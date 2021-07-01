@@ -1,0 +1,52 @@
+{
+    "versionId": "ctX1rE1SroAk0eJUQeyxZggXq_SRzRgO",
+    "shareableId": "93a4b069-4b7c-4d38-b0bb-e8f672f876fd",
+    "studioConfig": {
+        "name": "My Amplify Studio Project",
+        "components": [
+            {
+                "name": "CollectionOfTexts",
+                "componentType": "Collection",
+                "id": "948d58a5-9de2-4ef3-8dfa-cb9a2eacea13",
+                "children": [
+                    {
+                        "componentType": "Text",
+                        "id": "68c07886-b805-473e-adaa-6a6f68fd0b7d",
+                        "children": [
+                            {
+                                "componentType": "String",
+                                "id": "0849f9b2-d7a1-485f-8e64-411a40252368",
+                                "children": [],
+                                "props": {
+                                    "color": {
+                                        "hook": "textColor"
+                                    },
+                                    "value": {
+                                        "type": "string",
+                                        "value": "todo.description",
+                                        "bind": true
+                                    }
+                                }
+                            }
+                        ],
+                        "props": {}
+                    }
+                ],
+                "props": {
+                    "modelName": {
+                        "type": "string",
+                        "value": "Todo"
+                    },
+                    "itemRef": {
+                        "type": "string",
+                        "value": "todo"
+                    }
+                }
+            }
+        ],
+        "id": "asdf-123-jkl-987"
+    },
+    "shareable": "false",
+    "backendManagerAppId": "2cd36836-d1bb-47ce-af77-d3a56627eab3",
+    "schema": ""
+}
