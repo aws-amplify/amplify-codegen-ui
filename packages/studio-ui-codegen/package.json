@@ -1,0 +1,37 @@
+{
+  "name": "@amzn/studio-ui-codegen",
+  "version": "0.0.1",
+  "description": "generic component code generation interface definitions",
+  "author": "Jean Ro <frimfram+github@amazon.com>",
+  "homepage": "https://code.amazon.com/packages/AmplifyUICodegen/packages/studio-ui-codegen-core",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "ssh://git.amazon.com:2222/pkg/AmplifyUICodegen"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "tsc",
+    "build:watch": "npm run build -- --watch"
+  },
+  "devDependencies": {
+    "@aws-amplify/datastore": "^2.9.16",
+    "rollup": "^2.47.0",
+    "source-map-support": "^0.5.19",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "@aws-amplify/datastore": "^2.9.16"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "versionId": "ctX1rE1SroAk0eJUQeyxZggXq_SRzRgO",
+  "shareableId": "93a4b069-4b7c-4d38-b0bb-e8f672f876fd",
+  "studioConfig": {
+    "name": "My Amplify Studio Project",
+    "components": [
+      {
+        "name": "RedBadge",
+        "componentType": "Badge",
+        "id": "8ed91c68-a406-4356-a698-32aa76714ebb",
+        "children": [
+          {
+            "componentType": "Text",
+            "id": "188b75f1-890b-4b12-b502-a775b00f4b41",
+            "children": [],
+            "props": {
+              "value": {
+                "value": "Test"
+              }
+            }
+          }
+        ],
+        "props": {
+          "color": {
+            "value": "blue"
+          }
+        }
+      }
+    ],
+    "id": "asdf-123-jkl-987"
+  },
+  "shareable": "false",
+  "backendManagerAppId": "2cd36836-d1bb-47ce-af77-d3a56627eab3",
+  "schema": ""
+}

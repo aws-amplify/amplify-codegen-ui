@@ -1,0 +1,34 @@
+{
+  "name": "@amzn/test-generator",
+  "version": "0.0.1",
+  "description": "Test generator with sample JSON files",
+  "author": "Christopher Woolum",
+  "homepage": "https://code.amazon.com/packages/AmplifyUICodegen/packages/test-generator",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "dependencies": {
+    "@amzn/studio-ui-codegen": "^0.0.1",
+    "@amzn/studio-ui-codegen-react": "^0.0.1",
+    "@types/node": "^15.12.1"
+  },
+  "devDependencies": {
+    "source-map-support": "^0.5.19",
+    "typescript": "^4.2.4"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "npm run build -- --watch",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  }
+}
