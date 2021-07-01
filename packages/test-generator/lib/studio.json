@@ -1,0 +1,695 @@
+{
+  "versionId": "ctX1rE1SroAk0eJUQeyxZggXq_SRzRgO",
+  "shareableId": "93a4b069-4b7c-4d38-b0bb-e8f672f876fd",
+  "studioConfig": {
+    "name": "My Amplify Studio Project",
+    "components": [
+      {
+        "name": "PropertyListing",
+        "componentType": "Box",
+        "id": "6dba795e-bf5d-435e-93c0-d6abae5df719",
+
+        "children": [
+          {
+            "componentType": "Image",
+            "id": "4b3d7c6e-9b09-4c3c-be65-72eedabd96ee",
+            "children": [],
+            "props": {
+              "source": {
+                "value": "https://bit.ly/2Z4KKcF"
+              }
+            }
+          },
+          {
+            "componentType": "Box",
+            "id": "a1438328-8367-4d06-bbd4-07b1cb8b84ae",
+            "children": [
+              {
+                "componentType": "Box",
+                "id": "d8541c3f-0b73-424d-8921-c9aed5bde14a",
+                "children": [
+                  {
+                    "componentType": "Icon",
+                    "id": "21f97702-d21e-48d2-9f60-11cc0b12fca3",
+                    "children": [],
+                    "props": {
+                      "color": {
+                        "value": "teal.500"
+                      },
+                      "type": {
+                        "value": "Star"
+                      }
+                    }
+                  },
+                  {
+                    "componentType": "Icon",
+                    "id": "894b0ab7-64b8-4020-9f2e-00ceffeb25e1",
+                    "children": [],
+                    "props": {
+                      "type": {
+                        "value": "Star"
+                      }
+                    }
+                  },
+                  {
+                    "componentType": "Icon",
+                    "id": "9b155c84-c7ed-4ba4-bff1-125ddedb7555",
+                    "children": [],
+                    "props": {
+                      "type": {
+                        "value": "Star"
+                      }
+                    }
+                  }
+                ],
+                "props": {
+                  "d": {
+                    "value": "flex"
+                  },
+                  "alignItems": {
+                    "value": "center"
+                  },
+                  "mt": {
+                    "value": "2"
+                  }
+                }
+              },
+              {
+                "componentType": "Box",
+                "id": "273be8c5-3d07-427c-940d-a7b7f25c5de1",
+                "children": [
+                  {
+                    "componentType": "Badge",
+                    "id": "24fae664-ca54-4a72-b156-9d60ec12b8ef",
+                    "children": [
+                      {
+                        "componentType": "String",
+                        "id": "f1085c38-f668-4d91-976f-a9d20ae1e6ef",
+                        "children": [],
+                        "props": {
+                          "value": {
+                            "value": "old"
+                          }
+                        }
+                      }
+                    ],
+                    "props": {
+                      "px": {
+                        "value": "2"
+                      },
+                      "borderRadius": {
+                        "value": "full"
+                      },
+                      "color": {
+                        "value": "red"
+                      }
+                    }
+                  },
+                  {
+                    "componentType": "Box",
+                    "id": "96d53673-0c61-482b-9f6c-98a699f2854a",
+                    "children": [
+                      {
+                        "componentType": "String",
+                        "id": "457ee42e-0df6-4e76-9776-baa69ed53082",
+                        "children": [],
+                        "props": {
+                          "value": {
+                            "value": "3 beds 3 baths"
+                          }
+                        }
+                      }
+                    ],
+                    "props": {
+                      "letterSpacing": {
+                        "value": "wide"
+                      },
+                      "fontSize": {
+                        "value": "xs"
+                      },
+                      "color": {
+                        "value": "gray.500"
+                      },
+                      "fontWeight": {
+                        "value": "semibold"
+                      },
+                      "textTransform": {
+                        "value": "uppercase"
+                      },
+                      "ml": {
+                        "value": "3"
+                      }
+                    }
+                  }
+                ],
+                "props": {
+                  "d": {
+                    "value": "flex"
+                  },
+                  "alignItems": {
+                    "value": "baseline"
+                  }
+                }
+              },
+              {
+                "componentType": "Box",
+                "id": "cf1b2abc-3b31-479f-a76d-897091030a46",
+                "children": [
+                  {
+                    "componentType": "String",
+                    "id": "566c1434-2902-4fec-80df-fbc544780f19",
+                    "children": [],
+                    "props": {
+                      "value": {
+                        "value": "This is the title of this property"
+                      }
+                    }
+                  }
+                ],
+                "props": {
+                  "as": {
+                    "value": "h4"
+                  },
+                  "fontWeight": {
+                    "value": "semibold"
+                  },
+                  "mt": {
+                    "value": "1"
+                  }
+                }
+              },
+              {
+                "componentType": "Box",
+                "id": "317b72b7-7c75-44d2-9431-4590786eba65",
+                "children": [
+                  {
+                    "componentType": "String",
+                    "id": "e9f06e00-4acd-4c0b-a8ae-0fcf38fa02a2",
+                    "children": [],
+                    "props": {
+                      "value": {
+                        "value": "200"
+                      }
+                    }
+                  },
+                  {
+                    "componentType": "Box",
+                    "id": "33983614-d602-4b8c-bf25-48acc750c954",
+                    "children": [
+                      {
+                        "componentType": "String",
+                        "id": "26e9a652-e534-4cbf-a9d0-1e65c09bc862",
+                        "children": [],
+                        "props": {
+                          "value": {
+                            "value": "/ wk"
+                          }
+                        }
+                      }
+                    ],
+                    "props": {
+                      "color": {
+                        "value": "gray.600"
+                      },
+                      "as": {
+                        "value": "span"
+                      },
+                      "fontSize": {
+                        "value": "sm"
+                      }
+                    }
+                  }
+                ],
+                "props": {}
+              },
+              {
+                "componentType": "Box",
+                "id": "adafae81-bd27-4a15-8efd-1a9179404c3f",
+                "children": [
+                  {
+                    "componentType": "String",
+                    "id": "499914c1-eb74-46ba-805e-d705434b4889",
+                    "children": [],
+                    "props": {
+                      "value": {
+                        "value": "300 reviews"
+                      }
+                    }
+                  }
+                ],
+                "props": {
+                  "as": {
+                    "value": "span"
+                  },
+                  "fontSize": {
+                    "value": "sm"
+                  },
+                  "color": {
+                    "value": "gray.600"
+                  },
+                  "mt": {
+                    "value": "3"
+                  }
+                }
+              }
+            ],
+            "props": {
+              "padding": {
+                "value": "6"
+              }
+            }
+          }
+        ],
+        "props": {
+          "maxWidth": {
+            "value": "400px"
+          },
+          "overflow": {
+            "value": "hidden"
+          },
+          "borderRadius": {
+            "value": "8px"
+          },
+          "borderWidth": {
+            "value": "1px"
+          }
+        }
+      },
+      {
+        "name": "CustomTimeline",
+        "componentType": "Box",
+        "id": "131eb677-fe60-468b-8f1f-bdcb46727b8a",
+        "children": [
+          {
+            "componentType": "Avatar",
+            "props": {
+              "name": {
+                "dynamic": "timelineItem.author.alias"
+              }
+            },
+            "id": "bf949b91-7c7b-443b-960b-14e351eee112"
+          },
+          {
+            "componentType": "Box",
+            "id": "51464127-c307-495e-a3b2-16ccd1398a4d",
+            "children": [
+              {
+                "children": [
+                  {
+                    "componentType": "Box",
+                    "id": "914c43fc-ff85-444d-9c36-4d7827e740bc",
+                    "children": [
+                      {
+                        "componentType": "Box",
+                        "id": "b1c55903-4c83-4866-bf18-66251eaecf6a",
+                        "children": [
+                          {
+                            "componentType": "Text",
+                            "props": {
+                              "fontWeight": {
+                                "value": "bold"
+                              },
+                              "fontSize": {
+                                "value": "sm"
+                              },
+                              "content": {
+                                "dynamic": "timelineItem.author.alias"
+                              }
+                            },
+                            "id": "a2c52947-f9b1-48c5-9776-0960f1055c35"
+                          }
+                        ],
+                        "props": {
+                          "ml": {
+                            "value": "2"
+                          }
+                        }
+                      }
+                    ],
+                    "props": {
+                      "d": {
+                        "value": "flex"
+                      },
+                      "alignItems": {
+                        "value": "baseline"
+                      }
+                    }
+                  },
+                  {
+                    "componentType": "Spacer",
+                    "id": "c4de281d-b7f9-43fc-95f7-ea626643f42a"
+                  },
+                  {
+                    "componentType": "Box",
+                    "id": "ad5e80d2-c322-43ef-ad46-b3ff6c300c90",
+                    "children": [
+                      {
+                        "componentType": "Text",
+                        "props": {
+                          "content": {
+                            "value": "..."
+                          }
+                        },
+                        "id": "51d1a1a5-0f0c-4a21-b912-9619c9bfa3df"
+                      }
+                    ],
+                    "props": {
+                      "padding": {
+                        "value": "2"
+                      }
+                    }
+                  }
+                ],
+                "componentType": "Flex",
+                "id": "99404c07-e681-4c78-8779-56afbbf817a2"
+              }
+            ],
+            "props": {
+              "padding": {
+                "value": "2"
+              }
+            }
+          },
+          {
+            "componentType": "Box",
+            "id": "b6d08026-450f-4d5b-8b2d-d06b6723f03b",
+            "children": [
+              {
+                "componentType": "Box",
+                "id": "1edfb4a6-0259-4ad8-8c13-28bc19aa13ef",
+                "children": [
+                  {
+                    "componentType": "Media",
+                    "props": {
+                      "media": {
+                        "dynamic": "timelineItem.content"
+                      }
+                    },
+                    "id": "2328768d-540e-4048-aa56-e3e5a3d712ce"
+                  }
+                ],
+                "props": {}
+              },
+              {
+                "componentType": "Box",
+                "id": "ca55bb6a-7164-464e-8eed-8276551f2425",
+                "children": [
+                  {
+                    "componentType": "Box",
+                    "id": "c56acaff-c83f-458e-a2f0-bb9a232f4169",
+                    "children": [
+                      {
+                        "componentType": "IconButton",
+                        "props": {
+                          "variant": {
+                            "value": "ghost"
+                          },
+                          "componentType": {
+                            "value": "AddIcon"
+                          },
+                          "id": {
+                            "value": "5da74196-5bfb-41ba-a06d-c451e3139fa2"
+                          }
+                        },
+                        "id": "571b81cb-d438-42c8-89cf-df24be9a7063"
+                      },
+                      {
+                        "componentType": "IconButton",
+                        "props": {
+                          "variant": {
+                            "value": "ghost"
+                          },
+                          "componentType": {
+                            "value": "ChatIcon"
+                          },
+                          "id": {
+                            "value": "c6fe6cd3-7f1b-4c4b-8fe3-8464843f3f63"
+                          }
+                        },
+                        "id": "354c90a3-8798-4d9a-9394-1f1962309f98"
+                      },
+                      {
+                        "componentType": "IconButton",
+                        "props": {
+                          "variant": {
+                            "value": "ghost"
+                          },
+                          "componentType": {
+                            "value": "EmailIcon"
+                          },
+                          "id": {
+                            "value": "114a7bfd-8348-4e2a-b638-5d6930ae5586"
+                          }
+                        },
+                        "id": "9d43fa78-d81e-4f88-bf29-484eb980ef96"
+                      }
+                    ],
+                    "props": {}
+                  },
+                  {
+                    "componentType": "Box",
+                    "id": "f7bbfc58-730a-4065-9436-5965856a831e",
+                    "children": [
+                      {
+                        "componentType": "Text",
+                        "id": "2a099875-d177-47f9-866d-c3d6f94121ab",
+                        "children": [
+                          {
+                            "componentType": "Text",
+                            "props": {
+                              "as": {
+                                "value": "b"
+                              },
+                              "content": {
+                                "dynamic": "timelineItem.author.alias"
+                              }
+                            },
+                            "id": "5f6c4c1a-9b71-4176-adb3-cace5f5a03e8"
+                          },
+                          {
+                            "componentType": "Text",
+                            "props": {
+                              "content": {
+                                "dynamic": "timelineItem.description"
+                              }
+                            },
+                            "id": "862f3fa2-381a-4c69-8d93-1480f8bc560e"
+                          }
+                        ],
+                        "props": {}
+                      }
+                    ],
+                    "props": {
+                      "mt": {
+                        "value": "3"
+                      }
+                    }
+                  },
+                  {
+                    "componentType": "Collection",
+                    "id": "ef32f814-020f-468c-a367-b0c84f31090e",
+                    "children": [
+                      {
+                        "componentType": "Text",
+                        "id": "0a0a6164-75d8-4e23-8c43-8316929defe6",
+                        "children": [
+                          {
+                            "componentType": "Text",
+                            "props": {
+                              "as": {
+                                "value": "b"
+                              },
+                              "content": {
+                                "dynamic": "comment.author.alias"
+                              }
+                            },
+                            "id": "ef2ea2e9-7d19-42d9-845a-ce8e006ae1b2"
+                          },
+                          {
+                            "componentType": "Text",
+                            "props": {
+                              "content": {
+                                "dynamic": "comment.body"
+                              }
+                            },
+                            "id": "3b478bd9-025f-4e8e-bf4b-0cf73a99eaee"
+                          }
+                        ],
+                        "props": {
+                          "key": {
+                            "dynamic": "comment.id"
+                          }
+                        }
+                      }
+                    ],
+                    "props": {
+                      "predicate": {
+                        "value": "timeLineItemId = timelineItem.id"
+                      }
+                    }
+                  },
+                  {
+                    "componentType": "Box",
+                    "id": "d0df547d-9fce-4975-97ed-0c2c5184f497",
+                    "children": [
+                      {
+                        "componentType": "Text",
+                        "id": "8ef00542-1743-4058-afdd-bcd43004620a",
+                        "children": [
+                          {
+                            "componentType": "Text",
+                            "props": {
+                              "content": {
+                                "value": "2 hours ago"
+                              }
+                            },
+                            "id": "a7814f20-42f7-4087-aa44-b1037ee23b14"
+                          }
+                        ],
+                        "props": {
+                          "color": {
+                            "value": "gray.500"
+                          },
+                          "fontSize": {
+                            "value": "xs"
+                          }
+                        }
+                      }
+                    ],
+                    "props": {
+                      "mb": {
+                        "value": "2"
+                      },
+                      "mt": {
+                        "value": "1"
+                      }
+                    }
+                  },
+                  {
+                    "children": [
+                      {
+                        "componentType": "Input",
+                        "props": {
+                          "name": {
+                            "value": "body"
+                          },
+                          "placeholder": {
+                            "value": "Add a comment..."
+                          }
+                        },
+                        "id": "4efe9d01-a005-4254-bfea-a30a4962086f"
+                      }
+                    ],
+                    "componentType": "form",
+                    "id": "f8dd8e83-0add-4160-921a-11b7c044c528"
+                  }
+                ],
+                "props": {
+                  "ml": {
+                    "value": "3"
+                  }
+                }
+              }
+            ],
+            "props": {
+              "maxWidth": {
+                "value": "lg"
+              },
+              "overflow": {
+                "value": "hidden"
+              },
+              "marginX": {
+                "value": "auto"
+              },
+              "borderWidth": {
+                "value": "2px"
+              },
+              "marginY": {
+                "value": "5"
+              },
+              "maxbackground": {
+                "value": "white"
+              }
+            }
+          }
+        ],
+        "props": {
+          "padding": {
+            "value": "2"
+          },
+          "borderRadius": {
+            "value": "5px"
+          },
+          "borderWidth": {
+            "value": "2px"
+          }
+        }
+      },
+      {
+        "name": "CollectionOfTexts",
+        "componentType": "Collection",
+        "id": "948d58a5-9de2-4ef3-8dfa-cb9a2eacea13",
+        "children": [
+          {
+            "componentType": "Text",
+            "id": "68c07886-b805-473e-adaa-6a6f68fd0b7d",
+            "children": [
+              {
+                "componentType": "String",
+                "id": "0849f9b2-d7a1-485f-8e64-411a40252368",
+                "children": [],
+                "props": {
+                  "color": {
+                    "hook": "textColor"
+                  },
+                  "value": {
+                    "type": "string",
+                    "value": "todo.description",
+                    "bind": true
+                  }
+                }
+              }
+            ],
+            "props": {}
+          }
+        ],
+        "props": {
+          "modelName": {
+            "type": "string",
+            "value": "Todo"
+          },
+          "itemRef": {
+            "type": "string",
+            "value": "todo"
+          }
+        }
+      },
+      {
+        "name": "RedBadge",
+        "componentType": "Badge",
+        "id": "8ed91c68-a406-4356-a698-32aa76714ebb",
+        "children": [
+          {
+            "componentType": "String",
+            "id": "188b75f1-890b-4b12-b502-a775b00f4b41",
+            "children": [],
+            "props": {
+              "value": {
+                "value": "Test"
+              }
+            }
+          }
+        ],
+        "props": {
+          "color": {
+            "value": "blue"
+          }
+        }
+      }
+    ],
+    "id": "asdf-123-jkl-987"
+  },
+  "shareable": "false",
+  "backendManagerAppId": "2cd36836-d1bb-47ce-af77-d3a56627eab3",
+  "schema": ""
+}
