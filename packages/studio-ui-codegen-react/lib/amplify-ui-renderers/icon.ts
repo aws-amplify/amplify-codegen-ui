@@ -34,30 +34,4 @@ export default class IconRenderer extends ReactComponentRenderer<
       color: props.color,
     };
   }
-
-  private renderOpeningElement(
-    factory: ts.NodeFactory,
-    props: StudioComponentProperties,
-    tagName: string
-  ): ts.JsxOpeningElement {
-    const propsArray: ts.JsxAttribute[] = [];
-    for (let propKey of Object.keys(props)) {
-      const currentProp = props[propKey];
-
-      if (currentProp.value) {
-        const attr = factory.createJsxAttribute(
-          factory.createIdentifier(propKey),
-          factory.createStringLiteral(currentProp.value)
-        );
-
-        propsArray.push(attr);
-      }
-    }
-
-    return factory.createJsxOpeningElement(
-      factory.createIdentifier(tagName),
-      undefined,
-      factory.createJsxAttributes(propsArray)
-    );
-  }
 }
