@@ -1,7 +1,7 @@
 import {
   StudioComponent,
   StudioComponentProperties,
-} from "./types/studio-component";
+} from "@amzn/amplify-ui-codegen-schema";
 
 /**
  * Shared class for rendering components.

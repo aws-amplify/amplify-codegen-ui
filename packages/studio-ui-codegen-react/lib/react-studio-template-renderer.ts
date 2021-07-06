@@ -1,6 +1,8 @@
 import {
   FirstOrderStudioComponent,
   StudioComponent,
+} from "@amzn/amplify-ui-codegen-schema"
+import {
   StudioTemplateRenderer,
 } from "@amzn/studio-ui-codegen";
 

@@ -1,9 +1,9 @@
 {
-  "name": "@amzn/studio-ui-codegen",
+  "name": "@amzn/amplify-ui-codegen-schema",
   "version": "0.0.1",
-  "description": "generic component code generation interface definitions",
+  "description": "Type definitions for schema of JSON, which is input to the code generator",
   "author": "Jean Ro <frimfram+github@amazon.com>",
-  "homepage": "https://code.amazon.com/packages/AmplifyUICodegen/packages/studio-ui-codegen-core",
+  "homepage": "https://code.amazon.com/packages/AmplifyUICodegen/packages/amplify-ui-codegen-schema",
   "license": "ISC",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,15 +24,10 @@
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
-    "@aws-amplify/datastore": "^2.9.16",
     "rollup": "^2.47.0",
     "source-map-support": "^0.5.19",
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "@amzn/amplify-ui-codegen-schema": "^0.0.1"
-  },
-  "peerDependencies": {
-    "@aws-amplify/datastore": "^2.9.16"
   }
 }

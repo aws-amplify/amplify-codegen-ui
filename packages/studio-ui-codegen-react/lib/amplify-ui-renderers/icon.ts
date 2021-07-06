@@ -4,7 +4,7 @@ import { AmplifyIconProps } from "../amplify-ui-props/amplify-icon-props";
 import {
   StudioComponent,
   StudioComponentProperties,
-} from "@amzn/studio-ui-codegen";
+} from "@amzn/amplify-ui-codegen-schema";
 
 import { ReactComponentRenderer } from "../react-component-renderer"
 

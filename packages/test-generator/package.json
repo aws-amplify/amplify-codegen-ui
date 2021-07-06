@@ -18,6 +18,7 @@
     "url": ""
   },
   "dependencies": {
+    "@amzn/amplify-ui-codegen-schema": "^0.0.1",
     "@amzn/studio-ui-codegen": "^0.0.1",
     "@amzn/studio-ui-codegen-react": "^0.0.1",
     "@types/node": "^15.12.1"

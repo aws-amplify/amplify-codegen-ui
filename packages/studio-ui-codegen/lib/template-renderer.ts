@@ -1,7 +1,7 @@
 import { FrameworkOutputManager } from "./framework-output-manager";
 import { StudioTemplateRenderer } from "./studio-template-renderer";
 import { StudioTemplateRendererFactory } from "./template-renderer-factory";
-import { StudioApp } from "./types/studio-schema";
+import { StudioApp } from "@amzn/amplify-ui-codegen-schema";
 
 var fs = require("fs");
 var path = require("path");

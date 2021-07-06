@@ -1,6 +1,6 @@
 import { FrameworkOutputManager } from "./framework-output-manager";
 import { RenderTextComponentResponse } from "./render-component-response";
-import { FirstOrderStudioComponent } from "./types/studio-component";
+import { FirstOrderStudioComponent } from "@amzn/amplify-ui-codegen-schema";
 
 export abstract class StudioTemplateRenderer<
   TSource,
