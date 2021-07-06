@@ -4,7 +4,7 @@ import { AmplifyImageProps } from "../amplify-ui-props/amplify-image-props";
 import {
   StudioComponent,
   StudioComponentProperties,
-} from "@amzn/studio-ui-codegen";
+} from "@amzn/amplify-ui-codegen-schema";
 import { ReactComponentRenderer } from "../react-component-renderer"
 
 import ts, { factory, JsxElement } from "typescript";

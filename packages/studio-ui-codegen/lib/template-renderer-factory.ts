@@ -1,6 +1,6 @@
 import { FrameworkOutputManager } from "./framework-output-manager";
 import { StudioTemplateRenderer } from "./studio-template-renderer";
-import { FirstOrderStudioComponent } from "./types/studio-component";
+import { FirstOrderStudioComponent } from "@amzn/amplify-ui-codegen-schema";
 
 /**
  * This class is used to wrap the created of renderers due to each renderer

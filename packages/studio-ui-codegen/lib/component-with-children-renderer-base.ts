@@ -1,7 +1,7 @@
 //import { BadgeProps, BoxProps } from "@amzn/amplify-ui";
 
 import { CommonComponentRenderer } from "./common-component-renderer";
-import { StudioComponent } from "./types/studio-component";
+import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
 
 //type SourceProp = BoxProps | BadgeProps;
 

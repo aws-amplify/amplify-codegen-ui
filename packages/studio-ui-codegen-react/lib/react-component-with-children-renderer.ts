@@ -1,9 +1,11 @@
 import {
   ComponentWithChildrenRendererBase,
+} from "@amzn/studio-ui-codegen";
+import {
   StudioComponent,
   StudioComponentProperties,
   StudioComponentProperty,
-} from "@amzn/studio-ui-codegen";
+} from "@amzn/amplify-ui-codegen-schema";
 import { JsxElement, JsxChild, factory, JsxAttribute } from "typescript";
 import { ImportCollection } from "./import-collection";
 

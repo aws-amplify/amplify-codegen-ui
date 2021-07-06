@@ -2,7 +2,7 @@ import { BoxProps } from "../amplify-ui-props/amplify-box-props";
 import {
   StudioComponent,
   StudioComponentProperties,
-} from "@amzn/studio-ui-codegen";
+} from "@amzn/amplify-ui-codegen-schema";
 
 import { ReactComponentWithChildrenRenderer } from "../react-component-with-children-renderer"
 

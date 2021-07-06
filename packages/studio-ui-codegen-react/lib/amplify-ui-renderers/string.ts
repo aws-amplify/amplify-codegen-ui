@@ -1,4 +1,4 @@
-import { StudioComponent } from "@amzn/studio-ui-codegen";
+import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
 import ts, { JsxFragment } from "typescript";
 
 export default function renderString(component: StudioComponent): JsxFragment {
