@@ -14,8 +14,9 @@ export default class ImageRenderer extends ReactComponentRenderer<
   AmplifyImageProps
 > {
   renderElement(): ts.JsxElement {
+    const tagName = "Image";
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, this.component.props),
+      this.renderOpeningElement(factory, this.component.props, tagName),
       [],
       factory.createJsxClosingElement(factory.createIdentifier("Image"))
     );
@@ -31,16 +32,5 @@ export default class ImageRenderer extends ReactComponentRenderer<
       source: props.source,
       alt: props.alt,
     };
-  }
-
-  private renderOpeningElement(
-    factory: ts.NodeFactory,
-    props: StudioComponentProperties
-  ): ts.JsxOpeningElement {
-    return factory.createJsxOpeningElement(
-      factory.createIdentifier("Image"),
-      undefined,
-      factory.createJsxAttributes(this.convertPropsToJsxAttributes(props))
-    );
   }
 }
