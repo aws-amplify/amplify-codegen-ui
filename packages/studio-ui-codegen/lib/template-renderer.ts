@@ -1,7 +1,7 @@
 import { FrameworkOutputManager } from "./framework-output-manager";
 import { StudioTemplateRenderer } from "./studio-template-renderer";
 import { StudioTemplateRendererFactory } from "./template-renderer-factory";
-import { StudioApp } from "@amzn/amplify-ui-codegen-schema";
+import { StudioApp, FirstOrderStudioComponent } from "@amzn/amplify-ui-codegen-schema";
 
 var fs = require("fs");
 var path = require("path");
@@ -32,6 +32,14 @@ export class StudioTemplateRendererManager<
     if (!fs.existsSync(renderPath)) {
       fs.mkdirSync(renderPath);
     }
+  }
+
+  renderSchemaToTemplate(component: FirstOrderStudioComponent | undefined) {
+    if (!component) {
+      throw new Error("Please ensure you have passed in a valid component schema");
+    }
+    console.log("Rendering a component ", component.componentType);
+    this.renderer.buildRenderer(component).renderComponent();
   }
 
   renderSchemaToTemplates(jsonSchema: StudioApp | undefined) {

@@ -20,4 +20,4 @@ const rendererManager = new StudioTemplateRendererManager(rendererFactory, '.');
 
 console.log(rendererManager);
 
-rendererManager.renderSchemaToTemplates(schema as any);
+rendererManager.renderSchemaToTemplate(schema as any);
