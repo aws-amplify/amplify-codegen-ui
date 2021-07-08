@@ -18,7 +18,7 @@ export default class BoxRenderer extends ReactComponentWithChildrenRenderer<
     renderChildren: (children: StudioComponent[]) => JsxChild[]
   ): JsxElement {
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, this.component.props),
+      this.renderOpeningElement(factory, this.component.properties),
       renderChildren(this.component.children),
       factory.createJsxClosingElement(factory.createIdentifier("Box"))
     );

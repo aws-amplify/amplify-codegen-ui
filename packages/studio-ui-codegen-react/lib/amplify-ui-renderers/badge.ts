@@ -16,7 +16,7 @@ export default class BadgeRenderer extends ReactComponentWithChildrenRenderer<
     renderChildren: (children: StudioComponent[]) => JsxChild[]
   ): ts.JsxElement {
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, this.component.props),
+      this.renderOpeningElement(factory, this.component.properties),
       renderChildren(this.component.children),
       factory.createJsxClosingElement(factory.createIdentifier("Badge"))
     );

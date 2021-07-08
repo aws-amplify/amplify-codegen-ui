@@ -13,7 +13,7 @@ export abstract class CommonComponentRenderer<TPropIn, TPropOut> {
   abstract mapProps(props: TPropIn): TPropOut;
 
   constructor(protected component: StudioComponent) {
-    const flattenedProps = Object.entries(component.props).map((prop) => {
+    const flattenedProps = Object.entries(component.properties).map((prop) => {
       return [prop[0], prop[1]?.value];
     });
 
