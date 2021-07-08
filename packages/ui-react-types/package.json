@@ -1,0 +1,18 @@
+{
+  "name": "@aws-amplify/ui-react-types",
+  "version": "0.0.1",
+  "description": "Amplify UI React types package mirror. Includes type definitions for React UI components",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist"
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.5"
+  }
+}
