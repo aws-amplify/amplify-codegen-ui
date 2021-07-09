@@ -16,7 +16,7 @@ export default class ImageRenderer extends ReactComponentRenderer<
   renderElement(): ts.JsxElement {
     const tagName = "Image";
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, this.component.props, tagName),
+      this.renderOpeningElement(factory, this.component.properties, tagName),
       [],
       factory.createJsxClosingElement(factory.createIdentifier("Image"))
     );

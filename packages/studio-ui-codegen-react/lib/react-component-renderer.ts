@@ -86,7 +86,12 @@ export abstract class ReactComponentRenderer<
       factory.createCallExpression(
         factory.createIdentifier("getOverrideProps"), 
         undefined, 
-        [factory.createIdentifier("overrides"), factory.createStringLiteral(tagName)]
+        [factory.createPropertyAccessExpression(
+          factory.createIdentifier("props"), 
+          factory.createIdentifier("overrides")
+          ), 
+          factory.createStringLiteral(tagName)
+        ]
       )
     );
     attributes.push(overrideAttr);

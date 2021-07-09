@@ -24,7 +24,7 @@ export type StudioComponent = {
   /**
    * These are the customized properties
    */
-  props: StudioComponentProperties;
+  properties: StudioComponentProperties;
 };
 
 export type StudioComponentProperties = {

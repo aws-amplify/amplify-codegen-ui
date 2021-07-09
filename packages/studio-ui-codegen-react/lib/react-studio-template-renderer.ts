@@ -1,12 +1,7 @@
-import {
-  FirstOrderStudioComponent,
-  StudioComponent,
-} from "@amzn/amplify-ui-codegen-schema"
-import {
-  StudioTemplateRenderer,
-} from "@amzn/studio-ui-codegen";
+import { FirstOrderStudioComponent, StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+import { StudioTemplateRenderer } from '@amzn/studio-ui-codegen';
 
-import { EOL } from "os";
+import { EOL } from 'os';
 import ts, {
   createPrinter,
   createSourceFile,
@@ -20,9 +15,9 @@ import ts, {
   ScriptTarget,
   SyntaxKind,
   transpileModule,
-} from "typescript";
-import { ImportCollection } from "./import-collection";
-import ReactOutputManager from "./react-output-manager";
+} from 'typescript';
+import { ImportCollection } from './import-collection';
+import ReactOutputManager from './react-output-manager';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -45,18 +40,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const { printer, file } = this.createPrinter();
 
-    console.log("JSX rendered");
+    console.log('JSX rendered');
 
-    const wrappedFunction = this.renderFunctionWrapper(
-      this.component.name,
-      jsx
-    );
+    const wrappedFunction = this.renderFunctionWrapper(this.component.name, jsx);
 
-    const result = printer.printNode(
-      EmitHint.Unspecified,
-      wrappedFunction,
-      file
-    );
+    const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
     let compiled = transpileModule(result, {
       compilerOptions: {
@@ -66,7 +54,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       },
     });
 
-    return compiled.outputText.replace("export default ", "");
+    return compiled.outputText.replace('export default ', '');
   }
 
   renderComponent() {
@@ -76,52 +64,34 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const jsx = this.renderJsx(this.component);
 
-    console.log("JSX rendered");
+    console.log('JSX rendered');
 
-    const wrappedFunction = this.renderFunctionWrapper(
-      this.component.name,
-      jsx
-    );
+    const wrappedFunction = this.renderFunctionWrapper(this.component.name, jsx);
 
     const imports = this.importCollection.buildImportStatements();
 
-    let componentText = "/* eslint-disable */" + EOL;
+    let componentText = '/* eslint-disable */' + EOL;
 
     for (let importStatement of imports) {
-      const result = printer.printNode(
-        EmitHint.Unspecified,
-        importStatement,
-        file
-      );
+      const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
       componentText += result + EOL;
     }
 
     componentText += EOL;
 
-    const result = printer.printNode(
-      EmitHint.Unspecified,
-      wrappedFunction,
-      file
-    );
+    const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
 
     console.log(componentText);
 
     return {
       componentText,
-      renderComponentToFilesystem:
-        this.renderComponentToFilesystem(componentText),
+      renderComponentToFilesystem: this.renderComponentToFilesystem(componentText),
     };
   }
 
   private createPrinter() {
-    const file = createSourceFile(
-      this.componentPath,
-      "",
-      ScriptTarget.ESNext,
-      false,
-      ScriptKind.TSX
-    );
+    const file = createSourceFile(this.componentPath, '', ScriptTarget.ESNext, false, ScriptKind.TSX);
 
     const printer = createPrinter({
       newLine: NewLineKind.LineFeed,
@@ -129,35 +99,31 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return { printer, file };
   }
 
-  renderFunctionWrapper(
-    componentName: string,
-    jsx: JsxElement | JsxFragment
-  ): FunctionDeclaration {
+  renderFunctionWrapper(componentName: string, jsx: JsxElement | JsxFragment): FunctionDeclaration {
+    const componentPropType = componentName + 'Props';
+
     return factory.createFunctionDeclaration(
       undefined,
-      [
-        factory.createModifier(SyntaxKind.ExportKeyword),
-        factory.createModifier(SyntaxKind.DefaultKeyword),
-      ],
+      [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DefaultKeyword)],
       undefined,
       factory.createIdentifier(componentName),
       undefined,
-      [],
-      factory.createTypeReferenceNode(
-        factory.createQualifiedName(
-          factory.createIdentifier("JSX"),
-          factory.createIdentifier("Element")
+      [
+        factory.createParameterDeclaration(
+          undefined,
+          undefined,
+          undefined,
+          'props',
+          undefined,
+          factory.createTypeReferenceNode(componentPropType, undefined),
+          undefined,
         ),
-        undefined
+      ],
+      factory.createTypeReferenceNode(
+        factory.createQualifiedName(factory.createIdentifier('JSX'), factory.createIdentifier('Element')),
+        undefined,
       ),
-      factory.createBlock(
-        [
-          factory.createReturnStatement(
-            factory.createParenthesizedExpression(jsx)
-          ),
-        ],
-        true
-      )
+      factory.createBlock([factory.createReturnStatement(factory.createParenthesizedExpression(jsx))], true),
     );
   }
 

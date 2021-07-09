@@ -18,12 +18,12 @@ export default class IconRenderer extends ReactComponentRenderer<
     const tagName = "Icon";
 
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, this.component.props, tagName),
+      this.renderOpeningElement(factory, this.component.properties, tagName),
       [],
       factory.createJsxClosingElement(factory.createIdentifier(tagName))
     );
 
-    this.importCollection.addImport("@amzn/amplify-ui", tagName);
+    this.importCollection.addImport("@amzn-amplify/amplify-ui", tagName);
     return element;
   }
 

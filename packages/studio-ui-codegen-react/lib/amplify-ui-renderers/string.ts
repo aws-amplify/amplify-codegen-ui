@@ -4,7 +4,7 @@ import ts, { JsxFragment } from "typescript";
 export default function renderString(component: StudioComponent): JsxFragment {
   const factory = ts.factory;
 
-  const value = component.props["value"].value;
+  const value = component.properties["value"].value;
   console.log(value);
   const element = factory.createJsxFragment(
     factory.createJsxOpeningFragment(),
