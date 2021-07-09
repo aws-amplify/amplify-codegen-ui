@@ -29,6 +29,7 @@
     "source-map-support": "^0.5.19"
   },
   "dependencies": {
+    "@aws-amplify/ui-react-types": "^0.0.1",
     "@amzn/studio-ui-codegen": "^0.0.1",
     "@amzn/amplify-ui-codegen-schema": "^0.0.1",
     "@emotion/react": "^11",

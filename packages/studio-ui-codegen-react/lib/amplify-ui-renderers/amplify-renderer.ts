@@ -5,6 +5,7 @@ import {
 import ts, { factory, JsxElement, JsxFragment } from "typescript";
 import { ReactStudioTemplateRenderer } from "../react-studio-template-renderer";
 
+import ButtonRenderer from "./button";
 import BadgeRenderer from "./badge";
 import BoxRenderer from "./box";
 import IconRenderer from "./icon";
@@ -18,6 +19,8 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
   renderJsx(component: StudioComponent): JsxElement | JsxFragment {
     switch (component.componentType) {
+      case "Button":
+        return new ButtonRenderer(component, this.importCollection).renderElement();
       case "Box":
         return new BoxRenderer(component, this.importCollection).renderElement(
           (children) => children.map((child) => this.renderJsx(child))

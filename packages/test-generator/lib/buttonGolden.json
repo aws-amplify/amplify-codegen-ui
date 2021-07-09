@@ -1,6 +1,6 @@
 {
     "componentId": "1234-5678-9010",
-    "componentType": "Icon",
+    "componentType": "Button",
     "name": "CustomButton",
     "properties": {}
 }
