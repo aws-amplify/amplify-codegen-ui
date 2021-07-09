@@ -42,6 +42,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     console.log('JSX rendered');
 
+    const imports = this.importCollection.buildImportStatements();
+
+    let importsText = '';
+
+    for (let importStatement of imports) {
+      const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
+      importsText += result + EOL;
+    }
+
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, jsx);
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
@@ -54,7 +63,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       },
     });
 
-    return compiled.outputText.replace('export default ', '');
+    const compText = compiled.outputText.replace('export default ', '');
+
+    return {compText, importsText};
   }
 
   renderComponent() {
