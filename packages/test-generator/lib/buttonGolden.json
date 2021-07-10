@@ -1,6 +1,14 @@
 {
-    "componentId": "1234-5678-9010",
-    "componentType": "Button",
-    "name": "CustomButton",
-    "properties": {}
+  "componentId": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "CustomButton",
+  "properties": {
+    "color": {
+      "value": "#ff0000"
+    },
+    "width": {
+      "type": "Number",
+      "value": "20"
+    }
+  }
 }

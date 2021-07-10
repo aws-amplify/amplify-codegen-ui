@@ -3,7 +3,7 @@ import {
   StudioComponentProperties,
 } from "@amzn/amplify-ui-codegen-schema";
 import { ComponentRendererBase } from "@amzn/studio-ui-codegen";
-import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from "typescript";
+import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory, SyntaxKind } from "typescript";
 
 import { ImportCollection } from "./import-collection";
 
@@ -58,7 +58,17 @@ export abstract class ReactComponentRenderer<
       if (currentProp.value) {
         const attr = factory.createJsxAttribute(
           factory.createIdentifier(propKey),
-          factory.createStringLiteral(currentProp.value)
+          factory.createJsxExpression(
+            undefined,
+            factory.createBinaryExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier("props"),
+                propKey
+              ),
+              SyntaxKind.QuestionQuestionToken,
+              factory.createStringLiteral(currentProp.value, true),
+            )
+          )
         );
 
         propsArray.push(attr);
