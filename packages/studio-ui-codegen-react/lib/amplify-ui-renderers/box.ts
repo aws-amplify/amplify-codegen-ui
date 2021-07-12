@@ -1,4 +1,6 @@
 import { BoxProps } from "../amplify-ui-props/amplify-box-props";
+import { AmplifyBoxProps } from "../amplify-ui-props/amplify-box-props";
+
 import {
   StudioComponent,
   StudioComponentProperties,
@@ -7,9 +9,6 @@ import {
 import { ReactComponentWithChildrenRenderer } from "../react-component-with-children-renderer"
 
 import ts, { factory, JsxChild, JsxElement } from "typescript";
-
-import { AmplifyBoxProps } from "../amplify-ui-props/amplify-box-props";
-
 export default class BoxRenderer extends ReactComponentWithChildrenRenderer<
   BoxProps,
   AmplifyBoxProps
@@ -17,26 +16,17 @@ export default class BoxRenderer extends ReactComponentWithChildrenRenderer<
   renderElement(
     renderChildren: (children: StudioComponent[]) => JsxChild[]
   ): JsxElement {
+    const tagName = "Box";
+
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, this.component.properties),
+      this.renderOpeningElement(factory, this.component.properties, tagName),
       renderChildren(this.component.children),
-      factory.createJsxClosingElement(factory.createIdentifier("Box"))
+      factory.createJsxClosingElement(factory.createIdentifier(tagName))
     );
 
-    this.importCollection.addImport("@amzn/amplify-ui", "Box");
+    this.importCollection.addImport("@amzn/amplify-ui", tagName);
 
     return element;
-  }
-
-  private renderOpeningElement(
-    factory: ts.NodeFactory,
-    props: StudioComponentProperties
-  ): ts.JsxOpeningElement {
-    return factory.createJsxOpeningElement(
-      factory.createIdentifier("Box"),
-      undefined,
-      factory.createJsxAttributes(this.convertPropsToJsxAttributes(props))
-    );
   }
 
   mapProps(props: BoxProps): AmplifyBoxProps {
