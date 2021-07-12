@@ -1,5 +1,5 @@
 {
-  "name": "@aws-amplify/ui-react-types",
+  "name": "@amzn/amplify-ui-react-types",
   "version": "0.0.1",
   "description": "Amplify UI React types package mirror. Includes type definitions for React UI components",
   "main": "dist/index.js",
