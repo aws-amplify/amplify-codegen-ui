@@ -6,7 +6,6 @@ import ts, { factory, JsxElement, JsxFragment } from "typescript";
 import { ReactStudioTemplateRenderer } from "../react-studio-template-renderer";
 
 import ButtonRenderer from "./button";
-import BadgeRenderer from "./badge";
 import BoxRenderer from "./box";
 import IconRenderer from "./icon";
 import ImageRenderer from "./image";
@@ -39,14 +38,6 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
           component,
           this.importCollection
         ).renderElement();
-
-      case "Badge":
-        return new BadgeRenderer(
-          component,
-          this.importCollection
-        ).renderElement((children) =>
-          children.map((child) => this.renderJsx(child))
-        );
     }
 
     console.warn(`${component.componentType} is not mapped!`);

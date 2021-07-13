@@ -1,0 +1,20 @@
+{
+  "componentId": "1234-5678-9010",
+  "componentType": "Box",
+  "name": "BoxWithButton",
+  "properties": {},
+  "children": [
+    {
+      "componentId": "0987-6543-3211",
+      "componentType": "Button",
+      "properties": {
+        "color": {
+          "value": "#ff0000"
+        },
+        "width": {
+          "value": "20px"
+        }
+      }
+    }
+  ]
+}

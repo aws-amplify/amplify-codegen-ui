@@ -6,7 +6,8 @@ import {
   StudioComponentProperties,
   StudioComponentProperty,
 } from "@amzn/amplify-ui-codegen-schema";
-import { JsxElement, JsxChild, factory, JsxAttribute } from "typescript";
+
+import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, NodeFactory, SyntaxKind } from "typescript";
 import { ImportCollection } from "./import-collection";
 
 export abstract class ReactComponentWithChildrenRenderer<
@@ -52,5 +53,66 @@ export abstract class ReactComponentWithChildrenRenderer<
     }
 
     return propsArray;
+  }
+
+  protected renderOpeningElement(
+    factory: NodeFactory,
+    props: StudioComponentProperties,
+    tagName: string
+  ): JsxOpeningElement {
+    const propsArray: JsxAttribute[] = [];
+    for (let propKey of Object.keys(props)) {
+      const currentProp = props[propKey];
+
+      if (currentProp.value) {
+        const attr = factory.createJsxAttribute(
+          factory.createIdentifier(propKey),
+          factory.createJsxExpression(
+            undefined,
+            factory.createBinaryExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier("props"),
+                propKey
+              ),
+              SyntaxKind.QuestionQuestionToken,
+              factory.createStringLiteral(currentProp.value, true),
+            )
+          )
+        );
+
+        propsArray.push(attr);
+      }
+    }
+
+    this.addPropsSpreadAttributes(factory, propsArray, tagName);
+
+    return factory.createJsxOpeningElement(
+      factory.createIdentifier(tagName),
+      undefined,
+      factory.createJsxAttributes(propsArray)
+    );
+  }
+
+  private addPropsSpreadAttributes(
+    factory: NodeFactory,
+    attributes: JsxAttributeLike[],
+    tagName: string
+  ) {
+    const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier("props"));
+    attributes.push(propsAttr);
+
+    const overrideAttr = factory.createJsxSpreadAttribute(
+      factory.createCallExpression(
+        factory.createIdentifier("getOverrideProps"), 
+        undefined, 
+        [factory.createPropertyAccessExpression(
+          factory.createIdentifier("props"), 
+          factory.createIdentifier("overrides")
+          ), 
+          factory.createStringLiteral(tagName)
+        ]
+      )
+    );
+    attributes.push(overrideAttr);
   }
 }
