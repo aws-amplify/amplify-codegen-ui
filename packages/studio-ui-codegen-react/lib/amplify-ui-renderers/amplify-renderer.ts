@@ -7,7 +7,7 @@ import { ReactStudioTemplateRenderer } from "../react-studio-template-renderer";
 
 import ButtonRenderer from "./button";
 import BoxRenderer from "./box";
-import IconRenderer from "./icon";
+import TextRenderer from "./text";
 import ImageRenderer from "./image";
 import renderString from "./string";
 
@@ -33,8 +33,8 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case "String":
         return renderString(component);
 
-      case "Icon":
-        return new IconRenderer(
+      case "Text":
+        return new TextRenderer(
           component,
           this.importCollection
         ).renderElement();
