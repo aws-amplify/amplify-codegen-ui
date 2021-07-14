@@ -1,4 +1,4 @@
-import { ButtonProps } from "@amzn/amplify-ui-react-types";
+import { ButtonProps } from "@aws-amplify/ui-react-types";
 
 import {
   StudioComponent,

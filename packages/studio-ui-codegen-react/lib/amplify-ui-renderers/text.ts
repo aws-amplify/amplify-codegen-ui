@@ -1,4 +1,4 @@
-import { TextProps } from '@amzn/amplify-ui-react-types';
+import { TextProps } from '@aws-amplify/ui-react-types';
 
 import { StudioComponent, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
 
