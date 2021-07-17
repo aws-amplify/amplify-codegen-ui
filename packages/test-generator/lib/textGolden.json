@@ -8,6 +8,9 @@
       },
       "width": {
         "value": "20px"
+      },
+      "value": {
+        "value": "Text Value"
       }
     }
   }
