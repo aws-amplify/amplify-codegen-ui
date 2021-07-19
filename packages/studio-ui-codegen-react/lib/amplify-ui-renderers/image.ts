@@ -4,10 +4,10 @@ import { StudioComponent, StudioComponentProperties } from "@amzn/amplify-ui-cod
 
 import { ReactComponentRenderer } from "../react-component-renderer"
 
-import ts, { factory, JsxElement } from "typescript";
+import { factory, JsxElement } from "typescript";
 
 export default class ImageRenderer extends ReactComponentRenderer<ImageProps, ImageProps> {
-  renderElement(): ts.JsxElement {
+  renderElement(): JsxElement {
     const tagName = "Image";
     
     const element = factory.createJsxElement(

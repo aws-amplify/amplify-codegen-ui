@@ -7,7 +7,7 @@ import {
 
 import { ReactComponentWithChildrenRenderer } from "../react-component-with-children-renderer";
 
-import ts, { factory, JsxChild, JsxElement } from "typescript";
+import { factory, JsxChild, JsxElement } from "typescript";
 
 export default class ButtonRenderer extends ReactComponentWithChildrenRenderer<ButtonProps, ButtonProps> {
   renderElement(

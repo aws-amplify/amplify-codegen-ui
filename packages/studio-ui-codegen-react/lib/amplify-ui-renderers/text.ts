@@ -4,10 +4,10 @@ import { StudioComponent, StudioComponentProperties } from '@amzn/amplify-ui-cod
 
 import { ReactComponentRenderer } from '../react-component-renderer';
 
-import ts, { factory, JsxElement } from 'typescript';
+import { factory, JsxElement } from 'typescript';
 
 export default class TextRenderer extends ReactComponentRenderer<TextProps, TextProps> {
-  renderElement(): ts.JsxElement {
+  renderElement(): JsxElement {
     const tagName = 'Text';
     const textValue = this.component.properties.value ? this.component.properties.value.value ?? '' : '';
     const element = factory.createJsxElement(

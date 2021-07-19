@@ -4,10 +4,10 @@ import { StudioComponent, StudioComponentProperties } from "@amzn/amplify-ui-cod
 
 import { ReactComponentRenderer } from "../react-component-renderer";
 
-import ts, { factory, JsxElement } from "typescript";
+import { factory, JsxElement } from "typescript";
 
 export default class DividerRenderer extends ReactComponentRenderer<DividerProps, DividerProps> {
-  renderElement(): ts.JsxElement {
+  renderElement(): JsxElement {
     const tagName = "Divider";
     
     const element = factory.createJsxElement(

@@ -2,7 +2,7 @@ import {
   FirstOrderStudioComponent,
   StudioComponent,
 } from "@amzn/amplify-ui-codegen-schema";
-import ts, { factory, JsxElement, JsxFragment } from "typescript";
+import { factory, JsxElement, JsxFragment } from "typescript";
 import { ReactStudioTemplateRenderer } from "../react-studio-template-renderer";
 
 import BadgeRenderer from "./badge";
