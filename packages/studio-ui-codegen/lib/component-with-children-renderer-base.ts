@@ -3,14 +3,13 @@ import {
   ButtonProps,
   CardProps,
   FlexProps,
-  TextProps,
   ViewProps as BoxProps
 } from "@amzn/amplify-ui-react-types";
 
 import { CommonComponentRenderer } from "./common-component-renderer";
 import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
 
-type SourceProp = BoxProps | BadgeProps | ButtonProps | CardProps | FlexProps | TextProps;
+type SourceProp = BoxProps | BadgeProps | ButtonProps | CardProps | FlexProps;
 
 export abstract class ComponentWithChildrenRendererBase<
   TPropIn extends SourceProp,

@@ -63,9 +63,10 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         return renderString(component);
 
       case "Text":
-        return new TextRenderer(component, this.importCollection).renderElement(
-          (children) => children.map((child) => this.renderJsx(child))
-        );
+        return new TextRenderer(
+          component,
+          this.importCollection
+        ).renderElement();
     }
 
     console.warn(`${component.componentType} is not mapped!`);

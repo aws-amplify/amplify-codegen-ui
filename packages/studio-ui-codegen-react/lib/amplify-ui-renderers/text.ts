@@ -2,19 +2,17 @@ import { TextProps } from '@amzn/amplify-ui-react-types';
 
 import { StudioComponent, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
 
-import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
+import { ReactComponentRenderer } from '../react-component-renderer';
 
-import ts, { factory, JsxChild, JsxElement } from "typescript";
+import ts, { factory, JsxElement } from 'typescript';
 
-export default class TextRenderer extends ReactComponentWithChildrenRenderer<TextProps, TextProps> {
-  renderElement(
-    renderChildren: (children: StudioComponent[]) => JsxChild[]
-  ): JsxElement {
+export default class TextRenderer extends ReactComponentRenderer<TextProps, TextProps> {
+  renderElement(): ts.JsxElement {
     const tagName = 'Text';
-
+    const textValue = this.component.properties.value ? this.component.properties.value.value ?? '' : '';
     const element = factory.createJsxElement(
       this.renderOpeningElement(factory, this.component.properties, tagName),
-      renderChildren(this.component.children),
+      [factory.createJsxText(textValue)],
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );
 
