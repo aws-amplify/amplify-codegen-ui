@@ -1,14 +1,14 @@
-import { ImageProps } from "@amzn/amplify-ui-react-types";
+import { DividerProps } from "@amzn/amplify-ui-react-types";
 
 import { StudioComponent, StudioComponentProperties } from "@amzn/amplify-ui-codegen-schema";
 
-import { ReactComponentRenderer } from "../react-component-renderer"
+import { ReactComponentRenderer } from "../react-component-renderer";
 
 import ts, { factory, JsxElement } from "typescript";
 
-export default class ImageRenderer extends ReactComponentRenderer<ImageProps, ImageProps> {
+export default class DividerRenderer extends ReactComponentRenderer<DividerProps, DividerProps> {
   renderElement(): ts.JsxElement {
-    const tagName = "Image";
+    const tagName = "Divider";
     
     const element = factory.createJsxElement(
       this.renderOpeningElement(factory, this.component.properties, tagName),
@@ -17,10 +17,11 @@ export default class ImageRenderer extends ReactComponentRenderer<ImageProps, Im
     );
 
     this.importCollection.addImport("@aws-amplify/ui-react", tagName);
+    
     return element;
   }
 
-  mapProps(props: ImageProps): ImageProps {
+  mapProps(props: DividerProps): DividerProps {
     return props;
   }
 }

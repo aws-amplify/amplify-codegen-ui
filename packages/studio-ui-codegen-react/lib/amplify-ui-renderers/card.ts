@@ -1,19 +1,19 @@
-import { ViewProps as BoxProps } from "@amzn/amplify-ui-react-types";
+import { CardProps } from "@amzn/amplify-ui-react-types";
 
 import {
   StudioComponent,
   StudioComponentProperties,
 } from "@amzn/amplify-ui-codegen-schema";
 
-import { ReactComponentWithChildrenRenderer } from "../react-component-with-children-renderer"
+import { ReactComponentWithChildrenRenderer } from "../react-component-with-children-renderer";
 
 import ts, { factory, JsxChild, JsxElement } from "typescript";
 
-export default class BoxRenderer extends ReactComponentWithChildrenRenderer<BoxProps, BoxProps> {
+export default class CardRenderer extends ReactComponentWithChildrenRenderer<CardProps, CardProps> {
   renderElement(
     renderChildren: (children: StudioComponent[]) => JsxChild[]
   ): JsxElement {
-    const tagName = "View";
+    const tagName = "Card";
 
     const element = factory.createJsxElement(
       this.renderOpeningElement(factory, this.component.properties, tagName),
@@ -22,11 +22,10 @@ export default class BoxRenderer extends ReactComponentWithChildrenRenderer<BoxP
     );
 
     this.importCollection.addImport("@aws-amplify/ui-react", tagName);
-
     return element;
   }
 
-  mapProps(props: BoxProps): BoxProps {
+  mapProps(props: CardProps): CardProps {
     return props;
   }
 }

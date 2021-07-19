@@ -1,4 +1,4 @@
-import { TextProps } from '@aws-amplify/ui-react-types';
+import { TextProps } from '@amzn/amplify-ui-react-types';
 
 import { StudioComponent, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
 
@@ -16,11 +16,11 @@ export default class TextRenderer extends ReactComponentRenderer<TextProps, Text
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );
 
-    this.importCollection.addImport('@amzn-amplify/amplify-ui', tagName);
+    this.importCollection.addImport('@aws-amplify/ui-react', tagName);
     return element;
   }
 
   mapProps(props: TextProps): TextProps {
-    return {};
+    return props;
   }
 }

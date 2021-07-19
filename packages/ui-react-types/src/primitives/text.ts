@@ -1,8 +1,16 @@
-import { AriaProps, BaseProps, StyleProps } from './common';
+import { BaseComponentProps } from './base';
+import { BaseStyleProps } from './style';
 
-export type TextVariant = 'primary' | 'secondary' | 'tertiary' | 'error' | 'warning' | 'info' | 'success';
+export type TextVariant =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'error'
+  | 'warning'
+  | 'info'
+  | 'success';
 
-export interface TextProps extends BaseProps, StyleProps {
+export interface TextProps extends BaseComponentProps, BaseStyleProps {
   /**
    * This should be the primary way to handle different styles of text. Lower-level
    * text styling attributes like color can be set directly, that should be more of an
