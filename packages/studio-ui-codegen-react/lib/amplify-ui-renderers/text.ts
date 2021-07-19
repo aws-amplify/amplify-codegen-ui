@@ -9,10 +9,10 @@ import ts, { factory, JsxElement } from 'typescript';
 export default class TextRenderer extends ReactComponentRenderer<TextProps, TextProps> {
   renderElement(): ts.JsxElement {
     const tagName = 'Text';
-
+    const textValue = this.component.properties.value ? this.component.properties.value.value ?? '' : '';
     const element = factory.createJsxElement(
       this.renderOpeningElement(factory, this.component.properties, tagName),
-      [],
+      [factory.createJsxText(textValue)],
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );
 
