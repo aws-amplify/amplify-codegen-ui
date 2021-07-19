@@ -56,6 +56,7 @@ export abstract class ReactComponentRenderer<
       const currentProp = props[propKey];
 
       if (currentProp.value) {
+        const propName = currentProp.exposedAs ?? propKey;
         const attr = factory.createJsxAttribute(
           factory.createIdentifier(propKey),
           factory.createJsxExpression(
@@ -63,7 +64,7 @@ export abstract class ReactComponentRenderer<
             factory.createBinaryExpression(
               factory.createPropertyAccessExpression(
                 factory.createIdentifier("props"),
-                propKey
+                propName
               ),
               SyntaxKind.QuestionQuestionToken,
               factory.createStringLiteral(currentProp.value, true),
