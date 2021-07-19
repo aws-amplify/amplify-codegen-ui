@@ -53,5 +53,5 @@ export type StudioComponentProperty = {
   /**
    * This is the exposed property that will propogate down to this value
    */
-  hook?: string;
+  exposedAs?: string;
 };
