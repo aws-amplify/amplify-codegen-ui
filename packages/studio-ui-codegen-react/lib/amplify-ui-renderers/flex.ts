@@ -1,19 +1,19 @@
-import { ViewProps as BoxProps } from "@amzn/amplify-ui-react-types";
+import { FlexProps } from "@amzn/amplify-ui-react-types";
 
 import {
   StudioComponent,
   StudioComponentProperties,
 } from "@amzn/amplify-ui-codegen-schema";
 
-import { ReactComponentWithChildrenRenderer } from "../react-component-with-children-renderer"
+import { ReactComponentWithChildrenRenderer } from "../react-component-with-children-renderer";
 
 import ts, { factory, JsxChild, JsxElement } from "typescript";
 
-export default class BoxRenderer extends ReactComponentWithChildrenRenderer<BoxProps, BoxProps> {
+export default class FlexRenderer extends ReactComponentWithChildrenRenderer<FlexProps, FlexProps> {
   renderElement(
     renderChildren: (children: StudioComponent[]) => JsxChild[]
   ): JsxElement {
-    const tagName = "View";
+    const tagName = "Flex";
 
     const element = factory.createJsxElement(
       this.renderOpeningElement(factory, this.component.properties, tagName),
@@ -22,11 +22,11 @@ export default class BoxRenderer extends ReactComponentWithChildrenRenderer<BoxP
     );
 
     this.importCollection.addImport("@aws-amplify/ui-react", tagName);
-
+    
     return element;
   }
 
-  mapProps(props: BoxProps): BoxProps {
+  mapProps(props: FlexProps): FlexProps {
     return props;
   }
 }

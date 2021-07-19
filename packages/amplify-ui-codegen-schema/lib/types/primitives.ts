@@ -1,1 +1,1 @@
-export type StudioPrimitives = "Button" | "Box" | "Image" | "Badge" | "String" | "Text";
+export type StudioPrimitives = "Badge" | "Box" | "Button" | "Card" | "Divider" | "Flex" | "Image" | "String" | "Text";

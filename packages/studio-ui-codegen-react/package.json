@@ -6,7 +6,7 @@
   "homepage": "https://code.amazon.com/packages/AmplifyUICodegen/packages/studio-ui-codegen-react",
   "license": "ISC",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",  
+  "types": "dist/index.d.ts",
   "files": [
     "dist/**"
   ],
@@ -20,14 +20,15 @@
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
+    "@types/node": "^16.3.3",
     "@types/react": "^17.0.4",
     "rollup": "^2.47.0",
     "source-map-support": "^0.5.19"
   },
   "dependencies": {
-    "@aws-amplify/ui-react-types": "^0.0.1",
-    "@amzn/studio-ui-codegen": "^0.0.1",
     "@amzn/amplify-ui-codegen-schema": "^0.0.1",
+    "@amzn/amplify-ui-react-types": "^0.0.1",
+    "@amzn/studio-ui-codegen": "^0.0.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "framer-motion": "^4",

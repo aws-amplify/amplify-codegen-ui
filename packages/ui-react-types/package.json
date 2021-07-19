@@ -1,5 +1,5 @@
 {
-  "name": "@aws-amplify/ui-react-types",
+  "name": "@amzn/amplify-ui-react-types",
   "version": "0.0.1",
   "description": "Amplify UI React types package mirror. Includes type definitions for React UI components",
   "main": "dist/index.js",
@@ -12,12 +12,15 @@
     "dist/**"
   ],
   "devDependencies": {
-    "@types/react": "^17.0.14",
+    "@types/react": "^17.0.4",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "csstype": "^3.0.8",
-    "react": "^17.0.2"
+    "csstype": "^3.0.8"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }

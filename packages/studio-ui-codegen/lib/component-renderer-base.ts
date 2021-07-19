@@ -1,33 +1,31 @@
-/*
 import {
   BadgeProps,
   ButtonProps,
   CardProps,
-  CollectionProps,
-  IconProps,
+  DividerProps,
+  FlexProps,
   ImageProps,
-  SelectProps,
-} from "@amzn/amplify-ui";
-*/
+  TextProps,
+  ViewProps
+} from "@amzn/amplify-ui-react-types";
 
 import { CommonComponentRenderer } from "./common-component-renderer";
 
-/*
 type SourceProp =
+  | BadgeProps
   | ButtonProps
   | CardProps
-  | CollectionProps
-  | SelectProps
-  | IconProps
-  | BadgeProps
-  | ImageProps;
-  */
+  | DividerProps
+  | FlexProps
+  | ImageProps
+  | TextProps
+  | ViewProps;
 
 /**
  * This is a base class for a renderer that renders components with no children.
  */
 export abstract class ComponentRendererBase<
-  TPropIn,  //extends SourceProp,
+  TPropIn extends SourceProp,
   TPropOut,
   TElementOut
 > extends CommonComponentRenderer<TPropIn, TPropOut> {
