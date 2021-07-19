@@ -11,15 +11,7 @@ import {
 
 import { CommonComponentRenderer } from "./common-component-renderer";
 
-type SourceProp =
-  | BadgeProps
-  | ButtonProps
-  | CardProps
-  | DividerProps
-  | FlexProps
-  | ImageProps
-  | TextProps
-  | ViewProps;
+type SourceProp = DividerProps | ImageProps;
 
 /**
  * This is a base class for a renderer that renders components with no children.
