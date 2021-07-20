@@ -55,6 +55,35 @@ export abstract class ReactComponentWithChildrenRenderer<
     return propsArray;
   }
 
+  protected renderCustomCompOpeningElement(
+    factory: NodeFactory,
+    props: StudioComponentProperties,
+    tagName: string
+  ): JsxOpeningElement {
+    const propsArray: JsxAttribute[] = [];
+    for (let propKey of Object.keys(props)) {
+      const currentProp = props[propKey];
+
+      if (currentProp.value) {
+        const propName = currentProp.exposedAs ?? propKey;
+        const attr = factory.createJsxAttribute(
+          factory.createIdentifier(propKey),
+          factory.createStringLiteral(currentProp.value, true)
+        );
+
+        propsArray.push(attr);
+      }
+    }
+
+    this.addFindChildOverrideAttribute(factory, propsArray, tagName);
+
+    return factory.createJsxOpeningElement(
+      factory.createIdentifier(tagName),
+      undefined,
+      factory.createJsxAttributes(propsArray)
+    );
+  }
+
   protected renderOpeningElement(
     factory: NodeFactory,
     props: StudioComponentProperties,
@@ -115,5 +144,26 @@ export abstract class ReactComponentWithChildrenRenderer<
       )
     );
     attributes.push(overrideAttr);
+  }
+
+  private addFindChildOverrideAttribute(
+    factory: NodeFactory,
+    attributes: JsxAttributeLike[],
+    tagName: string
+  ) {
+
+    const findChildOverrideAttr = factory.createJsxSpreadAttribute(
+      factory.createCallExpression(
+        factory.createIdentifier("findChildOverrides"), 
+        undefined, 
+        [factory.createPropertyAccessExpression(
+          factory.createIdentifier("props"), 
+          factory.createIdentifier("overrides")
+          ), 
+          factory.createStringLiteral(tagName)
+        ]
+      )
+    );
+    attributes.push(findChildOverrideAttr);
   }
 }

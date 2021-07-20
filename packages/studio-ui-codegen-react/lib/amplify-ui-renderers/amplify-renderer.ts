@@ -14,6 +14,7 @@ import FlexRenderer from "./flex";
 import ImageRenderer from "./image";
 import TextRenderer from "./text";
 import renderString from "./string";
+import CustomComponentRenderer from "./customComponent";
 
 export class AmplifyRenderer extends ReactStudioTemplateRenderer {
   constructor(component: FirstOrderStudioComponent) {
@@ -69,17 +70,13 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement();
     }
 
-    console.warn(`${component.componentType} is not mapped!`);
-    const element = factory.createJsxElement(
-      factory.createJsxOpeningElement(
-        factory.createIdentifier("div"),
-        undefined,
-        factory.createJsxAttributes([])
-      ),
-      [],
-      factory.createJsxClosingElement(factory.createIdentifier("div"))
-    );
+    console.warn(`${component.componentType} is not one of the primitives - assuming CustomComponent`);
 
-    return element;
+    return new CustomComponentRenderer(
+      component,
+      this.importCollection
+    ).renderElement(
+      (children) => children.map((child) => this.renderJsx(child))
+    );
   }
 }
