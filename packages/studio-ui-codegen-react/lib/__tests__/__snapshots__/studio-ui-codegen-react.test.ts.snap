@@ -1,11 +1,61 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`amplify render tests should generate a simple button component 1`] = `
+exports[`amplify render tests should generate a button within a box component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
 import { Button, View } from \\"@aws-amplify/ui-react\\";
 
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
     return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><Button color={props.color ?? '#ff0000'} width={props.width ?? '20px'} {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button></View>);
+}"
+`;
+
+exports[`amplify render tests should generate a component with custom child 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { CustomButton, View } from \\"@aws-amplify/ui-react\\";
+
+export default function BoxWithCustomButton(props: BoxWithCustomButtonProps): JSX.Element {
+    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><CustomButton color='#ff0000' width='20px' {...findChildOverrides(props.overrides, \\"CustomButton\\")}></CustomButton></View>);
+}"
+`;
+
+exports[`amplify render tests should generate a component with exposeAs prop 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { Button, View } from \\"@aws-amplify/ui-react\\";
+
+export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
+    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><Button color={props.buttonColor ?? '#ff0000'} width={props.width ?? '20px'} {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button></View>);
+}"
+`;
+
+exports[`amplify render tests should generate a simple box component 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { View } from \\"@aws-amplify/ui-react\\";
+
+export default function Test(props: TestProps): JSX.Element {
+    return (<View fontFamily={props.fontFamily ?? 'Times New Roman'} fontSize={props.fontSize ?? '20px'} {...props} {...getOverrideProps(props.overrides, \\"View\\")}></View>);
+}"
+`;
+
+exports[`amplify render tests should generate a simple button component 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { Button } from \\"@aws-amplify/ui-react\\";
+
+export default function CustomButton(props: CustomButtonProps): JSX.Element {
+    return (<Button color={props.color ?? '#ff0000'} width={props.width ?? '20'} {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button>);
+}"
+`;
+
+exports[`amplify render tests should generate a simple text component 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { Text } from \\"@aws-amplify/ui-react\\";
+
+export default function CustomText(props: CustomTextProps): JSX.Element {
+    return (<Text color={props.color ?? '#ff0000'} width={props.width ?? '20px'} value={props.value ?? 'Text Value'} {...props} {...getOverrideProps(props.overrides, \\"Text\\")}>Text Value</Text>);
 }"
 `;

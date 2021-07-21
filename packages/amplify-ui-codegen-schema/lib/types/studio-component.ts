@@ -9,7 +9,7 @@ export type StudioComponent = {
   /**
    * This is the unique global identifier for each component
    */
-  id: string;
+  componentId: string;
 
   /**
    * These are the nested components in a composite
