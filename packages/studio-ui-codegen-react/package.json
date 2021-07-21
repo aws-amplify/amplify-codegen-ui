@@ -7,23 +7,18 @@
   "license": "ISC",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist/**"
-  ],
   "repository": {
     "type": "git",
     "url": "ssh://git.amazon.com:2222/pkg/AmplifyUICodegen"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
+    "test": "jest",
     "build": "tsc",
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
     "@types/node": "^16.3.3",
-    "@types/react": "^17.0.4",
-    "rollup": "^2.47.0",
-    "source-map-support": "^0.5.19"
+    "@types/react": "^17.0.4"
   },
   "dependencies": {
     "@amzn/amplify-ui-codegen-schema": "^0.0.1",
@@ -35,5 +30,26 @@
   "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+  },
+  "jest": {
+    "verbose": false,
+    "preset": "ts-jest",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "lib/**/*.ts"
+    ],
+    "testRegex": "(lib/__tests__/.*.test.ts)$",
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   }
 }

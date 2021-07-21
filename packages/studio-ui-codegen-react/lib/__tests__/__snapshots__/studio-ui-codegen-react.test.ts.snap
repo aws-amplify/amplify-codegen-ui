@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`amplify render tests should generate a simple button component 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { Button, View } from \\"@aws-amplify/ui-react\\";
+
+export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
+    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><Button color={props.color ?? '#ff0000'} width={props.width ?? '20px'} {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button></View>);
+}"
+`;

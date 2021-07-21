@@ -22,5 +22,5 @@
     "incremental": true
   },
   "compileOnSave": true,
-  "exclude": ["node_modules", "build", "scripts"]
+  "exclude": ["node_modules", "build", "scripts", "**/__tests__/**/*", "**/dist/**/*"]
 }

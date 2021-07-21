@@ -14,10 +14,9 @@ export default class ButtonRenderer extends ReactComponentWithChildrenRenderer<B
     renderChildren: (children: StudioComponent[]) => JsxChild[]
   ): JsxElement {
     const tagName = "Button";
-
     const element = factory.createJsxElement(
       this.renderOpeningElement(factory, this.component.properties, tagName),
-      renderChildren(this.component.children),
+      this.component.children ? renderChildren(this.component.children) : [],
       factory.createJsxClosingElement(factory.createIdentifier(tagName))
     );
 
