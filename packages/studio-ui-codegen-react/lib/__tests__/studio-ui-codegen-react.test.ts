@@ -5,9 +5,6 @@ import * as schema from './studio-ui-json/boxGolden.json';
 import fs from 'fs';
 import { join } from 'path';
 
-const rendererFactory = new StudioTemplateRendererFactory(
-  (component: FirstOrderStudioComponent) => new AmplifyRenderer(component),
-);
 function generateWithAmplifyRenderer(jsonSchemaFile: string): string {
   const schema = JSON.parse(
     fs.readFileSync(join(__dirname, 'studio-ui-json', `${jsonSchemaFile}.json`), 'utf-8')
