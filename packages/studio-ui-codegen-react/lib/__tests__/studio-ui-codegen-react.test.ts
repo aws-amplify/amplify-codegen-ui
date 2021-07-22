@@ -1,7 +1,6 @@
 import { FirstOrderStudioComponent } from '@amzn/amplify-ui-codegen-schema';
-import { StudioTemplateRendererFactory } from '../../../studio-ui-codegen/dist';
+import { StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
 import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
-import * as schema from './studio-ui-json/boxGolden.json';
 import fs from 'fs';
 import { join } from 'path';
 
