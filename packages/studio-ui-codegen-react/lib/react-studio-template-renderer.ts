@@ -58,7 +58,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     let compiled = transpileModule(result, {
       compilerOptions: {
         module: ts.ModuleKind.ESNext,
-        target: ts.ScriptTarget.ES5,
+        target: ts.ScriptTarget.ES2015,
         jsx: ts.JsxEmit.React,
       },
     });
