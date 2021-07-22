@@ -1,6 +1,10 @@
 // Base component definition
 export interface BaseComponentProps {
   id?: string;
+
+  /**
+   * Additional CSS class name for component
+   */
   className?: string;
 
   /**
