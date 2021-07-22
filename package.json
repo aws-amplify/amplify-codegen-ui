@@ -10,8 +10,8 @@
     "test": "lerna run test",
     "build": "lerna run build",
     "prepublishOnly": "npm run build && npm run test",
-    "setup-dev": "yarn && lerna run build",
-    "clean": "lerna run clean && lerna exec yarn rimraf tsconfig.tsbuildinfo && lerna clean --yes && yarn rimraf node_modules"
+    "setup-dev": "npm install && lerna bootstrap && lerna run build",
+    "clean": "lerna run clean && lerna exec npm run rimraf tsconfig.tsbuildinfo && lerna clean --yes && npm run rimraf node_modules"
   },
   "files": [],
   "devDependencies": {
@@ -27,9 +27,5 @@
     "ts-jest": "^27.0.3",
     "ts-node": "^8.10.1",
     "rimraf": "^3.0.2"
-  },
-  "workspaces": [
-    "packages/*"
-  ],
-  "private": true
+  }
 }
