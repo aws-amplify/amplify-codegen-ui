@@ -15,33 +15,55 @@ function generateWithAmplifyRenderer(jsonSchemaFile: string): string {
 }
 
 describe('amplify render tests', () => {
-  it('should generate a simple box component', () => {
-    const generatedCode = generateWithAmplifyRenderer('boxTest')
-    expect(generatedCode).toMatchSnapshot();
+  describe('basic component tests', () => {
+    it('should generate a simple box component', () => {
+      const generatedCode = generateWithAmplifyRenderer('boxTest')
+      expect(generatedCode).toMatchSnapshot();
+    });
+  
+    it('should generate a simple button component', () => {
+      const generatedCode = generateWithAmplifyRenderer('buttonGolden')
+      expect(generatedCode).toMatchSnapshot();
+    });
+  
+    it('should generate a simple text component', () => {
+      const generatedCode = generateWithAmplifyRenderer('textGolden')
+      expect(generatedCode).toMatchSnapshot();
+    });
+
+    it('should generate a simple badge component', () => {
+    });
+
+    it('should generate a simple card component', () => {
+    });
+
+    it('should generate a simple divider component', () => {
+    });
+
+    it('should generate a simple flex component', () => {
+    });
+
+    it('should generate a simple image component', () => {
+    });
+
+    it('should generate a simple string component', () => {
+    });
   });
 
-  it('should generate a simple button component', () => {
-    const generatedCode = generateWithAmplifyRenderer('buttonGolden')
-    expect(generatedCode).toMatchSnapshot();
-  });
-
-  it('should generate a simple text component', () => {
-    const generatedCode = generateWithAmplifyRenderer('textGolden')
-    expect(generatedCode).toMatchSnapshot();
-  });
-
-  it('should generate a button within a box component', () => {
-    const generatedCode = generateWithAmplifyRenderer('boxGolden')
-    expect(generatedCode).toMatchSnapshot();
-  });
-
-  it('should generate a component with custom child', () => {
-    const generatedCode = generateWithAmplifyRenderer('customChild')
-    expect(generatedCode).toMatchSnapshot();
-  });
-
-  it('should generate a component with exposeAs prop', () => {
-    const generatedCode = generateWithAmplifyRenderer('exposedAsTest')
-    expect(generatedCode).toMatchSnapshot();
-  });
+  describe('complex component tests', () => {
+    it('should generate a button within a box component', () => {
+      const generatedCode = generateWithAmplifyRenderer('boxGolden')
+      expect(generatedCode).toMatchSnapshot();
+    });
+  
+    it('should generate a component with custom child', () => {
+      const generatedCode = generateWithAmplifyRenderer('customChild')
+      expect(generatedCode).toMatchSnapshot();
+    });
+  
+    it('should generate a component with exposeAs prop', () => {
+      const generatedCode = generateWithAmplifyRenderer('exposedAsTest')
+      expect(generatedCode).toMatchSnapshot();
+    });
+  })
 });
