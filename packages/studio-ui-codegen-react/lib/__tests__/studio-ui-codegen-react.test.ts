@@ -4,13 +4,20 @@ import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
 import fs from 'fs';
 import { join } from 'path';
 
-function generateWithAmplifyRenderer(jsonSchemaFile: string): string {
-  const schema = JSON.parse(
+function loadSchemaFromJSONFile(jsonSchemaFile: string): FirstOrderStudioComponent {
+  return JSON.parse(
     fs.readFileSync(join(__dirname, 'studio-ui-json', `${jsonSchemaFile}.json`), 'utf-8')
     ) as FirstOrderStudioComponent;
+}
+
+function generateWithAmplifyRenderer(jsonSchemaFile: string, isSampleCodeSnippet: boolean = false): string {
+  const schema = loadSchemaFromJSONFile(jsonSchemaFile);
   const rendererFactory = new StudioTemplateRendererFactory(
     (component: FirstOrderStudioComponent) => new AmplifyRenderer(component),
   );
+  if (isSampleCodeSnippet) {
+    return rendererFactory.buildRenderer(schema).renderSampleCodeSnippet().compText;
+  }
   return rendererFactory.buildRenderer(schema).renderComponent().componentText;
 }
 
@@ -63,6 +70,13 @@ describe('amplify render tests', () => {
   
     it('should generate a component with exposeAs prop', () => {
       const generatedCode = generateWithAmplifyRenderer('exposedAsTest')
+      expect(generatedCode).toMatchSnapshot();
+    });
+  })
+
+  describe('sample code snippet tests', () => {
+    it('should generate a sample code snippet for components', () => {
+      const generatedCode = generateWithAmplifyRenderer('sampleCodeSnippet')
       expect(generatedCode).toMatchSnapshot();
     });
   })

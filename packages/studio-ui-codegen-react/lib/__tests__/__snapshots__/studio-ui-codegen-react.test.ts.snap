@@ -59,3 +59,13 @@ export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
     return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><Button color={props.buttonColor ?? '#ff0000'} width={props.width ?? '20px'} {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button></View>);
 }"
 `;
+
+exports[`amplify render tests sample code snippet tests should generate a sample code snippet for components 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { CustomButton, View } from \\"@aws-amplify/ui-react\\";
+
+export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
+    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><CustomButton color='#ff0000' width='20px' buttonText='Click Me' {...findChildOverrides(props.overrides, \\"CustomButton\\")}></CustomButton></View>);
+}"
+`;
