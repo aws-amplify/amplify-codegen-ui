@@ -7,7 +7,7 @@ import {
 } from "@amzn/studio-ui-codegen";
 import { AmplifyRenderer } from "@amzn/studio-ui-codegen-react";
 
-import * as schema from "./lib/customChild.json";
+import * as schema from "./lib/sampleCodeSnippet.json";
 
 Error.stackTraceLimit = Infinity;
 
@@ -27,3 +27,10 @@ console.log("componentText ");
 console.log(compOnly.compText);
 console.log("componentImports ");
 console.log(compOnly.importsText);
+
+const compOnlyAppSample = rendererFactory.buildRenderer(schema as any).renderSampleCodeSnippet();
+console.log("Code Snippet Output");
+console.log("componentText ");
+console.log(compOnlyAppSample.compText);
+console.log("componentImports ");
+console.log(compOnlyAppSample.importsText);

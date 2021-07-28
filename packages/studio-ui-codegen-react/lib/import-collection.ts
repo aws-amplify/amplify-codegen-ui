@@ -26,6 +26,27 @@ export class ImportCollection {
     }
   }
 
+  buildSampleSnippetImports(topComponentName: string): ImportDeclaration[] {
+    const importDeclarations: ImportDeclaration[] = [];
+    const sampleStudioPath = "./studio-ui";
+    const namedImports = factory.createNamedImports([
+      factory.createImportSpecifier(undefined, factory.createIdentifier(topComponentName))
+    ]);
+
+    importDeclarations.push(
+      createImportDeclaration(
+        undefined,
+        undefined,
+        factory.createImportClause(
+          undefined,
+          namedImports
+        ),
+        factory.createStringLiteral(sampleStudioPath)
+      )
+    );
+    return importDeclarations;
+  }
+
   buildImportStatements(): ImportDeclaration[] {
     const importDeclarations: ImportDeclaration[] = [];
 

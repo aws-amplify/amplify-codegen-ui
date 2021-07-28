@@ -1,5 +1,6 @@
 import {
   StudioComponent,
+  FirstOrderStudioComponent,
   StudioComponentProperties,
 } from "@amzn/amplify-ui-codegen-schema";
 import { ComponentRendererBase } from "@amzn/studio-ui-codegen";
@@ -12,7 +13,7 @@ export abstract class ReactComponentRenderer<
   TPropOut
 > extends ComponentRendererBase<TPropIn, TPropOut, JsxElement> {
   constructor(
-    component: StudioComponent,
+    component: StudioComponent | FirstOrderStudioComponent,
     protected importCollection: ImportCollection
   ) {
     super(component);

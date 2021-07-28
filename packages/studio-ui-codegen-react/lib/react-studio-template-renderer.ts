@@ -15,9 +15,11 @@ import ts, {
   ScriptTarget,
   SyntaxKind,
   transpileModule,
+  VariableStatement,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import ReactOutputManager from './react-output-manager';
+import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -33,6 +35,24 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   constructor(component: FirstOrderStudioComponent) {
     super(component, new ReactOutputManager());
+  }
+
+  renderSampleCodeSnippet() {
+    const jsx = this.renderSampleCodeSnippetJsx(this.component);
+    const imports = this.importCollection.buildSampleSnippetImports(this.component.name);
+    const sampleAppName = 'App';
+
+    const { printer, file } = this.createPrinter();
+    let importsText = '';
+    for (let importStatement of imports) {
+      const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
+      importsText += result + EOL;
+    }
+
+    const wrapper = this.renderAppWrapper(sampleAppName, jsx);
+    const compText = printer.printNode(EmitHint.Unspecified, wrapper, file);
+
+    return { compText, importsText };
   }
 
   renderComponentOnly() {
@@ -65,7 +85,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const compText = compiled.outputText.replace('export default ', '');
 
-    return {compText, importsText};
+    return { compText, importsText };
   }
 
   renderComponent() {
@@ -136,6 +156,37 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       ),
       factory.createBlock([factory.createReturnStatement(factory.createParenthesizedExpression(jsx))], true),
     );
+  }
+
+  renderAppWrapper(appName: string, jsx: JsxElement | JsxFragment): VariableStatement {
+    const declarationList = factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          appName,
+          undefined,
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [],
+            undefined,
+            factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock([factory.createReturnStatement(factory.createParenthesizedExpression(jsx))], true),
+          ),
+        ),
+      ],
+      ts.NodeFlags.Const,
+    );
+    const wrapper = factory.createVariableStatement(
+      [factory.createModifier(SyntaxKind.ExportKeyword)],
+      declarationList,
+    );
+
+    return wrapper;
+  }
+
+  renderSampleCodeSnippetJsx(component: FirstOrderStudioComponent): JsxElement | JsxFragment {
+    return new SampleCodeRenderer(component, this.importCollection).renderElement();
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment;

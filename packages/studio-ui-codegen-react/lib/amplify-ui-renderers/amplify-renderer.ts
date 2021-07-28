@@ -21,7 +21,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
     super(component);
   }
 
-  renderJsx(component: StudioComponent): JsxElement | JsxFragment {
+  renderJsx(component: StudioComponent | FirstOrderStudioComponent): JsxElement | JsxFragment {
     switch (component.componentType) {
       case "Badge":
         return new BadgeRenderer(component, this.importCollection).renderElement(
