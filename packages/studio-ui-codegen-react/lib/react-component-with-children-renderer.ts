@@ -5,10 +5,12 @@ import {
   StudioComponent,
   StudioComponentProperties,
   StudioComponentProperty,
+  StudioComponentPropertyType,
 } from "@amzn/amplify-ui-codegen-schema";
 
-import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, NodeFactory, SyntaxKind } from "typescript";
+import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, NodeFactory, SyntaxKind, Expression } from "typescript";
 import { ImportCollection } from "./import-collection";
+import { getComponentPropValueExpression } from "./react-component-render-helper";
 
 export abstract class ReactComponentWithChildrenRenderer<
   TPropIn,
@@ -63,12 +65,12 @@ export abstract class ReactComponentWithChildrenRenderer<
     const propsArray: JsxAttribute[] = [];
     for (let propKey of Object.keys(props)) {
       const currentProp = props[propKey];
-
-      if (currentProp.value) {
+      if (currentProp.value !== undefined) {
+        const currentPropValue = getComponentPropValueExpression(currentProp);
         const propName = currentProp.exposedAs ?? propKey;
         const attr = factory.createJsxAttribute(
           factory.createIdentifier(propKey),
-          factory.createStringLiteral(currentProp.value, true)
+          factory.createJsxExpression(undefined, currentPropValue),
         );
 
         propsArray.push(attr);
@@ -95,6 +97,7 @@ export abstract class ReactComponentWithChildrenRenderer<
 
       if (currentProp.value) {
         const propName = currentProp.exposedAs ?? propKey;
+        const propValue = getComponentPropValueExpression(currentProp);
         const attr = factory.createJsxAttribute(
           factory.createIdentifier(propKey),
           factory.createJsxExpression(
@@ -105,7 +108,7 @@ export abstract class ReactComponentWithChildrenRenderer<
                 propName
               ),
               SyntaxKind.QuestionQuestionToken,
-              factory.createStringLiteral(currentProp.value, true),
+              propValue,
             )
           )
         );

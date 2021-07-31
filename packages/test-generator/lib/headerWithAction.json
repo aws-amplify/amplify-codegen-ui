@@ -1,0 +1,210 @@
+{
+  "name": "HeaderWithAction3",
+  "componentType": "Flex",
+  "componentId": "O8phmtdR-chILsHCWXQBo",
+  "children": [
+    {
+      "componentType": "Flex",
+      "componentId": "243:20",
+      "children": [
+        {
+          "componentType": "Text",
+          "componentId": "243:22",
+          "children": [],
+          "properties": {
+            "fontSize": {
+              "value": "32px"
+            },
+            "fontFamily": {
+              "value": "Arial"
+            },
+            "color": {
+              "value": "rgb(0,0,0)"
+            },
+            "value": {
+              "value": "Header"
+            },
+            "fontWeight": {
+              "value": 700
+            }
+          }
+        }
+      ],
+      "properties": {
+        "padding": {
+          "value": "0px 55.5px 0px 12px"
+        },
+        "margin": {
+          "value": "0 10px"
+        },
+        "alignSelf": {
+          "value": "stretch"
+        },
+        "flexGrow": {
+          "value": "1"
+        },
+        "alignItems": {
+          "value": "center"
+        },
+        "display": {
+          "value": "flex"
+        },
+        "gap": {
+          "value": "10px"
+        },
+        "width": {
+          "value": "100%"
+        },
+        "direction": {
+          "value": "row"
+        },
+        "height": {
+          "value": "100%"
+        }
+      }
+    },
+    {
+      "componentType": "Flex",
+      "componentId": "243:21",
+      "children": [
+        {
+          "componentType": "Flex",
+          "componentId": "230:1929",
+          "children": [
+            {
+              "componentType": "Text",
+              "componentId": "230:1930",
+              "children": [],
+              "properties": {
+                "fontSize": {
+                  "value": "16px"
+                },
+                "fontFamily": {
+                  "value": "Arial"
+                },
+                "color": {
+                  "value": "rgb(255,255,255)"
+                },
+                "value": {
+                  "value": "Action"
+                },
+                "fontWeight": {
+                  "value": "400"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "padding": {
+              "value": "10px 0px 10px 0px"
+            },
+            "margin": {
+              "value": "0 10px"
+            },
+            "backgroundColor": {
+              "value": "rgb(42.13476486504078,41.23828276991844,86.06250151991844)"
+            },
+            "flexGrow": {
+              "value": "0"
+            },
+            "alignItems": {
+              "value": "center"
+            },
+            "display": {
+              "value": "flex"
+            },
+            "justifyContent": {
+              "value": "center"
+            },
+            "borderTopLeftRadius": {
+              "value": "8px"
+            },
+            "borderRadius": {
+              "value": "8px"
+            },
+            "borderBottomLeftRadius": {
+              "value": "8px"
+            },
+            "width": {
+              "value": "166px"
+            },
+            "borderBottomRightRadius": {
+              "value": "8px"
+            },
+            "borderTopRightRadius": {
+              "value": "8px"
+            },
+            "direction": {
+              "value": "column"
+            },
+            "height": {
+              "value": "44px"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "padding": {
+          "value": "42px 42px 42px 42px"
+        },
+        "margin": {
+          "value": "0 10px"
+        },
+        "alignSelf": {
+          "value": "stretch"
+        },
+        "flexGrow": {
+          "value": "0"
+        },
+        "alignItems": {
+          "value": "center"
+        },
+        "display": {
+          "value": "flex"
+        },
+        "gap": {
+          "value": "10px"
+        },
+        "justifyContent": {
+          "value": "flex-end"
+        },
+        "direction": {
+          "value": "row"
+        },
+        "height": {
+          "value": "64px"
+        }
+      }
+    }
+  ],
+  "properties": {
+    "padding": {
+      "value": "12px 12px 12px 12px"
+    },
+    "backgroundColor": {
+      "value": "rgb(255,255,255)"
+    },
+    "alignItems": {
+      "value": "flex-start"
+    },
+    "display": {
+      "value": "flex"
+    },
+    "gap": {
+      "value": "10px"
+    },
+    "width": {
+      "value": "1133px"
+    },
+    "direction": {
+      "value": "row"
+    },
+    "height": {
+      "value": "88px"
+    }
+  },
+  "figmaMetadata": {
+    "nodeId": "243:25",
+    "documentUrl": "https://www.figma.com/file/hAY0FyLQ4H7Cjh7ylpWYta/Playground_v1-Copy?node-id=122%3A1763"
+  }
+}

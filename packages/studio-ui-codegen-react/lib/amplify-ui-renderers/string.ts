@@ -8,7 +8,7 @@ export default function renderString(component: StudioComponent): JsxFragment {
   console.log(value);
   const element = factory.createJsxFragment(
     factory.createJsxOpeningFragment(),
-    [factory.createJsxText(value)],
+    [factory.createJsxText(value.toString())],
     factory.createJsxJsxClosingFragment()
   );
 

@@ -46,7 +46,7 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
     const propsArray: JsxAttribute[] = [];
     props?.forEach((value, key) => {
       if (value.exposedAs) {
-        const displayExpr = value.value ? factory.createStringLiteral(value.value) : defaultValueExpr;
+        const displayExpr = value.value !== undefined ? factory.createStringLiteral(value.value.toString()) : defaultValueExpr;
         const attr = factory.createJsxAttribute(
           factory.createIdentifier(key),
           displayExpr,
