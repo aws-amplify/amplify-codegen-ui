@@ -15,7 +15,7 @@
     "url": "ssh://git.amazon.com:2222/pkg/AmplifyUICodegen"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
+    "test": "echo \"Error: run tests from root\"",
     "build": "tsc",
     "build:watch": "npm run build -- --watch"
   },
