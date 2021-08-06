@@ -2,11 +2,14 @@ import {
   StudioComponent,
   FirstOrderStudioComponent,
   StudioComponentProperties,
+  StudioComponentProperty,
+  StudioComponentPropertyType
 } from "@amzn/amplify-ui-codegen-schema";
 import { ComponentRendererBase } from "@amzn/studio-ui-codegen";
-import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory, SyntaxKind } from "typescript";
+import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory, SyntaxKind, Expression } from "typescript";
 
 import { ImportCollection } from "./import-collection";
+import { getComponentPropValueExpression } from "./react-component-render-helper";
 
 export abstract class ReactComponentRenderer<
   TPropIn,
@@ -55,8 +58,8 @@ export abstract class ReactComponentRenderer<
     const propsArray: JsxAttribute[] = [];
     for (let propKey of Object.keys(props)) {
       const currentProp = props[propKey];
-
-      if (currentProp.value) {
+      if (currentProp.value !== undefined) {
+        const propValue = getComponentPropValueExpression(currentProp);
         const propName = currentProp.exposedAs ?? propKey;
         const attr = factory.createJsxAttribute(
           factory.createIdentifier(propKey),
@@ -68,7 +71,7 @@ export abstract class ReactComponentRenderer<
                 propName
               ),
               SyntaxKind.QuestionQuestionToken,
-              factory.createStringLiteral(currentProp.value, true),
+              propValue,
             )
           )
         );
