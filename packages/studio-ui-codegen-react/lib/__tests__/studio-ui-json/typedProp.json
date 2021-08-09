@@ -1,0 +1,13 @@
+{
+  "name": "typedPropTest",
+  "componentType": "Button",
+  "componentId": "1234-5678-9010",
+  "properties": {
+    "width": {
+      "value": 20
+    },
+    "value": {
+      "value": "Header"
+    }
+  }
+}

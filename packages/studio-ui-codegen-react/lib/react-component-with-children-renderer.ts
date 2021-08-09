@@ -66,11 +66,12 @@ export abstract class ReactComponentWithChildrenRenderer<
     for (let propKey of Object.keys(props)) {
       const currentProp = props[propKey];
       if (currentProp.value !== undefined) {
-        const currentPropValue = getComponentPropValueExpression(currentProp);
+        //convert all types to string because of the jsx attribute regulation
+        const currentPropValue = factory.createStringLiteral(currentProp.value.toString(), true);;
         const propName = currentProp.exposedAs ?? propKey;
         const attr = factory.createJsxAttribute(
-          factory.createIdentifier(propKey),
-          factory.createJsxExpression(undefined, currentPropValue),
+          factory.createIdentifier(propName),
+          currentPropValue,
         );
 
         propsArray.push(attr);

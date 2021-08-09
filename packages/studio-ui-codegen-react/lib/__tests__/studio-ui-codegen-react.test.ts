@@ -76,8 +76,15 @@ describe('amplify render tests', () => {
 
   describe('sample code snippet tests', () => {
     it('should generate a sample code snippet for components', () => {
-      const generatedCode = generateWithAmplifyRenderer('sampleCodeSnippet')
+      const generatedCode = generateWithAmplifyRenderer('sampleCodeSnippet', true)
       expect(generatedCode).toMatchSnapshot();
     });
   })
+
+  describe('typed property tests', () => {
+    it('should generate a property of number type', () => {
+      const generatedCode = generateWithAmplifyRenderer('typedProp')
+      expect(generatedCode).toMatchSnapshot();
+    });
+  });
 });
