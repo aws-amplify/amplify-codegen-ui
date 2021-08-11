@@ -1,6 +1,8 @@
 import { FrameworkOutputManager } from "./framework-output-manager";
 import { StudioTemplateRenderer } from "./studio-template-renderer";
+
 import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
+import { RenderTextComponentResponse } from "./render-component-response";
 
 /**
  * This class is used to wrap the created of renderers due to each renderer
@@ -9,7 +11,7 @@ import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
 export class StudioTemplateRendererFactory<
   TSource,
   TOutputManager extends FrameworkOutputManager<TSource>,
-  TRenderOutput,
+  TRenderOutput extends RenderTextComponentResponse,
   TRenderer extends StudioTemplateRenderer<
     TSource,
     TOutputManager,

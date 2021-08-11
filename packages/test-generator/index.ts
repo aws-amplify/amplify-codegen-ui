@@ -5,7 +5,14 @@ import {
   StudioTemplateRendererManager,
   StudioTemplateRendererFactory,
 } from "@amzn/studio-ui-codegen";
-import { AmplifyRenderer } from "@amzn/studio-ui-codegen-react";
+import { 
+  AmplifyRenderer, 
+  ReactOutputConfig,
+  JSModuleEnum,
+  CompileTargetEnum,
+  JSOutputFormatEnum
+} from "@amzn/studio-ui-codegen-react";
+import path from 'path';
 
 import * as schema from "./lib/dataBindingWithDataStore.json";
 
@@ -15,7 +22,14 @@ const rendererFactory = new StudioTemplateRendererFactory(
   (component: StudioComponent) => new AmplifyRenderer(component)
 );
 
-const rendererManager = new StudioTemplateRendererManager(rendererFactory, '.');
+const outputPathDir = path.resolve(path.join(__dirname, '..', 'ui-components'));
+const outputConfig: ReactOutputConfig = {
+  outputPathDir,
+  module: JSModuleEnum.CommonJS,
+  compileTarget: CompileTargetEnum.ES6,
+  outputFormat: JSOutputFormatEnum.tsx
+};
+const rendererManager = new StudioTemplateRendererManager(rendererFactory, outputConfig);
 
 console.log(rendererManager);
 
@@ -28,11 +42,9 @@ console.log(compOnly.compText);
 console.log("componentImports ");
 console.log(compOnly.importsText);
 
-/*
 const compOnlyAppSample = rendererFactory.buildRenderer(schema as any).renderSampleCodeSnippet();
 console.log("Code Snippet Output");
 console.log("componentText ");
 console.log(compOnlyAppSample.compText);
 console.log("componentImports ");
 console.log(compOnlyAppSample.importsText);
-*/

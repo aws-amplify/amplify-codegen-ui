@@ -1,11 +1,12 @@
 import { FrameworkOutputManager } from "./framework-output-manager";
 import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
 import { StudioRendererConstants } from "./renderer-helper";
+import { RenderTextComponentResponse } from "./render-component-response";
 
 export abstract class StudioTemplateRenderer<
   TSource,
   TOutputManager extends FrameworkOutputManager<TSource>,
-  TRenderOutput
+  TRenderOutput extends RenderTextComponentResponse
 > {
   /**
    *
@@ -22,7 +23,7 @@ export abstract class StudioTemplateRenderer<
    */
   abstract renderComponent(): TRenderOutput;
 
-  protected renderComponentToFilesystem(componentContent: TSource) {
+  renderComponentToFilesystem(componentContent: TSource) {
     return (outputPath: string) =>
       this.outputManager.writeComponent(
         componentContent,
