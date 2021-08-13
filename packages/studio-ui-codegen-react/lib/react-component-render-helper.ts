@@ -1,14 +1,13 @@
-import { StudioComponentProperty, StudioComponentPropertyType } from '@amzn/amplify-ui-codegen-schema';
+import { FixedStudioComponentProperty, BoundStudioComponentProperty } from '@amzn/amplify-ui-codegen-schema';
 
 import { factory, Expression } from 'typescript';
 
-export function getComponentPropValueExpression(prop: StudioComponentProperty): Expression {
-  if (prop.type) {
-    switch (prop.type) {
-      case StudioComponentPropertyType.Number:
-        return factory.createNumericLiteral(prop.value);
-    }
-  }
-
+export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): Expression {
   return factory.createStringLiteral(prop.value.toString(), true);
+}
+
+export function isFixedPropertyWithValue(
+  prop: FixedStudioComponentProperty | BoundStudioComponentProperty,
+): prop is FixedStudioComponentProperty {
+  return 'value' in prop;
 }

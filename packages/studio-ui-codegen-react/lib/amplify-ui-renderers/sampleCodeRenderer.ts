@@ -4,15 +4,18 @@ import { ReactComponentRenderer } from '../react-component-renderer';
 import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from 'typescript';
 import {
   StudioComponent,
-  FirstOrderStudioComponent,
-  StudioComponentProperty,
-} from '../../../amplify-ui-codegen-schema/dist';
+  StudioComponentChild,
+  BoundStudioComponentProperty,
+} from '@amzn/amplify-ui-codegen-schema';
+import {
+  StudioRendererConstants
+} from '@amzn/studio-ui-codegen'
 
-export default class SampleCodeRenderer extends ReactComponentRenderer<BaseComponentProps, BaseComponentProps> {
+export default class SampleCodeRenderer extends ReactComponentRenderer<BaseComponentProps> {
   renderElement(): JsxElement {
-    const tagName = (<FirstOrderStudioComponent>this.component).name;
-    var exposedProps = new Map<string, StudioComponentProperty>();
-    this.collectExposedProps(this.component, exposedProps);
+    const tagName = (<StudioComponent>this.component).name ?? StudioRendererConstants.unknownName;
+    var exposedProps = new Map<string, BoundStudioComponentProperty>();
+    //this.collectExposedProps(this.component, exposedProps);
 
     const element = factory.createJsxElement(
       this.renderSampleCodeOpeningElement(factory, exposedProps, tagName),
@@ -23,6 +26,7 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
     return element;
   }
 
+  /*  TODO:  Switch over to boundProperties
   private collectExposedProps(component: StudioComponent, collected: Map<string, StudioComponentProperty>) {
     const moreItems = Object.entries(component.properties).filter((m) => !(m[1].exposedAs == null));
     moreItems?.forEach((value, index) => {
@@ -35,16 +39,18 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
       this.collectExposedProps(child, collected);
     });
   }
+  */
 
   private renderSampleCodeOpeningElement(
     factory: NodeFactory,
-    props: Map<string, StudioComponentProperty>,
+    props: Map<string, BoundStudioComponentProperty>,
     tagName: string,
   ): JsxOpeningElement {
     const defaultValue = 'defaultValue';
     const defaultValueExpr = factory.createJsxExpression(undefined, factory.createIdentifier(defaultValue));
     const propsArray: JsxAttribute[] = [];
     props?.forEach((value, key) => {
+      /*  TODO:  move over to boundProperties
       if (value.exposedAs) {
         const displayExpr = value.value !== undefined ? factory.createStringLiteral(value.value.toString()) : defaultValueExpr;
         const attr = factory.createJsxAttribute(
@@ -53,6 +59,7 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
         );
         propsArray.push(attr);
       }
+      */
     });
 
     return factory.createJsxOpeningElement(

@@ -1,6 +1,6 @@
 import { FrameworkOutputManager } from "./framework-output-manager";
 import { StudioTemplateRenderer } from "./studio-template-renderer";
-import { FirstOrderStudioComponent } from "@amzn/amplify-ui-codegen-schema";
+import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
 
 /**
  * This class is used to wrap the created of renderers due to each renderer
@@ -17,10 +17,10 @@ export class StudioTemplateRendererFactory<
   >
 > {
   constructor(
-    private renderer: (component: FirstOrderStudioComponent) => TRenderer
+    private renderer: (component: StudioComponent) => TRenderer
   ) {}
 
-  buildRenderer(component: FirstOrderStudioComponent): TRenderer {
+  buildRenderer(component: StudioComponent): TRenderer {
     return this.renderer(component);
   }
 }

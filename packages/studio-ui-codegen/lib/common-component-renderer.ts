@@ -1,29 +1,23 @@
 import {
+  FixedStudioComponentProperty,
   StudioComponent,
+  StudioComponentChild,
   StudioComponentProperties,
+  WrappedComponentProperties
 } from "@amzn/amplify-ui-codegen-schema";
 
 /**
  * Shared class for rendering components.
  * Mostly contains helper functions for mapping the Studio schema to actual props.
  */
-export abstract class CommonComponentRenderer<TPropIn, TPropOut> {
-  inputProps: TPropIn;
+export abstract class CommonComponentRenderer<TPropIn> {
+  //inputProps: TPropIn;
+  protected inputProps: WrappedComponentProperties<TPropIn>;
 
-  abstract mapProps(props: TPropIn): TPropOut;
-
-  constructor(protected component: StudioComponent) {
+  constructor(protected component: StudioComponent | StudioComponentChild) {
     const flattenedProps = Object.entries(component.properties).map((prop) => {
-      return [prop[0], prop[1]?.value];
+      return [prop[0], prop[1]];
     });
-
     this.inputProps = Object.fromEntries(flattenedProps);
-  }
-
-  protected convertPropsFromJsonSchema(
-    props: StudioComponentProperties
-  ): [string, string][] {
-    const mapped = this.mapProps(this.inputProps);
-    return Object.entries(mapped).filter((m) => m[1] !== undefined);
   }
 }

@@ -9,8 +9,7 @@ type SourceProp = DividerProps | ImageProps | TextProps;
  */
 export abstract class ComponentRendererBase<
   TPropIn extends SourceProp,
-  TPropOut,
   TElementOut
-> extends CommonComponentRenderer<TPropIn, TPropOut> {
+> extends CommonComponentRenderer<TPropIn> {
   abstract renderElement(): TElementOut;
 }

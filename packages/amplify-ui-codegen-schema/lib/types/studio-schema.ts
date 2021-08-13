@@ -1,12 +1,9 @@
-import { FirstOrderStudioComponent } from './studio-component';
+import { StudioComponent, FixedStudioComponentProperty, BoundStudioComponentProperty } from './index';
 
-export type StudioApp = {
-  versionId: string;
-  shareableId: string;
-  studioConfig: StudioConfig;
+export type FixedOrBoundProps = {
+  [propertyName: string]: FixedStudioComponentProperty | BoundStudioComponentProperty;
 };
 
-export type StudioConfig = {
-  name: string;
-  components: FirstOrderStudioComponent[];
-};
+export type WrappedComponentProperties<TPropIn> = {
+  [key in keyof TPropIn]: FixedStudioComponentProperty | BoundStudioComponentProperty;
+}

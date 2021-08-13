@@ -1,5 +1,5 @@
-import { FirstOrderStudioComponent, StudioComponent } from '@amzn/amplify-ui-codegen-schema';
-import { StudioTemplateRenderer } from '@amzn/studio-ui-codegen';
+import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+import { StudioTemplateRenderer, StudioRendererConstants } from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';
 import ts, {
@@ -33,13 +33,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   componentPath = `${this.component.name}.tsx`;
 
-  constructor(component: FirstOrderStudioComponent) {
+  constructor(component: StudioComponent) {
     super(component, new ReactOutputManager());
   }
 
   renderSampleCodeSnippet() {
     const jsx = this.renderSampleCodeSnippetJsx(this.component);
-    const imports = this.importCollection.buildSampleSnippetImports(this.component.name);
+    const imports = this.importCollection.buildSampleSnippetImports(this.component.name ?? StudioRendererConstants.unknownName);
     const sampleAppName = 'App';
 
     const { printer, file } = this.createPrinter();
@@ -71,7 +71,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       importsText += result + EOL;
     }
 
-    const wrappedFunction = this.renderFunctionWrapper(this.component.name, jsx);
+    const wrappedFunction = this.renderFunctionWrapper(this.component.name ?? StudioRendererConstants.unknownName, jsx);
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
@@ -97,7 +97,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     console.log('JSX rendered');
 
-    const wrappedFunction = this.renderFunctionWrapper(this.component.name, jsx);
+    const wrappedFunction = this.renderFunctionWrapper(this.component.name ?? StudioRendererConstants.unknownName, jsx);
 
     const imports = this.importCollection.buildImportStatements();
 
@@ -185,7 +185,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return wrapper;
   }
 
-  renderSampleCodeSnippetJsx(component: FirstOrderStudioComponent): JsxElement | JsxFragment {
+  renderSampleCodeSnippetJsx(component: StudioComponent): JsxElement | JsxFragment {
     return new SampleCodeRenderer(component, this.importCollection).renderElement();
   }
 

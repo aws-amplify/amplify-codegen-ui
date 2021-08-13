@@ -1,53 +1,23 @@
 import {
   StudioComponent,
-  FirstOrderStudioComponent,
+  StudioComponentChild,
   StudioComponentProperties,
-  StudioComponentProperty,
-  StudioComponentPropertyType
+  FixedStudioComponentProperty,
 } from "@amzn/amplify-ui-codegen-schema";
 import { ComponentRendererBase } from "@amzn/studio-ui-codegen";
 import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory, SyntaxKind, Expression } from "typescript";
 
 import { ImportCollection } from "./import-collection";
-import { getComponentPropValueExpression } from "./react-component-render-helper";
+import { getFixedComponentPropValueExpression, isFixedPropertyWithValue } from "./react-component-render-helper";
 
 export abstract class ReactComponentRenderer<
-  TPropIn,
-  TPropOut
-> extends ComponentRendererBase<TPropIn, TPropOut, JsxElement> {
+  TPropIn
+> extends ComponentRendererBase<TPropIn, JsxElement> {
   constructor(
-    component: StudioComponent | FirstOrderStudioComponent,
+    component: StudioComponent | StudioComponentChild,
     protected importCollection: ImportCollection
   ) {
     super(component);
-  }
-
-  protected convertPropsToJsxAttributes(props: StudioComponentProperties) {
-    const propsArray: JsxAttribute[] = [];
-
-    for (let prop of this.convertPropsFromJsonSchema(props)) {
-      let value;
-      console.log(prop);
-
-      value = factory.createStringLiteral(prop[1]);
-
-      if (value) {
-        const attr = factory.createJsxAttribute(
-          factory.createIdentifier(prop[0]),
-          value
-        );
-
-        if (prop[0] && prop[1]) {
-          propsArray.push(attr);
-        } else {
-          console.warn(`Prop ${prop[0]} is not set`);
-        }
-      } else {
-        console.log("Skipping ", prop);
-      }
-    }
-
-    return propsArray;
   }
 
   protected renderOpeningElement(
@@ -58,26 +28,17 @@ export abstract class ReactComponentRenderer<
     const propsArray: JsxAttribute[] = [];
     for (let propKey of Object.keys(props)) {
       const currentProp = props[propKey];
-      if (currentProp.value !== undefined) {
-        const propValue = getComponentPropValueExpression(currentProp);
-        const propName = currentProp.exposedAs ?? propKey;
+      if (isFixedPropertyWithValue(currentProp)) {
+        const propName = propKey;
+        const propValue = getFixedComponentPropValueExpression(currentProp);
         const attr = factory.createJsxAttribute(
           factory.createIdentifier(propKey),
-          factory.createJsxExpression(
-            undefined,
-            factory.createBinaryExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier("props"),
-                propName
-              ),
-              SyntaxKind.QuestionQuestionToken,
-              propValue,
-            )
-          )
+          factory.createJsxExpression(undefined, propValue)
         );
-
         propsArray.push(attr);
       }
+      //TODO:  handle BoundStudioComponentProperty
+      
     }
 
     this.addPropsSpreadAttributes(factory, propsArray, tagName);

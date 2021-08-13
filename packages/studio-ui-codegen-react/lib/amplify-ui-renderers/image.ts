@@ -6,7 +6,7 @@ import { ReactComponentRenderer } from "../react-component-renderer"
 
 import { factory, JsxElement } from "typescript";
 
-export default class ImageRenderer extends ReactComponentRenderer<ImageProps, ImageProps> {
+export default class ImageRenderer extends ReactComponentRenderer<ImageProps> {
   renderElement(): JsxElement {
     const tagName = "Image";
     
@@ -18,9 +18,5 @@ export default class ImageRenderer extends ReactComponentRenderer<ImageProps, Im
 
     this.importCollection.addImport("@aws-amplify/ui-react", tagName);
     return element;
-  }
-
-  mapProps(props: ImageProps): ImageProps {
-    return props;
   }
 }

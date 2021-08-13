@@ -1,5 +1,5 @@
 import {
-  FirstOrderStudioComponent,
+  StudioComponent,
 } from "@amzn/amplify-ui-codegen-schema"
 import {
   StudioTemplateRendererManager,
@@ -12,7 +12,7 @@ import * as schema from "./lib/sampleCodeSnippet.json";
 Error.stackTraceLimit = Infinity;
 
 const rendererFactory = new StudioTemplateRendererFactory(
-  (component: FirstOrderStudioComponent) => new AmplifyRenderer(component)
+  (component: StudioComponent) => new AmplifyRenderer(component)
 );
 
 const rendererManager = new StudioTemplateRendererManager(rendererFactory, '.');
@@ -28,9 +28,11 @@ console.log(compOnly.compText);
 console.log("componentImports ");
 console.log(compOnly.importsText);
 
+/*
 const compOnlyAppSample = rendererFactory.buildRenderer(schema as any).renderSampleCodeSnippet();
 console.log("Code Snippet Output");
 console.log("componentText ");
 console.log(compOnlyAppSample.compText);
 console.log("componentImports ");
 console.log(compOnlyAppSample.importsText);
+*/
