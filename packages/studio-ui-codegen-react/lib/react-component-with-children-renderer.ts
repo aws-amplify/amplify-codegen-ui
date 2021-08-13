@@ -2,59 +2,28 @@ import {
   ComponentWithChildrenRendererBase,
 } from "@amzn/studio-ui-codegen";
 import {
+  FixedStudioComponentProperty,
   StudioComponent,
+  StudioComponentChild,
   StudioComponentProperties,
-  StudioComponentProperty,
-  StudioComponentPropertyType,
 } from "@amzn/amplify-ui-codegen-schema";
 
 import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, NodeFactory, SyntaxKind, Expression } from "typescript";
 import { ImportCollection } from "./import-collection";
-import { getComponentPropValueExpression } from "./react-component-render-helper";
+import { getFixedComponentPropValueExpression, isFixedPropertyWithValue } from "./react-component-render-helper";
 
 export abstract class ReactComponentWithChildrenRenderer<
-  TPropIn,
-  TPropOut
+  TPropIn
 > extends ComponentWithChildrenRendererBase<
   TPropIn,
-  TPropOut,
   JsxElement,
   JsxChild
 > {
   constructor(
-    component: StudioComponent,
+    component: StudioComponent | StudioComponentChild,
     protected importCollection: ImportCollection
   ) {
     super(component);
-  }
-
-  protected convertPropsToJsxAttributes(props: StudioComponentProperties) {
-    const propsArray: JsxAttribute[] = [];
-
-    const convertedProps = this.convertPropsFromJsonSchema(props);
-
-    for (let prop of convertedProps) {
-      let value;
-
-      value = factory.createStringLiteral(prop[1]);
-
-      if (value) {
-        const attr = factory.createJsxAttribute(
-          factory.createIdentifier(prop[0]),
-          value
-        );
-
-        if (prop[0] && prop[1]) {
-          propsArray.push(attr);
-        } else {
-          console.warn(`Prop ${prop[0]} is not set`);
-        }
-      } else {
-        console.log("Skipping ", prop);
-      }
-    }
-
-    return propsArray;
   }
 
   protected renderCustomCompOpeningElement(
@@ -65,15 +34,24 @@ export abstract class ReactComponentWithChildrenRenderer<
     const propsArray: JsxAttribute[] = [];
     for (let propKey of Object.keys(props)) {
       const currentProp = props[propKey];
-      if (currentProp.value !== undefined) {
-        const currentPropValue = getComponentPropValueExpression(currentProp);
-        const propName = currentProp.exposedAs ?? propKey;
-        const attr = factory.createJsxAttribute(
-          factory.createIdentifier(propKey),
-          factory.createJsxExpression(undefined, currentPropValue),
-        );
-
-        propsArray.push(attr);
+      if (isFixedPropertyWithValue(currentProp)) {
+        const currentPropValue = currentProp.value;
+        const propName = propKey;
+        if (typeof currentPropValue == "string") {
+          const attr = factory.createJsxAttribute(
+            factory.createIdentifier(propKey),
+            factory.createStringLiteral(currentPropValue),
+          );
+          propsArray.push(attr);
+        } else {
+          const propValueExpr = getFixedComponentPropValueExpression(currentProp);
+          const attr = factory.createJsxAttribute(
+            factory.createIdentifier(propKey),
+            factory.createJsxExpression(undefined, propValueExpr)
+          );
+          propsArray.push(attr);
+        }
+        
       }
     }
 
@@ -95,26 +73,17 @@ export abstract class ReactComponentWithChildrenRenderer<
     for (let propKey of Object.keys(props)) {
       const currentProp = props[propKey];
 
-      if (currentProp.value) {
-        const propName = currentProp.exposedAs ?? propKey;
-        const propValue = getComponentPropValueExpression(currentProp);
+      if (isFixedPropertyWithValue(currentProp)) {
+        const propName = propKey;
+        const propValue = getFixedComponentPropValueExpression(currentProp);
         const attr = factory.createJsxAttribute(
           factory.createIdentifier(propKey),
-          factory.createJsxExpression(
-            undefined,
-            factory.createBinaryExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier("props"),
-                propName
-              ),
-              SyntaxKind.QuestionQuestionToken,
-              propValue,
-            )
-          )
+          factory.createJsxExpression(undefined, propValue)
         );
-
         propsArray.push(attr);
       }
+
+      //TODO:  handle BoundStudioComponentProperty
     }
 
     this.addPropsSpreadAttributes(factory, propsArray, tagName);
@@ -168,5 +137,30 @@ export abstract class ReactComponentWithChildrenRenderer<
       )
     );
     attributes.push(findChildOverrideAttr);
+  }
+
+  private addBoundExpressionAttributes(
+    factory: NodeFactory,
+    attributes: JsxAttributeLike[],
+    propKey: string,
+    propName: string,
+    propValue: Expression  
+  ) {
+    const attr = factory.createJsxAttribute(
+      factory.createIdentifier(propKey),
+      factory.createJsxExpression(
+        undefined,
+        factory.createBinaryExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier("props"),
+            propName
+          ),
+          SyntaxKind.QuestionQuestionToken,
+          propValue,
+        )
+      )
+    );
+
+    attributes.push(attr);  
   }
 }

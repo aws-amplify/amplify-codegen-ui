@@ -1,6 +1,5 @@
 import {
-  FirstOrderStudioComponent,
-  StudioComponent,
+  StudioComponent, StudioComponentChild,
 } from "@amzn/amplify-ui-codegen-schema";
 import { factory, JsxElement, JsxFragment } from "typescript";
 import { ReactStudioTemplateRenderer } from "../react-studio-template-renderer";
@@ -17,11 +16,11 @@ import renderString from "./string";
 import CustomComponentRenderer from "./customComponent";
 
 export class AmplifyRenderer extends ReactStudioTemplateRenderer {
-  constructor(component: FirstOrderStudioComponent) {
+  constructor(component: StudioComponent) {
     super(component);
   }
 
-  renderJsx(component: StudioComponent | FirstOrderStudioComponent): JsxElement | JsxFragment {
+  renderJsx(component: StudioComponent | StudioComponentChild): JsxElement | JsxFragment {
     switch (component.componentType) {
       case "Badge":
         return new BadgeRenderer(component, this.importCollection).renderElement(

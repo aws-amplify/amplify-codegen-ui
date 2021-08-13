@@ -1,7 +1,8 @@
 import { FrameworkOutputManager } from "./framework-output-manager";
 import { StudioTemplateRenderer } from "./studio-template-renderer";
 import { StudioTemplateRendererFactory } from "./template-renderer-factory";
-import { StudioApp, FirstOrderStudioComponent } from "@amzn/amplify-ui-codegen-schema";
+import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
+import { StudioRendererConstants } from "./renderer-helper";
 
 var fs = require("fs");
 var path = require("path");
@@ -34,7 +35,7 @@ export class StudioTemplateRendererManager<
     }
   }
 
-  renderSchemaToTemplate(component: FirstOrderStudioComponent | undefined) {
+  renderSchemaToTemplate(component: StudioComponent | undefined) {
     if (!component) {
       throw new Error("Please ensure you have passed in a valid component schema");
     }
@@ -42,15 +43,15 @@ export class StudioTemplateRendererManager<
     this.renderer.buildRenderer(component).renderComponent();
   }
 
-  renderSchemaToTemplates(jsonSchema: StudioApp | undefined) {
+  renderSchemaToTemplates(jsonSchema: StudioComponent[] | undefined) {
     if (!jsonSchema) {
       throw new Error("Please ensure you have passed in a valid schema");
     }
 
-    console.log("Rendering App ", jsonSchema.studioConfig.name);
+    console.log("Rendering multiple components ", jsonSchema.length);
 
-    for (let component of jsonSchema.studioConfig?.components) {
-      const componentPath = path.join(this.renderPath, component.name);
+    for (let component of jsonSchema) {
+      const componentPath = path.join(this.renderPath, component.name ?? StudioRendererConstants.unknownName);
 
       this.renderer.buildRenderer(component).renderComponent();
     }

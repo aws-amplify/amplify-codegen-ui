@@ -6,7 +6,7 @@ import { ReactComponentRenderer } from "../react-component-renderer";
 
 import { factory, JsxElement } from "typescript";
 
-export default class DividerRenderer extends ReactComponentRenderer<DividerProps, DividerProps> {
+export default class DividerRenderer extends ReactComponentRenderer<DividerProps> {
   renderElement(): JsxElement {
     const tagName = "Divider";
     
@@ -19,9 +19,5 @@ export default class DividerRenderer extends ReactComponentRenderer<DividerProps
     this.importCollection.addImport("@aws-amplify/ui-react", tagName);
     
     return element;
-  }
-
-  mapProps(props: DividerProps): DividerProps {
-    return props;
   }
 }

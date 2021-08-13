@@ -7,19 +7,18 @@ import {
 } from "@amzn/amplify-ui-react-types";
 
 import { CommonComponentRenderer } from "./common-component-renderer";
-import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
+import { StudioComponent, StudioComponentChild } from "@amzn/amplify-ui-codegen-schema";
 
 type SourceProp = BoxProps | BadgeProps | ButtonProps | CardProps | FlexProps;
 
 export abstract class ComponentWithChildrenRendererBase<
   TPropIn extends SourceProp,
-  TPropOut,
   TElementOut,
   TElementChild
-> extends CommonComponentRenderer<TPropIn, TPropOut> {
+> extends CommonComponentRenderer<TPropIn> {
   abstract renderElement(
     renderChildren: (
-      children: StudioComponent[],
+      children: StudioComponentChild[],
       component?: TElementOut
     ) => TElementChild[]
   ): TElementOut;
