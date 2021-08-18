@@ -1,5 +1,5 @@
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
-import { StudioTemplateRenderer, StudioRendererConstants } from '@amzn/studio-ui-codegen';
+import { StudioTemplateRenderer, StudioRendererConstants, isStudioComponentWithBinding, isSimplePropertyBinding, isDataPropertyBinding } from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';
 import ts, {
@@ -10,16 +10,21 @@ import ts, {
   FunctionDeclaration,
   JsxElement,
   JsxFragment,
+  ModifierFlags,
   NewLineKind,
+  PropertySignature,
   ScriptKind,
   ScriptTarget,
   SyntaxKind,
   transpileModule,
+  TypeAliasDeclaration,
+  TypeNode,
   VariableStatement,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import ReactOutputManager from './react-output-manager';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
+import { getComponentPropName } from './react-component-render-helper';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -39,7 +44,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   renderSampleCodeSnippet() {
     const jsx = this.renderSampleCodeSnippetJsx(this.component);
-    const imports = this.importCollection.buildSampleSnippetImports(this.component.name ?? StudioRendererConstants.unknownName);
+    const imports = this.importCollection.buildSampleSnippetImports(
+      this.component.name ?? StudioRendererConstants.unknownName,
+    );
     const sampleAppName = 'App';
 
     const { printer, file } = this.createPrinter();
@@ -110,6 +117,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     componentText += EOL;
 
+    const propsDeclaration = this.renderBindingPropsType(this.component);
+    const propsPrinted = printer.printNode(EmitHint.Unspecified, propsDeclaration, file);
+    componentText += propsPrinted;
+
+    componentText += EOL;
+
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
 
@@ -131,7 +144,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   renderFunctionWrapper(componentName: string, jsx: JsxElement | JsxFragment): FunctionDeclaration {
-    const componentPropType = componentName + 'Props';
+    const componentPropType = getComponentPropName(componentName);
 
     return factory.createFunctionDeclaration(
       undefined,
@@ -187,6 +200,50 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   renderSampleCodeSnippetJsx(component: StudioComponent): JsxElement | JsxFragment {
     return new SampleCodeRenderer(component, this.importCollection).renderElement();
+  }
+
+  renderBindingPropsType(component: StudioComponent): TypeAliasDeclaration {
+    const componentPropType = getComponentPropName(component.name);
+    return factory.createTypeAliasDeclaration(
+      undefined,
+      factory.createModifiersFromModifierFlags(ModifierFlags.Export),
+      componentPropType,
+      undefined,
+      factory.createIntersectionTypeNode([
+        this.buildBindingPropNodes(component),
+        factory.createTypeReferenceNode('CommonProps', undefined)
+      ]),
+    );
+  }
+
+  private buildBindingPropNodes(component: StudioComponent): TypeNode {
+    var propSignatures: PropertySignature[] = [];
+    const bindingProps = component.bindingProperties;
+    if (bindingProps === undefined || !isStudioComponentWithBinding(component)) {
+      return factory.createTypeLiteralNode([]);
+    }
+    for (let bindingProp of Object.entries(component.bindingProperties)) {
+      const propName = bindingProp[0];
+      const typeName = bindingProp[1].type.toString();
+      if (isSimplePropertyBinding(bindingProp[1])) {       
+        const propSignature = factory.createPropertySignature(
+          undefined,
+          propName,
+          undefined,
+          factory.createTypeReferenceNode(typeName, undefined),
+        )
+        propSignatures.push(propSignature);
+      } else if (isDataPropertyBinding(bindingProp[1])) {
+        const propSignature = factory.createPropertySignature(
+          undefined,
+          propName,
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode(typeName, undefined),
+        )
+        propSignatures.push(propSignature);
+      }
+    }
+    return factory.createTypeLiteralNode(propSignatures);
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment;

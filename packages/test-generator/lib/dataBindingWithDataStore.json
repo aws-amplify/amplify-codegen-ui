@@ -1,0 +1,40 @@
+{
+  "componentId": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "CustomButton",
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
+    },
+    "buttonUser": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User"
+      },
+      "defaultValue": {
+        "predicates": {
+          "eq": {
+            "ID": "1234"
+          }
+        }
+      }
+    },
+    "buttonColor": {
+      "type": "String"
+    }
+  },
+  "properties": {
+    "label": {
+      "bindingProperties": {
+        "property": "buttonUser",
+        "field": "username"
+      },
+      "defaultValue": "hspain@gmail.com"
+    },
+    "labelWidth": {
+      "bindingProperties": {
+        "property": "width"
+      }
+    }
+  }
+}
