@@ -7,7 +7,7 @@ import {
 } from "@amzn/studio-ui-codegen";
 import { AmplifyRenderer } from "@amzn/studio-ui-codegen-react";
 
-import * as schema from "./lib/sampleCodeSnippet.json";
+import * as schema from "./lib/dataBindingWithDataStore.json";
 
 Error.stackTraceLimit = Infinity;
 
