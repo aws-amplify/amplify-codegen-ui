@@ -24,6 +24,12 @@
     }
   },
   "properties": {
+    "color": {
+      "value": "#ff0000"
+    },
+    "width": {
+      "value": 20
+    },
     "label": {
       "bindingProperties": {
         "property": "buttonUser",
@@ -34,7 +40,8 @@
     "labelWidth": {
       "bindingProperties": {
         "property": "width"
-      }
+      },
+      "defaultValue": "50px"
     }
   }
 }

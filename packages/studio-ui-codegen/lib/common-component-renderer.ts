@@ -11,7 +11,6 @@ import {
  * Mostly contains helper functions for mapping the Studio schema to actual props.
  */
 export abstract class CommonComponentRenderer<TPropIn> {
-  //inputProps: TPropIn;
   protected inputProps: WrappedComponentProperties<TPropIn>;
 
   constructor(protected component: StudioComponent | StudioComponentChild) {
