@@ -11,16 +11,29 @@ lerna bootstrap
 lerna run build
 ```
 
-### Running the code generation test application
+# How to use code generator
 
-After you have built the entire project successfully, use the following command to run the test generator.
+The react code generator defined in studio-ui-codegen-react package accepts JSON conforming to the Studio Component Model schema as input and then outputs React code either as in-memory string or in a file with the path specified in outputConfig.
+
+```js
+// Create a factory that can create a renderer for a specific platform (such as Amplify UI)
+const rendererFactory = new StudioTemplateRendererFactory(
+  (component: StudioComponent) => new AmplifyRenderer(component)
+);
+
+// Create a renderer manager with factory and output config as input parameter
+const rendererManager = new StudioTemplateRendererManager(rendererFactory, outputConfig);
+
+// Use the renderer to generate UI code
+rendererManager.renderSchemaToTemplate(schema as any);
+```
+
+The test-generator package contains sample code that uses above pattern.
+To run the sample app in test-generator package, after you have built the entire project successfully, use the following command.
 
 ```sh
 node ./packages/test-generator/dist/index.js
 ```
-
-The above command will use JSON in '/packages/test-generator/lib' as input.
-
 # Package Descriptions
 
 ## Test
