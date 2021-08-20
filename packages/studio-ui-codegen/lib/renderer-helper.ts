@@ -1,9 +1,6 @@
 import {
-  FixedStudioComponentProperty,
   StudioComponent,
   StudioComponentChild,
-  StudioComponentProperties,
-  WrappedComponentProperties,
   StudioComponentDataPropertyBinding,
   StudioComponentAuthPropertyBinding,
   StudioComponentStoragePropertyBinding,
