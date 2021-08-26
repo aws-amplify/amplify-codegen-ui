@@ -1,5 +1,4 @@
 import { Property } from 'csstype';
-import React from 'react';
 
 import { BaseComponentProps } from './base';
 import { BaseStyleProps } from './style';
@@ -32,16 +31,6 @@ export interface ImageOptions extends ImageStyleProps {
    * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-srcset
    */
   srcSet?: React.ImgHTMLAttributes<HTMLImageElement>['srcSet'];
-
-  /**
-   * Intrinsic image width. Must be an integer without a unit.
-   */
-  htmlWidth?: React.ImgHTMLAttributes<HTMLImageElement>['width'];
-
-  /**
-   * Intrinsic image height. Must be an integer without a unit.
-   */
-  htmlHeight?: React.ImgHTMLAttributes<HTMLImageElement>['height'];
 
   /**
    * Handles loading event on image
