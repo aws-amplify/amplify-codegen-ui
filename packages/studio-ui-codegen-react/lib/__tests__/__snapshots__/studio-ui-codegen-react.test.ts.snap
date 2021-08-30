@@ -5,8 +5,9 @@ exports[`amplify render tests basic component tests should generate a simple box
 import React from \\"react\\";
 import { View } from \\"@aws-amplify/ui-react\\";
 
+export type TestProps = {} & CommonProps;
 export default function Test(props: TestProps): JSX.Element {
-    return (<View fontFamily={props.fontFamily ?? 'Times New Roman'} fontSize={props.fontSize ?? '20px'} {...props} {...getOverrideProps(props.overrides, \\"View\\")}></View>);
+    return (<View fontFamily=\\"Times New Roman\\" fontSize=\\"20px\\" {...props} {...getOverrideProps(props.overrides, \\"View\\")}></View>);
 }"
 `;
 
@@ -15,8 +16,9 @@ exports[`amplify render tests basic component tests should generate a simple but
 import React from \\"react\\";
 import { Button } from \\"@aws-amplify/ui-react\\";
 
+export type CustomButtonProps = {} & CommonProps;
 export default function CustomButton(props: CustomButtonProps): JSX.Element {
-    return (<Button color={props.color ?? '#ff0000'} width={props.width ?? '20'} {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button>);
+    return (<Button color=\\"#ff0000\\" width=\\"20\\" {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button>);
 }"
 `;
 
@@ -25,8 +27,9 @@ exports[`amplify render tests basic component tests should generate a simple tex
 import React from \\"react\\";
 import { Text } from \\"@aws-amplify/ui-react\\";
 
+export type CustomTextProps = {} & CommonProps;
 export default function CustomText(props: CustomTextProps): JSX.Element {
-    return (<Text color={props.color ?? '#ff0000'} width={props.width ?? '20px'} value={props.value ?? 'Text Value'} {...props} {...getOverrideProps(props.overrides, \\"Text\\")}>Text Value</Text>);
+    return (<Text color=\\"#ff0000\\" width=\\"20px\\" value=\\"Text Value\\" {...props} {...getOverrideProps(props.overrides, \\"Text\\")}>Text Value</Text>);
 }"
 `;
 
@@ -35,8 +38,9 @@ exports[`amplify render tests complex component tests should generate a button w
 import React from \\"react\\";
 import { Button, View } from \\"@aws-amplify/ui-react\\";
 
+export type BoxWithButtonProps = {} & CommonProps;
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
-    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><Button color={props.color ?? '#ff0000'} width={props.width ?? '20px'} {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button></View>);
+    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><Button color=\\"#ff0000\\" width=\\"20px\\" {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button></View>);
 }"
 `;
 
@@ -45,8 +49,9 @@ exports[`amplify render tests complex component tests should generate a componen
 import React from \\"react\\";
 import { CustomButton, View } from \\"@aws-amplify/ui-react\\";
 
+export type BoxWithCustomButtonProps = {} & CommonProps;
 export default function BoxWithCustomButton(props: BoxWithCustomButtonProps): JSX.Element {
-    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><CustomButton color='#ff0000' width='20px' {...findChildOverrides(props.overrides, \\"CustomButton\\")}></CustomButton></View>);
+    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><CustomButton color=\\"#ff0000\\" width=\\"20px\\" {...findChildOverrides(props.overrides, \\"CustomButton\\")}></CustomButton></View>);
 }"
 `;
 
@@ -55,8 +60,9 @@ exports[`amplify render tests complex component tests should generate a componen
 import React from \\"react\\";
 import { Button, View } from \\"@aws-amplify/ui-react\\";
 
+export type BoxWithButtonProps = {} & CommonProps;
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
-    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><Button color={props.buttonColor ?? '#ff0000'} width={props.width ?? '20px'} {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button></View>);
+    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><Button color=\\"#ff0000\\" width=\\"20px\\" {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button></View>);
 }"
 `;
 
@@ -65,7 +71,8 @@ exports[`amplify render tests sample code snippet tests should generate a sample
 import React from \\"react\\";
 import { CustomButton, View } from \\"@aws-amplify/ui-react\\";
 
+export type BoxWithButtonProps = {} & CommonProps;
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
-    return (<View {...props} {...getOverrideProps(props.overrides, \\"View\\")}><CustomButton color='#ff0000' width='20px' buttonText='Click Me' {...findChildOverrides(props.overrides, \\"CustomButton\\")}></CustomButton></View>);
+    return (<View padding-left {...props} {...getOverrideProps(props.overrides, \\"View\\")}><CustomButton color=\\"#ff0000\\" width=\\"20px\\" buttonText=\\"Click Me\\" {...findChildOverrides(props.overrides, \\"CustomButton\\")}></CustomButton></View>);
 }"
 `;
