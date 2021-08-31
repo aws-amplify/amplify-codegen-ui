@@ -61,7 +61,7 @@ export class ImportCollection {
           factory.createImportClause(
             undefined,
             factory.createNamedImports(
-              [...value].map((item) => {
+              [...value].sort().map((item) => {
                 return factory.createImportSpecifier(undefined, factory.createIdentifier(item));
               }),
             ),

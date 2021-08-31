@@ -76,6 +76,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
         factory.createStringLiteral(tagName),
       ]),
     );
+    this.importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
     attributes.push(overrideAttr);
   }
 
@@ -89,6 +90,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
         factory.createStringLiteral(tagName),
       ]),
     );
+    this.importCollection.addImport('@aws-amplify/ui-react', 'findChildOverrides');
     attributes.push(findChildOverrideAttr);
   }
 

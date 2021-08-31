@@ -43,6 +43,7 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
         factory.createStringLiteral(tagName),
       ]),
     );
+    this.importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
     attributes.push(overrideAttr);
   }
 }
