@@ -30,7 +30,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:watch": "npm run build -- --watch",
+    "build:watch": "yarn run build -- --watch",
     "test": "echo \"Error: run tests from root\" && exit 1"
   }
 }

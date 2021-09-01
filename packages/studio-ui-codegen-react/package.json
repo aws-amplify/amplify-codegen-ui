@@ -14,7 +14,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "build:watch": "npm run build -- --watch"
+    "build:watch": "yarn run build -- --watch"
   },
   "devDependencies": {
     "@types/node": "^16.3.3",

@@ -17,7 +17,7 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\"",
     "build": "tsc",
-    "build:watch": "npm run build -- --watch"
+    "build:watch": "yarn run build -- --watch"
   },
   "devDependencies": {
     "@aws-amplify/datastore": "^2.9.16",
