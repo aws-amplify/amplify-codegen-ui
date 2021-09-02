@@ -3,5 +3,5 @@
 const sampleRenderer = require('..');
 
 describe('sample-renderer', () => {
-    it('needs tests');
+  it('needs tests');
 });

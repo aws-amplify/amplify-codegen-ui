@@ -4,10 +4,7 @@ import { AriaRole } from 'react';
 
 export type ViewAsHTMLElementTypes = keyof JSX.IntrinsicElements;
 
-export interface ViewProps
-  extends BaseComponentProps,
-    BaseStyleProps,
-    AriaProps {
+export interface ViewProps extends BaseComponentProps, BaseStyleProps, AriaProps {
   as?: ViewAsHTMLElementTypes;
 
   role?: AriaRole;

@@ -11,10 +11,7 @@ export interface ViewBox {
 
 export type IconSize = 'small' | 'medium' | 'large';
 
-export interface IconProps
-  extends BaseComponentProps,
-    BaseStyleProps,
-    AriaProps {
+export interface IconProps extends BaseComponentProps, BaseStyleProps, AriaProps {
   /**
    * This defines the shape of the <path> SVG element(the 'd' attribute).
    * @link https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path

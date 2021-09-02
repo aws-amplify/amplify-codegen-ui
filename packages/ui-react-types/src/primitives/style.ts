@@ -26,10 +26,7 @@ export interface BaseStyleProps {
   width?: Property.Width;
 }
 
-export interface AllStyleProps
-  extends BaseStyleProps,
-    ImageStyleProps,
-    FlexStyleProps {}
+export interface AllStyleProps extends BaseStyleProps, ImageStyleProps, FlexStyleProps {}
 
 export type ComponentPropToStyleProp = {
   [key in keyof AllStyleProps]: keyof React.CSSProperties;

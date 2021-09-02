@@ -1,7 +1,4 @@
-import factory, {
-  createImportDeclaration,
-  ImportDeclaration,
-} from "typescript";
+import factory, { createImportDeclaration, ImportDeclaration } from 'typescript';
 
 export class ImportCollection {
   #collection: Map<string, Set<string>> = new Map();
@@ -28,21 +25,18 @@ export class ImportCollection {
 
   buildSampleSnippetImports(topComponentName: string): ImportDeclaration[] {
     const importDeclarations: ImportDeclaration[] = [];
-    const sampleStudioPath = "./studio-ui";
+    const sampleStudioPath = './studio-ui';
     const namedImports = factory.createNamedImports([
-      factory.createImportSpecifier(undefined, factory.createIdentifier(topComponentName))
+      factory.createImportSpecifier(undefined, factory.createIdentifier(topComponentName)),
     ]);
 
     importDeclarations.push(
       createImportDeclaration(
         undefined,
         undefined,
-        factory.createImportClause(
-          undefined,
-          namedImports
-        ),
-        factory.createStringLiteral(sampleStudioPath)
-      )
+        factory.createImportClause(undefined, namedImports),
+        factory.createStringLiteral(sampleStudioPath),
+      ),
     );
     return importDeclarations;
   }
@@ -54,12 +48,9 @@ export class ImportCollection {
       factory.createImportDeclaration(
         undefined,
         undefined,
-        factory.createImportClause(
-          factory.createIdentifier("React"),
-          undefined
-        ),
-        factory.createStringLiteral("react")
-      )
+        factory.createImportClause(factory.createIdentifier('React'), undefined),
+        factory.createStringLiteral('react'),
+      ),
     );
 
     for (let [key, value] of this.#collection) {
@@ -71,15 +62,12 @@ export class ImportCollection {
             undefined,
             factory.createNamedImports(
               [...value].map((item) => {
-                return factory.createImportSpecifier(
-                  undefined,
-                  factory.createIdentifier(item)
-                );
-              })
-            )
+                return factory.createImportSpecifier(undefined, factory.createIdentifier(item));
+              }),
+            ),
           ),
-          factory.createStringLiteral(key)
-        )
+          factory.createStringLiteral(key),
+        ),
       );
     }
 

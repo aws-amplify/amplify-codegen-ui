@@ -14,10 +14,7 @@ export const CollectionTypeMap: CollectionTypeMapInterface = {
   TABLE: 'table',
 };
 
-export interface CollectionBaseProps<CollectionItemType>
-  extends BaseComponentProps,
-    AriaProps,
-    BaseStyleProps {
+export interface CollectionBaseProps<CollectionItemType> extends BaseComponentProps, AriaProps, BaseStyleProps {
   /*
    * Collection type. This will be used to determine collection wrapper component.
    * @default 'list'
@@ -37,8 +34,7 @@ export interface CollectionBaseProps<CollectionItemType>
 }
 
 // @TODO Add GridCollectionProps and TableCollectionProps
-export type ListCollectionProps<CollectionType> =
-  CollectionBaseProps<CollectionType> & FlexStyleProps & { type: 'list' };
+export type ListCollectionProps<CollectionType> = CollectionBaseProps<CollectionType> &
+  FlexStyleProps & { type: 'list' };
 
-export type CollectionProps<CollectionType> =
-  ListCollectionProps<CollectionType>;
+export type CollectionProps<CollectionType> = ListCollectionProps<CollectionType>;

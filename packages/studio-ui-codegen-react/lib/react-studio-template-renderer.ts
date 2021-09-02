@@ -1,5 +1,11 @@
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
-import { StudioTemplateRenderer, StudioRendererConstants, isStudioComponentWithBinding, isSimplePropertyBinding, isDataPropertyBinding } from '@amzn/studio-ui-codegen';
+import {
+  StudioTemplateRenderer,
+  StudioRendererConstants,
+  isStudioComponentWithBinding,
+  isSimplePropertyBinding,
+  isDataPropertyBinding,
+} from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';
 import ts, {
@@ -211,7 +217,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       undefined,
       factory.createIntersectionTypeNode([
         this.buildBindingPropNodes(component),
-        factory.createTypeReferenceNode('CommonProps', undefined)
+        factory.createTypeReferenceNode('CommonProps', undefined),
       ]),
     );
   }
@@ -225,13 +231,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     for (let bindingProp of Object.entries(component.bindingProperties)) {
       const propName = bindingProp[0];
       const typeName = bindingProp[1].type.toString();
-      if (isSimplePropertyBinding(bindingProp[1])) {       
+      if (isSimplePropertyBinding(bindingProp[1])) {
         const propSignature = factory.createPropertySignature(
           undefined,
           propName,
           undefined,
           factory.createTypeReferenceNode(typeName, undefined),
-        )
+        );
         propSignatures.push(propSignature);
       } else if (isDataPropertyBinding(bindingProp[1])) {
         const propSignature = factory.createPropertySignature(
@@ -239,7 +245,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           propName,
           factory.createToken(SyntaxKind.QuestionToken),
           factory.createTypeReferenceNode(typeName, undefined),
-        )
+        );
         propSignatures.push(propSignature);
       }
     }

@@ -2,14 +2,8 @@ import { BaseComponentProps } from '@amzn/amplify-ui-react-types';
 import { ReactComponentRenderer } from '../react-component-renderer';
 
 import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from 'typescript';
-import {
-  StudioComponent,
-  StudioComponentChild,
-  BoundStudioComponentProperty,
-} from '@amzn/amplify-ui-codegen-schema';
-import {
-  StudioRendererConstants
-} from '@amzn/studio-ui-codegen'
+import { StudioComponent, StudioComponentChild, BoundStudioComponentProperty } from '@amzn/amplify-ui-codegen-schema';
+import { StudioRendererConstants } from '@amzn/studio-ui-codegen';
 
 export default class SampleCodeRenderer extends ReactComponentRenderer<BaseComponentProps> {
   renderElement(): JsxElement {

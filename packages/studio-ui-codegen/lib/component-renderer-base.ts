@@ -1,6 +1,6 @@
-import { DividerProps, ImageProps, TextProps } from "@amzn/amplify-ui-react-types";
+import { DividerProps, ImageProps, TextProps } from '@amzn/amplify-ui-react-types';
 
-import { CommonComponentRenderer } from "./common-component-renderer";
+import { CommonComponentRenderer } from './common-component-renderer';
 
 type SourceProp = DividerProps | ImageProps | TextProps;
 
@@ -9,7 +9,7 @@ type SourceProp = DividerProps | ImageProps | TextProps;
  */
 export abstract class ComponentRendererBase<
   TPropIn extends SourceProp,
-  TElementOut
+  TElementOut,
 > extends CommonComponentRenderer<TPropIn> {
   abstract renderElement(): TElementOut;
 }

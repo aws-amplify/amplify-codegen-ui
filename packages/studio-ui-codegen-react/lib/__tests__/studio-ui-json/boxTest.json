@@ -1,14 +1,14 @@
 {
-  "componentType":"Box",
-  "componentId":"I:5",
+  "componentType": "Box",
+  "componentId": "I:5",
   "properties": {
     "fontFamily": {
-      "value":"Times New Roman"
+      "value": "Times New Roman"
     },
     "fontSize": {
-      "value":"20px"
+      "value": "20px"
     }
   },
-  "overrides":{},
-  "name":"Test"
+  "overrides": {},
+  "name": "Test"
 }
