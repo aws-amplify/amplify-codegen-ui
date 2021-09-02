@@ -6,4 +6,4 @@ export type FixedOrBoundProps = {
 
 export type WrappedComponentProperties<TPropIn> = {
   [key in keyof TPropIn]: FixedStudioComponentProperty | BoundStudioComponentProperty;
-}
+};

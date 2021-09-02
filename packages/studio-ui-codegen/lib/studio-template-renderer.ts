@@ -1,21 +1,18 @@
-import { FrameworkOutputManager } from "./framework-output-manager";
-import { StudioComponent } from "@amzn/amplify-ui-codegen-schema";
-import { StudioRendererConstants } from "./renderer-helper";
-import { RenderTextComponentResponse } from "./render-component-response";
+import { FrameworkOutputManager } from './framework-output-manager';
+import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+import { StudioRendererConstants } from './renderer-helper';
+import { RenderTextComponentResponse } from './render-component-response';
 
 export abstract class StudioTemplateRenderer<
   TSource,
   TOutputManager extends FrameworkOutputManager<TSource>,
-  TRenderOutput extends RenderTextComponentResponse
+  TRenderOutput extends RenderTextComponentResponse,
 > {
   /**
    *
    * @param component The first order component to be rendered.
    */
-  constructor(
-    protected component: StudioComponent,
-    protected outputManager: TOutputManager
-  ) {}
+  constructor(protected component: StudioComponent, protected outputManager: TOutputManager) {}
 
   /**
    * Renders the entire first order component. It returns the
@@ -28,7 +25,7 @@ export abstract class StudioTemplateRenderer<
       this.outputManager.writeComponent(
         componentContent,
         outputPath,
-        this.component.name ?? StudioRendererConstants.unknownName
+        this.component.name ?? StudioRendererConstants.unknownName,
       );
   }
 }

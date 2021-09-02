@@ -1,1 +1,7 @@
-{"componentType":"Box","id":"I:5","properties":{"fontFamily":{"value":"Times New Roman"},"fontSize":{"value":"20px"}},"overrides":{},"name":"Test"}
+{
+  "componentType": "Box",
+  "id": "I:5",
+  "properties": { "fontFamily": { "value": "Times New Roman" }, "fontSize": { "value": "20px" } },
+  "overrides": {},
+  "name": "Test"
+}

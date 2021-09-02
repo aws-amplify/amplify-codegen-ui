@@ -3,8 +3,8 @@ import {
   StudioComponent,
   StudioComponentChild,
   StudioComponentProperties,
-  WrappedComponentProperties
-} from "@amzn/amplify-ui-codegen-schema";
+  WrappedComponentProperties,
+} from '@amzn/amplify-ui-codegen-schema';
 
 /**
  * Shared class for rendering components.

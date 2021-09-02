@@ -6,9 +6,7 @@ import { ReactComponentWithChildrenRenderer } from '../react-component-with-chil
 
 import { factory, JsxChild, JsxElement } from 'typescript';
 
-export default class CustomComponentRenderer extends ReactComponentWithChildrenRenderer<
-  CustomComponentProps
-> {
+export default class CustomComponentRenderer extends ReactComponentWithChildrenRenderer<CustomComponentProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
     const tagName = this.component.componentType;
 

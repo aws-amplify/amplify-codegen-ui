@@ -5,5 +5,5 @@ export type FrameworkOutputConfig = {
    * @type string
    * @description required, the directory of output path
    */
-   outputPathDir: string;
-}
+  outputPathDir: string;
+};

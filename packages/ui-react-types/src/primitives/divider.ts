@@ -18,7 +18,4 @@ export interface DividerOptions {
   size?: DividerSize;
 }
 
-export interface DividerProps
-  extends DividerOptions,
-    BaseComponentProps,
-    BaseStyleProps {}
+export interface DividerProps extends DividerOptions, BaseComponentProps, BaseStyleProps {}
