@@ -1,8 +1,9 @@
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
-import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
+import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '../';
 import fs from 'fs';
 import { join } from 'path';
+import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
 
 function loadSchemaFromJSONFile(jsonSchemaFile: string): StudioComponent {
   return JSON.parse(
@@ -10,10 +11,14 @@ function loadSchemaFromJSONFile(jsonSchemaFile: string): StudioComponent {
   ) as StudioComponent;
 }
 
-function generateWithAmplifyRenderer(jsonSchemaFile: string, isSampleCodeSnippet: boolean = false): string {
+function generateWithAmplifyRenderer(
+  jsonSchemaFile: string,
+  renderConfig: ReactRenderConfig = {},
+  isSampleCodeSnippet: boolean = false,
+): string {
   const schema = loadSchemaFromJSONFile(jsonSchemaFile);
   const rendererFactory = new StudioTemplateRendererFactory(
-    (component: StudioComponent) => new AmplifyRenderer(component),
+    (component: StudioComponent) => new AmplifyRenderer(component, renderConfig),
   );
   if (isSampleCodeSnippet) {
     return rendererFactory.buildRenderer(schema).renderSampleCodeSnippet().compText;
@@ -79,6 +84,24 @@ describe('amplify render tests', () => {
     it('should add model imports', () => {
       const generatedCode = generateWithAmplifyRenderer('componentWithDataBinding');
       expect(generatedCode).toMatchSnapshot();
+    });
+  });
+
+  describe('custom render config', () => {
+    it('should render ES5', () => {
+      expect(
+        generateWithAmplifyRenderer('boxGolden', { target: ScriptTarget.ES5, script: ScriptKind.JS }),
+      ).toMatchSnapshot();
+    });
+
+    it('should render JSX', () => {
+      expect(generateWithAmplifyRenderer('boxGolden', { script: ScriptKind.JSX })).toMatchSnapshot();
+    });
+
+    it('should render common JS', () => {
+      expect(
+        generateWithAmplifyRenderer('boxGolden', { module: ModuleKind.CommonJS, script: ScriptKind.JS }),
+      ).toMatchSnapshot();
     });
   });
 });

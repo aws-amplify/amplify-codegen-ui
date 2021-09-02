@@ -36,8 +36,8 @@ export class StudioTemplateRendererManager<
     }
     console.log('Rendering a component ', component.componentType);
     const componentRenderer = this.renderer.buildRenderer(component);
-    let result = componentRenderer.renderComponent();
-    componentRenderer.renderComponentToFilesystem(result.componentText as any)(this.outputConfig.outputPathDir);
+    const result = componentRenderer.renderComponent();
+    result.renderComponentToFilesystem(this.outputConfig.outputPathDir);
     return result;
   }
 
