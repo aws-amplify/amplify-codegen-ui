@@ -16,7 +16,7 @@ export class ImportCollection {
   }
 
   mergeCollections(otherCollection: ImportCollection) {
-    for (let [key, value] of otherCollection.#collection) {
+    for (const [key, value] of otherCollection.#collection) {
       [...value].forEach((singlePackage) => {
         this.addImport(key, singlePackage);
       });
@@ -53,7 +53,7 @@ export class ImportCollection {
       ),
     );
 
-    for (let [key, value] of this.#collection) {
+    for (const [key, value] of this.#collection) {
       importDeclarations.push(
         createImportDeclaration(
           undefined,

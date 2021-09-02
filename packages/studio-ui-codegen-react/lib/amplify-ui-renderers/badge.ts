@@ -2,9 +2,8 @@ import { BadgeProps } from '@amzn/amplify-ui-react-types';
 
 import { StudioComponentChild, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
 
-import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
-
 import { factory, JsxChild, JsxElement } from 'typescript';
+import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 
 export default class BadgeRenderer extends ReactComponentWithChildrenRenderer<BadgeProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {

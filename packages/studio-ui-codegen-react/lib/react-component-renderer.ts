@@ -17,7 +17,7 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
     tagName: string,
   ): JsxOpeningElement {
     const propsArray: JsxAttribute[] = [];
-    for (let propKey of Object.keys(props)) {
+    for (const propKey of Object.keys(props)) {
       const currentProp = props[propKey];
       propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
     }

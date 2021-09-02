@@ -1,9 +1,8 @@
 import { FrameworkOutputManager } from '@amzn/studio-ui-codegen';
-import { existsSync, mkdirSync } from 'fs';
-import { promises as fs } from 'fs';
+import { existsSync, mkdirSync, promises as fs } from 'fs';
 import path from 'path';
 
-export default class ReactOutputManager extends FrameworkOutputManager<string> {
+export class ReactOutputManager extends FrameworkOutputManager<string> {
   async writeComponent(input: string, outputPath: string, componentName: string): Promise<void> {
     console.log('Writing file ', outputPath);
 

@@ -1,9 +1,9 @@
+import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+import path from 'path';
 import { FrameworkOutputManager } from './framework-output-manager';
 import { FrameworkRenderConfig } from './framework-render-config';
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { StudioRendererConstants } from './renderer-helper';
 import { RenderTextComponentResponse } from './render-component-response';
-import path from 'path';
 
 export abstract class StudioTemplateRenderer<
   TSource,

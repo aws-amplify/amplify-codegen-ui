@@ -1,4 +1,4 @@
-//The basic type for studio ui codegen output configuration
+// The basic type for studio ui codegen output configuration
 export type FrameworkOutputConfig = {
   /**
    * @name outputPathDir

@@ -1,6 +1,6 @@
+import { AriaRole } from 'react';
 import { AriaProps, BaseComponentProps } from './base';
 import { BaseStyleProps } from './style';
-import { AriaRole } from 'react';
 
 export type ViewAsHTMLElementTypes = keyof JSX.IntrinsicElements;
 

@@ -1,6 +1,5 @@
 import { FrameworkOutputManager } from '@amzn/studio-ui-codegen';
-import { existsSync, mkdirSync } from 'fs';
-import { promises as fs } from 'fs';
+import { existsSync, mkdirSync, promises as fs } from 'fs';
 import path from 'path';
 
 export * from './react-component-with-children-renderer';

@@ -25,6 +25,7 @@
     "@amzn/amplify-ui-react-types": "^0.0.1",
     "@amzn/studio-ui-codegen": "^0.0.1",
     "framer-motion": "^4",
+    "prettier": "2.3.2",
     "typescript": "^4.2.4"
   },
   "peerDependencies": {

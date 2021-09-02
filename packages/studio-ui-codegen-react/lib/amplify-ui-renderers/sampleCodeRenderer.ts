@@ -1,15 +1,15 @@
 import { BaseComponentProps } from '@amzn/amplify-ui-react-types';
-import { ReactComponentRenderer } from '../react-component-renderer';
 
 import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from 'typescript';
 import { StudioComponent, StudioComponentChild, BoundStudioComponentProperty } from '@amzn/amplify-ui-codegen-schema';
 import { StudioRendererConstants } from '@amzn/studio-ui-codegen';
+import { ReactComponentRenderer } from '../react-component-renderer';
 
 export default class SampleCodeRenderer extends ReactComponentRenderer<BaseComponentProps> {
   renderElement(): JsxElement {
     const tagName = (<StudioComponent>this.component).name ?? StudioRendererConstants.unknownName;
-    var exposedProps = new Map<string, BoundStudioComponentProperty>();
-    //this.collectExposedProps(this.component, exposedProps);
+    const exposedProps = new Map<string, BoundStudioComponentProperty>();
+    // this.collectExposedProps(this.component, exposedProps);
 
     const element = factory.createJsxElement(
       this.renderSampleCodeOpeningElement(factory, exposedProps, tagName),

@@ -6,9 +6,8 @@ import {
   StudioComponentProperties,
 } from '@amzn/amplify-ui-codegen-schema';
 
-import { ReactComponentRenderer } from '../react-component-renderer';
-
 import { factory, JsxElement } from 'typescript';
+import { ReactComponentRenderer } from '../react-component-renderer';
 
 export default class TextRenderer extends ReactComponentRenderer<TextProps> {
   renderElement(): JsxElement {

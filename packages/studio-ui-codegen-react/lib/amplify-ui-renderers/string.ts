@@ -2,12 +2,12 @@ import { FixedStudioComponentProperty, StudioComponentChild } from '@amzn/amplif
 import ts, { JsxFragment } from 'typescript';
 
 export default function renderString(component: StudioComponentChild): JsxFragment {
-  const factory = ts.factory;
+  const { factory } = ts;
 
   if ('value' in component.properties) {
-    if ('value' in component.properties['value']) {
-      const stringProp = component.properties['value'];
-      const value = stringProp.value;
+    if ('value' in component.properties.value) {
+      const stringProp = component.properties.value;
+      const { value } = stringProp;
       console.log(value);
 
       const element = factory.createJsxFragment(
