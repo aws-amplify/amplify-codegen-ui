@@ -1,6 +1,6 @@
 {
   "componentType": "Box",
-  "componentId": "I:5",
+  "id": "I:5",
   "properties": {
     "fontFamily": {
       "value": "Times New Roman"
