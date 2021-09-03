@@ -4,6 +4,7 @@ import {
   StudioComponentDataPropertyBinding,
   StudioComponentAuthPropertyBinding,
   StudioComponentStoragePropertyBinding,
+  StudioComponentEventPropertyBinding,
   StudioComponentSimplePropertyBinding,
   StudioComponentPropertyType,
 } from '@amzn/amplify-ui-codegen-schema';
@@ -23,6 +24,7 @@ export function isDataPropertyBinding(
     | StudioComponentDataPropertyBinding
     | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
+    | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,
 ): prop is StudioComponentDataPropertyBinding {
   return 'type' in prop && prop.type === 'Data';
@@ -33,6 +35,7 @@ export function isAuthPropertyBinding(
     | StudioComponentDataPropertyBinding
     | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
+    | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,
 ): prop is StudioComponentAuthPropertyBinding {
   return 'type' in prop && prop.type === 'Authentication';
@@ -43,6 +46,7 @@ export function isStoragePropertyBinding(
     | StudioComponentDataPropertyBinding
     | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
+    | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,
 ): prop is StudioComponentStoragePropertyBinding {
   return 'type' in prop && prop.type === 'Storage';
@@ -53,6 +57,7 @@ export function isSimplePropertyBinding(
     | StudioComponentDataPropertyBinding
     | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
+    | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,
 ): prop is StudioComponentSimplePropertyBinding {
   return (

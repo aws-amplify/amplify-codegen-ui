@@ -1,15 +1,15 @@
 {
   "name": "HeaderWithAction3",
   "componentType": "Flex",
-  "componentId": "O8phmtdR-chILsHCWXQBo",
+  "id": "O8phmtdR-chILsHCWXQBo",
   "children": [
     {
       "componentType": "Flex",
-      "componentId": "243:20",
+      "id": "243:20",
       "children": [
         {
           "componentType": "Text",
-          "componentId": "243:22",
+          "id": "243:22",
           "children": [],
           "properties": {
             "fontSize": {
@@ -65,15 +65,15 @@
     },
     {
       "componentType": "Flex",
-      "componentId": "243:21",
+      "id": "243:21",
       "children": [
         {
           "componentType": "Flex",
-          "componentId": "230:1929",
+          "id": "230:1929",
           "children": [
             {
               "componentType": "Text",
-              "componentId": "230:1930",
+              "id": "230:1930",
               "children": [],
               "properties": {
                 "fontSize": {

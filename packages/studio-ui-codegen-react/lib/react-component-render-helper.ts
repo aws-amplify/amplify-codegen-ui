@@ -1,4 +1,10 @@
-import { FixedStudioComponentProperty, BoundStudioComponentProperty } from '@amzn/amplify-ui-codegen-schema';
+import {
+  FixedStudioComponentProperty,
+  BoundStudioComponentProperty,
+  CollectionStudioComponentProperty,
+  WorkflowStudioComponentProperty,
+  FormStudioComponentProperty,
+} from '@amzn/amplify-ui-codegen-schema';
 
 import { factory, JsxAttribute, JsxExpression, StringLiteral, SyntaxKind } from 'typescript';
 
@@ -14,13 +20,23 @@ export function getComponentPropName(componentName?: string): string {
 }
 
 export function isFixedPropertyWithValue(
-  prop: FixedStudioComponentProperty | BoundStudioComponentProperty,
+  prop:
+    | FixedStudioComponentProperty
+    | BoundStudioComponentProperty
+    | CollectionStudioComponentProperty
+    | WorkflowStudioComponentProperty
+    | FormStudioComponentProperty,
 ): prop is FixedStudioComponentProperty {
   return 'value' in prop;
 }
 
 export function isBoundProperty(
-  prop: FixedStudioComponentProperty | BoundStudioComponentProperty,
+  prop:
+    | FixedStudioComponentProperty
+    | BoundStudioComponentProperty
+    | CollectionStudioComponentProperty
+    | WorkflowStudioComponentProperty
+    | FormStudioComponentProperty,
 ): prop is BoundStudioComponentProperty {
   return 'bindingProperties' in prop || 'defaultValue' in prop;
 }
@@ -83,7 +99,12 @@ export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: str
 }
 
 export function buildOpeningElementAttributes(
-  prop: FixedStudioComponentProperty | BoundStudioComponentProperty,
+  prop:
+    | FixedStudioComponentProperty
+    | BoundStudioComponentProperty
+    | CollectionStudioComponentProperty
+    | WorkflowStudioComponentProperty
+    | FormStudioComponentProperty,
   propName: string,
 ): JsxAttribute {
   if (isFixedPropertyWithValue(prop)) {

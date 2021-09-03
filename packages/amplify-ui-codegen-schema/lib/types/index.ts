@@ -22,7 +22,7 @@ export type StudioComponent = {
   /**
    *  This is the unique global identifier for each component
    */
-  componentId: string;
+  id?: string;
 
   /**
    * This should map to the components available including Amplify
@@ -60,13 +60,59 @@ export type StudioComponent = {
       | StudioComponentDataPropertyBinding
       | StudioComponentAuthPropertyBinding
       | StudioComponentStoragePropertyBinding
-      | StudioComponentSimplePropertyBinding;
+      | StudioComponentSimplePropertyBinding
+      | StudioComponentEventPropertyBinding;
   };
+};
+
+/**
+ * A new studio component where the id will automatically be generated
+ */
+export type NewStudioComponent = {
+  /**
+   * The name of the customized component
+   */
+  name?: string;
 
   /**
-   * disables component property editing in the studio component editor
+   * This should map to the components available including Amplify
+   * UI components and other custom components
    */
-  isBootrapped?: boolean;
+  componentType: string;
+
+  /**
+   * These are the customized properties
+   */
+  properties: StudioComponentProperties;
+
+  /**
+   * These are the nested components in a composite
+   */
+  children?: StudioComponentChild[];
+
+  /**
+   * The  metatdata gerated by Figma
+   */
+  figmaMetadata?: FigmaMetadata;
+
+  /**
+   * Variants in terms of styles
+   */
+  variants?: StudioComponentVariant[];
+
+  /**
+   * Overrides for primitives
+   */
+  overrides?: StudioComponentOverrides;
+
+  bindingProperties: {
+    [propertyName: string]:
+      | StudioComponentDataPropertyBinding
+      | StudioComponentAuthPropertyBinding
+      | StudioComponentStoragePropertyBinding
+      | StudioComponentSimplePropertyBinding
+      | StudioComponentEventPropertyBinding;
+  };
 };
 
 export type StudioComponentSimplePropertyBinding = {
@@ -98,6 +144,13 @@ export type StudioComponentChild = {
    * These are the nested components in a composite
    */
   children?: StudioComponentChild[];
+
+  /**
+   * These are the collection properties
+   */
+  collectionProperties?: {
+    [propertyName: string]: StudioComponentDataPropertyBinding;
+  };
 };
 
 /**
@@ -136,7 +189,12 @@ export type StudioComponentProperties = {
    * Each key maps to an available component property. Static values
    * can be passed in as a string.
    */
-  [key: string]: FixedStudioComponentProperty | BoundStudioComponentProperty;
+  [key: string]:
+    | FixedStudioComponentProperty
+    | BoundStudioComponentProperty
+    | CollectionStudioComponentProperty
+    | WorkflowStudioComponentProperty
+    | FormStudioComponentProperty;
 };
 
 /**
@@ -171,6 +229,32 @@ export type BoundStudioComponentProperty = {
 };
 
 /**
+ * This represents a component property that is configured with collection item
+ */
+export type CollectionStudioComponentProperty = {
+  /**
+   * record collection item bindings
+   */
+  collectionBindingProperties: {
+    property: string;
+    field?: string;
+  };
+
+  /**
+   * The default value to pass in if no prop is provided
+   */
+  defaultValue?: string;
+};
+
+/**
+ * This represents a component property that is configured with either
+ * data bound values
+ */
+export type WorkflowStudioComponentProperty = {
+  event: string;
+};
+
+/**
  * This represent the configuration for binding a component property
  * to Amplify specific information
  */
@@ -184,6 +268,50 @@ export type StudioComponentDataPropertyBinding = {
    * This is the value of the data binding
    */
   bindingProperties: StudioComponentDataBindingProperty;
+};
+
+/**
+ * This represent the configuration for binding a component property
+ * to Amplify specific information
+ */
+export type StudioComponentEventPropertyBinding = {
+  /**
+   * This declares that the type is of a workflow binding
+   */
+  type: 'Event';
+};
+
+/**
+ * This is the configuration for a form binding. This is
+ * technically an extension of Workflows but because it is
+ * pretty unique, it should be separated out with its own definition
+ */
+export type FormStudioComponentProperty = {
+  /**
+   * The model of the DataStore object
+   */
+  model: string;
+
+  /**
+   * The binding configuration for the form
+   */
+  bindings: FormBindings;
+};
+
+export type FormBindings = {
+  [key: string]: FormBindingElement;
+};
+
+export type FormBindingElement = {
+  /**
+   * The name of the component to fetch a value from
+   */
+  element: string;
+
+  /**
+   * The property component to get the value from.
+   */
+  property: string;
 };
 
 /**

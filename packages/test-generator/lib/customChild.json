@@ -1,11 +1,11 @@
 {
-  "componentId": "1234-5678-9010",
+  "id": "1234-5678-9010",
   "componentType": "Box",
   "name": "BoxWithCustomButton",
   "properties": {},
   "children": [
     {
-      "componentId": "0987-6543-3211",
+      "id": "0987-6543-3211",
       "componentType": "CustomButton",
       "properties": {
         "color": {
