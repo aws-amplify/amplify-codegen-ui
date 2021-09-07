@@ -111,6 +111,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     console.log('JSX rendered');
 
     const wrappedFunction = this.renderFunctionWrapper(this.component.name ?? StudioRendererConstants.unknownName, jsx);
+    const propsDeclaration = this.renderBindingPropsType(this.component);
 
     const imports = this.importCollection.buildImportStatements();
 
@@ -123,7 +124,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     componentText += EOL;
 
-    const propsDeclaration = this.renderBindingPropsType(this.component);
     const propsPrinted = printer.printNode(EmitHint.Unspecified, propsDeclaration, file);
     componentText += propsPrinted;
 
@@ -210,14 +210,26 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   renderBindingPropsType(component: StudioComponent): TypeAliasDeclaration {
     const componentPropType = getComponentPropName(component.name);
+    this.importCollection.addImport('@aws-amplify/ui-react', 'EscapeHatchProps');
     return factory.createTypeAliasDeclaration(
       undefined,
-      factory.createModifiersFromModifierFlags(ModifierFlags.Export),
-      componentPropType,
+      [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      factory.createIdentifier(componentPropType),
       undefined,
       factory.createIntersectionTypeNode([
         this.buildBindingPropNodes(component),
-        factory.createTypeReferenceNode('CommonProps', undefined),
+        factory.createTypeLiteralNode([
+          factory.createPropertySignature(
+            undefined,
+            factory.createIdentifier('overrides'),
+            factory.createToken(ts.SyntaxKind.QuestionToken),
+            factory.createUnionTypeNode([
+              factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+              factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
+              factory.createLiteralTypeNode(factory.createNull()),
+            ]),
+          ),
+        ]),
       ]),
     );
   }
