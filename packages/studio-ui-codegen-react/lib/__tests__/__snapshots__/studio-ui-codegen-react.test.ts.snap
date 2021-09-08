@@ -78,6 +78,25 @@ export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
 }"
 `;
 
+exports[`amplify render tests component with data binding should add model imports 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { User } from \\"../models\\";
+import { Button, EscapeHatchProps, getOverrideProps } from \\"@aws-amplify/ui-react\\";
+
+export type ComponentWithDataBindingProps = {
+    width: Number;
+    isDisabled: Boolean;
+    buttonUser?: User;
+    buttonColor: String;
+} & {
+    overrides?: EscapeHatchProps | undefined | null;
+};
+export default function ComponentWithDataBinding(props: ComponentWithDataBindingProps): JSX.Element {
+    return (<Button label={buttonUser.username || \\"hspain@gmail.com\\"} labelWidth={width} disabled={isDisabled} {...props} {...getOverrideProps(props.overrides, \\"Button\\")}></Button>);
+}"
+`;
+
 exports[`amplify render tests sample code snippet tests should generate a sample code snippet for components 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

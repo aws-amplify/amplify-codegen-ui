@@ -243,22 +243,21 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       return factory.createTypeLiteralNode([]);
     }
     for (let bindingProp of Object.entries(component.bindingProperties)) {
-      const propName = bindingProp[0];
-      const typeName = bindingProp[1].type.toString();
-      if (isSimplePropertyBinding(bindingProp[1])) {
+      const [propName, binding] = bindingProp;
+      if (isSimplePropertyBinding(binding)) {
         const propSignature = factory.createPropertySignature(
           undefined,
           propName,
           undefined,
-          factory.createTypeReferenceNode(typeName, undefined),
+          factory.createTypeReferenceNode(binding.type, undefined),
         );
         propSignatures.push(propSignature);
-      } else if (isDataPropertyBinding(bindingProp[1])) {
+      } else if (isDataPropertyBinding(binding)) {
         const propSignature = factory.createPropertySignature(
           undefined,
           propName,
           factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(typeName, undefined),
+          factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
         );
         propSignatures.push(propSignature);
       }

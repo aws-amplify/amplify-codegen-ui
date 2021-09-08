@@ -12,7 +12,7 @@ import {
   Expression,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
-import { buildOpeningElementAttributes } from './react-component-render-helper';
+import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
 
 export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithChildrenRendererBase<
   TPropIn,
@@ -21,6 +21,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
 > {
   constructor(component: StudioComponent | StudioComponentChild, protected importCollection: ImportCollection) {
     super(component);
+    addBindingPropertiesImports(component, importCollection);
   }
 
   protected renderCustomCompOpeningElement(

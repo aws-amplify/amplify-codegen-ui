@@ -4,9 +4,13 @@ import {
   CollectionStudioComponentProperty,
   WorkflowStudioComponentProperty,
   FormStudioComponentProperty,
+  StudioComponent,
+  StudioComponentChild,
 } from '@amzn/amplify-ui-codegen-schema';
 
 import { factory, JsxAttribute, JsxExpression, StringLiteral, SyntaxKind } from 'typescript';
+
+import { ImportCollection } from './import-collection';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
@@ -182,4 +186,17 @@ export function buildCollectionBindingAttrWithDefault(
     factory.createJsxExpression(undefined, binaryExpr),
   );
   return attr;
+}
+
+export function addBindingPropertiesImports(
+  component: StudioComponent | StudioComponentChild,
+  importCollection: ImportCollection,
+) {
+  if ('bindingProperties' in component) {
+    Object.entries(component.bindingProperties).forEach(([property, binding]) => {
+      if ('bindingProperties' in binding && 'model' in binding.bindingProperties) {
+        importCollection.addImport('../models', binding.bindingProperties.model);
+      }
+    });
+  }
 }
