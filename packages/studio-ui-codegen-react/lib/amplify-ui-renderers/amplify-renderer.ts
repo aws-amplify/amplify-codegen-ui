@@ -1,6 +1,7 @@
 import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { factory, JsxElement, JsxFragment } from 'typescript';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
+import { ReactRenderConfig } from '../react-render-config';
 
 import BadgeRenderer from './badge';
 import ButtonRenderer from './button';
@@ -15,8 +16,8 @@ import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
 
 export class AmplifyRenderer extends ReactStudioTemplateRenderer {
-  constructor(component: StudioComponent) {
-    super(component);
+  constructor(component: StudioComponent, renderConfig: ReactRenderConfig) {
+    super(component, renderConfig);
   }
 
   renderJsx(component: StudioComponent | StudioComponentChild): JsxElement | JsxFragment {

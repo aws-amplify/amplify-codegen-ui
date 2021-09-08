@@ -1,28 +1,26 @@
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererManager, StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
-import {
-  AmplifyRenderer,
-  ReactOutputConfig,
-  JSModuleEnum,
-  CompileTargetEnum,
-  JSOutputFormatEnum,
-} from '@amzn/studio-ui-codegen-react';
+import { AmplifyRenderer, ReactOutputConfig, ReactRenderConfig, ScriptKind } from '@amzn/studio-ui-codegen-react';
+import { ModuleKind, ScriptTarget } from 'typescript';
 import path from 'path';
 
 import * as schemas from './lib';
 
 Error.stackTraceLimit = Infinity;
 
+const renderConfig: ReactRenderConfig = {
+  module: ModuleKind.CommonJS,
+  target: ScriptTarget.ES2015,
+  script: ScriptKind.JS,
+};
+
 const rendererFactory = new StudioTemplateRendererFactory(
-  (component: StudioComponent) => new AmplifyRenderer(component),
+  (component: StudioComponent) => new AmplifyRenderer(component, renderConfig),
 );
 
 const outputPathDir = path.resolve(path.join(__dirname, '..', 'ui-components'));
 const outputConfig: ReactOutputConfig = {
   outputPathDir,
-  module: JSModuleEnum.CommonJS,
-  compileTarget: CompileTargetEnum.ES6,
-  outputFormat: JSOutputFormatEnum.tsx,
 };
 const rendererManager = new StudioTemplateRendererManager(rendererFactory, outputConfig);
 Object.entries(schemas).forEach(([name, schema]) => {

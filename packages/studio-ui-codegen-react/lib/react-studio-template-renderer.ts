@@ -19,8 +19,6 @@ import ts, {
   ModifierFlags,
   NewLineKind,
   PropertySignature,
-  ScriptKind,
-  ScriptTarget,
   SyntaxKind,
   transpileModule,
   TypeAliasDeclaration,
@@ -28,8 +26,16 @@ import ts, {
   VariableStatement,
   Statement,
 } from 'typescript';
+import prettier from 'prettier';
 import { ImportCollection } from './import-collection';
 import ReactOutputManager from './react-output-manager';
+import {
+  ReactRenderConfig,
+  ScriptKind,
+  ScriptTarget,
+  ModuleKind,
+  scriptKindToFileExtension,
+} from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
 import { getComponentPropName } from './react-component-render-helper';
 
@@ -42,11 +48,29 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 > {
   protected importCollection = new ImportCollection();
+  protected defaultRenderConfig = {
+    script: ScriptKind.TSX,
+    target: ScriptTarget.ES2015,
+    module: ModuleKind.ESNext,
+  };
 
-  componentPath = `${this.component.name}.tsx`;
+  fileName = `${this.component.name}.tsx`;
 
-  constructor(component: StudioComponent) {
-    super(component, new ReactOutputManager());
+  constructor(component: StudioComponent, protected renderConfig: ReactRenderConfig) {
+    super(component, new ReactOutputManager(), renderConfig);
+    const { script } = this.renderConfig;
+    if (script !== ScriptKind.TSX) {
+      this.fileName = `${this.component.name}.${scriptKindToFileExtension(renderConfig.script || ScriptKind.TSX)}`;
+    }
+
+    this.renderConfig = {
+      script: ScriptKind.TSX,
+      target: ScriptTarget.ES2015,
+      module: ModuleKind.ESNext,
+      ...this.renderConfig,
+    };
+
+    // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
   }
 
   renderSampleCodeSnippet() {
@@ -89,15 +113,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
-    let compiled = transpileModule(result, {
-      compilerOptions: {
-        module: ts.ModuleKind.ESNext,
-        target: ts.ScriptTarget.ES2015,
-        jsx: ts.JsxEmit.React,
-      },
-    });
-
-    const compText = compiled.outputText.replace('export default ', '');
+    const compText = this.transpile(result);
 
     return { compText, importsText };
   }
@@ -133,16 +149,42 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
 
-    console.log(componentText);
+    const transpiledComponentText = this.transpile(componentText);
+
+    console.log(transpiledComponentText);
 
     return {
-      componentText,
-      renderComponentToFilesystem: this.renderComponentToFilesystem(componentText),
+      componentText: transpiledComponentText,
+      renderComponentToFilesystem: this.renderComponentToFilesystem(transpiledComponentText)(this.fileName),
     };
   }
 
+  private transpile(code: string): string {
+    const { target, module, script } = this.renderConfig;
+    if (script === ScriptKind.JS || script == ScriptKind.JSX) {
+      const transpiledCode = transpileModule(code, {
+        compilerOptions: {
+          target,
+          module,
+          jsx: script === ScriptKind.JS ? ts.JsxEmit.React : ts.JsxEmit.Preserve,
+        },
+      }).outputText;
+
+      return prettier.format(transpiledCode, { parser: 'babel' });
+    }
+
+    return prettier.format(code, { parser: 'babel' });
+  }
+
   private createPrinter() {
-    const file = createSourceFile(this.componentPath, '', ScriptTarget.ESNext, false, ScriptKind.TSX);
+    const { target, script } = this.renderConfig;
+    const file = createSourceFile(
+      this.fileName,
+      '',
+      target || this.defaultRenderConfig.target,
+      false,
+      script || this.defaultRenderConfig.script,
+    );
 
     const printer = createPrinter({
       newLine: NewLineKind.LineFeed,

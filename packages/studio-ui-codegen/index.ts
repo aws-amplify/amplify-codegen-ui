@@ -10,3 +10,4 @@ export * from './lib/template-renderer-factory';
 export * from './lib/mapper/mapper-base';
 export * from './lib/renderer-helper';
 export * from './lib/framework-output-config';
+export * from './lib/framework-render-config';

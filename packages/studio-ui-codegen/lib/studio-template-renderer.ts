@@ -1,7 +1,9 @@
 import { FrameworkOutputManager } from './framework-output-manager';
+import { FrameworkRenderConfig } from './framework-render-config';
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { StudioRendererConstants } from './renderer-helper';
 import { RenderTextComponentResponse } from './render-component-response';
+import path from 'path';
 
 export abstract class StudioTemplateRenderer<
   TSource,
@@ -12,7 +14,11 @@ export abstract class StudioTemplateRenderer<
    *
    * @param component The first order component to be rendered.
    */
-  constructor(protected component: StudioComponent, protected outputManager: TOutputManager) {}
+  constructor(
+    protected component: StudioComponent,
+    protected outputManager: TOutputManager,
+    protected renderConfig: FrameworkRenderConfig,
+  ) {}
 
   /**
    * Renders the entire first order component. It returns the
@@ -21,10 +27,10 @@ export abstract class StudioTemplateRenderer<
   abstract renderComponent(): TRenderOutput;
 
   renderComponentToFilesystem(componentContent: TSource) {
-    return (outputPath: string) =>
+    return (fileName: string) => (outputPath: string) =>
       this.outputManager.writeComponent(
         componentContent,
-        outputPath,
+        path.join(outputPath, fileName),
         this.component.name ?? StudioRendererConstants.unknownName,
       );
   }
