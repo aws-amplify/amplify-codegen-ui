@@ -38,7 +38,29 @@ export function isBoundProperty(
     | WorkflowStudioComponentProperty
     | FormStudioComponentProperty,
 ): prop is BoundStudioComponentProperty {
-  return 'bindingProperties' in prop || 'defaultValue' in prop;
+  return 'bindingProperties' in prop;
+}
+
+export function isCollectionItemBoundProperty(
+  prop:
+    | FixedStudioComponentProperty
+    | BoundStudioComponentProperty
+    | CollectionStudioComponentProperty
+    | WorkflowStudioComponentProperty
+    | FormStudioComponentProperty,
+): prop is CollectionStudioComponentProperty {
+  return 'collectionBindingProperties' in prop;
+}
+
+export function isDefaultValueOnly(
+  prop:
+    | FixedStudioComponentProperty
+    | BoundStudioComponentProperty
+    | CollectionStudioComponentProperty
+    | WorkflowStudioComponentProperty
+    | FormStudioComponentProperty,
+): prop is CollectionStudioComponentProperty | BoundStudioComponentProperty {
+  return 'defaultValue' in prop && !(isCollectionItemBoundProperty(prop) || isBoundProperty(prop));
 }
 
 export function buildBindingAttr(prop: BoundStudioComponentProperty, propName: string): JsxAttribute {
@@ -115,6 +137,49 @@ export function buildOpeningElementAttributes(
         ? buildBindingAttr(prop, propName)
         : buildBindingAttrWithDefault(prop, propName, prop.defaultValue);
     return attr;
+  } else if (isCollectionItemBoundProperty(prop)) {
+    const attr =
+      prop.defaultValue === undefined
+        ? buildCollectionBindingAttr(prop, propName)
+        : buildCollectionBindingAttrWithDefault(prop, propName, prop.defaultValue);
   }
   return factory.createJsxAttribute(factory.createIdentifier(propName), undefined);
+}
+
+export function buildCollectionBindingAttr(prop: CollectionStudioComponentProperty, propName: string): JsxAttribute {
+  const expr =
+    prop.collectionBindingProperties.field === undefined
+      ? factory.createIdentifier(prop.collectionBindingProperties.property)
+      : factory.createPropertyAccessExpression(
+          factory.createIdentifier(prop.collectionBindingProperties.property),
+          prop.collectionBindingProperties.field,
+        );
+
+  const attr = factory.createJsxAttribute(
+    factory.createIdentifier(propName),
+    factory.createJsxExpression(undefined, expr),
+  );
+  return attr;
+}
+
+export function buildCollectionBindingAttrWithDefault(
+  prop: CollectionStudioComponentProperty,
+  propName: string,
+  defaultValue: string,
+): JsxAttribute {
+  const rightExpr = factory.createStringLiteral(defaultValue);
+  const leftExpr =
+    prop.collectionBindingProperties.field === undefined
+      ? factory.createIdentifier(prop.collectionBindingProperties.property)
+      : factory.createPropertyAccessExpression(
+          factory.createIdentifier(prop.collectionBindingProperties.property),
+          prop.collectionBindingProperties.field,
+        );
+
+  const binaryExpr = factory.createBinaryExpression(leftExpr, factory.createToken(SyntaxKind.BarBarToken), rightExpr);
+  const attr = factory.createJsxAttribute(
+    factory.createIdentifier(propName),
+    factory.createJsxExpression(undefined, binaryExpr),
+  );
+  return attr;
 }

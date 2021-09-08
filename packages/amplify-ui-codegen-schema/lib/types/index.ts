@@ -63,6 +63,13 @@ export type StudioComponent = {
       | StudioComponentSimplePropertyBinding
       | StudioComponentEventPropertyBinding;
   };
+
+  /**
+   * These are the collection properties
+   */
+  collectionProperties?: {
+    [propertyName: string]: StudioComponentDataPropertyBinding;
+  };
 };
 
 /**
