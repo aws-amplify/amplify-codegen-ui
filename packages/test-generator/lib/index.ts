@@ -7,3 +7,4 @@ export { default as ExposedAsTest } from './exposedAsTest.json';
 export { default as HeaderWithAction } from './headerWithAction.json';
 export { default as SampleCodeSnippet } from './sampleCodeSnippet.json';
 export { default as TextGolden } from './textGolden.json';
+export { default as CollectionWithBinding } from './collectionWithBinding.json';

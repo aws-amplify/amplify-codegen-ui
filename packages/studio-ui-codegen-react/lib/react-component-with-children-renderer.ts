@@ -63,6 +63,33 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
   }
 
+  protected renderCollectionOpeningElement(
+    factory: NodeFactory,
+    props: StudioComponentProperties,
+    tagName: string,
+    itemsVariableName: string,
+  ): JsxOpeningElement {
+    const propsArray: JsxAttribute[] = [];
+    for (let propKey of Object.keys(props)) {
+      const currentProp = props[propKey];
+      propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
+    }
+
+    const itemsAttribute = factory.createJsxAttribute(
+      factory.createIdentifier('items'),
+      factory.createJsxExpression(undefined, factory.createIdentifier(itemsVariableName)),
+    );
+    propsArray.push(itemsAttribute);
+
+    this.addPropsSpreadAttributes(factory, propsArray, tagName);
+
+    return factory.createJsxOpeningElement(
+      factory.createIdentifier(tagName),
+      undefined,
+      factory.createJsxAttributes(propsArray),
+    );
+  }
+
   private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[], tagName: string) {
     const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
     attributes.push(propsAttr);

@@ -1,4 +1,4 @@
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
   StudioRendererConstants,
@@ -26,6 +26,7 @@ import ts, {
   TypeAliasDeclaration,
   TypeNode,
   VariableStatement,
+  Statement,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import ReactOutputManager from './react-output-manager';
@@ -151,7 +152,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   renderFunctionWrapper(componentName: string, jsx: JsxElement | JsxFragment): FunctionDeclaration {
     const componentPropType = getComponentPropName(componentName);
-
+    const codeBlockContent = this.buildUseDataStoreBindingStatements(this.component);
+    codeBlockContent.push(factory.createReturnStatement(factory.createParenthesizedExpression(jsx)));
     return factory.createFunctionDeclaration(
       undefined,
       [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DefaultKeyword)],
@@ -173,7 +175,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         factory.createQualifiedName(factory.createIdentifier('JSX'), factory.createIdentifier('Element')),
         undefined,
       ),
-      factory.createBlock([factory.createReturnStatement(factory.createParenthesizedExpression(jsx))], true),
+      factory.createBlock(codeBlockContent, true),
     );
   }
 
@@ -262,6 +264,97 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       }
     }
     return factory.createTypeLiteralNode(propSignatures);
+  }
+
+  private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
+    var collections: StudioComponentChild[] = [];
+    if (component.collectionProperties !== undefined) {
+      collections.push(component);
+    }
+    component.children?.map((value) => {
+      this.findCollections(value, collections);
+    });
+
+    var statements: Statement[] = [];
+
+    collections.map((value) => {
+      if (value.collectionProperties === undefined) return;
+      Object.entries(value.collectionProperties).map((collectionProp) => {
+        const propName = collectionProp[0];
+        const propType = collectionProp[1].type;
+        const propBindingProp = collectionProp[1].bindingProperties;
+        const bindingModel = propBindingProp.model;
+
+        // create collection items variable declaration
+        if (propType === 'Data') {
+          // create filterCriteria declaration
+          statements.push(
+            factory.createVariableStatement(
+              undefined,
+              factory.createVariableDeclarationList(
+                [
+                  factory.createVariableDeclaration(
+                    factory.createIdentifier('filterCriteria' + propName),
+                    undefined,
+                    undefined,
+                    factory.createArrayLiteralExpression([], false),
+                  ),
+                ],
+                ts.NodeFlags.Const,
+              ),
+            ),
+          );
+          const statement = factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createObjectBindingPattern([
+                    factory.createBindingElement(undefined, undefined, factory.createIdentifier(propName), undefined),
+                  ]),
+                  undefined,
+                  undefined,
+                  factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
+                    factory.createObjectLiteralExpression(
+                      [
+                        factory.createPropertyAssignment(
+                          factory.createIdentifier('type'),
+                          factory.createStringLiteral('collection'),
+                        ),
+                        factory.createPropertyAssignment(
+                          factory.createIdentifier('model'),
+                          factory.createIdentifier(bindingModel),
+                        ),
+                        factory.createPropertyAssignment(
+                          factory.createIdentifier('criteria'),
+                          factory.createIdentifier('filterCriteria' + propName),
+                        ),
+                      ],
+                      true,
+                    ),
+                  ]),
+                ),
+              ],
+              ts.NodeFlags.Const,
+            ),
+          );
+          statements.push(statement);
+        }
+      });
+    });
+
+    return statements;
+  }
+
+  private findCollections(component: StudioComponentChild, found: StudioComponentChild[]) {
+    if (component.collectionProperties !== undefined) {
+      found.push(component);
+    }
+    if (component.children !== undefined) {
+      component.children.map((value) => {
+        this.findCollections(value, found);
+      });
+    }
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment;

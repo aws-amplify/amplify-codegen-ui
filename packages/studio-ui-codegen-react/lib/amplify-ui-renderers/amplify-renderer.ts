@@ -12,6 +12,7 @@ import ImageRenderer from './image';
 import TextRenderer from './text';
 import renderString from './string';
 import CustomComponentRenderer from './customComponent';
+import CollectionRenderer from './collection';
 
 export class AmplifyRenderer extends ReactStudioTemplateRenderer {
   constructor(component: StudioComponent) {
@@ -20,6 +21,10 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
   renderJsx(component: StudioComponent | StudioComponentChild): JsxElement | JsxFragment {
     switch (component.componentType) {
+      case 'Collection':
+        return new CollectionRenderer(component, this.importCollection).renderElement((children) =>
+          children.map((child) => this.renderJsx(child)),
+        );
       case 'Badge':
         return new BadgeRenderer(component, this.importCollection).renderElement((children) =>
           children.map((child) => this.renderJsx(child)),

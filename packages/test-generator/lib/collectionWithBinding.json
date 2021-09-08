@@ -1,0 +1,106 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Collection",
+  "name": "CollectionOfCustomButtons",
+  "properties": {
+    "type": {
+      "value": "list"
+    },
+    "gap": {
+      "value": "1.5rem"
+    },
+    "backgroundColor": {
+      "bindingProperties": {
+        "property": "backgroundColor"
+      }
+    }
+  },
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
+    },
+    "backgroundColor": {
+      "type": "String"
+    },
+    "buttonColor": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "UserPreferences",
+        "predicates": [
+          {
+            "field": "userID",
+            "operand": "user@email.com",
+            "operator": "eq"
+          }
+        ]
+      }
+    }
+  },
+  "collectionProperties": {
+    "buttonUser": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User",
+        "predicates": [
+          {
+            "field": "age",
+            "operand": "10",
+            "operator": "gt"
+          },
+          {
+            "field": "lastName",
+            "operand": "L",
+            "operator": "beginsWith"
+          }
+        ]
+      }
+    },
+    "isDisabled": {
+      "bindingProperties": {
+        "predicates": [
+          {
+            "field": "index",
+            "operand": "5",
+            "operator": "eq"
+          }
+        ]
+      }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Flex",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "Button",
+          "properties": {
+            "label": {
+              "collectionBindingProperties": {
+                "property": "buttonUser",
+                "field": "username"
+              },
+              "defaultValue": "hspain@gmail.com"
+            },
+            "labelWidth": {
+              "bindingProperties": {
+                "property": "width"
+              }
+            },
+            "backgroundColor": {
+              "bindingProperties": {
+                "property": "buttonColor",
+                "field": "favoriteColor"
+              }
+            },
+            "disabled": {
+              "bindingProperties": {
+                "property": "isDisabled"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
