@@ -74,4 +74,11 @@ describe('amplify render tests', () => {
       expect(generatedCode).toMatchSnapshot();
     });
   });
+
+  describe('component with data binding', () => {
+    it('should add model imports', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithDataBinding');
+      expect(generatedCode).toMatchSnapshot();
+    });
+  });
 });

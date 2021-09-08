@@ -2,12 +2,13 @@ import { StudioComponent, StudioComponentChild, StudioComponentProperties } from
 import { ComponentRendererBase } from '@amzn/studio-ui-codegen';
 import { JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from 'typescript';
 
+import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
 import { ImportCollection } from './import-collection';
-import { buildOpeningElementAttributes } from './react-component-render-helper';
 
 export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<TPropIn, JsxElement> {
   constructor(component: StudioComponent | StudioComponentChild, protected importCollection: ImportCollection) {
     super(component);
+    addBindingPropertiesImports(component, importCollection);
   }
 
   protected renderOpeningElement(
