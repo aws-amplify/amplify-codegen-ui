@@ -1,4 +1,4 @@
-import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, StudioComponentChild, StudioComponentPredicate } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
   StudioRendererConstants,
@@ -27,6 +27,7 @@ import ts, {
   Statement,
   BindingElement,
   Modifier,
+  ObjectLiteralExpression,
 } from 'typescript';
 import prettier from 'prettier';
 import { ImportCollection } from './import-collection';
@@ -379,34 +380,41 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const statements: Statement[] = [];
 
-    collections.map((value) => {
-      if (value.collectionProperties === undefined) return;
-      Object.entries(value.collectionProperties).map((collectionProp) => {
-        const propName = collectionProp[0];
-        const propType = collectionProp[1].type;
-        const propBindingProp = collectionProp[1].bindingProperties;
-        const bindingModel = propBindingProp.model;
-        if (propType === 'Data') {
-          const propStatements = this.buildUseDataStoreBindingCall('collection', propName, bindingModel);
-          propStatements.forEach((value) => {
-            statements.push(value);
-          });
-        }
-      });
+    collections.forEach((value) => {
+      if (value.collectionProperties !== undefined) {
+        Object.entries(value.collectionProperties).forEach((collectionProp) => {
+          const [propName, binding] = collectionProp;
+          if (isDataPropertyBinding(binding)) {
+            const { bindingProperties } = binding;
+            const { predicate } = bindingProperties;
+            if (predicate !== undefined) {
+              statements.push(this.buildPredicateDeclaration(propName, predicate));
+            }
+
+            const { model } = bindingProperties;
+            this.buildUseDataStoreBindingCall('collection', propName, model).forEach((value) => {
+              statements.push(value);
+            });
+          }
+        });
+      }
     });
 
     // generate for single record binding
     if (component.bindingProperties !== undefined) {
-      Object.entries(component.bindingProperties).map((compBindingProp) => {
-        const [compPropName, compBinding] = compBindingProp;
-        if (isDataPropertyBinding(compBinding) && 'bindingProperties' in compBinding) {
-          if ('model' in compBinding.bindingProperties && 'predicates' in compBinding.bindingProperties) {
-            const { model, predicate } = compBinding.bindingProperties;
-            const moreStatements = this.buildUseDataStoreBindingCall('record', compPropName, model);
-            moreStatements.forEach((value) => {
-              statements.push(value);
-            });
+      Object.entries(component.bindingProperties).forEach((compBindingProp) => {
+        const [propName, binding] = compBindingProp;
+        if (isDataPropertyBinding(binding)) {
+          const { bindingProperties } = binding;
+          const { predicate } = bindingProperties;
+          if (predicate !== undefined) {
+            statements.push(this.buildPredicateDeclaration(propName, predicate));
           }
+
+          const { model } = bindingProperties;
+          this.buildUseDataStoreBindingCall('record', propName, model).forEach((value) => {
+            statements.push(value);
+          });
         }
       });
     }
@@ -415,22 +423,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private buildUseDataStoreBindingCall(callType: string, propName: string, bindingModel: string): VariableStatement[] {
     const statements: VariableStatement[] = [];
-    statements.push(
-      factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createIdentifier(`filterCriteria${propName}`),
-              undefined,
-              undefined,
-              factory.createArrayLiteralExpression([], false),
-            ),
-          ],
-          ts.NodeFlags.Const,
-        ),
-      ),
-    );
     statements.push(
       factory.createVariableStatement(
         undefined,
@@ -455,7 +447,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                     ),
                     factory.createPropertyAssignment(
                       factory.createIdentifier('criteria'),
-                      factory.createIdentifier(`filterCriteria${propName}`),
+                      factory.createIdentifier(this.getFilterName(propName)),
                     ),
                   ],
                   true,
@@ -470,6 +462,38 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return statements;
   }
 
+  private predicateToObjectLiteralExpression(predicate: StudioComponentPredicate): ObjectLiteralExpression {
+    return factory.createObjectLiteralExpression(
+      Object.entries(predicate).map(([key, value]) => {
+        return factory.createPropertyAssignment(
+          factory.createIdentifier(key),
+          key === 'and' || key === 'or'
+            ? factory.createArrayLiteralExpression(
+                value.map((pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred), false),
+              )
+            : factory.createStringLiteral(value),
+        );
+      }, false),
+    );
+  }
+
+  private buildPredicateDeclaration(name: string, predicate: StudioComponentPredicate): VariableStatement {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(this.getFilterName(name)),
+            undefined,
+            undefined,
+            this.predicateToObjectLiteralExpression(predicate),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
   private findCollections(component: StudioComponentChild, found: StudioComponentChild[]) {
     if (component.collectionProperties !== undefined) {
       found.push(component);
@@ -479,6 +503,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         this.findCollections(value, found);
       });
     }
+  }
+
+  private getFilterName(propName: string): string {
+    return `${propName}Filter`;
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment;
