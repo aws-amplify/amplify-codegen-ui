@@ -38,9 +38,9 @@ interface BasePaginationProps {
 
 export interface PaginationProps extends BasePaginationProps, BaseComponentProps, BaseStyleProps, AriaProps {}
 
-export interface UsePaginationProps extends Omit<BasePaginationProps, PaginationCallbackType> {}
+export type UsePaginationProps = Omit<BasePaginationProps, PaginationCallbackType>;
 
-export interface UsePaginationResult extends Required<BasePaginationProps> {}
+export type UsePaginationResult = Required<BasePaginationProps>;
 
 export interface PaginationItemProps extends BaseComponentProps, BaseStyleProps, AriaProps {
   /**

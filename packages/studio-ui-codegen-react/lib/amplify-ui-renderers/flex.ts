@@ -2,9 +2,8 @@ import { FlexProps } from '@amzn/amplify-ui-react-types';
 
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 
-import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
-
 import { factory, JsxChild, JsxElement } from 'typescript';
+import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 
 export default class FlexRenderer extends ReactComponentWithChildrenRenderer<FlexProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {

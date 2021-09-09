@@ -1,8 +1,9 @@
 import { BaseComponentProps } from '@amzn/amplify-ui-react-types';
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { isDataPropertyBinding } from '@amzn/studio-ui-codegen';
-import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 import { factory, JsxChild, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
+import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
+
 export default class CollectionRenderer extends ReactComponentWithChildrenRenderer<BaseComponentProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
     const tagName = this.component.componentType;

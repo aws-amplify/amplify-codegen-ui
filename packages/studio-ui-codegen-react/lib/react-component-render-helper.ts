@@ -18,7 +18,7 @@ export function getFixedComponentPropValueExpression(prop: FixedStudioComponentP
 
 export function getComponentPropName(componentName?: string): string {
   if (componentName !== undefined) {
-    return componentName + 'Props';
+    return `${componentName}Props`;
   }
   return 'ComponentWithoutName' + 'Props';
 }
@@ -107,7 +107,7 @@ export function buildBindingAttrWithDefault(
 
 export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: string): JsxAttribute {
   const currentPropValue = prop.value;
-  var propValueExpr: StringLiteral | JsxExpression = factory.createStringLiteral(currentPropValue.toString());
+  let propValueExpr: StringLiteral | JsxExpression = factory.createStringLiteral(currentPropValue.toString());
   switch (typeof currentPropValue) {
     case 'number':
       propValueExpr = factory.createJsxExpression(undefined, factory.createNumericLiteral(currentPropValue, undefined));
@@ -135,13 +135,15 @@ export function buildOpeningElementAttributes(
 ): JsxAttribute {
   if (isFixedPropertyWithValue(prop)) {
     return buildFixedAttr(prop, propName);
-  } else if (isBoundProperty(prop)) {
+  }
+  if (isBoundProperty(prop)) {
     const attr =
       prop.defaultValue === undefined
         ? buildBindingAttr(prop, propName)
         : buildBindingAttrWithDefault(prop, propName, prop.defaultValue);
     return attr;
-  } else if (isCollectionItemBoundProperty(prop)) {
+  }
+  if (isCollectionItemBoundProperty(prop)) {
     const attr =
       prop.defaultValue === undefined
         ? buildCollectionBindingAttr(prop, propName)

@@ -1,6 +1,6 @@
+import { Property } from 'csstype';
 import { BaseComponentProps } from './base';
 import { BaseStyleProps } from './style';
-import { Property } from 'csstype';
 
 export type RatingSize = 'small' | 'medium' | 'large';
 

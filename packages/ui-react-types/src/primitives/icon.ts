@@ -1,6 +1,6 @@
+import { Property } from 'csstype';
 import { BaseComponentProps, AriaProps } from './base';
 import { BaseStyleProps } from './style';
-import { Property } from 'csstype';
 
 export interface ViewBox {
   minX?: number;

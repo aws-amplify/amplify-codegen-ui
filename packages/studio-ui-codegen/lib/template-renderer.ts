@@ -1,14 +1,14 @@
+import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { FrameworkOutputManager } from './framework-output-manager';
 import { StudioTemplateRenderer } from './studio-template-renderer';
 import { StudioTemplateRendererFactory } from './template-renderer-factory';
 
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { StudioRendererConstants } from './renderer-helper';
 import { FrameworkOutputConfig } from './framework-output-config';
 import { RenderTextComponentResponse } from './render-component-response';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * This is a class for genercially rendering Studio templates.
@@ -48,7 +48,7 @@ export class StudioTemplateRendererManager<
 
     console.log('Rendering multiple components ', jsonSchema.length);
 
-    for (let component of jsonSchema) {
+    for (const component of jsonSchema) {
       const componentPath = path.join(
         this.outputConfig.outputPathDir,
         component.name ?? StudioRendererConstants.unknownName,

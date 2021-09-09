@@ -1,7 +1,7 @@
+import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { FrameworkOutputManager } from './framework-output-manager';
 import { StudioTemplateRenderer } from './studio-template-renderer';
 
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { RenderTextComponentResponse } from './render-component-response';
 
 /**

@@ -28,7 +28,7 @@ import ts, {
 } from 'typescript';
 import prettier from 'prettier';
 import { ImportCollection } from './import-collection';
-import ReactOutputManager from './react-output-manager';
+import { ReactOutputManager } from './react-output-manager';
 import {
   ReactRenderConfig,
   ScriptKind,
@@ -48,6 +48,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 > {
   protected importCollection = new ImportCollection();
+
   protected defaultRenderConfig = {
     script: ScriptKind.TSX,
     target: ScriptTarget.ES2015,
@@ -82,7 +83,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const { printer, file } = this.createPrinter();
     let importsText = '';
-    for (let importStatement of imports) {
+    for (const importStatement of imports) {
       const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
       importsText += result + EOL;
     }
@@ -104,7 +105,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     let importsText = '';
 
-    for (let importStatement of imports) {
+    for (const importStatement of imports) {
       const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
       importsText += result + EOL;
     }
@@ -132,9 +133,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const imports = this.importCollection.buildImportStatements();
 
-    let componentText = '/* eslint-disable */' + EOL;
+    let componentText = `/* eslint-disable */${EOL}`;
 
-    for (let importStatement of imports) {
+    for (const importStatement of imports) {
       const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
       componentText += result + EOL;
     }
@@ -161,7 +162,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private transpile(code: string): string {
     const { target, module, script } = this.renderConfig;
-    if (script === ScriptKind.JS || script == ScriptKind.JSX) {
+    if (script === ScriptKind.JS || script === ScriptKind.JSX) {
       const transpiledCode = transpileModule(code, {
         compilerOptions: {
           target,
@@ -279,12 +280,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private buildBindingPropNodes(component: StudioComponent): TypeNode {
-    var propSignatures: PropertySignature[] = [];
+    const propSignatures: PropertySignature[] = [];
     const bindingProps = component.bindingProperties;
     if (bindingProps === undefined || !isStudioComponentWithBinding(component)) {
       return factory.createTypeLiteralNode([]);
     }
-    for (let bindingProp of Object.entries(component.bindingProperties)) {
+    for (const bindingProp of Object.entries(component.bindingProperties)) {
       const [propName, binding] = bindingProp;
       if (isSimplePropertyBinding(binding)) {
         const propSignature = factory.createPropertySignature(
@@ -308,7 +309,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
-    var collections: StudioComponentChild[] = [];
+    const collections: StudioComponentChild[] = [];
     if (component.collectionProperties !== undefined) {
       collections.push(component);
     }
@@ -316,7 +317,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       this.findCollections(value, collections);
     });
 
-    var statements: Statement[] = [];
+    const statements: Statement[] = [];
 
     collections.map((value) => {
       if (value.collectionProperties === undefined) return;
@@ -335,7 +336,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
               factory.createVariableDeclarationList(
                 [
                   factory.createVariableDeclaration(
-                    factory.createIdentifier('filterCriteria' + propName),
+                    factory.createIdentifier(`filterCriteria${propName}`),
                     undefined,
                     undefined,
                     factory.createArrayLiteralExpression([], false),
@@ -368,7 +369,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                         ),
                         factory.createPropertyAssignment(
                           factory.createIdentifier('criteria'),
-                          factory.createIdentifier('filterCriteria' + propName),
+                          factory.createIdentifier(`filterCriteria${propName}`),
                         ),
                       ],
                       true,

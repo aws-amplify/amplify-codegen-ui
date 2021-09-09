@@ -30,7 +30,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     tagName: string,
   ): JsxOpeningElement {
     const propsArray: JsxAttribute[] = [];
-    for (let propKey of Object.keys(props)) {
+    for (const propKey of Object.keys(props)) {
       const currentProp = props[propKey];
       propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
     }
@@ -50,7 +50,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     tagName: string,
   ): JsxOpeningElement {
     const propsArray: JsxAttribute[] = [];
-    for (let propKey of Object.keys(props)) {
+    for (const propKey of Object.keys(props)) {
       const currentProp = props[propKey];
       propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
     }
@@ -71,7 +71,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     itemsVariableName: string,
   ): JsxOpeningElement {
     const propsArray: JsxAttribute[] = [];
-    for (let propKey of Object.keys(props)) {
+    for (const propKey of Object.keys(props)) {
       const currentProp = props[propKey];
       propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
     }

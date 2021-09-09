@@ -1,8 +1,8 @@
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
-import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '../';
 import fs from 'fs';
 import { join } from 'path';
+import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '..';
 import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
 
 function loadSchemaFromJSONFile(jsonSchemaFile: string): StudioComponent {
@@ -14,7 +14,7 @@ function loadSchemaFromJSONFile(jsonSchemaFile: string): StudioComponent {
 function generateWithAmplifyRenderer(
   jsonSchemaFile: string,
   renderConfig: ReactRenderConfig = {},
-  isSampleCodeSnippet: boolean = false,
+  isSampleCodeSnippet = false,
 ): string {
   const schema = loadSchemaFromJSONFile(jsonSchemaFile);
   const rendererFactory = new StudioTemplateRendererFactory(
