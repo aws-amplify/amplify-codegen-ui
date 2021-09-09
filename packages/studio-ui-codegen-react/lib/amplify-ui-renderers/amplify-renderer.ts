@@ -17,10 +17,6 @@ import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
 
 export class AmplifyRenderer extends ReactStudioTemplateRenderer {
-  constructor(component: StudioComponent, renderConfig: ReactRenderConfig) {
-    super(component, renderConfig);
-  }
-
   renderJsx(component: StudioComponent | StudioComponentChild, parent?: StudioNode): JsxElement | JsxFragment {
     const node = new StudioNode(component, parent);
     switch (component.componentType) {
