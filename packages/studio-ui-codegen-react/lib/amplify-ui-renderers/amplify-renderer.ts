@@ -64,10 +64,11 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case 'Text':
         return new TextRenderer(component, this.importCollection, parent).renderElement();
-    }
 
-    return new CustomComponentRenderer(component, this.importCollection).renderElement((children) =>
-      children.map((child) => this.renderJsx(child, node)),
-    );
+      default:
+        return new CustomComponentRenderer(component, this.importCollection).renderElement((children) =>
+          children.map((child) => this.renderJsx(child, node)),
+        );
+    }
   }
 }
