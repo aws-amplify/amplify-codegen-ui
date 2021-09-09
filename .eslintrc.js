@@ -42,7 +42,6 @@ module.exports = {
     'class-methods-use-this': 'off',
     '@typescript-eslint/no-useless-constructor': 'off',
     'default-case': 'off',
-    'no-useless-concat': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
   },
 };

@@ -20,7 +20,7 @@ export function getComponentPropName(componentName?: string): string {
   if (componentName !== undefined) {
     return `${componentName}Props`;
   }
-  return 'ComponentWithoutName' + 'Props';
+  return 'ComponentWithoutNameProps';
 }
 
 export function isFixedPropertyWithValue(
