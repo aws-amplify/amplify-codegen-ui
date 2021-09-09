@@ -326,65 +326,87 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const propType = collectionProp[1].type;
         const propBindingProp = collectionProp[1].bindingProperties;
         const bindingModel = propBindingProp.model;
-
-        // create collection items variable declaration
         if (propType === 'Data') {
-          // create filterCriteria declaration
-          statements.push(
-            factory.createVariableStatement(
-              undefined,
-              factory.createVariableDeclarationList(
-                [
-                  factory.createVariableDeclaration(
-                    factory.createIdentifier(`filterCriteria${propName}`),
-                    undefined,
-                    undefined,
-                    factory.createArrayLiteralExpression([], false),
-                  ),
-                ],
-                ts.NodeFlags.Const,
-              ),
-            ),
-          );
-          const statement = factory.createVariableStatement(
-            undefined,
-            factory.createVariableDeclarationList(
-              [
-                factory.createVariableDeclaration(
-                  factory.createObjectBindingPattern([
-                    factory.createBindingElement(undefined, undefined, factory.createIdentifier(propName), undefined),
-                  ]),
-                  undefined,
-                  undefined,
-                  factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
-                    factory.createObjectLiteralExpression(
-                      [
-                        factory.createPropertyAssignment(
-                          factory.createIdentifier('type'),
-                          factory.createStringLiteral('collection'),
-                        ),
-                        factory.createPropertyAssignment(
-                          factory.createIdentifier('model'),
-                          factory.createIdentifier(bindingModel),
-                        ),
-                        factory.createPropertyAssignment(
-                          factory.createIdentifier('criteria'),
-                          factory.createIdentifier(`filterCriteria${propName}`),
-                        ),
-                      ],
-                      true,
-                    ),
-                  ]),
-                ),
-              ],
-              ts.NodeFlags.Const,
-            ),
-          );
-          statements.push(statement);
+          const propStatements = this.buildUseDataStoreBindingCall('collection', propName, bindingModel);
+          propStatements.forEach((value) => {
+            statements.push(value);
+          });
         }
       });
     });
 
+    // generate for single record binding
+    if (component.bindingProperties !== undefined) {
+      Object.entries(component.bindingProperties).map((compBindingProp) => {
+        const [compPropName, compBinding] = compBindingProp;
+        if (isDataPropertyBinding(compBinding) && 'bindingProperties' in compBinding) {
+          if ('model' in compBinding.bindingProperties && 'predicates' in compBinding.bindingProperties) {
+            const { model, predicate } = compBinding.bindingProperties;
+            const moreStatements = this.buildUseDataStoreBindingCall('record', compPropName, model);
+            moreStatements.forEach((value) => {
+              statements.push(value);
+            });
+          }
+        }
+      });
+    }
+    return statements;
+  }
+
+  private buildUseDataStoreBindingCall(callType: string, propName: string, bindingModel: string): VariableStatement[] {
+    const statements: VariableStatement[] = [];
+    statements.push(
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier(`filterCriteria${propName}`),
+              undefined,
+              undefined,
+              factory.createArrayLiteralExpression([], false),
+            ),
+          ],
+          ts.NodeFlags.Const,
+        ),
+      ),
+    );
+    statements.push(
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createObjectBindingPattern([
+                factory.createBindingElement(undefined, undefined, factory.createIdentifier(propName), undefined),
+              ]),
+              undefined,
+              undefined,
+              factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
+                factory.createObjectLiteralExpression(
+                  [
+                    factory.createPropertyAssignment(
+                      factory.createIdentifier('type'),
+                      factory.createStringLiteral(callType),
+                    ),
+                    factory.createPropertyAssignment(
+                      factory.createIdentifier('model'),
+                      factory.createIdentifier(bindingModel),
+                    ),
+                    factory.createPropertyAssignment(
+                      factory.createIdentifier('criteria'),
+                      factory.createIdentifier(`filterCriteria${propName}`),
+                    ),
+                  ],
+                  true,
+                ),
+              ]),
+            ),
+          ],
+          ts.NodeFlags.Const,
+        ),
+      ),
+    );
     return statements;
   }
 
