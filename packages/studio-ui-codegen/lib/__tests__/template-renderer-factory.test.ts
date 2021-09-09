@@ -4,7 +4,7 @@ import { StudioTemplateRenderer } from '../studio-template-renderer';
 import { StudioTemplateRendererFactory } from '../template-renderer-factory';
 
 class MockOutputManager extends FrameworkOutputManager<string> {
-  writeComponent(input: string, outputPath: string, componentName: string): Promise<void> {
+  writeComponent(): Promise<void> {
     return new Promise((resolve) => {
       resolve();
     });

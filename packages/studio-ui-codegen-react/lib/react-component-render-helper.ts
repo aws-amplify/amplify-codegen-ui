@@ -196,7 +196,7 @@ export function addBindingPropertiesImports(
   importCollection: ImportCollection,
 ) {
   if ('bindingProperties' in component) {
-    Object.entries(component.bindingProperties).forEach(([property, binding]) => {
+    Object.entries(component.bindingProperties).forEach(([, binding]) => {
       if ('bindingProperties' in binding && 'model' in binding.bindingProperties) {
         importCollection.addImport('../models', binding.bindingProperties.model);
       }

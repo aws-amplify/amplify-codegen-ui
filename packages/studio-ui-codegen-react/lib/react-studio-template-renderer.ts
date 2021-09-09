@@ -16,7 +16,6 @@ import ts, {
   FunctionDeclaration,
   JsxElement,
   JsxFragment,
-  ModifierFlags,
   NewLineKind,
   PropertySignature,
   SyntaxKind,

@@ -29,7 +29,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     // TODO: enable rules below and fix issues
     '@typescript-eslint/no-shadow': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/ban-types': 'off',
     'import/prefer-default-export': 'off',
     'no-restricted-syntax': 'off',

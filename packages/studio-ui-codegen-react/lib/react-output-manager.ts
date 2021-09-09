@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, promises as fs } from 'fs';
 import path from 'path';
 
 export class ReactOutputManager extends FrameworkOutputManager<string> {
-  async writeComponent(input: string, outputPath: string, componentName: string): Promise<void> {
+  async writeComponent(input: string, outputPath: string): Promise<void> {
     const { dir } = path.parse(outputPath);
 
     if (!existsSync(dir)) {

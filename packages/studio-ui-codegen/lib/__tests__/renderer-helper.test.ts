@@ -2,7 +2,6 @@ import {
   StudioComponentDataPropertyBinding,
   StudioComponentAuthPropertyBinding,
   StudioComponentStoragePropertyBinding,
-  StudioComponentEventPropertyBinding,
   StudioComponentSimplePropertyBinding,
 } from '@amzn/amplify-ui-codegen-schema';
 import {

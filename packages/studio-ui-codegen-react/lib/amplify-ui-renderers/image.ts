@@ -1,7 +1,5 @@
 import { ImageProps } from '@amzn/amplify-ui-react-types';
 
-import { StudioComponent, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
-
 import { factory, JsxElement } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
 

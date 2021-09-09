@@ -1,4 +1,4 @@
-import { FixedStudioComponentProperty, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import ts, { JsxFragment } from 'typescript';
 
 export default function renderString(component: StudioComponentChild): JsxFragment {

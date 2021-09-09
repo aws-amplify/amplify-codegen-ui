@@ -1,8 +1,7 @@
 import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { StudioNode } from '@amzn/studio-ui-codegen';
-import { factory, JsxElement, JsxFragment } from 'typescript';
+import { JsxElement, JsxFragment } from 'typescript';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
-import { ReactRenderConfig } from '../react-render-config';
 
 import BadgeRenderer from './badge';
 import ButtonRenderer from './button';
