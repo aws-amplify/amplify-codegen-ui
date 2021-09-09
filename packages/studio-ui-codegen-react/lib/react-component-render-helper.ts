@@ -124,35 +124,6 @@ export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: str
   return factory.createJsxAttribute(factory.createIdentifier(propName), propValueExpr);
 }
 
-export function buildOpeningElementAttributes(
-  prop:
-    | FixedStudioComponentProperty
-    | BoundStudioComponentProperty
-    | CollectionStudioComponentProperty
-    | WorkflowStudioComponentProperty
-    | FormStudioComponentProperty,
-  propName: string,
-): JsxAttribute {
-  if (isFixedPropertyWithValue(prop)) {
-    return buildFixedAttr(prop, propName);
-  }
-  if (isBoundProperty(prop)) {
-    const attr =
-      prop.defaultValue === undefined
-        ? buildBindingAttr(prop, propName)
-        : buildBindingAttrWithDefault(prop, propName, prop.defaultValue);
-    return attr;
-  }
-  if (isCollectionItemBoundProperty(prop)) {
-    const attr =
-      prop.defaultValue === undefined
-        ? buildCollectionBindingAttr(prop, propName)
-        : buildCollectionBindingAttrWithDefault(prop, propName, prop.defaultValue);
-    return attr;
-  }
-  return factory.createJsxAttribute(factory.createIdentifier(propName), undefined);
-}
-
 export function buildCollectionBindingAttr(prop: CollectionStudioComponentProperty, propName: string): JsxAttribute {
   const expr =
     prop.collectionBindingProperties.field === undefined
@@ -191,6 +162,34 @@ export function buildCollectionBindingAttrWithDefault(
   return attr;
 }
 
+export function buildOpeningElementAttributes(
+  prop:
+    | FixedStudioComponentProperty
+    | BoundStudioComponentProperty
+    | CollectionStudioComponentProperty
+    | WorkflowStudioComponentProperty
+    | FormStudioComponentProperty,
+  propName: string,
+): JsxAttribute {
+  if (isFixedPropertyWithValue(prop)) {
+    return buildFixedAttr(prop, propName);
+  }
+  if (isBoundProperty(prop)) {
+    const attr =
+      prop.defaultValue === undefined
+        ? buildBindingAttr(prop, propName)
+        : buildBindingAttrWithDefault(prop, propName, prop.defaultValue);
+    return attr;
+  }
+  if (isCollectionItemBoundProperty(prop)) {
+    const attr =
+      prop.defaultValue === undefined
+        ? buildCollectionBindingAttr(prop, propName)
+        : buildCollectionBindingAttrWithDefault(prop, propName, prop.defaultValue);
+    return attr;
+  }
+  return factory.createJsxAttribute(factory.createIdentifier(propName), undefined);
+}
 export function addBindingPropertiesImports(
   component: StudioComponent | StudioComponentChild,
   importCollection: ImportCollection,

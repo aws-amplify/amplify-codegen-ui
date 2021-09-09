@@ -34,6 +34,5 @@ module.exports = {
     'no-restricted-syntax': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'class-methods-use-this': 'off',
-    '@typescript-eslint/no-use-before-define': 'off',
   },
 };
