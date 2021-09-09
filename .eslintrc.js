@@ -1,5 +1,14 @@
 module.exports = {
-  ignorePatterns: ['build', 'dist', 'node_modules', 'jest.config.js', '.eslintrc.js', 'commitlint.config.js'],
+  ignorePatterns: [
+    'build',
+    'dist',
+    'node_modules',
+    'jest.config.js',
+    '.eslintrc.js',
+    'commitlint.config.js',
+    'packages/ui-react-types',
+    'packages/amplify-ui-codegen-schema',
+  ],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'airbnb-typescript/base',
