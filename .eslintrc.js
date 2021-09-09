@@ -32,7 +32,6 @@ module.exports = {
     '@typescript-eslint/ban-types': 'off',
     'import/prefer-default-export': 'off',
     'no-restricted-syntax': 'off',
-    'array-callback-return': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'class-methods-use-this': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
