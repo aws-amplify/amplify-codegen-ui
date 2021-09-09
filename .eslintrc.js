@@ -31,7 +31,6 @@ module.exports = {
     'import/no-cycle': 'off',
     '@typescript-eslint/no-shadow': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
-    '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/explicit-module-boundary-type': 'off',
     'import/prefer-default-export': 'off',
