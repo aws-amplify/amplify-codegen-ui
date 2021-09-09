@@ -16,7 +16,16 @@ export class ReactOutputManager extends FrameworkOutputManager<string> {
       throw new Error('You must call renderComponent before you can save the file.');
     }
 
-    await fs.writeFile(outputPath, '/* eslint-disable */');
-    await fs.writeFile(outputPath, input);
+    const generatedNotice = `\
+/***************************************************************************
+ * The contents of this file were generated with Amplify Studio.           *
+ * Please refrain from making any modifications to this file.              *
+ * Any changes to this file will be overwritten when running amplify pull. *
+ **************************************************************************/
+
+`;
+    const generatedOutput = `${generatedNotice}${input}`;
+
+    await fs.writeFile(outputPath, generatedOutput);
   }
 }
