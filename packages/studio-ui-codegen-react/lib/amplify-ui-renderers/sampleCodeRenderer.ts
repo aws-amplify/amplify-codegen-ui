@@ -46,11 +46,9 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
     props?.forEach((value, key) => {
       /*  TODO:  move over to boundProperties
       if (value.exposedAs) {
-        const displayExpr = value.value !== undefined ? factory.createStringLiteral(value.value.toString()) : defaultValueExpr;
-        const attr = factory.createJsxAttribute(
-          factory.createIdentifier(key),
-          displayExpr,
-        );
+        const displayExpr =
+          value.value !== undefined ? factory.createStringLiteral(value.value.toString()) : defaultValueExpr;
+        const attr = factory.createJsxAttribute(factory.createIdentifier(key), displayExpr);
         propsArray.push(attr);
       }
       */

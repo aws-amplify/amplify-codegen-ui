@@ -38,7 +38,6 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'array-callback-return': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    'max-len': 'off',
     'class-methods-use-this': 'off',
     '@typescript-eslint/no-useless-constructor': 'off',
     'default-case': 'off',
