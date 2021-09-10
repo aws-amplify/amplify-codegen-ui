@@ -26,6 +26,7 @@ import ts, {
   VariableStatement,
   Statement,
   BindingElement,
+  Modifier,
 } from 'typescript';
 import prettier from 'prettier';
 import { ImportCollection } from './import-collection';
@@ -111,7 +112,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       importsText += result + EOL;
     }
 
-    const wrappedFunction = this.renderFunctionWrapper(this.component.name ?? StudioRendererConstants.unknownName, jsx);
+    const wrappedFunction = this.renderFunctionWrapper(
+      this.component.name ?? StudioRendererConstants.unknownName,
+      jsx,
+      false,
+    );
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
@@ -129,7 +134,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     console.log('JSX rendered');
 
-    const wrappedFunction = this.renderFunctionWrapper(this.component.name ?? StudioRendererConstants.unknownName, jsx);
+    const wrappedFunction = this.renderFunctionWrapper(
+      this.component.name ?? StudioRendererConstants.unknownName,
+      jsx,
+      true,
+    );
     const propsDeclaration = this.renderBindingPropsType(this.component);
 
     const imports = this.importCollection.buildImportStatements();
@@ -194,13 +203,20 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return { printer, file };
   }
 
-  renderFunctionWrapper(componentName: string, jsx: JsxElement | JsxFragment): FunctionDeclaration {
+  renderFunctionWrapper(
+    componentName: string,
+    jsx: JsxElement | JsxFragment,
+    renderExport: boolean,
+  ): FunctionDeclaration {
     const componentPropType = getComponentPropName(componentName);
     const codeBlockContent = this.buildVariableStatements(this.component);
     codeBlockContent.push(factory.createReturnStatement(factory.createParenthesizedExpression(jsx)));
+    const modifiers: Modifier[] = renderExport
+      ? [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DefaultKeyword)]
+      : [];
     return factory.createFunctionDeclaration(
       undefined,
-      [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DefaultKeyword)],
+      modifiers,
       undefined,
       factory.createIdentifier(componentName),
       undefined,
