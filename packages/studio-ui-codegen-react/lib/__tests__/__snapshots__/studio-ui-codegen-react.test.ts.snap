@@ -184,6 +184,11 @@ export default function ComponentWithDataBinding(
   props: ComponentWithDataBindingProps
 ): JSX.Element {
   const { width, isDisabled, buttonUser, buttonColor } = props;
+  const { buttonUser } = useDataStoreBinding({
+    type: \\"record\\",
+    model: User,
+    criteria: buttonUserFilter,
+  });
   return (
     <Button
       label={buttonUser.username || \\"hspain@gmail.com\\"}
@@ -192,6 +197,76 @@ export default function ComponentWithDataBinding(
       {...props}
       {...getOverrideProps(props.overrides, \\"Button\\")}
     ></Button>
+  );
+}
+"
+`;
+
+exports[`amplify render tests component with data binding should render collection data binding 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { User, UserPreferences } from \\"../models\\";
+import {
+  Button,
+  Collection,
+  EscapeHatchProps,
+  Flex,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CollectionOfCustomButtonsProps = {
+  width?: Number,
+  backgroundColor?: String,
+  buttonColor?: UserPreferences,
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function CollectionOfCustomButtons(
+  props: CollectionOfCustomButtonsProps
+): JSX.Element {
+  const { width, backgroundColor, buttonColor } = props;
+  const buttonUserFilter = {
+    and: [
+      { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
+      { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
+    ],
+  };
+  const { buttonUser } = useDataStoreBinding({
+    type: \\"collection\\",
+    model: User,
+    criteria: buttonUserFilter,
+  });
+  const buttonColorFilter = {
+    field: \\"userID\\",
+    operand: \\"user@email.com\\",
+    operator: \\"eq\\",
+  };
+  const { buttonColor } = useDataStoreBinding({
+    type: \\"record\\",
+    model: UserPreferences,
+    criteria: buttonColorFilter,
+  });
+  return (
+    <Collection
+      type=\\"list\\"
+      gap=\\"1.5rem\\"
+      backgroundColor={backgroundColor}
+      items={buttonUser}
+      {...props}
+      {...getOverrideProps(props.overrides, \\"Collection\\")}
+    >
+      {(item, index) => (
+        <Flex {...getOverrideProps(props.overrides, \\"Collection.Flex\\")}>
+          <Button
+            label={item.username || \\"hspain@gmail.com\\"}
+            labelWidth={width}
+            backgroundColor={buttonColor.favoriteColor}
+            disabled={isDisabled}
+            {...getOverrideProps(props.overrides, \\"Collection.Flex.Button\\")}
+          ></Button>
+        </Flex>
+      )}
+    </Collection>
   );
 }
 "

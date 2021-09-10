@@ -85,6 +85,11 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('componentWithDataBinding');
       expect(generatedCode).toMatchSnapshot();
     });
+
+    it('should render collection data binding', () => {
+      const generatedCode = generateWithAmplifyRenderer('collectionWithBinding');
+      expect(generatedCode).toMatchSnapshot();
+    });
   });
 
   describe('custom render config', () => {
