@@ -18,7 +18,7 @@ export default function Test(props: TestProps): JSX.Element {
       fontFamily=\\"Times New Roman\\"
       fontSize=\\"20px\\"
       {...props}
-      {...getOverrideProps(props.overrides, \\"View\\")}
+      {...getOverrideProps(props.overrides, \\"Box\\")}
     ></View>
   );
 }
@@ -93,12 +93,11 @@ export type BoxWithButtonProps = {} & {
 };
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
   return (
-    <View {...props} {...getOverrideProps(props.overrides, \\"View\\")}>
+    <View {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...props}
-        {...getOverrideProps(props.overrides, \\"Button\\")}
+        {...getOverrideProps(props.overrides, \\"Box.Button\\")}
       ></Button>
     </View>
   );
@@ -124,7 +123,7 @@ export default function BoxWithCustomButton(
   props: BoxWithCustomButtonProps
 ): JSX.Element {
   return (
-    <View {...props} {...getOverrideProps(props.overrides, \\"View\\")}>
+    <View {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -151,12 +150,11 @@ export type BoxWithButtonProps = {} & {
 };
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
   return (
-    <View {...props} {...getOverrideProps(props.overrides, \\"View\\")}>
+    <View {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...props}
-        {...getOverrideProps(props.overrides, \\"Button\\")}
+        {...getOverrideProps(props.overrides, \\"Box.Button\\")}
       ></Button>
     </View>
   );
@@ -175,16 +173,17 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type ComponentWithDataBindingProps = {
-  width: Number,
-  isDisabled: Boolean,
+  width?: Number,
+  isDisabled?: Boolean,
   buttonUser?: User,
-  buttonColor: String,
+  buttonColor?: String,
 } & {
   overrides?: EscapeHatchProps | undefined | null,
 };
 export default function ComponentWithDataBinding(
   props: ComponentWithDataBindingProps
 ): JSX.Element {
+  const { width, isDisabled, buttonUser, buttonColor } = props;
   return (
     <Button
       label={buttonUser.username || \\"hspain@gmail.com\\"}
@@ -220,13 +219,12 @@ import { Button, View, getOverrideProps } from \\"@aws-amplify/ui-react\\";
 export default function BoxWithButton(props) {
   return React.createElement(
     View,
-    __assign({}, props, getOverrideProps(props.overrides, \\"View\\")),
+    __assign({}, props, getOverrideProps(props.overrides, \\"Box\\")),
     React.createElement(
       Button,
       __assign(
         { color: \\"#ff0000\\", width: \\"20px\\" },
-        props,
-        getOverrideProps(props.overrides, \\"Button\\")
+        getOverrideProps(props.overrides, \\"Box.Button\\")
       )
     )
   );
@@ -240,12 +238,11 @@ import React from \\"react\\";
 import { Button, View, getOverrideProps } from \\"@aws-amplify/ui-react\\";
 export default function BoxWithButton(props) {
   return (
-    <View {...props} {...getOverrideProps(props.overrides, \\"View\\")}>
+    <View {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...props}
-        {...getOverrideProps(props.overrides, \\"Button\\")}
+        {...getOverrideProps(props.overrides, \\"Box.Button\\")}
       ></Button>
     </View>
   );
@@ -265,14 +262,13 @@ function BoxWithButton(props) {
     Object.assign(
       {},
       props,
-      ui_react_1.getOverrideProps(props.overrides, \\"View\\")
+      ui_react_1.getOverrideProps(props.overrides, \\"Box\\")
     ),
     react_1.default.createElement(
       ui_react_1.Button,
       Object.assign(
         { color: \\"#ff0000\\", width: \\"20px\\" },
-        props,
-        ui_react_1.getOverrideProps(props.overrides, \\"Button\\")
+        ui_react_1.getOverrideProps(props.overrides, \\"Box.Button\\")
       )
     )
   );
@@ -297,11 +293,7 @@ export type BoxWithButtonProps = {} & {
 };
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
   return (
-    <View
-      padding-left
-      {...props}
-      {...getOverrideProps(props.overrides, \\"View\\")}
-    >
+    <View padding-left {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"

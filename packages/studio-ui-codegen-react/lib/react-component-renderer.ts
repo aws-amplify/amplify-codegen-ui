@@ -1,13 +1,17 @@
 import { StudioComponent, StudioComponentChild, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
-import { ComponentRendererBase } from '@amzn/studio-ui-codegen';
+import { ComponentRendererBase, StudioNode } from '@amzn/studio-ui-codegen';
 import { JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from 'typescript';
 
 import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
 import { ImportCollection } from './import-collection';
 
 export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<TPropIn, JsxElement> {
-  constructor(component: StudioComponent | StudioComponentChild, protected importCollection: ImportCollection) {
-    super(component);
+  constructor(
+    component: StudioComponent | StudioComponentChild,
+    protected importCollection: ImportCollection,
+    protected parent?: StudioNode,
+  ) {
+    super(component, parent);
     addBindingPropertiesImports(component, importCollection);
   }
 
@@ -32,8 +36,10 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
   }
 
   private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[], tagName: string) {
-    const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
-    attributes.push(propsAttr);
+    if (this.node.isRoot()) {
+      const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
+      attributes.push(propsAttr);
+    }
 
     const overrideAttr = factory.createJsxSpreadAttribute(
       factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
@@ -41,7 +47,13 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
           factory.createIdentifier('props'),
           factory.createIdentifier('overrides'),
         ),
-        factory.createStringLiteral(tagName),
+        factory.createStringLiteral(
+          this.node
+            .getComponentPathToRoot()
+            .reverse()
+            .map((component) => component.componentType)
+            .join('.'),
+        ),
       ]),
     );
     this.importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
