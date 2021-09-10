@@ -9,7 +9,7 @@ export class ReactOutputManager extends FrameworkOutputManager<string> {
     const dir = path.parse(outputPath).base;
 
     if (!existsSync(dir)) {
-      mkdirSync(dir);
+      // mkdirSync(dir);  TODO:  figure out why it creates a folder
     }
 
     if (!input) {
