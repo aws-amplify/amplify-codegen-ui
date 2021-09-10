@@ -291,7 +291,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const propSignature = factory.createPropertySignature(
           undefined,
           propName,
-          undefined,
+          factory.createToken(SyntaxKind.QuestionToken),
           factory.createTypeReferenceNode(binding.type, undefined),
         );
         propSignatures.push(propSignature);
