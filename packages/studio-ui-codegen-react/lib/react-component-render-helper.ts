@@ -148,6 +148,7 @@ export function buildOpeningElementAttributes(
       prop.defaultValue === undefined
         ? buildCollectionBindingAttr(prop, propName)
         : buildCollectionBindingAttrWithDefault(prop, propName, prop.defaultValue);
+    return attr;
   }
   return factory.createJsxAttribute(factory.createIdentifier(propName), undefined);
 }
@@ -155,9 +156,9 @@ export function buildOpeningElementAttributes(
 export function buildCollectionBindingAttr(prop: CollectionStudioComponentProperty, propName: string): JsxAttribute {
   const expr =
     prop.collectionBindingProperties.field === undefined
-      ? factory.createIdentifier(prop.collectionBindingProperties.property)
+      ? factory.createIdentifier('item')
       : factory.createPropertyAccessExpression(
-          factory.createIdentifier(prop.collectionBindingProperties.property),
+          factory.createIdentifier('item'),
           prop.collectionBindingProperties.field,
         );
 
@@ -176,9 +177,9 @@ export function buildCollectionBindingAttrWithDefault(
   const rightExpr = factory.createStringLiteral(defaultValue);
   const leftExpr =
     prop.collectionBindingProperties.field === undefined
-      ? factory.createIdentifier(prop.collectionBindingProperties.property)
+      ? factory.createIdentifier('item')
       : factory.createPropertyAccessExpression(
-          factory.createIdentifier(prop.collectionBindingProperties.property),
+          factory.createIdentifier('item'),
           prop.collectionBindingProperties.field,
         );
 
