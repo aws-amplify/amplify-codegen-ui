@@ -25,6 +25,7 @@ import ts, {
   TypeNode,
   VariableStatement,
   Statement,
+  BindingElement,
 } from 'typescript';
 import prettier from 'prettier';
 import { ImportCollection } from './import-collection';
@@ -195,7 +196,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   renderFunctionWrapper(componentName: string, jsx: JsxElement | JsxFragment): FunctionDeclaration {
     const componentPropType = getComponentPropName(componentName);
-    const codeBlockContent = this.buildUseDataStoreBindingStatements(this.component);
+    const codeBlockContent = this.buildVariableStatements(this.component);
     codeBlockContent.push(factory.createReturnStatement(factory.createParenthesizedExpression(jsx)));
     return factory.createFunctionDeclaration(
       undefined,
@@ -306,6 +307,49 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       }
     }
     return factory.createTypeLiteralNode(propSignatures);
+  }
+
+  private buildVariableStatements(component: StudioComponent): Statement[] {
+    const statements: Statement[] = [];
+
+    if (isStudioComponentWithBinding(component)) {
+      const elements: BindingElement[] = [];
+      Object.entries(component.bindingProperties).forEach((entry) => {
+        const [propName, binding] = entry;
+        if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding)) {
+          const bindingElement = factory.createBindingElement(
+            undefined,
+            undefined,
+            factory.createIdentifier(propName),
+            undefined,
+          );
+          elements.push(bindingElement);
+        }
+      });
+
+      const statement = factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createObjectBindingPattern(elements),
+              undefined,
+              undefined,
+              factory.createIdentifier('props'),
+            ),
+          ],
+          ts.NodeFlags.Const,
+        ),
+      );
+      statements.push(statement);
+    }
+
+    const useStoreBindingStatements = this.buildUseDataStoreBindingStatements(component);
+    useStoreBindingStatements.forEach((entry) => {
+      statements.push(entry);
+    });
+
+    return statements;
   }
 
   private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
