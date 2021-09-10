@@ -1,4 +1,4 @@
-import { ComponentWithChildrenRendererBase } from '@amzn/studio-ui-codegen';
+import { ComponentWithChildrenRendererBase, StudioNode } from '@amzn/studio-ui-codegen';
 import { StudioComponent, StudioComponentChild, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
 
 import {
@@ -19,8 +19,12 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
   JsxElement,
   JsxChild
 > {
-  constructor(component: StudioComponent | StudioComponentChild, protected importCollection: ImportCollection) {
-    super(component);
+  constructor(
+    component: StudioComponent | StudioComponentChild,
+    protected importCollection: ImportCollection,
+    protected parent?: StudioNode,
+  ) {
+    super(component, parent);
     addBindingPropertiesImports(component, importCollection);
   }
 
@@ -92,8 +96,10 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
   }
 
   private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[], tagName: string) {
-    const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
-    attributes.push(propsAttr);
+    if (this.node.isRoot()) {
+      const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
+      attributes.push(propsAttr);
+    }
 
     const overrideAttr = factory.createJsxSpreadAttribute(
       factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
@@ -101,7 +107,13 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
           factory.createIdentifier('props'),
           factory.createIdentifier('overrides'),
         ),
-        factory.createStringLiteral(tagName),
+        factory.createStringLiteral(
+          this.node
+            .getComponentPathToRoot()
+            .reverse()
+            .map((component) => component.componentType)
+            .join('.'),
+        ),
       ]),
     );
     this.importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
