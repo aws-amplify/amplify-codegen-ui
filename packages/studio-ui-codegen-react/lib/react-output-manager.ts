@@ -6,7 +6,7 @@ export class ReactOutputManager extends FrameworkOutputManager<string> {
   async writeComponent(input: string, outputPath: string, componentName: string): Promise<void> {
     console.log('Writing file ', outputPath);
 
-    const dir = path.parse(outputPath).base;
+    const { dir } = path.parse(outputPath);
 
     if (!existsSync(dir)) {
       mkdirSync(dir);
