@@ -8,7 +8,7 @@
   "homepage": "https://code.amazon.com/packages/AmplifyUICodegen",
   "scripts": {
     "test": "lerna run test --stream",
-    "build": "lerna run build",
+    "build": "lerna run build --stream",
     "prepublishOnly": "npm run build && npm run test",
     "setup-dev": "npm install && lerna bootstrap && lerna run build",
     "clean": "lerna run clean && lerna exec npm run rimraf tsconfig.tsbuildinfo && lerna clean --yes && npm run rimraf node_modules",
@@ -43,6 +43,9 @@
     "typescript": "^4.3.5"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,css,md,mdx}": ["prettier --write", "npm run lint:fix"]
+    "*.{ts,tsx,js,css,md,mdx}": [
+      "prettier --write",
+      "npm run lint:fix"
+    ]
   }
 }
