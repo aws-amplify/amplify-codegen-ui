@@ -67,7 +67,6 @@ export default function CustomText(props: CustomTextProps): JSX.Element {
     <Text
       color=\\"#ff0000\\"
       width=\\"20px\\"
-      value=\\"Text Value\\"
       {...props}
       {...getOverrideProps(props.overrides, \\"Text\\")}
     >
