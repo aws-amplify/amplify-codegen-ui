@@ -25,6 +25,67 @@ export type StudioComponent = {
   id?: string;
 
   /**
+   * The id if the component in its source system (Figma, Sketch, etc.)
+   */
+  sourceId?: string;
+
+  /**
+   * This should map to the components available including Amplify
+   * UI components and other custom components
+   */
+  componentType: string;
+
+  /**
+   * These are the customized properties
+   */
+  properties: StudioComponentProperties;
+
+  /**
+   * These are the nested components in a composite
+   */
+  children?: StudioComponentChild[];
+
+  /**
+   * The  metatdata gerated by Figma
+   */
+  figmaMetadata?: FigmaMetadata;
+
+  /**
+   * Variants in terms of styles
+   */
+  variants?: StudioComponentVariant[];
+
+  /**
+   * Overrides for primitives
+   */
+  overrides?: StudioComponentOverrides;
+
+  bindingProperties: {
+    [propertyName: string]:
+      | StudioComponentDataPropertyBinding
+      | StudioComponentAuthPropertyBinding
+      | StudioComponentStoragePropertyBinding
+      | StudioComponentSimplePropertyBinding
+      | StudioComponentEventPropertyBinding;
+  };
+  /**
+   * These are the collection properties
+   */
+  collectionProperties?: {
+    [propertyName: string]: StudioComponentDataPropertyBinding;
+  };
+};
+
+/**
+ * A new studio component where the componentId will automatically be generated
+ */
+export type NewStudioComponent = {
+  /**
+   * The name of the customized component
+   */
+  name?: string;
+
+  /**
    * This should map to the components available including Amplify
    * UI components and other custom components
    */
@@ -72,56 +133,6 @@ export type StudioComponent = {
   };
 };
 
-/**
- * A new studio component where the id will automatically be generated
- */
-export type NewStudioComponent = {
-  /**
-   * The name of the customized component
-   */
-  name?: string;
-
-  /**
-   * This should map to the components available including Amplify
-   * UI components and other custom components
-   */
-  componentType: string;
-
-  /**
-   * These are the customized properties
-   */
-  properties: StudioComponentProperties;
-
-  /**
-   * These are the nested components in a composite
-   */
-  children?: StudioComponentChild[];
-
-  /**
-   * The  metatdata gerated by Figma
-   */
-  figmaMetadata?: FigmaMetadata;
-
-  /**
-   * Variants in terms of styles
-   */
-  variants?: StudioComponentVariant[];
-
-  /**
-   * Overrides for primitives
-   */
-  overrides?: StudioComponentOverrides;
-
-  bindingProperties: {
-    [propertyName: string]:
-      | StudioComponentDataPropertyBinding
-      | StudioComponentAuthPropertyBinding
-      | StudioComponentStoragePropertyBinding
-      | StudioComponentSimplePropertyBinding
-      | StudioComponentEventPropertyBinding;
-  };
-};
-
 export type StudioComponentSimplePropertyBinding = {
   /**
    *  This is the data type for the value that is bound to this property. The default
@@ -129,7 +140,7 @@ export type StudioComponentSimplePropertyBinding = {
    */
   type: keyof typeof StudioComponentPropertyType;
 
-  defaultValue?: string | number | boolean | Date;
+  defaultValue?: string | undefined;
 };
 
 /**
@@ -141,6 +152,11 @@ export type StudioComponentChild = {
    * UI components and other custom components
    */
   componentType: string;
+
+  /**
+   * The unique name of the child element.
+   */
+  name: string;
 
   /**
    * These are the customized properties
@@ -379,7 +395,15 @@ export enum StudioComponentPropertyBindingType {
 export type StudioComponentDataBindingProperty = {
   model: string;
   field?: string;
-  predicate?: string;
+  predicate?: StudioComponentPredicate;
+};
+
+export type StudioComponentPredicate = {
+  and?: StudioComponentPredicate[];
+  or?: StudioComponentPredicate[];
+  field?: string;
+  operand?: string;
+  operator?: string;
 };
 
 /**
