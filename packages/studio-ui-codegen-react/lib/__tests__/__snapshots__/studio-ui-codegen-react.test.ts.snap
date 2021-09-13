@@ -161,6 +161,38 @@ export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
 "
 `;
 
+exports[`amplify render tests component with binding should render build property on Text 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Text,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type TextWithDataBindingProps = {
+  textValue?: String,
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function TextWithDataBinding(
+  props: TextWithDataBindingProps
+): JSX.Element {
+  const { textValue } = props;
+  return (
+    <Text
+      color=\\"#ff0000\\"
+      width=\\"20px\\"
+      {...props}
+      {...getOverrideProps(props.overrides, \\"Text\\")}
+    >
+      {textValue}
+    </Text>
+  );
+}
+"
+`;
+
 exports[`amplify render tests component with data binding should add model imports 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

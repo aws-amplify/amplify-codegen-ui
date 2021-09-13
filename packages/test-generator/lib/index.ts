@@ -9,3 +9,4 @@ export { default as SampleCodeSnippet } from './sampleCodeSnippet.json';
 export { default as TextGolden } from './textGolden.json';
 export { default as CollectionWithBinding } from './collectionWithBinding.json';
 export { default as ComponentWithDataBinding } from './componentWithDataBinding.json';
+export { default as TextWithDataBinding } from './textWithDataBinding.json';
