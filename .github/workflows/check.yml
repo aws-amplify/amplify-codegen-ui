@@ -49,3 +49,46 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm run test
+
+  amplify-categoy-studio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+        with:
+          path: amplify-ui-staging
+      - name: Checkout Amplify CLI Studio Category
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.DOWNSTREAM }}
+          path: amplify-category-studio
+          repository: johnpc/amplify-category-studio
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install amplify-ui-staging dependencies
+        working-directory: amplify-ui-staging
+        run: npm ci
+      - name: Lerna bootstrap amplify-ui-staging
+        working-directory: amplify-ui-staging
+        run: lerna bootstrap
+      - name: Build amplify-ui-staging
+        working-directory: amplify-ui-staging
+        run: npm run build
+      - name: Package amplify-ui-staging
+        working-directory: amplify-ui-staging
+        run: lerna exec npm pack
+      - name: Install amplify-category-studio
+        working-directory: amplify-category-studio
+        run: |
+          npm install
+          npm install amplify-provider-awscloudformation
+          npm install aws-sdk.tgz
+          npm install ../amplify-ui-staging/packages/ui-react-types/amzn-amplify-ui-react-types-0.0.1.tgz
+          npm install ../amplify-ui-staging/packages/amplify-ui-codegen-schema/amzn-amplify-ui-codegen-schema-0.0.1.tgz
+          npm install ../amplify-ui-staging/packages/studio-ui-codegen/amzn-studio-ui-codegen-0.0.1.tgz
+          npm install ../amplify-ui-staging/packages/studio-ui-codegen-react/amzn-studio-ui-codegen-react-0.0.1.tgz
+      - name: Test amplify-category-studio
+        working-directory: amplify-category-studio
+        run: npm test
