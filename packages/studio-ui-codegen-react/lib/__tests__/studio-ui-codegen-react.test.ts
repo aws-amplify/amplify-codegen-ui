@@ -92,6 +92,13 @@ describe('amplify render tests', () => {
     });
   });
 
+  describe('component with binding', () => {
+    it('should render build property on Text', () => {
+      const generatedCode = generateWithAmplifyRenderer('textWithDataBinding');
+      expect(generatedCode).toMatchSnapshot();
+    });
+  });
+
   describe('custom render config', () => {
     it('should render ES5', () => {
       expect(
