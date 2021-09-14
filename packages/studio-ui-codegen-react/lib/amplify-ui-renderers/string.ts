@@ -8,7 +8,6 @@ export default function renderString(component: StudioComponentChild): JsxFragme
     if ('value' in component.properties.value) {
       const stringProp = component.properties.value;
       const { value } = stringProp;
-      console.log(value);
 
       const element = factory.createJsxFragment(
         factory.createJsxOpeningFragment(),

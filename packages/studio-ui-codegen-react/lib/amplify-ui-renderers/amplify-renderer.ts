@@ -22,7 +22,6 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
   }
 
   renderJsx(component: StudioComponent | StudioComponentChild, parent?: StudioNode): JsxElement | JsxFragment {
-    console.log(parent);
     const node = new StudioNode(component, parent);
     switch (component.componentType) {
       case 'Collection':
@@ -66,8 +65,6 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case 'Text':
         return new TextRenderer(component, this.importCollection, parent).renderElement();
     }
-
-    console.warn(`${component.componentType} is not one of the primitives - assuming CustomComponent`);
 
     return new CustomComponentRenderer(component, this.importCollection).renderElement((children) =>
       children.map((child) => this.renderJsx(child, node)),

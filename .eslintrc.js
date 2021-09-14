@@ -29,7 +29,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     // TODO: enable rules below and fix issues
     'import/no-cycle': 'off',
-    'no-console': 'off',
     '@typescript-eslint/no-shadow': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-var-requires': 'off',
