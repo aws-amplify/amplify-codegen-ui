@@ -61,7 +61,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         return new ImageRenderer(component, this.importCollection, parent).renderElement();
 
       case 'String':
-        return renderString(component);
+        return renderString(component as StudioComponentChild);
 
       case 'Text':
         return new TextRenderer(component, this.importCollection, parent).renderElement();
