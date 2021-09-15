@@ -15,7 +15,7 @@
     "url": "ssh://git.amazon.com:2222/pkg/AmplifyUICodegen"
   },
   "scripts": {
-    "test": "echo \"No tests\"",
+    "test": "jest",
     "build": "tsc",
     "build:watch": "npm run build -- --watch"
   },
@@ -26,5 +26,26 @@
   "dependencies": {
     "@amzn/amplify-ui-codegen-schema": "^0.0.1",
     "@amzn/amplify-ui-react-types": "^0.0.1"
+  },
+  "jest": {
+    "verbose": false,
+    "preset": "ts-jest",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "lib/**/*.ts"
+    ],
+    "testRegex": "(lib/__tests__/.*.test.ts)$",
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
   }
 }
