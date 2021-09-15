@@ -8,6 +8,7 @@ module.exports = {
     'commitlint.config.js',
     'packages/ui-react-types',
     'packages/amplify-ui-codegen-schema',
+    'ui-components',
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',

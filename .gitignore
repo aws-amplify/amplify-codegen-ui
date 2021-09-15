@@ -50,3 +50,5 @@ amplify-backup/**
 dist/**
 
 **/.rollup.cache
+
+ui-components

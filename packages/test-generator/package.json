@@ -9,11 +9,10 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "npm run build -- --watch",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"No tests\""
   },
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "lib": "lib"
   },
   "private": true,
   "files": [
