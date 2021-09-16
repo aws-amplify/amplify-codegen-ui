@@ -30,6 +30,7 @@ import ts, {
   ObjectLiteralExpression,
 } from 'typescript';
 import prettier from 'prettier';
+import parserBabel from 'prettier/parser-babel';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
 import {
@@ -182,10 +183,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         },
       }).outputText;
 
-      return prettier.format(transpiledCode, { parser: 'babel' });
+      return prettier.format(transpiledCode, { parser: 'babel', plugins: [parserBabel] });
     }
 
-    return prettier.format(code, { parser: 'babel' });
+    return prettier.format(code, { parser: 'babel', plugins: [parserBabel] });
   }
 
   private createPrinter() {
