@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
