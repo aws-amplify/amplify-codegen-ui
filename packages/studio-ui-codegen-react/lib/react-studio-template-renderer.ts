@@ -387,16 +387,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           const [propName, binding] = collectionProp;
           if (isDataPropertyBinding(binding)) {
             const { bindingProperties } = binding;
-            const { predicate } = bindingProperties;
             if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
               statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
+              const { model } = bindingProperties;
+              this.importCollection.addImport('../models', model);
+              this.buildUseDataStoreBindingCall('collection', propName, model).forEach((value) => {
+                statements.push(value);
+              });
             }
-
-            const { model } = bindingProperties;
-            this.importCollection.addImport('../models', model);
-            this.buildUseDataStoreBindingCall('collection', propName, model).forEach((value) => {
-              statements.push(value);
-            });
           }
         });
       }
@@ -408,15 +406,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const [propName, binding] = compBindingProp;
         if (isDataPropertyBinding(binding)) {
           const { bindingProperties } = binding;
-          const { predicate } = bindingProperties;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
+            const { model } = bindingProperties;
+            this.importCollection.addImport('../models', model);
+            this.buildUseDataStoreBindingCall('record', propName, model).forEach((value) => {
+              statements.push(value);
+            });
           }
-
-          const { model } = bindingProperties;
-          this.buildUseDataStoreBindingCall('record', propName, model).forEach((value) => {
-            statements.push(value);
-          });
         }
       });
     }
