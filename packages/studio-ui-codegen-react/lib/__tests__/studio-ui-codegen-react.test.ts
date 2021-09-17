@@ -90,6 +90,11 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('collectionWithBinding');
       expect(generatedCode).toMatchSnapshot();
     });
+
+    it('should not have useDataStoreBinding when there is no predicate', () => {
+      const generatedCode = generateWithAmplifyRenderer('dataBindingWithoutPredicate');
+      expect(generatedCode).toMatchSnapshot();
+    });
   });
 
   describe('component with binding', () => {

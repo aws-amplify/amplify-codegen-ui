@@ -215,11 +215,6 @@ export default function ComponentWithDataBinding(
   props: ComponentWithDataBindingProps
 ): JSX.Element {
   const { width, isDisabled, buttonUser, buttonColor } = props;
-  const { buttonUser } = useDataStoreBinding({
-    type: \\"record\\",
-    model: User,
-    criteria: buttonUserFilter,
-  });
   return (
     <Button
       label={buttonUser.username || \\"hspain@gmail.com\\"}
@@ -228,6 +223,67 @@ export default function ComponentWithDataBinding(
       {...props}
       {...getOverrideProps(props.overrides, \\"Button\\")}
     ></Button>
+  );
+}
+"
+`;
+
+exports[`amplify render tests component with data binding should not have useDataStoreBinding when there is no predicate 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { UntitledModel } from \\"../models\\";
+import {
+  EscapeHatchProps,
+  Flex,
+  Text,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type SectionHeadingProps = {
+  newProp6fd1?: UntitledModel,
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function SectionHeading(
+  props: SectionHeadingProps
+): JSX.Element {
+  const { newProp6fd1 } = props;
+  return (
+    <Flex
+      padding=\\"0px 0px 10px 0px\\"
+      backgroundColor=\\"rgb(255,255,255)\\"
+      direction=\\"column\\"
+      {...props}
+      {...getOverrideProps(props.overrides, \\"Flex\\")}
+    >
+      <Flex
+        tes={newProp6fd1.untitledfield}
+        {...getOverrideProps(props.overrides, \\"Flex.Flex\\")}
+      >
+        <Text
+          fontFamily=\\"Inter\\"
+          color=\\"rgb(15.539060980081558,29.73937589675188,47.8125)\\"
+          textAlign=\\"left\\"
+          fontSize=\\"48px\\"
+          lineHeight=\\"48px\\"
+          fontWeight=\\"300\\"
+          {...getOverrideProps(props.overrides, \\"Flex.Flex.Text\\")}
+        >
+          Heading 2
+        </Text>
+      </Flex>
+      <Text
+        fontFamily=\\"Inter\\"
+        color=\\"rgb(0,0,0)\\"
+        textAlign=\\"left\\"
+        fontSize=\\"32px\\"
+        lineHeight=\\"48px\\"
+        fontWeight=\\"400\\"
+        {...getOverrideProps(props.overrides, \\"Flex.Text\\")}
+      >
+        subtitle
+      </Text>
+    </Flex>
   );
 }
 "
