@@ -103,8 +103,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const { printer, file } = this.createPrinter();
 
-    console.log('JSX rendered');
-
     const imports = this.importCollection.buildImportStatements();
 
     let importsText = '';
@@ -134,8 +132,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const jsx = this.renderJsx(this.component);
 
-    console.log('JSX rendered');
-
     const wrappedFunction = this.renderFunctionWrapper(
       this.component.name ?? StudioRendererConstants.unknownName,
       jsx,
@@ -163,8 +159,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     componentText += result;
 
     const transpiledComponentText = this.transpile(componentText);
-
-    console.log(transpiledComponentText);
 
     return {
       componentText: transpiledComponentText,

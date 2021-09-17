@@ -34,7 +34,6 @@ export class StudioTemplateRendererManager<
     if (!component) {
       throw new Error('Please ensure you have passed in a valid component schema');
     }
-    console.log('Rendering a component ', component.componentType);
     const componentRenderer = this.renderer.buildRenderer(component);
     const result = componentRenderer.renderComponent();
     result.renderComponentToFilesystem(this.outputConfig.outputPathDir);
@@ -45,8 +44,6 @@ export class StudioTemplateRendererManager<
     if (!jsonSchema) {
       throw new Error('Please ensure you have passed in a valid schema');
     }
-
-    console.log('Rendering multiple components ', jsonSchema.length);
 
     for (const component of jsonSchema) {
       const componentPath = path.join(
