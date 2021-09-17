@@ -280,6 +280,7 @@ export default function CollectionOfCustomButtons(
   return (
     <Collection
       type=\\"list\\"
+      isPaginated={true}
       gap=\\"1.5rem\\"
       backgroundColor={backgroundColor}
       items={buttonUser}

@@ -6,6 +6,9 @@
     "type": {
       "value": "list"
     },
+    "isPaginated": {
+      "value": true
+    },
     "gap": {
       "value": "1.5rem"
     },
