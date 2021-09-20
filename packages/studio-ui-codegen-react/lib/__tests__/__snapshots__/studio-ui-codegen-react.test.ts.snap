@@ -415,9 +415,14 @@ export default function BoxWithButton(props) {
 
 exports[`amplify render tests custom render config should render common JS 1`] = `
 "\\"use strict\\";
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, \\"__esModule\\", { value: true });
 /* eslint-disable */
-const react_1 = require(\\"react\\");
+const react_1 = __importDefault(require(\\"react\\"));
 const ui_react_1 = require(\\"@aws-amplify/ui-react\\");
 function BoxWithButton(props) {
   return react_1.default.createElement(

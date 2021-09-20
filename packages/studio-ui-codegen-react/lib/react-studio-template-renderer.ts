@@ -174,6 +174,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           target,
           module,
           jsx: script === ScriptKind.JS ? ts.JsxEmit.React : ts.JsxEmit.Preserve,
+          esModuleInterop: true,
         },
       }).outputText;
 
