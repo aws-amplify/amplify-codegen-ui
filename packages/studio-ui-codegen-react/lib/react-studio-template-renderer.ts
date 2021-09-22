@@ -28,6 +28,7 @@ import ts, {
   BindingElement,
   Modifier,
   ObjectLiteralExpression,
+  CallExpression,
 } from 'typescript';
 import prettier from 'prettier';
 import parserBabel from 'prettier/parser-babel';
@@ -319,6 +320,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         propSignatures.push(propSignature);
       }
     }
+    if (component.componentType === 'Collection') {
+      const propSignature = factory.createPropertySignature(
+        undefined,
+        'items',
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createTypeReferenceNode('any[]', undefined),
+      );
+      propSignatures.push(propSignature);
+    }
     return factory.createTypeLiteralNode(propSignatures);
   }
 
@@ -339,6 +349,16 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           elements.push(bindingElement);
         }
       });
+
+      if (component.componentType === 'Collection') {
+        const bindingElement = factory.createBindingElement(
+          undefined,
+          undefined,
+          factory.createIdentifier('items'),
+          undefined,
+        );
+        elements.push(bindingElement);
+      }
 
       const statement = factory.createVariableStatement(
         undefined,
@@ -386,9 +406,16 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
               statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
               const { model } = bindingProperties;
               this.importCollection.addImport('../models', model);
-              this.buildUseDataStoreBindingCall('collection', propName, model).forEach((value) => {
-                statements.push(value);
-              });
+              statements.push(
+                this.buildPropPrecedentStatement(
+                  'displayedItems',
+                  'items',
+                  factory.createPropertyAccessExpression(
+                    this.buildUseDataStoreBindingCall('collection', propName, model),
+                    factory.createIdentifier('buttonUser'),
+                  ),
+                ),
+              );
             }
           }
         });
@@ -405,9 +432,29 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
             const { model } = bindingProperties;
             this.importCollection.addImport('../models', model);
-            this.buildUseDataStoreBindingCall('record', propName, model).forEach((value) => {
-              statements.push(value);
-            });
+            statements.push(
+              factory.createVariableStatement(
+                undefined,
+                factory.createVariableDeclarationList(
+                  [
+                    factory.createVariableDeclaration(
+                      factory.createObjectBindingPattern([
+                        factory.createBindingElement(
+                          undefined,
+                          undefined,
+                          factory.createIdentifier(propName),
+                          undefined,
+                        ),
+                      ]),
+                      undefined,
+                      undefined,
+                      this.buildUseDataStoreBindingCall('record', propName, model),
+                    ),
+                  ],
+                  ts.NodeFlags.Const,
+                ),
+              ),
+            );
           }
         }
       });
@@ -415,45 +462,51 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return statements;
   }
 
-  private buildUseDataStoreBindingCall(callType: string, propName: string, bindingModel: string): VariableStatement[] {
-    const statements: VariableStatement[] = [];
-    statements.push(
-      factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createObjectBindingPattern([
-                factory.createBindingElement(undefined, undefined, factory.createIdentifier(propName), undefined),
-              ]),
-              undefined,
-              undefined,
-              factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
-                factory.createObjectLiteralExpression(
-                  [
-                    factory.createPropertyAssignment(
-                      factory.createIdentifier('type'),
-                      factory.createStringLiteral(callType),
-                    ),
-                    factory.createPropertyAssignment(
-                      factory.createIdentifier('model'),
-                      factory.createIdentifier(bindingModel),
-                    ),
-                    factory.createPropertyAssignment(
-                      factory.createIdentifier('criteria'),
-                      factory.createIdentifier(this.getFilterName(propName)),
-                    ),
-                  ],
-                  true,
-                ),
-              ]),
+  private buildPropPrecedentStatement(
+    precedentName: string,
+    propName: string,
+    defaultExpression: any,
+  ): VariableStatement {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(precedentName),
+            undefined,
+            undefined,
+            factory.createConditionalExpression(
+              factory.createBinaryExpression(
+                factory.createIdentifier(propName),
+                factory.createToken(ts.SyntaxKind.ExclamationEqualsEqualsToken),
+                factory.createIdentifier('undefined'),
+              ),
+              factory.createToken(ts.SyntaxKind.QuestionToken),
+              factory.createIdentifier(propName),
+              factory.createToken(ts.SyntaxKind.ColonToken),
+              defaultExpression,
             ),
-          ],
-          ts.NodeFlags.Const,
-        ),
+          ),
+        ],
+        ts.NodeFlags.Const,
       ),
     );
-    return statements;
+  }
+
+  private buildUseDataStoreBindingCall(callType: string, propName: string, bindingModel: string): CallExpression {
+    return factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
+      factory.createObjectLiteralExpression(
+        [
+          factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
+          factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(bindingModel)),
+          factory.createPropertyAssignment(
+            factory.createIdentifier('criteria'),
+            factory.createIdentifier(this.getFilterName(propName)),
+          ),
+        ],
+        true,
+      ),
+    ]);
   }
 
   private predicateToObjectLiteralExpression(predicate: StudioComponentPredicate): ObjectLiteralExpression {
