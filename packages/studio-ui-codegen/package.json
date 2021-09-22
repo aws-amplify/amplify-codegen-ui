@@ -19,10 +19,6 @@
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "npm run build -- --watch"
   },
-  "devDependencies": {
-    "rollup": "^2.47.0",
-    "source-map-support": "^0.5.19"
-  },
   "dependencies": {
     "@amzn/amplify-ui-codegen-schema": "^0.0.1",
     "@amzn/amplify-ui-react-types": "^0.0.1"

@@ -1,8 +1,14 @@
 /* eslint-disable no-console */
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererManager, StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
-import { AmplifyRenderer, ReactOutputConfig, ReactRenderConfig, ScriptKind } from '@amzn/studio-ui-codegen-react';
-import { ModuleKind, ScriptTarget } from 'typescript';
+import {
+  AmplifyRenderer,
+  ReactOutputConfig,
+  ReactRenderConfig,
+  ScriptTarget,
+  ModuleKind,
+  ScriptKind,
+} from '@amzn/studio-ui-codegen-react';
 import path from 'path';
 
 import * as schemas from './lib';
