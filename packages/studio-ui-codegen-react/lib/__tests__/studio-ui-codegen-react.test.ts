@@ -1,14 +1,21 @@
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, StudioTheme } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
 import fs from 'fs';
 import { join } from 'path';
 import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '..';
 import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
+import { ReactThemeStudioTemplateRenderer } from '../react-theme-studio-template-renderer';
 
 function loadSchemaFromJSONFile(jsonSchemaFile: string): StudioComponent {
   return JSON.parse(
     fs.readFileSync(join(__dirname, 'studio-ui-json', `${jsonSchemaFile}.json`), 'utf-8'),
   ) as StudioComponent;
+}
+
+function loadThemeFromJSONFile(jsonThemeFile: string): StudioTheme {
+  return JSON.parse(
+    fs.readFileSync(join(__dirname, 'studio-ui-json', `${jsonThemeFile}.json`), 'utf-8'),
+  ) as StudioTheme;
 }
 
 function generateWithAmplifyRenderer(
@@ -24,6 +31,14 @@ function generateWithAmplifyRenderer(
     return rendererFactory.buildRenderer(schema).renderSampleCodeSnippet().compText;
   }
   return rendererFactory.buildRenderer(schema).renderComponent().componentText;
+}
+
+function generateWithThemeRenderer(jsonFile: string, renderConfig: ReactRenderConfig = {}): string {
+  const theme = loadThemeFromJSONFile(jsonFile);
+  const rendererFactory = new StudioTemplateRendererFactory(
+    (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
+  );
+  return rendererFactory.buildRenderer(theme).renderComponent().componentText;
 }
 
 describe('amplify render tests', () => {
@@ -149,6 +164,20 @@ describe('amplify render tests', () => {
   describe('user specific attributes', () => {
     it('should render user specific attributes', () => {
       expect(generateWithAmplifyRenderer('componentWithUserSpecificAttributes')).toMatchSnapshot();
+    });
+  });
+
+  describe('theme', () => {
+    it('should render the theme', () => {
+      expect(generateWithThemeRenderer('theme')).toMatchSnapshot();
+    });
+
+    it('should render the theme with TSX', () => {
+      expect(generateWithThemeRenderer('theme', { script: ScriptKind.TSX })).toMatchSnapshot();
+    });
+
+    it('should render the theme with ES5', () => {
+      expect(generateWithThemeRenderer('theme', { target: ScriptTarget.ES5, script: ScriptKind.JS })).toMatchSnapshot();
     });
   });
 });

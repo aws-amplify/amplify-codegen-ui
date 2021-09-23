@@ -15,17 +15,13 @@ import {
 
 import { EOL } from 'os';
 import ts, {
-  createPrinter,
-  createSourceFile,
   EmitHint,
   factory,
   FunctionDeclaration,
   JsxElement,
   JsxFragment,
-  NewLineKind,
   PropertySignature,
   SyntaxKind,
-  transpileModule,
   TypeAliasDeclaration,
   TypeNode,
   VariableStatement,
@@ -37,8 +33,6 @@ import ts, {
   Identifier,
   ComputedPropertyName,
 } from 'typescript';
-import prettier from 'prettier';
-import parserBabel from 'prettier/parser-babel';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
 import {
@@ -50,9 +44,11 @@ import {
 } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
 import { getComponentPropName } from './react-component-render-helper';
+import { transpile, buildPrinter } from './react-studio-template-renderer-helper';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
+  StudioComponent,
   ReactOutputManager,
   {
     componentText: string;
@@ -93,7 +89,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
     const sampleAppName = 'App';
 
-    const { printer, file } = this.createPrinter();
+    const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
     let importsText = '';
     for (const importStatement of imports) {
       const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
@@ -109,7 +105,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   renderComponentOnly() {
     const jsx = this.renderJsx(this.component);
 
-    const { printer, file } = this.createPrinter();
+    const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
     const imports = this.importCollection.buildImportStatements();
 
@@ -128,7 +124,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
-    const compText = this.transpile(result);
+    const compText = transpile(result, this.renderConfig);
 
     return { compText, importsText };
   }
@@ -136,7 +132,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   renderComponent() {
     // This is a react component so we only need a single tsx
 
-    const { printer, file } = this.createPrinter();
+    const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
     const jsx = this.renderJsx(this.component);
 
@@ -166,46 +162,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
 
-    const transpiledComponentText = this.transpile(componentText);
+    const transpiledComponentText = transpile(componentText, this.renderConfig);
 
     return {
       componentText: transpiledComponentText,
       renderComponentToFilesystem: this.renderComponentToFilesystem(transpiledComponentText)(this.fileName),
     };
-  }
-
-  private transpile(code: string): string {
-    const { target, module, script } = this.renderConfig;
-    if (script === ScriptKind.JS || script === ScriptKind.JSX) {
-      const transpiledCode = transpileModule(code, {
-        compilerOptions: {
-          target,
-          module,
-          jsx: script === ScriptKind.JS ? ts.JsxEmit.React : ts.JsxEmit.Preserve,
-          esModuleInterop: true,
-        },
-      }).outputText;
-
-      return prettier.format(transpiledCode, { parser: 'babel', plugins: [parserBabel] });
-    }
-
-    return prettier.format(code, { parser: 'babel', plugins: [parserBabel] });
-  }
-
-  private createPrinter() {
-    const { target, script } = this.renderConfig;
-    const file = createSourceFile(
-      this.fileName,
-      '',
-      target || this.defaultRenderConfig.target,
-      false,
-      script || this.defaultRenderConfig.script,
-    );
-
-    const printer = createPrinter({
-      newLine: NewLineKind.LineFeed,
-    });
-    return { printer, file };
   }
 
   renderFunctionWrapper(

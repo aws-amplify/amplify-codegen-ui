@@ -1,4 +1,3 @@
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import fs from 'fs';
 import { FrameworkOutputManager } from './framework-output-manager';
 import { StudioTemplateRenderer } from './studio-template-renderer';
@@ -13,12 +12,13 @@ import { RenderTextComponentResponse } from './render-component-response';
  */
 export class StudioTemplateRendererManager<
   TSource,
+  TStudioType,
   TOutputManager extends FrameworkOutputManager<TSource>,
   TRenderOutput extends RenderTextComponentResponse,
-  TRenderer extends StudioTemplateRenderer<TSource, TOutputManager, TRenderOutput>,
+  TRenderer extends StudioTemplateRenderer<TSource, TStudioType, TOutputManager, TRenderOutput>,
 > {
   constructor(
-    private renderer: StudioTemplateRendererFactory<TSource, TOutputManager, TRenderOutput, TRenderer>,
+    private renderer: StudioTemplateRendererFactory<TSource, TStudioType, TOutputManager, TRenderOutput, TRenderer>,
     private outputConfig: FrameworkOutputConfig,
   ) {
     const renderPath = this.outputConfig.outputPathDir;
@@ -27,7 +27,7 @@ export class StudioTemplateRendererManager<
     }
   }
 
-  renderSchemaToTemplate(component: StudioComponent | undefined): TRenderOutput {
+  renderSchemaToTemplate(component: TStudioType | undefined): TRenderOutput {
     if (!component) {
       throw new Error('Please ensure you have passed in a valid component schema');
     }
@@ -37,7 +37,7 @@ export class StudioTemplateRendererManager<
     return result;
   }
 
-  renderSchemaToTemplates(jsonSchema: StudioComponent[] | undefined) {
+  renderSchemaToTemplates(jsonSchema: TStudioType[] | undefined) {
     if (!jsonSchema) {
       throw new Error('Please ensure you have passed in a valid schema');
     }
