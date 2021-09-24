@@ -26,7 +26,7 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
       propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
     }
 
-    this.addPropsSpreadAttributes(factory, propsArray, tagName);
+    this.addPropsSpreadAttributes(factory, propsArray);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -35,7 +35,7 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
     );
   }
 
-  private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[], tagName: string) {
+  private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
       const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
       attributes.push(propsAttr);

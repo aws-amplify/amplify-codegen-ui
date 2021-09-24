@@ -1,7 +1,7 @@
 import { BaseComponentProps } from '@amzn/amplify-ui-react-types';
 
 import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from 'typescript';
-import { StudioComponent, StudioComponentChild, BoundStudioComponentProperty } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, BoundStudioComponentProperty } from '@amzn/amplify-ui-codegen-schema';
 import { StudioRendererConstants } from '@amzn/studio-ui-codegen';
 import { ReactComponentRenderer } from '../react-component-renderer';
 
@@ -40,21 +40,19 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
     props: Map<string, BoundStudioComponentProperty>,
     tagName: string,
   ): JsxOpeningElement {
+    const propsArray: JsxAttribute[] = [];
+    /*  TODO:  move over to boundProperties
     const defaultValue = 'defaultValue';
     const defaultValueExpr = factory.createJsxExpression(undefined, factory.createIdentifier(defaultValue));
-    const propsArray: JsxAttribute[] = [];
     props?.forEach((value, key) => {
-      /*  TODO:  move over to boundProperties
       if (value.exposedAs) {
-        const displayExpr = value.value !== undefined ? factory.createStringLiteral(value.value.toString()) : defaultValueExpr;
-        const attr = factory.createJsxAttribute(
-          factory.createIdentifier(key),
-          displayExpr,
-        );
+        const displayExpr =
+          value.value !== undefined ? factory.createStringLiteral(value.value.toString()) : defaultValueExpr;
+        const attr = factory.createJsxAttribute(factory.createIdentifier(key), displayExpr);
         propsArray.push(attr);
       }
-      */
     });
+    */
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),

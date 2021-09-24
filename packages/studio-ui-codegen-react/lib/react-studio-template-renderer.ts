@@ -16,7 +16,6 @@ import ts, {
   FunctionDeclaration,
   JsxElement,
   JsxFragment,
-  ModifierFlags,
   NewLineKind,
   PropertySignature,
   SyntaxKind,
@@ -370,7 +369,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (component.collectionProperties !== undefined) {
       collections.push(component);
     }
-    component.children?.map((value) => {
+    component.children?.forEach((value) => {
       this.findCollections(value, collections);
     });
 
@@ -496,7 +495,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       found.push(component);
     }
     if (component.children !== undefined) {
-      component.children.map((value) => {
+      component.children.forEach((value) => {
         this.findCollections(value, found);
       });
     }

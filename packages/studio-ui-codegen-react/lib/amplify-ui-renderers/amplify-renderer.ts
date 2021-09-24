@@ -1,8 +1,7 @@
 import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { StudioNode } from '@amzn/studio-ui-codegen';
-import { factory, JsxElement, JsxFragment } from 'typescript';
+import { JsxElement, JsxFragment } from 'typescript';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
-import { ReactRenderConfig } from '../react-render-config';
 
 import BadgeRenderer from './badge';
 import ButtonRenderer from './button';
@@ -17,10 +16,6 @@ import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
 
 export class AmplifyRenderer extends ReactStudioTemplateRenderer {
-  constructor(component: StudioComponent, renderConfig: ReactRenderConfig) {
-    super(component, renderConfig);
-  }
-
   renderJsx(component: StudioComponent | StudioComponentChild, parent?: StudioNode): JsxElement | JsxFragment {
     const node = new StudioNode(component, parent);
     switch (component.componentType) {
@@ -64,10 +59,11 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case 'Text':
         return new TextRenderer(component, this.importCollection, parent).renderElement();
-    }
 
-    return new CustomComponentRenderer(component, this.importCollection).renderElement((children) =>
-      children.map((child) => this.renderJsx(child, node)),
-    );
+      default:
+        return new CustomComponentRenderer(component, this.importCollection).renderElement((children) =>
+          children.map((child) => this.renderJsx(child, node)),
+        );
+    }
   }
 }

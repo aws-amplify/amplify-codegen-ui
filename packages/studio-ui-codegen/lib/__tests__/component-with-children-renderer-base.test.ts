@@ -1,5 +1,5 @@
 import { ButtonProps } from '@amzn/amplify-ui-react-types';
-import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { ComponentWithChildrenRendererBase } from '../component-with-children-renderer-base';
 
 class MockComponentRenderer extends ComponentWithChildrenRendererBase<ButtonProps, string, string> {

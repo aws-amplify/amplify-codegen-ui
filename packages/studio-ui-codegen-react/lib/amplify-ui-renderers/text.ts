@@ -1,10 +1,6 @@
 import { TextProps } from '@amzn/amplify-ui-react-types';
 
-import {
-  FixedStudioComponentProperty,
-  StudioComponent,
-  StudioComponentProperties,
-} from '@amzn/amplify-ui-codegen-schema';
+import { FixedStudioComponentProperty } from '@amzn/amplify-ui-codegen-schema';
 
 import { factory, JsxElement, JsxChild } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';

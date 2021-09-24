@@ -1,10 +1,4 @@
-import {
-  FixedStudioComponentProperty,
-  StudioComponent,
-  StudioComponentChild,
-  StudioComponentProperties,
-  WrappedComponentProperties,
-} from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, StudioComponentChild, WrappedComponentProperties } from '@amzn/amplify-ui-codegen-schema';
 
 import { StudioNode } from './studio-node';
 

@@ -1,6 +1,6 @@
 import { BadgeProps } from '@amzn/amplify-ui-react-types';
 
-import { StudioComponentChild, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 
 import { factory, JsxChild, JsxElement } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';

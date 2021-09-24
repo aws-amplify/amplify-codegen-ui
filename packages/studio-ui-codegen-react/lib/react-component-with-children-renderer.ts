@@ -59,7 +59,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
       propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
     }
 
-    this.addPropsSpreadAttributes(factory, propsArray, tagName);
+    this.addPropsSpreadAttributes(factory, propsArray);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -86,7 +86,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
     propsArray.push(itemsAttribute);
 
-    this.addPropsSpreadAttributes(factory, propsArray, tagName);
+    this.addPropsSpreadAttributes(factory, propsArray);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -95,7 +95,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
   }
 
-  private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[], tagName: string) {
+  private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
       const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
       attributes.push(propsAttr);
