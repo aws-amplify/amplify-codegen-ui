@@ -86,13 +86,20 @@ describe('amplify render tests', () => {
       expect(generatedCode).toMatchSnapshot();
     });
 
-    it('should render collection data binding', () => {
+    it('should not have useDataStoreBinding when there is no predicate', () => {
+      const generatedCode = generateWithAmplifyRenderer('dataBindingWithoutPredicate');
+      expect(generatedCode).toMatchSnapshot();
+    });
+  });
+
+  describe('collection', () => {
+    it('should render collection with data binding', () => {
       const generatedCode = generateWithAmplifyRenderer('collectionWithBinding');
       expect(generatedCode).toMatchSnapshot();
     });
 
-    it('should not have useDataStoreBinding when there is no predicate', () => {
-      const generatedCode = generateWithAmplifyRenderer('dataBindingWithoutPredicate');
+    it('should render collection without data binding', () => {
+      const generatedCode = generateWithAmplifyRenderer('collectionWithoutBinding');
       expect(generatedCode).toMatchSnapshot();
     });
   });

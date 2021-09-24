@@ -22,10 +22,10 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
     return element;
   }
 
-  private findItemsVariableName(): string {
+  private findItemsVariableName(): string | undefined {
     const collectionProps = Object.entries(this.component.collectionProperties ?? {});
     const dataProps = collectionProps.filter((value) => isDataPropertyBinding(value[1]));
-    const modelName = dataProps.length > 0 ? dataProps[0][0] : 'items';
+    const modelName = dataProps.length > 0 ? dataProps[0][0] : undefined;
     return modelName;
   }
 

@@ -72,7 +72,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     factory: NodeFactory,
     props: StudioComponentProperties,
     tagName: string,
-    itemsVariableName: string,
+    itemsVariableName?: string,
   ): JsxOpeningElement {
     const propsArray: JsxAttribute[] = [];
     for (const propKey of Object.keys(props)) {
@@ -82,7 +82,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
 
     const itemsAttribute = factory.createJsxAttribute(
       factory.createIdentifier('items'),
-      factory.createJsxExpression(undefined, factory.createIdentifier(itemsVariableName)),
+      factory.createJsxExpression(undefined, factory.createIdentifier(itemsVariableName ? 'displayedItems' : 'items')),
     );
     propsArray.push(itemsAttribute);
 
