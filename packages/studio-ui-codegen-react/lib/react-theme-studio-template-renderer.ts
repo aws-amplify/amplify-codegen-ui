@@ -73,6 +73,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   }
 
   private buildImports() {
+    this.importCollection.addImport('react', 'useEffect');
     this.importCollection.addImport('@aws-amplify/ui-react', 'extendTheming');
     this.importCollection.addImport('@aws-amplify/ui-react', 'Theme');
     this.importCollection.addImport('@aws-amplify/ui-react', 'DeepPartial');
@@ -188,6 +189,96 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
                             ],
                             NodeFlags.Const,
                           ),
+                        ),
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(factory.createIdentifier('useEffect'), undefined, [
+                            factory.createArrowFunction(
+                              undefined,
+                              undefined,
+                              [],
+                              undefined,
+                              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                              factory.createBlock(
+                                [
+                                  factory.createExpressionStatement(
+                                    factory.createCallExpression(
+                                      factory.createPropertyAccessExpression(
+                                        factory.createCallExpression(
+                                          factory.createPropertyAccessExpression(
+                                            factory.createIdentifier('Object'),
+                                            factory.createIdentifier('entries'),
+                                          ),
+                                          undefined,
+                                          [
+                                            factory.createPropertyAccessExpression(
+                                              factory.createIdentifier('theming'),
+                                              factory.createIdentifier('CSSVariables'),
+                                            ),
+                                          ],
+                                        ),
+                                        factory.createIdentifier('forEach'),
+                                      ),
+                                      undefined,
+                                      [
+                                        factory.createArrowFunction(
+                                          undefined,
+                                          undefined,
+                                          [
+                                            factory.createParameterDeclaration(
+                                              undefined,
+                                              undefined,
+                                              undefined,
+                                              factory.createArrayBindingPattern([
+                                                factory.createBindingElement(
+                                                  undefined,
+                                                  undefined,
+                                                  factory.createIdentifier('key'),
+                                                  undefined,
+                                                ),
+                                                factory.createBindingElement(
+                                                  undefined,
+                                                  undefined,
+                                                  factory.createIdentifier('value'),
+                                                  undefined,
+                                                ),
+                                              ]),
+                                              undefined,
+                                              undefined,
+                                              undefined,
+                                            ),
+                                          ],
+                                          undefined,
+                                          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                          factory.createBlock(
+                                            [
+                                              factory.createExpressionStatement(
+                                                factory.createCallExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createPropertyAccessExpression(
+                                                        factory.createIdentifier('document'),
+                                                        factory.createIdentifier('documentElement'),
+                                                      ),
+                                                      factory.createIdentifier('style'),
+                                                    ),
+                                                    factory.createIdentifier('setProperty'),
+                                                  ),
+                                                  undefined,
+                                                  [factory.createIdentifier('key'), factory.createIdentifier('value')],
+                                                ),
+                                              ),
+                                            ],
+                                            true,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                true,
+                              ),
+                            ),
+                          ]),
                         ),
                         factory.createReturnStatement(
                           factory.createParenthesizedExpression(
