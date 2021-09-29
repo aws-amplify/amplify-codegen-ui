@@ -216,6 +216,8 @@ export type StudioComponentProperties = {
     | FixedStudioComponentProperty
     | BoundStudioComponentProperty
     | CollectionStudioComponentProperty
+    | ConcatenatedStudioComponentProperty
+    | ConditionalStudioComponentProperty
     | WorkflowStudioComponentProperty
     | FormStudioComponentProperty;
 };
@@ -267,6 +269,49 @@ export type CollectionStudioComponentProperty = {
    * The default value to pass in if no prop is provided
    */
   defaultValue?: string;
+};
+
+/**
+ * Component property that contains concatenation of multiple properties
+ */
+export type ConcatenatedStudioComponentProperty = {
+  concat: (
+    | ConcatenatedStudioComponentProperty
+    | ConditionalStudioComponentProperty
+    | FixedStudioComponentProperty
+    | BoundStudioComponentProperty
+    | CollectionStudioComponentProperty
+    | WorkflowStudioComponentProperty
+    | FormStudioComponentProperty
+  )[];
+};
+
+/**
+ * Component property that represents a conditional expression
+ */
+export type ConditionalStudioComponentProperty = {
+  condition: {
+    property: string;
+    field: string;
+    operator: string;
+    operand: string | number | boolean;
+    then:
+      | FixedStudioComponentProperty
+      | BoundStudioComponentProperty
+      | CollectionStudioComponentProperty
+      | ConcatenatedStudioComponentProperty
+      | ConditionalStudioComponentProperty
+      | WorkflowStudioComponentProperty
+      | FormStudioComponentProperty;
+    else:
+      | FixedStudioComponentProperty
+      | BoundStudioComponentProperty
+      | CollectionStudioComponentProperty
+      | ConcatenatedStudioComponentProperty
+      | ConditionalStudioComponentProperty
+      | WorkflowStudioComponentProperty
+      | FormStudioComponentProperty;
+  };
 };
 
 /**

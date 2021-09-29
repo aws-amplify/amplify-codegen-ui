@@ -1,4 +1,6 @@
 import {
+  ConcatenatedStudioComponentProperty,
+  ConditionalStudioComponentProperty,
   FixedStudioComponentProperty,
   BoundStudioComponentProperty,
   CollectionStudioComponentProperty,
@@ -8,7 +10,7 @@ import {
   StudioComponentChild,
 } from '@amzn/amplify-ui-codegen-schema';
 
-import { factory, JsxAttribute, JsxExpression, StringLiteral, SyntaxKind } from 'typescript';
+import { Expression, factory, JsxAttribute, TemplateSpan, StringLiteral, SyntaxKind, JsxExpression } from 'typescript';
 
 import { ImportCollection } from './import-collection';
 
@@ -23,58 +25,50 @@ export function getComponentPropName(componentName?: string): string {
   return 'ComponentWithoutNameProps';
 }
 
-export function isFixedPropertyWithValue(
-  prop:
-    | FixedStudioComponentProperty
-    | BoundStudioComponentProperty
-    | CollectionStudioComponentProperty
-    | WorkflowStudioComponentProperty
-    | FormStudioComponentProperty,
-): prop is FixedStudioComponentProperty {
+type ComponentPropertyValueTypes =
+  | ConcatenatedStudioComponentProperty
+  | ConditionalStudioComponentProperty
+  | FixedStudioComponentProperty
+  | BoundStudioComponentProperty
+  | CollectionStudioComponentProperty
+  | WorkflowStudioComponentProperty
+  | FormStudioComponentProperty;
+
+export function isFixedPropertyWithValue(prop: ComponentPropertyValueTypes): prop is FixedStudioComponentProperty {
   return 'value' in prop;
 }
 
-export function isBoundProperty(
-  prop:
-    | FixedStudioComponentProperty
-    | BoundStudioComponentProperty
-    | CollectionStudioComponentProperty
-    | WorkflowStudioComponentProperty
-    | FormStudioComponentProperty,
-): prop is BoundStudioComponentProperty {
+export function isBoundProperty(prop: ComponentPropertyValueTypes): prop is BoundStudioComponentProperty {
   return 'bindingProperties' in prop;
 }
 
 export function isCollectionItemBoundProperty(
-  prop:
-    | FixedStudioComponentProperty
-    | BoundStudioComponentProperty
-    | CollectionStudioComponentProperty
-    | WorkflowStudioComponentProperty
-    | FormStudioComponentProperty,
+  prop: ComponentPropertyValueTypes,
 ): prop is CollectionStudioComponentProperty {
   return 'collectionBindingProperties' in prop;
 }
 
+export function isConcatenatedProperty(prop: ComponentPropertyValueTypes): prop is ConcatenatedStudioComponentProperty {
+  return 'concat' in prop;
+}
+
 export function isDefaultValueOnly(
-  prop:
-    | FixedStudioComponentProperty
-    | BoundStudioComponentProperty
-    | CollectionStudioComponentProperty
-    | WorkflowStudioComponentProperty
-    | FormStudioComponentProperty,
+  prop: ComponentPropertyValueTypes,
 ): prop is CollectionStudioComponentProperty | BoundStudioComponentProperty {
   return 'defaultValue' in prop && !(isCollectionItemBoundProperty(prop) || isBoundProperty(prop));
 }
 
+export function buildBindingExpression(prop: BoundStudioComponentProperty): Expression {
+  return prop.bindingProperties.field === undefined
+    ? factory.createIdentifier(prop.bindingProperties.property)
+    : factory.createPropertyAccessExpression(
+        factory.createIdentifier(prop.bindingProperties.property),
+        prop.bindingProperties.field,
+      );
+}
+
 export function buildBindingAttr(prop: BoundStudioComponentProperty, propName: string): JsxAttribute {
-  const expr =
-    prop.bindingProperties.field === undefined
-      ? factory.createIdentifier(prop.bindingProperties.property)
-      : factory.createPropertyAccessExpression(
-          factory.createIdentifier(prop.bindingProperties.property),
-          prop.bindingProperties.field,
-        );
+  const expr = buildBindingExpression(prop);
 
   const attr = factory.createJsxAttribute(
     factory.createIdentifier(propName),
@@ -83,11 +77,10 @@ export function buildBindingAttr(prop: BoundStudioComponentProperty, propName: s
   return attr;
 }
 
-export function buildBindingAttrWithDefault(
+export function buildBindingWithDefaultExpression(
   prop: BoundStudioComponentProperty,
-  propName: string,
   defaultValue: string,
-): JsxAttribute {
+): Expression {
   const rightExpr = factory.createStringLiteral(defaultValue);
   const leftExpr =
     prop.bindingProperties.field === undefined
@@ -97,7 +90,15 @@ export function buildBindingAttrWithDefault(
           prop.bindingProperties.field,
         );
 
-  const binaryExpr = factory.createBinaryExpression(leftExpr, factory.createToken(SyntaxKind.BarBarToken), rightExpr);
+  return factory.createBinaryExpression(leftExpr, factory.createToken(SyntaxKind.BarBarToken), rightExpr);
+}
+
+export function buildBindingAttrWithDefault(
+  prop: BoundStudioComponentProperty,
+  propName: string,
+  defaultValue: string,
+): JsxAttribute {
+  const binaryExpr = buildBindingWithDefaultExpression(prop, defaultValue);
   const attr = factory.createJsxAttribute(
     factory.createIdentifier(propName),
     factory.createJsxExpression(undefined, binaryExpr),
@@ -105,7 +106,7 @@ export function buildBindingAttrWithDefault(
   return attr;
 }
 
-export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: string): JsxAttribute {
+export function buildFixedExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
   const currentPropValue = prop.value;
   let propValueExpr: StringLiteral | JsxExpression = factory.createStringLiteral(currentPropValue.toString());
   switch (typeof currentPropValue) {
@@ -121,18 +122,22 @@ export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: str
     default:
       break;
   }
-  return factory.createJsxAttribute(factory.createIdentifier(propName), propValueExpr);
+  return propValueExpr;
+}
+
+export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: string): JsxAttribute {
+  const expr = buildFixedExpression(prop);
+  return factory.createJsxAttribute(factory.createIdentifier(propName), expr);
+}
+
+export function buildCollectionBindingExpression(prop: CollectionStudioComponentProperty): Expression {
+  return prop.collectionBindingProperties.field === undefined
+    ? factory.createIdentifier('item')
+    : factory.createPropertyAccessExpression(factory.createIdentifier('item'), prop.collectionBindingProperties.field);
 }
 
 export function buildCollectionBindingAttr(prop: CollectionStudioComponentProperty, propName: string): JsxAttribute {
-  const expr =
-    prop.collectionBindingProperties.field === undefined
-      ? factory.createIdentifier('item')
-      : factory.createPropertyAccessExpression(
-          factory.createIdentifier('item'),
-          prop.collectionBindingProperties.field,
-        );
-
+  const expr = buildCollectionBindingExpression(prop);
   const attr = factory.createJsxAttribute(
     factory.createIdentifier(propName),
     factory.createJsxExpression(undefined, expr),
@@ -140,11 +145,10 @@ export function buildCollectionBindingAttr(prop: CollectionStudioComponentProper
   return attr;
 }
 
-export function buildCollectionBindingAttrWithDefault(
+export function buildCollectionBindingWithDefaultExpression(
   prop: CollectionStudioComponentProperty,
-  propName: string,
   defaultValue: string,
-): JsxAttribute {
+): Expression {
   const rightExpr = factory.createStringLiteral(defaultValue);
   const leftExpr =
     prop.collectionBindingProperties.field === undefined
@@ -154,7 +158,15 @@ export function buildCollectionBindingAttrWithDefault(
           prop.collectionBindingProperties.field,
         );
 
-  const binaryExpr = factory.createBinaryExpression(leftExpr, factory.createToken(SyntaxKind.BarBarToken), rightExpr);
+  return factory.createBinaryExpression(leftExpr, factory.createToken(SyntaxKind.BarBarToken), rightExpr);
+}
+
+export function buildCollectionBindingAttrWithDefault(
+  prop: CollectionStudioComponentProperty,
+  propName: string,
+  defaultValue: string,
+): JsxAttribute {
+  const binaryExpr = buildCollectionBindingWithDefaultExpression(prop, defaultValue);
   const attr = factory.createJsxAttribute(
     factory.createIdentifier(propName),
     factory.createJsxExpression(undefined, binaryExpr),
@@ -162,15 +174,44 @@ export function buildCollectionBindingAttrWithDefault(
   return attr;
 }
 
-export function buildOpeningElementAttributes(
-  prop:
-    | FixedStudioComponentProperty
-    | BoundStudioComponentProperty
-    | CollectionStudioComponentProperty
-    | WorkflowStudioComponentProperty
-    | FormStudioComponentProperty,
-  propName: string,
-): JsxAttribute {
+export function buildConcatExpression(prop: ConcatenatedStudioComponentProperty): Expression {
+  const expressions: Expression[] = [];
+  prop.concat.forEach((propItem) => {
+    if (isFixedPropertyWithValue(propItem)) {
+      expressions.push(buildFixedExpression(propItem));
+    } else if (isBoundProperty(propItem)) {
+      const expr =
+        propItem.defaultValue === undefined
+          ? buildBindingExpression(propItem)
+          : buildBindingWithDefaultExpression(propItem, propItem.defaultValue);
+      expressions.push(expr);
+    } else if (isCollectionItemBoundProperty(propItem)) {
+      const expr =
+        propItem.defaultValue === undefined
+          ? buildCollectionBindingExpression(propItem)
+          : buildCollectionBindingWithDefaultExpression(propItem, propItem.defaultValue);
+      expressions.push(expr);
+    } else if (isConcatenatedProperty(propItem)) {
+      expressions.push(buildConcatExpression(propItem));
+    }
+  });
+  const templateSpans: TemplateSpan[] = [];
+  expressions.forEach((expr, index) => {
+    const span =
+      index === expressions.length - 1
+        ? factory.createTemplateSpan(expr, factory.createTemplateTail('', ''))
+        : factory.createTemplateSpan(expr, factory.createTemplateMiddle('', ''));
+    templateSpans.push(span);
+  });
+  return factory.createTemplateExpression(factory.createTemplateHead('', ''), templateSpans);
+}
+
+export function buildConcatAttr(prop: ConcatenatedStudioComponentProperty, propName: string): JsxAttribute {
+  const expr = buildConcatExpression(prop);
+  return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
+}
+
+export function buildOpeningElementAttributes(prop: ComponentPropertyValueTypes, propName: string): JsxAttribute {
   if (isFixedPropertyWithValue(prop)) {
     return buildFixedAttr(prop, propName);
   }
@@ -187,6 +228,9 @@ export function buildOpeningElementAttributes(
         ? buildCollectionBindingAttr(prop, propName)
         : buildCollectionBindingAttrWithDefault(prop, propName, prop.defaultValue);
     return attr;
+  }
+  if (isConcatenatedProperty(prop)) {
+    return buildConcatAttr(prop, propName);
   }
   return factory.createJsxAttribute(factory.createIdentifier(propName), undefined);
 }

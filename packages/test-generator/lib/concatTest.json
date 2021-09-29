@@ -1,0 +1,47 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "CustomButton",
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
+    },
+    "buttonUser": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User"
+      }
+    },
+    "buttonColor": {
+      "type": "String"
+    }
+  },
+  "properties": {
+    "label": {
+      "concat": [
+        {
+          "bindingProperties": {
+            "property": "buttonUser",
+            "field": "firstname"
+          },
+          "defaultValue": "Harrison"
+        },
+        {
+          "value": " "
+        },
+        {
+          "bindingProperties": {
+            "property": "buttonUser",
+            "field": "lastname"
+          },
+          "defaultValue": "Spain"
+        }
+      ]
+    },
+    "labelWidth": {
+      "bindingProperties": {
+        "property": "width"
+      }
+    }
+  }
+}

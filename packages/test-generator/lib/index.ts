@@ -1,6 +1,7 @@
 export { default as BoxGolden } from './boxGolden.json';
 export { default as BoxTest } from './boxTest.json';
 export { default as ButtonGolden } from './buttonGolden.json';
+export { default as Concat } from './concatTest.json';
 export { default as CustomChild } from './customChild.json';
 export { default as DataBindingWithDataStore } from './dataBindingWithDataStore.json';
 export { default as ExposedAsTest } from './exposedAsTest.json';
