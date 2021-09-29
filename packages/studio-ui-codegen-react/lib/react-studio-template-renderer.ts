@@ -403,19 +403,23 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             const { bindingProperties } = binding;
             if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
               statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
-              const { model } = bindingProperties;
-              this.importCollection.addImport('../models', model);
-              statements.push(
-                this.buildPropPrecedentStatement(
-                  'displayedItems',
-                  'items',
-                  factory.createPropertyAccessExpression(
-                    this.buildUseDataStoreBindingCall('collection', propName, model),
-                    factory.createIdentifier('buttonUser'),
-                  ),
-                ),
-              );
             }
+            const { model } = bindingProperties;
+            this.importCollection.addImport('../models', model);
+            statements.push(
+              this.buildPropPrecedentStatement(
+                'displayedItems',
+                'items',
+                factory.createPropertyAccessExpression(
+                  this.buildUseDataStoreBindingCall(
+                    'collection',
+                    model,
+                    bindingProperties.predicate ? this.getFilterName(propName) : undefined,
+                  ),
+                  factory.createIdentifier(propName),
+                ),
+              ),
+            );
           }
         });
       }
@@ -447,7 +451,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                       ]),
                       undefined,
                       undefined,
-                      this.buildUseDataStoreBindingCall('record', propName, model),
+                      this.buildUseDataStoreBindingCall('record', model, this.getFilterName(propName)),
                     ),
                   ],
                   ts.NodeFlags.Const,
@@ -492,19 +496,23 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private buildUseDataStoreBindingCall(callType: string, propName: string, bindingModel: string): CallExpression {
+  private buildUseDataStoreBindingCall(callType: string, bindingModel: string, predicateName?: string): CallExpression {
+    const objectProperties = [
+      factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
+      factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(bindingModel)),
+    ].concat(
+      predicateName
+        ? [
+            factory.createPropertyAssignment(
+              factory.createIdentifier('criteria'),
+              factory.createIdentifier(predicateName),
+            ),
+          ]
+        : [],
+    );
+
     return factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
-      factory.createObjectLiteralExpression(
-        [
-          factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
-          factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(bindingModel)),
-          factory.createPropertyAssignment(
-            factory.createIdentifier('criteria'),
-            factory.createIdentifier(this.getFilterName(propName)),
-          ),
-        ],
-        true,
-      ),
+      factory.createObjectLiteralExpression(objectProperties, true),
     ]);
   }
 
