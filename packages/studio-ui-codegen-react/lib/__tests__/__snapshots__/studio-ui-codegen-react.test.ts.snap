@@ -152,6 +152,60 @@ export default function CollectionOfCustomButtons(
 "
 `;
 
+exports[`amplify render tests collection should render collection with data binding with no predicate 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Collection,
+  EscapeHatchProps,
+  ListingCard,
+  findChildOverrides,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+import { UntitledModel } from \\"../models\\";
+
+export type ListingCardCollectionProps = {
+  items?: any[],
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function ListingCardCollection(
+  props: ListingCardCollectionProps
+): JSX.Element {
+  const { items } = props;
+  const displayedItems =
+    items !== undefined
+      ? items
+      : useDataStoreBinding({
+          type: \\"collection\\",
+          model: UntitledModel,
+        }).bananas;
+  return (
+    <Collection
+      isPaginated=\\"true\\"
+      collectionType=\\"grid\\"
+      type=\\"list\\"
+      columns=\\"2\\"
+      order=\\"left-to-right\\"
+      items={displayedItems}
+      {...props}
+      {...getOverrideProps(props.overrides, \\"Collection\\")}
+    >
+      {(item, index) => (
+        <ListingCard
+          marginRight=\\"0\\"
+          marginBottom=\\"0\\"
+          marginTop=\\"0\\"
+          marginLeft=\\"0\\"
+          {...findChildOverrides(props.overrides, \\"ListingCard\\")}
+        ></ListingCard>
+      )}
+    </Collection>
+  );
+}
+"
+`;
+
 exports[`amplify render tests collection should render collection without data binding 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

@@ -102,6 +102,11 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('collectionWithoutBinding');
       expect(generatedCode).toMatchSnapshot();
     });
+
+    it('should render collection with data binding with no predicate', () => {
+      const generatedCode = generateWithAmplifyRenderer('collectionWithBindingWithoutPredicate');
+      expect(generatedCode).toMatchSnapshot();
+    });
   });
 
   describe('component with binding', () => {
