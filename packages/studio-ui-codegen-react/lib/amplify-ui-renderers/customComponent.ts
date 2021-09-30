@@ -1,4 +1,4 @@
-import { ViewProps as CustomComponentProps } from '@amzn/amplify-ui-react-types';
+import { ViewProps as CustomComponentProps } from '@aws-amplify/ui-react';
 
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 

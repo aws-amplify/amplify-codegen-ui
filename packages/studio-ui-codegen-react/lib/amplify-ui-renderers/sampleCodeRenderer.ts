@@ -1,4 +1,4 @@
-import { BaseComponentProps } from '@amzn/amplify-ui-react-types';
+import { BaseComponentProps } from '@aws-amplify/ui-react';
 
 import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from 'typescript';
 import { StudioComponent, BoundStudioComponentProperty } from '@amzn/amplify-ui-codegen-schema';

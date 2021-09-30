@@ -1,4 +1,4 @@
-import { FlexProps } from '@amzn/amplify-ui-react-types';
+import { FlexProps } from '@aws-amplify/ui-react';
 
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 

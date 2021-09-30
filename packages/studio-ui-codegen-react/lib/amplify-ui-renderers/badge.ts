@@ -1,4 +1,4 @@
-import { BadgeProps } from '@amzn/amplify-ui-react-types';
+import { BadgeProps } from '@aws-amplify/ui-react';
 
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 

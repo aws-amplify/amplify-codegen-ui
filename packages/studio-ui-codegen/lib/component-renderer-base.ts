@@ -1,4 +1,5 @@
-import { DividerProps, ImageProps, TextProps } from '@amzn/amplify-ui-react-types';
+import { TextProps } from '@amzn/amplify-ui-react-types';
+import { DividerProps, ImageProps } from '@aws-amplify/ui-react';
 
 import { CommonComponentRenderer } from './common-component-renderer';
 
