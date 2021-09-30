@@ -1,4 +1,4 @@
-import { CardProps } from '@amzn/amplify-ui-react-types';
+import { CardProps } from '@aws-amplify/ui-react';
 
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 

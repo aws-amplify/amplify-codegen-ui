@@ -1,5 +1,4 @@
-import { BadgeProps, ButtonProps, FlexProps, ViewProps as BoxProps } from '@aws-amplify/ui-react';
-import { CardProps } from '@amzn/amplify-ui-react-types';
+import { BadgeProps, ButtonProps, FlexProps, CardProps, ViewProps as BoxProps } from '@aws-amplify/ui-react';
 
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { CommonComponentRenderer } from './common-component-renderer';
