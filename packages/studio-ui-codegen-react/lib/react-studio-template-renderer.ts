@@ -35,16 +35,10 @@ import ts, {
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
-import {
-  ReactRenderConfig,
-  ScriptKind,
-  ScriptTarget,
-  ModuleKind,
-  scriptKindToFileExtension,
-} from './react-render-config';
+import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
 import { getComponentPropName } from './react-component-render-helper';
-import { transpile, buildPrinter } from './react-studio-template-renderer-helper';
+import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -57,11 +51,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 > {
   protected importCollection = new ImportCollection();
 
-  protected defaultRenderConfig = {
-    script: ScriptKind.TSX,
-    target: ScriptTarget.ES2015,
-    module: ModuleKind.ESNext,
-  };
+  protected defaultRenderConfig = defaultRenderConfig;
 
   fileName = `${this.component.name}.tsx`;
 
@@ -73,9 +63,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     this.renderConfig = {
-      script: ScriptKind.TSX,
-      target: ScriptTarget.ES2015,
-      module: ModuleKind.ESNext,
+      ...this.defaultRenderConfig,
       ...this.renderConfig,
     };
 

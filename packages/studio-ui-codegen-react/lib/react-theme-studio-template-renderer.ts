@@ -15,13 +15,7 @@ import {
 } from 'typescript';
 import { StudioTemplateRenderer } from '@amzn/studio-ui-codegen';
 
-import {
-  ReactRenderConfig,
-  ScriptKind,
-  scriptKindToFileExtension,
-  ScriptTarget,
-  ModuleKind,
-} from './react-render-config';
+import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
@@ -49,9 +43,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
     }
 
     this.renderConfig = {
-      script: ScriptKind.TSX,
-      target: ScriptTarget.ES2015,
-      module: ModuleKind.ESNext,
+      ...this.defaultRenderConfig,
       ...this.renderConfig,
     };
   }
