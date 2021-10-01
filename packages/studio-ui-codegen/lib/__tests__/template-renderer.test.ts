@@ -1,34 +1,11 @@
-/* eslint-disable max-classes-per-file */
 import { mocked } from 'ts-jest/utils'; // eslint-disable-line import/no-extraneous-dependencies
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { existsSync, mkdirSync } from 'fs';
-import { StudioTemplateRenderer } from '../studio-template-renderer';
 import { StudioTemplateRendererFactory } from '../template-renderer-factory';
 import { StudioTemplateRendererManager } from '../template-renderer';
-import { FrameworkOutputManager } from '../framework-output-manager';
+import { MockOutputManager, MockTemplateRenderer } from './__utils__/mock-classes';
 
 jest.mock('fs');
-
-class MockOutputManager extends FrameworkOutputManager<string> {
-  writeComponent(): Promise<void> {
-    return new Promise((resolve) => {
-      resolve();
-    });
-  }
-}
-
-class MockTemplateRenderer extends StudioTemplateRenderer<
-  string,
-  MockOutputManager,
-  { componentText: string; renderComponentToFilesystem: (outputPath: string) => Promise<void> }
-> {
-  renderComponent() {
-    return {
-      componentText: this.component.name || '',
-      renderComponentToFilesystem: jest.fn(),
-    };
-  }
-}
 
 describe('StudioTemplateRendererManager', () => {
   beforeEach(() => {
