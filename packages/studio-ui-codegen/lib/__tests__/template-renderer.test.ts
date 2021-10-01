@@ -35,7 +35,7 @@ describe('StudioTemplateRendererManager', () => {
     jest.clearAllMocks();
   });
 
-  test('constructor', () => {
+  test('constructor - outputPathDir does not exist', () => {
     const outputPathDir = 'mock-output';
     const outputManager = new MockOutputManager();
     const rendererFactory = new StudioTemplateRendererFactory(
@@ -46,8 +46,14 @@ describe('StudioTemplateRendererManager', () => {
     new StudioTemplateRendererManager(rendererFactory, { outputPathDir }); // eslint-disable-line no-new
     expect(existsSync).toHaveBeenCalled();
     expect(mkdirSync).toHaveBeenCalledWith(outputPathDir);
+  });
 
-    jest.clearAllMocks();
+  test('constructor - outputPathDir does exist', () => {
+    const outputPathDir = 'mock-output';
+    const outputManager = new MockOutputManager();
+    const rendererFactory = new StudioTemplateRendererFactory(
+      (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
+    );
 
     mocked(existsSync).mockImplementation(() => true);
     new StudioTemplateRendererManager(rendererFactory, { outputPathDir }); // eslint-disable-line no-new
