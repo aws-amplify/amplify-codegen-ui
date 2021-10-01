@@ -82,7 +82,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
 
     const itemsAttribute = factory.createJsxAttribute(
       factory.createIdentifier('items'),
-      factory.createJsxExpression(undefined, factory.createIdentifier(itemsVariableName ? 'displayedItems' : 'items')),
+      factory.createJsxExpression(undefined, factory.createIdentifier(itemsVariableName || 'items')),
     );
     propsArray.push(itemsAttribute);
 

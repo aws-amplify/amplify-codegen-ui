@@ -107,20 +107,20 @@ export default function CollectionOfCustomButtons(
       { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
     ],
   };
-  const displayedItems =
+  const buttonUser =
     items !== undefined
       ? items
       : useDataStoreBinding({
           type: \\"collection\\",
           model: User,
           criteria: buttonUserFilter,
-        }).buttonUser;
+        }).items;
   const buttonColorFilter = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
     operator: \\"eq\\",
   };
-  const { buttonColor } = useDataStoreBinding({
+  const { item: buttonColor } = useDataStoreBinding({
     type: \\"record\\",
     model: UserPreferences,
     criteria: buttonColorFilter,
@@ -131,7 +131,7 @@ export default function CollectionOfCustomButtons(
       isPaginated={true}
       gap=\\"1.5rem\\"
       backgroundColor={backgroundColor}
-      items={displayedItems}
+      items={buttonUser}
       {...props}
       {...getOverrideProps(props.overrides, \\"Collection\\")}
     >
@@ -173,13 +173,13 @@ export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): JSX.Element {
   const { items } = props;
-  const displayedItems =
+  const bananas =
     items !== undefined
       ? items
       : useDataStoreBinding({
           type: \\"collection\\",
           model: UntitledModel,
-        }).bananas;
+        }).items;
   return (
     <Collection
       isPaginated=\\"true\\"
@@ -187,7 +187,7 @@ export default function ListingCardCollection(
       type=\\"list\\"
       columns=\\"2\\"
       order=\\"left-to-right\\"
-      items={displayedItems}
+      items={bananas}
       {...props}
       {...getOverrideProps(props.overrides, \\"Collection\\")}
     >
