@@ -1,10 +1,16 @@
-import { StudioComponent, StudioComponentChild, StudioComponentPredicate } from '@amzn/amplify-ui-codegen-schema';
+import {
+  StudioComponent,
+  StudioComponentChild,
+  StudioComponentPredicate,
+  StudioComponentAuthPropertyBinding,
+} from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
   StudioRendererConstants,
   isStudioComponentWithBinding,
   isSimplePropertyBinding,
   isDataPropertyBinding,
+  isAuthPropertyBinding,
 } from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';
@@ -28,6 +34,8 @@ import ts, {
   Modifier,
   ObjectLiteralExpression,
   CallExpression,
+  Identifier,
+  ComputedPropertyName,
 } from 'typescript';
 import prettier from 'prettier';
 import parserBabel from 'prettier/parser-babel';
@@ -376,12 +384,64 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(statement);
     }
 
+    const authStatement = this.buildUseAuthenticatedUserStatement(component);
+    if (authStatement !== undefined) {
+      statements.push(authStatement);
+    }
+
     const useStoreBindingStatements = this.buildUseDataStoreBindingStatements(component);
     useStoreBindingStatements.forEach((entry) => {
       statements.push(entry);
     });
 
     return statements;
+  }
+
+  private buildUseAuthenticatedUserStatement(component: StudioComponent): Statement | undefined {
+    if (isStudioComponentWithBinding(component)) {
+      const authPropertyBindings = Object.entries(component.bindingProperties).filter(([, binding]) =>
+        isAuthPropertyBinding(binding),
+      );
+      if (authPropertyBindings.length) {
+        // create destructuring statements
+        // { propertyName: newName, ['custom:property']: customProperty }
+        const bindings = factory.createObjectBindingPattern(
+          authPropertyBindings.map(([propName, binding]) => {
+            const {
+              bindingProperties: { userAttribute },
+            } = binding as StudioComponentAuthPropertyBinding;
+            let propertyName: undefined | Identifier | ComputedPropertyName = factory.createIdentifier(userAttribute);
+            if (userAttribute.startsWith('custom:')) {
+              propertyName = factory.createComputedPropertyName(factory.createStringLiteral(userAttribute));
+            } else if (propName === userAttribute) {
+              propertyName = undefined;
+            }
+            return factory.createBindingElement(undefined, propertyName, factory.createIdentifier(propName), undefined);
+          }),
+        );
+
+        // get values from useAuthenticatedUser
+        // const { attributes: { property } } = useAuthenticatedUser()
+        return factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createObjectBindingPattern([
+                  factory.createBindingElement(undefined, factory.createIdentifier('attributes'), bindings, undefined),
+                ]),
+                undefined,
+                undefined,
+                factory.createCallExpression(factory.createIdentifier('useAuthenticatedUser'), undefined, []),
+              ),
+            ],
+            ts.NodeFlags.Const,
+          ),
+        );
+      }
+    }
+
+    return undefined;
   }
 
   private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
