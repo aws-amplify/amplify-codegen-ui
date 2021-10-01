@@ -85,7 +85,6 @@ jobs:
           npm install
           npm install amplify-provider-awscloudformation
           npm install aws-sdk.tgz
-          npm install ../amplify-ui-staging/packages/ui-react-types/amzn-amplify-ui-react-types-0.0.1.tgz
           npm install ../amplify-ui-staging/packages/amplify-ui-codegen-schema/amzn-amplify-ui-codegen-schema-0.0.1.tgz
           npm install ../amplify-ui-staging/packages/studio-ui-codegen/amzn-studio-ui-codegen-0.0.1.tgz
           npm install ../amplify-ui-staging/packages/studio-ui-codegen-react/amzn-studio-ui-codegen-react-0.0.1.tgz
