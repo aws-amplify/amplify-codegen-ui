@@ -457,6 +457,83 @@ export default function SectionHeading(
 "
 `;
 
+exports[`amplify render tests concat and conditional transform should render component with concatenation prop 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { User } from \\"../models\\";
+import {
+  Button,
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CustomButtonProps = {
+  width?: Number,
+  buttonUser?: User,
+  buttonColor?: String,
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function CustomButton(props: CustomButtonProps): JSX.Element {
+  const { width, buttonUser, buttonColor } = props;
+  return (
+    <Button
+      label={\`\${buttonUser.firstname || \\"Harrison\\"}\${\\" \\"}\${
+        buttonUser.lastname || \\"Spain\\"
+      }\`}
+      labelWidth={width}
+      {...props}
+      {...getOverrideProps(props.overrides, \\"Button\\")}
+    ></Button>
+  );
+}
+"
+`;
+
+exports[`amplify render tests concat and conditional transform should render component with conditional prop 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { User } from \\"../models\\";
+import {
+  Button,
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CustomButtonProps = {
+  width?: Number,
+  buttonUser?: User,
+  buttonColor?: String,
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function CustomButton(props: CustomButtonProps): JSX.Element {
+  const { width, buttonUser, buttonColor } = props;
+  return (
+    <Button
+      label={\`\${buttonUser.firstname || \\"Harrison\\"}\${\\" \\"}\${
+        buttonUser.lastname || \\"Spain\\"
+      }\`}
+      labelWidth={width}
+      disabled={buttonUser.isLoggedIn === true ? true : false}
+      prompt={
+        buttonUser.age > 18
+          ? \`\${buttonUser.firstname}\${\\", cast your vote.\\"}\`
+          : \\"Sorry you cannot vote\\"
+      }
+      backgroundColor={
+        buttonUser.isLoggedIn === true
+          ? buttonUser.loggedInColor
+          : buttonUser.loggedOutColor
+      }
+      {...props}
+      {...getOverrideProps(props.overrides, \\"Button\\")}
+    ></Button>
+  );
+}
+"
+`;
+
 exports[`amplify render tests custom render config should render ES5 1`] = `
 "var __assign =
   (this && this.__assign) ||

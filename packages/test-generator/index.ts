@@ -14,7 +14,7 @@ log.setLevel('info');
 const renderConfig: ReactRenderConfig = {
   module: ModuleKind.CommonJS,
   target: ScriptTarget.ES2015,
-  script: ScriptKind.JS,
+  script: ScriptKind.TSX,
 };
 
 const rendererFactory = new StudioTemplateRendererFactory(

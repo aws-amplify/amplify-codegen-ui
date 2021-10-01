@@ -109,6 +109,18 @@ describe('amplify render tests', () => {
     });
   });
 
+  describe('concat and conditional transform', () => {
+    it('should render component with concatenation prop', () => {
+      const generatedCode = generateWithAmplifyRenderer('concatTest');
+      expect(generatedCode).toMatchSnapshot();
+    });
+
+    it('should render component with conditional prop', () => {
+      const generatedCode = generateWithAmplifyRenderer('conditionalTest');
+      expect(generatedCode).toMatchSnapshot();
+    });
+  });
+
   describe('component with binding', () => {
     it('should render build property on Text', () => {
       const generatedCode = generateWithAmplifyRenderer('textWithDataBinding');
