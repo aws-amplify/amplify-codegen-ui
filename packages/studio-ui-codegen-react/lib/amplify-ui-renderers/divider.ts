@@ -1,4 +1,4 @@
-import { DividerProps } from '@amzn/amplify-ui-react-types';
+import { DividerProps } from '@aws-amplify/ui-react';
 
 import { factory, JsxElement } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';

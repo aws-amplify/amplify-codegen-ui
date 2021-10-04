@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "sourceMap": true
+    "sourceMap": true,
+    "skipLibCheck": true
   },
   "include": ["./lib", "index.ts"]
 }
