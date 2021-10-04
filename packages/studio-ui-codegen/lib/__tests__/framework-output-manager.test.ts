@@ -1,12 +1,4 @@
-import { FrameworkOutputManager } from '../framework-output-manager';
-
-class MockOutputManager extends FrameworkOutputManager<string> {
-  writeComponent(): Promise<void> {
-    return new Promise((resolve) => {
-      resolve();
-    });
-  }
-}
+import { MockOutputManager } from './__utils__/mock-classes';
 
 describe('FrameworkOutputManager', () => {
   test('writeComponent', async () => {
