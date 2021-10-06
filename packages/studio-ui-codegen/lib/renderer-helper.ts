@@ -19,6 +19,16 @@ export function isStudioComponentWithBinding(
   return 'bindingProperties' in component;
 }
 
+/**
+ * Verify if this is 1) a type that has the collectionProperties, and 2) that the collection
+ * properties object is set. Then provide the typehint back to the compiler that this attribute exists.
+ */
+export function isStudioComponentWithCollectionProperties(
+  component: StudioComponent | StudioComponentChild,
+): component is StudioComponent & Required<Pick<StudioComponent, 'collectionProperties'>> {
+  return 'collectionProperties' in component && component.collectionProperties !== undefined;
+}
+
 export function isDataPropertyBinding(
   prop:
     | StudioComponentDataPropertyBinding

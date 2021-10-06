@@ -1,10 +1,11 @@
-import { StudioComponent, StudioComponentChild, StudioComponentPredicate } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, StudioComponentPredicate } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
   StudioRendererConstants,
   isStudioComponentWithBinding,
   isSimplePropertyBinding,
   isDataPropertyBinding,
+  isStudioComponentWithCollectionProperties,
 } from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';
@@ -376,6 +377,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(statement);
     }
 
+    const collectionBindingStatements = this.buildCollectionBindingStatements(component);
+    collectionBindingStatements.forEach((entry) => {
+      statements.push(entry);
+    });
+
     const useStoreBindingStatements = this.buildUseDataStoreBindingStatements(component);
     useStoreBindingStatements.forEach((entry) => {
       statements.push(entry);
@@ -384,46 +390,39 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return statements;
   }
 
-  private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
-    const collections: (StudioComponent | StudioComponentChild)[] = [];
-    if (component.collectionProperties !== undefined) {
-      collections.push(component);
-    }
-    component.children?.forEach((value) => {
-      this.findCollections(value, collections);
-    });
-
+  private buildCollectionBindingStatements(component: StudioComponent): Statement[] {
     const statements: Statement[] = [];
 
-    collections.forEach((collection) => {
-      if (collection.collectionProperties !== undefined) {
-        Object.entries(collection.collectionProperties).forEach((collectionProp) => {
-          const [propName, binding] = collectionProp;
-          if (isDataPropertyBinding(binding)) {
-            const { bindingProperties } = binding;
-            if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
-              statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
-            }
-            const { model } = bindingProperties;
-            this.importCollection.addImport('../models', model);
-            statements.push(
-              this.buildPropPrecedentStatement(
-                propName,
-                'items',
-                factory.createPropertyAccessExpression(
-                  this.buildUseDataStoreBindingCall(
-                    'collection',
-                    model,
-                    bindingProperties.predicate ? this.getFilterName(propName) : undefined,
-                  ),
-                  'items',
-                ),
+    if (isStudioComponentWithCollectionProperties(component)) {
+      Object.entries(component.collectionProperties).forEach((collectionProp) => {
+        const [propName, bindingProperties] = collectionProp;
+        if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
+          statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
+        }
+        const { model } = bindingProperties;
+        this.importCollection.addImport('../models', model);
+        statements.push(
+          this.buildPropPrecedentStatement(
+            propName,
+            'items',
+            factory.createPropertyAccessExpression(
+              this.buildUseDataStoreBindingCall(
+                'collection',
+                model,
+                bindingProperties.predicate ? this.getFilterName(propName) : undefined,
               ),
-            );
-          }
-        });
-      }
-    });
+              'items',
+            ),
+          ),
+        );
+      });
+    }
+
+    return statements;
+  }
+
+  private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
+    const statements: Statement[] = [];
 
     // generate for single record binding
     if (component.bindingProperties !== undefined) {
@@ -549,17 +548,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         ts.NodeFlags.Const,
       ),
     );
-  }
-
-  private findCollections(component: StudioComponentChild, found: (StudioComponent | StudioComponentChild)[]) {
-    if (component.collectionProperties !== undefined) {
-      found.push(component);
-    }
-    if (component.children !== undefined) {
-      component.children.forEach((value) => {
-        this.findCollections(value, found);
-      });
-    }
   }
 
   private getFilterName(propName: string): string {
