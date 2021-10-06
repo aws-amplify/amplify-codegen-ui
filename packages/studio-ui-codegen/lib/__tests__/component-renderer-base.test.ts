@@ -1,4 +1,4 @@
-import { TextProps } from '@amzn/amplify-ui-react-types';
+import { TextProps } from '@aws-amplify/ui-react';
 import { ComponentRendererBase } from '../component-renderer-base';
 
 class MockComponentRenderer extends ComponentRendererBase<TextProps, string> {
