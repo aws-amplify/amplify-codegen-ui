@@ -2,9 +2,10 @@
   "name": "@amzn/test-generator",
   "version": "0.0.1",
   "description": "Test generator with sample JSON files",
-  "author": "Christopher Woolum",
-  "homepage": "https://code.amazon.com/packages/AmplifyUICodegen/packages/test-generator",
-  "license": "ISC",
+  "author": "Amazon Web Services",
+  "repository": "https://github.com/aws-amplify/amplify-codegen-ui.git",
+  "homepage": "https://docs.amplify.aws/",
+  "license": "Apache-2.0",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
@@ -18,10 +19,6 @@
   "files": [
     "lib"
   ],
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
   "dependencies": {
     "@amzn/amplify-ui-codegen-schema": "^0.0.1",
     "@amzn/studio-ui-codegen": "^0.0.1",
