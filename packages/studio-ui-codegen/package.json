@@ -2,18 +2,15 @@
   "name": "@amzn/studio-ui-codegen",
   "version": "0.0.1",
   "description": "generic component code generation interface definitions",
-  "author": "Jean Ro <frimfram+github@amazon.com>",
-  "homepage": "https://code.amazon.com/packages/AmplifyUICodegen/packages/studio-ui-codegen-core",
-  "license": "ISC",
+  "author": "Amazon Web Services",
+  "homepage": "https://docs.amplify.aws/",
+  "repository": "https://github.com/aws-amplify/amplify-codegen-ui.git",
+  "license": "Apache-2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/**"
   ],
-  "repository": {
-    "type": "git",
-    "url": "ssh://git.amazon.com:2222/pkg/AmplifyUICodegen"
-  },
   "scripts": {
     "test": "jest",
     "build": "tsc -p tsconfig.build.json",

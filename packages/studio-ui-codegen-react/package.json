@@ -2,15 +2,12 @@
   "name": "@amzn/studio-ui-codegen-react",
   "version": "0.0.1",
   "description": "Amplify UI React code generation implementation",
-  "author": "Jean Ro <frimfram+github@amazon.com>",
-  "homepage": "https://code.amazon.com/packages/AmplifyUICodegen/packages/studio-ui-codegen-react",
-  "license": "ISC",
+  "author": "Amazon Web Services",
+  "repository": "https://github.com/aws-amplify/amplify-codegen-ui.git",
+  "homepage": "https://docs.amplify.aws/",
+  "license": "Apache-2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "ssh://git.amazon.com:2222/pkg/AmplifyUICodegen"
-  },
   "scripts": {
     "test": "jest",
     "build": "tsc -p tsconfig.build.json",
