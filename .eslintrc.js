@@ -9,6 +9,7 @@ module.exports = {
     'packages/ui-react-types',
     'packages/amplify-ui-codegen-schema',
     'ui-components',
+    '*.md',
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',

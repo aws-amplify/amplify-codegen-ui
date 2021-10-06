@@ -1,11 +1,16 @@
-# `sample-renderer`
+# `test-renderer`
 
-> TODO: description
+This package can be used to render out sample files using the renderers provided in `studio-ui-codegen-react`.
 
 ## Usage
 
-```
-const sampleRenderer = require('sample-renderer');
+Test components will be rendered with both source and usage docs to STDOUT as markdown.
 
-// TODO: DEMONSTRATE API
+```sh
+# Build the package from repo root.
+lerna bootstrap
+lerna run build
+# And either render to STDOUT or a file
+node packages/test-generator/dist/index.js
+node packages/test-generator/dist/index.js > test-generator-output.md
 ```
