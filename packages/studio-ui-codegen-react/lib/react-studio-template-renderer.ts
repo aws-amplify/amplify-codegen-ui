@@ -408,7 +408,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             this.importCollection.addImport('../models', model);
             statements.push(
               this.buildPropPrecedentStatement(
-                'displayedItems',
+                propName,
                 'items',
                 factory.createPropertyAccessExpression(
                   this.buildUseDataStoreBindingCall(
@@ -416,7 +416,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                     model,
                     bindingProperties.predicate ? this.getFilterName(propName) : undefined,
                   ),
-                  factory.createIdentifier(propName),
+                  'items',
                 ),
               ),
             );
@@ -444,7 +444,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                       factory.createObjectBindingPattern([
                         factory.createBindingElement(
                           undefined,
-                          undefined,
+                          factory.createIdentifier('item'),
                           factory.createIdentifier(propName),
                           undefined,
                         ),
