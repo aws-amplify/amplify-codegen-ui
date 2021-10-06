@@ -6,9 +6,9 @@ This is a monorepo for Amplify UI Code Generation packages.
 
 To build the project, run the following commands:
 
-```js
-lerna bootstrap
-lerna run build
+```sh
+yarn setup-dev
+yarn test # Run tests in each package
 ```
 
 # How to use code generator
@@ -34,6 +34,7 @@ To run the sample app in test-generator package, after you have built the entire
 ```sh
 node ./packages/test-generator/dist/index.js
 ```
+
 # Package Descriptions
 
 ## Test
