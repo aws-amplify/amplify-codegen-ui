@@ -7,6 +7,11 @@ This is a monorepo for Amplify UI Code Generation packages.
 To build the project, run the following commands:
 
 ```sh
+# Using NPM
+npm run setup-dev
+npm test
+
+# Using Yarn
 yarn setup-dev
 yarn test # Run tests in each package
 ```
