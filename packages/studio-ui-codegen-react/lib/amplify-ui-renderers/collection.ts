@@ -1,6 +1,6 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
-import { isDataPropertyBinding } from '@amzn/studio-ui-codegen';
+import { isStudioComponentWithCollectionProperties } from '@amzn/studio-ui-codegen';
 import { factory, JsxChild, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 
@@ -23,13 +23,14 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
   }
 
   private findItemsVariableName(): string | undefined {
-    const collectionProps = Object.entries(this.component.collectionProperties ?? {});
-    const dataProps = collectionProps.filter((value) => isDataPropertyBinding(value[1]));
-    const modelName = dataProps.length > 0 ? dataProps[0][0] : undefined;
-    return modelName;
+    if (isStudioComponentWithCollectionProperties(this.component)) {
+      const collectionProps = Object.entries(this.component.collectionProperties ?? {});
+      return collectionProps.length > 0 ? collectionProps[0][0] : undefined;
+    }
+    return undefined;
   }
 
-  private renderItemArrowFunctionExpr(childreanJsx: JsxChild[]): JsxExpression {
+  private renderItemArrowFunctionExpr(childrenJsx: JsxChild[]): JsxExpression {
     return factory.createJsxExpression(
       undefined,
       factory.createArrowFunction(
@@ -57,7 +58,7 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
         ],
         undefined,
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-        factory.createParenthesizedExpression(childreanJsx[0] as JsxExpression),
+        factory.createParenthesizedExpression(childrenJsx[0] as JsxExpression),
       ),
     );
   }
