@@ -47,10 +47,7 @@
   "variants": [],
   "collectionProperties": {
     "bananas": {
-      "type": "Data",
-      "bindingProperties": {
-        "model": "UntitledModel"
-      }
+      "model": "UntitledModel"
     }
   }
 }

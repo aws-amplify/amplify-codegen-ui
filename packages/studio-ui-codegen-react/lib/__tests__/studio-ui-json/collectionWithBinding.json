@@ -39,32 +39,20 @@
   },
   "collectionProperties": {
     "buttonUser": {
-      "type": "Data",
-      "bindingProperties": {
-        "model": "User",
-        "predicate": {
-          "and": [
-            {
-              "field": "age",
-              "operand": "10",
-              "operator": "gt"
-            },
-            {
-              "field": "lastName",
-              "operand": "L",
-              "operator": "beginsWith"
-            }
-          ]
-        }
-      }
-    },
-    "isDisabled": {
-      "bindingProperties": {
-        "predicate": {
-          "field": "index",
-          "operand": "5",
-          "operator": "eq"
-        }
+      "model": "User",
+      "predicate": {
+        "and": [
+          {
+            "field": "age",
+            "operand": "10",
+            "operator": "gt"
+          },
+          {
+            "field": "lastName",
+            "operand": "L",
+            "operator": "beginsWith"
+          }
+        ]
       }
     }
   },

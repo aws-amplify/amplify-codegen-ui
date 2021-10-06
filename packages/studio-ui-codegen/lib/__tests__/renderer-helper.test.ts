@@ -10,6 +10,7 @@ import {
   isAuthPropertyBinding,
   isStoragePropertyBinding,
   isSimplePropertyBinding,
+  isStudioComponentWithCollectionProperties,
 } from '../renderer-helper';
 
 describe('render-helper', () => {
@@ -71,6 +72,38 @@ describe('render-helper', () => {
           properties: {},
         }),
       ).toBeFalsy();
+    });
+  });
+
+  describe('isStudioComponentWithCollectionProperties', () => {
+    test('object without collectionProperties is falsy', () => {
+      expect(
+        isStudioComponentWithCollectionProperties({
+          componentType: '',
+          name: '',
+          properties: {},
+        }),
+      ).toBeFalsy();
+    });
+    test('object with undefined collectionProperties is falsy', () => {
+      expect(
+        isStudioComponentWithCollectionProperties({
+          componentType: '',
+          name: '',
+          properties: {},
+          collectionProperties: undefined,
+        }),
+      ).toBeFalsy();
+    });
+    test('object with collectionProperties is truthy', () => {
+      expect(
+        isStudioComponentWithCollectionProperties({
+          componentType: '',
+          name: '',
+          properties: {},
+          collectionProperties: {},
+        }),
+      ).toBeTruthy();
     });
   });
 

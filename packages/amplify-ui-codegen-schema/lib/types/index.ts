@@ -72,7 +72,7 @@ export type StudioComponent = {
    * These are the collection properties
    */
   collectionProperties?: {
-    [propertyName: string]: StudioComponentDataPropertyBinding;
+    [propertyName: string]: StudioComponentDataConfiguration;
   };
 };
 
@@ -167,13 +167,6 @@ export type StudioComponentChild = {
    * These are the nested components in a composite
    */
   children?: StudioComponentChild[];
-
-  /**
-   * These are the collection properties
-   */
-  collectionProperties?: {
-    [propertyName: string]: StudioComponentDataPropertyBinding;
-  };
 };
 
 /**
@@ -320,6 +313,29 @@ export type ConditionalStudioComponentProperty = {
  */
 export type WorkflowStudioComponentProperty = {
   event: string;
+};
+
+/**
+ * This represent the configuration for binding a component property
+ * to Amplify specific information
+ */
+export type StudioComponentDataConfiguration = {
+  model: string;
+
+  sort?: StudioComponentSort[];
+
+  predicate?: StudioComponentPredicate;
+
+  /**
+   * This is a collection of Id's that will be always queried from DataStore.
+   * This would be used in liu of a predicate.
+   */
+  identifiers?: string[];
+};
+
+export type StudioComponentSort = {
+  field: string;
+  direction: 'ASC' | 'DESC';
 };
 
 /**
