@@ -1,4 +1,4 @@
-import { ButtonProps } from '@amzn/amplify-ui-react-types';
+import { ButtonProps } from '@aws-amplify/ui-react';
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { ComponentWithChildrenRendererBase } from '../component-with-children-renderer-base';
 

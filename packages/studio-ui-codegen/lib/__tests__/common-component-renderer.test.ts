@@ -1,4 +1,4 @@
-import { BaseComponentProps } from '@amzn/amplify-ui-react-types';
+import { BaseComponentProps } from '@aws-amplify/ui-react';
 import { StudioNode } from '../studio-node';
 import { CommonComponentRenderer } from '../common-component-renderer';
 
