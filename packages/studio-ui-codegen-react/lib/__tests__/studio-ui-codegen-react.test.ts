@@ -133,4 +133,10 @@ describe('amplify render tests', () => {
       ).toMatchSnapshot();
     });
   });
+
+  describe('user specific attributes', () => {
+    it('should render user specific attributes', () => {
+      expect(generateWithAmplifyRenderer('componentWithUserSpecificAttributes')).toMatchSnapshot();
+    });
+  });
 });

@@ -570,3 +570,46 @@ export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
 }
 "
 `;
+
+exports[`amplify render tests user specific attributes should render user specific attributes 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  EscapeHatchProps,
+  Flex,
+  Image,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type ProfileProps = {} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function Profile(props: ProfileProps): JSX.Element {
+  const {} = props;
+  const {
+    attributes: {
+      username,
+      picture: userImage,
+      [\\"custom:favorite_icecream\\"]: customUserAttributeIcecream,
+    },
+  } = useAuthenticatedUser();
+  return (
+    <Flex {...props} {...getOverrideProps(props.overrides, \\"Flex\\")}>
+      <Image
+        src={userImage}
+        {...getOverrideProps(props.overrides, \\"Flex.Image\\")}
+      ></Image>
+      <Button
+        label={username}
+        {...getOverrideProps(props.overrides, \\"Flex.Button\\")}
+      ></Button>
+      <Button
+        label={customUserAttributeIcecream}
+        {...getOverrideProps(props.overrides, \\"Flex.Button\\")}
+      ></Button>
+    </Flex>
+  );
+}
+"
+`;
