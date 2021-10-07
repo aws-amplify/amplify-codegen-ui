@@ -18,7 +18,12 @@ import { StudioTemplateRenderer } from '@amzn/studio-ui-codegen';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
-import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
+import {
+  transpile,
+  buildPrinter,
+  defaultRenderConfig,
+  getDeclarationFilename,
+} from './react-studio-template-renderer-helper';
 
 export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -54,11 +59,16 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
     );
     const renderedFunction = printer.printNode(EmitHint.Unspecified, this.buildFunction(), file);
     const componentText = ['/* eslint-disable */', ...renderedImports, renderedFunction].join(EOL);
-    const transpiledComponentText = transpile(componentText, this.renderConfig);
+    const { componentText: transpiledComponentText, declaration } = transpile(componentText, this.renderConfig);
 
     return {
       componentText: transpiledComponentText,
-      renderComponentToFilesystem: this.renderComponentToFilesystem(transpiledComponentText)(this.fileName),
+      renderComponentToFilesystem: async (outputPath: string) => {
+        await this.renderComponentToFilesystem(transpiledComponentText)(this.fileName)(outputPath);
+        if (declaration) {
+          await this.renderComponentToFilesystem(declaration)(getDeclarationFilename(this.fileName))(outputPath);
+        }
+      },
     };
   }
 

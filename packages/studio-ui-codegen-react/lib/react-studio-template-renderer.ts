@@ -42,7 +42,12 @@ import { ReactOutputManager } from './react-output-manager';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
 import { getComponentPropName } from './react-component-render-helper';
-import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
+import {
+  transpile,
+  buildPrinter,
+  defaultRenderConfig,
+  getDeclarationFilename,
+} from './react-studio-template-renderer-helper';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -114,7 +119,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
-    const compText = transpile(result, this.renderConfig);
+    // do not produce declaration becuase it is not used
+    const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
 
     return { compText, importsText };
   }
@@ -152,11 +158,17 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
 
-    const transpiledComponentText = transpile(componentText, this.renderConfig);
+    const { componentText: transpiledComponentText, declaration } = transpile(componentText, this.renderConfig);
 
     return {
       componentText: transpiledComponentText,
-      renderComponentToFilesystem: this.renderComponentToFilesystem(transpiledComponentText)(this.fileName),
+      declaration,
+      renderComponentToFilesystem: async (outputPath: string) => {
+        await this.renderComponentToFilesystem(transpiledComponentText)(this.fileName)(outputPath);
+        if (declaration) {
+          await this.renderComponentToFilesystem(declaration)(getDeclarationFilename(this.fileName))(outputPath);
+        }
+      },
     };
   }
 
@@ -189,7 +201,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         ),
       ],
       factory.createTypeReferenceNode(
-        factory.createQualifiedName(factory.createIdentifier('JSX'), factory.createIdentifier('Element')),
+        factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('Element')),
         undefined,
       ),
       factory.createBlock(codeBlockContent, true),
