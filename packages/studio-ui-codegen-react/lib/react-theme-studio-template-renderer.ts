@@ -64,6 +64,16 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
     };
   }
 
+  /*
+   * import React from "react";
+   * import { useEffect } from "react";
+   * import {
+   *   AmplifyProvider,
+   *   DeepPartial,
+   *   Theme,
+   *   extendTheming,
+   * } from "@aws-amplify/ui-react";
+   */
   private buildImports() {
     this.importCollection.addImport('react', 'useEffect');
     this.importCollection.addImport('@aws-amplify/ui-react', 'extendTheming');
@@ -98,215 +108,9 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
       undefined,
       factory.createBlock(
         [
-          factory.createVariableStatement(
-            undefined,
-            factory.createVariableDeclarationList(
-              [
-                factory.createVariableDeclaration(
-                  factory.createIdentifier('theme'),
-                  undefined,
-                  undefined,
-                  this.themeToLiteral(this.component),
-                ),
-              ],
-              NodeFlags.Const,
-            ),
-          ),
-          factory.createVariableStatement(
-            undefined,
-            factory.createVariableDeclarationList(
-              [
-                factory.createVariableDeclaration(
-                  factory.createIdentifier('displayName'),
-                  undefined,
-                  undefined,
-                  factory.createBinaryExpression(
-                    factory.createBinaryExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('WrappedComponent'),
-                        factory.createIdentifier('displayName'),
-                      ),
-                      factory.createToken(SyntaxKind.BarBarToken),
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('WrappedComponent'),
-                        factory.createIdentifier('name'),
-                      ),
-                    ),
-                    factory.createToken(SyntaxKind.BarBarToken),
-                    factory.createStringLiteral('Component'),
-                  ),
-                ),
-              ],
-              NodeFlags.Const,
-            ),
-          ),
-          factory.createVariableStatement(
-            undefined,
-            factory.createVariableDeclarationList(
-              [
-                factory.createVariableDeclaration(
-                  factory.createIdentifier('ComponentWithTheme'),
-                  undefined,
-                  undefined,
-                  factory.createArrowFunction(
-                    undefined,
-                    undefined,
-                    [
-                      factory.createParameterDeclaration(
-                        undefined,
-                        undefined,
-                        undefined,
-                        factory.createIdentifier('props'),
-                        undefined,
-                        factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined),
-                        undefined,
-                      ),
-                    ],
-                    undefined,
-                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                    factory.createBlock(
-                      [
-                        factory.createVariableStatement(
-                          undefined,
-                          factory.createVariableDeclarationList(
-                            [
-                              factory.createVariableDeclaration(
-                                factory.createIdentifier('theming'),
-                                undefined,
-                                undefined,
-                                factory.createCallExpression(factory.createIdentifier('extendTheming'), undefined, [
-                                  factory.createIdentifier('theme'),
-                                ]),
-                              ),
-                            ],
-                            NodeFlags.Const,
-                          ),
-                        ),
-                        factory.createExpressionStatement(
-                          factory.createCallExpression(factory.createIdentifier('useEffect'), undefined, [
-                            factory.createArrowFunction(
-                              undefined,
-                              undefined,
-                              [],
-                              undefined,
-                              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                              factory.createBlock(
-                                [
-                                  factory.createExpressionStatement(
-                                    factory.createCallExpression(
-                                      factory.createPropertyAccessExpression(
-                                        factory.createCallExpression(
-                                          factory.createPropertyAccessExpression(
-                                            factory.createIdentifier('Object'),
-                                            factory.createIdentifier('entries'),
-                                          ),
-                                          undefined,
-                                          [
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('theming'),
-                                              factory.createIdentifier('CSSVariables'),
-                                            ),
-                                          ],
-                                        ),
-                                        factory.createIdentifier('forEach'),
-                                      ),
-                                      undefined,
-                                      [
-                                        factory.createArrowFunction(
-                                          undefined,
-                                          undefined,
-                                          [
-                                            factory.createParameterDeclaration(
-                                              undefined,
-                                              undefined,
-                                              undefined,
-                                              factory.createArrayBindingPattern([
-                                                factory.createBindingElement(
-                                                  undefined,
-                                                  undefined,
-                                                  factory.createIdentifier('key'),
-                                                  undefined,
-                                                ),
-                                                factory.createBindingElement(
-                                                  undefined,
-                                                  undefined,
-                                                  factory.createIdentifier('value'),
-                                                  undefined,
-                                                ),
-                                              ]),
-                                              undefined,
-                                              undefined,
-                                              undefined,
-                                            ),
-                                          ],
-                                          undefined,
-                                          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                          factory.createBlock(
-                                            [
-                                              factory.createExpressionStatement(
-                                                factory.createCallExpression(
-                                                  factory.createPropertyAccessExpression(
-                                                    factory.createPropertyAccessExpression(
-                                                      factory.createPropertyAccessExpression(
-                                                        factory.createIdentifier('document'),
-                                                        factory.createIdentifier('documentElement'),
-                                                      ),
-                                                      factory.createIdentifier('style'),
-                                                    ),
-                                                    factory.createIdentifier('setProperty'),
-                                                  ),
-                                                  undefined,
-                                                  [factory.createIdentifier('key'), factory.createIdentifier('value')],
-                                                ),
-                                              ),
-                                            ],
-                                            true,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                                true,
-                              ),
-                            ),
-                          ]),
-                        ),
-                        factory.createReturnStatement(
-                          factory.createParenthesizedExpression(
-                            factory.createJsxElement(
-                              factory.createJsxOpeningElement(
-                                factory.createIdentifier('AmplifyProvider'),
-                                undefined,
-                                factory.createJsxAttributes([
-                                  factory.createJsxAttribute(
-                                    factory.createIdentifier('theming'),
-                                    factory.createJsxExpression(undefined, factory.createIdentifier('theming')),
-                                  ),
-                                ]),
-                              ),
-                              [
-                                factory.createJsxSelfClosingElement(
-                                  factory.createIdentifier('WrappedComponent'),
-                                  undefined,
-                                  factory.createJsxAttributes([
-                                    factory.createJsxSpreadAttribute(factory.createIdentifier('props')),
-                                  ]),
-                                ),
-                              ],
-                              factory.createJsxClosingElement(factory.createIdentifier('AmplifyProvider')),
-                            ),
-                          ),
-                        ),
-                      ],
-                      true,
-                    ),
-                  ),
-                ),
-              ],
-              NodeFlags.Const,
-            ),
-          ),
+          this.buildThemeVariable(),
+          this.buildSetComponentNameStatement(),
+          this.buildComponentWithThemeFunction(),
           factory.createExpressionStatement(
             factory.createBinaryExpression(
               factory.createPropertyAccessExpression(
@@ -321,6 +125,263 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
         ],
         true,
       ),
+    );
+  }
+
+  /*
+   * const theme = {{ theme object }}
+   */
+  private buildThemeVariable() {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('theme'),
+            undefined,
+            undefined,
+            this.themeToLiteral(this.component),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    );
+  }
+
+  /*
+   * const displayName = WrappedComponent.displayName || WrappedComponent.name || "Component";
+   */
+  private buildSetComponentNameStatement() {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('displayName'),
+            undefined,
+            undefined,
+            factory.createBinaryExpression(
+              factory.createBinaryExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('WrappedComponent'),
+                  factory.createIdentifier('displayName'),
+                ),
+                factory.createToken(SyntaxKind.BarBarToken),
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('WrappedComponent'),
+                  factory.createIdentifier('name'),
+                ),
+              ),
+              factory.createToken(SyntaxKind.BarBarToken),
+              factory.createStringLiteral('Component'),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    );
+  }
+
+  /*
+   * const ComponentWithTheme = (props: T) => {
+   *   const theming = extendTheming(theme);
+   *   useEffect(() => {
+   *     Object.entries(theming.CSSVariables).forEach(([key, value]) => {
+   *       document.documentElement.style.setProperty(key, value);
+   *     });
+   *   });
+   *   return (
+   *     <AmplifyProvider theming={theming}>
+   *       <WrappedComponent {...props} />
+   *     </AmplifyProvider>
+   *   );
+   * };
+   */
+  private buildComponentWithThemeFunction() {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('ComponentWithTheme'),
+            undefined,
+            undefined,
+            factory.createArrowFunction(
+              undefined,
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('props'),
+                  undefined,
+                  factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined),
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
+                [
+                  this.buildExtendThemingStatement(),
+                  this.buildApplyStylesHook(),
+                  factory.createReturnStatement(
+                    factory.createParenthesizedExpression(
+                      factory.createJsxElement(
+                        factory.createJsxOpeningElement(
+                          factory.createIdentifier('AmplifyProvider'),
+                          undefined,
+                          factory.createJsxAttributes([
+                            factory.createJsxAttribute(
+                              factory.createIdentifier('theming'),
+                              factory.createJsxExpression(undefined, factory.createIdentifier('theming')),
+                            ),
+                          ]),
+                        ),
+                        [
+                          factory.createJsxSelfClosingElement(
+                            factory.createIdentifier('WrappedComponent'),
+                            undefined,
+                            factory.createJsxAttributes([
+                              factory.createJsxSpreadAttribute(factory.createIdentifier('props')),
+                            ]),
+                          ),
+                        ],
+                        factory.createJsxClosingElement(factory.createIdentifier('AmplifyProvider')),
+                      ),
+                    ),
+                  ),
+                ],
+                true,
+              ),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    );
+  }
+
+  /*
+   * const theming = extendTheming(theme);
+   */
+  private buildExtendThemingStatement() {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('theming'),
+            undefined,
+            undefined,
+            factory.createCallExpression(factory.createIdentifier('extendTheming'), undefined, [
+              factory.createIdentifier('theme'),
+            ]),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    );
+  }
+
+  /*
+   * useEffect(() => {
+   *   Object.entries(theming.CSSVariables).forEach(([key, value]) => {
+   *     document.documentElement.style.setProperty(key, value);
+   *   });
+   * });
+   */
+  private buildApplyStylesHook() {
+    return factory.createExpressionStatement(
+      factory.createCallExpression(factory.createIdentifier('useEffect'), undefined, [
+        factory.createArrowFunction(
+          undefined,
+          undefined,
+          [],
+          undefined,
+          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+          factory.createBlock(
+            [
+              factory.createExpressionStatement(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('Object'),
+                        factory.createIdentifier('entries'),
+                      ),
+                      undefined,
+                      [
+                        factory.createPropertyAccessExpression(
+                          factory.createIdentifier('theming'),
+                          factory.createIdentifier('CSSVariables'),
+                        ),
+                      ],
+                    ),
+                    factory.createIdentifier('forEach'),
+                  ),
+                  undefined,
+                  [
+                    factory.createArrowFunction(
+                      undefined,
+                      undefined,
+                      [
+                        factory.createParameterDeclaration(
+                          undefined,
+                          undefined,
+                          undefined,
+                          factory.createArrayBindingPattern([
+                            factory.createBindingElement(
+                              undefined,
+                              undefined,
+                              factory.createIdentifier('key'),
+                              undefined,
+                            ),
+                            factory.createBindingElement(
+                              undefined,
+                              undefined,
+                              factory.createIdentifier('value'),
+                              undefined,
+                            ),
+                          ]),
+                          undefined,
+                          undefined,
+                          undefined,
+                        ),
+                      ],
+                      undefined,
+                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                      factory.createBlock(
+                        [
+                          factory.createExpressionStatement(
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('document'),
+                                    factory.createIdentifier('documentElement'),
+                                  ),
+                                  factory.createIdentifier('style'),
+                                ),
+                                factory.createIdentifier('setProperty'),
+                              ),
+                              undefined,
+                              [factory.createIdentifier('key'), factory.createIdentifier('value')],
+                            ),
+                          ),
+                        ],
+                        true,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            true,
+          ),
+        ),
+      ]),
     );
   }
 
