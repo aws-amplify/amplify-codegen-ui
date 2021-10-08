@@ -245,6 +245,90 @@ export default function ListingCardCollection(
 "
 `;
 
+exports[`amplify render tests collection should render collection with data binding and sort 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { User, UserPreferences } from \\"../models\\";
+import {
+  Button,
+  Collection,
+  EscapeHatchProps,
+  Flex,
+  convertSortPredicatesToDataStore,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CollectionOfCustomButtonsProps = {
+  width?: Number,
+  backgroundColor?: String,
+  buttonColor?: UserPreferences,
+  items?: any[],
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function CollectionOfCustomButtons(
+  props: CollectionOfCustomButtonsProps
+): JSX.Element {
+  const { width, backgroundColor, buttonColor, items } = props;
+  const buttonUserFilter = {
+    and: [
+      { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
+      { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
+    ],
+  };
+  const buttonUserSort = convertSortPredicatesToDataStore([
+    { field: \\"firstName\\", direction: \\"ASC\\" },
+    { field: \\"lastName\\", direction: \\"DESC\\" },
+  ]);
+  const buttonUserPagination = {
+    sort: buttonUserSort,
+  };
+  const buttonUser =
+    items !== undefined
+      ? items
+      : useDataStoreBinding({
+          type: \\"collection\\",
+          model: User,
+          criteria: buttonUserFilter,
+          pagination: buttonUserPagination,
+        }).items;
+  const buttonColorFilter = {
+    field: \\"userID\\",
+    operand: \\"user@email.com\\",
+    operator: \\"eq\\",
+  };
+  const { item: buttonColor } = useDataStoreBinding({
+    type: \\"record\\",
+    model: UserPreferences,
+    criteria: buttonColorFilter,
+  });
+  return (
+    <Collection
+      type=\\"list\\"
+      isPaginated={true}
+      gap=\\"1.5rem\\"
+      backgroundColor={backgroundColor}
+      items={buttonUser}
+      {...props}
+      {...getOverrideProps(props.overrides, \\"Collection\\")}
+    >
+      {(item, index) => (
+        <Flex {...getOverrideProps(props.overrides, \\"Collection.Flex\\")}>
+          <Button
+            label={item.username || \\"hspain@gmail.com\\"}
+            labelWidth={width}
+            backgroundColor={buttonColor.favoriteColor}
+            disabled={isDisabled}
+            {...getOverrideProps(props.overrides, \\"Collection.Flex.Button\\")}
+          ></Button>
+        </Flex>
+      )}
+    </Collection>
+  );
+}
+"
+`;
+
 exports[`amplify render tests complex component tests should generate a button within a box component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
