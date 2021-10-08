@@ -2,6 +2,7 @@ import {
   StudioComponent,
   StudioComponentPredicate,
   StudioComponentAuthPropertyBinding,
+  StudioComponentSort,
 } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
@@ -402,11 +403,17 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     if (isStudioComponentWithCollectionProperties(component)) {
       Object.entries(component.collectionProperties).forEach((collectionProp) => {
-        const [propName, bindingProperties] = collectionProp;
-        if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
-          statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
+        const [propName, { model, sort, predicate }] = collectionProp;
+        if (predicate) {
+          statements.push(this.buildPredicateDeclaration(propName, predicate));
         }
-        const { model } = bindingProperties;
+        if (sort) {
+          this.importCollection.addImport('@aws-amplify/ui-react', 'convertSortPredicatesToDataStore');
+          statements.push(
+            this.buildSortStatement(propName, sort),
+            this.buildPaginationStatement(propName, this.getSortName(propName)),
+          );
+        }
         this.importCollection.addImport('../models', model);
         statements.push(
           this.buildPropPrecedentStatement(
@@ -416,7 +423,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
               this.buildUseDataStoreBindingCall(
                 'collection',
                 model,
-                bindingProperties.predicate ? this.getFilterName(propName) : undefined,
+                predicate ? this.getFilterName(propName) : undefined,
+                sort ? this.getPaginationName(propName) : undefined,
               ),
               'items',
             ),
@@ -502,20 +510,88 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private buildUseDataStoreBindingCall(callType: string, bindingModel: string, predicateName?: string): CallExpression {
+  private buildSortStatement(propName: string, sort: StudioComponentSort[]): VariableStatement {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(this.getSortName(propName)),
+            undefined,
+            undefined,
+            this.buildConvertSortPredicatesToDataStoreCall(sort),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
+  private buildConvertSortPredicatesToDataStoreCall(sort: StudioComponentSort[]): CallExpression {
+    const sortExpressions = sort.map(({ field, direction }) =>
+      factory.createObjectLiteralExpression([
+        factory.createPropertyAssignment(factory.createIdentifier('field'), factory.createStringLiteral(field)),
+        factory.createPropertyAssignment(factory.createIdentifier('direction'), factory.createStringLiteral(direction)),
+      ]),
+    );
+
+    return factory.createCallExpression(factory.createIdentifier('convertSortPredicatesToDataStore'), undefined, [
+      factory.createArrayLiteralExpression(sortExpressions, true),
+    ]);
+  }
+
+  private buildPaginationStatement(propName: string, sortName?: string): VariableStatement {
+    const paginationProperties = ([] as ts.PropertyAssignment[]).concat(
+      sortName
+        ? [factory.createPropertyAssignment(factory.createIdentifier('sort'), factory.createIdentifier(sortName))]
+        : [],
+    );
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(this.getPaginationName(propName)),
+            undefined,
+            undefined,
+            factory.createObjectLiteralExpression(paginationProperties, true),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
+  private buildUseDataStoreBindingCall(
+    callType: string,
+    bindingModel: string,
+    criteriaName?: string,
+    paginationName?: string,
+  ): CallExpression {
     const objectProperties = [
       factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
       factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(bindingModel)),
-    ].concat(
-      predicateName
-        ? [
-            factory.createPropertyAssignment(
-              factory.createIdentifier('criteria'),
-              factory.createIdentifier(predicateName),
-            ),
-          ]
-        : [],
-    );
+    ]
+      .concat(
+        criteriaName
+          ? [
+              factory.createPropertyAssignment(
+                factory.createIdentifier('criteria'),
+                factory.createIdentifier(criteriaName),
+              ),
+            ]
+          : [],
+      )
+      .concat(
+        paginationName
+          ? [
+              factory.createPropertyAssignment(
+                factory.createIdentifier('pagination'),
+                factory.createIdentifier(paginationName),
+              ),
+            ]
+          : [],
+      );
 
     return factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
       factory.createObjectLiteralExpression(objectProperties, true),
@@ -555,6 +631,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         ts.NodeFlags.Const,
       ),
     );
+  }
+
+  private getSortName(propName: string): string {
+    return `${propName}Sort`;
+  }
+
+  private getPaginationName(propName: string): string {
+    return `${propName}Pagination`;
   }
 
   private getFilterName(propName: string): string {

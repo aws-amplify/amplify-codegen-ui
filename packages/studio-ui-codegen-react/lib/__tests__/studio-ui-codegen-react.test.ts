@@ -122,6 +122,11 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('collectionWithBindingWithoutPredicate');
       expect(generatedCode).toMatchSnapshot();
     });
+
+    it('should render collection with data binding and sort', () => {
+      const generatedCode = generateWithAmplifyRenderer('collectionWithBindingAndSort');
+      expect(generatedCode).toMatchSnapshot();
+    });
   });
 
   describe('concat and conditional transform', () => {
