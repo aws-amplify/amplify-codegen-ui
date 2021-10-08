@@ -31,8 +31,6 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection = new ImportCollection();
 
-  protected defaultRenderConfig = defaultRenderConfig;
-
   fileName = 'theme.txs';
 
   constructor(theme: StudioTheme, protected renderConfig: ReactRenderConfig) {
@@ -43,7 +41,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
     }
 
     this.renderConfig = {
-      ...this.defaultRenderConfig,
+      ...defaultRenderConfig,
       ...this.renderConfig,
     };
   }

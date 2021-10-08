@@ -51,8 +51,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 > {
   protected importCollection = new ImportCollection();
 
-  protected defaultRenderConfig = defaultRenderConfig;
-
   fileName = `${this.component.name}.tsx`;
 
   constructor(component: StudioComponent, protected renderConfig: ReactRenderConfig) {
@@ -63,7 +61,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     this.renderConfig = {
-      ...this.defaultRenderConfig,
+      ...defaultRenderConfig,
       ...this.renderConfig,
     };
 
