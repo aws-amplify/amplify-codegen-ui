@@ -27,6 +27,7 @@ module.exports = {
   rules: {
     'max-len': ['error', 120, 2],
     'react/prop-types': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     // TODO: enable rules below and fix issues
     '@typescript-eslint/no-shadow': 'off',

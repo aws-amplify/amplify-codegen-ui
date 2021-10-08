@@ -10,7 +10,16 @@ import {
   StudioComponentChild,
 } from '@amzn/amplify-ui-codegen-schema';
 
-import { Expression, factory, JsxAttribute, TemplateSpan, StringLiteral, SyntaxKind, JsxExpression } from 'typescript';
+import {
+  Expression,
+  factory,
+  JsxAttribute,
+  TemplateSpan,
+  StringLiteral,
+  SyntaxKind,
+  JsxExpression,
+  BinaryOperatorToken,
+} from 'typescript';
 
 import { ImportCollection } from './import-collection';
 
@@ -50,6 +59,10 @@ export function isCollectionItemBoundProperty(
 
 export function isConcatenatedProperty(prop: ComponentPropertyValueTypes): prop is ConcatenatedStudioComponentProperty {
   return 'concat' in prop;
+}
+
+export function isConditionalProperty(prop: ComponentPropertyValueTypes): prop is ConditionalStudioComponentProperty {
+  return 'condition' in prop;
 }
 
 export function isDefaultValueOnly(
@@ -106,7 +119,7 @@ export function buildBindingAttrWithDefault(
   return attr;
 }
 
-export function buildFixedExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
+export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
   const currentPropValue = prop.value;
   let propValueExpr: StringLiteral | JsxExpression = factory.createStringLiteral(currentPropValue.toString());
   switch (typeof currentPropValue) {
@@ -126,7 +139,7 @@ export function buildFixedExpression(prop: FixedStudioComponentProperty): String
 }
 
 export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: string): JsxAttribute {
-  const expr = buildFixedExpression(prop);
+  const expr = buildFixedJsxExpression(prop);
   return factory.createJsxAttribute(factory.createIdentifier(propName), expr);
 }
 
@@ -178,7 +191,7 @@ export function buildConcatExpression(prop: ConcatenatedStudioComponentProperty)
   const expressions: Expression[] = [];
   prop.concat.forEach((propItem) => {
     if (isFixedPropertyWithValue(propItem)) {
-      expressions.push(buildFixedExpression(propItem));
+      expressions.push(buildFixedJsxExpression(propItem));
     } else if (isBoundProperty(propItem)) {
       const expr =
         propItem.defaultValue === undefined
@@ -211,6 +224,101 @@ export function buildConcatAttr(prop: ConcatenatedStudioComponentProperty, propN
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
+export function resolvePropToExpression(prop: ComponentPropertyValueTypes): Expression {
+  if (isFixedPropertyWithValue(prop)) {
+    const propValue = prop.value;
+    switch (typeof propValue) {
+      case 'number':
+        return factory.createNumericLiteral(propValue, undefined);
+      case 'boolean':
+        return propValue ? factory.createTrue() : factory.createFalse();
+      default:
+        return factory.createStringLiteral(propValue.toString(), undefined);
+    }
+  }
+  if (isBoundProperty(prop)) {
+    const expr =
+      prop.defaultValue === undefined
+        ? buildBindingExpression(prop)
+        : buildBindingWithDefaultExpression(prop, prop.defaultValue);
+    return expr;
+  }
+  if (isCollectionItemBoundProperty(prop)) {
+    const expr =
+      prop.defaultValue === undefined
+        ? buildCollectionBindingExpression(prop)
+        : buildCollectionBindingWithDefaultExpression(prop, prop.defaultValue);
+    return expr;
+  }
+  if (isConcatenatedProperty(prop)) {
+    return buildConcatExpression(prop);
+  }
+  if (isConditionalProperty(prop)) {
+    return buildConditionalExpression(prop);
+  }
+  return factory.createVoidZero();
+}
+
+export function getSyntaxKindToken(operator: string): BinaryOperatorToken | undefined {
+  switch (operator) {
+    case 'eq':
+      return factory.createToken(SyntaxKind.EqualsEqualsEqualsToken);
+    case 'ne':
+      return factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken);
+    case 'le':
+      return factory.createToken(SyntaxKind.LessThanEqualsToken);
+    case 'lt':
+      return factory.createToken(SyntaxKind.LessThanToken);
+    case 'ge':
+      return factory.createToken(SyntaxKind.GreaterThanEqualsToken);
+    case 'gt':
+      return factory.createToken(SyntaxKind.GreaterThanToken);
+    default:
+      return undefined;
+  }
+}
+
+export function getConditionalOperandExpression(operand: string | number | boolean): Expression {
+  switch (typeof operand) {
+    case 'number':
+      return factory.createNumericLiteral(operand);
+    case 'boolean':
+      return operand ? factory.createTrue() : factory.createFalse();
+    default:
+      return factory.createStringLiteral(operand);
+  }
+}
+
+export function buildConditionalExpression(prop: ConditionalStudioComponentProperty): JsxExpression {
+  const { property, field, operand, operator, then } = prop.condition;
+  const elseBlock = prop.condition.else;
+  const operatorToken = getSyntaxKindToken(operator);
+
+  if (operatorToken !== undefined) {
+    const expr = factory.createJsxExpression(
+      undefined,
+      factory.createConditionalExpression(
+        factory.createBinaryExpression(
+          factory.createPropertyAccessExpression(factory.createIdentifier(property), factory.createIdentifier(field)),
+          operatorToken,
+          getConditionalOperandExpression(operand),
+        ),
+        factory.createToken(SyntaxKind.QuestionToken),
+        resolvePropToExpression(then),
+        factory.createToken(SyntaxKind.ColonToken),
+        resolvePropToExpression(elseBlock),
+      ),
+    );
+    return expr;
+  }
+  return factory.createJsxExpression(undefined, undefined);
+}
+
+export function buildConditionalAttr(prop: ConditionalStudioComponentProperty, propName: string): JsxAttribute {
+  const expr = buildConditionalExpression(prop);
+  return factory.createJsxAttribute(factory.createIdentifier(propName), expr);
+}
+
 export function buildOpeningElementAttributes(prop: ComponentPropertyValueTypes, propName: string): JsxAttribute {
   if (isFixedPropertyWithValue(prop)) {
     return buildFixedAttr(prop, propName);
@@ -231,6 +339,9 @@ export function buildOpeningElementAttributes(prop: ComponentPropertyValueTypes,
   }
   if (isConcatenatedProperty(prop)) {
     return buildConcatAttr(prop, propName);
+  }
+  if (isConditionalProperty(prop)) {
+    return buildConditionalAttr(prop, propName);
   }
   return factory.createJsxAttribute(factory.createIdentifier(propName), undefined);
 }
