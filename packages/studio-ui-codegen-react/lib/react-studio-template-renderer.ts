@@ -35,6 +35,7 @@ import ts, {
   CallExpression,
   Identifier,
   ComputedPropertyName,
+  ArrowFunction,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
@@ -625,11 +626,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           statements.push(this.buildPredicateDeclaration(propName, predicate));
         }
         if (sort) {
-          this.importCollection.addImport('@aws-amplify/ui-react', 'convertSortPredicatesToDataStore');
-          statements.push(
-            this.buildSortStatement(propName, sort),
-            this.buildPaginationStatement(propName, this.getSortName(propName)),
-          );
+          this.importCollection.addImport('@aws-amplify/ui-react', 'SortDirection');
+          statements.push(this.buildPaginationStatement(propName, sort));
         }
         this.importCollection.addImport('../models', model);
         statements.push(
@@ -727,42 +725,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private buildSortStatement(propName: string, sort: StudioComponentSort[]): VariableStatement {
-    return factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createIdentifier(this.getSortName(propName)),
-            undefined,
-            undefined,
-            this.buildConvertSortPredicatesToDataStoreCall(sort),
-          ),
-        ],
-        ts.NodeFlags.Const,
-      ),
-    );
-  }
-
-  private buildConvertSortPredicatesToDataStoreCall(sort: StudioComponentSort[]): CallExpression {
-    const sortExpressions = sort.map(({ field, direction }) =>
-      factory.createObjectLiteralExpression([
-        factory.createPropertyAssignment(factory.createIdentifier('field'), factory.createStringLiteral(field)),
-        factory.createPropertyAssignment(factory.createIdentifier('direction'), factory.createStringLiteral(direction)),
-      ]),
-    );
-
-    return factory.createCallExpression(factory.createIdentifier('convertSortPredicatesToDataStore'), undefined, [
-      factory.createArrayLiteralExpression(sortExpressions, true),
-    ]);
-  }
-
-  private buildPaginationStatement(propName: string, sortName?: string): VariableStatement {
-    const paginationProperties = ([] as ts.PropertyAssignment[]).concat(
-      sortName
-        ? [factory.createPropertyAssignment(factory.createIdentifier('sort'), factory.createIdentifier(sortName))]
-        : [],
-    );
+  /**
+   * const buttonUserSort = {
+   *   sort: s => s.firstName('DESCENDING').lastName('ASCENDING')
+   * }
+   */
+  private buildPaginationStatement(propName: string, sort?: StudioComponentSort[]): VariableStatement {
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -771,11 +739,59 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createIdentifier(this.getPaginationName(propName)),
             undefined,
             undefined,
-            factory.createObjectLiteralExpression(paginationProperties, true),
+            factory.createObjectLiteralExpression(
+              ([] as ts.PropertyAssignment[]).concat(
+                sort
+                  ? [factory.createPropertyAssignment(factory.createIdentifier('sort'), this.buildSortFunction(sort))]
+                  : [],
+              ),
+            ),
           ),
         ],
         ts.NodeFlags.Const,
       ),
+    );
+  }
+
+  /**
+   * s => s.firstName('ASCENDING').lastName('DESCENDING')
+   */
+  private buildSortFunction(sort: StudioComponentSort[]): ArrowFunction {
+    const ascendingSortDirection = factory.createPropertyAccessExpression(
+      factory.createIdentifier('SortDirection'),
+      factory.createIdentifier('ASCENDING'),
+    );
+    const descendingSortDirection = factory.createPropertyAccessExpression(
+      factory.createIdentifier('SortDirection'),
+      factory.createIdentifier('DESCENDING'),
+    );
+
+    let expr: Identifier | CallExpression = factory.createIdentifier('s');
+    sort.forEach((sortPredicate) => {
+      expr = factory.createCallExpression(
+        factory.createPropertyAccessExpression(expr, factory.createIdentifier(sortPredicate.field)),
+        undefined,
+        [sortPredicate.direction === 'ASC' ? ascendingSortDirection : descendingSortDirection],
+      );
+    });
+
+    return factory.createArrowFunction(
+      undefined,
+      undefined,
+      [
+        factory.createParameterDeclaration(
+          undefined,
+          undefined,
+          undefined,
+          factory.createIdentifier('s'),
+          undefined,
+          undefined,
+          undefined,
+        ),
+      ],
+      undefined,
+      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+      expr,
     );
   }
 
@@ -848,10 +864,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         ts.NodeFlags.Const,
       ),
     );
-  }
-
-  private getSortName(propName: string): string {
-    return `${propName}Sort`;
   }
 
   private getPaginationName(propName: string): string {
