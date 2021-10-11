@@ -1,18 +1,6 @@
 import { StudioTheme } from '@amzn/amplify-ui-codegen-schema';
 import { EOL } from 'os';
-import {
-  factory,
-  SyntaxKind,
-  ObjectLiteralExpression,
-  NodeFlags,
-  EmitHint,
-  FunctionDeclaration,
-  StringLiteral,
-  NumericLiteral,
-  BooleanLiteral,
-  NullLiteral,
-  ArrayLiteralExpression,
-} from 'typescript';
+import { factory, SyntaxKind, NodeFlags, EmitHint, FunctionDeclaration } from 'typescript';
 import { StudioTemplateRenderer } from '@amzn/studio-ui-codegen';
 
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
@@ -23,6 +11,8 @@ import {
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
+  json,
+  jsonToLiteral,
 } from './react-studio-template-renderer-helper';
 
 export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -148,7 +138,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
             factory.createIdentifier('theme'),
             undefined,
             undefined,
-            this.themeToLiteral(this.component),
+            jsonToLiteral(this.component as json),
           ),
         ],
         NodeFlags.Const,
@@ -391,54 +381,5 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
         ),
       ]),
     );
-  }
-
-  private themeToLiteral(
-    theme: StudioTheme,
-  ): ObjectLiteralExpression | StringLiteral | NumericLiteral | BooleanLiteral | NullLiteral | ArrayLiteralExpression {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    type json = string | number | boolean | null | json[] | { [key: string]: json };
-
-    // eslint-disable-next-line consistent-return
-    function jsonToLiteral(
-      jsonObject: json,
-    ):
-      | ObjectLiteralExpression
-      | StringLiteral
-      | NumericLiteral
-      | BooleanLiteral
-      | NullLiteral
-      | ArrayLiteralExpression {
-      if (jsonObject === null) {
-        return factory.createNull();
-      }
-      // eslint-disable-next-line default-case
-      switch (typeof jsonObject) {
-        case 'string':
-          return factory.createStringLiteral(jsonObject);
-        case 'number':
-          return factory.createNumericLiteral(jsonObject);
-        case 'boolean': {
-          if (jsonObject) {
-            return factory.createTrue();
-          }
-          return factory.createFalse();
-        }
-        case 'object': {
-          if (jsonObject instanceof Array) {
-            return factory.createArrayLiteralExpression(jsonObject.map(jsonToLiteral), false);
-          }
-          // else object
-          return factory.createObjectLiteralExpression(
-            Object.entries(jsonObject).map(([key, value]) =>
-              factory.createPropertyAssignment(factory.createIdentifier(key), jsonToLiteral(value)),
-            ),
-            false,
-          );
-        }
-      }
-    }
-
-    return jsonToLiteral(theme as json);
   }
 }

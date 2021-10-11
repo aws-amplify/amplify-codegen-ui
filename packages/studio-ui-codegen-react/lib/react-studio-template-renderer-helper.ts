@@ -1,4 +1,17 @@
-import ts, { createPrinter, createSourceFile, NewLineKind, transpileModule, createProgram } from 'typescript';
+import ts, {
+  createPrinter,
+  createSourceFile,
+  NewLineKind,
+  transpileModule,
+  factory,
+  StringLiteral,
+  NumericLiteral,
+  BooleanLiteral,
+  NullLiteral,
+  ArrayLiteralExpression,
+  ObjectLiteralExpression,
+  createProgram,
+} from 'typescript';
 import prettier from 'prettier';
 import parserBabel from 'prettier/parser-babel';
 import tmp, { FileResult, DirResult } from 'tmp';
@@ -89,4 +102,41 @@ export function buildPrinter(fileName: string, renderConfig: ReactRenderConfig) 
 
 export function getDeclarationFilename(filename: string): string {
   return `${path.basename(filename, '.tsx')}.d.ts`;
+}
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export type json = string | number | boolean | null | json[] | { [key: string]: json };
+
+// eslint-disable-next-line consistent-return
+export function jsonToLiteral(
+  jsonObject: json,
+): ObjectLiteralExpression | StringLiteral | NumericLiteral | BooleanLiteral | NullLiteral | ArrayLiteralExpression {
+  if (jsonObject === null) {
+    return factory.createNull();
+  }
+  // eslint-disable-next-line default-case
+  switch (typeof jsonObject) {
+    case 'string':
+      return factory.createStringLiteral(jsonObject);
+    case 'number':
+      return factory.createNumericLiteral(jsonObject);
+    case 'boolean': {
+      if (jsonObject) {
+        return factory.createTrue();
+      }
+      return factory.createFalse();
+    }
+    case 'object': {
+      if (jsonObject instanceof Array) {
+        return factory.createArrayLiteralExpression(jsonObject.map(jsonToLiteral), false);
+      }
+      // else object
+      return factory.createObjectLiteralExpression(
+        Object.entries(jsonObject).map(([key, value]) =>
+          factory.createPropertyAssignment(factory.createIdentifier(key), jsonToLiteral(value)),
+        ),
+        false,
+      );
+    }
+  }
 }

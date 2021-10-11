@@ -35,6 +35,12 @@ export function isStudioComponentWithVariants(
   return 'variants' in component && component.variants !== undefined && component.variants.length > 0;
 }
 
+export function isStudioComponentWithActions(
+  component: StudioComponent | StudioComponentChild,
+): component is StudioComponent & Required<Pick<StudioComponent, 'actions'>> {
+  return 'actions' in component && component.actions !== undefined;
+}
+
 export function isDataPropertyBinding(
   prop:
     | StudioComponentDataPropertyBinding

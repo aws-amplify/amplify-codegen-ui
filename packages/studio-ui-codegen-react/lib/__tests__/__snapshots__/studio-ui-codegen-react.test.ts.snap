@@ -1,5 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`amplify render tests actions should render sign out action 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  EscapeHatchProps,
+  Flex,
+  Heading,
+  findChildOverrides,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type SiteHeaderProps = {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function SiteHeader(props: SiteHeaderProps): React.Element {
+  const overrides = { ...props.overrides };
+  const { invokeAction } = useActions({
+    signOutAction: {
+      type: \\"Amplify.Auth.SignOut\\",
+      parameters: { global: true },
+    },
+  });
+  return (
+    <Flex
+      direction=\\"row\\"
+      justifyContent=\\"space-between\\"
+      {...props}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Heading
+        level={1}
+        children=\\"Title\\"
+        {...findChildOverrides(props.overrides, \\"Heading\\")}
+      ></Heading>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Log off\\"
+        onClick={invokeAction(\\"signOutAction\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests basic component tests should generate a simple box component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

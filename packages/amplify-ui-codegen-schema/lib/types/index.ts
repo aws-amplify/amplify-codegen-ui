@@ -70,11 +70,19 @@ export type StudioComponent = {
       | StudioComponentSimplePropertyBinding
       | StudioComponentEventPropertyBinding;
   };
+
   /**
    * These are the collection properties
    */
   collectionProperties?: {
     [propertyName: string]: StudioComponentDataConfiguration;
+  };
+
+  /**
+   * Component actions
+   */
+  actions?: {
+    [actionName: string]: StudioComponentAction;
   };
 };
 
@@ -169,6 +177,14 @@ export type StudioComponentChild = {
    * These are the nested components in a composite
    */
   children?: StudioComponentChild[];
+
+  /**
+   * Event <-> Action mapping (e.g click => SignOutAction)
+   * When an event is triggered, an action is executed
+   */
+  events?: {
+    [eventName: string]: string;
+  };
 };
 
 /**
@@ -491,3 +507,18 @@ type DeepPartial<T> = {
 };
 
 export type StudioTheme = DeepPartial<typeof theme>;
+
+/**
+ * Component action types
+ */
+export type StudioComponentAction = AmplifyAuthSignOutAction;
+
+/**
+ * Amplify Auth signout Action type
+ */
+export type AmplifyAuthSignOutAction = {
+  type: 'Amplify.Auth.SignOut';
+  parameters?: {
+    global: boolean;
+  };
+};

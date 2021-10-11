@@ -203,4 +203,10 @@ describe('amplify render tests', () => {
       expect(generateWithThemeRenderer('theme', { target: ScriptTarget.ES5, script: ScriptKind.JS })).toMatchSnapshot();
     });
   });
+
+  describe('actions', () => {
+    it('should render sign out action', () => {
+      expect(generateWithAmplifyRenderer('componentWithActionSignOut')).toMatchSnapshot();
+    });
+  });
 });

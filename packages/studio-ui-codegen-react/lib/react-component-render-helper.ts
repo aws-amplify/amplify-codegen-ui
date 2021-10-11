@@ -345,6 +345,37 @@ export function buildOpeningElementAttributes(prop: ComponentPropertyValueTypes,
   }
   return factory.createJsxAttribute(factory.createIdentifier(propName), undefined);
 }
+
+/* Tempory stub function to map from generic event name to React event name. Final implementation will be included in
+ * amplify-ui.
+ */
+function mapGenericEventToReact(genericEventBinding: string): string {
+  switch (genericEventBinding) {
+    case 'click':
+      return 'onClick';
+    default:
+      throw new Error(`${genericEventBinding} is not a possible event.`);
+  }
+}
+
+/* Build React attribute for actions
+ *
+ * Example: onClick={invokeAction("signOutAction")}
+ */
+export function buildOpeningElementActions(genericEventBinding: string, action: string): JsxAttribute {
+  // TODO: map from generic to platform
+  const reactActionBinding = mapGenericEventToReact(genericEventBinding);
+  return factory.createJsxAttribute(
+    factory.createIdentifier(reactActionBinding),
+    factory.createJsxExpression(
+      undefined,
+      factory.createCallExpression(factory.createIdentifier('invokeAction'), undefined, [
+        factory.createStringLiteral(action),
+      ]),
+    ),
+  );
+}
+
 export function addBindingPropertiesImports(
   component: StudioComponent | StudioComponentChild,
   importCollection: ImportCollection,
