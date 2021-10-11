@@ -260,7 +260,7 @@ import {
   Collection,
   EscapeHatchProps,
   Flex,
-  convertSortPredicatesToDataStore,
+  SortDirection,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -283,12 +283,9 @@ export default function CollectionOfCustomButtons(
       { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
     ],
   };
-  const buttonUserSort = convertSortPredicatesToDataStore([
-    { field: \\"firstName\\", direction: \\"ASC\\" },
-    { field: \\"lastName\\", direction: \\"DESC\\" },
-  ]);
   const buttonUserPagination = {
-    sort: buttonUserSort,
+    sort: (s) =>
+      s.firstName(SortDirection.ASCENDING).lastName(SortDirection.DESCENDING),
   };
   const buttonUser =
     items !== undefined
