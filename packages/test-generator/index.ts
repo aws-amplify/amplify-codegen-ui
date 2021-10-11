@@ -1,7 +1,15 @@
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+/* eslint-disable no-console */
+import { StudioComponent, StudioTheme } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererManager, StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
-import { AmplifyRenderer, ReactOutputConfig, ReactRenderConfig, ScriptKind } from '@amzn/studio-ui-codegen-react';
-import { ModuleKind, ScriptTarget } from 'typescript';
+import {
+  AmplifyRenderer,
+  ReactOutputConfig,
+  ReactRenderConfig,
+  ReactThemeStudioTemplateRenderer,
+  ModuleKind,
+  ScriptTarget,
+  ScriptKind,
+} from '@amzn/studio-ui-codegen-react';
 import path from 'path';
 import log from 'loglevel';
 
@@ -26,11 +34,40 @@ const outputConfig: ReactOutputConfig = {
   outputPathDir,
 };
 
+const rendererManager = new StudioTemplateRendererManager(rendererFactory, outputConfig);
+
+const themeRendererManager = new StudioTemplateRendererManager(
+  new StudioTemplateRendererFactory((theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig)),
+  outputConfig,
+);
+
+const theme: StudioTheme = {
+  components: {
+    alert: {
+      backgroundColor: 'hsl(210, 5%, 90%)',
+      padding: '0.75rem 1rem',
+      info: {
+        backgroundColor: 'hsl(220, 85%, 85%)',
+      },
+      error: {
+        backgroundColor: 'hsl(0, 75%, 85%)',
+      },
+      warning: {
+        backgroundColor: 'hsl(30, 75%, 85%)',
+      },
+      success: {
+        backgroundColor: 'hsl(130, 75%, 85%)',
+      },
+    },
+  },
+};
+
 const decorateTypescriptWithMarkdown = (typescriptSource: string): string => {
   return `\`\`\`typescript jsx\n${typescriptSource}\n\`\`\``;
 };
 
-const rendererManager = new StudioTemplateRendererManager(rendererFactory, outputConfig);
+themeRendererManager.renderSchemaToTemplate(theme);
+
 Object.entries(schemas).forEach(([name, schema]) => {
   log.info(`# ${name}`);
   try {

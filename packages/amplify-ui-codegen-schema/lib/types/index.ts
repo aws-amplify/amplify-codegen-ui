@@ -1,3 +1,5 @@
+import { theme } from '@aws-amplify/ui';
+
 export type FigmaMetadata = {
   /**
    * The document URL for the figma document
@@ -483,3 +485,9 @@ export type StudioComponentStorageBindingProperty = {
   bucket: string;
   key?: string;
 };
+
+type DeepPartial<T> = {
+  [K in keyof T]?: DeepPartial<T[K]>;
+};
+
+export type StudioTheme = DeepPartial<typeof theme>;

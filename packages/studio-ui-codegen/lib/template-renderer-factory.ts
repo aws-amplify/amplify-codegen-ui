@@ -1,4 +1,3 @@
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { FrameworkOutputManager } from './framework-output-manager';
 import { StudioTemplateRenderer } from './studio-template-renderer';
 
@@ -10,13 +9,14 @@ import { RenderTextComponentResponse } from './render-component-response';
  */
 export class StudioTemplateRendererFactory<
   TSource,
+  TStudioType,
   TOutputManager extends FrameworkOutputManager<TSource>,
   TRenderOutput extends RenderTextComponentResponse,
-  TRenderer extends StudioTemplateRenderer<TSource, TOutputManager, TRenderOutput>,
+  TRenderer extends StudioTemplateRenderer<TSource, TStudioType, TOutputManager, TRenderOutput>,
 > {
-  constructor(private renderer: (component: StudioComponent) => TRenderer) {}
+  constructor(private renderer: (component: TStudioType) => TRenderer) {}
 
-  buildRenderer(component: StudioComponent): TRenderer {
+  buildRenderer(component: TStudioType): TRenderer {
     return this.renderer(component);
   }
 }

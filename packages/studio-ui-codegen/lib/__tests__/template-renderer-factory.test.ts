@@ -1,3 +1,4 @@
+import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererFactory } from '../template-renderer-factory';
 import { MockOutputManager, MockTemplateRenderer } from './__utils__/mock-classes';
 
@@ -6,7 +7,7 @@ describe('StudioTemplateRendererFactory', () => {
     const componentName = 'MyText';
     const outputManager = new MockOutputManager();
     const renderer = new StudioTemplateRendererFactory(
-      (component) => new MockTemplateRenderer(component, outputManager, {}),
+      (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
     ).buildRenderer({
       componentType: 'Text',
       name: componentName,
