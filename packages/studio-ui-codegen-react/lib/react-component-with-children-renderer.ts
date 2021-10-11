@@ -7,9 +7,9 @@ import {
   JsxElement,
   JsxChild,
   JsxOpeningElement,
-  NodeFactory,
   SyntaxKind,
   Expression,
+  factory,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
@@ -28,18 +28,14 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     addBindingPropertiesImports(component, importCollection);
   }
 
-  protected renderCustomCompOpeningElement(
-    factory: NodeFactory,
-    props: StudioComponentProperties,
-    tagName: string,
-  ): JsxOpeningElement {
+  protected renderCustomCompOpeningElement(props: StudioComponentProperties, tagName: string): JsxOpeningElement {
     const propsArray: JsxAttribute[] = [];
     for (const propKey of Object.keys(props)) {
       const currentProp = props[propKey];
       propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
     }
 
-    this.addFindChildOverrideAttribute(factory, propsArray, tagName);
+    this.addFindChildOverrideAttribute(propsArray, tagName);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -48,18 +44,14 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
   }
 
-  protected renderOpeningElement(
-    factory: NodeFactory,
-    props: StudioComponentProperties,
-    tagName: string,
-  ): JsxOpeningElement {
+  protected renderOpeningElement(props: StudioComponentProperties, tagName: string): JsxOpeningElement {
     const propsArray: JsxAttribute[] = [];
     for (const propKey of Object.keys(props)) {
       const currentProp = props[propKey];
       propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
     }
 
-    this.addPropsSpreadAttributes(factory, propsArray);
+    this.addPropsSpreadAttributes(propsArray);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -69,7 +61,6 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
   }
 
   protected renderCollectionOpeningElement(
-    factory: NodeFactory,
     props: StudioComponentProperties,
     tagName: string,
     itemsVariableName?: string,
@@ -86,7 +77,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
     propsArray.push(itemsAttribute);
 
-    this.addPropsSpreadAttributes(factory, propsArray);
+    this.addPropsSpreadAttributes(propsArray);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -95,7 +86,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
   }
 
-  private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[]) {
+  private addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
       const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
       attributes.push(propsAttr);
@@ -120,7 +111,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     attributes.push(overrideAttr);
   }
 
-  private addFindChildOverrideAttribute(factory: NodeFactory, attributes: JsxAttributeLike[], tagName: string) {
+  private addFindChildOverrideAttribute(attributes: JsxAttributeLike[], tagName: string) {
     const findChildOverrideAttr = factory.createJsxSpreadAttribute(
       factory.createCallExpression(factory.createIdentifier('findChildOverrides'), undefined, [
         factory.createPropertyAccessExpression(
@@ -135,7 +126,6 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
   }
 
   private addBoundExpressionAttributes(
-    factory: NodeFactory,
     attributes: JsxAttributeLike[],
     propKey: string,
     propName: string,

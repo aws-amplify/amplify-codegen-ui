@@ -1,6 +1,6 @@
 import { StudioComponent, StudioComponentChild, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
 import { ComponentRendererBase, StudioNode } from '@amzn/studio-ui-codegen';
-import { JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from 'typescript';
+import { JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, factory } from 'typescript';
 
 import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
 import { ImportCollection } from './import-collection';
@@ -15,18 +15,14 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
     addBindingPropertiesImports(component, importCollection);
   }
 
-  protected renderOpeningElement(
-    factory: NodeFactory,
-    props: StudioComponentProperties,
-    tagName: string,
-  ): JsxOpeningElement {
+  protected renderOpeningElement(props: StudioComponentProperties, tagName: string): JsxOpeningElement {
     const propsArray: JsxAttribute[] = [];
     for (const propKey of Object.keys(props)) {
       const currentProp = props[propKey];
       propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
     }
 
-    this.addPropsSpreadAttributes(factory, propsArray);
+    this.addPropsSpreadAttributes(propsArray);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -35,7 +31,7 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
     );
   }
 
-  private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[]) {
+  private addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
       const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
       attributes.push(propsAttr);

@@ -11,7 +11,7 @@ export default class BadgeRenderer extends ReactComponentWithChildrenRenderer<Ba
     const children = this.component.children ?? [];
 
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, this.component.properties, tagName),
+      this.renderOpeningElement(this.component.properties, tagName),
       renderChildren(children),
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );

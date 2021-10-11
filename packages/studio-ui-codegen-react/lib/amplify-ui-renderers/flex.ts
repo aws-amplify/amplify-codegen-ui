@@ -10,7 +10,7 @@ export default class FlexRenderer extends ReactComponentWithChildrenRenderer<Fle
     const tagName = 'Flex';
 
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, this.component.properties, tagName),
+      this.renderOpeningElement(this.component.properties, tagName),
       renderChildren(this.component.children ?? []),
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );

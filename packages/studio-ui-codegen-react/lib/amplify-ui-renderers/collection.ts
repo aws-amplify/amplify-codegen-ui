@@ -12,7 +12,7 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
     const arrowFuncExpr = this.renderItemArrowFunctionExpr(childrenJsx);
     const itemsVariableName = this.findItemsVariableName();
     const element = factory.createJsxElement(
-      this.renderCollectionOpeningElement(factory, this.component.properties, tagName, itemsVariableName),
+      this.renderCollectionOpeningElement(this.component.properties, tagName, itemsVariableName),
       [arrowFuncExpr],
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );

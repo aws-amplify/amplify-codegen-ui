@@ -11,7 +11,7 @@ export default class CustomComponentRenderer extends ReactComponentWithChildrenR
 
     const childrenJsx = this.component.children ? renderChildren(this.component.children ?? []) : [];
     const element = factory.createJsxElement(
-      this.renderCustomCompOpeningElement(factory, this.component.properties, tagName),
+      this.renderCustomCompOpeningElement(this.component.properties, tagName),
       childrenJsx,
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );
