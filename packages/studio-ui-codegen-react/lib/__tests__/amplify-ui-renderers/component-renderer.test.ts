@@ -1,4 +1,5 @@
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+import { createPrinter, EmitHint, createSourceFile, ScriptTarget, ScriptKind } from 'typescript';
 import { ImportCollection } from '../../import-collection';
 
 import BadgeRenderer from '../../amplify-ui-renderers/badge';
@@ -28,7 +29,12 @@ function testComponentRenderer(
   component: StudioComponent,
 ) {
   const renderChildren = jest.fn();
-  expect(new Renderer(component, new ImportCollection()).renderElement(renderChildren)).toMatchSnapshot();
+  const renderedComponent = new Renderer(component, new ImportCollection()).renderElement(renderChildren);
+
+  // file is not actually written. filename does not matter
+  const file = createSourceFile('test.ts', '', ScriptTarget.ES2015, true, ScriptKind.TS);
+  const printer = createPrinter();
+  expect(printer.printNode(EmitHint.Unspecified, renderedComponent, file)).toMatchSnapshot();
 }
 
 describe('Component Renderers', () => {
@@ -144,7 +150,11 @@ describe('Component Renderers', () => {
         },
         bindingProperties: {},
       };
-      expect(renderString(component)).toMatchSnapshot();
+
+      const renderedString = renderString(component);
+      const file = createSourceFile('test.ts', '', ScriptTarget.ES2015, true, ScriptKind.TS);
+      const printer = createPrinter();
+      expect(printer.printNode(EmitHint.Unspecified, renderedString, file)).toMatchSnapshot();
     });
 
     test('missing props', () => {
