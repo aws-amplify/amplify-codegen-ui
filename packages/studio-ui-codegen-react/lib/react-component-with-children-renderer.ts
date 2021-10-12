@@ -1,16 +1,6 @@
 import { ComponentWithChildrenRendererBase, StudioNode } from '@amzn/studio-ui-codegen';
-import { StudioComponent, StudioComponentChild, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
-
-import {
-  JsxAttribute,
-  JsxAttributeLike,
-  JsxElement,
-  JsxChild,
-  JsxOpeningElement,
-  NodeFactory,
-  SyntaxKind,
-  Expression,
-} from 'typescript';
+import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
+import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
 
@@ -28,18 +18,12 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     addBindingPropertiesImports(component, importCollection);
   }
 
-  protected renderCustomCompOpeningElement(
-    factory: NodeFactory,
-    props: StudioComponentProperties,
-    tagName: string,
-  ): JsxOpeningElement {
-    const propsArray: JsxAttribute[] = [];
-    for (const propKey of Object.keys(props)) {
-      const currentProp = props[propKey];
-      propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
-    }
+  protected renderCustomCompOpeningElement(tagName: string): JsxOpeningElement {
+    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementAttributes(value, key),
+    );
 
-    this.addFindChildOverrideAttribute(factory, propsArray, tagName);
+    this.addFindChildOverrideAttribute(propsArray, tagName);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -48,18 +32,12 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
   }
 
-  protected renderOpeningElement(
-    factory: NodeFactory,
-    props: StudioComponentProperties,
-    tagName: string,
-  ): JsxOpeningElement {
-    const propsArray: JsxAttribute[] = [];
-    for (const propKey of Object.keys(props)) {
-      const currentProp = props[propKey];
-      propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
-    }
+  protected renderOpeningElement(tagName: string): JsxOpeningElement {
+    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementAttributes(value, key),
+    );
 
-    this.addPropsSpreadAttributes(factory, propsArray);
+    this.addPropsSpreadAttributes(propsArray);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -68,17 +46,10 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
   }
 
-  protected renderCollectionOpeningElement(
-    factory: NodeFactory,
-    props: StudioComponentProperties,
-    tagName: string,
-    itemsVariableName?: string,
-  ): JsxOpeningElement {
-    const propsArray: JsxAttribute[] = [];
-    for (const propKey of Object.keys(props)) {
-      const currentProp = props[propKey];
-      propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
-    }
+  protected renderCollectionOpeningElement(tagName: string, itemsVariableName?: string): JsxOpeningElement {
+    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementAttributes(value, key),
+    );
 
     const itemsAttribute = factory.createJsxAttribute(
       factory.createIdentifier('items'),
@@ -86,7 +57,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
     propsArray.push(itemsAttribute);
 
-    this.addPropsSpreadAttributes(factory, propsArray);
+    this.addPropsSpreadAttributes(propsArray);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
@@ -95,7 +66,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
   }
 
-  private addPropsSpreadAttributes(factory: NodeFactory, attributes: JsxAttributeLike[]) {
+  private addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
       const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
       attributes.push(propsAttr);
@@ -117,7 +88,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     attributes.push(overrideAttr);
   }
 
-  private addFindChildOverrideAttribute(factory: NodeFactory, attributes: JsxAttributeLike[], tagName: string) {
+  private addFindChildOverrideAttribute(attributes: JsxAttributeLike[], tagName: string) {
     const findChildOverrideAttr = factory.createJsxSpreadAttribute(
       factory.createCallExpression(factory.createIdentifier('findChildOverrides'), undefined, [
         factory.createPropertyAccessExpression(
@@ -132,7 +103,6 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
   }
 
   private addBoundExpressionAttributes(
-    factory: NodeFactory,
     attributes: JsxAttributeLike[],
     propKey: string,
     propName: string,

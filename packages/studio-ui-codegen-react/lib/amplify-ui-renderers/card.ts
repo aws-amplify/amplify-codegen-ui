@@ -10,7 +10,7 @@ export default class CardRenderer extends ReactComponentWithChildrenRenderer<Car
     const tagName = 'Card';
 
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, this.component.properties, tagName),
+      this.renderOpeningElement(tagName),
       renderChildren(this.component.children ?? []),
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );

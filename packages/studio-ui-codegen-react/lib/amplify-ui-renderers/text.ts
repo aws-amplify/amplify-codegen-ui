@@ -10,11 +10,8 @@ export default class TextRenderer extends ReactComponentRenderer<TextProps> {
   renderElement(): JsxElement {
     const tagName = 'Text';
 
-    // value should be child of Text, not a prop
-    const { value, ...properties } = this.component.properties;
-
     const element = factory.createJsxElement(
-      this.renderOpeningElement(factory, properties, tagName),
+      this.renderOpeningElement(tagName),
       this.getChildren(),
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );

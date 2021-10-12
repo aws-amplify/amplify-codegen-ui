@@ -1,6 +1,6 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 
-import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, NodeFactory } from 'typescript';
+import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement } from 'typescript';
 import { StudioComponent, BoundStudioComponentProperty } from '@amzn/amplify-ui-codegen-schema';
 import { StudioRendererConstants } from '@amzn/studio-ui-codegen';
 import { ReactComponentRenderer } from '../react-component-renderer';
@@ -12,7 +12,7 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
     // this.collectExposedProps(this.component, exposedProps);
 
     const element = factory.createJsxElement(
-      this.renderSampleCodeOpeningElement(factory, exposedProps, tagName),
+      this.renderSampleCodeOpeningElement(exposedProps, tagName),
       [],
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );
@@ -36,7 +36,6 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
   */
 
   private renderSampleCodeOpeningElement(
-    factory: NodeFactory,
     props: Map<string, BoundStudioComponentProperty>,
     tagName: string,
   ): JsxOpeningElement {
@@ -61,7 +60,7 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
     );
   }
 
-  private addExposedPropAttributes(factory: NodeFactory, attributes: JsxAttributeLike[], tagName: string) {
+  private addExposedPropAttributes(attributes: JsxAttributeLike[], tagName: string) {
     const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
     attributes.push(propsAttr);
 
