@@ -8,7 +8,7 @@ export default class DividerRenderer extends ReactComponentRenderer<DividerProps
     const tagName = 'Divider';
 
     const element = factory.createJsxElement(
-      this.renderOpeningElement(this.component.properties, tagName),
+      this.renderOpeningElement(tagName),
       [],
       factory.createJsxClosingElement(factory.createIdentifier(tagName)),
     );

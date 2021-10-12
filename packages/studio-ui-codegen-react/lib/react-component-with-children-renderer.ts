@@ -1,16 +1,6 @@
 import { ComponentWithChildrenRendererBase, StudioNode } from '@amzn/studio-ui-codegen';
-import { StudioComponent, StudioComponentChild, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
-
-import {
-  JsxAttribute,
-  JsxAttributeLike,
-  JsxElement,
-  JsxChild,
-  JsxOpeningElement,
-  SyntaxKind,
-  Expression,
-  factory,
-} from 'typescript';
+import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
+import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
 
@@ -28,12 +18,10 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     addBindingPropertiesImports(component, importCollection);
   }
 
-  protected renderCustomCompOpeningElement(props: StudioComponentProperties, tagName: string): JsxOpeningElement {
-    const propsArray: JsxAttribute[] = [];
-    for (const propKey of Object.keys(props)) {
-      const currentProp = props[propKey];
-      propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
-    }
+  protected renderCustomCompOpeningElement(tagName: string): JsxOpeningElement {
+    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementAttributes(value, key),
+    );
 
     this.addFindChildOverrideAttribute(propsArray, tagName);
 
@@ -44,12 +32,10 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
   }
 
-  protected renderOpeningElement(props: StudioComponentProperties, tagName: string): JsxOpeningElement {
-    const propsArray: JsxAttribute[] = [];
-    for (const propKey of Object.keys(props)) {
-      const currentProp = props[propKey];
-      propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
-    }
+  protected renderOpeningElement(tagName: string): JsxOpeningElement {
+    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementAttributes(value, key),
+    );
 
     this.addPropsSpreadAttributes(propsArray);
 
@@ -60,16 +46,10 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     );
   }
 
-  protected renderCollectionOpeningElement(
-    props: StudioComponentProperties,
-    tagName: string,
-    itemsVariableName?: string,
-  ): JsxOpeningElement {
-    const propsArray: JsxAttribute[] = [];
-    for (const propKey of Object.keys(props)) {
-      const currentProp = props[propKey];
-      propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
-    }
+  protected renderCollectionOpeningElement(tagName: string, itemsVariableName?: string): JsxOpeningElement {
+    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementAttributes(value, key),
+    );
 
     const itemsAttribute = factory.createJsxAttribute(
       factory.createIdentifier('items'),

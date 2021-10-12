@@ -1,6 +1,6 @@
-import { StudioComponent, StudioComponentChild, StudioComponentProperties } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { ComponentRendererBase, StudioNode } from '@amzn/studio-ui-codegen';
-import { JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement, factory } from 'typescript';
+import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory } from 'typescript';
 
 import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
 import { ImportCollection } from './import-collection';
@@ -15,12 +15,11 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
     addBindingPropertiesImports(component, importCollection);
   }
 
-  protected renderOpeningElement(props: StudioComponentProperties, tagName: string): JsxOpeningElement {
-    const propsArray: JsxAttribute[] = [];
-    for (const propKey of Object.keys(props)) {
-      const currentProp = props[propKey];
-      propsArray.push(buildOpeningElementAttributes(currentProp, propKey));
-    }
+  protected renderOpeningElement(tagName: string): JsxOpeningElement {
+    const propsArray = Object.entries(this.component.properties)
+      // value should be child of Text, not a prop
+      .filter(([key]) => !(this.component.componentType === 'Text' && key === 'value'))
+      .map(([key, value]) => buildOpeningElementAttributes(value, key));
 
     this.addPropsSpreadAttributes(propsArray);
 
