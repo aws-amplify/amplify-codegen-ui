@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "test": "echo \"No tests\"",
+    "test:update": "echo \"No tests\"",
     "build": "tsc",
     "build:watch": "npm run build -- --watch"
   },
