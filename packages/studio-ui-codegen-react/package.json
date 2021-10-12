@@ -10,6 +10,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
+    "test:update": "jest --updateSnapshot",
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "npm run build -- --watch"
   },

@@ -8,6 +8,7 @@
   "homepage": "https://docs.amplify.aws/",
   "scripts": {
     "test": "lerna run test --stream",
+    "test:update": "lerna run test:update --stream",
     "build": "lerna run build --stream",
     "prepublishOnly": "npm run build && npm run test",
     "setup-dev": "npm install && lerna bootstrap && lerna run build",

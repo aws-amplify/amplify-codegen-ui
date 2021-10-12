@@ -156,6 +156,88 @@ export default function CollectionOfCustomButtons(
 "
 `;
 
+exports[`amplify render tests collection should render collection with data binding and sort 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { User, UserPreferences } from \\"../models\\";
+import {
+  Button,
+  Collection,
+  EscapeHatchProps,
+  Flex,
+  SortDirection,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CollectionOfCustomButtonsProps = {
+  width?: Number,
+  backgroundColor?: String,
+  buttonColor?: UserPreferences,
+  items?: any[],
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function CollectionOfCustomButtons(
+  props: CollectionOfCustomButtonsProps
+): JSX.Element {
+  const { width, backgroundColor, buttonColor, items } = props;
+  const overrides = { ...props.overrides };
+  const buttonUserFilter = {
+    and: [
+      { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
+      { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
+    ],
+  };
+  const buttonUserPagination = {
+    sort: (s) =>
+      s.firstName(SortDirection.ASCENDING).lastName(SortDirection.DESCENDING),
+  };
+  const buttonUser =
+    items !== undefined
+      ? items
+      : useDataStoreBinding({
+          type: \\"collection\\",
+          model: User,
+          criteria: buttonUserFilter,
+          pagination: buttonUserPagination,
+        }).items;
+  const buttonColorFilter = {
+    field: \\"userID\\",
+    operand: \\"user@email.com\\",
+    operator: \\"eq\\",
+  };
+  const { item: buttonColor } = useDataStoreBinding({
+    type: \\"record\\",
+    model: UserPreferences,
+    criteria: buttonColorFilter,
+  });
+  return (
+    <Collection
+      type=\\"list\\"
+      isPaginated={true}
+      gap=\\"1.5rem\\"
+      backgroundColor={backgroundColor}
+      items={buttonUser}
+      {...props}
+      {...getOverrideProps(overrides, \\"Collection\\")}
+    >
+      {(item, index) => (
+        <Flex {...getOverrideProps(overrides, \\"Collection.Flex\\")}>
+          <Button
+            label={item.username || \\"hspain@gmail.com\\"}
+            labelWidth={width}
+            backgroundColor={buttonColor.favoriteColor}
+            disabled={isDisabled}
+            {...getOverrideProps(overrides, \\"Collection.Flex.Button\\")}
+          ></Button>
+        </Flex>
+      )}
+    </Collection>
+  );
+}
+"
+`;
+
 exports[`amplify render tests collection should render collection with data binding with no predicate 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
@@ -244,88 +326,6 @@ export default function ListingCardCollection(
         <ListingCard
           {...findChildOverrides(props.overrides, \\"ListingCard\\")}
         ></ListingCard>
-      )}
-    </Collection>
-  );
-}
-"
-`;
-
-exports[`amplify render tests collection should render collection with data binding and sort 1`] = `
-"/* eslint-disable */
-import React from \\"react\\";
-import { User, UserPreferences } from \\"../models\\";
-import {
-  Button,
-  Collection,
-  EscapeHatchProps,
-  Flex,
-  SortDirection,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react\\";
-
-export type CollectionOfCustomButtonsProps = {
-  width?: Number,
-  backgroundColor?: String,
-  buttonColor?: UserPreferences,
-  items?: any[],
-} & {
-  overrides?: EscapeHatchProps | undefined | null,
-};
-export default function CollectionOfCustomButtons(
-  props: CollectionOfCustomButtonsProps
-): JSX.Element {
-  const { width, backgroundColor, buttonColor, items } = props;
-  const overrides = { ...props.overrides };
-  const buttonUserFilter = {
-    and: [
-      { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
-      { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
-    ],
-  };
-  const buttonUserPagination = {
-    sort: (s) =>
-      s.firstName(SortDirection.ASCENDING).lastName(SortDirection.DESCENDING),
-  };
-  const buttonUser =
-    items !== undefined
-      ? items
-      : useDataStoreBinding({
-          type: \\"collection\\",
-          model: User,
-          criteria: buttonUserFilter,
-          pagination: buttonUserPagination,
-        }).items;
-  const buttonColorFilter = {
-    field: \\"userID\\",
-    operand: \\"user@email.com\\",
-    operator: \\"eq\\",
-  };
-  const { item: buttonColor } = useDataStoreBinding({
-    type: \\"record\\",
-    model: UserPreferences,
-    criteria: buttonColorFilter,
-  });
-  return (
-    <Collection
-      type=\\"list\\"
-      isPaginated={true}
-      gap=\\"1.5rem\\"
-      backgroundColor={backgroundColor}
-      items={buttonUser}
-      {...props}
-      {...getOverrideProps(overrides, \\"Collection\\")}
-    >
-      {(item, index) => (
-        <Flex {...getOverrideProps(overrides, \\"Collection.Flex\\")}>
-          <Button
-            label={item.username || \\"hspain@gmail.com\\"}
-            labelWidth={width}
-            backgroundColor={buttonColor.favoriteColor}
-            disabled={isDisabled}
-            {...getOverrideProps(overrides, \\"Collection.Flex.Button\\")}
-          ></Button>
-        </Flex>
       )}
     </Collection>
   );
@@ -453,68 +453,6 @@ export default function TextWithDataBinding(
 "
 `;
 
-exports[`amplify render tests component with variants should render variants with options provided 1`] = `
-"/* eslint-disable */
-import React from \\"react\\";
-import {
-  Button,
-  EscapeHatchProps,
-  getOverrideProps,
-  getOverridesFromVariants,
-} from \\"@aws-amplify/ui-react\\";
-
-export type CustomButtonProps = {
-  variant: \\"primary\\" | \\"secondary\\",
-  size?: \\"large\\",
-} & {
-  overrides?: EscapeHatchProps | undefined | null,
-};
-export default function CustomButton(props: CustomButtonProps): JSX.Element {
-  const {} = props;
-  const variants = [
-    {
-      variantValues: {
-        variant: \\"primary\\",
-      },
-      overrides: {
-        Button: {
-          fontSize: \\"12px\\",
-        },
-      },
-    },
-    {
-      variantValues: {
-        variant: \\"secondary\\",
-      },
-      overrides: {
-        Button: {
-          fontSize: \\"40px\\",
-        },
-      },
-    },
-    {
-      variantValues: {
-        variant: \\"primary\\",
-        size: \\"large\\",
-      },
-      overrides: {
-        Button: {
-          width: \\"500\\",
-        },
-      },
-    },
-  ];
-  const overrides = {
-    ...getOverridesFromVariants(variants, props),
-    ...props.overrides,
-  };
-  return (
-    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}></Button>
-  );
-}
-"
-`;
-
 exports[`amplify render tests component with data binding should add model imports 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
@@ -608,6 +546,68 @@ export default function SectionHeading(
         subtitle
       </Text>
     </Flex>
+  );
+}
+"
+`;
+
+exports[`amplify render tests component with variants should render variants with options provided 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  EscapeHatchProps,
+  getOverrideProps,
+  getOverridesFromVariants,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CustomButtonProps = {
+  variant: \\"primary\\" | \\"secondary\\",
+  size?: \\"large\\",
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function CustomButton(props: CustomButtonProps): JSX.Element {
+  const {} = props;
+  const variants = [
+    {
+      variantValues: {
+        variant: \\"primary\\",
+      },
+      overrides: {
+        Button: {
+          fontSize: \\"12px\\",
+        },
+      },
+    },
+    {
+      variantValues: {
+        variant: \\"secondary\\",
+      },
+      overrides: {
+        Button: {
+          fontSize: \\"40px\\",
+        },
+      },
+    },
+    {
+      variantValues: {
+        variant: \\"primary\\",
+        size: \\"large\\",
+      },
+      overrides: {
+        Button: {
+          width: \\"500\\",
+        },
+      },
+    },
+  ];
+  const overrides = {
+    ...getOverridesFromVariants(variants, props),
+    ...props.overrides,
+  };
+  return (
+    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}></Button>
   );
 }
 "
