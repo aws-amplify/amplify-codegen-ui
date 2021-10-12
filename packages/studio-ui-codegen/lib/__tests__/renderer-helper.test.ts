@@ -11,6 +11,7 @@ import {
   isStoragePropertyBinding,
   isSimplePropertyBinding,
   isStudioComponentWithCollectionProperties,
+  isStudioComponentWithVariants,
 } from '../renderer-helper';
 
 describe('render-helper', () => {
@@ -102,6 +103,53 @@ describe('render-helper', () => {
           name: '',
           properties: {},
           collectionProperties: {},
+        }),
+      ).toBeTruthy();
+    });
+  });
+
+  describe('isStudioComponentWithVariants', () => {
+    test('object without variants is falsy', () => {
+      expect(
+        isStudioComponentWithVariants({
+          componentType: '',
+          name: '',
+          properties: {},
+        }),
+      ).toBeFalsy();
+    });
+    test('object with undefined variants is falsy', () => {
+      expect(
+        isStudioComponentWithVariants({
+          componentType: '',
+          name: '',
+          properties: {},
+          variants: undefined,
+        }),
+      ).toBeFalsy();
+    });
+    test('object with empty list of variants is falsy', () => {
+      expect(
+        isStudioComponentWithVariants({
+          componentType: '',
+          name: '',
+          properties: {},
+          variants: [],
+        }),
+      ).toBeFalsy();
+    });
+    test('object with variants is truthy', () => {
+      expect(
+        isStudioComponentWithVariants({
+          componentType: '',
+          name: '',
+          properties: {},
+          variants: [
+            {
+              variantValues: {},
+              overrides: {},
+            },
+          ],
         }),
       ).toBeTruthy();
     });

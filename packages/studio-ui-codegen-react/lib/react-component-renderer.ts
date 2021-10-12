@@ -43,10 +43,7 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
 
     const overrideAttr = factory.createJsxSpreadAttribute(
       factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
-        factory.createPropertyAccessExpression(
-          factory.createIdentifier('props'),
-          factory.createIdentifier('overrides'),
-        ),
+        factory.createIdentifier('overrides'),
         factory.createStringLiteral(
           this.node
             .getComponentPathToRoot()
