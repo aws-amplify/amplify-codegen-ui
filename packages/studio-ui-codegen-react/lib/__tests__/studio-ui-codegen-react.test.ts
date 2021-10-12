@@ -148,6 +148,13 @@ describe('amplify render tests', () => {
     });
   });
 
+  describe('component with variants', () => {
+    it('should render variants with options provided', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithVariants');
+      expect(generatedCode).toMatchSnapshot();
+    });
+  });
+
   describe('custom render config', () => {
     it('should render ES5', () => {
       expect(

@@ -3,6 +3,7 @@ import {
   StudioComponentPredicate,
   StudioComponentAuthPropertyBinding,
   StudioComponentSort,
+  StudioComponentVariant,
 } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
@@ -12,6 +13,7 @@ import {
   isDataPropertyBinding,
   isAuthPropertyBinding,
   isStudioComponentWithCollectionProperties,
+  isStudioComponentWithVariants,
 } from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';
@@ -225,6 +227,18 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   renderBindingPropsType(component: StudioComponent): TypeAliasDeclaration {
+    const escapeHatchType = factory.createTypeLiteralNode([
+      factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier('overrides'),
+        factory.createToken(ts.SyntaxKind.QuestionToken),
+        factory.createUnionTypeNode([
+          factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+          factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
+          factory.createLiteralTypeNode(factory.createNull()),
+        ]),
+      ),
+    ]);
     const componentPropType = getComponentPropName(component.name);
     this.importCollection.addImport('@aws-amplify/ui-react', 'EscapeHatchProps');
     return factory.createTypeAliasDeclaration(
@@ -232,29 +246,82 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
       factory.createIdentifier(componentPropType),
       undefined,
-      factory.createIntersectionTypeNode([
-        this.buildBindingPropNodes(component),
-        factory.createTypeLiteralNode([
-          factory.createPropertySignature(
-            undefined,
-            factory.createIdentifier('overrides'),
-            factory.createToken(ts.SyntaxKind.QuestionToken),
-            factory.createUnionTypeNode([
-              factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
-              factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
-              factory.createLiteralTypeNode(factory.createNull()),
-            ]),
-          ),
+      factory.createIntersectionTypeNode(
+        this.dropMissingListElements([
+          this.buildComponentPropNodes(component),
+          this.buildVariantPropNodes(component),
+          escapeHatchType,
         ]),
-      ]),
+      ),
     );
   }
 
-  private buildBindingPropNodes(component: StudioComponent): TypeNode {
+  /**
+   * This builder is responsible primarily for identifying the variant options, partioning them into
+   * required and optional parameters, then building the appropriate property signature based on that.
+   * e.g.
+     {
+       variant: "primary" | "secondary",
+       size?: "large",
+     }
+   */
+  private buildVariantPropNodes(component: StudioComponent): TypeNode | undefined {
+    if (!isStudioComponentWithVariants(component)) {
+      return undefined;
+    }
+    const variantValues = component.variants.map((variant) => variant.variantValues);
+
+    const allKeys = [...new Set(variantValues.flatMap((variantValue) => Object.keys(variantValue)))];
+    const requiredKeys = allKeys
+      .filter((key) => variantValues.every((variantValue) => Object.keys(variantValue).includes(key)))
+      .sort();
+    const optionalKeys = [...allKeys].filter((key) => !requiredKeys.includes(key)).sort();
+
+    const requiredProperties = requiredKeys.map((key) => {
+      const variantOptions = [
+        ...new Set(
+          variantValues
+            .map((variantValue) => variantValue[key])
+            .filter((variantOption) => variantOption !== undefined && variantOption !== null),
+        ),
+      ].sort();
+      const valueTypeNodes = variantOptions.map((variantOption) =>
+        factory.createLiteralTypeNode(factory.createStringLiteral(variantOption)),
+      );
+      return factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier(key),
+        undefined,
+        factory.createUnionTypeNode(valueTypeNodes),
+      );
+    });
+    const optionalProperties = optionalKeys.map((key) => {
+      const variantOptions = [
+        ...new Set(
+          variantValues
+            .map((variantValue) => variantValue[key])
+            .filter((variantOption) => variantOption !== undefined && variantOption !== null),
+        ),
+      ].sort();
+      const valueTypeNodes = variantOptions.map((variantOption) =>
+        factory.createLiteralTypeNode(factory.createStringLiteral(variantOption)),
+      );
+      return factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier(key),
+        factory.createToken(ts.SyntaxKind.QuestionToken),
+        factory.createUnionTypeNode(valueTypeNodes),
+      );
+    });
+
+    return factory.createTypeLiteralNode([...requiredProperties, ...optionalProperties]);
+  }
+
+  private buildComponentPropNodes(component: StudioComponent): TypeNode | undefined {
     const propSignatures: PropertySignature[] = [];
     const bindingProps = component.bindingProperties;
     if (bindingProps === undefined || !isStudioComponentWithBinding(component)) {
-      return factory.createTypeLiteralNode([]);
+      return undefined;
     }
     for (const bindingProp of Object.entries(component.bindingProperties)) {
       const [propName, binding] = bindingProp;
@@ -284,6 +351,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         factory.createTypeReferenceNode('any[]', undefined),
       );
       propSignatures.push(propSignature);
+    }
+    if (propSignatures.length === 0) {
+      return undefined;
     }
     return factory.createTypeLiteralNode(propSignatures);
   }
@@ -332,6 +402,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       );
       statements.push(statement);
     }
+
+    if (isStudioComponentWithVariants(component)) {
+      statements.push(this.buildVariantDeclaration(component.variants));
+      // TODO: In components, replace props.override with override (defined here).
+    }
+
+    statements.push(this.buildOverridesDeclaration(isStudioComponentWithVariants(component)));
 
     const authStatement = this.buildUseAuthenticatedUserStatement(component);
     if (authStatement !== undefined) {
@@ -396,6 +473,146 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     return undefined;
+  }
+
+  /**
+   * This is perhaps slightly odd, because the input shape very directly lines up with what we emit as the assignment
+   * expression, but I wanted to leave this so we're not implicitly opting out of processing, and relying on matching
+   * shapes in the input and output layers for things to work.
+   * const variants = [
+   {
+    variantValues: {
+      'variant': 'primary'
+    },
+    overrides: {
+      'Button': {
+        'fontSize': '12px',
+      },
+    },
+  },
+   {
+    variantValues: {
+      'variant': 'secondary'
+    },
+    overrides: {
+      'Button': {
+        'fontSize': '40px',
+      },
+    },
+  },
+   {
+    variantValues: {
+      'variant': 'primary',
+      'size': 'large'
+    },
+    overrides: {
+      'Button': {
+        'width': '500',
+      },
+    },
+  }
+   ];
+   */
+  private buildVariantDeclaration(variants: StudioComponentVariant[]): VariableStatement {
+    const variantObjectLiteralExpressions = variants.map((variant) => {
+      const variantValueProperties = Object.entries(variant.variantValues).map(([variantPropName, variantPropField]) =>
+        factory.createPropertyAssignment(
+          factory.createStringLiteral(variantPropName),
+          factory.createStringLiteral(variantPropField),
+        ),
+      );
+
+      const variantOverrides = Object.entries(variant.overrides).map(([hierarchyReference, overrideExpression]) => {
+        const variantValueProperties = Object.entries(overrideExpression).map(([overrideName, overrideValue]) =>
+          factory.createPropertyAssignment(
+            factory.createStringLiteral(overrideName),
+            factory.createStringLiteral(overrideValue),
+          ),
+        );
+
+        return factory.createPropertyAssignment(
+          factory.createStringLiteral(hierarchyReference),
+          factory.createObjectLiteralExpression(variantValueProperties, true),
+        );
+      });
+
+      return factory.createObjectLiteralExpression(
+        [
+          factory.createPropertyAssignment(
+            factory.createIdentifier('variantValues'),
+            factory.createObjectLiteralExpression(variantValueProperties, true),
+          ),
+          factory.createPropertyAssignment(
+            factory.createIdentifier('overrides'),
+            factory.createObjectLiteralExpression(variantOverrides, true),
+          ),
+        ],
+        true,
+      );
+    });
+
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('variants'),
+            undefined,
+            undefined,
+            factory.createArrayLiteralExpression(variantObjectLiteralExpressions),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
+  /**
+   * case: hasVariants = true => const overrides = { ...getOverridesFromVariants(variants), ...props.overrides };
+   * case: hasVariants = false => const overrides = { ...props.overrides };
+   */
+  private buildOverridesDeclaration(hasVariants: boolean): VariableStatement {
+    if (hasVariants) {
+      this.importCollection.addImport('@aws-amplify/ui-react', 'getOverridesFromVariants');
+    }
+
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('overrides'),
+            undefined,
+            undefined,
+            factory.createObjectLiteralExpression(
+              ([] as ts.ObjectLiteralElementLike[])
+                .concat(
+                  hasVariants
+                    ? [
+                        factory.createSpreadAssignment(
+                          factory.createCallExpression(
+                            factory.createIdentifier('getOverridesFromVariants'),
+                            undefined,
+                            [factory.createIdentifier('variants'), factory.createIdentifier('props')],
+                          ),
+                        ),
+                      ]
+                    : [],
+                )
+                .concat([
+                  factory.createSpreadAssignment(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('props'),
+                      factory.createIdentifier('overrides'),
+                    ),
+                  ),
+                ]),
+            ),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
   }
 
   private buildCollectionBindingStatements(component: StudioComponent): Statement[] {
@@ -643,6 +860,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private getFilterName(propName: string): string {
     return `${propName}Filter`;
+  }
+
+  private dropMissingListElements<T>(elements: (T | null | undefined)[]): T[] {
+    return elements.filter((element) => element !== null && element !== undefined) as T[];
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment;

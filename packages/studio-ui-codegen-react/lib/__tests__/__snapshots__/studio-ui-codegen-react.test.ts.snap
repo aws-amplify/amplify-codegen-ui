@@ -9,16 +9,17 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type TestProps = {} & {
+export type TestProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
 export default function Test(props: TestProps): JSX.Element {
+  const overrides = { ...props.overrides };
   return (
     <View
       fontFamily=\\"Times New Roman\\"
       fontSize=\\"20px\\"
       {...props}
-      {...getOverrideProps(props.overrides, \\"Box\\")}
+      {...getOverrideProps(overrides, \\"Box\\")}
     ></View>
   );
 }
@@ -34,16 +35,17 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type CustomButtonProps = {} & {
+export type CustomButtonProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
 export default function CustomButton(props: CustomButtonProps): JSX.Element {
+  const overrides = { ...props.overrides };
   return (
     <Button
       color=\\"#ff0000\\"
       width=\\"20\\"
       {...props}
-      {...getOverrideProps(props.overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
   );
 }
@@ -59,16 +61,17 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type CustomTextProps = {} & {
+export type CustomTextProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
 export default function CustomText(props: CustomTextProps): JSX.Element {
+  const overrides = { ...props.overrides };
   return (
     <Text
       color=\\"#ff0000\\"
       width=\\"20px\\"
       {...props}
-      {...getOverrideProps(props.overrides, \\"Text\\")}
+      {...getOverrideProps(overrides, \\"Text\\")}
     >
       Text Value
     </Text>
@@ -101,6 +104,7 @@ export default function CollectionOfCustomButtons(
   props: CollectionOfCustomButtonsProps
 ): JSX.Element {
   const { width, backgroundColor, buttonColor, items } = props;
+  const overrides = { ...props.overrides };
   const buttonUserFilter = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
@@ -133,16 +137,16 @@ export default function CollectionOfCustomButtons(
       backgroundColor={backgroundColor}
       items={buttonUser}
       {...props}
-      {...getOverrideProps(props.overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Flex {...getOverrideProps(props.overrides, \\"Collection.Flex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"Collection.Flex\\")}>
           <Button
             label={item.username || \\"hspain@gmail.com\\"}
             labelWidth={width}
             backgroundColor={buttonColor.favoriteColor}
             disabled={isDisabled}
-            {...getOverrideProps(props.overrides, \\"Collection.Flex.Button\\")}
+            {...getOverrideProps(overrides, \\"Collection.Flex.Button\\")}
           ></Button>
         </Flex>
       )}
@@ -173,6 +177,7 @@ export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): JSX.Element {
   const { items } = props;
+  const overrides = { ...props.overrides };
   const bananas =
     items !== undefined
       ? items
@@ -189,7 +194,7 @@ export default function ListingCardCollection(
       order=\\"left-to-right\\"
       items={bananas}
       {...props}
-      {...getOverrideProps(props.overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
         <ListingCard
@@ -226,13 +231,14 @@ export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): JSX.Element {
   const { items } = props;
+  const overrides = { ...props.overrides };
   return (
     <Collection
       type=\\"list\\"
       isPaginated=\\"true\\"
       items={items}
       {...props}
-      {...getOverrideProps(props.overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
         <ListingCard
@@ -270,6 +276,7 @@ export default function CollectionOfCustomButtons(
   props: CollectionOfCustomButtonsProps
 ): JSX.Element {
   const { width, backgroundColor, buttonColor, items } = props;
+  const overrides = { ...props.overrides };
   const buttonUserFilter = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
@@ -310,16 +317,16 @@ export default function CollectionOfCustomButtons(
       backgroundColor={backgroundColor}
       items={buttonUser}
       {...props}
-      {...getOverrideProps(props.overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Flex {...getOverrideProps(props.overrides, \\"Collection.Flex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"Collection.Flex\\")}>
           <Button
             label={item.username || \\"hspain@gmail.com\\"}
             labelWidth={width}
             backgroundColor={buttonColor.favoriteColor}
             disabled={isDisabled}
-            {...getOverrideProps(props.overrides, \\"Collection.Flex.Button\\")}
+            {...getOverrideProps(overrides, \\"Collection.Flex.Button\\")}
           ></Button>
         </Flex>
       )}
@@ -339,16 +346,17 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type BoxWithButtonProps = {} & {
+export type BoxWithButtonProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
+  const overrides = { ...props.overrides };
   return (
-    <View {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
+    <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(props.overrides, \\"Box.Button\\")}
+        {...getOverrideProps(overrides, \\"Box.Button\\")}
       ></Button>
     </View>
   );
@@ -367,14 +375,15 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type BoxWithCustomButtonProps = {} & {
+export type BoxWithCustomButtonProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
 export default function BoxWithCustomButton(
   props: BoxWithCustomButtonProps
 ): JSX.Element {
+  const overrides = { ...props.overrides };
   return (
-    <View {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
+    <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -396,16 +405,17 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type BoxWithButtonProps = {} & {
+export type BoxWithButtonProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
+  const overrides = { ...props.overrides };
   return (
-    <View {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
+    <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(props.overrides, \\"Box.Button\\")}
+        {...getOverrideProps(overrides, \\"Box.Button\\")}
       ></Button>
     </View>
   );
@@ -431,15 +441,78 @@ export default function TextWithDataBinding(
   props: TextWithDataBindingProps
 ): JSX.Element {
   const { textValue } = props;
+  const overrides = { ...props.overrides };
   return (
     <Text
       color=\\"#ff0000\\"
       width=\\"20px\\"
       {...props}
-      {...getOverrideProps(props.overrides, \\"Text\\")}
+      {...getOverrideProps(overrides, \\"Text\\")}
     >
       {textValue}
     </Text>
+  );
+}
+"
+`;
+
+exports[`amplify render tests component with variants should render variants with options provided 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  EscapeHatchProps,
+  getOverrideProps,
+  getOverridesFromVariants,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CustomButtonProps = {
+  variant: \\"primary\\" | \\"secondary\\",
+  size?: \\"large\\",
+} & {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function CustomButton(props: CustomButtonProps): JSX.Element {
+  const {} = props;
+  const variants = [
+    {
+      variantValues: {
+        variant: \\"primary\\",
+      },
+      overrides: {
+        Button: {
+          fontSize: \\"12px\\",
+        },
+      },
+    },
+    {
+      variantValues: {
+        variant: \\"secondary\\",
+      },
+      overrides: {
+        Button: {
+          fontSize: \\"40px\\",
+        },
+      },
+    },
+    {
+      variantValues: {
+        variant: \\"primary\\",
+        size: \\"large\\",
+      },
+      overrides: {
+        Button: {
+          width: \\"500\\",
+        },
+      },
+    },
+  ];
+  const overrides = {
+    ...getOverridesFromVariants(variants, props),
+    ...props.overrides,
+  };
+  return (
+    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}></Button>
   );
 }
 "
@@ -467,13 +540,14 @@ export default function ComponentWithDataBinding(
   props: ComponentWithDataBindingProps
 ): JSX.Element {
   const { width, isDisabled, buttonUser, buttonColor } = props;
+  const overrides = { ...props.overrides };
   return (
     <Button
       label={buttonUser.username || \\"hspain@gmail.com\\"}
       labelWidth={width}
       disabled={isDisabled}
       {...props}
-      {...getOverrideProps(props.overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
   );
 }
@@ -500,17 +574,18 @@ export default function SectionHeading(
   props: SectionHeadingProps
 ): JSX.Element {
   const { newProp6fd1 } = props;
+  const overrides = { ...props.overrides };
   return (
     <Flex
       padding=\\"0px 0px 10px 0px\\"
       backgroundColor=\\"rgb(255,255,255)\\"
       direction=\\"column\\"
       {...props}
-      {...getOverrideProps(props.overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"Flex\\")}
     >
       <Flex
         tes={newProp6fd1.untitledfield}
-        {...getOverrideProps(props.overrides, \\"Flex.Flex\\")}
+        {...getOverrideProps(overrides, \\"Flex.Flex\\")}
       >
         <Text
           fontFamily=\\"Inter\\"
@@ -519,7 +594,7 @@ export default function SectionHeading(
           fontSize=\\"48px\\"
           lineHeight=\\"48px\\"
           fontWeight=\\"300\\"
-          {...getOverrideProps(props.overrides, \\"Flex.Flex.Text\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex.Text\\")}
         >
           Heading 2
         </Text>
@@ -531,7 +606,7 @@ export default function SectionHeading(
         fontSize=\\"32px\\"
         lineHeight=\\"48px\\"
         fontWeight=\\"400\\"
-        {...getOverrideProps(props.overrides, \\"Flex.Text\\")}
+        {...getOverrideProps(overrides, \\"Flex.Text\\")}
       >
         subtitle
       </Text>
@@ -560,6 +635,7 @@ export type CustomButtonProps = {
 };
 export default function CustomButton(props: CustomButtonProps): JSX.Element {
   const { width, buttonUser, buttonColor } = props;
+  const overrides = { ...props.overrides };
   return (
     <Button
       label={\`\${buttonUser.firstname || \\"Harrison\\"}\${\\" \\"}\${
@@ -567,7 +643,7 @@ export default function CustomButton(props: CustomButtonProps): JSX.Element {
       }\`}
       labelWidth={width}
       {...props}
-      {...getOverrideProps(props.overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
   );
 }
@@ -593,6 +669,7 @@ export type CustomButtonProps = {
 };
 export default function CustomButton(props: CustomButtonProps): JSX.Element {
   const { width, buttonUser, buttonColor } = props;
+  const overrides = { ...props.overrides };
   return (
     <Button
       label={\`\${buttonUser.firstname || \\"Harrison\\"}\${\\" \\"}\${
@@ -611,7 +688,7 @@ export default function CustomButton(props: CustomButtonProps): JSX.Element {
           : buttonUser.loggedOutColor
       }
       {...props}
-      {...getOverrideProps(props.overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
   );
 }
@@ -638,14 +715,15 @@ exports[`amplify render tests custom render config should render ES5 1`] = `
 import React from \\"react\\";
 import { Button, View, getOverrideProps } from \\"@aws-amplify/ui-react\\";
 export default function BoxWithButton(props) {
+  var overrides = __assign({}, props.overrides);
   return React.createElement(
     View,
-    __assign({}, props, getOverrideProps(props.overrides, \\"Box\\")),
+    __assign({}, props, getOverrideProps(overrides, \\"Box\\")),
     React.createElement(
       Button,
       __assign(
         { color: \\"#ff0000\\", width: \\"20px\\" },
-        getOverrideProps(props.overrides, \\"Box.Button\\")
+        getOverrideProps(overrides, \\"Box.Button\\")
       )
     )
   );
@@ -658,12 +736,13 @@ exports[`amplify render tests custom render config should render JSX 1`] = `
 import React from \\"react\\";
 import { Button, View, getOverrideProps } from \\"@aws-amplify/ui-react\\";
 export default function BoxWithButton(props) {
+  const overrides = Object.assign({}, props.overrides);
   return (
-    <View {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
+    <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(props.overrides, \\"Box.Button\\")}
+        {...getOverrideProps(overrides, \\"Box.Button\\")}
       ></Button>
     </View>
   );
@@ -683,18 +762,15 @@ Object.defineProperty(exports, \\"__esModule\\", { value: true });
 const react_1 = __importDefault(require(\\"react\\"));
 const ui_react_1 = require(\\"@aws-amplify/ui-react\\");
 function BoxWithButton(props) {
+  const overrides = Object.assign({}, props.overrides);
   return react_1.default.createElement(
     ui_react_1.View,
-    Object.assign(
-      {},
-      props,
-      ui_react_1.getOverrideProps(props.overrides, \\"Box\\")
-    ),
+    Object.assign({}, props, ui_react_1.getOverrideProps(overrides, \\"Box\\")),
     react_1.default.createElement(
       ui_react_1.Button,
       Object.assign(
         { color: \\"#ff0000\\", width: \\"20px\\" },
-        ui_react_1.getOverrideProps(props.overrides, \\"Box.Button\\")
+        ui_react_1.getOverrideProps(overrides, \\"Box.Button\\")
       )
     )
   );
@@ -714,12 +790,13 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type BoxWithButtonProps = {} & {
+export type BoxWithButtonProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
 export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
+  const overrides = { ...props.overrides };
   return (
-    <View padding-left {...props} {...getOverrideProps(props.overrides, \\"Box\\")}>
+    <View padding-left {...props} {...getOverrideProps(overrides, \\"Box\\")}>
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -930,11 +1007,12 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ProfileProps = {} & {
+export type ProfileProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
 export default function Profile(props: ProfileProps): JSX.Element {
   const {} = props;
+  const overrides = { ...props.overrides };
   const {
     attributes: {
       username,
@@ -943,18 +1021,18 @@ export default function Profile(props: ProfileProps): JSX.Element {
     },
   } = useAuthenticatedUser();
   return (
-    <Flex {...props} {...getOverrideProps(props.overrides, \\"Flex\\")}>
+    <Flex {...props} {...getOverrideProps(overrides, \\"Flex\\")}>
       <Image
         src={userImage}
-        {...getOverrideProps(props.overrides, \\"Flex.Image\\")}
+        {...getOverrideProps(overrides, \\"Flex.Image\\")}
       ></Image>
       <Button
         label={username}
-        {...getOverrideProps(props.overrides, \\"Flex.Button\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button\\")}
       ></Button>
       <Button
         label={customUserAttributeIcecream}
-        {...getOverrideProps(props.overrides, \\"Flex.Button\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button\\")}
       ></Button>
     </Flex>
   );

@@ -29,6 +29,12 @@ export function isStudioComponentWithCollectionProperties(
   return 'collectionProperties' in component && component.collectionProperties !== undefined;
 }
 
+export function isStudioComponentWithVariants(
+  component: StudioComponent | StudioComponentChild,
+): component is StudioComponent & Required<Pick<StudioComponent, 'variants'>> {
+  return 'variants' in component && component.variants !== undefined && component.variants.length > 0;
+}
+
 export function isDataPropertyBinding(
   prop:
     | StudioComponentDataPropertyBinding
