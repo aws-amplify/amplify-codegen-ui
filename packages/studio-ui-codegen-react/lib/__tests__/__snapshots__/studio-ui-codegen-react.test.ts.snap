@@ -12,7 +12,7 @@ import {
 export type TestProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function Test(props: TestProps): JSX.Element {
+export default function Test(props: TestProps): React.Element {
   const overrides = { ...props.overrides };
   return (
     <View
@@ -38,7 +38,7 @@ import {
 export type CustomButtonProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function CustomButton(props: CustomButtonProps): JSX.Element {
+export default function CustomButton(props: CustomButtonProps): React.Element {
   const overrides = { ...props.overrides };
   return (
     <Button
@@ -64,7 +64,7 @@ import {
 export type CustomTextProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function CustomText(props: CustomTextProps): JSX.Element {
+export default function CustomText(props: CustomTextProps): React.Element {
   const overrides = { ...props.overrides };
   return (
     <Text
@@ -102,7 +102,7 @@ export type CollectionOfCustomButtonsProps = {
 };
 export default function CollectionOfCustomButtons(
   props: CollectionOfCustomButtonsProps
-): JSX.Element {
+): React.Element {
   const { width, backgroundColor, buttonColor, items } = props;
   const overrides = { ...props.overrides };
   const buttonUserFilter = {
@@ -157,7 +157,8 @@ export default function CollectionOfCustomButtons(
 `;
 
 exports[`amplify render tests collection should render collection with data binding and sort 1`] = `
-"/* eslint-disable */
+Object {
+  "componentText": "/* eslint-disable */
 import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
@@ -179,7 +180,7 @@ export type CollectionOfCustomButtonsProps = {
 };
 export default function CollectionOfCustomButtons(
   props: CollectionOfCustomButtonsProps
-): JSX.Element {
+): React.Element {
   const { width, backgroundColor, buttonColor, items } = props;
   const overrides = { ...props.overrides };
   const buttonUserFilter = {
@@ -235,7 +236,10 @@ export default function CollectionOfCustomButtons(
     </Collection>
   );
 }
-"
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
 `;
 
 exports[`amplify render tests collection should render collection with data binding with no predicate 1`] = `
@@ -257,7 +261,7 @@ export type ListingCardCollectionProps = {
 };
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
-): JSX.Element {
+): React.Element {
   const { items } = props;
   const overrides = { ...props.overrides };
   const bananas =
@@ -311,7 +315,7 @@ export type ListingCardCollectionProps = {
 };
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
-): JSX.Element {
+): React.Element {
   const { items } = props;
   const overrides = { ...props.overrides };
   return (
@@ -346,7 +350,9 @@ import {
 export type BoxWithButtonProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
+export default function BoxWithButton(
+  props: BoxWithButtonProps
+): React.Element {
   const overrides = { ...props.overrides };
   return (
     <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
@@ -377,7 +383,7 @@ export type BoxWithCustomButtonProps = {
 };
 export default function BoxWithCustomButton(
   props: BoxWithCustomButtonProps
-): JSX.Element {
+): React.Element {
   const overrides = { ...props.overrides };
   return (
     <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
@@ -405,7 +411,9 @@ import {
 export type BoxWithButtonProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
+export default function BoxWithButton(
+  props: BoxWithButtonProps
+): React.Element {
   const overrides = { ...props.overrides };
   return (
     <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
@@ -436,7 +444,7 @@ export type TextWithDataBindingProps = {
 };
 export default function TextWithDataBinding(
   props: TextWithDataBindingProps
-): JSX.Element {
+): React.Element {
   const { textValue } = props;
   const overrides = { ...props.overrides };
   return (
@@ -473,7 +481,7 @@ export type ComponentWithDataBindingProps = {
 };
 export default function ComponentWithDataBinding(
   props: ComponentWithDataBindingProps
-): JSX.Element {
+): React.Element {
   const { width, isDisabled, buttonUser, buttonColor } = props;
   const overrides = { ...props.overrides };
   return (
@@ -507,7 +515,7 @@ export type SectionHeadingProps = {
 };
 export default function SectionHeading(
   props: SectionHeadingProps
-): JSX.Element {
+): React.Element {
   const { newProp6fd1 } = props;
   const overrides = { ...props.overrides };
   return (
@@ -552,7 +560,8 @@ export default function SectionHeading(
 `;
 
 exports[`amplify render tests component with variants should render variants with options provided 1`] = `
-"/* eslint-disable */
+Object {
+  "componentText": "/* eslint-disable */
 import React from \\"react\\";
 import {
   Button,
@@ -567,7 +576,7 @@ export type CustomButtonProps = {
 } & {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function CustomButton(props: CustomButtonProps): JSX.Element {
+export default function CustomButton(props: CustomButtonProps): React.Element {
   const {} = props;
   const variants = [
     {
@@ -610,7 +619,10 @@ export default function CustomButton(props: CustomButtonProps): JSX.Element {
     <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}></Button>
   );
 }
-"
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
 `;
 
 exports[`amplify render tests concat and conditional transform should render component with concatenation prop 1`] = `
@@ -630,7 +642,7 @@ export type CustomButtonProps = {
 } & {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function CustomButton(props: CustomButtonProps): JSX.Element {
+export default function CustomButton(props: CustomButtonProps): React.Element {
   const { width, buttonUser, buttonColor } = props;
   const overrides = { ...props.overrides };
   return (
@@ -664,7 +676,7 @@ export type CustomButtonProps = {
 } & {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function CustomButton(props: CustomButtonProps): JSX.Element {
+export default function CustomButton(props: CustomButtonProps): React.Element {
   const { width, buttonUser, buttonColor } = props;
   const overrides = { ...props.overrides };
   return (
@@ -776,6 +788,16 @@ exports.default = BoxWithButton;
 "
 `;
 
+exports[`amplify render tests declarations should render declarations 1`] = `
+"import React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type ProfileProps = {
+    overrides?: EscapeHatchProps | undefined | null;
+};
+export default function Profile(props: ProfileProps): React.Element;
+"
+`;
+
 exports[`amplify render tests sample code snippet tests should generate a sample code snippet for components 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
@@ -790,7 +812,9 @@ import {
 export type BoxWithButtonProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function BoxWithButton(props: BoxWithButtonProps): JSX.Element {
+export default function BoxWithButton(
+  props: BoxWithButtonProps
+): React.Element {
   const overrides = { ...props.overrides };
   return (
     <View padding-left {...props} {...getOverrideProps(overrides, \\"Box\\")}>
@@ -1007,7 +1031,7 @@ import {
 export type ProfileProps = {
   overrides?: EscapeHatchProps | undefined | null,
 };
-export default function Profile(props: ProfileProps): JSX.Element {
+export default function Profile(props: ProfileProps): React.Element {
   const {} = props;
   const overrides = { ...props.overrides };
   const {
