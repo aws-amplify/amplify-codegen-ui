@@ -1,0 +1,110 @@
+{
+    "componentType": "Flex",
+    "name": "SiteHeader",
+    "actions": {
+      "openAmplifyDocs": {
+        "type": "Navigation.Open",
+        "parameters": {
+          "href": "docs.amplify.aws"
+        }
+      },
+      "redirectToFooter": {
+        "type": "Navigation.Redirect",
+        "parameters": {
+          "href": "#footer-id",
+          "replaceHistory": true
+        }
+      },
+      "navigateToFAQPage": {
+        "type": "Navigation.Redirect",
+        "parameters": {
+          "href": "/faq"
+        }
+      },
+      "reloadPage": {
+        "type": "Navigation.Refresh"
+      }
+    },
+    "properties": {
+      "direction": {
+        "value": "row"
+      },
+      "justifyContent": {
+        "value": "space-between"
+      }
+    },
+    "children": [
+      {
+        "componentType": "Heading",
+        "name": "Heading1",
+        "properties": {
+          "level": {
+            "value": 1
+          },
+          "children": {
+            "value": "Title"
+          }
+        }
+      },
+      {
+        "componentType": "Button",
+        "name": "Button1",
+        "events": {
+          "click": "openAmplifyDocs"
+        },
+        "properties": {
+          "variation": {
+            "value": "primary"
+          },
+          "children": {
+            "value": "Open Amplify Docs"
+          }
+        }
+      },
+      {
+        "componentType": "Button",
+        "name": "Button2",
+        "events": {
+          "click": "navigateToFAQPage"
+        },
+        "properties": {
+          "variation": {
+            "value": "primary"
+          },
+          "children": {
+            "value": "Navigate to FAQ Page"
+          }
+        }
+      },
+      {
+        "componentType": "Button",
+        "name": "Button3",
+        "events": {
+          "click": "reloadPage"
+        },
+        "properties": {
+          "variation": {
+            "value": "primary"
+          },
+          "children": {
+            "value": "Reload Page"
+          }
+        }
+      },
+      {
+        "componentType": "Button",
+        "name": "Button4",
+        "events": {
+          "click": "redirectToFooter"
+        },
+        "properties": {
+          "variation": {
+            "value": "primary"
+          },
+          "children": {
+            "value": "Redirect To Footer (No History Update)"
+          }
+        }
+      }
+    ]
+  }

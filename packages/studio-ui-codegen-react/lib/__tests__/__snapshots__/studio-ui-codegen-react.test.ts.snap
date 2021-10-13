@@ -881,6 +881,84 @@ export default function BoxWithButton(
 "
 `;
 
+exports[`amplify render tests should render navigation actions 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  EscapeHatchProps,
+  Flex,
+  Heading,
+  findChildOverrides,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type SiteHeaderProps = {
+  overrides?: EscapeHatchProps | undefined | null,
+};
+export default function SiteHeader(props: SiteHeaderProps): React.Element {
+  const overrides = { ...props.overrides };
+  const { invokeAction } = useActions({
+    openAmplifyDocs: {
+      type: \\"Navigation.Open\\",
+      parameters: { href: \\"docs.amplify.aws\\" },
+    },
+    redirectToFooter: {
+      type: \\"Navigation.Redirect\\",
+      parameters: { href: \\"#footer-id\\", replaceHistory: true },
+    },
+    navigateToFAQPage: {
+      type: \\"Navigation.Redirect\\",
+      parameters: { href: \\"/faq\\" },
+    },
+    reloadPage: { type: \\"Navigation.Refresh\\" },
+  });
+  return (
+    <Flex
+      direction=\\"row\\"
+      justifyContent=\\"space-between\\"
+      {...props}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Heading
+        level={1}
+        children=\\"Title\\"
+        {...findChildOverrides(props.overrides, \\"Heading\\")}
+      ></Heading>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Open Amplify Docs\\"
+        onClick={invokeAction(\\"openAmplifyDocs\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button\\")}
+      ></Button>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Navigate to FAQ Page\\"
+        onClick={invokeAction(\\"navigateToFAQPage\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button\\")}
+      ></Button>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Reload Page\\"
+        onClick={invokeAction(\\"reloadPage\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button\\")}
+      ></Button>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Redirect To Footer (No History Update)\\"
+        onClick={invokeAction(\\"redirectToFooter\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests theme should render the theme 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

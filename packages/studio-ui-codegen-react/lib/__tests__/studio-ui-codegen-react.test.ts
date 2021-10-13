@@ -209,4 +209,8 @@ describe('amplify render tests', () => {
       expect(generateWithAmplifyRenderer('componentWithActionSignOut')).toMatchSnapshot();
     });
   });
+
+  it('should render navigation actions', () => {
+    expect(generateWithAmplifyRenderer('componentWithActionNavigation')).toMatchSnapshot();
+  });
 });
