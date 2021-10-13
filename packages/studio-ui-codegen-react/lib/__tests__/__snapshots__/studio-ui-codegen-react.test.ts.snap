@@ -631,35 +631,16 @@ export default function CustomButton(props: CustomButtonProps): React.Element {
   const {} = props;
   const variants = [
     {
-      variantValues: {
-        variant: \\"primary\\",
-      },
-      overrides: {
-        Button: {
-          fontSize: \\"12px\\",
-        },
-      },
+      variantValues: { variant: \\"primary\\" },
+      overrides: { Button: { fontSize: \\"12px\\" } },
     },
     {
-      variantValues: {
-        variant: \\"secondary\\",
-      },
-      overrides: {
-        Button: {
-          fontSize: \\"40px\\",
-        },
-      },
+      variantValues: { variant: \\"secondary\\" },
+      overrides: { Button: { fontSize: \\"40px\\" } },
     },
     {
-      variantValues: {
-        variant: \\"primary\\",
-        size: \\"large\\",
-      },
-      overrides: {
-        Button: {
-          width: \\"500\\",
-        },
-      },
+      variantValues: { variant: \\"primary\\", size: \\"large\\" },
+      overrides: { Button: { width: \\"500\\" } },
     },
   ];
   const overrides = {

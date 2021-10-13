@@ -498,81 +498,18 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   /**
-   * This is perhaps slightly odd, because the input shape very directly lines up with what we emit as the assignment
-   * expression, but I wanted to leave this so we're not implicitly opting out of processing, and relying on matching
-   * shapes in the input and output layers for things to work.
    * const variants = [
-   {
-    variantValues: {
-      'variant': 'primary'
-    },
-    overrides: {
-      'Button': {
-        'fontSize': '12px',
-      },
-    },
-  },
-   {
-    variantValues: {
-      'variant': 'secondary'
-    },
-    overrides: {
-      'Button': {
-        'fontSize': '40px',
-      },
-    },
-  },
-   {
-    variantValues: {
-      'variant': 'primary',
-      'size': 'large'
-    },
-    overrides: {
-      'Button': {
-        'width': '500',
-      },
-    },
-  }
+     {
+       variantValues: { variant: 'primary' },
+       overrides: { Button: { fontSize: '12px' } },
+     },
+     {
+       variantValues: { variant: 'secondary' },
+       overrides: { Button: { fontSize: '40px' } }
+     }
    ];
    */
   private buildVariantDeclaration(variants: StudioComponentVariant[]): VariableStatement {
-    const variantObjectLiteralExpressions = variants.map((variant) => {
-      const variantValueProperties = Object.entries(variant.variantValues).map(([variantPropName, variantPropField]) =>
-        factory.createPropertyAssignment(
-          factory.createStringLiteral(variantPropName),
-          factory.createStringLiteral(variantPropField),
-        ),
-      );
-
-      const variantOverrides = Object.entries(variant.overrides).map(([hierarchyReference, overrideExpression]) => {
-        const variantValueProperties = Object.entries(overrideExpression).map(([overrideName, overrideValue]) =>
-          factory.createPropertyAssignment(
-            factory.createStringLiteral(overrideName),
-            factory.createStringLiteral(overrideValue),
-          ),
-        );
-
-        return factory.createPropertyAssignment(
-          factory.createStringLiteral(hierarchyReference),
-          factory.createObjectLiteralExpression(variantValueProperties, true),
-        );
-      });
-
-      return factory.createObjectLiteralExpression(
-        [
-          factory.createPropertyAssignment(
-            factory.createIdentifier('variantValues'),
-            factory.createObjectLiteralExpression(variantValueProperties, true),
-          ),
-          factory.createPropertyAssignment(
-            factory.createIdentifier('overrides'),
-            factory.createObjectLiteralExpression(variantOverrides, true),
-          ),
-        ],
-        true,
-      );
-    });
-
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -581,7 +518,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createIdentifier('variants'),
             undefined,
             undefined,
-            factory.createArrayLiteralExpression(variantObjectLiteralExpressions),
+            jsonToLiteral(variants as json),
           ),
         ],
         ts.NodeFlags.Const,
