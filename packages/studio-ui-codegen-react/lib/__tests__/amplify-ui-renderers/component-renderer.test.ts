@@ -1,6 +1,7 @@
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { createPrinter, EmitHint, createSourceFile, ScriptTarget, ScriptKind } from 'typescript';
 import { ImportCollection } from '../../import-collection';
+import { assertASTMatchesSnapshot } from '../__utils__/snapshot-helpers';
 
 import BadgeRenderer from '../../amplify-ui-renderers/badge';
 import ButtonRenderer from '../../amplify-ui-renderers/button';
@@ -31,10 +32,7 @@ function testComponentRenderer(
   const renderChildren = jest.fn();
   const renderedComponent = new Renderer(component, new ImportCollection()).renderElement(renderChildren);
 
-  // file is not actually written. filename does not matter
-  const file = createSourceFile('test.ts', '', ScriptTarget.ES2015, true, ScriptKind.TS);
-  const printer = createPrinter();
-  expect(printer.printNode(EmitHint.Unspecified, renderedComponent, file)).toMatchSnapshot();
+  assertASTMatchesSnapshot(renderedComponent);
 }
 
 describe('Component Renderers', () => {
