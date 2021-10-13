@@ -4,6 +4,7 @@ import {
   StudioComponentAuthPropertyBinding,
   StudioComponentSort,
   StudioComponentVariant,
+  StudioComponentAction,
 } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
@@ -14,6 +15,7 @@ import {
   isAuthPropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
+  isStudioComponentWithActions,
 } from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';
@@ -47,6 +49,8 @@ import {
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
+  json,
+  jsonToLiteral,
 } from './react-studio-template-renderer-helper';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -438,6 +442,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(entry);
     });
 
+    const actionStatement = this.buildUseActionsStatement(component);
+    if (actionStatement !== undefined) {
+      statements.push(actionStatement);
+    }
+
     return statements;
   }
 
@@ -807,6 +816,41 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
+  /* Build useActions hook with component.actions passed
+   *
+   * Example:
+   * const { invokeAction } = useActions({
+   *   signOutAction: {
+   *     type: "Amplify.Auth.SignOut",
+   *     parameters: { global: true },
+   *   },
+   * });
+   */
+  private buildUseActionsStatement(component: StudioComponent): Statement | undefined {
+    if (isStudioComponentWithActions(component)) {
+      return factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createObjectBindingPattern([
+                factory.createBindingElement(undefined, undefined, factory.createIdentifier('invokeAction'), undefined),
+              ]),
+              undefined,
+              undefined,
+              factory.createCallExpression(factory.createIdentifier('useActions'), undefined, [
+                this.actionsToObjectLiteralExpression(component.actions),
+              ]),
+            ),
+          ],
+          ts.NodeFlags.Const,
+        ),
+      );
+    }
+
+    return undefined;
+  }
+
   private buildUseDataStoreBindingCall(
     callType: string,
     bindingModel: string,
@@ -859,6 +903,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         );
       }, false),
     );
+  }
+
+  private actionsToObjectLiteralExpression(actions: { [actionName: string]: StudioComponentAction }) {
+    // TODO: support property bindings
+    return jsonToLiteral(actions as json);
   }
 
   private buildPredicateDeclaration(name: string, predicate: StudioComponentPredicate): VariableStatement {

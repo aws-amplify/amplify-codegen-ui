@@ -2,7 +2,11 @@ import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-
 import { ComponentRendererBase, StudioNode } from '@amzn/studio-ui-codegen';
 import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory } from 'typescript';
 
-import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
+import {
+  addBindingPropertiesImports,
+  buildOpeningElementAttributes,
+  buildOpeningElementActions,
+} from './react-component-render-helper';
 import { ImportCollection } from './import-collection';
 
 export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<TPropIn, JsxElement> {
@@ -16,17 +20,23 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
   }
 
   protected renderOpeningElement(tagName: string): JsxOpeningElement {
-    const propsArray = Object.entries(this.component.properties)
+    const attributes = Object.entries(this.component.properties)
       // value should be child of Text, not a prop
       .filter(([key]) => !(this.component.componentType === 'Text' && key === 'value'))
       .map(([key, value]) => buildOpeningElementAttributes(value, key));
 
-    this.addPropsSpreadAttributes(propsArray);
+    if ('events' in this.component && this.component.events !== undefined) {
+      attributes.push(
+        ...Object.entries(this.component.events).map(([key, value]) => buildOpeningElementActions(key, value)),
+      );
+    }
+
+    this.addPropsSpreadAttributes(attributes);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
       undefined,
-      factory.createJsxAttributes(propsArray),
+      factory.createJsxAttributes(attributes),
     );
   }
 

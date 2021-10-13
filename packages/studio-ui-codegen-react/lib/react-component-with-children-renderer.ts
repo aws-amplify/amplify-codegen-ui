@@ -2,7 +2,11 @@ import { ComponentWithChildrenRendererBase, StudioNode } from '@amzn/studio-ui-c
 import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
 import { ImportCollection } from './import-collection';
-import { addBindingPropertiesImports, buildOpeningElementAttributes } from './react-component-render-helper';
+import {
+  addBindingPropertiesImports,
+  buildOpeningElementAttributes,
+  buildOpeningElementActions,
+} from './react-component-render-helper';
 
 export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithChildrenRendererBase<
   TPropIn,
@@ -19,30 +23,42 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
   }
 
   protected renderCustomCompOpeningElement(tagName: string): JsxOpeningElement {
-    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
+    const attributes = Object.entries(this.component.properties).map(([key, value]) =>
       buildOpeningElementAttributes(value, key),
     );
 
-    this.addFindChildOverrideAttribute(propsArray, tagName);
+    if ('events' in this.component && this.component.events !== undefined) {
+      attributes.push(
+        ...Object.entries(this.component.events).map(([key, value]) => buildOpeningElementActions(key, value)),
+      );
+    }
+
+    this.addFindChildOverrideAttribute(attributes, tagName);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
       undefined,
-      factory.createJsxAttributes(propsArray),
+      factory.createJsxAttributes(attributes),
     );
   }
 
   protected renderOpeningElement(tagName: string): JsxOpeningElement {
-    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
+    const attributes = Object.entries(this.component.properties).map(([key, value]) =>
       buildOpeningElementAttributes(value, key),
     );
 
-    this.addPropsSpreadAttributes(propsArray);
+    if ('events' in this.component && this.component.events !== undefined) {
+      attributes.push(
+        ...Object.entries(this.component.events).map(([key, value]) => buildOpeningElementActions(key, value)),
+      );
+    }
+
+    this.addPropsSpreadAttributes(attributes);
 
     return factory.createJsxOpeningElement(
       factory.createIdentifier(tagName),
       undefined,
-      factory.createJsxAttributes(propsArray),
+      factory.createJsxAttributes(attributes),
     );
   }
 
