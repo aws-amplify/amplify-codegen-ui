@@ -511,7 +511,7 @@ export type StudioTheme = DeepPartial<typeof theme>;
 /**
  * Component action types
  */
-export type StudioComponentAction = AmplifyAuthSignOutAction;
+export type StudioComponentAction = AmplifyAuthSignOutAction | NavigationAction;
 
 /**
  * Amplify Auth signout Action type
@@ -521,4 +521,37 @@ export type AmplifyAuthSignOutAction = {
   parameters?: {
     global: boolean;
   };
+};
+
+/**
+ * Navigation related action types.
+ */
+export type NavigationAction =
+  | NavigationRedirectAction
+  | NavigationOpenAction
+  | NavigationRefreshAction;
+
+/**
+ * Redirect action type
+ */
+export type NavigationRedirectAction = {
+  type: 'Navigation.Redirect';
+  parameters: {
+    href: string;
+    replaceHistory?: boolean; // Default to false
+  }
+};
+
+/**
+ * Redirect action type
+ */
+ export type NavigationOpenAction = {
+  type: 'Navigation.Open';
+  parameters: {
+    href: string;
+  }
+};
+
+export type NavigationRefreshAction = {
+  type: 'Navigation.Refresh';
 };
