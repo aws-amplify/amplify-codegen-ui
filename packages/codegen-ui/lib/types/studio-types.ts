@@ -76,12 +76,7 @@ export type StudioComponent = {
   overrides?: StudioComponentOverrides;
 
   bindingProperties: {
-    [propertyName: string]:
-      | StudioComponentDataPropertyBinding
-      | StudioComponentAuthPropertyBinding
-      | StudioComponentStoragePropertyBinding
-      | StudioComponentSimplePropertyBinding
-      | StudioComponentEventPropertyBinding;
+    [propertyName: string]: StudioComponentPropertyBinding;
   };
 
   /**
@@ -90,6 +85,8 @@ export type StudioComponent = {
   collectionProperties?: {
     [propertyName: string]: StudioComponentDataConfiguration;
   };
+
+  eventProperties?: StudioComponentEventProperties;
 
   /**
    * Component actions
@@ -140,12 +137,7 @@ export type NewStudioComponent = {
   overrides?: StudioComponentOverrides;
 
   bindingProperties: {
-    [propertyName: string]:
-      | StudioComponentDataPropertyBinding
-      | StudioComponentAuthPropertyBinding
-      | StudioComponentStoragePropertyBinding
-      | StudioComponentSimplePropertyBinding
-      | StudioComponentEventPropertyBinding;
+    [propertyName: string]: StudioComponentPropertyBinding;
   };
 
   /**
@@ -154,6 +146,8 @@ export type NewStudioComponent = {
   collectionProperties?: {
     [propertyName: string]: StudioComponentDataPropertyBinding;
   };
+
+  eventProperties?: StudioComponentEventProperties;
 };
 
 export type StudioComponentSimplePropertyBinding = {
@@ -190,6 +184,8 @@ export type StudioComponentChild = {
    * These are the nested components in a composite
    */
   children?: StudioComponentChild[];
+
+  eventProperties?: StudioComponentEventProperties;
 
   /**
    * Event <-> Action mapping (e.g click => SignOutAction)
@@ -387,6 +383,13 @@ export type StudioComponentSort = {
   direction: 'ASC' | 'DESC';
 };
 
+export type StudioComponentPropertyBinding =
+  | StudioComponentDataPropertyBinding
+  | StudioComponentAuthPropertyBinding
+  | StudioComponentStoragePropertyBinding
+  | StudioComponentSimplePropertyBinding
+  | StudioComponentEventPropertyBinding;
+
 /**
  * This represent the configuration for binding a component property
  * to Amplify specific information
@@ -479,6 +482,7 @@ export enum StudioComponentPropertyBindingType {
   Data = 'Data',
   Authentication = 'Authentication',
   Storage = 'Storage',
+  Event = 'Event',
 }
 
 /**
@@ -514,6 +518,10 @@ export type StudioComponentAuthBindingProperty = {
 export type StudioComponentStorageBindingProperty = {
   bucket: string;
   key?: string;
+};
+
+export type StudioComponentEventProperties = {
+  [eventName: string]: string;
 };
 
 export type StudioTheme = {

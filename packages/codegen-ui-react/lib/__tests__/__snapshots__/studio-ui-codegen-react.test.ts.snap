@@ -5646,6 +5646,54 @@ export default function ViewWithButton(
 "
 `;
 
+exports[`amplify render tests should render events 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import Input from \\"./Input\\";
+import { Button, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
+import { SyntheticEvent } from \\"react\\";
+
+export type EventProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    onButtonClick?: (event: SyntheticEvent) => void;
+    onInputChange?: (event: SyntheticEvent) => void;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function Event(props: EventProps): React.ReactElement {
+  const {
+    onButtonClick,
+    onInputChange,
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>
+      <Input
+        onChange={onInputChange}
+        {...getOverrideProps(overrides, \\"Flex.Input[0]\\")}
+      ></Input>
+      <Button
+        onClick={onButtonClick}
+        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests should render navigation actions 1`] = `
 Object {
   "componentText": "/* eslint-disable */

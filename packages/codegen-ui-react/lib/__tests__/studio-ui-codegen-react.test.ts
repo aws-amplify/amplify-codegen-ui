@@ -321,6 +321,10 @@ describe('amplify render tests', () => {
     expect(generateWithAmplifyRenderer('componentWithActionNavigation')).toMatchSnapshot();
   });
 
+  it('should render events', () => {
+    expect(generateWithAmplifyRenderer('workflow/event')).toMatchSnapshot();
+  });
+
   describe('default value', () => {
     it('should render bound default value', () => {
       expect(generateWithAmplifyRenderer('default-value-components/boundDefaultValue')).toMatchSnapshot();

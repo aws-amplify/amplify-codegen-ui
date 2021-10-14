@@ -56,6 +56,7 @@ const studioComponentChildSchema: any = yup.object({
   bindingProperties: yup.object().nullable(),
   collectionProperties: yup.object().nullable(),
   actions: yup.object().nullable(),
+  eventProperties: yup.object().nullable(),
 });
 
 const studioComponentSchema = yup.object({
@@ -71,6 +72,7 @@ const studioComponentSchema = yup.object({
   bindingProperties: yup.object().nullable(),
   collectionProperties: yup.object().nullable(),
   actions: yup.object().nullable(),
+  eventProperties: yup.object().nullable(),
 });
 
 /**

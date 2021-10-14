@@ -20,6 +20,7 @@ import {
   isSimplePropertyBinding,
   isDataPropertyBinding,
   isAuthPropertyBinding,
+  isEventPropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
   isStudioComponentWithActions,
@@ -424,6 +425,30 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
         );
         propSignatures.push(propSignature);
+      } else if (isEventPropertyBinding(binding)) {
+        this.importCollection.addImport('react', 'SyntheticEvent');
+        const propSignature = factory.createPropertySignature(
+          undefined,
+          propName,
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createFunctionTypeNode(
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('event'),
+                undefined,
+                factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
+                undefined,
+              ),
+            ],
+            factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
+          ),
+        );
+
+        propSignatures.push(propSignature);
       }
     });
     if (component.componentType === 'Collection') {
@@ -447,7 +472,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithBinding(component)) {
       Object.entries(component.bindingProperties).forEach((entry) => {
         const [propName, binding] = entry;
-        if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding)) {
+        if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding) || isEventPropertyBinding(binding)) {
           const usesHook = bindingPropertyUsesHook(binding);
           const bindingElement = factory.createBindingElement(
             undefined,

@@ -18,6 +18,7 @@ import {
   StudioComponentAuthPropertyBinding,
   StudioComponentStoragePropertyBinding,
   StudioComponentSimplePropertyBinding,
+  StudioComponentEventPropertyBinding,
 } from '../types';
 import {
   isStudioComponentWithBinding,
@@ -27,6 +28,7 @@ import {
   isSimplePropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
+  isEventPropertyBinding,
 } from '../renderer-helper';
 
 describe('render-helper', () => {
@@ -38,6 +40,7 @@ describe('render-helper', () => {
     string: StudioComponentSimplePropertyBinding;
     number: StudioComponentSimplePropertyBinding;
     date: StudioComponentSimplePropertyBinding;
+    event: StudioComponentEventPropertyBinding;
   } = {
     data: {
       type: 'Data',
@@ -68,6 +71,9 @@ describe('render-helper', () => {
     },
     date: {
       type: 'Date',
+    },
+    event: {
+      type: 'Event',
     },
   };
 
@@ -202,6 +208,14 @@ describe('render-helper', () => {
       expect(isSimplePropertyBinding(bindingProperties.date)).toBeTruthy();
       const { boolean, string, number, date, ...otherTypes } = bindingProperties;
       Object.values(otherTypes).forEach((otherType) => expect(isSimplePropertyBinding(otherType)).toBeFalsy());
+    });
+  });
+
+  describe('isEventPropertyBinding', () => {
+    test('property has type Event', () => {
+      expect(isEventPropertyBinding(bindingProperties.event)).toBeTruthy();
+      const { event, ...otherTypes } = bindingProperties;
+      Object.values(otherTypes).forEach((otherType) => expect(isEventPropertyBinding(otherType)).toBeFalsy());
     });
   });
 });
