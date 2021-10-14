@@ -17,6 +17,14 @@ import React, { useState, SyntheticEvent } from 'react';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider } from '@aws-amplify/ui-react';
 import { Event } from './ui-components'; // eslint-disable-line import/extensions
+/*
+import {
+  Event, 
+  NavigationAction,
+  SignOutAction, 
+  CreateItemAction
+} from './ui-components'; // eslint-disable-line import/extensions
+*/
 
 export default function ComplexTests() {
   const [textChanged, setTextChanged] = useState('');
@@ -37,6 +45,23 @@ export default function ComplexTests() {
         />
       </View>
       <Divider />
+      {/*
+      <Heading>Navigation Action</Heading>
+      <View id="navigation-action">
+        <NavigationAction />
+      </View>
+      <Divider />
+      <Heading>Sign Out Action</Heading>
+      <View id="sign-out-action">
+        <SignOutAction />
+      </View>
+      <Divider />
+      <Heading>Create Item Action</Heading>
+      <View id="sign-out-action">
+        <CreateItemAction />
+      </View>
+      <Divider />
+      */}
     </AmplifyProvider>
   );
 }

@@ -21,6 +21,7 @@ import {
   StudioComponentStoragePropertyBinding,
   StudioComponentEventPropertyBinding,
   StudioComponentSimplePropertyBinding,
+  StudioComponentActionPropertyBinding,
   StudioComponentPropertyType,
   StudioComponentPropertyBinding,
 } from './types';
@@ -49,12 +50,6 @@ export function isStudioComponentWithVariants(
   component: StudioComponent | StudioComponentChild,
 ): component is StudioComponent & Required<Pick<StudioComponent, 'variants'>> {
   return 'variants' in component && component.variants !== undefined && component.variants.length > 0;
-}
-
-export function isStudioComponentWithActions(
-  component: StudioComponent | StudioComponentChild,
-): component is StudioComponent & Required<Pick<StudioComponent, 'actions'>> {
-  return 'actions' in component && component.actions !== undefined;
 }
 
 export function isDataPropertyBinding(
@@ -93,4 +88,10 @@ export function isEventPropertyBinding(
   prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentEventPropertyBinding {
   return 'type' in prop && prop.type === 'Event';
+}
+
+export function isActionPropertyBinding(
+  prop: StudioComponentPropertyBinding,
+): prop is StudioComponentActionPropertyBinding {
+  return 'type' in prop && prop.type === 'Action';
 }

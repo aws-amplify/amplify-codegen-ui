@@ -1,0 +1,54 @@
+{
+  "componentType": "Flex",
+  "name": "SignOutAction",
+  "bindingProperties": {
+    "signOutAction": {
+      "type": "Action",
+      "bindingProperties": {
+        "type": "Amplify.Auth.SignOut",
+        "parameters": {
+          "global": {
+            "value": true
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "direction": {
+      "value": "row"
+    },
+    "justifyContent": {
+      "value": "space-between"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Heading",
+      "name": "Heading1",
+      "properties": {
+        "level": {
+          "value": 1
+        },
+        "children": {
+          "value": "Title"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "Button1",
+      "eventProperties": {
+        "click": "signOutAction"
+      },
+      "properties": {
+        "variation": {
+          "value": "primary"
+        },
+        "children": {
+          "value": "Log off"
+        }
+      }
+    }
+  ]
+}

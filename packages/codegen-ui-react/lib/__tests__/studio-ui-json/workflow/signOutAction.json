@@ -1,14 +1,6 @@
 {
   "componentType": "Flex",
   "name": "SiteHeader",
-  "actions": {
-    "signOutAction": {
-      "type": "Amplify.Auth.SignOut",
-      "parameters": {
-        "global": true
-      }
-    }
-  },
   "properties": {
     "direction": {
       "value": "row"
@@ -33,8 +25,18 @@
     {
       "componentType": "Button",
       "name": "Button1",
-      "events": {
-        "click": "signOutAction"
+      "eventProperties": {
+        "click": {
+          "type": "Action",
+          "bindingProperties": {
+            "type": "Amplify.Auth.SignOut",
+            "parameters": {
+              "global": {
+                "value": true
+              }
+            }
+          }
+        }
       },
       "properties": {
         "variation": {

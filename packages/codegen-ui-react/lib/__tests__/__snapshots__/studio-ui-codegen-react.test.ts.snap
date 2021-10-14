@@ -1,5 +1,192 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`amplify render tests actions should render navigation actions 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useActions,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Heading } from \\"@aws-amplify/ui-react\\";
+
+export type SiteHeaderProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const { invokeAction } = useActions({
+    openAmplifyDocs: {
+      type: \\"Navigation.Open\\",
+      parameters: { href: \\"docs.amplify.aws\\" },
+    },
+    redirectToFooter: {
+      type: \\"Navigation.Redirect\\",
+      parameters: { href: \\"#footer-id\\", replaceHistory: true },
+    },
+    navigateToFAQPage: {
+      type: \\"Navigation.Redirect\\",
+      parameters: { href: \\"/faq\\" },
+    },
+    reloadPage: { type: \\"Navigation.Refresh\\" },
+  });
+  const openAmplifyDocs = invokeAction(\\"openAmplifyDocs\\");
+  const redirectToFooter = invokeAction(\\"redirectToFooter\\");
+  const navigateToFAQPage = invokeAction(\\"navigateToFAQPage\\");
+  const reloadPage = invokeAction(\\"reloadPage\\");
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      direction=\\"row\\"
+      justifyContent=\\"space-between\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Heading
+        level={1}
+        children=\\"Title\\"
+        {...getOverrideProps(overrides, \\"Flex.Heading[0]\\")}
+      ></Heading>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Open Amplify Docs\\"
+        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
+      ></Button>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Navigate to FAQ Page\\"
+        {...getOverrideProps(overrides, \\"Flex.Button[1]\\")}
+      ></Button>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Reload Page\\"
+        {...getOverrideProps(overrides, \\"Flex.Button[2]\\")}
+      ></Button>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Redirect To Footer (No History Update)\\"
+        {...getOverrideProps(overrides, \\"Flex.Button[3]\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests actions should render sign out action 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useActions,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Heading } from \\"@aws-amplify/ui-react\\";
+
+export type SiteHeaderProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const { invokeAction } = useActions({
+    signOutAction: {
+      type: \\"Amplify.Auth.SignOut\\",
+      parameters: { global: true },
+    },
+  });
+  const signOutAction = invokeAction(\\"signOutAction\\");
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      direction=\\"row\\"
+      justifyContent=\\"space-between\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Heading
+        level={1}
+        children=\\"Title\\"
+        {...getOverrideProps(overrides, \\"Flex.Heading[0]\\")}
+      ></Heading>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Log off\\"
+        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests actions should render with bindings 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import { Post } from \\"../models\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useActions,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
+
+export type CreatePostButtonProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    post?: Post;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function CreatePostButton(
+  props: CreatePostButtonProps
+): React.ReactElement {
+  const { post, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const { invokeAction } = useActions({
+    createItemAction: {
+      type: \\"Amplify.DataStore.CreateItem\\",
+      parameters: {
+        itemId: post?.id,
+        model: Post,
+        fields: {
+          status: \\"published\\",
+        },
+      },
+    },
+  });
+  const createItemAction = invokeAction(\\"createItemAction\\");
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Create Post\\"
+        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests basic component tests should generate a simple button component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

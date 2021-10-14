@@ -32,6 +32,7 @@ export enum ImportValue {
   USE_DATA_STORE_BINDING = 'useDataStoreBinding',
   CREATE_THEME = 'createTheme',
   MERGE_VARIANTS_OVERRIDES = 'mergeVariantsAndOverrides',
+  USE_ACTIONS = 'useActions',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
@@ -46,4 +47,5 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.SORT_DIRECTION]: ImportSource.AMPLIFY_DATASTORE,
   [ImportValue.SORT_PREDICATE]: ImportSource.AMPLIFY_DATASTORE,
   [ImportValue.MERGE_VARIANTS_OVERRIDES]: ImportSource.UI_REACT_INTERNAL,
+  [ImportValue.USE_ACTIONS]: ImportSource.UI_REACT_INTERNAL,
 };

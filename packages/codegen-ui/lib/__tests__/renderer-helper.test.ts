@@ -19,6 +19,7 @@ import {
   StudioComponentStoragePropertyBinding,
   StudioComponentSimplePropertyBinding,
   StudioComponentEventPropertyBinding,
+  StudioComponentActionPropertyBinding,
 } from '../types';
 import {
   isStudioComponentWithBinding,
@@ -29,6 +30,7 @@ import {
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
   isEventPropertyBinding,
+  isActionPropertyBinding,
 } from '../renderer-helper';
 
 describe('render-helper', () => {
@@ -41,6 +43,7 @@ describe('render-helper', () => {
     number: StudioComponentSimplePropertyBinding;
     date: StudioComponentSimplePropertyBinding;
     event: StudioComponentEventPropertyBinding;
+    action: StudioComponentActionPropertyBinding;
   } = {
     data: {
       type: 'Data',
@@ -74,6 +77,17 @@ describe('render-helper', () => {
     },
     event: {
       type: 'Event',
+    },
+    action: {
+      type: 'Action',
+      bindingProperties: {
+        type: 'Navigation.Redirect',
+        parameters: {
+          href: {
+            value: '/home',
+          },
+        },
+      },
     },
   };
 
@@ -216,6 +230,14 @@ describe('render-helper', () => {
       expect(isEventPropertyBinding(bindingProperties.event)).toBeTruthy();
       const { event, ...otherTypes } = bindingProperties;
       Object.values(otherTypes).forEach((otherType) => expect(isEventPropertyBinding(otherType)).toBeFalsy());
+    });
+  });
+
+  describe('isActionPropertyBinding', () => {
+    test('property has type Action', () => {
+      expect(isActionPropertyBinding(bindingProperties.action)).toBeTruthy();
+      const { action, ...otherTypes } = bindingProperties;
+      Object.values(otherTypes).forEach((otherType) => expect(isActionPropertyBinding(otherType)).toBeFalsy());
     });
   });
 });

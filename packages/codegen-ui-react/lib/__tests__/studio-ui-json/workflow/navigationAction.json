@@ -1,0 +1,112 @@
+{
+  "componentType": "Flex",
+  "name": "SiteHeader",
+  "properties": {
+    "direction": {
+      "value": "row"
+    },
+    "justifyContent": {
+      "value": "space-between"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Heading",
+      "name": "Heading1",
+      "properties": {
+        "level": {
+          "value": 1
+        },
+        "children": {
+          "value": "Title"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "Button1",
+      "events": {
+        "click": {
+          "action": "Navigation.Open",
+          "parameters": {
+            "href": {
+              "value": "docs.amplify.aws"
+            }
+          }
+        }
+      },
+      "properties": {
+        "variation": {
+          "value": "primary"
+        },
+        "children": {
+          "value": "Open Amplify Docs"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "Button2",
+      "events": {
+        "click": {
+          "type": "Navigation.Redirect",
+          "parameters": {
+            "href": {
+              "value": "/faq"
+            }
+          }
+        }
+      },
+      "properties": {
+        "variation": {
+          "value": "primary"
+        },
+        "children": {
+          "value": "Navigate to FAQ Page"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "Button3",
+      "events": {
+        "click": {
+          "action": "Navigation.Refresh"
+        }
+      },
+      "properties": {
+        "variation": {
+          "value": "primary"
+        },
+        "children": {
+          "value": "Reload Page"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "Button4",
+      "events": {
+        "click": {
+          "action": "Navigation.Redirect",
+          "parameters": {
+            "href": {
+              "value": "#footer-id"
+            },
+            "replaceHistory": {
+              "value": true
+            }
+          }
+        }
+      },
+      "properties": {
+        "variation": {
+          "value": "primary"
+        },
+        "children": {
+          "value": "Redirect To Footer (No History Update)"
+        }
+      }
+    }
+  ]
+}

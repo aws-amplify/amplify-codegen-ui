@@ -322,6 +322,20 @@ describe('amplify render tests', () => {
     });
   });
 
+  describe('actions', () => {
+    it('should render sign out action', () => {
+      expect(generateWithAmplifyRenderer('workflow/signOutAction')).toMatchSnapshot();
+    });
+
+    it('should render with bindings', () => {
+      expect(generateWithAmplifyRenderer('workflow/createItemAction')).toMatchSnapshot();
+    });
+
+    it('should render navigation actions', () => {
+      expect(generateWithAmplifyRenderer('workflow/navigationAction')).toMatchSnapshot();
+    });
+  });
+
   it('should render events', () => {
     expect(generateWithAmplifyRenderer('workflow/event')).toMatchSnapshot();
   });

@@ -39,6 +39,11 @@ import {
   BinaryOperatorToken,
   JsxChild,
   PrimaryExpression,
+  ObjectLiteralExpression,
+  NumericLiteral,
+  BooleanLiteral,
+  NullLiteral,
+  ArrayLiteralExpression,
 } from 'typescript';
 
 import { ImportCollection, ImportSource } from './imports';
@@ -138,21 +143,33 @@ export function buildBindingEvent(prop: BoundStudioComponentEvent, propName: str
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
-export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
+export function buildFixedLiteralExpression(
+  prop: FixedStudioComponentProperty,
+): ObjectLiteralExpression | StringLiteral | NumericLiteral | BooleanLiteral | NullLiteral | ArrayLiteralExpression {
   const { value, type } = prop;
   switch (typeof value) {
     case 'number':
-      return factory.createJsxExpression(undefined, factory.createNumericLiteral(value, undefined));
+      return factory.createNumericLiteral(value, undefined);
     case 'boolean':
-      return factory.createJsxExpression(undefined, value ? factory.createTrue() : factory.createFalse());
+      return value ? factory.createTrue() : factory.createFalse();
     case 'string':
-      return stringToJsxExpression(value as string, type);
+      return fixedPropertyWithTypeToLiteral(value, type);
     default:
       throw new Error(`Invalid type ${typeof value} for "${value}"`);
   }
 }
 
-function stringToJsxExpression(strValue: string, type: string | undefined) {
+export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
+  const expression = buildFixedLiteralExpression(prop);
+
+  // do not wrap strings with brackets
+  if (expression.kind === SyntaxKind.StringLiteral) {
+    return expression;
+  }
+  return factory.createJsxExpression(undefined, buildFixedLiteralExpression(prop));
+}
+
+function fixedPropertyWithTypeToLiteral(strValue: string, type?: string) {
   switch (type) {
     case undefined:
     case 'String':
@@ -167,12 +184,12 @@ function stringToJsxExpression(strValue: string, type: string | undefined) {
 
         switch (typeof parsedValue) {
           case 'number':
-            return factory.createJsxExpression(undefined, factory.createNumericLiteral(parsedValue, undefined));
+            return factory.createNumericLiteral(parsedValue, undefined);
           case 'boolean':
-            return factory.createJsxExpression(undefined, parsedValue ? factory.createTrue() : factory.createFalse());
+            return parsedValue ? factory.createTrue() : factory.createFalse();
           // object, array, and null
           default:
-            return factory.createJsxExpression(undefined, jsonToLiteral(parsedValue));
+            return jsonToLiteral(parsedValue);
         }
       } catch (e) {
         if (e instanceof SyntaxError) {
