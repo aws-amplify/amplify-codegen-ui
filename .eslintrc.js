@@ -36,5 +36,6 @@ module.exports = {
     'no-restricted-syntax': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'class-methods-use-this': 'off',
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
 };

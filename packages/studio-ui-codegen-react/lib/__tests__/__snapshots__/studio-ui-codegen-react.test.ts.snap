@@ -806,12 +806,16 @@ function BoxWithButton(props) {
   const overrides = Object.assign({}, props.overrides);
   return react_1.default.createElement(
     ui_react_1.View,
-    Object.assign({}, props, ui_react_1.getOverrideProps(overrides, \\"Box\\")),
+    Object.assign(
+      {},
+      props,
+      (0, ui_react_1.getOverrideProps)(overrides, \\"Box\\")
+    ),
     react_1.default.createElement(
       ui_react_1.Button,
       Object.assign(
         { color: \\"#ff0000\\", width: \\"20px\\" },
-        ui_react_1.getOverrideProps(overrides, \\"Box.Button\\")
+        (0, ui_react_1.getOverrideProps)(overrides, \\"Box.Button\\")
       )
     )
   );

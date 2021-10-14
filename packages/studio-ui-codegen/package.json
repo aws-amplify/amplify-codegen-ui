@@ -19,11 +19,11 @@
   },
   "devDependencies": {
     "rollup": "^2.47.0",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "@aws-amplify/ui-react": "^2.0.1-next.5"
   },
   "dependencies": {
-    "@amzn/amplify-ui-codegen-schema": "^0.0.1",
-    "@aws-amplify/ui-react": "^2.0.1-next.5"
+    "@amzn/amplify-ui-codegen-schema": "^0.0.1"
   },
   "jest": {
     "verbose": false,
