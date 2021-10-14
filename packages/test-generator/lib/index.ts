@@ -1,14 +1,2 @@
-export { default as BoxGolden } from './boxGolden.json';
-export { default as BoxTest } from './boxTest.json';
-export { default as ButtonGolden } from './buttonGolden.json';
-export { default as Concat } from './concatTest.json';
-export { default as Conditional } from './conditionalTest.json';
-export { default as CustomChild } from './customChild.json';
-export { default as DataBindingWithDataStore } from './dataBindingWithDataStore.json';
-export { default as ExposedAsTest } from './exposedAsTest.json';
-export { default as HeaderWithAction } from './headerWithAction.json';
-export { default as SampleCodeSnippet } from './sampleCodeSnippet.json';
-export { default as TextGolden } from './textGolden.json';
-export { default as CollectionWithBinding } from './collectionWithBinding.json';
-export { default as ComponentWithDataBinding } from './componentWithDataBinding.json';
-export { default as TextWithDataBinding } from './textWithDataBinding.json';
+export * as ComponentSchemas from './components';
+export * as ThemeSchemas from './themes';

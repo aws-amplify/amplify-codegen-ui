@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { StudioComponent, StudioTheme } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererManager, StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
 import {
@@ -12,8 +11,7 @@ import {
 } from '@amzn/studio-ui-codegen-react';
 import path from 'path';
 import log from 'loglevel';
-
-import * as schemas from './lib';
+import { ComponentSchemas, ThemeSchemas } from './lib';
 
 Error.stackTraceLimit = Infinity;
 
@@ -25,8 +23,12 @@ const renderConfig: ReactRenderConfig = {
   script: ScriptKind.TSX,
 };
 
-const rendererFactory = new StudioTemplateRendererFactory(
+const componentRendererFactory = new StudioTemplateRendererFactory(
   (component: StudioComponent) => new AmplifyRenderer(component, renderConfig),
+);
+
+const themeRendererFactory = new StudioTemplateRendererFactory(
+  (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
 );
 
 const outputPathDir = path.resolve(path.join(__dirname, '..', 'ui-components'));
@@ -34,45 +36,18 @@ const outputConfig: ReactOutputConfig = {
   outputPathDir,
 };
 
-const rendererManager = new StudioTemplateRendererManager(rendererFactory, outputConfig);
-
-const themeRendererManager = new StudioTemplateRendererManager(
-  new StudioTemplateRendererFactory((theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig)),
-  outputConfig,
-);
-
-const theme: StudioTheme = {
-  components: {
-    alert: {
-      backgroundColor: 'hsl(210, 5%, 90%)',
-      padding: '0.75rem 1rem',
-      info: {
-        backgroundColor: 'hsl(220, 85%, 85%)',
-      },
-      error: {
-        backgroundColor: 'hsl(0, 75%, 85%)',
-      },
-      warning: {
-        backgroundColor: 'hsl(30, 75%, 85%)',
-      },
-      success: {
-        backgroundColor: 'hsl(130, 75%, 85%)',
-      },
-    },
-  },
-};
+const rendererManager = new StudioTemplateRendererManager(componentRendererFactory, outputConfig);
+const themeRendererManager = new StudioTemplateRendererManager(themeRendererFactory, outputConfig);
 
 const decorateTypescriptWithMarkdown = (typescriptSource: string): string => {
   return `\`\`\`typescript jsx\n${typescriptSource}\n\`\`\``;
 };
 
-themeRendererManager.renderSchemaToTemplate(theme);
-
-Object.entries(schemas).forEach(([name, schema]) => {
+Object.entries(ComponentSchemas).forEach(([name, schema]) => {
   log.info(`# ${name}`);
   try {
     rendererManager.renderSchemaToTemplate(schema as any);
-    const buildRenderer = rendererFactory.buildRenderer(schema as any);
+    const buildRenderer = componentRendererFactory.buildRenderer(schema as any);
 
     const compOnly = buildRenderer.renderComponentOnly();
     log.info('## Component Only Output');
@@ -87,6 +62,21 @@ Object.entries(schemas).forEach(([name, schema]) => {
     log.info(decorateTypescriptWithMarkdown(compOnlyAppSample.importsText));
     log.info('### componentText');
     log.info(decorateTypescriptWithMarkdown(compOnlyAppSample.compText));
+  } catch (err) {
+    log.error(`${name} failed with error:`);
+    log.error(err);
+  }
+});
+
+Object.entries(ThemeSchemas).forEach(([name, schema]) => {
+  log.info(`# ${name}`);
+  try {
+    themeRendererManager.renderSchemaToTemplate(schema as any);
+    const buildRenderer = themeRendererFactory.buildRenderer(schema as any);
+
+    const component = buildRenderer.renderComponent();
+    log.info('## Theme Output');
+    log.info(decorateTypescriptWithMarkdown(component.componentText));
   } catch (err) {
     log.error(`${name} failed with error:`);
     log.error(err);
