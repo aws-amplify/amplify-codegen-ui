@@ -12,8 +12,6 @@ export type ReactRenderConfig = FrameworkRenderConfig & {
 
 export function scriptKindToFileExtension(scriptKind: ScriptKind): string {
   switch (scriptKind) {
-    case ScriptKind.TS:
-      return 'ts';
     case ScriptKind.TSX:
       return 'tsx';
     case ScriptKind.JS:
@@ -21,6 +19,6 @@ export function scriptKindToFileExtension(scriptKind: ScriptKind): string {
     case ScriptKind.JSX:
       return 'jsx';
     default:
-      return 'tsx';
+      throw new Error(`Invalid script kind: ${ScriptKind[scriptKind]}`);
   }
 }
