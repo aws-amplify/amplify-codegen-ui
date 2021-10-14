@@ -34,7 +34,7 @@ export function getComponentPropName(componentName?: string): string {
   return 'ComponentWithoutNameProps';
 }
 
-type ComponentPropertyValueTypes =
+export type ComponentPropertyValueTypes =
   | ConcatenatedStudioComponentProperty
   | ConditionalStudioComponentProperty
   | FixedStudioComponentProperty
