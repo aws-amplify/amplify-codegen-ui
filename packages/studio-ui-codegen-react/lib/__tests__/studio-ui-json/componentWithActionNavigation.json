@@ -1,28 +1,48 @@
 {
     "componentType": "Flex",
     "name": "SiteHeader",
-    "actions": {
+    "bindingProperties": {
       "openAmplifyDocs": {
-        "type": "Navigation.Open",
-        "parameters": {
-          "href": "docs.amplify.aws"
+        "type": "Action",
+        "bindingProperties": {
+          "type": "Navigation.Open",
+          "parameters": {
+            "href": {
+              "value": "docs.amplify.aws"
+            }
+          }
         }
       },
       "redirectToFooter": {
-        "type": "Navigation.Redirect",
-        "parameters": {
-          "href": "#footer-id",
-          "replaceHistory": true
+        "type": "Action",
+        "bindingProperties": {
+          "type": "Navigation.Redirect",
+          "parameters": {
+            "href": {
+              "value": "#footer-id"
+            },
+            "replaceHistory": {
+              "value": true
+            }
+          }
         }
       },
       "navigateToFAQPage": {
+        "type": "Action",
+        "bindingProperties": {
         "type": "Navigation.Redirect",
-        "parameters": {
-          "href": "/faq"
+          "parameters": {
+            "href": {
+              "value": "/faq"
+            }
+          }
         }
       },
       "reloadPage": {
-        "type": "Navigation.Refresh"
+        "type": "Action",
+        "bindingProperties": {
+          "type": "Navigation.Refresh"
+        }
       }
     },
     "properties": {
@@ -49,10 +69,12 @@
       {
         "componentType": "Button",
         "name": "Button1",
-        "events": {
-          "click": "openAmplifyDocs"
-        },
         "properties": {
+          "click": {
+            "bindingProperties": {
+              "property": "openAmplifyDocs"
+            }
+          },
           "variation": {
             "value": "primary"
           },
@@ -64,10 +86,12 @@
       {
         "componentType": "Button",
         "name": "Button2",
-        "events": {
-          "click": "navigateToFAQPage"
-        },
         "properties": {
+          "click": {
+            "bindingProperties": {
+              "property": "navigateToFAQPage"
+            }
+          },
           "variation": {
             "value": "primary"
           },
@@ -79,10 +103,12 @@
       {
         "componentType": "Button",
         "name": "Button3",
-        "events": {
-          "click": "reloadPage"
-        },
         "properties": {
+          "click": {
+            "bindingProperties": {
+              "property": "reloadPage"
+            }
+          },
           "variation": {
             "value": "primary"
           },
@@ -94,10 +120,12 @@
       {
         "componentType": "Button",
         "name": "Button4",
-        "events": {
-          "click": "redirectToFooter"
-        },
         "properties": {
+          "click": {
+            "bindingProperties": {
+              "property": "redirectToFooter"
+            }
+          },
           "variation": {
             "value": "primary"
           },

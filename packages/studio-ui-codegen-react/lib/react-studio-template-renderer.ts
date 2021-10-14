@@ -19,7 +19,8 @@ import {
   StudioComponentAuthPropertyBinding,
   StudioComponentSort,
   StudioComponentVariant,
-  StudioComponentAction,
+  StudioComponentProperty,
+  StudioComponentActionPropertyBinding,
 } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
@@ -28,9 +29,10 @@ import {
   isSimplePropertyBinding,
   isDataPropertyBinding,
   isAuthPropertyBinding,
+  isEventPropertyBinding,
+  isActionPropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
-  isStudioComponentWithActions,
 } from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';
@@ -53,19 +55,30 @@ import ts, {
   Identifier,
   ComputedPropertyName,
   ArrowFunction,
+  Expression,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
-import { getComponentPropName } from './react-component-render-helper';
+import {
+  getComponentPropName,
+  isFixedPropertyWithValue,
+  isBoundProperty,
+  isConcatenatedProperty,
+  isConditionalProperty,
+  buildBindingExpression,
+  buildBindingWithDefaultExpression,
+  buildConcatExpression,
+  buildConditionalExpression,
+} from './react-component-render-helper';
 import {
   transpile,
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
-  json,
   jsonToLiteral,
+  json,
 } from './react-studio-template-renderer-helper';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -402,6 +415,30 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
         );
         propSignatures.push(propSignature);
+      } else if (isEventPropertyBinding(binding)) {
+        this.importCollection.addImport('react', 'SyntheticEvent');
+        const propSignature = factory.createPropertySignature(
+          undefined,
+          propName,
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createFunctionTypeNode(
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('event'),
+                undefined,
+                factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
+                undefined,
+              ),
+            ],
+            factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
+          ),
+        );
+
+        propSignatures.push(propSignature);
       }
     }
     if (component.componentType === 'Collection') {
@@ -506,9 +543,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     });
 
     const actionStatement = this.buildUseActionsStatement(component);
-    if (actionStatement !== undefined) {
-      statements.push(actionStatement);
-    }
+    actionStatement.forEach((entry) => {
+      statements.push(entry);
+    });
 
     return statements;
   }
@@ -819,29 +856,42 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    *   },
    * });
    */
-  private buildUseActionsStatement(component: StudioComponent): Statement | undefined {
-    if (isStudioComponentWithActions(component)) {
-      return factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createObjectBindingPattern([
-                factory.createBindingElement(undefined, undefined, factory.createIdentifier('invokeAction'), undefined),
-              ]),
-              undefined,
-              undefined,
-              factory.createCallExpression(factory.createIdentifier('useActions'), undefined, [
-                this.actionsToObjectLiteralExpression(component.actions),
-              ]),
+  private buildUseActionsStatement(component: StudioComponent): Statement[] {
+    if (component.bindingProperties !== undefined) {
+      const actions = Object.fromEntries(
+        Object.entries(component.bindingProperties).filter(([, binding]) => isActionPropertyBinding(binding)),
+      ) as { [bindingName: string]: StudioComponentActionPropertyBinding };
+
+      if (Object.keys(actions).length) {
+        return [
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createObjectBindingPattern([
+                    factory.createBindingElement(
+                      undefined,
+                      undefined,
+                      factory.createIdentifier('invokeAction'),
+                      undefined,
+                    ),
+                  ]),
+                  undefined,
+                  undefined,
+                  factory.createCallExpression(factory.createIdentifier('useActions'), undefined, [
+                    this.actionsToObjectLiteralExpression(actions),
+                  ]),
+                ),
+              ],
+              ts.NodeFlags.Const,
             ),
-          ],
-          ts.NodeFlags.Const,
-        ),
-      );
+          ),
+        ].concat(Object.keys(actions).map((actionName) => this.buildActionVariableStatement(actionName)));
+      }
     }
 
-    return undefined;
+    return [];
   }
 
   private buildUseDataStoreBindingCall(
@@ -898,9 +948,163 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private actionsToObjectLiteralExpression(actions: { [actionName: string]: StudioComponentAction }) {
-    // TODO: support property bindings
-    return jsonToLiteral(actions as json);
+  /* Transform actions to json passed to useActions hook
+   *
+   * Example:
+   * input:
+   *
+   * "createItemAction": {
+   *   "type": "Amplify.DataStore.CreateItem",
+   *   "parameters": {
+   *     "model": "Post",
+   *     "itemId": {
+   *       "bindingProperties": {
+   *         "property": "post",
+   *         "field": "id"
+   *       }
+   *     },
+   *     "fields": {
+   *       "status": {
+   *         "value": "published"
+   *       }
+   *     }
+   *   }
+   * }
+   *
+   * output:
+   * createItemAction: {
+   *   type: "Amplify.DataStore.CreateItem",
+   *   parameters: {
+   *     model: Post,
+   *     itemId: post.id,
+   *     fields: { status: "published" },
+   *   },
+   * }
+   *
+   */
+  private actionsToObjectLiteralExpression(actions: { [bindingName: string]: StudioComponentActionPropertyBinding }) {
+    return factory.createObjectLiteralExpression(
+      Object.entries(actions).map(
+        ([key, value]) =>
+          factory.createPropertyAssignment(factory.createIdentifier(key), this.actionToExpression(value)),
+        false,
+      ),
+    );
+  }
+
+  /* Transforms single action json to property assignement.
+   */
+  private actionToExpression(action: StudioComponentActionPropertyBinding): Expression {
+    const { bindingProperties } = action;
+    return factory.createObjectLiteralExpression(
+      [
+        factory.createPropertyAssignment(
+          factory.createIdentifier('type'),
+          factory.createStringLiteral(bindingProperties.type),
+        ),
+      ].concat(
+        'parameters' in bindingProperties && bindingProperties.parameters !== undefined
+          ? factory.createPropertyAssignment(
+              factory.createIdentifier('parameters'),
+              this.actionParametersToExpression(bindingProperties.parameters),
+            )
+          : [],
+      ),
+      false,
+    );
+  }
+
+  /* Transform the action parameters field to literal
+   *
+   * model and fields are special cases. All other fields are StudioComponentProperty
+   */
+  private actionParametersToExpression(parameters: {
+    [key: string]: StudioComponentProperty | string | { [field: string]: StudioComponentProperty };
+  }): Expression {
+    // model is special case and is always string
+    // fields is special case and is alway { [field: string]: StudioComponentProperty }
+    const { model, fields, ...otherParameters } = parameters;
+    const hasModel = model !== undefined;
+    if (hasModel) {
+      this.importCollection.addImport('../models', model as string);
+    }
+
+    return factory.createObjectLiteralExpression(
+      Object.entries(otherParameters)
+        .map(
+          ([key, value]) =>
+            factory.createPropertyAssignment(
+              factory.createIdentifier(key),
+              this.actionParameterToExpression(value as StudioComponentProperty),
+            ),
+          false,
+        )
+        .concat(
+          hasModel
+            ? factory.createPropertyAssignment(
+                factory.createIdentifier('model'),
+                factory.createIdentifier(model as string),
+              )
+            : [],
+        )
+        .concat(
+          fields !== undefined
+            ? factory.createPropertyAssignment(
+                factory.createIdentifier('fields'),
+                factory.createObjectLiteralExpression(
+                  Object.entries(fields).map(([key, value]) =>
+                    factory.createPropertyAssignment(
+                      factory.createIdentifier(key),
+                      this.actionParameterToExpression(value),
+                    ),
+                  ),
+                  true,
+                ),
+              )
+            : [],
+        ),
+    );
+  }
+
+  private actionParameterToExpression(parameter: StudioComponentProperty): Expression {
+    if (isFixedPropertyWithValue(parameter)) {
+      return jsonToLiteral(parameter.value as string);
+    }
+
+    if (isBoundProperty(parameter)) {
+      return parameter.defaultValue === undefined
+        ? buildBindingExpression(parameter)
+        : buildBindingWithDefaultExpression(parameter, parameter.defaultValue);
+    }
+
+    if (isConcatenatedProperty(parameter)) {
+      return buildConcatExpression(parameter);
+    }
+
+    if (isConditionalProperty(parameter)) {
+      return buildConditionalExpression(parameter);
+    }
+
+    throw new Error(`Invalid action parameter: ${JSON.stringify(parameter)}.`);
+  }
+
+  private buildActionVariableStatement(actionName: string) {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(actionName),
+            undefined,
+            undefined,
+            factory.createCallExpression(factory.createIdentifier('invokeAction'), undefined, [
+              factory.createStringLiteral(actionName),
+            ]),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
   }
 
   private buildPredicateDeclaration(name: string, predicate: StudioComponentPredicate): VariableStatement {

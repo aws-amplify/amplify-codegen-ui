@@ -238,9 +238,17 @@ describe('amplify render tests', () => {
     it('should render sign out action', () => {
       expect(generateWithAmplifyRenderer('componentWithActionSignOut')).toMatchSnapshot();
     });
+
+    it('should render with bindings', () => {
+      expect(generateWithAmplifyRenderer('componentWithActionsWithBindings')).toMatchSnapshot();
+    });
+
+    it('should render navigation actions', () => {
+      expect(generateWithAmplifyRenderer('componentWithActionNavigation')).toMatchSnapshot();
+    });
   });
 
-  it('should render navigation actions', () => {
-    expect(generateWithAmplifyRenderer('componentWithActionNavigation')).toMatchSnapshot();
+  it('should render events', () => {
+    expect(generateWithAmplifyRenderer('componentWithEvent')).toMatchSnapshot();
   });
 });

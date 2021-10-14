@@ -1,0 +1,36 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "CustomComponent",
+  "bindingProperties": {
+    "onButtonClick": {
+      "type": "Event"
+    },
+    "onInputChange": {
+      "type": "Event"
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Input",
+      "properties": {
+        "change": {
+          "bindingProperties": {
+            "property": "onInputChange"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "properties": {
+        "click": {
+          "bindingProperties": {
+            "property": "onButtonClick"
+          }
+        }
+      }
+    }
+  ]
+}
