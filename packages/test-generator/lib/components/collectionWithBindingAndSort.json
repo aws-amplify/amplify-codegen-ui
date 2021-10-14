@@ -40,6 +40,16 @@
   "collectionProperties": {
     "buttonUser": {
       "model": "User",
+      "sort": [
+        {
+          "field": "firstName",
+          "direction": "ASC"
+        },
+        {
+          "field": "lastName",
+          "direction": "DESC"
+        }
+      ],
       "predicate": {
         "and": [
           {
