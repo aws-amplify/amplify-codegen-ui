@@ -26,6 +26,7 @@ import {
   StudioGenericEvent,
   StudioComponentEvent,
   BoundStudioComponentEvent,
+  ActionStudioComponentEvent,
 } from '@aws-amplify/codegen-ui';
 
 import {
@@ -39,6 +40,11 @@ import {
   BinaryOperatorToken,
   JsxChild,
   PrimaryExpression,
+  ObjectLiteralExpression,
+  NumericLiteral,
+  BooleanLiteral,
+  NullLiteral,
+  ArrayLiteralExpression,
 } from 'typescript';
 
 import { ImportCollection, ImportSource } from './imports';
@@ -81,8 +87,12 @@ export function isDefaultValueOnly(prop: StudioComponentProperty): prop is Colle
   return 'defaultValue' in prop && !(isCollectionItemBoundProperty(prop) || isBoundProperty(prop));
 }
 
-export function isBoundEvent(prop: StudioComponentProperty | StudioComponentEvent): prop is StudioComponentEvent {
-  return 'bindingEvent' in prop;
+export function isBoundEvent(event: StudioComponentEvent): event is BoundStudioComponentEvent {
+  return 'bindingEvent' in event;
+}
+
+export function isActionEvent(event: StudioComponentEvent): event is ActionStudioComponentEvent {
+  return 'action' in event;
 }
 
 /**
@@ -133,26 +143,70 @@ export function buildBindingAttrWithDefault(
   );
 }
 
-export function buildBindingEvent(prop: BoundStudioComponentEvent, propName: string): JsxAttribute {
-  const expr = factory.createIdentifier(prop.bindingEvent);
-  return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
+export function buildBindingEvent(event: BoundStudioComponentEvent, eventName: string): JsxAttribute {
+  const expr = factory.createIdentifier(event.bindingEvent);
+  return factory.createJsxAttribute(factory.createIdentifier(eventName), factory.createJsxExpression(undefined, expr));
 }
 
-export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
+export function buildActionEvent(event: ActionStudioComponentEvent, eventName: string): JsxAttribute {
+  return factory.createJsxAttribute(
+    factory.createIdentifier(eventName),
+    factory.createJsxExpression(
+      undefined,
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createBlock(
+          [
+            factory.createExpressionStatement(
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  // TODO: use unique identifier
+                  factory.createIdentifier('action'),
+                  factory.createIdentifier('run'),
+                ),
+                undefined,
+                [],
+              ),
+            ),
+          ],
+          false,
+        ),
+      ),
+    ),
+  );
+}
+
+export function buildFixedLiteralExpression(
+  prop: FixedStudioComponentProperty,
+): ObjectLiteralExpression | StringLiteral | NumericLiteral | BooleanLiteral | NullLiteral | ArrayLiteralExpression {
   const { value, type } = prop;
   switch (typeof value) {
     case 'number':
-      return factory.createJsxExpression(undefined, factory.createNumericLiteral(value, undefined));
+      return factory.createNumericLiteral(value, undefined);
     case 'boolean':
-      return factory.createJsxExpression(undefined, value ? factory.createTrue() : factory.createFalse());
+      return value ? factory.createTrue() : factory.createFalse();
     case 'string':
-      return stringToJsxExpression(value as string, type);
+      return fixedPropertyWithTypeToLiteral(value, type);
     default:
       throw new Error(`Invalid type ${typeof value} for "${value}"`);
   }
 }
 
-function stringToJsxExpression(strValue: string, type: string | undefined) {
+export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
+  const expression = buildFixedLiteralExpression(prop);
+
+  // do not wrap strings with brackets
+  if (expression.kind === SyntaxKind.StringLiteral) {
+    return expression;
+  }
+  return factory.createJsxExpression(undefined, buildFixedLiteralExpression(prop));
+}
+
+function fixedPropertyWithTypeToLiteral(strValue: string, type?: string) {
   switch (type) {
     case undefined:
     case 'String':
@@ -167,12 +221,12 @@ function stringToJsxExpression(strValue: string, type: string | undefined) {
 
         switch (typeof parsedValue) {
           case 'number':
-            return factory.createJsxExpression(undefined, factory.createNumericLiteral(parsedValue, undefined));
+            return factory.createNumericLiteral(parsedValue, undefined);
           case 'boolean':
-            return factory.createJsxExpression(undefined, parsedValue ? factory.createTrue() : factory.createFalse());
+            return parsedValue ? factory.createTrue() : factory.createFalse();
           // object, array, and null
           default:
-            return factory.createJsxExpression(undefined, jsonToLiteral(parsedValue));
+            return jsonToLiteral(parsedValue);
         }
       } catch (e) {
         if (e instanceof SyntaxError) {
@@ -458,10 +512,14 @@ export function buildOpeningElementProperties(prop: StudioComponentProperty, nam
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
 
-export function buildOpeningElementEvents(prop: StudioComponentEvent, name: string): JsxAttribute {
-  if (isBoundEvent(prop)) {
-    return buildBindingEvent(prop, name);
+export function buildOpeningElementEvents(event: StudioComponentEvent, name: string): JsxAttribute {
+  if (isBoundEvent(event)) {
+    return buildBindingEvent(event, name);
   }
+  if (isActionEvent(event)) {
+    return buildActionEvent(event, name);
+  }
+
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
 
@@ -478,23 +536,6 @@ export function mapGenericEventToReact(genericEventBinding: StudioGenericEvent):
     default:
       throw new Error(`${genericEventBinding} is not a possible event.`);
   }
-}
-
-/* Build React attribute for actions
- *
- * Example: onClick={invokeAction("signOutAction")}
- */
-export function buildOpeningElementActions(genericEventBinding: StudioGenericEvent, action: string): JsxAttribute {
-  const reactActionBinding = mapGenericEventToReact(genericEventBinding);
-  return factory.createJsxAttribute(
-    factory.createIdentifier(reactActionBinding),
-    factory.createJsxExpression(
-      undefined,
-      factory.createCallExpression(factory.createIdentifier('invokeAction'), undefined, [
-        factory.createStringLiteral(action),
-      ]),
-    ),
-  );
 }
 
 export function addBindingPropertiesImports(

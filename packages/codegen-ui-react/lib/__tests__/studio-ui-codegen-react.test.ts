@@ -322,6 +322,12 @@ describe('amplify render tests', () => {
     });
   });
 
+  describe('actions', () => {
+    it('navigation action', () => {
+      expect(generateWithAmplifyRenderer('workflow/navigationAction')).toMatchSnapshot();
+    });
+  });
+
   it('should render events', () => {
     expect(generateWithAmplifyRenderer('workflow/event')).toMatchSnapshot();
   });
