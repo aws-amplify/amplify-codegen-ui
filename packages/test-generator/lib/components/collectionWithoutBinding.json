@@ -1,0 +1,26 @@
+{
+  "name": "ListingCardCollection",
+  "children": [
+    {
+      "children": [],
+      "name": "ListingCard",
+      "componentType": "ListingCard",
+      "properties": {},
+      "overrides": {},
+      "variants": []
+    }
+  ],
+  "id": "c-7m9oAaC8SO0M40Pnvu",
+  "bindingProperties": {},
+  "componentType": "Collection",
+  "properties": {
+    "type": {
+      "value": "list"
+    },
+    "isPaginated": {
+      "value": "true"
+    }
+  },
+  "overrides": {},
+  "variants": []
+}
