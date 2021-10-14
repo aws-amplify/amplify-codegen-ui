@@ -16,12 +16,12 @@
   },
   "devDependencies": {
     "@types/node": "^16.3.3",
-    "@types/react": "^17.0.4"
+    "@types/react": "^17.0.4",
+    "@aws-amplify/ui-react": "^2.0.1-next.5"
   },
   "dependencies": {
     "@amzn/amplify-ui-codegen-schema": "^0.0.1",
     "@amzn/studio-ui-codegen": "^0.0.1",
-    "@aws-amplify/ui-react": "^2.0.1-next.5",
     "@babel/parser": "^7.15.6",
     "@types/tmp": "^0.2.1",
     "framer-motion": "^4",
