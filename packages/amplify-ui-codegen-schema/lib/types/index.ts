@@ -96,9 +96,7 @@ export type StudioComponent = {
   /**
    * Component actions
    */
-  actions?: {
-    [actionName: string]: StudioComponentAction;
-  };
+  actions?: StudioComponentActions
 };
 
 /**
@@ -241,8 +239,8 @@ export type StudioComponentProperties = {
   [key: string]: StudioComponentProperty;
 };
 
-export type StudioComponentProperty =
-  | FixedStudioComponentProperty
+export type StudioComponentProperty<T = DefaultFixedStudioComponentPropertyType> =
+  | FixedStudioComponentProperty<T>
   | BoundStudioComponentProperty
   | CollectionStudioComponentProperty
   | ConcatenatedStudioComponentProperty
@@ -250,16 +248,20 @@ export type StudioComponentProperty =
   | WorkflowStudioComponentProperty
   | FormStudioComponentProperty;
 
+export type DefaultFixedStudioComponentPropertyType = string | number | boolean | Date;
+
 /**
  * This represents a component property that is configured with either
  * static  values
+ *
+ * Use a type paramater to restrict the type of the property
  */
-export type FixedStudioComponentProperty = {
+export type FixedStudioComponentProperty<T = DefaultFixedStudioComponentPropertyType> = {
   /**
    * These are the values pass when code generating. Static values can be passed in
    * as a string
    */
-  value: string | number | boolean | Date;
+  value: T;
 };
 
 /**
@@ -503,10 +505,16 @@ type DeepPartial<T> = {
 
 export type StudioTheme = DeepPartial<typeof theme>;
 
+export type StudioComponentActions = {
+  [key: string]: StudioComponentAction;
+}
+
+export type JSONObject = string | number | boolean | null | JSONObject[] | { [key: string]: JSONObject }; 
+
 /**
  * Component action types
  */
-export type StudioComponentAction = AmplifyAuthSignOutAction | NavigationAction;
+export type StudioComponentAction = AmplifyAuthSignOutAction | NavigationAction | AmplifyDataStoreUpdateItemAction;
 
 /**
  * Amplify Auth signout Action type
@@ -514,9 +522,18 @@ export type StudioComponentAction = AmplifyAuthSignOutAction | NavigationAction;
 export type AmplifyAuthSignOutAction = {
   type: 'Amplify.Auth.SignOut';
   parameters?: {
-    global: boolean;
+    global: StudioComponentProperty<boolean>;
   };
 };
+
+export type AmplifyDataStoreUpdateItemAction = {
+  type: 'Amplify.DataStore.UpdateItem';
+  parameters: {
+    model: string;
+    itemId: StudioComponentProperty<string>;
+    fields: StudioComponentProperty<JSONObject>;
+  }
+}
 
 /**
  * Navigation related action types.
@@ -532,8 +549,8 @@ export type NavigationAction =
 export type NavigationRedirectAction = {
   type: 'Navigation.Redirect';
   parameters: {
-    href: string;
-    replaceHistory?: boolean; // Default to false
+    href: StudioComponentProperty<string>;
+    replaceHistory?: StudioComponentProperty<boolean>;
   }
 };
 
@@ -543,7 +560,7 @@ export type NavigationRedirectAction = {
  export type NavigationOpenAction = {
   type: 'Navigation.Open';
   parameters: {
-    href: string;
+    href: StudioComponentProperty<string>;
   }
 };
 

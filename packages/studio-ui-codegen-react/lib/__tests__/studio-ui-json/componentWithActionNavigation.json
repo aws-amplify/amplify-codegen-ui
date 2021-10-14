@@ -5,20 +5,28 @@
       "openAmplifyDocs": {
         "type": "Navigation.Open",
         "parameters": {
-          "href": "docs.amplify.aws"
+          "href": {
+            "value": "docs.amplify.aws"
+          }
         }
       },
       "redirectToFooter": {
         "type": "Navigation.Redirect",
         "parameters": {
-          "href": "#footer-id",
-          "replaceHistory": true
+          "href": {
+            "value": "#footer-id"
+          },
+          "replaceHistory": {
+            "value": true
+          }
         }
       },
       "navigateToFAQPage": {
         "type": "Navigation.Redirect",
         "parameters": {
-          "href": "/faq"
+          "href": {
+            "value": "/faq"
+          }
         }
       },
       "reloadPage": {

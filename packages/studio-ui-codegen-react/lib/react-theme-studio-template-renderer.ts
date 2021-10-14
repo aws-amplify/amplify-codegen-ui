@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioTheme } from '@amzn/amplify-ui-codegen-schema';
+import { StudioTheme, JSONObject } from '@amzn/amplify-ui-codegen-schema';
 import { EOL } from 'os';
 import { factory, SyntaxKind, NodeFlags, EmitHint, FunctionDeclaration } from 'typescript';
 import { StudioTemplateRenderer } from '@amzn/studio-ui-codegen';
@@ -26,7 +26,6 @@ import {
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
-  json,
   jsonToLiteral,
 } from './react-studio-template-renderer-helper';
 
@@ -153,7 +152,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
             factory.createIdentifier('theme'),
             undefined,
             undefined,
-            jsonToLiteral(this.component as json),
+            jsonToLiteral(this.component as JSONObject),
           ),
         ],
         NodeFlags.Const,

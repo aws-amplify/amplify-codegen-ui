@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { JSONObject } from '@amzn/amplify-ui-codegen-schema';
 import ts, {
   createPrinter,
   createSourceFile,
@@ -114,12 +115,9 @@ export function getDeclarationFilename(filename: string): string {
   return `${path.basename(filename, '.tsx')}.d.ts`;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export type json = string | number | boolean | null | json[] | { [key: string]: json };
-
 // eslint-disable-next-line consistent-return
 export function jsonToLiteral(
-  jsonObject: json,
+  jsonObject: JSONObject,
 ): ObjectLiteralExpression | StringLiteral | NumericLiteral | BooleanLiteral | NullLiteral | ArrayLiteralExpression {
   if (jsonObject === null) {
     return factory.createNull();

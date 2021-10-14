@@ -20,6 +20,9 @@ import {
   StudioComponentSort,
   StudioComponentVariant,
   StudioComponentAction,
+  StudioComponentActions,
+  StudioComponentProperty,
+  JSONObject,
 } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
@@ -53,18 +56,23 @@ import ts, {
   Identifier,
   ComputedPropertyName,
   ArrowFunction,
+  Expression,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
-import { getComponentPropName } from './react-component-render-helper';
+import {
+  getComponentPropName,
+  isFixedPropertyWithValue,
+  buildBindingExpression,
+  isBoundProperty,
+} from './react-component-render-helper';
 import {
   transpile,
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
-  json,
   jsonToLiteral,
 } from './react-studio-template-renderer-helper';
 
@@ -533,7 +541,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createIdentifier('variants'),
             undefined,
             undefined,
-            jsonToLiteral(variants as json),
+            jsonToLiteral(variants as JSONObject),
           ),
         ],
         ts.NodeFlags.Const,
@@ -857,9 +865,107 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private actionsToObjectLiteralExpression(actions: { [actionName: string]: StudioComponentAction }) {
-    // TODO: support property bindings
-    return jsonToLiteral(actions as json);
+  /* Transform actions to json passed to useActions hook
+   *
+   * Example:
+   * input:
+   *
+   * "createItemAction": {
+   *   "type": "Amplify.DataStore.CreateItem",
+   *   "parameters": {
+   *     "model": "Post",
+   *     "itemId": {
+   *       "bindingProperties": {
+   *         "property": "post",
+   *         "field": "id"
+   *       }
+   *     },
+   *     "fields": {
+   *       "status": "published"
+   *     }
+   *   }
+   * }
+   *
+   * output:
+   * createItemAction: {
+   *   type: "Amplify.DataStore.CreateItem",
+   *     parameters: {
+   *       model: Post,
+   *       itemId: post.id,
+   *       fields: { status: "published" },
+   *     },
+   *   },
+   * }
+   *
+   */
+  private actionsToObjectLiteralExpression(actions: StudioComponentActions) {
+    return factory.createObjectLiteralExpression(
+      Object.entries(actions).map(
+        ([key, value]) =>
+          factory.createPropertyAssignment(factory.createIdentifier(key), this.actionToExpression(value)),
+        false,
+      ),
+    );
+  }
+
+  private actionToExpression(action: StudioComponentAction): Expression {
+    return factory.createObjectLiteralExpression(
+      [
+        factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(action.type)),
+      ].concat(
+        'parameters' in action && action.parameters !== undefined
+          ? factory.createPropertyAssignment(
+              factory.createIdentifier('parameters'),
+              this.actionParametersToExpression(action.parameters),
+            )
+          : [],
+      ),
+      false,
+    );
+  }
+
+  private actionParametersToExpression(parameters: {
+    [key: string]: StudioComponentProperty<JSONObject> | string;
+  }): Expression {
+    // model is special case as string and not StudioComponentProperty
+    const { model, ...otherParameters } = parameters;
+    const hasModel = model !== undefined;
+    if (hasModel) {
+      this.importCollection.addImport('../models', model as string);
+    }
+
+    return factory.createObjectLiteralExpression(
+      Object.entries(otherParameters)
+        .map(
+          ([key, value]) =>
+            factory.createPropertyAssignment(
+              factory.createIdentifier(key),
+              this.actionParameterToExpression(value as StudioComponentProperty),
+            ),
+          false,
+        )
+        .concat(
+          hasModel
+            ? factory.createPropertyAssignment(
+                factory.createIdentifier('model'),
+                factory.createIdentifier(model as string),
+              )
+            : [],
+        ),
+    );
+  }
+
+  private actionParameterToExpression(parameter: StudioComponentProperty): Expression {
+    if (isFixedPropertyWithValue(parameter)) {
+      return jsonToLiteral(parameter.value as string);
+    }
+
+    if (isBoundProperty(parameter)) {
+      return buildBindingExpression(parameter);
+    }
+
+    // TODO: support concatenation and conditional
+    throw new Error(`Invalid action parameter: ${JSON.stringify(parameter)}.`);
   }
 
   private buildPredicateDeclaration(name: string, predicate: StudioComponentPredicate): VariableStatement {

@@ -5,7 +5,9 @@
     "signOutAction": {
       "type": "Amplify.Auth.SignOut",
       "parameters": {
-        "global": true
+        "global": {
+          "value": true
+        }
       }
     }
   },

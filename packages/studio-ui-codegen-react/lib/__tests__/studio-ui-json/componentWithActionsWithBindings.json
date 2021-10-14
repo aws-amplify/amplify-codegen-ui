@@ -1,0 +1,48 @@
+{
+  "componentType": "Flex",
+  "name": "CreatePostButton",
+  "actions": {
+    "createItemAction": {
+      "type": "Amplify.DataStore.CreateItem",
+      "parameters": {
+        "model": "Post",
+        "itemId": {
+          "bindingProperties": {
+            "property": "post",
+            "field": "id"
+          }
+        },
+        "fields": {
+          "value": {
+            "status": "published"
+          }
+        }
+      }
+    }
+  },
+  "bindingProperties": {
+    "post": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "Post"
+      }
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Button",
+      "events": {
+        "click": "createItemAction"
+      },
+      "properties": {
+        "variation": {
+          "value": "primary"
+        },
+        "children": {
+          "value": "Create Post"
+        }
+      }
+    }
+  ]
+}

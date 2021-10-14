@@ -51,6 +51,55 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
 }
 `;
 
+exports[`amplify render tests actions should render with bindings 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import { Post } from \\"../models\\";
+import {
+  Button,
+  EscapeHatchProps,
+  Flex,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CreatePostButtonProps = {
+  post?: Post;
+} & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CreatePostButton(
+  props: CreatePostButtonProps
+): React.ReactElement {
+  const { post } = props;
+  const overrides = { ...props.overrides };
+  const { invokeAction } = useActions({
+    createItemAction: {
+      type: \\"Amplify.DataStore.CreateItem\\",
+      parameters: {
+        itemId: post?.id,
+        fields: { status: \\"published\\" },
+        model: Post,
+      },
+    },
+  });
+  return (
+    <Flex {...props} {...getOverrideProps(overrides, \\"Flex\\")}>
+      <Button
+        variation=\\"primary\\"
+        children=\\"Create Post\\"
+        onClick={invokeAction(\\"createItemAction\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests basic component tests should generate a simple button component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
