@@ -1,6 +1,6 @@
 {
   "name": "@amzn/studio-ui-codegen",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "description": "generic component code generation interface definitions",
   "author": "Amazon Web Services",
   "homepage": "https://docs.amplify.aws/",
@@ -18,12 +18,12 @@
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
+    "@aws-amplify/ui-react": "^2.0.1-next.5",
     "rollup": "^2.47.0",
-    "source-map-support": "^0.5.19",
-    "@aws-amplify/ui-react": "^2.0.1-next.5"
+    "source-map-support": "^0.5.19"
   },
   "dependencies": {
-    "@amzn/amplify-ui-codegen-schema": "^0.0.1"
+    "@amzn/amplify-ui-codegen-schema": "^0.0.7"
   },
   "jest": {
     "verbose": false,
@@ -35,9 +35,13 @@
     "collectCoverageFrom": [
       "lib/**/*.ts"
     ],
-    "coveragePathIgnorePatterns": ["<rootDir>/lib/__tests__/__utils__/"],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/lib/__tests__/__utils__/"
+    ],
     "testRegex": "(lib/__tests__/.*.test.ts)$",
-    "testPathIgnorePatterns": ["<rootDir>/lib/__tests__/__utils__/"],
+    "testPathIgnorePatterns": [
+      "<rootDir>/lib/__tests__/__utils__/"
+    ],
     "globals": {
       "ts-jest": {
         "diagnostics": false
