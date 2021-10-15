@@ -18,7 +18,11 @@
     "format:check": "prettier --check 'packages/*/lib/**/*.{js,jsx,ts,tsx}'",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "test:generate-test-app": "npx rimraf packages/test-generator/test-app-templates/src/ui-components && lerna run build --stream && node packages/test-generator/dist/lib/generators/GenerateTestApp.js"
+    "test:generate-test-app": "npx rimraf packages/test-generator/test-app-templates/src/ui-components && lerna run build --stream && node packages/test-generator/dist/generators/GenerateTestApp.js",
+    "browser-integration:setup": "npm run browser-integration:create && npm run browser-integration:install",
+    "browser-integration:create": "(cd packages && npx create-react-app browser-integration-test --use-npm --template typescript) && echo 'SKIP_PREFLIGHT_CHECK=true' > packages/browser-integration-test/.env && cp -r packages/test-generator/browser-integration-test-templates/* packages/browser-integration-test",
+    "browser-integration:install": "lerna bootstrap && lerna add --scope browser-integration-test @amzn/studio-ui-codegen-react && lerna add --scope browser-integration-test @amzn/test-generator && lerna add --no-ci --scope browser-integration-test cypress",
+    "browser-integration:clean": "npx rimraf packages/browser-integration-test"
   },
   "files": [],
   "devDependencies": {
