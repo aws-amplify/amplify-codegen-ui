@@ -26,7 +26,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection = new ImportCollection();
 
-  fileName = 'theme.txs';
+  fileName = 'theme.tsx';
 
   constructor(theme: StudioTheme, protected renderConfig: ReactRenderConfig) {
     super(theme, new ReactOutputManager(), renderConfig);
