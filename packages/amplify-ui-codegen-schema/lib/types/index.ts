@@ -223,15 +223,17 @@ export type StudioComponentProperties = {
    * Each key maps to an available component property. Static values
    * can be passed in as a string.
    */
-  [key: string]:
-    | FixedStudioComponentProperty
-    | BoundStudioComponentProperty
-    | CollectionStudioComponentProperty
-    | ConcatenatedStudioComponentProperty
-    | ConditionalStudioComponentProperty
-    | WorkflowStudioComponentProperty
-    | FormStudioComponentProperty;
+  [key: string]: StudioComponentProperty;
 };
+
+export type StudioComponentProperty =
+  | FixedStudioComponentProperty
+  | BoundStudioComponentProperty
+  | CollectionStudioComponentProperty
+  | ConcatenatedStudioComponentProperty
+  | ConditionalStudioComponentProperty
+  | WorkflowStudioComponentProperty
+  | FormStudioComponentProperty;
 
 /**
  * This represents a component property that is configured with either
@@ -286,15 +288,7 @@ export type CollectionStudioComponentProperty = {
  * Component property that contains concatenation of multiple properties
  */
 export type ConcatenatedStudioComponentProperty = {
-  concat: (
-    | ConcatenatedStudioComponentProperty
-    | ConditionalStudioComponentProperty
-    | FixedStudioComponentProperty
-    | BoundStudioComponentProperty
-    | CollectionStudioComponentProperty
-    | WorkflowStudioComponentProperty
-    | FormStudioComponentProperty
-  )[];
+  concat: StudioComponentProperty[];
 };
 
 /**
@@ -306,22 +300,8 @@ export type ConditionalStudioComponentProperty = {
     field: string;
     operator: string;
     operand: string | number | boolean;
-    then:
-      | FixedStudioComponentProperty
-      | BoundStudioComponentProperty
-      | CollectionStudioComponentProperty
-      | ConcatenatedStudioComponentProperty
-      | ConditionalStudioComponentProperty
-      | WorkflowStudioComponentProperty
-      | FormStudioComponentProperty;
-    else:
-      | FixedStudioComponentProperty
-      | BoundStudioComponentProperty
-      | CollectionStudioComponentProperty
-      | ConcatenatedStudioComponentProperty
-      | ConditionalStudioComponentProperty
-      | WorkflowStudioComponentProperty
-      | FormStudioComponentProperty;
+    then: StudioComponentProperty;
+    else: StudioComponentProperty;
   };
 };
 
@@ -331,6 +311,23 @@ export type ConditionalStudioComponentProperty = {
  */
 export type WorkflowStudioComponentProperty = {
   event: string;
+};
+
+/**
+ * This is the configuration for a form binding. This is
+ * technically an extension of Workflows but because it is
+ * pretty unique, it should be separated out with its own definition
+ */
+export type FormStudioComponentProperty = {
+  /**
+   * The model of the DataStore object
+   */
+  model: string;
+
+  /**
+   * The binding configuration for the form
+   */
+  bindings: FormBindings;
 };
 
 /**
@@ -381,23 +378,6 @@ export type StudioComponentEventPropertyBinding = {
    * This declares that the type is of a workflow binding
    */
   type: 'Event';
-};
-
-/**
- * This is the configuration for a form binding. This is
- * technically an extension of Workflows but because it is
- * pretty unique, it should be separated out with its own definition
- */
-export type FormStudioComponentProperty = {
-  /**
-   * The model of the DataStore object
-   */
-  model: string;
-
-  /**
-   * The binding configuration for the form
-   */
-  bindings: FormBindings;
 };
 
 export type FormBindings = {
