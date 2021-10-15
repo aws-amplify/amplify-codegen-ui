@@ -48,7 +48,6 @@ import {
   transpile,
   buildPrinter,
   defaultRenderConfig,
-  getDeclarationFilename,
   json,
   jsonToLiteral,
 } from './react-studio-template-renderer-helper';
@@ -123,8 +122,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
-    // do not produce declaration becuase it is not used
-    const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
+    const compText = transpile(result, this.renderConfig);
 
     return { compText, importsText };
   }
@@ -162,17 +160,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
 
-    const { componentText: transpiledComponentText, declaration } = transpile(componentText, this.renderConfig);
+    const transpiledComponentText = transpile(componentText, this.renderConfig);
 
     return {
       componentText: transpiledComponentText,
-      declaration,
-      renderComponentToFilesystem: async (outputPath: string) => {
-        await this.renderComponentToFilesystem(transpiledComponentText)(this.fileName)(outputPath);
-        if (declaration) {
-          await this.renderComponentToFilesystem(declaration)(getDeclarationFilename(this.fileName))(outputPath);
-        }
-      },
+      renderComponentToFilesystem: this.renderComponentToFilesystem(transpiledComponentText)(this.fileName),
     };
   }
 
@@ -205,7 +197,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         ),
       ],
       factory.createTypeReferenceNode(
-        factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('Element')),
+        factory.createQualifiedName(factory.createIdentifier('JSX'), factory.createIdentifier('Element')),
         undefined,
       ),
       factory.createBlock(codeBlockContent, true),

@@ -10,7 +10,6 @@ import {
   transpile,
   buildPrinter,
   defaultRenderConfig,
-  getDeclarationFilename,
   json,
   jsonToLiteral,
 } from './react-studio-template-renderer-helper';
@@ -49,16 +48,11 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
     );
     const renderedFunction = printer.printNode(EmitHint.Unspecified, this.buildFunction(), file);
     const componentText = ['/* eslint-disable */', ...renderedImports, renderedFunction].join(EOL);
-    const { componentText: transpiledComponentText, declaration } = transpile(componentText, this.renderConfig);
+    const transpiledComponentText = transpile(componentText, this.renderConfig);
 
     return {
       componentText: transpiledComponentText,
-      renderComponentToFilesystem: async (outputPath: string) => {
-        await this.renderComponentToFilesystem(transpiledComponentText)(this.fileName)(outputPath);
-        if (declaration) {
-          await this.renderComponentToFilesystem(declaration)(getDeclarationFilename(this.fileName))(outputPath);
-        }
-      },
+      renderComponentToFilesystem: this.renderComponentToFilesystem(transpiledComponentText)(this.fileName),
     };
   }
 

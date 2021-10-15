@@ -7,7 +7,6 @@ export type ReactRenderConfig = FrameworkRenderConfig & {
   script?: ScriptKind;
   target?: ScriptTarget;
   module?: ModuleKind;
-  renderTypeDeclarations?: boolean;
 };
 
 export function scriptKindToFileExtension(scriptKind: ScriptKind): string {
