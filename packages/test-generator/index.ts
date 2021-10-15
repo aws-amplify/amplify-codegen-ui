@@ -1,17 +1,16 @@
-import { StudioComponent, StudioTheme } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererManager, StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
 import {
   AmplifyRenderer,
   ReactOutputConfig,
   ReactRenderConfig,
-  ReactThemeStudioTemplateRenderer,
   ModuleKind,
   ScriptTarget,
   ScriptKind,
 } from '@amzn/studio-ui-codegen-react';
 import path from 'path';
 import log from 'loglevel';
-import { ComponentSchemas, ThemeSchemas } from './lib';
+import { ComponentSchemas } from './lib';
 
 Error.stackTraceLimit = Infinity;
 
@@ -27,9 +26,9 @@ const componentRendererFactory = new StudioTemplateRendererFactory(
   (component: StudioComponent) => new AmplifyRenderer(component, renderConfig),
 );
 
-const themeRendererFactory = new StudioTemplateRendererFactory(
-  (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
-);
+// const themeRendererFactory = new StudioTemplateRendererFactory(
+//   (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
+// );
 
 const outputPathDir = path.resolve(path.join(__dirname, '..', 'test-app-templates', 'src', 'ui-components'));
 const outputConfig: ReactOutputConfig = {
@@ -37,7 +36,7 @@ const outputConfig: ReactOutputConfig = {
 };
 
 const rendererManager = new StudioTemplateRendererManager(componentRendererFactory, outputConfig);
-const themeRendererManager = new StudioTemplateRendererManager(themeRendererFactory, outputConfig);
+// const themeRendererManager = new StudioTemplateRendererManager(themeRendererFactory, outputConfig);
 
 const decorateTypescriptWithMarkdown = (typescriptSource: string): string => {
   return `\`\`\`typescript jsx\n${typescriptSource}\n\`\`\``;
@@ -67,18 +66,18 @@ Object.entries(ComponentSchemas).forEach(([name, schema]) => {
     log.error(err);
   }
 });
-
-Object.entries(ThemeSchemas).forEach(([name, schema]) => {
-  log.info(`# ${name}`);
-  try {
-    themeRendererManager.renderSchemaToTemplate(schema as any);
-    const buildRenderer = themeRendererFactory.buildRenderer(schema as any);
-
-    const component = buildRenderer.renderComponent();
-    log.info('## Theme Output');
-    log.info(decorateTypescriptWithMarkdown(component.componentText));
-  } catch (err) {
-    log.error(`${name} failed with error:`);
-    log.error(err);
-  }
-});
+//
+// Object.entries(ThemeSchemas).forEach(([name, schema]) => {
+//   log.info(`# ${name}`);
+//   try {
+//     themeRendererManager.renderSchemaToTemplate(schema as any);
+//     const buildRenderer = themeRendererFactory.buildRenderer(schema as any);
+//
+//     const component = buildRenderer.renderComponent();
+//     log.info('## Theme Output');
+//     log.info(decorateTypescriptWithMarkdown(component.componentText));
+//   } catch (err) {
+//     log.error(`${name} failed with error:`);
+//     log.error(err);
+//   }
+// });
