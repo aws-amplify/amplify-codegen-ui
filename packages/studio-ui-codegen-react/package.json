@@ -15,18 +15,18 @@
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
+    "@aws-amplify/ui-react": "^2.0.1-next.5",
     "@types/node": "^16.3.3",
-    "@types/react": "^17.0.4",
-    "@aws-amplify/ui-react": "^2.0.1-next.5"
+    "@types/react": "^17.0.4"
   },
   "dependencies": {
     "@amzn/amplify-ui-codegen-schema": "^0.0.1",
     "@amzn/studio-ui-codegen": "^0.0.1",
     "@babel/parser": "^7.15.6",
-    "@types/tmp": "^0.2.1",
+    "@types/temp": "^0.9.1",
     "framer-motion": "^4",
     "prettier": "2.3.2",
-    "tmp": "^0.2.1",
+    "temp": "^0.9.4",
     "typescript": "^4.2.4"
   },
   "peerDependencies": {
@@ -43,9 +43,13 @@
     "collectCoverageFrom": [
       "lib/**/*.ts"
     ],
-    "coveragePathIgnorePatterns": ["<rootDir>/lib/__tests__/__utils__/"],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/lib/__tests__/__utils__/"
+    ],
     "testRegex": "(lib/__tests__/.*.test.ts)$",
-    "testPathIgnorePatterns": ["<rootDir>/lib/__tests__/__utils__/"],
+    "testPathIgnorePatterns": [
+      "<rootDir>/lib/__tests__/__utils__/"
+    ],
     "globals": {
       "ts-jest": {
         "diagnostics": false
