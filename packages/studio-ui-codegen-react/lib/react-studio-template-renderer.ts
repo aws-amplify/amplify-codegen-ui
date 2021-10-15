@@ -205,7 +205,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         ),
       ],
       factory.createTypeReferenceNode(
-        factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('Element')),
+        factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('ReactElement')),
         undefined,
       ),
       factory.createBlock(codeBlockContent, true),
