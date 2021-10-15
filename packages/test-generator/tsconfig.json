@@ -6,5 +6,5 @@
     "sourceMap": true,
     "skipLibCheck": true
   },
-  "include": ["./lib", "index.ts"]
+  "include": ["./lib"]
 }

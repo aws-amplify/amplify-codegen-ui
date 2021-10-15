@@ -13,9 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { TestGenerator } from './TestGenerator';
+import { NodeTestGenerator } from './NodeTestGenerator';
 
-new TestGenerator({
+new NodeTestGenerator({
   writeToLogger: false,
   writeToDisk: true,
   disabledSchemas: [

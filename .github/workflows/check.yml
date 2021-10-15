@@ -114,7 +114,7 @@ jobs:
         run: npm run build
       - name: Execute test-generator
         working-directory: amplify-codegen-ui-staging/packages/test-generator
-        run: node ./dist/lib/generators/GenerateTestApp.js
+        run: node ./dist/generators/GenerateTestApp.js
       - name: Create test app with dependencies
         working-directory: .
         run: |
@@ -128,5 +128,32 @@ jobs:
         with:
           working-directory: test-app
           build: npm run build
+          start: npm start
+          wait-on: 'http://localhost:3000'
+
+  browser-integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install packages
+        run: npm ci
+      - name: Lerna bootstrap
+        run: lerna bootstrap
+      - name: Build
+        run: npm run build
+      - name: Setup Browser Integration Test
+        run: |
+          npm run browser-integration:clean
+          npm run browser-integration:setup
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: packages/browser-integration-test
+          install: false
           start: npm start
           wait-on: 'http://localhost:3000'

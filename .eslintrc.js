@@ -7,10 +7,12 @@ module.exports = {
     '.eslintrc.js',
     'commitlint.config.js',
     'packages/amplify-ui-codegen-schema',
+    'packages/browser-integration-test',
     'ui-components',
     '*.md',
     'cypress',
     'packages/test-generator/test-app-templates',
+    'packages/test-generator/browser-integration-test-templates',
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',

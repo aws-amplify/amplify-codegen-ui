@@ -14,27 +14,16 @@
   limitations under the License.
  */
 import { StudioComponent, StudioTheme } from '@amzn/amplify-ui-codegen-schema';
-import { StudioTemplateRendererManager, StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
-import {
-  AmplifyRenderer,
-  ReactOutputConfig,
-  ModuleKind,
-  ScriptTarget,
-  ScriptKind,
-  ReactThemeStudioTemplateRenderer,
-  ReactRenderConfig,
-} from '@amzn/studio-ui-codegen-react';
-import path from 'path';
+import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '@amzn/studio-ui-codegen-react';
 import log from 'loglevel';
-import { ComponentSchemas, ThemeSchemas } from '../index';
+import * as ComponentSchemas from '../components';
+import * as ThemeSchemas from '../themes';
 
 const DEFAULT_RENDER_CONFIG = {
   module: ModuleKind.CommonJS,
   target: ScriptTarget.ES2015,
   script: ScriptKind.TSX,
 };
-
-Error.stackTraceLimit = Infinity;
 
 log.setLevel('info');
 
@@ -45,37 +34,15 @@ export type TestGeneratorParams = {
   disabledSchemas?: string[];
 };
 
-export class TestGenerator {
-  private readonly params: TestGeneratorParams;
+export abstract class TestGenerator {
+  protected readonly params: TestGeneratorParams;
 
-  private readonly componentRendererFactory: any;
-
-  private readonly themeRendererFactory: any;
-
-  private readonly rendererManager: any;
-
-  private readonly themeRendererManager: any;
+  protected readonly renderConfig: ReactRenderConfig;
 
   constructor(params: TestGeneratorParams) {
     this.params = params;
-    const mergedRenderConfig = { ...DEFAULT_RENDER_CONFIG, ...params.renderConfigOverride };
-    this.componentRendererFactory = new StudioTemplateRendererFactory(
-      (component: StudioComponent) => new AmplifyRenderer(component, mergedRenderConfig),
-    );
-    this.themeRendererFactory = new StudioTemplateRendererFactory(
-      (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, mergedRenderConfig),
-    );
-    const outputPathDir = path.resolve(
-      path.join(__dirname, '..', '..', '..', 'test-app-templates', 'src', 'ui-components'),
-    );
-    const outputConfig: ReactOutputConfig = { outputPathDir };
-    this.rendererManager = new StudioTemplateRendererManager(this.componentRendererFactory, outputConfig);
-    this.themeRendererManager = new StudioTemplateRendererManager(this.themeRendererFactory, outputConfig);
+    this.renderConfig = { ...DEFAULT_RENDER_CONFIG, ...params.renderConfigOverride };
   }
-
-  private decorateTypescriptWithMarkdown = (typescriptSource: string): string => {
-    return `\`\`\`typescript jsx\n${typescriptSource}\n\`\`\``;
-  };
 
   generate = () => {
     const renderErrors: { [key: string]: any } = {};
@@ -86,24 +53,22 @@ export class TestGenerator {
       }
       try {
         if (this.params.writeToDisk) {
-          this.rendererManager.renderSchemaToTemplate(schema as any);
+          this.writeComponentToDisk(schema as StudioComponent);
         }
 
         if (this.params.writeToLogger) {
-          const buildRenderer = this.componentRendererFactory.buildRenderer(schema as any);
-          const compOnly = buildRenderer.renderComponentOnly();
-          const compOnlyAppSample = buildRenderer.renderSampleCodeSnippet();
+          const { renderedComponent, appSample } = this.renderComponent(schema as StudioComponent);
           log.info(`# ${name}`);
           log.info('## Component Only Output');
           log.info('### componentImports');
-          log.info(this.decorateTypescriptWithMarkdown(compOnly.importsText));
+          log.info(this.decorateTypescriptWithMarkdown(renderedComponent.importsText));
           log.info('### componentText');
-          log.info(this.decorateTypescriptWithMarkdown(compOnly.compText));
+          log.info(this.decorateTypescriptWithMarkdown(renderedComponent.compText));
           log.info('## Code Snippet Output');
           log.info('### componentImports');
-          log.info(this.decorateTypescriptWithMarkdown(compOnlyAppSample.importsText));
+          log.info(this.decorateTypescriptWithMarkdown(appSample.importsText));
           log.info('### componentText');
-          log.info(this.decorateTypescriptWithMarkdown(compOnlyAppSample.compText));
+          log.info(this.decorateTypescriptWithMarkdown(appSample.compText));
         }
       } catch (err) {
         renderErrors[name] = err;
@@ -116,15 +81,14 @@ export class TestGenerator {
       }
       try {
         if (this.params.writeToDisk) {
-          this.themeRendererManager.renderSchemaToTemplate(schema as any);
+          this.writeThemeToDisk(schema as StudioTheme);
         }
 
         if (this.params.writeToLogger) {
-          const buildRenderer = this.themeRendererFactory.buildRenderer(schema as any);
-          const component = buildRenderer.renderComponent();
+          const theme = this.renderTheme(schema as StudioTheme);
           log.info(`# ${name}`);
           log.info('## Theme Output');
-          log.info(this.decorateTypescriptWithMarkdown(component.componentText));
+          log.info(this.decorateTypescriptWithMarkdown(theme.componentText));
         }
       } catch (err) {
         renderErrors[name] = err;
@@ -140,4 +104,19 @@ export class TestGenerator {
       throw new Error('Not all tests rendered successfully');
     }
   };
+
+  private decorateTypescriptWithMarkdown = (typescriptSource: string): string => {
+    return `\`\`\`typescript jsx\n${typescriptSource}\n\`\`\``;
+  };
+
+  abstract writeComponentToDisk(component: StudioComponent): void;
+
+  abstract writeThemeToDisk(theme: StudioTheme): void;
+
+  abstract renderComponent(component: StudioComponent): {
+    renderedComponent: { compText: string; importsText: string };
+    appSample: { compText: string; importsText: string };
+  };
+
+  abstract renderTheme(theme: StudioTheme): { componentText: string };
 }

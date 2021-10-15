@@ -11,6 +11,6 @@ Test components will be rendered with both source and usage docs to STDOUT as ma
 lerna bootstrap
 lerna run build
 # And either render to STDOUT or a file
-node packages/test-generator/dist/index.js
-node packages/test-generator/dist/index.js > test-generator-output.md
+node packages/test-generator/dist/scripts/run.js
+node packages/test-generator/dist/scripts/run.js > test-generator-output.md
 ```
