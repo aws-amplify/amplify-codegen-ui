@@ -14,10 +14,11 @@
   limitations under the License.
  */
 import React from 'react';
+import { AmplifyProvider } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 import ViewTest from './ui-components/ViewTest';
 import ViewWithButton from './ui-components/ViewWithButton';
 import CustomButton from './ui-components/CustomButton';
-import withTheme from './ui-components/theme';
 import BasicComponentBadge from './ui-components/BasicComponentBadge';
 import BasicComponentView from './ui-components/BasicComponentView';
 import BasicComponentButton from './ui-components/BasicComponentButton';
@@ -31,11 +32,13 @@ import BasicComponentFlex from './ui-components/BasicComponentFlex';
 import BasicComponentImage from './ui-components/BasicComponentImage';
 import BasicComponentCustomRating from './ui-components/BasicComponentCustomRating';
 import ComponentWithVariant from './ui-components/ComponentWithVariant';
+import theme from './ui-components/MyTheme';
 /* eslint-enable import/extensions */
 
-function ComponentTests() {
+export default function ComponentTests() {
   return (
-    <>
+    /* components prop is required. https://github.com/aws-amplify/amplify-ui/issues/575 */
+    <AmplifyProvider theme={theme} components={{}}>
       <h1>Generated Component Tests</h1>
       <div id={'basic-components'}>
         <h2>Basic Components</h2>
@@ -101,8 +104,6 @@ function ComponentTests() {
           }}
         />
       </div>
-    </>
+    </AmplifyProvider>
   );
 }
-
-export default withTheme(ComponentTests);

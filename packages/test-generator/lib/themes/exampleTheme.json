@@ -1,22 +1,54 @@
 {
-  "name": "example-theme",
-  "tokens": {
-    "colors": {
-      "font": {
-        "primary": {"value": "{colors.neutral.100.value}"}
+  "id": "1234-5678-9010",
+  "name": "MyTheme",
+  "values": {
+    "tokens": {
+      "children": {
+        "colors": {
+          "children": {
+            "font": {
+              "children": {
+                "primary": {
+                  "children": {
+                    "value": {
+                      "value": "#008080"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
-  "breakpoints": {
-    "values": {
-      "base": 0,
-      "small": 30,
-      "medium": 48,
-      "large": 62,
-      "xl": 80,
-      "xxl": 96
-    },
-    "unit": "em",
-    "defaultBreakpoint": "base"
-  }
+  "overrides": [
+    {
+      "colorMode": {
+        "value": "dark"
+      },
+      "tokens": {
+        "children": {
+          "colors": {
+            "children": {
+              "black": {
+                "children": {
+                  "value": {
+                    "value": "#fff"
+                  }
+                }
+              },
+              "white": {
+                "children": {
+                  "value": {
+                    "value": "#000"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

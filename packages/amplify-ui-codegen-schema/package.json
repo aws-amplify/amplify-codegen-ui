@@ -18,7 +18,6 @@
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
-    "@aws-amplify/ui": "^0.0.0-next-202192018414",
     "rollup": "^2.47.0",
     "source-map-support": "^0.5.19",
     "typescript": "^4.2.4"

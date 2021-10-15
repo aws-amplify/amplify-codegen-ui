@@ -1185,9 +1185,10 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
 exports[`amplify render tests theme should render the theme 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { AmplifyProvider, createTheme } from \\"@aws-amplify/ui-react\\";
-export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
-  const theme = createTheme({
+import { createTheme } from \\"@aws-amplify/ui-react\\";
+export default createTheme({
+  name: \\"MyTheme\\",
+  tokens: {
     components: {
       alert: {
         backgroundColor: \\"hsl(210, 5%, 90%)\\",
@@ -1198,56 +1199,24 @@ export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
         success: { backgroundColor: \\"hsl(130, 75%, 85%)\\" },
       },
     },
-    borderWidths: { small: \\"1px\\", medium: \\"2px\\", large: \\"3px\\" },
-    breakpoints: {
-      values: { base: 0, small: 30, medium: 48, large: 62, xl: 80, xxl: 96 },
-      unit: \\"em\\",
-      defaultBreakpoint: \\"base\\",
+  },
+  overrides: [
+    {
+      colorMode: \\"dark\\",
+      tokens: {
+        colors: { black: { value: \\"#fff\\" }, white: { value: \\"#000\\" } },
+      },
     },
-    testAllTypes: {
-      null: null,
-      string: \\"test\\",
-      number: 10,
-      boolean: { t: true, false: false },
-      object: { object: { test: \\"test\\" }, array: [\\"test\\"] },
-    },
-  });
-  const displayName =
-    WrappedComponent.displayName || WrappedComponent.name || \\"Component\\";
-  const ComponentWithTheme = (props: T) => {
-    return (
-      <AmplifyProvider theme={theme} components={{}}>
-        <WrappedComponent {...props} />
-      </AmplifyProvider>
-    );
-  };
-  ComponentWithTheme.displayName = displayName;
-  return ComponentWithTheme;
-}
+  ],
+});
 "
 `;
 
 exports[`amplify render tests theme should render the theme with ES5 1`] = `
-"var __assign =
-  (this && this.__assign) ||
-  function () {
-    __assign =
-      Object.assign ||
-      function (t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-          s = arguments[i];
-          for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-      };
-    return __assign.apply(this, arguments);
-  };
-/* eslint-disable */
-import React from \\"react\\";
-import { AmplifyProvider, createTheme } from \\"@aws-amplify/ui-react\\";
-export default function withTheme(WrappedComponent) {
-  var theme = createTheme({
+"import { createTheme } from \\"@aws-amplify/ui-react\\";
+export default createTheme({
+  name: \\"MyTheme\\",
+  tokens: {
     components: {
       alert: {
         backgroundColor: \\"hsl(210, 5%, 90%)\\",
@@ -1258,41 +1227,26 @@ export default function withTheme(WrappedComponent) {
         success: { backgroundColor: \\"hsl(130, 75%, 85%)\\" },
       },
     },
-    borderWidths: { small: \\"1px\\", medium: \\"2px\\", large: \\"3px\\" },
-    breakpoints: {
-      values: { base: 0, small: 30, medium: 48, large: 62, xl: 80, xxl: 96 },
-      unit: \\"em\\",
-      defaultBreakpoint: \\"base\\",
+  },
+  overrides: [
+    {
+      colorMode: \\"dark\\",
+      tokens: {
+        colors: { black: { value: \\"#fff\\" }, white: { value: \\"#000\\" } },
+      },
     },
-    testAllTypes: {
-      null: null,
-      string: \\"test\\",
-      number: 10,
-      boolean: { t: true, false: false },
-      object: { object: { test: \\"test\\" }, array: [\\"test\\"] },
-    },
-  });
-  var displayName =
-    WrappedComponent.displayName || WrappedComponent.name || \\"Component\\";
-  var ComponentWithTheme = function (props) {
-    return React.createElement(
-      AmplifyProvider,
-      { theme: theme, components: {} },
-      React.createElement(WrappedComponent, __assign({}, props))
-    );
-  };
-  ComponentWithTheme.displayName = displayName;
-  return ComponentWithTheme;
-}
+  ],
+});
 "
 `;
 
 exports[`amplify render tests theme should render the theme with TSX 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { AmplifyProvider, createTheme } from \\"@aws-amplify/ui-react\\";
-export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
-  const theme = createTheme({
+import { createTheme } from \\"@aws-amplify/ui-react\\";
+export default createTheme({
+  name: \\"MyTheme\\",
+  tokens: {
     components: {
       alert: {
         backgroundColor: \\"hsl(210, 5%, 90%)\\",
@@ -1303,32 +1257,16 @@ export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
         success: { backgroundColor: \\"hsl(130, 75%, 85%)\\" },
       },
     },
-    borderWidths: { small: \\"1px\\", medium: \\"2px\\", large: \\"3px\\" },
-    breakpoints: {
-      values: { base: 0, small: 30, medium: 48, large: 62, xl: 80, xxl: 96 },
-      unit: \\"em\\",
-      defaultBreakpoint: \\"base\\",
+  },
+  overrides: [
+    {
+      colorMode: \\"dark\\",
+      tokens: {
+        colors: { black: { value: \\"#fff\\" }, white: { value: \\"#000\\" } },
+      },
     },
-    testAllTypes: {
-      null: null,
-      string: \\"test\\",
-      number: 10,
-      boolean: { t: true, false: false },
-      object: { object: { test: \\"test\\" }, array: [\\"test\\"] },
-    },
-  });
-  const displayName =
-    WrappedComponent.displayName || WrappedComponent.name || \\"Component\\";
-  const ComponentWithTheme = (props: T) => {
-    return (
-      <AmplifyProvider theme={theme} components={{}}>
-        <WrappedComponent {...props} />
-      </AmplifyProvider>
-    );
-  };
-  ComponentWithTheme.displayName = displayName;
-  return ComponentWithTheme;
-}
+  ],
+});
 "
 `;
 

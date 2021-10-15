@@ -1,52 +1,81 @@
 {
-  "components": {
-    "alert": {
-      "backgroundColor": "hsl(210, 5%, 90%)",
-      "padding": "0.75rem 1rem",
-      "info": {
-        "backgroundColor": "hsl(220, 85%, 85%)"
-      },
-      "error": {
-        "backgroundColor": "hsl(0, 75%, 85%)"
-      },
-      "warning": {
-        "backgroundColor": "hsl(30, 75%, 85%)"
-      },
-      "success": {
-        "backgroundColor": "hsl(130, 75%, 85%)"
+  "id": "1234-5678-9010",
+  "name": "MyTheme",
+  "values": {
+    "tokens": {
+      "children": {
+        "components": {
+          "children": {
+            "alert": {
+              "children": {
+                "backgroundColor": {
+                  "value": "hsl(210, 5%, 90%)"
+                },
+                "padding": {
+                  "value": "0.75rem 1rem"
+                },
+                "info": {
+                  "children": {
+                    "backgroundColor": {
+                      "value": "hsl(220, 85%, 85%)"
+                    }
+                  }
+                },
+                "error": {
+                  "children": {
+                    "backgroundColor": {
+                      "value": "hsl(0, 75%, 85%)"
+                    }
+                  }
+                },
+                "warning": {
+                  "children": {
+                    "backgroundColor": {
+                      "value": "hsl(30, 75%, 85%)"
+                    }
+                  }
+                },
+                "success": {
+                  "children": {
+                    "backgroundColor": {
+                      "value": "hsl(130, 75%, 85%)"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
-  "borderWidths": {
-    "small": "1px",
-    "medium": "2px",
-    "large": "3px"
-  },
-  "breakpoints": {
-    "values": {
-      "base": 0,
-      "small": 30,
-      "medium": 48,
-      "large": 62,
-      "xl": 80,
-      "xxl": 96
-    },
-    "unit": "em",
-    "defaultBreakpoint": "base"
-  },
-  "testAllTypes": {
-    "null": null,
-    "string": "test",
-    "number": 10,
-    "boolean": {
-      "t": true,
-      "false": false
-    },
-    "object": {
-      "object": {
-        "test": "test"
+  "overrides": [
+    {
+      "colorMode": {
+        "value": "dark"
       },
-      "array": ["test"]
+      "tokens": {
+        "children": {
+          "colors": {
+            "children": {
+              "black": {
+                "children": {
+                  "value": {
+                    "value": "#fff"
+                  }
+                }
+              },
+              "white": {
+                "children": {
+                  "value": {
+                    "value": "#000"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
-  }
+  ]
 }
