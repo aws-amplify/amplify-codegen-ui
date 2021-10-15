@@ -10,6 +10,7 @@ module.exports = {
     'packages/amplify-ui-codegen-schema',
     'ui-components',
     '*.md',
+    'cypress',
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',

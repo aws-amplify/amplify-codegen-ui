@@ -31,7 +31,7 @@ const themeRendererFactory = new StudioTemplateRendererFactory(
   (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
 );
 
-const outputPathDir = path.resolve(path.join(__dirname, '..', 'ui-components'));
+const outputPathDir = path.resolve(path.join(__dirname, '..', 'test-app-templates', 'src', 'ui-components'));
 const outputConfig: ReactOutputConfig = {
   outputPathDir,
 };

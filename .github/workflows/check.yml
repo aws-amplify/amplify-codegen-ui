@@ -91,3 +91,43 @@ jobs:
       - name: Test amplify-category-studio
         working-directory: amplify-category-studio
         run: npm test
+
+  test-generated-components-render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+        with:
+          path: amplify-codegen-ui-staging
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install amplify-codegen-ui-staging dependencies
+        working-directory: amplify-codegen-ui-staging
+        run: npm ci
+      - name: Lerna bootstrap amplify-codegen-ui-staging
+        working-directory: amplify-codegen-ui-staging
+        run: lerna bootstrap
+      - name: Build amplify-codegen-ui-staging
+        working-directory: amplify-codegen-ui-staging
+        run: npm run build
+      - name: Execute test-generator
+        working-directory: amplify-codegen-ui-staging/packages/test-generator
+        run: node .
+      - name: Create test app with dependencies
+        working-directory: .
+        run: |
+          npx create-react-app test-app --use-npm --template typescript
+          cp -r amplify-codegen-ui-staging/packages/test-generator/test-app-templates/* test-app
+          cd test-app
+          npm i aws-amplify @aws-amplify/ui-react@2.0.1-next.5
+          npm i cypress --save-dev
+          echo "Installed test-app to ${PWD}"
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: test-app
+          build: npm run build
+          start: npm start
+          wait-on: 'http://localhost:3000'
