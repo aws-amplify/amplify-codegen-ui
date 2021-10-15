@@ -114,7 +114,7 @@ jobs:
         run: npm run build
       - name: Execute test-generator
         working-directory: amplify-codegen-ui-staging/packages/test-generator
-        run: node .
+        run: node ./dist/lib/generators/GenerateTestApp.js
       - name: Create test app with dependencies
         working-directory: .
         run: |

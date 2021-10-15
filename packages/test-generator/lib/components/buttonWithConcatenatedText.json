@@ -1,0 +1,47 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "ButtonWithConcatenatedText",
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
+    },
+    "buttonUser": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User"
+      }
+    },
+    "buttonColor": {
+      "type": "String"
+    }
+  },
+  "properties": {
+    "label": {
+      "concat": [
+        {
+          "bindingProperties": {
+            "property": "buttonUser",
+            "field": "firstname"
+          },
+          "defaultValue": "Harry"
+        },
+        {
+          "value": " "
+        },
+        {
+          "bindingProperties": {
+            "property": "buttonUser",
+            "field": "lastname"
+          },
+          "defaultValue": "Callahan"
+        }
+      ]
+    },
+    "labelWidth": {
+      "bindingProperties": {
+        "property": "width"
+      }
+    }
+  }
+}
