@@ -123,7 +123,6 @@ jobs:
           cd test-app
           npm i aws-amplify @aws-amplify/ui-react@2.0.1-next.5
           npm i cypress --save-dev
-          echo "Installed test-app to ${PWD}"
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
