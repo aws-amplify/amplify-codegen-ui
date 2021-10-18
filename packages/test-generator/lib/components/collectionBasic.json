@@ -1,0 +1,34 @@
+{
+  "name": "CollectionBasic",
+  "children": [
+    {
+      "children": [],
+      "name": "ListingCard1",
+      "componentType": "ListingCard",
+      "properties": {},
+      "overrides": {},
+      "variants": []
+    },
+    {
+      "children": [],
+      "name": "ListingCard2",
+      "componentType": "ListingCard",
+      "properties": {},
+      "overrides": {},
+      "variants": []
+    }
+  ],
+  "id": "c-7m9oAaC8SO0M40Pnvu",
+  "bindingProperties": {},
+  "componentType": "Collection",
+  "properties": {
+    "type": {
+      "value": "list"
+    },
+    "isPaginated": {
+      "value": "true"
+    }
+  },
+  "overrides": {},
+  "variants": []
+}

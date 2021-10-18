@@ -2,12 +2,8 @@
 import React from 'react';
 import BoxTest from './ui-components/BoxTest';
 import BoxWithButton from './ui-components/BoxWithButton';
-import BoxWithButtonExposedAs from './ui-components/BoxWithButtonExposedAs';
 import CustomButton from './ui-components/CustomButton';
 import CustomText from './ui-components/CustomText';
-import TextWithDataBinding from './ui-components/TextWithDataBinding';
-// import ButtonWithConcatenatedText from './ui-components/ButtonWithConcatenatedText';
-// import ButtonWithConditionalState from './ui-components/ButtonWithConditionalState';
 /* eslint-enable import/extensions */
 
 function App() {
@@ -15,10 +11,9 @@ function App() {
     <>
       <BoxTest />
       <BoxWithButton />
-      <BoxWithButtonExposedAs />
       <CustomButton />
       <CustomText />
-      <TextWithDataBinding />
+      {/* <TextWithDataBinding /> // TODO: add back in with data binding tests /*}
       {/*
       TODO: buttonUser Listed as optional prop, but fails when not present
       <ButtonWithConcatenatedText />

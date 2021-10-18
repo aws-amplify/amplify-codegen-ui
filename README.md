@@ -49,7 +49,35 @@ node ./packages/test-generator/dist/index.js
 
 _@amzn/test-generator_
 
-This is a sample project that utilizes codegen to render components in a desired framework. This project is currently configured to codegen Amplify UI Wrapper components.
+This is a sample project that utilizes codegen to render components in a desired framework.
+
+This project is currently configured to codegen Amplify UI components and themes, as well as provide templates which can be used in external projects to verify the correctness and usability of generated components.
+
+### E2E testing with test-generator
+
+test-generator can be used to create a react app and verify the correctness of our generated components E2E. This is in fact what the `test-generated-components-render` github workflow does on each commit.
+
+To do so locally, execute something along the lines of the following.
+
+```sh
+# From the repo root build latest code, and generate ui-components in test-generator package, then move outside the repo
+npm run setup-dev # If this is a newly cloned repo
+npm run test:generate-test-app
+cd ..
+# Generate a new react app, and clone in the template files from test-generator, and the generated files
+npx create-react-app test-app --use-npm --template typescript
+cp -r amplify-codegen-ui-staging/packages/test-generator/test-app-templates/* test-app
+cd test-app
+# Install new dependencies required
+npm i aws-amplify @aws-amplify/ui-react@2.0.1-next.5
+npm i cypress --save-dev\
+# And in parallel start the webapp
+npm start
+# And either run cypress suite
+npx cypress run
+# Or open cypress, and iterate on tests using the tool
+npx cypress open
+```
 
 ## Amplify Components Schema
 
