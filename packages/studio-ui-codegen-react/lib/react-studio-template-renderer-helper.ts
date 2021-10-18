@@ -14,9 +14,9 @@ import ts, {
 } from 'typescript';
 import prettier from 'prettier';
 import parserBabel from 'prettier/parser-babel';
-import tmp, { FileResult, DirResult } from 'tmp';
 import fs from 'fs';
 import path from 'path';
+import temp from 'temp';
 import { ReactRenderConfig, ScriptKind, ScriptTarget, ModuleKind } from './react-render-config';
 
 export const defaultRenderConfig = {
@@ -46,33 +46,28 @@ export function transpile(
      * createProgram is used here becuase transpileModule cannot produce type declarations.
      */
     if (renderTypeDeclarations) {
-      let tmpFile: FileResult | undefined;
-      let tmpDir: DirResult | undefined;
+      temp.track(); // tracks temp resources created to then be deleted by temp.cleanupSync
+
       try {
-        tmpFile = tmp.fileSync({ postfix: '.tsx' });
-        tmpDir = tmp.dirSync({ unsafeCleanup: true });
+        const tmpFile = temp.openSync({ suffix: '.tsx' });
+        const tmpDir = temp.mkdirSync();
 
-        fs.writeFileSync(tmpFile.name, code);
+        fs.writeFileSync(tmpFile.path, code);
 
-        createProgram([tmpFile.name], {
+        createProgram([tmpFile.path], {
           target,
           module,
           declaration: true,
           emitDeclarationOnly: true,
-          outDir: tmpDir.name,
+          outDir: tmpDir,
           skipLibCheck: true,
         }).emit();
 
-        const declaration = fs.readFileSync(path.join(tmpDir.name, getDeclarationFilename(tmpFile.name)), 'utf8');
+        const declaration = fs.readFileSync(path.join(tmpDir, getDeclarationFilename(tmpFile.path)), 'utf8');
 
         return { componentText, declaration };
       } finally {
-        if (tmpFile !== undefined) {
-          tmpFile.removeCallback();
-        }
-        if (tmpDir !== undefined) {
-          tmpDir.removeCallback();
-        }
+        temp.cleanupSync();
       }
     }
 
