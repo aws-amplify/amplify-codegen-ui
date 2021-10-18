@@ -6,11 +6,11 @@ module.exports = {
     'jest.config.js',
     '.eslintrc.js',
     'commitlint.config.js',
-    'packages/ui-react-types',
     'packages/amplify-ui-codegen-schema',
     'ui-components',
     '*.md',
     'cypress',
+    'packages/test-generator/test-app-templates',
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',
@@ -18,7 +18,7 @@ module.exports = {
     'prettier',
     'plugin:prettier/recommended',
   ],
-  plugins: ['import', 'prettier', '@typescript-eslint'],
+  plugins: ['import', 'prettier', '@typescript-eslint', 'header'],
   parserOptions: {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
@@ -38,5 +38,6 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'class-methods-use-this': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'header/header': [2, 'licence-header.js'],
   },
 };
