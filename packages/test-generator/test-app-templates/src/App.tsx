@@ -4,6 +4,7 @@ import BoxTest from './ui-components/BoxTest';
 import BoxWithButton from './ui-components/BoxWithButton';
 import CustomButton from './ui-components/CustomButton';
 import CustomText from './ui-components/CustomText';
+import withTheme from './ui-components/theme';
 /* eslint-enable import/extensions */
 
 function App() {
@@ -62,4 +63,4 @@ function App() {
   );
 }
 
-export default App;
+export default withTheme(App);

@@ -14,6 +14,5 @@ new TestGenerator({
     'ComponentWithVariant', // TODO: Support Variant E2E Tests
     'ComponentWithActionSignOut', // TODO: Support Auth Action E2E Tests
     'ComponentWithActionNavigation', // TODO: Support Navigation Action E2E Tests
-    'ExampleTheme', // TODO: Support Theme E2E Tests
   ],
 }).generate();
