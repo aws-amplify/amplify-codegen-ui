@@ -112,7 +112,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
           factory.createIdentifier('WrappedComponent'),
           undefined,
           factory.createTypeReferenceNode(
-            factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('ReactComponent')),
+            factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('ComponentType')),
             [factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined)],
           ),
           undefined,
@@ -200,11 +200,11 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    *   const theming = extendTheming(theme);
    *   useEffect(() => {
    *     Object.entries(theming.CSSVariables).forEach(([key, value]) => {
-   *       document.documentElement.style.setProperty(key, value);
+   *       document.documentElement.style.setProperty(key, value as string | null);
    *     });
    *   });
    *   return (
-   *     <AmplifyProvider theming={theming}>
+   *     <AmplifyProvider theming={theming} components={{}}>
    *       <WrappedComponent {...props} />
    *     </AmplifyProvider>
    *   );
@@ -249,6 +249,10 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
                             factory.createJsxAttribute(
                               factory.createIdentifier('theming'),
                               factory.createJsxExpression(undefined, factory.createIdentifier('theming')),
+                            ),
+                            factory.createJsxAttribute(
+                              factory.createIdentifier('components'),
+                              factory.createJsxExpression(undefined, factory.createObjectLiteralExpression([], false)),
                             ),
                           ]),
                         ),
@@ -301,7 +305,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   /*
    * useEffect(() => {
    *   Object.entries(theming.CSSVariables).forEach(([key, value]) => {
-   *     document.documentElement.style.setProperty(key, value);
+   *     document.documentElement.style.setProperty(key, (value as string | null));
    *   });
    * });
    */
@@ -380,7 +384,18 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
                                 factory.createIdentifier('setProperty'),
                               ),
                               undefined,
-                              [factory.createIdentifier('key'), factory.createIdentifier('value')],
+                              [
+                                factory.createIdentifier('key'),
+                                factory.createParenthesizedExpression(
+                                  factory.createAsExpression(
+                                    factory.createIdentifier('value'),
+                                    factory.createUnionTypeNode([
+                                      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+                                      factory.createLiteralTypeNode(factory.createNull()),
+                                    ]),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],

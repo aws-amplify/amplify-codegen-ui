@@ -14,7 +14,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type SiteHeaderProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
   const overrides = { ...props.overrides };
@@ -61,7 +61,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type TestProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function Test(props: TestProps): React.ReactElement {
   const overrides = { ...props.overrides };
@@ -87,7 +87,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function CustomButton(
   props: CustomButtonProps
@@ -115,7 +115,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type CustomTextProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function CustomText(props: CustomTextProps): React.ReactElement {
   const overrides = { ...props.overrides };
@@ -146,12 +146,12 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type CollectionOfCustomButtonsProps = {
-  width?: Number,
-  backgroundColor?: String,
-  buttonColor?: UserPreferences,
-  items?: any[],
+  width?: Number;
+  backgroundColor?: String;
+  buttonColor?: UserPreferences;
+  items?: any[];
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function CollectionOfCustomButtons(
   props: CollectionOfCustomButtonsProps
@@ -224,12 +224,12 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type CollectionOfCustomButtonsProps = {
-  width?: Number,
-  backgroundColor?: String,
-  buttonColor?: UserPreferences,
-  items?: any[],
+  width?: Number;
+  backgroundColor?: String;
+  buttonColor?: UserPreferences;
+  items?: any[];
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function CollectionOfCustomButtons(
   props: CollectionOfCustomButtonsProps
@@ -308,9 +308,9 @@ import {
 import { UntitledModel } from \\"../models\\";
 
 export type ListingCardCollectionProps = {
-  items?: any[],
+  items?: any[];
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
@@ -362,9 +362,9 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type ListingCardCollectionProps = {
-  items?: any[],
+  items?: any[];
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
@@ -401,7 +401,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type BoxWithButtonProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function BoxWithButton(
   props: BoxWithButtonProps
@@ -432,7 +432,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type BoxWithCustomButtonProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function BoxWithCustomButton(
   props: BoxWithCustomButtonProps
@@ -462,7 +462,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type BoxWithButtonProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function BoxWithButton(
   props: BoxWithButtonProps
@@ -491,9 +491,9 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type TextWithDataBindingProps = {
-  textValue?: String,
+  textValue?: String;
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function TextWithDataBinding(
   props: TextWithDataBindingProps
@@ -525,12 +525,12 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type ComponentWithDataBindingProps = {
-  width?: Number,
-  isDisabled?: Boolean,
-  buttonUser?: User,
-  buttonColor?: String,
+  width?: Number;
+  isDisabled?: Boolean;
+  buttonUser?: User;
+  buttonColor?: String;
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function ComponentWithDataBinding(
   props: ComponentWithDataBindingProps
@@ -562,9 +562,9 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type SectionHeadingProps = {
-  newProp6fd1?: UntitledModel,
+  newProp6fd1?: UntitledModel;
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function SectionHeading(
   props: SectionHeadingProps
@@ -624,10 +624,10 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = {
-  variant: \\"primary\\" | \\"secondary\\",
-  size?: \\"large\\",
+  variant: \\"primary\\" | \\"secondary\\";
+  size?: \\"large\\";
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function CustomButton(
   props: CustomButtonProps
@@ -672,11 +672,11 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = {
-  width?: Number,
-  buttonUser?: User,
-  buttonColor?: String,
+  width?: Number;
+  buttonUser?: User;
+  buttonColor?: String;
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function CustomButton(
   props: CustomButtonProps
@@ -708,11 +708,11 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = {
-  width?: Number,
-  buttonUser?: User,
-  buttonColor?: String,
+  width?: Number;
+  buttonUser?: User;
+  buttonColor?: String;
 } & {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function CustomButton(
   props: CustomButtonProps
@@ -854,7 +854,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type BoxWithButtonProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function BoxWithButton(
   props: BoxWithButtonProps
@@ -888,7 +888,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type SiteHeaderProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
   const overrides = { ...props.overrides };
@@ -962,9 +962,7 @@ import {
   Theme,
   extendTheming,
 } from \\"@aws-amplify/ui-react\\";
-export default function withTheme<T>(
-  WrappedComponent: React.ReactComponent<T>
-) {
+export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
   const theme = {
     components: {
       alert: {
@@ -996,11 +994,11 @@ export default function withTheme<T>(
     const theming = extendTheming(theme);
     useEffect(() => {
       Object.entries(theming.CSSVariables).forEach(([key, value]) => {
-        document.documentElement.style.setProperty(key, value);
+        document.documentElement.style.setProperty(key, value as string | null);
       });
     });
     return (
-      <AmplifyProvider theming={theming}>
+      <AmplifyProvider theming={theming} components={{}}>
         <WrappedComponent {...props} />
       </AmplifyProvider>
     );
@@ -1070,7 +1068,7 @@ export default function withTheme(WrappedComponent) {
     });
     return React.createElement(
       AmplifyProvider,
-      { theming: theming },
+      { theming: theming, components: {} },
       React.createElement(WrappedComponent, __assign({}, props))
     );
   };
@@ -1090,9 +1088,7 @@ import {
   Theme,
   extendTheming,
 } from \\"@aws-amplify/ui-react\\";
-export default function withTheme<T>(
-  WrappedComponent: React.ReactComponent<T>
-) {
+export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
   const theme = {
     components: {
       alert: {
@@ -1124,11 +1120,11 @@ export default function withTheme<T>(
     const theming = extendTheming(theme);
     useEffect(() => {
       Object.entries(theming.CSSVariables).forEach(([key, value]) => {
-        document.documentElement.style.setProperty(key, value);
+        document.documentElement.style.setProperty(key, value as string | null);
       });
     });
     return (
-      <AmplifyProvider theming={theming}>
+      <AmplifyProvider theming={theming} components={{}}>
         <WrappedComponent {...props} />
       </AmplifyProvider>
     );
@@ -1151,7 +1147,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type ProfileProps = {
-  overrides?: EscapeHatchProps | undefined | null,
+  overrides?: EscapeHatchProps | undefined | null;
 };
 export default function Profile(props: ProfileProps): React.ReactElement {
   const {} = props;
