@@ -17,7 +17,8 @@
     "format": "prettier --write 'packages/*/lib/**/*.{js,jsx,ts,tsx}'",
     "format:check": "prettier --check 'packages/*/lib/**/*.{js,jsx,ts,tsx}'",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "test:generate-test-app": "npx rimraf packages/test-generator/test-app-templates/src/ui-components && lerna run build --stream && node packages/test-generator/dist/lib/generators/GenerateTestApp.js"
   },
   "files": [],
   "devDependencies": {
