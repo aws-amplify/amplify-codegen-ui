@@ -34,7 +34,7 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
     addBindingPropertiesImports(component, importCollection);
   }
 
-  protected renderOpeningElement(tagName: string): JsxOpeningElement {
+  protected renderOpeningElement(): JsxOpeningElement {
     const attributes = Object.entries(this.component.properties)
       // value should be child of Text, not a prop
       .filter(([key]) => !(this.component.componentType === 'Text' && key === 'value'))
@@ -49,7 +49,7 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
     this.addPropsSpreadAttributes(attributes);
 
     return factory.createJsxOpeningElement(
-      factory.createIdentifier(tagName),
+      factory.createIdentifier(this.component.componentType),
       undefined,
       factory.createJsxAttributes(attributes),
     );

@@ -22,16 +22,15 @@ import { ReactComponentWithChildrenRenderer } from '../react-component-with-chil
 
 export default class BadgeRenderer extends ReactComponentWithChildrenRenderer<BadgeProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
-    const tagName = 'Badge';
     const children = this.component.children ?? [];
 
     const element = factory.createJsxElement(
-      this.renderOpeningElement(tagName),
+      this.renderOpeningElement(),
       renderChildren(children),
-      factory.createJsxClosingElement(factory.createIdentifier(tagName)),
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
-    this.importCollection.addImport('@aws-amplify/ui-react', tagName);
+    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
 
     return element;
   }

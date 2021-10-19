@@ -20,18 +20,16 @@ import { buildChildElement } from '../react-component-render-helper';
 
 export default class TextRenderer extends ReactComponentRenderer<TextProps> {
   renderElement(): JsxElement {
-    const tagName = 'Text';
-
     const childElement = buildChildElement(this.component.properties.value);
     const children: JsxChild[] = childElement ? [childElement] : [];
 
     const element = factory.createJsxElement(
-      this.renderOpeningElement(tagName),
+      this.renderOpeningElement(),
       children,
-      factory.createJsxClosingElement(factory.createIdentifier(tagName)),
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
-    this.importCollection.addImport('@aws-amplify/ui-react', tagName);
+    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
     return element;
   }
 }
