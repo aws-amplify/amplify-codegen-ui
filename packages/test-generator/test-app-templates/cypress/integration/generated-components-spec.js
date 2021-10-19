@@ -6,14 +6,59 @@ describe('Generated Components', () => {
   });
 
   describe('Basic Components', () => {
-    it('Renders Box with Button, and text inside', () => {
+    it('Renders Badge component', () => {
       cy.visit('http://localhost:3000');
-      cy.get('button').contains('Text in Button');
+      cy.get('#basic-components').contains('Basic Component Badge');
+    });
+
+    it('Renders Box component', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('#basic-components').contains('Basic Component Box');
+    });
+
+    it('Renders Button component', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('#basic-components').contains('Basic Component Button');
+    });
+
+    it('Renders Card component', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('#basic-components').contains('Basic Component Card');
+    });
+
+    it('Renders Collection component', () => {
+      cy.visit('http://localhost:3000');
+      // TODO: Integrate and finish test.
+      // cy.get('#basic-components').contains('Basic Component Collection');
+    });
+
+    it('Renders Custom component', () => {
+      cy.visit('http://localhost:3000');
+      // TODO: Integrate and finish test.
+      // cy.get('#basic-components').contains('Basic Custom Component');
+    });
+
+    it('Renders Divider component', () => {
+      cy.visit('http://localhost:3000');
+      // TODO: Integrate and finish test.
+      // cy.get('#basic-components').contains('Basic Component Divider');
+    });
+
+    it('Renders Flex component', () => {
+      cy.visit('http://localhost:3000');
+      // TODO: Integrate and finish test.
+      // cy.get('#basic-components').contains('Basic Component Flex');
+    });
+
+    it('Renders Image component', () => {
+      cy.visit('http://localhost:3000');
+      // TODO: Integrate and finish test.
+      // cy.get('#basic-components').contains('Basic Component Image');
     });
 
     it('Renders Text component', () => {
       cy.visit('http://localhost:3000');
-      cy.contains('Custom Text Value');
+      cy.get('#basic-components').contains('Basic Component Text');
     });
   });
 
