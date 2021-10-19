@@ -1,5 +1,5 @@
 {
-  "componentType": "Box",
+  "componentType": "View",
   "id": "I:5",
   "properties": {
     "fontFamily": {

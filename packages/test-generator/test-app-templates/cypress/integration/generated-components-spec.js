@@ -11,9 +11,9 @@ describe('Generated Components', () => {
       cy.get('#basic-components').contains('Basic Component Badge');
     });
 
-    it('Renders Box component', () => {
+    it('Renders View component', () => {
       cy.visit('http://localhost:3000');
-      cy.get('#basic-components').contains('Basic Component Box');
+      cy.get('#basic-components').contains('Basic Component View');
     });
 
     it('Renders Button component', () => {

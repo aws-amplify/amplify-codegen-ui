@@ -13,8 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export { default as BoxWithButton } from './boxWithButton.json';
-export { default as BoxTest } from './boxTest.json';
+export { default as ViewWithButton } from './viewWithButton.json';
+export { default as ViewTest } from './viewTest.json';
 export { default as CustomButton } from './customButton.json';
 export { default as ComponentWithExposedAs } from './componentWithExposedAs.json';
 export { default as ComponentWithDataBinding } from './componentWithDataBinding.json';

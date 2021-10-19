@@ -58,8 +58,8 @@ function generateWithThemeRenderer(jsonFile: string, renderConfig: ReactRenderCo
 
 describe('amplify render tests', () => {
   describe('basic component tests', () => {
-    it('should generate a simple box component', () => {
-      const generatedCode = generateWithAmplifyRenderer('boxTest');
+    it('should generate a simple view component', () => {
+      const generatedCode = generateWithAmplifyRenderer('viewTest');
       expect(generatedCode.componentText).toMatchSnapshot();
     });
 
@@ -87,8 +87,8 @@ describe('amplify render tests', () => {
   });
 
   describe('complex component tests', () => {
-    it('should generate a button within a box component', () => {
-      const generatedCode = generateWithAmplifyRenderer('boxGolden');
+    it('should generate a button within a view component', () => {
+      const generatedCode = generateWithAmplifyRenderer('viewGolden');
       expect(generatedCode.componentText).toMatchSnapshot();
     });
 
@@ -173,17 +173,17 @@ describe('amplify render tests', () => {
   describe('custom render config', () => {
     it('should render ES5', () => {
       expect(
-        generateWithAmplifyRenderer('boxGolden', { target: ScriptTarget.ES5, script: ScriptKind.JS }).componentText,
+        generateWithAmplifyRenderer('viewGolden', { target: ScriptTarget.ES5, script: ScriptKind.JS }).componentText,
       ).toMatchSnapshot();
     });
 
     it('should render JSX', () => {
-      expect(generateWithAmplifyRenderer('boxGolden', { script: ScriptKind.JSX }).componentText).toMatchSnapshot();
+      expect(generateWithAmplifyRenderer('viewGolden', { script: ScriptKind.JSX }).componentText).toMatchSnapshot();
     });
 
     it('should render common JS', () => {
       expect(
-        generateWithAmplifyRenderer('boxGolden', { module: ModuleKind.CommonJS, script: ScriptKind.JS }).componentText,
+        generateWithAmplifyRenderer('viewGolden', { module: ModuleKind.CommonJS, script: ScriptKind.JS }).componentText,
       ).toMatchSnapshot();
     });
   });

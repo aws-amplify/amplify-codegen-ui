@@ -51,32 +51,6 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
 }
 `;
 
-exports[`amplify render tests basic component tests should generate a simple box component 1`] = `
-"/* eslint-disable */
-import React from \\"react\\";
-import {
-  EscapeHatchProps,
-  View,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react\\";
-
-export type TestProps = {
-  overrides?: EscapeHatchProps | undefined | null;
-};
-export default function Test(props: TestProps): React.ReactElement {
-  const overrides = { ...props.overrides };
-  return (
-    <View
-      fontFamily=\\"Times New Roman\\"
-      fontSize=\\"20px\\"
-      {...props}
-      {...getOverrideProps(overrides, \\"Box\\")}
-    ></View>
-  );
-}
-"
-`;
-
 exports[`amplify render tests basic component tests should generate a simple button component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
@@ -128,6 +102,32 @@ export default function CustomText(props: CustomTextProps): React.ReactElement {
     >
       Text Value
     </Text>
+  );
+}
+"
+`;
+
+exports[`amplify render tests basic component tests should generate a simple view component 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  View,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type TestProps = {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function Test(props: TestProps): React.ReactElement {
+  const overrides = { ...props.overrides };
+  return (
+    <View
+      fontFamily=\\"Times New Roman\\"
+      fontSize=\\"20px\\"
+      {...props}
+      {...getOverrideProps(overrides, \\"View\\")}
+    ></View>
   );
 }
 "
@@ -390,7 +390,7 @@ export default function ListingCardCollection(
 "
 `;
 
-exports[`amplify render tests complex component tests should generate a button within a box component 1`] = `
+exports[`amplify render tests complex component tests should generate a button within a view component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
 import {
@@ -400,19 +400,19 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type BoxWithButtonProps = {
+export type ViewWithButtonProps = {
   overrides?: EscapeHatchProps | undefined | null;
 };
-export default function BoxWithButton(
-  props: BoxWithButtonProps
+export default function ViewWithButton(
+  props: ViewWithButtonProps
 ): React.ReactElement {
   const overrides = { ...props.overrides };
   return (
-    <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
+    <View {...props} {...getOverrideProps(overrides, \\"View\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"Box.Button\\")}
+        {...getOverrideProps(overrides, \\"View.Button\\")}
       ></Button>
     </View>
   );
@@ -431,15 +431,15 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type BoxWithCustomButtonProps = {
+export type ViewWithCustomButtonProps = {
   overrides?: EscapeHatchProps | undefined | null;
 };
-export default function BoxWithCustomButton(
-  props: BoxWithCustomButtonProps
+export default function ViewWithCustomButton(
+  props: ViewWithCustomButtonProps
 ): React.ReactElement {
   const overrides = { ...props.overrides };
   return (
-    <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
+    <View {...props} {...getOverrideProps(overrides, \\"View\\")}>
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -461,19 +461,19 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type BoxWithButtonProps = {
+export type ViewWithButtonProps = {
   overrides?: EscapeHatchProps | undefined | null;
 };
-export default function BoxWithButton(
-  props: BoxWithButtonProps
+export default function ViewWithButton(
+  props: ViewWithButtonProps
 ): React.ReactElement {
   const overrides = { ...props.overrides };
   return (
-    <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
+    <View {...props} {...getOverrideProps(overrides, \\"View\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"Box.Button\\")}
+        {...getOverrideProps(overrides, \\"View.Button\\")}
       ></Button>
     </View>
   );
@@ -765,16 +765,16 @@ exports[`amplify render tests custom render config should render ES5 1`] = `
 /* eslint-disable */
 import React from \\"react\\";
 import { Button, View, getOverrideProps } from \\"@aws-amplify/ui-react\\";
-export default function BoxWithButton(props) {
+export default function ViewWithButton(props) {
   var overrides = __assign({}, props.overrides);
   return React.createElement(
     View,
-    __assign({}, props, getOverrideProps(overrides, \\"Box\\")),
+    __assign({}, props, getOverrideProps(overrides, \\"View\\")),
     React.createElement(
       Button,
       __assign(
         { color: \\"#ff0000\\", width: \\"20px\\" },
-        getOverrideProps(overrides, \\"Box.Button\\")
+        getOverrideProps(overrides, \\"View.Button\\")
       )
     )
   );
@@ -786,14 +786,14 @@ exports[`amplify render tests custom render config should render JSX 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
 import { Button, View, getOverrideProps } from \\"@aws-amplify/ui-react\\";
-export default function BoxWithButton(props) {
+export default function ViewWithButton(props) {
   const overrides = Object.assign({}, props.overrides);
   return (
-    <View {...props} {...getOverrideProps(overrides, \\"Box\\")}>
+    <View {...props} {...getOverrideProps(overrides, \\"View\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"Box.Button\\")}
+        {...getOverrideProps(overrides, \\"View.Button\\")}
       ></Button>
     </View>
   );
@@ -812,25 +812,25 @@ Object.defineProperty(exports, \\"__esModule\\", { value: true });
 /* eslint-disable */
 const react_1 = __importDefault(require(\\"react\\"));
 const ui_react_1 = require(\\"@aws-amplify/ui-react\\");
-function BoxWithButton(props) {
+function ViewWithButton(props) {
   const overrides = Object.assign({}, props.overrides);
   return react_1.default.createElement(
     ui_react_1.View,
     Object.assign(
       {},
       props,
-      (0, ui_react_1.getOverrideProps)(overrides, \\"Box\\")
+      (0, ui_react_1.getOverrideProps)(overrides, \\"View\\")
     ),
     react_1.default.createElement(
       ui_react_1.Button,
       Object.assign(
         { color: \\"#ff0000\\", width: \\"20px\\" },
-        (0, ui_react_1.getOverrideProps)(overrides, \\"Box.Button\\")
+        (0, ui_react_1.getOverrideProps)(overrides, \\"View.Button\\")
       )
     )
   );
 }
-exports.default = BoxWithButton;
+exports.default = ViewWithButton;
 "
 `;
 
@@ -855,15 +855,15 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type BoxWithButtonProps = {
+export type ViewWithButtonProps = {
   overrides?: EscapeHatchProps | undefined | null;
 };
-export default function BoxWithButton(
-  props: BoxWithButtonProps
+export default function ViewWithButton(
+  props: ViewWithButtonProps
 ): React.ReactElement {
   const overrides = { ...props.overrides };
   return (
-    <View padding-left {...props} {...getOverrideProps(overrides, \\"Box\\")}>
+    <View padding-left {...props} {...getOverrideProps(overrides, \\"View\\")}>
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
