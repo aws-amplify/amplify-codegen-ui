@@ -28,7 +28,7 @@ import ts, {
   createProgram,
 } from 'typescript';
 import prettier from 'prettier';
-import parserBabel from 'prettier/parser-babel';
+import parserTypescript from 'prettier/parser-typescript';
 import fs from 'fs';
 import path from 'path';
 import temp from 'temp';
@@ -55,7 +55,7 @@ export function transpile(
       },
     }).outputText;
 
-    const componentText = prettier.format(transpiledCode, { parser: 'typescript', plugins: [parserBabel] });
+    const componentText = prettier.format(transpiledCode, { parser: 'typescript', plugins: [parserTypescript] });
 
     /* createProgram is less performant than traspileModule and should only be used when necessary.
      * createProgram is used here becuase transpileModule cannot produce type declarations.
@@ -91,7 +91,7 @@ export function transpile(
     };
   }
 
-  return { componentText: prettier.format(code, { parser: 'typescript', plugins: [parserBabel] }) };
+  return { componentText: prettier.format(code, { parser: 'typescript', plugins: [parserTypescript] }) };
 }
 
 export function buildPrinter(fileName: string, renderConfig: ReactRenderConfig) {

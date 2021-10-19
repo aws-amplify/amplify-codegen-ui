@@ -22,7 +22,6 @@
   "dependencies": {
     "@amzn/amplify-ui-codegen-schema": "^0.0.1",
     "@amzn/studio-ui-codegen": "^0.0.1",
-    "@babel/parser": "^7.15.6",
     "@types/temp": "^0.9.1",
     "framer-motion": "^4",
     "prettier": "2.3.2",
