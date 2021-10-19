@@ -63,20 +63,33 @@ describe('Generated Components', () => {
   });
 
   describe('Conditional Data', () => {
-    // TODO: Write Conditional Cases
+    it('Renders Button disabled when user is not logged in', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('[label="Disabled Conditional Button"]').get('[disabled]');
+    });
+
+    it('Renders May vote when user old enough', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('[label="May Vote Conditional Button"]').get('[prompt="May Vote, cast your vote."]');
+    });
+
+    it('Renders May not vote when user too young', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('[label="May Not Vote Conditional Button"]').get('[prompt="Sorry you cannot vote"]');
+    });
   });
 
+  // TODO: We should be rendering the element as a text child, but concat doesn't seem to support that yet.
   describe('Concatenated Data', () => {
-    // TODO: Get Concatenation Cases Working
-    // it('Renders Button text as a concatenated, bound element', () => {
-    //   cy.visit('http://localhost:3000');
-    //   cy.contains('Harry Callahan')
-    // });
-    //
-    // it('Renders Button text as a concatenated, bound element, with overrides', () => {
-    //   cy.visit('http://localhost:3000');
-    //   cy.contains('Norm Gunderson')
-    // });
+    it('Renders Button text as a concatenated, bound element', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('[label="Harry Callahan"]');
+    });
+
+    it('Renders Button text as a concatenated, bound element, with overrides', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('[label="Norm Gunderson"]');
+    });
   });
 
   describe('Component Variants', () => {

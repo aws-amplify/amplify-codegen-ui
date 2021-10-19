@@ -268,7 +268,7 @@ export type FixedStudioComponentProperty = {
  */
 export type BoundStudioComponentProperty = {
   /**
-   * This is the exposed property that will propogate down to this value
+   * This is the exposed property that will propagate down to this value
    */
   bindingProperties: {
     property: string;
