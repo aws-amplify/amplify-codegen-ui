@@ -1,0 +1,54 @@
+{
+  "name": "BasicComponentCollection",
+  "id": "c-7m9oAaC8SO0M40Pnvu",
+  "bindingProperties": {},
+  "componentType": "Collection",
+  "properties": {
+    "type": {
+      "value": "list"
+    },
+    "isPaginated": {
+      "value": "true"
+    }
+  },
+  "children": [
+    {
+      "name": "Card1",
+      "componentType": "Card",
+      "children": [
+        {
+          "name": "Card1Text",
+          "componentType": "Text",
+          "properties": {
+            "value": {
+              "value": "Basic Collection Card 1"
+            }
+          }
+        }
+      ],
+      "properties": {},
+      "overrides": {},
+      "variants": []
+    },
+    {
+      "name": "Card2",
+      "componentType": "Card",
+      "children": [
+        {
+          "name": "Card2Text",
+          "componentType": "Text",
+          "properties": {
+            "value": {
+              "value": "Basic Collection Card 2"
+            }
+          }
+        }
+      ],
+      "properties": {},
+      "overrides": {},
+      "variants": []
+    }
+  ],
+  "overrides": {},
+  "variants": []
+}
