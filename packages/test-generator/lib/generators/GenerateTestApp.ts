@@ -19,8 +19,6 @@ new TestGenerator({
   writeToLogger: false,
   writeToDisk: true,
   disabledSchemas: [
-    'ComponentWithConcatenation', // TODO: Support Concatenation E2E Tests
-    'ComponentWithConditional', // TODO: Support Conditional E2E Tests
     'ComponentWithDataBinding', // TODO: Support Data Binding E2E Tests
     'ComponentWithExposedAs', // TODO: Support Custom Props E2E Tests
     'CollectionWithBinding', // TODO: Support Collection Binding E2E Tests

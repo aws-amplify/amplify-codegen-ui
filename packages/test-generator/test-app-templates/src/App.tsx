@@ -23,6 +23,8 @@ import BasicComponentBox from './ui-components/BasicComponentBox';
 import BasicComponentButton from './ui-components/BasicComponentButton';
 import BasicComponentCard from './ui-components/BasicComponentCard';
 import BasicComponentText from './ui-components/BasicComponentText';
+import ComponentWithConcatenation from './ui-components/ComponentWithConcatenation';
+import ComponentWithConditional from './ui-components/ComponentWithConditional';
 /* eslint-enable import/extensions */
 
 function App() {
@@ -40,51 +42,51 @@ function App() {
       <BoxTest />
       <BoxWithButton />
       <CustomButton />
-      {/* <TextWithDataBinding /> // TODO: add back in with data binding tests /*}
-      {/*
-      TODO: buttonUser Listed as optional prop, but fails when not present
-      <ButtonWithConcatenatedText />
-      <ButtonWithConcatenatedText
-        buttonUser={{
-          firstname: 'Norm',
-          lastname: 'Gunderson',
-          isLoggedIn: true,
-          loggedInColor: 'blue',
-          loggedOutColor: 'red',
-          age: -1,
-        }}
-       />
-      <ButtonWithConditionalState
-        buttonUser={{
-          firstname: 'Disabled',
-          lastname: 'Conditional Button',
-          isLoggedIn: false,
-          loggedInColor: 'blue',
-          loggedOutColor: 'red',
-          age: -1,
-        }}
-       />
-      <ButtonWithConditionalState
-        buttonUser={{
-          firstname: 'May Vote',
-          lastname: 'Conditional Button',
-          age: 19,
-          isLoggedIn: true,
-          loggedInColor: 'blue',
-          loggedOutColor: 'red',
-        }}
-      />
-      <ButtonWithConditionalState
-        buttonUser={{
-          firstname: 'May Not Vote',
-          lastname: 'Conditional Button',
-          age: 16,
-          isLoggedIn: true,
-          loggedInColor: 'blue',
-          loggedOutColor: 'red',
-        }}
-      />
-      */}
+      {/* <TextWithDataBinding /> // TODO: add back in with data binding tests */}
+      <div id="concat-and-conditional">
+        <h2>Concatenation and Conditional Tests</h2>
+        <ComponentWithConcatenation />
+        <ComponentWithConcatenation
+          buttonUser={{
+            firstname: 'Norm',
+            lastname: 'Gunderson',
+            isLoggedIn: true,
+            loggedInColor: 'blue',
+            loggedOutColor: 'red',
+            age: -1,
+          }}
+        />
+        <ComponentWithConditional
+          buttonUser={{
+            firstname: 'Disabled',
+            lastname: 'Conditional Button',
+            isLoggedIn: false,
+            loggedInColor: 'blue',
+            loggedOutColor: 'red',
+            age: -1,
+          }}
+        />
+        <ComponentWithConditional
+          buttonUser={{
+            firstname: 'May Vote',
+            lastname: 'Conditional Button',
+            age: 19,
+            isLoggedIn: true,
+            loggedInColor: 'blue',
+            loggedOutColor: 'red',
+          }}
+        />
+        <ComponentWithConditional
+          buttonUser={{
+            firstname: 'May Not Vote',
+            lastname: 'Conditional Button',
+            age: 16,
+            isLoggedIn: true,
+            loggedInColor: 'blue',
+            loggedOutColor: 'red',
+          }}
+        />
+      </div>
     </>
   );
 }

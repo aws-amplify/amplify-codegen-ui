@@ -86,23 +86,23 @@ export function isDefaultValueOnly(
   return 'defaultValue' in prop && !(isCollectionItemBoundProperty(prop) || isBoundProperty(prop));
 }
 
+/**
+ * case: has field => <prop.bindingProperties.property>?.<prop.bindingProperties.field>
+ * case: no field =>  <prop.bindingProperties.property>
+ */
 export function buildBindingExpression(prop: BoundStudioComponentProperty): Expression {
   return prop.bindingProperties.field === undefined
     ? factory.createIdentifier(prop.bindingProperties.property)
-    : factory.createPropertyAccessExpression(
+    : factory.createPropertyAccessChain(
         factory.createIdentifier(prop.bindingProperties.property),
+        factory.createToken(SyntaxKind.QuestionDotToken),
         prop.bindingProperties.field,
       );
 }
 
 export function buildBindingAttr(prop: BoundStudioComponentProperty, propName: string): JsxAttribute {
   const expr = buildBindingExpression(prop);
-
-  const attr = factory.createJsxAttribute(
-    factory.createIdentifier(propName),
-    factory.createJsxExpression(undefined, expr),
-  );
-  return attr;
+  return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
 export function buildBindingWithDefaultExpression(
@@ -113,8 +113,9 @@ export function buildBindingWithDefaultExpression(
   const leftExpr =
     prop.bindingProperties.field === undefined
       ? factory.createIdentifier(prop.bindingProperties.property)
-      : factory.createPropertyAccessExpression(
+      : factory.createPropertyAccessChain(
           factory.createIdentifier(prop.bindingProperties.property),
+          factory.createToken(SyntaxKind.QuestionDotToken),
           prop.bindingProperties.field,
         );
 
@@ -127,11 +128,10 @@ export function buildBindingAttrWithDefault(
   defaultValue: string,
 ): JsxAttribute {
   const binaryExpr = buildBindingWithDefaultExpression(prop, defaultValue);
-  const attr = factory.createJsxAttribute(
+  return factory.createJsxAttribute(
     factory.createIdentifier(propName),
     factory.createJsxExpression(undefined, binaryExpr),
   );
-  return attr;
 }
 
 export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
@@ -309,24 +309,32 @@ export function buildConditionalExpression(prop: ConditionalStudioComponentPrope
   const elseBlock = prop.condition.else;
   const operatorToken = getSyntaxKindToken(operator);
 
-  if (operatorToken !== undefined) {
-    const expr = factory.createJsxExpression(
-      undefined,
-      factory.createConditionalExpression(
-        factory.createBinaryExpression(
-          factory.createPropertyAccessExpression(factory.createIdentifier(property), factory.createIdentifier(field)),
-          operatorToken,
-          getConditionalOperandExpression(operand),
-        ),
-        factory.createToken(SyntaxKind.QuestionToken),
-        resolvePropToExpression(then),
-        factory.createToken(SyntaxKind.ColonToken),
-        resolvePropToExpression(elseBlock),
-      ),
-    );
-    return expr;
+  if (operatorToken === undefined) {
+    return factory.createJsxExpression(undefined, undefined);
   }
-  return factory.createJsxExpression(undefined, undefined);
+
+  const propertyAccess = factory.createPropertyAccessChain(
+    factory.createIdentifier(property),
+    factory.createToken(SyntaxKind.QuestionDotToken),
+    factory.createIdentifier(field),
+  );
+
+  return factory.createJsxExpression(
+    undefined,
+    factory.createConditionalExpression(
+      factory.createParenthesizedExpression(
+        factory.createBinaryExpression(
+          propertyAccess,
+          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+          factory.createBinaryExpression(propertyAccess, operatorToken, getConditionalOperandExpression(operand)),
+        ),
+      ),
+      factory.createToken(SyntaxKind.QuestionToken),
+      resolvePropToExpression(then),
+      factory.createToken(SyntaxKind.ColonToken),
+      resolvePropToExpression(elseBlock),
+    ),
+  );
 }
 
 export function buildConditionalAttr(prop: ConditionalStudioComponentProperty, propName: string): JsxAttribute {
