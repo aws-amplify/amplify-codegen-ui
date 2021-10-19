@@ -14,7 +14,7 @@
   limitations under the License.
  */
 export { default as BasicComponentBadge } from './basicComponentBadge.json';
-export { default as BasicComponentBox } from './basicComponentBox.json';
+export { default as BasicComponentView } from './basicComponentView.json';
 export { default as BasicComponentButton } from './basicComponentButton.json';
 export { default as BasicComponentCard } from './basicComponentCard.json';
 export { default as BasicComponentCollection } from './basicComponentCollection.json';

@@ -2,7 +2,7 @@
 
 exports[`Component Renderers BadgeRenderer 1`] = `"<Badge {...props} {...getOverrideProps(overrides, \\"Badge\\")}></Badge>"`;
 
-exports[`Component Renderers BoxRenderer 1`] = `"<View {...props} {...getOverrideProps(overrides, \\"Box\\")}></View>"`;
+exports[`Component Renderers BoxRenderer 1`] = `"<View {...props} {...getOverrideProps(overrides, \\"View\\")}></View>"`;
 
 exports[`Component Renderers ButtonRenderer 1`] = `"<Button {...props} {...getOverrideProps(overrides, \\"Button\\")}></Button>"`;
 

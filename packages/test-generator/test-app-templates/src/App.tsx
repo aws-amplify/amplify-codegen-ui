@@ -14,12 +14,12 @@
   limitations under the License.
  */
 import React from 'react';
-import BoxTest from './ui-components/BoxTest';
-import BoxWithButton from './ui-components/BoxWithButton';
+import ViewTest from './ui-components/ViewTest';
+import ViewWithButton from './ui-components/ViewWithButton';
 import CustomButton from './ui-components/CustomButton';
 import withTheme from './ui-components/theme';
 import BasicComponentBadge from './ui-components/BasicComponentBadge';
-import BasicComponentBox from './ui-components/BasicComponentBox';
+import BasicComponentView from './ui-components/BasicComponentView';
 import BasicComponentButton from './ui-components/BasicComponentButton';
 import BasicComponentCard from './ui-components/BasicComponentCard';
 import BasicComponentText from './ui-components/BasicComponentText';
@@ -32,13 +32,13 @@ function App() {
       <div id={'basic-components'}>
         <h2>Basic Components</h2>
         <BasicComponentBadge />
-        <BasicComponentBox />
+        <BasicComponentView />
         <BasicComponentButton />
         <BasicComponentCard />
         <BasicComponentText />
       </div>
-      <BoxTest />
-      <BoxWithButton />
+      <ViewTest />
+      <ViewWithButton />
       <CustomButton />
       {/* <TextWithDataBinding /> // TODO: add back in with data binding tests /*}
       {/*

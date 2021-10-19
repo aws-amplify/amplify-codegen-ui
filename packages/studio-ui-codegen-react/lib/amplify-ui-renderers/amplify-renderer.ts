@@ -20,7 +20,7 @@ import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
 
 import BadgeRenderer from './badge';
 import ButtonRenderer from './button';
-import BoxRenderer from './box';
+import ViewRenderer from './view';
 import CardRenderer from './card';
 import DividerRenderer from './divider';
 import FlexRenderer from './flex';
@@ -48,8 +48,8 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
           children.map((child) => this.renderJsx(child, node)),
         );
 
-      case 'Box':
-        return new BoxRenderer(component, this.importCollection, parent).renderElement((children) =>
+      case 'View':
+        return new ViewRenderer(component, this.importCollection, parent).renderElement((children) =>
           children.map((child) => this.renderJsx(child, node)),
         );
 

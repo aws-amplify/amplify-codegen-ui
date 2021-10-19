@@ -13,14 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ViewProps as BoxProps } from '@aws-amplify/ui-react';
+import { ViewProps } from '@aws-amplify/ui-react';
 
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 
 import { factory, JsxChild, JsxElement } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 
-export default class BoxRenderer extends ReactComponentWithChildrenRenderer<BoxProps> {
+export default class ViewRenderer extends ReactComponentWithChildrenRenderer<ViewProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
     const tagName = 'View';
 

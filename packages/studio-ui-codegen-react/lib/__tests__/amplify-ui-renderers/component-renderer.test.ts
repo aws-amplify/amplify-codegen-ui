@@ -20,7 +20,7 @@ import { assertASTMatchesSnapshot } from '../__utils__/snapshot-helpers';
 
 import BadgeRenderer from '../../amplify-ui-renderers/badge';
 import ButtonRenderer from '../../amplify-ui-renderers/button';
-import BoxRenderer from '../../amplify-ui-renderers/box';
+import ViewRenderer from '../../amplify-ui-renderers/view';
 import CardRenderer from '../../amplify-ui-renderers/card';
 import DividerRenderer from '../../amplify-ui-renderers/divider';
 import FlexRenderer from '../../amplify-ui-renderers/flex';
@@ -34,7 +34,7 @@ function testComponentRenderer(
   Renderer:
     | typeof BadgeRenderer
     | typeof ButtonRenderer
-    | typeof BoxRenderer
+    | typeof ViewRenderer
     | typeof CardRenderer
     | typeof DividerRenderer
     | typeof FlexRenderer
@@ -73,12 +73,12 @@ describe('Component Renderers', () => {
 
   test('BoxRenderer', () => {
     const component = {
-      componentType: 'Box',
-      name: 'MyBox',
+      componentType: 'View',
+      name: 'MyView',
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(BoxRenderer, component);
+    testComponentRenderer(ViewRenderer, component);
   });
 
   test('CardRenderer', () => {
