@@ -263,4 +263,8 @@ describe('amplify render tests', () => {
       expect(generateWithAmplifyRenderer('default-value-components/collectionDefaultValue')).toMatchSnapshot();
     });
   });
+
+  it('should render parsed fixed values', () => {
+    expect(generateWithAmplifyRenderer('parsedFixedValues')).toMatchSnapshot();
+  });
 });

@@ -76,7 +76,7 @@ export default function CustomButton(
   return (
     <Button
       color=\\"#ff0000\\"
-      width=\\"20\\"
+      width={20}
       {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
@@ -1335,6 +1335,98 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
         {...getOverrideProps(overrides, \\"Flex.Button\\")}
       ></Button>
     </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests should render parsed fixed values 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Input,
+  InputProps,
+  View,
+  ViewProps,
+  findChildOverrides,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type ParsedFixedValuesProps = Partial<ViewProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function ParsedFixedValues(
+  props: ParsedFixedValuesProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <View
+      id=\\"parsed-fixed-values\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"View\\")}
+    >
+      <Input
+        id=\\"string-value\\"
+        value=\\"raw string value\\"
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"number-value\\"
+        value=\\"67548\\"
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-number-value\\"
+        value={67548}
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"boolean-value\\"
+        value=\\"true\\"
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-boolean-value\\"
+        value={true}
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"json-value\\"
+        value='{\\"foo\\": \\"bar\\"}'
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-json-value\\"
+        value={{ foo: \\"bar\\" }}
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"array-value\\"
+        value=\\"[1,2,3]\\"
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-array-value\\"
+        value={[1, 2, 3]}
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"null-value\\"
+        value=\\"null\\"
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-null-value\\"
+        value={null}
+        {...findChildOverrides(props.overrides, \\"Input\\")}
+      ></Input>
+    </View>
   );
 }
 ",

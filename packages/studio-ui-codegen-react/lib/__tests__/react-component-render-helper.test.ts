@@ -22,7 +22,10 @@ import {
   isCollectionItemBoundProperty,
   isConcatenatedProperty,
   isConditionalProperty,
+  buildFixedJsxExpression,
 } from '../react-component-render-helper';
+
+import { assertASTMatchesSnapshot } from './__utils__/snapshot-helpers';
 
 describe('react-component-render-helper', () => {
   test('getFixedComponentPropValueExpression', () => {
@@ -87,6 +90,60 @@ describe('react-component-render-helper', () => {
           });
         });
       });
+    });
+  });
+
+  describe('buildFixedJsxExpression', () => {
+    test('string', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: 'some text' }));
+    });
+
+    test('number', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: 400 }));
+    });
+
+    test('string wrapped number', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: '400' }));
+    });
+
+    test('parsed number', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: '400', type: 'Number' }));
+    });
+
+    test('boolean', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: true }));
+    });
+
+    test('string wrapped boolean', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: 'true' }));
+    });
+
+    test('parsed boolean', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: 'true', type: 'Boolean' }));
+    });
+
+    test('string wrapped array', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: '[1,2,3]' }));
+    });
+
+    test('parsed array', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: '[1,2,3]', type: 'Object' }));
+    });
+
+    test('string wrapped object', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: '{"transponder": "rocinante"}' }));
+    });
+
+    test('parsed object', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: '{"transponder": "rocinante"}', type: 'Object' }));
+    });
+
+    test('string wrapped null', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: 'null' }));
+    });
+
+    test('parsed null', () => {
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: 'null', type: 'Object' }));
     });
   });
 });
