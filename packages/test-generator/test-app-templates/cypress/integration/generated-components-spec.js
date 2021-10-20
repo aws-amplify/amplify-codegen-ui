@@ -50,6 +50,11 @@ describe('Generated Components', () => {
       cy.visit('http://localhost:3000');
       cy.get('#basic-components').contains('Basic Component Text');
     });
+
+    it('Renders Custom component', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('#basic-components').find('.amplify-rating');
+    });
   });
 
   describe('Conditional Data', () => {

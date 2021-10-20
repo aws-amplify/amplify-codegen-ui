@@ -22,3 +22,4 @@ export { default as BasicComponentDivider } from './basicComponentDivider.json';
 export { default as BasicComponentFlex } from './basicComponentFlex.json';
 export { default as BasicComponentImage } from './basicComponentImage.json';
 export { default as BasicComponentText } from './basicComponentText.json';
+export { default as BasicComponentCustomRating } from './basicComponentCustomRating.json';
