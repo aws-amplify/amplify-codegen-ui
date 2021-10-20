@@ -94,3 +94,10 @@ This packages contains all of the base classes for the codegen providers. This i
 _@amzn/studio-ui-codegen-react_
 
 This package contains the necessary codegen to render directly to Amplify Components from a Studio Schema.
+
+## Versioning
+
+1. Create new branch: `git checkout -b new-release`
+1. Run version command: `npm run version`
+1. Create new PR with the new branch to mainline: `gh pr create`
+1. Squash and merge PR after approval.
