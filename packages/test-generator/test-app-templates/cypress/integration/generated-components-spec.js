@@ -28,32 +28,22 @@ describe('Generated Components', () => {
 
     it('Renders Collection component', () => {
       cy.visit('http://localhost:3000');
-      // TODO: Integrate and finish test.
-      // cy.get('#basic-components').contains('Basic Component Collection');
-    });
-
-    it('Renders Custom component', () => {
-      cy.visit('http://localhost:3000');
-      // TODO: Integrate and finish test.
-      // cy.get('#basic-components').contains('Basic Custom Component');
+      cy.get('#basic-components').find('p:contains("Basic Collection Card Text")').should('have.length', 2);
     });
 
     it('Renders Divider component', () => {
       cy.visit('http://localhost:3000');
-      // TODO: Integrate and finish test.
-      // cy.get('#basic-components').contains('Basic Component Divider');
+      cy.get('#basic-components').find('.amplify-divider');
     });
 
     it('Renders Flex component', () => {
       cy.visit('http://localhost:3000');
-      // TODO: Integrate and finish test.
-      // cy.get('#basic-components').contains('Basic Component Flex');
+      cy.get('#basic-components').find('.amplify-flex').contains('Basic Component Flex');
     });
 
     it('Renders Image component', () => {
       cy.visit('http://localhost:3000');
-      // TODO: Integrate and finish test.
-      // cy.get('#basic-components').contains('Basic Component Image');
+      cy.get('#basic-components').find('img');
     });
 
     it('Renders Text component', () => {

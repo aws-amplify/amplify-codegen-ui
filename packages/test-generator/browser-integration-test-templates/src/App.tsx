@@ -22,12 +22,6 @@ function App() {
   const generator = new BrowserTestGenerator({
     writeToLogger: true,
     writeToDisk: false,
-    disabledSchemas: [
-      'BasicComponentCustom', // TODO: Add as part of basic components part 2
-      'BasicComponentDivider', // TODO: Add as part of basic components part 2
-      'BasicComponentFlex', // TODO: Add as part of basic components part 2
-      'BasicComponentImage', // TODO: Add as part of basic components part 2
-    ],
   });
   generator.generate();
   return (

@@ -26,10 +26,5 @@ new NodeTestGenerator({
     'ComponentWithVariant', // TODO: Support Variant E2E Tests
     'ComponentWithActionSignOut', // TODO: Support Auth Action E2E Tests
     'ComponentWithActionNavigation', // TODO: Support Navigation Action E2E Tests
-    'BasicComponentCollection', // TODO: Add as part of basic components part 2
-    'BasicComponentCustom', // TODO: Add as part of basic components part 2
-    'BasicComponentDivider', // TODO: Add as part of basic components part 2
-    'BasicComponentFlex', // TODO: Add as part of basic components part 2
-    'BasicComponentImage', // TODO: Add as part of basic components part 2
   ],
 }).generate();

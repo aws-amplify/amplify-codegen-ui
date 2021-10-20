@@ -18,7 +18,6 @@ export { default as BasicComponentView } from './basicComponentView.json';
 export { default as BasicComponentButton } from './basicComponentButton.json';
 export { default as BasicComponentCard } from './basicComponentCard.json';
 export { default as BasicComponentCollection } from './basicComponentCollection.json';
-export { default as BasicComponentCustom } from './basicComponentCustom.json';
 export { default as BasicComponentDivider } from './basicComponentDivider.json';
 export { default as BasicComponentFlex } from './basicComponentFlex.json';
 export { default as BasicComponentImage } from './basicComponentImage.json';

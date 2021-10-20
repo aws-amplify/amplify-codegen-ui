@@ -22,9 +22,13 @@ import BasicComponentBadge from './ui-components/BasicComponentBadge';
 import BasicComponentView from './ui-components/BasicComponentView';
 import BasicComponentButton from './ui-components/BasicComponentButton';
 import BasicComponentCard from './ui-components/BasicComponentCard';
+import BasicComponentCollection from './ui-components/BasicComponentCollection';
 import BasicComponentText from './ui-components/BasicComponentText';
 import ComponentWithConcatenation from './ui-components/ComponentWithConcatenation';
 import ComponentWithConditional from './ui-components/ComponentWithConditional';
+import BasicComponentDivider from './ui-components/BasicComponentDivider';
+import BasicComponentFlex from './ui-components/BasicComponentFlex';
+import BasicComponentImage from './ui-components/BasicComponentImage';
 /* eslint-enable import/extensions */
 
 function App() {
@@ -37,7 +41,11 @@ function App() {
         <BasicComponentView />
         <BasicComponentButton />
         <BasicComponentCard />
+        <BasicComponentCollection items={[0, 1]} />
+        <BasicComponentDivider />
+        <BasicComponentFlex />
         <BasicComponentText />
+        <BasicComponentImage />
       </div>
       <ViewTest />
       <ViewWithButton />
