@@ -13,7 +13,7 @@ node packages/test-generator/dist/generators/GenerateTestApp.js
 # install
 lerna bootstrap
 lerna add --scope integration-test aws-amplify
-lerna add --scope integration-test @aws-amplify/ui-react@2.0.1-next.5
+lerna add --scope integration-test @aws-amplify/ui-react@next
 lerna add --scope integration-test @amzn/studio-ui-codegen-react
 lerna add --scope integration-test @amzn/test-generator
 lerna add --no-ci --scope integration-test react-router-dom
