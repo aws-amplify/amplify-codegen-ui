@@ -29,6 +29,7 @@ import ComponentWithConditional from './ui-components/ComponentWithConditional';
 import BasicComponentDivider from './ui-components/BasicComponentDivider';
 import BasicComponentFlex from './ui-components/BasicComponentFlex';
 import BasicComponentImage from './ui-components/BasicComponentImage';
+import BasicComponentCustomRating from './ui-components/BasicComponentCustomRating';
 /* eslint-enable import/extensions */
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
         <BasicComponentFlex />
         <BasicComponentText />
         <BasicComponentImage />
+        <BasicComponentCustomRating />
       </div>
       <ViewTest />
       <ViewWithButton />

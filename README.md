@@ -70,7 +70,7 @@ cp -r amplify-codegen-ui-staging/packages/test-generator/test-app-templates/* te
 cd test-app
 # Install new dependencies required
 npm i aws-amplify @aws-amplify/ui-react@2.0.1-next.5
-npm i cypress --save-dev\
+npm i -D cypress
 # And in parallel start the webapp
 npm start
 # And either run cypress suite
