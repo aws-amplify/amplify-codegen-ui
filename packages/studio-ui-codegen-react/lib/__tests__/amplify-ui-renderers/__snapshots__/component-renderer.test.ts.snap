@@ -8,7 +8,7 @@ exports[`Component Renderers ButtonRenderer 1`] = `"<Button {...props} {...getOv
 
 exports[`Component Renderers CardRenderer 1`] = `"<Card {...props} {...getOverrideProps(overrides, \\"Card\\")}></Card>"`;
 
-exports[`Component Renderers CollectionRenderer 1`] = `"<Collection items={items} {...props} {...getOverrideProps(overrides, \\"Collection\\")}>{(item, index) => ()}</Collection>"`;
+exports[`Component Renderers CollectionRenderer 1`] = `"<Collection items={items || []} {...props} {...getOverrideProps(overrides, \\"Collection\\")}>{(item, index) => ()}</Collection>"`;
 
 exports[`Component Renderers CustomComponentRenderer 1`] = `"<Custom {...findChildOverrides(props.overrides, \\"Custom\\")}></Custom>"`;
 

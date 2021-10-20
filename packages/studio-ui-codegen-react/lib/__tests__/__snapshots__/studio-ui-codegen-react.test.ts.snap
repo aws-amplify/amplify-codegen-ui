@@ -188,7 +188,7 @@ export default function CollectionOfCustomButtons(
       isPaginated={true}
       gap=\\"1.5rem\\"
       backgroundColor={backgroundColor}
-      items={buttonUser}
+      items={buttonUser || []}
       {...props}
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
@@ -271,7 +271,7 @@ export default function CollectionOfCustomButtons(
       isPaginated={true}
       gap=\\"1.5rem\\"
       backgroundColor={backgroundColor}
-      items={buttonUser}
+      items={buttonUser || []}
       {...props}
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
@@ -331,7 +331,7 @@ export default function ListingCardCollection(
       type=\\"list\\"
       columns=\\"2\\"
       order=\\"left-to-right\\"
-      items={bananas}
+      items={bananas || []}
       {...props}
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
@@ -375,7 +375,7 @@ export default function ListingCardCollection(
     <Collection
       type=\\"list\\"
       isPaginated=\\"true\\"
-      items={items}
+      items={items || []}
       {...props}
       {...getOverrideProps(overrides, \\"Collection\\")}
     >

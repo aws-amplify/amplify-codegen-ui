@@ -1,1 +1,20 @@
-{}
+{
+  "id": "1234-5678-9010",
+  "componentType": "Image",
+  "name": "BasicComponentImage",
+  "properties": {
+    "src": {
+      "value": "http://media.corporate-ir.net/media_files/IROL/17/176060/Oct18/AWS.png"
+    },
+    "alt": {
+      "value": "AWS Logo"
+    },
+    "width": {
+      "value": "200px"
+    },
+    "height": {
+      "value": "120px"
+    }
+  },
+  "children": []
+}
