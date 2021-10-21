@@ -14,24 +14,16 @@
   limitations under the License.
  */
 import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
-import ts, { JsxFragment } from 'typescript';
+import { factory, JsxChild, JsxFragment } from 'typescript';
+import { buildChildElement } from '../react-component-render-helper';
 
 export default function renderString(component: StudioComponentChild): JsxFragment {
-  const { factory } = ts;
-
-  if ('value' in component.properties) {
-    if ('value' in component.properties.value) {
-      const stringProp = component.properties.value;
-      const { value } = stringProp;
-
-      const element = factory.createJsxFragment(
-        factory.createJsxOpeningFragment(),
-        [factory.createJsxText(value.toString())],
-        factory.createJsxJsxClosingFragment(),
-      );
-      return element;
-    }
+  if (!('value' in component.properties)) {
+    throw new Error('Failed to render String - Unexpected component structure');
   }
 
-  throw new Error('Failed to render String - Unexpected component structure');
+  const childElement = buildChildElement(component.properties.value);
+  const children: JsxChild[] = childElement ? [childElement] : [];
+
+  return factory.createJsxFragment(factory.createJsxOpeningFragment(), children, factory.createJsxJsxClosingFragment());
 }

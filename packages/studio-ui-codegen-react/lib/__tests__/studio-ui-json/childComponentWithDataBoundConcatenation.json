@@ -1,0 +1,40 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "ChildComponentWithDataBoundConcatenation",
+  "bindingProperties": {
+    "textValue": {
+      "type": "String"
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Text",
+      "name": "TextWithConcatenation",
+      "properties": {
+        "value": {
+          "concat": [
+            {
+              "bindingProperties": {
+                "property": "buttonUser",
+                "field": "firstname"
+              },
+              "defaultValue": "Harrison"
+            },
+            {
+              "value": " "
+            },
+            {
+              "bindingProperties": {
+                "property": "buttonUser",
+                "field": "lastname"
+              },
+              "defaultValue": "Spain"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

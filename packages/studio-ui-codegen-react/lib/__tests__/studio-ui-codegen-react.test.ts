@@ -120,6 +120,11 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('dataBindingWithoutPredicate');
       expect(generatedCode.componentText).toMatchSnapshot();
     });
+
+    it('should render with data binding in child elements', () => {
+      const generatedCode = generateWithAmplifyRenderer('childComponentWithDataBinding');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
   });
 
   describe('collection', () => {
@@ -147,6 +152,16 @@ describe('amplify render tests', () => {
   describe('concat and conditional transform', () => {
     it('should render component with concatenation prop', () => {
       const generatedCode = generateWithAmplifyRenderer('concatTest');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+
+    it('should render child component with static concatenation', () => {
+      const generatedCode = generateWithAmplifyRenderer('childComponentWithStaticConcatenation');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+
+    it('should render child component with data bound concatenation', () => {
+      const generatedCode = generateWithAmplifyRenderer('childComponentWithDataBoundConcatenation');
       expect(generatedCode.componentText).toMatchSnapshot();
     });
 
