@@ -100,7 +100,7 @@ export default function CustomText(props: CustomTextProps): React.ReactElement {
       {...props}
       {...getOverrideProps(overrides, \\"Text\\")}
     >
-      Text Value
+      {\\"Text Value\\"}
     </Text>
   );
 }
@@ -592,7 +592,7 @@ export default function SectionHeading(
           fontWeight=\\"300\\"
           {...getOverrideProps(overrides, \\"Flex.Flex.Text\\")}
         >
-          Heading 2
+          {\\"Heading 2\\"}
         </Text>
       </Flex>
       <Text
@@ -604,9 +604,38 @@ export default function SectionHeading(
         fontWeight=\\"400\\"
         {...getOverrideProps(overrides, \\"Flex.Text\\")}
       >
-        subtitle
+        {\\"subtitle\\"}
       </Text>
     </Flex>
+  );
+}
+"
+`;
+
+exports[`amplify render tests component with data binding should render with data binding in child elements 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  EscapeHatchProps,
+  Text,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type ChildComponentWithDataBindingProps = {
+  textValue?: String;
+} & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function ChildComponentWithDataBinding(
+  props: ChildComponentWithDataBindingProps
+): React.ReactElement {
+  const { textValue } = props;
+  const overrides = { ...props.overrides };
+  return (
+    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}>
+      <Text {...getOverrideProps(overrides, \\"Button.Text\\")}>{textValue}</Text>
+    </Button>
   );
 }
 "
@@ -659,6 +688,66 @@ export default function CustomButton(
   "declaration": undefined,
   "renderComponentToFilesystem": [Function],
 }
+`;
+
+exports[`amplify render tests concat and conditional transform should render child component with data bound concatenation 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  EscapeHatchProps,
+  Text,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type ChildComponentWithDataBoundConcatenationProps = {
+  textValue?: String;
+} & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function ChildComponentWithDataBoundConcatenation(
+  props: ChildComponentWithDataBoundConcatenationProps
+): React.ReactElement {
+  const { textValue } = props;
+  const overrides = { ...props.overrides };
+  return (
+    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}>
+      <Text {...getOverrideProps(overrides, \\"Button.Text\\")}>{\`\${
+        buttonUser?.firstname || \\"Harrison\\"
+      }\${\\" \\"}\${buttonUser?.lastname || \\"Spain\\"}\`}</Text>
+    </Button>
+  );
+}
+"
+`;
+
+exports[`amplify render tests concat and conditional transform should render child component with static concatenation 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  EscapeHatchProps,
+  Text,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type ChildComponentWithStaticConcatenationProps = {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function ChildComponentWithStaticConcatenation(
+  props: ChildComponentWithStaticConcatenationProps
+): React.ReactElement {
+  const {} = props;
+  const overrides = { ...props.overrides };
+  return (
+    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}>
+      <Text
+        {...getOverrideProps(overrides, \\"Button.Text\\")}
+      >{\`\${\\"Concatenate\\"}\${\\" \\"}\${\\"Me!\\"}\`}</Text>
+    </Button>
+  );
+}
+"
 `;
 
 exports[`amplify render tests concat and conditional transform should render component with concatenation prop 1`] = `

@@ -18,8 +18,8 @@ exports[`Component Renderers FlexRenderer 1`] = `"<Flex {...props} {...getOverri
 
 exports[`Component Renderers ImageRenderer 1`] = `"<Image {...props} {...getOverrideProps(overrides, \\"Image\\")}></Image>"`;
 
-exports[`Component Renderers StringRenderer basic 1`] = `"<>test</>"`;
+exports[`Component Renderers StringRenderer basic 1`] = `"<>{\\"test\\"}</>"`;
 
 exports[`Component Renderers StringRenderer missing props 1`] = `"Failed to render String - Unexpected component structure"`;
 
-exports[`Component Renderers TextRenderer 1`] = `"<Text {...props} {...getOverrideProps(overrides, \\"Text\\")}>test</Text>"`;
+exports[`Component Renderers TextRenderer 1`] = `"<Text {...props} {...getOverrideProps(overrides, \\"Text\\")}>{\\"test\\"}</Text>"`;

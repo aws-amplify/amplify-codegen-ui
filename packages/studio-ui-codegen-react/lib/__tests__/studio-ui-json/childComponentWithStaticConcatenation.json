@@ -1,0 +1,28 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "ChildComponentWithStaticConcatenation",
+  "bindingProperties": {},
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Text",
+      "name": "TextWithConcatenation",
+      "properties": {
+        "value": {
+          "concat": [
+            {
+              "value": "Concatenate"
+            },
+            {
+              "value": " "
+            },
+            {
+              "value": "Me!"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

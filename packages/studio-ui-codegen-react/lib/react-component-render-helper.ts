@@ -34,6 +34,7 @@ import {
   SyntaxKind,
   JsxExpression,
   BinaryOperatorToken,
+  JsxChild,
 } from 'typescript';
 
 import { ImportCollection } from './import-collection';
@@ -342,23 +343,48 @@ export function buildConditionalAttr(prop: ConditionalStudioComponentProperty, p
   return factory.createJsxAttribute(factory.createIdentifier(propName), expr);
 }
 
+export function buildChildElement(prop?: ComponentPropertyValueTypes): JsxChild | undefined {
+  if (!prop) {
+    return undefined;
+  }
+  let expression: Expression | undefined;
+  if (isFixedPropertyWithValue(prop)) {
+    expression = buildFixedJsxExpression(prop);
+  }
+  if (isBoundProperty(prop)) {
+    expression =
+      prop.defaultValue === undefined
+        ? buildBindingExpression(prop)
+        : buildBindingWithDefaultExpression(prop, prop.defaultValue);
+  }
+  if (isCollectionItemBoundProperty(prop)) {
+    expression =
+      prop.defaultValue === undefined
+        ? buildCollectionBindingExpression(prop)
+        : buildCollectionBindingWithDefaultExpression(prop, prop.defaultValue);
+  }
+  if (isConcatenatedProperty(prop)) {
+    expression = buildConcatExpression(prop);
+  }
+  if (isConditionalProperty(prop)) {
+    expression = buildConditionalExpression(prop);
+  }
+  return expression && factory.createJsxExpression(undefined, expression);
+}
+
 export function buildOpeningElementAttributes(prop: ComponentPropertyValueTypes, propName: string): JsxAttribute {
   if (isFixedPropertyWithValue(prop)) {
     return buildFixedAttr(prop, propName);
   }
   if (isBoundProperty(prop)) {
-    const attr =
-      prop.defaultValue === undefined
-        ? buildBindingAttr(prop, propName)
-        : buildBindingAttrWithDefault(prop, propName, prop.defaultValue);
-    return attr;
+    return prop.defaultValue === undefined
+      ? buildBindingAttr(prop, propName)
+      : buildBindingAttrWithDefault(prop, propName, prop.defaultValue);
   }
   if (isCollectionItemBoundProperty(prop)) {
-    const attr =
-      prop.defaultValue === undefined
-        ? buildCollectionBindingAttr(prop, propName)
-        : buildCollectionBindingAttrWithDefault(prop, propName, prop.defaultValue);
-    return attr;
+    return prop.defaultValue === undefined
+      ? buildCollectionBindingAttr(prop, propName)
+      : buildCollectionBindingAttrWithDefault(prop, propName, prop.defaultValue);
   }
   if (isConcatenatedProperty(prop)) {
     return buildConcatAttr(prop, propName);
