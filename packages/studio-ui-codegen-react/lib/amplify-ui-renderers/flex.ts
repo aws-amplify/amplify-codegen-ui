@@ -29,6 +29,7 @@ export default class FlexRenderer extends ReactComponentWithChildrenRenderer<Fle
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport('@aws-amplify/ui-react', `${this.component.componentType}Props`);
 
     return element;
   }

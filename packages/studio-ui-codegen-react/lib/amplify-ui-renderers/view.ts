@@ -30,6 +30,7 @@ export default class ViewRenderer extends ReactComponentWithChildrenRenderer<Vie
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport('@aws-amplify/ui-react', `${this.component.componentType}Props`);
 
     return element;
   }

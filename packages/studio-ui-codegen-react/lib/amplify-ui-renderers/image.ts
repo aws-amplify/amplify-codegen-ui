@@ -27,6 +27,8 @@ export default class ImageRenderer extends ReactComponentRenderer<ImageProps> {
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport('@aws-amplify/ui-react', `${this.component.componentType}Props`);
+
     return element;
   }
 }

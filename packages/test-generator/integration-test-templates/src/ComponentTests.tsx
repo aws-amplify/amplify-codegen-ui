@@ -30,6 +30,7 @@ import BasicComponentDivider from './ui-components/BasicComponentDivider';
 import BasicComponentFlex from './ui-components/BasicComponentFlex';
 import BasicComponentImage from './ui-components/BasicComponentImage';
 import BasicComponentCustomRating from './ui-components/BasicComponentCustomRating';
+import ComponentWithVariant from './ui-components/ComponentWithVariant';
 /* eslint-enable import/extensions */
 
 function ComponentTests() {
@@ -67,6 +68,7 @@ function ComponentTests() {
           }}
         />
         <ComponentWithConditional
+          id="conditional1"
           buttonUser={{
             firstname: 'Disabled',
             lastname: 'Conditional Button',
@@ -77,6 +79,7 @@ function ComponentTests() {
           }}
         />
         <ComponentWithConditional
+          id="conditional2"
           buttonUser={{
             firstname: 'May Vote',
             lastname: 'Conditional Button',
@@ -87,6 +90,7 @@ function ComponentTests() {
           }}
         />
         <ComponentWithConditional
+          id="conditional3"
           buttonUser={{
             firstname: 'May Not Vote',
             lastname: 'Conditional Button',

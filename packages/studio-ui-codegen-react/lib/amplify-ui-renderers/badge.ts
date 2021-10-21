@@ -31,6 +31,7 @@ export default class BadgeRenderer extends ReactComponentWithChildrenRenderer<Ba
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport('@aws-amplify/ui-react', `${this.component.componentType}Props`);
 
     return element;
   }
