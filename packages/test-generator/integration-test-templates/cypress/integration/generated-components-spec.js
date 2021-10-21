@@ -57,33 +57,34 @@ describe('Generated Components', () => {
     });
   });
 
-  describe('Conditional Data', () => {
-    it('Renders Button disabled when user is not logged in', () => {
-      cy.visit('http://localhost:3000/component-tests');
-      cy.get('[label="Disabled Conditional Button"]').get('[disabled]');
+  describe('Generated Components', () => {
+    describe('Concatenated Data', () => {
+      it('Renders Button text as a concatenated, bound element', () => {
+        cy.visit('http://localhost:3000/component-tests');
+        cy.get('#concat-and-conditional').contains('Harry Callahan');
+      });
+
+      it('Renders Button text as a concatenated, bound element, with overrides', () => {
+        cy.visit('http://localhost:3000/component-tests');
+        cy.get('#concat-and-conditional').contains('Norm Gunderson');
+      });
     });
 
-    it('Renders May vote when user old enough', () => {
-      cy.visit('http://localhost:3000/component-tests');
-      cy.get('[label="May Vote Conditional Button"]').get('[prompt="May Vote, cast your vote."]');
-    });
+    describe('Conditional Data', () => {
+      it('Renders Button with one background when user is logged in', () => {
+        cy.visit('http://localhost:3000/component-tests');
+        cy.get('#concat-and-conditional').get('#conditional1').should('have.css', 'background-color', 'rgb(255, 0, 0)');
+      });
 
-    it('Renders May not vote when user too young', () => {
-      cy.visit('http://localhost:3000/component-tests');
-      cy.get('[label="May Not Vote Conditional Button"]').get('[prompt="Sorry you cannot vote"]');
-    });
-  });
+      it('Renders Button with a different background when user is not logged in', () => {
+        cy.visit('http://localhost:3000/component-tests');
+        cy.get('#concat-and-conditional').get('#conditional2').should('have.css', 'background-color', 'rgb(0, 0, 255)');
+      });
 
-  // TODO: We should be rendering the element as a text child, but concat doesn't seem to support that yet.
-  describe('Concatenated Data', () => {
-    it('Renders Button text as a concatenated, bound element', () => {
-      cy.visit('http://localhost:3000/component-tests');
-      cy.get('[label="Harry Callahan"]');
-    });
-
-    it('Renders Button text as a concatenated, bound element, with overrides', () => {
-      cy.visit('http://localhost:3000/component-tests');
-      cy.get('[label="Norm Gunderson"]');
+      it('Renders Button disabled when user is not logged in', () => {
+        cy.visit('http://localhost:3000/component-tests');
+        cy.get('#concat-and-conditional').get('#conditional2').get('[disabled]');
+      });
     });
   });
 

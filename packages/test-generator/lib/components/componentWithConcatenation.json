@@ -3,45 +3,41 @@
   "componentType": "Button",
   "name": "ComponentWithConcatenation",
   "bindingProperties": {
-    "width": {
-      "type": "Number"
-    },
     "buttonUser": {
       "type": "Data",
       "bindingProperties": {
         "model": "User"
       }
-    },
-    "buttonColor": {
-      "type": "String"
     }
   },
-  "properties": {
-    "label": {
-      "concat": [
-        {
-          "bindingProperties": {
-            "property": "buttonUser",
-            "field": "firstname"
-          },
-          "defaultValue": "Harry"
-        },
-        {
-          "value": " "
-        },
-        {
-          "bindingProperties": {
-            "property": "buttonUser",
-            "field": "lastname"
-          },
-          "defaultValue": "Callahan"
+  "properties": {},
+  "children": [
+    {
+      "componentType": "String",
+      "name": "String",
+      "properties": {
+        "value": {
+          "concat": [
+            {
+              "bindingProperties": {
+                "property": "buttonUser",
+                "field": "firstname"
+              },
+              "defaultValue": "Harry"
+            },
+            {
+              "value": " "
+            },
+            {
+              "bindingProperties": {
+                "property": "buttonUser",
+                "field": "lastname"
+              },
+              "defaultValue": "Callahan"
+            }
+          ]
         }
-      ]
-    },
-    "labelWidth": {
-      "bindingProperties": {
-        "property": "width"
       }
     }
-  }
+  ]
 }

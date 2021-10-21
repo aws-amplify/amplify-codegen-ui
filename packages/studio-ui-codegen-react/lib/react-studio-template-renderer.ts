@@ -259,7 +259,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   renderBindingPropsType(component: StudioComponent): TypeAliasDeclaration {
-    const escapeHatchType = factory.createTypeLiteralNode([
+    const escapeHatchTypeNode = factory.createTypeLiteralNode([
       factory.createPropertySignature(
         undefined,
         factory.createIdentifier('overrides'),
@@ -280,12 +280,41 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       undefined,
       factory.createIntersectionTypeNode(
         this.dropMissingListElements([
-          this.buildComponentPropNodes(component),
-          this.buildVariantPropNodes(component),
-          escapeHatchType,
+          this.buildPrimitivePropNode(component),
+          this.buildComponentPropNode(component),
+          this.buildVariantPropNode(component),
+          escapeHatchTypeNode,
         ]),
       ),
     );
+  }
+
+  private hasPrimitivePropType(component: StudioComponent): boolean {
+    return component.componentType !== 'String';
+  }
+
+  private getParameterizedPrimitivePropType(component: StudioComponent): TypeNode | undefined {
+    switch (component.componentType) {
+      case 'Collection':
+        return factory.createTypeReferenceNode(factory.createIdentifier('CollectionProps'), [
+          factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+        ]);
+      default:
+        return undefined;
+    }
+  }
+
+  private buildPrimitivePropNode(component: StudioComponent): TypeNode | undefined {
+    if (!this.hasPrimitivePropType(component)) {
+      return undefined;
+    }
+
+    const parameterizedPrimitivePropType = this.getParameterizedPrimitivePropType(component);
+    const primitivePropType =
+      parameterizedPrimitivePropType ||
+      factory.createTypeReferenceNode(factory.createIdentifier(`${component.componentType}Props`), undefined);
+
+    return factory.createTypeReferenceNode(factory.createIdentifier('Partial'), [primitivePropType]);
   }
 
   /**
@@ -297,7 +326,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
        size?: "large",
      }
    */
-  private buildVariantPropNodes(component: StudioComponent): TypeNode | undefined {
+  private buildVariantPropNode(component: StudioComponent): TypeNode | undefined {
     if (!isStudioComponentWithVariants(component)) {
       return undefined;
     }
@@ -349,7 +378,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return factory.createTypeLiteralNode([...requiredProperties, ...optionalProperties]);
   }
 
-  private buildComponentPropNodes(component: StudioComponent): TypeNode | undefined {
+  private buildComponentPropNode(component: StudioComponent): TypeNode | undefined {
     const propSignatures: PropertySignature[] = [];
     const bindingProps = component.bindingProperties;
     if (bindingProps === undefined || !isStudioComponentWithBinding(component)) {
@@ -392,9 +421,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private buildVariableStatements(component: StudioComponent): Statement[] {
     const statements: Statement[] = [];
-
+    const elements: BindingElement[] = [];
     if (isStudioComponentWithBinding(component)) {
-      const elements: BindingElement[] = [];
       Object.entries(component.bindingProperties).forEach((entry) => {
         const [propName, binding] = entry;
         if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding)) {
@@ -407,33 +435,53 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           elements.push(bindingElement);
         }
       });
-
-      if (component.componentType === 'Collection') {
-        const bindingElement = factory.createBindingElement(
-          undefined,
-          undefined,
-          factory.createIdentifier('items'),
-          undefined,
-        );
-        elements.push(bindingElement);
-      }
-
-      const statement = factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createObjectBindingPattern(elements),
-              undefined,
-              undefined,
-              factory.createIdentifier('props'),
-            ),
-          ],
-          ts.NodeFlags.Const,
-        ),
-      );
-      statements.push(statement);
     }
+
+    if (component.componentType === 'Collection') {
+      const bindingElement = factory.createBindingElement(
+        undefined,
+        undefined,
+        factory.createIdentifier('items'),
+        undefined,
+      );
+      elements.push(bindingElement);
+    }
+
+    // remove overrides from rest of props
+    elements.push(
+      factory.createBindingElement(
+        undefined,
+        factory.createIdentifier('overrides'),
+        factory.createIdentifier('overridesProp'),
+        undefined,
+      ),
+    );
+
+    // get rest of props to pass to top level component
+    elements.push(
+      factory.createBindingElement(
+        factory.createToken(ts.SyntaxKind.DotDotDotToken),
+        undefined,
+        factory.createIdentifier('rest'),
+        undefined,
+      ),
+    );
+
+    const statement = factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createObjectBindingPattern(elements),
+            undefined,
+            undefined,
+            factory.createIdentifier('props'),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+    statements.push(statement);
 
     if (isStudioComponentWithVariants(component)) {
       statements.push(this.buildVariantDeclaration(component.variants));
@@ -542,8 +590,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   /**
-   * case: hasVariants = true => const overrides = { ...getOverridesFromVariants(variants), ...props.overrides };
-   * case: hasVariants = false => const overrides = { ...props.overrides };
+   * case: hasVariants = true => const overrides = { ...getOverridesFromVariants(variants, props) };
+   * case: hasVariants = false => const overrides = { ...overridesProp };
    */
   private buildOverridesDeclaration(hasVariants: boolean): VariableStatement {
     if (hasVariants) {
@@ -573,14 +621,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                       ]
                     : [],
                 )
-                .concat([
-                  factory.createSpreadAssignment(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('props'),
-                      factory.createIdentifier('overrides'),
-                    ),
-                  ),
-                ]),
+                .concat([factory.createSpreadAssignment(factory.createIdentifier('overridesProp'))]),
             ),
           ),
         ],

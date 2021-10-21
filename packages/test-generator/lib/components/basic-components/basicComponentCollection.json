@@ -6,9 +6,6 @@
   "properties": {
     "type": {
       "value": "list"
-    },
-    "isPaginated": {
-      "value": "true"
     }
   },
   "children": [

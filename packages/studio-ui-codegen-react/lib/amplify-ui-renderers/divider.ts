@@ -27,6 +27,7 @@ export default class DividerRenderer extends ReactComponentRenderer<DividerProps
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport('@aws-amplify/ui-react', `${this.component.componentType}Props`);
 
     return element;
   }

@@ -3,46 +3,14 @@
   "componentType": "Button",
   "name": "ComponentWithConditional",
   "bindingProperties": {
-    "width": {
-      "type": "Number"
-    },
     "buttonUser": {
       "type": "Data",
       "bindingProperties": {
         "model": "User"
       }
-    },
-    "buttonColor": {
-      "type": "String"
     }
   },
   "properties": {
-    "label": {
-      "concat": [
-        {
-          "bindingProperties": {
-            "property": "buttonUser",
-            "field": "firstname"
-          },
-          "defaultValue": "Harry"
-        },
-        {
-          "value": " "
-        },
-        {
-          "bindingProperties": {
-            "property": "buttonUser",
-            "field": "lastname"
-          },
-          "defaultValue": "Callahan"
-        }
-      ]
-    },
-    "labelWidth": {
-      "bindingProperties": {
-        "property": "width"
-      }
-    },
     "disabled": {
       "condition": {
         "property": "buttonUser",
@@ -54,30 +22,6 @@
         },
         "else": {
           "value": false
-        }
-      }
-    },
-    "prompt": {
-      "condition": {
-        "property": "buttonUser",
-        "field": "age",
-        "operator": "gt",
-        "operand": 18,
-        "then": {
-          "concat": [
-            {
-              "bindingProperties": {
-                "property": "buttonUser",
-                "field": "firstname"
-              }
-            },
-            {
-              "value": ", cast your vote."
-            }
-          ]
-        },
-        "else": {
-          "value": "Sorry you cannot vote"
         }
       }
     },
@@ -101,5 +45,16 @@
         }
       }
     }
-  }
+  },
+  "children": [
+    {
+      "componentType": "String",
+      "name": "String",
+      "properties": {
+        "value": {
+          "value": "Conditional Text"
+        }
+      }
+    }
+  ]
 }

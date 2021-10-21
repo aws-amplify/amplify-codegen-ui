@@ -57,7 +57,7 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
 
   private addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
-      const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));
+      const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('rest'));
       attributes.push(propsAttr);
     }
 

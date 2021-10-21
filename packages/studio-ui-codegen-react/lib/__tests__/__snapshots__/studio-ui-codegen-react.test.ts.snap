@@ -6,18 +6,22 @@ Object {
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   Flex,
+  FlexProps,
   Heading,
+  HeadingProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type SiteHeaderProps = {
+export type SiteHeaderProps = Partial<FlexProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   const { invokeAction } = useActions({
     signOutAction: {
       type: \\"Amplify.Auth.SignOut\\",
@@ -28,7 +32,7 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
     <Flex
       direction=\\"row\\"
       justifyContent=\\"space-between\\"
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Flex\\")}
     >
       <Heading
@@ -56,22 +60,24 @@ exports[`amplify render tests basic component tests should generate a simple but
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type CustomButtonProps = {
+export type CustomButtonProps = Partial<ButtonProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
     <Button
       color=\\"#ff0000\\"
       width=\\"20\\"
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
   );
@@ -85,19 +91,21 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   Text,
+  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type CustomTextProps = {
+export type CustomTextProps = Partial<TextProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function CustomText(props: CustomTextProps): React.ReactElement {
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
     <Text
       color=\\"#ff0000\\"
       width=\\"20px\\"
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Text\\")}
     >
       {\\"Text Value\\"}
@@ -113,19 +121,21 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   View,
+  ViewProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type TestProps = {
+export type TestProps = Partial<ViewProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function Test(props: TestProps): React.ReactElement {
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
     <View
       fontFamily=\\"Times New Roman\\"
       fontSize=\\"20px\\"
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"View\\")}
     ></View>
   );
@@ -139,13 +149,16 @@ import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
+  ButtonProps,
   Collection,
+  CollectionProps,
   EscapeHatchProps,
   Flex,
+  FlexProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type CollectionOfCustomButtonsProps = {
+export type CollectionOfCustomButtonsProps = Partial<CollectionProps<any>> & {
   width?: Number;
   backgroundColor?: String;
   buttonColor?: UserPreferences;
@@ -156,8 +169,15 @@ export type CollectionOfCustomButtonsProps = {
 export default function CollectionOfCustomButtons(
   props: CollectionOfCustomButtonsProps
 ): React.ReactElement {
-  const { width, backgroundColor, buttonColor, items } = props;
-  const overrides = { ...props.overrides };
+  const {
+    width,
+    backgroundColor,
+    buttonColor,
+    items,
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
   const buttonUserFilter = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
@@ -189,7 +209,7 @@ export default function CollectionOfCustomButtons(
       gap=\\"1.5rem\\"
       backgroundColor={backgroundColor}
       items={buttonUser || []}
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
@@ -216,14 +236,17 @@ import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
+  ButtonProps,
   Collection,
+  CollectionProps,
   EscapeHatchProps,
   Flex,
+  FlexProps,
   SortDirection,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type CollectionOfCustomButtonsProps = {
+export type CollectionOfCustomButtonsProps = Partial<CollectionProps<any>> & {
   width?: Number;
   backgroundColor?: String;
   buttonColor?: UserPreferences;
@@ -234,8 +257,15 @@ export type CollectionOfCustomButtonsProps = {
 export default function CollectionOfCustomButtons(
   props: CollectionOfCustomButtonsProps
 ): React.ReactElement {
-  const { width, backgroundColor, buttonColor, items } = props;
-  const overrides = { ...props.overrides };
+  const {
+    width,
+    backgroundColor,
+    buttonColor,
+    items,
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
   const buttonUserFilter = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
@@ -272,7 +302,7 @@ export default function CollectionOfCustomButtons(
       gap=\\"1.5rem\\"
       backgroundColor={backgroundColor}
       items={buttonUser || []}
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
@@ -300,14 +330,16 @@ exports[`amplify render tests collection should render collection with data bind
 import React from \\"react\\";
 import {
   Collection,
+  CollectionProps,
   EscapeHatchProps,
   ListingCard,
+  ListingCardProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 import { UntitledModel } from \\"../models\\";
 
-export type ListingCardCollectionProps = {
+export type ListingCardCollectionProps = Partial<CollectionProps<any>> & {
   items?: any[];
 } & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -315,8 +347,8 @@ export type ListingCardCollectionProps = {
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): React.ReactElement {
-  const { items } = props;
-  const overrides = { ...props.overrides };
+  const { items, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   const bananas =
     items !== undefined
       ? items
@@ -332,7 +364,7 @@ export default function ListingCardCollection(
       columns=\\"2\\"
       order=\\"left-to-right\\"
       items={bananas || []}
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
@@ -355,13 +387,15 @@ exports[`amplify render tests collection should render collection without data b
 import React from \\"react\\";
 import {
   Collection,
+  CollectionProps,
   EscapeHatchProps,
   ListingCard,
+  ListingCardProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ListingCardCollectionProps = {
+export type ListingCardCollectionProps = Partial<CollectionProps<any>> & {
   items?: any[];
 } & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -369,14 +403,14 @@ export type ListingCardCollectionProps = {
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): React.ReactElement {
-  const { items } = props;
-  const overrides = { ...props.overrides };
+  const { items, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
     <Collection
       type=\\"list\\"
       isPaginated=\\"true\\"
       items={items || []}
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
@@ -395,20 +429,23 @@ exports[`amplify render tests complex component tests should generate a button w
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   View,
+  ViewProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ViewWithButtonProps = {
+export type ViewWithButtonProps = Partial<ViewProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function ViewWithButton(
   props: ViewWithButtonProps
 ): React.ReactElement {
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
-    <View {...props} {...getOverrideProps(overrides, \\"View\\")}>
+    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -425,21 +462,24 @@ exports[`amplify render tests complex component tests should generate a componen
 import React from \\"react\\";
 import {
   CustomButton,
+  CustomButtonProps,
   EscapeHatchProps,
   View,
+  ViewProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ViewWithCustomButtonProps = {
+export type ViewWithCustomButtonProps = Partial<ViewProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function ViewWithCustomButton(
   props: ViewWithCustomButtonProps
 ): React.ReactElement {
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
-    <View {...props} {...getOverrideProps(overrides, \\"View\\")}>
+    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -456,20 +496,23 @@ exports[`amplify render tests complex component tests should generate a componen
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   View,
+  ViewProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ViewWithButtonProps = {
+export type ViewWithButtonProps = Partial<ViewProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function ViewWithButton(
   props: ViewWithButtonProps
 ): React.ReactElement {
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
-    <View {...props} {...getOverrideProps(overrides, \\"View\\")}>
+    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -487,10 +530,11 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   Text,
+  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type TextWithDataBindingProps = {
+export type TextWithDataBindingProps = Partial<TextProps> & {
   textValue?: String;
 } & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -498,13 +542,13 @@ export type TextWithDataBindingProps = {
 export default function TextWithDataBinding(
   props: TextWithDataBindingProps
 ): React.ReactElement {
-  const { textValue } = props;
-  const overrides = { ...props.overrides };
+  const { textValue, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
     <Text
       color=\\"#ff0000\\"
       width=\\"20px\\"
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Text\\")}
     >
       {textValue}
@@ -520,11 +564,12 @@ import React from \\"react\\";
 import { User } from \\"../models\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ComponentWithDataBindingProps = {
+export type ComponentWithDataBindingProps = Partial<ButtonProps> & {
   width?: Number;
   isDisabled?: Boolean;
   buttonUser?: User;
@@ -535,14 +580,21 @@ export type ComponentWithDataBindingProps = {
 export default function ComponentWithDataBinding(
   props: ComponentWithDataBindingProps
 ): React.ReactElement {
-  const { width, isDisabled, buttonUser, buttonColor } = props;
-  const overrides = { ...props.overrides };
+  const {
+    width,
+    isDisabled,
+    buttonUser,
+    buttonColor,
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
   return (
     <Button
       label={buttonUser?.username || \\"hspain@gmail.com\\"}
       labelWidth={width}
       disabled={isDisabled}
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
   );
@@ -557,11 +609,13 @@ import { UntitledModel } from \\"../models\\";
 import {
   EscapeHatchProps,
   Flex,
+  FlexProps,
   Text,
+  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type SectionHeadingProps = {
+export type SectionHeadingProps = Partial<FlexProps> & {
   newProp6fd1?: UntitledModel;
 } & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -569,14 +623,14 @@ export type SectionHeadingProps = {
 export default function SectionHeading(
   props: SectionHeadingProps
 ): React.ReactElement {
-  const { newProp6fd1 } = props;
-  const overrides = { ...props.overrides };
+  const { newProp6fd1, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
     <Flex
       padding=\\"0px 0px 10px 0px\\"
       backgroundColor=\\"rgb(255,255,255)\\"
       direction=\\"column\\"
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Flex\\")}
     >
       <Flex
@@ -617,12 +671,14 @@ exports[`amplify render tests component with data binding should render with dat
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   Text,
+  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ChildComponentWithDataBindingProps = {
+export type ChildComponentWithDataBindingProps = Partial<ButtonProps> & {
   textValue?: String;
 } & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -630,10 +686,10 @@ export type ChildComponentWithDataBindingProps = {
 export default function ChildComponentWithDataBinding(
   props: ChildComponentWithDataBindingProps
 ): React.ReactElement {
-  const { textValue } = props;
-  const overrides = { ...props.overrides };
+  const { textValue, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
-    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}>
+    <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
       <Text {...getOverrideProps(overrides, \\"Button.Text\\")}>{textValue}</Text>
     </Button>
   );
@@ -647,12 +703,13 @@ Object {
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   getOverrideProps,
   getOverridesFromVariants,
 } from \\"@aws-amplify/ui-react\\";
 
-export type CustomButtonProps = {
+export type CustomButtonProps = Partial<ButtonProps> & {
   variant: \\"primary\\" | \\"secondary\\";
   size?: \\"large\\";
 } & {
@@ -661,7 +718,7 @@ export type CustomButtonProps = {
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const {} = props;
+  const { overrides: overridesProp, ...rest } = props;
   const variants = [
     {
       variantValues: { variant: \\"primary\\" },
@@ -678,11 +735,9 @@ export default function CustomButton(
   ];
   const overrides = {
     ...getOverridesFromVariants(variants, props),
-    ...props.overrides,
+    ...overridesProp,
   };
-  return (
-    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}></Button>
-  );
+  return <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}></Button>;
 }
 ",
   "declaration": undefined,
@@ -695,23 +750,26 @@ exports[`amplify render tests concat and conditional transform should render chi
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   Text,
+  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ChildComponentWithDataBoundConcatenationProps = {
-  textValue?: String;
-} & {
-  overrides?: EscapeHatchProps | undefined | null;
-};
+export type ChildComponentWithDataBoundConcatenationProps =
+  Partial<ButtonProps> & {
+    textValue?: String;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  };
 export default function ChildComponentWithDataBoundConcatenation(
   props: ChildComponentWithDataBoundConcatenationProps
 ): React.ReactElement {
-  const { textValue } = props;
-  const overrides = { ...props.overrides };
+  const { textValue, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
-    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}>
+    <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
       <Text {...getOverrideProps(overrides, \\"Button.Text\\")}>{\`\${
         buttonUser?.firstname || \\"Harrison\\"
       }\${\\" \\"}\${buttonUser?.lastname || \\"Spain\\"}\`}</Text>
@@ -726,21 +784,24 @@ exports[`amplify render tests concat and conditional transform should render chi
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   Text,
+  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ChildComponentWithStaticConcatenationProps = {
-  overrides?: EscapeHatchProps | undefined | null;
-};
+export type ChildComponentWithStaticConcatenationProps =
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  };
 export default function ChildComponentWithStaticConcatenation(
   props: ChildComponentWithStaticConcatenationProps
 ): React.ReactElement {
-  const {} = props;
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
-    <Button {...props} {...getOverrideProps(overrides, \\"Button\\")}>
+    <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
       <Text
         {...getOverrideProps(overrides, \\"Button.Text\\")}
       >{\`\${\\"Concatenate\\"}\${\\" \\"}\${\\"Me!\\"}\`}</Text>
@@ -756,11 +817,12 @@ import React from \\"react\\";
 import { User } from \\"../models\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type CustomButtonProps = {
+export type CustomButtonProps = Partial<ButtonProps> & {
   width?: Number;
   buttonUser?: User;
   buttonColor?: String;
@@ -770,15 +832,21 @@ export type CustomButtonProps = {
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const { width, buttonUser, buttonColor } = props;
-  const overrides = { ...props.overrides };
+  const {
+    width,
+    buttonUser,
+    buttonColor,
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
   return (
     <Button
       label={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
         buttonUser?.lastname || \\"Spain\\"
       }\`}
       labelWidth={width}
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
   );
@@ -792,11 +860,12 @@ import React from \\"react\\";
 import { User } from \\"../models\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type CustomButtonProps = {
+export type CustomButtonProps = Partial<ButtonProps> & {
   width?: Number;
   buttonUser?: User;
   buttonColor?: String;
@@ -806,8 +875,14 @@ export type CustomButtonProps = {
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const { width, buttonUser, buttonColor } = props;
-  const overrides = { ...props.overrides };
+  const {
+    width,
+    buttonUser,
+    buttonColor,
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
   return (
     <Button
       label={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
@@ -827,7 +902,7 @@ export default function CustomButton(
           ? buttonUser?.loggedInColor
           : buttonUser?.loggedOutColor
       }
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
   );
@@ -851,14 +926,33 @@ exports[`amplify render tests custom render config should render ES5 1`] = `
       };
     return __assign.apply(this, arguments);
   };
+var __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === \\"function\\")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (
+          e.indexOf(p[i]) < 0 &&
+          Object.prototype.propertyIsEnumerable.call(s, p[i])
+        )
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
 /* eslint-disable */
 import React from \\"react\\";
 import { Button, View, getOverrideProps } from \\"@aws-amplify/ui-react\\";
 export default function ViewWithButton(props) {
-  var overrides = __assign({}, props.overrides);
+  var overridesProp = props.overrides,
+    rest = __rest(props, [\\"overrides\\"]);
+  var overrides = __assign({}, overridesProp);
   return React.createElement(
     View,
-    __assign({}, props, getOverrideProps(overrides, \\"View\\")),
+    __assign({}, rest, getOverrideProps(overrides, \\"View\\")),
     React.createElement(
       Button,
       __assign(
@@ -872,13 +966,32 @@ export default function ViewWithButton(props) {
 `;
 
 exports[`amplify render tests custom render config should render JSX 1`] = `
-"/* eslint-disable */
+"var __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === \\"function\\")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (
+          e.indexOf(p[i]) < 0 &&
+          Object.prototype.propertyIsEnumerable.call(s, p[i])
+        )
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
+/* eslint-disable */
 import React from \\"react\\";
 import { Button, View, getOverrideProps } from \\"@aws-amplify/ui-react\\";
 export default function ViewWithButton(props) {
-  const overrides = Object.assign({}, props.overrides);
+  const { overrides: overridesProp } = props,
+    rest = __rest(props, [\\"overrides\\"]);
+  const overrides = Object.assign({}, overridesProp);
   return (
-    <View {...props} {...getOverrideProps(overrides, \\"View\\")}>
+    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -892,6 +1005,23 @@ export default function ViewWithButton(props) {
 
 exports[`amplify render tests custom render config should render common JS 1`] = `
 "\\"use strict\\";
+var __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === \\"function\\")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (
+          e.indexOf(p[i]) < 0 &&
+          Object.prototype.propertyIsEnumerable.call(s, p[i])
+        )
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
 var __importDefault =
   (this && this.__importDefault) ||
   function (mod) {
@@ -902,12 +1032,14 @@ Object.defineProperty(exports, \\"__esModule\\", { value: true });
 const react_1 = __importDefault(require(\\"react\\"));
 const ui_react_1 = require(\\"@aws-amplify/ui-react\\");
 function ViewWithButton(props) {
-  const overrides = Object.assign({}, props.overrides);
+  const { overrides: overridesProp } = props,
+    rest = __rest(props, [\\"overrides\\"]);
+  const overrides = Object.assign({}, overridesProp);
   return react_1.default.createElement(
     ui_react_1.View,
     Object.assign(
       {},
-      props,
+      rest,
       (0, ui_react_1.getOverrideProps)(overrides, \\"View\\")
     ),
     react_1.default.createElement(
@@ -925,8 +1057,8 @@ exports.default = ViewWithButton;
 
 exports[`amplify render tests declarations should render declarations 1`] = `
 "import React from \\"react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
-export declare type ProfileProps = {
+import { EscapeHatchProps, FlexProps } from \\"@aws-amplify/ui-react\\";
+export declare type ProfileProps = Partial<FlexProps> & {
     overrides?: EscapeHatchProps | undefined | null;
 };
 export default function Profile(props: ProfileProps): React.ReactElement;
@@ -938,21 +1070,24 @@ exports[`amplify render tests sample code snippet tests should generate a sample
 import React from \\"react\\";
 import {
   CustomButton,
+  CustomButtonProps,
   EscapeHatchProps,
   View,
+  ViewProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ViewWithButtonProps = {
+export type ViewWithButtonProps = Partial<ViewProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function ViewWithButton(
   props: ViewWithButtonProps
 ): React.ReactElement {
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   return (
-    <View padding-left {...props} {...getOverrideProps(overrides, \\"View\\")}>
+    <View padding-left {...rest} {...getOverrideProps(overrides, \\"View\\")}>
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -971,18 +1106,22 @@ Object {
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   Flex,
+  FlexProps,
   Heading,
+  HeadingProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type SiteHeaderProps = {
+export type SiteHeaderProps = Partial<FlexProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   const { invokeAction } = useActions({
     openAmplifyDocs: {
       type: \\"Navigation.Open\\",
@@ -1002,7 +1141,7 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
     <Flex
       direction=\\"row\\"
       justifyContent=\\"space-between\\"
-      {...props}
+      {...rest}
       {...getOverrideProps(overrides, \\"Flex\\")}
     >
       <Heading
@@ -1198,18 +1337,21 @@ exports[`amplify render tests user specific attributes should render user specif
 import React from \\"react\\";
 import {
   Button,
+  ButtonProps,
   EscapeHatchProps,
   Flex,
+  FlexProps,
   Image,
+  ImageProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type ProfileProps = {
+export type ProfileProps = Partial<FlexProps> & {
   overrides?: EscapeHatchProps | undefined | null;
 };
 export default function Profile(props: ProfileProps): React.ReactElement {
-  const {} = props;
-  const overrides = { ...props.overrides };
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
   const {
     attributes: {
       username,
@@ -1218,7 +1360,7 @@ export default function Profile(props: ProfileProps): React.ReactElement {
     },
   } = useAuthenticatedUser();
   return (
-    <Flex {...props} {...getOverrideProps(overrides, \\"Flex\\")}>
+    <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>
       <Image
         src={userImage}
         {...getOverrideProps(overrides, \\"Flex.Image\\")}
