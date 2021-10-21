@@ -92,46 +92,7 @@ jobs:
         working-directory: amplify-category-studio
         run: npm test
 
-  test-generated-components-render:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Studio Codegen
-        uses: actions/checkout@v2
-        with:
-          path: amplify-codegen-ui-staging
-      - name: Setup Node.js LTS
-        uses: actions/setup-node@v2
-        with:
-          node-version: lts/*
-      - name: Install amplify-codegen-ui-staging dependencies
-        working-directory: amplify-codegen-ui-staging
-        run: npm ci
-      - name: Lerna bootstrap amplify-codegen-ui-staging
-        working-directory: amplify-codegen-ui-staging
-        run: lerna bootstrap
-      - name: Build amplify-codegen-ui-staging
-        working-directory: amplify-codegen-ui-staging
-        run: npm run build
-      - name: Execute test-generator
-        working-directory: amplify-codegen-ui-staging/packages/test-generator
-        run: node ./dist/generators/GenerateTestApp.js
-      - name: Create test app with dependencies
-        working-directory: .
-        run: |
-          npx create-react-app test-app --use-npm --template typescript
-          cp -r amplify-codegen-ui-staging/packages/test-generator/test-app-templates/* test-app
-          cd test-app
-          npm i aws-amplify @aws-amplify/ui-react@2.0.1-next.5
-          npm i cypress --save-dev
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          working-directory: test-app
-          build: npm run build
-          start: npm start
-          wait-on: 'http://localhost:3000'
-
-  browser-integration-test:
+  integration-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Studio Codegen
@@ -144,16 +105,13 @@ jobs:
         run: npm ci
       - name: Lerna bootstrap
         run: lerna bootstrap
-      - name: Build
-        run: npm run build
-      - name: Setup Browser Integration Test
-        run: |
-          npm run browser-integration:clean
-          npm run browser-integration:setup
+      - name: Setup Inegration Test
+        run: npm run integ:setup
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          working-directory: packages/browser-integration-test
+          working-directory: packages/integration-test
           install: false
           start: npm start
           wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120

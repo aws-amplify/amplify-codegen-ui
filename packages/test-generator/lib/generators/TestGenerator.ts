@@ -14,7 +14,13 @@
   limitations under the License.
  */
 import { StudioComponent, StudioTheme } from '@amzn/amplify-ui-codegen-schema';
-import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '@amzn/studio-ui-codegen-react';
+import {
+  ModuleKind,
+  ScriptTarget,
+  ScriptKind,
+  ReactRenderConfig,
+  ReactOutputConfig,
+} from '@amzn/studio-ui-codegen-react';
 import log from 'loglevel';
 import * as ComponentSchemas from '../components';
 import * as ThemeSchemas from '../themes';
@@ -25,12 +31,17 @@ const DEFAULT_RENDER_CONFIG = {
   script: ScriptKind.TSX,
 };
 
+const DEFAULT_OUTPUT_CONFIG = {
+  outputPathDir: 'ui-components',
+};
+
 log.setLevel('info');
 
 export type TestGeneratorParams = {
   writeToLogger: boolean;
   writeToDisk: boolean;
   renderConfigOverride?: ReactRenderConfig;
+  outputConfigOverride?: ReactOutputConfig;
   disabledSchemas?: string[];
 };
 
@@ -39,9 +50,12 @@ export abstract class TestGenerator {
 
   protected readonly renderConfig: ReactRenderConfig;
 
+  protected readonly outputConfig: ReactOutputConfig;
+
   constructor(params: TestGeneratorParams) {
     this.params = params;
     this.renderConfig = { ...DEFAULT_RENDER_CONFIG, ...params.renderConfigOverride };
+    this.outputConfig = { ...DEFAULT_OUTPUT_CONFIG, ...params.outputConfigOverride };
   }
 
   generate = () => {

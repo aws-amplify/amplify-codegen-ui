@@ -17,8 +17,7 @@
 /* Test Generator to be used in the Node environment */
 import { StudioComponent, StudioTheme } from '@amzn/amplify-ui-codegen-schema';
 import { StudioTemplateRendererManager, StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
-import { AmplifyRenderer, ReactOutputConfig, ReactThemeStudioTemplateRenderer } from '@amzn/studio-ui-codegen-react';
-import path from 'path';
+import { AmplifyRenderer, ReactThemeStudioTemplateRenderer } from '@amzn/studio-ui-codegen-react';
 import { TestGenerator, TestGeneratorParams } from './TestGenerator';
 
 export class NodeTestGenerator extends TestGenerator {
@@ -38,10 +37,8 @@ export class NodeTestGenerator extends TestGenerator {
     this.themeRendererFactory = new StudioTemplateRendererFactory(
       (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, this.renderConfig),
     );
-    const outputPathDir = path.resolve(path.join(__dirname, '..', '..', 'test-app-templates', 'src', 'ui-components'));
-    const outputConfig: ReactOutputConfig = { outputPathDir };
-    this.rendererManager = new StudioTemplateRendererManager(this.componentRendererFactory, outputConfig);
-    this.themeRendererManager = new StudioTemplateRendererManager(this.themeRendererFactory, outputConfig);
+    this.rendererManager = new StudioTemplateRendererManager(this.componentRendererFactory, this.outputConfig);
+    this.themeRendererManager = new StudioTemplateRendererManager(this.themeRendererFactory, this.outputConfig);
   }
 
   writeComponentToDisk(component: StudioComponent) {

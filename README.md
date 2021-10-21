@@ -53,31 +53,26 @@ This is a sample project that utilizes codegen to render components in a desired
 
 This project is currently configured to codegen Amplify UI components and themes, as well as provide templates which can be used in external projects to verify the correctness and usability of generated components.
 
-### E2E testing with test-generator
+### Integration Testing
 
-test-generator can be used to create a react app and verify the correctness of our generated components E2E. This is in fact what the `test-generated-components-render` github workflow does on each commit.
+Integration tests are done using a React app with Cypress.
 
-To do so locally, execute something along the lines of the following.
+The integraiton tests verify:
+
+- The correctness of the generated components.
+- The generate functionality in the browser environment.
+
+The `integration-test` GitHub workflow performs these integration tests in CI.
+
+To run integration tests locally, execute the following:
 
 ```sh
-# From the repo root build latest code, and generate ui-components in test-generator package, then move outside the repo
 npm run setup-dev # If this is a newly cloned repo
-npm run test:generate-test-app
-cd ..
-# Generate a new react app, and clone in the template files from test-generator, and the generated files
-npx create-react-app test-app --use-npm --template typescript
-cp -r amplify-codegen-ui-staging/packages/test-generator/test-app-templates/* test-app
-cd test-app
-# Install new dependencies required
-npm i aws-amplify @aws-amplify/ui-react@2.0.1-next.5
-npm i -D cypress
-# And in parallel start the webapp
-npm start
-# And either run cypress suite
-npx cypress run
-# Or open cypress, and iterate on tests using the tool
-npx cypress open
+npm run integ
 ```
+
+- Use `npm run integ:setup` to only setup the integration tests and not run the tests.
+- Use `npm run integ:test` to only run the integration tests on existing integration setup.
 
 ## Amplify Components Schema
 

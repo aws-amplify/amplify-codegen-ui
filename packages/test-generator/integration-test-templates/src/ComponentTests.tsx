@@ -32,7 +32,7 @@ import BasicComponentImage from './ui-components/BasicComponentImage';
 import BasicComponentCustomRating from './ui-components/BasicComponentCustomRating';
 /* eslint-enable import/extensions */
 
-function App() {
+function ComponentTests() {
   return (
     <>
       <h1>Generated Component Tests</h1>
@@ -101,4 +101,4 @@ function App() {
   );
 }
 
-export default withTheme(App);
+export default withTheme(ComponentTests);

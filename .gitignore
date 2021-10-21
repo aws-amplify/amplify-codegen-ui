@@ -52,4 +52,4 @@ dist/**
 **/.rollup.cache
 
 ui-components
-browser-integration-test
+packages/integration-test

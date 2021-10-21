@@ -27,4 +27,7 @@ new NodeTestGenerator({
     'ComponentWithActionSignOut', // TODO: Support Auth Action E2E Tests
     'ComponentWithActionNavigation', // TODO: Support Navigation Action E2E Tests
   ],
+  outputConfigOverride: {
+    outputPathDir: 'packages/integration-test/src/ui-components',
+  },
 }).generate();
