@@ -79,19 +79,13 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 
   /*
    * import React from "react";
-   * import { useEffect } from "react";
    * import {
    *   AmplifyProvider,
-   *   DeepPartial,
-   *   Theme,
-   *   extendTheming,
+   *   createTheme,
    * } from "@aws-amplify/ui-react";
    */
   private buildImports() {
-    this.importCollection.addImport('react', 'useEffect');
-    this.importCollection.addImport('@aws-amplify/ui-react', 'extendTheming');
-    this.importCollection.addImport('@aws-amplify/ui-react', 'Theme');
-    this.importCollection.addImport('@aws-amplify/ui-react', 'DeepPartial');
+    this.importCollection.addImport('@aws-amplify/ui-react', 'createTheme');
     this.importCollection.addImport('@aws-amplify/ui-react', 'AmplifyProvider');
 
     return this.importCollection.buildImportStatements();
@@ -142,7 +136,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   }
 
   /*
-   * const theme = {{ theme object }}
+   * const theme = createTheme({{ theme object }})
    */
   private buildThemeVariable() {
     return factory.createVariableStatement(
@@ -153,7 +147,9 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
             factory.createIdentifier('theme'),
             undefined,
             undefined,
-            jsonToLiteral(this.component as json),
+            factory.createCallExpression(factory.createIdentifier('createTheme'), undefined, [
+              jsonToLiteral(this.component as json),
+            ]),
           ),
         ],
         NodeFlags.Const,
@@ -197,14 +193,8 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 
   /*
    * const ComponentWithTheme = (props: T) => {
-   *   const theming = extendTheming(theme);
-   *   useEffect(() => {
-   *     Object.entries(theming.CSSVariables).forEach(([key, value]) => {
-   *       document.documentElement.style.setProperty(key, value as string | null);
-   *     });
-   *   });
    *   return (
-   *     <AmplifyProvider theming={theming} components={{}}>
+   *     <AmplifyProvider theme={theme}>
    *       <WrappedComponent {...props} />
    *     </AmplifyProvider>
    *   );
@@ -237,8 +227,6 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
               factory.createToken(SyntaxKind.EqualsGreaterThanToken),
               factory.createBlock(
                 [
-                  this.buildExtendThemingStatement(),
-                  this.buildApplyStylesHook(),
                   factory.createReturnStatement(
                     factory.createParenthesizedExpression(
                       factory.createJsxElement(
@@ -247,8 +235,8 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
                           undefined,
                           factory.createJsxAttributes([
                             factory.createJsxAttribute(
-                              factory.createIdentifier('theming'),
-                              factory.createJsxExpression(undefined, factory.createIdentifier('theming')),
+                              factory.createIdentifier('theme'),
+                              factory.createJsxExpression(undefined, factory.createIdentifier('theme')),
                             ),
                             factory.createJsxAttribute(
                               factory.createIdentifier('components'),
@@ -277,139 +265,6 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
         ],
         NodeFlags.Const,
       ),
-    );
-  }
-
-  /*
-   * const theming = extendTheming(theme);
-   */
-  private buildExtendThemingStatement() {
-    return factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createIdentifier('theming'),
-            undefined,
-            undefined,
-            factory.createCallExpression(factory.createIdentifier('extendTheming'), undefined, [
-              factory.createIdentifier('theme'),
-            ]),
-          ),
-        ],
-        NodeFlags.Const,
-      ),
-    );
-  }
-
-  /*
-   * useEffect(() => {
-   *   Object.entries(theming.CSSVariables).forEach(([key, value]) => {
-   *     document.documentElement.style.setProperty(key, (value as string | null));
-   *   });
-   * });
-   */
-  private buildApplyStylesHook() {
-    return factory.createExpressionStatement(
-      factory.createCallExpression(factory.createIdentifier('useEffect'), undefined, [
-        factory.createArrowFunction(
-          undefined,
-          undefined,
-          [],
-          undefined,
-          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-          factory.createBlock(
-            [
-              factory.createExpressionStatement(
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('Object'),
-                        factory.createIdentifier('entries'),
-                      ),
-                      undefined,
-                      [
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('theming'),
-                          factory.createIdentifier('CSSVariables'),
-                        ),
-                      ],
-                    ),
-                    factory.createIdentifier('forEach'),
-                  ),
-                  undefined,
-                  [
-                    factory.createArrowFunction(
-                      undefined,
-                      undefined,
-                      [
-                        factory.createParameterDeclaration(
-                          undefined,
-                          undefined,
-                          undefined,
-                          factory.createArrayBindingPattern([
-                            factory.createBindingElement(
-                              undefined,
-                              undefined,
-                              factory.createIdentifier('key'),
-                              undefined,
-                            ),
-                            factory.createBindingElement(
-                              undefined,
-                              undefined,
-                              factory.createIdentifier('value'),
-                              undefined,
-                            ),
-                          ]),
-                          undefined,
-                          undefined,
-                          undefined,
-                        ),
-                      ],
-                      undefined,
-                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                      factory.createBlock(
-                        [
-                          factory.createExpressionStatement(
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createPropertyAccessExpression(
-                                    factory.createIdentifier('document'),
-                                    factory.createIdentifier('documentElement'),
-                                  ),
-                                  factory.createIdentifier('style'),
-                                ),
-                                factory.createIdentifier('setProperty'),
-                              ),
-                              undefined,
-                              [
-                                factory.createIdentifier('key'),
-                                factory.createParenthesizedExpression(
-                                  factory.createAsExpression(
-                                    factory.createIdentifier('value'),
-                                    factory.createUnionTypeNode([
-                                      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-                                      factory.createLiteralTypeNode(factory.createNull()),
-                                    ]),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                        true,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-            true,
-          ),
-        ),
-      ]),
     );
   }
 }
