@@ -1,26 +1,11 @@
 {
-  "components": {
-    "alert": {
-      "backgroundColor": "hsl(210, 5%, 90%)",
-      "padding": "0.75rem 1rem",
-      "info": {
-        "backgroundColor": "hsl(220, 85%, 85%)"
-      },
-      "error": {
-        "backgroundColor": "hsl(0, 75%, 85%)"
-      },
-      "warning": {
-        "backgroundColor": "hsl(30, 75%, 85%)"
-      },
-      "success": {
-        "backgroundColor": "hsl(130, 75%, 85%)"
+  "name": "example-theme",
+  "tokens": {
+    "colors": {
+      "font": {
+        "primary": {"value": "{colors.neutral.100.value}"}
       }
     }
-  },
-  "borderWidths": {
-    "small": "1px",
-    "medium": "2px",
-    "large": "3px"
   },
   "breakpoints": {
     "values": {
@@ -33,20 +18,5 @@
     },
     "unit": "em",
     "defaultBreakpoint": "base"
-  },
-  "testAllTypes": {
-    "null": null,
-    "string": "test",
-    "number": 10,
-    "boolean": {
-      "t": true,
-      "false": false
-    },
-    "object": {
-      "object": {
-        "test": "test"
-      },
-      "array": ["test"]
-    }
   }
 }

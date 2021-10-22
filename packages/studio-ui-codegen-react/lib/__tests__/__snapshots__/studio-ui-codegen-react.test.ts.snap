@@ -1046,15 +1046,9 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
 exports[`amplify render tests theme should render the theme 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { useEffect } from \\"react\\";
-import {
-  AmplifyProvider,
-  DeepPartial,
-  Theme,
-  extendTheming,
-} from \\"@aws-amplify/ui-react\\";
+import { AmplifyProvider, createTheme } from \\"@aws-amplify/ui-react\\";
 export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
-  const theme = {
+  const theme = createTheme({
     components: {
       alert: {
         backgroundColor: \\"hsl(210, 5%, 90%)\\",
@@ -1078,18 +1072,12 @@ export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
       boolean: { t: true, false: false },
       object: { object: { test: \\"test\\" }, array: [\\"test\\"] },
     },
-  };
+  });
   const displayName =
     WrappedComponent.displayName || WrappedComponent.name || \\"Component\\";
   const ComponentWithTheme = (props: T) => {
-    const theming = extendTheming(theme);
-    useEffect(() => {
-      Object.entries(theming.CSSVariables).forEach(([key, value]) => {
-        document.documentElement.style.setProperty(key, value as string | null);
-      });
-    });
     return (
-      <AmplifyProvider theming={theming} components={{}}>
+      <AmplifyProvider theme={theme} components={{}}>
         <WrappedComponent {...props} />
       </AmplifyProvider>
     );
@@ -1118,10 +1106,9 @@ exports[`amplify render tests theme should render the theme with ES5 1`] = `
   };
 /* eslint-disable */
 import React from \\"react\\";
-import { useEffect } from \\"react\\";
-import { AmplifyProvider, extendTheming } from \\"@aws-amplify/ui-react\\";
+import { AmplifyProvider, createTheme } from \\"@aws-amplify/ui-react\\";
 export default function withTheme(WrappedComponent) {
-  var theme = {
+  var theme = createTheme({
     components: {
       alert: {
         backgroundColor: \\"hsl(210, 5%, 90%)\\",
@@ -1145,21 +1132,13 @@ export default function withTheme(WrappedComponent) {
       boolean: { t: true, false: false },
       object: { object: { test: \\"test\\" }, array: [\\"test\\"] },
     },
-  };
+  });
   var displayName =
     WrappedComponent.displayName || WrappedComponent.name || \\"Component\\";
   var ComponentWithTheme = function (props) {
-    var theming = extendTheming(theme);
-    useEffect(function () {
-      Object.entries(theming.CSSVariables).forEach(function (_a) {
-        var key = _a[0],
-          value = _a[1];
-        document.documentElement.style.setProperty(key, value);
-      });
-    });
     return React.createElement(
       AmplifyProvider,
-      { theming: theming, components: {} },
+      { theme: theme, components: {} },
       React.createElement(WrappedComponent, __assign({}, props))
     );
   };
@@ -1172,15 +1151,9 @@ export default function withTheme(WrappedComponent) {
 exports[`amplify render tests theme should render the theme with TSX 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { useEffect } from \\"react\\";
-import {
-  AmplifyProvider,
-  DeepPartial,
-  Theme,
-  extendTheming,
-} from \\"@aws-amplify/ui-react\\";
+import { AmplifyProvider, createTheme } from \\"@aws-amplify/ui-react\\";
 export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
-  const theme = {
+  const theme = createTheme({
     components: {
       alert: {
         backgroundColor: \\"hsl(210, 5%, 90%)\\",
@@ -1204,18 +1177,12 @@ export default function withTheme<T>(WrappedComponent: React.ComponentType<T>) {
       boolean: { t: true, false: false },
       object: { object: { test: \\"test\\" }, array: [\\"test\\"] },
     },
-  };
+  });
   const displayName =
     WrappedComponent.displayName || WrappedComponent.name || \\"Component\\";
   const ComponentWithTheme = (props: T) => {
-    const theming = extendTheming(theme);
-    useEffect(() => {
-      Object.entries(theming.CSSVariables).forEach(([key, value]) => {
-        document.documentElement.style.setProperty(key, value as string | null);
-      });
-    });
     return (
-      <AmplifyProvider theming={theming} components={{}}>
+      <AmplifyProvider theme={theme} components={{}}>
         <WrappedComponent {...props} />
       </AmplifyProvider>
     );
