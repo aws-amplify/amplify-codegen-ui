@@ -22,15 +22,13 @@ import { ReactComponentWithChildrenRenderer } from '../react-component-with-chil
 
 export default class FlexRenderer extends ReactComponentWithChildrenRenderer<FlexProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
-    const tagName = 'Flex';
-
     const element = factory.createJsxElement(
-      this.renderOpeningElement(tagName),
+      this.renderOpeningElement(),
       renderChildren(this.component.children ?? []),
-      factory.createJsxClosingElement(factory.createIdentifier(tagName)),
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
-    this.importCollection.addImport('@aws-amplify/ui-react', tagName);
+    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
 
     return element;
   }

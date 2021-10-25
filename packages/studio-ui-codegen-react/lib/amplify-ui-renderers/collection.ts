@@ -21,18 +21,17 @@ import { ReactComponentWithChildrenRenderer } from '../react-component-with-chil
 
 export default class CollectionRenderer extends ReactComponentWithChildrenRenderer<BaseComponentProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
-    const tagName = this.component.componentType;
     const childrenJsx = this.component.children ? renderChildren(this.component.children ?? []) : [];
 
     const arrowFuncExpr = this.renderItemArrowFunctionExpr(childrenJsx);
     const itemsVariableName = this.findItemsVariableName();
     const element = factory.createJsxElement(
-      this.renderCollectionOpeningElement(tagName, itemsVariableName),
+      this.renderCollectionOpeningElement(itemsVariableName),
       [arrowFuncExpr],
-      factory.createJsxClosingElement(factory.createIdentifier(tagName)),
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
-    this.importCollection.addImport('@aws-amplify/ui-react', tagName);
+    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
 
     return element;
   }

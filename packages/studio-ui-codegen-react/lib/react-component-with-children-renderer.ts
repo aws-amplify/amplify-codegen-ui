@@ -37,7 +37,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     addBindingPropertiesImports(component, importCollection);
   }
 
-  protected renderCustomCompOpeningElement(tagName: string): JsxOpeningElement {
+  protected renderCustomCompOpeningElement(): JsxOpeningElement {
     const attributes = Object.entries(this.component.properties).map(([key, value]) =>
       buildOpeningElementAttributes(value, key),
     );
@@ -48,16 +48,16 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
       );
     }
 
-    this.addFindChildOverrideAttribute(attributes, tagName);
+    this.addFindChildOverrideAttribute(attributes, this.component.componentType);
 
     return factory.createJsxOpeningElement(
-      factory.createIdentifier(tagName),
+      factory.createIdentifier(this.component.componentType),
       undefined,
       factory.createJsxAttributes(attributes),
     );
   }
 
-  protected renderOpeningElement(tagName: string): JsxOpeningElement {
+  protected renderOpeningElement(): JsxOpeningElement {
     const attributes = Object.entries(this.component.properties).map(([key, value]) =>
       buildOpeningElementAttributes(value, key),
     );
@@ -71,13 +71,13 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     this.addPropsSpreadAttributes(attributes);
 
     return factory.createJsxOpeningElement(
-      factory.createIdentifier(tagName),
+      factory.createIdentifier(this.component.componentType),
       undefined,
       factory.createJsxAttributes(attributes),
     );
   }
 
-  protected renderCollectionOpeningElement(tagName: string, itemsVariableName?: string): JsxOpeningElement {
+  protected renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
     const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
       buildOpeningElementAttributes(value, key),
     );
@@ -98,7 +98,7 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
     this.addPropsSpreadAttributes(propsArray);
 
     return factory.createJsxOpeningElement(
-      factory.createIdentifier(tagName),
+      factory.createIdentifier(this.component.componentType),
       undefined,
       factory.createJsxAttributes(propsArray),
     );

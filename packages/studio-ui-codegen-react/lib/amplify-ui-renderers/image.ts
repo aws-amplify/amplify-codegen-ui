@@ -20,15 +20,13 @@ import { ReactComponentRenderer } from '../react-component-renderer';
 
 export default class ImageRenderer extends ReactComponentRenderer<ImageProps> {
   renderElement(): JsxElement {
-    const tagName = 'Image';
-
     const element = factory.createJsxElement(
-      this.renderOpeningElement(tagName),
+      this.renderOpeningElement(),
       [],
-      factory.createJsxClosingElement(factory.createIdentifier(tagName)),
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
-    this.importCollection.addImport('@aws-amplify/ui-react', tagName);
+    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
     return element;
   }
 }
