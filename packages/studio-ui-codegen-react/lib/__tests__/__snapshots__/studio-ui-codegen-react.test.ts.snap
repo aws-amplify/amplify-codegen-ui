@@ -705,6 +705,7 @@ import {
   Button,
   ButtonProps,
   EscapeHatchProps,
+  Variant,
   getOverrideProps,
   getOverridesFromVariants,
 } from \\"@aws-amplify/ui-react\\";
@@ -719,7 +720,7 @@ export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
-  const variants = [
+  const variants: Variant[] = [
     {
       variantValues: { variant: \\"primary\\" },
       overrides: { Button: { fontSize: \\"12px\\" } },

@@ -31,10 +31,20 @@
       },
       "overrides": {
         "Button": {
-          "width": "500"
+          "width": "500px"
         }
       }
     }
   ],
-  "bindingProperties": {}
+  "children": [
+    {
+      "componentType": "String",
+      "name": "String",
+      "properties": {
+        "value": {
+          "value": "ComponentWithVariant"
+        }
+      }
+    }
+  ]
 }
