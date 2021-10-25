@@ -104,6 +104,12 @@ export default function ComponentTests() {
           }}
         />
       </div>
+      <div id="variants">
+        <h2>Variants</h2>
+        <ComponentWithVariant id="variant1" variant="primary" />
+        <ComponentWithVariant id="variant2" variant="secondary" />
+        <ComponentWithVariant id="variant3" variant="primary" size="large" />
+      </div>
     </AmplifyProvider>
   );
 }

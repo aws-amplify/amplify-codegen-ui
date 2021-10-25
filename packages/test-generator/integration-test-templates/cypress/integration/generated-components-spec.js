@@ -89,7 +89,12 @@ describe('Generated Components', () => {
   });
 
   describe('Component Variants', () => {
-    // TODO: Write Variant Cases
+    it('Renders Button disabled when user is not logged in', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#variants').get('#variant1').should('have.css', 'font-size', '12px');
+      cy.get('#variants').get('#variant2').should('have.css', 'font-size', '40px');
+      cy.get('#variants').get('#variant3').should('have.css', 'width', '500px');
+    });
   });
 
   describe('Data Binding', () => {

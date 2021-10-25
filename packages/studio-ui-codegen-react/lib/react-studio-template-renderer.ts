@@ -580,7 +580,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           factory.createVariableDeclaration(
             factory.createIdentifier('variants'),
             undefined,
-            undefined,
+            factory.createArrayTypeNode(
+              factory.createTypeReferenceNode(factory.createIdentifier('Variant'), undefined),
+            ),
             jsonToLiteral(variants as json),
           ),
         ],
@@ -596,6 +598,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   private buildOverridesDeclaration(hasVariants: boolean): VariableStatement {
     if (hasVariants) {
       this.importCollection.addImport('@aws-amplify/ui-react', 'getOverridesFromVariants');
+      this.importCollection.addImport('@aws-amplify/ui-react', 'Variant');
     }
 
     return factory.createVariableStatement(
