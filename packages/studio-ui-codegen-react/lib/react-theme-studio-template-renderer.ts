@@ -13,9 +13,16 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioTheme } from '@amzn/amplify-ui-codegen-schema';
+import { StudioTheme, StudioThemeValues, StudioThemeValue } from '@amzn/amplify-ui-codegen-schema';
 import { EOL } from 'os';
-import { factory, SyntaxKind, NodeFlags, EmitHint, FunctionDeclaration } from 'typescript';
+import {
+  factory,
+  EmitHint,
+  ExportAssignment,
+  ObjectLiteralExpression,
+  StringLiteral,
+  PropertyAssignment,
+} from 'typescript';
 import { StudioTemplateRenderer } from '@amzn/studio-ui-codegen';
 
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
@@ -26,8 +33,6 @@ import {
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
-  json,
-  jsonToLiteral,
 } from './react-studio-template-renderer-helper';
 
 export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -41,13 +46,13 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection = new ImportCollection();
 
-  fileName = 'theme.tsx';
+  fileName = `${this.component.name}.tsx`;
 
   constructor(theme: StudioTheme, protected renderConfig: ReactRenderConfig) {
     super(theme, new ReactOutputManager(), renderConfig);
     const { script } = this.renderConfig;
     if (script !== ScriptKind.TSX) {
-      this.fileName = `theme.${scriptKindToFileExtension(renderConfig.script || ScriptKind.TSX)}`;
+      this.fileName = `${this.component.name}.${scriptKindToFileExtension(renderConfig.script || ScriptKind.TSX)}`;
     }
 
     this.renderConfig = {
@@ -62,7 +67,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
     const renderedImports = this.buildImports().map((importStatement) =>
       printer.printNode(EmitHint.Unspecified, importStatement, file),
     );
-    const renderedFunction = printer.printNode(EmitHint.Unspecified, this.buildFunction(), file);
+    const renderedFunction = printer.printNode(EmitHint.Unspecified, this.buildTheme(), file);
     const componentText = ['/* eslint-disable */', ...renderedImports, renderedFunction].join(EOL);
     const { componentText: transpiledComponentText, declaration } = transpile(componentText, this.renderConfig);
 
@@ -79,192 +84,95 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 
   /*
    * import React from "react";
-   * import {
-   *   AmplifyProvider,
-   *   createTheme,
-   * } from "@aws-amplify/ui-react";
+   * import { createTheme } from "@aws-amplify/ui-react";
    */
   private buildImports() {
     this.importCollection.addImport('@aws-amplify/ui-react', 'createTheme');
-    this.importCollection.addImport('@aws-amplify/ui-react', 'AmplifyProvider');
 
     return this.importCollection.buildImportStatements();
   }
 
-  private buildFunction(): FunctionDeclaration {
-    return factory.createFunctionDeclaration(
+  /*
+   * export default createTheme({ ... });
+   */
+  private buildTheme(): ExportAssignment {
+    return factory.createExportAssignment(
       undefined,
-      [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DefaultKeyword)],
       undefined,
-      factory.createIdentifier('withTheme'),
-      [factory.createTypeParameterDeclaration(factory.createIdentifier('T'), undefined, undefined)],
+      undefined,
+      factory.createCallExpression(factory.createIdentifier('createTheme'), undefined, [this.buildThemeObject()]),
+    );
+  }
+
+  /*
+   * {
+   *   id: '123',
+   *   name: 'MyTheme',
+   *   tokens: {},
+   *   overrides: {},
+   * }
+   */
+  private buildThemeObject(): ObjectLiteralExpression {
+    return factory.createObjectLiteralExpression(
       [
-        factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          undefined,
-          factory.createIdentifier('WrappedComponent'),
-          undefined,
-          factory.createTypeReferenceNode(
-            factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('ComponentType')),
-            [factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined)],
-          ),
-          undefined,
+        factory.createPropertyAssignment(
+          factory.createIdentifier('name'),
+          factory.createStringLiteral(this.component.name),
         ),
-      ],
-      undefined,
-      factory.createBlock(
-        [
-          this.buildThemeVariable(),
-          this.buildSetComponentNameStatement(),
-          this.buildComponentWithThemeFunction(),
-          factory.createExpressionStatement(
-            factory.createBinaryExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier('ComponentWithTheme'),
-                factory.createIdentifier('displayName'),
-              ),
-              factory.createToken(SyntaxKind.EqualsToken),
-              factory.createIdentifier('displayName'),
-            ),
-          ),
-          factory.createReturnStatement(factory.createIdentifier('ComponentWithTheme')),
-        ],
-        true,
-      ),
+      ]
+        .concat(this.buildThemeValues(this.component.values))
+        .concat(this.buildThemeOverrides(this.component.overrides)),
+      true,
     );
   }
 
-  /*
-   * const theme = createTheme({{ theme object }})
+  /* Removes children and value (needed for smithy) from theme values json
+   *
+   * tokens: {
+   *   components: {
+   *     alert: {
+   *       backgroundcolor: \\"hsl(210, 5%, 90%)\\",
+   * ...
    */
-  private buildThemeVariable() {
-    return factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createIdentifier('theme'),
-            undefined,
-            undefined,
-            factory.createCallExpression(factory.createIdentifier('createTheme'), undefined, [
-              jsonToLiteral(this.component as json),
-            ]),
-          ),
-        ],
-        NodeFlags.Const,
-      ),
+  private buildThemeValues(values: StudioThemeValues): PropertyAssignment[] {
+    return Object.entries(values).map(([key, value]) =>
+      factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeValue(value)),
     );
   }
 
-  /*
-   * const displayName = WrappedComponent.displayName || WrappedComponent.name || "Component";
-   */
-  private buildSetComponentNameStatement() {
-    return factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createIdentifier('displayName'),
-            undefined,
-            undefined,
-            factory.createBinaryExpression(
-              factory.createBinaryExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('WrappedComponent'),
-                  factory.createIdentifier('displayName'),
-                ),
-                factory.createToken(SyntaxKind.BarBarToken),
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('WrappedComponent'),
-                  factory.createIdentifier('name'),
-                ),
-              ),
-              factory.createToken(SyntaxKind.BarBarToken),
-              factory.createStringLiteral('Component'),
-            ),
-          ),
-        ],
-        NodeFlags.Const,
-      ),
-    );
+  private buildThemeValue(value: StudioThemeValue): ObjectLiteralExpression | StringLiteral {
+    if ('children' in value && value.children !== undefined) {
+      return factory.createObjectLiteralExpression(this.buildThemeValues(value.children));
+    }
+    if ('value' in value && value.value !== undefined) {
+      return factory.createStringLiteral(value.value);
+    }
+
+    throw new Error(`Invalid theme value: ${JSON.stringify(value)}`);
   }
 
-  /*
-   * const ComponentWithTheme = (props: T) => {
-   *   return (
-   *     <AmplifyProvider theme={theme}>
-   *       <WrappedComponent {...props} />
-   *     </AmplifyProvider>
-   *   );
-   * };
+  /* builds special case theme value overrides becuase it is an array
+   *
+   * overrides: [
+   *   {
+   *     colorMode: \\"dark\\",
+   *     tokens: {
+   *       colors: { black: { value: \\"#fff\\" }, white: { value: \\"#000\\" } },
+   *     },
+   *   },
+   * ],
    */
-  private buildComponentWithThemeFunction() {
-    return factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createIdentifier('ComponentWithTheme'),
-            undefined,
-            undefined,
-            factory.createArrowFunction(
-              undefined,
-              undefined,
-              [
-                factory.createParameterDeclaration(
-                  undefined,
-                  undefined,
-                  undefined,
-                  factory.createIdentifier('props'),
-                  undefined,
-                  factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined),
-                  undefined,
-                ),
-              ],
-              undefined,
-              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-              factory.createBlock(
-                [
-                  factory.createReturnStatement(
-                    factory.createParenthesizedExpression(
-                      factory.createJsxElement(
-                        factory.createJsxOpeningElement(
-                          factory.createIdentifier('AmplifyProvider'),
-                          undefined,
-                          factory.createJsxAttributes([
-                            factory.createJsxAttribute(
-                              factory.createIdentifier('theme'),
-                              factory.createJsxExpression(undefined, factory.createIdentifier('theme')),
-                            ),
-                            factory.createJsxAttribute(
-                              factory.createIdentifier('components'),
-                              factory.createJsxExpression(undefined, factory.createObjectLiteralExpression([], false)),
-                            ),
-                          ]),
-                        ),
-                        [
-                          factory.createJsxSelfClosingElement(
-                            factory.createIdentifier('WrappedComponent'),
-                            undefined,
-                            factory.createJsxAttributes([
-                              factory.createJsxSpreadAttribute(factory.createIdentifier('props')),
-                            ]),
-                          ),
-                        ],
-                        factory.createJsxClosingElement(factory.createIdentifier('AmplifyProvider')),
-                      ),
-                    ),
-                  ),
-                ],
-                true,
-              ),
-            ),
-          ),
-        ],
-        NodeFlags.Const,
-      ),
-    );
+  private buildThemeOverrides(overrides?: StudioThemeValues[]) {
+    if (overrides !== undefined) {
+      return factory.createPropertyAssignment(
+        factory.createIdentifier('overrides'),
+        factory.createArrayLiteralExpression(
+          overrides.map((override) => factory.createObjectLiteralExpression(this.buildThemeValues(override), true)),
+          false,
+        ),
+      );
+    }
+
+    return [];
   }
 }

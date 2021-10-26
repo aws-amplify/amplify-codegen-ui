@@ -13,8 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { theme } from '@aws-amplify/ui';
-
 export type FigmaMetadata = {
   /**
    * The document URL for the figma document
@@ -497,11 +495,22 @@ export type StudioComponentStorageBindingProperty = {
   key?: string;
 };
 
-type DeepPartial<T> = {
-  [K in keyof T]?: DeepPartial<T[K]>;
+export type StudioTheme = {
+  name: string;
+  id?: string;
+  values: StudioThemeValues;
+  // overrides is a special case becuase it is an array of values
+  overrides?: StudioThemeValues[];
 };
 
-export type StudioTheme = DeepPartial<typeof theme>;
+export type StudioThemeValues = {
+  [token: string]: StudioThemeValue;
+};
+
+export type StudioThemeValue = {
+  value?: string;
+  children?: StudioThemeValues;
+};
 
 /**
  * Component action types

@@ -108,6 +108,7 @@ describe('Generated Components', () => {
 describe('Generated Themes', () => {
   it('Successfully decorates the app', () => {
     cy.visit('http://localhost:3000/component-tests');
-    // TODO: Write theming test
+    // amplify-ui theming converts hex color to rgb
+    cy.get('p.amplify-text').should('have.css', 'color', 'rgb(0, 128, 128)');
   });
 });
