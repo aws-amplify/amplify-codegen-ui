@@ -23,7 +23,7 @@ import {
   buildOpeningElementActions,
 } from './react-component-render-helper';
 
-export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithChildrenRendererBase<
+export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithChildrenRendererBase<
   TPropIn,
   JsxElement,
   JsxChild
@@ -35,6 +35,21 @@ export abstract class ReactComponentWithChildrenRenderer<TPropIn> extends Compon
   ) {
     super(component, parent);
     addBindingPropertiesImports(component, importCollection);
+  }
+
+  renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
+    const children = this.component.children ?? [];
+
+    const element = factory.createJsxElement(
+      this.renderOpeningElement(),
+      renderChildren(children),
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
+    );
+
+    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport('@aws-amplify/ui-react', `${this.component.componentType}Props`);
+
+    return element;
   }
 
   protected renderCustomCompOpeningElement(): JsxOpeningElement {
