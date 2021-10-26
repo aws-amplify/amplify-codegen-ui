@@ -7,8 +7,7 @@ npm run build
 (cd packages && npx create-react-app integration-test --use-npm --template typescript)
 
 # add files
-cp -r packages/test-generator/integration-test-templates/. packages/integration-test
-node packages/test-generator/dist/generators/GenerateTestApp.js
+npm run integ:templates
 
 # install
 lerna bootstrap

@@ -71,8 +71,12 @@ npm run setup-dev # If this is a newly cloned repo
 npm run integ
 ```
 
-- Use `npm run integ:setup` to only setup the integration tests and not run the tests.
-- Use `npm run integ:test` to only run the integration tests on existing integration setup.
+| Command                       | Description                                                       |
+| ----------------------------- | ----------------------------------------------------------------- |
+| npm run integ:setup           | Setup integration tests but do not run the tests.                 |
+| npm run integ:test            | Run integration tests on an existing integration setup.           |
+| npm run integ:templates       | Reload integration templates from test-generator.                 |
+| npm run integ:templates:watch | Watch for changes to integration templates and reload on changes. |
 
 ## Amplify Components Schema
 
