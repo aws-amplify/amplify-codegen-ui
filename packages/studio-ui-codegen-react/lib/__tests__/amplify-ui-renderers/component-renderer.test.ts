@@ -14,39 +14,13 @@
   limitations under the License.
  */
 import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
-import { createPrinter, EmitHint, createSourceFile, ScriptTarget, ScriptKind } from 'typescript';
-import { ImportCollection } from '../../import-collection';
 import { assertASTMatchesSnapshot } from '../__utils__/snapshot-helpers';
 
-import BadgeRenderer from '../../amplify-ui-renderers/badge';
-import ButtonRenderer from '../../amplify-ui-renderers/button';
-import ViewRenderer from '../../amplify-ui-renderers/view';
-import CardRenderer from '../../amplify-ui-renderers/card';
-import DividerRenderer from '../../amplify-ui-renderers/divider';
-import FlexRenderer from '../../amplify-ui-renderers/flex';
-import ImageRenderer from '../../amplify-ui-renderers/image';
-import TextRenderer from '../../amplify-ui-renderers/text';
 import renderString from '../../amplify-ui-renderers/string';
-import CustomComponentRenderer from '../../amplify-ui-renderers/customComponent';
-import CollectionRenderer from '../../amplify-ui-renderers/collection';
+import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
 
-function testComponentRenderer(
-  Renderer:
-    | typeof BadgeRenderer
-    | typeof ButtonRenderer
-    | typeof ViewRenderer
-    | typeof CardRenderer
-    | typeof DividerRenderer
-    | typeof FlexRenderer
-    | typeof ImageRenderer
-    | typeof TextRenderer
-    | typeof CustomComponentRenderer
-    | typeof CollectionRenderer,
-  component: StudioComponent,
-) {
-  const renderChildren = jest.fn();
-  const renderedComponent = new Renderer(component, new ImportCollection()).renderElement(renderChildren);
-
+function testComponentRenderer(component: StudioComponent) {
+  const renderedComponent = new AmplifyRenderer(component, {}).renderJsx(component);
   assertASTMatchesSnapshot(renderedComponent);
 }
 
@@ -58,7 +32,7 @@ describe('Component Renderers', () => {
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(BadgeRenderer, component);
+    testComponentRenderer(component);
   });
 
   test('ButtonRenderer', () => {
@@ -68,7 +42,7 @@ describe('Component Renderers', () => {
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(ButtonRenderer, component);
+    testComponentRenderer(component);
   });
 
   test('BoxRenderer', () => {
@@ -78,7 +52,7 @@ describe('Component Renderers', () => {
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(ViewRenderer, component);
+    testComponentRenderer(component);
   });
 
   test('CardRenderer', () => {
@@ -88,7 +62,7 @@ describe('Component Renderers', () => {
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(CardRenderer, component);
+    testComponentRenderer(component);
   });
 
   test('DividerRenderer', () => {
@@ -98,7 +72,7 @@ describe('Component Renderers', () => {
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(DividerRenderer, component);
+    testComponentRenderer(component);
   });
 
   test('FlexRenderer', () => {
@@ -108,7 +82,7 @@ describe('Component Renderers', () => {
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(FlexRenderer, component);
+    testComponentRenderer(component);
   });
 
   test('ImageRenderer', () => {
@@ -118,7 +92,7 @@ describe('Component Renderers', () => {
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(ImageRenderer, component);
+    testComponentRenderer(component);
   });
 
   test('TextRenderer', () => {
@@ -128,7 +102,7 @@ describe('Component Renderers', () => {
       properties: { value: { value: 'test' } },
       bindingProperties: {},
     };
-    testComponentRenderer(TextRenderer, component);
+    testComponentRenderer(component);
   });
 
   test('CustomComponentRenderer', () => {
@@ -138,7 +112,7 @@ describe('Component Renderers', () => {
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(CustomComponentRenderer, component);
+    testComponentRenderer(component);
   });
 
   test('CollectionRenderer', () => {
@@ -148,36 +122,30 @@ describe('Component Renderers', () => {
       properties: {},
       bindingProperties: {},
     };
-    testComponentRenderer(CollectionRenderer, component);
+    testComponentRenderer(component);
   });
 
-  describe('StringRenderer', () => {
-    test('basic', () => {
-      const component = {
-        componentType: 'String',
-        name: 'MyString',
-        properties: {
-          value: {
-            value: 'test',
-          },
+  test('StringRenderer', () => {
+    const component = {
+      componentType: 'String',
+      name: 'MyString',
+      properties: {
+        value: {
+          value: 'test',
         },
-        bindingProperties: {},
-      };
+      },
+      bindingProperties: {},
+    };
+    testComponentRenderer(component);
+  });
 
-      const renderedString = renderString(component);
-      const file = createSourceFile('test.ts', '', ScriptTarget.ES2015, true, ScriptKind.TS);
-      const printer = createPrinter();
-      expect(printer.printNode(EmitHint.Unspecified, renderedString, file)).toMatchSnapshot();
-    });
-
-    test('missing props', () => {
-      const component = {
-        componentType: 'String',
-        name: 'MyString',
-        properties: {},
-        bindingProperties: {},
-      };
-      expect(() => renderString(component)).toThrowErrorMatchingSnapshot();
-    });
+  test('StringRenderer throws on missing props', () => {
+    const component = {
+      componentType: 'String',
+      name: 'MyString',
+      properties: {},
+      bindingProperties: {},
+    };
+    expect(() => renderString(component)).toThrowErrorMatchingSnapshot();
   });
 });

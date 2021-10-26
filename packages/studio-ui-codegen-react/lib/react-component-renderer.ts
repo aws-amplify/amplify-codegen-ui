@@ -24,7 +24,7 @@ import {
 } from './react-component-render-helper';
 import { ImportCollection } from './import-collection';
 
-export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<TPropIn, JsxElement> {
+export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<TPropIn, JsxElement> {
   constructor(
     component: StudioComponent | StudioComponentChild,
     protected importCollection: ImportCollection,
@@ -32,6 +32,19 @@ export abstract class ReactComponentRenderer<TPropIn> extends ComponentRendererB
   ) {
     super(component, parent);
     addBindingPropertiesImports(component, importCollection);
+  }
+
+  renderElement(): JsxElement {
+    const element = factory.createJsxElement(
+      this.renderOpeningElement(),
+      [],
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
+    );
+
+    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport('@aws-amplify/ui-react', `${this.component.componentType}Props`);
+
+    return element;
   }
 
   protected renderOpeningElement(): JsxOpeningElement {

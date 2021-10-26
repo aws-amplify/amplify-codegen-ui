@@ -16,58 +16,70 @@
 import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
 import { StudioNode } from '@amzn/studio-ui-codegen';
 import { JsxElement, JsxFragment } from 'typescript';
+import {
+  BadgeProps,
+  ButtonProps,
+  CardProps,
+  DividerProps,
+  FlexProps,
+  ImageProps,
+  ViewProps,
+} from '@aws-amplify/ui-react';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
-
-import BadgeRenderer from './badge';
-import ButtonRenderer from './button';
-import ViewRenderer from './view';
-import CardRenderer from './card';
-import DividerRenderer from './divider';
-import FlexRenderer from './flex';
-import ImageRenderer from './image';
 import TextRenderer from './text';
 import renderString from './string';
 import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
+import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
+import { ReactComponentRenderer } from '../react-component-renderer';
 
 export class AmplifyRenderer extends ReactStudioTemplateRenderer {
   renderJsx(component: StudioComponent | StudioComponentChild, parent?: StudioNode): JsxElement | JsxFragment {
     const node = new StudioNode(component, parent);
+    const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
     switch (component.componentType) {
       case 'Collection':
-        return new CollectionRenderer(component, this.importCollection, parent).renderElement((children) =>
-          children.map((child) => this.renderJsx(child, node)),
-        );
+        return new CollectionRenderer(component, this.importCollection, parent).renderElement(renderChildren);
       case 'Badge':
-        return new BadgeRenderer(component, this.importCollection, parent).renderElement((children) =>
-          children.map((child) => this.renderJsx(child, node)),
-        );
+        return new ReactComponentWithChildrenRenderer<BadgeProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
 
       case 'Button':
-        return new ButtonRenderer(component, this.importCollection, parent).renderElement((children) =>
-          children.map((child) => this.renderJsx(child, node)),
-        );
+        return new ReactComponentWithChildrenRenderer<ButtonProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
 
       case 'View':
-        return new ViewRenderer(component, this.importCollection, parent).renderElement((children) =>
-          children.map((child) => this.renderJsx(child, node)),
-        );
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
 
       case 'Card':
-        return new CardRenderer(component, this.importCollection, parent).renderElement((children) =>
-          children.map((child) => this.renderJsx(child, node)),
-        );
+        return new ReactComponentWithChildrenRenderer<CardProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
 
       case 'Divider':
-        return new DividerRenderer(component, this.importCollection, parent).renderElement();
+        return new ReactComponentRenderer<DividerProps>(component, this.importCollection, parent).renderElement();
 
       case 'Flex':
-        return new FlexRenderer(component, this.importCollection, parent).renderElement((children) =>
-          children.map((child) => this.renderJsx(child, node)),
-        );
+        return new ReactComponentWithChildrenRenderer<FlexProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
 
       case 'Image':
-        return new ImageRenderer(component, this.importCollection, parent).renderElement();
+        return new ReactComponentRenderer<ImageProps>(component, this.importCollection, parent).renderElement();
 
       case 'String':
         return renderString(component as StudioComponentChild);
@@ -76,9 +88,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         return new TextRenderer(component, this.importCollection, parent).renderElement();
 
       default:
-        return new CustomComponentRenderer(component, this.importCollection).renderElement((children) =>
-          children.map((child) => this.renderJsx(child, node)),
-        );
+        return new CustomComponentRenderer(component, this.importCollection).renderElement(renderChildren);
     }
   }
 }
