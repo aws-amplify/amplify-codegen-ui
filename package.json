@@ -9,7 +9,7 @@
   "scripts": {
     "test": "lerna run test --stream",
     "test:update": "lerna run test:update --stream",
-    "build": "lerna run build --stream --ignore integration-tests",
+    "build": "lerna run build --stream",
     "prepublishOnly": "npm run build && npm run test",
     "setup-dev": "npm install && lerna bootstrap && lerna run build",
     "clean": "lerna run clean && lerna exec npm run rimraf tsconfig.tsbuildinfo && lerna clean --yes && npm run rimraf node_modules",
