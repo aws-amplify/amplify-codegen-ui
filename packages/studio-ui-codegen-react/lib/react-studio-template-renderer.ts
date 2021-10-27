@@ -66,6 +66,7 @@ import {
   getDeclarationFilename,
   json,
   jsonToLiteral,
+  bindingPropertyUsesHook,
 } from './react-studio-template-renderer-helper';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -426,10 +427,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       Object.entries(component.bindingProperties).forEach((entry) => {
         const [propName, binding] = entry;
         if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding)) {
+          const usesHook = bindingPropertyUsesHook(binding);
           const bindingElement = factory.createBindingElement(
             undefined,
-            undefined,
-            factory.createIdentifier(propName),
+            usesHook ? factory.createIdentifier(propName) : undefined,
+            factory.createIdentifier(usesHook ? `${propName}Prop` : propName),
             undefined,
           );
           elements.push(bindingElement);
@@ -678,26 +680,66 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         if (isDataPropertyBinding(binding)) {
           const { bindingProperties } = binding;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
+            this.importCollection.addImport('@aws-amplify/ui-react', 'useDataStoreBinding');
+            /* const buttonColorFilter = {
+             *   field: "userID",
+             *   operand: "user@email.com",
+             *   operator: "eq",
+             * }
+             */
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
+
             const { model } = bindingProperties;
             this.importCollection.addImport('../models', model);
+
+            /* const buttonColorDataStore = useDataStoreBinding({
+             *   type: "collection"
+             *   ...
+             * }).items[0];
+             */
             statements.push(
               factory.createVariableStatement(
                 undefined,
                 factory.createVariableDeclarationList(
                   [
                     factory.createVariableDeclaration(
-                      factory.createObjectBindingPattern([
-                        factory.createBindingElement(
-                          undefined,
-                          factory.createIdentifier('item'),
-                          factory.createIdentifier(propName),
-                          undefined,
+                      factory.createIdentifier(this.getDataStoreName(propName)),
+                      undefined,
+                      undefined,
+                      factory.createElementAccessExpression(
+                        factory.createPropertyAccessExpression(
+                          this.buildUseDataStoreBindingCall('collection', model, this.getFilterName(propName)),
+                          factory.createIdentifier('items'),
                         ),
-                      ]),
+                        factory.createNumericLiteral('0'),
+                      ),
+                    ),
+                  ],
+                  ts.NodeFlags.Const,
+                ),
+              ),
+            );
+
+            statements.push(
+              factory.createVariableStatement(
+                undefined,
+                factory.createVariableDeclarationList(
+                  [
+                    factory.createVariableDeclaration(
+                      factory.createIdentifier(propName),
                       undefined,
                       undefined,
-                      this.buildUseDataStoreBindingCall('record', model, this.getFilterName(propName)),
+                      factory.createConditionalExpression(
+                        factory.createBinaryExpression(
+                          factory.createIdentifier(`${propName}Prop`),
+                          factory.createToken(ts.SyntaxKind.ExclamationEqualsEqualsToken),
+                          factory.createIdentifier('undefined'),
+                        ),
+                        factory.createToken(ts.SyntaxKind.QuestionToken),
+                        factory.createIdentifier(`${propName}Prop`),
+                        factory.createToken(ts.SyntaxKind.ColonToken),
+                        factory.createIdentifier(this.getDataStoreName(propName)),
+                      ),
                     ),
                   ],
                   ts.NodeFlags.Const,
@@ -931,6 +973,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private getFilterName(propName: string): string {
     return `${propName}Filter`;
+  }
+
+  private getDataStoreName(propName: string): string {
+    return `${propName}DataStore`;
   }
 
   private dropMissingListElements<T>(elements: (T | null | undefined)[]): T[] {

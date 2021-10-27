@@ -156,6 +156,7 @@ import {
   Flex,
   FlexProps,
   getOverrideProps,
+  useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
 
 export type CollectionOfCustomButtonsProps = Partial<CollectionProps<any>> & {
@@ -172,7 +173,7 @@ export default function CollectionOfCustomButtons(
   const {
     width,
     backgroundColor,
-    buttonColor,
+    buttonColor: buttonColorProp,
     items,
     overrides: overridesProp,
     ...rest
@@ -197,11 +198,13 @@ export default function CollectionOfCustomButtons(
     operand: \\"user@email.com\\",
     operator: \\"eq\\",
   };
-  const { item: buttonColor } = useDataStoreBinding({
-    type: \\"record\\",
+  const buttonColorDataStore = useDataStoreBinding({
+    type: \\"collection\\",
     model: UserPreferences,
     criteria: buttonColorFilter,
-  });
+  }).items[0];
+  const buttonColor =
+    buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
   return (
     <Collection
       type=\\"list\\"
@@ -244,6 +247,7 @@ import {
   FlexProps,
   SortDirection,
   getOverrideProps,
+  useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
 
 export type CollectionOfCustomButtonsProps = Partial<CollectionProps<any>> & {
@@ -260,7 +264,7 @@ export default function CollectionOfCustomButtons(
   const {
     width,
     backgroundColor,
-    buttonColor,
+    buttonColor: buttonColorProp,
     items,
     overrides: overridesProp,
     ...rest
@@ -290,11 +294,13 @@ export default function CollectionOfCustomButtons(
     operand: \\"user@email.com\\",
     operator: \\"eq\\",
   };
-  const { item: buttonColor } = useDataStoreBinding({
-    type: \\"record\\",
+  const buttonColorDataStore = useDataStoreBinding({
+    type: \\"collection\\",
     model: UserPreferences,
     criteria: buttonColorFilter,
-  });
+  }).items[0];
+  const buttonColor =
+    buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
   return (
     <Collection
       type=\\"list\\"
