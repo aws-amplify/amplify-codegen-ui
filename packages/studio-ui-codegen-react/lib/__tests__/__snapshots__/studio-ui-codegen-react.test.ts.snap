@@ -178,12 +178,13 @@ export default function CollectionOfCustomButtons(
     ...rest
   } = props;
   const overrides = { ...overridesProp };
-  const buttonUserFilter = {
+  const buttonUserFilterObj = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
       { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
     ],
   };
+  const buttonUserFilter = createDataStorePredicate(buttonUserFilterObj);
   const buttonUser =
     items !== undefined
       ? items
@@ -192,11 +193,12 @@ export default function CollectionOfCustomButtons(
           model: User,
           criteria: buttonUserFilter,
         }).items;
-  const buttonColorFilter = {
+  const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
     operator: \\"eq\\",
   };
+  const buttonColorFilter = createDataStorePredicate(buttonColorFilterObj);
   const { item: buttonColor } = useDataStoreBinding({
     type: \\"record\\",
     model: UserPreferences,
@@ -266,12 +268,13 @@ export default function CollectionOfCustomButtons(
     ...rest
   } = props;
   const overrides = { ...overridesProp };
-  const buttonUserFilter = {
+  const buttonUserFilterObj = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
       { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
     ],
   };
+  const buttonUserFilter = createDataStorePredicate(buttonUserFilterObj);
   const buttonUserPagination = {
     sort: (s) =>
       s.firstName(SortDirection.ASCENDING).lastName(SortDirection.DESCENDING),
@@ -285,11 +288,12 @@ export default function CollectionOfCustomButtons(
           criteria: buttonUserFilter,
           pagination: buttonUserPagination,
         }).items;
-  const buttonColorFilter = {
+  const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
     operator: \\"eq\\",
   };
+  const buttonColorFilter = createDataStorePredicate(buttonColorFilterObj);
   const { item: buttonColor } = useDataStoreBinding({
     type: \\"record\\",
     model: UserPreferences,
