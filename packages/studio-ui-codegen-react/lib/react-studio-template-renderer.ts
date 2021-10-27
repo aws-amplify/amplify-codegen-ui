@@ -20,6 +20,7 @@ import {
   StudioComponentSort,
   StudioComponentVariant,
   StudioComponentAction,
+  StudioComponentSimplePropertyBinding,
 } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
@@ -53,6 +54,8 @@ import ts, {
   Identifier,
   ComputedPropertyName,
   ArrowFunction,
+  LiteralExpression,
+  BooleanLiteral,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
@@ -430,7 +433,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             undefined,
             undefined,
             factory.createIdentifier(propName),
-            undefined,
+            isSimplePropertyBinding(binding) ? this.getDefaultValue(binding) : undefined,
           );
           elements.push(bindingElement);
         }
@@ -933,6 +936,24 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private dropMissingListElements<T>(elements: (T | null | undefined)[]): T[] {
     return elements.filter((element) => element !== null && element !== undefined) as T[];
+  }
+
+  private getDefaultValue(
+    binding: StudioComponentSimplePropertyBinding,
+  ): LiteralExpression | BooleanLiteral | undefined {
+    if (binding.defaultValue !== undefined) {
+      switch (binding.type) {
+        case 'String':
+          return factory.createStringLiteral(binding.defaultValue);
+        case 'Number':
+          return factory.createNumericLiteral(binding.defaultValue);
+        case 'Boolean':
+          return JSON.parse(binding.defaultValue) ? factory.createTrue() : factory.createFalse();
+        default:
+          throw new Error(`Could not parse binding with type ${binding.type}`);
+      }
+    }
+    return undefined;
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment;

@@ -1,0 +1,19 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Text",
+  "name": "SimpleAndBoundDefaultValue",
+  "bindingProperties": {
+    "label": {
+      "type": "String",
+      "defaultValue": "Simple Double Default"
+    }
+  },
+  "properties": {
+    "value": {
+      "bindingProperties": {
+        "property": "label"
+      },
+      "defaultValue": "Bound Double Default"
+    }
+  }
+}

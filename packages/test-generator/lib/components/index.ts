@@ -26,3 +26,4 @@ export { default as ComponentWithVariant } from './componentWithVariant.json';
 export { default as ComponentWithActionSignOut } from './componentWithActionSignOut.json';
 export { default as ComponentWithActionNavigation } from './componentWithActionNavigation.json';
 export * from './basic-components';
+export * from './default-value-components';

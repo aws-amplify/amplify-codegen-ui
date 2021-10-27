@@ -1066,6 +1066,113 @@ export default function Profile(props: ProfileProps): React.ReactElement;
 "
 `;
 
+exports[`amplify render tests default value should render bound default value 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Text,
+  TextProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type BoundDefaultValueProps = Partial<TextProps> & {
+  label?: String;
+} & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function BoundDefaultValue(
+  props: BoundDefaultValueProps
+): React.ReactElement {
+  const { label, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Text {...rest} {...getOverrideProps(overrides, \\"Text\\")}>
+      {label || \\"Bound Default\\"}
+    </Text>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests default value should render simple and bound default value 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Text,
+  TextProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type SimpleAndBoundDefaultValueProps = Partial<TextProps> & {
+  label?: String;
+} & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function SimpleAndBoundDefaultValue(
+  props: SimpleAndBoundDefaultValueProps
+): React.ReactElement {
+  const {
+    label = \\"Simple Double Default\\",
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Text {...rest} {...getOverrideProps(overrides, \\"Text\\")}>
+      {label || \\"Bound Double Default\\"}
+    </Text>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests default value should render simple default value 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Text,
+  TextProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type SimplePropertyBindingDefaultValueProps = Partial<TextProps> & {
+  label?: String;
+} & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function SimplePropertyBindingDefaultValue(
+  props: SimplePropertyBindingDefaultValueProps
+): React.ReactElement {
+  const {
+    label = \\"Default Binding Property\\",
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Text {...rest} {...getOverrideProps(overrides, \\"Text\\")}>
+      {label}
+    </Text>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests sample code snippet tests should generate a sample code snippet for components 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

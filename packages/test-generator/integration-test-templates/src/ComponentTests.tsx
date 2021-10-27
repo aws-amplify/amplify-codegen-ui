@@ -32,6 +32,9 @@ import BasicComponentFlex from './ui-components/BasicComponentFlex';
 import BasicComponentImage from './ui-components/BasicComponentImage';
 import BasicComponentCustomRating from './ui-components/BasicComponentCustomRating';
 import ComponentWithVariant from './ui-components/ComponentWithVariant';
+import SimplePropertyBindingDefaultValue from './ui-components/SimplePropertyBindingDefaultValue';
+import BoundDefaultValue from './ui-components/BoundDefaultValue';
+import SimpleAndBoundDefaultValue from './ui-components/SimpleAndBoundDefaultValue';
 import theme from './ui-components/MyTheme';
 /* eslint-enable import/extensions */
 
@@ -109,6 +112,15 @@ export default function ComponentTests() {
         <ComponentWithVariant id="variant1" variant="primary" />
         <ComponentWithVariant id="variant2" variant="secondary" />
         <ComponentWithVariant id="variant3" variant="primary" size="large" />
+      </div>
+      <div id="default-value">
+        <h2>Default Value</h2>
+        <SimplePropertyBindingDefaultValue id="bound-simple-binding-default" />
+        <SimplePropertyBindingDefaultValue id="bound-simple-binding-override" label="Override Simple Binding" />
+        <BoundDefaultValue id="bound-default" />
+        <BoundDefaultValue id="bound-override" label="Override Bound" />
+        <SimpleAndBoundDefaultValue id="simple-and-bound-default" />
+        <SimpleAndBoundDefaultValue id="simple-and-bound-override" label="Override Simple And Bound" />
       </div>
     </AmplifyProvider>
   );
