@@ -1,0 +1,28 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "ComponentWithDataBindingWithoutPredicate",
+  "bindingProperties": {
+    "buttonUser": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User"
+      }
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Text",
+      "properties": {
+        "value": {
+          "bindingProperties": {
+            "property": "buttonUser",
+            "field": "firstName"
+          },
+          "defaultValue": "Al"
+        }
+      }
+    }
+  ]
+}

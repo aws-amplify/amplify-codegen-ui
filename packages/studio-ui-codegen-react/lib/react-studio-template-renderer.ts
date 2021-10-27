@@ -853,6 +853,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     criteriaName?: string,
     paginationName?: string,
   ): CallExpression {
+    this.importCollection.addImport('@aws-amplify/ui-react', 'useDataStoreBinding');
+
     const objectProperties = [
       factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
       factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(bindingModel)),
