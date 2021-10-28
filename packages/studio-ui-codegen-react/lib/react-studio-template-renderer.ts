@@ -69,6 +69,7 @@ import {
   getDeclarationFilename,
   json,
   jsonToLiteral,
+  bindingPropertyUsesHook,
 } from './react-studio-template-renderer-helper';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -429,10 +430,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       Object.entries(component.bindingProperties).forEach((entry) => {
         const [propName, binding] = entry;
         if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding)) {
+          const usesHook = bindingPropertyUsesHook(binding);
           const bindingElement = factory.createBindingElement(
             undefined,
-            undefined,
-            factory.createIdentifier(propName),
+            usesHook ? factory.createIdentifier(propName) : undefined,
+            factory.createIdentifier(usesHook ? `${propName}Prop` : propName),
             isSimplePropertyBinding(binding) ? this.getDefaultValue(binding) : undefined,
           );
           elements.push(bindingElement);
@@ -644,11 +646,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const [propName, { model, sort, predicate }] = collectionProp;
         if (predicate) {
           statements.push(this.buildPredicateDeclaration(propName, predicate));
-          statements.push(this.buildCreateDataStorePredicateCall(propName));
+          // TODO: Re-enable data store predicates https://app.asana.com/0/1200812113384502/1201289886389275/f
+          // statements.push(this.buildCreateDataStorePredicateCall(propName));
         }
         if (sort) {
-          this.importCollection.addImport('@aws-amplify/ui-react', 'SortDirection');
-          statements.push(this.buildPaginationStatement(propName, sort));
+          this.importCollection.addImport('@aws-amplify/datastore', 'SortDirection');
+          this.importCollection.addImport('@aws-amplify/datastore', 'SortPredicate');
+          statements.push(this.buildPaginationStatement(propName, model, sort));
         }
         this.importCollection.addImport('../models', model);
         statements.push(
@@ -673,6 +677,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private buildCreateDataStorePredicateCall(name: string): Statement {
+    this.importCollection.addImport('@aws-amplify/ui-react', 'createDataStorePredicate');
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -701,27 +706,67 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         if (isDataPropertyBinding(binding)) {
           const { bindingProperties } = binding;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
+            this.importCollection.addImport('@aws-amplify/ui-react', 'useDataStoreBinding');
+            /* const buttonColorFilter = {
+             *   field: "userID",
+             *   operand: "user@email.com",
+             *   operator: "eq",
+             * }
+             */
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
-            statements.push(this.buildCreateDataStorePredicateCall(propName));
+            // TODO: Re-enable data store predicates https://app.asana.com/0/1200812113384502/1201289886389275/f
+            // statements.push(this.buildCreateDataStorePredicateCall(propName));
             const { model } = bindingProperties;
             this.importCollection.addImport('../models', model);
+
+            /* const buttonColorDataStore = useDataStoreBinding({
+             *   type: "collection"
+             *   ...
+             * }).items[0];
+             */
             statements.push(
               factory.createVariableStatement(
                 undefined,
                 factory.createVariableDeclarationList(
                   [
                     factory.createVariableDeclaration(
-                      factory.createObjectBindingPattern([
-                        factory.createBindingElement(
-                          undefined,
-                          factory.createIdentifier('item'),
-                          factory.createIdentifier(propName),
-                          undefined,
+                      factory.createIdentifier(this.getDataStoreName(propName)),
+                      undefined,
+                      undefined,
+                      factory.createElementAccessExpression(
+                        factory.createPropertyAccessExpression(
+                          this.buildUseDataStoreBindingCall('collection', model, this.getFilterName(propName)),
+                          factory.createIdentifier('items'),
                         ),
-                      ]),
+                        factory.createNumericLiteral('0'),
+                      ),
+                    ),
+                  ],
+                  ts.NodeFlags.Const,
+                ),
+              ),
+            );
+
+            statements.push(
+              factory.createVariableStatement(
+                undefined,
+                factory.createVariableDeclarationList(
+                  [
+                    factory.createVariableDeclaration(
+                      factory.createIdentifier(propName),
                       undefined,
                       undefined,
-                      this.buildUseDataStoreBindingCall('record', model, this.getFilterName(propName)),
+                      factory.createConditionalExpression(
+                        factory.createBinaryExpression(
+                          factory.createIdentifier(`${propName}Prop`),
+                          factory.createToken(ts.SyntaxKind.ExclamationEqualsEqualsToken),
+                          factory.createIdentifier('undefined'),
+                        ),
+                        factory.createToken(ts.SyntaxKind.QuestionToken),
+                        factory.createIdentifier(`${propName}Prop`),
+                        factory.createToken(ts.SyntaxKind.ColonToken),
+                        factory.createIdentifier(this.getDataStoreName(propName)),
+                      ),
                     ),
                   ],
                   ts.NodeFlags.Const,
@@ -768,10 +813,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   /**
    * const buttonUserSort = {
-   *   sort: s => s.firstName('DESCENDING').lastName('ASCENDING')
+   *   sort: (s: SortPredicate<User>) => s.firstName('DESCENDING').lastName('ASCENDING')
    * }
    */
-  private buildPaginationStatement(propName: string, sort?: StudioComponentSort[]): VariableStatement {
+  private buildPaginationStatement(propName: string, model: string, sort?: StudioComponentSort[]): VariableStatement {
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -783,7 +828,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createObjectLiteralExpression(
               ([] as ts.PropertyAssignment[]).concat(
                 sort
-                  ? [factory.createPropertyAssignment(factory.createIdentifier('sort'), this.buildSortFunction(sort))]
+                  ? [
+                      factory.createPropertyAssignment(
+                        factory.createIdentifier('sort'),
+                        this.buildSortFunction(model, sort),
+                      ),
+                    ]
                   : [],
               ),
             ),
@@ -795,9 +845,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   /**
-   * s => s.firstName('ASCENDING').lastName('DESCENDING')
+   * (s: SortPredicate<User>) => s.firstName('ASCENDING').lastName('DESCENDING')
    */
-  private buildSortFunction(sort: StudioComponentSort[]): ArrowFunction {
+  private buildSortFunction(model: string, sort: StudioComponentSort[]): ArrowFunction {
     const ascendingSortDirection = factory.createPropertyAccessExpression(
       factory.createIdentifier('SortDirection'),
       factory.createIdentifier('ASCENDING'),
@@ -826,7 +876,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           undefined,
           factory.createIdentifier('s'),
           undefined,
-          undefined,
+          factory.createTypeReferenceNode(factory.createIdentifier('SortPredicate'), [
+            factory.createTypeReferenceNode(factory.createIdentifier(model), undefined),
+          ]),
           undefined,
         ),
       ],
@@ -877,20 +929,23 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     criteriaName?: string,
     paginationName?: string,
   ): CallExpression {
+    this.importCollection.addImport('@aws-amplify/ui-react', 'useDataStoreBinding');
+
     const objectProperties = [
       factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
       factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(bindingModel)),
     ]
-      .concat(
-        criteriaName
-          ? [
-              factory.createPropertyAssignment(
-                factory.createIdentifier('criteria'),
-                factory.createIdentifier(criteriaName),
-              ),
-            ]
-          : [],
-      )
+      // TODO: Re-enable data store predicates https://app.asana.com/0/1200812113384502/1201289886389275/f
+      // .concat(
+      //   criteriaName
+      //     ? [
+      //         factory.createPropertyAssignment(
+      //           factory.createIdentifier('criteria'),
+      //           factory.createIdentifier(criteriaName),
+      //         ),
+      //       ]
+      //     : [],
+      // )
       .concat(
         paginationName
           ? [
@@ -957,6 +1012,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private getFilterName(propName: string): string {
     return `${propName}Filter`;
+  }
+
+  private getDataStoreName(propName: string): string {
+    return `${propName}DataStore`;
   }
 
   private dropMissingListElements<T>(elements: (T | null | undefined)[]): T[] {

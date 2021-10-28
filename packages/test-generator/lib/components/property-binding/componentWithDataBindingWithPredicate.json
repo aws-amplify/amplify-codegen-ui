@@ -1,0 +1,33 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "ComponentWithDataBindingWithPredicate",
+  "bindingProperties": {
+    "buttonUser": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User",
+        "predicate": {
+          "field": "firstName",
+          "operand": "Al",
+          "operator": "eq"
+        }
+      }
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Text",
+      "properties": {
+        "value": {
+          "bindingProperties": {
+            "property": "buttonUser",
+            "field": "firstName"
+          },
+          "defaultValue": "Buddy"
+        }
+      }
+    }
+  ]
+}

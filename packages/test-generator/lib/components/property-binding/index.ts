@@ -13,4 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './User';
+export { default as ComponentWithDataBindingWithPredicate } from './componentWithDataBindingWithPredicate.json';
+export { default as ComponentWithDataBindingWithoutPredicate } from './componentWithDataBindingWithoutPredicate.json';
+export { default as ComponentWithSimplePropertyBinding } from './componentWithSimplePropertyBinding.json';

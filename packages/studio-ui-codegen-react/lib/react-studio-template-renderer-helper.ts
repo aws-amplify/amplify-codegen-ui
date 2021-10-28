@@ -13,6 +13,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import {
+  StudioComponentDataPropertyBinding,
+  StudioComponentSimplePropertyBinding,
+} from '@amzn/amplify-ui-codegen-schema';
+import { isDataPropertyBinding } from '@amzn/studio-ui-codegen';
+
 import ts, {
   createPrinter,
   createSourceFile,
@@ -149,4 +155,10 @@ export function jsonToLiteral(
       );
     }
   }
+}
+
+export function bindingPropertyUsesHook(
+  binding: StudioComponentDataPropertyBinding | StudioComponentSimplePropertyBinding,
+): boolean {
+  return isDataPropertyBinding(binding) && 'predicate' in binding.bindingProperties;
 }

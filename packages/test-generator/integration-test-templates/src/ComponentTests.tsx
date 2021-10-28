@@ -36,6 +36,11 @@ import SimplePropertyBindingDefaultValue from './ui-components/SimplePropertyBin
 import BoundDefaultValue from './ui-components/BoundDefaultValue';
 import SimpleAndBoundDefaultValue from './ui-components/SimpleAndBoundDefaultValue';
 import theme from './ui-components/MyTheme';
+import ComponentWithSimplePropertyBinding from './ui-components/ComponentWithSimplePropertyBinding';
+import ComponentWithDataBindingWithoutPredicate from './ui-components/ComponentWithDataBindingWithoutPredicate';
+import ComponentWithDataBindingWithPredicate from './ui-components/ComponentWithDataBindingWithPredicate';
+import CollectionWithBinding from './ui-components/CollectionWithBinding';
+import CollectionWithSort from './ui-components/CollectionWithSort';
 /* eslint-enable import/extensions */
 
 export default function ComponentTests() {
@@ -59,25 +64,23 @@ export default function ComponentTests() {
       <ViewTest />
       <ViewWithButton />
       <CustomButton />
-      {/* <TextWithDataBinding /> // TODO: add back in with data binding tests */}
       <div id="concat-and-conditional">
         <h2>Concatenation and Conditional Tests</h2>
         <ComponentWithConcatenation />
         <ComponentWithConcatenation
           buttonUser={{
-            firstname: 'Norm',
-            lastname: 'Gunderson',
-            isLoggedIn: true,
-            loggedInColor: 'blue',
-            loggedOutColor: 'red',
+            id: '1',
+            firstName: 'Norm',
+            lastName: 'Gunderson',
             age: -1,
           }}
         />
         <ComponentWithConditional
           id="conditional1"
           buttonUser={{
-            firstname: 'Disabled',
-            lastname: 'Conditional Button',
+            id: '1',
+            firstName: 'Disabled',
+            lastName: 'Conditional Button',
             isLoggedIn: false,
             loggedInColor: 'blue',
             loggedOutColor: 'red',
@@ -87,9 +90,7 @@ export default function ComponentTests() {
         <ComponentWithConditional
           id="conditional2"
           buttonUser={{
-            firstname: 'May Vote',
-            lastname: 'Conditional Button',
-            age: 19,
+            id: '1',
             isLoggedIn: true,
             loggedInColor: 'blue',
             loggedOutColor: 'red',
@@ -98,9 +99,7 @@ export default function ComponentTests() {
         <ComponentWithConditional
           id="conditional3"
           buttonUser={{
-            firstname: 'May Not Vote',
-            lastname: 'Conditional Button',
-            age: 16,
+            id: '1',
             isLoggedIn: true,
             loggedInColor: 'blue',
             loggedOutColor: 'red',
@@ -112,6 +111,59 @@ export default function ComponentTests() {
         <ComponentWithVariant id="variant1" variant="primary" />
         <ComponentWithVariant id="variant2" variant="secondary" />
         <ComponentWithVariant id="variant3" variant="primary" size="large" />
+      </div>
+      <div id="data-binding">
+        <h2>Data Binding</h2>
+        <ComponentWithSimplePropertyBinding id="simplePropIsDisabled" isDisabled />
+        <ComponentWithSimplePropertyBinding id="simplePropIsNotDisabled" isDisabled={false} />
+        <ComponentWithDataBindingWithoutPredicate id="dataStoreBindingWithoutPredicateNoOverride" />
+        <ComponentWithDataBindingWithoutPredicate
+          id="dataStoreBindingWithoutPredicateWithOverride"
+          buttonUser={{
+            id: '1',
+            firstName: 'Override Name',
+            age: -1,
+          }}
+        />
+        <ComponentWithDataBindingWithPredicate id="dataStoreBindingWithPredicateNoOverrideNoModel" />
+        <ComponentWithDataBindingWithPredicate
+          id="dataStoreBindingWithPredicateWithOverride"
+          buttonUser={{
+            id: '1',
+            firstName: 'Override Name',
+          }}
+        />
+      </div>
+      <div id="collections">
+        <h2>Collections</h2>
+        <CollectionWithBinding
+          items={[
+            {
+              id: '1',
+              firstName: 'Yankee',
+              lastName: 'Doodle',
+            },
+            {
+              id: '2',
+              firstName: 'Feather',
+              lastName: 'Cap',
+            },
+          ]}
+        />
+        <CollectionWithSort
+          items={[
+            {
+              id: '1',
+              firstName: 'Yankee',
+              lastName: 'Doodle',
+            },
+            {
+              id: '2',
+              firstName: 'Feather',
+              lastName: 'Cap',
+            },
+          ]}
+        />
       </div>
       <div id="default-value">
         <h2>Default Value</h2>
