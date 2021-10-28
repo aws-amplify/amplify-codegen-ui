@@ -156,6 +156,7 @@ import {
   Flex,
   FlexProps,
   getOverrideProps,
+  useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
 
 export type CollectionOfCustomButtonsProps = Partial<CollectionProps<any>> & {
@@ -172,7 +173,7 @@ export default function CollectionOfCustomButtons(
   const {
     width,
     backgroundColor,
-    buttonColor,
+    buttonColor: buttonColorProp,
     items,
     overrides: overridesProp,
     ...rest
@@ -184,26 +185,24 @@ export default function CollectionOfCustomButtons(
       { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
     ],
   };
-  const buttonUserFilter = createDataStorePredicate(buttonUserFilterObj);
   const buttonUser =
     items !== undefined
       ? items
       : useDataStoreBinding({
           type: \\"collection\\",
           model: User,
-          criteria: buttonUserFilter,
         }).items;
   const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
     operator: \\"eq\\",
   };
-  const buttonColorFilter = createDataStorePredicate(buttonColorFilterObj);
-  const { item: buttonColor } = useDataStoreBinding({
-    type: \\"record\\",
+  const buttonColorDataStore = useDataStoreBinding({
+    type: \\"collection\\",
     model: UserPreferences,
-    criteria: buttonColorFilter,
-  });
+  }).items[0];
+  const buttonColor =
+    buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
   return (
     <Collection
       type=\\"list\\"
@@ -244,9 +243,10 @@ import {
   EscapeHatchProps,
   Flex,
   FlexProps,
-  SortDirection,
   getOverrideProps,
+  useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
+import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
 
 export type CollectionOfCustomButtonsProps = Partial<CollectionProps<any>> & {
   width?: Number;
@@ -262,7 +262,7 @@ export default function CollectionOfCustomButtons(
   const {
     width,
     backgroundColor,
-    buttonColor,
+    buttonColor: buttonColorProp,
     items,
     overrides: overridesProp,
     ...rest
@@ -274,9 +274,8 @@ export default function CollectionOfCustomButtons(
       { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
     ],
   };
-  const buttonUserFilter = createDataStorePredicate(buttonUserFilterObj);
   const buttonUserPagination = {
-    sort: (s) =>
+    sort: (s: SortPredicate<User>) =>
       s.firstName(SortDirection.ASCENDING).lastName(SortDirection.DESCENDING),
   };
   const buttonUser =
@@ -285,7 +284,6 @@ export default function CollectionOfCustomButtons(
       : useDataStoreBinding({
           type: \\"collection\\",
           model: User,
-          criteria: buttonUserFilter,
           pagination: buttonUserPagination,
         }).items;
   const buttonColorFilterObj = {
@@ -293,12 +291,12 @@ export default function CollectionOfCustomButtons(
     operand: \\"user@email.com\\",
     operator: \\"eq\\",
   };
-  const buttonColorFilter = createDataStorePredicate(buttonColorFilterObj);
-  const { item: buttonColor } = useDataStoreBinding({
-    type: \\"record\\",
+  const buttonColorDataStore = useDataStoreBinding({
+    type: \\"collection\\",
     model: UserPreferences,
-    criteria: buttonColorFilter,
-  });
+  }).items[0];
+  const buttonColor =
+    buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
   return (
     <Collection
       type=\\"list\\"
@@ -340,6 +338,7 @@ import {
   ListingCardProps,
   findChildOverrides,
   getOverrideProps,
+  useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
 import { UntitledModel } from \\"../models\\";
 

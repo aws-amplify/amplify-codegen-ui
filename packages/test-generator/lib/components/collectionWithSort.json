@@ -19,16 +19,13 @@
     }
   },
   "bindingProperties": {
-    "width": {
-      "type": "Number"
-    },
     "backgroundColor": {
       "type": "String"
     },
     "buttonColor": {
       "type": "Data",
       "bindingProperties": {
-        "model": "UserPreferences",
+        "model": "UserPreference",
         "predicate": {
           "field": "userID",
           "operand": "user@email.com",
@@ -74,30 +71,26 @@
         {
           "componentType": "Button",
           "properties": {
-            "label": {
-              "collectionBindingProperties": {
-                "property": "buttonUser",
-                "field": "username"
-              },
-              "defaultValue": "hspain@gmail.com"
-            },
-            "labelWidth": {
-              "bindingProperties": {
-                "property": "width"
-              }
-            },
             "backgroundColor": {
               "bindingProperties": {
                 "property": "buttonColor",
                 "field": "favoriteColor"
               }
-            },
-            "disabled": {
-              "bindingProperties": {
-                "property": "isDisabled"
+            }
+          },
+          "children": [
+            {
+              "componentType": "Text",
+              "properties": {},
+              "value": {
+                "collectionBindingProperties": {
+                  "property": "buttonUser",
+                  "field": "username"
+                },
+                "defaultValue": "hspain@gmail.com"
               }
             }
-          }
+          ]
         }
       ]
     }
