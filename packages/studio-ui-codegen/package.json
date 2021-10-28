@@ -1,6 +1,6 @@
 {
   "name": "@amzn/studio-ui-codegen",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "generic component code generation interface definitions",
   "author": "Amazon Web Services",
   "homepage": "https://docs.amplify.aws/",
@@ -21,7 +21,7 @@
     "@aws-amplify/ui-react": "^0.0.0-next-202192018414"
   },
   "dependencies": {
-    "@amzn/amplify-ui-codegen-schema": "0.2.0"
+    "@amzn/amplify-ui-codegen-schema": "0.2.1"
   },
   "jest": {
     "verbose": false,

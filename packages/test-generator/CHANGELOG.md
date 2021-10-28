@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/@amzn/test-generator@0.2.0...@amzn/test-generator@0.2.1) (2021-10-28)
+
+### Bug Fixes
+
+- simple property binding default value ([#168](https://github.com/aws-amplify/amplify-codegen-ui/issues/168)) ([de84261](https://github.com/aws-amplify/amplify-codegen-ui/commit/de84261aebab5d9b570210c19cfb7a3d0214e1fe))
+
 # 0.2.0 (2021-10-27)
 
 ### Bug Fixes
