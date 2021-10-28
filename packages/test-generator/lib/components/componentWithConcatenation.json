@@ -21,7 +21,7 @@
             {
               "bindingProperties": {
                 "property": "buttonUser",
-                "field": "firstname"
+                "field": "firstName"
               },
               "defaultValue": "Harry"
             },
@@ -31,7 +31,7 @@
             {
               "bindingProperties": {
                 "property": "buttonUser",
-                "field": "lastname"
+                "field": "lastName"
               },
               "defaultValue": "Callahan"
             }

@@ -98,7 +98,32 @@ describe('Generated Components', () => {
   });
 
   describe('Data Binding', () => {
-    // TODO: Write Data Binding Cases
+    describe('Simple Property Binding', () => {
+      it('Renders the Bound property', () => {
+        cy.visit('http://localhost:3000/component-tests');
+        cy.get('#data-binding').get('#simplePropIsDisabled').get('[disabled]');
+      });
+    });
+
+    describe('DataStore Binding Without Predicate', () => {
+      it('Renders with and without overrides', () => {
+        cy.visit('http://localhost:3000/component-tests');
+        cy.get('#data-binding').get('#dataStoreBindingWithoutPredicateNoOverride').contains('Al');
+        cy.get('#data-binding').get('#dataStoreBindingWithoutPredicateWithOverride').contains('Override Name');
+      });
+    });
+
+    describe('DataStore Binding With Predicate', () => {
+      it('Renders with and without overrides', () => {
+        cy.visit('http://localhost:3000/component-tests');
+        cy.get('#data-binding').get('#dataStoreBindingWithPredicateNoOverrideNoModel').contains('Buddy');
+        cy.get('#data-binding').get('#dataStoreBindingWithPredicateWithOverride').contains('Override Name');
+      });
+
+      it('Renders with wired data model', () => {
+        // TODO: Implement me.
+      });
+    });
   });
 
   describe('Action Binding', () => {
