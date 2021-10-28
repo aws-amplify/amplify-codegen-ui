@@ -646,7 +646,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const [propName, { model, sort, predicate }] = collectionProp;
         if (predicate) {
           statements.push(this.buildPredicateDeclaration(propName, predicate));
-          statements.push(this.buildCreateDataStorePredicateCall(propName));
+          // TODO: Re-enable data store predicates https://app.asana.com/0/1200812113384502/1201289886389275/f
+          // statements.push(this.buildCreateDataStorePredicateCall(propName));
         }
         if (sort) {
           this.importCollection.addImport('@aws-amplify/datastore', 'SortDirection');
@@ -676,6 +677,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private buildCreateDataStorePredicateCall(name: string): Statement {
+    this.importCollection.addImport('@aws-amplify/ui-react', 'createDataStorePredicate');
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -712,7 +714,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
              * }
              */
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
-            statements.push(this.buildCreateDataStorePredicateCall(propName));
+            // TODO: Re-enable data store predicates https://app.asana.com/0/1200812113384502/1201289886389275/f
+            // statements.push(this.buildCreateDataStorePredicateCall(propName));
             const { model } = bindingProperties;
             this.importCollection.addImport('../models', model);
 
@@ -932,16 +935,17 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
       factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(bindingModel)),
     ]
-      .concat(
-        criteriaName
-          ? [
-              factory.createPropertyAssignment(
-                factory.createIdentifier('criteria'),
-                factory.createIdentifier(criteriaName),
-              ),
-            ]
-          : [],
-      )
+      // TODO: Re-enable data store predicates https://app.asana.com/0/1200812113384502/1201289886389275/f
+      // .concat(
+      //   criteriaName
+      //     ? [
+      //         factory.createPropertyAssignment(
+      //           factory.createIdentifier('criteria'),
+      //           factory.createIdentifier(criteriaName),
+      //         ),
+      //       ]
+      //     : [],
+      // )
       .concat(
         paginationName
           ? [
