@@ -133,6 +133,62 @@ describe('Generated Components', () => {
   describe('Collections', () => {
     // TODO: Write Collection Cases
   });
+
+  describe('Default Value', () => {
+    it('Renders simple property binding default value', () => {
+      cy.get('#default-value')
+        .get('#bound-simple-binding-default')
+        .invoke('text')
+        .then((text) => {
+          expect(text.trim()).equal('Default Binding Property');
+        });
+    });
+
+    it('Overrides simple property binding default value', () => {
+      cy.get('#default-value')
+        .get('#bound-simple-binding-override')
+        .invoke('text')
+        .then((text) => {
+          expect(text.trim()).equal('Override Simple Binding');
+        });
+    });
+
+    it('Renders bound default value', () => {
+      cy.get('#default-value')
+        .get('#bound-default')
+        .invoke('text')
+        .then((text) => {
+          expect(text.trim()).equal('Bound Default');
+        });
+    });
+
+    it('Overrides bound default value', () => {
+      cy.get('#default-value')
+        .get('#bound-override')
+        .invoke('text')
+        .then((text) => {
+          expect(text.trim()).equal('Override Bound');
+        });
+    });
+
+    it('Renders simple default value when simple and bound', () => {
+      cy.get('#default-value')
+        .get('#simple-and-bound-default')
+        .invoke('text')
+        .then((text) => {
+          expect(text.trim()).equal('Simple Double Default');
+        });
+    });
+
+    it('Overrides simple and bound default value', () => {
+      cy.get('#default-value')
+        .get('#simple-and-bound-override')
+        .invoke('text')
+        .then((text) => {
+          expect(text.trim()).equal('Override Simple And Bound');
+        });
+    });
+  });
 });
 
 describe('Generated Themes', () => {

@@ -20,6 +20,7 @@ import {
   StudioComponentSort,
   StudioComponentVariant,
   StudioComponentAction,
+  StudioComponentSimplePropertyBinding,
 } from '@amzn/amplify-ui-codegen-schema';
 import {
   StudioTemplateRenderer,
@@ -53,6 +54,8 @@ import ts, {
   Identifier,
   ComputedPropertyName,
   ArrowFunction,
+  LiteralExpression,
+  BooleanLiteral,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
@@ -432,7 +435,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             undefined,
             usesHook ? factory.createIdentifier(propName) : undefined,
             factory.createIdentifier(usesHook ? `${propName}Prop` : propName),
-            undefined,
+            isSimplePropertyBinding(binding) ? this.getDefaultValue(binding) : undefined,
           );
           elements.push(bindingElement);
         }
@@ -643,6 +646,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const [propName, { model, sort, predicate }] = collectionProp;
         if (predicate) {
           statements.push(this.buildPredicateDeclaration(propName, predicate));
+          statements.push(this.buildCreateDataStorePredicateCall(propName));
         }
         if (sort) {
           this.importCollection.addImport('@aws-amplify/datastore', 'SortDirection');
@@ -671,6 +675,25 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return statements;
   }
 
+  private buildCreateDataStorePredicateCall(name: string): Statement {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(this.getFilterName(name)),
+            undefined,
+            undefined,
+            factory.createCallExpression(factory.createIdentifier('createDataStorePredicate'), undefined, [
+              factory.createIdentifier(this.getFilterObjName(name)),
+            ]),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
   private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
     const statements: Statement[] = [];
 
@@ -689,7 +712,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
              * }
              */
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
-
+            statements.push(this.buildCreateDataStorePredicateCall(propName));
             const { model } = bindingProperties;
             this.importCollection.addImport('../models', model);
 
@@ -964,7 +987,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       factory.createVariableDeclarationList(
         [
           factory.createVariableDeclaration(
-            factory.createIdentifier(this.getFilterName(name)),
+            factory.createIdentifier(this.getFilterObjName(name)),
             undefined,
             undefined,
             this.predicateToObjectLiteralExpression(predicate),
@@ -979,6 +1002,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return `${propName}Pagination`;
   }
 
+  private getFilterObjName(propName: string): string {
+    return `${propName}FilterObj`;
+  }
+
   private getFilterName(propName: string): string {
     return `${propName}Filter`;
   }
@@ -989,6 +1016,24 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private dropMissingListElements<T>(elements: (T | null | undefined)[]): T[] {
     return elements.filter((element) => element !== null && element !== undefined) as T[];
+  }
+
+  private getDefaultValue(
+    binding: StudioComponentSimplePropertyBinding,
+  ): LiteralExpression | BooleanLiteral | undefined {
+    if (binding.defaultValue !== undefined) {
+      switch (binding.type) {
+        case 'String':
+          return factory.createStringLiteral(binding.defaultValue);
+        case 'Number':
+          return factory.createNumericLiteral(binding.defaultValue);
+        case 'Boolean':
+          return JSON.parse(binding.defaultValue) ? factory.createTrue() : factory.createFalse();
+        default:
+          throw new Error(`Could not parse binding with type ${binding.type}`);
+      }
+    }
+    return undefined;
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment;

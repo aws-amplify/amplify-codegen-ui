@@ -22,7 +22,7 @@
     "integ": "npm run integ:setup && npm run integ:test",
     "integ:setup": "./scripts/integ-setup.sh",
     "integ:templates": "./scripts/integ-templates.sh",
-    "integ:templates:watch": "nodemon --watch packages/test-generator/lib --watch packages/test-generator/integration-test-templates -e tsx,ts,js,json --exec 'npm run integ:templates'",
+    "integ:templates:watch": "nodemon --watch packages/test-generator/integration-test-templates/ --watch packages/test-generator/lib -e tsx,ts,js,json --exec 'npm run integ:templates'",
     "integ:test": "./scripts/integ-test.sh",
     "integ:clean": "npx rimraf packages/integration-test"
   },

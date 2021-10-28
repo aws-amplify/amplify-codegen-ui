@@ -243,4 +243,20 @@ describe('amplify render tests', () => {
   it('should render navigation actions', () => {
     expect(generateWithAmplifyRenderer('componentWithActionNavigation')).toMatchSnapshot();
   });
+
+  describe('default value', () => {
+    it('should render bound default value', () => {
+      expect(generateWithAmplifyRenderer('default-value-components/boundDefaultValue')).toMatchSnapshot();
+    });
+
+    it('should render simple and bound default value', () => {
+      expect(generateWithAmplifyRenderer('default-value-components/simpleAndBoundDefaultValue')).toMatchSnapshot();
+    });
+
+    it('should render simple default value', () => {
+      expect(
+        generateWithAmplifyRenderer('default-value-components/simplePropertyBindingDefaultValue'),
+      ).toMatchSnapshot();
+    });
+  });
 });

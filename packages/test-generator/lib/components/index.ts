@@ -25,3 +25,4 @@ export { default as ComponentWithActionSignOut } from './componentWithActionSign
 export { default as ComponentWithActionNavigation } from './componentWithActionNavigation.json';
 export * from './basic-components';
 export * from './property-binding';
+export * from './default-value-components';

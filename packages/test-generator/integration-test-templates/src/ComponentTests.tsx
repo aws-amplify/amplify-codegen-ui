@@ -32,6 +32,9 @@ import BasicComponentFlex from './ui-components/BasicComponentFlex';
 import BasicComponentImage from './ui-components/BasicComponentImage';
 import BasicComponentCustomRating from './ui-components/BasicComponentCustomRating';
 import ComponentWithVariant from './ui-components/ComponentWithVariant';
+import SimplePropertyBindingDefaultValue from './ui-components/SimplePropertyBindingDefaultValue';
+import BoundDefaultValue from './ui-components/BoundDefaultValue';
+import SimpleAndBoundDefaultValue from './ui-components/SimpleAndBoundDefaultValue';
 import theme from './ui-components/MyTheme';
 import ComponentWithSimplePropertyBinding from './ui-components/ComponentWithSimplePropertyBinding';
 import ComponentWithDataBindingWithoutPredicate from './ui-components/ComponentWithDataBindingWithoutPredicate';
@@ -161,6 +164,15 @@ export default function ComponentTests() {
             },
           ]}
         />
+      </div>
+      <div id="default-value">
+        <h2>Default Value</h2>
+        <SimplePropertyBindingDefaultValue id="bound-simple-binding-default" />
+        <SimplePropertyBindingDefaultValue id="bound-simple-binding-override" label="Override Simple Binding" />
+        <BoundDefaultValue id="bound-default" />
+        <BoundDefaultValue id="bound-override" label="Override Bound" />
+        <SimpleAndBoundDefaultValue id="simple-and-bound-default" />
+        <SimpleAndBoundDefaultValue id="simple-and-bound-override" label="Override Simple And Bound" />
       </div>
     </AmplifyProvider>
   );
