@@ -342,6 +342,7 @@ import {
   ListingCardProps,
   findChildOverrides,
   getOverrideProps,
+  useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
 import { UntitledModel } from \\"../models\\";
 
