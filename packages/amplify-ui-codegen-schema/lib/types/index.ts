@@ -239,14 +239,29 @@ export type StudioComponentProperties = {
   [key: string]: StudioComponentProperty;
 };
 
-export type StudioComponentProperty =
+export type CommonPropertyValues = {
+  /**
+   * If this flag is set, then the property will be shown in Studio UI. If not, it will be hidden.
+   * All properties imported from an external provider will omit this property by default.
+   */
+  configured?: boolean;
+  /**
+   * The original imported value of the property. If the value
+   * has not been overridden from import, this field will remain undefined.
+   */
+  importedValue?: string;
+};
+
+export type StudioComponentProperty = (
   | FixedStudioComponentProperty
   | BoundStudioComponentProperty
   | CollectionStudioComponentProperty
   | ConcatenatedStudioComponentProperty
   | ConditionalStudioComponentProperty
   | WorkflowStudioComponentProperty
-  | FormStudioComponentProperty;
+  | FormStudioComponentProperty
+) &
+  CommonPropertyValues;
 
 /**
  * This represents a component property that is configured with either
@@ -258,6 +273,7 @@ export type FixedStudioComponentProperty = {
    * as a string
    */
   value: string | number | boolean | Date;
+  type?: string;
 };
 
 /**
