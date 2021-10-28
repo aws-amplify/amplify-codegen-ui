@@ -258,5 +258,9 @@ describe('amplify render tests', () => {
         generateWithAmplifyRenderer('default-value-components/simplePropertyBindingDefaultValue'),
       ).toMatchSnapshot();
     });
+
+    it('should render collection default value', () => {
+      expect(generateWithAmplifyRenderer('default-value-components/collectionDefaultValue')).toMatchSnapshot();
+    });
   });
 });

@@ -1102,6 +1102,56 @@ export default function BoundDefaultValue(
 }
 `;
 
+exports[`amplify render tests default value should render collection default value 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  Collection,
+  CollectionProps,
+  EscapeHatchProps,
+  Text,
+  TextProps,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react\\";
+import { User } from \\"../models\\";
+
+export type CollectionDefaultValueProps = Partial<CollectionProps<any>> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CollectionDefaultValue(
+  props: CollectionDefaultValueProps
+): React.ReactElement {
+  const { items, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const user =
+    items !== undefined
+      ? items
+      : useDataStoreBinding({
+          type: \\"collection\\",
+          model: User,
+        }).items;
+  return (
+    <Collection
+      items={user || []}
+      {...rest}
+      {...getOverrideProps(overrides, \\"Collection\\")}
+    >
+      {(item, index) => (
+        <Text {...getOverrideProps(overrides, \\"Collection.Text\\")}>
+          {item.username || \\"Collection Default Value\\"}
+        </Text>
+      )}
+    </Collection>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests default value should render simple and bound default value 1`] = `
 Object {
   "componentText": "/* eslint-disable */

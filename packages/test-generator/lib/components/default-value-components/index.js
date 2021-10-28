@@ -16,3 +16,4 @@
 export { default as BoundDefaultValue } from './boundDefaultValue.json';
 export { default as SimplePropertyBindingDefaultValue } from './simplePropertyBindingDefaultValue.json';
 export { default as SimpleAndBouldDefaultValue } from './simpleAndBoundDefaultValue.json';
+export { default as CollectionDefaultValue } from './collectionDefaultValue.json';

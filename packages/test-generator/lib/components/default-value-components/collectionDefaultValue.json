@@ -1,0 +1,29 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Collection",
+  "name": "CollectionDefaultValue",
+  "properties": {
+    "type": {
+      "value": "list"
+    }
+  },
+  "collectionProperties": {
+    "user": {
+      "model": "User"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Text",
+      "properties": {
+        "value": {
+          "collectionBindingProperties": {
+            "property": "user",
+            "field": "username"
+          },
+          "defaultValue": "Collection Default"
+        }
+      }
+    }
+  ]
+}
