@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/@amzn/amplify-ui-codegen-schema@0.2.0...@amzn/amplify-ui-codegen-schema@0.2.1) (2021-10-28)
+
+**Note:** Version bump only for package @amzn/amplify-ui-codegen-schema
+
+
+
+
+
 # 0.2.0 (2021-10-27)
 
 
