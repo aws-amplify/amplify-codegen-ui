@@ -245,10 +245,10 @@ import {
   EscapeHatchProps,
   Flex,
   FlexProps,
-  SortDirection,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
+import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
 
 export type CollectionOfCustomButtonsProps = Partial<CollectionProps<any>> & {
   width?: Number;
@@ -277,7 +277,7 @@ export default function CollectionOfCustomButtons(
     ],
   };
   const buttonUserPagination = {
-    sort: (s) =>
+    sort: (s: SortPredicate<User>) =>
       s.firstName(SortDirection.ASCENDING).lastName(SortDirection.DESCENDING),
   };
   const buttonUser =
