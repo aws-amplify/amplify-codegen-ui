@@ -641,6 +641,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const [propName, { model, sort, predicate }] = collectionProp;
         if (predicate) {
           statements.push(this.buildPredicateDeclaration(propName, predicate));
+          statements.push(this.buildCreateDataStorePredicateCall(propName));
         }
         if (sort) {
           this.importCollection.addImport('@aws-amplify/ui-react', 'SortDirection');
@@ -668,6 +669,25 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return statements;
   }
 
+  private buildCreateDataStorePredicateCall(name: string): Statement {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(this.getFilterName(name)),
+            undefined,
+            undefined,
+            factory.createCallExpression(factory.createIdentifier('createDataStorePredicate'), undefined, [
+              factory.createIdentifier(this.getFilterObjName(name)),
+            ]),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
   private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
     const statements: Statement[] = [];
 
@@ -679,6 +699,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           const { bindingProperties } = binding;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
+            statements.push(this.buildCreateDataStorePredicateCall(propName));
             const { model } = bindingProperties;
             this.importCollection.addImport('../models', model);
             statements.push(
@@ -912,7 +933,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       factory.createVariableDeclarationList(
         [
           factory.createVariableDeclaration(
-            factory.createIdentifier(this.getFilterName(name)),
+            factory.createIdentifier(this.getFilterObjName(name)),
             undefined,
             undefined,
             this.predicateToObjectLiteralExpression(predicate),
@@ -925,6 +946,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private getPaginationName(propName: string): string {
     return `${propName}Pagination`;
+  }
+
+  private getFilterObjName(propName: string): string {
+    return `${propName}FilterObj`;
   }
 
   private getFilterName(propName: string): string {
