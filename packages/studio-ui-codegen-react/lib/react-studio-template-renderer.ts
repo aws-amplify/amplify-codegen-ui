@@ -645,8 +645,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           statements.push(this.buildPredicateDeclaration(propName, predicate));
         }
         if (sort) {
-          this.importCollection.addImport('@aws-amplify/ui-react', 'SortDirection');
-          statements.push(this.buildPaginationStatement(propName, sort));
+          this.importCollection.addImport('@aws-amplify/datastore', 'SortDirection');
+          this.importCollection.addImport('@aws-amplify/datastore', 'SortPredicate');
+          statements.push(this.buildPaginationStatement(propName, model, sort));
         }
         this.importCollection.addImport('../models', model);
         statements.push(
@@ -786,10 +787,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   /**
    * const buttonUserSort = {
-   *   sort: s => s.firstName('DESCENDING').lastName('ASCENDING')
+   *   sort: (s: SortPredicate<User>) => s.firstName('DESCENDING').lastName('ASCENDING')
    * }
    */
-  private buildPaginationStatement(propName: string, sort?: StudioComponentSort[]): VariableStatement {
+  private buildPaginationStatement(propName: string, model: string, sort?: StudioComponentSort[]): VariableStatement {
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -801,7 +802,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createObjectLiteralExpression(
               ([] as ts.PropertyAssignment[]).concat(
                 sort
-                  ? [factory.createPropertyAssignment(factory.createIdentifier('sort'), this.buildSortFunction(sort))]
+                  ? [
+                      factory.createPropertyAssignment(
+                        factory.createIdentifier('sort'),
+                        this.buildSortFunction(model, sort),
+                      ),
+                    ]
                   : [],
               ),
             ),
@@ -813,9 +819,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   /**
-   * s => s.firstName('ASCENDING').lastName('DESCENDING')
+   * (s: SortPredicate<User>) => s.firstName('ASCENDING').lastName('DESCENDING')
    */
-  private buildSortFunction(sort: StudioComponentSort[]): ArrowFunction {
+  private buildSortFunction(model: string, sort: StudioComponentSort[]): ArrowFunction {
     const ascendingSortDirection = factory.createPropertyAccessExpression(
       factory.createIdentifier('SortDirection'),
       factory.createIdentifier('ASCENDING'),
@@ -844,7 +850,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           undefined,
           factory.createIdentifier('s'),
           undefined,
-          undefined,
+          factory.createTypeReferenceNode(factory.createIdentifier('SortPredicate'), [
+            factory.createTypeReferenceNode(factory.createIdentifier(model), undefined),
+          ]),
           undefined,
         ),
       ],

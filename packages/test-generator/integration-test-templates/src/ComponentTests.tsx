@@ -36,6 +36,8 @@ import theme from './ui-components/MyTheme';
 import ComponentWithSimplePropertyBinding from './ui-components/ComponentWithSimplePropertyBinding';
 import ComponentWithDataBindingWithoutPredicate from './ui-components/ComponentWithDataBindingWithoutPredicate';
 import ComponentWithDataBindingWithPredicate from './ui-components/ComponentWithDataBindingWithPredicate';
+import CollectionWithBinding from './ui-components/CollectionWithBinding';
+import CollectionWithSort from './ui-components/CollectionWithSort';
 /* eslint-enable import/extensions */
 
 export default function ComponentTests() {
@@ -127,6 +129,37 @@ export default function ComponentTests() {
             id: '1',
             firstName: 'Override Name',
           }}
+        />
+      </div>
+      <div id="collections">
+        <h2>Collections</h2>
+        <CollectionWithBinding
+          items={[
+            {
+              id: '1',
+              firstName: 'Yankee',
+              lastName: 'Doodle',
+            },
+            {
+              id: '2',
+              firstName: 'Feather',
+              lastName: 'Cap',
+            },
+          ]}
+        />
+        <CollectionWithSort
+          items={[
+            {
+              id: '1',
+              firstName: 'Yankee',
+              lastName: 'Doodle',
+            },
+            {
+              id: '2',
+              firstName: 'Feather',
+              lastName: 'Cap',
+            },
+          ]}
         />
       </div>
     </AmplifyProvider>
