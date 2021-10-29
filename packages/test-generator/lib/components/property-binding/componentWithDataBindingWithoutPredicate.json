@@ -10,19 +10,13 @@
       }
     }
   },
-  "properties": {},
-  "children": [
-    {
-      "componentType": "Text",
-      "properties": {
-        "value": {
-          "bindingProperties": {
-            "property": "buttonUser",
-            "field": "firstName"
-          },
-          "defaultValue": "Al"
-        }
-      }
+  "properties": {
+    "children": {
+      "bindingProperties": {
+        "property": "buttonUser",
+        "field": "firstName"
+      },
+      "defaultValue": "Al"
     }
-  ]
+  }
 }

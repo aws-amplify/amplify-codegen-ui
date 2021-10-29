@@ -10,34 +10,27 @@
       }
     }
   },
-  "properties": {},
-  "children": [
-    {
-      "componentType": "String",
-      "name": "String",
-      "properties": {
-        "value": {
-          "concat": [
-            {
-              "bindingProperties": {
-                "property": "buttonUser",
-                "field": "firstName"
-              },
-              "defaultValue": "Harry"
-            },
-            {
-              "value": " "
-            },
-            {
-              "bindingProperties": {
-                "property": "buttonUser",
-                "field": "lastName"
-              },
-              "defaultValue": "Callahan"
-            }
-          ]
+  "properties": {
+    "children": {
+      "concat": [
+        {
+          "bindingProperties": {
+            "property": "buttonUser",
+            "field": "firstName"
+          },
+          "defaultValue": "Harry"
+        },
+        {
+          "value": " "
+        },
+        {
+          "bindingProperties": {
+            "property": "buttonUser",
+            "field": "lastName"
+          },
+          "defaultValue": "Callahan"
         }
-      }
+      ]
     }
-  ]
+  }
 }
