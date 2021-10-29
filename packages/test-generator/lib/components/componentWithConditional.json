@@ -44,17 +44,9 @@
           }
         }
       }
+    },
+    "children": {
+      "value": "Conditional Text"
     }
-  },
-  "children": [
-    {
-      "componentType": "String",
-      "name": "String",
-      "properties": {
-        "value": {
-          "value": "Conditional Text"
-        }
-      }
-    }
-  ]
+  }
 }

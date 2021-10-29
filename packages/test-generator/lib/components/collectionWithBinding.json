@@ -66,21 +66,15 @@
                 "property": "buttonColor",
                 "field": "favoriteColor"
               }
+            },
+            "children": {
+              "collectionBindingProperties": {
+                "property": "buttonUser",
+                "field": "username"
+              },
+              "defaultValue": "hspain@gmail.com"
             }
-          },
-          "children": [
-            {
-              "componentType": "Text",
-              "properties": {},
-              "value": {
-                "collectionBindingProperties": {
-                  "property": "buttonUser",
-                  "field": "username"
-                },
-                "defaultValue": "hspain@gmail.com"
-              }
-            }
-          ]
+          }
         }
       ]
     }

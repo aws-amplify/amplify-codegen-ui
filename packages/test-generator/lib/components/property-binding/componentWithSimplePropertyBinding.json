@@ -12,16 +12,9 @@
       "bindingProperties": {
         "property": "isDisabled"
       }
+    },
+    "children": {
+      "value": "Simple Property Binding"
     }
-  },
-  "children": [
-    {
-      "componentType": "Text",
-      "properties": {
-        "value": {
-          "value": "Simple Property Binding"
-        }
-      }
-    }
-  ]
+  }
 }
