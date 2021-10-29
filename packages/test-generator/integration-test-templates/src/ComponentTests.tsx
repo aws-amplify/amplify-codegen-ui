@@ -35,6 +35,7 @@ import ComponentWithVariant from './ui-components/ComponentWithVariant';
 import SimplePropertyBindingDefaultValue from './ui-components/SimplePropertyBindingDefaultValue';
 import BoundDefaultValue from './ui-components/BoundDefaultValue';
 import SimpleAndBoundDefaultValue from './ui-components/SimpleAndBoundDefaultValue';
+import CollectionDefaultValue from './ui-components/CollectionDefaultValue';
 import theme from './ui-components/MyTheme';
 import ComponentWithSimplePropertyBinding from './ui-components/ComponentWithSimplePropertyBinding';
 import ComponentWithDataBindingWithoutPredicate from './ui-components/ComponentWithDataBindingWithoutPredicate';
@@ -173,6 +174,8 @@ export default function ComponentTests() {
         <BoundDefaultValue id="bound-override" label="Override Bound" />
         <SimpleAndBoundDefaultValue id="simple-and-bound-default" />
         <SimpleAndBoundDefaultValue id="simple-and-bound-override" label="Override Simple And Bound" />
+        <CollectionDefaultValue id="collection-default" items={[{}]} />
+        <CollectionDefaultValue id="collection-override" items={[{ username: 'Override Collection' }]} />
       </div>
     </AmplifyProvider>
   );

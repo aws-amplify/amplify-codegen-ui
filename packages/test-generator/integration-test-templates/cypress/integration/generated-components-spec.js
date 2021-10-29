@@ -188,6 +188,26 @@ describe('Generated Components', () => {
           expect(text.trim()).equal('Override Simple And Bound');
         });
     });
+
+    it('Renders collection default value', () => {
+      cy.get('#default-value')
+        .get('#collection-default')
+        .find('.amplify-text')
+        .invoke('text')
+        .then((text) => {
+          expect(text.trim()).equal('Collection Default');
+        });
+    });
+
+    it('Overrides collection default value', () => {
+      cy.get('#default-value')
+        .get('#collection-override')
+        .find('.amplify-text')
+        .invoke('text')
+        .then((text) => {
+          expect(text.trim()).equal('Override Collection');
+        });
+    });
   });
 });
 
