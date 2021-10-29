@@ -21,6 +21,9 @@
       "overrides": {
         "Button": {
           "fontSize": "40px"
+        },
+        "Button.Text": {
+          "fontSize": "40px"
         }
       }
     },

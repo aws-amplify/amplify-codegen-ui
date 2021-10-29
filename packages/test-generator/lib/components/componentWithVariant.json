@@ -2,7 +2,11 @@
   "id": "1234-5678-9010",
   "componentType": "Button",
   "name": "ComponentWithVariant",
-  "properties": {},
+  "properties": {
+    "children": {
+      "value": "ComponentWithVariant"
+    }
+  },
   "variants": [
     {
       "variantValues": {
@@ -10,6 +14,9 @@
       },
       "overrides": {
         "Button": {
+          "fontSize": "12px"
+        },
+        "Button.Text": {
           "fontSize": "12px"
         }
       }
@@ -32,17 +39,6 @@
       "overrides": {
         "Button": {
           "width": "500px"
-        }
-      }
-    }
-  ],
-  "children": [
-    {
-      "componentType": "String",
-      "name": "String",
-      "properties": {
-        "value": {
-          "value": "ComponentWithVariant"
         }
       }
     }

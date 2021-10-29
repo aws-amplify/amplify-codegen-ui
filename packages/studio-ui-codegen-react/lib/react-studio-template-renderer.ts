@@ -326,7 +326,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    * required and optional parameters, then building the appropriate property signature based on that.
    * e.g.
      {
-       variant: "primary" | "secondary",
+       variant?: "primary" | "secondary",
        size?: "large",
      }
    */
@@ -356,7 +356,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       return factory.createPropertySignature(
         undefined,
         factory.createIdentifier(key),
-        undefined,
+        factory.createToken(ts.SyntaxKind.QuestionToken),
         factory.createUnionTypeNode(valueTypeNodes),
       );
     });

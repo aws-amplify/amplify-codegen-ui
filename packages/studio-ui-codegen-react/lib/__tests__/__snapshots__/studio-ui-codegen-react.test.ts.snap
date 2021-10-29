@@ -714,7 +714,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = Partial<ButtonProps> & {
-  variant: \\"primary\\" | \\"secondary\\";
+  variant?: \\"primary\\" | \\"secondary\\";
   size?: \\"large\\";
 } & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -730,7 +730,10 @@ export default function CustomButton(
     },
     {
       variantValues: { variant: \\"secondary\\" },
-      overrides: { Button: { fontSize: \\"40px\\" } },
+      overrides: {
+        Button: { fontSize: \\"40px\\" },
+        \\"Button.Text\\": { fontSize: \\"40px\\" },
+      },
     },
     {
       variantValues: { variant: \\"primary\\", size: \\"large\\" },
