@@ -4,7 +4,8 @@
   "name": "BasicComponentCustomRating",
   "properties": {
     "value": {
-      "value": "3.5"
+      "value": "3.5",
+      "type": "Number"
     }
   }
 }

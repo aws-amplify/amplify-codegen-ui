@@ -39,6 +39,7 @@ import fs from 'fs';
 import path from 'path';
 import temp from 'temp';
 import { ReactRenderConfig, ScriptKind, ScriptTarget, ModuleKind } from './react-render-config';
+import Primitives from './primitives';
 
 export const defaultRenderConfig = {
   script: ScriptKind.TSX,
@@ -161,4 +162,8 @@ export function bindingPropertyUsesHook(
   binding: StudioComponentDataPropertyBinding | StudioComponentSimplePropertyBinding,
 ): boolean {
   return isDataPropertyBinding(binding) && 'predicate' in binding.bindingProperties;
+}
+
+export function isPrimitive(componentType: string): boolean {
+  return Object.values(Primitives).includes(componentType as Primitives);
 }

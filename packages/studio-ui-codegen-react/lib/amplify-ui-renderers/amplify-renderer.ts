@@ -24,6 +24,7 @@ import {
   ImageProps,
   ViewProps,
 } from '@aws-amplify/ui-react';
+import Primitives from '../primitives';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
 import TextRenderer from './text';
 import renderString from './string';
@@ -36,58 +37,377 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
   renderJsx(component: StudioComponent | StudioComponentChild, parent?: StudioNode): JsxElement | JsxFragment {
     const node = new StudioNode(component, parent);
     const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
+
+    // add primitives in alphabetical order
     switch (component.componentType) {
-      case 'Collection':
-        return new CollectionRenderer(component, this.importCollection, parent).renderElement(renderChildren);
-      case 'Badge':
-        return new ReactComponentWithChildrenRenderer<BadgeProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
-
-      case 'Button':
-        return new ReactComponentWithChildrenRenderer<ButtonProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
-
-      case 'View':
+      case Primitives.Alert:
+        // unofficial support to retain functionality
+        // TODO: add official support
         return new ReactComponentWithChildrenRenderer<ViewProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case 'Card':
+      case Primitives.Badge:
+        return new ReactComponentWithChildrenRenderer<BadgeProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Button:
+        return new ReactComponentWithChildrenRenderer<ButtonProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.ButtonGroup:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Card:
         return new ReactComponentWithChildrenRenderer<CardProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case 'Divider':
+      case Primitives.CheckboxField:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Collection:
+        return new CollectionRenderer(component, this.importCollection, parent).renderElement(renderChildren);
+
+      case Primitives.Divider:
         return new ReactComponentRenderer<DividerProps>(component, this.importCollection, parent).renderElement();
 
-      case 'Flex':
+      case Primitives.Field:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.FieldClearButton:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.FieldDescription:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.FieldErrorMessage:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.FieldGroup:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.FieldGroupIcon:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.FieldGroupIconButton:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Flex:
         return new ReactComponentWithChildrenRenderer<FlexProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case 'Image':
+      case Primitives.Grid:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Heading:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Icon:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Image:
         return new ReactComponentRenderer<ImageProps>(component, this.importCollection, parent).renderElement();
 
+      case Primitives.Input:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Label:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Link:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Loader:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Pagination:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.PasswordField:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.PhoneNumberField:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Placeholder:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Radio:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.RadioGroupField:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Rating:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.ScrollView:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.SearchField:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.SelectField:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.StepperField:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.SwitchField:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Tabs:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.Text:
+        return new TextRenderer(component, this.importCollection, parent).renderElement();
+
+      case Primitives.TextArea:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.TextField:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.ToggleButton:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.ToggleButtonGroup:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.View:
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitives.VisuallyHidden:
+        // unofficial support to retain functionality
+        // TODO: add official support
+        return new ReactComponentWithChildrenRenderer<ViewProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      // to be removed
       case 'String':
         return renderString(component as StudioComponentChild);
 
-      case 'Text':
-        return new TextRenderer(component, this.importCollection, parent).renderElement();
-
       default:
-        return new CustomComponentRenderer(component, this.importCollection).renderElement(renderChildren);
+        return new CustomComponentRenderer(component, this.importCollection, parent).renderElement(renderChildren);
     }
   }
 }

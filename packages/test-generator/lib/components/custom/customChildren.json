@@ -1,0 +1,14 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "View",
+  "name": "CustomChildren",
+  "properties": {
+    "id": {
+      "value": "custom-children"
+    }
+  },
+  "children": [{
+    "componentType": "CustomButton",
+    "properties": {}
+  }]
+}

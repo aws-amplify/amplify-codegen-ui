@@ -55,26 +55,6 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
     return element;
   }
 
-  protected renderCustomCompOpeningElement(): JsxOpeningElement {
-    const attributes = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementAttributes(value, key),
-    );
-
-    if ('events' in this.component && this.component.events !== undefined) {
-      attributes.push(
-        ...Object.entries(this.component.events).map(([key, value]) => buildOpeningElementActions(key, value)),
-      );
-    }
-
-    this.addFindChildOverrideAttribute(attributes, this.component.componentType);
-
-    return factory.createJsxOpeningElement(
-      factory.createIdentifier(this.component.componentType),
-      undefined,
-      factory.createJsxAttributes(attributes),
-    );
-  }
-
   protected renderOpeningElement(): JsxOpeningElement {
     const attributes = Object.entries(this.component.properties).map(([key, value]) =>
       buildOpeningElementAttributes(value, key),
@@ -142,20 +122,6 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
     );
     this.importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
     attributes.push(overrideAttr);
-  }
-
-  private addFindChildOverrideAttribute(attributes: JsxAttributeLike[], tagName: string) {
-    const findChildOverrideAttr = factory.createJsxSpreadAttribute(
-      factory.createCallExpression(factory.createIdentifier('findChildOverrides'), undefined, [
-        factory.createPropertyAccessExpression(
-          factory.createIdentifier('props'),
-          factory.createIdentifier('overrides'),
-        ),
-        factory.createStringLiteral(tagName),
-      ]),
-    );
-    this.importCollection.addImport('@aws-amplify/ui-react', 'findChildOverrides');
-    attributes.push(findChildOverrideAttr);
   }
 
   private addBoundExpressionAttributes(

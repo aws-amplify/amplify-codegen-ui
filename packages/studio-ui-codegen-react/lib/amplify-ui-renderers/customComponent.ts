@@ -13,23 +13,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ViewProps as CustomComponentProps } from '@aws-amplify/ui-react';
-
 import { StudioComponentChild } from '@amzn/studio-ui-codegen';
-
-import { factory, JsxChild, JsxElement } from 'typescript';
+import { JsxChild, JsxElement, factory } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 
-export default class CustomComponentRenderer extends ReactComponentWithChildrenRenderer<CustomComponentProps> {
+export default class CustomComponentRenderer<TPropIn> extends ReactComponentWithChildrenRenderer<TPropIn> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
-    const childrenJsx = this.component.children ? renderChildren(this.component.children ?? []) : [];
+    const children = this.component.children ? this.component.children : [];
     const element = factory.createJsxElement(
-      this.renderCustomCompOpeningElement(),
-      childrenJsx,
+      this.renderOpeningElement(),
+      renderChildren(children),
       factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
-    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport(`./${this.component.componentType}`, 'default');
 
     return element;
   }

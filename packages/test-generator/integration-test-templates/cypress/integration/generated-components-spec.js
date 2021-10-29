@@ -312,6 +312,29 @@ describe('Generated Components', () => {
       cy.get('#parsed-fixed-values').find('#parsed-null-value').should('have.attr', 'value').should('be.empty');
     });
   });
+
+  describe('Custom Component', () => {
+    it('Renders custom children', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#custom-component')
+        .find('#custom-children')
+        .find('button')
+        .should('have.attr', 'style', 'color: rgb(255, 0, 0);');
+    });
+    it('Renders custom parent', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#custom-component').find('#custom-parent').should('have.css', 'font-family', '"Times New Roman"');
+    });
+
+    it('Renders custom parent and children', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#custom-component')
+        .find('#custom-parent-and-children')
+        .should('have.css', 'font-family', '"Times New Roman"')
+        .find('button')
+        .should('have.attr', 'style', 'color: rgb(255, 0, 0);');
+    });
+  });
 });
 
 describe('Generated Themes', () => {

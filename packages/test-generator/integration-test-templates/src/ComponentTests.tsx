@@ -43,6 +43,9 @@ import ComponentWithDataBindingWithPredicate from './ui-components/ComponentWith
 import CollectionWithBinding from './ui-components/CollectionWithBinding';
 import CollectionWithSort from './ui-components/CollectionWithSort';
 import ParsedFixedValues from './ui-components/ParsedFixedValues';
+import CustomChildren from './ui-components/CustomChildren';
+import CustomParent from './ui-components/CustomParent';
+import CustomParentAndChildren from './ui-components/CustomParentAndChildren';
 import { DataStore } from 'aws-amplify';
 import { User } from './models';
 import CollectionWithBindingItemsName from './ui-components/CollectionWithBindingItemsName';
@@ -205,6 +208,11 @@ export default function ComponentTests() {
       </div>
       <div id="parsed-fixed-values">
         <ParsedFixedValues />
+      </div>
+      <div id="custom-component">
+        <CustomChildren />
+        <CustomParent />
+        <CustomParentAndChildren />
       </div>
     </AmplifyProvider>
   );

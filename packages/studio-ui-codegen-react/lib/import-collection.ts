@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import factory, { createImportDeclaration, ImportDeclaration } from 'typescript';
+import path from 'path';
 
 export class ImportCollection {
   #collection: Map<string, Set<string>> = new Map();
@@ -57,34 +58,32 @@ export class ImportCollection {
   }
 
   buildImportStatements(): ImportDeclaration[] {
-    const importDeclarations: ImportDeclaration[] = [];
-
-    importDeclarations.push(
+    const importDeclarations: ImportDeclaration[] = [
       factory.createImportDeclaration(
         undefined,
         undefined,
         factory.createImportClause(factory.createIdentifier('React'), undefined),
         factory.createStringLiteral('react'),
       ),
-    );
-
-    for (const [key, value] of this.#collection) {
-      importDeclarations.push(
-        createImportDeclaration(
+    ].concat(
+      Array.from(this.#collection).map(([moduleName, imports]) => {
+        const namedImports = [...imports].filter((namedImport) => namedImport !== 'default').sort();
+        return createImportDeclaration(
           undefined,
           undefined,
           factory.createImportClause(
-            undefined,
+            // use module name as defualt import name
+            [...imports].indexOf('default') >= 0 ? factory.createIdentifier(path.basename(moduleName)) : undefined,
             factory.createNamedImports(
-              [...value].sort().map((item) => {
+              namedImports.map((item) => {
                 return factory.createImportSpecifier(undefined, factory.createIdentifier(item));
               }),
             ),
           ),
-          factory.createStringLiteral(key),
-        ),
-      );
-    }
+          factory.createStringLiteral(moduleName),
+        );
+      }),
+    );
 
     return importDeclarations;
   }

@@ -68,6 +68,7 @@ import {
   json,
   jsonToLiteral,
   bindingPropertyUsesHook,
+  isPrimitive,
 } from './react-studio-template-renderer-helper';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -313,7 +314,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const propsType = `${component.componentType}Props`;
 
-    this.importCollection.addImport('@aws-amplify/ui-react', propsType);
+    if (isPrimitive(component.componentType)) {
+      this.importCollection.addImport('@aws-amplify/ui-react', propsType);
+    } else {
+      this.importCollection.addImport(`./${component.componentType}`, `${component.componentType}Props`);
+    }
 
     const parameterizedPrimitivePropType = this.getParameterizedPrimitivePropType(component);
     const primitivePropType =
