@@ -149,7 +149,7 @@ export function jsonToLiteral(
       // else object
       return factory.createObjectLiteralExpression(
         Object.entries(jsonObject).map(([key, value]) =>
-          factory.createPropertyAssignment(factory.createIdentifier(key), jsonToLiteral(value)),
+          factory.createPropertyAssignment(factory.createStringLiteral(key), jsonToLiteral(value)),
         ),
         false,
       );
