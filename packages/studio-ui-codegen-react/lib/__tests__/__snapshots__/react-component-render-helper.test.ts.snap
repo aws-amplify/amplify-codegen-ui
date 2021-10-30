@@ -12,7 +12,7 @@ exports[`react-component-render-helper buildFixedJsxExpression parsed null 1`] =
 
 exports[`react-component-render-helper buildFixedJsxExpression parsed number 1`] = `"{400}"`;
 
-exports[`react-component-render-helper buildFixedJsxExpression parsed object 1`] = `"{{ transponder: \\"rocinante\\" }}"`;
+exports[`react-component-render-helper buildFixedJsxExpression parsed object 1`] = `"{{ \\"transponder\\": \\"rocinante\\" }}"`;
 
 exports[`react-component-render-helper buildFixedJsxExpression string 1`] = `"\\"some text\\""`;
 
