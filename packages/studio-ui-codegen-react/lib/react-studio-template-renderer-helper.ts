@@ -14,10 +14,10 @@
   limitations under the License.
  */
 import {
+  isDataPropertyBinding,
   StudioComponentDataPropertyBinding,
   StudioComponentSimplePropertyBinding,
-} from '@amzn/amplify-ui-codegen-schema';
-import { isDataPropertyBinding } from '@amzn/studio-ui-codegen';
+} from '@amzn/studio-ui-codegen';
 
 import ts, {
   createPrinter,

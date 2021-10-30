@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, StudioComponentChild } from './types';
 
 export class StudioNode {
   component: StudioComponent | StudioComponentChild;

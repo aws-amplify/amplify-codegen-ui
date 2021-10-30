@@ -78,17 +78,11 @@ npm run integ
 | npm run integ:templates       | Reload integration templates from test-generator.                 |
 | npm run integ:templates:watch | Watch for changes to integration templates and reload on changes. |
 
-## Amplify Components Schema
-
-_@amzn/amplify-ui-codegen-schema_
-
-This package contains all of the Json schema definitions as Typescript types.
-
 ## CodeGen
 
 _@amzn/studio-ui-codegen_
 
-This packages contains all of the base classes for the codegen providers. This is currently geared to generating web components with JSX.
+This packages contains all of the base classes for the codegen providers, and codegen schema for studio. This is currently geared to generating web components with JSX.
 
 _@amzn/studio-ui-codegen-react_
 

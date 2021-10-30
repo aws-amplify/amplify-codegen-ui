@@ -15,7 +15,7 @@
  */
 
 /* Test Generator to be used in the browser environment */
-import { StudioComponent, StudioTheme } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, StudioTheme } from '@amzn/studio-ui-codegen';
 import { AmplifyRenderer, ReactThemeStudioTemplateRenderer } from '@amzn/studio-ui-codegen-react';
 import { TestGenerator } from './TestGenerator';
 

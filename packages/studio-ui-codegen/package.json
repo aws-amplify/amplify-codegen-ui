@@ -20,9 +20,6 @@
   "devDependencies": {
     "@aws-amplify/ui-react": "^0.0.0-next-202192018414"
   },
-  "dependencies": {
-    "@amzn/amplify-ui-codegen-schema": "0.2.1"
-  },
   "jest": {
     "verbose": false,
     "preset": "ts-jest",

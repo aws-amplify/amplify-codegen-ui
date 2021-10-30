@@ -13,8 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent, StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
-import { ComponentRendererBase, StudioNode } from '@amzn/studio-ui-codegen';
+import { ComponentRendererBase, StudioNode, StudioComponent, StudioComponentChild } from '@amzn/studio-ui-codegen';
 import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory } from 'typescript';
 
 import {

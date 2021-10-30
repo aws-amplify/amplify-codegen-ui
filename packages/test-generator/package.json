@@ -22,7 +22,6 @@
     "lib"
   ],
   "dependencies": {
-    "@amzn/amplify-ui-codegen-schema": "0.2.1",
     "@amzn/studio-ui-codegen": "0.2.1",
     "@amzn/studio-ui-codegen-react": "0.2.1",
     "@types/node": "^15.12.1",

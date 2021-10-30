@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioTheme, StudioThemeValues, StudioThemeValue } from '@amzn/amplify-ui-codegen-schema';
 import { EOL } from 'os';
 import {
   factory,
@@ -23,7 +22,7 @@ import {
   StringLiteral,
   PropertyAssignment,
 } from 'typescript';
-import { StudioTemplateRenderer } from '@amzn/studio-ui-codegen';
+import { StudioTemplateRenderer, StudioTheme, StudioThemeValues, StudioThemeValue } from '@amzn/studio-ui-codegen';
 
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import { ImportCollection } from './import-collection';

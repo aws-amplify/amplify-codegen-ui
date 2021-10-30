@@ -39,6 +39,6 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'class-methods-use-this': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-    'header/header': [2, 'licence-header.js'],
+    'header/header': [2, 'license-header.js'],
   },
 };

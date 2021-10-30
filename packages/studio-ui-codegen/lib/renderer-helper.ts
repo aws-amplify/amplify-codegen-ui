@@ -22,7 +22,7 @@ import {
   StudioComponentEventPropertyBinding,
   StudioComponentSimplePropertyBinding,
   StudioComponentPropertyType,
-} from '@amzn/amplify-ui-codegen-schema';
+} from './types';
 
 export const StudioRendererConstants = {
   unknownName: 'unknown_component_name',
