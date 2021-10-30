@@ -70,7 +70,7 @@
             "children": {
               "collectionBindingProperties": {
                 "property": "buttonUser",
-                "field": "username"
+                "field": "firstName"
               },
               "defaultValue": "hspain@gmail.com"
             }

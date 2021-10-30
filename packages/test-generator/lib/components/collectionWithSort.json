@@ -39,12 +39,8 @@
       "model": "User",
       "sort": [
         {
-          "field": "firstName",
-          "direction": "ASC"
-        },
-        {
           "field": "lastName",
-          "direction": "DESC"
+          "direction": "ASC"
         }
       ],
       "predicate": {
@@ -80,9 +76,8 @@
             "children": {
               "collectionBindingProperties": {
                 "property": "buttonUser",
-                "field": "username"
-              },
-              "defaultValue": "hspain@gmail.com"
+                "field": "lastName"
+              }
             }
           }
         }

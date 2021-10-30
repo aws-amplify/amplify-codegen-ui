@@ -131,7 +131,25 @@ describe('Generated Components', () => {
   });
 
   describe('Collections', () => {
-    // TODO: Write Collection Cases
+    it('It renders a list of override values', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#collections').get('#collectionWithBindingAndOverrides button').eq(0).contains('Yankee');
+      cy.get('#collections').get('#collectionWithBindingAndOverrides button').eq(1).contains('Feather');
+    });
+
+    it('It renders data pulled from local datastore', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#collections').get('#collectionWithBindingNoOverrides button').eq(0).contains('Real');
+      cy.get('#collections').get('#collectionWithBindingNoOverrides button').eq(1).contains('Another');
+      cy.get('#collections').get('#collectionWithBindingNoOverrides button').eq(2).contains('Last');
+    });
+
+    it('It respects sort functionality', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#collections').get('#collectionWithSort button').eq(0).contains('LUser1');
+      cy.get('#collections').get('#collectionWithSort button').eq(1).contains('LUser2');
+      cy.get('#collections').get('#collectionWithSort button').eq(2).contains('LUser3');
+    });
   });
 
   describe('Default Value', () => {

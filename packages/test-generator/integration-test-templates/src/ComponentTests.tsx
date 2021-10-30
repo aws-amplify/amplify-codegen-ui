@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import ViewTest from './ui-components/ViewTest';
@@ -43,9 +43,28 @@ import ComponentWithDataBindingWithPredicate from './ui-components/ComponentWith
 import CollectionWithBinding from './ui-components/CollectionWithBinding';
 import CollectionWithSort from './ui-components/CollectionWithSort';
 import ParsedFixedValues from './ui-components/ParsedFixedValues';
+import { DataStore } from 'aws-amplify';
+import { User } from './models';
 /* eslint-enable import/extensions */
 
 export default function ComponentTests() {
+  const [isInitialized, setInitialized] = useState(false);
+  useEffect(() => {
+    const initializeTestUserData = async () => {
+      indexedDB.deleteDatabase('amplify-datastore'); // DataStore.clear() doesn't appear to reliably work in this scenario.
+      await DataStore.save(new User({ firstName: 'Real', lastName: 'LUser3' }));
+      await DataStore.save(new User({ firstName: 'Another', lastName: 'LUser2' }));
+      await DataStore.save(new User({ firstName: 'Last', lastName: 'LUser1' }));
+      setInitialized(true);
+    };
+
+    initializeTestUserData();
+  }, []);
+
+  if (!isInitialized) {
+    return null;
+  }
+
   return (
     /* components prop is required. https://github.com/aws-amplify/amplify-ui/issues/575 */
     <AmplifyProvider theme={theme} components={{}}>
@@ -139,6 +158,7 @@ export default function ComponentTests() {
       <div id="collections">
         <h2>Collections</h2>
         <CollectionWithBinding
+          id="collectionWithBindingAndOverrides"
           items={[
             {
               id: '1',
@@ -152,20 +172,8 @@ export default function ComponentTests() {
             },
           ]}
         />
-        <CollectionWithSort
-          items={[
-            {
-              id: '1',
-              firstName: 'Yankee',
-              lastName: 'Doodle',
-            },
-            {
-              id: '2',
-              firstName: 'Feather',
-              lastName: 'Cap',
-            },
-          ]}
-        />
+        <CollectionWithBinding id="collectionWithBindingNoOverrides" />
+        <CollectionWithSort id="collectionWithSort" />
       </div>
       <div id="default-value">
         <h2>Default Value</h2>
