@@ -85,7 +85,6 @@ jobs:
           npm install
           npm install amplify-provider-awscloudformation
           npm install aws-sdk.tgz
-          npm install ../amplify-codegen-ui-staging/packages/amplify-ui-codegen-schema/amzn-amplify-ui-codegen-schema-*.tgz
           npm install ../amplify-codegen-ui-staging/packages/studio-ui-codegen/amzn-studio-ui-codegen-*.tgz
           npm install ../amplify-codegen-ui-staging/packages/studio-ui-codegen-react/amzn-studio-ui-codegen-react-*.tgz
       - name: Test amplify-category-studio
@@ -105,7 +104,7 @@ jobs:
         run: npm ci
       - name: Lerna bootstrap
         run: lerna bootstrap
-      - name: Setup Inegration Test
+      - name: Setup Integration Test
         run: npm run integ:setup
       - name: Cypress run
         uses: cypress-io/github-action@v2

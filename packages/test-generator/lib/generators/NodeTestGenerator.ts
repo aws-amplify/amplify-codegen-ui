@@ -15,8 +15,12 @@
  */
 
 /* Test Generator to be used in the Node environment */
-import { StudioComponent, StudioTheme } from '@amzn/amplify-ui-codegen-schema';
-import { StudioTemplateRendererManager, StudioTemplateRendererFactory } from '@amzn/studio-ui-codegen';
+import {
+  StudioTemplateRendererManager,
+  StudioTemplateRendererFactory,
+  StudioComponent,
+  StudioTheme,
+} from '@amzn/studio-ui-codegen';
 import { AmplifyRenderer, ReactThemeStudioTemplateRenderer } from '@amzn/studio-ui-codegen-react';
 import { TestGenerator, TestGeneratorParams } from './TestGenerator';
 

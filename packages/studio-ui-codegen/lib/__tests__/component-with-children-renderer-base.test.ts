@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { ButtonProps } from '@aws-amplify/ui-react';
-import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponentChild } from '../types';
 import { ComponentWithChildrenRendererBase } from '../component-with-children-renderer-base';
 
 class MockComponentRenderer extends ComponentWithChildrenRendererBase<ButtonProps, string, string> {

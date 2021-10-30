@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent, StudioComponentChild, WrappedComponentProperties } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent, StudioComponentChild, WrappedComponentProperties } from './types';
 
 import { StudioNode } from './studio-node';
 

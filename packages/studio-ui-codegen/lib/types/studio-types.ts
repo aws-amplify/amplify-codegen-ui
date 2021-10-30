@@ -546,10 +546,7 @@ export type AmplifyAuthSignOutAction = {
 /**
  * Navigation related action types.
  */
-export type NavigationAction =
-  | NavigationRedirectAction
-  | NavigationOpenAction
-  | NavigationRefreshAction;
+export type NavigationAction = NavigationRedirectAction | NavigationOpenAction | NavigationRefreshAction;
 
 /**
  * Redirect action type
@@ -559,17 +556,17 @@ export type NavigationRedirectAction = {
   parameters: {
     href: string;
     replaceHistory?: boolean; // Default to false
-  }
+  };
 };
 
 /**
  * Redirect action type
  */
- export type NavigationOpenAction = {
+export type NavigationOpenAction = {
   type: 'Navigation.Open';
   parameters: {
     href: string;
-  }
+  };
 };
 
 export type NavigationRefreshAction = {

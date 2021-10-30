@@ -14,8 +14,8 @@
   limitations under the License.
  */
 import { mocked } from 'ts-jest/utils'; // eslint-disable-line import/no-extraneous-dependencies
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
 import { existsSync, mkdirSync } from 'fs';
+import { StudioComponent } from '../types';
 import { StudioTemplateRendererFactory } from '../template-renderer-factory';
 import { StudioTemplateRendererManager } from '../template-renderer';
 import { MockOutputManager, MockTemplateRenderer } from './__utils__/mock-classes';

@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent } from '../types';
 import { StudioTemplateRendererFactory } from '../template-renderer-factory';
 import { MockOutputManager, MockTemplateRenderer } from './__utils__/mock-classes';
 

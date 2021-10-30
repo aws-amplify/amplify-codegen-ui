@@ -13,12 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent, FixedStudioComponentProperty, BoundStudioComponentProperty } from './index';
-
-export type FixedOrBoundProps = {
-  [propertyName: string]: FixedStudioComponentProperty | BoundStudioComponentProperty;
-};
-
-export type WrappedComponentProperties<TPropIn> = {
-  [key in keyof TPropIn]: FixedStudioComponentProperty | BoundStudioComponentProperty;
-};
+export * from './primitives';
+export * from './studio-schema';
+export * from './studio-types';

@@ -14,15 +14,6 @@
   limitations under the License.
  */
 import {
-  StudioComponent,
-  StudioComponentPredicate,
-  StudioComponentAuthPropertyBinding,
-  StudioComponentSort,
-  StudioComponentVariant,
-  StudioComponentAction,
-  StudioComponentSimplePropertyBinding,
-} from '@amzn/amplify-ui-codegen-schema';
-import {
   StudioTemplateRenderer,
   StudioRendererConstants,
   isStudioComponentWithBinding,
@@ -32,6 +23,13 @@ import {
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
   isStudioComponentWithActions,
+  StudioComponent,
+  StudioComponentPredicate,
+  StudioComponentAuthPropertyBinding,
+  StudioComponentSort,
+  StudioComponentVariant,
+  StudioComponentAction,
+  StudioComponentSimplePropertyBinding,
 } from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';

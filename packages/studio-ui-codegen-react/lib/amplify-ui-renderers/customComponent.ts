@@ -15,7 +15,7 @@
  */
 import { ViewProps as CustomComponentProps } from '@aws-amplify/ui-react';
 
-import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponentChild } from '@amzn/studio-ui-codegen';
 
 import { factory, JsxChild, JsxElement } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';

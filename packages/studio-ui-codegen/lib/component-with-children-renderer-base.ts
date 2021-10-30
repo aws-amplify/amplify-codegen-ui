@@ -15,7 +15,7 @@
  */
 import { BadgeProps, ButtonProps, FlexProps, CardProps, ViewProps as BoxProps } from '@aws-amplify/ui-react';
 
-import { StudioComponentChild } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponentChild } from './types';
 import { CommonComponentRenderer } from './common-component-renderer';
 
 type SourceProp = BoxProps | BadgeProps | ButtonProps | CardProps | FlexProps;

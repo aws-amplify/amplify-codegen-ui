@@ -23,7 +23,7 @@ import {
   FormStudioComponentProperty,
   StudioComponent,
   StudioComponentChild,
-} from '@amzn/amplify-ui-codegen-schema';
+} from '@amzn/studio-ui-codegen';
 
 import {
   Expression,
