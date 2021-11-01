@@ -1,0 +1,158 @@
+{
+    "appId": "d12i42jzsrnwt4",
+    "bindingProperties": {},
+    "children": [
+      {
+        "children": [],
+        "componentType": "Text",
+        "name": "Hello World!",
+        "properties": {
+          "padding": {
+            "value": "0px 0px 0px 0px"
+          },
+          "fontFamily": {
+            "value": "Inter"
+          },
+          "color": {
+            "value": "rgb(0,0,0)"
+          },
+          "textAlign": {
+            "value": "left"
+          },
+          "width": {
+            "value": "146px"
+          },
+          "fontSize": {
+            "value": "24px"
+          },
+          "lineHeight": {
+            "value": "28.80000114440918px"
+          },
+          "position": {
+            "value": "relative"
+          },
+          "value": {
+            "value": "Hello World!"
+          },
+          "fontWeight": {
+            "value": "400"
+          },
+          "height": {
+            "value": "29px"
+          }
+        }
+      },
+      {
+        "children": [],
+        "componentType": "Box",
+        "name": "Rectangle 58",
+        "properties": {
+          "width": {
+            "value": "390px"
+          },
+          "padding": {
+            "value": "0px 0px 0px 0px"
+          },
+          "backgroundColor": {
+            "value": "rgb(196.00000351667404,196.00000351667404,196.00000351667404)"
+          },
+          "position": {
+            "value": "relative"
+          },
+          "src": {
+            "value": "https://via.placeholder.com/430x452?text=Amplify+Studio+is+Awesome!"
+          },
+          "height": {
+            "value": "69px"
+          }
+        }
+      },
+      {
+        "children": [],
+        "componentType": "ReneButton",
+        "name": "ReneButton",
+        "properties": {
+          "width": {
+            "value": "293px"
+          },
+          "height": {
+            "value": "45px"
+          }
+        }
+      },
+      {
+        "children": [],
+        "componentType": "Text",
+        "name": "Testing 123",
+        "properties": {
+          "padding": {
+            "value": "0px 0px 0px 0px"
+          },
+          "fontFamily": {
+            "value": "Inter"
+          },
+          "color": {
+            "value": "rgb(0,0,0)"
+          },
+          "textAlign": {
+            "value": "left"
+          },
+          "width": {
+            "value": "138px"
+          },
+          "fontSize": {
+            "value": "24px"
+          },
+          "lineHeight": {
+            "value": "28.80000114440918px"
+          },
+          "position": {
+            "value": "relative"
+          },
+          "value": {
+            "value": "Testing 123"
+          },
+          "fontWeight": {
+            "value": "400"
+          },
+          "height": {
+            "value": "29px"
+          }
+        }
+      }
+    ],
+    "componentType": "Flex",
+    "createdAt": "2021-10-29T19:06:43.825Z",
+    "environmentName": "staging",
+    "id": "c-KLxpfgaCLmd1FymkDt",
+    "name": "NewComponent",
+    "overrides": {},
+    "properties": {
+      "padding": {
+        "value": "20px 20px 20px 20px"
+      },
+      "backgroundColor": {
+        "value": "rgb(255,255,255)"
+      },
+      "overflow": {
+        "value": "hidden"
+      },
+      "alignItems": {
+        "value": "center"
+      },
+      "gap": {
+        "value": "80px"
+      },
+      "position": {
+        "value": "relative"
+      },
+      "justifyContent": {
+        "value": "center"
+      },
+      "direction": {
+        "value": "column"
+      }
+    },
+    "sourceId": "201:6",
+    "variants": []
+  }

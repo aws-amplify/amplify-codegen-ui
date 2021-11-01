@@ -148,6 +148,43 @@ describe('amplify render tests', () => {
     });
   });
 
+  describe('complex examples', () => {
+    it('should render complex sample 1', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest1');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+
+    it('should render complex sample 2', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest2');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+
+    it('should render complex sample 3', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest3');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+    it('should render complex sample 4', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest4');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+    it('should render complex sample 5', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest5');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+    it('should render complex sample 6', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest6');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+    it('should render complex sample 7', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest7');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+    it('should render complex sample 8', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest8');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+  });
+
   describe('concat and conditional transform', () => {
     it('should render component with concatenation prop', () => {
       const generatedCode = generateWithAmplifyRenderer('concatTest');

@@ -1,0 +1,125 @@
+{
+    "appId": "d12i42jzsrnwt4",
+    "bindingProperties": {},
+    "children": [
+      {
+        "children": [
+          {
+            "children": [],
+            "componentType": "Box",
+            "name": "RectangleRed",
+            "properties": {
+              "width": {
+                "value": "123px"
+              },
+              "padding": {
+                "value": "0px 0px 0px 0px"
+              },
+              "backgroundColor": {
+                "value": "rgb(255,0,0)"
+              },
+              "position": {
+                "value": "relative"
+              },
+              "src": {
+                "value": "https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!"
+              },
+              "height": {
+                "value": "125px"
+              }
+            }
+          },
+          {
+            "children": [],
+            "componentType": "Box",
+            "name": "RectangleYellow",
+            "properties": {
+              "width": {
+                "value": "123px"
+              },
+              "padding": {
+                "value": "0px 0px 0px 0px"
+              },
+              "backgroundColor": {
+                "value": "rgb(219.30000364780426,255,0)"
+              },
+              "position": {
+                "value": "relative"
+              },
+              "src": {
+                "value": "https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!"
+              },
+              "height": {
+                "value": "122px"
+              }
+            }
+          }
+        ],
+        "componentType": "Flex",
+        "name": "Container",
+        "properties": {
+          "padding": {
+            "value": "10px 10px 10px 10px"
+          },
+          "alignSelf": {
+            "value": "stretch"
+          },
+          "flexGrow": {
+            "value": "1"
+          },
+          "overflow": {
+            "value": "hidden"
+          },
+          "gap": {
+            "value": "10px"
+          },
+          "width": {
+            "value": "100%"
+          },
+          "position": {
+            "value": "relative"
+          },
+          "height": {
+            "value": "100%"
+          },
+          "direction": {
+            "value": "column"
+          }
+        }
+      }
+    ],
+    "componentType": "Flex",
+    "createdAt": "2021-10-29T19:06:44.204Z",
+    "environmentName": "staging",
+    "id": "c-DlN0MMNeyYvjilfTUv",
+    "name": "VerticalFlexFixed",
+    "overrides": {},
+    "properties": {
+      "padding": {
+        "value": "0px 0px 0px 0px"
+      },
+      "backgroundColor": {
+        "value": "rgb(255,255,255)"
+      },
+      "alignItems": {
+        "value": "flex-start"
+      },
+      "gap": {
+        "value": "0"
+      },
+      "width": {
+        "value": "153px"
+      },
+      "position": {
+        "value": "relative"
+      },
+      "direction": {
+        "value": "row"
+      },
+      "height": {
+        "value": "289px"
+      }
+    },
+    "sourceId": "101:18",
+    "variants": []
+  }

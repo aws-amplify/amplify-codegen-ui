@@ -1,0 +1,77 @@
+{
+    "appId": "d12i42jzsrnwt4",
+    "bindingProperties": {},
+    "children": [
+      {
+        "children": [],
+        "componentType": "Text",
+        "name": "Hi harriso",
+        "properties": {
+          "padding": {
+            "value": "0px 0px 0px 0px"
+          },
+          "fontFamily": {
+            "value": "Roboto"
+          },
+          "color": {
+            "value": "rgb(0,0,0)"
+          },
+          "textAlign": {
+            "value": "left"
+          },
+          "width": {
+            "value": "52px"
+          },
+          "fontSize": {
+            "value": "12px"
+          },
+          "lineHeight": {
+            "value": "14.0625px"
+          },
+          "position": {
+            "value": "relative"
+          },
+          "value": {
+            "value": "Hi harriso"
+          },
+          "fontWeight": {
+            "value": "400"
+          },
+          "height": {
+            "value": "14px"
+          }
+        }
+      }
+    ],
+    "componentType": "Flex",
+    "createdAt": "2021-10-29T19:06:43.992Z",
+    "environmentName": "staging",
+    "id": "c-dtWZ1lFsFicAxSq4Om",
+    "name": "Hi",
+    "overrides": {},
+    "properties": {
+      "padding": {
+        "value": "34px 56px 34px 56px"
+      },
+      "backgroundColor": {
+        "value": "rgb(255,255,255)"
+      },
+      "overflow": {
+        "value": "hidden"
+      },
+      "alignItems": {
+        "value": "flex-start"
+      },
+      "gap": {
+        "value": "10px"
+      },
+      "position": {
+        "value": "relative"
+      },
+      "direction": {
+        "value": "row"
+      }
+    },
+    "sourceId": "203:5",
+    "variants": []
+  }

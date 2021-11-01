@@ -1,0 +1,142 @@
+{
+    "appId": "d12i42jzsrnwt4",
+    "bindingProperties": {},
+    "children": [
+      {
+        "children": [],
+        "componentType": "Image",
+        "name": "Imageexy",
+        "properties": {
+          "border": {
+            "value": "4px SOLID rgb(0,0,0)"
+          },
+          "padding": {
+            "value": "0px 0px 0px 0px"
+          },
+          "top": {
+            "value": "0px"
+          },
+          "borderRadius": {
+            "value": "45px"
+          },
+          "left": {
+            "value": "254.15074157714844px"
+          },
+          "src": {
+            "value": "https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!"
+          },
+          "width": {
+            "value": "150.84925842285156px"
+          },
+          "position": {
+            "value": "absolute"
+          },
+          "height": {
+            "value": "196px"
+          }
+        }
+      },
+      {
+        "children": [],
+        "componentType": "Text",
+        "name": "Test",
+        "properties": {
+          "padding": {
+            "value": "0px 0px 0px 0px"
+          },
+          "color": {
+            "value": "rgb(0,0,0)"
+          },
+          "textAlign": {
+            "value": "left"
+          },
+          "fontFamily": {
+            "value": "Inter"
+          },
+          "top": {
+            "value": "0px"
+          },
+          "left": {
+            "value": "187.4011993408203px"
+          },
+          "width": {
+            "value": "54.426666259765625px"
+          },
+          "fontSize": {
+            "value": "24px"
+          },
+          "lineHeight": {
+            "value": "28.80000114440918px"
+          },
+          "position": {
+            "value": "absolute"
+          },
+          "value": {
+            "value": "Test"
+          },
+          "fontWeight": {
+            "value": "400"
+          },
+          "height": {
+            "value": "27.839996337890625px"
+          }
+        }
+      },
+      {
+        "children": [],
+        "componentType": "Image",
+        "name": "Imagecgh",
+        "properties": {
+          "border": {
+            "value": "4px SOLID rgb(0,0,0)"
+          },
+          "padding": {
+            "value": "0px 0px 0px 0px"
+          },
+          "top": {
+            "value": "0px"
+          },
+          "borderRadius": {
+            "value": "27px"
+          },
+          "left": {
+            "value": "0px"
+          },
+          "src": {
+            "value": "https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!"
+          },
+          "width": {
+            "value": "169.42330932617188px"
+          },
+          "position": {
+            "value": "absolute"
+          },
+          "height": {
+            "value": "189.0880126953125px"
+          }
+        }
+      }
+    ],
+    "componentType": "Box",
+    "createdAt": "2021-10-29T19:06:43.800Z",
+    "environmentName": "staging",
+    "id": "c-VvMay8MuTP9vrUQhpL",
+    "name": "ImageFlex",
+    "overrides": {},
+    "properties": {
+      "width": {
+        "value": "401px"
+      },
+      "padding": {
+        "value": "0px 0px 0px 0px"
+      },
+      "position": {
+        "value": "relative"
+      },
+      "height": {
+        "value": "192px"
+      }
+    },
+    "sourceId": "101:34",
+    "variants": []
+  }
