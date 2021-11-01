@@ -42,6 +42,7 @@ import ComponentWithDataBindingWithoutPredicate from './ui-components/ComponentW
 import ComponentWithDataBindingWithPredicate from './ui-components/ComponentWithDataBindingWithPredicate';
 import CollectionWithBinding from './ui-components/CollectionWithBinding';
 import CollectionWithSort from './ui-components/CollectionWithSort';
+import ParsedFixedValues from './ui-components/ParsedFixedValues';
 /* eslint-enable import/extensions */
 
 export default function ComponentTests() {
@@ -176,6 +177,9 @@ export default function ComponentTests() {
         <SimpleAndBoundDefaultValue id="simple-and-bound-override" label="Override Simple And Bound" />
         <CollectionDefaultValue id="collection-default" items={[{}]} />
         <CollectionDefaultValue id="collection-override" items={[{ username: 'Override Collection' }]} />
+      </div>
+      <div id="parsed-fixed-values">
+        <ParsedFixedValues />
       </div>
     </AmplifyProvider>
   );

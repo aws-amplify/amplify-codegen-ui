@@ -38,6 +38,7 @@ import {
 } from 'typescript';
 
 import { ImportCollection } from './import-collection';
+import { jsonToLiteral } from './react-studio-template-renderer-helper';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
@@ -136,22 +137,42 @@ export function buildBindingAttrWithDefault(
 }
 
 export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
-  const currentPropValue = prop.value;
-  let propValueExpr: StringLiteral | JsxExpression = factory.createStringLiteral(currentPropValue.toString());
-  switch (typeof currentPropValue) {
+  const { value, type } = prop;
+  switch (typeof value) {
     case 'number':
-      propValueExpr = factory.createJsxExpression(undefined, factory.createNumericLiteral(currentPropValue, undefined));
-      break;
+      return factory.createJsxExpression(undefined, factory.createNumericLiteral(value, undefined));
     case 'boolean':
-      propValueExpr = factory.createJsxExpression(
-        undefined,
-        currentPropValue ? factory.createTrue() : factory.createFalse(),
-      );
-      break;
+      return factory.createJsxExpression(undefined, value ? factory.createTrue() : factory.createFalse());
+    case 'string':
+      switch (type) {
+        case undefined:
+          return factory.createStringLiteral(value as string);
+        case 'String':
+          return factory.createStringLiteral(value as string);
+        case 'Object':
+        case 'Number':
+        case 'Boolean':
+          try {
+            const parsedValue = JSON.parse(value as string);
+
+            if (typeof parsedValue === 'number') {
+              return factory.createJsxExpression(undefined, factory.createNumericLiteral(parsedValue, undefined));
+            }
+            if (typeof parsedValue === 'boolean') {
+              return factory.createJsxExpression(undefined, parsedValue ? factory.createTrue() : factory.createFalse());
+            }
+            // object, array, and null
+            if (typeof parsedValue === 'object') {
+              return factory.createJsxExpression(undefined, jsonToLiteral(parsedValue));
+            }
+          } catch {} // eslint-disable-line no-empty
+          throw new Error(`Failed to parse value "${value}" as type ${type}`);
+        default:
+          throw new Error(`Invalid type ${type} for "${value}"`);
+      }
     default:
-      break;
+      throw new Error(`Invalid type ${typeof value} for "${value}"`);
   }
-  return propValueExpr;
 }
 
 export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: string): JsxAttribute {

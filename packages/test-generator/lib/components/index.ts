@@ -23,6 +23,7 @@ export { default as CollectionWithSort } from './collectionWithSort.json';
 export { default as ComponentWithVariant } from './componentWithVariant.json';
 export { default as ComponentWithActionSignOut } from './componentWithActionSignOut.json';
 export { default as ComponentWithActionNavigation } from './componentWithActionNavigation.json';
+export { default as ParsedFixedValues } from './parsedFixedValues.json';
 export * from './basic-components';
 export * from './property-binding';
 export * from './default-value-components';

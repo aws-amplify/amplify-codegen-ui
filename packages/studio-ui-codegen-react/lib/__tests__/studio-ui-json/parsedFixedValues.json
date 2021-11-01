@@ -1,0 +1,138 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "View",
+  "name": "ParsedFixedValues",
+  "properties": {
+    "id": {
+      "value": "parsed-fixed-values"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "string-value"
+        },
+        "value": {
+          "value": "raw string value"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "number-value"
+        },
+        "value": {
+          "value": "67548"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "parsed-number-value"
+        },
+        "value": {
+          "value": "67548",
+          "type": "Number"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "boolean-value"
+        },
+        "value": {
+          "value": "true"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "parsed-boolean-value"
+        },
+        "value": {
+          "value": "true",
+          "type": "Boolean"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "json-value"
+        },
+        "value": {
+          "value": "{\"foo\": \"bar\"}"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "parsed-json-value"
+        },
+        "value": {
+          "value": "{\"foo\": \"bar\"}",
+          "type": "Object"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "array-value"
+        },
+        "value": {
+          "value": "[1,2,3]"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "parsed-array-value"
+        },
+        "value": {
+          "value": "[1,2,3]",
+          "type": "Object"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "null-value"
+        },
+        "value": {
+          "value": "null"
+        }
+      }
+    },
+    {
+      "componentType": "Input",
+      "properties": {
+        "id": {
+          "value": "parsed-null-value"
+        },
+        "value": {
+          "value": "null",
+          "type": "Object"
+        }
+      }
+    }
+  ]
+}
