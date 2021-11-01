@@ -90,7 +90,27 @@ This package contains the necessary codegen to render directly to Amplify Compon
 
 ## Versioning
 
+Until this package is public and publishes to NPM, we have a slightly complicated release process (though mostly automated).
+
+There are 3 keys steps, first you need to create a new tagged release version of the packages which will be used by our dependencies to consume the latest code. After that you'll need to update the CLI repo to point to this new version, and then execute an import script in StudioUI to pull the latest external code into their service.
+
+### Codegen Repo Packages
+
 1. Create new branch: `git checkout -b new-release`
 1. Run version command: `npm run version`
 1. Create new PR with the new branch to mainline: `gh pr create`
 1. Squash and merge PR after approval.
+
+\*\*N.B. Ensure that your release has a tag, manually creating if necessary. Only major/minor updates seem to automatically generate tags, but you can create one yourself with the [git-tag](https://git-scm.com/docs/git-tag) command.
+
+### Amplify CLI
+
+1. Navigate to the Studio Category repo's [configuration file](https://github.com/johnpc/amplify-category-studio/blob/master/.github/variables/codegenVersion.env) for the codegen version, and update this to point to the version you've just published.
+1. Create new PR for the release with `gh pr create`
+1. Ask the CLI team to merge the PR after approval.
+
+### Studio UI
+
+1. Pull down the necessary packages to integrate into studio UI.
+1. Execute the 'update-codegen.sh' script, providing the newly created tag.
+1. Ensure review and merge of the CR, after manual verification testing.
