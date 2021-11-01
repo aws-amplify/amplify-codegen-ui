@@ -527,6 +527,613 @@ export default function ViewWithButton(
 "
 `;
 
+exports[`amplify render tests complex examples should render complex sample 1 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type HiProps = Partial<FlexProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function Hi(props: HiProps): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Flex
+      padding=\\"34px 56px 34px 56px\\"
+      backgroundColor=\\"rgb(255,255,255)\\"
+      overflow=\\"hidden\\"
+      alignItems=\\"flex-start\\"
+      gap=\\"10px\\"
+      position=\\"relative\\"
+      direction=\\"row\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Text
+        padding=\\"0px 0px 0px 0px\\"
+        fontFamily=\\"Roboto\\"
+        color=\\"rgb(0,0,0)\\"
+        textAlign=\\"left\\"
+        width=\\"52px\\"
+        fontSize=\\"12px\\"
+        lineHeight=\\"14.0625px\\"
+        position=\\"relative\\"
+        fontWeight=\\"400\\"
+        height=\\"14px\\"
+        {...getOverrideProps(overrides, \\"Flex.Text\\")}
+      >
+        {\\"Hi harriso\\"}
+      </Text>
+    </Flex>
+  );
+}
+"
+`;
+
+exports[`amplify render tests complex examples should render complex sample 2 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Box,
+  BoxProps,
+  EscapeHatchProps,
+  Flex,
+  FlexProps,
+  findChildOverrides,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type VerticalFlexFixedProps = Partial<FlexProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function VerticalFlexFixed(
+  props: VerticalFlexFixedProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Flex
+      padding=\\"0px 0px 0px 0px\\"
+      backgroundColor=\\"rgb(255,255,255)\\"
+      alignItems=\\"flex-start\\"
+      gap=\\"0\\"
+      width=\\"153px\\"
+      position=\\"relative\\"
+      direction=\\"row\\"
+      height=\\"289px\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Flex
+        padding=\\"10px 10px 10px 10px\\"
+        alignSelf=\\"stretch\\"
+        flexGrow=\\"1\\"
+        overflow=\\"hidden\\"
+        gap=\\"10px\\"
+        width=\\"100%\\"
+        position=\\"relative\\"
+        height=\\"100%\\"
+        direction=\\"column\\"
+        {...getOverrideProps(overrides, \\"Flex.Flex\\")}
+      >
+        <Box
+          width=\\"123px\\"
+          padding=\\"0px 0px 0px 0px\\"
+          backgroundColor=\\"rgb(255,0,0)\\"
+          position=\\"relative\\"
+          src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
+          height=\\"125px\\"
+          {...findChildOverrides(props.overrides, \\"Box\\")}
+        ></Box>
+        <Box
+          width=\\"123px\\"
+          padding=\\"0px 0px 0px 0px\\"
+          backgroundColor=\\"rgb(219.30000364780426,255,0)\\"
+          position=\\"relative\\"
+          src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
+          height=\\"122px\\"
+          {...findChildOverrides(props.overrides, \\"Box\\")}
+        ></Box>
+      </Flex>
+    </Flex>
+  );
+}
+"
+`;
+
+exports[`amplify render tests complex examples should render complex sample 3 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Box,
+  BoxProps,
+  EscapeHatchProps,
+  Flex,
+  FlexProps,
+  ReneButton,
+  ReneButtonProps,
+  Text,
+  TextProps,
+  findChildOverrides,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type NewComponentProps = Partial<FlexProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function NewComponent(
+  props: NewComponentProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Flex
+      padding=\\"20px 20px 20px 20px\\"
+      backgroundColor=\\"rgb(255,255,255)\\"
+      overflow=\\"hidden\\"
+      alignItems=\\"center\\"
+      gap=\\"80px\\"
+      position=\\"relative\\"
+      justifyContent=\\"center\\"
+      direction=\\"column\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Text
+        padding=\\"0px 0px 0px 0px\\"
+        fontFamily=\\"Inter\\"
+        color=\\"rgb(0,0,0)\\"
+        textAlign=\\"left\\"
+        width=\\"146px\\"
+        fontSize=\\"24px\\"
+        lineHeight=\\"28.80000114440918px\\"
+        position=\\"relative\\"
+        fontWeight=\\"400\\"
+        height=\\"29px\\"
+        {...getOverrideProps(overrides, \\"Flex.Text\\")}
+      >
+        {\\"Hello World!\\"}
+      </Text>
+      <Box
+        width=\\"390px\\"
+        padding=\\"0px 0px 0px 0px\\"
+        backgroundColor=\\"rgb(196.00000351667404,196.00000351667404,196.00000351667404)\\"
+        position=\\"relative\\"
+        src=\\"https://via.placeholder.com/430x452?text=Amplify+Studio+is+Awesome!\\"
+        height=\\"69px\\"
+        {...findChildOverrides(props.overrides, \\"Box\\")}
+      ></Box>
+      <ReneButton
+        width=\\"293px\\"
+        height=\\"45px\\"
+        {...findChildOverrides(props.overrides, \\"ReneButton\\")}
+      ></ReneButton>
+      <Text
+        padding=\\"0px 0px 0px 0px\\"
+        fontFamily=\\"Inter\\"
+        color=\\"rgb(0,0,0)\\"
+        textAlign=\\"left\\"
+        width=\\"138px\\"
+        fontSize=\\"24px\\"
+        lineHeight=\\"28.80000114440918px\\"
+        position=\\"relative\\"
+        fontWeight=\\"400\\"
+        height=\\"29px\\"
+        {...getOverrideProps(overrides, \\"Flex.Text\\")}
+      >
+        {\\"Testing 123\\"}
+      </Text>
+    </Flex>
+  );
+}
+"
+`;
+
+exports[`amplify render tests complex examples should render complex sample 4 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Box,
+  BoxProps,
+  EscapeHatchProps,
+  Flex,
+  FlexProps,
+  Variant,
+  findChildOverrides,
+  getOverrideProps,
+  getOverridesFromVariants,
+} from \\"@aws-amplify/ui-react\\";
+
+export type GroupReferenceProps = Partial<FlexProps> & {
+  colors?: \\"Red/Orange\\";
+} & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function GroupReference(
+  props: GroupReferenceProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const variants: Variant[] = [
+    {
+      overrides: {
+        Flex: {
+          padding: \\"10px 10px 10px 10px\\",
+          backgroundColor: \\"rgb(255,255,255)\\",
+          overflow: \\"hidden\\",
+          alignItems: \\"flex-start\\",
+          gap: \\"10px\\",
+          position: \\"relative\\",
+          direction: \\"row\\",
+        },
+        \\"Flex.Flex.Box[1]\\": {
+          padding: \\"0px 0px 0px 0px\\",
+          backgroundColor: \\"rgb(255,153.00000607967377,0)\\",
+          top: \\"1px\\",
+          left: \\"203px\\",
+          src: \\"https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!\\",
+          width: \\"120px\\",
+          position: \\"absolute\\",
+          height: \\"122px\\",
+        },
+        \\"Flex.Flex.Box[0]\\": {
+          padding: \\"0px 0px 0px 0px\\",
+          backgroundColor: \\"rgb(255,0,0)\\",
+          top: \\"0px\\",
+          left: \\"0px\\",
+          src: \\"https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!\\",
+          width: \\"122px\\",
+          position: \\"absolute\\",
+          height: \\"123px\\",
+        },
+        \\"Flex.Flex[0]\\": {
+          width: \\"323px\\",
+          padding: \\"0px 0px 0px 0px\\",
+          position: \\"relative\\",
+          height: \\"123px\\",
+        },
+      },
+      variantValues: { colors: \\"Red/Orange\\" },
+    },
+  ];
+  const overrides = {
+    ...getOverridesFromVariants(variants, props),
+    ...overridesProp,
+  };
+  return (
+    <Flex
+      padding=\\"10px 10px 10px 10px\\"
+      backgroundColor=\\"rgb(255,255,255)\\"
+      overflow=\\"hidden\\"
+      alignItems=\\"flex-start\\"
+      gap=\\"10px\\"
+      position=\\"relative\\"
+      direction=\\"row\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Flex
+        width=\\"323px\\"
+        padding=\\"0px 0px 0px 0px\\"
+        position=\\"relative\\"
+        height=\\"123px\\"
+        {...getOverrideProps(overrides, \\"Flex.Flex\\")}
+      >
+        <Box
+          padding=\\"0px 0px 0px 0px\\"
+          backgroundColor=\\"rgb(35.699965953826904,0,255)\\"
+          top=\\"0px\\"
+          left=\\"0px\\"
+          src=\\"https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!\\"
+          width=\\"122px\\"
+          position=\\"absolute\\"
+          height=\\"123px\\"
+          {...findChildOverrides(props.overrides, \\"Box\\")}
+        ></Box>
+        <Box
+          padding=\\"0px 0px 0px 0px\\"
+          backgroundColor=\\"rgb(0,255,25.49997568130493)\\"
+          top=\\"1px\\"
+          left=\\"203px\\"
+          src=\\"https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!\\"
+          width=\\"120px\\"
+          position=\\"absolute\\"
+          height=\\"122px\\"
+          {...findChildOverrides(props.overrides, \\"Box\\")}
+        ></Box>
+      </Flex>
+    </Flex>
+  );
+}
+"
+`;
+
+exports[`amplify render tests complex examples should render complex sample 5 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Box,
+  BoxProps,
+  EscapeHatchProps,
+  Flex,
+  FlexProps,
+  findChildOverrides,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type FlexTestProps = Partial<FlexProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function FlexTest(props: FlexTestProps): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Flex
+      padding=\\"0px 0px 0px 0px\\"
+      backgroundColor=\\"rgb(255,255,255)\\"
+      position=\\"relative\\"
+      alignItems=\\"flex-start\\"
+      gap=\\"0\\"
+      direction=\\"row\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Box
+        width=\\"120px\\"
+        padding=\\"0px 0px 0px 0px\\"
+        backgroundColor=\\"rgb(35.699965953826904,0,255)\\"
+        position=\\"relative\\"
+        src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
+        height=\\"120px\\"
+        {...findChildOverrides(props.overrides, \\"Box\\")}
+      ></Box>
+      <Box
+        width=\\"120px\\"
+        padding=\\"0px 0px 0px 0px\\"
+        backgroundColor=\\"rgb(0,255,25.49997568130493)\\"
+        position=\\"relative\\"
+        src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
+        height=\\"120px\\"
+        {...findChildOverrides(props.overrides, \\"Box\\")}
+      ></Box>
+    </Flex>
+  );
+}
+"
+`;
+
+exports[`amplify render tests complex examples should render complex sample 6 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type MohitHomeProps = Partial<FlexProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function MohitHome(props: MohitHomeProps): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Flex
+      padding=\\"21px 42px 21px 42px\\"
+      backgroundColor=\\"rgb(255,255,255)\\"
+      overflow=\\"hidden\\"
+      position=\\"relative\\"
+      gap=\\"22px\\"
+      direction=\\"column\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Text
+        padding=\\"0px 0px 0px 0px\\"
+        fontFamily=\\"Inter\\"
+        color=\\"rgb(0,0,0)\\"
+        textAlign=\\"left\\"
+        width=\\"68px\\"
+        fontSize=\\"24px\\"
+        lineHeight=\\"28.125px\\"
+        position=\\"relative\\"
+        fontWeight=\\"700\\"
+        height=\\"29px\\"
+        {...getOverrideProps(overrides, \\"Flex.Text\\")}
+      >
+        {\\"Name\\"}
+      </Text>
+      <Text
+        padding=\\"0px 0px 0px 0px\\"
+        fontFamily=\\"Roboto\\"
+        color=\\"rgb(0,0,0)\\"
+        textAlign=\\"left\\"
+        width=\\"83px\\"
+        fontSize=\\"12px\\"
+        lineHeight=\\"14.0625px\\"
+        position=\\"relative\\"
+        fontWeight=\\"400\\"
+        height=\\"14px\\"
+        {...getOverrideProps(overrides, \\"Flex.Text\\")}
+      >
+        {\\"Price / Address\\"}
+      </Text>
+      <Text
+        padding=\\"0px 0px 0px 0px\\"
+        fontFamily=\\"Roboto\\"
+        color=\\"rgb(0,0,0)\\"
+        textAlign=\\"left\\"
+        width=\\"23px\\"
+        fontSize=\\"12px\\"
+        lineHeight=\\"14.0625px\\"
+        position=\\"relative\\"
+        fontWeight=\\"400\\"
+        height=\\"14px\\"
+        {...getOverrideProps(overrides, \\"Flex.Text\\")}
+      >
+        {\\"Sqft\\"}
+      </Text>
+    </Flex>
+  );
+}
+"
+`;
+
+exports[`amplify render tests complex examples should render complex sample 7 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Box,
+  BoxProps,
+  EscapeHatchProps,
+  Image,
+  ImageProps,
+  Text,
+  TextProps,
+  findChildOverrides,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type ImageFlexProps = Partial<BoxProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Box
+      width=\\"401px\\"
+      padding=\\"0px 0px 0px 0px\\"
+      position=\\"relative\\"
+      height=\\"192px\\"
+      {...findChildOverrides(props.overrides, \\"Box\\")}
+    >
+      <Image
+        border=\\"4px SOLID rgb(0,0,0)\\"
+        padding=\\"0px 0px 0px 0px\\"
+        top=\\"0px\\"
+        borderRadius=\\"45px\\"
+        left=\\"254.15074157714844px\\"
+        src=\\"https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!\\"
+        width=\\"150.84925842285156px\\"
+        position=\\"absolute\\"
+        height=\\"196px\\"
+        {...getOverrideProps(overrides, \\"Box.Image\\")}
+      ></Image>
+      <Text
+        padding=\\"0px 0px 0px 0px\\"
+        color=\\"rgb(0,0,0)\\"
+        textAlign=\\"left\\"
+        fontFamily=\\"Inter\\"
+        top=\\"0px\\"
+        left=\\"187.4011993408203px\\"
+        width=\\"54.426666259765625px\\"
+        fontSize=\\"24px\\"
+        lineHeight=\\"28.80000114440918px\\"
+        position=\\"absolute\\"
+        fontWeight=\\"400\\"
+        height=\\"27.839996337890625px\\"
+        {...getOverrideProps(overrides, \\"Box.Text\\")}
+      >
+        {\\"Test\\"}
+      </Text>
+      <Image
+        border=\\"4px SOLID rgb(0,0,0)\\"
+        padding=\\"0px 0px 0px 0px\\"
+        top=\\"0px\\"
+        borderRadius=\\"27px\\"
+        left=\\"0px\\"
+        src=\\"https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!\\"
+        width=\\"169.42330932617188px\\"
+        position=\\"absolute\\"
+        height=\\"189.0880126953125px\\"
+        {...getOverrideProps(overrides, \\"Box.Image\\")}
+      ></Image>
+    </Box>
+  );
+}
+"
+`;
+
+exports[`amplify render tests complex examples should render complex sample 8 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Box,
+  BoxProps,
+  EscapeHatchProps,
+  Flex,
+  FlexProps,
+  findChildOverrides,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type VerticalFlexFillProps = Partial<FlexProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function VerticalFlexFill(
+  props: VerticalFlexFillProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Flex
+      padding=\\"0px 0px 0px 0px\\"
+      backgroundColor=\\"rgb(255,255,255)\\"
+      alignItems=\\"flex-start\\"
+      gap=\\"0\\"
+      width=\\"145px\\"
+      position=\\"relative\\"
+      direction=\\"row\\"
+      height=\\"243px\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Flex
+        padding=\\"0px 0px 0px 0px\\"
+        flexGrow=\\"0\\"
+        gap=\\"0\\"
+        width=\\"472px\\"
+        position=\\"relative\\"
+        height=\\"723px\\"
+        direction=\\"column\\"
+        {...getOverrideProps(overrides, \\"Flex.Flex\\")}
+      >
+        <Box
+          width=\\"145px\\"
+          padding=\\"0px 0px 0px 0px\\"
+          backgroundColor=\\"rgb(219.30000364780426,255,0)\\"
+          position=\\"relative\\"
+          src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
+          height=\\"119px\\"
+          {...findChildOverrides(props.overrides, \\"Box\\")}
+        ></Box>
+        <Box
+          width=\\"145px\\"
+          padding=\\"0px 0px 0px 0px\\"
+          backgroundColor=\\"rgb(255,0,0)\\"
+          position=\\"relative\\"
+          src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
+          height=\\"124px\\"
+          {...findChildOverrides(props.overrides, \\"Box\\")}
+        ></Box>
+      </Flex>
+    </Flex>
+  );
+}
+"
+`;
+
 exports[`amplify render tests component with binding should render build property on Text 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

@@ -1,0 +1,162 @@
+{
+    "appId": "d12i42jzsrnwt4",
+    "bindingProperties": {},
+    "children": [
+      {
+        "children": [
+          {
+            "children": [],
+            "componentType": "Box",
+            "name": "RectangleGreen",
+            "properties": {
+              "padding": {
+                "value": "0px 0px 0px 0px"
+              },
+              "backgroundColor": {
+                "value": "rgb(35.699965953826904,0,255)"
+              },
+              "top": {
+                "value": "0px"
+              },
+              "left": {
+                "value": "0px"
+              },
+              "src": {
+                "value": "https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!"
+              },
+              "width": {
+                "value": "122px"
+              },
+              "position": {
+                "value": "absolute"
+              },
+              "height": {
+                "value": "123px"
+              }
+            }
+          },
+          {
+            "children": [],
+            "componentType": "Box",
+            "name": "RectangleBlue",
+            "properties": {
+              "padding": {
+                "value": "0px 0px 0px 0px"
+              },
+              "backgroundColor": {
+                "value": "rgb(0,255,25.49997568130493)"
+              },
+              "top": {
+                "value": "1px"
+              },
+              "left": {
+                "value": "203px"
+              },
+              "src": {
+                "value": "https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!"
+              },
+              "width": {
+                "value": "120px"
+              },
+              "position": {
+                "value": "absolute"
+              },
+              "height": {
+                "value": "122px"
+              }
+            }
+          }
+        ],
+        "componentType": "Flex",
+        "name": "GroupTest",
+        "properties": {
+          "width": {
+            "value": "323px"
+          },
+          "padding": {
+            "value": "0px 0px 0px 0px"
+          },
+          "position": {
+            "value": "relative"
+          },
+          "height": {
+            "value": "123px"
+          }
+        }
+      }
+    ],
+    "componentType": "Flex",
+    "createdAt": "2021-10-29T19:06:43.814Z",
+    "environmentName": "staging",
+    "id": "c-3IYERcyAEhkaBEBg1s",
+    "name": "GroupReference",
+    "overrides": {},
+    "properties": {
+      "padding": {
+        "value": "10px 10px 10px 10px"
+      },
+      "backgroundColor": {
+        "value": "rgb(255,255,255)"
+      },
+      "overflow": {
+        "value": "hidden"
+      },
+      "alignItems": {
+        "value": "flex-start"
+      },
+      "gap": {
+        "value": "10px"
+      },
+      "position": {
+        "value": "relative"
+      },
+      "direction": {
+        "value": "row"
+      }
+    },
+    "sourceId": "101:4",
+    "variants": [
+      {
+        "overrides": {
+          "Flex": {
+            "padding": "10px 10px 10px 10px",
+            "backgroundColor": "rgb(255,255,255)",
+            "overflow": "hidden",
+            "alignItems": "flex-start",
+            "gap": "10px",
+            "position": "relative",
+            "direction": "row"
+          },
+          "Flex.Flex.Box[1]": {
+            "padding": "0px 0px 0px 0px",
+            "backgroundColor": "rgb(255,153.00000607967377,0)",
+            "top": "1px",
+            "left": "203px",
+            "src": "https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!",
+            "width": "120px",
+            "position": "absolute",
+            "height": "122px"
+          },
+          "Flex.Flex.Box[0]": {
+            "padding": "0px 0px 0px 0px",
+            "backgroundColor": "rgb(255,0,0)",
+            "top": "0px",
+            "left": "0px",
+            "src": "https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!",
+            "width": "122px",
+            "position": "absolute",
+            "height": "123px"
+          },
+          "Flex.Flex[0]": {
+            "width": "323px",
+            "padding": "0px 0px 0px 0px",
+            "position": "relative",
+            "height": "123px"
+          }
+        },
+        "variantValues": {
+          "colors": "Red/Orange"
+        }
+      }
+    ]
+  }
