@@ -31,7 +31,7 @@
           "position": {
             "value": "relative"
           },
-          "value": {
+          "label": {
             "value": "Hello World!"
           },
           "fontWeight": {
@@ -109,7 +109,7 @@
           "position": {
             "value": "relative"
           },
-          "value": {
+          "label": {
             "value": "Testing 123"
           },
           "fontWeight": {

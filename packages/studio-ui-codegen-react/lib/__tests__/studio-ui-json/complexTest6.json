@@ -31,7 +31,7 @@
           "position": {
             "value": "relative"
           },
-          "value": {
+          "label": {
             "value": "Name"
           },
           "fontWeight": {
@@ -71,7 +71,7 @@
           "position": {
             "value": "relative"
           },
-          "value": {
+          "label": {
             "value": "Price / Address"
           },
           "fontWeight": {
@@ -111,7 +111,7 @@
           "position": {
             "value": "relative"
           },
-          "value": {
+          "label": {
             "value": "Sqft"
           },
           "fontWeight": {

@@ -22,3 +22,4 @@ export * from './react-output-config';
 export * from './react-render-config';
 export * from './react-output-manager';
 export * from './amplify-ui-renderers/amplify-renderer';
+export * from './primitive';

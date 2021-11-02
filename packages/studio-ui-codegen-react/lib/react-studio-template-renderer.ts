@@ -69,8 +69,8 @@ import {
   json,
   jsonToLiteral,
   bindingPropertyUsesHook,
-  isPrimitive,
 } from './react-studio-template-renderer-helper';
+import { isPrimitive } from './primitive';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,

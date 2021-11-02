@@ -13,7 +13,7 @@
       "componentType": "Text",
       "name": "TextWithConcatenation",
       "properties": {
-        "value": {
+        "label": {
           "concat": [
             {
               "bindingProperties": {

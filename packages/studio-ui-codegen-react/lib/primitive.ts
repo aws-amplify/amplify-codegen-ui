@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-enum Primitives {
+enum Primitive {
   Alert = 'Alert',
   Badge = 'Badge',
   Button = 'Button',
@@ -55,4 +55,23 @@ enum Primitives {
   VisuallyHidden = 'VisuallyHidden',
 }
 
-export default Primitives;
+export default Primitive;
+
+export function isPrimitive(componentType: string): boolean {
+  return Object.values(Primitive).includes(componentType as Primitive);
+}
+
+export const PrimitiveChildrenPropMapping: Partial<Record<Primitive, string>> = {
+  [Primitive.Alert]: 'label',
+  [Primitive.Badge]: 'label',
+  [Primitive.Button]: 'label',
+  [Primitive.Heading]: 'label',
+  [Primitive.Label]: 'label',
+  [Primitive.Link]: 'label',
+  // [Primitive.MenuButton]: 'label',
+  // [Primitive.MenuItem]: 'label',
+  [Primitive.Radio]: 'label',
+  // [Primitive.TableCell]: 'label',
+  [Primitive.Text]: 'label',
+  [Primitive.ToggleButton]: 'label',
+};

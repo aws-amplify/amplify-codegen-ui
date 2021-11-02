@@ -71,7 +71,7 @@
           "position": {
             "value": "absolute"
           },
-          "value": {
+          "label": {
             "value": "Test"
           },
           "fontWeight": {
