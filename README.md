@@ -4,7 +4,13 @@ This is a monorepo for Amplify UI Code Generation packages.
 
 # Development
 
-To build the project, run the following commands:
+## Getting Started
+
+1. Fork & Clone this repo
+1. [`nvm install`](https://github.com/nvm-sh/nvm)
+1. [`nvm use`](https://github.com/nvm-sh/nvm)
+
+## Building
 
 ```sh
 # To run a full build
@@ -14,10 +20,19 @@ npm run setup-dev
 npm install
 lerna bootstrap
 lerna run build
+```
 
+## Testing
+
+```sh
 # To run tests in all packages
 npm test
+
+# To run E2E Integration tests
+npm run integ
 ```
+
+For more information on integration testing, see [Integration Testing](#integration-testing) below.
 
 # How to use code generator
 
