@@ -15,7 +15,7 @@
  */
 /* eslint-disable max-classes-per-file */
 
-import { StudioComponent } from '@amzn/amplify-ui-codegen-schema';
+import { StudioComponent } from '../../types';
 import { StudioTemplateRenderer } from '../../studio-template-renderer';
 import { FrameworkOutputManager } from '../../framework-output-manager';
 
