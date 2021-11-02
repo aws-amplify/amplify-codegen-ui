@@ -54,6 +54,7 @@ import ts, {
   ArrowFunction,
   LiteralExpression,
   BooleanLiteral,
+  addSyntheticLeadingComment,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
@@ -201,7 +202,18 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   ): FunctionDeclaration {
     const componentPropType = getComponentPropName(componentName);
     const codeBlockContent = this.buildVariableStatements(this.component);
-    codeBlockContent.push(factory.createReturnStatement(factory.createParenthesizedExpression(jsx)));
+    const jsxStatement = factory.createParenthesizedExpression(
+      this.renderConfig.script !== ScriptKind.TSX
+        ? jsx
+        : /* add ts-ignore comment above jsx statement. Generated props are incompatible with amplify-ui props */
+          addSyntheticLeadingComment(
+            factory.createParenthesizedExpression(jsx),
+            SyntaxKind.MultiLineCommentTrivia,
+            ' @ts-ignore: TS2322 ',
+            true,
+          ),
+    );
+    codeBlockContent.push(factory.createReturnStatement(jsxStatement));
     const modifiers: Modifier[] = renderExport
       ? [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DefaultKeyword)]
       : [];
@@ -314,7 +326,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       return undefined;
     }
 
-    const propsType = `${component.componentType}Props`;
+    const propsType = this.getPropsTypeName(component);
 
     if (isPrimitive(component.componentType)) {
       this.importCollection.addImport('@aws-amplify/ui-react', propsType);
@@ -1033,6 +1045,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private getDataStoreName(propName: string): string {
     return `${propName}DataStore`;
+  }
+
+  private getPropsTypeName(component: StudioComponent): string {
+    // special case for FieldGroup. All other primitives follow same pattern
+    if (component.componentType === 'FieldGroup') {
+      return 'FieldGroupOptions';
+    }
+
+    return `${component.componentType}Props`;
   }
 
   private dropMissingListElements<T>(elements: (T | null | undefined)[]): T[] {

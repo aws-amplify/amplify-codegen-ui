@@ -28,3 +28,4 @@ export * from './collections';
 export * from './custom';
 export * from './operators';
 export * from './overrides';
+export * from './primitives';
