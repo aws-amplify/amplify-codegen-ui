@@ -1517,7 +1517,7 @@ export default function CustomButton(
 "
 `;
 
-exports[`amplify render tests concat and conditional transform should render component with conditional prop 1`] = `
+exports[`amplify render tests concat and conditional transform should render component with conditional data binding prop 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
 import { User } from \\"../models\\";
@@ -1565,6 +1565,37 @@ export default function CustomButton(
           ? buttonUser?.loggedInColor
           : buttonUser?.loggedOutColor
       }
+      {...rest}
+      {...getOverrideProps(overrides, \\"Button\\")}
+    ></Button>
+  );
+}
+"
+`;
+
+exports[`amplify render tests concat and conditional transform should render component with conditional simple binding prop 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  ButtonProps,
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CustomButtonProps = Partial<ButtonProps> & {
+  buttonColor?: String;
+} & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CustomButton(
+  props: CustomButtonProps
+): React.ReactElement {
+  const { buttonColor, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <Button
+      disabled={buttonColor && buttonColor === \\"red\\" ? true : false}
       {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>

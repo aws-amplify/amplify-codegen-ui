@@ -49,6 +49,7 @@ import CustomParentAndChildren from './ui-components/CustomParentAndChildren';
 import { DataStore } from 'aws-amplify';
 import { User } from './models';
 import CollectionWithBindingItemsName from './ui-components/CollectionWithBindingItemsName';
+import ComponentWithBoundPropertyConditional from './ui-components/ComponentWithBoundPropertyConditional';
 /* eslint-enable import/extensions */
 
 export default function ComponentTests() {
@@ -129,6 +130,12 @@ export default function ComponentTests() {
             loggedInColor: 'blue',
             loggedOutColor: 'red',
           }}
+        />
+        <ComponentWithBoundPropertyConditional id="ComponentWithBoundPropertyConditional-no-prop" />
+        <ComponentWithBoundPropertyConditional id="ComponentWithBoundPropertyConditional-true-prop" buttonColor="red" />
+        <ComponentWithBoundPropertyConditional
+          id="ComponentWithBoundPropertyConditional-false-prop"
+          buttonColor="green"
         />
       </div>
       <div id="variants">

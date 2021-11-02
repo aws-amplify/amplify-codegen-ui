@@ -85,6 +85,13 @@ describe('Generated Components', () => {
         cy.visit('http://localhost:3000/component-tests');
         cy.get('#concat-and-conditional').get('#conditional2').get('[disabled]');
       });
+
+      it('Renders conditional props for simple property binding', () => {
+        cy.visit('http://localhost:3000/component-tests');
+        cy.get('#ComponentWithBoundPropertyConditional-no-prop [disabled]').should('not.exist');
+        cy.get('#ComponentWithBoundPropertyConditional-true-prop').get('[disabled]');
+        cy.get('#ComponentWithBoundPropertyConditional-false-prop [disabled]').should('not.exist');
+      });
     });
   });
 

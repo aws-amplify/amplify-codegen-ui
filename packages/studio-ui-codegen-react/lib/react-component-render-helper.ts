@@ -335,11 +335,14 @@ export function buildConditionalExpression(prop: ConditionalStudioComponentPrope
     return factory.createJsxExpression(undefined, undefined);
   }
 
-  const propertyAccess = factory.createPropertyAccessChain(
-    factory.createIdentifier(property),
-    factory.createToken(SyntaxKind.QuestionDotToken),
-    factory.createIdentifier(field),
-  );
+  const propertyAccess =
+    field !== undefined
+      ? factory.createPropertyAccessChain(
+          factory.createIdentifier(property),
+          factory.createToken(SyntaxKind.QuestionDotToken),
+          factory.createIdentifier(field),
+        )
+      : factory.createIdentifier(property);
 
   return factory.createJsxExpression(
     undefined,

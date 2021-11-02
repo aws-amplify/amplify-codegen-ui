@@ -1,0 +1,25 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "CustomButton",
+  "bindingProperties": {
+    "buttonColor": {
+      "type": "String"
+    }
+  },
+  "properties": {
+    "disabled": {
+      "condition": {
+        "property": "buttonColor",
+        "operator": "eq",
+        "operand": "red",
+        "then": {
+          "value": true
+        },
+        "else": {
+          "value": false
+        }
+      }
+    }
+  }
+}

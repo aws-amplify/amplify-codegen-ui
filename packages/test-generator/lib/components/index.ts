@@ -16,8 +16,6 @@
 export { default as ViewWithButton } from './viewWithButton.json';
 export { default as ViewTest } from './viewTest.json';
 export { default as CustomButton } from './customButton.json';
-export { default as ComponentWithConcatenation } from './componentWithConcatenation.json';
-export { default as ComponentWithConditional } from './componentWithConditional.json';
 export { default as ComponentWithVariant } from './componentWithVariant.json';
 export { default as ComponentWithActionSignOut } from './componentWithActionSignOut.json';
 export { default as ComponentWithActionNavigation } from './componentWithActionNavigation.json';
@@ -28,3 +26,4 @@ export * from './default-value-components';
 export * from './complex-tests';
 export * from './collections';
 export * from './custom';
+export * from './operators';
