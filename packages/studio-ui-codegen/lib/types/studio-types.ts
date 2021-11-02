@@ -326,7 +326,7 @@ export type ConcatenatedStudioComponentProperty = {
 export type ConditionalStudioComponentProperty = {
   condition: {
     property: string;
-    field: string;
+    field?: string;
     operator: string;
     operand: string | number | boolean;
     then: StudioComponentProperty;
