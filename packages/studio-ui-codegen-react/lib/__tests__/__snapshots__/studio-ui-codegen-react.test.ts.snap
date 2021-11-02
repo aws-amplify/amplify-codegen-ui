@@ -327,12 +327,10 @@ import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
-  ButtonProps,
   Collection,
   CollectionProps,
   EscapeHatchProps,
   Flex,
-  FlexProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
