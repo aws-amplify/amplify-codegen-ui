@@ -311,10 +311,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       return undefined;
     }
 
+    const propsType = `${component.componentType}Props`;
+
+    this.importCollection.addImport('@aws-amplify/ui-react', propsType);
+
     const parameterizedPrimitivePropType = this.getParameterizedPrimitivePropType(component);
     const primitivePropType =
-      parameterizedPrimitivePropType ||
-      factory.createTypeReferenceNode(factory.createIdentifier(`${component.componentType}Props`), undefined);
+      parameterizedPrimitivePropType || factory.createTypeReferenceNode(factory.createIdentifier(propsType), undefined);
 
     return factory.createTypeReferenceNode(factory.createIdentifier('Partial'), [primitivePropType]);
   }

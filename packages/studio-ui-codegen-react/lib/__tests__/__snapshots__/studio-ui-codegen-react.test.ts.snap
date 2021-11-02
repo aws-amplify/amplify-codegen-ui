@@ -6,12 +6,10 @@ Object {
 import React from \\"react\\";
 import {
   Button,
-  ButtonProps,
   EscapeHatchProps,
   Flex,
   FlexProps,
   Heading,
-  HeadingProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
@@ -149,12 +147,10 @@ import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
-  ButtonProps,
   Collection,
   CollectionProps,
   EscapeHatchProps,
   Flex,
-  FlexProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
@@ -237,12 +233,10 @@ import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
-  ButtonProps,
   Collection,
   CollectionProps,
   EscapeHatchProps,
   Flex,
-  FlexProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
@@ -422,7 +416,6 @@ import {
   CollectionProps,
   EscapeHatchProps,
   ListingCard,
-  ListingCardProps,
   findChildOverrides,
   getOverrideProps,
   useDataStoreBinding,
@@ -480,7 +473,6 @@ import {
   CollectionProps,
   EscapeHatchProps,
   ListingCard,
-  ListingCardProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
@@ -519,7 +511,6 @@ exports[`amplify render tests complex component tests should generate a button w
 import React from \\"react\\";
 import {
   Button,
-  ButtonProps,
   EscapeHatchProps,
   View,
   ViewProps,
@@ -552,7 +543,6 @@ exports[`amplify render tests complex component tests should generate a componen
 import React from \\"react\\";
 import {
   CustomButton,
-  CustomButtonProps,
   EscapeHatchProps,
   View,
   ViewProps,
@@ -586,7 +576,6 @@ exports[`amplify render tests complex component tests should generate a componen
 import React from \\"react\\";
 import {
   Button,
-  ButtonProps,
   EscapeHatchProps,
   View,
   ViewProps,
@@ -622,7 +611,6 @@ import {
   Flex,
   FlexProps,
   Text,
-  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -670,7 +658,6 @@ exports[`amplify render tests complex examples should render complex sample 2 1`
 import React from \\"react\\";
 import {
   Box,
-  BoxProps,
   EscapeHatchProps,
   Flex,
   FlexProps,
@@ -741,14 +728,11 @@ exports[`amplify render tests complex examples should render complex sample 3 1`
 import React from \\"react\\";
 import {
   Box,
-  BoxProps,
   EscapeHatchProps,
   Flex,
   FlexProps,
   ReneButton,
-  ReneButtonProps,
   Text,
-  TextProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
@@ -829,7 +813,6 @@ exports[`amplify render tests complex examples should render complex sample 4 1`
 import React from \\"react\\";
 import {
   Box,
-  BoxProps,
   EscapeHatchProps,
   Flex,
   FlexProps,
@@ -947,7 +930,6 @@ exports[`amplify render tests complex examples should render complex sample 5 1`
 import React from \\"react\\";
 import {
   Box,
-  BoxProps,
   EscapeHatchProps,
   Flex,
   FlexProps,
@@ -1004,7 +986,6 @@ import {
   Flex,
   FlexProps,
   Text,
-  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -1084,9 +1065,7 @@ import {
   BoxProps,
   EscapeHatchProps,
   Image,
-  ImageProps,
   Text,
-  TextProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
@@ -1157,7 +1136,6 @@ exports[`amplify render tests complex examples should render complex sample 8 1`
 import React from \\"react\\";
 import {
   Box,
-  BoxProps,
   EscapeHatchProps,
   Flex,
   FlexProps,
@@ -1308,7 +1286,6 @@ import {
   Flex,
   FlexProps,
   Text,
-  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -1371,7 +1348,6 @@ import {
   ButtonProps,
   EscapeHatchProps,
   Text,
-  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -1454,7 +1430,6 @@ import {
   ButtonProps,
   EscapeHatchProps,
   Text,
-  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -1488,7 +1463,6 @@ import {
   ButtonProps,
   EscapeHatchProps,
   Text,
-  TextProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -1808,7 +1782,6 @@ import {
   CollectionProps,
   EscapeHatchProps,
   Text,
-  TextProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
@@ -1928,7 +1901,6 @@ exports[`amplify render tests sample code snippet tests should generate a sample
 import React from \\"react\\";
 import {
   CustomButton,
-  CustomButtonProps,
   EscapeHatchProps,
   View,
   ViewProps,
@@ -1964,12 +1936,10 @@ Object {
 import React from \\"react\\";
 import {
   Button,
-  ButtonProps,
   EscapeHatchProps,
   Flex,
   FlexProps,
   Heading,
-  HeadingProps,
   findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
@@ -2047,7 +2017,6 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   Input,
-  InputProps,
   View,
   ViewProps,
   findChildOverrides,
@@ -2225,12 +2194,10 @@ exports[`amplify render tests user specific attributes should render user specif
 import React from \\"react\\";
 import {
   Button,
-  ButtonProps,
   EscapeHatchProps,
   Flex,
   FlexProps,
   Image,
-  ImageProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
