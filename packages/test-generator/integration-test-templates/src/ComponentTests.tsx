@@ -45,6 +45,7 @@ import CollectionWithSort from './ui-components/CollectionWithSort';
 import ParsedFixedValues from './ui-components/ParsedFixedValues';
 import { DataStore } from 'aws-amplify';
 import { User } from './models';
+import CollectionWithBindingItemsName from './ui-components/CollectionWithBindingItemsName';
 /* eslint-enable import/extensions */
 
 export default function ComponentTests() {
@@ -174,6 +175,22 @@ export default function ComponentTests() {
         />
         <CollectionWithBinding id="collectionWithBindingNoOverrides" />
         <CollectionWithSort id="collectionWithSort" />
+        <CollectionWithBindingItemsName id="collectionWithBindingItemsNameNoOverrides" />
+        <CollectionWithBindingItemsName
+          id="collectionWithBindingItemsNameWithOverrides"
+          items={[
+            {
+              id: '1',
+              firstName: 'Yankee',
+              lastName: 'Doodle',
+            },
+            {
+              id: '2',
+              firstName: 'Feather',
+              lastName: 'Cap',
+            },
+          ]}
+        />
       </div>
       <div id="default-value">
         <h2>Default Value</h2>

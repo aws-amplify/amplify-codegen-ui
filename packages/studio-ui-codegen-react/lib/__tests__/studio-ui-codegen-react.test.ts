@@ -146,6 +146,11 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('collectionWithBindingAndSort');
       expect(generatedCode).toMatchSnapshot();
     });
+
+    it('should render collection with data binding if binding name is items', () => {
+      const generatedCode = generateWithAmplifyRenderer('collectionWithBindingItemsName');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
   });
 
   describe('complex examples', () => {

@@ -441,12 +441,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     if (component.componentType === 'Collection') {
-      const bindingElement = factory.createBindingElement(
-        undefined,
-        undefined,
-        factory.createIdentifier('items'),
-        undefined,
-      );
+      const bindingElement = this.hasCollectionPropertyNamedItems(component)
+        ? factory.createBindingElement(
+            undefined,
+            factory.createIdentifier('items'),
+            factory.createIdentifier('itemsProp'),
+            undefined,
+          )
+        : factory.createBindingElement(undefined, undefined, factory.createIdentifier('items'), undefined);
       elements.push(bindingElement);
     }
 
@@ -656,7 +658,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         statements.push(
           this.buildPropPrecedentStatement(
             propName,
-            'items',
+            this.hasCollectionPropertyNamedItems(component) ? 'itemsProp' : 'items',
             factory.createPropertyAccessExpression(
               this.buildUseDataStoreBindingCall(
                 'collection',
@@ -998,6 +1000,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         ts.NodeFlags.Const,
       ),
     );
+  }
+
+  private hasCollectionPropertyNamedItems(component: StudioComponent): boolean {
+    if (component.collectionProperties === undefined) {
+      return false;
+    }
+    return Object.keys(component.collectionProperties).some((propName) => propName === 'items');
   }
 
   private getPaginationName(propName: string): string {

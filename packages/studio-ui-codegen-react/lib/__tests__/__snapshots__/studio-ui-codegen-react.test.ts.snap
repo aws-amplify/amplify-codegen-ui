@@ -327,6 +327,93 @@ export default function CollectionOfCustomButtons(
 }
 `;
 
+exports[`amplify render tests collection should render collection with data binding if binding name is items 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { User, UserPreferences } from \\"../models\\";
+import {
+  Button,
+  ButtonProps,
+  Collection,
+  CollectionProps,
+  EscapeHatchProps,
+  Flex,
+  FlexProps,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CollectionOfCustomButtonsProps = Partial<CollectionProps<any>> & {
+  width?: Number;
+  backgroundColor?: String;
+  buttonColor?: UserPreferences;
+  items?: any[];
+} & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CollectionOfCustomButtons(
+  props: CollectionOfCustomButtonsProps
+): React.ReactElement {
+  const {
+    width,
+    backgroundColor,
+    buttonColor: buttonColorProp,
+    items: itemsProp,
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
+  const itemsFilterObj = {
+    and: [
+      { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
+      { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
+    ],
+  };
+  const items =
+    itemsProp !== undefined
+      ? itemsProp
+      : useDataStoreBinding({
+          type: \\"collection\\",
+          model: User,
+        }).items;
+  const buttonColorFilterObj = {
+    field: \\"userID\\",
+    operand: \\"user@email.com\\",
+    operator: \\"eq\\",
+  };
+  const buttonColorDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: UserPreferences,
+  }).items[0];
+  const buttonColor =
+    buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
+  return (
+    <Collection
+      type=\\"list\\"
+      isPaginated={true}
+      gap=\\"1.5rem\\"
+      backgroundColor={backgroundColor}
+      items={items || []}
+      {...rest}
+      {...getOverrideProps(overrides, \\"Collection\\")}
+    >
+      {(item, index) => (
+        <Flex {...getOverrideProps(overrides, \\"Collection.Flex\\")}>
+          <Button
+            label={item.username || \\"hspain@gmail.com\\"}
+            labelWidth={width}
+            backgroundColor={buttonColor?.favoriteColor}
+            disabled={isDisabled}
+            {...getOverrideProps(overrides, \\"Collection.Flex.Button\\")}
+          ></Button>
+        </Flex>
+      )}
+    </Collection>
+  );
+}
+"
+`;
+
 exports[`amplify render tests collection should render collection with data binding with no predicate 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
