@@ -150,6 +150,19 @@ describe('Generated Components', () => {
       cy.get('#collections').get('#collectionWithSort button').eq(1).contains('LUser2');
       cy.get('#collections').get('#collectionWithSort button').eq(2).contains('LUser3');
     });
+
+    it('It renders a list of override values with collectionProperty named items', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#collections').get('#collectionWithBindingItemsNameWithOverrides button').eq(0).contains('Yankee');
+      cy.get('#collections').get('#collectionWithBindingItemsNameWithOverrides button').eq(1).contains('Feather');
+    });
+
+    it('It renders data pulled from local datastore with collectionProperty named items', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#collections').get('#collectionWithBindingItemsNameNoOverrides button').eq(0).contains('Real');
+      cy.get('#collections').get('#collectionWithBindingItemsNameNoOverrides button').eq(1).contains('Another');
+      cy.get('#collections').get('#collectionWithBindingItemsNameNoOverrides button').eq(2).contains('Last');
+    });
   });
 
   describe('Default Value', () => {

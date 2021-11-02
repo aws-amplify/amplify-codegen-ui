@@ -1,0 +1,95 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Collection",
+  "name": "CollectionOfCustomButtons",
+  "properties": {
+    "type": {
+      "value": "list"
+    },
+    "isPaginated": {
+      "value": true
+    },
+    "gap": {
+      "value": "1.5rem"
+    },
+    "backgroundColor": {
+      "bindingProperties": {
+        "property": "backgroundColor"
+      }
+    }
+  },
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
+    },
+    "backgroundColor": {
+      "type": "String"
+    },
+    "buttonColor": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "UserPreferences",
+        "predicate": {
+          "field": "userID",
+          "operand": "user@email.com",
+          "operator": "eq"
+        }
+      }
+    }
+  },
+  "collectionProperties": {
+    "items": {
+      "model": "User",
+      "predicate": {
+        "and": [
+          {
+            "field": "age",
+            "operand": "10",
+            "operator": "gt"
+          },
+          {
+            "field": "lastName",
+            "operand": "L",
+            "operator": "beginsWith"
+          }
+        ]
+      }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Flex",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "Button",
+          "properties": {
+            "label": {
+              "collectionBindingProperties": {
+                "property": "items",
+                "field": "username"
+              },
+              "defaultValue": "hspain@gmail.com"
+            },
+            "labelWidth": {
+              "bindingProperties": {
+                "property": "width"
+              }
+            },
+            "backgroundColor": {
+              "bindingProperties": {
+                "property": "buttonColor",
+                "field": "favoriteColor"
+              }
+            },
+            "disabled": {
+              "bindingProperties": {
+                "property": "isDisabled"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
