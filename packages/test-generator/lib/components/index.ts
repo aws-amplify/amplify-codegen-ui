@@ -27,3 +27,4 @@ export * from './property-binding';
 export * from './default-value-components';
 export * from './complex-tests';
 export * from './collections';
+export * from './custom';

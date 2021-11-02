@@ -1,0 +1,14 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "ViewTest",
+  "name": "CustomParent",
+  "properties": {
+    "id": {
+      "value": "custom-parent"
+    }
+  },
+  "children": [{
+    "componentType": "Button",
+    "properties": {}
+  }]
+}

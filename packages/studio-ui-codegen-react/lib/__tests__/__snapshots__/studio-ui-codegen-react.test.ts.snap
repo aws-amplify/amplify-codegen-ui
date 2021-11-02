@@ -10,7 +10,6 @@ import {
   Flex,
   FlexProps,
   Heading,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -36,7 +35,7 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
       <Heading
         level={1}
         children=\\"Title\\"
-        {...findChildOverrides(props.overrides, \\"Heading\\")}
+        {...getOverrideProps(overrides, \\"Flex.Heading\\")}
       ></Heading>
       <Button
         variation=\\"primary\\"
@@ -413,11 +412,10 @@ import {
   Collection,
   CollectionProps,
   EscapeHatchProps,
-  ListingCard,
-  findChildOverrides,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react\\";
+import ListingCard from \\"./ListingCard\\";
 import { UntitledModel } from \\"../models\\";
 
 export type ListingCardCollectionProps = Partial<CollectionProps<any>> & {
@@ -454,7 +452,7 @@ export default function ListingCardCollection(
           marginBottom=\\"0\\"
           marginTop=\\"0\\"
           marginLeft=\\"0\\"
-          {...findChildOverrides(props.overrides, \\"ListingCard\\")}
+          {...getOverrideProps(overrides, \\"Collection.ListingCard\\")}
         ></ListingCard>
       )}
     </Collection>
@@ -470,10 +468,9 @@ import {
   Collection,
   CollectionProps,
   EscapeHatchProps,
-  ListingCard,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
+import ListingCard from \\"./ListingCard\\";
 
 export type ListingCardCollectionProps = Partial<CollectionProps<any>> & {
   items?: any[];
@@ -495,7 +492,7 @@ export default function ListingCardCollection(
     >
       {(item, index) => (
         <ListingCard
-          {...findChildOverrides(props.overrides, \\"ListingCard\\")}
+          {...getOverrideProps(overrides, \\"Collection.ListingCard\\")}
         ></ListingCard>
       )}
     </Collection>
@@ -540,13 +537,12 @@ exports[`amplify render tests complex component tests should generate a componen
 "/* eslint-disable */
 import React from \\"react\\";
 import {
-  CustomButton,
   EscapeHatchProps,
   View,
   ViewProps,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
+import CustomButton from \\"./CustomButton\\";
 
 export type ViewWithCustomButtonProps = Partial<ViewProps> & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -561,7 +557,7 @@ export default function ViewWithCustomButton(
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...findChildOverrides(props.overrides, \\"CustomButton\\")}
+        {...getOverrideProps(overrides, \\"View.CustomButton\\")}
       ></CustomButton>
     </View>
   );
@@ -655,13 +651,12 @@ exports[`amplify render tests complex examples should render complex sample 2 1`
 "/* eslint-disable */
 import React from \\"react\\";
 import {
-  Box,
   EscapeHatchProps,
   Flex,
   FlexProps,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
+import Box from \\"./Box\\";
 
 export type VerticalFlexFixedProps = Partial<FlexProps> & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -703,7 +698,7 @@ export default function VerticalFlexFixed(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
           height=\\"125px\\"
-          {...findChildOverrides(props.overrides, \\"Box\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex.Box\\")}
         ></Box>
         <Box
           width=\\"123px\\"
@@ -712,7 +707,7 @@ export default function VerticalFlexFixed(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
           height=\\"122px\\"
-          {...findChildOverrides(props.overrides, \\"Box\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex.Box\\")}
         ></Box>
       </Flex>
     </Flex>
@@ -725,15 +720,14 @@ exports[`amplify render tests complex examples should render complex sample 3 1`
 "/* eslint-disable */
 import React from \\"react\\";
 import {
-  Box,
   EscapeHatchProps,
   Flex,
   FlexProps,
-  ReneButton,
   Text,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
+import Box from \\"./Box\\";
+import ReneButton from \\"./ReneButton\\";
 
 export type NewComponentProps = Partial<FlexProps> & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -778,12 +772,12 @@ export default function NewComponent(
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/430x452?text=Amplify+Studio+is+Awesome!\\"
         height=\\"69px\\"
-        {...findChildOverrides(props.overrides, \\"Box\\")}
+        {...getOverrideProps(overrides, \\"Flex.Box\\")}
       ></Box>
       <ReneButton
         width=\\"293px\\"
         height=\\"45px\\"
-        {...findChildOverrides(props.overrides, \\"ReneButton\\")}
+        {...getOverrideProps(overrides, \\"Flex.ReneButton\\")}
       ></ReneButton>
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -810,15 +804,14 @@ exports[`amplify render tests complex examples should render complex sample 4 1`
 "/* eslint-disable */
 import React from \\"react\\";
 import {
-  Box,
   EscapeHatchProps,
   Flex,
   FlexProps,
   Variant,
-  findChildOverrides,
   getOverrideProps,
   getOverridesFromVariants,
 } from \\"@aws-amplify/ui-react\\";
+import Box from \\"./Box\\";
 
 export type GroupReferenceProps = Partial<FlexProps> & {
   colors?: \\"Red/Orange\\";
@@ -903,7 +896,7 @@ export default function GroupReference(
           width=\\"122px\\"
           position=\\"absolute\\"
           height=\\"123px\\"
-          {...findChildOverrides(props.overrides, \\"Box\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex.Box\\")}
         ></Box>
         <Box
           padding=\\"0px 0px 0px 0px\\"
@@ -914,7 +907,7 @@ export default function GroupReference(
           width=\\"120px\\"
           position=\\"absolute\\"
           height=\\"122px\\"
-          {...findChildOverrides(props.overrides, \\"Box\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex.Box\\")}
         ></Box>
       </Flex>
     </Flex>
@@ -927,13 +920,12 @@ exports[`amplify render tests complex examples should render complex sample 5 1`
 "/* eslint-disable */
 import React from \\"react\\";
 import {
-  Box,
   EscapeHatchProps,
   Flex,
   FlexProps,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
+import Box from \\"./Box\\";
 
 export type FlexTestProps = Partial<FlexProps> & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -959,7 +951,7 @@ export default function FlexTest(props: FlexTestProps): React.ReactElement {
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
         height=\\"120px\\"
-        {...findChildOverrides(props.overrides, \\"Box\\")}
+        {...getOverrideProps(overrides, \\"Flex.Box\\")}
       ></Box>
       <Box
         width=\\"120px\\"
@@ -968,7 +960,7 @@ export default function FlexTest(props: FlexTestProps): React.ReactElement {
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
         height=\\"120px\\"
-        {...findChildOverrides(props.overrides, \\"Box\\")}
+        {...getOverrideProps(overrides, \\"Flex.Box\\")}
       ></Box>
     </Flex>
   );
@@ -1059,14 +1051,12 @@ exports[`amplify render tests complex examples should render complex sample 7 1`
 "/* eslint-disable */
 import React from \\"react\\";
 import {
-  Box,
-  BoxProps,
   EscapeHatchProps,
   Image,
   Text,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
+import Box, { BoxProps } from \\"./Box\\";
 
 export type ImageFlexProps = Partial<BoxProps> & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -1080,7 +1070,8 @@ export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
       padding=\\"0px 0px 0px 0px\\"
       position=\\"relative\\"
       height=\\"192px\\"
-      {...findChildOverrides(props.overrides, \\"Box\\")}
+      {...rest}
+      {...getOverrideProps(overrides, \\"Box\\")}
     >
       <Image
         border=\\"4px SOLID rgb(0,0,0)\\"
@@ -1133,13 +1124,12 @@ exports[`amplify render tests complex examples should render complex sample 8 1`
 "/* eslint-disable */
 import React from \\"react\\";
 import {
-  Box,
   EscapeHatchProps,
   Flex,
   FlexProps,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
+import Box from \\"./Box\\";
 
 export type VerticalFlexFillProps = Partial<FlexProps> & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -1179,7 +1169,7 @@ export default function VerticalFlexFill(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
           height=\\"119px\\"
-          {...findChildOverrides(props.overrides, \\"Box\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex.Box\\")}
         ></Box>
         <Box
           width=\\"145px\\"
@@ -1188,7 +1178,7 @@ export default function VerticalFlexFill(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
           height=\\"124px\\"
-          {...findChildOverrides(props.overrides, \\"Box\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex.Box\\")}
         ></Box>
       </Flex>
     </Flex>
@@ -1583,6 +1573,279 @@ export default function CustomButton(
 "
 `;
 
+exports[`amplify render tests custom components custom children should render component with custom children 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { EscapeHatchProps, getOverrideProps } from \\"@aws-amplify/ui-react\\";
+import CustomButton from \\"./CustomButton\\";
+import MyView, { MyViewProps } from \\"./MyView\\";
+
+export type CustomChildrenProps = Partial<MyViewProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CustomChildren(
+  props: CustomChildrenProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <MyView {...rest} {...getOverrideProps(overrides, \\"MyView\\")}>
+      <CustomButton
+        {...getOverrideProps(overrides, \\"MyView.CustomButton\\")}
+      ></CustomButton>
+    </MyView>
+  );
+}
+"
+`;
+
+exports[`amplify render tests custom components custom children should render component with custom children with ES5 1`] = `
+"var __assign =
+  (this && this.__assign) ||
+  function () {
+    __assign =
+      Object.assign ||
+      function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+          for (var p in s)
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+      };
+    return __assign.apply(this, arguments);
+  };
+var __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === \\"function\\")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (
+          e.indexOf(p[i]) < 0 &&
+          Object.prototype.propertyIsEnumerable.call(s, p[i])
+        )
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
+/* eslint-disable */
+import React from \\"react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react\\";
+import CustomButton from \\"./CustomButton\\";
+import MyView from \\"./MyView\\";
+export default function CustomChildren(props) {
+  var overridesProp = props.overrides,
+    rest = __rest(props, [\\"overrides\\"]);
+  var overrides = __assign({}, overridesProp);
+  return React.createElement(
+    MyView,
+    __assign({}, rest, getOverrideProps(overrides, \\"MyView\\")),
+    React.createElement(
+      CustomButton,
+      __assign({}, getOverrideProps(overrides, \\"MyView.CustomButton\\"))
+    )
+  );
+}
+"
+`;
+
+exports[`amplify render tests custom components custom children should render declarations 1`] = `
+"import React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import { MyViewProps } from \\"./MyView\\";
+export declare type CustomChildrenProps = Partial<MyViewProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CustomChildren(props: CustomChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`amplify render tests custom components custom parent and children should render component with custom parent and children 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { EscapeHatchProps, getOverrideProps } from \\"@aws-amplify/ui-react\\";
+import CustomButton from \\"./CustomButton\\";
+import ViewTest, { ViewTestProps } from \\"./ViewTest\\";
+
+export type CustomParentAndChildrenProps = Partial<ViewTestProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CustomParentAndChildren(
+  props: CustomParentAndChildrenProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <ViewTest {...rest} {...getOverrideProps(overrides, \\"ViewTest\\")}>
+      <CustomButton
+        {...getOverrideProps(overrides, \\"ViewTest.CustomButton\\")}
+      ></CustomButton>
+    </ViewTest>
+  );
+}
+"
+`;
+
+exports[`amplify render tests custom components custom parent and children should render component with custom parent and children with ES5 1`] = `
+"var __assign =
+  (this && this.__assign) ||
+  function () {
+    __assign =
+      Object.assign ||
+      function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+          for (var p in s)
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+      };
+    return __assign.apply(this, arguments);
+  };
+var __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === \\"function\\")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (
+          e.indexOf(p[i]) < 0 &&
+          Object.prototype.propertyIsEnumerable.call(s, p[i])
+        )
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
+/* eslint-disable */
+import React from \\"react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react\\";
+import CustomButton from \\"./CustomButton\\";
+import ViewTest from \\"./ViewTest\\";
+export default function CustomParentAndChildren(props) {
+  var overridesProp = props.overrides,
+    rest = __rest(props, [\\"overrides\\"]);
+  var overrides = __assign({}, overridesProp);
+  return React.createElement(
+    ViewTest,
+    __assign({}, rest, getOverrideProps(overrides, \\"ViewTest\\")),
+    React.createElement(
+      CustomButton,
+      __assign({}, getOverrideProps(overrides, \\"ViewTest.CustomButton\\"))
+    )
+  );
+}
+"
+`;
+
+exports[`amplify render tests custom components custom parent and children should render declarations 1`] = `
+"import React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+export declare type CustomParentAndChildrenProps = Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`amplify render tests custom components custom parent should render component 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  Button,
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+import MyView, { MyViewProps } from \\"./MyView\\";
+
+export type CustomParentProps = Partial<MyViewProps> & {
+  overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CustomParent(
+  props: CustomParentProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    <MyView {...rest} {...getOverrideProps(overrides, \\"MyView\\")}>
+      <Button {...getOverrideProps(overrides, \\"MyView.Button\\")}></Button>
+    </MyView>
+  );
+}
+"
+`;
+
+exports[`amplify render tests custom components custom parent should render component with ES5 1`] = `
+"var __assign =
+  (this && this.__assign) ||
+  function () {
+    __assign =
+      Object.assign ||
+      function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+          for (var p in s)
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+      };
+    return __assign.apply(this, arguments);
+  };
+var __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === \\"function\\")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (
+          e.indexOf(p[i]) < 0 &&
+          Object.prototype.propertyIsEnumerable.call(s, p[i])
+        )
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
+/* eslint-disable */
+import React from \\"react\\";
+import { Button, getOverrideProps } from \\"@aws-amplify/ui-react\\";
+import MyView from \\"./MyView\\";
+export default function CustomParent(props) {
+  var overridesProp = props.overrides,
+    rest = __rest(props, [\\"overrides\\"]);
+  var overrides = __assign({}, overridesProp);
+  return React.createElement(
+    MyView,
+    __assign({}, rest, getOverrideProps(overrides, \\"MyView\\")),
+    React.createElement(
+      Button,
+      __assign({}, getOverrideProps(overrides, \\"MyView.Button\\"))
+    )
+  );
+}
+"
+`;
+
+exports[`amplify render tests custom components custom parent should render declarations 1`] = `
+"import React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import { MyViewProps } from \\"./MyView\\";
+export declare type CustomParentProps = Partial<MyViewProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+};
+export default function CustomParent(props: CustomParentProps): React.ReactElement;
+"
+`;
+
 exports[`amplify render tests custom render config should render ES5 1`] = `
 "var __assign =
   (this && this.__assign) ||
@@ -1898,13 +2161,12 @@ exports[`amplify render tests sample code snippet tests should generate a sample
 "/* eslint-disable */
 import React from \\"react\\";
 import {
-  CustomButton,
   EscapeHatchProps,
   View,
   ViewProps,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
+import CustomButton from \\"./CustomButton\\";
 
 export type ViewWithButtonProps = Partial<ViewProps> & {
   overrides?: EscapeHatchProps | undefined | null;
@@ -1920,7 +2182,7 @@ export default function ViewWithButton(
         color=\\"#ff0000\\"
         width=\\"20px\\"
         buttonText=\\"Click Me\\"
-        {...findChildOverrides(props.overrides, \\"CustomButton\\")}
+        {...getOverrideProps(overrides, \\"View.CustomButton\\")}
       ></CustomButton>
     </View>
   );
@@ -1938,7 +2200,6 @@ import {
   Flex,
   FlexProps,
   Heading,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -1973,7 +2234,7 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
       <Heading
         level={1}
         children=\\"Title\\"
-        {...findChildOverrides(props.overrides, \\"Heading\\")}
+        {...getOverrideProps(overrides, \\"Flex.Heading\\")}
       ></Heading>
       <Button
         variation=\\"primary\\"
@@ -2017,7 +2278,6 @@ import {
   Input,
   View,
   ViewProps,
-  findChildOverrides,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -2038,57 +2298,57 @@ export default function ParsedFixedValues(
       <Input
         id=\\"string-value\\"
         value=\\"raw string value\\"
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"number-value\\"
         value=\\"67548\\"
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"parsed-number-value\\"
         value={67548}
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"boolean-value\\"
         value=\\"true\\"
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"parsed-boolean-value\\"
         value={true}
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"json-value\\"
         value='{\\"foo\\": \\"bar\\"}'
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"parsed-json-value\\"
         value={{ foo: \\"bar\\" }}
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"array-value\\"
         value=\\"[1,2,3]\\"
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"parsed-array-value\\"
         value={[1, 2, 3]}
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"null-value\\"
         value=\\"null\\"
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
       <Input
         id=\\"parsed-null-value\\"
         value={null}
-        {...findChildOverrides(props.overrides, \\"Input\\")}
+        {...getOverrideProps(overrides, \\"View.Input\\")}
       ></Input>
     </View>
   );

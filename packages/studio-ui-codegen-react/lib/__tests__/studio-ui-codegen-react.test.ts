@@ -308,4 +308,78 @@ describe('amplify render tests', () => {
   it('should render parsed fixed values', () => {
     expect(generateWithAmplifyRenderer('parsedFixedValues')).toMatchSnapshot();
   });
+
+  describe('custom components', () => {
+    describe('custom children', () => {
+      it('should render component with custom children', () => {
+        expect(generateWithAmplifyRenderer('custom/customChildren').componentText).toMatchSnapshot();
+      });
+
+      it('should render component with custom children with ES5', () => {
+        expect(
+          generateWithAmplifyRenderer('custom/customChildren', {
+            target: ScriptTarget.ES5,
+            script: ScriptKind.JS,
+          }).componentText,
+        ).toMatchSnapshot();
+      });
+
+      it('should render declarations', () => {
+        expect(
+          generateWithAmplifyRenderer('custom/customChildren', {
+            script: ScriptKind.JS,
+            renderTypeDeclarations: true,
+          }).declaration,
+        ).toMatchSnapshot();
+      });
+    });
+
+    describe('custom parent', () => {
+      it('should render component', () => {
+        expect(generateWithAmplifyRenderer('custom/customParent').componentText).toMatchSnapshot();
+      });
+
+      it('should render component with ES5', () => {
+        expect(
+          generateWithAmplifyRenderer('custom/customParent', {
+            target: ScriptTarget.ES5,
+            script: ScriptKind.JS,
+          }).componentText,
+        ).toMatchSnapshot();
+      });
+
+      it('should render declarations', () => {
+        expect(
+          generateWithAmplifyRenderer('custom/customParent', {
+            script: ScriptKind.JS,
+            renderTypeDeclarations: true,
+          }).declaration,
+        ).toMatchSnapshot();
+      });
+    });
+
+    describe('custom parent and children', () => {
+      it('should render component with custom parent and children', () => {
+        expect(generateWithAmplifyRenderer('custom/customParentAndChildren').componentText).toMatchSnapshot();
+      });
+
+      it('should render component with custom parent and children with ES5', () => {
+        expect(
+          generateWithAmplifyRenderer('custom/customParentAndChildren', {
+            target: ScriptTarget.ES5,
+            script: ScriptKind.JS,
+          }).componentText,
+        ).toMatchSnapshot();
+      });
+
+      it('should render declarations', () => {
+        expect(
+          generateWithAmplifyRenderer('custom/customParentAndChildren', {
+            script: ScriptKind.JS,
+            renderTypeDeclarations: true,
+          }).declaration,
+        ).toMatchSnapshot();
+      });
+    });
+  });
 });
