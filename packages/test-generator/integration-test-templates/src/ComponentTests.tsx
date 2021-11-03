@@ -55,9 +55,10 @@ import PaginatedCollection from './ui-components/PaginatedCollection';
 /* eslint-enable import/extensions */
 
 const initializeUserTestData = async (): Promise<void> => {
-  await DataStore.save(new User({ firstName: 'Real', lastName: 'LUser3' }));
-  await DataStore.save(new User({ firstName: 'Another', lastName: 'LUser2' }));
-  await DataStore.save(new User({ firstName: 'Last', lastName: 'LUser1' }));
+  await DataStore.save(new User({ firstName: 'Real', lastName: 'LUser3', age: 29 }));
+  await DataStore.save(new User({ firstName: 'Another', lastName: 'LUser2', age: 72 }));
+  await DataStore.save(new User({ firstName: 'Last', lastName: 'LUser1', age: 50 }));
+  await DataStore.save(new User({ firstName: 'Too Young', lastName: 'LUser0', age: 5 }));
 };
 
 const initializeListingTestData = async (): Promise<void> => {
