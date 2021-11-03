@@ -62,10 +62,6 @@ exports[`Primitives SelectField 1`] = `"<SelectField {...rest} {...getOverridePr
 
 exports[`Primitives StepperField 1`] = `"<StepperField {...rest} {...getOverrideProps(overrides, \\"StepperField\\")}></StepperField>"`;
 
-exports[`Primitives StringRenderer 1`] = `"<>{\\"test\\"}</>"`;
-
-exports[`Primitives StringRenderer throws on missing props 1`] = `"Failed to render String - Unexpected component structure"`;
-
 exports[`Primitives SwitchField 1`] = `"<SwitchField {...rest} {...getOverrideProps(overrides, \\"SwitchField\\")}></SwitchField>"`;
 
 exports[`Primitives Tabs 1`] = `"<Tabs {...rest} {...getOverrideProps(overrides, \\"Tabs\\")}></Tabs>"`;
