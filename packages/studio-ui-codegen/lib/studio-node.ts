@@ -20,19 +20,48 @@ export class StudioNode {
 
   parent?: StudioNode;
 
+  children: StudioNode[];
+
+  elementIndex?: number;
+
   constructor(component: StudioComponent | StudioComponentChild, parent?: StudioNode) {
     this.component = component;
     this.parent = parent;
+    this.children = [];
+    if (this.parent) {
+      this.elementIndex = this.parent.children.filter(
+        (childNode) => this.component.componentType === childNode.component.componentType,
+      ).length;
+      this.parent.children.push(this);
+    }
   }
 
   isRoot(): boolean {
     return this.parent === undefined;
   }
 
-  getComponentPathToRoot(): (StudioComponent | StudioComponentChild)[] {
+  getComponentPathToRoot(): StudioNode[] {
     if (this.parent !== undefined) {
-      return [this.component].concat(this.parent.getComponentPathToRoot());
+      return [this as StudioNode].concat(this.parent.getComponentPathToRoot());
     }
-    return [this.component];
+    return [this];
+  }
+
+  /**
+   * Build the override path for a given element walking from the node to tree root, providing an index
+   * for all but the top-level components.
+   * Example:
+   * <Flex> <-- returns 'Flex'
+   *     <Button> <-- returns 'Flex.Button[0]'
+   *     <Button> <-- returns 'Flex.Button[1]'
+   *     <Flex> <-- returns 'Flex.Flex[0]'
+   *         </Button> <-- returns 'Flex.Flex[0].Button[0]'
+   *     </Flex>
+   * </Flex>
+   */
+  getOverrideKey(): string {
+    const [parentElement, ...childElements] = this.getComponentPathToRoot().reverse();
+    const childPath = childElements.map((node) => `${node.component.componentType}[${node.elementIndex}]`);
+    return [parentElement.component.componentType, ...childPath].join('.');
   }
 }
