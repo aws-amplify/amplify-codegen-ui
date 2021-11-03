@@ -668,8 +668,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const [propName, { model, sort, predicate }] = collectionProp;
         if (predicate) {
           statements.push(this.buildPredicateDeclaration(propName, predicate));
-          // TODO: Re-enable data store predicates https://app.asana.com/0/1200812113384502/1201289886389275/f
-          // statements.push(this.buildCreateDataStorePredicateCall(propName));
+          statements.push(this.buildCreateDataStorePredicateCall(model, propName));
         }
         if (sort) {
           this.importCollection.addImport('@aws-amplify/datastore', 'SortDirection');
@@ -698,7 +697,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return statements;
   }
 
-  private buildCreateDataStorePredicateCall(name: string): Statement {
+  private buildCreateDataStorePredicateCall(type: string, name: string): Statement {
     this.importCollection.addImport('@aws-amplify/ui-react', 'createDataStorePredicate');
     return factory.createVariableStatement(
       undefined,
@@ -708,9 +707,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createIdentifier(this.getFilterName(name)),
             undefined,
             undefined,
-            factory.createCallExpression(factory.createIdentifier('createDataStorePredicate'), undefined, [
-              factory.createIdentifier(this.getFilterObjName(name)),
-            ]),
+            factory.createCallExpression(
+              factory.createIdentifier('createDataStorePredicate'),
+              [factory.createTypeReferenceNode(factory.createIdentifier(type), undefined)],
+              [factory.createIdentifier(this.getFilterObjName(name))],
+            ),
           ),
         ],
         ts.NodeFlags.Const,
@@ -736,8 +737,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
              * }
              */
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
-            // TODO: Re-enable data store predicates https://app.asana.com/0/1200812113384502/1201289886389275/f
-            // statements.push(this.buildCreateDataStorePredicateCall(propName));
+            statements.push(this.buildCreateDataStorePredicateCall(bindingProperties.model, propName));
             const { model } = bindingProperties;
             this.importCollection.addImport('../models', model);
 
@@ -957,17 +957,16 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
       factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(bindingModel)),
     ]
-      // TODO: Re-enable data store predicates https://app.asana.com/0/1200812113384502/1201289886389275/f
-      // .concat(
-      //   criteriaName
-      //     ? [
-      //         factory.createPropertyAssignment(
-      //           factory.createIdentifier('criteria'),
-      //           factory.createIdentifier(criteriaName),
-      //         ),
-      //       ]
-      //     : [],
-      // )
+      .concat(
+        criteriaName
+          ? [
+              factory.createPropertyAssignment(
+                factory.createIdentifier('criteria'),
+                factory.createIdentifier(criteriaName),
+              ),
+            ]
+          : [],
+      )
       .concat(
         paginationName
           ? [
