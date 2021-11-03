@@ -1,0 +1,60 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Collection",
+    "name": "PaginatedCollection",
+    "properties": {
+      "type": {
+        "value": "list"
+      },
+      "isPaginated": {
+        "value": true
+      },
+      "direction": {
+        "value": "row"
+      },
+      "itemsPerPage": {
+        "value": 5
+      }
+    },
+    "collectionProperties": {
+      "listings": {
+        "model": "Listing"
+      }
+    },
+    "children": [
+      {
+        "componentType": "Flex",
+        "properties": {},
+        "children": [
+          {
+            "componentType": "Badge",
+            "properties": {
+              "children": {
+                "concat": [
+                  {
+                    "collectionBindingProperties": {
+                      "property": "listing",
+                      "field": "title"
+                    }
+                  },
+                  {
+                    "value" : " - $"
+                  },
+                  {
+                    "collectionBindingProperties": {
+                      "property": "listing",
+                      "field": "priceUSD"
+                    }
+                  },
+                  {
+                    "value" : "/night"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+  

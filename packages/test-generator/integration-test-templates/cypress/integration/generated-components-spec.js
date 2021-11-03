@@ -170,6 +170,14 @@ describe('Generated Components', () => {
       cy.get('#collections').get('#collectionWithBindingItemsNameNoOverrides button').eq(1).contains('Another');
       cy.get('#collections').get('#collectionWithBindingItemsNameNoOverrides button').eq(2).contains('Last');
     });
+
+    it('It renders paginated collections', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#paginatedCollection').contains('Mountain Retreat - $1800');
+      cy.get('#paginatedCollection').contains('Beachside Cottage - $1000').should('not.exist');
+      cy.get('[aria-label="Go to page 2"]').click();
+      cy.get('#paginatedCollection').contains('Beachside Cottage - $1000');
+    });
   });
 
   describe('Default Value', () => {
