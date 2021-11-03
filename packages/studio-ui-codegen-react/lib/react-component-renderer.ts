@@ -75,13 +75,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<TProp
     const overrideAttr = factory.createJsxSpreadAttribute(
       factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
         factory.createIdentifier('overrides'),
-        factory.createStringLiteral(
-          this.node
-            .getComponentPathToRoot()
-            .reverse()
-            .map((component) => component.componentType)
-            .join('.'),
-        ),
+        factory.createStringLiteral(this.node.getOverrideKey()),
       ]),
     );
     this.importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
