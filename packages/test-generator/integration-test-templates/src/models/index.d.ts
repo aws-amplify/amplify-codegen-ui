@@ -11,6 +11,10 @@ type UserMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
 
+type ListingMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
 export declare class UserPreference {
   readonly id: string;
   readonly favoriteColor?: string;
@@ -40,4 +44,18 @@ export declare class User {
     source: User,
     mutator: (draft: MutableModel<User, UserMetaData>) => MutableModel<User, UserMetaData> | void,
   ): User;
+}
+
+export declare class Listing {
+  readonly id: string;
+  readonly title?: string;
+  readonly priceUSD?: number;
+  readonly description?: string;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  constructor(init: ModelInit<Listing, ListingMetaData>);
+  static copyOf(
+    source: Listing,
+    mutator: (draft: MutableModel<Listing, ListingMetaData>) => MutableModel<Listing, ListingMetaData> | void,
+  ): Listing;
 }
