@@ -17,7 +17,6 @@ MockComponentRenderer {
     },
   },
   "node": StudioNode {
-    "children": Array [],
     "component": Object {
       "componentType": "Button",
       "name": "MyButton",
@@ -27,11 +26,7 @@ MockComponentRenderer {
         },
       },
     },
-    "elementIndex": 0,
     "parent": StudioNode {
-      "children": Array [
-        [Circular],
-      ],
       "component": Object {
         "componentType": "View",
         "name": "MyView",
@@ -41,22 +36,6 @@ MockComponentRenderer {
     },
   },
   "parent": StudioNode {
-    "children": Array [
-      StudioNode {
-        "children": Array [],
-        "component": Object {
-          "componentType": "Button",
-          "name": "MyButton",
-          "properties": Object {
-            "value": Object {
-              "value": "Confirm",
-            },
-          },
-        },
-        "elementIndex": 0,
-        "parent": [Circular],
-      },
-    ],
     "component": Object {
       "componentType": "View",
       "name": "MyView",

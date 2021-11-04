@@ -50,6 +50,7 @@ import { DataStore } from 'aws-amplify';
 import { User } from './models';
 import CollectionWithBindingItemsName from './ui-components/CollectionWithBindingItemsName';
 import ComponentWithBoundPropertyConditional from './ui-components/ComponentWithBoundPropertyConditional';
+import ComponentWithNestedOverrides from './ui-components/ComponentWithNestedOverrides';
 /* eslint-enable import/extensions */
 
 export default function ComponentTests() {
@@ -220,6 +221,17 @@ export default function ComponentTests() {
         <CustomChildren />
         <CustomParent />
         <CustomParentAndChildren />
+      </div>
+      <div id="overrides">
+        <h2>Overrides</h2>
+        <ComponentWithNestedOverrides
+          id="componentWithNestedOverrides"
+          overrides={{
+            Flex: { backgroundColor: 'red' },
+            'Flex.Flex[2]': { backgroundColor: 'green' },
+            'Flex.Flex[1].Flex[0]': { backgroundColor: 'blue' },
+          }}
+        />
       </div>
     </AmplifyProvider>
   );

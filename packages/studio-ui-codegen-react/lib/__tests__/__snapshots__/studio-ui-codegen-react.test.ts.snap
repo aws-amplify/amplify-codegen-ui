@@ -37,13 +37,13 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
       <Heading
         level={1}
         children=\\"Title\\"
-        {...getOverrideProps(overrides, \\"Flex.Heading[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Heading[0]\\")}
       ></Heading>
       <Button
         variation=\\"primary\\"
         children=\\"Log off\\"
         onClick={invokeAction(\\"signOutAction\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
       ></Button>
     </Flex>
   );
@@ -219,13 +219,13 @@ export default function CollectionOfCustomButtons(
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Flex {...getOverrideProps(overrides, \\"Collection.Flex[1]\\")}>
+        <Flex {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}>
           <Button
             label={item.username || \\"hspain@gmail.com\\"}
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
             disabled={isDisabled}
-            {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[1]\\")}
+            {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[0]\\")}
           ></Button>
         </Flex>
       )}
@@ -313,13 +313,13 @@ export default function CollectionOfCustomButtons(
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Flex {...getOverrideProps(overrides, \\"Collection.Flex[1]\\")}>
+        <Flex {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}>
           <Button
             label={item.username || \\"hspain@gmail.com\\"}
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
             disabled={isDisabled}
-            {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[1]\\")}
+            {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[0]\\")}
           ></Button>
         </Flex>
       )}
@@ -403,13 +403,13 @@ export default function CollectionOfCustomButtons(
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Flex {...getOverrideProps(overrides, \\"Collection.Flex[1]\\")}>
+        <Flex {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}>
           <Button
             label={item.username || \\"hspain@gmail.com\\"}
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
             disabled={isDisabled}
-            {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[1]\\")}
+            {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[0]\\")}
           ></Button>
         </Flex>
       )}
@@ -468,7 +468,7 @@ export default function ListingCardCollection(
           marginBottom=\\"0\\"
           marginTop=\\"0\\"
           marginLeft=\\"0\\"
-          {...getOverrideProps(overrides, \\"Collection.ListingCard[1]\\")}
+          {...getOverrideProps(overrides, \\"Collection.ListingCard[0]\\")}
         ></ListingCard>
       )}
     </Collection>
@@ -510,7 +510,7 @@ export default function ListingCardCollection(
     >
       {(item, index) => (
         <ListingCard
-          {...getOverrideProps(overrides, \\"Collection.ListingCard[1]\\")}
+          {...getOverrideProps(overrides, \\"Collection.ListingCard[0]\\")}
         ></ListingCard>
       )}
     </Collection>
@@ -545,7 +545,7 @@ export default function ViewWithButton(
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"View.Button[1]\\")}
+        {...getOverrideProps(overrides, \\"View.Button[0]\\")}
       ></Button>
     </View>
   );
@@ -579,7 +579,7 @@ export default function ViewWithCustomButton(
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"View.CustomButton[1]\\")}
+        {...getOverrideProps(overrides, \\"View.CustomButton[0]\\")}
       ></CustomButton>
     </View>
   );
@@ -613,7 +613,7 @@ export default function ViewWithButton(
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"View.Button[1]\\")}
+        {...getOverrideProps(overrides, \\"View.Button[0]\\")}
       ></Button>
     </View>
   );
@@ -663,7 +663,7 @@ export default function Hi(props: HiProps): React.ReactElement {
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"14px\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
       >
         {\\"Hi harriso\\"}
       </Text>
@@ -717,7 +717,7 @@ export default function VerticalFlexFixed(
         position=\\"relative\\"
         height=\\"100%\\"
         direction=\\"column\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
       >
         <Box
           width=\\"123px\\"
@@ -726,7 +726,7 @@ export default function VerticalFlexFixed(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
           height=\\"125px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[1]\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[0]\\")}
         ></Box>
         <Box
           width=\\"123px\\"
@@ -735,7 +735,7 @@ export default function VerticalFlexFixed(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
           height=\\"122px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[3]\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[1]\\")}
         ></Box>
       </Flex>
     </Flex>
@@ -791,7 +791,7 @@ export default function NewComponent(
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"29px\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
       >
         {\\"Hello World!\\"}
       </Text>
@@ -802,12 +802,12 @@ export default function NewComponent(
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/430x452?text=Amplify+Studio+is+Awesome!\\"
         height=\\"69px\\"
-        {...getOverrideProps(overrides, \\"Flex.Box[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Box[0]\\")}
       ></Box>
       <ReneButton
         width=\\"293px\\"
         height=\\"45px\\"
-        {...getOverrideProps(overrides, \\"Flex.ReneButton[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.ReneButton[0]\\")}
       ></ReneButton>
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -820,7 +820,7 @@ export default function NewComponent(
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"29px\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[3]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
       >
         {\\"Testing 123\\"}
       </Text>
@@ -917,7 +917,7 @@ export default function GroupReference(
         padding=\\"0px 0px 0px 0px\\"
         position=\\"relative\\"
         height=\\"123px\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
       >
         <Box
           padding=\\"0px 0px 0px 0px\\"
@@ -928,7 +928,7 @@ export default function GroupReference(
           width=\\"122px\\"
           position=\\"absolute\\"
           height=\\"123px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[1]\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[0]\\")}
         ></Box>
         <Box
           padding=\\"0px 0px 0px 0px\\"
@@ -939,7 +939,7 @@ export default function GroupReference(
           width=\\"120px\\"
           position=\\"absolute\\"
           height=\\"122px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[3]\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[1]\\")}
         ></Box>
       </Flex>
     </Flex>
@@ -985,7 +985,7 @@ export default function FlexTest(props: FlexTestProps): React.ReactElement {
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
         height=\\"120px\\"
-        {...getOverrideProps(overrides, \\"Flex.Box[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Box[0]\\")}
       ></Box>
       <Box
         width=\\"120px\\"
@@ -994,7 +994,7 @@ export default function FlexTest(props: FlexTestProps): React.ReactElement {
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
         height=\\"120px\\"
-        {...getOverrideProps(overrides, \\"Flex.Box[3]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Box[1]\\")}
       ></Box>
     </Flex>
   );
@@ -1043,7 +1043,7 @@ export default function MohitHome(props: MohitHomeProps): React.ReactElement {
         position=\\"relative\\"
         fontWeight=\\"700\\"
         height=\\"29px\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
       >
         {\\"Name\\"}
       </Text>
@@ -1058,7 +1058,7 @@ export default function MohitHome(props: MohitHomeProps): React.ReactElement {
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"14px\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[3]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
       >
         {\\"Price / Address\\"}
       </Text>
@@ -1073,7 +1073,7 @@ export default function MohitHome(props: MohitHomeProps): React.ReactElement {
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"14px\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[5]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Text[2]\\")}
       >
         {\\"Sqft\\"}
       </Text>
@@ -1121,7 +1121,7 @@ export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
         width=\\"150.84925842285156px\\"
         position=\\"absolute\\"
         height=\\"196px\\"
-        {...getOverrideProps(overrides, \\"Box.Image[1]\\")}
+        {...getOverrideProps(overrides, \\"Box.Image[0]\\")}
       ></Image>
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -1136,7 +1136,7 @@ export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
         position=\\"absolute\\"
         fontWeight=\\"400\\"
         height=\\"27.839996337890625px\\"
-        {...getOverrideProps(overrides, \\"Box.Text[1]\\")}
+        {...getOverrideProps(overrides, \\"Box.Text[0]\\")}
       >
         {\\"Test\\"}
       </Text>
@@ -1150,7 +1150,7 @@ export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
         width=\\"169.42330932617188px\\"
         position=\\"absolute\\"
         height=\\"189.0880126953125px\\"
-        {...getOverrideProps(overrides, \\"Box.Image[3]\\")}
+        {...getOverrideProps(overrides, \\"Box.Image[1]\\")}
       ></Image>
     </Box>
   );
@@ -1200,7 +1200,7 @@ export default function VerticalFlexFill(
         position=\\"relative\\"
         height=\\"723px\\"
         direction=\\"column\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
       >
         <Box
           width=\\"145px\\"
@@ -1209,7 +1209,7 @@ export default function VerticalFlexFill(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
           height=\\"119px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[1]\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[0]\\")}
         ></Box>
         <Box
           width=\\"145px\\"
@@ -1218,7 +1218,7 @@ export default function VerticalFlexFill(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
           height=\\"124px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[3]\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[1]\\")}
         ></Box>
       </Flex>
     </Flex>
@@ -1343,7 +1343,7 @@ export default function SectionHeading(
     >
       <Flex
         tes={newProp6fd1.untitledfield}
-        {...getOverrideProps(overrides, \\"Flex.Flex[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
       >
         <Text
           fontFamily=\\"Inter\\"
@@ -1352,7 +1352,7 @@ export default function SectionHeading(
           fontSize=\\"48px\\"
           lineHeight=\\"48px\\"
           fontWeight=\\"300\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Text[1]\\")}
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].Text[0]\\")}
         >
           {\\"Heading 2\\"}
         </Text>
@@ -1364,7 +1364,7 @@ export default function SectionHeading(
         fontSize=\\"32px\\"
         lineHeight=\\"48px\\"
         fontWeight=\\"400\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
       >
         {\\"subtitle\\"}
       </Text>
@@ -1399,7 +1399,7 @@ export default function ChildComponentWithDataBinding(
   const overrides = { ...overridesProp };
   return (
     <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
-      <Text {...getOverrideProps(overrides, \\"Button.Text[1]\\")}>
+      <Text {...getOverrideProps(overrides, \\"Button.Text[0]\\")}>
         {textValue}
       </Text>
     </Button>
@@ -1488,7 +1488,7 @@ export default function ChildComponentWithDataBoundConcatenation(
   const overrides = { ...overridesProp };
   return (
     <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
-      <Text {...getOverrideProps(overrides, \\"Button.Text[1]\\")}>{\`\${
+      <Text {...getOverrideProps(overrides, \\"Button.Text[0]\\")}>{\`\${
         buttonUser?.firstname || \\"Harrison\\"
       }\${\\" \\"}\${buttonUser?.lastname || \\"Spain\\"}\`}</Text>
     </Button>
@@ -1522,7 +1522,7 @@ export default function ChildComponentWithStaticConcatenation(
   return (
     <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
       <Text
-        {...getOverrideProps(overrides, \\"Button.Text[1]\\")}
+        {...getOverrideProps(overrides, \\"Button.Text[0]\\")}
       >{\`\${\\"Concatenate\\"}\${\\" \\"}\${\\"Me!\\"}\`}</Text>
     </Button>
   );
@@ -1686,7 +1686,7 @@ export default function CustomChildren(
   return (
     <MyView {...rest} {...getOverrideProps(overrides, \\"MyView\\")}>
       <CustomButton
-        {...getOverrideProps(overrides, \\"MyView.CustomButton[1]\\")}
+        {...getOverrideProps(overrides, \\"MyView.CustomButton[0]\\")}
       ></CustomButton>
     </MyView>
   );
@@ -1741,7 +1741,7 @@ export default function CustomChildren(props) {
     __assign({}, rest, getOverrideProps(overrides, \\"MyView\\")),
     React.createElement(
       CustomButton,
-      __assign({}, getOverrideProps(overrides, \\"MyView.CustomButton[1]\\"))
+      __assign({}, getOverrideProps(overrides, \\"MyView.CustomButton[0]\\"))
     )
   );
 }
@@ -1779,7 +1779,7 @@ export default function CustomParentAndChildren(
   return (
     <ViewTest {...rest} {...getOverrideProps(overrides, \\"ViewTest\\")}>
       <CustomButton
-        {...getOverrideProps(overrides, \\"ViewTest.CustomButton[1]\\")}
+        {...getOverrideProps(overrides, \\"ViewTest.CustomButton[0]\\")}
       ></CustomButton>
     </ViewTest>
   );
@@ -1834,7 +1834,7 @@ export default function CustomParentAndChildren(props) {
     __assign({}, rest, getOverrideProps(overrides, \\"ViewTest\\")),
     React.createElement(
       CustomButton,
-      __assign({}, getOverrideProps(overrides, \\"ViewTest.CustomButton[1]\\"))
+      __assign({}, getOverrideProps(overrides, \\"ViewTest.CustomButton[0]\\"))
     )
   );
 }
@@ -1874,7 +1874,7 @@ export default function CustomParent(
   const overrides = { ...overridesProp };
   return (
     <MyView {...rest} {...getOverrideProps(overrides, \\"MyView\\")}>
-      <Button {...getOverrideProps(overrides, \\"MyView.Button[1]\\")}></Button>
+      <Button {...getOverrideProps(overrides, \\"MyView.Button[0]\\")}></Button>
     </MyView>
   );
 }
@@ -1927,7 +1927,7 @@ export default function CustomParent(props) {
     __assign({}, rest, getOverrideProps(overrides, \\"MyView\\")),
     React.createElement(
       Button,
-      __assign({}, getOverrideProps(overrides, \\"MyView.Button[1]\\"))
+      __assign({}, getOverrideProps(overrides, \\"MyView.Button[0]\\"))
     )
   );
 }
@@ -1992,7 +1992,7 @@ export default function ViewWithButton(props) {
       Button,
       __assign(
         { color: \\"#ff0000\\", width: \\"20px\\" },
-        getOverrideProps(overrides, \\"View.Button[1]\\")
+        getOverrideProps(overrides, \\"View.Button[0]\\")
       )
     )
   );
@@ -2030,7 +2030,7 @@ export default function ViewWithButton(props) {
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"View.Button[1]\\")}
+        {...getOverrideProps(overrides, \\"View.Button[0]\\")}
       ></Button>
     </View>
   );
@@ -2081,7 +2081,7 @@ function ViewWithButton(props) {
       ui_react_1.Button,
       Object.assign(
         { color: \\"#ff0000\\", width: \\"20px\\" },
-        (0, ui_react_1.getOverrideProps)(overrides, \\"View.Button[1]\\")
+        (0, ui_react_1.getOverrideProps)(overrides, \\"View.Button[0]\\")
       )
     )
   );
@@ -2173,7 +2173,7 @@ export default function CollectionDefaultValue(
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Text {...getOverrideProps(overrides, \\"Collection.Text[1]\\")}>
+        <Text {...getOverrideProps(overrides, \\"Collection.Text[0]\\")}>
           {item.username || \\"Collection Default Value\\"}
         </Text>
       )}
@@ -2291,7 +2291,7 @@ export default function ViewWithButton(
         color=\\"#ff0000\\"
         width=\\"20px\\"
         buttonText=\\"Click Me\\"
-        {...getOverrideProps(overrides, \\"View.CustomButton[1]\\")}
+        {...getOverrideProps(overrides, \\"View.CustomButton[0]\\")}
       ></CustomButton>
     </View>
   );
@@ -2345,31 +2345,31 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
       <Heading
         level={1}
         children=\\"Title\\"
-        {...getOverrideProps(overrides, \\"Flex.Heading[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Heading[0]\\")}
       ></Heading>
       <Button
         variation=\\"primary\\"
         children=\\"Open Amplify Docs\\"
         onClick={invokeAction(\\"openAmplifyDocs\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
       ></Button>
       <Button
         variation=\\"primary\\"
         children=\\"Navigate to FAQ Page\\"
         onClick={invokeAction(\\"navigateToFAQPage\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[3]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button[1]\\")}
       ></Button>
       <Button
         variation=\\"primary\\"
         children=\\"Reload Page\\"
         onClick={invokeAction(\\"reloadPage\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[5]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button[2]\\")}
       ></Button>
       <Button
         variation=\\"primary\\"
         children=\\"Redirect To Footer (No History Update)\\"
         onClick={invokeAction(\\"redirectToFooter\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[7]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button[3]\\")}
       ></Button>
     </Flex>
   );
@@ -2411,57 +2411,57 @@ export default function ParsedFixedValues(
       <Input
         id=\\"string-value\\"
         value=\\"raw string value\\"
-        {...getOverrideProps(overrides, \\"View.Input[1]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[0]\\")}
       ></Input>
       <Input
         id=\\"number-value\\"
         value=\\"67548\\"
-        {...getOverrideProps(overrides, \\"View.Input[3]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[1]\\")}
       ></Input>
       <Input
         id=\\"parsed-number-value\\"
         value={67548}
-        {...getOverrideProps(overrides, \\"View.Input[5]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[2]\\")}
       ></Input>
       <Input
         id=\\"boolean-value\\"
         value=\\"true\\"
-        {...getOverrideProps(overrides, \\"View.Input[7]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[3]\\")}
       ></Input>
       <Input
         id=\\"parsed-boolean-value\\"
         value={true}
-        {...getOverrideProps(overrides, \\"View.Input[9]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[4]\\")}
       ></Input>
       <Input
         id=\\"json-value\\"
         value='{\\"foo\\": \\"bar\\"}'
-        {...getOverrideProps(overrides, \\"View.Input[11]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[5]\\")}
       ></Input>
       <Input
         id=\\"parsed-json-value\\"
         value={{ foo: \\"bar\\" }}
-        {...getOverrideProps(overrides, \\"View.Input[13]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[6]\\")}
       ></Input>
       <Input
         id=\\"array-value\\"
         value=\\"[1,2,3]\\"
-        {...getOverrideProps(overrides, \\"View.Input[15]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[7]\\")}
       ></Input>
       <Input
         id=\\"parsed-array-value\\"
         value={[1, 2, 3]}
-        {...getOverrideProps(overrides, \\"View.Input[17]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[8]\\")}
       ></Input>
       <Input
         id=\\"null-value\\"
         value=\\"null\\"
-        {...getOverrideProps(overrides, \\"View.Input[19]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[9]\\")}
       ></Input>
       <Input
         id=\\"parsed-null-value\\"
         value={null}
-        {...getOverrideProps(overrides, \\"View.Input[21]\\")}
+        {...getOverrideProps(overrides, \\"View.Input[10]\\")}
       ></Input>
     </View>
   );
@@ -2591,15 +2591,15 @@ export default function Profile(props: ProfileProps): React.ReactElement {
     <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>
       <Image
         src={userImage}
-        {...getOverrideProps(overrides, \\"Flex.Image[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Image[0]\\")}
       ></Image>
       <Button
         label={username}
-        {...getOverrideProps(overrides, \\"Flex.Button[1]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
       ></Button>
       <Button
         label={customUserAttributeIcecream}
-        {...getOverrideProps(overrides, \\"Flex.Button[3]\\")}
+        {...getOverrideProps(overrides, \\"Flex.Button[1]\\")}
       ></Button>
     </Flex>
   );
