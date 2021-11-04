@@ -20,20 +20,9 @@ export class StudioNode {
 
   parent?: StudioNode;
 
-  children: StudioNode[];
-
-  elementIndex?: number;
-
   constructor(component: StudioComponent | StudioComponentChild, parent?: StudioNode) {
     this.component = component;
     this.parent = parent;
-    this.children = [];
-    if (this.parent) {
-      this.elementIndex = this.parent.children.filter(
-        (childNode) => this.component.componentType === childNode.component.componentType,
-      ).length;
-      this.parent.children.push(this);
-    }
   }
 
   isRoot(): boolean {
@@ -45,6 +34,16 @@ export class StudioNode {
       return [this as StudioNode].concat(this.parent.getComponentPathToRoot());
     }
     return [this];
+  }
+
+  getOverrideIndex(): number {
+    if (this.parent === undefined || this.parent.component.children === undefined) {
+      return -1;
+    }
+
+    return this.parent.component.children
+      .filter((child: StudioComponentChild) => child.componentType === this.component.componentType)
+      .findIndex((child: StudioComponentChild) => child === this.component);
   }
 
   /**
@@ -61,7 +60,7 @@ export class StudioNode {
    */
   getOverrideKey(): string {
     const [parentElement, ...childElements] = this.getComponentPathToRoot().reverse();
-    const childPath = childElements.map((node) => `${node.component.componentType}[${node.elementIndex}]`);
+    const childPath = childElements.map((node) => `${node.component.componentType}[${node.getOverrideIndex()}]`);
     return [parentElement.component.componentType, ...childPath].join('.');
   }
 }

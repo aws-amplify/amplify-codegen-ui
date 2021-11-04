@@ -64,44 +64,41 @@ describe('StudioNode', () => {
 
   describe('getOverrideKey', () => {
     test('returns for parent', () => {
-      const rootComponent = new StudioNode(createSimpleComponentForType('Flex'));
-      new StudioNode(createSimpleComponentForType('Button'), rootComponent);
+      const rootComponent = createStudioNodeOfType('Flex', createStudioNodeOfType('Button'));
 
       expect(rootComponent.getOverrideKey()).toEqual('Flex');
     });
 
     test('returns only one child', () => {
-      const rootComponent = new StudioNode(createSimpleComponentForType('Flex'));
-      const childComponent = new StudioNode(createSimpleComponentForType('Button'), rootComponent);
+      const button1 = createStudioNodeOfType('Button');
+      createStudioNodeOfType('Flex', button1);
 
-      expect(childComponent.getOverrideKey()).toEqual('Flex.Button[0]');
+      expect(button1.getOverrideKey()).toEqual('Flex.Button[0]');
     });
 
     test('returns index 0 for first of multiple elements', () => {
-      const rootComponent = new StudioNode(createSimpleComponentForType('Flex'));
-      const firstChildComponent = new StudioNode(createSimpleComponentForType('Button'), rootComponent);
-      new StudioNode(createSimpleComponentForType('Button'), rootComponent);
-      new StudioNode(createSimpleComponentForType('Tooltip'), rootComponent);
+      const button1 = createStudioNodeOfType('Button');
+      createStudioNodeOfType('Flex', button1, createStudioNodeOfType('Button'), createStudioNodeOfType('Tooltip'));
 
-      expect(firstChildComponent.getOverrideKey()).toEqual('Flex.Button[0]');
+      expect(button1.getOverrideKey()).toEqual('Flex.Button[0]');
     });
 
     test('returns index 0 for first of element of type', () => {
-      const rootComponent = new StudioNode(createSimpleComponentForType('Flex'));
-      new StudioNode(createSimpleComponentForType('Button'), rootComponent);
-      new StudioNode(createSimpleComponentForType('Button'), rootComponent);
-      const firstTooltipChildComponent = new StudioNode(createSimpleComponentForType('Tooltip'), rootComponent);
+      const button1 = createStudioNodeOfType('Button');
+      const button2 = createStudioNodeOfType('Button');
+      const tooltip1 = createStudioNodeOfType('Tooltip');
+      createStudioNodeOfType('Flex', button1, button2, tooltip1);
 
-      expect(firstTooltipChildComponent.getOverrideKey()).toEqual('Flex.Tooltip[0]');
+      expect(tooltip1.getOverrideKey()).toEqual('Flex.Tooltip[0]');
     });
 
     test('returns index 1 for second of element of type', () => {
-      const rootComponent = new StudioNode(createSimpleComponentForType('Flex'));
-      new StudioNode(createSimpleComponentForType('Button'), rootComponent);
-      const secondChildComponent = new StudioNode(createSimpleComponentForType('Button'), rootComponent);
-      new StudioNode(createSimpleComponentForType('Tooltip'), rootComponent);
+      const button1 = createStudioNodeOfType('Button');
+      const button2 = createStudioNodeOfType('Button');
+      const tooltip1 = createStudioNodeOfType('Tooltip');
+      createStudioNodeOfType('Flex', button1, button2, tooltip1);
 
-      expect(secondChildComponent.getOverrideKey()).toEqual('Flex.Button[1]');
+      expect(button2.getOverrideKey()).toEqual('Flex.Button[1]');
     });
 
     /**
@@ -119,27 +116,35 @@ describe('StudioNode', () => {
      * </Flex>
      */
     test('returns for deeply nested elements', () => {
-      const rootComponent = new StudioNode(createSimpleComponentForType('Flex'));
-      new StudioNode(createSimpleComponentForType('Flex'), rootComponent);
-      new StudioNode(createSimpleComponentForType('Flex'), rootComponent);
-      const thirdChildComponentOfType = new StudioNode(createSimpleComponentForType('Flex'), rootComponent);
-      new StudioNode(createSimpleComponentForType('Tooltip'), rootComponent);
-      new StudioNode(createSimpleComponentForType('Button'), rootComponent);
-      new StudioNode(createSimpleComponentForType('Button'), thirdChildComponentOfType);
-      const secondSubChildOfType = new StudioNode(createSimpleComponentForType('Button'), thirdChildComponentOfType);
-      const firstSubSubChild = new StudioNode(createSimpleComponentForType('Tooltip'), secondSubChildOfType);
+      const firstSubSubChild = createStudioNodeOfType('Tooltip');
 
-      expect(thirdChildComponentOfType.getOverrideKey()).toEqual('Flex.Flex[2]');
+      const firstSubChildOfType = createStudioNodeOfType('Button');
+      const secondSubChildOfType = createStudioNodeOfType('Button', firstSubSubChild);
+
+      const flex1 = createStudioNodeOfType('Flex');
+      const flex2 = createStudioNodeOfType('Flex');
+      const flex3 = createStudioNodeOfType('Flex', firstSubChildOfType, secondSubChildOfType);
+      const flex4 = createStudioNodeOfType('Flex');
+      const tooltip1 = createStudioNodeOfType('Tooltip');
+      const button1 = createStudioNodeOfType('Button');
+
+      createStudioNodeOfType('Flex', flex1, flex2, flex3, flex4, tooltip1, button1);
+
+      expect(flex3.getOverrideKey()).toEqual('Flex.Flex[2]');
       expect(secondSubChildOfType.getOverrideKey()).toEqual('Flex.Flex[2].Button[1]');
       expect(firstSubSubChild.getOverrideKey()).toEqual('Flex.Flex[2].Button[1].Tooltip[0]');
     });
   });
 });
 
-const createSimpleComponentForType = (type: string): StudioComponentChild => {
-  return {
+const createStudioNodeOfType = (type: string, ...children: StudioNode[]): StudioNode => {
+  const node = new StudioNode({
     componentType: type,
     name: type,
     properties: {},
-  };
+    children: children.map((child) => child.component as StudioComponentChild),
+  });
+  // eslint-disable-next-line no-return-assign, no-param-reassign
+  children.forEach((child) => (child.parent = node));
+  return node;
 };

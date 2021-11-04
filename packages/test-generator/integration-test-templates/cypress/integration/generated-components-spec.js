@@ -344,6 +344,15 @@ describe('Generated Components', () => {
   });
 });
 
+describe('Overrides', () => {
+  it('renders overrides with the correct indices', () => {
+    cy.visit('http://localhost:3000/component-tests');
+    cy.get('#componentWithNestedOverrides').should('have.css', 'background-color', 'rgb(255, 0, 0)');
+    cy.get('#componentWithNestedOverrides #ChildFlex3').should('have.css', 'background-color', 'rgb(0, 128, 0)');
+    cy.get('#componentWithNestedOverrides #ChildChildFlex1').should('have.css', 'background-color', 'rgb(0, 0, 255)');
+  });
+});
+
 describe('Generated Themes', () => {
   it('Successfully decorates the app', () => {
     cy.visit('http://localhost:3000/component-tests');
