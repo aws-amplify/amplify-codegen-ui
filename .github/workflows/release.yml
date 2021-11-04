@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, 'chore(release): v')"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Get Version Number
+        id: get-version-number
+        run: |
+          version_number=$(echo "${{github.event.head_commit.message}}" | sed -e "s/^chore(release): v//")
+          echo "::set-output name=version_number::$version_number"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{steps.get-version-number.outputs.version_number}}
+          release_name: Release v${{steps.get-version-number.outputs.version_number}}
+          draft: false
+          prerelease: false
