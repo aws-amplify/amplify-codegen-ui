@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`validation-helper validateStudioComponent child component requires componentType to be the correct type 1`] = `"children[0].componentType must be a \`string\` type, but the final value was: \`3\`."`;
+
+exports[`validation-helper validateStudioComponent deeply nested child components requires properties 1`] = `"children[0].children[0].children[0].properties is a required field"`;
+
+exports[`validation-helper validateStudioComponent top-level component requires componentType 1`] = `"componentType is a required field"`;
+
+exports[`validation-helper validateStudioComponent top-level component requires componentType to be the correct type 1`] = `"componentType must be a \`string\` type, but the final value was: \`2\`."`;
+
+exports[`validation-helper validateStudioComponent top-level component requires properties 1`] = `"properties is a required field"`;

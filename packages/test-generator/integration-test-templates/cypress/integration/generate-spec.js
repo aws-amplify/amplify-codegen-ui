@@ -1,4 +1,5 @@
-const EXPECTED_FAILURE_CASES = new Set(['ComponentMissingProperties', 'ComponentMissingType']);
+const EXPECTED_INVALID_INPUT_CASES = new Set(['ComponentMissingProperties', 'ComponentMissingType']);
+const EXPECTED_INTERNAL_ERROR_CASES = new Set([]);
 
 const TARGET_GENERATORS = ['ES2016_TSX', 'ES2016_JSX', 'ES5_TSX', 'ES5_JSX'];
 
@@ -14,8 +15,12 @@ describe('Generate Components', () => {
       cy.wrap($element).within(() => {
         cy.get('button').click();
         TARGET_GENERATORS.forEach((targetName) => {
-          if (EXPECTED_FAILURE_CASES.has(className)) {
+          if (EXPECTED_INVALID_INPUT_CASES.has(className)) {
             cy.get(`.${targetName}`).contains('❌');
+            cy.get(`.${targetName}`).contains('InvalidInputError');
+          } else if (EXPECTED_INTERNAL_ERROR_CASES.has(className)) {
+            cy.get(`.${targetName}`).contains('❌');
+            cy.get(`.${targetName}`).contains('InternalError');
           } else {
             cy.get(`.${targetName}`).contains('✅');
           }

@@ -14,6 +14,7 @@ lerna bootstrap
 lerna add --scope integration-test aws-amplify
 lerna add --scope integration-test @aws-amplify/ui-react@next
 lerna add --scope integration-test @aws-amplify/datastore
+lerna add --scope integration-test @amzn/studio-ui-codegen
 lerna add --scope integration-test @amzn/studio-ui-codegen-react
 lerna add --scope integration-test @amzn/test-generator
 lerna add --no-ci --scope integration-test react-router-dom

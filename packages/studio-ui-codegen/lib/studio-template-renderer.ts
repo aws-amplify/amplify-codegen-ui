@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import path from 'path';
+import { handleCodegenErrors } from './errors';
 import { FrameworkOutputManager } from './framework-output-manager';
 import { FrameworkRenderConfig } from './framework-render-config';
 import { RenderTextComponentResponse } from './render-component-response';
@@ -38,7 +39,12 @@ export abstract class StudioTemplateRenderer<
    * Renders the entire first order component. It returns the
    * component text and a method for saving the component to the filesystem.
    */
-  abstract renderComponent(): TRenderOutput;
+  @handleCodegenErrors
+  renderComponent(): TRenderOutput {
+    return this.renderComponentInternal();
+  }
+
+  protected abstract renderComponentInternal(): TRenderOutput;
 
   renderComponentToFilesystem(componentContent: TSource) {
     return (fileName: string) => (outputPath: string) =>

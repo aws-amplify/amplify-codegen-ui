@@ -15,8 +15,11 @@
  */
 /* eslint-disable max-classes-per-file */
 
-export type CodegenError = InternalError | InvalidInputError;
-
+/**
+ * Internal error to the codegen library.
+ * Something went wrong that we didn't expect while executing code generation for input that
+ * passed input verification.
+ */
 export class InternalError extends Error {
   constructor(message: string) {
     super(message);
@@ -24,6 +27,9 @@ export class InternalError extends Error {
   }
 }
 
+/**
+ * Unexpected input was provided to the codegen library, and we don't expect retrying will help in resolving.
+ */
 export class InvalidInputError extends Error {
   constructor(message: string) {
     super(message);

@@ -48,6 +48,7 @@ export type TestGeneratorParams = {
   writeToDisk: boolean;
   renderConfigOverride?: ReactRenderConfig;
   outputConfigOverride?: ReactOutputConfig;
+  immediatelyThrowGenerateErrors?: boolean;
 };
 
 export abstract class TestGenerator {
@@ -88,6 +89,9 @@ export abstract class TestGenerator {
           log.info(this.decorateTypescriptWithMarkdown(appSample.compText));
         }
       } catch (err) {
+        if (this.params.immediatelyThrowGenerateErrors) {
+          throw err;
+        }
         renderErrors[name] = err;
       }
     };
@@ -106,6 +110,9 @@ export abstract class TestGenerator {
           log.info(this.decorateTypescriptWithMarkdown(theme.componentText));
         }
       } catch (err) {
+        if (this.params.immediatelyThrowGenerateErrors) {
+          throw err;
+        }
         renderErrors[name] = err;
       }
     };

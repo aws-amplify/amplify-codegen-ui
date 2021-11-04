@@ -20,6 +20,7 @@ import { StudioTemplateRendererFactory } from './template-renderer-factory';
 
 import { FrameworkOutputConfig } from './framework-output-config';
 import { RenderTextComponentResponse } from './render-component-response';
+import { handleCodegenErrors, InvalidInputError } from './errors';
 
 /**
  * This is a class for genercially rendering Studio templates.
@@ -42,9 +43,10 @@ export class StudioTemplateRendererManager<
     }
   }
 
+  @handleCodegenErrors
   renderSchemaToTemplate(component: TStudioType | undefined): TRenderOutput {
     if (!component) {
-      throw new Error('Please ensure you have passed in a valid component schema');
+      throw new InvalidInputError('Please ensure you have passed in a valid component schema');
     }
     const componentRenderer = this.renderer.buildRenderer(component);
     const result = componentRenderer.renderComponent();
@@ -52,9 +54,10 @@ export class StudioTemplateRendererManager<
     return result;
   }
 
+  @handleCodegenErrors
   renderSchemaToTemplates(jsonSchema: TStudioType[] | undefined) {
     if (!jsonSchema) {
-      throw new Error('Please ensure you have passed in a valid schema');
+      throw new InvalidInputError('Please ensure you have passed in a valid schema');
     }
 
     for (const component of jsonSchema) {

@@ -30,6 +30,7 @@ import {
   StudioComponentVariant,
   StudioComponentAction,
   StudioComponentSimplePropertyBinding,
+  handleCodegenErrors,
 } from '@amzn/studio-ui-codegen';
 
 import { EOL } from 'os';
@@ -100,6 +101,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
   }
 
+  @handleCodegenErrors
   renderSampleCodeSnippet() {
     const jsx = this.renderSampleCodeSnippetJsx(this.component);
     const imports = this.importCollection.buildSampleSnippetImports(
@@ -120,6 +122,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return { compText, importsText };
   }
 
+  @handleCodegenErrors
   renderComponentOnly() {
     const jsx = this.renderJsx(this.component);
 
@@ -148,7 +151,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return { compText, importsText };
   }
 
-  renderComponent() {
+  renderComponentInternal() {
     // This is a react component so we only need a single tsx
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
