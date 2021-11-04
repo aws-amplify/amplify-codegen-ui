@@ -281,14 +281,16 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
       factory.createIdentifier(componentPropType),
       undefined,
-      factory.createIntersectionTypeNode(
-        this.dropMissingListElements([
-          this.buildPrimitivePropNode(component),
-          this.buildComponentPropNode(component),
-          this.buildVariantPropNode(component),
-          escapeHatchTypeNode,
-        ]),
-      ),
+      factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
+        factory.createIntersectionTypeNode(
+          this.dropMissingListElements([
+            this.buildPrimitivePropNode(component),
+            this.buildComponentPropNode(component),
+            this.buildVariantPropNode(component),
+            escapeHatchTypeNode,
+          ]),
+        ),
+      ]),
     );
   }
 
