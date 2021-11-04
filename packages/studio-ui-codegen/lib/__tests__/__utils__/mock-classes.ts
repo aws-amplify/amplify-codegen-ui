@@ -33,7 +33,7 @@ export class MockTemplateRenderer extends StudioTemplateRenderer<
   MockOutputManager,
   { componentText: string; renderComponentToFilesystem: (outputPath: string) => Promise<void> }
 > {
-  renderComponent() {
+  renderComponentInternal() {
     return {
       componentText: this.component.name || '',
       renderComponentToFilesystem: jest.fn(),

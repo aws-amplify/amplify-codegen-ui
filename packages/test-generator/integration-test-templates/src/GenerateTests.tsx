@@ -16,6 +16,7 @@
 import './GenerateTests.css';
 import { useState, useEffect, useCallback } from 'react';
 import { BrowserTestGenerator, TestCase } from '@amzn/test-generator';
+import { InvalidInputError, InternalError } from '@amzn/studio-ui-codegen';
 import { ScriptKind, ScriptTarget } from 'typescript';
 
 const defaultGenerator = new BrowserTestGenerator({
@@ -50,6 +51,7 @@ const generators = Object.fromEntries(
         writeToLogger: true,
         writeToDisk: false,
         renderConfigOverride,
+        immediatelyThrowGenerateErrors: true,
       }),
     ];
   }),
@@ -64,7 +66,7 @@ type GenerateTestCaseProps = {
 
 type TestResult = {
   result: 'PASSED' | 'FAILED';
-  errorCode?: any;
+  errorType?: any;
 };
 
 const GenerateTestCase = (props: GenerateTestCaseProps) => {
@@ -82,14 +84,16 @@ const GenerateTestCase = (props: GenerateTestCaseProps) => {
           return clonedState;
         });
       } catch (e) {
+        console.error(`Generate error for: ${name} - ${targetName}`, e);
+        const errorType = e instanceof InvalidInputError || e instanceof InternalError ? e.constructor.name : e;
         setTestState((testState) => {
           const clonedState = { ...testState };
-          clonedState[targetName] = { result: 'FAILED', errorCode: e };
+          clonedState[targetName] = { result: 'FAILED', errorType };
           return clonedState;
         });
       }
     });
-  }, [testCase]);
+  }, [name, testCase]);
 
   useEffect(() => {
     if (executeImmediately) {
@@ -107,7 +111,7 @@ const GenerateTestCase = (props: GenerateTestCaseProps) => {
       {targetValues.map((targetName) => (
         <td className={targetName}>
           {testState[targetName] &&
-            (testState[targetName].result === 'PASSED' ? ' ✅' : ` ❌ - ${testState[targetName].errorCode}`)}
+            (testState[targetName].result === 'PASSED' ? ' ✅' : ` ❌ - ${testState[targetName].errorType}`)}
         </td>
       ))}
     </tr>

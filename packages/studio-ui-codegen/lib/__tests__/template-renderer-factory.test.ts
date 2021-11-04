@@ -18,7 +18,7 @@ import { StudioTemplateRendererFactory } from '../template-renderer-factory';
 import { MockOutputManager, MockTemplateRenderer } from './__utils__/mock-classes';
 
 describe('StudioTemplateRendererFactory', () => {
-  test('buildRenerer', () => {
+  test('buildRenderer', () => {
     const componentName = 'MyText';
     const outputManager = new MockOutputManager();
     const renderer = new StudioTemplateRendererFactory(

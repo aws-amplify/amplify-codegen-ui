@@ -60,7 +60,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
     };
   }
 
-  renderComponent() {
+  renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
     const renderedImports = this.buildImports().map((importStatement) =>

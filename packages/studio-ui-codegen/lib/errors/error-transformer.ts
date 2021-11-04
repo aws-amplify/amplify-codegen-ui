@@ -13,16 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { InternalError, InvalidInputError, CodegenError } from './error-types';
+import { InternalError, InvalidInputError } from './error-types';
 
-export const transformCodegenError = (error: any | unknown): CodegenError => {
+export const transformCodegenError = (error: any | unknown): InternalError | InvalidInputError => {
   if (error instanceof InternalError || error instanceof InvalidInputError) {
     return error;
   }
 
-  // TODO: Extend with additional known error types.
-
-  return new InternalError(error.message);
+  return new InternalError('Unhandled internal error occurred - see stack trace.');
 };
 
 export const handleCodegenErrors = (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
