@@ -15,14 +15,43 @@
  */
 import { StudioNode, StudioComponent, StudioComponentChild } from '@amzn/studio-ui-codegen';
 import { JsxElement, JsxFragment } from 'typescript';
+// add primitives in alphabetical order
 import {
+  AlertProps,
   BadgeProps,
   ButtonProps,
+  ButtonGroupProps,
   CardProps,
+  CheckboxFieldProps,
   DividerProps,
+  FieldGroupIconProps,
+  FieldGroupIconButtonProps,
   FlexProps,
+  GridProps,
+  HeadingProps,
+  IconProps,
   ImageProps,
+  InputProps,
+  LabelProps,
+  LinkProps,
+  LoaderProps,
+  PaginationProps,
+  PasswordFieldProps,
+  PhoneNumberFieldProps,
+  PlaceholderProps,
+  RadioProps,
+  RadioGroupFieldProps,
+  RatingProps,
+  ScrollViewProps,
+  SearchFieldProps,
+  SelectFieldProps,
+  StepperFieldProps,
+  SwitchFieldProps,
+  TabsProps,
+  ToggleButtonProps,
+  ToggleButtonGroupProps,
   ViewProps,
+  VisuallyHiddenProps,
 } from '@aws-amplify/ui-react';
 import Primitives from '../primitives';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
@@ -41,9 +70,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
     // add primitives in alphabetical order
     switch (component.componentType) {
       case Primitives.Alert:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<AlertProps>(
           component,
           this.importCollection,
           parent,
@@ -64,9 +91,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitives.ButtonGroup:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<ButtonGroupProps>(
           component,
           this.importCollection,
           parent,
@@ -80,9 +105,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitives.CheckboxField:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<CheckboxFieldProps>(
           component,
           this.importCollection,
           parent,
@@ -94,45 +117,8 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitives.Divider:
         return new ReactComponentRenderer<DividerProps>(component, this.importCollection, parent).renderElement();
 
-      case Primitives.Field:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
-
-      case Primitives.FieldClearButton:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
-
-      case Primitives.FieldDescription:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
-
-      case Primitives.FieldErrorMessage:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
-
       case Primitives.FieldGroup:
-        // unofficial support to retain functionality
-        // TODO: add official support
+        // TODO: Use correct prop type
         return new ReactComponentWithChildrenRenderer<ViewProps>(
           component,
           this.importCollection,
@@ -140,18 +126,14 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitives.FieldGroupIcon:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<FieldGroupIconProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.FieldGroupIconButton:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<FieldGroupIconButtonProps>(
           component,
           this.importCollection,
           parent,
@@ -165,27 +147,21 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitives.Grid:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<GridProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Heading:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<HeadingProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Icon:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<IconProps>(
           component,
           this.importCollection,
           parent,
@@ -195,153 +171,119 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         return new ReactComponentRenderer<ImageProps>(component, this.importCollection, parent).renderElement();
 
       case Primitives.Input:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<InputProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Label:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<LabelProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Link:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<LinkProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Loader:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<LoaderProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Pagination:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<PaginationProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.PasswordField:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<PasswordFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.PhoneNumberField:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<PhoneNumberFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Placeholder:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<PlaceholderProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Radio:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<RadioProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.RadioGroupField:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<RadioGroupFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Rating:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<RatingProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.ScrollView:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<ScrollViewProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.SearchField:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<SearchFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.SelectField:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<SelectFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.StepperField:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<StepperFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.SwitchField:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<SwitchFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.Tabs:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<TabsProps>(
           component,
           this.importCollection,
           parent,
@@ -349,15 +291,6 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case Primitives.Text:
         return new TextRenderer(component, this.importCollection, parent).renderElement();
-
-      case Primitives.TextArea:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
 
       case Primitives.TextField:
         // unofficial support to retain functionality
@@ -369,18 +302,14 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitives.ToggleButton:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<ToggleButtonProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitives.ToggleButtonGroup:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<ToggleButtonGroupProps>(
           component,
           this.importCollection,
           parent,
@@ -394,9 +323,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitives.VisuallyHidden:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<VisuallyHiddenProps>(
           component,
           this.importCollection,
           parent,
