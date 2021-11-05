@@ -14,7 +14,7 @@ jobs:
       - name: Get Version Number
         id: get-version-number
         run: |
-          version_number=$(echo "${{github.event.head_commit.message}}" | sed -e "s/^chore(release): v//")
+          version_number=$(echo "${{github.event.head_commit.message}}" | sed -e "s/^chore(release): v//" -e "s/ (#[[:digit:]]\+)$//")
           echo "::set-output name=version_number::$version_number"
       - name: Create Release
         id: create_release
