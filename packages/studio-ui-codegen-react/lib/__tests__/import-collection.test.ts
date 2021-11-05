@@ -89,9 +89,6 @@ describe('ImportCollection', () => {
 
   test('buildSampleSnippetImports', () => {
     const importCollection = new ImportCollection();
-    importCollection.addImport('@aws-amplify/ui-react', 'Button');
-    importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
-    importCollection.addImport('../models', 'User');
     assertASTMatchesSnapshot(importCollection.buildSampleSnippetImports('MyButton'));
   });
 });

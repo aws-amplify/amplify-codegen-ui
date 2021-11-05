@@ -34,7 +34,7 @@ import { User } from \\"../models\\";"
 
 exports[`ImportCollection buildImportStatements no imports 1`] = `"import React from \\"react\\";"`;
 
-exports[`ImportCollection buildSampleSnippetImports 1`] = `"import { MyButton } from \\"./studio-ui\\";"`;
+exports[`ImportCollection buildSampleSnippetImports 1`] = `"import { MyButton } from \\"./ui-components\\";"`;
 
 exports[`ImportCollection mergeCollections 1`] = `
 "import React from \\"react\\";

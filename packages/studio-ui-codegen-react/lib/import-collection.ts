@@ -41,7 +41,7 @@ export class ImportCollection {
 
   buildSampleSnippetImports(topComponentName: string): ImportDeclaration[] {
     const importDeclarations: ImportDeclaration[] = [];
-    const sampleStudioPath = './studio-ui';
+    const sampleStudioPath = './ui-components';
     const namedImports = factory.createNamedImports([
       factory.createImportSpecifier(undefined, factory.createIdentifier(topComponentName)),
     ]);
