@@ -15,7 +15,9 @@
  */
 import { NodeTestGenerator } from '..';
 
-new NodeTestGenerator({
+const generator = new NodeTestGenerator({
   writeToLogger: true,
   writeToDisk: false,
-}).generate();
+});
+
+generator.generate(generator.getTestCases());

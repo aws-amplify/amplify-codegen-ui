@@ -13,6 +13,5 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './NodeTestGenerator';
-export * from './BrowserTestGenerator';
-export * from './TestGenerator';
+export { default as ComponentMissingType } from './componentMissingType.json';
+export { default as ComponentMissingProperties } from './componentMissingProperties.json';

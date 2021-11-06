@@ -29,3 +29,4 @@ export * from './custom';
 export * from './operators';
 export * from './overrides';
 export * from './primitives';
+export * from './errors';

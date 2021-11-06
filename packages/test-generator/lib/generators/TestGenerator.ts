@@ -37,12 +37,17 @@ const DEFAULT_OUTPUT_CONFIG = {
 
 log.setLevel('info');
 
+export type TestCase = {
+  name: string;
+  schema: any;
+  testType: 'Component' | 'Theme';
+};
+
 export type TestGeneratorParams = {
   writeToLogger: boolean;
   writeToDisk: boolean;
   renderConfigOverride?: ReactRenderConfig;
   outputConfigOverride?: ReactOutputConfig;
-  disabledSchemas?: string[];
 };
 
 export abstract class TestGenerator {
@@ -58,13 +63,11 @@ export abstract class TestGenerator {
     this.outputConfig = { ...DEFAULT_OUTPUT_CONFIG, ...params.outputConfigOverride };
   }
 
-  generate = () => {
+  generate = (testCases: TestCase[]) => {
     const renderErrors: { [key: string]: any } = {};
 
-    Object.entries(ComponentSchemas).forEach(([name, schema]) => {
-      if (this.params.disabledSchemas && this.params.disabledSchemas.includes(name)) {
-        return;
-      }
+    const generateComponent = (testCase: TestCase) => {
+      const { name, schema } = testCase;
       try {
         if (this.params.writeToDisk) {
           this.writeComponentToDisk(schema as StudioComponent);
@@ -87,12 +90,10 @@ export abstract class TestGenerator {
       } catch (err) {
         renderErrors[name] = err;
       }
-    });
+    };
 
-    Object.entries(ThemeSchemas).forEach(([name, schema]) => {
-      if (this.params.disabledSchemas && this.params.disabledSchemas.includes(name)) {
-        return;
-      }
+    const generateTheme = (testCase: TestCase) => {
+      const { name, schema } = testCase;
       try {
         if (this.params.writeToDisk) {
           this.writeThemeToDisk(schema as StudioTheme);
@@ -106,6 +107,19 @@ export abstract class TestGenerator {
         }
       } catch (err) {
         renderErrors[name] = err;
+      }
+    };
+
+    testCases.forEach((testCase) => {
+      switch (testCase.testType) {
+        case 'Component':
+          generateComponent(testCase);
+          break;
+        case 'Theme':
+          generateTheme(testCase);
+          break;
+        default:
+          throw new Error('Expected either a `Component` or `Theme` test case type');
       }
     });
 
@@ -133,4 +147,16 @@ export abstract class TestGenerator {
   };
 
   abstract renderTheme(theme: StudioTheme): { componentText: string };
+
+  getTestCases(disabledSchemaNames?: string[]): TestCase[] {
+    const disabledSchemaSet = new Set(disabledSchemaNames);
+    return [
+      ...Object.entries(ComponentSchemas).map(([name, schema]) => {
+        return { name, schema, testType: 'Component' } as TestCase;
+      }),
+      ...Object.entries(ThemeSchemas).map(([name, schema]) => {
+        return { name, schema, testType: 'Theme' } as TestCase;
+      }),
+    ].filter((testCase) => !disabledSchemaSet.has(testCase.name));
+  }
 }
