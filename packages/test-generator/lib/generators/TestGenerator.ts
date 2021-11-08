@@ -75,18 +75,13 @@ export abstract class TestGenerator {
         }
 
         if (this.params.writeToLogger) {
-          const { renderedComponent, appSample } = this.renderComponent(schema as StudioComponent);
+          const { importsText, compText } = this.renderComponent(schema as StudioComponent);
           log.info(`# ${name}`);
           log.info('## Component Only Output');
           log.info('### componentImports');
-          log.info(this.decorateTypescriptWithMarkdown(renderedComponent.importsText));
+          log.info(this.decorateTypescriptWithMarkdown(importsText));
           log.info('### componentText');
-          log.info(this.decorateTypescriptWithMarkdown(renderedComponent.compText));
-          log.info('## Code Snippet Output');
-          log.info('### componentImports');
-          log.info(this.decorateTypescriptWithMarkdown(appSample.importsText));
-          log.info('### componentText');
-          log.info(this.decorateTypescriptWithMarkdown(appSample.compText));
+          log.info(this.decorateTypescriptWithMarkdown(compText));
         }
       } catch (err) {
         if (this.params.immediatelyThrowGenerateErrors) {
@@ -136,6 +131,29 @@ export abstract class TestGenerator {
       }
     };
 
+    const generateSnippet = (testCases: TestCase[]) => {
+      const components = testCases.map((testCase) => testCase.schema);
+      try {
+        if (this.params.writeToDisk) {
+          this.writeSnippetToDisk(components);
+        }
+
+        if (this.params.writeToLogger) {
+          const { importsText, compText } = this.renderSnippet(components);
+          log.info('## Code Snippet Output');
+          log.info('### componentImports');
+          log.info(this.decorateTypescriptWithMarkdown(importsText));
+          log.info('### componentText');
+          log.info(this.decorateTypescriptWithMarkdown(compText));
+        }
+      } catch (err) {
+        if (this.params.immediatelyThrowGenerateErrors) {
+          throw err;
+        }
+        renderErrors.snippet = err;
+      }
+    };
+
     testCases.forEach((testCase) => {
       switch (testCase.testType) {
         case 'Component':
@@ -150,6 +168,9 @@ export abstract class TestGenerator {
     });
 
     generateIndexFile(testCases);
+
+    // only test with 4 components for performance
+    generateSnippet(testCases.filter((testCase) => testCase.testType === 'Component').slice(4));
 
     if (Object.keys(renderErrors).length > 0) {
       log.error('Caught exceptions while rendering templates');
@@ -169,16 +190,17 @@ export abstract class TestGenerator {
 
   abstract writeThemeToDisk(theme: StudioTheme): void;
 
-  abstract renderComponent(component: StudioComponent): {
-    renderedComponent: { compText: string; importsText: string };
-    appSample: { compText: string; importsText: string };
-  };
+  abstract renderComponent(component: StudioComponent): { compText: string; importsText: string };
 
   abstract renderTheme(theme: StudioTheme): { componentText: string };
 
   abstract writeIndexFileToDisk(schemas: (StudioComponent | StudioTheme)[]): void;
 
   abstract renderIndexFile(schemas: (StudioComponent | StudioTheme)[]): { componentText: string };
+
+  abstract writeSnippetToDisk(components: StudioComponent[]): void;
+
+  abstract renderSnippet(components: StudioComponent[]): { compText: string; importsText: string };
 
   getTestCases(disabledSchemaNames?: string[]): TestCase[] {
     const disabledSchemaSet = new Set(disabledSchemaNames);
