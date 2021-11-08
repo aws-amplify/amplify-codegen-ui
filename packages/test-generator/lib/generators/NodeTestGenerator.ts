@@ -15,6 +15,8 @@
  */
 
 /* Test Generator to be used in the Node environment */
+import fs from 'fs';
+import path from 'path';
 import {
   StudioTemplateRendererManager,
   StudioTemplateRendererFactory,
@@ -63,9 +65,29 @@ export class NodeTestGenerator extends TestGenerator {
 
   renderComponent(component: StudioComponent) {
     const buildRenderer = this.componentRendererFactory.buildRenderer(component);
-    const renderedComponent = buildRenderer.renderComponentOnly();
-    const appSample = buildRenderer.renderSampleCodeSnippet();
-    return { renderedComponent, appSample };
+    return buildRenderer.renderComponentOnly();
+  }
+
+  writeSnippetToDisk(components: StudioComponent[]) {
+    const { importsText, compText } = this.renderSnippet(components);
+    fs.writeFileSync(path.join(this.outputConfig.outputPathDir, '..', 'SnippetTests.jsx'), importsText + compText);
+  }
+
+  renderSnippet(components: StudioComponent[]): { importsText: string; compText: string } {
+    const snippet = components
+      .map((component) => {
+        const buildRenderer = this.componentRendererFactory.buildRenderer(component);
+        return buildRenderer.renderSampleCodeSnippet();
+      })
+      .reduce(
+        (prev, curr): { importsText: string; compText: string } => ({
+          importsText: prev.importsText + curr.importsText,
+          compText: `${prev.compText}\n${curr.compText}`,
+        }),
+        { importsText: '', compText: 'export default function SnippetTests() {\nreturn (\n<>\n' },
+      );
+
+    return { ...snippet, compText: `${snippet.compText}\n</>\n);\n}` };
   }
 
   writeThemeToDisk(theme: StudioTheme) {

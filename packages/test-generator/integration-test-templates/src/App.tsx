@@ -20,6 +20,7 @@ import GenerateTests from './GenerateTests';
 import PrimitivesTests from './PrimitivesTests';
 import ComplexTests from './ComplexTests';
 import IconsetTests from './IconsetTests';
+import SnippetTests from './SnippetTests'; // eslint-disable-line import/extensions
 
 // use fake endpoint so useDataStoreBinding does not fail
 Amplify.configure({
@@ -46,6 +47,9 @@ const HomePage = () => {
         <li>
           <a href="/iconset-tests">Iconset Tests</a>
         </li>
+        <li>
+          <a href="/snippet-tests">Snippet Tests</a>
+        </li>
       </ul>
     </div>
   );
@@ -60,6 +64,7 @@ export default function App() {
         <Route path="/primitives-tests" element={<PrimitivesTests />} />
         <Route path="/complex-tests" element={<ComplexTests />} />
         <Route path="/iconset-tests" element={<IconsetTests />} />
+        <Route path="/snippet-tests" element={<SnippetTests />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
