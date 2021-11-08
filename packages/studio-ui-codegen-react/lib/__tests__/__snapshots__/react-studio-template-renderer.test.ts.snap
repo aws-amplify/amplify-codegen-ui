@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReactStudioTemplateRenderer renderSampleCodeSnippet component with name 1`] = `
+Object {
+  "compText": "export const App = () => {
+    return (<MyText></MyText>);
+};",
+  "importsText": "import { MyText } from \\"./ui-components\\";
+",
+}
+`;
+
+exports[`ReactStudioTemplateRenderer renderSampleCodeSnippet component without name 1`] = `
+Object {
+  "compText": "export const App = () => {
+    return (<unknown_component_name></unknown_component_name>);
+};",
+  "importsText": "import { unknown_component_name } from \\"./ui-components\\";
+",
+}
+`;
