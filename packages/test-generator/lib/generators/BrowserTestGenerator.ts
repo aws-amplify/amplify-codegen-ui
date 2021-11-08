@@ -30,18 +30,31 @@ export class BrowserTestGenerator extends TestGenerator {
 
   writeIndexFileToDisk() {} // no-op
 
+  writeSnippetToDisk() {} // no-op
+
   renderIndexFile(schemas: (StudioComponent | StudioTheme)[]) {
     return new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig).renderComponent();
   }
 
   renderComponent(component: StudioComponent) {
-    return {
-      renderedComponent: new AmplifyRenderer(component, this.renderConfig).renderComponentOnly(),
-      appSample: { compText: '', importsText: '' },
-    };
+    return new AmplifyRenderer(component, this.renderConfig).renderComponentOnly();
   }
 
   renderTheme(theme: StudioTheme) {
     return new ReactThemeStudioTemplateRenderer(theme, this.renderConfig).renderComponent();
+  }
+
+  renderSnippet(components: StudioComponent[]) {
+    const snippet = components
+      .map((component) => new AmplifyRenderer(component, this.renderConfig).renderSampleCodeSnippet())
+      .reduce(
+        (prev, curr): { importsText: string; compText: string } => ({
+          importsText: prev.importsText + curr.importsText,
+          compText: `${prev.compText}\n${curr.compText}`,
+        }),
+        { importsText: '', compText: 'export default function SnippetTests() {\nreturn (\n<>\n' },
+      );
+
+    return { ...snippet, compText: `${snippet.compText}\n</>\n);\n}` };
   }
 }
