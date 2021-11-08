@@ -26,6 +26,7 @@ import {
   buildOpeningElementAttributes,
   buildOpeningElementActions,
 } from './react-component-render-helper';
+import Primitive, { PrimitiveChildrenPropMapping } from './primitive';
 
 export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithChildrenRendererBase<
   TPropIn,
@@ -38,6 +39,7 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
     protected parent?: StudioNode,
   ) {
     super(component, parent);
+    this.mapSyntheticProps();
     addBindingPropertiesImports(component, importCollection);
   }
 
@@ -137,5 +139,27 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
     );
 
     attributes.push(attr);
+  }
+
+  /* Some additional props are added to Amplify primitives in Studio. These "sythetic" props are mapped to real props
+   * on the primitives.
+   *
+   * Example: Text prop label is mapped to to Text prop Children
+   *
+   * This is done so that nonadvanced users of Studio do not need to interact with props that might confuse them.
+   */
+  private mapSyntheticProps() {
+    // properties.children will take precedent over mapped children prop
+    if (this.component.properties.children === undefined) {
+      const childrenPropMapping = PrimitiveChildrenPropMapping[Primitive[this.component.componentType as Primitive]];
+
+      if (childrenPropMapping !== undefined) {
+        const mappedChildrenProp = this.component.properties[childrenPropMapping];
+        if (mappedChildrenProp !== undefined) {
+          this.component.properties.children = mappedChildrenProp;
+          delete this.component.properties[childrenPropMapping];
+        }
+      }
+    }
   }
 }

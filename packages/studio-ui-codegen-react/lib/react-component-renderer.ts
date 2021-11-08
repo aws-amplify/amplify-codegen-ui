@@ -46,10 +46,9 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<TProp
   }
 
   protected renderOpeningElement(): JsxOpeningElement {
-    const attributes = Object.entries(this.component.properties)
-      // value should be child of Text, not a prop
-      .filter(([key]) => !(this.component.componentType === 'Text' && key === 'value'))
-      .map(([key, value]) => buildOpeningElementAttributes(value, key));
+    const attributes = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementAttributes(value, key),
+    );
 
     if ('events' in this.component && this.component.events !== undefined) {
       attributes.push(

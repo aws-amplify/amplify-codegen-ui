@@ -9,7 +9,7 @@
       "componentType": "Text",
       "name": "TextWithConcatenation",
       "properties": {
-        "value": {
+        "label": {
           "concat": [
             {
               "value": "Concatenate"

@@ -12,7 +12,7 @@
     {
       "componentType": "Text",
       "properties": {
-        "value": {
+        "label": {
           "collectionBindingProperties": {
             "property": "user",
             "field": "username"

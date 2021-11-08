@@ -9,7 +9,7 @@
     }
   },
   "properties": {
-    "value": {
+    "label": {
       "bindingProperties": {
         "property": "label"
       },

@@ -8,7 +8,7 @@
       "name": "Text",
       "componentType": "Text",
       "properties": {
-        "value": {
+        "label": {
           "value": "Basic Component Badge"
         }
       }

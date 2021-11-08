@@ -53,7 +53,7 @@ import {
   ViewProps,
   VisuallyHiddenProps,
 } from '@aws-amplify/ui-react';
-import Primitives from '../primitives';
+import Primitive from '../primitive';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
 import TextRenderer from './text';
 import CustomComponentRenderer from './customComponent';
@@ -66,57 +66,57 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
     const node = new StudioNode(component, parent);
     const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
 
-    // add primitives in alphabetical order
+    // add Primitive in alphabetical order
     switch (component.componentType) {
-      case Primitives.Alert:
+      case Primitive.Alert:
         return new ReactComponentWithChildrenRenderer<AlertProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Badge:
+      case Primitive.Badge:
         return new ReactComponentWithChildrenRenderer<BadgeProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Button:
+      case Primitive.Button:
         return new ReactComponentWithChildrenRenderer<ButtonProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.ButtonGroup:
+      case Primitive.ButtonGroup:
         return new ReactComponentWithChildrenRenderer<ButtonGroupProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Card:
+      case Primitive.Card:
         return new ReactComponentWithChildrenRenderer<CardProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.CheckboxField:
+      case Primitive.CheckboxField:
         return new ReactComponentWithChildrenRenderer<CheckboxFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Collection:
+      case Primitive.Collection:
         return new CollectionRenderer(component, this.importCollection, parent).renderElement(renderChildren);
 
-      case Primitives.Divider:
+      case Primitive.Divider:
         return new ReactComponentRenderer<DividerProps>(component, this.importCollection, parent).renderElement();
 
-      case Primitives.FieldGroup:
+      case Primitive.FieldGroup:
         // TODO: Use correct prop type
         return new ReactComponentWithChildrenRenderer<ViewProps>(
           component,
@@ -124,174 +124,174 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.FieldGroupIcon:
+      case Primitive.FieldGroupIcon:
         return new ReactComponentWithChildrenRenderer<FieldGroupIconProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.FieldGroupIconButton:
+      case Primitive.FieldGroupIconButton:
         return new ReactComponentWithChildrenRenderer<FieldGroupIconButtonProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Flex:
+      case Primitive.Flex:
         return new ReactComponentWithChildrenRenderer<FlexProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Grid:
+      case Primitive.Grid:
         return new ReactComponentWithChildrenRenderer<GridProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Heading:
+      case Primitive.Heading:
         return new ReactComponentWithChildrenRenderer<HeadingProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Icon:
+      case Primitive.Icon:
         return new ReactComponentWithChildrenRenderer<IconProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Image:
+      case Primitive.Image:
         return new ReactComponentRenderer<ImageProps>(component, this.importCollection, parent).renderElement();
 
-      case Primitives.Input:
+      case Primitive.Input:
         return new ReactComponentWithChildrenRenderer<InputProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Label:
+      case Primitive.Label:
         return new ReactComponentWithChildrenRenderer<LabelProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Link:
+      case Primitive.Link:
         return new ReactComponentWithChildrenRenderer<LinkProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Loader:
+      case Primitive.Loader:
         return new ReactComponentWithChildrenRenderer<LoaderProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Pagination:
+      case Primitive.Pagination:
         return new ReactComponentWithChildrenRenderer<PaginationProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.PasswordField:
+      case Primitive.PasswordField:
         return new ReactComponentWithChildrenRenderer<PasswordFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.PhoneNumberField:
+      case Primitive.PhoneNumberField:
         return new ReactComponentWithChildrenRenderer<PhoneNumberFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Placeholder:
+      case Primitive.Placeholder:
         return new ReactComponentWithChildrenRenderer<PlaceholderProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Radio:
+      case Primitive.Radio:
         return new ReactComponentWithChildrenRenderer<RadioProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.RadioGroupField:
+      case Primitive.RadioGroupField:
         return new ReactComponentWithChildrenRenderer<RadioGroupFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Rating:
+      case Primitive.Rating:
         return new ReactComponentWithChildrenRenderer<RatingProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.ScrollView:
+      case Primitive.ScrollView:
         return new ReactComponentWithChildrenRenderer<ScrollViewProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.SearchField:
+      case Primitive.SearchField:
         return new ReactComponentWithChildrenRenderer<SearchFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.SelectField:
+      case Primitive.SelectField:
         return new ReactComponentWithChildrenRenderer<SelectFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.StepperField:
+      case Primitive.StepperField:
         return new ReactComponentWithChildrenRenderer<StepperFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.SwitchField:
+      case Primitive.SwitchField:
         return new ReactComponentWithChildrenRenderer<SwitchFieldProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Tabs:
+      case Primitive.Tabs:
         return new ReactComponentWithChildrenRenderer<TabsProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.Text:
+      case Primitive.Text:
         return new TextRenderer(component, this.importCollection, parent).renderElement();
 
-      case Primitives.TextField:
+      case Primitive.TextField:
         // unofficial support to retain functionality
         // TODO: add official support
         return new ReactComponentWithChildrenRenderer<ViewProps>(
@@ -300,28 +300,28 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.ToggleButton:
+      case Primitive.ToggleButton:
         return new ReactComponentWithChildrenRenderer<ToggleButtonProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.ToggleButtonGroup:
+      case Primitive.ToggleButtonGroup:
         return new ReactComponentWithChildrenRenderer<ToggleButtonGroupProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.View:
+      case Primitive.View:
         return new ReactComponentWithChildrenRenderer<ViewProps>(
           component,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
-      case Primitives.VisuallyHidden:
+      case Primitive.VisuallyHidden:
         return new ReactComponentWithChildrenRenderer<VisuallyHiddenProps>(
           component,
           this.importCollection,

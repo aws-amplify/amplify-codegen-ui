@@ -15,7 +15,7 @@
           "componentType": "Text",
           "name": "CustomText",
           "properties": {
-            "value": {
+            "label": {
               "value": "Text in Button"
             }
           }

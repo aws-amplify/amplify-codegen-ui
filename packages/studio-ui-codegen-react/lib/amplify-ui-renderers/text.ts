@@ -15,12 +15,13 @@
  */
 import { TextProps } from '@aws-amplify/ui-react';
 import { factory, JsxChild, JsxElement } from 'typescript';
-import { ReactComponentRenderer } from '../react-component-renderer';
+import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 import { buildChildElement } from '../react-component-render-helper';
 
-export default class TextRenderer extends ReactComponentRenderer<TextProps> {
+export default class TextRenderer extends ReactComponentWithChildrenRenderer<TextProps> {
   renderElement(): JsxElement {
     const childElement = buildChildElement(this.component.properties.value);
+    delete this.component.properties.value;
     const children: JsxChild[] = childElement ? [childElement] : [];
 
     const element = factory.createJsxElement(

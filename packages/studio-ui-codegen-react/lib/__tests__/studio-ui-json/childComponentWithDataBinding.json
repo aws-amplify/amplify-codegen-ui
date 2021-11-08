@@ -13,7 +13,7 @@
       "componentType": "Text",
       "name": "TextWithDataBinding",
       "properties": {
-        "value": {
+        "label": {
           "bindingProperties": {
             "property": "textValue"
           }

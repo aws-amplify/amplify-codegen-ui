@@ -34,7 +34,7 @@
             "lineHeight": {
               "value": "48px"
             },
-            "value": {
+            "label": {
               "value": "Heading 2"
             },
             "fontWeight": {
@@ -71,7 +71,7 @@
         "lineHeight": {
           "value": "48px"
         },
-        "value": {
+        "label": {
           "value": "subtitle"
         },
         "fontWeight": {

@@ -111,11 +111,10 @@ export default function CustomText(props: CustomTextProps): React.ReactElement {
     <Text
       color=\\"#ff0000\\"
       width=\\"20px\\"
+      children=\\"Text Value\\"
       {...rest}
       {...getOverrideProps(overrides, \\"Text\\")}
-    >
-      {\\"Text Value\\"}
-    </Text>
+    ></Text>
   );
 }
 "
@@ -232,10 +231,10 @@ export default function CollectionOfCustomButtons(
       {(item, index) => (
         <Flex {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}>
           <Button
-            label={item.username || \\"hspain@gmail.com\\"}
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
             disabled={isDisabled}
+            children={item.username || \\"hspain@gmail.com\\"}
             {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[0]\\")}
           ></Button>
         </Flex>
@@ -333,10 +332,10 @@ export default function CollectionOfCustomButtons(
       {(item, index) => (
         <Flex {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}>
           <Button
-            label={item.username || \\"hspain@gmail.com\\"}
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
             disabled={isDisabled}
+            children={item.username || \\"hspain@gmail.com\\"}
             {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[0]\\")}
           ></Button>
         </Flex>
@@ -430,10 +429,10 @@ export default function CollectionOfCustomButtons(
       {(item, index) => (
         <Flex {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}>
           <Button
-            label={item.username || \\"hspain@gmail.com\\"}
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
             disabled={isDisabled}
+            children={item.username || \\"hspain@gmail.com\\"}
             {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[0]\\")}
           ></Button>
         </Flex>
@@ -694,10 +693,9 @@ export default function Hi(props: HiProps): React.ReactElement {
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"14px\\"
+        children=\\"Hi harriso\\"
         {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
-      >
-        {\\"Hi harriso\\"}
-      </Text>
+      ></Text>
     </Flex>
   );
 }
@@ -824,10 +822,9 @@ export default function NewComponent(
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"29px\\"
+        children=\\"Hello World!\\"
         {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
-      >
-        {\\"Hello World!\\"}
-      </Text>
+      ></Text>
       <Box
         width=\\"390px\\"
         padding=\\"0px 0px 0px 0px\\"
@@ -853,10 +850,9 @@ export default function NewComponent(
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"29px\\"
+        children=\\"Testing 123\\"
         {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
-      >
-        {\\"Testing 123\\"}
-      </Text>
+      ></Text>
     </Flex>
   );
 }
@@ -1079,10 +1075,9 @@ export default function MohitHome(props: MohitHomeProps): React.ReactElement {
         position=\\"relative\\"
         fontWeight=\\"700\\"
         height=\\"29px\\"
+        children=\\"Name\\"
         {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
-      >
-        {\\"Name\\"}
-      </Text>
+      ></Text>
       <Text
         padding=\\"0px 0px 0px 0px\\"
         fontFamily=\\"Roboto\\"
@@ -1094,10 +1089,9 @@ export default function MohitHome(props: MohitHomeProps): React.ReactElement {
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"14px\\"
+        children=\\"Price / Address\\"
         {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
-      >
-        {\\"Price / Address\\"}
-      </Text>
+      ></Text>
       <Text
         padding=\\"0px 0px 0px 0px\\"
         fontFamily=\\"Roboto\\"
@@ -1109,10 +1103,9 @@ export default function MohitHome(props: MohitHomeProps): React.ReactElement {
         position=\\"relative\\"
         fontWeight=\\"400\\"
         height=\\"14px\\"
+        children=\\"Sqft\\"
         {...getOverrideProps(overrides, \\"Flex.Text[2]\\")}
-      >
-        {\\"Sqft\\"}
-      </Text>
+      ></Text>
     </Flex>
   );
 }
@@ -1173,10 +1166,9 @@ export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
         position=\\"absolute\\"
         fontWeight=\\"400\\"
         height=\\"27.839996337890625px\\"
+        children=\\"Test\\"
         {...getOverrideProps(overrides, \\"Box.Text[0]\\")}
-      >
-        {\\"Test\\"}
-      </Text>
+      ></Text>
       <Image
         border=\\"4px SOLID rgb(0,0,0)\\"
         padding=\\"0px 0px 0px 0px\\"
@@ -1292,11 +1284,10 @@ export default function TextWithDataBinding(
     <Text
       color=\\"#ff0000\\"
       width=\\"20px\\"
+      children={textValue}
       {...rest}
       {...getOverrideProps(overrides, \\"Text\\")}
-    >
-      {textValue}
-    </Text>
+    ></Text>
   );
 }
 "
@@ -1338,9 +1329,9 @@ export default function ComponentWithDataBinding(
   return (
     /* @ts-ignore: TS2322 */
     <Button
-      label={buttonUser?.username || \\"hspain@gmail.com\\"}
       labelWidth={width}
       disabled={isDisabled}
+      children={buttonUser?.username || \\"hspain@gmail.com\\"}
       {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
@@ -1393,10 +1384,9 @@ export default function SectionHeading(
           fontSize=\\"48px\\"
           lineHeight=\\"48px\\"
           fontWeight=\\"300\\"
+          children=\\"Heading 2\\"
           {...getOverrideProps(overrides, \\"Flex.Flex[0].Text[0]\\")}
-        >
-          {\\"Heading 2\\"}
-        </Text>
+        ></Text>
       </Flex>
       <Text
         fontFamily=\\"Inter\\"
@@ -1405,10 +1395,9 @@ export default function SectionHeading(
         fontSize=\\"32px\\"
         lineHeight=\\"48px\\"
         fontWeight=\\"400\\"
+        children=\\"subtitle\\"
         {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
-      >
-        {\\"subtitle\\"}
-      </Text>
+      ></Text>
     </Flex>
   );
 }
@@ -1441,9 +1430,10 @@ export default function ChildComponentWithDataBinding(
   return (
     /* @ts-ignore: TS2322 */
     <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
-      <Text {...getOverrideProps(overrides, \\"Button.Text[0]\\")}>
-        {textValue}
-      </Text>
+      <Text
+        children={textValue}
+        {...getOverrideProps(overrides, \\"Button.Text[0]\\")}
+      ></Text>
     </Button>
   );
 }
@@ -1534,9 +1524,12 @@ export default function ChildComponentWithDataBoundConcatenation(
   return (
     /* @ts-ignore: TS2322 */
     <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
-      <Text {...getOverrideProps(overrides, \\"Button.Text[0]\\")}>{\`\${
-        buttonUser?.firstname || \\"Harrison\\"
-      }\${\\" \\"}\${buttonUser?.lastname || \\"Spain\\"}\`}</Text>
+      <Text
+        children={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
+          buttonUser?.lastname || \\"Spain\\"
+        }\`}
+        {...getOverrideProps(overrides, \\"Button.Text[0]\\")}
+      ></Text>
     </Button>
   );
 }
@@ -1569,8 +1562,9 @@ export default function ChildComponentWithStaticConcatenation(
     /* @ts-ignore: TS2322 */
     <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
       <Text
+        children={\`\${\\"Concatenate\\"}\${\\" \\"}\${\\"Me!\\"}\`}
         {...getOverrideProps(overrides, \\"Button.Text[0]\\")}
-      >{\`\${\\"Concatenate\\"}\${\\" \\"}\${\\"Me!\\"}\`}</Text>
+      ></Text>
     </Button>
   );
 }
@@ -1611,10 +1605,10 @@ export default function CustomButton(
   return (
     /* @ts-ignore: TS2322 */
     <Button
-      label={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
+      labelWidth={width}
+      children={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
         buttonUser?.lastname || \\"Spain\\"
       }\`}
-      labelWidth={width}
       {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
@@ -1657,9 +1651,6 @@ export default function CustomButton(
   return (
     /* @ts-ignore: TS2322 */
     <Button
-      label={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
-        buttonUser?.lastname || \\"Spain\\"
-      }\`}
       labelWidth={width}
       disabled={
         buttonUser?.isLoggedIn && buttonUser?.isLoggedIn === true ? true : false
@@ -1674,6 +1665,9 @@ export default function CustomButton(
           ? buttonUser?.loggedInColor
           : buttonUser?.loggedOutColor
       }
+      children={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
+        buttonUser?.lastname || \\"Spain\\"
+      }\`}
       {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
@@ -2178,9 +2172,11 @@ export default function BoundDefaultValue(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Text {...rest} {...getOverrideProps(overrides, \\"Text\\")}>
-      {label || \\"Bound Default\\"}
-    </Text>
+    <Text
+      children={label || \\"Bound Default\\"}
+      {...rest}
+      {...getOverrideProps(overrides, \\"Text\\")}
+    ></Text>
   );
 }
 ",
@@ -2228,9 +2224,10 @@ export default function CollectionDefaultValue(
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Text {...getOverrideProps(overrides, \\"Collection.Text[0]\\")}>
-          {item.username || \\"Collection Default Value\\"}
-        </Text>
+        <Text
+          children={item.username || \\"Collection Default Value\\"}
+          {...getOverrideProps(overrides, \\"Collection.Text[0]\\")}
+        ></Text>
       )}
     </Collection>
   );
@@ -2270,9 +2267,11 @@ export default function SimpleAndBoundDefaultValue(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Text {...rest} {...getOverrideProps(overrides, \\"Text\\")}>
-      {label || \\"Bound Double Default\\"}
-    </Text>
+    <Text
+      children={label || \\"Bound Double Default\\"}
+      {...rest}
+      {...getOverrideProps(overrides, \\"Text\\")}
+    ></Text>
   );
 }
 ",
@@ -2310,9 +2309,11 @@ export default function SimplePropertyBindingDefaultValue(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Text {...rest} {...getOverrideProps(overrides, \\"Text\\")}>
-      {label}
-    </Text>
+    <Text
+      children={label}
+      {...rest}
+      {...getOverrideProps(overrides, \\"Text\\")}
+    ></Text>
   );
 }
 ",
@@ -2655,11 +2656,11 @@ export default function Profile(props: ProfileProps): React.ReactElement {
         {...getOverrideProps(overrides, \\"Flex.Image[0]\\")}
       ></Image>
       <Button
-        label={username}
+        children={username}
         {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
       ></Button>
       <Button
-        label={customUserAttributeIcecream}
+        children={customUserAttributeIcecream}
         {...getOverrideProps(overrides, \\"Flex.Button[1]\\")}
       ></Button>
     </Flex>

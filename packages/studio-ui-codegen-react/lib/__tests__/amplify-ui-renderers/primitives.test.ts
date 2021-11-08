@@ -17,7 +17,7 @@ import { StudioComponent } from '@amzn/studio-ui-codegen';
 import { assertASTMatchesSnapshot } from '../__utils__/snapshot-helpers';
 
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
-import Primitives from '../../primitives';
+import Primitive from '../../primitive';
 
 function testPrimitive(component: StudioComponent) {
   const renderedComponent = new AmplifyRenderer(component, {}).renderJsx(component);
@@ -25,7 +25,7 @@ function testPrimitive(component: StudioComponent) {
 }
 
 describe('Primitives', () => {
-  Object.values(Primitives).forEach((primitive) => {
+  Object.values(Primitive).forEach((primitive) => {
     test(primitive, () => {
       testPrimitive({
         componentType: primitive,
