@@ -2,5 +2,12 @@
   "id": "1234-5678-9010",
   "componentType": "Badge",
   "name": "BadgePrimitive",
-  "properties": {}
+  "properties": {
+    "variation": {
+      "value": "error"
+    },
+    "label": {
+      "value": "Error Found!"
+    }
+  }
 }

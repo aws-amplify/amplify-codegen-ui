@@ -2,5 +2,15 @@
   "id": "1234-5678-9010",
   "componentType": "Button",
   "name": "ButtonPrimitive",
-  "properties": {}
+  "properties": {
+    "variation": {
+      "value": "primary"
+    },
+    "size": {
+      "value": "large"
+    },
+    "label": {
+      "value": "Hello world!"
+    }
+  }
 }

@@ -26,7 +26,6 @@ export { default as GridPrimitive } from './GridPrimitive.json';
 export { default as HeadingPrimitive } from './HeadingPrimitive.json';
 export { default as IconPrimitive } from './IconPrimitive.json';
 export { default as ImagePrimitive } from './ImagePrimitive.json';
-export { default as InputPrimitive } from './InputPrimitive.json';
 export { default as LabelPrimitive } from './LabelPrimitive.json';
 export { default as LinkPrimitive } from './LinkPrimitive.json';
 export { default as LoaderPrimitive } from './LoaderPrimitive.json';

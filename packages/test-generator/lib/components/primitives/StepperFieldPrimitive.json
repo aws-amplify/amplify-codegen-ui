@@ -2,5 +2,29 @@
   "id": "1234-5678-9010",
   "componentType": "StepperField",
   "name": "StepperFieldPrimitive",
-  "properties": {}
+  "properties": {
+    "label": {
+      "value": "Stepper"
+    },
+    "defaultValue": {
+      "type": "Number",
+      "value": "0"
+    },
+    "min": {
+      "type": "Number",
+      "value": "0"
+    },
+    "max": {
+      "type": "Number",
+      "value": "10"
+    },
+    "step": {
+      "type": "Number",
+      "value": "1"
+    },
+    "labelHidden": {
+      "type": "Boolean",
+      "value": "true"
+    }
+  }
 }
