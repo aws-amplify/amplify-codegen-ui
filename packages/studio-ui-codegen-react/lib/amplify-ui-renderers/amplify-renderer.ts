@@ -56,7 +56,6 @@ import {
 import Primitives from '../primitives';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
 import TextRenderer from './text';
-import renderString from './string';
 import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
@@ -328,10 +327,6 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
-
-      // to be removed
-      case 'String':
-        return renderString(component as StudioComponentChild);
 
       default:
         return new CustomComponentRenderer(component, this.importCollection, parent).renderElement(renderChildren);

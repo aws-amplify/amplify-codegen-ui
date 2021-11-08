@@ -16,7 +16,6 @@
 import { StudioComponent } from '@amzn/studio-ui-codegen';
 import { assertASTMatchesSnapshot } from '../__utils__/snapshot-helpers';
 
-import renderString from '../../amplify-ui-renderers/string';
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
 import Primitives from '../../primitives';
 
@@ -35,29 +34,5 @@ describe('Primitives', () => {
         bindingProperties: {},
       });
     });
-  });
-
-  test('StringRenderer', () => {
-    const component = {
-      componentType: 'String',
-      name: 'MyString',
-      properties: {
-        value: {
-          value: 'test',
-        },
-      },
-      bindingProperties: {},
-    };
-    testPrimitive(component);
-  });
-
-  test('StringRenderer throws on missing props', () => {
-    const component = {
-      componentType: 'String',
-      name: 'MyString',
-      properties: {},
-      bindingProperties: {},
-    };
-    expect(() => renderString(component)).toThrowErrorMatchingSnapshot();
   });
 });
