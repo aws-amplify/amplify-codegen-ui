@@ -387,4 +387,10 @@ describe('amplify render tests', () => {
       });
     });
   });
+
+  describe('primitives', () => {
+    test('TextField', () => {
+      expect(generateWithAmplifyRenderer('primitives/TextFieldPrimitive').componentText).toMatchSnapshot();
+    });
+  });
 });

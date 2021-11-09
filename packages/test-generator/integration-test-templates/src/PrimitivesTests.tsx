@@ -31,7 +31,7 @@ import StepperFieldPrimitive from './ui-components/StepperFieldPrimitive';
 import SwitchFieldPrimitive from './ui-components/SwitchFieldPrimitive';
 import TabsPrimitive from './ui-components/TabsPrimitive';
 import TextPrimitive from './ui-components/TextPrimitive';
-// import TextFieldPrimitive from './ui-components/TextFieldPrimitive';
+import TextFieldPrimitive from './ui-components/TextFieldPrimitive';
 import ToggleButtonPrimitive from './ui-components/ToggleButtonPrimitive';
 import ToggleButtonGroupPrimitive from './ui-components/ToggleButtonGroupPrimitive';
 import ViewPrimitive from './ui-components/ViewPrimitive';
@@ -160,7 +160,10 @@ export default function PrimitivesTests() {
         <Heading>Text</Heading>
         <TextPrimitive />
       </View>
-      {/* <TextFieldPrimitive /> */}
+      <View id="text-field">
+        <Heading>Text Field</Heading>
+        <TextFieldPrimitive />
+      </View>
       <View id="toggle-button">
         <Heading>Toggle Button</Heading>
         <ToggleButtonPrimitive />

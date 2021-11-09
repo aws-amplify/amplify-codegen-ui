@@ -43,7 +43,7 @@ export { default as StepperFieldPrimitive } from './StepperFieldPrimitive.json';
 export { default as SwitchFieldPrimitive } from './SwitchFieldPrimitive.json';
 export { default as TabsPrimitive } from './TabsPrimitive.json';
 export { default as TextPrimitive } from './TextPrimitive.json';
-// export { default as TextFieldPrimitive } from './TextFieldPrimitive.json';
+export { default as TextFieldPrimitive } from './TextFieldPrimitive.json';
 export { default as ToggleButtonPrimitive } from './ToggleButtonPrimitive.json';
 export { default as ToggleButtonGroupPrimitive } from './ToggleButtonGroupPrimitive.json';
 export { default as ViewPrimitive } from './ViewPrimitive.json';

@@ -2322,6 +2322,41 @@ export default function SimplePropertyBindingDefaultValue(
 }
 `;
 
+exports[`amplify render tests primitives TextField 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  TextField,
+  TextFieldProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type TextFieldPrimitiveProps<Multiline extends boolean> =
+  React.PropsWithChildren<
+    Partial<TextFieldProps<Multiline>> & {
+      overrides?: EscapeHatchProps | undefined | null;
+    }
+  >;
+export default function TextFieldPrimitive<Multiline extends boolean>(
+  props: TextFieldPrimitiveProps<Multiline>
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <TextField
+      label=\\"Name\\"
+      placeholder=\\"Holden\\"
+      descriptiveText=\\"Please enter valid name\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"TextField\\")}
+    ></TextField>
+  );
+}
+"
+`;
+
 exports[`amplify render tests sample code snippet tests should generate a sample code snippet for components 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
