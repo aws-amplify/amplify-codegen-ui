@@ -26,8 +26,6 @@ exports[`Primitives Icon 1`] = `"<Icon {...rest} {...getOverrideProps(overrides,
 
 exports[`Primitives Image 1`] = `"<Image {...rest} {...getOverrideProps(overrides, \\"Image\\")}></Image>"`;
 
-exports[`Primitives Input 1`] = `"<Input {...rest} {...getOverrideProps(overrides, \\"Input\\")}></Input>"`;
-
 exports[`Primitives Label 1`] = `"<Label {...rest} {...getOverrideProps(overrides, \\"Label\\")}></Label>"`;
 
 exports[`Primitives Link 1`] = `"<Link {...rest} {...getOverrideProps(overrides, \\"Link\\")}></Link>"`;

@@ -265,7 +265,6 @@ describe('Generated Components', () => {
         .should('equal', 'raw string value');
     });
 
-    // string and parsed number values are represented the same in HTML. Snapshot tests cover differences.
     it('String Number Value', () => {
       cy.visit('http://localhost:3000/component-tests');
       cy.get('#parsed-fixed-values').find('#string-number-value').should('have.attr', 'value').should('equal', '67548');
@@ -273,10 +272,9 @@ describe('Generated Components', () => {
 
     it('Parsed Number Value', () => {
       cy.visit('http://localhost:3000/component-tests');
-      cy.get('#parsed-fixed-values').find('#parsed-number-value').should('have.attr', 'value').should('equal', '67548');
+      cy.get('#parsed-fixed-values').find('#parsed-number-value').get('.amplify-visually-hidden').contains('0.4');
     });
 
-    // string and parsed boolean values are represented the same in HTML. Snapshot tests cover differences.
     it('String Boolean Value', () => {
       cy.visit('http://localhost:3000/component-tests');
       cy.get('#parsed-fixed-values').find('#string-boolean-value').should('have.attr', 'value').should('equal', 'true');
@@ -284,7 +282,7 @@ describe('Generated Components', () => {
 
     it('Parsed Boolean Value', () => {
       cy.visit('http://localhost:3000/component-tests');
-      cy.get('#parsed-fixed-values').find('#parsed-boolean-value').should('have.attr', 'value').should('equal', 'true');
+      cy.get('#parsed-fixed-values').find('#parsed-boolean-value').should('be.disabled');
     });
 
     it('String JSON Value', () => {
@@ -297,10 +295,7 @@ describe('Generated Components', () => {
 
     it('Parsed JSON Value', () => {
       cy.visit('http://localhost:3000/component-tests');
-      cy.get('#parsed-fixed-values')
-        .find('#parsed-json-value')
-        .should('have.attr', 'value')
-        .should('equal', '[object Object]'); // shows that object was parsed
+      cy.get('#parsed-fixed-values').find('#parsed-json-value').should('have.attr', 'viewBox', '0 0 24 24');
     });
 
     it('String Array Value', () => {
@@ -313,8 +308,7 @@ describe('Generated Components', () => {
 
     it('Parsed Array Value', () => {
       cy.visit('http://localhost:3000/component-tests');
-      // no brackets indicates array was parsed
-      cy.get('#parsed-fixed-values').find('#parsed-array-value').should('have.attr', 'value').should('equal', '1,2,3');
+      cy.get('#parsed-fixed-values').find('#parsed-array-value').contains('123');
     });
 
     it('String Null Value', () => {
@@ -324,7 +318,7 @@ describe('Generated Components', () => {
 
     it('Parsed Null Value', () => {
       cy.visit('http://localhost:3000/component-tests');
-      cy.get('#parsed-fixed-values').find('#parsed-null-value').should('have.attr', 'value').should('be.empty');
+      cy.get('#parsed-fixed-values').find('#parsed-null-value').should('have.text', '');
     });
   });
 

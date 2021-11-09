@@ -2481,11 +2481,11 @@ Object {
 import React from \\"react\\";
 import {
   EscapeHatchProps,
-  Input,
   View,
   ViewProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
+import Input from \\"./Input\\";
 
 export type ParsedFixedValuesProps = React.PropsWithChildren<
   Partial<ViewProps> & {
