@@ -16,12 +16,6 @@ exports[`Primitives Collection 1`] = `"<Collection items={items || []} {...rest}
 
 exports[`Primitives Divider 1`] = `"<Divider {...rest} {...getOverrideProps(overrides, \\"Divider\\")}></Divider>"`;
 
-exports[`Primitives FieldGroup 1`] = `"<FieldGroup {...rest} {...getOverrideProps(overrides, \\"FieldGroup\\")}></FieldGroup>"`;
-
-exports[`Primitives FieldGroupIcon 1`] = `"<FieldGroupIcon {...rest} {...getOverrideProps(overrides, \\"FieldGroupIcon\\")}></FieldGroupIcon>"`;
-
-exports[`Primitives FieldGroupIconButton 1`] = `"<FieldGroupIconButton {...rest} {...getOverrideProps(overrides, \\"FieldGroupIconButton\\")}></FieldGroupIconButton>"`;
-
 exports[`Primitives Flex 1`] = `"<Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}></Flex>"`;
 
 exports[`Primitives Grid 1`] = `"<Grid {...rest} {...getOverrideProps(overrides, \\"Grid\\")}></Grid>"`;

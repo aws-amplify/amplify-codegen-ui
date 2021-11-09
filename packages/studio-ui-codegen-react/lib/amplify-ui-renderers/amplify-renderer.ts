@@ -24,8 +24,6 @@ import {
   CardProps,
   CheckboxFieldProps,
   DividerProps,
-  FieldGroupIconProps,
-  FieldGroupIconButtonProps,
   FlexProps,
   GridProps,
   HeadingProps,
@@ -115,28 +113,6 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Divider:
         return new ReactComponentRenderer<DividerProps>(component, this.importCollection, parent).renderElement();
-
-      case Primitive.FieldGroup:
-        // TODO: Use correct prop type
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
-
-      case Primitive.FieldGroupIcon:
-        return new ReactComponentWithChildrenRenderer<FieldGroupIconProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
-
-      case Primitive.FieldGroupIconButton:
-        return new ReactComponentWithChildrenRenderer<FieldGroupIconButtonProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
 
       case Primitive.Flex:
         return new ReactComponentWithChildrenRenderer<FlexProps>(
