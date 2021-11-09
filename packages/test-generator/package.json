@@ -1,6 +1,6 @@
 {
   "name": "@amzn/test-generator",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Test generator with sample JSON files",
   "author": "Amazon Web Services",
   "repository": "https://github.com/aws-amplify/amplify-codegen-ui.git",
@@ -22,8 +22,8 @@
     "lib"
   ],
   "dependencies": {
-    "@amzn/studio-ui-codegen": "0.6.0",
-    "@amzn/studio-ui-codegen-react": "0.6.0",
+    "@amzn/studio-ui-codegen": "0.7.0",
+    "@amzn/studio-ui-codegen-react": "0.7.0",
     "@types/node": "^15.12.1",
     "loglevel": "^1.7.1",
     "typescript": "^4.2.4"
