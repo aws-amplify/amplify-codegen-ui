@@ -8,9 +8,6 @@ import CardPrimitive from './ui-components/CardPrimitive';
 import CheckboxFieldPrimitive from './ui-components/CheckboxFieldPrimitive';
 import CollectionPrimitive from './ui-components/CollectionPrimitive';
 import DividerPrimitive from './ui-components/DividerPrimitive';
-import FieldGroupPrimitive from './ui-components/FieldGroupPrimitive';
-import FieldGroupIconPrimitive from './ui-components/FieldGroupIconPrimitive';
-import FieldGroupIconButtonPrimitive from './ui-components/FieldGroupIconButtonPrimitive';
 import FlexPrimitive from './ui-components/FlexPrimitive';
 import GridPrimitive from './ui-components/GridPrimitive';
 import HeadingPrimitive from './ui-components/HeadingPrimitive';
@@ -51,9 +48,6 @@ export default function PrimitivesTests() {
       <CheckboxFieldPrimitive />
       <CollectionPrimitive />
       <DividerPrimitive />
-      <FieldGroupPrimitive />
-      <FieldGroupIconPrimitive />
-      <FieldGroupIconButtonPrimitive />
       <FlexPrimitive />
       <GridPrimitive />
       <HeadingPrimitive />
