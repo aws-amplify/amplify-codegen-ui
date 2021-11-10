@@ -39,6 +39,7 @@ export { default as RatingPrimitive } from './RatingPrimitive.json';
 export { default as ScrollViewPrimitive } from './ScrollViewPrimitive.json';
 export { default as SearchFieldPrimitive } from './SearchFieldPrimitive.json';
 export { default as SelectFieldPrimitive } from './SelectFieldPrimitive.json';
+export { default as SliderFieldPrimitive } from './SliderFieldPrimitive.json';
 export { default as StepperFieldPrimitive } from './StepperFieldPrimitive.json';
 export { default as SwitchFieldPrimitive } from './SwitchFieldPrimitive.json';
 export { default as TabsPrimitive } from './TabsPrimitive.json';

@@ -2322,6 +2322,43 @@ export default function SimplePropertyBindingDefaultValue(
 }
 `;
 
+exports[`amplify render tests primitives SliderField 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  SliderField,
+  SliderFieldProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type SliderFieldPrimitiveProps = React.PropsWithChildren<
+  Partial<SliderFieldProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function SliderFieldPrimitive(
+  props: SliderFieldPrimitiveProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <SliderField
+      name=\\"slider\\"
+      label=\\"Slider\\"
+      defaultValue={50}
+      min={0}
+      max={100}
+      step={1}
+      {...rest}
+      {...getOverrideProps(overrides, \\"SliderField\\")}
+    ></SliderField>
+  );
+}
+"
+`;
+
 exports[`amplify render tests primitives TextField 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

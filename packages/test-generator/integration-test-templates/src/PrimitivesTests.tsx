@@ -27,6 +27,7 @@ import RatingPrimitive from './ui-components/RatingPrimitive';
 import ScrollViewPrimitive from './ui-components/ScrollViewPrimitive';
 import SearchFieldPrimitive from './ui-components/SearchFieldPrimitive';
 import SelectFieldPrimitive from './ui-components/SelectFieldPrimitive';
+import SliderFieldPrimitive from './ui-components/SliderFieldPrimitive';
 import StepperFieldPrimitive from './ui-components/StepperFieldPrimitive';
 import SwitchFieldPrimitive from './ui-components/SwitchFieldPrimitive';
 import TabsPrimitive from './ui-components/TabsPrimitive';
@@ -143,6 +144,10 @@ export default function PrimitivesTests() {
       <View id="select-field">
         <Heading>Select Field</Heading>
         <SelectFieldPrimitive />
+      </View>
+      <View id="slider-field">
+        <Heading>Slider Field</Heading>
+        <SliderFieldPrimitive />
       </View>
       <View id="stepper-field">
         <Heading>Stepper Field</Heading>
