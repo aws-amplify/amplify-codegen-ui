@@ -2,5 +2,55 @@
   "id": "1234-5678-9010",
   "componentType": "ToggleButtonGroup",
   "name": "ToggleButtonGroupPrimitive",
-  "properties": {}
+  "properties": {
+    "value": {
+      "value": "bold"
+    }
+  },
+  "children": [
+    {
+      "componentType": "ToggleButton",
+      "properties": {
+        "value": {
+          "value": "bold"
+        },
+        "label": {
+          "value": "bold"
+        }
+      }
+    },
+    {
+      "componentType": "ToggleButton",
+      "properties": {
+        "value": {
+          "value": "italic"
+        },
+        "label": {
+          "value": "italic"
+        }
+      }
+    },
+    {
+      "componentType": "ToggleButton",
+      "properties": {
+        "value": {
+          "value": "underline"
+        },
+        "label": {
+          "value": "underline"
+        }
+      }
+    },
+    {
+      "componentType": "ToggleButton",
+      "properties": {
+        "value": {
+          "value": "color-fill"
+        },
+        "label": {
+          "value": "color-fill"
+        }
+      }
+    }
+  ]
 }

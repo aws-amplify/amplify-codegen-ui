@@ -2,5 +2,31 @@
   "id": "1234-5678-9010",
   "componentType": "ScrollView",
   "name": "ScrollViewPrimitive",
-  "properties": {}
+  "properties": {
+    "height": {
+      "value": "300px"
+    },
+    "width": {
+      "value": "400px"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Image",
+      "properties": {
+        "width": {
+          "value": "800px"
+        },
+        "maxWidth": {
+          "value": "800px"
+        },
+        "src": {
+          "value": "/road-to-milford-new-zealand-800w.jpg"
+        },
+        "alt": {
+          "value": "Road to Milford"
+        }
+      }
+    }
+  ]
 }

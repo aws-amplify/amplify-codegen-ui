@@ -1,6 +1,28 @@
 {
   "id": "1234-5678-9010",
-  "componentType": "VisuallyHidden",
+  "componentType": "Button",
   "name": "VisuallyHiddenPrimitive",
-  "properties": {}
+  "properties": {
+    "variation": {
+      "value": "primary"
+    }
+  },
+  "children": [
+    {
+      "componentType": "VisuallyHidden",
+      "properties": {
+        "children": {
+          "value": "Donemark"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "properties": {
+        "children": {
+          "value": "✅"
+        }
+      }
+    }
+  ]
 }

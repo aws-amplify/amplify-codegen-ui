@@ -2,11 +2,52 @@
   "id": "1234-5678-9010",
   "componentType": "Collection",
   "name": "CollectionPrimitive",
-  "properties": {},
+  "properties": {
+    "type": {
+      "value": "list"
+    }
+  },
+  "collectionProperties": {
+    "listing": {
+      "model": "Listing"
+    }
+  },
   "children": [
     {
-      "componentType": "Flex",
-      "properties": {}
+      "componentType": "Card",
+      "properties": {
+        "padding": {
+          "value": "1rem"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "properties": {
+            "level": {
+              "type": "Number",
+              "value": 4
+            },
+            "label": {
+              "collectionBindingProperties": {
+                "property": "listing",
+                "field": "title"
+              }
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "properties": {
+            "label": {
+              "collectionBindingProperties": {
+                "property": "listing",
+                "field": "description"
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }

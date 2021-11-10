@@ -2,5 +2,35 @@
   "id": "1234-5678-9010",
   "componentType": "ButtonGroup",
   "name": "ButtonGroupPrimitive",
-  "properties": {}
+  "properties": {
+    "variation": {
+      "value": "primary"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Button",
+      "properties": {
+        "label": {
+          "value": "🚀"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "properties": {
+        "label": {
+          "value": "🌕"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "properties": {
+        "label": {
+          "value": "⭐"
+        }
+      }
+    }
+  ]
 }

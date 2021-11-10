@@ -2,5 +2,49 @@
   "id": "1234-5678-9010",
   "componentType": "Grid",
   "name": "GridPrimitive",
-  "properties": {}
+  "properties": {
+    "templateColumns": {
+      "value": "1fr 1fr"
+    },
+    "templateRows": {
+      "value": "10rem 10rem"
+    },
+    "gap": {
+      "value": "var(--amplify-space-small)"
+    }
+  },
+  "children": [
+    {
+      "componentType": "View",
+      "properties": {
+        "backgroundColor": {
+          "value": "var(--amplify-colors-blue-10)"
+        }
+      }
+    },
+    {
+      "componentType": "View",
+      "properties": {
+        "backgroundColor": {
+          "value": "var(--amplify-colors-blue-20)"
+        }
+      }
+    },
+    {
+      "componentType": "View",
+      "properties": {
+        "backgroundColor": {
+          "value": "var(--amplify-colors-blue-40)"
+        }
+      }
+    },
+    {
+      "componentType": "View",
+      "properties": {
+        "backgroundColor": {
+          "value": "var(--amplify-colors-blue-60)"
+        }
+      }
+    }
+  ]
 }

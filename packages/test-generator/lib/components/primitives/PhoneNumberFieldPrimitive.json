@@ -2,5 +2,12 @@
   "id": "1234-5678-9010",
   "componentType": "PhoneNumberField",
   "name": "PhoneNumberFieldPrimitive",
-  "properties": {}
+  "properties": {
+    "defaultCountryCode": {
+      "value": "+1"
+    },
+    "label": {
+      "value": "Phone Number"
+    }
+  }
 }

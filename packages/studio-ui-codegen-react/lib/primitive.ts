@@ -44,6 +44,7 @@ enum Primitive {
   StepperField = 'StepperField',
   SwitchField = 'SwitchField',
   Tabs = 'Tabs',
+  TabItem = 'TabItem',
   Text = 'Text',
   TextField = 'TextField',
   ToggleButton = 'ToggleButton',

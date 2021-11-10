@@ -2,5 +2,23 @@
   "id": "1234-5678-9010",
   "componentType": "Placeholder",
   "name": "PlaceholderPrimitive",
-  "properties": {}
+  "properties": {
+    "size": {
+      "value": "large"
+    },
+    "isLoaded": {
+      "type": "Boolean",
+      "value": "false"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Text",
+      "properties": {
+        "label": {
+          "value": "Done Loading"
+        }
+      }
+    }
+  ]
 }

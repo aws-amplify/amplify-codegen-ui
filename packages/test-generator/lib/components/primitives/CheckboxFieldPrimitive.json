@@ -2,5 +2,9 @@
   "id": "1234-5678-9010",
   "componentType": "CheckboxField",
   "name": "CheckboxFieldPrimitive",
-  "properties": {}
+  "properties": {
+    "children": {
+      "value": "Subscribe"
+    }
+  }
 }

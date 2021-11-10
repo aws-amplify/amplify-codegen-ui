@@ -2,5 +2,9 @@
   "id": "1234-5678-9010",
   "componentType": "Heading",
   "name": "HeadingPrimitive",
-  "properties": {}
+  "properties": {
+    "label": {
+      "value": "Hello world!"
+    }
+  }
 }

@@ -2,5 +2,12 @@
   "id": "1234-5678-9010",
   "componentType": "Alert",
   "name": "AlertPrimitive",
-  "properties": {}
+  "properties": {
+    "variation": {
+      "value": "info"
+    },
+    "children": {
+      "value": "Alert Text"
+    }
+  }
 }

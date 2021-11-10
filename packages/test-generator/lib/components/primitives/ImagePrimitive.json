@@ -2,5 +2,12 @@
   "id": "1234-5678-9010",
   "componentType": "Image",
   "name": "ImagePrimitive",
-  "properties": {}
+  "properties": {
+    "src": {
+      "value": "/road-to-milford-new-zealand-800w.jpg"
+    },
+    "alt": {
+      "value": "View from road to Milford Sound, New Zealand. Glittering stream with old log, snowy mountain peaks tower over a green field."
+    }
+  }
 }

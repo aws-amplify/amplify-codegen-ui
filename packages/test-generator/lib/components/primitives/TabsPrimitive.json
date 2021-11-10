@@ -3,12 +3,28 @@
   "componentType": "Tabs",
   "name": "TabsPrimitive",
   "properties": {},
-  "children": [{
-    "componentType": "Text",
-    "properties": {
-      "children": {
-        "value": "children"
+  "children": [
+    {
+      "componentType": "TabItem",
+      "properties": {
+        "title": {
+          "value": "Tab 1"
+        },
+        "children": {
+          "value": "Tab 1 Content"
+        }
+      }
+    },
+    {
+      "componentType": "TabItem",
+      "properties": {
+        "title": {
+          "value": "Tab 2"
+        },
+        "children": {
+          "value": "Tab 2 Content"
+        }
       }
     }
-  }]
+  ]
 }

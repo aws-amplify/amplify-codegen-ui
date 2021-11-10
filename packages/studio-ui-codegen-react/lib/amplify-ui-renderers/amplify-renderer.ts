@@ -45,6 +45,7 @@ import {
   SelectFieldProps,
   StepperFieldProps,
   SwitchFieldProps,
+  TabItemProps,
   TabsProps,
   ToggleButtonProps,
   ToggleButtonGroupProps,
@@ -252,6 +253,13 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.SwitchField:
         return new ReactComponentWithChildrenRenderer<SwitchFieldProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.TabItem:
+        return new ReactComponentWithChildrenRenderer<TabItemProps>(
           component,
           this.importCollection,
           parent,

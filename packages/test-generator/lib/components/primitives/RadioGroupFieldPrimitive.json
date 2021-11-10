@@ -2,5 +2,50 @@
   "id": "1234-5678-9010",
   "componentType": "RadioGroupField",
   "name": "RadioGroupFieldPrimitive",
-  "properties": {}
+  "properties": {
+    "label": {
+      "value": "Language"
+    },
+    "name": {
+      "value": "language"
+    },
+    "defaultValue": {
+      "value": "html"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Radio",
+      "properties": {
+        "value": {
+          "value": "html"
+        },
+        "label": {
+          "value": "html"
+        }
+      }
+    },
+    {
+      "componentType": "Radio",
+      "properties": {
+        "value": {
+          "value": "css"
+        },
+        "label": {
+          "value": "css"
+        }
+      }
+    },
+    {
+      "componentType": "Radio",
+      "properties": {
+        "value": {
+          "value": "javascript"
+        },
+        "label": {
+          "value": "javascript"
+        }
+      }
+    }
+  ]
 }

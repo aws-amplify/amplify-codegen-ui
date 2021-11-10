@@ -2,5 +2,56 @@
   "id": "1234-5678-9010",
   "componentType": "SelectField",
   "name": "SelectFieldPrimitive",
-  "properties": {}
+  "properties": {
+    "label": {
+      "value": "Fruit"
+    },
+    "placeholder": {
+      "value": "Please select a fruit"
+    }
+  },
+  "children": [
+    {
+      "componentType": "View",
+      "properties": {
+        "as": {
+          "value": "option"
+        },
+        "value": {
+          "value": "apple"
+        },
+        "children": {
+          "value": "Apple"
+        }
+      }
+    },
+    {
+      "componentType": "View",
+      "properties": {
+        "as": {
+          "value": "option"
+        },
+        "value": {
+          "value": "banana"
+        },
+        "children": {
+          "value": "Banana"
+        }
+      }
+    },
+    {
+      "componentType": "View",
+      "properties": {
+        "as": {
+          "value": "option"
+        },
+        "value": {
+          "value": "orange"
+        },
+        "children": {
+          "value": "Orange"
+        }
+      }
+    }
+  ]
 }
