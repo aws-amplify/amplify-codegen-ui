@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import { ScriptKind } from 'typescript';
+import { scriptKindToFileExtensionNonReact } from '..';
 import { scriptKindToFileExtension } from '../react-render-config';
 
 describe('ReactRenderConfig', () => {
@@ -32,6 +33,24 @@ describe('ReactRenderConfig', () => {
 
     test('TS (not supported)', () => {
       expect(() => scriptKindToFileExtension(ScriptKind.TS)).toThrow(new Error('Invalid script kind: TS'));
+    });
+  });
+
+  describe('scriptKindToFileExtensionNonReact', () => {
+    test('JS', () => {
+      expect(scriptKindToFileExtensionNonReact(ScriptKind.JS)).toEqual('js');
+    });
+
+    test('JSX', () => {
+      expect(scriptKindToFileExtensionNonReact(ScriptKind.JSX)).toEqual('js');
+    });
+
+    test('TSX', () => {
+      expect(scriptKindToFileExtensionNonReact(ScriptKind.TSX)).toEqual('ts');
+    });
+
+    test('TS (not supported)', () => {
+      expect(() => scriptKindToFileExtensionNonReact(ScriptKind.TS)).toThrow(new Error('Invalid script kind: TS'));
     });
   });
 });

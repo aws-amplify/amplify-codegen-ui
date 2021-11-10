@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FrameworkRenderConfig } from '@amzn/studio-ui-codegen';
+import { FrameworkRenderConfig, InvalidInputError } from '@amzn/studio-ui-codegen';
 import { ScriptKind, ScriptTarget, ModuleKind } from 'typescript';
 
 export { ScriptKind, ScriptTarget, ModuleKind } from 'typescript';
@@ -34,6 +34,18 @@ export function scriptKindToFileExtension(scriptKind: ScriptKind): string {
     case ScriptKind.JSX:
       return 'jsx';
     default:
-      throw new Error(`Invalid script kind: ${ScriptKind[scriptKind]}`);
+      throw new InvalidInputError(`Invalid script kind: ${ScriptKind[scriptKind]}`);
+  }
+}
+
+export function scriptKindToFileExtensionNonReact(scriptKind: ScriptKind): string {
+  switch (scriptKind) {
+    case ScriptKind.TSX:
+      return 'ts';
+    case ScriptKind.JS:
+    case ScriptKind.JSX:
+      return 'js';
+    default:
+      throw new InvalidInputError(`Invalid script kind: ${ScriptKind[scriptKind]}`);
   }
 }

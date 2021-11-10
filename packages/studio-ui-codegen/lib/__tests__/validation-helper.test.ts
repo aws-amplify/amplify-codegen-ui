@@ -13,13 +13,21 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { validateStudioComponent } from '../validation-helper';
+import { validateComponentSchema, validateThemeSchema } from '../validation-helper';
 
 describe('validation-helper', () => {
-  describe('validateStudioComponent', () => {
+  describe('validateComponentSchema', () => {
+    test('throws no error on valid type', () => {
+      validateComponentSchema({
+        name: 'MyBindingView',
+        componentType: 'View',
+        properties: {},
+      });
+    });
+
     test('top-level component requires componentType', () => {
       expect(() => {
-        validateStudioComponent({
+        validateComponentSchema({
           name: 'MyBindingView',
           properties: {},
         });
@@ -28,7 +36,7 @@ describe('validation-helper', () => {
 
     test('top-level component requires properties', () => {
       expect(() => {
-        validateStudioComponent({
+        validateComponentSchema({
           componentType: 'View',
           name: 'MyBindingView',
         });
@@ -37,7 +45,7 @@ describe('validation-helper', () => {
 
     test('top-level component requires componentType to be the correct type', () => {
       expect(() => {
-        validateStudioComponent({
+        validateComponentSchema({
           componentType: 2,
           name: 'MyBindingView',
           properties: {},
@@ -47,7 +55,7 @@ describe('validation-helper', () => {
 
     test('child component requires componentType to be the correct type', () => {
       expect(() => {
-        validateStudioComponent({
+        validateComponentSchema({
           componentType: 'View',
           name: 'MyBindingView',
           properties: {},
@@ -63,7 +71,7 @@ describe('validation-helper', () => {
 
     test('deeply nested child components requires properties', () => {
       expect(() => {
-        validateStudioComponent({
+        validateComponentSchema({
           componentType: 'View',
           name: 'MyBindingView',
           properties: {},
@@ -82,6 +90,82 @@ describe('validation-helper', () => {
                   ],
                 },
               ],
+            },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe('validateThemeSchema', () => {
+    test('throws no error on valid type', () => {
+      validateThemeSchema({
+        name: 'MyBindingView',
+        values: [
+          {
+            key: 'breakpoints',
+            value: {},
+          },
+          {
+            key: 'tokens',
+            value: {},
+          },
+        ],
+        overrides: [],
+      });
+    });
+
+    test('top-level component requires name', () => {
+      expect(() => {
+        validateThemeSchema({
+          values: [
+            {
+              key: 'breakpoints',
+              value: {},
+            },
+            {
+              key: 'tokens',
+              value: {},
+            },
+          ],
+          overrides: [],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('top-level component requires values', () => {
+      expect(() => {
+        validateThemeSchema({
+          name: 'MyBindingView',
+          overrides: [],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('children objects should not be empty', () => {
+      expect(() => {
+        validateThemeSchema({
+          name: 'MyBindingView',
+          values: [
+            {
+              key: 'breakpoints',
+              value: {},
+            },
+            {},
+          ],
+          overrides: [],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('overrides should contain the right shape', () => {
+      expect(() => {
+        validateThemeSchema({
+          name: 'MyBindingView',
+          values: [],
+          overrides: [
+            {
+              value: {},
             },
           ],
         });
