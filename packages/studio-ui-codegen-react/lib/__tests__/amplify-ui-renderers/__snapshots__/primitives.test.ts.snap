@@ -58,6 +58,8 @@ exports[`Primitives StepperField 1`] = `"<StepperField {...rest} {...getOverride
 
 exports[`Primitives SwitchField 1`] = `"<SwitchField {...rest} {...getOverrideProps(overrides, \\"SwitchField\\")}></SwitchField>"`;
 
+exports[`Primitives TabItem 1`] = `"<TabItem {...rest} {...getOverrideProps(overrides, \\"TabItem\\")}></TabItem>"`;
+
 exports[`Primitives Tabs 1`] = `"<Tabs {...rest} {...getOverrideProps(overrides, \\"Tabs\\")}></Tabs>"`;
 
 exports[`Primitives Text 1`] = `"<Text {...rest} {...getOverrideProps(overrides, \\"Text\\")}></Text>"`;

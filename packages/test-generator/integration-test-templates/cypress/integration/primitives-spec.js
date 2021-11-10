@@ -185,6 +185,19 @@ describe('Primitives', () => {
     });
   });
 
+  describe('TextField', () => {
+    it('Basic', () => {
+      cy.visit('http://localhost:3000/primitives-tests');
+      cy.get('#text-field')
+        .find('.amplify-textfield')
+        .within(() => {
+          cy.get('.amplify-label').contains('Name');
+          cy.get('.amplify-text').contains('Please enter valid name');
+          cy.get('.amplify-input').should('have.attr', 'placeholder', 'Holden');
+        });
+    });
+  });
+
   describe('ToggleButton', () => {
     it('Basic', () => {
       cy.visit('http://localhost:3000/primitives-tests');

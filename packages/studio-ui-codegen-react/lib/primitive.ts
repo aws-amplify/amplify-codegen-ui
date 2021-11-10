@@ -13,6 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { factory, SyntaxKind, TypeParameterDeclaration, TypeNode } from 'typescript';
+
 enum Primitive {
   Alert = 'Alert',
   Badge = 'Badge',
@@ -72,4 +74,23 @@ export const PrimitiveChildrenPropMapping: Partial<Record<Primitive, string>> = 
   // [Primitive.TableCell]: 'label',
   [Primitive.Text]: 'label',
   [Primitive.ToggleButton]: 'label',
+};
+
+export const PrimitiveTypeParameter: Partial<
+  Record<Primitive, { declaration: () => TypeParameterDeclaration[] | undefined; reference: () => TypeNode[] }>
+> = {
+  [Primitive.TextField]: {
+    declaration: () => [
+      factory.createTypeParameterDeclaration(
+        factory.createIdentifier('Multiline'),
+        factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
+        undefined,
+      ),
+    ],
+    reference: () => [factory.createTypeReferenceNode(factory.createIdentifier('Multiline'), undefined)],
+  },
+  [Primitive.Collection]: {
+    declaration: () => undefined,
+    reference: () => [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)],
+  },
 };

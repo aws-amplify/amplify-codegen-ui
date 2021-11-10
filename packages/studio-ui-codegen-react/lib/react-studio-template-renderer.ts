@@ -71,7 +71,7 @@ import {
   jsonToLiteral,
   bindingPropertyUsesHook,
 } from './react-studio-template-renderer-helper';
-import { isPrimitive } from './primitive';
+import Primitive, { isPrimitive, PrimitiveTypeParameter } from './primitive';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -220,12 +220,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const modifiers: Modifier[] = renderExport
       ? [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DefaultKeyword)]
       : [];
+    const typeParameter = PrimitiveTypeParameter[Primitive[this.component.componentType as Primitive]];
+    // only use type parameter reference if one was declared
+    const typeParameterReference = typeParameter && typeParameter.declaration() ? typeParameter.reference() : undefined;
     return factory.createFunctionDeclaration(
       undefined,
       modifiers,
       undefined,
       factory.createIdentifier(componentName),
-      undefined,
+      typeParameter ? typeParameter.declaration() : undefined,
       [
         factory.createParameterDeclaration(
           undefined,
@@ -233,7 +236,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           undefined,
           'props',
           undefined,
-          factory.createTypeReferenceNode(componentPropType, undefined),
+          factory.createTypeReferenceNode(componentPropType, typeParameterReference),
           undefined,
         ),
       ],
@@ -290,16 +293,19 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       ),
     ]);
     const componentPropType = getComponentPropName(component.name);
+    const propsTypeParameter = PrimitiveTypeParameter[Primitive[component.componentType as Primitive]];
+
     this.importCollection.addImport('@aws-amplify/ui-react', 'EscapeHatchProps');
+
     return factory.createTypeAliasDeclaration(
       undefined,
       [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
       factory.createIdentifier(componentPropType),
-      undefined,
+      propsTypeParameter ? propsTypeParameter.declaration() : undefined,
       factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
         factory.createIntersectionTypeNode(
           this.dropMissingListElements([
-            this.buildPrimitivePropNode(component),
+            this.buildBasePropNode(component),
             this.buildComponentPropNode(component),
             this.buildVariantPropNode(component),
             escapeHatchTypeNode,
@@ -309,39 +315,26 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private hasPrimitivePropType(component: StudioComponent): boolean {
-    return component.componentType !== 'String';
-  }
-
-  private getParameterizedPrimitivePropType(component: StudioComponent): TypeNode | undefined {
-    switch (component.componentType) {
-      case 'Collection':
-        return factory.createTypeReferenceNode(factory.createIdentifier('CollectionProps'), [
-          factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-        ]);
-      default:
-        return undefined;
-    }
-  }
-
-  private buildPrimitivePropNode(component: StudioComponent): TypeNode | undefined {
-    if (!this.hasPrimitivePropType(component)) {
-      return undefined;
-    }
-
+  private buildBasePropNode(component: StudioComponent): TypeNode | undefined {
     const propsType = this.getPropsTypeName(component);
 
-    if (isPrimitive(component.componentType)) {
+    const componentIsPrimitive = isPrimitive(component.componentType);
+    if (componentIsPrimitive) {
       this.importCollection.addImport('@aws-amplify/ui-react', propsType);
     } else {
       this.importCollection.addImport(`./${component.componentType}`, `${component.componentType}Props`);
     }
 
-    const parameterizedPrimitivePropType = this.getParameterizedPrimitivePropType(component);
-    const primitivePropType =
-      parameterizedPrimitivePropType || factory.createTypeReferenceNode(factory.createIdentifier(propsType), undefined);
+    const propsTypeParameter = componentIsPrimitive
+      ? PrimitiveTypeParameter[Primitive[component.componentType as Primitive]]
+      : undefined;
 
-    return factory.createTypeReferenceNode(factory.createIdentifier('Partial'), [primitivePropType]);
+    const basePropType = factory.createTypeReferenceNode(
+      factory.createIdentifier(propsType),
+      propsTypeParameter ? propsTypeParameter.reference() : undefined,
+    );
+
+    return factory.createTypeReferenceNode(factory.createIdentifier('Partial'), [basePropType]);
   }
 
   /**
@@ -1050,11 +1043,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private getPropsTypeName(component: StudioComponent): string {
-    // special case for FieldGroup. All other primitives follow same pattern
-    if (component.componentType === 'FieldGroup') {
-      return 'FieldGroupOptions';
-    }
-
     return `${component.componentType}Props`;
   }
 

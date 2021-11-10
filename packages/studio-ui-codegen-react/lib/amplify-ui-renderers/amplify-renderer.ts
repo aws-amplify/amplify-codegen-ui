@@ -47,6 +47,7 @@ import {
   SwitchFieldProps,
   TabItemProps,
   TabsProps,
+  TextFieldProps,
   ToggleButtonProps,
   ToggleButtonGroupProps,
   ViewProps,
@@ -276,9 +277,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         return new TextRenderer(component, this.importCollection, parent).renderElement();
 
       case Primitive.TextField:
-        // unofficial support to retain functionality
-        // TODO: add official support
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentWithChildrenRenderer<TextFieldProps<boolean>>(
           component,
           this.importCollection,
           parent,
