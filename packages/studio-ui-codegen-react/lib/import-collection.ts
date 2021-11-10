@@ -57,33 +57,39 @@ export class ImportCollection {
     return importDeclarations;
   }
 
-  buildImportStatements(): ImportDeclaration[] {
-    const importDeclarations: ImportDeclaration[] = [
-      factory.createImportDeclaration(
-        undefined,
-        undefined,
-        factory.createImportClause(factory.createIdentifier('React'), undefined),
-        factory.createStringLiteral('react'),
-      ),
-    ].concat(
-      Array.from(this.#collection).map(([moduleName, imports]) => {
-        const namedImports = [...imports].filter((namedImport) => namedImport !== 'default').sort();
-        return createImportDeclaration(
-          undefined,
-          undefined,
-          factory.createImportClause(
-            // use module name as defualt import name
-            [...imports].indexOf('default') >= 0 ? factory.createIdentifier(path.basename(moduleName)) : undefined,
-            factory.createNamedImports(
-              namedImports.map((item) => {
-                return factory.createImportSpecifier(undefined, factory.createIdentifier(item));
-              }),
+  buildImportStatements(skipReactImport?: boolean): ImportDeclaration[] {
+    const importDeclarations = ([] as ImportDeclaration[])
+      .concat(
+        skipReactImport
+          ? []
+          : [
+              factory.createImportDeclaration(
+                undefined,
+                undefined,
+                factory.createImportClause(factory.createIdentifier('React'), undefined),
+                factory.createStringLiteral('react'),
+              ),
+            ],
+      )
+      .concat(
+        Array.from(this.#collection).map(([moduleName, imports]) => {
+          const namedImports = [...imports].filter((namedImport) => namedImport !== 'default').sort();
+          return createImportDeclaration(
+            undefined,
+            undefined,
+            factory.createImportClause(
+              // use module name as defualt import name
+              [...imports].indexOf('default') >= 0 ? factory.createIdentifier(path.basename(moduleName)) : undefined,
+              factory.createNamedImports(
+                namedImports.map((item) => {
+                  return factory.createImportSpecifier(undefined, factory.createIdentifier(item));
+                }),
+              ),
             ),
-          ),
-          factory.createStringLiteral(moduleName),
-        );
-      }),
-    );
+            factory.createStringLiteral(moduleName),
+          );
+        }),
+      );
 
     return importDeclarations;
   }

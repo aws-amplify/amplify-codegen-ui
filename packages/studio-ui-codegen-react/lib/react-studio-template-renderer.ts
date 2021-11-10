@@ -72,6 +72,7 @@ import {
   bindingPropertyUsesHook,
 } from './react-studio-template-renderer-helper';
 import Primitive, { isPrimitive, PrimitiveTypeParameter } from './primitive';
+import { RequiredKeys } from './utils/type-utils';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -84,20 +85,17 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 > {
   protected importCollection = new ImportCollection();
 
+  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
+
   fileName = `${this.component.name}.tsx`;
 
-  constructor(component: StudioComponent, protected renderConfig: ReactRenderConfig) {
+  constructor(component: StudioComponent, renderConfig: ReactRenderConfig) {
     super(component, new ReactOutputManager(), renderConfig);
-    const { script } = this.renderConfig;
-    if (script !== ScriptKind.TSX) {
-      this.fileName = `${this.component.name}.${scriptKindToFileExtension(renderConfig.script || ScriptKind.TSX)}`;
-    }
-
     this.renderConfig = {
       ...defaultRenderConfig,
-      ...this.renderConfig,
+      ...renderConfig,
     };
-
+    this.fileName = `${this.component.name}.${scriptKindToFileExtension(this.renderConfig.script)}`;
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
   }
 

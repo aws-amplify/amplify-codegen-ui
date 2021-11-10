@@ -22,9 +22,15 @@ import {
   StringLiteral,
   PropertyAssignment,
 } from 'typescript';
-import { StudioTemplateRenderer, StudioTheme, StudioThemeValues, StudioThemeValue } from '@amzn/studio-ui-codegen';
-
-import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
+import {
+  StudioTemplateRenderer,
+  StudioTheme,
+  StudioThemeValues,
+  StudioThemeValue,
+  validateThemeSchema,
+  InvalidInputError,
+} from '@amzn/studio-ui-codegen';
+import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
 import {
@@ -33,6 +39,7 @@ import {
   defaultRenderConfig,
   getDeclarationFilename,
 } from './react-studio-template-renderer-helper';
+import { RequiredKeys } from './utils/type-utils';
 
 export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -45,19 +52,18 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection = new ImportCollection();
 
-  fileName = `${this.component.name}.tsx`;
+  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
 
-  constructor(theme: StudioTheme, protected renderConfig: ReactRenderConfig) {
+  fileName: string;
+
+  constructor(theme: StudioTheme, renderConfig: ReactRenderConfig) {
     super(theme, new ReactOutputManager(), renderConfig);
-    const { script } = this.renderConfig;
-    if (script !== ScriptKind.TSX) {
-      this.fileName = `${this.component.name}.${scriptKindToFileExtension(renderConfig.script || ScriptKind.TSX)}`;
-    }
-
+    validateThemeSchema(theme);
     this.renderConfig = {
       ...defaultRenderConfig,
-      ...this.renderConfig,
+      ...renderConfig,
     };
+    this.fileName = `${this.component.name}.${scriptKindToFileExtensionNonReact(this.renderConfig.script)}`;
   }
 
   renderComponentInternal() {
@@ -82,13 +88,12 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   }
 
   /*
-   * import React from "react";
    * import { createTheme } from "@aws-amplify/ui-react";
    */
   private buildImports() {
     this.importCollection.addImport('@aws-amplify/ui-react', 'createTheme');
 
-    return this.importCollection.buildImportStatements();
+    return this.importCollection.buildImportStatements(true);
   }
 
   /*
@@ -133,21 +138,22 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    *       backgroundcolor: \\"hsl(210, 5%, 90%)\\",
    * ...
    */
-  private buildThemeValues(values: StudioThemeValues): PropertyAssignment[] {
-    return Object.entries(values).map(([key, value]) =>
+  private buildThemeValues(values: StudioThemeValues[]): PropertyAssignment[] {
+    return values.map(({ key, value }) =>
       factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeValue(value)),
     );
   }
 
-  private buildThemeValue(value: StudioThemeValue): ObjectLiteralExpression | StringLiteral {
-    if ('children' in value && value.children !== undefined) {
-      return factory.createObjectLiteralExpression(this.buildThemeValues(value.children));
+  private buildThemeValue(themeValue: StudioThemeValue): ObjectLiteralExpression | StringLiteral {
+    const { children, value } = themeValue;
+    if (children) {
+      return factory.createObjectLiteralExpression(this.buildThemeValues(children));
     }
-    if ('value' in value && value.value !== undefined) {
-      return factory.createStringLiteral(value.value);
+    if (value) {
+      return factory.createStringLiteral(value);
     }
 
-    throw new Error(`Invalid theme value: ${JSON.stringify(value)}`);
+    throw new InvalidInputError(`Invalid theme value: ${JSON.stringify(value)}`);
   }
 
   /* builds special case theme value overrides becuase it is an array
@@ -162,16 +168,16 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    * ],
    */
   private buildThemeOverrides(overrides?: StudioThemeValues[]) {
-    if (overrides !== undefined) {
-      return factory.createPropertyAssignment(
-        factory.createIdentifier('overrides'),
-        factory.createArrayLiteralExpression(
-          overrides.map((override) => factory.createObjectLiteralExpression(this.buildThemeValues(override), true)),
-          false,
-        ),
-      );
+    if (overrides === undefined) {
+      return [];
     }
 
-    return [];
+    return factory.createPropertyAssignment(
+      factory.createIdentifier('overrides'),
+      factory.createArrayLiteralExpression(
+        [factory.createObjectLiteralExpression(this.buildThemeValues(overrides), true)],
+        false,
+      ),
+    );
   }
 }

@@ -28,6 +28,7 @@ const DISABLED_SCHEMAS = [
   'ComplexTest8', // TODO: Complex tests are broken
   'ComponentMissingProperties', // Expected failure cases
   'ComponentMissingType', // Expected failure cases
+  'InvalidTheme', // Expected failure cases
 ];
 
 const generator = new NodeTestGenerator({

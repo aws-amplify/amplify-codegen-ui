@@ -514,18 +514,19 @@ export type StudioComponentStorageBindingProperty = {
 export type StudioTheme = {
   name: string;
   id?: string;
-  values: StudioThemeValues;
-  // overrides is a special case becuase it is an array of values
+  values: StudioThemeValues[];
+  // overrides is a special case because it is an array of values
   overrides?: StudioThemeValues[];
 };
 
 export type StudioThemeValues = {
-  [token: string]: StudioThemeValue;
+  key: string;
+  value: StudioThemeValue;
 };
 
 export type StudioThemeValue = {
   value?: string;
-  children?: StudioThemeValues;
+  children?: StudioThemeValues[];
 };
 
 /**

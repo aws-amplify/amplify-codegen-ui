@@ -16,13 +16,16 @@
 import * as yup from 'yup';
 import { InvalidInputError } from './errors';
 
+/**
+ * Component Schema Definitions
+ */
 const studioComponentChildSchema: any = yup.object({
   componentType: yup.string().strict().required(),
   // TODO: Name is required in the studio-types file, but doesn't seem to need to be. Relaxing the restriction here.
   name: yup.string().strict(),
   properties: yup.object().required(),
   // Doing lazy eval here since we reference our own type otherwise
-  children: yup.lazy(() => yup.array(studioComponentChildSchema)),
+  children: yup.lazy(() => yup.array(studioComponentChildSchema.default(undefined))),
   figmaMetadata: yup.object(),
   variants: yup.array(),
   overrides: yup.object(),
@@ -47,15 +50,38 @@ const studioComponentSchema = yup.object({
 });
 
 /**
- * Basic input validation. Just verify all required fields exist on the object, and are the correct type.
+ * Theme Schema Definitions
  */
-export function validateStudioComponent(component: any) {
+const studioThemeValuesSchema: any = yup.object({
+  key: yup.string().strict().required(),
+  value: yup
+    .object({
+      value: yup.string().strict(),
+      children: yup.lazy(() => yup.array(studioThemeValuesSchema.default(undefined))),
+    })
+    .required(),
+});
+
+const studioThemeSchema = yup.object({
+  name: yup.string().strict().required(),
+  id: yup.string().strict(),
+  values: yup.array(studioThemeValuesSchema).required(),
+  overrides: yup.array(studioThemeValuesSchema),
+});
+
+/**
+ * Studio Schema Validation Functions and Helpers.
+ */
+const validateSchema = (validator: yup.AnySchema, studioSchema: any) => {
   try {
-    studioComponentSchema.validateSync(component);
+    validator.validateSync(studioSchema);
   } catch (e) {
     if (e instanceof yup.ValidationError) {
       throw new InvalidInputError(e.errors.join(', '));
     }
     throw e;
   }
-}
+};
+
+export const validateComponentSchema = (schema: any) => validateSchema(studioComponentSchema, schema);
+export const validateThemeSchema = (schema: any) => validateSchema(studioThemeSchema, schema);

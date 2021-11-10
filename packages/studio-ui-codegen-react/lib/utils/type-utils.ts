@@ -13,5 +13,4 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export { default as MyTheme } from './myTheme.json';
-export { default as InvalidTheme } from './invalidTheme.json';
+export type RequiredKeys<T extends object, K extends keyof T = keyof T> = Omit<T, K> & Required<Pick<T, K>>;

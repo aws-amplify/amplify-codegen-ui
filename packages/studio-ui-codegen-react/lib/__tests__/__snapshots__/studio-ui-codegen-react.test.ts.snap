@@ -2570,7 +2570,6 @@ export default function ParsedFixedValues(
 
 exports[`amplify render tests theme should render the theme 1`] = `
 "/* eslint-disable */
-import React from \\"react\\";
 import { createTheme } from \\"@aws-amplify/ui-react\\";
 export default createTheme({
   name: \\"MyTheme\\",
@@ -2599,7 +2598,8 @@ export default createTheme({
 `;
 
 exports[`amplify render tests theme should render the theme with ES5 1`] = `
-"import { createTheme } from \\"@aws-amplify/ui-react\\";
+"/* eslint-disable */
+import { createTheme } from \\"@aws-amplify/ui-react\\";
 export default createTheme({
   name: \\"MyTheme\\",
   tokens: {
@@ -2628,7 +2628,6 @@ export default createTheme({
 
 exports[`amplify render tests theme should render the theme with TSX 1`] = `
 "/* eslint-disable */
-import React from \\"react\\";
 import { createTheme } from \\"@aws-amplify/ui-react\\";
 export default createTheme({
   name: \\"MyTheme\\",
