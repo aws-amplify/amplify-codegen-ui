@@ -29,7 +29,6 @@ import {
   HeadingProps,
   IconProps,
   ImageProps,
-  InputProps,
   LabelProps,
   LinkProps,
   LoaderProps,
@@ -146,13 +145,6 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Image:
         return new ReactComponentRenderer<ImageProps>(component, this.importCollection, parent).renderElement();
-
-      case Primitive.Input:
-        return new ReactComponentWithChildrenRenderer<InputProps>(
-          component,
-          this.importCollection,
-          parent,
-        ).renderElement(renderChildren);
 
       case Primitive.Label:
         return new ReactComponentWithChildrenRenderer<LabelProps>(

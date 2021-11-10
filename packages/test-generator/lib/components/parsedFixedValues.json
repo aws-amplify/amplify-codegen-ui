@@ -9,10 +9,13 @@
   },
   "children": [
     {
-      "componentType": "Input",
+      "componentType": "TextField",
       "properties": {
         "id": {
           "value": "string-value"
+        },
+        "label": {
+          "value": "String"
         },
         "value": {
           "value": "raw string value"
@@ -20,10 +23,13 @@
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "TextField",
       "properties": {
         "id": {
           "value": "string-number-value"
+        },
+        "label": {
+          "value": "String Number"
         },
         "value": {
           "value": "67548"
@@ -31,22 +37,25 @@
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "Rating",
       "properties": {
         "id": {
           "value": "parsed-number-value"
         },
         "value": {
-          "value": "67548",
+          "value": "0.4",
           "type": "Number"
         }
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "TextField",
       "properties": {
         "id": {
           "value": "string-boolean-value"
+        },
+        "label": {
+          "value": "String Boolean"
         },
         "value": {
           "value": "true"
@@ -54,22 +63,28 @@
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "TextField",
       "properties": {
         "id": {
           "value": "parsed-boolean-value"
         },
-        "value": {
+        "label": {
+          "value": "Parsed Boolean"
+        },
+        "isDisabled": {
           "value": "true",
           "type": "Boolean"
         }
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "TextField",
       "properties": {
         "id": {
           "value": "string-json-value"
+        },
+        "label": {
+          "value": "String JSON"
         },
         "value": {
           "value": "{\"foo\": \"bar\"}"
@@ -77,22 +92,31 @@
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "Icon",
       "properties": {
         "id": {
           "value": "parsed-json-value"
         },
-        "value": {
-          "value": "{\"foo\": \"bar\"}",
+        "viewBox": {
+          "value": "{\"width\": 24, \"height\": 24}",
           "type": "Object"
+        },
+        "pathData": {
+          "value": "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+        },
+        "ariaLabel": {
+          "value": "Favorite"
         }
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "TextField",
       "properties": {
         "id": {
           "value": "string-array-value"
+        },
+        "label": {
+          "value": "String Array"
         },
         "value": {
           "value": "[1,2,3]"
@@ -100,22 +124,25 @@
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "Badge",
       "properties": {
         "id": {
           "value": "parsed-array-value"
         },
-        "value": {
+        "label": {
           "value": "[1,2,3]",
           "type": "Object"
         }
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "TextField",
       "properties": {
         "id": {
           "value": "string-null-value"
+        },
+        "label": {
+          "value": "String null"
         },
         "value": {
           "value": "null"
@@ -123,12 +150,12 @@
       }
     },
     {
-      "componentType": "Input",
+      "componentType": "Badge",
       "properties": {
         "id": {
           "value": "parsed-null-value"
         },
-        "value": {
+        "label": {
           "value": "null",
           "type": "Object"
         }

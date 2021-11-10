@@ -29,7 +29,6 @@ enum Primitive {
   Heading = 'Heading',
   Icon = 'Icon',
   Image = 'Image',
-  Input = 'Input',
   Label = 'Label',
   Link = 'Link',
   Loader = 'Loader',
