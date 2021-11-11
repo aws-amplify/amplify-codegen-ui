@@ -18,25 +18,18 @@ const fs = require('fs');
 const AmplifyUI = require('@aws-amplify/ui-react');
 const pascalcase = require('pascalcase');
 
-const iconset = Object.keys(AmplifyUI).filter((name) => name.match(/^Icon\w/));
+const iconset = Object.keys(AmplifyUI)
+  .filter((name) => name.match(/^Icon\w/))
+  .map(pascalcase);
 
-fs.writeFileSync(
-  'lib/iconset.ts',
-  `/* eslint-disable */
+const icons = {
+  componentType: 'View',
+  name: 'Icons',
+  properties: {},
+  children: iconset.map((icon) => ({
+    componentType: icon,
+    properties: {},
+  })),
+};
 
-/* This file was generated with scripts/generateBuiltInIconset.js. Do not edit directly. */
-export default new Set([
-${iconset
-  .map(pascalcase)
-  .map((icon) => `  '${icon}'`)
-  .join(',\n')},
-]);
-
-export const iconsetPascalNameMapping = new Map([
-${iconset
-  .filter((icon) => icon !== pascalcase(icon))
-  .map((icon) => `  ['${pascalcase(icon)}', '${icon}']`)
-  .join(',\n')},
-]);
-`,
-);
+fs.writeFileSync('lib/components/icons.json', JSON.stringify(icons, null, 2));

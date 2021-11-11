@@ -54,6 +54,7 @@ import {
   TextProps,
 } from '@aws-amplify/ui-react';
 import Primitive, { isBuiltInIcon } from '../primitive';
+import { iconsetPascalNameMapping } from '../iconset';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
 import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
@@ -69,9 +70,14 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
     const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
 
     if (isBuiltInIcon(component.componentType)) {
-      return new ReactComponentWithChildrenRenderer<IconProps>(component, this.importCollection, parent).renderElement(
-        renderChildren,
-      );
+      return new ReactComponentWithChildrenRenderer<IconProps>(
+        {
+          ...component,
+          componentType: iconsetPascalNameMapping.get(component.componentType) || component.componentType,
+        },
+        this.importCollection,
+        parent,
+      ).renderElement(renderChildren);
     }
 
     // add Primitive in alphabetical order
