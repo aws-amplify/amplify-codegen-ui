@@ -72,7 +72,7 @@ import {
   jsonToLiteral,
   bindingPropertyUsesHook,
 } from './react-studio-template-renderer-helper';
-import Primitive, { isPrimitive, PrimitiveTypeParameter } from './primitive';
+import Primitive, { isPrimitive, PrimitiveTypeParameter, isBuiltInIcon } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -316,7 +316,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const propsType = this.getPropsTypeName(component);
 
     const componentIsPrimitive = isPrimitive(component.componentType);
-    if (componentIsPrimitive) {
+    if (componentIsPrimitive || isBuiltInIcon(component.componentType)) {
       this.importCollection.addImport('@aws-amplify/ui-react', propsType);
     } else {
       this.importCollection.addImport(`./${component.componentType}`, `${component.componentType}Props`);
@@ -1050,6 +1050,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private getPropsTypeName(component: StudioComponent): string {
+    if (isBuiltInIcon(component.componentType)) {
+      return 'IconProps';
+    }
     return `${component.componentType}Props`;
   }
 
