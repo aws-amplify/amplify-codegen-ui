@@ -26,7 +26,7 @@ export const transformCodegenError = (error: any | unknown): InternalError | Inv
 export const handleCodegenErrors = (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
   const originalMethod = descriptor.value;
 
-  // eslint-disable-next-line no-param-reassign
+  // eslint-disable-next-line no-param-reassign, func-names
   descriptor.value = function (...args: any[]) {
     try {
       return originalMethod.apply(this, args);
