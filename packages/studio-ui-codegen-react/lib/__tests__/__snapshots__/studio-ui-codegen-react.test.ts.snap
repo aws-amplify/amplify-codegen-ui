@@ -2665,6 +2665,7 @@ import {
   FlexProps,
   Image,
   getOverrideProps,
+  useAuth,
 } from \\"@aws-amplify/ui-react\\";
 
 export type ProfileProps = React.PropsWithChildren<
@@ -2676,12 +2677,10 @@ export default function Profile(props: ProfileProps): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   const {
-    attributes: {
-      username,
-      picture: userImage,
-      [\\"custom:favorite_icecream\\"]: customUserAttributeIcecream,
-    },
-  } = useAuthenticatedUser();
+    username,
+    picture: userImage,
+    [\\"custom:favorite_icecream\\"]: customUserAttributeIcecream,
+  } = useAuth().user?.attributes ?? {};
   return (
     /* @ts-ignore: TS2322 */
     <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>

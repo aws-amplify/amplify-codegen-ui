@@ -52,6 +52,7 @@ import CollectionWithBindingItemsName from './ui-components/CollectionWithBindin
 import ComponentWithBoundPropertyConditional from './ui-components/ComponentWithBoundPropertyConditional';
 import ComponentWithNestedOverrides from './ui-components/ComponentWithNestedOverrides';
 import PaginatedCollection from './ui-components/PaginatedCollection';
+import ComponentWithAuthBinding from './ui-components/ComponentWithAuthBinding';
 /* eslint-enable import/extensions */
 
 const initializeUserTestData = async (): Promise<void> => {
@@ -229,6 +230,7 @@ export default function ComponentTests() {
             firstName: 'Override Name',
           }}
         />
+        <ComponentWithAuthBinding id="authBinding" />
       </div>
       <div id="collections">
         <h2>Collections</h2>

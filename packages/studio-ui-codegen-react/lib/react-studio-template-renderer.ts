@@ -514,6 +514,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const authStatement = this.buildUseAuthenticatedUserStatement(component);
     if (authStatement !== undefined) {
+      this.importCollection.addImport('@aws-amplify/ui-react', 'useAuth');
       statements.push(authStatement);
     }
 
@@ -559,18 +560,27 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         );
 
         // get values from useAuthenticatedUser
-        // const { attributes: { property } } = useAuthenticatedUser()
+        // const { property } = useAuth().user?.attributes || {};
         return factory.createVariableStatement(
           undefined,
           factory.createVariableDeclarationList(
             [
               factory.createVariableDeclaration(
-                factory.createObjectBindingPattern([
-                  factory.createBindingElement(undefined, factory.createIdentifier('attributes'), bindings, undefined),
-                ]),
+                bindings,
                 undefined,
                 undefined,
-                factory.createCallExpression(factory.createIdentifier('useAuthenticatedUser'), undefined, []),
+                factory.createBinaryExpression(
+                  factory.createPropertyAccessChain(
+                    factory.createPropertyAccessExpression(
+                      factory.createCallExpression(factory.createIdentifier('useAuth'), undefined, []),
+                      factory.createIdentifier('user'),
+                    ),
+                    factory.createToken(ts.SyntaxKind.QuestionDotToken),
+                    factory.createIdentifier('attributes'),
+                  ),
+                  factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                  factory.createObjectLiteralExpression([], false),
+                ),
               ),
             ],
             ts.NodeFlags.Const,

@@ -1,0 +1,61 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "ComponentWithAuthBinding",
+  "bindingProperties": {
+    "username": {
+      "type": "Authentication",
+      "bindingProperties": {
+        "userAttribute": "username"
+      }
+    },
+    "userImage": {
+      "type": "Authentication",
+      "bindingProperties": {
+        "userAttribute": "picture"
+      }
+    },
+    "customUserAttributeIcecream": {
+      "type": "Authentication",
+      "bindingProperties": {
+        "userAttribute": "custom:favorite_icecream"
+      }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Image",
+      "properties": {
+        "src": {
+          "bindingProperties": {
+            "property": "userImage"
+          }
+        },
+        "alt": {
+          "value": "User Image"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "properties": {
+        "label": {
+          "bindingProperties": {
+            "property": "username"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "properties": {
+        "label": {
+          "bindingProperties": {
+            "property": "customUserAttributeIcecream"
+          }
+        }
+      }
+    }
+  ],
+  "properties": {}
+}
