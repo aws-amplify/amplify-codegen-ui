@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import factory, { createImportDeclaration, ImportDeclaration } from 'typescript';
+import factory, { ImportDeclaration } from 'typescript';
 import path from 'path';
 
 export class ImportCollection {
@@ -40,21 +40,14 @@ export class ImportCollection {
   }
 
   buildSampleSnippetImports(topComponentName: string): ImportDeclaration[] {
-    const importDeclarations: ImportDeclaration[] = [];
-    const sampleStudioPath = './ui-components';
-    const namedImports = factory.createNamedImports([
-      factory.createImportSpecifier(undefined, factory.createIdentifier(topComponentName)),
-    ]);
-
-    importDeclarations.push(
-      createImportDeclaration(
+    return [
+      factory.createImportDeclaration(
         undefined,
         undefined,
-        factory.createImportClause(undefined, namedImports),
-        factory.createStringLiteral(sampleStudioPath),
+        factory.createImportClause(factory.createIdentifier(topComponentName), undefined),
+        factory.createStringLiteral(`./ui-components/${topComponentName}`),
       ),
-    );
-    return importDeclarations;
+    ];
   }
 
   buildImportStatements(skipReactImport?: boolean): ImportDeclaration[] {
@@ -74,7 +67,7 @@ export class ImportCollection {
       .concat(
         Array.from(this.#collection).map(([moduleName, imports]) => {
           const namedImports = [...imports].filter((namedImport) => namedImport !== 'default').sort();
-          return createImportDeclaration(
+          return factory.createImportDeclaration(
             undefined,
             undefined,
             factory.createImportClause(
