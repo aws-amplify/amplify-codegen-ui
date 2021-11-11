@@ -56,6 +56,7 @@ import ts, {
   LiteralExpression,
   BooleanLiteral,
   addSyntheticLeadingComment,
+  JsxSelfClosingElement,
 } from 'typescript';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
@@ -198,7 +199,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   renderFunctionWrapper(
     componentName: string,
-    jsx: JsxElement | JsxFragment,
+    jsx: JsxElement | JsxFragment | JsxSelfClosingElement,
     renderExport: boolean,
   ): FunctionDeclaration {
     const componentPropType = getComponentPropName(componentName);
@@ -246,7 +247,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  renderAppWrapper(appName: string, jsx: JsxElement | JsxFragment): VariableStatement {
+  renderAppWrapper(appName: string, jsx: JsxElement | JsxFragment | JsxSelfClosingElement): VariableStatement {
     const declarationList = factory.createVariableDeclarationList(
       [
         factory.createVariableDeclaration(
@@ -273,7 +274,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return wrapper;
   }
 
-  renderSampleCodeSnippetJsx(component: StudioComponent): JsxElement | JsxFragment {
+  renderSampleCodeSnippetJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement {
     return new SampleCodeRenderer(component, this.importCollection).renderElement();
   }
 
@@ -1066,5 +1067,5 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return undefined;
   }
 
-  abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment;
+  abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement;
 }

@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { StudioNode, StudioComponent, StudioComponentChild } from '@amzn/studio-ui-codegen';
-import { JsxElement, JsxFragment } from 'typescript';
+import { JsxElement, JsxFragment, JsxSelfClosingElement } from 'typescript';
 // add primitives in alphabetical order
 import {
   AlertProps,
@@ -61,7 +61,10 @@ import { ReactComponentWithChildrenRenderer } from '../react-component-with-chil
 import { ReactComponentRenderer } from '../react-component-renderer';
 
 export class AmplifyRenderer extends ReactStudioTemplateRenderer {
-  renderJsx(component: StudioComponent | StudioComponentChild, parent?: StudioNode): JsxElement | JsxFragment {
+  renderJsx(
+    component: StudioComponent | StudioComponentChild,
+    parent?: StudioNode,
+  ): JsxElement | JsxFragment | JsxSelfClosingElement {
     const node = new StudioNode(component, parent);
     const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
 

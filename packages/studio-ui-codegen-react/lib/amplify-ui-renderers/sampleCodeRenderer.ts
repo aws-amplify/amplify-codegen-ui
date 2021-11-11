@@ -15,23 +15,35 @@
  */
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 
-import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxOpeningElement } from 'typescript';
-import { StudioRendererConstants, StudioComponent, BoundStudioComponentProperty } from '@amzn/studio-ui-codegen';
+import { factory, JsxAttribute, JsxAttributeLike, JsxSelfClosingElement } from 'typescript';
+import { StudioRendererConstants } from '@amzn/studio-ui-codegen';
 import { ReactComponentRenderer } from '../react-component-renderer';
 
 export default class SampleCodeRenderer extends ReactComponentRenderer<BaseComponentProps> {
-  renderElement(): JsxElement {
-    const tagName = (<StudioComponent>this.component).name ?? StudioRendererConstants.unknownName;
-    const exposedProps = new Map<string, BoundStudioComponentProperty>();
-    // this.collectExposedProps(this.component, exposedProps);
+  renderElement(): JsxSelfClosingElement {
+    const tagName = this.component.name ?? StudioRendererConstants.unknownName;
+    // const prop = new Map<string, BoundStudioComponentProperty>();
+    // this.collectExposedProps(this.component, prop);
 
-    const element = factory.createJsxElement(
-      this.renderSampleCodeOpeningElement(exposedProps, tagName),
-      [],
-      factory.createJsxClosingElement(factory.createIdentifier(tagName)),
+    const propsArray: JsxAttribute[] = [];
+    /*  TODO:  move over to boundProperties
+    const defaultValue = 'defaultValue';
+    const defaultValueExpr = factory.createJsxExpression(undefined, factory.createIdentifier(defaultValue));
+    props?.forEach((value, key) => {
+      if (value.exposedAs) {
+        const displayExpr =
+          value.value !== undefined ? factory.createStringLiteral(value.value.toString()) : defaultValueExpr;
+        const attr = factory.createJsxAttribute(factory.createIdentifier(key), displayExpr);
+        propsArray.push(attr);
+      }
+    });
+    */
+
+    return factory.createJsxSelfClosingElement(
+      factory.createIdentifier(tagName),
+      undefined,
+      factory.createJsxAttributes(propsArray),
     );
-
-    return element;
   }
 
   /*  TODO:  Switch over to boundProperties
@@ -48,31 +60,6 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
     });
   }
   */
-
-  private renderSampleCodeOpeningElement(
-    props: Map<string, BoundStudioComponentProperty>,
-    tagName: string,
-  ): JsxOpeningElement {
-    const propsArray: JsxAttribute[] = [];
-    /*  TODO:  move over to boundProperties
-    const defaultValue = 'defaultValue';
-    const defaultValueExpr = factory.createJsxExpression(undefined, factory.createIdentifier(defaultValue));
-    props?.forEach((value, key) => {
-      if (value.exposedAs) {
-        const displayExpr =
-          value.value !== undefined ? factory.createStringLiteral(value.value.toString()) : defaultValueExpr;
-        const attr = factory.createJsxAttribute(factory.createIdentifier(key), displayExpr);
-        propsArray.push(attr);
-      }
-    });
-    */
-
-    return factory.createJsxOpeningElement(
-      factory.createIdentifier(tagName),
-      undefined,
-      factory.createJsxAttributes(propsArray),
-    );
-  }
 
   private addExposedPropAttributes(attributes: JsxAttributeLike[], tagName: string) {
     const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('props'));

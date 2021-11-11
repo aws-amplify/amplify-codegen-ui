@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { ComponentRendererBase, StudioNode, StudioComponent, StudioComponentChild } from '@amzn/studio-ui-codegen';
-import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory } from 'typescript';
+import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory, JsxSelfClosingElement } from 'typescript';
 
 import {
   addBindingPropertiesImports,
@@ -23,7 +23,10 @@ import {
 } from './react-component-render-helper';
 import { ImportCollection } from './import-collection';
 
-export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<TPropIn, JsxElement> {
+export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
+  TPropIn,
+  JsxElement | JsxSelfClosingElement
+> {
   constructor(
     component: StudioComponent | StudioComponentChild,
     protected importCollection: ImportCollection,
@@ -33,7 +36,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<TProp
     addBindingPropertiesImports(component, importCollection);
   }
 
-  renderElement(): JsxElement {
+  renderElement(): JsxElement | JsxSelfClosingElement {
     const element = factory.createJsxElement(
       this.renderOpeningElement(),
       [],
