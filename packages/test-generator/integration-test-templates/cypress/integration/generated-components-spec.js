@@ -130,6 +130,17 @@ describe('Generated Components', () => {
       it('Renders with wired data model', () => {
         // TODO: Implement me.
       });
+
+      describe('Auth Binding', () => {
+        it('Renders if user data is not available', () => {
+          cy.visit('http://localhost:3000/component-tests');
+          cy.get('#authBinding [alt="User Image"]');
+        });
+
+        it('Renders user data is available', () => {
+          // TODO: Implement me.
+        });
+      });
     });
   });
 
