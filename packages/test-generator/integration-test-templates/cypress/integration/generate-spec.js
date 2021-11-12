@@ -1,4 +1,9 @@
-const EXPECTED_INVALID_INPUT_CASES = new Set(['ComponentMissingProperties', 'ComponentMissingType', 'InvalidTheme']);
+const EXPECTED_INVALID_INPUT_CASES = new Set([
+  'ComponentMissingProperties',
+  'ComponentMissingType',
+  'InvalidTheme',
+  'CardWithInvalidChildComponentType',
+]);
 const EXPECTED_INTERNAL_ERROR_CASES = new Set([]);
 
 const TARGET_GENERATORS = ['ES2016_TSX', 'ES2016_JSX', 'ES5_TSX', 'ES5_JSX'];

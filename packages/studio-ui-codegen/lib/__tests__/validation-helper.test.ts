@@ -95,6 +95,49 @@ describe('validation-helper', () => {
         });
       }).toThrowErrorMatchingSnapshot();
     });
+
+    test('fails on componentType with whitespace', () => {
+      expect(() => {
+        validateComponentSchema({
+          name: 'CustomComponent',
+          componentType: 'View 2',
+          properties: {},
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('fails on componentType with leading number', () => {
+      expect(() => {
+        validateComponentSchema({
+          name: 'CustomComponent',
+          componentType: '2View',
+          properties: {},
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('succeeds on componentType with trailing number', () => {
+      validateComponentSchema({
+        name: 'CustomComponent',
+        componentType: 'View2',
+        properties: {},
+      });
+    });
+
+    test('child component name may contain whitespace', () => {
+      validateComponentSchema({
+        name: 'CustomComponent',
+        componentType: 'View',
+        properties: {},
+        children: [
+          {
+            name: 'I Have Spaces',
+            componentType: 'Button',
+            properties: {},
+          },
+        ],
+      });
+    });
   });
 
   describe('validateThemeSchema', () => {

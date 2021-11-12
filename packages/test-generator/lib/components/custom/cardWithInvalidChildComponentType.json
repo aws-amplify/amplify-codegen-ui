@@ -1,0 +1,70 @@
+{
+  "name": "CardWithInvalidChildComponentType",
+  "children": [
+    {
+      "children": [
+        {
+          "children": [],
+          "name": "Frame 2",
+          "componentType": "Frame 2",
+          "properties": {
+            "width": {
+              "value": "323px"
+            },
+            "height": {
+              "value": "100px"
+            },
+            "alignItems": {
+              "value": "center"
+            }
+          },
+          "overrides": {},
+          "variants": []
+        }
+      ],
+      "name": "Card",
+      "componentType": "Card",
+      "properties": {
+        "style": {
+          "value": "plain"
+        }
+      },
+      "overrides": {},
+      "variants": []
+    }
+  ],
+  "id": "1736:4332",
+  "bindingProperties": {},
+  "componentType": "Flex",
+  "properties": {
+    "width": {
+      "value": "375px"
+    },
+    "height": {
+      "value": "152px"
+    },
+    "gap": {
+      "value": "10px"
+    },
+    "direction": {
+      "value": "row"
+    },
+    "alignItems": {
+      "value": "flex-start"
+    },
+    "overflow": {
+      "value": "hidden"
+    },
+    "position": {
+      "value": "relative"
+    },
+    "padding": {
+      "value": "10px 10px 10px 10px"
+    },
+    "backgroundColor": {
+      "value": "rgba(255,255,255,1)"
+    }
+  },
+  "overrides": {},
+  "variants": []
+}
