@@ -73,6 +73,9 @@ export const PrimitiveChildrenPropMapping: Partial<Record<Primitive, string>> = 
   // [Primitive.TableCell]: 'label',
   [Primitive.Text]: 'label',
   [Primitive.ToggleButton]: 'label',
+
+  // remove once label is added in Amplify UI
+  [Primitive.CheckboxField]: 'label',
 };
 
 export const PrimitiveTypeParameter: Partial<
