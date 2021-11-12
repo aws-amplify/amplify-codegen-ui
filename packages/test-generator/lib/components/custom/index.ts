@@ -16,3 +16,4 @@
 export { default as CustomParent } from './customParent.json';
 export { default as CustomChildren } from './customChildren.json';
 export { default as CustomParentAndChildren } from './customParentAndChildren.json';
+export { default as CardWithInvalidChildComponentType } from './cardWithInvalidChildComponentType.json';

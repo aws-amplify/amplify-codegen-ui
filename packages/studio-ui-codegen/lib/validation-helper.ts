@@ -16,13 +16,23 @@
 import * as yup from 'yup';
 import { InvalidInputError } from './errors';
 
+const alphaNumString = () => {
+  return yup.string().matches(/^[a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string' });
+};
+
+const alphaNumNoLeadingNumberString = () => {
+  return yup
+    .string()
+    .matches(/^[a-zA-Z][a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string, starting with a character' });
+};
+
 /**
  * Component Schema Definitions
  */
 const studioComponentChildSchema: any = yup.object({
-  componentType: yup.string().strict().required(),
+  componentType: alphaNumNoLeadingNumberString().required(),
   // TODO: Name is required in the studio-types file, but doesn't seem to need to be. Relaxing the restriction here.
-  name: yup.string().strict(),
+  name: yup.string(),
   properties: yup.object().required(),
   // Doing lazy eval here since we reference our own type otherwise
   children: yup.lazy(() => yup.array(studioComponentChildSchema.default(undefined))),
@@ -35,10 +45,10 @@ const studioComponentChildSchema: any = yup.object({
 });
 
 const studioComponentSchema = yup.object({
-  name: yup.string().strict(),
-  id: yup.string().strict(),
-  sourceId: yup.string().strict(),
-  componentType: yup.string().strict().required(),
+  name: alphaNumString(),
+  id: yup.string(),
+  sourceId: yup.string(),
+  componentType: alphaNumNoLeadingNumberString().required(),
   properties: yup.object().required(),
   children: yup.array(studioComponentChildSchema),
   figmaMetadata: yup.object(),
@@ -53,18 +63,18 @@ const studioComponentSchema = yup.object({
  * Theme Schema Definitions
  */
 const studioThemeValuesSchema: any = yup.object({
-  key: yup.string().strict().required(),
+  key: yup.string().required(),
   value: yup
     .object({
-      value: yup.string().strict(),
+      value: yup.string(),
       children: yup.lazy(() => yup.array(studioThemeValuesSchema.default(undefined))),
     })
     .required(),
 });
 
 const studioThemeSchema = yup.object({
-  name: yup.string().strict().required(),
-  id: yup.string().strict(),
+  name: alphaNumString().required(),
+  id: yup.string(),
   values: yup.array(studioThemeValuesSchema).required(),
   overrides: yup.array(studioThemeValuesSchema),
 });
@@ -74,7 +84,7 @@ const studioThemeSchema = yup.object({
  */
 const validateSchema = (validator: yup.AnySchema, studioSchema: any) => {
   try {
-    validator.validateSync(studioSchema);
+    validator.validateSync(studioSchema, { strict: true, abortEarly: false });
   } catch (e) {
     if (e instanceof yup.ValidationError) {
       throw new InvalidInputError(e.errors.join(', '));

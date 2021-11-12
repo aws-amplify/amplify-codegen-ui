@@ -29,6 +29,7 @@ const DISABLED_SCHEMAS = [
   'ComponentMissingProperties', // Expected failure cases
   'ComponentMissingType', // Expected failure cases
   'InvalidTheme', // Expected failure cases
+  'CardWithInvalidChildComponentType', // Expected failure cases
 ];
 
 const generator = new NodeTestGenerator({

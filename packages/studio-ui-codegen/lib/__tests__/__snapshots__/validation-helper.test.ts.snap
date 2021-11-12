@@ -4,13 +4,17 @@ exports[`validation-helper validateComponentSchema child component requires comp
 
 exports[`validation-helper validateComponentSchema deeply nested child components requires properties 1`] = `"children[0].children[0].children[0].properties is a required field"`;
 
+exports[`validation-helper validateComponentSchema fails on componentType with leading number 1`] = `"Expected an alphanumeric string, starting with a character"`;
+
+exports[`validation-helper validateComponentSchema fails on componentType with whitespace 1`] = `"Expected an alphanumeric string, starting with a character"`;
+
 exports[`validation-helper validateComponentSchema top-level component requires componentType 1`] = `"componentType is a required field"`;
 
 exports[`validation-helper validateComponentSchema top-level component requires componentType to be the correct type 1`] = `"componentType must be a \`string\` type, but the final value was: \`2\`."`;
 
 exports[`validation-helper validateComponentSchema top-level component requires properties 1`] = `"properties is a required field"`;
 
-exports[`validation-helper validateThemeSchema children objects should not be empty 1`] = `"values[1].key is a required field"`;
+exports[`validation-helper validateThemeSchema children objects should not be empty 1`] = `"values[1].key is a required field, values[1].value is a required field"`;
 
 exports[`validation-helper validateThemeSchema overrides should contain the right shape 1`] = `"overrides[0].key is a required field"`;
 
