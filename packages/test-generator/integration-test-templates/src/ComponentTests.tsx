@@ -16,43 +16,45 @@
 import { useEffect, useState } from 'react';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-import ViewTest from './ui-components/ViewTest';
-import ViewWithButton from './ui-components/ViewWithButton';
-import CustomButton from './ui-components/CustomButton';
-import BasicComponentBadge from './ui-components/BasicComponentBadge';
-import BasicComponentView from './ui-components/BasicComponentView';
-import BasicComponentButton from './ui-components/BasicComponentButton';
-import BasicComponentCard from './ui-components/BasicComponentCard';
-import BasicComponentCollection from './ui-components/BasicComponentCollection';
-import BasicComponentText from './ui-components/BasicComponentText';
-import ComponentWithConcatenation from './ui-components/ComponentWithConcatenation';
-import ComponentWithConditional from './ui-components/ComponentWithConditional';
-import BasicComponentDivider from './ui-components/BasicComponentDivider';
-import BasicComponentFlex from './ui-components/BasicComponentFlex';
-import BasicComponentImage from './ui-components/BasicComponentImage';
-import BasicComponentCustomRating from './ui-components/BasicComponentCustomRating';
-import ComponentWithVariant from './ui-components/ComponentWithVariant';
-import SimplePropertyBindingDefaultValue from './ui-components/SimplePropertyBindingDefaultValue';
-import BoundDefaultValue from './ui-components/BoundDefaultValue';
-import SimpleAndBoundDefaultValue from './ui-components/SimpleAndBoundDefaultValue';
-import CollectionDefaultValue from './ui-components/CollectionDefaultValue';
-import theme from './ui-components/MyTheme';
-import ComponentWithSimplePropertyBinding from './ui-components/ComponentWithSimplePropertyBinding';
-import ComponentWithDataBindingWithoutPredicate from './ui-components/ComponentWithDataBindingWithoutPredicate';
-import ComponentWithDataBindingWithPredicate from './ui-components/ComponentWithDataBindingWithPredicate';
-import CollectionWithBinding from './ui-components/CollectionWithBinding';
-import CollectionWithSort from './ui-components/CollectionWithSort';
-import ParsedFixedValues from './ui-components/ParsedFixedValues';
-import CustomChildren from './ui-components/CustomChildren';
-import CustomParent from './ui-components/CustomParent';
-import CustomParentAndChildren from './ui-components/CustomParentAndChildren';
 import { DataStore } from 'aws-amplify';
 import { User, Listing } from './models';
-import CollectionWithBindingItemsName from './ui-components/CollectionWithBindingItemsName';
-import ComponentWithBoundPropertyConditional from './ui-components/ComponentWithBoundPropertyConditional';
-import ComponentWithNestedOverrides from './ui-components/ComponentWithNestedOverrides';
-import PaginatedCollection from './ui-components/PaginatedCollection';
-import ComponentWithAuthBinding from './ui-components/ComponentWithAuthBinding';
+import {
+  ViewTest,
+  ViewWithButton,
+  CustomButton,
+  BasicComponentBadge,
+  BasicComponentView,
+  BasicComponentButton,
+  BasicComponentCard,
+  BasicComponentCollection,
+  BasicComponentText,
+  ComponentWithConcatenation,
+  ComponentWithConditional,
+  BasicComponentDivider,
+  BasicComponentFlex,
+  BasicComponentImage,
+  BasicComponentCustomRating,
+  ComponentWithVariant,
+  SimplePropertyBindingDefaultValue,
+  BoundDefaultValue,
+  SimpleAndBoundDefaultValue,
+  CollectionDefaultValue,
+  MyTheme,
+  ComponentWithSimplePropertyBinding,
+  ComponentWithDataBindingWithoutPredicate,
+  ComponentWithDataBindingWithPredicate,
+  CollectionWithBinding,
+  CollectionWithSort,
+  ParsedFixedValues,
+  CustomChildren,
+  CustomParent,
+  CustomParentAndChildren,
+  CollectionWithBindingItemsName,
+  ComponentWithBoundPropertyConditional,
+  ComponentWithNestedOverrides,
+  PaginatedCollection,
+  ComponentWithAuthBinding,
+} from './ui-components';
 /* eslint-enable import/extensions */
 
 const initializeUserTestData = async (): Promise<void> => {
@@ -137,7 +139,7 @@ export default function ComponentTests() {
 
   return (
     /* components prop is required. https://github.com/aws-amplify/amplify-ui/issues/575 */
-    <AmplifyProvider theme={theme} components={{}}>
+    <AmplifyProvider theme={MyTheme} components={{}}>
       <h1>Generated Component Tests</h1>
       <div id={'basic-components'}>
         <h2>Basic Components</h2>

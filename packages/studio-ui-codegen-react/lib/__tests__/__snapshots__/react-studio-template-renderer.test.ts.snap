@@ -5,7 +5,7 @@ Object {
   "compText": "export const App = () => {
     return (<MyText />);
 };",
-  "importsText": "import MyText from \\"./ui-components/MyText\\";
+  "importsText": "import { MyText } from \\"./ui-components\\";
 ",
 }
 `;
@@ -15,7 +15,7 @@ Object {
   "compText": "export const App = () => {
     return (<unknown_component_name />);
 };",
-  "importsText": "import unknown_component_name from \\"./ui-components/unknown_component_name\\";
+  "importsText": "import { unknown_component_name } from \\"./ui-components\\";
 ",
 }
 `;
