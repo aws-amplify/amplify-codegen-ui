@@ -117,6 +117,25 @@ export abstract class TestGenerator {
       }
     };
 
+    const generateIndexFile = (testCases: TestCase[]) => {
+      const schemas = testCases.map((testCase) => testCase.schema);
+      try {
+        if (this.params.writeToDisk) {
+          this.writeIndexFileToDisk(schemas);
+        }
+        if (this.params.writeToLogger) {
+          const indexFile = this.renderIndexFile(schemas);
+          log.info(`# index`);
+          log.info(this.decorateTypescriptWithMarkdown(indexFile.componentText));
+        }
+      } catch (err) {
+        if (this.params.immediatelyThrowGenerateErrors) {
+          throw err;
+        }
+        renderErrors.index = err;
+      }
+    };
+
     testCases.forEach((testCase) => {
       switch (testCase.testType) {
         case 'Component':
@@ -129,6 +148,8 @@ export abstract class TestGenerator {
           throw new Error('Expected either a `Component` or `Theme` test case type');
       }
     });
+
+    generateIndexFile(testCases);
 
     if (Object.keys(renderErrors).length > 0) {
       log.error('Caught exceptions while rendering templates');
@@ -154,6 +175,10 @@ export abstract class TestGenerator {
   };
 
   abstract renderTheme(theme: StudioTheme): { componentText: string };
+
+  abstract writeIndexFileToDisk(schemas: (StudioComponent | StudioTheme)[]): void;
+
+  abstract renderIndexFile(schemas: (StudioComponent | StudioTheme)[]): { componentText: string };
 
   getTestCases(disabledSchemaNames?: string[]): TestCase[] {
     const disabledSchemaSet = new Set(disabledSchemaNames);

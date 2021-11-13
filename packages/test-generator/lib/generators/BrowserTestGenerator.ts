@@ -16,13 +16,23 @@
 
 /* Test Generator to be used in the browser environment */
 import { StudioComponent, StudioTheme } from '@amzn/studio-ui-codegen';
-import { AmplifyRenderer, ReactThemeStudioTemplateRenderer } from '@amzn/studio-ui-codegen-react';
+import {
+  AmplifyRenderer,
+  ReactThemeStudioTemplateRenderer,
+  ReactIndexStudioTemplateRenderer,
+} from '@amzn/studio-ui-codegen-react';
 import { TestGenerator } from './TestGenerator';
 
 export class BrowserTestGenerator extends TestGenerator {
   writeComponentToDisk() {} // no-op
 
   writeThemeToDisk() {} // no-op
+
+  writeIndexFileToDisk() {} // no-op
+
+  renderIndexFile(schemas: (StudioComponent | StudioTheme)[]) {
+    return new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig).renderComponent();
+  }
 
   renderComponent(component: StudioComponent) {
     return {

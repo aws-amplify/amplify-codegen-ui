@@ -21,7 +21,11 @@ import {
   StudioComponent,
   StudioTheme,
 } from '@amzn/studio-ui-codegen';
-import { AmplifyRenderer, ReactThemeStudioTemplateRenderer } from '@amzn/studio-ui-codegen-react';
+import {
+  AmplifyRenderer,
+  ReactThemeStudioTemplateRenderer,
+  ReactIndexStudioTemplateRenderer,
+} from '@amzn/studio-ui-codegen-react';
 import { TestGenerator, TestGeneratorParams } from './TestGenerator';
 
 export class NodeTestGenerator extends TestGenerator {
@@ -29,9 +33,13 @@ export class NodeTestGenerator extends TestGenerator {
 
   private readonly themeRendererFactory: any;
 
+  private readonly indexRendererFactory: any;
+
   private readonly rendererManager: any;
 
   private readonly themeRendererManager: any;
+
+  private readonly indexRendererManager: any;
 
   constructor(params: TestGeneratorParams) {
     super(params);
@@ -41,8 +49,12 @@ export class NodeTestGenerator extends TestGenerator {
     this.themeRendererFactory = new StudioTemplateRendererFactory(
       (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, this.renderConfig),
     );
+    this.indexRendererFactory = new StudioTemplateRendererFactory(
+      (schemas: (StudioComponent | StudioTheme)[]) => new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig),
+    );
     this.rendererManager = new StudioTemplateRendererManager(this.componentRendererFactory, this.outputConfig);
     this.themeRendererManager = new StudioTemplateRendererManager(this.themeRendererFactory, this.outputConfig);
+    this.indexRendererManager = new StudioTemplateRendererManager(this.indexRendererFactory, this.outputConfig);
   }
 
   writeComponentToDisk(component: StudioComponent) {
@@ -63,5 +75,14 @@ export class NodeTestGenerator extends TestGenerator {
   renderTheme(theme: StudioTheme) {
     const buildRenderer = this.themeRendererFactory.buildRenderer(theme);
     return buildRenderer.renderComponent();
+  }
+
+  writeIndexFileToDisk(schemas: (StudioComponent | StudioTheme)[]) {
+    this.indexRendererManager.renderSchemaToTemplate(schemas);
+  }
+
+  renderIndexFile(schemas: (StudioComponent | StudioTheme)[]) {
+    const indexRenderer = this.indexRendererFactory.buildRenderer(schemas);
+    return indexRenderer.renderComponent();
   }
 }

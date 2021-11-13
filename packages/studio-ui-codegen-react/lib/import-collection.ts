@@ -44,8 +44,13 @@ export class ImportCollection {
       factory.createImportDeclaration(
         undefined,
         undefined,
-        factory.createImportClause(factory.createIdentifier(topComponentName), undefined),
-        factory.createStringLiteral(`./ui-components/${topComponentName}`),
+        factory.createImportClause(
+          undefined,
+          factory.createNamedImports([
+            factory.createImportSpecifier(undefined, factory.createIdentifier(topComponentName)),
+          ]),
+        ),
+        factory.createStringLiteral('./ui-components'),
       ),
     ];
   }
