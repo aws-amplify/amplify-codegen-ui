@@ -5,6 +5,9 @@
   "properties": {
     "label": {
       "value": "My Link"
+    },
+    "href": {
+      "value": "/primitives-tests"
     }
   }
 }
