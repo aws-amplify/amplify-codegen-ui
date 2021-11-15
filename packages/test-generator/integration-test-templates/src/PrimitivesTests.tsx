@@ -71,7 +71,7 @@ export default function PrimitivesTests() {
         <Heading>Collection</Heading>
         <CollectionPrimitive />
       </View>
-      <View id="Divider">
+      <View id="divider">
         <Heading>Divider</Heading>
         <DividerPrimitive />
       </View>
