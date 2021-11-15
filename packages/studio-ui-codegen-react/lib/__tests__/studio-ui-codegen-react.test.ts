@@ -392,5 +392,9 @@ describe('amplify render tests', () => {
     test('TextField', () => {
       expect(generateWithAmplifyRenderer('primitives/TextFieldPrimitive').componentText).toMatchSnapshot();
     });
+
+    test('SliderField', () => {
+      expect(generateWithAmplifyRenderer('primitives/SliderFieldPrimitive').componentText).toMatchSnapshot();
+    });
   });
 });

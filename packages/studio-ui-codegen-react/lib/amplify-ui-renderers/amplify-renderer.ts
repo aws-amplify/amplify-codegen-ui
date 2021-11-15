@@ -42,6 +42,7 @@ import {
   ScrollViewProps,
   SearchFieldProps,
   SelectFieldProps,
+  SliderFieldProps,
   StepperFieldProps,
   SwitchFieldProps,
   TabItemProps,
@@ -239,6 +240,9 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
+
+      case Primitive.SliderField:
+        return new ReactComponentRenderer<SliderFieldProps>(component, this.importCollection, parent).renderElement();
 
       case Primitive.StepperField:
         return new ReactComponentWithChildrenRenderer<StepperFieldProps>(

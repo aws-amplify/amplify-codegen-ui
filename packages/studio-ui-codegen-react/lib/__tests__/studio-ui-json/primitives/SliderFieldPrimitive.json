@@ -1,0 +1,29 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "SliderField",
+  "name": "SliderFieldPrimitive",
+  "properties": {
+    "name": {
+      "value": "slider"
+    },
+    "label": {
+      "value": "Slider"
+    },
+    "defaultValue": {
+      "value": "50",
+      "type": "Number"
+    },
+    "min": {
+      "value": "0",
+      "type": "Number"
+    },
+    "max": {
+      "value": "100",
+      "type": "Number"
+    },
+    "step": {
+      "value": "1",
+      "type": "Number"
+    }
+  }
+}

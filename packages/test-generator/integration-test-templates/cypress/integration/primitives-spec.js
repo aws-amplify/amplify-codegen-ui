@@ -161,6 +161,26 @@ describe('Primitives', () => {
     });
   });
 
+  describe('SliderField', () => {
+    it('Basic', () => {
+      cy.visit('http://localhost:3000/primitives-tests');
+      cy.get('#slider-field')
+        .find('.amplify-sliderfield')
+        .within(() => {
+          cy.get('.amplify-label').within(() => {
+            cy.get('span').eq(0).contains('Slider');
+            cy.get('span').eq(1).contains('50');
+          });
+          cy.get('.amplify-sliderfield__group')
+            .find('span')
+            .find('span')
+            .eq(0)
+            .find('span')
+            .should('have.attr', 'style', 'left: 0%; right: 50%;');
+        });
+    });
+  });
+
   describe('StepperField', () => {
     it('Basic', () => {
       cy.visit('http://localhost:3000/primitives-tests');

@@ -42,6 +42,7 @@ enum Primitive {
   ScrollView = 'ScrollView',
   SearchField = 'SearchField',
   SelectField = 'SelectField',
+  SliderField = 'SliderField',
   StepperField = 'StepperField',
   SwitchField = 'SwitchField',
   Tabs = 'Tabs',
