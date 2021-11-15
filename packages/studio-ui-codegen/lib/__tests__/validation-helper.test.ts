@@ -34,6 +34,15 @@ describe('validation-helper', () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
+    test('values can be `null` or not present', () => {
+      validateComponentSchema({
+        name: 'MyBindingView',
+        componentType: 'View',
+        properties: {},
+        sourceId: null,
+      });
+    });
+
     test('top-level component requires properties', () => {
       expect(() => {
         validateComponentSchema({

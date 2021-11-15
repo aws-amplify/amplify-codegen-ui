@@ -32,31 +32,31 @@ const alphaNumNoLeadingNumberString = () => {
 const studioComponentChildSchema: any = yup.object({
   componentType: alphaNumNoLeadingNumberString().required(),
   // TODO: Name is required in the studio-types file, but doesn't seem to need to be. Relaxing the restriction here.
-  name: yup.string(),
+  name: yup.string().nullable(),
   properties: yup.object().required(),
   // Doing lazy eval here since we reference our own type otherwise
   children: yup.lazy(() => yup.array(studioComponentChildSchema.default(undefined))),
-  figmaMetadata: yup.object(),
-  variants: yup.array(),
-  overrides: yup.object(),
-  bindingProperties: yup.object(),
-  collectionProperties: yup.object(),
-  actions: yup.object(),
+  figmaMetadata: yup.object().nullable(),
+  variants: yup.array().nullable(),
+  overrides: yup.object().nullable(),
+  bindingProperties: yup.object().nullable(),
+  collectionProperties: yup.object().nullable(),
+  actions: yup.object().nullable(),
 });
 
 const studioComponentSchema = yup.object({
-  name: alphaNumString(),
-  id: yup.string(),
-  sourceId: yup.string(),
+  name: alphaNumString().nullable(),
+  id: yup.string().nullable(),
+  sourceId: yup.string().nullable(),
   componentType: alphaNumNoLeadingNumberString().required(),
   properties: yup.object().required(),
-  children: yup.array(studioComponentChildSchema),
-  figmaMetadata: yup.object(),
-  variants: yup.array(),
-  overrides: yup.object(),
-  bindingProperties: yup.object(),
-  collectionProperties: yup.object(),
-  actions: yup.object(),
+  children: yup.array(studioComponentChildSchema).nullable(),
+  figmaMetadata: yup.object().nullable(),
+  variants: yup.array().nullable(),
+  overrides: yup.object().nullable(),
+  bindingProperties: yup.object().nullable(),
+  collectionProperties: yup.object().nullable(),
+  actions: yup.object().nullable(),
 });
 
 /**
@@ -74,9 +74,9 @@ const studioThemeValuesSchema: any = yup.object({
 
 const studioThemeSchema = yup.object({
   name: alphaNumString().required(),
-  id: yup.string(),
+  id: yup.string().nullable(),
   values: yup.array(studioThemeValuesSchema).required(),
-  overrides: yup.array(studioThemeValuesSchema),
+  overrides: yup.array(studioThemeValuesSchema).nullable(),
 });
 
 /**
