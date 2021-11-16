@@ -54,7 +54,7 @@ import {
   VisuallyHiddenProps,
   TextProps,
 } from '@aws-amplify/ui-react';
-import Primitive from '../primitive';
+import Primitive, { isBuiltInIcon } from '../primitive';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
 import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
@@ -68,6 +68,12 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
   ): JsxElement | JsxFragment | JsxSelfClosingElement {
     const node = new StudioNode(component, parent);
     const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
+
+    if (isBuiltInIcon(component.componentType)) {
+      return new ReactComponentWithChildrenRenderer<IconProps>(component, this.importCollection, parent).renderElement(
+        renderChildren,
+      );
+    }
 
     // add Primitive in alphabetical order
     switch (component.componentType) {

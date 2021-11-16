@@ -2377,6 +2377,37 @@ export default function SimplePropertyBindingDefaultValue(
 }
 `;
 
+exports[`amplify render tests primitives Built-in Iconset 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  IconCloud,
+  IconProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type MyIconCloudProps = React.PropsWithChildren<
+  Partial<IconProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function MyIconCloud(
+  props: MyIconCloudProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <IconCloud
+      {...rest}
+      {...getOverrideProps(overrides, \\"IconCloud\\")}
+    ></IconCloud>
+  );
+}
+"
+`;
+
 exports[`amplify render tests primitives SliderField 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

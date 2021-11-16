@@ -54,6 +54,7 @@ import {
   ComponentWithNestedOverrides,
   PaginatedCollection,
   ComponentWithAuthBinding,
+  MyIconCloud
 } from './ui-components';
 /* eslint-enable import/extensions */
 
@@ -300,6 +301,9 @@ export default function ComponentTests() {
             'Flex.Flex[1].Flex[0]': { backgroundColor: 'blue' },
           }}
         />
+      </div>
+      <div id="icons">
+        <MyIconCloud />
       </div>
     </AmplifyProvider>
   );

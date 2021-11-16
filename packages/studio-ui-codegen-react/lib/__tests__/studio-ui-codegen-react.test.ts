@@ -401,5 +401,9 @@ describe('amplify render tests', () => {
     test('SliderField', () => {
       expect(generateWithAmplifyRenderer('primitives/SliderFieldPrimitive').componentText).toMatchSnapshot();
     });
+
+    test('Built-in Iconset', () => {
+      expect(generateWithAmplifyRenderer('builtInIconset').componentText).toMatchSnapshot();
+    });
   });
 });

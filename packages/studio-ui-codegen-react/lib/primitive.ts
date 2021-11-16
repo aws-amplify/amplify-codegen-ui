@@ -14,6 +14,8 @@
   limitations under the License.
  */
 import { factory, SyntaxKind, TypeParameterDeclaration, TypeNode } from 'typescript';
+// use require style import to get CommonJS version of Amplify UI React
+const AmplifyUI = require('@aws-amplify/ui-react'); // eslint-disable-line @typescript-eslint/no-var-requires
 
 enum Primitive {
   Alert = 'Alert',
@@ -97,3 +99,9 @@ export const PrimitiveTypeParameter: Partial<
     reference: () => [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)],
   },
 };
+
+export const iconset = new Set(Object.keys(AmplifyUI).filter((name) => name.match(/^Icon\w/)));
+
+export function isBuiltInIcon(componentType: string): boolean {
+  return iconset.has(componentType);
+}
