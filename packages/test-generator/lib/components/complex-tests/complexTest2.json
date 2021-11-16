@@ -6,7 +6,7 @@
         "children": [
           {
             "children": [],
-            "componentType": "Box",
+            "componentType": "View",
             "name": "RectangleRed",
             "properties": {
               "width": {
@@ -31,7 +31,7 @@
           },
           {
             "children": [],
-            "componentType": "Box",
+            "componentType": "View",
             "name": "RectangleYellow",
             "properties": {
               "width": {
@@ -63,9 +63,6 @@
           },
           "alignSelf": {
             "value": "stretch"
-          },
-          "flexGrow": {
-            "value": "1"
           },
           "overflow": {
             "value": "hidden"

@@ -6,7 +6,7 @@
         "children": [
           {
             "children": [],
-            "componentType": "Box",
+            "componentType": "View",
             "name": "Rectangle 57",
             "properties": {
               "width": {
@@ -31,7 +31,7 @@
           },
           {
             "children": [],
-            "componentType": "Box",
+            "componentType": "View",
             "name": "Rectangle 56",
             "properties": {
               "width": {
@@ -86,7 +86,7 @@
     "createdAt": "2021-10-29T19:06:43.871Z",
     "environmentName": "staging",
     "id": "c-0Fp5NOksaO2U0LKA2y",
-    "name": "VerticalFlexFill",
+    "name": "ComplexTest8",
     "overrides": {},
     "properties": {
       "padding": {

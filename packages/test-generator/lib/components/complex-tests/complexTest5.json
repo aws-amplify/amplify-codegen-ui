@@ -4,7 +4,7 @@
     "children": [
       {
         "children": [],
-        "componentType": "Box",
+        "componentType": "View",
         "name": "RectangleGreen",
         "properties": {
           "width": {
@@ -29,7 +29,7 @@
       },
       {
         "children": [],
-        "componentType": "Box",
+        "componentType": "View",
         "name": "RectangleBlue",
         "properties": {
           "width": {

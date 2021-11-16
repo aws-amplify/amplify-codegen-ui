@@ -44,7 +44,7 @@
       },
       {
         "children": [],
-        "componentType": "Box",
+        "componentType": "View",
         "name": "Rectangle 58",
         "properties": {
           "width": {
@@ -125,7 +125,7 @@
     "createdAt": "2021-10-29T19:06:43.825Z",
     "environmentName": "staging",
     "id": "c-KLxpfgaCLmd1FymkDt",
-    "name": "NewComponent",
+    "name": "ComplexTest3",
     "overrides": {},
     "properties": {
       "padding": {
