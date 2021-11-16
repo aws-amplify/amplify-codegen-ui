@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v0.9.0...v0.10.0) (2021-11-16)
+
+
+### Bug Fixes
+
+* remove special 'value' handling for text, since it causes issues, and is replaced w/ 'label' ([c4767da](https://github.com/aws-amplify/amplify-codegen-ui/commit/c4767da593f6cd091aa7a9642402f9f7433a8f58))
+
+
+### Features
+
+* add built-in iconset ([#219](https://github.com/aws-amplify/amplify-codegen-ui/issues/219)) ([d3e097b](https://github.com/aws-amplify/amplify-codegen-ui/commit/d3e097b1d48dee50061d304ba8a18089dcf668ac))
+
+
+
+
+
 # 0.9.0 (2021-11-15)
 
 
