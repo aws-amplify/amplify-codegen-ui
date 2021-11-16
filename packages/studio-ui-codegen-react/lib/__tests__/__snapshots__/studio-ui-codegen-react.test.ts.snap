@@ -1676,6 +1676,61 @@ export default function CustomButton(
 "
 `;
 
+exports[`amplify render tests concat and conditional transform should render component with conditional data binding prop from a bug 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { Student } from \\"../models\\";
+import {
+  Button,
+  EscapeHatchProps,
+  Flex,
+  FlexProps,
+  Text,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type ConditionalComponentWithDataBindingProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    student?: Student;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ConditionalComponentWithDataBinding(
+  props: ConditionalComponentWithDataBindingProps
+): React.ReactElement {
+  const { student, overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>
+      <Text
+        value={
+          student?.id && student?.id === \\"idstringuserinput\\"
+            ? student?.createdAt
+            : student?.id
+        }
+        children={
+          student?.id && student?.id === \\"idstringuserinput\\"
+            ? student?.createdAt
+            : student?.id
+        }
+        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
+      ></Text>
+      <Button
+        value={
+          student?.id && student?.id === \\"idstringuserinput\\"
+            ? student?.createdAt
+            : student?.id
+        }
+        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
+      ></Button>
+    </Flex>
+  );
+}
+"
+`;
+
 exports[`amplify render tests concat and conditional transform should render component with conditional simple binding prop 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
