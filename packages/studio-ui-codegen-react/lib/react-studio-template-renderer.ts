@@ -106,7 +106,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const imports = this.importCollection.buildSampleSnippetImports(
       this.component.name ?? StudioRendererConstants.unknownName,
     );
-    const sampleAppName = 'App';
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
     let importsText = '';
@@ -115,8 +114,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       importsText += result + EOL;
     }
 
-    const wrapper = this.renderAppWrapper(sampleAppName, jsx);
-    const compText = printer.printNode(EmitHint.Unspecified, wrapper, file);
+    const compText = printer.printNode(EmitHint.Unspecified, jsx, file);
 
     return { compText, importsText };
   }
