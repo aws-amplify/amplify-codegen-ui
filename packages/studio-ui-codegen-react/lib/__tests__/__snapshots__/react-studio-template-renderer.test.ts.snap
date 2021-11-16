@@ -2,9 +2,7 @@
 
 exports[`ReactStudioTemplateRenderer renderSampleCodeSnippet component with name 1`] = `
 Object {
-  "compText": "export const App = () => {
-    return (<MyText />);
-};",
+  "compText": "<MyText />",
   "importsText": "import { MyText } from \\"./ui-components\\";
 ",
 }
@@ -12,9 +10,7 @@ Object {
 
 exports[`ReactStudioTemplateRenderer renderSampleCodeSnippet component without name 1`] = `
 Object {
-  "compText": "export const App = () => {
-    return (<unknown_component_name />);
-};",
+  "compText": "<unknown_component_name />",
   "importsText": "import { unknown_component_name } from \\"./ui-components\\";
 ",
 }
