@@ -6,7 +6,6 @@ module.exports = {
     'jest.config.js',
     '.eslintrc.js',
     'commitlint.config.js',
-    'packages/amplify-ui-codegen-schema',
     'packages/integration-test',
     'ui-components',
     '*.md',

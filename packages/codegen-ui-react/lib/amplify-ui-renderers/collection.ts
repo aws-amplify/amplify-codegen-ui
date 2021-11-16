@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { BaseComponentProps } from '@aws-amplify/ui-react';
-import { isStudioComponentWithCollectionProperties, StudioComponentChild } from '@amzn/studio-ui-codegen';
+import { isStudioComponentWithCollectionProperties, StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { factory, JsxChild, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 

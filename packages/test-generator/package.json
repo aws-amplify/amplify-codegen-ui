@@ -1,5 +1,5 @@
 {
-  "name": "@amzn/test-generator",
+  "name": "@aws-amplify/codegen-ui-test-generator",
   "version": "0.9.0",
   "description": "Test generator with sample JSON files",
   "author": "Amazon Web Services",
@@ -22,8 +22,8 @@
     "lib"
   ],
   "dependencies": {
-    "@amzn/studio-ui-codegen": "0.9.0",
-    "@amzn/studio-ui-codegen-react": "0.9.0",
+    "@aws-amplify/codegen-ui": "0.9.0",
+    "@aws-amplify/codegen-ui-react": "0.9.0",
     "@types/node": "^15.12.1",
     "loglevel": "^1.7.1",
     "typescript": "^4.2.4"

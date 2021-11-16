@@ -15,8 +15,8 @@
  */
 import './GenerateTests.css';
 import { useState, useEffect, useCallback } from 'react';
-import { BrowserTestGenerator, TestCase } from '@amzn/test-generator';
-import { InvalidInputError, InternalError } from '@amzn/studio-ui-codegen';
+import { BrowserTestGenerator, TestCase } from '@aws-amplify/codegen-ui-test-generator';
+import { InvalidInputError, InternalError } from '@aws-amplify/codegen-ui';
 import { ScriptKind, ScriptTarget } from 'typescript';
 
 const defaultGenerator = new BrowserTestGenerator({

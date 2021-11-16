@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FrameworkOutputManager } from '@amzn/studio-ui-codegen';
+import { FrameworkOutputManager } from '@aws-amplify/codegen-ui';
 import { existsSync, mkdirSync, promises as fs } from 'fs';
 import path from 'path';
 

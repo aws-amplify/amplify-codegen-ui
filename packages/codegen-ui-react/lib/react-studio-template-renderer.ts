@@ -31,7 +31,7 @@ import {
   StudioComponentAction,
   StudioComponentSimplePropertyBinding,
   handleCodegenErrors,
-} from '@amzn/studio-ui-codegen';
+} from '@aws-amplify/codegen-ui';
 
 import { EOL } from 'os';
 import ts, {

@@ -56,7 +56,7 @@ jobs:
       - name: Checkout Studio Codegen
         uses: actions/checkout@v2
         with:
-          path: amplify-codegen-ui-staging
+          path: amplify-codegen-ui
       - name: Checkout Amplify CLI Studio Category
         uses: actions/checkout@v2
         with:
@@ -67,17 +67,17 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - name: Install amplify-codegen-ui-staging dependencies
-        working-directory: amplify-codegen-ui-staging
+      - name: Install amplify-codegen-ui dependencies
+        working-directory: amplify-codegen-ui
         run: npm ci
-      - name: Lerna bootstrap amplify-codegen-ui-staging
-        working-directory: amplify-codegen-ui-staging
+      - name: Lerna bootstrap amplify-codegen-ui
+        working-directory: amplify-codegen-ui
         run: lerna bootstrap
-      - name: Build amplify-codegen-ui-staging
-        working-directory: amplify-codegen-ui-staging
+      - name: Build amplify-codegen-ui
+        working-directory: amplify-codegen-ui
         run: npm run build
-      - name: Package amplify-codegen-ui-staging
-        working-directory: amplify-codegen-ui-staging
+      - name: Package amplify-codegen-ui
+        working-directory: amplify-codegen-ui
         run: lerna exec npm pack
       - name: Install amplify-category-studio
         working-directory: amplify-category-studio
@@ -85,8 +85,8 @@ jobs:
           npm install
           npm install amplify-provider-awscloudformation
           npm install aws-sdk.tgz
-          npm install ../amplify-codegen-ui-staging/packages/studio-ui-codegen/amzn-studio-ui-codegen-*.tgz
-          npm install ../amplify-codegen-ui-staging/packages/studio-ui-codegen-react/amzn-studio-ui-codegen-react-*.tgz
+          npm install ../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
+          npm install ../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
       - name: Test amplify-category-studio
         working-directory: amplify-category-studio
         run: npm test

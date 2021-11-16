@@ -13,14 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent, StudioTheme } from '@amzn/studio-ui-codegen';
+import { StudioComponent, StudioTheme } from '@aws-amplify/codegen-ui';
 import {
   ModuleKind,
   ScriptTarget,
   ScriptKind,
   ReactRenderConfig,
   ReactOutputConfig,
-} from '@amzn/studio-ui-codegen-react';
+} from '@aws-amplify/codegen-ui-react';
 import log from 'loglevel';
 import * as ComponentSchemas from '../components';
 import * as ThemeSchemas from '../themes';

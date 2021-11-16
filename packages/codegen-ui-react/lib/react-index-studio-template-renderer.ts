@@ -15,7 +15,7 @@
  */
 import { EOL } from 'os';
 import { EmitHint, ExportDeclaration, factory } from 'typescript';
-import { StudioTemplateRenderer, StudioTheme, StudioComponent } from '@amzn/studio-ui-codegen';
+import { StudioTemplateRenderer, StudioTheme, StudioComponent } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';

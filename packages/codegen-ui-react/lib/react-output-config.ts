@@ -13,6 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FrameworkOutputConfig } from '@amzn/studio-ui-codegen';
+import { FrameworkOutputConfig } from '@aws-amplify/codegen-ui';
 
 export type ReactOutputConfig = FrameworkOutputConfig & {};

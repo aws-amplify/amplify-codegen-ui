@@ -70,7 +70,7 @@ There are 3 keys steps, first you need to create a new tagged release version of
 1. Squash and merge PR after approval.
    Ensure the commit message follows the pattern: `chore(release): v{version_number}`.
    The Release GitHub workflow will not work if the commit message is not formated correctly.
-1. Wait for the [Release GithHub workflow](https://github.com/aws-amplify/amplify-codegen-ui-staging/actions/workflows/release.yml) to complete.
+1. Wait for the [Release GithHub workflow](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/release.yml) to complete.
 
 \*\*N.B. Ensure that your release has a tag, manually creating if necessary. Only major/minor updates seem to automatically generate tags, but you can create one yourself with the [git-tag](https://git-scm.com/docs/git-tag) command.
 

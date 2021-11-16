@@ -18,7 +18,7 @@ import {
   StudioNode,
   StudioComponent,
   StudioComponentChild,
-} from '@amzn/studio-ui-codegen';
+} from '@aws-amplify/codegen-ui';
 import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
 import { ImportCollection } from './import-collection';
 import {

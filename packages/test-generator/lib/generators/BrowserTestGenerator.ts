@@ -15,12 +15,12 @@
  */
 
 /* Test Generator to be used in the browser environment */
-import { StudioComponent, StudioTheme } from '@amzn/studio-ui-codegen';
+import { StudioComponent, StudioTheme } from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
   ReactThemeStudioTemplateRenderer,
   ReactIndexStudioTemplateRenderer,
-} from '@amzn/studio-ui-codegen-react';
+} from '@aws-amplify/codegen-ui-react';
 import { TestGenerator } from './TestGenerator';
 
 export class BrowserTestGenerator extends TestGenerator {

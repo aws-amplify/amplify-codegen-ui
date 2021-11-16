@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponentChild } from '@amzn/studio-ui-codegen';
+import { StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { JsxChild, JsxElement, factory } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 

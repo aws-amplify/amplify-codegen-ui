@@ -29,7 +29,7 @@ import {
   StudioThemeValue,
   validateThemeSchema,
   InvalidInputError,
-} from '@amzn/studio-ui-codegen';
+} from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';

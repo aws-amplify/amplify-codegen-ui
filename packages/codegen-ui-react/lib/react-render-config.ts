@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FrameworkRenderConfig, InvalidInputError } from '@amzn/studio-ui-codegen';
+import { FrameworkRenderConfig, InvalidInputError } from '@aws-amplify/codegen-ui';
 import { ScriptKind, ScriptTarget, ModuleKind } from 'typescript';
 
 export { ScriptKind, ScriptTarget, ModuleKind } from 'typescript';
