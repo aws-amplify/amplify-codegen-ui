@@ -1,134 +1,354 @@
-# Getting Started
+<img src="https://s3.amazonaws.com/aws-mobile-hub-images/aws-amplify-logo.png" alt="AWS Amplify" width="225">
 
-This is a monorepo for Amplify UI Code Generation packages.
+---
 
-# Development
+# Amplify Codegen UI
 
-## Getting Started
+[![GitHub](https://img.shields.io/github/license/aws-amplify/amplify-codegen-ui)](LICENSE)
+[![Discord](https://img.shields.io/discord/308323056592486420?logo=discord)](https://discord.gg/jWVbPfC)
+[![Build](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/check.yml/badge.svg)](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/check.yml)
+[![Open Bugs](https://img.shields.io/github/issues/aws-amplify/amplify-codegen-ui/bug?color=d73a4a&label=bugs)](https://github.com/aws-amplify/amplify-codegen-ui/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+[![Feature Requests](https://img.shields.io/github/issues/aws-amplify/amplify-codegen-ui/feature-request?color=ff9001&label=feature%20requests)](https://github.com/aws-amplify/amplify-codegen-ui/issues?q=is%3Aissue+label%3Afeature-request+is%3Aopen)
 
-1. Fork & Clone this repo
-1. [`nvm install`](https://github.com/nvm-sh/nvm)
-1. [`nvm use`](https://github.com/nvm-sh/nvm)
+Generate React components for use in an AWS Amplify project.
 
-## Building
+## Usage
 
-```sh
-# To run a full build
-npm run setup-dev
+Amplify Codegen UI supports component generation in Node or a browser environment.
 
-# Or, if you'd like to run steps manually
-npm install
-lerna bootstrap
-lerna run build
-```
+### Generate in Node
 
-## Testing
-
-```sh
-# To run tests in all packages
-npm test
-
-# To run E2E Integration tests
-npm run integ
-```
-
-For more information on integration testing, see [Integration Testing](#integration-testing) below.
-
-# How to use code generator
-
-The react code generator defined in studio-ui-codegen-react package accepts JSON conforming to the Studio Component Model schema as input and then outputs React code either as in-memory string or in a file with the path specified in outputConfig.
+#### Components
 
 ```js
-// Create a factory that can create a renderer for a specific platform (such as Amplify UI)
-const rendererFactory = new StudioTemplateRendererFactory(
-  (component: StudioComponent) => new AmplifyRenderer(component)
+import {
+  AmplifyRenderer,
+  StudioTemplateRendererFactory,
+  StudioTemplateRendererManager,
+} from '@aws-amplify/codegen-ui-react';
+
+const renderConfig = {};
+const outputConfig = {
+  outputPathDir: './src/ui-components';
+};
+
+const componentRendererFactory = new StudioTemplateRendererFactory(
+  (component) => new AmplifyRenderer(component, renderConfig),
 );
 
-// Create a renderer manager with factory and output config as input parameter
-const rendererManager = new StudioTemplateRendererManager(rendererFactory, outputConfig);
+const rendererManager = new StudioTemplateRendererManager(componentRendererFactory, outputConfig);
 
-// Use the renderer to generate UI code
-rendererManager.renderSchemaToTemplate(schema as any);
+const component = {
+  id: '1234-5678-9010',
+  componentType: 'Text',
+  name: 'TextPrimitive',
+  properties: {
+    label: {
+      value: 'Hello world',
+    },
+  },
+};
+
+rendererManager.renderSchemaToTemplate(component);
 ```
 
-The test-generator package contains sample code that uses above pattern.
-To run the sample app in test-generator package, after you have built the entire project successfully, use the following command.
+#### Themes
 
-```sh
-node ./packages/test-generator/dist/index.js
+```js
+import {
+  ReactThemeStudioTemplateRenderer,
+  StudioTemplateRendererFactory,
+  StudioTemplateRendererManager,
+} from '@aws-amplify/codegen-ui-react';
+
+const renderConfig = {};
+const outputConfig = {
+  outputPathDir: './src/ui-components';
+};
+
+const themeRendererFactory = new StudioTemplateRendererFactory(
+  (theme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
+);
+
+const themeRendererManager = new StudioTemplateRendererManager(themeRendererFactory, outputConfig);
+
+const theme = {
+  id: '1234-5678-9010',
+  name: 'MyTheme',
+  values: [
+    {
+      key: 'tokens',
+      value: {
+        children: [
+          {
+            key: 'colors',
+            value: {
+              children: [
+                {
+                  key: 'font',
+                  value: {
+                    children: [
+                      {
+                        key: 'primary',
+                        value: {
+                          children: [
+                            {
+                              key: 'value',
+                              value: {
+                                value: '#008080',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
+
+themeRendererManager.renderSchemaToTemplate(theme);
 ```
 
-# Package Descriptions
+#### `index.js` File
 
-## Test
+```js
+import {
+  ReactIndexStudioTemplateRenderer,
+  StudioTemplateRendererFactory,
+  StudioTemplateRendererManager,
+} from '@aws-amplify/codegen-ui-react';
 
-_@amzn/test-generator_
+const renderConfig = {};
+const outputConfig = {
+  outputPathDir: './src/ui-components',
+};
 
-This is a sample project that utilizes codegen to render components in a desired framework.
+const indexRendererFactory = new StudioTemplateRendererFactory(
+  (components) => new ReactIndexStudioTemplateRenderer(components, renderConfig),
+);
 
-This project is currently configured to codegen Amplify UI components and themes, as well as provide templates which can be used in external projects to verify the correctness and usability of generated components.
+const indexRendererManager = new StudioTemplateRendererManager(indexRendererFactory, outputConfig);
 
-### Integration Testing
+const components = [
+  {
+    id: '1234-5678-9010',
+    componentType: 'Text',
+    name: 'MyHelloWorld',
+    properties: {
+      label: {
+        value: 'Hello world!',
+      },
+    },
+  },
+  {
+    id: '1234-5678-9012',
+    componentType: 'Text',
+    name: 'MyCodegen',
+    properties: {
+      label: {
+        value: 'Codegen!',
+      },
+    },
+  },
+];
 
-Integration tests are done using a React app with Cypress.
-
-The integraiton tests verify:
-
-- The correctness of the generated components.
-- The generate functionality in the browser environment.
-
-The `integration-test` GitHub workflow performs these integration tests in CI.
-
-To run integration tests locally, execute the following:
-
-```sh
-npm run setup-dev # If this is a newly cloned repo
-npm run integ
+indexRendererManager.renderSchemaToTemplate(components);
 ```
 
-| Command                       | Description                                                       |
-| ----------------------------- | ----------------------------------------------------------------- |
-| npm run integ:setup           | Setup integration tests but do not run the tests.                 |
-| npm run integ:test            | Run integration tests on an existing integration setup.           |
-| npm run integ:templates       | Reload integration templates from test-generator.                 |
-| npm run integ:templates:watch | Watch for changes to integration templates and reload on changes. |
+### Generate in Browser
 
-## CodeGen
+When generating components in the browser, components will not be written to the file system.
 
-_@amzn/studio-ui-codegen_
+#### Components
 
-This packages contains all of the base classes for the codegen providers, and codegen schema for studio. This is currently geared to generating web components with JSX.
+```js
+import { AmplifyRenderer } from '@aws-amplify/codegen-ui-react';
 
-_@amzn/studio-ui-codegen-react_
+const renderConfig = {};
 
-This package contains the necessary codegen to render directly to Amplify Components from a Studio Schema.
+const component = {
+  id: '1234-5678-9010',
+  componentType: 'Text',
+  name: 'TextPrimitive',
+  properties: {
+    label: {
+      value: 'Hello world',
+    },
+  },
+};
 
-## Versioning
+const { importsText, compText } = new AmplifyRenderer(component, renderConfig).renderComponentOnly();
+```
 
-Until this package is public and publishes to NPM, we have a slightly complicated release process (though mostly automated).
+#### Themes
 
-There are 3 keys steps, first you need to create a new tagged release version of the packages which will be used by our dependencies to consume the latest code. After that you'll need to update the CLI repo to point to this new version, and then execute an import script in StudioUI to pull the latest external code into their service.
+```js
+import { ReactThemeStudioTemplateRenderer } from '@aws-amplify/codegen-ui-react';
 
-### Codegen Repo Packages
+const renderConfig = {};
 
-1. Create new branch: `git checkout -b new-release`
-1. Run version command: `npm run version`
-1. Create new PR with the new branch to mainline: `gh pr create`
-1. Squash and merge PR after approval.
-   Ensure the commit message follows the pattern: `chore(release): v{version_number}`.
-   The Release GitHub workflow will not work if the commit message is not formated correctly.
-1. Wait for the Release GithHub workflow to complete.
+const theme = {
+  id: '1234-5678-9010',
+  name: 'MyTheme',
+  values: [
+    {
+      key: 'tokens',
+      value: {
+        children: [
+          {
+            key: 'colors',
+            value: {
+              children: [
+                {
+                  key: 'font',
+                  value: {
+                    children: [
+                      {
+                        key: 'primary',
+                        value: {
+                          children: [
+                            {
+                              key: 'value',
+                              value: {
+                                value: '#008080',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
 
-\*\*N.B. Ensure that your release has a tag, manually creating if necessary. Only major/minor updates seem to automatically generate tags, but you can create one yourself with the [git-tag](https://git-scm.com/docs/git-tag) command.
+const { componentText } = new ReactThemeStudioTemplateRenderer(theme, renderConfig).renderComponent();
+```
 
-### Amplify CLI
+#### `index.js` File
 
-1. Navigate to the Studio Category repo's [configuration file](https://github.com/johnpc/amplify-category-studio/blob/master/.github/variables/codegenVersion.env) for the codegen version, and update this to point to the version you've just published.
-1. Create new PR for the release with `gh pr create`
-1. Ask the CLI team to merge the PR after approval.
+```js
+import { ReactIndexStudioTemplateRenderer } from '@aws-amplify/codegen-ui-react';
 
-### Studio UI
+const renderConfig = {};
+const components = [
+  {
+    id: '1234-5678-9010',
+    componentType: 'Text',
+    name: 'MyHelloWorld',
+    properties: {
+      label: {
+        value: 'Hello world!',
+      },
+    },
+  },
+  {
+    id: '1234-5678-9012',
+    componentType: 'Text',
+    name: 'MyCodegen',
+    properties: {
+      label: {
+        value: 'CodeGen',
+      },
+    },
+  },
+];
 
-1. Pull down the necessary packages to integrate into studio UI.
-1. Execute the 'update-codegen.sh' script, providing the newly created tag.
-1. Ensure review and merge of the CR, after manual verification testing.
+const { componentText } = new ReactIndexStudioTemplateRenderer(components, renderConfig);
+```
+
+### Config
+
+#### Output Config
+
+##### outputPathDir (Required)
+
+The directory generated components are written to.
+
+```js
+const outputConfig = {
+  outputPathDir: './src/ui-components',
+};
+```
+
+#### Render Config
+
+##### script
+
+The script kind (JSX, TSX, etc.) of generated components.
+
+Default: `TSX`
+Allowed: `TSX`, `JSX`, `JS`
+
+```js
+import { ScriptKind } from '@aws-amplify/codegen-ui-react';
+
+const renderConfig = {
+  script: ScriptKind.JSX,
+};
+```
+
+##### target
+
+The EcmaScript version (ES2016, ESNext, etc.) of generated components.
+
+Default: `ES2015`
+Allowed: `ES3`, `ES5`, `ES6`/`ES2015`, `ES2016`, `ES2017`, `ES2018`, `ES2019`, `ES2020`, `ES2021`, `ESNext`
+
+```js
+import { ScriptTarget } from '@aws-amplify/codegen-ui-react';
+
+const renderConfig = {
+  target: ScriptTaget.ESNext,
+};
+```
+
+##### module
+
+The JavaScript module system of generated components.
+
+Default: `CommonJS`
+Allowed: `CommonJS`, `ESNext`
+
+```js
+import { ScriptTarget } from '@aws-amplify/codegen-ui-react';
+
+const renderConfig = {
+  module: ModuleKind.ESNext,
+};
+```
+
+##### renderTypeDeclarations
+
+Generate the type declaration files (`.d.ts`) for components.
+
+Default: `false`
+Allowed: `false`, `true`
+
+Rendering type declarations will negatively affect performance.
+Only generate type declarations if necessary.
+
+Not supported in browser environments.
+
+```js
+const renderConfig = {
+  renderTypeDeclarations: true,
+};
+```
+
+## Contributing
+
+[CONTRIBUTING.md](/CONTRIBUTING.md)
