@@ -54,9 +54,8 @@ import {
   ComponentWithNestedOverrides,
   PaginatedCollection,
   ComponentWithAuthBinding,
-  MyIconCloud
-} from './ui-components';
-/* eslint-enable import/extensions */
+  MyIconCloud,
+} from './ui-components'; // eslint-disable-line import/extensions
 
 const initializeUserTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'Real', lastName: 'LUser3', age: 29 }));
@@ -126,7 +125,8 @@ export default function ComponentTests() {
   const [isInitialized, setInitialized] = useState(false);
   useEffect(() => {
     const initializeTestUserData = async () => {
-      indexedDB.deleteDatabase('amplify-datastore'); // DataStore.clear() doesn't appear to reliably work in this scenario.
+      // DataStore.clear() doesn't appear to reliably work in this scenario.
+      indexedDB.deleteDatabase('amplify-datastore');
       await Promise.all([initializeUserTestData(), initializeListingTestData()]);
       setInitialized(true);
     };
