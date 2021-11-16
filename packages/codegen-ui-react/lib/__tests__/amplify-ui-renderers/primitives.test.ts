@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent } from '@amzn/studio-ui-codegen';
+import { StudioComponent } from '@aws-amplify/codegen-ui';
 import { assertASTMatchesSnapshot } from '../__utils__/snapshot-helpers';
 
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';

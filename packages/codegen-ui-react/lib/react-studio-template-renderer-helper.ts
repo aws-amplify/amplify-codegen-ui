@@ -17,7 +17,7 @@ import {
   isDataPropertyBinding,
   StudioComponentDataPropertyBinding,
   StudioComponentSimplePropertyBinding,
-} from '@amzn/studio-ui-codegen';
+} from '@aws-amplify/codegen-ui';
 
 import ts, {
   createPrinter,

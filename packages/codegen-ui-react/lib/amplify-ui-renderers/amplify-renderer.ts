@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioNode, StudioComponent, StudioComponentChild } from '@amzn/studio-ui-codegen';
+import { StudioNode, StudioComponent, StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { JsxElement, JsxFragment, JsxSelfClosingElement } from 'typescript';
 // add primitives in alphabetical order
 import {

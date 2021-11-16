@@ -20,12 +20,12 @@ import {
   StudioTemplateRendererFactory,
   StudioComponent,
   StudioTheme,
-} from '@amzn/studio-ui-codegen';
+} from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
   ReactThemeStudioTemplateRenderer,
   ReactIndexStudioTemplateRenderer,
-} from '@amzn/studio-ui-codegen-react';
+} from '@aws-amplify/codegen-ui-react';
 import { TestGenerator, TestGeneratorParams } from './TestGenerator';
 
 export class NodeTestGenerator extends TestGenerator {

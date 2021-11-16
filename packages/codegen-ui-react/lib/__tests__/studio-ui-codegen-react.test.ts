@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioTemplateRendererFactory, StudioComponent, StudioTheme } from '@amzn/studio-ui-codegen';
+import { StudioTemplateRendererFactory, StudioComponent, StudioTheme } from '@aws-amplify/codegen-ui';
 import fs from 'fs';
 import { join } from 'path';
 import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '..';

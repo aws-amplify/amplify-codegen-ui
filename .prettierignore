@@ -1,4 +1,2 @@
 .husky
-packages/ui-react-types
-packages/amplify-ui-codegen-schema
 ui-components
