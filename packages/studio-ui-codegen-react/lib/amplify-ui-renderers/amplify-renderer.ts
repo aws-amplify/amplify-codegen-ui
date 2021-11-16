@@ -52,10 +52,10 @@ import {
   ToggleButtonGroupProps,
   ViewProps,
   VisuallyHiddenProps,
+  TextProps,
 } from '@aws-amplify/ui-react';
 import Primitive from '../primitive';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
-import TextRenderer from './text';
 import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
@@ -273,7 +273,11 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Text:
-        return new TextRenderer(component, this.importCollection, parent).renderElement();
+        return new ReactComponentWithChildrenRenderer<TextProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
 
       case Primitive.TextField:
         return new ReactComponentWithChildrenRenderer<TextFieldProps<boolean>>(

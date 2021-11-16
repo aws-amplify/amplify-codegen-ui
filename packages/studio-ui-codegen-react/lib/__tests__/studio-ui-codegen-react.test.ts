@@ -215,6 +215,11 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('componentWithSimplePropertyConditional');
       expect(generatedCode.componentText).toMatchSnapshot();
     });
+
+    it('should render component with conditional data binding prop from a bug', () => {
+      const generatedCode = generateWithAmplifyRenderer('conditionalComponentWithDataBinding');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
   });
 
   describe('component with binding', () => {
