@@ -109,10 +109,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
     let importsText = '';
-    for (const importStatement of imports) {
+    imports.forEach((importStatement) => {
       const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
       importsText += result + EOL;
-    }
+    });
 
     const compText = printer.printNode(EmitHint.Unspecified, jsx, file);
 
@@ -129,10 +129,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     let importsText = '';
 
-    for (const importStatement of imports) {
+    imports.forEach((importStatement) => {
       const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
       importsText += result + EOL;
-    }
+    });
 
     const wrappedFunction = this.renderFunctionWrapper(
       this.component.name ?? StudioRendererConstants.unknownName,
@@ -166,10 +166,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     let componentText = `/* eslint-disable */${EOL}`;
 
-    for (const importStatement of imports) {
+    imports.forEach((importStatement) => {
       const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
       componentText += result + EOL;
-    }
+    });
 
     componentText += EOL;
 
@@ -401,8 +401,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (bindingProps === undefined || !isStudioComponentWithBinding(component)) {
       return undefined;
     }
-    for (const bindingProp of Object.entries(component.bindingProperties)) {
-      const [propName, binding] = bindingProp;
+    Object.entries(component.bindingProperties).forEach(([propName, binding]) => {
       if (isSimplePropertyBinding(binding)) {
         const propSignature = factory.createPropertySignature(
           undefined,
@@ -420,7 +419,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         );
         propSignatures.push(propSignature);
       }
-    }
+    });
     if (component.componentType === 'Collection') {
       const propSignature = factory.createPropertySignature(
         undefined,
