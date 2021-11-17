@@ -38,7 +38,6 @@ module.exports = {
       },
     ],
     // TODO: enable rules below and fix issues
-    '@typescript-eslint/no-shadow': 'off',
     '@typescript-eslint/ban-types': 'off',
     'import/prefer-default-export': 'off',
     'no-restricted-syntax': 'off',

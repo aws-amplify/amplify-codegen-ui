@@ -112,8 +112,8 @@ export abstract class TestGenerator {
       }
     };
 
-    const generateIndexFile = (testCases: TestCase[]) => {
-      const schemas = testCases.map((testCase) => testCase.schema);
+    const generateIndexFile = (indexFileTestCases: TestCase[]) => {
+      const schemas = indexFileTestCases.map((testCase) => testCase.schema);
       try {
         if (this.params.writeToDisk) {
           this.writeIndexFileToDisk(schemas);
@@ -131,8 +131,8 @@ export abstract class TestGenerator {
       }
     };
 
-    const generateSnippet = (testCases: TestCase[]) => {
-      const components = testCases.map((testCase) => testCase.schema);
+    const generateSnippet = (snippetTestCases: TestCase[]) => {
+      const components = snippetTestCases.map((testCase) => testCase.schema);
       try {
         if (this.params.writeToDisk) {
           this.writeSnippetToDisk(components);
