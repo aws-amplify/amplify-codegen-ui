@@ -32,11 +32,11 @@ export class ImportCollection {
   }
 
   mergeCollections(otherCollection: ImportCollection) {
-    for (const [key, value] of otherCollection.#collection) {
+    otherCollection.#collection.forEach((value, key) => {
       [...value].forEach((singlePackage) => {
         this.addImport(key, singlePackage);
       });
-    }
+    });
   }
 
   buildSampleSnippetImports(topComponentName: string): ImportDeclaration[] {
