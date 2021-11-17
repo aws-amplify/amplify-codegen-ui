@@ -1,6 +1,6 @@
 {
   "name": "@aws-amplify/codegen-ui-react",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Amplify UI React code generation implementation",
   "author": "Amazon Web Services",
   "repository": "https://github.com/aws-amplify/amplify-codegen-ui.git",
@@ -21,7 +21,7 @@
     "@types/react": "^17.0.4"
   },
   "dependencies": {
-    "@aws-amplify/codegen-ui": "0.10.0",
+    "@aws-amplify/codegen-ui": "0.10.1",
     "@types/temp": "^0.9.1",
     "prettier": "2.3.2",
     "temp": "^0.9.4",
