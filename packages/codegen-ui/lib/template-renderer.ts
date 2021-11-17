@@ -60,8 +60,8 @@ export class StudioTemplateRendererManager<
       throw new InvalidInputError('Please ensure you have passed in a valid schema');
     }
 
-    for (const component of jsonSchema) {
+    jsonSchema.forEach((component) => {
       this.renderer.buildRenderer(component).renderComponent();
-    }
+    });
   }
 }
