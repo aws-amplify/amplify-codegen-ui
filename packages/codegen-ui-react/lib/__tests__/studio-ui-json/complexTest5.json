@@ -4,7 +4,7 @@
     "children": [
       {
         "children": [],
-        "componentType": "Box",
+        "componentType": "View",
         "name": "RectangleGreen",
         "properties": {
           "width": {
@@ -29,7 +29,7 @@
       },
       {
         "children": [],
-        "componentType": "Box",
+        "componentType": "View",
         "name": "RectangleBlue",
         "properties": {
           "width": {
@@ -57,7 +57,7 @@
     "createdAt": "2021-10-29T19:06:43.886Z",
     "environmentName": "staging",
     "id": "c-4DHVBARfOiuFxEWkax",
-    "name": "FlexTest",
+    "name": "ComplexTest5",
     "overrides": {},
     "properties": {
       "padding": {

@@ -6,7 +6,7 @@
         "children": [
           {
             "children": [],
-            "componentType": "Box",
+            "componentType": "View",
             "name": "Rectangle 57",
             "properties": {
               "width": {
@@ -31,7 +31,7 @@
           },
           {
             "children": [],
-            "componentType": "Box",
+            "componentType": "View",
             "name": "Rectangle 56",
             "properties": {
               "width": {
@@ -60,9 +60,6 @@
         "properties": {
           "padding": {
             "value": "0px 0px 0px 0px"
-          },
-          "flexGrow": {
-            "value": "0"
           },
           "gap": {
             "value": "0"

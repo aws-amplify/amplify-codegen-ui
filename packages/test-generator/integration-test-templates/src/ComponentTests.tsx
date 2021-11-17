@@ -54,7 +54,7 @@ import {
   ComponentWithNestedOverrides,
   PaginatedCollection,
   ComponentWithAuthBinding,
-  MyIconCloud
+  MyIconCloud,
 } from './ui-components';
 /* eslint-enable import/extensions */
 
@@ -139,8 +139,7 @@ export default function ComponentTests() {
   }
 
   return (
-    /* components prop is required. https://github.com/aws-amplify/amplify-ui/issues/575 */
-    <AmplifyProvider theme={MyTheme} components={{}}>
+    <AmplifyProvider theme={MyTheme}>
       <h1>Generated Component Tests</h1>
       <div id={'basic-components'}>
         <h2>Basic Components</h2>

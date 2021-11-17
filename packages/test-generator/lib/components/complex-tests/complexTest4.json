@@ -6,7 +6,7 @@
         "children": [
           {
             "children": [],
-            "componentType": "Box",
+            "componentType": "View",
             "name": "RectangleGreen",
             "properties": {
               "padding": {
@@ -37,7 +37,7 @@
           },
           {
             "children": [],
-            "componentType": "Box",
+            "componentType": "View",
             "name": "RectangleBlue",
             "properties": {
               "padding": {
@@ -127,7 +127,7 @@
             "position": "relative",
             "direction": "row"
           },
-          "Flex.Flex.Box[1]": {
+          "Flex.Flex.View[1]": {
             "padding": "0px 0px 0px 0px",
             "backgroundColor": "rgb(255,153.00000607967377,0)",
             "top": "1px",
@@ -137,7 +137,7 @@
             "position": "absolute",
             "height": "122px"
           },
-          "Flex.Flex.Box[0]": {
+          "Flex.Flex.View[0]": {
             "padding": "0px 0px 0px 0px",
             "backgroundColor": "rgb(255,0,0)",
             "top": "0px",

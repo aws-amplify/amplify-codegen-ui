@@ -44,7 +44,7 @@
       },
       {
         "children": [],
-        "componentType": "Box",
+        "componentType": "View",
         "name": "Rectangle 58",
         "properties": {
           "width": {

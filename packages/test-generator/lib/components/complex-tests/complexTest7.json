@@ -25,6 +25,9 @@
           "src": {
             "value": "https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!"
           },
+          "alt": {
+            "value": "Amplify Studio is Awesome!"
+          },
           "width": {
             "value": "150.84925842285156px"
           },
@@ -105,6 +108,9 @@
           "src": {
             "value": "https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!"
           },
+          "alt": {
+            "value": "Amplify Studio is Awesome!"
+          },
           "width": {
             "value": "169.42330932617188px"
           },
@@ -117,7 +123,7 @@
         }
       }
     ],
-    "componentType": "Box",
+    "componentType": "View",
     "createdAt": "2021-10-29T19:06:43.800Z",
     "environmentName": "staging",
     "id": "c-VvMay8MuTP9vrUQhpL",

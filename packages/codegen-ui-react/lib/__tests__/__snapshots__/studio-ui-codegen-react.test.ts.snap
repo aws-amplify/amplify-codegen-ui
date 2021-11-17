@@ -661,12 +661,14 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type HiProps = React.PropsWithChildren<
+export type ComplexTest1Props = React.PropsWithChildren<
   Partial<FlexProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function Hi(props: HiProps): React.ReactElement {
+export default function ComplexTest1(
+  props: ComplexTest1Props
+): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   return (
@@ -709,17 +711,17 @@ import {
   EscapeHatchProps,
   Flex,
   FlexProps,
+  View,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
-import Box from \\"./Box\\";
 
-export type VerticalFlexFixedProps = React.PropsWithChildren<
+export type ComplexTest2Props = React.PropsWithChildren<
   Partial<FlexProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function VerticalFlexFixed(
-  props: VerticalFlexFixedProps
+export default function ComplexTest2(
+  props: ComplexTest2Props
 ): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
@@ -749,24 +751,24 @@ export default function VerticalFlexFixed(
         direction=\\"column\\"
         {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
       >
-        <Box
+        <View
           width=\\"123px\\"
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(255,0,0)\\"
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
           height=\\"125px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[0]\\")}
-        ></Box>
-        <Box
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[0]\\")}
+        ></View>
+        <View
           width=\\"123px\\"
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(219.30000364780426,255,0)\\"
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
           height=\\"122px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[1]\\")}
-        ></Box>
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[1]\\")}
+        ></View>
       </Flex>
     </Flex>
   );
@@ -782,18 +784,18 @@ import {
   Flex,
   FlexProps,
   Text,
+  View,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
-import Box from \\"./Box\\";
 import ReneButton from \\"./ReneButton\\";
 
-export type NewComponentProps = React.PropsWithChildren<
+export type ComplexTest3Props = React.PropsWithChildren<
   Partial<FlexProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function NewComponent(
-  props: NewComponentProps
+export default function ComplexTest3(
+  props: ComplexTest3Props
 ): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
@@ -825,15 +827,15 @@ export default function NewComponent(
         children=\\"Hello World!\\"
         {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
       ></Text>
-      <Box
+      <View
         width=\\"390px\\"
         padding=\\"0px 0px 0px 0px\\"
         backgroundColor=\\"rgb(196.00000351667404,196.00000351667404,196.00000351667404)\\"
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/430x452?text=Amplify+Studio+is+Awesome!\\"
         height=\\"69px\\"
-        {...getOverrideProps(overrides, \\"Flex.Box[0]\\")}
-      ></Box>
+        {...getOverrideProps(overrides, \\"Flex.View[0]\\")}
+      ></View>
       <ReneButton
         width=\\"293px\\"
         height=\\"45px\\"
@@ -867,20 +869,20 @@ import {
   Flex,
   FlexProps,
   Variant,
+  View,
   getOverrideProps,
   getOverridesFromVariants,
 } from \\"@aws-amplify/ui-react\\";
-import Box from \\"./Box\\";
 
-export type GroupReferenceProps = React.PropsWithChildren<
+export type ComplexTest4Props = React.PropsWithChildren<
   Partial<FlexProps> & {
     colors?: \\"Red/Orange\\";
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function GroupReference(
-  props: GroupReferenceProps
+export default function ComplexTest4(
+  props: ComplexTest4Props
 ): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const variants: Variant[] = [
@@ -895,7 +897,7 @@ export default function GroupReference(
           position: \\"relative\\",
           direction: \\"row\\",
         },
-        \\"Flex.Flex.Box[1]\\": {
+        \\"Flex.Flex.View[1]\\": {
           padding: \\"0px 0px 0px 0px\\",
           backgroundColor: \\"rgb(255,153.00000607967377,0)\\",
           top: \\"1px\\",
@@ -905,7 +907,7 @@ export default function GroupReference(
           position: \\"absolute\\",
           height: \\"122px\\",
         },
-        \\"Flex.Flex.Box[0]\\": {
+        \\"Flex.Flex.View[0]\\": {
           padding: \\"0px 0px 0px 0px\\",
           backgroundColor: \\"rgb(255,0,0)\\",
           top: \\"0px\\",
@@ -949,7 +951,7 @@ export default function GroupReference(
         height=\\"123px\\"
         {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
       >
-        <Box
+        <View
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(35.699965953826904,0,255)\\"
           top=\\"0px\\"
@@ -958,9 +960,9 @@ export default function GroupReference(
           width=\\"122px\\"
           position=\\"absolute\\"
           height=\\"123px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[0]\\")}
-        ></Box>
-        <Box
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[0]\\")}
+        ></View>
+        <View
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(0,255,25.49997568130493)\\"
           top=\\"1px\\"
@@ -969,8 +971,8 @@ export default function GroupReference(
           width=\\"120px\\"
           position=\\"absolute\\"
           height=\\"122px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[1]\\")}
-        ></Box>
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[1]\\")}
+        ></View>
       </Flex>
     </Flex>
   );
@@ -985,16 +987,18 @@ import {
   EscapeHatchProps,
   Flex,
   FlexProps,
+  View,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
-import Box from \\"./Box\\";
 
-export type FlexTestProps = React.PropsWithChildren<
+export type ComplexTest5Props = React.PropsWithChildren<
   Partial<FlexProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function FlexTest(props: FlexTestProps): React.ReactElement {
+export default function ComplexTest5(
+  props: ComplexTest5Props
+): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   return (
@@ -1009,24 +1013,24 @@ export default function FlexTest(props: FlexTestProps): React.ReactElement {
       {...rest}
       {...getOverrideProps(overrides, \\"Flex\\")}
     >
-      <Box
+      <View
         width=\\"120px\\"
         padding=\\"0px 0px 0px 0px\\"
         backgroundColor=\\"rgb(35.699965953826904,0,255)\\"
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
         height=\\"120px\\"
-        {...getOverrideProps(overrides, \\"Flex.Box[0]\\")}
-      ></Box>
-      <Box
+        {...getOverrideProps(overrides, \\"Flex.View[0]\\")}
+      ></View>
+      <View
         width=\\"120px\\"
         padding=\\"0px 0px 0px 0px\\"
         backgroundColor=\\"rgb(0,255,25.49997568130493)\\"
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
         height=\\"120px\\"
-        {...getOverrideProps(overrides, \\"Flex.Box[1]\\")}
-      ></Box>
+        {...getOverrideProps(overrides, \\"Flex.View[1]\\")}
+      ></View>
     </Flex>
   );
 }
@@ -1044,12 +1048,14 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
 
-export type MohitHomeProps = React.PropsWithChildren<
+export type ComplexTest6Props = React.PropsWithChildren<
   Partial<FlexProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function MohitHome(props: MohitHomeProps): React.ReactElement {
+export default function ComplexTest6(
+  props: ComplexTest6Props
+): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   return (
@@ -1119,27 +1125,30 @@ import {
   EscapeHatchProps,
   Image,
   Text,
+  View,
+  ViewProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
-import Box, { BoxProps } from \\"./Box\\";
 
-export type ImageFlexProps = React.PropsWithChildren<
-  Partial<BoxProps> & {
+export type ComplexTest7Props = React.PropsWithChildren<
+  Partial<ViewProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
+export default function ComplexTest7(
+  props: ComplexTest7Props
+): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Box
+    <View
       width=\\"401px\\"
       padding=\\"0px 0px 0px 0px\\"
       position=\\"relative\\"
       height=\\"192px\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Box\\")}
+      {...getOverrideProps(overrides, \\"View\\")}
     >
       <Image
         border=\\"4px SOLID rgb(0,0,0)\\"
@@ -1151,7 +1160,7 @@ export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
         width=\\"150.84925842285156px\\"
         position=\\"absolute\\"
         height=\\"196px\\"
-        {...getOverrideProps(overrides, \\"Box.Image[0]\\")}
+        {...getOverrideProps(overrides, \\"View.Image[0]\\")}
       ></Image>
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -1167,7 +1176,7 @@ export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
         fontWeight=\\"400\\"
         height=\\"27.839996337890625px\\"
         children=\\"Test\\"
-        {...getOverrideProps(overrides, \\"Box.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"View.Text[0]\\")}
       ></Text>
       <Image
         border=\\"4px SOLID rgb(0,0,0)\\"
@@ -1179,9 +1188,9 @@ export default function ImageFlex(props: ImageFlexProps): React.ReactElement {
         width=\\"169.42330932617188px\\"
         position=\\"absolute\\"
         height=\\"189.0880126953125px\\"
-        {...getOverrideProps(overrides, \\"Box.Image[1]\\")}
+        {...getOverrideProps(overrides, \\"View.Image[1]\\")}
       ></Image>
-    </Box>
+    </View>
   );
 }
 "
@@ -1194,17 +1203,17 @@ import {
   EscapeHatchProps,
   Flex,
   FlexProps,
+  View,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react\\";
-import Box from \\"./Box\\";
 
-export type VerticalFlexFillProps = React.PropsWithChildren<
+export type ComplexTest8Props = React.PropsWithChildren<
   Partial<FlexProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function VerticalFlexFill(
-  props: VerticalFlexFillProps
+export default function ComplexTest8(
+  props: ComplexTest8Props
 ): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
@@ -1232,24 +1241,24 @@ export default function VerticalFlexFill(
         direction=\\"column\\"
         {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
       >
-        <Box
+        <View
           width=\\"145px\\"
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(219.30000364780426,255,0)\\"
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
           height=\\"119px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[0]\\")}
-        ></Box>
-        <Box
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[0]\\")}
+        ></View>
+        <View
           width=\\"145px\\"
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(255,0,0)\\"
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
           height=\\"124px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Box[1]\\")}
-        ></Box>
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[1]\\")}
+        ></View>
       </Flex>
     </Flex>
   );
