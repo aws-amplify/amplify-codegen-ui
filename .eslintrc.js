@@ -37,14 +37,13 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'header/header': [2, 'license-header.js'],
     // TODO: enable rules below and fix issues
     '@typescript-eslint/ban-types': 'off',
     'import/prefer-default-export': 'off',
-    'no-restricted-syntax': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'class-methods-use-this': 'off',
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-    'header/header': [2, 'license-header.js'],
   },
   settings: {
     'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
