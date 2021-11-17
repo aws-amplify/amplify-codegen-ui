@@ -7,10 +7,7 @@ module.exports = {
     '.eslintrc.js',
     'commitlint.config.js',
     'packages/integration-test',
-    'ui-components',
     '*.md',
-    'cypress',
-    'packages/test-generator/integration-test-templates',
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',
@@ -30,6 +27,16 @@ module.exports = {
     'react/prop-types': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
     // TODO: enable rules below and fix issues
     '@typescript-eslint/no-shadow': 'off',
     '@typescript-eslint/ban-types': 'off',
@@ -39,5 +46,13 @@ module.exports = {
     'class-methods-use-this': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'header/header': [2, 'license-header.js'],
+  },
+  settings: {
+    'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
   },
 };

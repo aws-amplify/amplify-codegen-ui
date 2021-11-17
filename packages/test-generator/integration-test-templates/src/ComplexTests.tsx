@@ -24,7 +24,7 @@ import {
   ComplexTest6,
   ComplexTest7,
   ComplexTest8,
-} from './ui-components';
+} from './ui-components'; // eslint-disable-line import/extensions
 
 export default function ComplexTests() {
   return (
