@@ -84,9 +84,9 @@ describe('react-component-render-helper', () => {
           expect(checker(property)).toBeTruthy();
         });
 
-        Object.entries(otherProperties).forEach(([otherPropertyType, { property }]) => {
+        Object.entries(otherProperties).forEach(([otherPropertyType, { property: otherProperty }]) => {
           test(`${otherPropertyType} is not ${propertyType}`, () => {
-            expect(checker(property)).toBeFalsy();
+            expect(checker(otherProperty)).toBeFalsy();
           });
         });
       });

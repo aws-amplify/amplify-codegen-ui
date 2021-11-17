@@ -48,10 +48,10 @@ function generateWithAmplifyRenderer(
 }
 
 function generateWithThemeRenderer(jsonFile: string, renderConfig: ReactRenderConfig = {}): string {
-  const theme = loadThemeFromJSONFile(jsonFile);
   const rendererFactory = new StudioTemplateRendererFactory(
     (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
   );
+  const theme = loadThemeFromJSONFile(jsonFile);
   return rendererFactory.buildRenderer(theme).renderComponent().componentText;
 }
 
