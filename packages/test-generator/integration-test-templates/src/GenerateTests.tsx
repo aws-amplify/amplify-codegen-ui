@@ -84,6 +84,7 @@ const GenerateTestCase = (props: GenerateTestCaseProps) => {
           return clonedState;
         });
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(`Generate error for: ${name} - ${targetName}`, e);
         const errorType = e instanceof InvalidInputError || e instanceof InternalError ? e.constructor.name : e;
         setTestState((testState) => {

@@ -1,3 +1,18 @@
+/*
+  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ */
 describe('Generated Components', () => {
   describe('Sanity Test', () => {
     it('Successfully opens the app', () => {
@@ -375,14 +390,12 @@ describe('Generated Components', () => {
   describe('Icons', () => {
     it('Renders IconCloud', () => {
       cy.visit('http://localhost:3000/component-tests');
-      cy.get('#icons')
-        .find('svg')
-        .find('path')
-        .should(
-          'have.attr',
-          'd',
-          'M12 6C14.62 6 16.88 7.86 17.39 10.43L17.69 11.93L19.22 12.04C20.78 12.14 22 13.45 22 15C22 16.65 20.65 18 19 18H6C3.79 18 2 16.21 2 14C2 11.95 3.53 10.24 5.56 10.03L6.63 9.92L7.13 8.97C8.08 7.14 9.94 6 12 6ZM12 4C9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04C18.67 6.59 15.64 4 12 4Z',
-        );
+      cy.get('#icons').find('svg').find('path').should(
+        'have.attr',
+        'd',
+        // eslint-disable-next-line max-len
+        'M12 6C14.62 6 16.88 7.86 17.39 10.43L17.69 11.93L19.22 12.04C20.78 12.14 22 13.45 22 15C22 16.65 20.65 18 19 18H6C3.79 18 2 16.21 2 14C2 11.95 3.53 10.24 5.56 10.03L6.63 9.92L7.13 8.97C8.08 7.14 9.94 6 12 6ZM12 4C9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04C18.67 6.59 15.64 4 12 4Z',
+      );
     });
   });
 });
