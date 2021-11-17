@@ -78,8 +78,8 @@ const GenerateTestCase = (props: GenerateTestCaseProps) => {
     Object.entries(generators).forEach(([targetName, generator]) => {
       try {
         generator.generate([testCase]);
-        setTestState((testState) => {
-          const clonedState = { ...testState };
+        setTestState((previousTestState) => {
+          const clonedState = { ...previousTestState };
           clonedState[targetName] = { result: 'PASSED' };
           return clonedState;
         });
@@ -87,8 +87,8 @@ const GenerateTestCase = (props: GenerateTestCaseProps) => {
         // eslint-disable-next-line no-console
         console.error(`Generate error for: ${name} - ${targetName}`, e);
         const errorType = e instanceof InvalidInputError || e instanceof InternalError ? e.constructor.name : e;
-        setTestState((testState) => {
-          const clonedState = { ...testState };
+        setTestState((previousTestState) => {
+          const clonedState = { ...previousTestState };
           clonedState[targetName] = { result: 'FAILED', errorType };
           return clonedState;
         });
