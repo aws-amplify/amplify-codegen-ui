@@ -85,3 +85,8 @@ There are 3 keys steps, first you need to create a new tagged release version of
 1. Pull down the necessary packages to integrate into studio UI.
 1. Execute the 'update-codegen.sh' script, providing the newly created tag.
 1. Ensure review and merge of the CR, after manual verification testing.
+
+### Icons
+
+The built-in iconset is genereted with `packages/scripts/generateBuiltInIconset.js`.
+When icons are added or removed from `@aws-amplify/ui-react` run the script to update the icons supported in codegen.

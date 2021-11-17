@@ -12,15 +12,16 @@
     "test": "jest",
     "test:update": "jest --updateSnapshot",
     "build": "tsc -p tsconfig.build.json",
-    "build:watch": "npm run build -- --watch"
+    "build:watch": "npm run build -- --watch",
+    "iconset": "node scripts/generateBuiltInIconset.js"
   },
   "devDependencies": {
+    "@aws-amplify/ui-react": "^0.0.0-next-d7c53a2-2021101311032",
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.4"
   },
   "dependencies": {
     "@aws-amplify/codegen-ui": "0.10.0",
-    "@aws-amplify/ui-react": "^0.0.0-next-d7c53a2-2021101311032",
     "@types/temp": "^0.9.1",
     "prettier": "2.3.2",
     "temp": "^0.9.4",
