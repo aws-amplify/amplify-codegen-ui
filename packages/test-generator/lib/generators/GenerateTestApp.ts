@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { ModuleKind, ScriptTarget, ScriptKind } from '@aws-amplify/codegen-ui-react/dist/lib/react-render-config';
 import { NodeTestGenerator } from './NodeTestGenerator';
 
 const DISABLED_SCHEMAS = [
@@ -24,12 +25,32 @@ const DISABLED_SCHEMAS = [
   'CardWithInvalidChildComponentType', // Expected failure cases
 ];
 
-const generator = new NodeTestGenerator({
+const INTEG_TEST_PATH = 'packages/integration-test/src/ui-components';
+
+const tsxGenerator = new NodeTestGenerator({
   writeToLogger: false,
   writeToDisk: true,
+  renderConfigOverride: {}, // Use Defaults
   outputConfigOverride: {
-    outputPathDir: 'packages/integration-test/src/ui-components',
+    outputPathDir: INTEG_TEST_PATH,
   },
 });
 
-generator.generate(generator.getTestCases(DISABLED_SCHEMAS));
+const jsxGenerator = new NodeTestGenerator({
+  writeToLogger: false,
+  writeToDisk: true,
+  renderConfigOverride: {
+    module: ModuleKind.ESNext,
+    target: ScriptTarget.ESNext,
+    script: ScriptKind.JSX,
+    renderTypeDeclarations: true,
+  },
+  outputConfigOverride: {
+    outputPathDir: INTEG_TEST_PATH,
+  },
+});
+
+const testCases = tsxGenerator.getTestCases(DISABLED_SCHEMAS);
+
+// tsxGenerator.generate(testCases);
+jsxGenerator.generate(testCases);

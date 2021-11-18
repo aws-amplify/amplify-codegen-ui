@@ -20,7 +20,13 @@ export const transformCodegenError = (error: any | unknown): InternalError | Inv
     return error;
   }
 
-  return new InternalError('Unhandled internal error occurred - see stack trace.');
+  let errorMsg = 'Unhandled Codegen Error Occurred';
+
+  if (error.stack) {
+    errorMsg += ` - ${JSON.stringify(error.stack)}`;
+  }
+
+  return new InternalError(errorMsg);
 };
 
 export const handleCodegenErrors = (target: Object, propertyKey: string, descriptor: PropertyDescriptor) => {
