@@ -402,6 +402,10 @@ describe('amplify render tests', () => {
       expect(generateWithAmplifyRenderer('primitives/SliderFieldPrimitive').componentText).toMatchSnapshot();
     });
 
+    test('CheckboxField', () => {
+      expect(generateWithAmplifyRenderer('primitives/CheckboxFieldPrimitive').componentText).toMatchSnapshot();
+    });
+
     test('Built-in Iconset', () => {
       expect(generateWithAmplifyRenderer('builtInIconset').componentText).toMatchSnapshot();
     });

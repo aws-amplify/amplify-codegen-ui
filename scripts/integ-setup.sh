@@ -12,7 +12,7 @@ npm run integ:templates
 # install
 lerna bootstrap
 lerna add --scope integration-test aws-amplify
-lerna add --scope integration-test @aws-amplify/ui-react@0.0.0-next-d7c53a2-2021101311032
+lerna add --scope integration-test @aws-amplify/ui-react@next
 lerna add --scope integration-test @aws-amplify/datastore
 lerna add --scope integration-test @aws-amplify/codegen-ui
 lerna add --scope integration-test @aws-amplify/codegen-ui-react
