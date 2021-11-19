@@ -35,6 +35,7 @@ import {
   BasicComponentImage,
   BasicComponentCustomRating,
   ComponentWithVariant,
+  ComponentWithVariantAndOverrides,
   SimplePropertyBindingDefaultValue,
   BoundDefaultValue,
   SimpleAndBoundDefaultValue,
@@ -210,6 +211,22 @@ export default function ComponentTests() {
         <ComponentWithVariant id="variant1" variant="primary" />
         <ComponentWithVariant id="variant2" variant="secondary" />
         <ComponentWithVariant id="variant3" variant="primary" size="large" />
+        <ComponentWithVariantAndOverrides id="variantAndOverrideDefault" />
+        <ComponentWithVariantAndOverrides id="variantAndOverrideVariantValue" variant="greeting" />
+        <ComponentWithVariantAndOverrides
+          id="variantAndOverrideOverrideApplied"
+          overrides={{ Text: { children: 'Overriden Text' } }}
+        />
+        <ComponentWithVariantAndOverrides
+          id="variantAndOverrideVariantValueAndNonOverlappingOverride"
+          variant="farewell"
+          overrides={{ Text: { color: 'red' } }}
+        />
+        <ComponentWithVariantAndOverrides
+          id="variantAndOverrideVariantValueAndOverlappingOverride"
+          variant="farewell"
+          overrides={{ Text: { children: 'Overriden Text' } }}
+        />
       </div>
       <div id="data-binding">
         <h2>Data Binding</h2>

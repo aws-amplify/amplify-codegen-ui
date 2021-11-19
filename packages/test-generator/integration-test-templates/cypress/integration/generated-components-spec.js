@@ -102,6 +102,15 @@ describe('Generated Components', () => {
       cy.get('#variants').get('#variant2').should('have.css', 'font-size', '40px');
       cy.get('#variants').get('#variant3').should('have.css', 'width', '500px');
     });
+
+    it('allows for use of both variants and overrides, prioritizing overrides if they collide', () => {
+      cy.visit('http://localhost:3000/component-tests');
+      cy.get('#variantAndOverrideDefault').contains('DefaultText');
+      cy.get('#variantAndOverrideVariantValue').contains('Hello');
+      cy.get('#variantAndOverrideOverrideApplied').contains('Overriden Text');
+      cy.get('#variantAndOverrideVariantValueAndNonOverlappingOverride').contains('Goodbye');
+      cy.get('#variantAndOverrideVariantValueAndOverlappingOverride').contains('Overriden Text');
+    });
   });
 
   describe('Data Binding', () => {

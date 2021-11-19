@@ -927,10 +927,30 @@ export default function ComplexTest4(
       variantValues: { colors: \\"Red/Orange\\" },
     },
   ];
-  const overrides = {
-    ...getOverridesFromVariants(variants, props),
-    ...overridesProp,
+  const mergeVariantsAndOverrides = (
+    variants: EscapeHatchProps,
+    overrides: EscapeHatchProps
+  ): EscapeHatchProps => {
+    const overrideKeys = new Set(Object.keys(overrides));
+    const sharedKeys = Object.keys(variants).filter((variantKey) =>
+      overrideKeys.has(variantKey)
+    );
+    const merged = Object.fromEntries(
+      sharedKeys.map((sharedKey) => [
+        sharedKey,
+        { ...variants[sharedKey], ...overrides[sharedKey] },
+      ])
+    );
+    return {
+      ...variants,
+      ...overrides,
+      ...merged,
+    };
   };
+  const overrides = mergeVariantsAndOverrides(
+    getOverridesFromVariants(variants, props),
+    overridesProp || {}
+  );
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -1491,10 +1511,30 @@ export default function CustomButton(
       overrides: { Button: { width: \\"500\\" } },
     },
   ];
-  const overrides = {
-    ...getOverridesFromVariants(variants, props),
-    ...overridesProp,
+  const mergeVariantsAndOverrides = (
+    variants: EscapeHatchProps,
+    overrides: EscapeHatchProps
+  ): EscapeHatchProps => {
+    const overrideKeys = new Set(Object.keys(overrides));
+    const sharedKeys = Object.keys(variants).filter((variantKey) =>
+      overrideKeys.has(variantKey)
+    );
+    const merged = Object.fromEntries(
+      sharedKeys.map((sharedKey) => [
+        sharedKey,
+        { ...variants[sharedKey], ...overrides[sharedKey] },
+      ])
+    );
+    return {
+      ...variants,
+      ...overrides,
+      ...merged,
+    };
   };
+  const overrides = mergeVariantsAndOverrides(
+    getOverridesFromVariants(variants, props),
+    overridesProp || {}
+  );
   return (
     /* @ts-ignore: TS2322 */
     <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}></Button>

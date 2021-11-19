@@ -16,7 +16,6 @@
 export { default as ViewWithButton } from './viewWithButton.json';
 export { default as ViewTest } from './viewTest.json';
 export { default as CustomButton } from './customButton.json';
-export { default as ComponentWithVariant } from './componentWithVariant.json';
 export { default as ComponentWithActionSignOut } from './componentWithActionSignOut.json';
 export { default as ComponentWithActionNavigation } from './componentWithActionNavigation.json';
 export { default as ParsedFixedValues } from './parsedFixedValues.json';
@@ -31,3 +30,4 @@ export * from './operators';
 export * from './overrides';
 export * from './primitives';
 export * from './errors';
+export * from './variants';
