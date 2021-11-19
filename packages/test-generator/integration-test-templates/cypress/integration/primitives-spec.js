@@ -115,7 +115,7 @@ describe('Primitives', () => {
           cy.get('path').should(
             'have.attr',
             'd',
-            'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z',
+            'M11 7H13V9H11V7ZM11 11H13V17H11V11ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z',
           );
         });
     });
@@ -125,13 +125,6 @@ describe('Primitives', () => {
     it('Basic', () => {
       cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#image').get('.amplify-image').should('have.attr', 'src', '/road-to-milford-new-zealand-800w.jpg');
-    });
-  });
-
-  describe('Label', () => {
-    it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
-      cy.get('#label').find('label').should('have.text', 'Hello world');
     });
   });
 

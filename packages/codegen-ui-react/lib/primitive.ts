@@ -30,7 +30,6 @@ enum Primitive {
   Heading = 'Heading',
   Icon = 'Icon',
   Image = 'Image',
-  Label = 'Label',
   Link = 'Link',
   Loader = 'Loader',
   Pagination = 'Pagination',
@@ -67,7 +66,6 @@ export const PrimitiveChildrenPropMapping: Partial<Record<Primitive, string>> = 
   [Primitive.Badge]: 'label',
   [Primitive.Button]: 'label',
   [Primitive.Heading]: 'label',
-  [Primitive.Label]: 'label',
   [Primitive.Link]: 'label',
   // [Primitive.MenuButton]: 'label',
   // [Primitive.MenuItem]: 'label',
@@ -75,9 +73,6 @@ export const PrimitiveChildrenPropMapping: Partial<Record<Primitive, string>> = 
   // [Primitive.TableCell]: 'label',
   [Primitive.Text]: 'label',
   [Primitive.ToggleButton]: 'label',
-
-  // remove once label is added in Amplify UI
-  [Primitive.CheckboxField]: 'label',
 };
 
 export const PrimitiveTypeParameter: Partial<

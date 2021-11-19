@@ -15,7 +15,6 @@ import {
   HeadingPrimitive,
   IconPrimitive,
   ImagePrimitive,
-  LabelPrimitive,
   LinkPrimitive,
   LoaderPrimitive,
   PaginationPrimitive,
@@ -94,10 +93,6 @@ export default function PrimitivesTests() {
       <View id="image">
         <Heading>Image</Heading>
         <ImagePrimitive />
-      </View>
-      <View id="label">
-        <Heading>Label</Heading>
-        <LabelPrimitive />
       </View>
       <View id="link">
         <Heading>Link</Heading>

@@ -2417,6 +2417,40 @@ export default function MyIconCloud(
 "
 `;
 
+exports[`amplify render tests primitives CheckboxField 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  CheckboxField,
+  CheckboxFieldProps,
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type CheckBoxFieldPrimitiveProps = React.PropsWithChildren<
+  Partial<CheckboxFieldProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function CheckBoxFieldPrimitive(
+  props: CheckBoxFieldPrimitiveProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <CheckboxField
+      label=\\"Subscribe\\"
+      name=\\"subscribe\\"
+      value=\\"yes\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"CheckboxField\\")}
+    ></CheckboxField>
+  );
+}
+"
+`;
+
 exports[`amplify render tests primitives SliderField 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
