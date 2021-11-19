@@ -508,6 +508,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       // TODO: In components, replace props.override with override (defined here).
     }
 
+    if (isStudioComponentWithVariants(component)) {
+      statements.push(this.buildMergeOverridesFunction());
+    }
+
     statements.push(this.buildOverridesDeclaration(isStudioComponentWithVariants(component)));
 
     const authStatement = this.buildUseAuthenticatedUserStatement(component);
@@ -621,14 +625,245 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
+  private buildMergeOverridesFunction(): VariableStatement {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('mergeVariantsAndOverrides'),
+            undefined,
+            undefined,
+            factory.createArrowFunction(
+              undefined,
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('variants'),
+                  undefined,
+                  factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+                  undefined,
+                ),
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('overrides'),
+                  undefined,
+                  factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+                  undefined,
+                ),
+              ],
+              factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+              factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
+                [
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('overrideKeys'),
+                          undefined,
+                          undefined,
+                          factory.createNewExpression(factory.createIdentifier('Set'), undefined, [
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('Object'),
+                                factory.createIdentifier('keys'),
+                              ),
+                              undefined,
+                              [factory.createIdentifier('overrides')],
+                            ),
+                          ]),
+                        ),
+                      ],
+                      ts.NodeFlags.Const,
+                    ),
+                  ),
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('sharedKeys'),
+                          undefined,
+                          undefined,
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('Object'),
+                                  factory.createIdentifier('keys'),
+                                ),
+                                undefined,
+                                [factory.createIdentifier('variants')],
+                              ),
+                              factory.createIdentifier('filter'),
+                            ),
+                            undefined,
+                            [
+                              factory.createArrowFunction(
+                                undefined,
+                                undefined,
+                                [
+                                  factory.createParameterDeclaration(
+                                    undefined,
+                                    undefined,
+                                    undefined,
+                                    factory.createIdentifier('variantKey'),
+                                    undefined,
+                                    undefined,
+                                    undefined,
+                                  ),
+                                ],
+                                undefined,
+                                factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                                factory.createCallExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('overrideKeys'),
+                                    factory.createIdentifier('has'),
+                                  ),
+                                  undefined,
+                                  [factory.createIdentifier('variantKey')],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      ts.NodeFlags.Const,
+                    ),
+                  ),
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('merged'),
+                          undefined,
+                          undefined,
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('Object'),
+                              factory.createIdentifier('fromEntries'),
+                            ),
+                            undefined,
+                            [
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('sharedKeys'),
+                                  factory.createIdentifier('map'),
+                                ),
+                                undefined,
+                                [
+                                  factory.createArrowFunction(
+                                    undefined,
+                                    undefined,
+                                    [
+                                      factory.createParameterDeclaration(
+                                        undefined,
+                                        undefined,
+                                        undefined,
+                                        factory.createIdentifier('sharedKey'),
+                                        undefined,
+                                        undefined,
+                                        undefined,
+                                      ),
+                                    ],
+                                    undefined,
+                                    factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                                    factory.createArrayLiteralExpression(
+                                      [
+                                        factory.createIdentifier('sharedKey'),
+                                        factory.createObjectLiteralExpression(
+                                          [
+                                            factory.createSpreadAssignment(
+                                              factory.createElementAccessExpression(
+                                                factory.createIdentifier('variants'),
+                                                factory.createIdentifier('sharedKey'),
+                                              ),
+                                            ),
+                                            factory.createSpreadAssignment(
+                                              factory.createElementAccessExpression(
+                                                factory.createIdentifier('overrides'),
+                                                factory.createIdentifier('sharedKey'),
+                                              ),
+                                            ),
+                                          ],
+                                          false,
+                                        ),
+                                      ],
+                                      false,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      ts.NodeFlags.Const,
+                    ),
+                  ),
+                  factory.createReturnStatement(
+                    factory.createObjectLiteralExpression(
+                      [
+                        factory.createSpreadAssignment(factory.createIdentifier('variants')),
+                        factory.createSpreadAssignment(factory.createIdentifier('overrides')),
+                        factory.createSpreadAssignment(factory.createIdentifier('merged')),
+                      ],
+                      true,
+                    ),
+                  ),
+                ],
+                true,
+              ),
+            ),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
   /**
    * case: hasVariants = true => const overrides = { ...getOverridesFromVariants(variants, props) };
    * case: hasVariants = false => const overrides = { ...overridesProp };
    */
   private buildOverridesDeclaration(hasVariants: boolean): VariableStatement {
     if (hasVariants) {
+      // TODO: ME
       this.importCollection.addImport('@aws-amplify/ui-react', 'getOverridesFromVariants');
       this.importCollection.addImport('@aws-amplify/ui-react', 'Variant');
+
+      return factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('overrides'),
+              undefined,
+              undefined,
+              factory.createCallExpression(factory.createIdentifier('mergeVariantsAndOverrides'), undefined, [
+                factory.createCallExpression(factory.createIdentifier('getOverridesFromVariants'), undefined, [
+                  factory.createIdentifier('variants'),
+                  factory.createIdentifier('props'),
+                ]),
+                factory.createBinaryExpression(
+                  factory.createIdentifier('overridesProp'),
+                  factory.createToken(ts.SyntaxKind.BarBarToken),
+                  factory.createObjectLiteralExpression([], false),
+                ),
+              ]),
+            ),
+          ],
+          ts.NodeFlags.Const,
+        ),
+      );
     }
 
     return factory.createVariableStatement(
@@ -639,23 +874,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createIdentifier('overrides'),
             undefined,
             undefined,
-            factory.createObjectLiteralExpression(
-              ([] as ts.ObjectLiteralElementLike[])
-                .concat(
-                  hasVariants
-                    ? [
-                        factory.createSpreadAssignment(
-                          factory.createCallExpression(
-                            factory.createIdentifier('getOverridesFromVariants'),
-                            undefined,
-                            [factory.createIdentifier('variants'), factory.createIdentifier('props')],
-                          ),
-                        ),
-                      ]
-                    : [],
-                )
-                .concat([factory.createSpreadAssignment(factory.createIdentifier('overridesProp'))]),
-            ),
+            factory.createObjectLiteralExpression([
+              factory.createSpreadAssignment(factory.createIdentifier('overridesProp')),
+            ]),
           ),
         ],
         ts.NodeFlags.Const,

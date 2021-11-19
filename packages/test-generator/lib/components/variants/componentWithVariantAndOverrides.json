@@ -1,0 +1,32 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Text",
+  "name": "ComponentWithVariantAndOverrides",
+  "properties": {
+    "label": {
+      "value": "DefaultText"
+    }
+  },
+  "variants": [
+    {
+      "variantValues": {
+        "variant": "greeting"
+      },
+      "overrides": {
+        "Text": {
+          "children": "Hello"
+        }
+      }
+    },
+    {
+      "variantValues": {
+        "variant": "farewell"
+      },
+      "overrides": {
+        "Text": {
+          "children": "Goodbye"
+        }
+      }
+    }
+  ]
+}
