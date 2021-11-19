@@ -116,7 +116,7 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
         factory.createStringLiteral(this.node.getOverrideKey()),
       ]),
     );
-    this.importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
+    this.importCollection.addImport('@aws-amplify/ui-react/internal', 'getOverrideProps');
     attributes.push(overrideAttr);
   }
 

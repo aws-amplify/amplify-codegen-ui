@@ -516,7 +516,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const authStatement = this.buildUseAuthenticatedUserStatement(component);
     if (authStatement !== undefined) {
-      this.importCollection.addImport('@aws-amplify/ui-react', 'useAuth');
+      this.importCollection.addImport('@aws-amplify/ui-react/internal', 'useAuth');
       statements.push(authStatement);
     }
 
@@ -836,9 +836,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    */
   private buildOverridesDeclaration(hasVariants: boolean): VariableStatement {
     if (hasVariants) {
-      // TODO: ME
-      this.importCollection.addImport('@aws-amplify/ui-react', 'getOverridesFromVariants');
-      this.importCollection.addImport('@aws-amplify/ui-react', 'Variant');
+      this.importCollection.addImport('@aws-amplify/ui-react/internal', 'getOverridesFromVariants');
+      this.importCollection.addImport('@aws-amplify/ui-react/internal', 'Variant');
 
       return factory.createVariableStatement(
         undefined,
@@ -922,7 +921,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private buildCreateDataStorePredicateCall(type: string, name: string): Statement {
-    this.importCollection.addImport('@aws-amplify/ui-react', 'createDataStorePredicate');
+    this.importCollection.addImport('@aws-amplify/ui-react/internal', 'createDataStorePredicate');
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -953,7 +952,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         if (isDataPropertyBinding(binding)) {
           const { bindingProperties } = binding;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
-            this.importCollection.addImport('@aws-amplify/ui-react', 'useDataStoreBinding');
+            this.importCollection.addImport('@aws-amplify/ui-react/internal', 'useDataStoreBinding');
             /* const buttonColorFilter = {
              *   field: "userID",
              *   operand: "user@email.com",
@@ -1175,7 +1174,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     criteriaName?: string,
     paginationName?: string,
   ): CallExpression {
-    this.importCollection.addImport('@aws-amplify/ui-react', 'useDataStoreBinding');
+    this.importCollection.addImport('@aws-amplify/ui-react/internal', 'useDataStoreBinding');
 
     const objectProperties = [
       factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
