@@ -52,6 +52,28 @@ describe('validation-helper', () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
+    test('top-level component requires non-empty property values', () => {
+      expect(() => {
+        validateComponentSchema({
+          componentType: 'View',
+          name: 'MyBindingView',
+          properties: {
+            pathData: {},
+          },
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('top-level component requires properties to be the correct type', () => {
+      expect(() => {
+        validateComponentSchema({
+          componentType: 'View',
+          name: 'MyBindingView',
+          properties: 'property',
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     test('top-level component requires componentType to be the correct type', () => {
       expect(() => {
         validateComponentSchema({
