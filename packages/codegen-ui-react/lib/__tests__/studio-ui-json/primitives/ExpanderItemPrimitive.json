@@ -1,0 +1,14 @@
+{
+  "componentType": "ExpanderItem",
+  "properties": {
+    "title": {
+      "value": "title1"
+    },
+    "value": {
+      "value": "ExpanderItem1"
+    },
+    "children": {
+      "value": "ExpanderItem1Content"
+    }
+  }
+}
