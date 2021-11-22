@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v0.10.1...v0.12.0) (2021-11-22)
+
+
+### Bug Fixes
+
+* deep merge variants and overrides rather than overwrite with spread ([a779553](https://github.com/aws-amplify/amplify-codegen-ui/commit/a779553f373c45406aa1631f9ff60eeb33775843))
+* fixing typescript version to 4.4.x, since 4.5.2 breaks the imports ([b726682](https://github.com/aws-amplify/amplify-codegen-ui/commit/b726682e56129ade22616682a14f481176851f94))
+* remove unnecessary types file from generated index ([f7565a0](https://github.com/aws-amplify/amplify-codegen-ui/commit/f7565a0ccf2626d3801839acef656e1b54e9f046))
+* removing label override for checkbox field, and removing label, which is not in primitives ([c819478](https://github.com/aws-amplify/amplify-codegen-ui/commit/c819478525f20dcd1be5664cb0563ab3a7dd9875))
+
+
+### Features
+
+* update internal hook import paths to use internal ui-react path ([74f4614](https://github.com/aws-amplify/amplify-codegen-ui/commit/74f4614409e361d7c423572c0ef2ef473bd07b1d))
+
+
+
+
+
 ## [0.11.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v0.10.1...v0.11.1) (2021-11-19)
 
 
