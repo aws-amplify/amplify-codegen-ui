@@ -49,6 +49,7 @@ export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
     this.renderConfig = {
       ...defaultRenderConfig,
       ...renderConfig,
+      renderTypeDeclarations: false, // Never render type declarations for index.js|ts file.
     };
     this.fileName = `index.${scriptKindToFileExtensionNonReact(this.renderConfig.script)}`;
   }
