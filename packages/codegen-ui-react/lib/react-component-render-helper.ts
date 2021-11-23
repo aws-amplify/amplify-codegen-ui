@@ -299,9 +299,9 @@ export function resolvePropToExpression(prop: ComponentPropertyValueTypes): Expr
 export function getSyntaxKindToken(operator: string): BinaryOperatorToken | undefined {
   switch (operator) {
     case 'eq':
-      return factory.createToken(SyntaxKind.EqualsEqualsEqualsToken);
+      return factory.createToken(SyntaxKind.EqualsEqualsToken);
     case 'ne':
-      return factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken);
+      return factory.createToken(SyntaxKind.ExclamationEqualsToken);
     case 'le':
       return factory.createToken(SyntaxKind.LessThanEqualsToken);
     case 'lt':
