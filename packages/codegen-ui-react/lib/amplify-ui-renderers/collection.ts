@@ -20,6 +20,7 @@ import { ReactComponentWithChildrenRenderer } from '../react-component-with-chil
 
 export default class CollectionRenderer extends ReactComponentWithChildrenRenderer<BaseComponentProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
+    this.addKeyPropertyToChildren(this.component.children ?? []);
     const childrenJsx = this.component.children ? renderChildren(this.component.children ?? []) : [];
 
     const arrowFuncExpr = this.renderItemArrowFunctionExpr(childrenJsx);
@@ -33,6 +34,21 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
 
     return element;
+  }
+
+  private addKeyPropertyToChildren(children: StudioComponentChild[]) {
+    children.forEach((child: StudioComponentChild) => {
+      if ('key' in child.properties) {
+        return;
+      }
+      // eslint-disable-next-line no-param-reassign
+      child.properties.key = {
+        collectionBindingProperties: {
+          property: '',
+          field: 'id',
+        },
+      };
+    });
   }
 
   private findItemsVariableName(): string | undefined {
