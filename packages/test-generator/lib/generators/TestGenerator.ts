@@ -40,7 +40,7 @@ log.setLevel('info');
 export type TestCase = {
   name: string;
   schema: any;
-  testType: 'Component' | 'Theme';
+  testType: 'Component' | 'Theme' | 'Snippet';
 };
 
 export type TestGeneratorParams = {
@@ -162,6 +162,9 @@ export abstract class TestGenerator {
         case 'Theme':
           generateTheme(testCase);
           break;
+        case 'Snippet':
+          generateSnippet([testCase]);
+          break;
         default:
           throw new Error('Expected either a `Component` or `Theme` test case type');
       }
@@ -170,7 +173,7 @@ export abstract class TestGenerator {
     generateIndexFile(testCases);
 
     // only test with 4 components for performance
-    generateSnippet(testCases.filter((testCase) => testCase.testType === 'Component').slice(4));
+    generateSnippet(testCases.filter((testCase) => testCase.testType === 'Component').slice(0, 4));
 
     if (Object.keys(renderErrors).length > 0) {
       log.error('Caught exceptions while rendering templates');
