@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v0.12.0...v0.13.0) (2021-11-23)
+
+
+### Bug Fixes
+
+* convert built-in iconset names to pascal case ([#253](https://github.com/aws-amplify/amplify-codegen-ui/issues/253)) ([0c12c7b](https://github.com/aws-amplify/amplify-codegen-ui/commit/0c12c7bcf9a5d5a06ed7238ffe508c1e13a529dd))
+* use double-equal instead of triple for conditional comparisons ([ff57822](https://github.com/aws-amplify/amplify-codegen-ui/commit/ff57822b5046bcbf2387b9fe8980c6aad956bc5a))
+
+
+### Features
+
+* add datastore object id as key to collections if not set ([63ffb89](https://github.com/aws-amplify/amplify-codegen-ui/commit/63ffb891e2d67dd63951a4cc4a103d8986cdfef0))
+
+
+
+
+
 # [0.12.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v0.10.1...v0.12.0) (2021-11-22)
 
 
