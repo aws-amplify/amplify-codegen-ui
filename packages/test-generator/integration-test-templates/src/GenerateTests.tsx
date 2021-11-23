@@ -122,7 +122,13 @@ const GenerateTestCase = (props: GenerateTestCaseProps) => {
 export default function GenerateTests() {
   const [generateAll, setGenerateAll] = useState(false);
   const testCases = defaultGenerator.getTestCases();
-  const testCaseComponents = testCases.map((testCase) => (
+  // only test snippet with 4 components for performance
+  const snippetTestCases: TestCase[] = testCases
+    .filter((testCase) => testCase.testType === 'Component')
+    .slice(0, 4)
+    .map((testCase) => ({ ...testCase, testType: 'Snippet' }));
+  const testCasesWithSnippets = testCases.concat(snippetTestCases);
+  const testCaseComponents = testCasesWithSnippets.map((testCase) => (
     <GenerateTestCase testCase={testCase} executeImmediately={generateAll} />
   ));
   return (
