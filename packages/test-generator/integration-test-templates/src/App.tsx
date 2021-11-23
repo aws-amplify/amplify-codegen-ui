@@ -3,6 +3,7 @@ import ComponentTests from './ComponentTests';
 import GenerateTests from './GenerateTests';
 import PrimitivesTests from './PrimitivesTests';
 import ComplexTests from './ComplexTests';
+import IconsetTests from './IconsetTests';
 
 const HomePage = () => {
   return (
@@ -21,6 +22,9 @@ const HomePage = () => {
         <li>
           <a href="/complex-tests">Complex Tests</a>
         </li>
+        <li>
+          <a href="/iconset-tests">Iconset Tests</a>
+        </li>
       </ul>
     </div>
   );
@@ -34,6 +38,7 @@ export default function App() {
         <Route path="/generate-tests" element={<GenerateTests />} />
         <Route path="/primitives-tests" element={<PrimitivesTests />} />
         <Route path="/complex-tests" element={<ComplexTests />} />
+        <Route path="/iconset-tests" element={<IconsetTests />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>

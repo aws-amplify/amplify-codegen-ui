@@ -1,5 +1,12 @@
 {
-  "componentType": "IconCloud",
-  "name": "MyIconCloud",
-  "properties": {}
+  "componentType": "View",
+  "name": "MyIcons",
+  "properties": {},
+  "children": [{
+    "componentType": "IconCloud",
+    "properties": {}
+  }, {
+    "componentType": "IconBrightness1",
+    "properties": {}
+  }]
 }

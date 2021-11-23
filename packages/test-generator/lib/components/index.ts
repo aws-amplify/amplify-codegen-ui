@@ -20,6 +20,7 @@ export { default as ComponentWithActionSignOut } from './componentWithActionSign
 export { default as ComponentWithActionNavigation } from './componentWithActionNavigation.json';
 export { default as ParsedFixedValues } from './parsedFixedValues.json';
 export { default as MyIconCloud } from './myIconCloud.json';
+export { default as Icons } from './icons.json';
 export * from './basic-components';
 export * from './property-binding';
 export * from './default-value-components';

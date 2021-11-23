@@ -89,4 +89,4 @@ There are 3 keys steps, first you need to create a new tagged release version of
 ### Icons
 
 The built-in iconset is genereted with `packages/scripts/generateBuiltInIconset.js`.
-When icons are added or removed from `@aws-amplify/ui-react` run the script to update the icons supported in codegen.
+When icons are added or removed from `@aws-amplify/ui-react` run `npm run iconset` from the root of the repo to update the icons supported in codegen.

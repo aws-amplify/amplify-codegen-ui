@@ -2372,24 +2372,32 @@ exports[`amplify render tests primitives Built-in Iconset 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, IconCloud, IconProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  IconBrightness_1,
+  IconCloud,
+  View,
+  ViewProps,
+} from \\"@aws-amplify/ui-react\\";
 
-export type MyIconCloudProps = React.PropsWithChildren<
-  Partial<IconProps> & {
+export type MyIconsProps = React.PropsWithChildren<
+  Partial<ViewProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function MyIconCloud(
-  props: MyIconCloudProps
-): React.ReactElement {
+export default function MyIcons(props: MyIconsProps): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <IconCloud
-      {...rest}
-      {...getOverrideProps(overrides, \\"IconCloud\\")}
-    ></IconCloud>
+    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
+      <IconCloud
+        {...getOverrideProps(overrides, \\"View.IconCloud[-1]\\")}
+      ></IconCloud>
+      <IconBrightness_1
+        {...getOverrideProps(overrides, \\"View.IconBrightness_1[-1]\\")}
+      ></IconBrightness_1>
+    </View>
   );
 }
 "
