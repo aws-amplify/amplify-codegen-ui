@@ -219,7 +219,10 @@ export default function CollectionOfCustomButtons(
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Flex {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}>
+        <Flex
+          key={item.id}
+          {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}
+        >
           <Button
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
@@ -322,7 +325,10 @@ export default function CollectionOfCustomButtons(
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Flex {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}>
+        <Flex
+          key={item.id}
+          {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}
+        >
           <Button
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
@@ -421,7 +427,10 @@ export default function CollectionOfCustomButtons(
       {...getOverrideProps(overrides, \\"Collection\\")}
     >
       {(item, index) => (
-        <Flex {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}>
+        <Flex
+          key={item.id}
+          {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}
+        >
           <Button
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
@@ -489,6 +498,7 @@ export default function ListingCardCollection(
           marginBottom=\\"0\\"
           marginTop=\\"0\\"
           marginLeft=\\"0\\"
+          key={item.id}
           {...getOverrideProps(overrides, \\"Collection.ListingCard[0]\\")}
         ></ListingCard>
       )}
@@ -532,6 +542,7 @@ export default function ListingCardCollection(
     >
       {(item, index) => (
         <ListingCard
+          key={item.id}
           {...getOverrideProps(overrides, \\"Collection.ListingCard[0]\\")}
         ></ListingCard>
       )}
@@ -2267,6 +2278,7 @@ export default function CollectionDefaultValue(
     >
       {(item, index) => (
         <Text
+          key={item.id}
           children={item.username || \\"Collection Default Value\\"}
           {...getOverrideProps(overrides, \\"Collection.Text[0]\\")}
         ></Text>
