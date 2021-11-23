@@ -21,6 +21,7 @@ export { default as CardPrimitive } from './CardPrimitive.json';
 export { default as CheckboxFieldPrimitive } from './CheckboxFieldPrimitive.json';
 export { default as CollectionPrimitive } from './CollectionPrimitive.json';
 export { default as DividerPrimitive } from './DividerPrimitive.json';
+export { default as ExpanderPrimitive } from './ExpanderPrimitive.json';
 export { default as FlexPrimitive } from './FlexPrimitive.json';
 export { default as GridPrimitive } from './GridPrimitive.json';
 export { default as HeadingPrimitive } from './HeadingPrimitive.json';

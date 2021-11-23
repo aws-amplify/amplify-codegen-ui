@@ -25,6 +25,8 @@ enum Primitive {
   CheckboxField = 'CheckboxField',
   Collection = 'Collection',
   Divider = 'Divider',
+  Expander = 'Expander',
+  ExpanderItem = 'ExpanderItem',
   Flex = 'Flex',
   Grid = 'Grid',
   Heading = 'Heading',

@@ -16,6 +16,10 @@ exports[`Primitives Collection 1`] = `"<Collection items={items || []} {...rest}
 
 exports[`Primitives Divider 1`] = `"<Divider {...rest} {...getOverrideProps(overrides, \\"Divider\\")}></Divider>"`;
 
+exports[`Primitives Expander 1`] = `"<Expander {...rest} {...getOverrideProps(overrides, \\"Expander\\")}></Expander>"`;
+
+exports[`Primitives ExpanderItem 1`] = `"<ExpanderItem {...rest} {...getOverrideProps(overrides, \\"ExpanderItem\\")}></ExpanderItem>"`;
+
 exports[`Primitives Flex 1`] = `"<Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}></Flex>"`;
 
 exports[`Primitives Grid 1`] = `"<Grid {...rest} {...getOverrideProps(overrides, \\"Grid\\")}></Grid>"`;

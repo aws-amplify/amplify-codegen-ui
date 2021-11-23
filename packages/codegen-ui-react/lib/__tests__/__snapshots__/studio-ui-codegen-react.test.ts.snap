@@ -2417,6 +2417,87 @@ export default function MyIconCloud(
 "
 `;
 
+exports[`amplify render tests primitives Expander 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Expander,
+  ExpanderItem,
+  ExpanderProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type ExpanderPrimitiveProps = React.PropsWithChildren<
+  Partial<ExpanderProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ExpanderPrimitive(
+  props: ExpanderPrimitiveProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Expander
+      type=\\"single\\"
+      isCollapsible={true}
+      {...rest}
+      {...getOverrideProps(overrides, \\"Expander\\")}
+    >
+      <ExpanderItem
+        title=\\"title1\\"
+        value=\\"ExpanderItem1\\"
+        children=\\"ExpanderItem1Content\\"
+        {...getOverrideProps(overrides, \\"Expander.ExpanderItem[0]\\")}
+      ></ExpanderItem>
+      <ExpanderItem
+        title=\\"title2\\"
+        value=\\"ExpanderItem2\\"
+        children=\\"ExpanderItem2Content\\"
+        {...getOverrideProps(overrides, \\"Expander.ExpanderItem[1]\\")}
+      ></ExpanderItem>
+    </Expander>
+  );
+}
+"
+`;
+
+exports[`amplify render tests primitives ExpanderItem 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  ExpanderItem,
+  ExpanderItemProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react\\";
+
+export type ComponentWithoutNameProps = React.PropsWithChildren<
+  Partial<ExpanderItemProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function unknown_component_name(
+  props: unknown_component_nameProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <ExpanderItem
+      title=\\"title1\\"
+      value=\\"ExpanderItem1\\"
+      children=\\"ExpanderItem1Content\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"ExpanderItem\\")}
+    ></ExpanderItem>
+  );
+}
+"
+`;
+
 exports[`amplify render tests primitives SliderField 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

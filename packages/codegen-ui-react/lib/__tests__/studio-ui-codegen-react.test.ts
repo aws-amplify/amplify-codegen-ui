@@ -394,6 +394,14 @@ describe('amplify render tests', () => {
   });
 
   describe('primitives', () => {
+    test('Expander', () => {
+      expect(generateWithAmplifyRenderer('primitives/ExpanderPrimitive').componentText).toMatchSnapshot();
+    });
+
+    test('ExpanderItem', () => {
+      expect(generateWithAmplifyRenderer('primitives/ExpanderItemPrimitive').componentText).toMatchSnapshot();
+    });
+
     test('TextField', () => {
       expect(generateWithAmplifyRenderer('primitives/TextFieldPrimitive').componentText).toMatchSnapshot();
     });
