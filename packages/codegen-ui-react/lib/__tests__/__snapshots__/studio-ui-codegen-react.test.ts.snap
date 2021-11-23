@@ -1643,7 +1643,7 @@ export default function CustomButton(
     <Button
       labelWidth={width}
       disabled={
-        buttonUser?.isLoggedIn && buttonUser?.isLoggedIn === true ? true : false
+        buttonUser?.isLoggedIn && buttonUser?.isLoggedIn == true ? true : false
       }
       prompt={
         buttonUser?.age && buttonUser?.age > 18
@@ -1651,7 +1651,7 @@ export default function CustomButton(
           : \\"Sorry you cannot vote\\"
       }
       backgroundColor={
-        buttonUser?.isLoggedIn && buttonUser?.isLoggedIn === true
+        buttonUser?.isLoggedIn && buttonUser?.isLoggedIn == true
           ? buttonUser?.loggedInColor
           : buttonUser?.loggedOutColor
       }
@@ -1696,12 +1696,12 @@ export default function ConditionalComponentWithDataBinding(
     <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>
       <Text
         value={
-          student?.id && student?.id === \\"idstringuserinput\\"
+          student?.id && student?.id == \\"idstringuserinput\\"
             ? student?.createdAt
             : student?.id
         }
         children={
-          student?.id && student?.id === \\"idstringuserinput\\"
+          student?.id && student?.id == \\"idstringuserinput\\"
             ? student?.createdAt
             : student?.id
         }
@@ -1709,7 +1709,7 @@ export default function ConditionalComponentWithDataBinding(
       ></Text>
       <Button
         value={
-          student?.id && student?.id === \\"idstringuserinput\\"
+          student?.id && student?.id == \\"idstringuserinput\\"
             ? student?.createdAt
             : student?.id
         }
@@ -1742,7 +1742,7 @@ export default function CustomButton(
   return (
     /* @ts-ignore: TS2322 */
     <Button
-      disabled={buttonColor && buttonColor === \\"red\\" ? true : false}
+      disabled={buttonColor && buttonColor == \\"red\\" ? true : false}
       {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
