@@ -24,6 +24,8 @@ import {
   CardProps,
   CheckboxFieldProps,
   DividerProps,
+  ExpanderProps,
+  ExpanderItemProps,
   FlexProps,
   GridProps,
   HeadingProps,
@@ -138,6 +140,20 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Divider:
         return new ReactComponentRenderer<DividerProps>(component, this.importCollection, parent).renderElement();
+
+      case Primitive.Expander:
+        return new ReactComponentWithChildrenRenderer<ExpanderProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.ExpanderItem:
+        return new ReactComponentWithChildrenRenderer<ExpanderItemProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
 
       case Primitive.Flex:
         return new ReactComponentWithChildrenRenderer<FlexProps>(

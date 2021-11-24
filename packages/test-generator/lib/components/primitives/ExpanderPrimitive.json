@@ -1,0 +1,45 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Expander",
+  "name": "ExpanderPrimitive",
+  "properties": {
+    "type": {
+      "value": "single",
+      "type": "String"
+    },
+    "isCollapsible": {
+      "value": true,
+      "type": "Boolean"
+    }
+  },
+  "children": [
+    {
+      "componentType": "ExpanderItem",
+      "properties": {
+        "title": {
+          "value": "title1"
+        },
+        "value": {
+          "value": "ExpanderItem1"
+        },
+        "children": {
+          "value": "ExpanderItem1Content"
+        }
+      }
+    },
+    {
+      "componentType": "ExpanderItem",
+      "properties": {
+        "title": {
+          "value": "title2"
+        },
+        "value": {
+          "value": "ExpanderItem2"
+        },
+        "children": {
+          "value": "ExpanderItem2Content"
+        }
+      }
+    }
+  ]
+}
