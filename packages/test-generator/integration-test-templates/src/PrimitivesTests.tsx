@@ -25,6 +25,7 @@ import {
   CheckboxFieldPrimitive,
   CollectionPrimitive,
   DividerPrimitive,
+  ExpanderPrimitive,
   FlexPrimitive,
   GridPrimitive,
   HeadingPrimitive,
@@ -88,6 +89,10 @@ export default function PrimitivesTests() {
       <View id="divider">
         <Heading>Divider</Heading>
         <DividerPrimitive />
+      </View>
+      <View id="expander">
+        <Heading>Expander</Heading>
+        <ExpanderPrimitive />
       </View>
       <View id="flex">
         <Heading>Flex</Heading>
