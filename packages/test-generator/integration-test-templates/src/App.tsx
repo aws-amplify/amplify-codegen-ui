@@ -1,9 +1,15 @@
+import Amplify from 'aws-amplify';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ComponentTests from './ComponentTests';
 import GenerateTests from './GenerateTests';
 import PrimitivesTests from './PrimitivesTests';
 import ComplexTests from './ComplexTests';
 import IconsetTests from './IconsetTests';
+
+// use fake endpoint so useDataStoreBinding does not fail
+Amplify.configure({
+  aws_appsync_graphqlEndpoint: 'https://fake-appsync-endpoint/graphql',
+});
 
 const HomePage = () => {
   return (
