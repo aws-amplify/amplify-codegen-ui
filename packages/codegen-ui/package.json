@@ -21,7 +21,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@aws-amplify/ui-react": "^2.0.0"
+    "@aws-amplify/ui-react": "^2.1.0"
   },
   "jest": {
     "verbose": false,
