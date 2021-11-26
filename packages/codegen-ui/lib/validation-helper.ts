@@ -26,6 +26,20 @@ const alphaNumNoLeadingNumberString = () => {
     .matches(/^[a-zA-Z][a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string, starting with a character' });
 };
 
+const propertiesSchema = (value: Object) => {
+  return yup.object().shape(
+    Object.fromEntries(
+      Object.keys(value || {}).map((key) => [
+        key,
+        yup
+          .object()
+          .test('property', 'property cannot be empty.', (property: Object) => Object.keys(property).length > 0)
+          .required(),
+      ]),
+    ),
+  );
+};
+
 /**
  * Component Schema Definitions
  */
@@ -33,7 +47,7 @@ const studioComponentChildSchema: any = yup.object({
   componentType: alphaNumNoLeadingNumberString().required(),
   // TODO: Name is required in the studio-types file, but doesn't seem to need to be. Relaxing the restriction here.
   name: yup.string().nullable(),
-  properties: yup.object().required(),
+  properties: yup.lazy((value) => propertiesSchema(value).required()),
   // Doing lazy eval here since we reference our own type otherwise
   children: yup.lazy(() => yup.array(studioComponentChildSchema.default(undefined))),
   figmaMetadata: yup.object().nullable(),
@@ -49,7 +63,7 @@ const studioComponentSchema = yup.object({
   id: yup.string().nullable(),
   sourceId: yup.string().nullable(),
   componentType: alphaNumNoLeadingNumberString().required(),
-  properties: yup.object().required(),
+  properties: yup.lazy((value) => propertiesSchema(value).required()),
   children: yup.array(studioComponentChildSchema).nullable(),
   figmaMetadata: yup.object().nullable(),
   variants: yup.array().nullable(),
