@@ -23,10 +23,10 @@ import {
   PropertyAssignment,
 } from 'typescript';
 import {
-  StudioTemplateRenderer,
-  StudioTheme,
-  StudioThemeValues,
-  StudioThemeValue,
+  FrontendManagerTemplateRenderer,
+  FrontendManagerTheme,
+  FrontendManagerThemeValues,
+  FrontendManagerThemeValue,
   validateThemeSchema,
   InvalidInputError,
 } from '@aws-amplify/codegen-ui';
@@ -38,12 +38,12 @@ import {
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
-} from './react-studio-template-renderer-helper';
+} from './react-frontend-manager-template-renderer-helper';
 import { RequiredKeys } from './utils/type-utils';
 
-export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
+export class ReactThemeFrontendManagerTemplateRenderer extends FrontendManagerTemplateRenderer<
   string,
-  StudioTheme,
+  FrontendManagerTheme,
   ReactOutputManager,
   {
     componentText: string;
@@ -56,7 +56,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 
   fileName: string;
 
-  constructor(theme: StudioTheme, renderConfig: ReactRenderConfig) {
+  constructor(theme: FrontendManagerTheme, renderConfig: ReactRenderConfig) {
     super(theme, new ReactOutputManager(), renderConfig);
     validateThemeSchema(theme);
     this.renderConfig = {
@@ -138,13 +138,13 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    *       backgroundcolor: \\"hsl(210, 5%, 90%)\\",
    * ...
    */
-  private buildThemeValues(values: StudioThemeValues[]): PropertyAssignment[] {
+  private buildThemeValues(values: FrontendManagerThemeValues[]): PropertyAssignment[] {
     return values.map(({ key, value }) =>
       factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeValue(value)),
     );
   }
 
-  private buildThemeValue(themeValue: StudioThemeValue): ObjectLiteralExpression | StringLiteral {
+  private buildThemeValue(themeValue: FrontendManagerThemeValue): ObjectLiteralExpression | StringLiteral {
     const { children, value } = themeValue;
     if (children) {
       return factory.createObjectLiteralExpression(this.buildThemeValues(children));
@@ -167,7 +167,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    *   },
    * ],
    */
-  private buildThemeOverrides(overrides?: StudioThemeValues[]) {
+  private buildThemeOverrides(overrides?: FrontendManagerThemeValues[]) {
     if (overrides === undefined) {
       return [];
     }

@@ -15,12 +15,9 @@
     "test:update": "echo \"No tests\"",
     "iconset": "node scripts/generateBuiltInIconsetTests.js"
   },
-  "directories": {
-    "lib": "lib"
-  },
   "private": true,
   "files": [
-    "lib"
+    "dist/**"
   ],
   "dependencies": {
     "@aws-amplify/codegen-ui": "0.13.0",

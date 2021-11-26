@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { BaseComponentProps } from '@aws-amplify/ui-react';
-import { StudioNode } from '../studio-node';
+import { FrontendManagerNode } from '../frontend-manager-node';
 import { CommonComponentRenderer } from '../common-component-renderer';
 
 class MockComponentRenderer extends CommonComponentRenderer<BaseComponentProps> {}
@@ -28,7 +28,7 @@ describe('common-component-renderer', () => {
         value: { value: 'Confirm' },
       },
     };
-    const parent = new StudioNode({
+    const parent = new FrontendManagerNode({
       componentType: 'View',
       name: 'MyView',
       properties: {},

@@ -13,16 +13,16 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent } from '../types';
-import { StudioTemplateRendererFactory } from '../template-renderer-factory';
+import { FrontendManagerComponent } from '../types';
+import { FrontendManagerTemplateRendererFactory } from '../template-renderer-factory';
 import { MockOutputManager, MockTemplateRenderer } from './__utils__/mock-classes';
 
-describe('StudioTemplateRendererFactory', () => {
+describe('FrontendManagerTemplateRendererFactory', () => {
   test('buildRenderer', () => {
     const componentName = 'MyText';
     const outputManager = new MockOutputManager();
-    const renderer = new StudioTemplateRendererFactory(
-      (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
+    const renderer = new FrontendManagerTemplateRendererFactory(
+      (component: FrontendManagerComponent) => new MockTemplateRenderer(component, outputManager, {}),
     ).buildRenderer({
       componentType: 'Text',
       name: componentName,

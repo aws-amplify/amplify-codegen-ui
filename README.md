@@ -23,8 +23,8 @@ Amplify Codegen UI supports component generation in Node or a browser environmen
 ```js
 import {
   AmplifyRenderer,
-  StudioTemplateRendererFactory,
-  StudioTemplateRendererManager,
+  FrontendManagerTemplateRendererFactory,
+  FrontendManagerTemplateRendererManager,
 } from '@aws-amplify/codegen-ui-react';
 
 const renderConfig = {};
@@ -32,11 +32,11 @@ const outputConfig = {
   outputPathDir: './src/ui-components';
 };
 
-const componentRendererFactory = new StudioTemplateRendererFactory(
+const componentRendererFactory = new FrontendManagerTemplateRendererFactory(
   (component) => new AmplifyRenderer(component, renderConfig),
 );
 
-const rendererManager = new StudioTemplateRendererManager(componentRendererFactory, outputConfig);
+const rendererManager = new FrontendManagerTemplateRendererManager(componentRendererFactory, outputConfig);
 
 const component = {
   id: '1234-5678-9010',
@@ -56,9 +56,9 @@ rendererManager.renderSchemaToTemplate(component);
 
 ```js
 import {
-  ReactThemeStudioTemplateRenderer,
-  StudioTemplateRendererFactory,
-  StudioTemplateRendererManager,
+  ReactThemeFrontendManagerTemplateRenderer,
+  FrontendManagerTemplateRendererFactory,
+  FrontendManagerTemplateRendererManager,
 } from '@aws-amplify/codegen-ui-react';
 
 const renderConfig = {};
@@ -66,11 +66,11 @@ const outputConfig = {
   outputPathDir: './src/ui-components';
 };
 
-const themeRendererFactory = new StudioTemplateRendererFactory(
-  (theme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
+const themeRendererFactory = new FrontendManagerTemplateRendererFactory(
+  (theme) => new ReactThemeFrontendManagerTemplateRenderer(theme, renderConfig),
 );
 
-const themeRendererManager = new StudioTemplateRendererManager(themeRendererFactory, outputConfig);
+const themeRendererManager = new FrontendManagerTemplateRendererManager(themeRendererFactory, outputConfig);
 
 const theme = {
   id: '1234-5678-9010',
@@ -120,9 +120,9 @@ themeRendererManager.renderSchemaToTemplate(theme);
 
 ```js
 import {
-  ReactIndexStudioTemplateRenderer,
-  StudioTemplateRendererFactory,
-  StudioTemplateRendererManager,
+  ReactIndexFrontendManagerTemplateRenderer,
+  FrontendManagerTemplateRendererFactory,
+  FrontendManagerTemplateRendererManager,
 } from '@aws-amplify/codegen-ui-react';
 
 const renderConfig = {};
@@ -130,11 +130,11 @@ const outputConfig = {
   outputPathDir: './src/ui-components',
 };
 
-const indexRendererFactory = new StudioTemplateRendererFactory(
-  (components) => new ReactIndexStudioTemplateRenderer(components, renderConfig),
+const indexRendererFactory = new FrontendManagerTemplateRendererFactory(
+  (components) => new ReactIndexFrontendManagerTemplateRenderer(components, renderConfig),
 );
 
-const indexRendererManager = new StudioTemplateRendererManager(indexRendererFactory, outputConfig);
+const indexRendererManager = new FrontendManagerTemplateRendererManager(indexRendererFactory, outputConfig);
 
 const components = [
   {
@@ -190,7 +190,7 @@ const { importsText, compText } = new AmplifyRenderer(component, renderConfig).r
 #### Themes
 
 ```js
-import { ReactThemeStudioTemplateRenderer } from '@aws-amplify/codegen-ui-react';
+import { ReactThemeFrontendManagerTemplateRenderer } from '@aws-amplify/codegen-ui-react';
 
 const renderConfig = {};
 
@@ -235,13 +235,13 @@ const theme = {
   ],
 };
 
-const { componentText } = new ReactThemeStudioTemplateRenderer(theme, renderConfig).renderComponent();
+const { componentText } = new ReactThemeFrontendManagerTemplateRenderer(theme, renderConfig).renderComponent();
 ```
 
 #### `index.js` File
 
 ```js
-import { ReactIndexStudioTemplateRenderer } from '@aws-amplify/codegen-ui-react';
+import { ReactIndexFrontendManagerTemplateRenderer } from '@aws-amplify/codegen-ui-react';
 
 const renderConfig = {};
 const components = [
@@ -267,7 +267,7 @@ const components = [
   },
 ];
 
-const { componentText } = new ReactIndexStudioTemplateRenderer(components, renderConfig);
+const { componentText } = new ReactIndexFrontendManagerTemplateRenderer(components, renderConfig);
 ```
 
 ### Config

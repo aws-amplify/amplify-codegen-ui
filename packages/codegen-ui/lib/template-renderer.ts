@@ -15,26 +15,32 @@
  */
 import fs from 'fs';
 import { FrameworkOutputManager } from './framework-output-manager';
-import { StudioTemplateRenderer } from './studio-template-renderer';
-import { StudioTemplateRendererFactory } from './template-renderer-factory';
+import { FrontendManagerTemplateRenderer } from './frontend-manager-template-renderer';
+import { FrontendManagerTemplateRendererFactory } from './template-renderer-factory';
 
 import { FrameworkOutputConfig } from './framework-output-config';
 import { RenderTextComponentResponse } from './render-component-response';
 import { handleCodegenErrors, InvalidInputError } from './errors';
 
 /**
- * This is a class for genercially rendering Studio templates.
+ * This is a class for genercially rendering FrontendManager templates.
  * The output is determined by the renderer passed into the constructor.
  */
-export class StudioTemplateRendererManager<
+export class FrontendManagerTemplateRendererManager<
   TSource,
-  TStudioType,
+  TFrontendManagerType,
   TOutputManager extends FrameworkOutputManager<TSource>,
   TRenderOutput extends RenderTextComponentResponse,
-  TRenderer extends StudioTemplateRenderer<TSource, TStudioType, TOutputManager, TRenderOutput>,
+  TRenderer extends FrontendManagerTemplateRenderer<TSource, TFrontendManagerType, TOutputManager, TRenderOutput>,
 > {
   constructor(
-    private renderer: StudioTemplateRendererFactory<TSource, TStudioType, TOutputManager, TRenderOutput, TRenderer>,
+    private renderer: FrontendManagerTemplateRendererFactory<
+      TSource,
+      TFrontendManagerType,
+      TOutputManager,
+      TRenderOutput,
+      TRenderer
+    >,
     private outputConfig: FrameworkOutputConfig,
   ) {
     const renderPath = this.outputConfig.outputPathDir;
@@ -44,7 +50,7 @@ export class StudioTemplateRendererManager<
   }
 
   @handleCodegenErrors
-  renderSchemaToTemplate(component: TStudioType | undefined): TRenderOutput {
+  renderSchemaToTemplate(component: TFrontendManagerType | undefined): TRenderOutput {
     if (!component) {
       throw new InvalidInputError('Please ensure you have passed in a valid component schema');
     }
@@ -55,7 +61,7 @@ export class StudioTemplateRendererManager<
   }
 
   @handleCodegenErrors
-  renderSchemaToTemplates(jsonSchema: TStudioType[] | undefined) {
+  renderSchemaToTemplates(jsonSchema: TFrontendManagerType[] | undefined) {
     if (!jsonSchema) {
       throw new InvalidInputError('Please ensure you have passed in a valid schema');
     }

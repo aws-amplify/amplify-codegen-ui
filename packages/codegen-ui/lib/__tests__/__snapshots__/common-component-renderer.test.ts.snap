@@ -16,7 +16,7 @@ MockComponentRenderer {
       "value": "Confirm",
     },
   },
-  "node": StudioNode {
+  "node": FrontendManagerNode {
     "component": Object {
       "componentType": "Button",
       "name": "MyButton",
@@ -26,7 +26,7 @@ MockComponentRenderer {
         },
       },
     },
-    "parent": StudioNode {
+    "parent": FrontendManagerNode {
       "component": Object {
         "componentType": "View",
         "name": "MyView",
@@ -35,7 +35,7 @@ MockComponentRenderer {
       "parent": undefined,
     },
   },
-  "parent": StudioNode {
+  "parent": FrontendManagerNode {
     "component": Object {
       "componentType": "View",
       "name": "MyView",

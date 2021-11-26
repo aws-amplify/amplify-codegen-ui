@@ -13,14 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent, StudioComponentChild } from './types';
+import { FrontendManagerComponent, FrontendManagerComponentChild } from './types';
 
-export class StudioNode {
-  component: StudioComponent | StudioComponentChild;
+export class FrontendManagerNode {
+  component: FrontendManagerComponent | FrontendManagerComponentChild;
 
-  parent?: StudioNode;
+  parent?: FrontendManagerNode;
 
-  constructor(component: StudioComponent | StudioComponentChild, parent?: StudioNode) {
+  constructor(component: FrontendManagerComponent | FrontendManagerComponentChild, parent?: FrontendManagerNode) {
     this.component = component;
     this.parent = parent;
   }
@@ -29,9 +29,9 @@ export class StudioNode {
     return this.parent === undefined;
   }
 
-  getComponentPathToRoot(): StudioNode[] {
+  getComponentPathToRoot(): FrontendManagerNode[] {
     if (this.parent !== undefined) {
-      return [this as StudioNode].concat(this.parent.getComponentPathToRoot());
+      return [this as FrontendManagerNode].concat(this.parent.getComponentPathToRoot());
     }
     return [this];
   }
@@ -42,8 +42,8 @@ export class StudioNode {
     }
 
     return this.parent.component.children
-      .filter((child: StudioComponentChild) => child.componentType === this.component.componentType)
-      .findIndex((child: StudioComponentChild) => child === this.component);
+      .filter((child: FrontendManagerComponentChild) => child.componentType === this.component.componentType)
+      .findIndex((child: FrontendManagerComponentChild) => child === this.component);
   }
 
   /**

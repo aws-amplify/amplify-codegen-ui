@@ -749,7 +749,7 @@ export default function ComplexTest2(
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(255,0,0)\\"
           position=\\"relative\\"
-          src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
+          src=\\"https://via.placeholder.com/153x289?text=Amplify+FrontendManager+is+Awesome!\\"
           height=\\"125px\\"
           {...getOverrideProps(overrides, \\"Flex.Flex[0].View[0]\\")}
         ></View>
@@ -758,7 +758,7 @@ export default function ComplexTest2(
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(219.30000364780426,255,0)\\"
           position=\\"relative\\"
-          src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
+          src=\\"https://via.placeholder.com/153x289?text=Amplify+FrontendManager+is+Awesome!\\"
           height=\\"122px\\"
           {...getOverrideProps(overrides, \\"Flex.Flex[0].View[1]\\")}
         ></View>
@@ -825,7 +825,7 @@ export default function ComplexTest3(
         padding=\\"0px 0px 0px 0px\\"
         backgroundColor=\\"rgb(196.00000351667404,196.00000351667404,196.00000351667404)\\"
         position=\\"relative\\"
-        src=\\"https://via.placeholder.com/430x452?text=Amplify+Studio+is+Awesome!\\"
+        src=\\"https://via.placeholder.com/430x452?text=Amplify+FrontendManager+is+Awesome!\\"
         height=\\"69px\\"
         {...getOverrideProps(overrides, \\"Flex.View[0]\\")}
       ></View>
@@ -892,7 +892,7 @@ export default function ComplexTest4(
           backgroundColor: \\"rgb(255,153.00000607967377,0)\\",
           top: \\"1px\\",
           left: \\"203px\\",
-          src: \\"https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!\\",
+          src: \\"https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!\\",
           width: \\"120px\\",
           position: \\"absolute\\",
           height: \\"122px\\",
@@ -902,7 +902,7 @@ export default function ComplexTest4(
           backgroundColor: \\"rgb(255,0,0)\\",
           top: \\"0px\\",
           left: \\"0px\\",
-          src: \\"https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!\\",
+          src: \\"https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!\\",
           width: \\"122px\\",
           position: \\"absolute\\",
           height: \\"123px\\",
@@ -966,7 +966,7 @@ export default function ComplexTest4(
           backgroundColor=\\"rgb(35.699965953826904,0,255)\\"
           top=\\"0px\\"
           left=\\"0px\\"
-          src=\\"https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!\\"
+          src=\\"https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!\\"
           width=\\"122px\\"
           position=\\"absolute\\"
           height=\\"123px\\"
@@ -977,7 +977,7 @@ export default function ComplexTest4(
           backgroundColor=\\"rgb(0,255,25.49997568130493)\\"
           top=\\"1px\\"
           left=\\"203px\\"
-          src=\\"https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!\\"
+          src=\\"https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!\\"
           width=\\"120px\\"
           position=\\"absolute\\"
           height=\\"122px\\"
@@ -1023,7 +1023,7 @@ export default function ComplexTest5(
         padding=\\"0px 0px 0px 0px\\"
         backgroundColor=\\"rgb(35.699965953826904,0,255)\\"
         position=\\"relative\\"
-        src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
+        src=\\"https://via.placeholder.com/240x120?text=Amplify+FrontendManager+is+Awesome!\\"
         height=\\"120px\\"
         {...getOverrideProps(overrides, \\"Flex.View[0]\\")}
       ></View>
@@ -1032,7 +1032,7 @@ export default function ComplexTest5(
         padding=\\"0px 0px 0px 0px\\"
         backgroundColor=\\"rgb(0,255,25.49997568130493)\\"
         position=\\"relative\\"
-        src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
+        src=\\"https://via.placeholder.com/240x120?text=Amplify+FrontendManager+is+Awesome!\\"
         height=\\"120px\\"
         {...getOverrideProps(overrides, \\"Flex.View[1]\\")}
       ></View>
@@ -1156,7 +1156,7 @@ export default function ComplexTest7(
         top=\\"0px\\"
         borderRadius=\\"45px\\"
         left=\\"254.15074157714844px\\"
-        src=\\"https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!\\"
+        src=\\"https://via.placeholder.com/401x192?text=Amplify+FrontendManager+is+Awesome!\\"
         width=\\"150.84925842285156px\\"
         position=\\"absolute\\"
         height=\\"196px\\"
@@ -1184,7 +1184,7 @@ export default function ComplexTest7(
         top=\\"0px\\"
         borderRadius=\\"27px\\"
         left=\\"0px\\"
-        src=\\"https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!\\"
+        src=\\"https://via.placeholder.com/401x192?text=Amplify+FrontendManager+is+Awesome!\\"
         width=\\"169.42330932617188px\\"
         position=\\"absolute\\"
         height=\\"189.0880126953125px\\"
@@ -1241,7 +1241,7 @@ export default function ComplexTest8(
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(219.30000364780426,255,0)\\"
           position=\\"relative\\"
-          src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
+          src=\\"https://via.placeholder.com/472x723?text=Amplify+FrontendManager+is+Awesome!\\"
           height=\\"119px\\"
           {...getOverrideProps(overrides, \\"Flex.Flex[0].View[0]\\")}
         ></View>
@@ -1250,7 +1250,7 @@ export default function ComplexTest8(
           padding=\\"0px 0px 0px 0px\\"
           backgroundColor=\\"rgb(255,0,0)\\"
           position=\\"relative\\"
-          src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
+          src=\\"https://via.placeholder.com/472x723?text=Amplify+FrontendManager+is+Awesome!\\"
           height=\\"124px\\"
           {...getOverrideProps(overrides, \\"Flex.Flex[0].View[1]\\")}
         ></View>

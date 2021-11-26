@@ -13,12 +13,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FixedStudioComponentProperty, BoundStudioComponentProperty } from './studio-types';
+import { FixedFrontendManagerComponentProperty, BoundFrontendManagerComponentProperty } from './frontend-manager-types';
 
 export type FixedOrBoundProps = {
-  [propertyName: string]: FixedStudioComponentProperty | BoundStudioComponentProperty;
+  [propertyName: string]: FixedFrontendManagerComponentProperty | BoundFrontendManagerComponentProperty;
 };
 
 export type WrappedComponentProperties<TPropIn> = {
-  [key in keyof TPropIn]: FixedStudioComponentProperty | BoundStudioComponentProperty;
+  [key in keyof TPropIn]: FixedFrontendManagerComponentProperty | BoundFrontendManagerComponentProperty;
 };

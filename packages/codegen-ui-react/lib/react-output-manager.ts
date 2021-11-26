@@ -31,7 +31,7 @@ export class ReactOutputManager extends FrameworkOutputManager<string> {
 
     const generatedNotice = `\
 /***************************************************************************
- * The contents of this file were generated with Amplify Studio.           *
+ * The contents of this file were generated with Amplify FrontendManager.           *
  * Please refrain from making any modifications to this file.              *
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/

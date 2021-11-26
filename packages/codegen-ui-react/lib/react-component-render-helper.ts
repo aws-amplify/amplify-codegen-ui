@@ -14,15 +14,15 @@
   limitations under the License.
  */
 import {
-  ConcatenatedStudioComponentProperty,
-  ConditionalStudioComponentProperty,
-  FixedStudioComponentProperty,
-  BoundStudioComponentProperty,
-  CollectionStudioComponentProperty,
-  WorkflowStudioComponentProperty,
-  FormStudioComponentProperty,
-  StudioComponent,
-  StudioComponentChild,
+  ConcatenatedFrontendManagerComponentProperty,
+  ConditionalFrontendManagerComponentProperty,
+  FixedFrontendManagerComponentProperty,
+  BoundFrontendManagerComponentProperty,
+  CollectionFrontendManagerComponentProperty,
+  WorkflowFrontendManagerComponentProperty,
+  FormFrontendManagerComponentProperty,
+  FrontendManagerComponent,
+  FrontendManagerComponentChild,
 } from '@aws-amplify/codegen-ui';
 
 import {
@@ -38,9 +38,9 @@ import {
 } from 'typescript';
 
 import { ImportCollection } from './import-collection';
-import { jsonToLiteral } from './react-studio-template-renderer-helper';
+import { jsonToLiteral } from './react-frontend-manager-template-renderer-helper';
 
-export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
+export function getFixedComponentPropValueExpression(prop: FixedFrontendManagerComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
 }
 
@@ -52,39 +52,45 @@ export function getComponentPropName(componentName?: string): string {
 }
 
 export type ComponentPropertyValueTypes =
-  | ConcatenatedStudioComponentProperty
-  | ConditionalStudioComponentProperty
-  | FixedStudioComponentProperty
-  | BoundStudioComponentProperty
-  | CollectionStudioComponentProperty
-  | WorkflowStudioComponentProperty
-  | FormStudioComponentProperty;
+  | ConcatenatedFrontendManagerComponentProperty
+  | ConditionalFrontendManagerComponentProperty
+  | FixedFrontendManagerComponentProperty
+  | BoundFrontendManagerComponentProperty
+  | CollectionFrontendManagerComponentProperty
+  | WorkflowFrontendManagerComponentProperty
+  | FormFrontendManagerComponentProperty;
 
-export function isFixedPropertyWithValue(prop: ComponentPropertyValueTypes): prop is FixedStudioComponentProperty {
+export function isFixedPropertyWithValue(
+  prop: ComponentPropertyValueTypes,
+): prop is FixedFrontendManagerComponentProperty {
   return 'value' in prop;
 }
 
-export function isBoundProperty(prop: ComponentPropertyValueTypes): prop is BoundStudioComponentProperty {
+export function isBoundProperty(prop: ComponentPropertyValueTypes): prop is BoundFrontendManagerComponentProperty {
   return 'bindingProperties' in prop;
 }
 
 export function isCollectionItemBoundProperty(
   prop: ComponentPropertyValueTypes,
-): prop is CollectionStudioComponentProperty {
+): prop is CollectionFrontendManagerComponentProperty {
   return 'collectionBindingProperties' in prop;
 }
 
-export function isConcatenatedProperty(prop: ComponentPropertyValueTypes): prop is ConcatenatedStudioComponentProperty {
+export function isConcatenatedProperty(
+  prop: ComponentPropertyValueTypes,
+): prop is ConcatenatedFrontendManagerComponentProperty {
   return 'concat' in prop;
 }
 
-export function isConditionalProperty(prop: ComponentPropertyValueTypes): prop is ConditionalStudioComponentProperty {
+export function isConditionalProperty(
+  prop: ComponentPropertyValueTypes,
+): prop is ConditionalFrontendManagerComponentProperty {
   return 'condition' in prop;
 }
 
 export function isDefaultValueOnly(
   prop: ComponentPropertyValueTypes,
-): prop is CollectionStudioComponentProperty | BoundStudioComponentProperty {
+): prop is CollectionFrontendManagerComponentProperty | BoundFrontendManagerComponentProperty {
   return 'defaultValue' in prop && !(isCollectionItemBoundProperty(prop) || isBoundProperty(prop));
 }
 
@@ -92,7 +98,7 @@ export function isDefaultValueOnly(
  * case: has field => <prop.bindingProperties.property>?.<prop.bindingProperties.field>
  * case: no field =>  <prop.bindingProperties.property>
  */
-export function buildBindingExpression(prop: BoundStudioComponentProperty): Expression {
+export function buildBindingExpression(prop: BoundFrontendManagerComponentProperty): Expression {
   return prop.bindingProperties.field === undefined
     ? factory.createIdentifier(prop.bindingProperties.property)
     : factory.createPropertyAccessChain(
@@ -102,13 +108,13 @@ export function buildBindingExpression(prop: BoundStudioComponentProperty): Expr
       );
 }
 
-export function buildBindingAttr(prop: BoundStudioComponentProperty, propName: string): JsxAttribute {
+export function buildBindingAttr(prop: BoundFrontendManagerComponentProperty, propName: string): JsxAttribute {
   const expr = buildBindingExpression(prop);
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
 export function buildBindingWithDefaultExpression(
-  prop: BoundStudioComponentProperty,
+  prop: BoundFrontendManagerComponentProperty,
   defaultValue: string,
 ): Expression {
   const rightExpr = factory.createStringLiteral(defaultValue);
@@ -125,7 +131,7 @@ export function buildBindingWithDefaultExpression(
 }
 
 export function buildBindingAttrWithDefault(
-  prop: BoundStudioComponentProperty,
+  prop: BoundFrontendManagerComponentProperty,
   propName: string,
   defaultValue: string,
 ): JsxAttribute {
@@ -136,7 +142,7 @@ export function buildBindingAttrWithDefault(
   );
 }
 
-export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
+export function buildFixedJsxExpression(prop: FixedFrontendManagerComponentProperty): StringLiteral | JsxExpression {
   const { value, type } = prop;
   switch (typeof value) {
     case 'number':
@@ -175,18 +181,21 @@ export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): Str
   }
 }
 
-export function buildFixedAttr(prop: FixedStudioComponentProperty, propName: string): JsxAttribute {
+export function buildFixedAttr(prop: FixedFrontendManagerComponentProperty, propName: string): JsxAttribute {
   const expr = buildFixedJsxExpression(prop);
   return factory.createJsxAttribute(factory.createIdentifier(propName), expr);
 }
 
-export function buildCollectionBindingExpression(prop: CollectionStudioComponentProperty): Expression {
+export function buildCollectionBindingExpression(prop: CollectionFrontendManagerComponentProperty): Expression {
   return prop.collectionBindingProperties.field === undefined
     ? factory.createIdentifier('item')
     : factory.createPropertyAccessExpression(factory.createIdentifier('item'), prop.collectionBindingProperties.field);
 }
 
-export function buildCollectionBindingAttr(prop: CollectionStudioComponentProperty, propName: string): JsxAttribute {
+export function buildCollectionBindingAttr(
+  prop: CollectionFrontendManagerComponentProperty,
+  propName: string,
+): JsxAttribute {
   const expr = buildCollectionBindingExpression(prop);
   const attr = factory.createJsxAttribute(
     factory.createIdentifier(propName),
@@ -196,7 +205,7 @@ export function buildCollectionBindingAttr(prop: CollectionStudioComponentProper
 }
 
 export function buildCollectionBindingWithDefaultExpression(
-  prop: CollectionStudioComponentProperty,
+  prop: CollectionFrontendManagerComponentProperty,
   defaultValue: string,
 ): Expression {
   const rightExpr = factory.createStringLiteral(defaultValue);
@@ -212,7 +221,7 @@ export function buildCollectionBindingWithDefaultExpression(
 }
 
 export function buildCollectionBindingAttrWithDefault(
-  prop: CollectionStudioComponentProperty,
+  prop: CollectionFrontendManagerComponentProperty,
   propName: string,
   defaultValue: string,
 ): JsxAttribute {
@@ -224,7 +233,7 @@ export function buildCollectionBindingAttrWithDefault(
   return attr;
 }
 
-export function buildConcatExpression(prop: ConcatenatedStudioComponentProperty): Expression {
+export function buildConcatExpression(prop: ConcatenatedFrontendManagerComponentProperty): Expression {
   const expressions: Expression[] = [];
   prop.concat.forEach((propItem) => {
     if (isFixedPropertyWithValue(propItem)) {
@@ -256,7 +265,7 @@ export function buildConcatExpression(prop: ConcatenatedStudioComponentProperty)
   return factory.createTemplateExpression(factory.createTemplateHead('', ''), templateSpans);
 }
 
-export function buildConcatAttr(prop: ConcatenatedStudioComponentProperty, propName: string): JsxAttribute {
+export function buildConcatAttr(prop: ConcatenatedFrontendManagerComponentProperty, propName: string): JsxAttribute {
   const expr = buildConcatExpression(prop);
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
@@ -326,7 +335,7 @@ export function getConditionalOperandExpression(operand: string | number | boole
   }
 }
 
-export function buildConditionalExpression(prop: ConditionalStudioComponentProperty): JsxExpression {
+export function buildConditionalExpression(prop: ConditionalFrontendManagerComponentProperty): JsxExpression {
   const { property, field, operand, operator, then } = prop.condition;
   const elseBlock = prop.condition.else;
   const operatorToken = getSyntaxKindToken(operator);
@@ -362,7 +371,10 @@ export function buildConditionalExpression(prop: ConditionalStudioComponentPrope
   );
 }
 
-export function buildConditionalAttr(prop: ConditionalStudioComponentProperty, propName: string): JsxAttribute {
+export function buildConditionalAttr(
+  prop: ConditionalFrontendManagerComponentProperty,
+  propName: string,
+): JsxAttribute {
   const expr = buildConditionalExpression(prop);
   return factory.createJsxAttribute(factory.createIdentifier(propName), expr);
 }
@@ -450,7 +462,7 @@ export function buildOpeningElementActions(genericEventBinding: string, action: 
 }
 
 export function addBindingPropertiesImports(
-  component: StudioComponent | StudioComponentChild,
+  component: FrontendManagerComponent | FrontendManagerComponentChild,
   importCollection: ImportCollection,
 ) {
   if ('bindingProperties' in component) {

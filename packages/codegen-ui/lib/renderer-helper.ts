@@ -14,23 +14,23 @@
   limitations under the License.
  */
 import {
-  StudioComponent,
-  StudioComponentChild,
-  StudioComponentDataPropertyBinding,
-  StudioComponentAuthPropertyBinding,
-  StudioComponentStoragePropertyBinding,
-  StudioComponentEventPropertyBinding,
-  StudioComponentSimplePropertyBinding,
-  StudioComponentPropertyType,
+  FrontendManagerComponent,
+  FrontendManagerComponentChild,
+  FrontendManagerComponentDataPropertyBinding,
+  FrontendManagerComponentAuthPropertyBinding,
+  FrontendManagerComponentStoragePropertyBinding,
+  FrontendManagerComponentEventPropertyBinding,
+  FrontendManagerComponentSimplePropertyBinding,
+  FrontendManagerComponentPropertyType,
 } from './types';
 
-export const StudioRendererConstants = {
+export const FrontendManagerRendererConstants = {
   unknownName: 'unknown_component_name',
 };
 
-export function isStudioComponentWithBinding(
-  component: StudioComponent | StudioComponentChild,
-): component is StudioComponent {
+export function isFrontendManagerComponentWithBinding(
+  component: FrontendManagerComponent | FrontendManagerComponentChild,
+): component is FrontendManagerComponent {
   return 'bindingProperties' in component;
 }
 
@@ -38,72 +38,72 @@ export function isStudioComponentWithBinding(
  * Verify if this is 1) a type that has the collectionProperties, and 2) that the collection
  * properties object is set. Then provide the typehint back to the compiler that this attribute exists.
  */
-export function isStudioComponentWithCollectionProperties(
-  component: StudioComponent | StudioComponentChild,
-): component is StudioComponent & Required<Pick<StudioComponent, 'collectionProperties'>> {
+export function isFrontendManagerComponentWithCollectionProperties(
+  component: FrontendManagerComponent | FrontendManagerComponentChild,
+): component is FrontendManagerComponent & Required<Pick<FrontendManagerComponent, 'collectionProperties'>> {
   return 'collectionProperties' in component && component.collectionProperties !== undefined;
 }
 
-export function isStudioComponentWithVariants(
-  component: StudioComponent | StudioComponentChild,
-): component is StudioComponent & Required<Pick<StudioComponent, 'variants'>> {
+export function isFrontendManagerComponentWithVariants(
+  component: FrontendManagerComponent | FrontendManagerComponentChild,
+): component is FrontendManagerComponent & Required<Pick<FrontendManagerComponent, 'variants'>> {
   return 'variants' in component && component.variants !== undefined && component.variants.length > 0;
 }
 
-export function isStudioComponentWithActions(
-  component: StudioComponent | StudioComponentChild,
-): component is StudioComponent & Required<Pick<StudioComponent, 'actions'>> {
+export function isFrontendManagerComponentWithActions(
+  component: FrontendManagerComponent | FrontendManagerComponentChild,
+): component is FrontendManagerComponent & Required<Pick<FrontendManagerComponent, 'actions'>> {
   return 'actions' in component && component.actions !== undefined;
 }
 
 export function isDataPropertyBinding(
   prop:
-    | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
-    | StudioComponentStoragePropertyBinding
-    | StudioComponentEventPropertyBinding
-    | StudioComponentSimplePropertyBinding,
-): prop is StudioComponentDataPropertyBinding {
+    | FrontendManagerComponentDataPropertyBinding
+    | FrontendManagerComponentAuthPropertyBinding
+    | FrontendManagerComponentStoragePropertyBinding
+    | FrontendManagerComponentEventPropertyBinding
+    | FrontendManagerComponentSimplePropertyBinding,
+): prop is FrontendManagerComponentDataPropertyBinding {
   return 'type' in prop && prop.type === 'Data';
 }
 
 export function isAuthPropertyBinding(
   prop:
-    | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
-    | StudioComponentStoragePropertyBinding
-    | StudioComponentEventPropertyBinding
-    | StudioComponentSimplePropertyBinding,
-): prop is StudioComponentAuthPropertyBinding {
+    | FrontendManagerComponentDataPropertyBinding
+    | FrontendManagerComponentAuthPropertyBinding
+    | FrontendManagerComponentStoragePropertyBinding
+    | FrontendManagerComponentEventPropertyBinding
+    | FrontendManagerComponentSimplePropertyBinding,
+): prop is FrontendManagerComponentAuthPropertyBinding {
   return 'type' in prop && prop.type === 'Authentication';
 }
 
 export function isStoragePropertyBinding(
   prop:
-    | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
-    | StudioComponentStoragePropertyBinding
-    | StudioComponentEventPropertyBinding
-    | StudioComponentSimplePropertyBinding,
-): prop is StudioComponentStoragePropertyBinding {
+    | FrontendManagerComponentDataPropertyBinding
+    | FrontendManagerComponentAuthPropertyBinding
+    | FrontendManagerComponentStoragePropertyBinding
+    | FrontendManagerComponentEventPropertyBinding
+    | FrontendManagerComponentSimplePropertyBinding,
+): prop is FrontendManagerComponentStoragePropertyBinding {
   return 'type' in prop && prop.type === 'Storage';
 }
 
 export function isSimplePropertyBinding(
   prop:
-    | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
-    | StudioComponentStoragePropertyBinding
-    | StudioComponentEventPropertyBinding
-    | StudioComponentSimplePropertyBinding,
-): prop is StudioComponentSimplePropertyBinding {
+    | FrontendManagerComponentDataPropertyBinding
+    | FrontendManagerComponentAuthPropertyBinding
+    | FrontendManagerComponentStoragePropertyBinding
+    | FrontendManagerComponentEventPropertyBinding
+    | FrontendManagerComponentSimplePropertyBinding,
+): prop is FrontendManagerComponentSimplePropertyBinding {
   return (
     'type' in prop &&
     [
-      StudioComponentPropertyType.Boolean.toString(),
-      StudioComponentPropertyType.Number.toString(),
-      StudioComponentPropertyType.String.toString(),
-      StudioComponentPropertyType.Date.toString(),
+      FrontendManagerComponentPropertyType.Boolean.toString(),
+      FrontendManagerComponentPropertyType.Number.toString(),
+      FrontendManagerComponentPropertyType.String.toString(),
+      FrontendManagerComponentPropertyType.Date.toString(),
     ].includes(prop.type)
   );
 }
