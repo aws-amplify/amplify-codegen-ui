@@ -14,18 +14,19 @@
   limitations under the License.
  */
 import { ReactRenderConfig } from '..';
-import { ReactIndexStudioTemplateRenderer } from '../react-index-studio-template-renderer';
+import { ReactIndexFrontendManagerTemplateRenderer } from '../react-index-frontend-manager-template-renderer';
 
-class ReactIndexStudioTemplateRendererWithExposedRenderConfig extends ReactIndexStudioTemplateRenderer {
+// eslint-disable-next-line max-len
+class ReactIndexFrontendManagerTemplateRendererWithExposedRenderConfig extends ReactIndexFrontendManagerTemplateRenderer {
   getRenderConfig(): ReactRenderConfig {
     return this.renderConfig;
   }
 }
 
-describe('ReactIndexStudioTemplateRenderer', () => {
+describe('ReactIndexFrontendManagerTemplateRenderer', () => {
   describe('constructor', () => {
     test('overrides renderTypeDeclarations to false', () => {
-      const renderer = new ReactIndexStudioTemplateRendererWithExposedRenderConfig([], {
+      const renderer = new ReactIndexFrontendManagerTemplateRendererWithExposedRenderConfig([], {
         renderTypeDeclarations: true,
       });
       expect(renderer.getRenderConfig().renderTypeDeclarations).toBeFalsy();

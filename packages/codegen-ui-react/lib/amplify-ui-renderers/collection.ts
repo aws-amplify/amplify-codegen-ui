@@ -14,12 +14,15 @@
   limitations under the License.
  */
 import { BaseComponentProps } from '@aws-amplify/ui-react';
-import { isStudioComponentWithCollectionProperties, StudioComponentChild } from '@aws-amplify/codegen-ui';
+import {
+  isFrontendManagerComponentWithCollectionProperties,
+  FrontendManagerComponentChild,
+} from '@aws-amplify/codegen-ui';
 import { factory, JsxChild, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 
 export default class CollectionRenderer extends ReactComponentWithChildrenRenderer<BaseComponentProps> {
-  renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
+  renderElement(renderChildren: (children: FrontendManagerComponentChild[]) => JsxChild[]): JsxElement {
     this.addKeyPropertyToChildren(this.component.children ?? []);
     const childrenJsx = this.component.children ? renderChildren(this.component.children ?? []) : [];
 
@@ -36,8 +39,8 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
     return element;
   }
 
-  private addKeyPropertyToChildren(children: StudioComponentChild[]) {
-    children.forEach((child: StudioComponentChild) => {
+  private addKeyPropertyToChildren(children: FrontendManagerComponentChild[]) {
+    children.forEach((child: FrontendManagerComponentChild) => {
       if ('key' in child.properties) {
         return;
       }
@@ -52,7 +55,7 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
   }
 
   private findItemsVariableName(): string | undefined {
-    if (isStudioComponentWithCollectionProperties(this.component)) {
+    if (isFrontendManagerComponentWithCollectionProperties(this.component)) {
       const collectionProps = Object.entries(this.component.collectionProperties ?? {});
       return collectionProps.length > 0 ? collectionProps[0][0] : undefined;
     }

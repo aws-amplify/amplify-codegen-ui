@@ -16,13 +16,13 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 
 import { factory, JsxAttribute, JsxAttributeLike, JsxSelfClosingElement } from 'typescript';
-import { StudioRendererConstants } from '@aws-amplify/codegen-ui';
+import { FrontendManagerRendererConstants } from '@aws-amplify/codegen-ui';
 import { ReactComponentRenderer } from '../react-component-renderer';
 
 export default class SampleCodeRenderer extends ReactComponentRenderer<BaseComponentProps> {
   renderElement(): JsxSelfClosingElement {
-    const tagName = this.component.name ?? StudioRendererConstants.unknownName;
-    // const prop = new Map<string, BoundStudioComponentProperty>();
+    const tagName = this.component.name ?? FrontendManagerRendererConstants.unknownName;
+    // const prop = new Map<string, BoundFrontendManagerComponentProperty>();
     // this.collectExposedProps(this.component, prop);
 
     const propsArray: JsxAttribute[] = [];
@@ -46,8 +46,11 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
     );
   }
 
-  /*  TODO:  Switch over to boundProperties
-  private collectExposedProps(component: StudioComponent, collected: Map<string, StudioComponentProperty>) {
+  /*
+  private collectExposedProps(
+    component: FrontendManagerComponent,
+    collected: Map<string, FrontendManagerComponentProperty>,
+  ) {
     const moreItems = Object.entries(component.properties).filter((m) => !(m[1].exposedAs == null));
     moreItems?.forEach((value, index) => {
       if (!collected.has(value[0])) {

@@ -22,7 +22,7 @@
                 "value": "0px"
               },
               "src": {
-                "value": "https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!"
+                "value": "https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!"
               },
               "width": {
                 "value": "122px"
@@ -53,7 +53,7 @@
                 "value": "203px"
               },
               "src": {
-                "value": "https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!"
+                "value": "https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!"
               },
               "width": {
                 "value": "120px"
@@ -132,7 +132,7 @@
             "backgroundColor": "rgb(255,153.00000607967377,0)",
             "top": "1px",
             "left": "203px",
-            "src": "https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!",
+            "src": "https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!",
             "width": "120px",
             "position": "absolute",
             "height": "122px"
@@ -142,7 +142,7 @@
             "backgroundColor": "rgb(255,0,0)",
             "top": "0px",
             "left": "0px",
-            "src": "https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!",
+            "src": "https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!",
             "width": "122px",
             "position": "absolute",
             "height": "123px"

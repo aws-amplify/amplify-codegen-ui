@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioNode, StudioComponent, StudioComponentChild } from '@aws-amplify/codegen-ui';
+import { FrontendManagerNode, FrontendManagerComponent, FrontendManagerComponentChild } from '@aws-amplify/codegen-ui';
 import { JsxElement, JsxFragment, JsxSelfClosingElement } from 'typescript';
 // add primitives in alphabetical order
 import {
@@ -55,19 +55,20 @@ import {
 } from '@aws-amplify/ui-react';
 import Primitive, { isBuiltInIcon } from '../primitive';
 import { iconsetPascalNameMapping } from '../iconset';
-import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
+import { ReactFrontendManagerTemplateRenderer } from '../react-frontend-manager-template-renderer';
 import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 import { ReactComponentRenderer } from '../react-component-renderer';
 
-export class AmplifyRenderer extends ReactStudioTemplateRenderer {
+export class AmplifyRenderer extends ReactFrontendManagerTemplateRenderer {
   renderJsx(
-    component: StudioComponent | StudioComponentChild,
-    parent?: StudioNode,
+    component: FrontendManagerComponent | FrontendManagerComponentChild,
+    parent?: FrontendManagerNode,
   ): JsxElement | JsxFragment | JsxSelfClosingElement {
-    const node = new StudioNode(component, parent);
-    const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
+    const node = new FrontendManagerNode(component, parent);
+    const renderChildren = (children: FrontendManagerComponentChild[]) =>
+      children.map((child) => this.renderJsx(child, node));
 
     if (isBuiltInIcon(component.componentType)) {
       return new ReactComponentWithChildrenRenderer<IconProps>(

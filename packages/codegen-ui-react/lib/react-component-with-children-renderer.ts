@@ -15,9 +15,9 @@
  */
 import {
   ComponentWithChildrenRendererBase,
-  StudioNode,
-  StudioComponent,
-  StudioComponentChild,
+  FrontendManagerNode,
+  FrontendManagerComponent,
+  FrontendManagerComponentChild,
 } from '@aws-amplify/codegen-ui';
 import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
 import { ImportCollection } from './import-collection';
@@ -34,16 +34,16 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
   JsxChild
 > {
   constructor(
-    component: StudioComponent | StudioComponentChild,
+    component: FrontendManagerComponent | FrontendManagerComponentChild,
     protected importCollection: ImportCollection,
-    protected parent?: StudioNode,
+    protected parent?: FrontendManagerNode,
   ) {
     super(component, parent);
     this.mapSyntheticProps();
     addBindingPropertiesImports(component, importCollection);
   }
 
-  renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
+  renderElement(renderChildren: (children: FrontendManagerComponentChild[]) => JsxChild[]): JsxElement {
     const children = this.component.children ?? [];
 
     const element = factory.createJsxElement(
@@ -141,12 +141,13 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
     attributes.push(attr);
   }
 
-  /* Some additional props are added to Amplify primitives in Studio. These "sythetic" props are mapped to real props
-   * on the primitives.
+  /* Some additional props are added to Amplify primitives in FrontendManager.
+   * These "sythetic" props are mapped to real props on the primitives.
    *
    * Example: Text prop label is mapped to to Text prop Children
    *
-   * This is done so that nonadvanced users of Studio do not need to interact with props that might confuse them.
+   * This is done so that nonadvanced users of FrontendManager do not need to
+   * interact with props that might confuse them.
    */
   private mapSyntheticProps() {
     // properties.children will take precedent over mapped children prop

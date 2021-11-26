@@ -14,22 +14,22 @@
   limitations under the License.
  */
 import {
-  StudioTemplateRenderer,
-  StudioRendererConstants,
-  isStudioComponentWithBinding,
+  FrontendManagerTemplateRenderer,
+  FrontendManagerRendererConstants,
+  isFrontendManagerComponentWithBinding,
   isSimplePropertyBinding,
   isDataPropertyBinding,
   isAuthPropertyBinding,
-  isStudioComponentWithCollectionProperties,
-  isStudioComponentWithVariants,
-  isStudioComponentWithActions,
-  StudioComponent,
-  StudioComponentPredicate,
-  StudioComponentAuthPropertyBinding,
-  StudioComponentSort,
-  StudioComponentVariant,
-  StudioComponentAction,
-  StudioComponentSimplePropertyBinding,
+  isFrontendManagerComponentWithCollectionProperties,
+  isFrontendManagerComponentWithVariants,
+  isFrontendManagerComponentWithActions,
+  FrontendManagerComponent,
+  FrontendManagerComponentPredicate,
+  FrontendManagerComponentAuthPropertyBinding,
+  FrontendManagerComponentSort,
+  FrontendManagerComponentVariant,
+  FrontendManagerComponentAction,
+  FrontendManagerComponentSimplePropertyBinding,
   handleCodegenErrors,
 } from '@aws-amplify/codegen-ui';
 
@@ -71,13 +71,13 @@ import {
   json,
   jsonToLiteral,
   bindingPropertyUsesHook,
-} from './react-studio-template-renderer-helper';
+} from './react-frontend-manager-template-renderer-helper';
 import Primitive, { isPrimitive, PrimitiveTypeParameter, isBuiltInIcon } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
 
-export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
+export abstract class ReactFrontendManagerTemplateRenderer extends FrontendManagerTemplateRenderer<
   string,
-  StudioComponent,
+  FrontendManagerComponent,
   ReactOutputManager,
   {
     componentText: string;
@@ -90,7 +90,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   fileName = `${this.component.name}.tsx`;
 
-  constructor(component: StudioComponent, renderConfig: ReactRenderConfig) {
+  constructor(component: FrontendManagerComponent, renderConfig: ReactRenderConfig) {
     super(component, new ReactOutputManager(), renderConfig);
     this.renderConfig = {
       ...defaultRenderConfig,
@@ -104,7 +104,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   renderSampleCodeSnippet() {
     const jsx = this.renderSampleCodeSnippetJsx(this.component);
     const imports = this.importCollection.buildSampleSnippetImports(
-      this.component.name ?? StudioRendererConstants.unknownName,
+      this.component.name ?? FrontendManagerRendererConstants.unknownName,
     );
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
@@ -135,7 +135,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     const wrappedFunction = this.renderFunctionWrapper(
-      this.component.name ?? StudioRendererConstants.unknownName,
+      this.component.name ?? FrontendManagerRendererConstants.unknownName,
       jsx,
       false,
     );
@@ -156,7 +156,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const jsx = this.renderJsx(this.component);
 
     const wrappedFunction = this.renderFunctionWrapper(
-      this.component.name ?? StudioRendererConstants.unknownName,
+      this.component.name ?? FrontendManagerRendererConstants.unknownName,
       jsx,
       true,
     );
@@ -272,11 +272,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return wrapper;
   }
 
-  renderSampleCodeSnippetJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement {
+  renderSampleCodeSnippetJsx(component: FrontendManagerComponent): JsxElement | JsxFragment | JsxSelfClosingElement {
     return new SampleCodeRenderer(component, this.importCollection).renderElement();
   }
 
-  renderBindingPropsType(component: StudioComponent): TypeAliasDeclaration {
+  renderBindingPropsType(component: FrontendManagerComponent): TypeAliasDeclaration {
     const escapeHatchTypeNode = factory.createTypeLiteralNode([
       factory.createPropertySignature(
         undefined,
@@ -312,7 +312,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private buildBasePropNode(component: StudioComponent): TypeNode | undefined {
+  private buildBasePropNode(component: FrontendManagerComponent): TypeNode | undefined {
     const propsType = this.getPropsTypeName(component);
 
     const componentIsPrimitive = isPrimitive(component.componentType);
@@ -343,8 +343,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
        size?: "large",
      }
    */
-  private buildVariantPropNode(component: StudioComponent): TypeNode | undefined {
-    if (!isStudioComponentWithVariants(component)) {
+  private buildVariantPropNode(component: FrontendManagerComponent): TypeNode | undefined {
+    if (!isFrontendManagerComponentWithVariants(component)) {
       return undefined;
     }
     const variantValues = component.variants.map((variant) => variant.variantValues);
@@ -395,10 +395,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return factory.createTypeLiteralNode([...requiredProperties, ...optionalProperties]);
   }
 
-  private buildComponentPropNode(component: StudioComponent): TypeNode | undefined {
+  private buildComponentPropNode(component: FrontendManagerComponent): TypeNode | undefined {
     const propSignatures: PropertySignature[] = [];
     const bindingProps = component.bindingProperties;
-    if (bindingProps === undefined || !isStudioComponentWithBinding(component)) {
+    if (bindingProps === undefined || !isFrontendManagerComponentWithBinding(component)) {
       return undefined;
     }
     for (const bindingProp of Object.entries(component.bindingProperties)) {
@@ -436,10 +436,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return factory.createTypeLiteralNode(propSignatures);
   }
 
-  private buildVariableStatements(component: StudioComponent): Statement[] {
+  private buildVariableStatements(component: FrontendManagerComponent): Statement[] {
     const statements: Statement[] = [];
     const elements: BindingElement[] = [];
-    if (isStudioComponentWithBinding(component)) {
+    if (isFrontendManagerComponentWithBinding(component)) {
       Object.entries(component.bindingProperties).forEach((entry) => {
         const [propName, binding] = entry;
         if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding)) {
@@ -503,16 +503,16 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
     statements.push(statement);
 
-    if (isStudioComponentWithVariants(component)) {
+    if (isFrontendManagerComponentWithVariants(component)) {
       statements.push(this.buildVariantDeclaration(component.variants));
       // TODO: In components, replace props.override with override (defined here).
     }
 
-    if (isStudioComponentWithVariants(component)) {
+    if (isFrontendManagerComponentWithVariants(component)) {
       statements.push(this.buildMergeOverridesFunction());
     }
 
-    statements.push(this.buildOverridesDeclaration(isStudioComponentWithVariants(component)));
+    statements.push(this.buildOverridesDeclaration(isFrontendManagerComponentWithVariants(component)));
 
     const authStatement = this.buildUseAuthenticatedUserStatement(component);
     if (authStatement !== undefined) {
@@ -538,8 +538,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return statements;
   }
 
-  private buildUseAuthenticatedUserStatement(component: StudioComponent): Statement | undefined {
-    if (isStudioComponentWithBinding(component)) {
+  private buildUseAuthenticatedUserStatement(component: FrontendManagerComponent): Statement | undefined {
+    if (isFrontendManagerComponentWithBinding(component)) {
       const authPropertyBindings = Object.entries(component.bindingProperties).filter(([, binding]) =>
         isAuthPropertyBinding(binding),
       );
@@ -550,7 +550,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           authPropertyBindings.map(([propName, binding]) => {
             const {
               bindingProperties: { userAttribute },
-            } = binding as StudioComponentAuthPropertyBinding;
+            } = binding as FrontendManagerComponentAuthPropertyBinding;
             let propertyName: undefined | Identifier | ComputedPropertyName = factory.createIdentifier(userAttribute);
             if (userAttribute.startsWith('custom:')) {
               propertyName = factory.createComputedPropertyName(factory.createStringLiteral(userAttribute));
@@ -606,7 +606,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
      }
    ];
    */
-  private buildVariantDeclaration(variants: StudioComponentVariant[]): VariableStatement {
+  private buildVariantDeclaration(variants: FrontendManagerComponentVariant[]): VariableStatement {
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -883,10 +883,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private buildCollectionBindingStatements(component: StudioComponent): Statement[] {
+  private buildCollectionBindingStatements(component: FrontendManagerComponent): Statement[] {
     const statements: Statement[] = [];
 
-    if (isStudioComponentWithCollectionProperties(component)) {
+    if (isFrontendManagerComponentWithCollectionProperties(component)) {
       Object.entries(component.collectionProperties).forEach((collectionProp) => {
         const [propName, { model, sort, predicate }] = collectionProp;
         if (predicate) {
@@ -942,7 +942,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private buildUseDataStoreBindingStatements(component: StudioComponent): Statement[] {
+  private buildUseDataStoreBindingStatements(component: FrontendManagerComponent): Statement[] {
     const statements: Statement[] = [];
 
     // generate for single record binding
@@ -1061,7 +1061,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    *   sort: (s: SortPredicate<User>) => s.firstName('DESCENDING').lastName('ASCENDING')
    * }
    */
-  private buildPaginationStatement(propName: string, model: string, sort?: StudioComponentSort[]): VariableStatement {
+  private buildPaginationStatement(
+    propName: string,
+    model: string,
+    sort?: FrontendManagerComponentSort[],
+  ): VariableStatement {
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -1092,7 +1096,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   /**
    * (s: SortPredicate<User>) => s.firstName('ASCENDING').lastName('DESCENDING')
    */
-  private buildSortFunction(model: string, sort: StudioComponentSort[]): ArrowFunction {
+  private buildSortFunction(model: string, sort: FrontendManagerComponentSort[]): ArrowFunction {
     const ascendingSortDirection = factory.createPropertyAccessExpression(
       factory.createIdentifier('SortDirection'),
       factory.createIdentifier('ASCENDING'),
@@ -1143,8 +1147,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    *   },
    * });
    */
-  private buildUseActionsStatement(component: StudioComponent): Statement | undefined {
-    if (isStudioComponentWithActions(component)) {
+  private buildUseActionsStatement(component: FrontendManagerComponent): Statement | undefined {
+    if (isFrontendManagerComponentWithActions(component)) {
       return factory.createVariableStatement(
         undefined,
         factory.createVariableDeclarationList(
@@ -1206,15 +1210,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     ]);
   }
 
-  private predicateToObjectLiteralExpression(predicate: StudioComponentPredicate): ObjectLiteralExpression {
+  private predicateToObjectLiteralExpression(predicate: FrontendManagerComponentPredicate): ObjectLiteralExpression {
     return factory.createObjectLiteralExpression(
       Object.entries(predicate).map(([key, value]) => {
         return factory.createPropertyAssignment(
           factory.createIdentifier(key),
           key === 'and' || key === 'or'
             ? factory.createArrayLiteralExpression(
-                (value as StudioComponentPredicate[]).map(
-                  (pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred),
+                (value as FrontendManagerComponentPredicate[]).map(
+                  (pred: FrontendManagerComponentPredicate) => this.predicateToObjectLiteralExpression(pred),
                   false,
                 ),
               )
@@ -1224,12 +1228,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private actionsToObjectLiteralExpression(actions: { [actionName: string]: StudioComponentAction }) {
+  private actionsToObjectLiteralExpression(actions: { [actionName: string]: FrontendManagerComponentAction }) {
     // TODO: support property bindings
     return jsonToLiteral(actions as json);
   }
 
-  private buildPredicateDeclaration(name: string, predicate: StudioComponentPredicate): VariableStatement {
+  private buildPredicateDeclaration(name: string, predicate: FrontendManagerComponentPredicate): VariableStatement {
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -1246,7 +1250,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private hasCollectionPropertyNamedItems(component: StudioComponent): boolean {
+  private hasCollectionPropertyNamedItems(component: FrontendManagerComponent): boolean {
     if (component.collectionProperties === undefined) {
       return false;
     }
@@ -1269,7 +1273,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return `${propName}DataStore`;
   }
 
-  private getPropsTypeName(component: StudioComponent): string {
+  private getPropsTypeName(component: FrontendManagerComponent): string {
     if (isBuiltInIcon(component.componentType)) {
       return 'IconProps';
     }
@@ -1281,7 +1285,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private getDefaultValue(
-    binding: StudioComponentSimplePropertyBinding,
+    binding: FrontendManagerComponentSimplePropertyBinding,
   ): LiteralExpression | BooleanLiteral | undefined {
     if (binding.defaultValue !== undefined) {
       switch (binding.type) {
@@ -1298,5 +1302,5 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return undefined;
   }
 
-  abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement;
+  abstract renderJsx(component: FrontendManagerComponent): JsxElement | JsxFragment | JsxSelfClosingElement;
 }
