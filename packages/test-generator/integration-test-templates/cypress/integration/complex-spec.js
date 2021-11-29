@@ -51,11 +51,7 @@ describe('Complex Components', () => {
                   'style',
                   'background-color: rgb(255, 0, 0); height: 125px; padding: 0px; position: relative; width: 123px;',
                 )
-                .should(
-                  'have.attr',
-                  'src',
-                  'https://via.placeholder.com/153x289?text=Amplify+FrontendManager+is+Awesome!',
-                );
+                .should('have.attr', 'src', 'https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!');
               cy.get('div')
                 .eq(1)
                 .should(
@@ -63,11 +59,7 @@ describe('Complex Components', () => {
                   'style',
                   'background-color: rgb(219, 255, 0); height: 122px; padding: 0px; position: relative; width: 123px;',
                 )
-                .should(
-                  'have.attr',
-                  'src',
-                  'https://via.placeholder.com/153x289?text=Amplify+FrontendManager+is+Awesome!',
-                );
+                .should('have.attr', 'src', 'https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!');
             });
         });
     });
@@ -95,7 +87,7 @@ describe('Complex Components', () => {
             .should('have.text', 'Hello World!');
 
           cy.get('div')
-            .should('have.attr', 'src', 'https://via.placeholder.com/430x452?text=Amplify+FrontendManager+is+Awesome!')
+            .should('have.attr', 'src', 'https://via.placeholder.com/430x452?text=Amplify+Studio+is+Awesome!')
             .should(
               'have.attr',
               'style',
@@ -135,11 +127,7 @@ describe('Complex Components', () => {
             .within(() => {
               cy.get('div')
                 .eq(0)
-                .should(
-                  'have.attr',
-                  'src',
-                  'https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!',
-                )
+                .should('have.attr', 'src', 'https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!')
                 .should(
                   'have.attr',
                   'style',
@@ -148,11 +136,7 @@ describe('Complex Components', () => {
                 );
               cy.get('div')
                 .eq(1)
-                .should(
-                  'have.attr',
-                  'src',
-                  'https://via.placeholder.com/323x123?text=Amplify+FrontendManager+is+Awesome!',
-                )
+                .should('have.attr', 'src', 'https://via.placeholder.com/323x123?text=Amplify+Studio+is+Awesome!')
                 .should(
                   'have.attr',
                   'style',
@@ -177,7 +161,7 @@ describe('Complex Components', () => {
         .within(() => {
           cy.get('div')
             .eq(0)
-            .should('have.attr', 'src', 'https://via.placeholder.com/240x120?text=Amplify+FrontendManager+is+Awesome!')
+            .should('have.attr', 'src', 'https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!')
             .should(
               'have.attr',
               'style',
@@ -185,7 +169,7 @@ describe('Complex Components', () => {
             );
           cy.get('div')
             .eq(1)
-            .should('have.attr', 'src', 'https://via.placeholder.com/240x120?text=Amplify+FrontendManager+is+Awesome!')
+            .should('have.attr', 'src', 'https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!')
             .should(
               'have.attr',
               'style',
@@ -253,8 +237,8 @@ describe('Complex Components', () => {
               // eslint-disable-next-line max-len
               'border: 4px solid rgb(0, 0, 0); border-radius: 45px; height: 196px; left: 254.151px; padding: 0px; position: absolute; top: 0px; width: 150.849px;',
             )
-            .should('have.attr', 'src', 'https://via.placeholder.com/401x192?text=Amplify+FrontendManager+is+Awesome!')
-            .should('have.attr', 'alt', 'Amplify FrontendManager is Awesome!');
+            .should('have.attr', 'src', 'https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!')
+            .should('have.attr', 'alt', 'Amplify Studio is Awesome!');
 
           cy.get('.amplify-text')
             .should(
@@ -273,8 +257,8 @@ describe('Complex Components', () => {
               // eslint-disable-next-line max-len
               'border: 4px solid rgb(0, 0, 0); border-radius: 27px; height: 189.088px; left: 0px; padding: 0px; position: absolute; top: 0px; width: 169.423px;',
             )
-            .should('have.attr', 'src', 'https://via.placeholder.com/401x192?text=Amplify+FrontendManager+is+Awesome!')
-            .should('have.attr', 'alt', 'Amplify FrontendManager is Awesome!');
+            .should('have.attr', 'src', 'https://via.placeholder.com/401x192?text=Amplify+Studio+is+Awesome!')
+            .should('have.attr', 'alt', 'Amplify Studio is Awesome!');
         });
     });
   });
@@ -304,11 +288,7 @@ describe('Complex Components', () => {
                   'style',
                   'background-color: rgb(219, 255, 0); height: 119px; padding: 0px; position: relative; width: 145px;',
                 )
-                .should(
-                  'have.attr',
-                  'src',
-                  'https://via.placeholder.com/472x723?text=Amplify+FrontendManager+is+Awesome!',
-                );
+                .should('have.attr', 'src', 'https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!');
               cy.get('div')
                 .eq(1)
                 .should(
@@ -316,11 +296,7 @@ describe('Complex Components', () => {
                   'style',
                   'background-color: rgb(255, 0, 0); height: 124px; padding: 0px; position: relative; width: 145px;',
                 )
-                .should(
-                  'have.attr',
-                  'src',
-                  'https://via.placeholder.com/472x723?text=Amplify+FrontendManager+is+Awesome!',
-                );
+                .should('have.attr', 'src', 'https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!');
             });
         });
     });

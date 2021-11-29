@@ -16,15 +16,15 @@
 
 /* Test Generator to be used in the Node environment */
 import {
-  FrontendManagerTemplateRendererManager,
-  FrontendManagerTemplateRendererFactory,
-  FrontendManagerComponent,
-  FrontendManagerTheme,
+  StudioTemplateRendererManager,
+  StudioTemplateRendererFactory,
+  StudioComponent,
+  StudioTheme,
 } from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
-  ReactThemeFrontendManagerTemplateRenderer,
-  ReactIndexFrontendManagerTemplateRenderer,
+  ReactThemeStudioTemplateRenderer,
+  ReactIndexStudioTemplateRenderer,
 } from '@aws-amplify/codegen-ui-react';
 import { TestGenerator, TestGeneratorParams } from './TestGenerator';
 
@@ -43,52 +43,45 @@ export class NodeTestGenerator extends TestGenerator {
 
   constructor(params: TestGeneratorParams) {
     super(params);
-    this.componentRendererFactory = new FrontendManagerTemplateRendererFactory(
-      (component: FrontendManagerComponent) => new AmplifyRenderer(component, this.renderConfig),
+    this.componentRendererFactory = new StudioTemplateRendererFactory(
+      (component: StudioComponent) => new AmplifyRenderer(component, this.renderConfig),
     );
-    this.themeRendererFactory = new FrontendManagerTemplateRendererFactory(
-      (theme: FrontendManagerTheme) => new ReactThemeFrontendManagerTemplateRenderer(theme, this.renderConfig),
+    this.themeRendererFactory = new StudioTemplateRendererFactory(
+      (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, this.renderConfig),
     );
-    this.indexRendererFactory = new FrontendManagerTemplateRendererFactory(
-      (schemas: (FrontendManagerComponent | FrontendManagerTheme)[]) =>
-        new ReactIndexFrontendManagerTemplateRenderer(schemas, this.renderConfig),
+    this.indexRendererFactory = new StudioTemplateRendererFactory(
+      (schemas: (StudioComponent | StudioTheme)[]) => new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig),
     );
-    this.rendererManager = new FrontendManagerTemplateRendererManager(this.componentRendererFactory, this.outputConfig);
-    this.themeRendererManager = new FrontendManagerTemplateRendererManager(
-      this.themeRendererFactory,
-      this.outputConfig,
-    );
-    this.indexRendererManager = new FrontendManagerTemplateRendererManager(
-      this.indexRendererFactory,
-      this.outputConfig,
-    );
+    this.rendererManager = new StudioTemplateRendererManager(this.componentRendererFactory, this.outputConfig);
+    this.themeRendererManager = new StudioTemplateRendererManager(this.themeRendererFactory, this.outputConfig);
+    this.indexRendererManager = new StudioTemplateRendererManager(this.indexRendererFactory, this.outputConfig);
   }
 
-  writeComponentToDisk(component: FrontendManagerComponent) {
+  writeComponentToDisk(component: StudioComponent) {
     this.rendererManager.renderSchemaToTemplate(component);
   }
 
-  renderComponent(component: FrontendManagerComponent) {
+  renderComponent(component: StudioComponent) {
     const buildRenderer = this.componentRendererFactory.buildRenderer(component);
     const renderedComponent = buildRenderer.renderComponentOnly();
     const appSample = buildRenderer.renderSampleCodeSnippet();
     return { renderedComponent, appSample };
   }
 
-  writeThemeToDisk(theme: FrontendManagerTheme) {
+  writeThemeToDisk(theme: StudioTheme) {
     this.themeRendererManager.renderSchemaToTemplate(theme);
   }
 
-  renderTheme(theme: FrontendManagerTheme) {
+  renderTheme(theme: StudioTheme) {
     const buildRenderer = this.themeRendererFactory.buildRenderer(theme);
     return buildRenderer.renderComponent();
   }
 
-  writeIndexFileToDisk(schemas: (FrontendManagerComponent | FrontendManagerTheme)[]) {
+  writeIndexFileToDisk(schemas: (StudioComponent | StudioTheme)[]) {
     this.indexRendererManager.renderSchemaToTemplate(schemas);
   }
 
-  renderIndexFile(schemas: (FrontendManagerComponent | FrontendManagerTheme)[]) {
+  renderIndexFile(schemas: (StudioComponent | StudioTheme)[]) {
     const indexRenderer = this.indexRendererFactory.buildRenderer(schemas);
     return indexRenderer.renderComponent();
   }

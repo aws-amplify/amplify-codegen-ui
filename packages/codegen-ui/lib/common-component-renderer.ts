@@ -13,32 +13,29 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FrontendManagerComponent, FrontendManagerComponentChild, WrappedComponentProperties } from './types';
+import { StudioComponent, StudioComponentChild, WrappedComponentProperties } from './types';
 
-import { FrontendManagerNode } from './frontend-manager-node';
+import { StudioNode } from './studio-node';
 import { validateComponentSchema } from './validation-helper';
 
 /**
  * Shared class for rendering components.
- * Mostly contains helper functions for mapping the FrontendManager schema to actual props.
+ * Mostly contains helper functions for mapping the Studio schema to actual props.
  */
 export abstract class CommonComponentRenderer<TPropIn> {
   protected inputProps: WrappedComponentProperties<TPropIn>;
 
-  protected node: FrontendManagerNode;
+  protected node: StudioNode;
 
-  constructor(
-    protected component: FrontendManagerComponent | FrontendManagerComponentChild,
-    protected parent?: FrontendManagerNode,
-  ) {
+  constructor(protected component: StudioComponent | StudioComponentChild, protected parent?: StudioNode) {
     // Run schema validation on the top-level component.
     if (this.parent === undefined) {
-      validateComponentSchema(this.component as FrontendManagerComponent);
+      validateComponentSchema(this.component as StudioComponent);
     }
     const flattenedProps = Object.entries(component.properties).map((prop) => {
       return [prop[0], prop[1]];
     });
     this.inputProps = Object.fromEntries(flattenedProps);
-    this.node = new FrontendManagerNode(component, parent);
+    this.node = new StudioNode(component, parent);
   }
 }

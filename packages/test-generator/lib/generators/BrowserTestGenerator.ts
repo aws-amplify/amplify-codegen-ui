@@ -15,11 +15,11 @@
  */
 
 /* Test Generator to be used in the browser environment */
-import { FrontendManagerComponent, FrontendManagerTheme } from '@aws-amplify/codegen-ui';
+import { StudioComponent, StudioTheme } from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
-  ReactThemeFrontendManagerTemplateRenderer,
-  ReactIndexFrontendManagerTemplateRenderer,
+  ReactThemeStudioTemplateRenderer,
+  ReactIndexStudioTemplateRenderer,
 } from '@aws-amplify/codegen-ui-react';
 import { TestGenerator } from './TestGenerator';
 
@@ -30,18 +30,18 @@ export class BrowserTestGenerator extends TestGenerator {
 
   writeIndexFileToDisk() {} // no-op
 
-  renderIndexFile(schemas: (FrontendManagerComponent | FrontendManagerTheme)[]) {
-    return new ReactIndexFrontendManagerTemplateRenderer(schemas, this.renderConfig).renderComponent();
+  renderIndexFile(schemas: (StudioComponent | StudioTheme)[]) {
+    return new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig).renderComponent();
   }
 
-  renderComponent(component: FrontendManagerComponent) {
+  renderComponent(component: StudioComponent) {
     return {
       renderedComponent: new AmplifyRenderer(component, this.renderConfig).renderComponentOnly(),
       appSample: { compText: '', importsText: '' },
     };
   }
 
-  renderTheme(theme: FrontendManagerTheme) {
-    return new ReactThemeFrontendManagerTemplateRenderer(theme, this.renderConfig).renderComponent();
+  renderTheme(theme: StudioTheme) {
+    return new ReactThemeStudioTemplateRenderer(theme, this.renderConfig).renderComponent();
   }
 }

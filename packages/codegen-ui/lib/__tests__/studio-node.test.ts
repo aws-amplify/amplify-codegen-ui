@@ -14,10 +14,10 @@
   limitations under the License.
  */
 /* eslint-disable no-new */
-import { FrontendManagerNode } from '../frontend-manager-node';
-import { FrontendManagerComponentChild } from '../types';
+import { StudioNode } from '../studio-node';
+import { StudioComponentChild } from '../types';
 
-describe('FrontendManagerNode', () => {
+describe('StudioNode', () => {
   describe('isRoot', () => {
     test('true when parent is undefined', () => {
       const component = {
@@ -25,10 +25,10 @@ describe('FrontendManagerNode', () => {
         name: 'MyView',
         properties: {},
       };
-      expect(new FrontendManagerNode(component).isRoot()).toBeTruthy();
+      expect(new StudioNode(component).isRoot()).toBeTruthy();
     });
     test('false when parent is defined', () => {
-      const parent = new FrontendManagerNode({
+      const parent = new StudioNode({
         componentType: 'View',
         name: 'MyParentView',
         properties: {},
@@ -38,7 +38,7 @@ describe('FrontendManagerNode', () => {
         name: 'MyView',
         properties: {},
       };
-      expect(new FrontendManagerNode(component, parent).isRoot()).toBeFalsy();
+      expect(new StudioNode(component, parent).isRoot()).toBeFalsy();
     });
   });
 
@@ -46,7 +46,7 @@ describe('FrontendManagerNode', () => {
     test('get component path', () => {
       const parentComponentName = 'MyParentView';
       const componentName = 'MyView';
-      const parent = new FrontendManagerNode({
+      const parent = new StudioNode({
         componentType: 'View',
         name: parentComponentName,
         properties: {},
@@ -56,7 +56,7 @@ describe('FrontendManagerNode', () => {
         name: componentName,
         properties: {},
       };
-      const componentPathToRoot = new FrontendManagerNode(component, parent).getComponentPathToRoot();
+      const componentPathToRoot = new StudioNode(component, parent).getComponentPathToRoot();
 
       expect(componentPathToRoot.map(({ component: { name } }) => name)).toEqual([componentName, parentComponentName]);
     });
@@ -64,44 +64,39 @@ describe('FrontendManagerNode', () => {
 
   describe('getOverrideKey', () => {
     test('returns for parent', () => {
-      const rootComponent = createFrontendManagerNodeOfType('Flex', createFrontendManagerNodeOfType('Button'));
+      const rootComponent = createStudioNodeOfType('Flex', createStudioNodeOfType('Button'));
 
       expect(rootComponent.getOverrideKey()).toEqual('Flex');
     });
 
     test('returns only one child', () => {
-      const button1 = createFrontendManagerNodeOfType('Button');
-      createFrontendManagerNodeOfType('Flex', button1);
+      const button1 = createStudioNodeOfType('Button');
+      createStudioNodeOfType('Flex', button1);
 
       expect(button1.getOverrideKey()).toEqual('Flex.Button[0]');
     });
 
     test('returns index 0 for first of multiple elements', () => {
-      const button1 = createFrontendManagerNodeOfType('Button');
-      createFrontendManagerNodeOfType(
-        'Flex',
-        button1,
-        createFrontendManagerNodeOfType('Button'),
-        createFrontendManagerNodeOfType('Tooltip'),
-      );
+      const button1 = createStudioNodeOfType('Button');
+      createStudioNodeOfType('Flex', button1, createStudioNodeOfType('Button'), createStudioNodeOfType('Tooltip'));
 
       expect(button1.getOverrideKey()).toEqual('Flex.Button[0]');
     });
 
     test('returns index 0 for first of element of type', () => {
-      const button1 = createFrontendManagerNodeOfType('Button');
-      const button2 = createFrontendManagerNodeOfType('Button');
-      const tooltip1 = createFrontendManagerNodeOfType('Tooltip');
-      createFrontendManagerNodeOfType('Flex', button1, button2, tooltip1);
+      const button1 = createStudioNodeOfType('Button');
+      const button2 = createStudioNodeOfType('Button');
+      const tooltip1 = createStudioNodeOfType('Tooltip');
+      createStudioNodeOfType('Flex', button1, button2, tooltip1);
 
       expect(tooltip1.getOverrideKey()).toEqual('Flex.Tooltip[0]');
     });
 
     test('returns index 1 for second of element of type', () => {
-      const button1 = createFrontendManagerNodeOfType('Button');
-      const button2 = createFrontendManagerNodeOfType('Button');
-      const tooltip1 = createFrontendManagerNodeOfType('Tooltip');
-      createFrontendManagerNodeOfType('Flex', button1, button2, tooltip1);
+      const button1 = createStudioNodeOfType('Button');
+      const button2 = createStudioNodeOfType('Button');
+      const tooltip1 = createStudioNodeOfType('Tooltip');
+      createStudioNodeOfType('Flex', button1, button2, tooltip1);
 
       expect(button2.getOverrideKey()).toEqual('Flex.Button[1]');
     });
@@ -121,19 +116,19 @@ describe('FrontendManagerNode', () => {
      * </Flex>
      */
     test('returns for deeply nested elements', () => {
-      const firstSubSubChild = createFrontendManagerNodeOfType('Tooltip');
+      const firstSubSubChild = createStudioNodeOfType('Tooltip');
 
-      const firstSubChildOfType = createFrontendManagerNodeOfType('Button');
-      const secondSubChildOfType = createFrontendManagerNodeOfType('Button', firstSubSubChild);
+      const firstSubChildOfType = createStudioNodeOfType('Button');
+      const secondSubChildOfType = createStudioNodeOfType('Button', firstSubSubChild);
 
-      const flex1 = createFrontendManagerNodeOfType('Flex');
-      const flex2 = createFrontendManagerNodeOfType('Flex');
-      const flex3 = createFrontendManagerNodeOfType('Flex', firstSubChildOfType, secondSubChildOfType);
-      const flex4 = createFrontendManagerNodeOfType('Flex');
-      const tooltip1 = createFrontendManagerNodeOfType('Tooltip');
-      const button1 = createFrontendManagerNodeOfType('Button');
+      const flex1 = createStudioNodeOfType('Flex');
+      const flex2 = createStudioNodeOfType('Flex');
+      const flex3 = createStudioNodeOfType('Flex', firstSubChildOfType, secondSubChildOfType);
+      const flex4 = createStudioNodeOfType('Flex');
+      const tooltip1 = createStudioNodeOfType('Tooltip');
+      const button1 = createStudioNodeOfType('Button');
 
-      createFrontendManagerNodeOfType('Flex', flex1, flex2, flex3, flex4, tooltip1, button1);
+      createStudioNodeOfType('Flex', flex1, flex2, flex3, flex4, tooltip1, button1);
 
       expect(flex3.getOverrideKey()).toEqual('Flex.Flex[2]');
       expect(secondSubChildOfType.getOverrideKey()).toEqual('Flex.Flex[2].Button[1]');
@@ -142,12 +137,12 @@ describe('FrontendManagerNode', () => {
   });
 });
 
-const createFrontendManagerNodeOfType = (type: string, ...children: FrontendManagerNode[]): FrontendManagerNode => {
-  const node = new FrontendManagerNode({
+const createStudioNodeOfType = (type: string, ...children: StudioNode[]): StudioNode => {
+  const node = new StudioNode({
     componentType: type,
     name: type,
     properties: {},
-    children: children.map((child) => child.component as FrontendManagerComponentChild),
+    children: children.map((child) => child.component as StudioComponentChild),
   });
   // eslint-disable-next-line no-return-assign, no-param-reassign
   children.forEach((child) => (child.parent = node));

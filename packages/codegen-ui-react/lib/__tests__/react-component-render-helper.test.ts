@@ -45,8 +45,8 @@ describe('react-component-render-helper', () => {
 
   describe('property type checkers', () => {
     const propertyTypes: { [propertyType: string]: { checker: Function; property: ComponentPropertyValueTypes } } = {
-      ConcatenatedFrontendManagerComponentProperty: { checker: isConcatenatedProperty, property: { concat: [] } },
-      ConditionalFrontendManagerComponentProperty: {
+      ConcatenatedStudioComponentProperty: { checker: isConcatenatedProperty, property: { concat: [] } },
+      ConditionalStudioComponentProperty: {
         checker: isConditionalProperty,
         property: {
           condition: {
@@ -63,12 +63,12 @@ describe('react-component-render-helper', () => {
           },
         },
       },
-      FixedFrontendManagerComponentProperty: { checker: isFixedPropertyWithValue, property: { value: 'testValue' } },
-      BoundFrontendManagerComponentProperty: {
+      FixedStudioComponentProperty: { checker: isFixedPropertyWithValue, property: { value: 'testValue' } },
+      BoundStudioComponentProperty: {
         checker: isBoundProperty,
         property: { bindingProperties: { property: 'testBinding' } },
       },
-      CollectionFrontendManagerComponentProperty: {
+      CollectionStudioComponentProperty: {
         checker: isCollectionItemBoundProperty,
         property: { collectionBindingProperties: { property: 'testCollectionBinding' } },
       },

@@ -13,12 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import {
-  ComponentRendererBase,
-  FrontendManagerNode,
-  FrontendManagerComponent,
-  FrontendManagerComponentChild,
-} from '@aws-amplify/codegen-ui';
+import { ComponentRendererBase, StudioNode, StudioComponent, StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory, JsxSelfClosingElement } from 'typescript';
 
 import {
@@ -33,9 +28,9 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   JsxElement | JsxSelfClosingElement
 > {
   constructor(
-    component: FrontendManagerComponent | FrontendManagerComponentChild,
+    component: StudioComponent | StudioComponentChild,
     protected importCollection: ImportCollection,
-    protected parent?: FrontendManagerNode,
+    protected parent?: StudioNode,
   ) {
     super(component, parent);
     addBindingPropertiesImports(component, importCollection);

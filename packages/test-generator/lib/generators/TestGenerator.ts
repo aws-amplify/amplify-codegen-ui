@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FrontendManagerComponent, FrontendManagerTheme } from '@aws-amplify/codegen-ui';
+import { StudioComponent, StudioTheme } from '@aws-amplify/codegen-ui';
 import {
   ModuleKind,
   ScriptTarget,
@@ -71,11 +71,11 @@ export abstract class TestGenerator {
       const { name, schema } = testCase;
       try {
         if (this.params.writeToDisk) {
-          this.writeComponentToDisk(schema as FrontendManagerComponent);
+          this.writeComponentToDisk(schema as StudioComponent);
         }
 
         if (this.params.writeToLogger) {
-          const { renderedComponent, appSample } = this.renderComponent(schema as FrontendManagerComponent);
+          const { renderedComponent, appSample } = this.renderComponent(schema as StudioComponent);
           log.info(`# ${name}`);
           log.info('## Component Only Output');
           log.info('### componentImports');
@@ -100,11 +100,11 @@ export abstract class TestGenerator {
       const { name, schema } = testCase;
       try {
         if (this.params.writeToDisk) {
-          this.writeThemeToDisk(schema as FrontendManagerTheme);
+          this.writeThemeToDisk(schema as StudioTheme);
         }
 
         if (this.params.writeToLogger) {
-          const theme = this.renderTheme(schema as FrontendManagerTheme);
+          const theme = this.renderTheme(schema as StudioTheme);
           log.info(`# ${name}`);
           log.info('## Theme Output');
           log.info(this.decorateTypescriptWithMarkdown(theme.componentText));
@@ -165,20 +165,20 @@ export abstract class TestGenerator {
     return `\`\`\`typescript jsx\n${typescriptSource}\n\`\`\``;
   };
 
-  abstract writeComponentToDisk(component: FrontendManagerComponent): void;
+  abstract writeComponentToDisk(component: StudioComponent): void;
 
-  abstract writeThemeToDisk(theme: FrontendManagerTheme): void;
+  abstract writeThemeToDisk(theme: StudioTheme): void;
 
-  abstract renderComponent(component: FrontendManagerComponent): {
+  abstract renderComponent(component: StudioComponent): {
     renderedComponent: { compText: string; importsText: string };
     appSample: { compText: string; importsText: string };
   };
 
-  abstract renderTheme(theme: FrontendManagerTheme): { componentText: string };
+  abstract renderTheme(theme: StudioTheme): { componentText: string };
 
-  abstract writeIndexFileToDisk(schemas: (FrontendManagerComponent | FrontendManagerTheme)[]): void;
+  abstract writeIndexFileToDisk(schemas: (StudioComponent | StudioTheme)[]): void;
 
-  abstract renderIndexFile(schemas: (FrontendManagerComponent | FrontendManagerTheme)[]): { componentText: string };
+  abstract renderIndexFile(schemas: (StudioComponent | StudioTheme)[]): { componentText: string };
 
   getTestCases(disabledSchemaNames?: string[]): TestCase[] {
     const disabledSchemaSet = new Set(disabledSchemaNames);

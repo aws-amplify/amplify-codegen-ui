@@ -14,7 +14,7 @@
   limitations under the License.
  */
 export * from './lib/template-renderer';
-export * from './lib/frontend-manager-template-renderer';
+export * from './lib/studio-template-renderer';
 
 export * from './lib/component-renderer-base';
 export * from './lib/component-with-children-renderer-base';
@@ -26,7 +26,7 @@ export * from './lib/renderer-helper';
 export * from './lib/validation-helper';
 export * from './lib/framework-output-config';
 export * from './lib/framework-render-config';
-export * from './lib/frontend-manager-node';
+export * from './lib/studio-node';
 
 export * from './lib/types';
 export * from './lib/errors';

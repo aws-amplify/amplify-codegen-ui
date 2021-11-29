@@ -15,14 +15,14 @@
  */
 import { mocked } from 'ts-jest/utils'; // eslint-disable-line import/no-extraneous-dependencies
 import { existsSync, mkdirSync } from 'fs';
-import { FrontendManagerComponent } from '../types';
-import { FrontendManagerTemplateRendererFactory } from '../template-renderer-factory';
-import { FrontendManagerTemplateRendererManager } from '../template-renderer';
+import { StudioComponent } from '../types';
+import { StudioTemplateRendererFactory } from '../template-renderer-factory';
+import { StudioTemplateRendererManager } from '../template-renderer';
 import { MockOutputManager, MockTemplateRenderer } from './__utils__/mock-classes';
 
 jest.mock('fs');
 
-describe('FrontendManagerTemplateRendererManager', () => {
+describe('StudioTemplateRendererManager', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -30,12 +30,12 @@ describe('FrontendManagerTemplateRendererManager', () => {
   test('constructor - outputPathDir does not exist', () => {
     const outputPathDir = 'mock-output';
     const outputManager = new MockOutputManager();
-    const rendererFactory = new FrontendManagerTemplateRendererFactory(
-      (component: FrontendManagerComponent) => new MockTemplateRenderer(component, outputManager, {}),
+    const rendererFactory = new StudioTemplateRendererFactory(
+      (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
     );
 
     mocked(existsSync).mockImplementation(() => false);
-    new FrontendManagerTemplateRendererManager(rendererFactory, { outputPathDir }); // eslint-disable-line no-new
+    new StudioTemplateRendererManager(rendererFactory, { outputPathDir }); // eslint-disable-line no-new
     expect(existsSync).toHaveBeenCalled();
     expect(mkdirSync).toHaveBeenCalledWith(outputPathDir);
   });
@@ -43,12 +43,12 @@ describe('FrontendManagerTemplateRendererManager', () => {
   test('constructor - outputPathDir does exist', () => {
     const outputPathDir = 'mock-output';
     const outputManager = new MockOutputManager();
-    const rendererFactory = new FrontendManagerTemplateRendererFactory(
-      (component: FrontendManagerComponent) => new MockTemplateRenderer(component, outputManager, {}),
+    const rendererFactory = new StudioTemplateRendererFactory(
+      (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
     );
 
     mocked(existsSync).mockImplementation(() => true);
-    new FrontendManagerTemplateRendererManager(rendererFactory, { outputPathDir }); // eslint-disable-line no-new
+    new StudioTemplateRendererManager(rendererFactory, { outputPathDir }); // eslint-disable-line no-new
     expect(existsSync).toHaveBeenCalled();
     expect(mkdirSync).not.toHaveBeenCalled();
   });
@@ -57,10 +57,10 @@ describe('FrontendManagerTemplateRendererManager', () => {
     test('render component', () => {
       const outputPathDir = 'mock-output';
       const outputManager = new MockOutputManager();
-      const rendererFactory = new FrontendManagerTemplateRendererFactory(
-        (component: FrontendManagerComponent) => new MockTemplateRenderer(component, outputManager, {}),
+      const rendererFactory = new StudioTemplateRendererFactory(
+        (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
       );
-      const rendererManager = new FrontendManagerTemplateRendererManager(rendererFactory, { outputPathDir });
+      const rendererManager = new StudioTemplateRendererManager(rendererFactory, { outputPathDir });
 
       const component = {
         componentType: 'Text',
@@ -76,10 +76,10 @@ describe('FrontendManagerTemplateRendererManager', () => {
     test('throw error when component is not defined', () => {
       const outputPathDir = 'mock-output';
       const outputManager = new MockOutputManager();
-      const rendererFactory = new FrontendManagerTemplateRendererFactory(
-        (component: FrontendManagerComponent) => new MockTemplateRenderer(component, outputManager, {}),
+      const rendererFactory = new StudioTemplateRendererFactory(
+        (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
       );
-      const rendererManager = new FrontendManagerTemplateRendererManager(rendererFactory, { outputPathDir });
+      const rendererManager = new StudioTemplateRendererManager(rendererFactory, { outputPathDir });
 
       expect(() => rendererManager.renderSchemaToTemplate(undefined)).toThrowErrorMatchingSnapshot();
     });
@@ -90,10 +90,10 @@ describe('FrontendManagerTemplateRendererManager', () => {
       const outputPathDir = 'mock-output';
       const outputManager = new MockOutputManager();
       const mockRender = jest.fn(
-        (component: FrontendManagerComponent) => new MockTemplateRenderer(component, outputManager, {}),
+        (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
       );
-      const rendererFactory = new FrontendManagerTemplateRendererFactory(mockRender);
-      const rendererManager = new FrontendManagerTemplateRendererManager(rendererFactory, { outputPathDir });
+      const rendererFactory = new StudioTemplateRendererFactory(mockRender);
+      const rendererManager = new StudioTemplateRendererManager(rendererFactory, { outputPathDir });
 
       const component = {
         componentType: 'Text',
@@ -108,10 +108,10 @@ describe('FrontendManagerTemplateRendererManager', () => {
     test('throw error when component is not defined', () => {
       const outputPathDir = 'mock-output';
       const outputManager = new MockOutputManager();
-      const rendererFactory = new FrontendManagerTemplateRendererFactory(
-        (component: FrontendManagerComponent) => new MockTemplateRenderer(component, outputManager, {}),
+      const rendererFactory = new StudioTemplateRendererFactory(
+        (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
       );
-      const rendererManager = new FrontendManagerTemplateRendererManager(rendererFactory, { outputPathDir });
+      const rendererManager = new StudioTemplateRendererManager(rendererFactory, { outputPathDir });
 
       expect(() => rendererManager.renderSchemaToTemplates(undefined)).toThrowErrorMatchingSnapshot();
     });

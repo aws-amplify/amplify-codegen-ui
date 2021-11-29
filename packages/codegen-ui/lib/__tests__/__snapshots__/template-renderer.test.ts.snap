@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FrontendManagerTemplateRendererManager renderSchemaToTemplate render component 1`] = `
+exports[`StudioTemplateRendererManager renderSchemaToTemplate render component 1`] = `
 Object {
   "componentText": "MyText",
   "renderComponentToFilesystem": [MockFunction] {
@@ -19,6 +19,6 @@ Object {
 }
 `;
 
-exports[`FrontendManagerTemplateRendererManager renderSchemaToTemplate throw error when component is not defined 1`] = `"Please ensure you have passed in a valid component schema"`;
+exports[`StudioTemplateRendererManager renderSchemaToTemplate throw error when component is not defined 1`] = `"Please ensure you have passed in a valid component schema"`;
 
-exports[`FrontendManagerTemplateRendererManager renderSchemaToTemplates throw error when component is not defined 1`] = `"Please ensure you have passed in a valid schema"`;
+exports[`StudioTemplateRendererManager renderSchemaToTemplates throw error when component is not defined 1`] = `"Please ensure you have passed in a valid schema"`;

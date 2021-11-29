@@ -15,11 +15,7 @@
  */
 import { EOL } from 'os';
 import { EmitHint, ExportDeclaration, factory } from 'typescript';
-import {
-  FrontendManagerTemplateRenderer,
-  FrontendManagerTheme,
-  FrontendManagerComponent,
-} from '@aws-amplify/codegen-ui';
+import { StudioTemplateRenderer, StudioTheme, StudioComponent } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection } from './import-collection';
 import { ReactOutputManager } from './react-output-manager';
@@ -28,14 +24,14 @@ import {
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
-} from './react-frontend-manager-template-renderer-helper';
+} from './react-studio-template-renderer-helper';
 import { RequiredKeys } from './utils/type-utils';
 
-type FrontendManagerSchema = FrontendManagerComponent | FrontendManagerTheme;
+type StudioSchema = StudioComponent | StudioTheme;
 
-export class ReactIndexFrontendManagerTemplateRenderer extends FrontendManagerTemplateRenderer<
+export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
-  FrontendManagerSchema[],
+  StudioSchema[],
   ReactOutputManager,
   {
     componentText: string;
@@ -48,7 +44,7 @@ export class ReactIndexFrontendManagerTemplateRenderer extends FrontendManagerTe
 
   fileName: string;
 
-  constructor(schemas: FrontendManagerSchema[], renderConfig: ReactRenderConfig) {
+  constructor(schemas: StudioSchema[], renderConfig: ReactRenderConfig) {
     super(schemas, new ReactOutputManager(), renderConfig);
     this.renderConfig = {
       ...defaultRenderConfig,

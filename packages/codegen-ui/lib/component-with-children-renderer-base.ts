@@ -15,7 +15,7 @@
  */
 import { BadgeProps, ButtonProps, FlexProps, CardProps, ViewProps as BoxProps } from '@aws-amplify/ui-react';
 
-import { FrontendManagerComponentChild } from './types';
+import { StudioComponentChild } from './types';
 import { CommonComponentRenderer } from './common-component-renderer';
 
 type SourceProp = BoxProps | BadgeProps | ButtonProps | CardProps | FlexProps;
@@ -26,6 +26,6 @@ export abstract class ComponentWithChildrenRendererBase<
   TElementChild,
 > extends CommonComponentRenderer<TPropIn> {
   abstract renderElement(
-    renderChildren: (children: FrontendManagerComponentChild[], component?: TElementOut) => TElementChild[],
+    renderChildren: (children: StudioComponentChild[], component?: TElementOut) => TElementChild[],
   ): TElementOut;
 }

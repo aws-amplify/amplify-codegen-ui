@@ -26,9 +26,9 @@ export type FigmaMetadata = {
 };
 
 /**
- * This is the base type for all FrontendManager components
+ * This is the base type for all Studio components
  */
-export type FrontendManagerComponent = {
+export type StudioComponent = {
   /**
    * The name of the customized component
    */
@@ -53,12 +53,12 @@ export type FrontendManagerComponent = {
   /**
    * These are the customized properties
    */
-  properties: FrontendManagerComponentProperties;
+  properties: StudioComponentProperties;
 
   /**
    * These are the nested components in a composite
    */
-  children?: FrontendManagerComponentChild[];
+  children?: StudioComponentChild[];
 
   /**
    * The  metatdata gerated by Figma
@@ -68,41 +68,41 @@ export type FrontendManagerComponent = {
   /**
    * Variants in terms of styles
    */
-  variants?: FrontendManagerComponentVariant[];
+  variants?: StudioComponentVariant[];
 
   /**
    * Overrides for primitives
    */
-  overrides?: FrontendManagerComponentOverrides;
+  overrides?: StudioComponentOverrides;
 
   bindingProperties: {
     [propertyName: string]:
-      | FrontendManagerComponentDataPropertyBinding
-      | FrontendManagerComponentAuthPropertyBinding
-      | FrontendManagerComponentStoragePropertyBinding
-      | FrontendManagerComponentSimplePropertyBinding
-      | FrontendManagerComponentEventPropertyBinding;
+      | StudioComponentDataPropertyBinding
+      | StudioComponentAuthPropertyBinding
+      | StudioComponentStoragePropertyBinding
+      | StudioComponentSimplePropertyBinding
+      | StudioComponentEventPropertyBinding;
   };
 
   /**
    * These are the collection properties
    */
   collectionProperties?: {
-    [propertyName: string]: FrontendManagerComponentDataConfiguration;
+    [propertyName: string]: StudioComponentDataConfiguration;
   };
 
   /**
    * Component actions
    */
   actions?: {
-    [actionName: string]: FrontendManagerComponentAction;
+    [actionName: string]: StudioComponentAction;
   };
 };
 
 /**
- * A new frontendManager component where the componentId will automatically be generated
+ * A new studio component where the componentId will automatically be generated
  */
-export type NewFrontendManagerComponent = {
+export type NewStudioComponent = {
   /**
    * The name of the customized component
    */
@@ -117,12 +117,12 @@ export type NewFrontendManagerComponent = {
   /**
    * These are the customized properties
    */
-  properties: FrontendManagerComponentProperties;
+  properties: StudioComponentProperties;
 
   /**
    * These are the nested components in a composite
    */
-  children?: FrontendManagerComponentChild[];
+  children?: StudioComponentChild[];
 
   /**
    * The  metatdata gerated by Figma
@@ -132,44 +132,44 @@ export type NewFrontendManagerComponent = {
   /**
    * Variants in terms of styles
    */
-  variants?: FrontendManagerComponentVariant[];
+  variants?: StudioComponentVariant[];
 
   /**
    * Overrides for primitives
    */
-  overrides?: FrontendManagerComponentOverrides;
+  overrides?: StudioComponentOverrides;
 
   bindingProperties: {
     [propertyName: string]:
-      | FrontendManagerComponentDataPropertyBinding
-      | FrontendManagerComponentAuthPropertyBinding
-      | FrontendManagerComponentStoragePropertyBinding
-      | FrontendManagerComponentSimplePropertyBinding
-      | FrontendManagerComponentEventPropertyBinding;
+      | StudioComponentDataPropertyBinding
+      | StudioComponentAuthPropertyBinding
+      | StudioComponentStoragePropertyBinding
+      | StudioComponentSimplePropertyBinding
+      | StudioComponentEventPropertyBinding;
   };
 
   /**
    * These are the collection properties
    */
   collectionProperties?: {
-    [propertyName: string]: FrontendManagerComponentDataPropertyBinding;
+    [propertyName: string]: StudioComponentDataPropertyBinding;
   };
 };
 
-export type FrontendManagerComponentSimplePropertyBinding = {
+export type StudioComponentSimplePropertyBinding = {
   /**
    *  This is the data type for the value that is bound to this property. The default
    * inferred type is string so this will only need to be set if it is not a string
    */
-  type: keyof typeof FrontendManagerComponentPropertyType;
+  type: keyof typeof StudioComponentPropertyType;
 
   defaultValue?: string | undefined;
 };
 
 /**
- * This is the child type for FrontendManager components
+ * This is the child type for Studio components
  */
-export type FrontendManagerComponentChild = {
+export type StudioComponentChild = {
   /**
    * This should map to the components available including Amplify
    * UI components and other custom components
@@ -184,12 +184,12 @@ export type FrontendManagerComponentChild = {
   /**
    * These are the customized properties
    */
-  properties: FrontendManagerComponentProperties;
+  properties: StudioComponentProperties;
 
   /**
    * These are the nested components in a composite
    */
-  children?: FrontendManagerComponentChild[];
+  children?: StudioComponentChild[];
 
   /**
    * Event <-> Action mapping (e.g click => SignOutAction)
@@ -203,7 +203,7 @@ export type FrontendManagerComponentChild = {
 /**
  * This is used to track vairants for a single component
  */
-export type FrontendManagerComponentVariant = {
+export type StudioComponentVariant = {
   /**
    * The combination of vairants that comprise this variant
    */
@@ -212,14 +212,14 @@ export type FrontendManagerComponentVariant = {
   /**
    * The overridden properties for this variant
    */
-  overrides: FrontendManagerComponentOverrides;
+  overrides: StudioComponentOverrides;
 };
 
 /**
  * This is a dictionary of overrides for a single parent component.
  * The hirearchy reference should
  */
-export type FrontendManagerComponentOverrides = {
+export type StudioComponentOverrides = {
   /**
    * This is the reference to full component override hierarchy
    * @returns A set of key value pairs representing overrides for the given primitive hierarchy.
@@ -231,17 +231,17 @@ export type FrontendManagerComponentOverrides = {
  * This is a dictionary of properties. Each key represents
  * a uniquely named property of a component
  */
-export type FrontendManagerComponentProperties = {
+export type StudioComponentProperties = {
   /**
    * Each key maps to an available component property. Static values
    * can be passed in as a string.
    */
-  [key: string]: FrontendManagerComponentProperty;
+  [key: string]: StudioComponentProperty;
 };
 
 export type CommonPropertyValues = {
   /**
-   * If this flag is set, then the property will be shown in FrontendManager UI. If not, it will be hidden.
+   * If this flag is set, then the property will be shown in Studio UI. If not, it will be hidden.
    * All properties imported from an external provider will omit this property by default.
    */
   configured?: boolean;
@@ -252,14 +252,14 @@ export type CommonPropertyValues = {
   importedValue?: string;
 };
 
-export type FrontendManagerComponentProperty = (
-  | FixedFrontendManagerComponentProperty
-  | BoundFrontendManagerComponentProperty
-  | CollectionFrontendManagerComponentProperty
-  | ConcatenatedFrontendManagerComponentProperty
-  | ConditionalFrontendManagerComponentProperty
-  | WorkflowFrontendManagerComponentProperty
-  | FormFrontendManagerComponentProperty
+export type StudioComponentProperty = (
+  | FixedStudioComponentProperty
+  | BoundStudioComponentProperty
+  | CollectionStudioComponentProperty
+  | ConcatenatedStudioComponentProperty
+  | ConditionalStudioComponentProperty
+  | WorkflowStudioComponentProperty
+  | FormStudioComponentProperty
 ) &
   CommonPropertyValues;
 
@@ -267,7 +267,7 @@ export type FrontendManagerComponentProperty = (
  * This represents a component property that is configured with either
  * static  values
  */
-export type FixedFrontendManagerComponentProperty = {
+export type FixedStudioComponentProperty = {
   /**
    * These are the values pass when code generating. Static values can be passed in
    * as a string
@@ -280,7 +280,7 @@ export type FixedFrontendManagerComponentProperty = {
  * This represents a component property that is configured with either
  * data bound values
  */
-export type BoundFrontendManagerComponentProperty = {
+export type BoundStudioComponentProperty = {
   /**
    * This is the exposed property that will propagate down to this value
    */
@@ -298,7 +298,7 @@ export type BoundFrontendManagerComponentProperty = {
 /**
  * This represents a component property that is configured with collection item
  */
-export type CollectionFrontendManagerComponentProperty = {
+export type CollectionStudioComponentProperty = {
   /**
    * record collection item bindings
    */
@@ -316,21 +316,21 @@ export type CollectionFrontendManagerComponentProperty = {
 /**
  * Component property that contains concatenation of multiple properties
  */
-export type ConcatenatedFrontendManagerComponentProperty = {
-  concat: FrontendManagerComponentProperty[];
+export type ConcatenatedStudioComponentProperty = {
+  concat: StudioComponentProperty[];
 };
 
 /**
  * Component property that represents a conditional expression
  */
-export type ConditionalFrontendManagerComponentProperty = {
+export type ConditionalStudioComponentProperty = {
   condition: {
     property: string;
     field?: string;
     operator: string;
     operand: string | number | boolean;
-    then: FrontendManagerComponentProperty;
-    else: FrontendManagerComponentProperty;
+    then: StudioComponentProperty;
+    else: StudioComponentProperty;
   };
 };
 
@@ -338,7 +338,7 @@ export type ConditionalFrontendManagerComponentProperty = {
  * This represents a component property that is configured with either
  * data bound values
  */
-export type WorkflowFrontendManagerComponentProperty = {
+export type WorkflowStudioComponentProperty = {
   event: string;
 };
 
@@ -347,7 +347,7 @@ export type WorkflowFrontendManagerComponentProperty = {
  * technically an extension of Workflows but because it is
  * pretty unique, it should be separated out with its own definition
  */
-export type FormFrontendManagerComponentProperty = {
+export type FormStudioComponentProperty = {
   /**
    * The model of the DataStore object
    */
@@ -363,12 +363,12 @@ export type FormFrontendManagerComponentProperty = {
  * This represent the configuration for binding a component property
  * to Amplify specific information
  */
-export type FrontendManagerComponentDataConfiguration = {
+export type StudioComponentDataConfiguration = {
   model: string;
 
-  sort?: FrontendManagerComponentSort[];
+  sort?: StudioComponentSort[];
 
-  predicate?: FrontendManagerComponentPredicate;
+  predicate?: StudioComponentPredicate;
 
   /**
    * This is a collection of Id's that will be always queried from DataStore.
@@ -377,7 +377,7 @@ export type FrontendManagerComponentDataConfiguration = {
   identifiers?: string[];
 };
 
-export type FrontendManagerComponentSort = {
+export type StudioComponentSort = {
   field: string;
   direction: 'ASC' | 'DESC';
 };
@@ -386,7 +386,7 @@ export type FrontendManagerComponentSort = {
  * This represent the configuration for binding a component property
  * to Amplify specific information
  */
-export type FrontendManagerComponentDataPropertyBinding = {
+export type StudioComponentDataPropertyBinding = {
   /**
    * This declares where the data is coming from to bind to
    */
@@ -395,14 +395,14 @@ export type FrontendManagerComponentDataPropertyBinding = {
   /**
    * This is the value of the data binding
    */
-  bindingProperties: FrontendManagerComponentDataBindingProperty;
+  bindingProperties: StudioComponentDataBindingProperty;
 };
 
 /**
  * This represent the configuration for binding a component property
  * to Amplify specific information
  */
-export type FrontendManagerComponentEventPropertyBinding = {
+export type StudioComponentEventPropertyBinding = {
   /**
    * This declares that the type is of a workflow binding
    */
@@ -429,7 +429,7 @@ export type FormBindingElement = {
  * This represent the configuration for binding a component property
  * to Amplify specific information
  */
-export type FrontendManagerComponentAuthPropertyBinding = {
+export type StudioComponentAuthPropertyBinding = {
   /**
    * This declares where the data is coming from to bind to
    */
@@ -438,14 +438,14 @@ export type FrontendManagerComponentAuthPropertyBinding = {
   /**
    * This is the value of the data binding
    */
-  bindingProperties: FrontendManagerComponentAuthBindingProperty;
+  bindingProperties: StudioComponentAuthBindingProperty;
 };
 
 /**
  * This represent the configuration for binding a component property
  * to Amplify specific information
  */
-export type FrontendManagerComponentStoragePropertyBinding = {
+export type StudioComponentStoragePropertyBinding = {
   /**
    * This declares where the data is coming from to bind to
    */
@@ -454,13 +454,13 @@ export type FrontendManagerComponentStoragePropertyBinding = {
   /**
    * This is the value of the data binding
    */
-  bindingProperties: FrontendManagerComponentStorageBindingProperty;
+  bindingProperties: StudioComponentStorageBindingProperty;
 };
 
 /**
  * These are the primitive value types
  */
-export enum FrontendManagerComponentPropertyType {
+export enum StudioComponentPropertyType {
   String = 'String',
   Number = 'Number',
   Boolean = 'Boolean',
@@ -470,7 +470,7 @@ export enum FrontendManagerComponentPropertyType {
 /**
  * These are the types of data binding
  */
-export enum FrontendManagerComponentPropertyBindingType {
+export enum StudioComponentPropertyBindingType {
   Data = 'Data',
   Authentication = 'Authentication',
   Storage = 'Storage',
@@ -480,15 +480,15 @@ export enum FrontendManagerComponentPropertyBindingType {
  * This represents the model and field you want to bind
  * a component property to
  */
-export type FrontendManagerComponentDataBindingProperty = {
+export type StudioComponentDataBindingProperty = {
   model: string;
   field?: string;
-  predicate?: FrontendManagerComponentPredicate;
+  predicate?: StudioComponentPredicate;
 };
 
-export type FrontendManagerComponentPredicate = {
-  and?: FrontendManagerComponentPredicate[];
-  or?: FrontendManagerComponentPredicate[];
+export type StudioComponentPredicate = {
+  and?: StudioComponentPredicate[];
+  or?: StudioComponentPredicate[];
   field?: string;
   operand?: string;
   operator?: string;
@@ -496,9 +496,9 @@ export type FrontendManagerComponentPredicate = {
 
 /**
  * This represents the user attribute you want to bind a
- * FrontendManager component property to
+ * Studio component property to
  */
-export type FrontendManagerComponentAuthBindingProperty = {
+export type StudioComponentAuthBindingProperty = {
   userAttribute: string;
 };
 
@@ -506,33 +506,33 @@ export type FrontendManagerComponentAuthBindingProperty = {
  * This represents the bucket and key you want to bind a component
  * property to
  */
-export type FrontendManagerComponentStorageBindingProperty = {
+export type StudioComponentStorageBindingProperty = {
   bucket: string;
   key?: string;
 };
 
-export type FrontendManagerTheme = {
+export type StudioTheme = {
   name: string;
   id?: string;
-  values: FrontendManagerThemeValues[];
+  values: StudioThemeValues[];
   // overrides is a special case because it is an array of values
-  overrides?: FrontendManagerThemeValues[];
+  overrides?: StudioThemeValues[];
 };
 
-export type FrontendManagerThemeValues = {
+export type StudioThemeValues = {
   key: string;
-  value: FrontendManagerThemeValue;
+  value: StudioThemeValue;
 };
 
-export type FrontendManagerThemeValue = {
+export type StudioThemeValue = {
   value?: string;
-  children?: FrontendManagerThemeValues[];
+  children?: StudioThemeValues[];
 };
 
 /**
  * Component action types
  */
-export type FrontendManagerComponentAction = AmplifyAuthSignOutAction | NavigationAction;
+export type StudioComponentAction = AmplifyAuthSignOutAction | NavigationAction;
 
 /**
  * Amplify Auth signout Action type

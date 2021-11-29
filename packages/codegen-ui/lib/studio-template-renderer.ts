@@ -19,9 +19,9 @@ import { FrameworkOutputManager } from './framework-output-manager';
 import { FrameworkRenderConfig } from './framework-render-config';
 import { RenderTextComponentResponse } from './render-component-response';
 
-export abstract class FrontendManagerTemplateRenderer<
+export abstract class StudioTemplateRenderer<
   TSource,
-  TFrontendManagerType,
+  TStudioType,
   TOutputManager extends FrameworkOutputManager<TSource>,
   TRenderOutput extends RenderTextComponentResponse,
 > {
@@ -30,7 +30,7 @@ export abstract class FrontendManagerTemplateRenderer<
    * @param component The first order component to be rendered.
    */
   constructor(
-    protected component: TFrontendManagerType,
+    protected component: TStudioType,
     protected outputManager: TOutputManager,
     protected renderConfig: FrameworkRenderConfig,
   ) {}

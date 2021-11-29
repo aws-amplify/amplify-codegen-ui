@@ -14,11 +14,11 @@
   limitations under the License.
  */
 import { ButtonProps } from '@aws-amplify/ui-react';
-import { FrontendManagerComponentChild } from '../types';
+import { StudioComponentChild } from '../types';
 import { ComponentWithChildrenRendererBase } from '../component-with-children-renderer-base';
 
 class MockComponentRenderer extends ComponentWithChildrenRendererBase<ButtonProps, string, string> {
-  renderElement(renderChildren: (children: FrontendManagerComponentChild[], component?: string) => string[]): string {
+  renderElement(renderChildren: (children: StudioComponentChild[], component?: string) => string[]): string {
     return `${this.component.name},${renderChildren(this.component.children || []).join(',')}`;
   }
 }

@@ -7,35 +7,10 @@
           {
             "children": [],
             "componentType": "View",
-            "name": "Rectangle 57",
+            "name": "RectangleRed",
             "properties": {
               "width": {
-                "value": "145px"
-              },
-              "padding": {
-                "value": "0px 0px 0px 0px"
-              },
-              "backgroundColor": {
-                "value": "rgb(219.30000364780426,255,0)"
-              },
-              "position": {
-                "value": "relative"
-              },
-              "src": {
-                "value": "https://via.placeholder.com/472x723?text=Amplify+FrontendManager+is+Awesome!"
-              },
-              "height": {
-                "value": "119px"
-              }
-            }
-          },
-          {
-            "children": [],
-            "componentType": "View",
-            "name": "Rectangle 56",
-            "properties": {
-              "width": {
-                "value": "145px"
+                "value": "123px"
               },
               "padding": {
                 "value": "0px 0px 0px 0px"
@@ -47,34 +22,65 @@
                 "value": "relative"
               },
               "src": {
-                "value": "https://via.placeholder.com/472x723?text=Amplify+FrontendManager+is+Awesome!"
+                "value": "https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!"
               },
               "height": {
-                "value": "124px"
+                "value": "125px"
+              }
+            }
+          },
+          {
+            "children": [],
+            "componentType": "View",
+            "name": "RectangleYellow",
+            "properties": {
+              "width": {
+                "value": "123px"
+              },
+              "padding": {
+                "value": "0px 0px 0px 0px"
+              },
+              "backgroundColor": {
+                "value": "rgb(219.30000364780426,255,0)"
+              },
+              "position": {
+                "value": "relative"
+              },
+              "src": {
+                "value": "https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!"
+              },
+              "height": {
+                "value": "122px"
               }
             }
           }
         ],
         "componentType": "Flex",
-        "name": "Frame 107",
+        "name": "Container",
         "properties": {
           "padding": {
-            "value": "0px 0px 0px 0px"
+            "value": "10px 10px 10px 10px"
+          },
+          "alignSelf": {
+            "value": "stretch"
           },
           "flexGrow": {
-            "value": "0"
+            "value": "1"
+          },
+          "overflow": {
+            "value": "hidden"
           },
           "gap": {
-            "value": "0"
+            "value": "10px"
           },
           "width": {
-            "value": "472px"
+            "value": "100%"
           },
           "position": {
             "value": "relative"
           },
           "height": {
-            "value": "723px"
+            "value": "100%"
           },
           "direction": {
             "value": "column"
@@ -83,10 +89,10 @@
       }
     ],
     "componentType": "Flex",
-    "createdAt": "2021-10-29T19:06:43.871Z",
+    "createdAt": "2021-10-29T19:06:44.204Z",
     "environmentName": "staging",
-    "id": "c-0Fp5NOksaO2U0LKA2y",
-    "name": "ComplexTest8",
+    "id": "c-DlN0MMNeyYvjilfTUv",
+    "name": "ComplexTest2",
     "overrides": {},
     "properties": {
       "padding": {
@@ -102,7 +108,7 @@
         "value": "0"
       },
       "width": {
-        "value": "145px"
+        "value": "153px"
       },
       "position": {
         "value": "relative"
@@ -111,9 +117,9 @@
         "value": "row"
       },
       "height": {
-        "value": "243px"
+        "value": "289px"
       }
     },
-    "sourceId": "101:26",
+    "sourceId": "101:18",
     "variants": []
   }

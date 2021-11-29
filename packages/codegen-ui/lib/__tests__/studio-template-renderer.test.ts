@@ -13,28 +13,24 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { MockTemplateRenderer } from './__utils__/mock-classes';
+import { MockOutputManager, MockTemplateRenderer } from './__utils__/mock-classes';
 
-describe('ReactFrontendManagerTemplateRenderer', () => {
-  describe('renderSampleCodeSnippet', () => {
+describe('StudioTemplateRenderer', () => {
+  test('renderComponentToFilesystem', () => {
     const component = {
       componentType: 'Text',
+      name: 'MyText',
+      properties: {},
       bindingProperties: {},
-      properties: {
-        children: {
-          value: 'value',
-        },
-      },
     };
-
-    test('component with name', () => {
-      const renderer = new MockTemplateRenderer({ ...component, name: 'MyText' }, {});
-      expect(renderer.renderSampleCodeSnippet()).toMatchSnapshot();
-    });
-
-    test('component without name', () => {
-      const renderer = new MockTemplateRenderer(component, {});
-      expect(renderer.renderSampleCodeSnippet()).toMatchSnapshot();
-    });
+    const outputManager = new MockOutputManager();
+    outputManager.writeComponent = jest.fn();
+    const componentText = 'component';
+    const fileName = 'MyText.ts';
+    const outputPath = 'ui-components';
+    new MockTemplateRenderer(component, outputManager, {}).renderComponentToFilesystem(componentText)(fileName)(
+      outputPath,
+    );
+    expect(outputManager.writeComponent).toHaveBeenCalledWith(componentText, `${outputPath}/${fileName}`);
   });
 });

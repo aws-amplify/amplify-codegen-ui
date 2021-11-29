@@ -29,13 +29,13 @@ const alphaNumNoLeadingNumberString = () => {
 /**
  * Component Schema Definitions
  */
-const frontendManagerComponentChildSchema: any = yup.object({
+const studioComponentChildSchema: any = yup.object({
   componentType: alphaNumNoLeadingNumberString().required(),
-  // TODO: Name is required in the types file, but doesn't seem to need to be. Relaxing the restriction here.
+  // TODO: Name is required in the studio-types file, but doesn't seem to need to be. Relaxing the restriction here.
   name: yup.string().nullable(),
   properties: yup.object().required(),
   // Doing lazy eval here since we reference our own type otherwise
-  children: yup.lazy(() => yup.array(frontendManagerComponentChildSchema.default(undefined))),
+  children: yup.lazy(() => yup.array(studioComponentChildSchema.default(undefined))),
   figmaMetadata: yup.object().nullable(),
   variants: yup.array().nullable(),
   overrides: yup.object().nullable(),
@@ -44,13 +44,13 @@ const frontendManagerComponentChildSchema: any = yup.object({
   actions: yup.object().nullable(),
 });
 
-const frontendManagerComponentSchema = yup.object({
+const studioComponentSchema = yup.object({
   name: alphaNumString().nullable(),
   id: yup.string().nullable(),
   sourceId: yup.string().nullable(),
   componentType: alphaNumNoLeadingNumberString().required(),
   properties: yup.object().required(),
-  children: yup.array(frontendManagerComponentChildSchema).nullable(),
+  children: yup.array(studioComponentChildSchema).nullable(),
   figmaMetadata: yup.object().nullable(),
   variants: yup.array().nullable(),
   overrides: yup.object().nullable(),
@@ -62,29 +62,29 @@ const frontendManagerComponentSchema = yup.object({
 /**
  * Theme Schema Definitions
  */
-const frontendManagerThemeValuesSchema: any = yup.object({
+const studioThemeValuesSchema: any = yup.object({
   key: yup.string().required(),
   value: yup
     .object({
       value: yup.string(),
-      children: yup.lazy(() => yup.array(frontendManagerThemeValuesSchema.default(undefined))),
+      children: yup.lazy(() => yup.array(studioThemeValuesSchema.default(undefined))),
     })
     .required(),
 });
 
-const frontendManagerThemeSchema = yup.object({
+const studioThemeSchema = yup.object({
   name: alphaNumString().required(),
   id: yup.string().nullable(),
-  values: yup.array(frontendManagerThemeValuesSchema).required(),
-  overrides: yup.array(frontendManagerThemeValuesSchema).nullable(),
+  values: yup.array(studioThemeValuesSchema).required(),
+  overrides: yup.array(studioThemeValuesSchema).nullable(),
 });
 
 /**
- * FrontendManager Schema Validation Functions and Helpers.
+ * Studio Schema Validation Functions and Helpers.
  */
-const validateSchema = (validator: yup.AnySchema, frontendManagerSchema: any) => {
+const validateSchema = (validator: yup.AnySchema, studioSchema: any) => {
   try {
-    validator.validateSync(frontendManagerSchema, { strict: true, abortEarly: false });
+    validator.validateSync(studioSchema, { strict: true, abortEarly: false });
   } catch (e) {
     if (e instanceof yup.ValidationError) {
       throw new InvalidInputError(e.errors.join(', '));
@@ -93,5 +93,5 @@ const validateSchema = (validator: yup.AnySchema, frontendManagerSchema: any) =>
   }
 };
 
-export const validateComponentSchema = (schema: any) => validateSchema(frontendManagerComponentSchema, schema);
-export const validateThemeSchema = (schema: any) => validateSchema(frontendManagerThemeSchema, schema);
+export const validateComponentSchema = (schema: any) => validateSchema(studioComponentSchema, schema);
+export const validateThemeSchema = (schema: any) => validateSchema(studioThemeSchema, schema);
