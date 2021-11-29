@@ -17,3 +17,4 @@ export { default as ComponentWithDataBindingWithPredicate } from './componentWit
 export { default as ComponentWithDataBindingWithoutPredicate } from './componentWithDataBindingWithoutPredicate.json';
 export { default as ComponentWithSimplePropertyBinding } from './componentWithSimplePropertyBinding.json';
 export { default as ComponentWithAuthBinding } from './componentWithAuthBinding.json';
+export { default as CompWithMultipleBindingsWithPred } from './componentWithMultipleDataBindingsWithPredicate.json';
