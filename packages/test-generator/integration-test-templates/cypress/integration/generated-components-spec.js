@@ -150,6 +150,13 @@ describe('Generated Components', () => {
           // TODO: Implement me.
         });
       });
+
+      describe('Multiple Data Bindings', () => {
+        it('Renders data from both bound data models', () => {
+          cy.visit('http://localhost:3000/component-tests');
+          cy.get('#multipleDataBindings').contains('QA - 2200');
+        });
+      });
     });
   });
 

@@ -1,0 +1,53 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Button",
+    "name": "ComponentWithMultipleDataBindingsWithPredicate",
+    "bindingProperties": {
+      "user": {
+        "type": "Data",
+        "bindingProperties": {
+          "model": "User",
+          "predicate": {
+            "field": "firstName",
+            "operand": "Al",
+            "operator": "eq"
+          }
+        }
+      },
+      "listing": {
+        "type": "Data",
+        "bindingProperties": {
+          "model": "Listing",
+          "predicate": {
+            "field": "title",
+            "operand": "Mountain Retreat",
+            "operator": "eq"
+          }
+        }
+      }
+    },
+    "properties": {
+      "label": {
+        "concat": [
+          {
+            "bindingProperties": {
+              "property": "user",
+              "field": "firstName"
+            },
+            "defaultValue": "Buddy"
+          },
+          {
+            "value": " - "
+          },
+          {
+            "bindingProperties": {
+              "property": "listing",
+              "field": "priceUSD"
+            },
+            "defaultValue": "100"
+          }
+        ]
+      }
+    }
+  }
+  

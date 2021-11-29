@@ -44,6 +44,7 @@ import {
   ComponentWithSimplePropertyBinding,
   ComponentWithDataBindingWithoutPredicate,
   ComponentWithDataBindingWithPredicate,
+  ComponentWithMultipleDataBindingsWithPredicate,
   CollectionWithBinding,
   CollectionWithSort,
   ParsedFixedValues,
@@ -250,6 +251,15 @@ export default function ComponentTests() {
           }}
         />
         <ComponentWithAuthBinding id="authBinding" />
+        <ComponentWithMultipleDataBindingsWithPredicate
+          id="multipleDataBindings"
+          user={{
+            firstName: 'QA',
+          }}
+          listing={{
+            priceUSD: 2200,
+          }}
+        />
       </div>
       <div id="collections">
         <h2>Collections</h2>
