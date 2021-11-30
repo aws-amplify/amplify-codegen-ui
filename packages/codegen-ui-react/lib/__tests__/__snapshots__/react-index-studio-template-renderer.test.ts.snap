@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReactIndexStudioTemplateRenderer renderComponentInternal does not crash with no schemas 1`] = `""`;
+
+exports[`ReactIndexStudioTemplateRenderer renderComponentInternal renders correct component text 1`] = `
+"export { default as MyText } from \\"./MyText\\";
+export { default as MyButton } from \\"./MyButton\\";
+"
+`;
