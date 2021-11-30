@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react-output-manager writeComponent throws error if component text is not set 1`] = `"You must call renderComponent before you can save the file."`;
+
+exports[`react-output-manager writeComponent writes component 1`] = `
+Array [
+  Array [
+    "output/MyComponent.js",
+    "/***************************************************************************
+ * The contents of this file were generated with Amplify Studio.           *
+ * Please refrain from making any modifications to this file.              *
+ * Any changes to this file will be overwritten when running amplify pull. *
+ **************************************************************************/
+
+My Component Text",
+  ],
+]
+`;
