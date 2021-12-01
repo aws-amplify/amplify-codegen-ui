@@ -1,0 +1,745 @@
+{
+  "appId": "d1m9wl849zeqa6",
+  "bindingProperties": {},
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [],
+                  "componentType": "Text",
+                  "name": "New Amplify Studio gives designers the ability to export UI to React code",
+                  "properties": {
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "alignSelf": {
+                      "value": "stretch"
+                    },
+                    "color": {
+                      "value": "rgba(0,0,0,1)"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "label": {
+                      "value": "New Amplify Studio gives designers the ability to export UI to React code"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "width": {
+                      "value": "712px"
+                    },
+                    "fontSize": {
+                      "value": "32px"
+                    },
+                    "lineHeight": {
+                      "value": "40px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "fontWeight": {
+                      "value": "700"
+                    },
+                    "direction": {
+                      "value": "column"
+                    }
+                  }
+                },
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "componentType": "Text",
+                      "name": "Nikhil S",
+                      "properties": {
+                        "padding": {
+                          "value": "0px 0px 0px 0px"
+                        },
+                        "color": {
+                          "value": "rgba(128.0000075697899,128.0000075697899,128.0000075697899,1)"
+                        },
+                        "textAlign": {
+                          "value": "left"
+                        },
+                        "shrink": {
+                          "value": "0"
+                        },
+                        "display": {
+                          "value": "flex"
+                        },
+                        "letterSpacing": {
+                          "value": "0.010000000000000009px"
+                        },
+                        "label": {
+                          "value": "Nikhil S"
+                        },
+                        "justifyContent": {
+                          "value": "flex-start"
+                        },
+                        "fontFamily": {
+                          "value": "Inter"
+                        },
+                        "fontSize": {
+                          "value": "16px"
+                        },
+                        "lineHeight": {
+                          "value": "24px"
+                        },
+                        "position": {
+                          "value": "relative"
+                        },
+                        "fontWeight": {
+                          "value": "400"
+                        },
+                        "direction": {
+                          "value": "column"
+                        }
+                      }
+                    },
+                    {
+                      "children": [],
+                      "componentType": "Text",
+                      "name": "2nd December 2021",
+                      "properties": {
+                        "padding": {
+                          "value": "0px 0px 0px 0px"
+                        },
+                        "color": {
+                          "value": "rgba(128.0000075697899,128.0000075697899,128.0000075697899,1)"
+                        },
+                        "textAlign": {
+                          "value": "left"
+                        },
+                        "shrink": {
+                          "value": "0"
+                        },
+                        "display": {
+                          "value": "flex"
+                        },
+                        "letterSpacing": {
+                          "value": "0.010000000000000009px"
+                        },
+                        "label": {
+                          "value": "2nd December 2021"
+                        },
+                        "justifyContent": {
+                          "value": "flex-start"
+                        },
+                        "fontFamily": {
+                          "value": "Inter"
+                        },
+                        "width": {
+                          "value": "1396px"
+                        },
+                        "fontSize": {
+                          "value": "16px"
+                        },
+                        "lineHeight": {
+                          "value": "24px"
+                        },
+                        "position": {
+                          "value": "relative"
+                        },
+                        "fontWeight": {
+                          "value": "400"
+                        },
+                        "direction": {
+                          "value": "column"
+                        }
+                      }
+                    }
+                  ],
+                  "componentType": "Flex",
+                  "name": "Frame",
+                  "properties": {
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "alignSelf": {
+                      "value": "stretch"
+                    },
+                    "alignItems": {
+                      "value": "flex-start"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "gap": {
+                      "value": "16px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "direction": {
+                      "value": "row"
+                    }
+                  }
+                }
+              ],
+              "componentType": "Flex",
+              "name": "Headline",
+              "properties": {
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "column"
+                }
+              }
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "componentType": "IconArrowForward",
+                  "name": "Iconynp",
+                  "properties": {
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "color": {
+                      "value": "rgba(207.00000286102295,77.00001060962677,193.99995803833008,1)"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "width": {
+                      "value": "24px"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "type": {
+                      "value": "arrow_forward"
+                    },
+                    "height": {
+                      "value": "24px"
+                    }
+                  }
+                },
+                {
+                  "children": [],
+                  "componentType": "Text",
+                  "name": "AWS Amplify Studio is a visual development environment for building full-stack web and mobile apps that grows with your business. Studio builds on existing backend building capabilities in AWS Amplify, allowing you to build your UI faster with a set of ready-to-use UI components that are editable in Figma. With Studio, you can quickly build an entire web app, front-to-back, with minimal coding, while still maintaining full control over your app design and behavior through code. Ship faster, scale effortlessly, and delight every user.",
+                  "properties": {
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "color": {
+                      "value": "rgba(0,0,0,1)"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "label": {
+                      "value": "AWS Amplify Studio is a visual development environment for building full-stack web and mobile apps that grows with your business. Studio builds on existing backend building capabilities in AWS Amplify, allowing you to build your UI faster with a set of ready-to-use UI components that are editable in Figma. With Studio, you can quickly build an entire web app, front-to-back, with minimal coding, while still maintaining full control over your app design and behavior through code. Ship faster, scale effortlessly, and delight every user."
+                    },
+                    "basis": {
+                      "value": "672px"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "width": {
+                      "value": "672px"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "direction": {
+                      "value": "column"
+                    }
+                  }
+                }
+              ],
+              "componentType": "Flex",
+              "name": "Article",
+              "properties": {
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "gap": {
+                  "value": "16px"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "direction": {
+                  "value": "row"
+                }
+              }
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "componentType": "Text",
+                  "name": "Sharedgc",
+                  "properties": {
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(128.0000075697899,128.0000075697899,128.0000075697899,1)"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "label": {
+                      "value": "Share"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "direction": {
+                      "value": "column"
+                    }
+                  }
+                },
+                {
+                  "children": [],
+                  "componentType": "IconBookmarkBorder",
+                  "name": "Iconsrv",
+                  "properties": {
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "color": {
+                      "value": "rgba(0,0,0,1)"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "width": {
+                      "value": "24px"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "type": {
+                      "value": "bookmark_border"
+                    },
+                    "height": {
+                      "value": "24px"
+                    }
+                  }
+                },
+                {
+                  "children": [],
+                  "componentType": "IconShare",
+                  "name": "Iconwdz",
+                  "properties": {
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "color": {
+                      "value": "rgba(0,0,0,1)"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "width": {
+                      "value": "24px"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "type": {
+                      "value": "share"
+                    },
+                    "height": {
+                      "value": "24px"
+                    }
+                  }
+                },
+                {
+                  "children": [],
+                  "componentType": "IconMoreVert",
+                  "name": "Iconxpr",
+                  "properties": {
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "color": {
+                      "value": "rgba(0,0,0,1)"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "width": {
+                      "value": "24px"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "type": {
+                      "value": "more_vert"
+                    },
+                    "height": {
+                      "value": "24px"
+                    }
+                  }
+                }
+              ],
+              "componentType": "Flex",
+              "name": "Shareakz",
+              "properties": {
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "gap": {
+                  "value": "16px"
+                },
+                "width": {
+                  "value": "165px"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "direction": {
+                  "value": "row"
+                }
+              }
+            }
+          ],
+          "componentType": "Flex",
+          "name": "Text",
+          "properties": {
+            "padding": {
+              "value": "0px 0px 0px 0px"
+            },
+            "grow": {
+              "value": "1"
+            },
+            "gap": {
+              "value": "16px"
+            },
+            "width": {
+              "value": "712px"
+            },
+            "position": {
+              "value": "relative"
+            },
+            "basis": {
+              "value": "712px"
+            },
+            "direction": {
+              "value": "column"
+            },
+            "height": {
+              "value": "344px"
+            }
+          }
+        },
+        {
+          "children": [],
+          "componentType": "Image",
+          "name": "image",
+          "properties": {
+            "width": {
+              "value": "160px"
+            },
+            "padding": {
+              "value": "0px 0px 0px 0px"
+            },
+            "position": {
+              "value": "relative"
+            },
+            "borderRadius": {
+              "value": "16px"
+            },
+            "shrink": {
+              "value": "0"
+            },
+            "height": {
+              "value": "160px"
+            }
+          }
+        }
+      ],
+      "componentType": "Flex",
+      "name": "Body",
+      "properties": {
+        "padding": {
+          "value": "0px 0px 0px 0px"
+        },
+        "alignSelf": {
+          "value": "stretch"
+        },
+        "alignItems": {
+          "value": "flex-start"
+        },
+        "shrink": {
+          "value": "0"
+        },
+        "gap": {
+          "value": "40px"
+        },
+        "position": {
+          "value": "relative"
+        },
+        "direction": {
+          "value": "row"
+        }
+      }
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "componentType": "IconArrowForward",
+          "name": "Iconlxm",
+          "properties": {
+            "padding": {
+              "value": "0px 0px 0px 0px"
+            },
+            "overflow": {
+              "value": "hidden"
+            },
+            "color": {
+              "value": "rgba(0,0,0,1)"
+            },
+            "shrink": {
+              "value": "0"
+            },
+            "width": {
+              "value": "24px"
+            },
+            "fontSize": {
+              "value": "24px"
+            },
+            "position": {
+              "value": "relative"
+            },
+            "type": {
+              "value": "arrow_forward"
+            },
+            "height": {
+              "value": "24px"
+            }
+          }
+        },
+        {
+          "children": [],
+          "componentType": "Text",
+          "name": "Read morepbe",
+          "properties": {
+            "padding": {
+              "value": "0px 0px 0px 0px"
+            },
+            "grow": {
+              "value": "1"
+            },
+            "color": {
+              "value": "rgba(0,0,0,1)"
+            },
+            "textAlign": {
+              "value": "left"
+            },
+            "display": {
+              "value": "flex"
+            },
+            "letterSpacing": {
+              "value": "0.010000000000000009px"
+            },
+            "textDecoration": {
+              "value": "underline"
+            },
+            "label": {
+              "value": "Read more"
+            },
+            "basis": {
+              "value": "872px"
+            },
+            "justifyContent": {
+              "value": "flex-start"
+            },
+            "fontFamily": {
+              "value": "Inter"
+            },
+            "width": {
+              "value": "872px"
+            },
+            "fontSize": {
+              "value": "16px"
+            },
+            "lineHeight": {
+              "value": "24px"
+            },
+            "position": {
+              "value": "relative"
+            },
+            "fontWeight": {
+              "value": "400"
+            },
+            "direction": {
+              "value": "column"
+            }
+          }
+        }
+      ],
+      "componentType": "Flex",
+      "name": "Read moreudv",
+      "properties": {
+        "padding": {
+          "value": "0px 0px 0px 0px"
+        },
+        "alignSelf": {
+          "value": "stretch"
+        },
+        "alignItems": {
+          "value": "flex-start"
+        },
+        "shrink": {
+          "value": "0"
+        },
+        "gap": {
+          "value": "16px"
+        },
+        "position": {
+          "value": "relative"
+        },
+        "direction": {
+          "value": "row"
+        }
+      }
+    }
+  ],
+  "componentType": "Flex",
+  "createdAt": "2021-12-01T00:37:25.832Z",
+  "environmentName": "staging",
+  "id": "c-8jT6tlUKxBuGXe7wLt",
+  "modifiedAt": "2021-12-01T00:37:25.832Z",
+  "name": "SocialA",
+  "overrides": {},
+  "properties": {
+    "width": {
+      "value": "960px"
+    },
+    "padding": {
+      "value": "24px 24px 24px 24px"
+    },
+    "backgroundColor": {
+      "value": "rgba(255,255,255,1)"
+    },
+    "position": {
+      "value": "relative"
+    },
+    "gap": {
+      "value": "16px"
+    },
+    "direction": {
+      "value": "column"
+    }
+  },
+  "sourceId": "1715:4398",
+  "variants": []
+}

@@ -410,4 +410,10 @@ describe('amplify render tests', () => {
       expect(generateWithAmplifyRenderer('builtInIconset').componentText).toMatchSnapshot();
     });
   });
+
+  describe('icon-indices', () => {
+    it('does not return negative indices for icons', () => {
+      expect(generateWithAmplifyRenderer('iconBug').componentText).toMatchSnapshot();
+    });
+  });
 });
