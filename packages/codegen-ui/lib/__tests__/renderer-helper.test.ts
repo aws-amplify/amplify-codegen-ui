@@ -14,30 +14,30 @@
   limitations under the License.
  */
 import {
-  FrontendManagerComponentDataPropertyBinding,
-  FrontendManagerComponentAuthPropertyBinding,
-  FrontendManagerComponentStoragePropertyBinding,
-  FrontendManagerComponentSimplePropertyBinding,
+  StudioComponentDataPropertyBinding,
+  StudioComponentAuthPropertyBinding,
+  StudioComponentStoragePropertyBinding,
+  StudioComponentSimplePropertyBinding,
 } from '../types';
 import {
-  isFrontendManagerComponentWithBinding,
+  isStudioComponentWithBinding,
   isDataPropertyBinding,
   isAuthPropertyBinding,
   isStoragePropertyBinding,
   isSimplePropertyBinding,
-  isFrontendManagerComponentWithCollectionProperties,
-  isFrontendManagerComponentWithVariants,
+  isStudioComponentWithCollectionProperties,
+  isStudioComponentWithVariants,
 } from '../renderer-helper';
 
 describe('render-helper', () => {
   const bindingProperties: {
-    data: FrontendManagerComponentDataPropertyBinding;
-    auth: FrontendManagerComponentAuthPropertyBinding;
-    storage: FrontendManagerComponentStoragePropertyBinding;
-    boolean: FrontendManagerComponentSimplePropertyBinding;
-    string: FrontendManagerComponentSimplePropertyBinding;
-    number: FrontendManagerComponentSimplePropertyBinding;
-    date: FrontendManagerComponentSimplePropertyBinding;
+    data: StudioComponentDataPropertyBinding;
+    auth: StudioComponentAuthPropertyBinding;
+    storage: StudioComponentStoragePropertyBinding;
+    boolean: StudioComponentSimplePropertyBinding;
+    string: StudioComponentSimplePropertyBinding;
+    number: StudioComponentSimplePropertyBinding;
+    date: StudioComponentSimplePropertyBinding;
   } = {
     data: {
       type: 'Data',
@@ -71,10 +71,10 @@ describe('render-helper', () => {
     },
   };
 
-  describe('isFrontendManagerComponentWithBinding', () => {
+  describe('isStudioComponentWithBinding', () => {
     test('object has bindingProperties', () => {
       expect(
-        isFrontendManagerComponentWithBinding({
+        isStudioComponentWithBinding({
           componentType: 'View',
           name: 'MyBindingView',
           properties: {},
@@ -82,7 +82,7 @@ describe('render-helper', () => {
         }),
       ).toBeTruthy();
       expect(
-        isFrontendManagerComponentWithBinding({
+        isStudioComponentWithBinding({
           componentType: 'View',
           name: 'MyNonBindingView',
           properties: {},
@@ -91,10 +91,10 @@ describe('render-helper', () => {
     });
   });
 
-  describe('isFrontendManagerComponentWithCollectionProperties', () => {
+  describe('isStudioComponentWithCollectionProperties', () => {
     test('object without collectionProperties is falsy', () => {
       expect(
-        isFrontendManagerComponentWithCollectionProperties({
+        isStudioComponentWithCollectionProperties({
           componentType: '',
           name: '',
           properties: {},
@@ -103,7 +103,7 @@ describe('render-helper', () => {
     });
     test('object with undefined collectionProperties is falsy', () => {
       expect(
-        isFrontendManagerComponentWithCollectionProperties({
+        isStudioComponentWithCollectionProperties({
           componentType: '',
           name: '',
           properties: {},
@@ -113,7 +113,7 @@ describe('render-helper', () => {
     });
     test('object with collectionProperties is truthy', () => {
       expect(
-        isFrontendManagerComponentWithCollectionProperties({
+        isStudioComponentWithCollectionProperties({
           componentType: '',
           name: '',
           properties: {},
@@ -123,10 +123,10 @@ describe('render-helper', () => {
     });
   });
 
-  describe('isFrontendManagerComponentWithVariants', () => {
+  describe('isStudioComponentWithVariants', () => {
     test('object without variants is falsy', () => {
       expect(
-        isFrontendManagerComponentWithVariants({
+        isStudioComponentWithVariants({
           componentType: '',
           name: '',
           properties: {},
@@ -135,7 +135,7 @@ describe('render-helper', () => {
     });
     test('object with undefined variants is falsy', () => {
       expect(
-        isFrontendManagerComponentWithVariants({
+        isStudioComponentWithVariants({
           componentType: '',
           name: '',
           properties: {},
@@ -145,7 +145,7 @@ describe('render-helper', () => {
     });
     test('object with empty list of variants is falsy', () => {
       expect(
-        isFrontendManagerComponentWithVariants({
+        isStudioComponentWithVariants({
           componentType: '',
           name: '',
           properties: {},
@@ -155,7 +155,7 @@ describe('render-helper', () => {
     });
     test('object with variants is truthy', () => {
       expect(
-        isFrontendManagerComponentWithVariants({
+        isStudioComponentWithVariants({
           componentType: '',
           name: '',
           properties: {},

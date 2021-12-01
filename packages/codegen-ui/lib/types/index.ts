@@ -14,5 +14,5 @@
   limitations under the License.
  */
 export * from './primitives';
-export * from './frontend-manager-schema';
-export * from './frontend-manager-types';
+export * from './studio-schema';
+export * from './studio-types';

@@ -14,9 +14,9 @@
   limitations under the License.
  */
 import { JsxFragment, factory } from 'typescript';
-import { ReactFrontendManagerTemplateRenderer } from '../../react-frontend-manager-template-renderer';
+import { ReactStudioTemplateRenderer } from '../../react-studio-template-renderer';
 
-export class MockTemplateRenderer extends ReactFrontendManagerTemplateRenderer {
+export class MockTemplateRenderer extends ReactStudioTemplateRenderer {
   renderJsx(): JsxFragment {
     return factory.createJsxFragment(factory.createJsxOpeningFragment(), [], factory.createJsxJsxClosingFragment());
   }

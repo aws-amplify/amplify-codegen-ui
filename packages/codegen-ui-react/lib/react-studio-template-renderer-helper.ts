@@ -15,8 +15,8 @@
  */
 import {
   isDataPropertyBinding,
-  FrontendManagerComponentDataPropertyBinding,
-  FrontendManagerComponentSimplePropertyBinding,
+  StudioComponentDataPropertyBinding,
+  StudioComponentSimplePropertyBinding,
 } from '@aws-amplify/codegen-ui';
 
 import ts, {
@@ -158,7 +158,7 @@ export function jsonToLiteral(
 }
 
 export function bindingPropertyUsesHook(
-  binding: FrontendManagerComponentDataPropertyBinding | FrontendManagerComponentSimplePropertyBinding,
+  binding: StudioComponentDataPropertyBinding | StudioComponentSimplePropertyBinding,
 ): boolean {
   return isDataPropertyBinding(binding) && 'predicate' in binding.bindingProperties;
 }

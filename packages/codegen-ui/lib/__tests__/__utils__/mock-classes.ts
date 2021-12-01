@@ -15,8 +15,8 @@
  */
 /* eslint-disable max-classes-per-file */
 
-import { FrontendManagerComponent } from '../../types';
-import { FrontendManagerTemplateRenderer } from '../../frontend-manager-template-renderer';
+import { StudioComponent } from '../../types';
+import { StudioTemplateRenderer } from '../../studio-template-renderer';
 import { FrameworkOutputManager } from '../../framework-output-manager';
 
 export class MockOutputManager extends FrameworkOutputManager<string> {
@@ -27,9 +27,9 @@ export class MockOutputManager extends FrameworkOutputManager<string> {
   }
 }
 
-export class MockTemplateRenderer extends FrontendManagerTemplateRenderer<
+export class MockTemplateRenderer extends StudioTemplateRenderer<
   string,
-  FrontendManagerComponent,
+  StudioComponent,
   MockOutputManager,
   { componentText: string; renderComponentToFilesystem: (outputPath: string) => Promise<void> }
 > {

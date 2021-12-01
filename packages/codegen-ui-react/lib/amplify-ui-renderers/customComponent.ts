@@ -13,12 +13,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FrontendManagerComponentChild } from '@aws-amplify/codegen-ui';
+import { StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { JsxChild, JsxElement, factory } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 
 export default class CustomComponentRenderer<TPropIn> extends ReactComponentWithChildrenRenderer<TPropIn> {
-  renderElement(renderChildren: (children: FrontendManagerComponentChild[]) => JsxChild[]): JsxElement {
+  renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
     const children = this.component.children ? this.component.children : [];
     const element = factory.createJsxElement(
       this.renderOpeningElement(),

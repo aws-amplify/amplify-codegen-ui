@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { FrameworkOutputManager } from './framework-output-manager';
-import { FrontendManagerTemplateRenderer } from './frontend-manager-template-renderer';
+import { StudioTemplateRenderer } from './studio-template-renderer';
 
 import { RenderTextComponentResponse } from './render-component-response';
 
@@ -22,16 +22,16 @@ import { RenderTextComponentResponse } from './render-component-response';
  * This class is used to wrap the created of renderers due to each renderer
  * only being used for one component.
  */
-export class FrontendManagerTemplateRendererFactory<
+export class StudioTemplateRendererFactory<
   TSource,
-  TFrontendManagerType,
+  TStudioType,
   TOutputManager extends FrameworkOutputManager<TSource>,
   TRenderOutput extends RenderTextComponentResponse,
-  TRenderer extends FrontendManagerTemplateRenderer<TSource, TFrontendManagerType, TOutputManager, TRenderOutput>,
+  TRenderer extends StudioTemplateRenderer<TSource, TStudioType, TOutputManager, TRenderOutput>,
 > {
-  constructor(private renderer: (component: TFrontendManagerType) => TRenderer) {}
+  constructor(private renderer: (component: TStudioType) => TRenderer) {}
 
-  buildRenderer(component: TFrontendManagerType): TRenderer {
+  buildRenderer(component: TStudioType): TRenderer {
     return this.renderer(component);
   }
 }

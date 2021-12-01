@@ -13,13 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FrontendManagerComponent } from '@aws-amplify/codegen-ui';
+import { StudioComponent } from '@aws-amplify/codegen-ui';
 import { assertASTMatchesSnapshot } from '../__utils__/snapshot-helpers';
 
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
 import Primitive from '../../primitive';
 
-function testPrimitive(component: FrontendManagerComponent) {
+function testPrimitive(component: StudioComponent) {
   const renderedComponent = new AmplifyRenderer(component, {}).renderJsx(component);
   assertASTMatchesSnapshot(renderedComponent);
 }

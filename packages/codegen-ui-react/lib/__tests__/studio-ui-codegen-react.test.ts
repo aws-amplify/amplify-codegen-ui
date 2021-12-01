@@ -13,27 +13,23 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import {
-  FrontendManagerTemplateRendererFactory,
-  FrontendManagerComponent,
-  FrontendManagerTheme,
-} from '@aws-amplify/codegen-ui';
+import { StudioTemplateRendererFactory, StudioComponent, StudioTheme } from '@aws-amplify/codegen-ui';
 import fs from 'fs';
 import { join } from 'path';
 import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '..';
 import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
-import { ReactThemeFrontendManagerTemplateRenderer } from '../react-theme-frontend-manager-template-renderer';
+import { ReactThemeStudioTemplateRenderer } from '../react-theme-studio-template-renderer';
 
-function loadSchemaFromJSONFile(jsonSchemaFile: string): FrontendManagerComponent {
+function loadSchemaFromJSONFile(jsonSchemaFile: string): StudioComponent {
   return JSON.parse(
-    fs.readFileSync(join(__dirname, 'frontend-manager-ui-json', `${jsonSchemaFile}.json`), 'utf-8'),
-  ) as FrontendManagerComponent;
+    fs.readFileSync(join(__dirname, 'studio-ui-json', `${jsonSchemaFile}.json`), 'utf-8'),
+  ) as StudioComponent;
 }
 
-function loadThemeFromJSONFile(jsonThemeFile: string): FrontendManagerTheme {
+function loadThemeFromJSONFile(jsonThemeFile: string): StudioTheme {
   return JSON.parse(
-    fs.readFileSync(join(__dirname, 'frontend-manager-ui-json', `${jsonThemeFile}.json`), 'utf-8'),
-  ) as FrontendManagerTheme;
+    fs.readFileSync(join(__dirname, 'studio-ui-json', `${jsonThemeFile}.json`), 'utf-8'),
+  ) as StudioTheme;
 }
 
 function generateWithAmplifyRenderer(
@@ -42,8 +38,8 @@ function generateWithAmplifyRenderer(
   isSampleCodeSnippet = false,
 ): { componentText: string; declaration?: string } {
   const schema = loadSchemaFromJSONFile(jsonSchemaFile);
-  const rendererFactory = new FrontendManagerTemplateRendererFactory(
-    (component: FrontendManagerComponent) => new AmplifyRenderer(component, renderConfig),
+  const rendererFactory = new StudioTemplateRendererFactory(
+    (component: StudioComponent) => new AmplifyRenderer(component, renderConfig),
   );
   if (isSampleCodeSnippet) {
     return { componentText: rendererFactory.buildRenderer(schema).renderSampleCodeSnippet().compText };
@@ -53,8 +49,8 @@ function generateWithAmplifyRenderer(
 
 function generateWithThemeRenderer(jsonFile: string, renderConfig: ReactRenderConfig = {}): string {
   const theme = loadThemeFromJSONFile(jsonFile);
-  const rendererFactory = new FrontendManagerTemplateRendererFactory(
-    (theme: FrontendManagerTheme) => new ReactThemeFrontendManagerTemplateRenderer(theme, renderConfig),
+  const rendererFactory = new StudioTemplateRendererFactory(
+    (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
   );
   return rendererFactory.buildRenderer(theme).renderComponent().componentText;
 }
