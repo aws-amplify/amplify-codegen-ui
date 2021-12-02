@@ -64,6 +64,8 @@ There are 3 keys steps, first you need to create a new tagged release version of
 
 #### Versioning
 
+1. Ensure you've pull main, including tags: `git fetch origin && git checkout main && git pull`
+1. Ensure you have the latest tags: `git pull --tags -f`
 1. Create new branch: `git checkout -b new-release`
 1. Run version command: `npm run version`
 1. Create new PR with the new branch to mainline: `gh pr create`
