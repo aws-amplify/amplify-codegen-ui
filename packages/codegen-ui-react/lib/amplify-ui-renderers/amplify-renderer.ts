@@ -70,14 +70,23 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
     const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
 
     if (isBuiltInIcon(component.componentType)) {
-      return new ReactComponentWithChildrenRenderer<IconProps>(
-        {
-          ...component,
-          componentType: iconsetPascalNameMapping.get(component.componentType) || component.componentType,
-        },
+      const { componentType } = component;
+
+      // need to reassign param so object equality comparison works when finding override index
+      // eslint-disable-next-line no-param-reassign
+      component.componentType = iconsetPascalNameMapping.get(component.componentType) || component.componentType;
+
+      const renderedComponent = new ReactComponentWithChildrenRenderer<IconProps>(
+        component,
         this.importCollection,
         parent,
       ).renderElement(renderChildren);
+
+      // return componentType to original value
+      // eslint-disable-next-line no-param-reassign
+      component.componentType = componentType;
+
+      return renderedComponent;
     }
 
     // add Primitive in alphabetical order
