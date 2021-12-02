@@ -17,8 +17,9 @@ import {
   isDataPropertyBinding,
   StudioComponentDataPropertyBinding,
   StudioComponentSimplePropertyBinding,
+  InternalError,
+  InvalidInputError,
 } from '@aws-amplify/codegen-ui';
-
 import ts, {
   createPrinter,
   createSourceFile,
@@ -33,11 +34,10 @@ import ts, {
   ObjectLiteralExpression,
   createProgram,
 } from 'typescript';
+import { createDefaultMapFromNodeModules, createSystem, createVirtualCompilerHost } from '@typescript/vfs';
 import prettier from 'prettier';
 import parserTypescript from 'prettier/parser-typescript';
-import fs from 'fs';
 import path from 'path';
-import temp from 'temp';
 import { ReactRenderConfig, ScriptKind, ScriptTarget, ModuleKind } from './react-render-config';
 
 export const defaultRenderConfig = {
@@ -45,6 +45,18 @@ export const defaultRenderConfig = {
   target: ScriptTarget.ES2015,
   module: ModuleKind.ESNext,
 };
+
+const supportedTranspilationTargets = [
+  ScriptTarget.ES3,
+  ScriptTarget.ES5,
+  ScriptTarget.ES2015,
+  ScriptTarget.ES2016,
+  ScriptTarget.ES2017,
+  ScriptTarget.ES2018,
+  ScriptTarget.ES2019,
+  ScriptTarget.ES2020,
+  ScriptTarget.ES2021,
+];
 
 export function transpile(
   code: string,
@@ -63,33 +75,45 @@ export function transpile(
 
     const componentText = prettier.format(transpiledCode, { parser: 'typescript', plugins: [parserTypescript] });
 
-    /* createProgram is less performant than traspileModule and should only be used when necessary.
+    /*
+     * createProgram is less performant than traspileModule and should only be used when necessary.
      * createProgram is used here becuase transpileModule cannot produce type declarations.
+     * We execute in a virtual filesystem to ensure we have no dependencies on platform fs in this stage.
      */
     if (renderTypeDeclarations) {
-      temp.track(); // tracks temp resources created to then be deleted by temp.cleanupSync
-
-      try {
-        const tmpFile = temp.openSync({ suffix: '.tsx' });
-        const tmpDir = temp.mkdirSync();
-
-        fs.writeFileSync(tmpFile.path, code);
-
-        createProgram([tmpFile.path], {
-          target,
-          module,
-          declaration: true,
-          emitDeclarationOnly: true,
-          outDir: tmpDir,
-          skipLibCheck: true,
-        }).emit();
-
-        const declaration = fs.readFileSync(path.join(tmpDir, getDeclarationFilename(tmpFile.path)), 'utf8');
-
-        return { componentText, declaration };
-      } finally {
-        temp.cleanupSync();
+      if (target && !new Set(supportedTranspilationTargets).has(target)) {
+        throw new InvalidInputError(
+          `ScriptTarget ${target} not supported with type declarations enabled, expected one of ${JSON.stringify(
+            supportedTranspilationTargets,
+          )}`,
+        );
       }
+
+      const compilerOptions = {
+        target,
+        module,
+        declaration: true,
+        emitDeclarationOnly: true,
+        skipLibCheck: true,
+      };
+
+      const fsMap = createDefaultMapFromNodeModules(compilerOptions, ts);
+      fsMap.set('index.tsx', code);
+
+      const host = createVirtualCompilerHost(createSystem(fsMap), compilerOptions, ts);
+      createProgram({
+        rootNames: [...fsMap.keys()],
+        options: compilerOptions,
+        host: host.compilerHost,
+      }).emit();
+
+      const declaration = fsMap.get('index.d.ts');
+
+      if (!declaration) {
+        throw new InternalError('Component declaration file not generated');
+      }
+
+      return { componentText, declaration };
     }
 
     return {

@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react-studio-template-renderer-helper transpile fails to transpile with ScriptTarget ESNext 1`] = `"ScriptTarget 99 not supported with type declarations enabled, expected one of [0,1,2,3,4,5,6,7,8]"`;
+
+exports[`react-studio-template-renderer-helper transpile fails to transpile with ScriptTarget Latest 1`] = `"ScriptTarget 99 not supported with type declarations enabled, expected one of [0,1,2,3,4,5,6,7,8]"`;
+
+exports[`react-studio-template-renderer-helper transpile successfully transpiles with ScriptTarget ES3 1`] = `
+"import React from \\"react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`react-studio-template-renderer-helper transpile successfully transpiles with ScriptTarget ES5 1`] = `
+"import React from \\"react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`react-studio-template-renderer-helper transpile successfully transpiles with ScriptTarget ES2015 1`] = `
+"import React from \\"react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`react-studio-template-renderer-helper transpile successfully transpiles with ScriptTarget ES2016 1`] = `
+"import React from \\"react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`react-studio-template-renderer-helper transpile successfully transpiles with ScriptTarget ES2017 1`] = `
+"import React from \\"react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`react-studio-template-renderer-helper transpile successfully transpiles with ScriptTarget ES2018 1`] = `
+"import React from \\"react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`react-studio-template-renderer-helper transpile successfully transpiles with ScriptTarget ES2019 1`] = `
+"import React from \\"react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`react-studio-template-renderer-helper transpile successfully transpiles with ScriptTarget ES2020 1`] = `
+"import React from \\"react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`react-studio-template-renderer-helper transpile successfully transpiles with ScriptTarget ES2021 1`] = `
+"import React from \\"react\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
