@@ -14,12 +14,11 @@
   limitations under the License.
  */
 describe('Complex Components', () => {
-  it('Successfully opens the app', () => {
+  before(() => {
     cy.visit('http://localhost:3000/complex-tests');
   });
 
   it('Complex 1', () => {
-    cy.visit('http://localhost:3000/complex-tests');
     cy.get('#complex-test-1').within(() => {
       cy.get('.amplify-flex')
         .should(
@@ -41,7 +40,6 @@ describe('Complex Components', () => {
   });
 
   it('Complex 2', () => {
-    cy.visit('http://localhost:3000/complex-tests');
     cy.get('#complex-test-2').within(() => {
       cy.get('.amplify-flex')
         .should(
@@ -81,7 +79,6 @@ describe('Complex Components', () => {
   });
 
   it('Complex 3', () => {
-    cy.visit('http://localhost:3000/complex-tests');
     cy.get('#complex-test-3').within(() => {
       cy.get('.amplify-flex')
         .should(
@@ -127,7 +124,6 @@ describe('Complex Components', () => {
   });
 
   it('Complex 4', () => {
-    cy.visit('http://localhost:3000/complex-tests');
     cy.get('#complex-test-4').within(() => {
       cy.get('.amplify-flex')
         .should(
@@ -164,7 +160,6 @@ describe('Complex Components', () => {
   });
 
   it('Complex 5', () => {
-    cy.visit('http://localhost:3000/complex-tests');
     cy.get('#complex-test-5').within(() => {
       cy.get('.amplify-flex')
         .should(
@@ -195,7 +190,6 @@ describe('Complex Components', () => {
   });
 
   it('Complex 6', () => {
-    cy.visit('http://localhost:3000/complex-tests');
     cy.get('#complex-test-6').within(() => {
       cy.get('.amplify-flex')
         .should(
@@ -239,7 +233,6 @@ describe('Complex Components', () => {
   });
 
   it('Complex 7', () => {
-    cy.visit('http://localhost:3000/complex-tests');
     cy.get('#complex-test-7').within(() => {
       cy.get('div')
         .should('have.attr', 'style', 'height: 192px; padding: 0px; position: relative; width: 401px;')
@@ -279,7 +272,6 @@ describe('Complex Components', () => {
   });
 
   it('Complex 8', () => {
-    cy.visit('http://localhost:3000/complex-tests');
     cy.get('#complex-test-8').within(() => {
       cy.get('.amplify-flex')
         .should(
