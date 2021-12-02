@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v1.0.0...v1.1.0) (2021-12-02)
+
+
+### Bug Fixes
+
+* use correct override index for built-in iconset components ([#266](https://github.com/aws-amplify/amplify-codegen-ui/issues/266)) ([04c3baa](https://github.com/aws-amplify/amplify-codegen-ui/commit/04c3baa68f76a8f227178488c2928248fb1b5292))
+
+
+### Features
+
+* use typescript virtual file server to allow transpilation without requiring a real fs ([#268](https://github.com/aws-amplify/amplify-codegen-ui/issues/268)) ([d8219c5](https://github.com/aws-amplify/amplify-codegen-ui/commit/d8219c50928e33ffd032df3a11b1024b3d7bf982))
+
+
+
+
+
 # [1.0.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v0.13.1...v1.0.0) (2021-12-01)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui-react
