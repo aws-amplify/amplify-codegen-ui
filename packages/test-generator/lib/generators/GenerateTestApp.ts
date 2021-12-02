@@ -40,8 +40,8 @@ const jsxGenerator = new NodeTestGenerator({
   writeToLogger: false,
   writeToDisk: true,
   renderConfigOverride: {
-    module: ModuleKind.ESNext,
-    target: ScriptTarget.ESNext,
+    module: ModuleKind.ES2020,
+    target: ScriptTarget.ES2020,
     script: ScriptKind.JSX,
     renderTypeDeclarations: true,
   },
