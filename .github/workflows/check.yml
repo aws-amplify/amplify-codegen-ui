@@ -49,6 +49,8 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm run test
+      - name: Codecov
+        uses: codecov/codecov-action@v2
 
   integration-test:
     runs-on: ubuntu-latest
