@@ -35,7 +35,7 @@ export enum ImportValue {
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.CREATE_THEME]: ImportSource.UI_REACT,
-  [ImportValue.ESCAPE_HATCH_PROPS]: ImportSource.UI_REACT,
+  [ImportValue.ESCAPE_HATCH_PROPS]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.GET_OVERRIDE_PROPS]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_AUTH]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.GET_OVERRIDES_FROM_VARIANTS]: ImportSource.UI_REACT_INTERNAL,
