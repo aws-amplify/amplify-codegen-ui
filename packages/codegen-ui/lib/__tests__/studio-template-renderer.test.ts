@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import path from 'path';
 import { MockOutputManager, MockTemplateRenderer } from './__utils__/mock-classes';
 
 describe('StudioTemplateRenderer', () => {
@@ -31,6 +32,6 @@ describe('StudioTemplateRenderer', () => {
     new MockTemplateRenderer(component, outputManager, {}).renderComponentToFilesystem(componentText)(fileName)(
       outputPath,
     );
-    expect(outputManager.writeComponent).toHaveBeenCalledWith(componentText, `${outputPath}/${fileName}`);
+    expect(outputManager.writeComponent).toHaveBeenCalledWith(componentText, path.join(outputPath, fileName));
   });
 });
