@@ -31,7 +31,7 @@ import {
   InvalidInputError,
 } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
-import { ImportCollection } from './import-collection';
+import { ImportCollection, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import {
   transpile,
@@ -91,7 +91,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    * import { createTheme } from "@aws-amplify/ui-react";
    */
   private buildImports() {
-    this.importCollection.addImport('@aws-amplify/ui-react', 'createTheme');
+    this.importCollection.addMappedImport(ImportValue.CREATE_THEME);
 
     return this.importCollection.buildImportStatements(true);
   }
