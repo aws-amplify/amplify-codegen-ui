@@ -15,9 +15,15 @@
  */
 import factory, { ImportDeclaration } from 'typescript';
 import path from 'path';
+import { ImportMapping, ImportValue } from './import-mapping';
 
 export class ImportCollection {
   #collection: Map<string, Set<string>> = new Map();
+
+  addMappedImport(importValue: ImportValue) {
+    const importPackage = ImportMapping[importValue];
+    this.addImport(importPackage, importValue);
+  }
 
   addImport(packageName: string, importName: string) {
     if (!this.#collection.has(packageName)) {

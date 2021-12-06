@@ -4,14 +4,11 @@ exports[`amplify render tests actions should render sign out action 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  Button,
   EscapeHatchProps,
-  Flex,
-  FlexProps,
-  Heading,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Heading } from \\"@aws-amplify/ui-react\\";
 
 export type SiteHeaderProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -58,8 +55,11 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
 exports[`amplify render tests basic component tests should generate a simple button component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps, EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -87,8 +87,11 @@ export default function CustomButton(
 exports[`amplify render tests basic component tests should generate a simple text component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
 export type CustomTextProps = React.PropsWithChildren<
   Partial<TextProps> & {
@@ -115,8 +118,11 @@ export default function CustomText(props: CustomTextProps): React.ReactElement {
 exports[`amplify render tests basic component tests should generate a simple view component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
 export type TestProps = React.PropsWithChildren<
   Partial<ViewProps> & {
@@ -144,6 +150,7 @@ exports[`amplify render tests collection should render collection with data bind
 import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
+  EscapeHatchProps,
   createDataStorePredicate,
   getOverrideProps,
   useDataStoreBinding,
@@ -152,7 +159,6 @@ import {
   Button,
   Collection,
   CollectionProps,
-  EscapeHatchProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -244,6 +250,7 @@ Object {
 import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
+  EscapeHatchProps,
   createDataStorePredicate,
   getOverrideProps,
   useDataStoreBinding,
@@ -252,7 +259,6 @@ import {
   Button,
   Collection,
   CollectionProps,
-  EscapeHatchProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
 import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
@@ -352,6 +358,7 @@ exports[`amplify render tests collection should render collection with data bind
 import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
+  EscapeHatchProps,
   createDataStorePredicate,
   getOverrideProps,
   useDataStoreBinding,
@@ -360,7 +367,6 @@ import {
   Button,
   Collection,
   CollectionProps,
-  EscapeHatchProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
 
@@ -450,15 +456,12 @@ exports[`amplify render tests collection should render collection with data bind
 "/* eslint-disable */
 import React from \\"react\\";
 import {
+  EscapeHatchProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
 import ListingCard from \\"./ListingCard\\";
-import {
-  Collection,
-  CollectionProps,
-  EscapeHatchProps,
-} from \\"@aws-amplify/ui-react\\";
+import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 import { UntitledModel } from \\"../models\\";
 
 export type ListingCardCollectionProps = React.PropsWithChildren<
@@ -511,13 +514,12 @@ export default function ListingCardCollection(
 exports[`amplify render tests collection should render collection without data binding 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import ListingCard from \\"./ListingCard\\";
 import {
-  Collection,
-  CollectionProps,
   EscapeHatchProps,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import ListingCard from \\"./ListingCard\\";
+import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -555,13 +557,11 @@ export default function ListingCardCollection(
 exports[`amplify render tests complex component tests should generate a button within a view component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  Button,
   EscapeHatchProps,
-  View,
-  ViewProps,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
 export type ViewWithButtonProps = React.PropsWithChildren<
   Partial<ViewProps> & {
@@ -590,9 +590,12 @@ export default function ViewWithButton(
 exports[`amplify render tests complex component tests should generate a component with custom child 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
 import CustomButton from \\"./CustomButton\\";
-import { EscapeHatchProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
+import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
 export type ViewWithCustomButtonProps = React.PropsWithChildren<
   Partial<ViewProps> & {
@@ -621,13 +624,11 @@ export default function ViewWithCustomButton(
 exports[`amplify render tests complex component tests should generate a component with exposeAs prop 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  Button,
   EscapeHatchProps,
-  View,
-  ViewProps,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
 export type ViewWithButtonProps = React.PropsWithChildren<
   Partial<ViewProps> & {
@@ -656,8 +657,11 @@ export default function ViewWithButton(
 exports[`amplify render tests complex examples should render complex sample 1 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type ComplexTest1Props = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -705,8 +709,11 @@ export default function ComplexTest1(
 exports[`amplify render tests complex examples should render complex sample 2 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
 
 export type ComplexTest2Props = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -772,14 +779,11 @@ export default function ComplexTest2(
 exports[`amplify render tests complex examples should render complex sample 3 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   EscapeHatchProps,
-  Flex,
-  FlexProps,
-  Text,
-  View,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, Text, View } from \\"@aws-amplify/ui-react\\";
 import ReneButton from \\"./ReneButton\\";
 
 export type ComplexTest3Props = React.PropsWithChildren<
@@ -858,11 +862,12 @@ exports[`amplify render tests complex examples should render complex sample 4 1`
 "/* eslint-disable */
 import React from \\"react\\";
 import {
+  EscapeHatchProps,
   Variant,
   getOverrideProps,
   getOverridesFromVariants,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
 
 export type ComplexTest4Props = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -993,8 +998,11 @@ export default function ComplexTest4(
 exports[`amplify render tests complex examples should render complex sample 5 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
 
 export type ComplexTest5Props = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -1045,8 +1053,11 @@ export default function ComplexTest5(
 exports[`amplify render tests complex examples should render complex sample 6 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type ComplexTest6Props = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -1121,14 +1132,11 @@ export default function ComplexTest6(
 exports[`amplify render tests complex examples should render complex sample 7 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   EscapeHatchProps,
-  Image,
-  Text,
-  View,
-  ViewProps,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Image, Text, View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
 export type ComplexTest7Props = React.PropsWithChildren<
   Partial<ViewProps> & {
@@ -1199,8 +1207,11 @@ export default function ComplexTest7(
 exports[`amplify render tests complex examples should render complex sample 8 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
 
 export type ComplexTest8Props = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -1264,8 +1275,11 @@ export default function ComplexTest8(
 exports[`amplify render tests component with binding should render build property on Text 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
 export type TextWithDataBindingProps = React.PropsWithChildren<
   Partial<TextProps> & {
@@ -1297,8 +1311,11 @@ exports[`amplify render tests component with data binding should add model impor
 "/* eslint-disable */
 import React from \\"react\\";
 import { User } from \\"../models\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps, EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type ComponentWithDataBindingProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -1340,8 +1357,11 @@ exports[`amplify render tests component with data binding should not have useDat
 "/* eslint-disable */
 import React from \\"react\\";
 import { UntitledModel } from \\"../models\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type SectionHeadingProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -1398,13 +1418,11 @@ export default function SectionHeading(
 exports[`amplify render tests component with data binding should render with data binding in child elements 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  Button,
-  ButtonProps,
   EscapeHatchProps,
-  Text,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type ChildComponentWithDataBindingProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -1436,11 +1454,12 @@ Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
 import {
+  EscapeHatchProps,
   Variant,
   getOverrideProps,
   getOverridesFromVariants,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps, EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -1509,13 +1528,11 @@ export default function CustomButton(
 exports[`amplify render tests concat and conditional transform should render child component with data bound concatenation 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  Button,
-  ButtonProps,
   EscapeHatchProps,
-  Text,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type ChildComponentWithDataBoundConcatenationProps =
   React.PropsWithChildren<
@@ -1548,13 +1565,11 @@ export default function ChildComponentWithDataBoundConcatenation(
 exports[`amplify render tests concat and conditional transform should render child component with static concatenation 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  Button,
-  ButtonProps,
   EscapeHatchProps,
-  Text,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type ChildComponentWithStaticConcatenationProps =
   React.PropsWithChildren<
@@ -1584,8 +1599,11 @@ exports[`amplify render tests concat and conditional transform should render com
 "/* eslint-disable */
 import React from \\"react\\";
 import { User } from \\"../models\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps, EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -1626,8 +1644,11 @@ exports[`amplify render tests concat and conditional transform should render com
 "/* eslint-disable */
 import React from \\"react\\";
 import { User } from \\"../models\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps, EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -1681,14 +1702,11 @@ exports[`amplify render tests concat and conditional transform should render com
 "/* eslint-disable */
 import React from \\"react\\";
 import { Student } from \\"../models\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  Button,
   EscapeHatchProps,
-  Flex,
-  FlexProps,
-  Text,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type ConditionalComponentWithDataBindingProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -1735,8 +1753,11 @@ export default function ConditionalComponentWithDataBinding(
 exports[`amplify render tests concat and conditional transform should render component with conditional simple binding prop 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps, EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -1765,10 +1786,12 @@ export default function CustomButton(
 exports[`amplify render tests custom components custom children should render component with custom children 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
 import CustomButton from \\"./CustomButton\\";
 import MyView, { MyViewProps } from \\"./MyView\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
 
 export type CustomChildrenProps = React.PropsWithChildren<
   Partial<MyViewProps> & {
@@ -1848,8 +1871,8 @@ export default function CustomChildren(props) {
 
 exports[`amplify render tests custom components custom children should render declarations 1`] = `
 "import React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { MyViewProps } from \\"./MyView\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
 export declare type CustomChildrenProps = React.PropsWithChildren<Partial<MyViewProps> & {
     overrides?: EscapeHatchProps | undefined | null;
 }>;
@@ -1860,10 +1883,12 @@ export default function CustomChildren(props: CustomChildrenProps): React.ReactE
 exports[`amplify render tests custom components custom parent and children should render component with custom parent and children 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
 import CustomButton from \\"./CustomButton\\";
 import ViewTest, { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
 
 export type CustomParentAndChildrenProps = React.PropsWithChildren<
   Partial<ViewTestProps> & {
@@ -1943,8 +1968,8 @@ export default function CustomParentAndChildren(props) {
 
 exports[`amplify render tests custom components custom parent and children should render declarations 1`] = `
 "import React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { ViewTestProps } from \\"./ViewTest\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
 export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
     overrides?: EscapeHatchProps | undefined | null;
 }>;
@@ -1955,8 +1980,11 @@ export default function CustomParentAndChildren(props: CustomParentAndChildrenPr
 exports[`amplify render tests custom components custom parent should render component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button } from \\"@aws-amplify/ui-react\\";
 import MyView, { MyViewProps } from \\"./MyView\\";
 
 export type CustomParentProps = React.PropsWithChildren<
@@ -2035,7 +2063,7 @@ export default function CustomParent(props) {
 
 exports[`amplify render tests custom components custom parent should render declarations 1`] = `
 "import React from \\"react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { MyViewProps } from \\"./MyView\\";
 export declare type CustomParentProps = React.PropsWithChildren<Partial<MyViewProps> & {
     overrides?: EscapeHatchProps | undefined | null;
@@ -2194,7 +2222,8 @@ exports.default = ViewWithButton;
 
 exports[`amplify render tests declarations should render declarations 1`] = `
 "import React from \\"react\\";
-import { EscapeHatchProps, FlexProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { FlexProps } from \\"@aws-amplify/ui-react\\";
 export declare type ProfileProps = React.PropsWithChildren<Partial<FlexProps> & {
     overrides?: EscapeHatchProps | undefined | null;
 }>;
@@ -2206,8 +2235,11 @@ exports[`amplify render tests default value should render bound default value 1`
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
 export type BoundDefaultValueProps = React.PropsWithChildren<
   Partial<TextProps> & {
@@ -2241,15 +2273,11 @@ Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
 import {
+  EscapeHatchProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import {
-  Collection,
-  CollectionProps,
-  EscapeHatchProps,
-  Text,
-} from \\"@aws-amplify/ui-react\\";
+import { Collection, CollectionProps, Text } from \\"@aws-amplify/ui-react\\";
 import { User } from \\"../models\\";
 
 export type CollectionDefaultValueProps = React.PropsWithChildren<
@@ -2296,8 +2324,11 @@ exports[`amplify render tests default value should render simple and bound defau
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
 export type SimpleAndBoundDefaultValueProps = React.PropsWithChildren<
   Partial<TextProps> & {
@@ -2334,8 +2365,11 @@ exports[`amplify render tests default value should render simple default value 1
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { EscapeHatchProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
 export type SimplePropertyBindingDefaultValueProps = React.PropsWithChildren<
   Partial<TextProps> & {
@@ -2371,9 +2405,11 @@ export default function SimplePropertyBindingDefaultValue(
 exports[`amplify render tests icon-indices does not return negative indices for icons 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
   Flex,
   FlexProps,
   IconArrowForward,
@@ -2697,9 +2733,11 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
 exports[`amplify render tests primitives Built-in Iconset 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
   IconBrightness_1,
   IconCloud,
   View,
@@ -2732,12 +2770,11 @@ export default function MyIcons(props: MyIconsProps): React.ReactElement {
 exports[`amplify render tests primitives CheckboxField 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  CheckboxField,
-  CheckboxFieldProps,
   EscapeHatchProps,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { CheckboxField, CheckboxFieldProps } from \\"@aws-amplify/ui-react\\";
 
 export type CheckBoxFieldPrimitiveProps = React.PropsWithChildren<
   Partial<CheckboxFieldProps> & {
@@ -2766,13 +2803,11 @@ export default function CheckBoxFieldPrimitive(
 exports[`amplify render tests primitives Expander 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   EscapeHatchProps,
-  Expander,
-  ExpanderItem,
-  ExpanderProps,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Expander, ExpanderItem, ExpanderProps } from \\"@aws-amplify/ui-react\\";
 
 export type ExpanderPrimitiveProps = React.PropsWithChildren<
   Partial<ExpanderProps> & {
@@ -2813,12 +2848,11 @@ export default function ExpanderPrimitive(
 exports[`amplify render tests primitives ExpanderItem 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   EscapeHatchProps,
-  ExpanderItem,
-  ExpanderItemProps,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { ExpanderItem, ExpanderItemProps } from \\"@aws-amplify/ui-react\\";
 
 export type ComponentWithoutNameProps = React.PropsWithChildren<
   Partial<ExpanderItemProps> & {
@@ -2847,12 +2881,11 @@ export default function unknown_component_name(
 exports[`amplify render tests primitives SliderField 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   EscapeHatchProps,
-  SliderField,
-  SliderFieldProps,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { SliderField, SliderFieldProps } from \\"@aws-amplify/ui-react\\";
 
 export type SliderFieldPrimitiveProps = React.PropsWithChildren<
   Partial<SliderFieldProps> & {
@@ -2884,12 +2917,11 @@ export default function SliderFieldPrimitive(
 exports[`amplify render tests primitives TextField 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   EscapeHatchProps,
-  TextField,
-  TextFieldProps,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { TextField, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 
 export type TextFieldPrimitiveProps<Multiline extends boolean> =
   React.PropsWithChildren<
@@ -2919,9 +2951,12 @@ export default function TextFieldPrimitive<Multiline extends boolean>(
 exports[`amplify render tests sample code snippet tests should generate a sample code snippet for components 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
 import CustomButton from \\"./CustomButton\\";
-import { EscapeHatchProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
+import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
 export type ViewWithButtonProps = React.PropsWithChildren<
   Partial<ViewProps> & {
@@ -2952,14 +2987,11 @@ exports[`amplify render tests should render navigation actions 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  Button,
   EscapeHatchProps,
-  Flex,
-  FlexProps,
-  Heading,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Heading } from \\"@aws-amplify/ui-react\\";
 
 export type SiteHeaderProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -3034,9 +3066,12 @@ exports[`amplify render tests should render parsed fixed values 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
 import Input from \\"./Input\\";
-import { EscapeHatchProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
+import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
 export type ParsedFixedValuesProps = React.PropsWithChildren<
   Partial<ViewProps> & {
@@ -3209,14 +3244,12 @@ export default createTheme({
 exports[`amplify render tests user specific attributes should render user specific attributes 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps, useAuth } from \\"@aws-amplify/ui-react/internal\\";
 import {
-  Button,
   EscapeHatchProps,
-  Flex,
-  FlexProps,
-  Image,
-} from \\"@aws-amplify/ui-react\\";
+  getOverrideProps,
+  useAuth,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Image } from \\"@aws-amplify/ui-react\\";
 
 export type ProfileProps = React.PropsWithChildren<
   Partial<FlexProps> & {

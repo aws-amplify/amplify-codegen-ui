@@ -254,9 +254,11 @@ export default function ComponentTests() {
         <ComponentWithMultipleDataBindingsWithPredicate
           id="multipleDataBindings"
           user={{
+            id: '1',
             firstName: 'QA',
           }}
           listing={{
+            id: '1',
             priceUSD: 2200,
           }}
         />

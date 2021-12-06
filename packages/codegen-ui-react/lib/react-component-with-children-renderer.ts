@@ -20,7 +20,7 @@ import {
   StudioComponentChild,
 } from '@aws-amplify/codegen-ui';
 import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
-import { ImportCollection } from './import-collection';
+import { ImportCollection, ImportSource, ImportValue } from './imports';
 import {
   addBindingPropertiesImports,
   buildOpeningElementAttributes,
@@ -52,7 +52,7 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
       factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
-    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport(ImportSource.UI_REACT, this.component.componentType);
 
     return element;
   }
@@ -116,7 +116,7 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
         factory.createStringLiteral(this.node.getOverrideKey()),
       ]),
     );
-    this.importCollection.addImport('@aws-amplify/ui-react/internal', 'getOverrideProps');
+    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
     attributes.push(overrideAttr);
   }
 

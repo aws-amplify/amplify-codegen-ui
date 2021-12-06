@@ -21,7 +21,7 @@ import {
   buildOpeningElementAttributes,
   buildOpeningElementActions,
 } from './react-component-render-helper';
-import { ImportCollection } from './import-collection';
+import { ImportCollection, ImportSource, ImportValue } from './imports';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   TPropIn,
@@ -43,7 +43,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
-    this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport(ImportSource.UI_REACT, this.component.componentType);
 
     return element;
   }
@@ -80,7 +80,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
         factory.createStringLiteral(this.node.getOverrideKey()),
       ]),
     );
-    this.importCollection.addImport('@aws-amplify/ui-react/internal', 'getOverrideProps');
+    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
     attributes.push(overrideAttr);
   }
 }
