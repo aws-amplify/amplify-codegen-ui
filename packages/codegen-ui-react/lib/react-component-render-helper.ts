@@ -37,7 +37,7 @@ import {
   JsxChild,
 } from 'typescript';
 
-import { ImportCollection } from './import-collection';
+import { ImportCollection, ImportSource } from './imports';
 import { jsonToLiteral } from './react-studio-template-renderer-helper';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
@@ -456,7 +456,7 @@ export function addBindingPropertiesImports(
   if ('bindingProperties' in component) {
     Object.entries(component.bindingProperties).forEach(([, binding]) => {
       if ('bindingProperties' in binding && 'model' in binding.bindingProperties) {
-        importCollection.addImport('../models', binding.bindingProperties.model);
+        importCollection.addImport(ImportSource.LOCAL_MODELS, binding.bindingProperties.model);
       }
     });
   }

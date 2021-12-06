@@ -58,7 +58,7 @@ import ts, {
   addSyntheticLeadingComment,
   JsxSelfClosingElement,
 } from 'typescript';
-import { ImportCollection } from './import-collection';
+import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
@@ -292,7 +292,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const componentPropType = getComponentPropName(component.name);
     const propsTypeParameter = PrimitiveTypeParameter[Primitive[component.componentType as Primitive]];
 
-    this.importCollection.addImport('@aws-amplify/ui-react', 'EscapeHatchProps');
+    this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
 
     return factory.createTypeAliasDeclaration(
       undefined,
@@ -317,7 +317,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const componentIsPrimitive = isPrimitive(component.componentType);
     if (componentIsPrimitive || isBuiltInIcon(component.componentType)) {
-      this.importCollection.addImport('@aws-amplify/ui-react', propsType);
+      this.importCollection.addImport(ImportSource.UI_REACT, propsType);
     } else {
       this.importCollection.addImport(`./${component.componentType}`, `${component.componentType}Props`);
     }
@@ -515,7 +515,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const authStatement = this.buildUseAuthenticatedUserStatement(component);
     if (authStatement !== undefined) {
-      this.importCollection.addImport('@aws-amplify/ui-react/internal', 'useAuth');
+      this.importCollection.addMappedImport(ImportValue.USE_AUTH);
       statements.push(authStatement);
     }
 
@@ -835,8 +835,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    */
   private buildOverridesDeclaration(hasVariants: boolean): VariableStatement {
     if (hasVariants) {
-      this.importCollection.addImport('@aws-amplify/ui-react/internal', 'getOverridesFromVariants');
-      this.importCollection.addImport('@aws-amplify/ui-react/internal', 'Variant');
+      this.importCollection.addMappedImport(ImportValue.GET_OVERRIDES_FROM_VARIANTS);
+      this.importCollection.addMappedImport(ImportValue.VARIANT);
 
       return factory.createVariableStatement(
         undefined,
@@ -893,11 +893,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           statements.push(this.buildCreateDataStorePredicateCall(model, propName));
         }
         if (sort) {
-          this.importCollection.addImport('@aws-amplify/datastore', 'SortDirection');
-          this.importCollection.addImport('@aws-amplify/datastore', 'SortPredicate');
+          this.importCollection.addMappedImport(ImportValue.SORT_DIRECTION);
+          this.importCollection.addMappedImport(ImportValue.SORT_PREDICATE);
           statements.push(this.buildPaginationStatement(propName, model, sort));
         }
-        this.importCollection.addImport('../models', model);
+        this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
         statements.push(
           this.buildPropPrecedentStatement(
             propName,
@@ -920,7 +920,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private buildCreateDataStorePredicateCall(type: string, name: string): Statement {
-    this.importCollection.addImport('@aws-amplify/ui-react/internal', 'createDataStorePredicate');
+    this.importCollection.addMappedImport(ImportValue.CREATE_DATA_STORE_PREDICATE);
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -951,7 +951,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         if (isDataPropertyBinding(binding)) {
           const { bindingProperties } = binding;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
-            this.importCollection.addImport('@aws-amplify/ui-react/internal', 'useDataStoreBinding');
+            this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
             /* const buttonColorFilter = {
              *   field: "userID",
              *   operand: "user@email.com",
@@ -961,7 +961,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
             statements.push(this.buildCreateDataStorePredicateCall(bindingProperties.model, propName));
             const { model } = bindingProperties;
-            this.importCollection.addImport('../models', model);
+            this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
 
             /* const buttonColorDataStore = useDataStoreBinding({
              *   type: "collection"
@@ -1173,7 +1173,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     criteriaName?: string,
     paginationName?: string,
   ): CallExpression {
-    this.importCollection.addImport('@aws-amplify/ui-react/internal', 'useDataStoreBinding');
+    this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
 
     const objectProperties = [
       factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
