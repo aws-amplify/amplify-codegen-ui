@@ -41,13 +41,38 @@ jobs:
       - name: Install updated codegen libraries
         working-directory: amplify-cli/packages/amplify-util-uibuilder
         run: |
-          npm install ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
-          npm install ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
+          npm i ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
+          npm i ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
       - name: Test amplify-category-studio
         working-directory: amplify-cli/packages/amplify-util-uibuilder
         run: npm test
+      - name: Create a test react app
+        run: npx create-react-app e2e-test-app
+      - name: Install test app dependencies
+        working-directory: e2e-test-app
+        run: npm i aws-amplify @aws-amplify/ui-react
+      - name: Run CLI Pull in test app
+        working-directory: e2e-test-app
+        run: |
+          FORCE_RENDER=1 amplify-dev pull --appId ${{ secrets.E2E_TEST_APP_ID }} --envName staging -y --providers "{\
+            \"awscloudformation\":{\
+              \"configLevel\":\"project\",\
+              \"useProfile\":false,\
+              \"profileName\":\"default\",\
+              \"accessKeyId\":\"${{ secrets.E2E_TEST_ACCESS_KEY }}\",\
+              \"secretAccessKey\":\"${{ secrets.E2E_TEST_SECRET_KEY }}\",\
+              \"region\":\"us-west-2\"\
+            }\
+          }"
+      - name: Verify Components Are Generated
+        working-directory: e2e-test-app
+        run: |
+          if [ $(ls ./src/ui-components/ | wc -l) -lt 1 ]
+          then
+            exit 1
+          fi
 
-  integration-test:
+  functional-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Studio Codegen
