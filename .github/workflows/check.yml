@@ -7,51 +7,6 @@ on:
     branches: [main]
 
 jobs:
-  style:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Studio Codegen
-        uses: actions/checkout@v2
-      - name: Setup Node.js LTS
-        uses: actions/setup-node@v2
-        with:
-          node-version: lts/*
-      - name: Install packages
-        run: npm ci
-      - name: Lerna bootstrap
-        run: lerna bootstrap
-      - name: Prettier
-        run: npm run format:check
-      - name: ESLint
-        run: npm run lint
-      - name: Commit message
-        run: |
-          echo "${{ github.event.head_commit.message }}" > commit-message-tmp
-          ./.husky/commit-msg commit-message-tmp
-          rm commit-message-tmp
-
-  unit-test:
-    runs-on: ubuntu-latest
-    env:
-      NODE_ENV: test
-    steps:
-      - name: Checkout Studio Codegen
-        uses: actions/checkout@v2
-      - name: Setup Node.js LTS
-        uses: actions/setup-node@v2
-        with:
-          node-version: lts/*
-      - name: Install packages
-        run: npm ci
-      - name: Lerna bootstrap
-        run: lerna bootstrap
-      - name: Build
-        run: npm run build
-      - name: Run tests
-        run: npm run test
-      - name: Codecov
-        uses: codecov/codecov-action@v2
-
   integration-test:
     runs-on: ubuntu-latest
     steps:
