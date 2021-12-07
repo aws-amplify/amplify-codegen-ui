@@ -7,6 +7,46 @@ on:
     branches: [main]
 
 jobs:
+  amplify-cli-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+        with:
+          path: amplify-codegen-ui
+      - name: Checkout Amplify CLI
+        uses: actions/checkout@v2
+        with:
+          path: amplify-cli
+          repository: aws-amplify/amplify-cli
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install amplify-codegen-ui dependencies
+        working-directory: amplify-codegen-ui
+        run: npm ci
+      - name: Lerna bootstrap amplify-codegen-ui
+        working-directory: amplify-codegen-ui
+        run: lerna bootstrap
+      - name: Build amplify-codegen-ui
+        working-directory: amplify-codegen-ui
+        run: npm run build
+      - name: Package amplify-codegen-ui
+        working-directory: amplify-codegen-ui
+        run: lerna exec npm pack
+      - name: Build amplify-cli
+        working-directory: amplify-cli
+        run: yarn setup-dev
+      - name: Install updated codegen libraries
+        working-directory: amplify-cli/packages/amplify-util-uibuilder
+        run: |
+          npm install ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
+          npm install ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
+      - name: Test amplify-category-studio
+        working-directory: amplify-cli/packages/amplify-util-uibuilder
+        run: npm test
+
   integration-test:
     runs-on: ubuntu-latest
     steps:
