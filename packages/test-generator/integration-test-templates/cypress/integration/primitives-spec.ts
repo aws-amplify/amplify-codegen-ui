@@ -14,15 +14,12 @@
   limitations under the License.
  */
 describe('Primitives', () => {
-  describe('Sanity Test', () => {
-    it('Successfully opens the app', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
-    });
+  before(() => {
+    cy.visit('http://localhost:3000/primitives-tests');
   });
 
   describe('Alert', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#alert')
         .find('.amplify-alert')
         .within(() => {
@@ -33,14 +30,12 @@ describe('Primitives', () => {
 
   describe('Badge', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#badge').find('.amplify-badge').contains('Error Found');
     });
   });
 
   describe('Button', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#button').within(() => {
         cy.get('.amplify-button').should('have.text', 'Hello world!');
         cy.get('.amplify-button').should('have.attr', 'type', 'button');
@@ -51,7 +46,6 @@ describe('Primitives', () => {
 
   describe('ButtonGroup', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#button-group').within(() => {
         cy.get('.amplify-button').should('have.attr', 'data-variation', 'primary');
       });
@@ -60,7 +54,6 @@ describe('Primitives', () => {
 
   describe('Card', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#card').within(() => {
         cy.get('.amplify-card').find('div').should('have.attr', 'style', 'padding: 1rem;');
       });
@@ -69,7 +62,6 @@ describe('Primitives', () => {
 
   describe('CheckboxField', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#checkbox-field').within(() => {
         cy.get('.amplify-checkboxfield').get('.amplify-checkbox__label').should('have.text', 'Subscribe');
       });
@@ -78,21 +70,18 @@ describe('Primitives', () => {
 
   describe('Collection', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#collection').find('.amplify-card').eq(0).should('have.text', 'Cozy BungalowLorem ipsum dolor sit amet');
     });
   });
 
   describe('Divider', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#divider').find('.amplify-divider');
     });
   });
 
   describe('Expander', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#expander')
         .find('.amplify-expander')
         .within(() => {
@@ -116,7 +105,6 @@ describe('Primitives', () => {
 
   describe('Flex', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#flex').within(() => {
         cy.get('.amplify-text').eq(0).should('have.text', 'Hello');
         cy.get('.amplify-text').eq(1).should('have.text', 'world');
@@ -126,7 +114,6 @@ describe('Primitives', () => {
 
   describe('Grid', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#grid')
         .get('.amplify-grid')
         .within(() => {
@@ -140,14 +127,12 @@ describe('Primitives', () => {
 
   describe('Heading', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#heading').find('.amplify-heading').eq(1).should('have.text', 'Hello world!');
     });
   });
 
   describe('Icon', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#icon')
         .get('.amplify-icon')
         .within(() => {
@@ -163,14 +148,12 @@ describe('Primitives', () => {
 
   describe('Image', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#image').get('.amplify-image').should('have.attr', 'src', '/road-to-milford-new-zealand-800w.jpg');
     });
   });
 
   describe('Link', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#link').get('.amplify-link').should('have.text', 'My Link');
       cy.get('#link').get('.amplify-link').should('have.attr', 'href', '/primitives-tests');
     });
@@ -178,14 +161,12 @@ describe('Primitives', () => {
 
   describe('Loader', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#loader').get('.amplify-loader').should('have.attr', 'data-size', 'large');
     });
   });
 
   describe('Pagination', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#pagination')
         .get('.amplify-pagination')
         .get('ol')
@@ -200,28 +181,24 @@ describe('Primitives', () => {
 
   describe('PasswordField', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#password-field').find('.amplify-input').should('have.attr', 'autocomplete', 'current-password');
     });
   });
 
   describe('PhoneNumberField', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#phone-number-field').find('.amplify-input').should('have.attr', 'autocomplete', 'tel-national');
     });
   });
 
   describe('Placeholder', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#placeholder').find('.amplify-placeholder');
     });
   });
 
   describe('Radio', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#radio')
         .find('.amplify-radio')
         .within(() => {
@@ -233,7 +210,6 @@ describe('Primitives', () => {
 
   describe('RadioGroupField', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#radio-group-field')
         .find('.amplify-radiogroupfield')
         .within(() => {
@@ -249,28 +225,24 @@ describe('Primitives', () => {
 
   describe('Rating', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#rating').find('.amplify-visually-hidden').should('have.text', '3.7 out of 5 rating');
     });
   });
 
   describe('ScrollView', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#scroll-view').find('.amplify-scrollview').should('have.attr', 'style', 'height: 300px; width: 400px;');
     });
   });
 
   describe('SearchField', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#search-field').find('.amplify-input').should('have.attr', 'name', 'q');
     });
   });
 
   describe('SliderField', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#slider-field')
         .find('.amplify-sliderfield')
         .within(() => {
@@ -290,7 +262,6 @@ describe('Primitives', () => {
 
   describe('StepperField', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#stepper-field').within(() => {
         cy.get('.amplify-input').should('have.attr', 'type', 'number');
         cy.get('.amplify-input').should('have.attr', 'min', '0');
@@ -302,7 +273,6 @@ describe('Primitives', () => {
 
   describe('SwitchField', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#switch-field')
         .find('.amplify-switch__wrapper')
         .within(() => {
@@ -314,7 +284,6 @@ describe('Primitives', () => {
 
   describe('Tabs', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#tabs')
         .find('div')
         .within(() => {
@@ -328,14 +297,12 @@ describe('Primitives', () => {
 
   describe('Text', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#text').find('.amplify-text').should('have.text', 'Hello world');
     });
   });
 
   describe('TextField', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#text-field')
         .find('.amplify-textfield')
         .within(() => {
@@ -348,7 +315,6 @@ describe('Primitives', () => {
 
   describe('ToggleButton', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#toggle-button').within(() => {
         cy.get('.amplify-togglebutton').should('have.text', 'Press me!');
         cy.get('.amplify-togglebutton').should('have.attr', 'aria-pressed', 'false');
@@ -358,7 +324,6 @@ describe('Primitives', () => {
 
   describe('ToggleButtonGroup', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#toggle-button-group')
         .find('.amplify-togglebuttongroup')
         .within(() => {
@@ -376,14 +341,12 @@ describe('Primitives', () => {
 
   describe('View', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#view').find('div').should('have.text', 'Nice view! 🏔');
     });
   });
 
   describe('VisuallyHidden', () => {
     it('Basic', () => {
-      cy.visit('http://localhost:3000/primitives-tests');
       cy.get('#visually-hidden').find('button').find('.amplify-visually-hidden').should('have.text', 'Donemark');
     });
   });
