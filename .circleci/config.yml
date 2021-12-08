@@ -71,11 +71,10 @@ jobs:
       - checkout
       - restore_node_modules
       - run:
-          name: NPM Login
-          command: npm set "//registry.npmjs.org/:_authToken" $NPM_ACCESS_TOKEN
-      - run:
           name: NPM Publish
-          command: >-
+          command: |
+            npm set "//registry.npmjs.org/:_authToken" $NPM_ACCESS_TOKEN
+            echo "Executing as npm user $(npm whoami)"
             if [[ `git log --format=%s -n 1` =~ ^chore\(release\):\ v.* ]];
             then npx lerna publish from-git -y;
             else npx lerna publish --pre-dist-tag next --canary -y;
@@ -101,7 +100,7 @@ workflows:
             - unit-test
           filters:
             branches:
-              only: main
+              only: publish-tests
 
 commands:
   create_concatenated_package_lock:

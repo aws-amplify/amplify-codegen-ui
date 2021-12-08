@@ -14,7 +14,6 @@
   limitations under the License.
  */
 import { BaseComponentProps } from '@aws-amplify/ui-react';
-
 import { factory, JsxAttribute, JsxAttributeLike, JsxSelfClosingElement } from 'typescript';
 import { StudioRendererConstants } from '@aws-amplify/codegen-ui';
 import { ReactComponentRenderer } from '../react-component-renderer';
