@@ -17,13 +17,13 @@ import Amplify from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import awsconfig from './aws-exports';
-import { NavBar, BlogPosts } from './ui-components';
+import { NavBar, BlogPosts, studioTheme } from './ui-components';
 
 Amplify.configure(awsconfig);
 
 function App() {
   return (
-    <AmplifyProvider>
+    <AmplifyProvider theme={studioTheme}>
       <NavBar id="navBar" />
       <BlogPosts id="blogPosts" />
     </AmplifyProvider>
