@@ -121,6 +121,34 @@ Studio UI does not yet consume Codegen UI from NPM and instead the Codegen UI so
 1. Execute the 'update-codegen.sh' script, providing the newly created tag.
 1. Ensure review and merge the CR, after manual verification testing.
 
+### Pre-Release
+
+A pre-release is automatically published to NPM when the following cirteria are met:
+
+- A commit is pushed to then `main` branch.
+- The commit is not a release commit (i.e. `chore(release): v...`).
+- The commit has changes to a leaf package source.
+  - Ex. updating `.circleci/config.yml` will not make a pre-release, but changes `packages/codegen-ui/lib/studio-node.ts` will.
+- Lerna will only look back a single commit. If the HEAD commit does not meet previous cirteria the pre-release will not be published.
+
+The pre-release will increment the patch version of each package and append meta information including the short commit hash.
+These changes will **NOT** be pushed back to the GitHub repo.
+
+Example:
+
+```
+ - @aws-amplify/codegen-ui-react => 1.1.1-alpha.270+2baaca9
+ - @aws-amplify/codegen-ui => 1.1.1-alpha.270+2baaca9
+```
+
+The pre-release will be published under the `next` dist tag.
+
+```
+npm install @aws-amplify/codegen-ui-react@next
+```
+
+See [lerna publish docs](https://github.com/lerna/lerna/tree/main/commands/publish) for further detail.
+
 ### Icons
 
 The built-in iconset is genereted with `packages/scripts/generateBuiltInIconset.js`.
