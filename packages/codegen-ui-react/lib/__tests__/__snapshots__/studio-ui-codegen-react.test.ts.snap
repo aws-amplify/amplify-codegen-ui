@@ -1272,6 +1272,414 @@ export default function ComplexTest8(
 "
 `;
 
+exports[`amplify render tests complex examples should render complex sample 9 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Variant,
+  getOverrideProps,
+  getOverridesFromVariants,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+
+export type ComplexTest9Props = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    mode?: \\"Dark\\" | \\"Light\\";
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ComplexTest9(
+  props: ComplexTest9Props
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const variants: Variant[] = [
+    {
+      nodeId: \\"2878:3221\\",
+      variantValues: { mode: \\"Light\\" },
+      overrides: {
+        \\"Flex.Flex[0].Flex[0].Text[0]\\": {
+          fontFamily: \\"Inter\\",
+          fontSize: \\"16px\\",
+          fontWeight: \\"700\\",
+          color:
+            \\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\",
+          lineHeight: \\"20px\\",
+          textAlign: \\"center\\",
+          display: \\"flex\\",
+          direction: \\"column\\",
+          justifyContent: \\"flex-start\\",
+          letterSpacing: \\"0.49px\\",
+          width: \\"701px\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+          children: \\"LOREM IPSUM\\",
+        },
+        \\"Flex.Flex[0].Flex[0].Flex[0].Text[0]\\": {
+          fontFamily: \\"Inter\\",
+          fontSize: \\"40px\\",
+          fontWeight: \\"700\\",
+          color:
+            \\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\",
+          lineHeight: \\"48px\\",
+          textAlign: \\"center\\",
+          display: \\"flex\\",
+          direction: \\"column\\",
+          justifyContent: \\"flex-start\\",
+          width: \\"701px\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+          children: \\"Ut enim ad minim veniam quis nostrud\\",
+        },
+        \\"Flex.Flex[0].Flex[0].Flex[0].Text[1]\\": {
+          fontFamily: \\"Inter\\",
+          fontSize: \\"16px\\",
+          fontWeight: \\"400\\",
+          color:
+            \\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\",
+          lineHeight: \\"24px\\",
+          textAlign: \\"center\\",
+          display: \\"flex\\",
+          direction: \\"column\\",
+          justifyContent: \\"flex-start\\",
+          letterSpacing: \\"0.010000000000000009px\\",
+          width: \\"701px\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+          children:
+            \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.\\",
+        },
+        \\"Flex.Flex[0].Flex[0].Flex[0]\\": {
+          gap: \\"16px\\",
+          direction: \\"column\\",
+          justifyContent: \\"center\\",
+          alignItems: \\"center\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+        },
+        \\"Flex.Flex[0].Flex[0].Button[0]\\": {
+          display: \\"flex\\",
+          shrink: \\"0\\",
+          width: \\"206px\\",
+          size: \\"large\\",
+          variation: \\"primary\\",
+          children: \\"Primary Button\\",
+        },
+        \\"Flex.Flex[0].Flex[0]\\": {
+          gap: \\"24px\\",
+          direction: \\"column\\",
+          justifyContent: \\"center\\",
+          alignItems: \\"center\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+        },
+        \\"Flex.Flex[0]\\": {
+          gap: \\"10px\\",
+          direction: \\"column\\",
+          height: \\"324px\\",
+          justifyContent: \\"center\\",
+          alignItems: \\"center\\",
+          grow: \\"1\\",
+          basis: \\"941px\\",
+          alignSelf: \\"stretch\\",
+          overflow: \\"hidden\\",
+          position: \\"relative\\",
+          padding: \\"120px 120px 120px 120px\\",
+          backgroundColor: \\"rgba(255,255,255,1)\\",
+        },
+        Flex: {
+          gap: \\"0\\",
+          direction: \\"row\\",
+          width: \\"941px\\",
+          height: \\"324px\\",
+          justifyContent: \\"center\\",
+          alignItems: \\"center\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+        },
+      },
+    },
+    {
+      nodeId: \\"2878:3272\\",
+      variantValues: { mode: \\"Dark\\" },
+      overrides: {
+        \\"Flex.Flex[0].Flex[0].Text[0]\\": {
+          fontFamily: \\"Inter\\",
+          fontSize: \\"16px\\",
+          fontWeight: \\"700\\",
+          color:
+            \\"rgba(233.00000131130219,249.00000035762787,252.00000017881393,1)\\",
+          lineHeight: \\"20px\\",
+          textAlign: \\"center\\",
+          display: \\"flex\\",
+          direction: \\"column\\",
+          justifyContent: \\"flex-start\\",
+          letterSpacing: \\"0.49px\\",
+          width: \\"445px\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+          children: \\"TestMessage1\\",
+        },
+        \\"Flex.Flex[0].Flex[0].Flex[0].Text[0]\\": {
+          fontFamily: \\"Inter\\",
+          fontSize: \\"40px\\",
+          fontWeight: \\"700\\",
+          color:
+            \\"rgba(233.00000131130219,249.00000035762787,252.00000017881393,1)\\",
+          lineHeight: \\"48px\\",
+          textAlign: \\"center\\",
+          display: \\"flex\\",
+          direction: \\"column\\",
+          justifyContent: \\"flex-start\\",
+          width: \\"445px\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+          children: \\"TestMessage2\\",
+        },
+        \\"Flex.Flex[0].Flex[0].Flex[0].Text[1]\\": {
+          fontFamily: \\"Inter\\",
+          fontSize: \\"16px\\",
+          fontWeight: \\"400\\",
+          color:
+            \\"rgba(233.00000131130219,249.00000035762787,252.00000017881393,1)\\",
+          lineHeight: \\"24px\\",
+          textAlign: \\"center\\",
+          display: \\"flex\\",
+          direction: \\"column\\",
+          justifyContent: \\"flex-start\\",
+          letterSpacing: \\"0.010000000000000009px\\",
+          width: \\"445px\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+          children: \\"TestMessage3\\",
+        },
+        \\"Flex.Flex[0].Flex[0].Flex[0]\\": {
+          gap: \\"16px\\",
+          direction: \\"column\\",
+          justifyContent: \\"center\\",
+          alignItems: \\"center\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+        },
+        \\"Flex.Flex[0].Flex[0].Button[0]\\": {
+          display: \\"flex\\",
+          shrink: \\"0\\",
+          width: \\"174px\\",
+          size: \\"large\\",
+          variation: \\"primary\\",
+          children: \\"TestButton1\\",
+        },
+        \\"Flex.Flex[0].Flex[0]\\": {
+          gap: \\"24px\\",
+          direction: \\"column\\",
+          justifyContent: \\"center\\",
+          alignItems: \\"center\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+        },
+        \\"Flex.Flex[0]\\": {
+          gap: \\"10px\\",
+          direction: \\"column\\",
+          height: \\"422px\\",
+          justifyContent: \\"center\\",
+          alignItems: \\"center\\",
+          grow: \\"1\\",
+          basis: \\"685px\\",
+          alignSelf: \\"stretch\\",
+          overflow: \\"hidden\\",
+          position: \\"relative\\",
+          padding: \\"120px 120px 120px 120px\\",
+          backgroundColor: \\"rgba(0,63.750030398368835,76.50000303983688,1)\\",
+        },
+        Flex: {
+          gap: \\"0\\",
+          direction: \\"row\\",
+          width: \\"908px\\",
+          height: \\"422px\\",
+          justifyContent: \\"center\\",
+          alignItems: \\"center\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+        },
+      },
+    },
+  ];
+  const mergeVariantsAndOverrides = (
+    variants: EscapeHatchProps,
+    overrides: EscapeHatchProps
+  ): EscapeHatchProps => {
+    const overrideKeys = new Set(Object.keys(overrides));
+    const sharedKeys = Object.keys(variants).filter((variantKey) =>
+      overrideKeys.has(variantKey)
+    );
+    const merged = Object.fromEntries(
+      sharedKeys.map((sharedKey) => [
+        sharedKey,
+        { ...variants[sharedKey], ...overrides[sharedKey] },
+      ])
+    );
+    return {
+      ...variants,
+      ...overrides,
+      ...merged,
+    };
+  };
+  const overrides = mergeVariantsAndOverrides(
+    getOverridesFromVariants(variants, props),
+    overridesProp || {}
+  );
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      gap=\\"0\\"
+      direction=\\"row\\"
+      width=\\"941px\\"
+      height=\\"324px\\"
+      justifyContent=\\"center\\"
+      alignItems=\\"center\\"
+      position=\\"relative\\"
+      padding=\\"0px 0px 0px 0px\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Flex\\")}
+    >
+      <Flex
+        gap=\\"10px\\"
+        direction=\\"column\\"
+        height=\\"324px\\"
+        justifyContent=\\"center\\"
+        alignItems=\\"center\\"
+        grow=\\"1\\"
+        basis=\\"941px\\"
+        alignSelf=\\"stretch\\"
+        overflow=\\"hidden\\"
+        position=\\"relative\\"
+        padding=\\"120px 120px 120px 120px\\"
+        backgroundColor=\\"rgba(255,255,255,1)\\"
+        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
+      >
+        <Flex
+          gap=\\"24px\\"
+          direction=\\"column\\"
+          justifyContent=\\"center\\"
+          alignItems=\\"center\\"
+          shrink=\\"0\\"
+          alignSelf=\\"stretch\\"
+          position=\\"relative\\"
+          padding=\\"0px 0px 0px 0px\\"
+          {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0]\\")}
+        >
+          <Text
+            fontFamily=\\"Inter\\"
+            fontSize=\\"16px\\"
+            fontWeight=\\"700\\"
+            color=\\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\"
+            lineHeight=\\"20px\\"
+            textAlign=\\"center\\"
+            display=\\"flex\\"
+            direction=\\"column\\"
+            justifyContent=\\"flex-start\\"
+            letterSpacing=\\"0.49px\\"
+            width=\\"701px\\"
+            shrink=\\"0\\"
+            alignSelf=\\"stretch\\"
+            position=\\"relative\\"
+            padding=\\"0px 0px 0px 0px\\"
+            children=\\"LOREM IPSUM\\"
+            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Text[0]\\")}
+          ></Text>
+          <Flex
+            gap=\\"16px\\"
+            direction=\\"column\\"
+            justifyContent=\\"center\\"
+            alignItems=\\"center\\"
+            shrink=\\"0\\"
+            alignSelf=\\"stretch\\"
+            position=\\"relative\\"
+            padding=\\"0px 0px 0px 0px\\"
+            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[0]\\")}
+          >
+            <Text
+              fontFamily=\\"Inter\\"
+              fontSize=\\"40px\\"
+              fontWeight=\\"700\\"
+              color=\\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\"
+              lineHeight=\\"48px\\"
+              textAlign=\\"center\\"
+              display=\\"flex\\"
+              direction=\\"column\\"
+              justifyContent=\\"flex-start\\"
+              width=\\"701px\\"
+              shrink=\\"0\\"
+              alignSelf=\\"stretch\\"
+              position=\\"relative\\"
+              padding=\\"0px 0px 0px 0px\\"
+              children=\\"Ut enim ad minim veniam quis nostrud\\"
+              {...getOverrideProps(
+                overrides,
+                \\"Flex.Flex[0].Flex[0].Flex[0].Text[0]\\"
+              )}
+            ></Text>
+            <Text
+              fontFamily=\\"Inter\\"
+              fontSize=\\"16px\\"
+              fontWeight=\\"400\\"
+              color=\\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\"
+              lineHeight=\\"24px\\"
+              textAlign=\\"center\\"
+              display=\\"flex\\"
+              direction=\\"column\\"
+              justifyContent=\\"flex-start\\"
+              letterSpacing=\\"0.010000000000000009px\\"
+              width=\\"701px\\"
+              shrink=\\"0\\"
+              alignSelf=\\"stretch\\"
+              position=\\"relative\\"
+              padding=\\"0px 0px 0px 0px\\"
+              children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.\\"
+              {...getOverrideProps(
+                overrides,
+                \\"Flex.Flex[0].Flex[0].Flex[0].Text[1]\\"
+              )}
+            ></Text>
+          </Flex>
+          <Button
+            display=\\"flex\\"
+            shrink=\\"0\\"
+            width=\\"206px\\"
+            size=\\"large\\"
+            variation=\\"primary\\"
+            children=\\"Primary Button\\"
+            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Button[0]\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Flex>
+  );
+}
+"
+`;
+
 exports[`amplify render tests component with binding should render build property on Text 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
@@ -1449,6 +1857,74 @@ export default function ChildComponentWithDataBinding(
 "
 `;
 
+exports[`amplify render tests component with variants and not override children prop should render variants with options provided, and not override children prop 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Variant,
+  getOverrideProps,
+  getOverridesFromVariants,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
+
+export type ViewPrimitiveProps = React.PropsWithChildren<
+  Partial<ViewProps> & {
+    variant?: \\"primary\\";
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ViewPrimitive(
+  props: ViewPrimitiveProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const variants: Variant[] = [
+    {
+      variantValues: { variant: \\"primary\\" },
+      overrides: { View: { label: \\"componentWithVariantsWithLabelProp\\" } },
+    },
+  ];
+  const mergeVariantsAndOverrides = (
+    variants: EscapeHatchProps,
+    overrides: EscapeHatchProps
+  ): EscapeHatchProps => {
+    const overrideKeys = new Set(Object.keys(overrides));
+    const sharedKeys = Object.keys(variants).filter((variantKey) =>
+      overrideKeys.has(variantKey)
+    );
+    const merged = Object.fromEntries(
+      sharedKeys.map((sharedKey) => [
+        sharedKey,
+        { ...variants[sharedKey], ...overrides[sharedKey] },
+      ])
+    );
+    return {
+      ...variants,
+      ...overrides,
+      ...merged,
+    };
+  };
+  const overrides = mergeVariantsAndOverrides(
+    getOverridesFromVariants(variants, props),
+    overridesProp || {}
+  );
+  return (
+    /* @ts-ignore: TS2322 */
+    <View
+      children=\\"Nice view! 🏔\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"View\\")}
+    ></View>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests component with variants should render variants with options provided 1`] = `
 Object {
   "componentText": "/* eslint-disable */
@@ -1488,6 +1964,97 @@ export default function CustomButton(
     {
       variantValues: { variant: \\"primary\\", size: \\"large\\" },
       overrides: { Button: { width: \\"500\\" } },
+    },
+  ];
+  const mergeVariantsAndOverrides = (
+    variants: EscapeHatchProps,
+    overrides: EscapeHatchProps
+  ): EscapeHatchProps => {
+    const overrideKeys = new Set(Object.keys(overrides));
+    const sharedKeys = Object.keys(variants).filter((variantKey) =>
+      overrideKeys.has(variantKey)
+    );
+    const merged = Object.fromEntries(
+      sharedKeys.map((sharedKey) => [
+        sharedKey,
+        { ...variants[sharedKey], ...overrides[sharedKey] },
+      ])
+    );
+    return {
+      ...variants,
+      ...overrides,
+      ...merged,
+    };
+  };
+  const overrides = mergeVariantsAndOverrides(
+    getOverridesFromVariants(variants, props),
+    overridesProp || {}
+  );
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests component with variants with mapped children prop should render variants with options provided, and mapped children prop 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Variant,
+  getOverrideProps,
+  getOverridesFromVariants,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export type CustomButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    variant?: \\"primary\\" | \\"secondary\\";
+    size?: \\"large\\";
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function CustomButton(
+  props: CustomButtonProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const variants: Variant[] = [
+    {
+      variantValues: { variant: \\"primary\\" },
+      overrides: {
+        Button: {
+          label: \\"componentWithVariantsWithMappedChildrenProp\\",
+          children: \\"componentWithVariantsWithChildrenProp\\",
+          fontSize: \\"12px\\",
+        },
+      },
+    },
+    {
+      variantValues: { variant: \\"secondary\\" },
+      overrides: {
+        Button: { fontSize: \\"40px\\" },
+        \\"Button.Text\\": {
+          fontSize: \\"40px\\",
+          label: \\"componentWithVariantsWithMappedChildrenProp\\",
+          children: \\"componentWithVariantsWithChildrenProp\\",
+        },
+      },
+    },
+    {
+      variantValues: { variant: \\"primary\\", size: \\"large\\" },
+      overrides: {
+        Button: {
+          width: \\"500\\",
+          children: \\"componentWithVariantsWithMappedChildrenProp\\",
+        },
+      },
     },
   ];
   const mergeVariantsAndOverrides = (

@@ -308,4 +308,56 @@ describe('Complex Components', () => {
         });
     });
   });
+  it('Complex 9', () => {
+    cy.get('#complex-test-9').within(() => {
+      cy.get('.amplify-flex').within(() => {
+        cy.get('.amplify-flex')
+          .should(
+            'have.attr',
+            'style',
+            // eslint-disable-next-line max-len
+            'align-items: center; align-self: stretch; background-color: rgb(0, 64, 77); flex-basis: 685px; flex-direction: column; gap: 10px; flex-grow: 1; height: 422px; justify-content: center; overflow: hidden; padding: 120px; position: relative;',
+          )
+          .within(() => {
+            cy.get('.amplify-flex')
+              .should(
+                'have.attr',
+                'style',
+                // eslint-disable-next-line max-len
+                'align-items: center; align-self: stretch; flex-direction: column; gap: 24px; justify-content: center; padding: 0px; position: relative; flex-shrink: 0;',
+              )
+              .within(() => {
+                cy.get('.amplify-text').contains('TestMessage1').should(
+                  'have.attr',
+                  'style',
+                  // eslint-disable-next-line max-len
+                  'align-self: stretch; color: rgb(233, 249, 252); flex-direction: column; display: flex; font-family: Inter; font-size: 16px; font-weight: 700; justify-content: flex-start; letter-spacing: 0.49px; line-height: 20px; padding: 0px; position: relative; flex-shrink: 0; text-align: center; width: 445px;',
+                );
+                cy.get('.amplify-button').contains('TestButton1');
+                cy.get('.amplify-flex')
+                  .should(
+                    'have.attr',
+                    'style',
+                    // eslint-disable-next-line max-len
+                    'align-items: center; align-self: stretch; flex-direction: column; gap: 16px; justify-content: center; padding: 0px; position: relative; flex-shrink: 0;',
+                  )
+                  .within(() => {
+                    cy.get('.amplify-text').eq(0).contains('TestMessage2').should(
+                      'have.attr',
+                      'style',
+                      // eslint-disable-next-line max-len
+                      'align-self: stretch; color: rgb(233, 249, 252); flex-direction: column; display: flex; font-family: Inter; font-size: 40px; font-weight: 700; justify-content: flex-start; line-height: 48px; padding: 0px; position: relative; flex-shrink: 0; text-align: center; width: 445px;',
+                    );
+                    cy.get('.amplify-text').eq(1).contains('TestMessage3').should(
+                      'have.attr',
+                      'style',
+                      // eslint-disable-next-line max-len
+                      'align-self: stretch; color: rgb(233, 249, 252); flex-direction: column; display: flex; font-family: Inter; font-size: 16px; font-weight: 400; justify-content: flex-start; letter-spacing: 0.01px; line-height: 24px; padding: 0px; position: relative; flex-shrink: 0; text-align: center; width: 445px;',
+                    );
+                  });
+              });
+          });
+      });
+    });
+  });
 });

@@ -24,6 +24,7 @@ import {
   ComplexTest6,
   ComplexTest7,
   ComplexTest8,
+  ComplexTest9,
 } from './ui-components'; // eslint-disable-line import/extensions
 
 export default function ComplexTests() {
@@ -65,6 +66,10 @@ export default function ComplexTests() {
       <Heading>Complex Test 8</Heading>
       <View id="complex-test-8">
         <ComplexTest8 />
+      </View>
+      <Heading>Complex Test 9</Heading>
+      <View id="complex-test-9">
+        <ComplexTest9 mode="Dark" />
       </View>
     </AmplifyProvider>
   );

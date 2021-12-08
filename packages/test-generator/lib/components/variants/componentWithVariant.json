@@ -41,6 +41,29 @@
           "width": "500px"
         }
       }
+    },
+    {
+      "variantValues": {
+        "variant": "success"
+      },
+      "overrides": {
+        "Button": {
+          "label": "ComponentWithVariantWithMappedChildrenProp",
+          "fontSize": "15px"
+        }
+      }
+    },
+    {
+      "variantValues": {
+        "variant": "light"
+      },
+      "overrides": {
+        "Button": {
+          "label": "ComponentWithVariantWithMappedChildrenProp",
+          "children": "ComponentWithVariantWithChildrenProp",
+          "fontSize": "16px"
+        }
+      }
     }
   ]
 }

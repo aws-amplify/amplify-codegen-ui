@@ -31,6 +31,7 @@ import {
   StudioComponentAction,
   StudioComponentSimplePropertyBinding,
   handleCodegenErrors,
+  StudioNode,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -71,7 +72,12 @@ import {
   jsonToLiteral,
   bindingPropertyUsesHook,
 } from './react-studio-template-renderer-helper';
-import Primitive, { isPrimitive, PrimitiveTypeParameter, isBuiltInIcon } from './primitive';
+import Primitive, {
+  isPrimitive,
+  PrimitiveTypeParameter,
+  isBuiltInIcon,
+  PrimitiveChildrenPropMapping,
+} from './primitive';
 import { RequiredKeys } from './utils/type-utils';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -97,6 +103,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     };
     this.fileName = `${this.component.name}.${scriptKindToFileExtension(this.renderConfig.script)}`;
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
+    this.mapSyntheticPropsForVariants();
   }
 
   @handleCodegenErrors
@@ -1294,6 +1301,35 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       }
     }
     return undefined;
+  }
+
+  /* To map predefined props to children props for variants
+   *
+   * Example: Text prop label is mapped to to Text prop Children
+   *
+   */
+  private mapSyntheticPropsForVariants() {
+    if (!isStudioComponentWithVariants(this.component)) {
+      return;
+    }
+
+    this.component.variants.forEach((variant) => {
+      // loop through the keys in the dict. Ex. Button, Flex.Flex[0].Flex[0].Button[0]
+      Object.entries(variant.overrides).forEach(([overrideKey, value]) => {
+        const propsInOverrides = value;
+        const componentType = StudioNode.getComponentTypeFromOverrideKey(overrideKey);
+        if (isPrimitive(componentType)) {
+          const childrenPropMapping = PrimitiveChildrenPropMapping[Primitive[componentType as Primitive]];
+          if (childrenPropMapping !== undefined) {
+            // only remap if children prop is not defined in this particular overrides section
+            if (propsInOverrides.children === undefined && propsInOverrides[childrenPropMapping] !== undefined) {
+              propsInOverrides.children = propsInOverrides[childrenPropMapping];
+              delete propsInOverrides[childrenPropMapping];
+            }
+          }
+        }
+      });
+    });
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement;

@@ -63,4 +63,22 @@ export class StudioNode {
     const childPath = childElements.map((node) => `${node.component.componentType}[${node.getOverrideIndex()}]`);
     return [parentElement.component.componentType, ...childPath].join('.');
   }
+
+  /**
+   *
+   * Parse the override key to get the component type
+   * Example: Flex.Flex[0].Flex[0].Button[0], Button
+   *
+   */
+  static getComponentTypeFromOverrideKey(overrideKey: string): string {
+    const splitOverrideKeys = overrideKey.split('.');
+    // for root component
+    if (splitOverrideKeys.length === 1) {
+      return splitOverrideKeys[0];
+    }
+
+    const lastOverrideKey = splitOverrideKeys[splitOverrideKeys.length - 1];
+    const openBracketIndex = lastOverrideKey.indexOf('[');
+    return lastOverrideKey.substring(0, openBracketIndex);
+  }
 }

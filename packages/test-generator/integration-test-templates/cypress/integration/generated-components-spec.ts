@@ -97,6 +97,11 @@ describe('Generated Components', () => {
       cy.get('#variant1').should('have.css', 'font-size', '12px');
       cy.get('#variant2').should('have.css', 'font-size', '40px');
       cy.get('#variant3').should('have.css', 'width', '500px');
+      cy.get('#variant4').should('have.css', 'font-size', '15px');
+      cy.get('#variant4').contains('ComponentWithVariantWithMappedChildrenProp');
+      cy.get('#variant5').contains('ComponentWithVariantWithChildrenProp');
+      cy.get('#variant5').should('have.css', 'font-size', '16px');
+      cy.get('#variant6').contains('Nice view!! 🏔');
     });
 
     it('allows for use of both variants and overrides, prioritizing overrides if they collide', () => {
