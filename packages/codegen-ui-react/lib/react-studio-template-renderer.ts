@@ -32,7 +32,6 @@ import {
   StudioComponentSimplePropertyBinding,
   handleCodegenErrors,
 } from '@aws-amplify/codegen-ui';
-
 import { EOL } from 'os';
 import ts, {
   EmitHint,

@@ -36,7 +36,6 @@ const tsxGenerator = new NodeTestGenerator({
   },
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const jsxGenerator = new NodeTestGenerator({
   writeToLogger: false,
   writeToDisk: true,
@@ -53,5 +52,5 @@ const jsxGenerator = new NodeTestGenerator({
 
 const testCases = tsxGenerator.getTestCases(DISABLED_SCHEMAS);
 
-tsxGenerator.generate(testCases);
-// jsxGenerator.generate(testCases);
+// tsxGenerator.generate(testCases);
+jsxGenerator.generate(testCases);
