@@ -71,6 +71,17 @@ jobs:
           then
             exit 1
           fi
+      - name: Write test files
+        working-directory: e2e-test-app
+        run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates .
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: e2e-test-app
+          install: false
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
 
   functional-tests:
     runs-on: ubuntu-latest
