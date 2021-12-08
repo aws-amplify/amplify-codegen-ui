@@ -56,6 +56,32 @@ npm run integ
 | npm run integ:templates       | Reload integration templates from test-generator.                 |
 | npm run integ:templates:watch | Watch for changes to integration templates and reload on changes. |
 
+### Testing updates to CLI
+
+This process is pretty ugly today, and seems fairly fragile at the moment. We should work to improve this long-term, but we also have automation that tests this in the pipeline, so you're almost certainly fine not running these tests manually today.
+
+The following steps assume you're testing with no a priori repo for CLI or Codegen, which is probably not right. adjust your steps as necessary.
+
+```sh
+# Clone repos
+git clone git@github.com:aws-amplify/amplify-codegen-ui.git
+git clone git@github.com:aws-amplify/amplify-cli.git
+# Build and package latest codegen
+(cd amplify-codegen-ui && npm ci && lerna bootstrap && npm run build && lerna exec npm pack)
+# Build and load codegen tarballs into cli
+(cd amplify-cli && yarn setup-dev)
+(cd amplify-cli/packages/amplify-util-uibuilder && npm install ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz && npm install ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz)
+(cd amplify-cli/packages/amplify-util-uibuilder && npm test)
+# Create and pull down test app
+npx create-react-app e2e-test-app
+cd e2e-test-app
+npm i aws-amplify @aws-amplify/ui-react
+amplify-dev pull --appId <YOUR_APP_ID> --envName <YOUR_APP_ENV_NAME>
+# Start app and test
+npm start
+# Note: you'll need to actually import your components, etc. in your app.
+```
+
 ### Release Process
 
 There are 3 keys steps, first you need to create a new tagged release version of the packages which will be used by our dependencies to consume the latest code.
@@ -77,9 +103,8 @@ Then execute an import script in StudioUI to pull the latest external code into 
    page](https://github.com/aws-amplify/amplify-codegen-ui/releases).
 1. `npm-release` will publish the packages to the public NPM registry.
 
-
-    * https://www.npmjs.com/package/@aws-amplify/codegen-ui
-    * https://www.npmjs.com/package/@aws-amplify/codegen-ui-react
+   - https://www.npmjs.com/package/@aws-amplify/codegen-ui
+   - https://www.npmjs.com/package/@aws-amplify/codegen-ui-react
 
 #### Update Amplify CLI
 
