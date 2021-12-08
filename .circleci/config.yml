@@ -76,9 +76,12 @@ jobs:
       - run:
           name: NPM Publish
           command: >-
+            # lerna publish docs: https://github.com/lerna/lerna/tree/main/commands/publish
             if [[ `git log --format=%s -n 1` =~ ^chore\(release\):\ v.* ]];
+            # production release
             then npx lerna publish from-git -y;
-            else echo "No publish";
+            # pre-release
+            else npx lerna publish --pre-dist-tag next --canary -y;
             fi
 
 workflows:
