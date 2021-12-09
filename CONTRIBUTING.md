@@ -149,6 +149,17 @@ npm install @aws-amplify/codegen-ui-react@next
 
 See [lerna publish docs](https://github.com/lerna/lerna/tree/main/commands/publish) for further detail.
 
+### Tagged Release
+
+A tagged release is used to release emergent or prototype changes without merging into `main`.
+To create a tagged release create a pull request or push directly to a branch with the prefix `tagged-release/`.
+(Ex. `tagged-release/fix-properties`).
+The branch name must not contain any additional forward slashes after `tagged-release/`.
+The tagged release will use the same versioning process as the pre-release except:
+
+- the preid will be the branch name with `tagged-release/` removed. (Ex. `1.1.1-fix-properties.270+2baaca9`)
+- the release will not be published under any dist tag
+
 ### Icons
 
 The built-in iconset is genereted with `packages/scripts/generateBuiltInIconset.js`.
