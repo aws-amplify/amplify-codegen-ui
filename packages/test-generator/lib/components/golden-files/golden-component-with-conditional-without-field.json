@@ -1,0 +1,53 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Button",
+    "name": "GoldenComponentWithConditionalWithoutField",
+    "bindingProperties": {
+        "width": {
+            "type": "Number"
+        },
+        "requiredScore": {
+            "type": "Number",
+            "defaultValue": "95"
+        },
+        "buttonColor": {
+            "type": "String"
+        }
+    },
+    "properties": {
+        "disabled": {
+            "condition": {
+                "property": "requiredScore",
+                "operator": "gt",
+                "operand": "80",
+                "then": {
+                    "value": false
+                },
+                "else": {
+                    "value": true
+                }
+            }
+        },
+        "prompt": {
+            "condition": {
+                "property": "requiredScore",
+                "operator": "gt",
+                "operand": "80",
+                "then": {
+                    "value": "You passed"
+                },
+                "else": {
+                    "value": "you failed"
+                }
+            }
+        },
+        "label": {
+            "value": "Turn it in!"
+        },
+        "labelWidth": {
+            "bindingProperties": {
+                "property": "width"
+            }
+        }
+    }
+}

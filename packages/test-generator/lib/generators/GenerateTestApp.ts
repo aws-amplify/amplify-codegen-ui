@@ -16,7 +16,32 @@
 import { ModuleKind, ScriptTarget, ScriptKind } from '@aws-amplify/codegen-ui-react/dist/lib/react-render-config';
 import { NodeTestGenerator } from './NodeTestGenerator';
 
+const GOLDEN_COMPONENTS = [
+  'GoldenBasicComponent',
+  'GoldenCollectionWithDataBindingAndPagination',
+  'GoldenCollectionWithDataBindingAndSort',
+  'GoldenCollectionWithDataBinding',
+  'GoldenCollectionWithSearchAndPagination',
+  'GoldenCollectionWithSpecificRecord',
+  'GoldenComponentWithAuthAttributes',
+  'GoldenComponentWithChildrenAndDataBinding',
+  'GoldenComponentWithChildren',
+  'GoldenComponentWithCustomChildren',
+  'GoldenComponentWithConcatAndConditional',
+  'GoldenComponentWithConditionalWithoutField',
+  'GoldenComponentWithDataBindingAndDatastoreDefault',
+  'GoldenComponentWithDataBinding',
+  'GoldenComponentWithEvent',
+  'GoldenComponentWithExposed',
+  'GoldenComponentWithForm',
+  'GoldenComponentWithImageWithStorage',
+  'GoldenComponentWithTypedProp',
+  'GoldenComponentWithVariants',
+  'GoldenTheme',
+];
+
 const DISABLED_SCHEMAS = [
+  ...GOLDEN_COMPONENTS, // Disabling golden components except to refresh examples
   'ComponentWithActionSignOut', // TODO: Support Auth Action E2E Tests
   'ComponentWithActionNavigation', // TODO: Support Navigation Action E2E Tests
   'ComponentMissingProperties', // Expected failure cases
@@ -36,6 +61,7 @@ const tsxGenerator = new NodeTestGenerator({
   },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const jsxGenerator = new NodeTestGenerator({
   writeToLogger: false,
   writeToDisk: true,
@@ -52,5 +78,5 @@ const jsxGenerator = new NodeTestGenerator({
 
 const testCases = tsxGenerator.getTestCases(DISABLED_SCHEMAS);
 
-// tsxGenerator.generate(testCases);
-jsxGenerator.generate(testCases);
+tsxGenerator.generate(testCases);
+// jsxGenerator.generate(testCases);

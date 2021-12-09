@@ -1,0 +1,19 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "View",
+    "name": "GoldenComponentWithChildren",
+    "properties": {},
+    "children": [
+        {
+            "componentType": "Button",
+            "properties": {
+                "color": {
+                    "value": "#ff0000"
+                },
+                "width": {
+                    "value": "20px"
+                }
+            }
+        }
+    ]
+}

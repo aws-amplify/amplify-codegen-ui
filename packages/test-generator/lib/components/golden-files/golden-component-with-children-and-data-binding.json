@@ -1,0 +1,39 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Flex",
+    "name": "GoldenComponentWithChildrenAndDataBinding",
+    "bindingProperties": {
+        "width": {
+            "type": "Number"
+        },
+        "buttonUser": {
+            "type": "Data",
+            "bindingProperties": {
+                "model": "User"
+            }
+        },
+        "buttonColor": {
+            "type": "String"
+        }
+    },
+    "children": [
+        {
+            "componentType": "Button",
+            "properties": {
+                "label": {
+                    "bindingProperties": {
+                        "property": "buttonUser",
+                        "field": "username"
+                    },
+                    "defaultValue": "hspain@gmail.com"
+                },
+                "labelWidth": {
+                    "bindingProperties": {
+                        "property": "width"
+                    }
+                }
+            }
+        }
+    ],
+    "properties": {}
+}
