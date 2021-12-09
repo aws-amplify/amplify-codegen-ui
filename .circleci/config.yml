@@ -101,7 +101,9 @@ workflows:
             - unit-test
           filters:
             branches:
-              only: main
+              only:
+                - main
+                - develop
 
 commands:
   create_concatenated_package_lock:
