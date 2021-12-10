@@ -15,3 +15,4 @@
  */
 export { default as MyTheme } from './myTheme.json';
 export { default as InvalidTheme } from './invalidTheme.json';
+export { default as GoldenTheme } from './goldenTheme.json';
