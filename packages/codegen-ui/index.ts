@@ -27,6 +27,7 @@ export * from './lib/validation-helper';
 export * from './lib/framework-output-config';
 export * from './lib/framework-render-config';
 export * from './lib/studio-node';
+export * from './lib/required-dependency-provider';
 
 export * from './lib/types';
 export * from './lib/errors';
