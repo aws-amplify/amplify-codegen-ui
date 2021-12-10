@@ -22,7 +22,9 @@
     "@aws-amplify/ui-react": "^2.1.0",
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.4",
-    "pascalcase": "1.0.0"
+    "pascalcase": "1.0.0",
+    "semver": "^7.3.5",
+    "@types/semver": "^7.3.9"
   },
   "dependencies": {
     "@aws-amplify/codegen-ui": "1.1.0",
