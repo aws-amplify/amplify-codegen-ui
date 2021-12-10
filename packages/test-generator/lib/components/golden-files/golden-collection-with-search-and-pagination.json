@@ -1,0 +1,83 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Collection",
+    "name": "GoldenCollectionWithSearchAndPagination",
+    "properties": {
+        "type": {
+            "value": "list"
+        },
+        "isPaginated": {
+            "value": true
+        },
+        "isSearchable": {
+            "value": true
+        },
+        "gap": {
+            "value": "1.5rem"
+        },
+        "backgroundColor": {
+            "bindingProperties": {
+                "property": "backgroundColor"
+            }
+        }
+    },
+    "bindingProperties": {
+        "width": {
+            "type": "Number"
+        },
+        "backgroundColor": {
+            "type": "String"
+        }
+    },
+    "collectionProperties": {
+        "filteredUsers": {
+            "model": "User",
+            "predicate": {
+                "and": [
+                    {
+                        "field": "age",
+                        "operand": "10",
+                        "operator": "gt"
+                    },
+                    {
+                        "field": "lastName",
+                        "operand": "L",
+                        "operator": "beginsWith"
+                    }
+                ]
+            }
+        }
+    },
+    "children": [
+        {
+            "name": "Parent",
+            "componentType": "Flex",
+            "properties": {},
+            "children": [
+                {
+                    "name": "Button",
+                    "componentType": "Button",
+                    "properties": {
+                        "label": {
+                            "collectionBindingProperties": {
+                                "property": "filteredUsers",
+                                "field": "username"
+                            },
+                            "defaultValue": "hspain@gmail.com"
+                        },
+                        "labelWidth": {
+                            "bindingProperties": {
+                                "property": "width"
+                            }
+                        },
+                        "disabled": {
+                            "bindingProperties": {
+                                "property": "isDisabled"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

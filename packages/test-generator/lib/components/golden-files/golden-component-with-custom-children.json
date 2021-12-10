@@ -1,0 +1,21 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "View",
+    "name": "GoldenComponentWithCustomChildren",
+    "properties": {},
+    "bindingProperties": {},
+    "children": [
+        {
+            "componentType": "CustomButton",
+            "name": "123",
+            "properties": {
+                "color": {
+                    "value": "#ff0000"
+                },
+                "width": {
+                    "value": "20px"
+                }
+            }
+        }
+    ]
+}
