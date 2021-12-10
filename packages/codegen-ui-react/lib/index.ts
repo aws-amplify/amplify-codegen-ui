@@ -24,4 +24,3 @@ export * from './react-output-manager';
 export * from './amplify-ui-renderers/amplify-renderer';
 export * from './primitive';
 export * from './react-index-studio-template-renderer';
-export * from './react-required-dependency-provider';
