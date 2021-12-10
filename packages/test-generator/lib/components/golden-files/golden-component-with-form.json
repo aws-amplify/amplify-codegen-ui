@@ -1,0 +1,53 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Flex",
+    "name": "GoldenComponentWithForm",
+    "children": [
+        {
+            "componentType": "Input",
+            "name": "123",
+            "properties": {}
+        },
+        {
+            "componentType": "Input",
+            "name": "123",
+            "properties": {
+                "name": {
+                    "value": "name"
+                }
+            }
+        },
+        {
+            "componentType": "Input",
+            "name": "123",
+            "properties": {
+                "name": {
+                    "value": "email"
+                }
+            }
+        },
+        {
+            "componentType": "Button",
+            "name": "123",
+            "properties": {
+                "onClick": {
+                    "model": "User",
+                    "bindings": {
+                        "name": {
+                            "element": "name",
+                            "property": "value"
+                        },
+                        "email": {
+                            "element": "email",
+                            "property": "value"
+                        }
+                    }
+                },
+                "children": {
+                    "value": "Save"
+                }
+            }
+        }
+    ],
+    "properties": {}
+}

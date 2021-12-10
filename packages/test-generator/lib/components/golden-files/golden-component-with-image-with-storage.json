@@ -1,0 +1,27 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Flex",
+    "name": "GoldenComponentWithImageWithStorage",
+    "bindingProperties": {
+        "userImage": {
+            "type": "Storage",
+            "bindingProperties": {
+                "key": "charlie.png",
+                "level": "public"
+            }
+        }
+    },
+    "children": [
+        {
+            "componentType": "Image",
+            "properties": {
+                "src": {
+                    "bindingProperties": {
+                        "property": "userImage"
+                    }
+                }
+            }
+        }
+    ],
+    "properties": {}
+}

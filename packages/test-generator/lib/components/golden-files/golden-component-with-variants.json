@@ -1,0 +1,40 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Button",
+    "name": "GoldenComponentWithVariants",
+    "properties": {},
+    "variants": [
+        {
+            "variantValues": {
+                "variant": "primary"
+            },
+            "overrides": {
+                "Button": {
+                    "fontSize": "12px"
+                }
+            }
+        },
+        {
+            "variantValues": {
+                "variant": "secondary"
+            },
+            "overrides": {
+                "Button": {
+                    "fontSize": "40px"
+                }
+            }
+        },
+        {
+            "variantValues": {
+                "variant": "primary",
+                "size": "large"
+            },
+            "overrides": {
+                "Button": {
+                    "width": "500"
+                }
+            }
+        }
+    ],
+    "bindingProperties": {}
+}
