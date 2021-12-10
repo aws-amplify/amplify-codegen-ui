@@ -13,15 +13,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './react-component-with-children-renderer';
-export * from './react-component-renderer';
-export * from './imports';
-export * from './react-studio-template-renderer';
-export * from './react-theme-studio-template-renderer';
-export * from './react-output-config';
-export * from './react-render-config';
-export * from './react-output-manager';
-export * from './amplify-ui-renderers/amplify-renderer';
-export * from './primitive';
-export * from './react-index-studio-template-renderer';
-export * from './react-required-dependency-provider';
+import { RequiredDependency, RequiredDependencyProvider } from '@aws-amplify/codegen-ui';
+
+type ReactRequiredDependency = RequiredDependency & {
+  minRequiredVersion: string;
+};
+
+export class ReactRequiredDependencyProvider extends RequiredDependencyProvider<ReactRequiredDependency> {
+  getRequiredDependencies(): ReactRequiredDependency[] {
+    return [
+      {
+        dependencyName: '@aws-amplify/ui-react',
+        minRequiredVersion: '2.1.4',
+        reason: 'Required to leverage amplify ui primitives, and studio component helper functions.',
+      },
+    ];
+  }
+}
