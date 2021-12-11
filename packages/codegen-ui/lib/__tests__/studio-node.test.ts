@@ -135,6 +135,18 @@ describe('StudioNode', () => {
       expect(firstSubSubChild.getOverrideKey()).toEqual('Flex.Flex[2].Button[1].Tooltip[0]');
     });
   });
+
+  describe('getComponentTypeFromOverrideKey', () => {
+    test('get component type from override key with only root component', () => {
+      const actual = StudioNode.getComponentTypeFromOverrideKey('Flex');
+      expect(actual).toEqual('Flex');
+    });
+
+    test('get component type from override key with nested component', () => {
+      const actual = StudioNode.getComponentTypeFromOverrideKey('Flex.Flex[2].Button[1]');
+      expect(actual).toEqual('Button');
+    });
+  });
 });
 
 const createStudioNodeOfType = (type: string, ...children: StudioNode[]): StudioNode => {

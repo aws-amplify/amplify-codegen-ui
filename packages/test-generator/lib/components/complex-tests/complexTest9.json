@@ -1,0 +1,585 @@
+{
+  "name": "ComplexTest9",
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "name": "LOREM IPSUM",
+              "componentType": "Text",
+              "properties": {
+                "fontFamily": {
+                  "value": "Inter"
+                },
+                "fontSize": {
+                  "value": "16px"
+                },
+                "label": {
+                  "value": "LOREM IPSUM"
+                },
+                "fontWeight": {
+                  "value": "700"
+                },
+                "color": {
+                  "value": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)"
+                },
+                "lineHeight": {
+                  "value": "20px"
+                },
+                "textAlign": {
+                  "value": "center"
+                },
+                "display": {
+                  "value": "flex"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "flex-start"
+                },
+                "letterSpacing": {
+                  "value": "0.49px"
+                },
+                "width": {
+                  "value": "701px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Ut enim ad minim veniam quis nostrud",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "40px"
+                    },
+                    "label": {
+                      "value": "Ut enim ad minim veniam quis nostrud"
+                    },
+                    "fontWeight": {
+                      "value": "700"
+                    },
+                    "color": {
+                      "value": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)"
+                    },
+                    "lineHeight": {
+                      "value": "48px"
+                    },
+                    "textAlign": {
+                      "value": "center"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "width": {
+                      "value": "701px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "alignSelf": {
+                      "value": "stretch"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "center"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "701px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "alignSelf": {
+                      "value": "stretch"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Message",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "center"
+                },
+                "alignItems": {
+                  "value": "center"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Button",
+              "componentType": "Button",
+              "properties": {
+                "display": {
+                  "value": "flex"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "width": {
+                  "value": "206px"
+                },
+                "label": {
+                  "value": "Primary Button"
+                },
+                "size": {
+                  "value": "large"
+                },
+                "variation": {
+                  "value": "primary"
+                }
+              },
+              "overrides": {
+                "Icon[0].Icon[1]": {
+                  "viewBox": "{\"minX\":0,\"minY\":0,\"width\":19.908447265625,\"height\":20}"
+                },
+                "Icon[0]": {
+                  "hiddenNode": "true"
+                },
+                "Icon[1].Icon[1]": {
+                  "viewBox": "{\"minX\":0,\"minY\":0,\"width\":19.908447265625,\"height\":20}"
+                },
+                "Icon[1]": {
+                  "hiddenNode": "true"
+                }
+              },
+              "variants": []
+            }
+          ],
+          "name": "HeroMessage",
+          "componentType": "Flex",
+          "properties": {
+            "gap": {
+              "value": "24px"
+            },
+            "direction": {
+              "value": "column"
+            },
+            "justifyContent": {
+              "value": "center"
+            },
+            "alignItems": {
+              "value": "center"
+            },
+            "shrink": {
+              "value": "0"
+            },
+            "alignSelf": {
+              "value": "stretch"
+            },
+            "position": {
+              "value": "relative"
+            },
+            "padding": {
+              "value": "0px 0px 0px 0px"
+            }
+          },
+          "overrides": {},
+          "variants": []
+        }
+      ],
+      "name": "Left",
+      "componentType": "Flex",
+      "properties": {
+        "gap": {
+          "value": "10px"
+        },
+        "direction": {
+          "value": "column"
+        },
+        "height": {
+          "value": "324px"
+        },
+        "justifyContent": {
+          "value": "center"
+        },
+        "alignItems": {
+          "value": "center"
+        },
+        "grow": {
+          "value": "1"
+        },
+        "basis": {
+          "value": "941px"
+        },
+        "alignSelf": {
+          "value": "stretch"
+        },
+        "overflow": {
+          "value": "hidden"
+        },
+        "position": {
+          "value": "relative"
+        },
+        "padding": {
+          "value": "120px 120px 120px 120px"
+        },
+        "backgroundColor": {
+          "value": "rgba(255,255,255,1)"
+        }
+      },
+      "overrides": {},
+      "variants": []
+    }
+  ],
+  "id": "2878:3220",
+  "bindingProperties": {},
+  "componentType": "Flex",
+  "properties": {
+    "gap": {
+      "value": "0"
+    },
+    "direction": {
+      "value": "row"
+    },
+    "width": {
+      "value": "941px"
+    },
+    "height": {
+      "value": "324px"
+    },
+    "justifyContent": {
+      "value": "center"
+    },
+    "alignItems": {
+      "value": "center"
+    },
+    "position": {
+      "value": "relative"
+    },
+    "padding": {
+      "value": "0px 0px 0px 0px"
+    }
+  },
+  "overrides": {},
+  "variants": [
+    {
+      "nodeId": "2878:3221",
+      "variantValues": {
+        "mode": "Light"
+      },
+      "overrides": {
+        "Flex.Flex[0].Flex[0].Text[0]": {
+          "fontFamily": "Inter",
+          "fontSize": "16px",
+          "label": "LOREM IPSUM",
+          "fontWeight": "700",
+          "color": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)",
+          "lineHeight": "20px",
+          "textAlign": "center",
+          "display": "flex",
+          "direction": "column",
+          "justifyContent": "flex-start",
+          "letterSpacing": "0.49px",
+          "width": "701px",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0].Flex[0].Flex[0].Text[0]": {
+          "fontFamily": "Inter",
+          "fontSize": "40px",
+          "label": "Ut enim ad minim veniam quis nostrud",
+          "fontWeight": "700",
+          "color": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)",
+          "lineHeight": "48px",
+          "textAlign": "center",
+          "display": "flex",
+          "direction": "column",
+          "justifyContent": "flex-start",
+          "width": "701px",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0].Flex[0].Flex[0].Text[1]": {
+          "fontFamily": "Inter",
+          "fontSize": "16px",
+          "label": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+          "fontWeight": "400",
+          "color": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)",
+          "lineHeight": "24px",
+          "textAlign": "center",
+          "display": "flex",
+          "direction": "column",
+          "justifyContent": "flex-start",
+          "letterSpacing": "0.010000000000000009px",
+          "width": "701px",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0].Flex[0].Flex[0]": {
+          "gap": "16px",
+          "direction": "column",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0].Flex[0].Button[0]": {
+          "display": "flex",
+          "shrink": "0",
+          "width": "206px",
+          "label": "Primary Button",
+          "size": "large",
+          "variation": "primary"
+        },
+        "Flex.Flex[0].Flex[0]": {
+          "gap": "24px",
+          "direction": "column",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0]": {
+          "gap": "10px",
+          "direction": "column",
+          "height": "324px",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "grow": "1",
+          "basis": "941px",
+          "alignSelf": "stretch",
+          "overflow": "hidden",
+          "position": "relative",
+          "padding": "120px 120px 120px 120px",
+          "backgroundColor": "rgba(255,255,255,1)"
+        },
+        "Flex": {
+          "gap": "0",
+          "direction": "row",
+          "width": "941px",
+          "height": "324px",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        }
+      }
+    },
+    {
+      "nodeId": "2878:3272",
+      "variantValues": {
+        "mode": "Dark"
+      },
+      "overrides": {
+        "Flex.Flex[0].Flex[0].Text[0]": {
+          "fontFamily": "Inter",
+          "fontSize": "16px",
+          "label": "TestMessage1",
+          "fontWeight": "700",
+          "color": "rgba(233.00000131130219,249.00000035762787,252.00000017881393,1)",
+          "lineHeight": "20px",
+          "textAlign": "center",
+          "display": "flex",
+          "direction": "column",
+          "justifyContent": "flex-start",
+          "letterSpacing": "0.49px",
+          "width": "445px",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0].Flex[0].Flex[0].Text[0]": {
+          "fontFamily": "Inter",
+          "fontSize": "40px",
+          "label": "TestMessage2",
+          "fontWeight": "700",
+          "color": "rgba(233.00000131130219,249.00000035762787,252.00000017881393,1)",
+          "lineHeight": "48px",
+          "textAlign": "center",
+          "display": "flex",
+          "direction": "column",
+          "justifyContent": "flex-start",
+          "width": "445px",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0].Flex[0].Flex[0].Text[1]": {
+          "fontFamily": "Inter",
+          "fontSize": "16px",
+          "label": "TestMessage3",
+          "fontWeight": "400",
+          "color": "rgba(233.00000131130219,249.00000035762787,252.00000017881393,1)",
+          "lineHeight": "24px",
+          "textAlign": "center",
+          "display": "flex",
+          "direction": "column",
+          "justifyContent": "flex-start",
+          "letterSpacing": "0.010000000000000009px",
+          "width": "445px",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0].Flex[0].Flex[0]": {
+          "gap": "16px",
+          "direction": "column",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0].Flex[0].Button[0]": {
+          "display": "flex",
+          "shrink": "0",
+          "width": "174px",
+          "label": "TestButton1",
+          "size": "large",
+          "variation": "primary"
+        },
+        "Flex.Flex[0].Flex[0]": {
+          "gap": "24px",
+          "direction": "column",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "shrink": "0",
+          "alignSelf": "stretch",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        },
+        "Flex.Flex[0]": {
+          "gap": "10px",
+          "direction": "column",
+          "height": "422px",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "grow": "1",
+          "basis": "685px",
+          "alignSelf": "stretch",
+          "overflow": "hidden",
+          "position": "relative",
+          "padding": "120px 120px 120px 120px",
+          "backgroundColor": "rgba(0,63.750030398368835,76.50000303983688,1)"
+        },
+        "Flex": {
+          "gap": "0",
+          "direction": "row",
+          "width": "908px",
+          "height": "422px",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "position": "relative",
+          "padding": "0px 0px 0px 0px"
+        }
+      }
+    }
+  ]
+}
