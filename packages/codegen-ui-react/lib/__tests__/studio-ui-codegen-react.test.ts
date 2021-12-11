@@ -188,6 +188,10 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('complexTest8');
       expect(generatedCode.componentText).toMatchSnapshot();
     });
+    it('should render complex sample 9', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest9');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
   });
 
   describe('concat and conditional transform', () => {
@@ -232,6 +236,20 @@ describe('amplify render tests', () => {
   describe('component with variants', () => {
     it('should render variants with options provided', () => {
       const generatedCode = generateWithAmplifyRenderer('componentWithVariants');
+      expect(generatedCode).toMatchSnapshot();
+    });
+  });
+
+  describe('component with variants with mapped children prop', () => {
+    it('should render variants with options provided, and mapped children prop', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithVariantsWithMappedChildrenProp');
+      expect(generatedCode).toMatchSnapshot();
+    });
+  });
+
+  describe('component with variants and not override children prop', () => {
+    it('should render variants with options provided, and not override children prop', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithVariantsAndNotOverrideChildProp');
       expect(generatedCode).toMatchSnapshot();
     });
   });

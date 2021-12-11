@@ -36,6 +36,7 @@ import {
   BasicComponentCustomRating,
   ComponentWithVariant,
   ComponentWithVariantAndOverrides,
+  ComponentWithVariantsAndNotOverrideChildProp,
   SimplePropertyBindingDefaultValue,
   BoundDefaultValue,
   SimpleAndBoundDefaultValue,
@@ -212,6 +213,9 @@ export default function ComponentTests() {
         <ComponentWithVariant id="variant1" variant="primary" />
         <ComponentWithVariant id="variant2" variant="secondary" />
         <ComponentWithVariant id="variant3" variant="primary" size="large" />
+        <ComponentWithVariant id="variant4" variant="success" />
+        <ComponentWithVariant id="variant5" variant="light" />
+        <ComponentWithVariantsAndNotOverrideChildProp id="variant6" mode="test" />
         <ComponentWithVariantAndOverrides id="variantAndOverrideDefault" />
         <ComponentWithVariantAndOverrides id="variantAndOverrideVariantValue" variant="greeting" />
         <ComponentWithVariantAndOverrides

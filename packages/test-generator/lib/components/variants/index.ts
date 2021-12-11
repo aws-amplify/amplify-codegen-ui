@@ -15,3 +15,5 @@
  */
 export { default as ComponentWithVariant } from './componentWithVariant.json';
 export { default as ComponentWithVariantAndOverrides } from './componentWithVariantAndOverrides.json';
+// eslint-disable-next-line max-len
+export { default as ComponentWithVariantsAndNotOverrideChildProp } from './ComponentWithVariantsAndNotOverrideChildProp.json';
