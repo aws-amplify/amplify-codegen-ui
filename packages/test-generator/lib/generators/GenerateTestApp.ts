@@ -78,5 +78,5 @@ const jsxGenerator = new NodeTestGenerator({
 
 const testCases = tsxGenerator.getTestCases(DISABLED_SCHEMAS);
 
-tsxGenerator.generate(testCases);
-// jsxGenerator.generate(testCases);
+// tsxGenerator.generate(testCases);
+jsxGenerator.generate(testCases);
