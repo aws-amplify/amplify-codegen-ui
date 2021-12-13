@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v1.0.0...v1.2.0) (2021-12-13)
+
+
+### Bug Fixes
+
+* add amazon as owner to license file ([#285](https://github.com/aws-amplify/amplify-codegen-ui/issues/285)) ([cdf35c3](https://github.com/aws-amplify/amplify-codegen-ui/commit/cdf35c36eb381b958efc8480ff1d164ebeef2895))
+* dont navigate on each test, and remove unnecessary gets from cypress suite ([#281](https://github.com/aws-amplify/amplify-codegen-ui/issues/281)) ([c72e66c](https://github.com/aws-amplify/amplify-codegen-ui/commit/c72e66cee560d7133650d242e3c36341c0356d98))
+* map prop to children prop for variant ([#297](https://github.com/aws-amplify/amplify-codegen-ui/issues/297)) ([#304](https://github.com/aws-amplify/amplify-codegen-ui/issues/304)) ([cc932c2](https://github.com/aws-amplify/amplify-codegen-ui/commit/cc932c200928e5ef3264a5f6b5ac5fc89cbf2073))
+* remove line of whitespace from LICENSE file, causing README badge to fail ([#269](https://github.com/aws-amplify/amplify-codegen-ui/issues/269)) ([85a3559](https://github.com/aws-amplify/amplify-codegen-ui/commit/85a3559c812058ed41f8e81c120ccef450b2273f))
+* use correct override index for built-in iconset components ([#266](https://github.com/aws-amplify/amplify-codegen-ui/issues/266)) ([04c3baa](https://github.com/aws-amplify/amplify-codegen-ui/commit/04c3baa68f76a8f227178488c2928248fb1b5292))
+
+
+### Features
+
+* add Expander primitive ([#252](https://github.com/aws-amplify/amplify-codegen-ui/issues/252)) ([91096ce](https://github.com/aws-amplify/amplify-codegen-ui/commit/91096ce8b3e6e7604c6dd63df8be5ef642b08b58))
+* add import mappings to non-dynamic, and correct EscapeHatchProps import type. ([#277](https://github.com/aws-amplify/amplify-codegen-ui/issues/277)) ([16acc35](https://github.com/aws-amplify/amplify-codegen-ui/commit/16acc35303f1fa62b6dbc8c72b4dd2dd22166238))
+* add min required library versions for generated components ([#302](https://github.com/aws-amplify/amplify-codegen-ui/issues/302)) ([#303](https://github.com/aws-amplify/amplify-codegen-ui/issues/303)) ([7f08cd9](https://github.com/aws-amplify/amplify-codegen-ui/commit/7f08cd9f0d74436686057bfb0ee6563ef47fef3e))
+* add support for developing on windows ([#276](https://github.com/aws-amplify/amplify-codegen-ui/issues/276)) ([985f576](https://github.com/aws-amplify/amplify-codegen-ui/commit/985f576f1df7251b4890366096326fee097fb7fc))
+* use typescript virtual file server to allow transpilation without requiring a real fs ([#268](https://github.com/aws-amplify/amplify-codegen-ui/issues/268)) ([d8219c5](https://github.com/aws-amplify/amplify-codegen-ui/commit/d8219c50928e33ffd032df3a11b1024b3d7bf982))
+* validate property values are not empty ([#247](https://github.com/aws-amplify/amplify-codegen-ui/issues/247)) ([d6933d5](https://github.com/aws-amplify/amplify-codegen-ui/commit/d6933d505b000856451bb873ef4406500345dd65))
+
+
+
+
+
 # [1.1.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v1.0.0...v1.1.0) (2021-12-02)
 
 
