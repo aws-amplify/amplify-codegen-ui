@@ -18,6 +18,7 @@ import fs from 'fs';
 import { join } from 'path';
 import { ScriptTarget, ScriptKind } from '..';
 import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
+import { formatCode } from '../react-studio-template-renderer-helper';
 
 function loadSchemaFromJSONFile(jsonSchemaFile: string): StudioComponent {
   return JSON.parse(
@@ -96,6 +97,22 @@ describe('react-studio-template-renderer-helper', () => {
       expect(() => {
         generateDeclarationForScriptTarget('custom/customParentAndChildren', ScriptTarget.Latest);
       }).toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe('formatCode', () => {
+    const code = 'const foo = 1;     const bar    =  false;';
+
+    it('formats code when prettier is installed', () => {
+      expect(formatCode(code)).toMatchSnapshot();
+    });
+
+    it('does not format code when prettier is not installed', () => {
+      jest.mock('prettier', () => {
+        throw new Error('Mock module not installed.');
+      });
+
+      expect(formatCode(code)).toEqual(code);
     });
   });
 });
