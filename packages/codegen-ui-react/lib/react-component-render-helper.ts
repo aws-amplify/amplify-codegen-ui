@@ -19,6 +19,7 @@ import {
   FixedStudioComponentProperty,
   BoundStudioComponentProperty,
   CollectionStudioComponentProperty,
+  RelationalOperator,
   WorkflowStudioComponentProperty,
   FormStudioComponentProperty,
   StudioComponent,
@@ -296,7 +297,7 @@ export function resolvePropToExpression(prop: ComponentPropertyValueTypes): Expr
   return factory.createVoidZero();
 }
 
-export function getSyntaxKindToken(operator: string): BinaryOperatorToken | undefined {
+export function getSyntaxKindToken(operator: RelationalOperator): BinaryOperatorToken | undefined {
   switch (operator) {
     case 'eq':
       return factory.createToken(SyntaxKind.EqualsEqualsToken);
