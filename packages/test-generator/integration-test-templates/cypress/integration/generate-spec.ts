@@ -50,6 +50,8 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'ComplexTest7',
   'ComplexTest8',
   'ComplexTest9',
+  'ComplexTest10',
+  'ComplexTest11',
   'ReneButton',
   'CollectionWithBinding',
   'CollectionWithSort',

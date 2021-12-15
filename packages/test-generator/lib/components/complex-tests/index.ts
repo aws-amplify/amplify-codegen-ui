@@ -22,4 +22,6 @@ export { default as ComplexTest6 } from './complexTest6.json';
 export { default as ComplexTest7 } from './complexTest7.json';
 export { default as ComplexTest8 } from './complexTest8.json';
 export { default as ComplexTest9 } from './complexTest9.json';
+export { default as ComplexTest10 } from './complexTest10.json';
+export { default as ComplexTest11 } from './complexTest11.json';
 export { default as ReneButton } from './reneButton.json';

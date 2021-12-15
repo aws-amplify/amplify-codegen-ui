@@ -1,0 +1,2543 @@
+{
+  "name": "ComplexTest10",
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "name": "Free",
+              "componentType": "Text",
+              "properties": {
+                "fontFamily": {
+                  "value": "Inter"
+                },
+                "fontSize": {
+                  "value": "40px"
+                },
+                "label": {
+                  "value": "Free"
+                },
+                "fontWeight": {
+                  "value": "700"
+                },
+                "color": {
+                  "value": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)"
+                },
+                "lineHeight": {
+                  "value": "48px"
+                },
+                "textAlign": {
+                  "value": "center"
+                },
+                "display": {
+                  "value": "flex"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "flex-start"
+                },
+                "width": {
+                  "value": "224px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "$0/mo",
+              "componentType": "Text",
+              "properties": {
+                "fontFamily": {
+                  "value": "Inter"
+                },
+                "fontSize": {
+                  "value": "32px"
+                },
+                "label": {
+                  "value": "$0/mo"
+                },
+                "fontWeight": {
+                  "value": "700"
+                },
+                "color": {
+                  "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                },
+                "lineHeight": {
+                  "value": "40px"
+                },
+                "textAlign": {
+                  "value": "center"
+                },
+                "display": {
+                  "value": "flex"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "flex-start"
+                },
+                "width": {
+                  "value": "224px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Buttondmi",
+              "componentType": "Button",
+              "properties": {
+                "display": {
+                  "value": "flex"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "label": {
+                  "value": "Primary Button"
+                },
+                "size": {
+                  "value": "large"
+                },
+                "variation": {
+                  "value": "primary"
+                }
+              },
+              "overrides": {
+                "Icon[0].Icon[1]": {
+                  "viewBox": "{\"minX\":0,\"minY\":0,\"width\":19.908340454101562,\"height\":20}"
+                },
+                "Icon[0]": {
+                  "hiddenNode": "true"
+                },
+                "Icon[1]": {
+                  "hiddenNode": "true"
+                }
+              },
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Dividerxhd",
+              "componentType": "Divider",
+              "properties": {
+                "width": {
+                  "value": "224px"
+                },
+                "height": {
+                  "value": "2px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "size": {
+                  "value": "default"
+                },
+                "orientation": {
+                  "value": "horizontal"
+                }
+              },
+              "overrides": {
+                "View[0]": {
+                  "width": "224px",
+                  "height": "2px"
+                }
+              },
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconunz",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.589996337890625,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.oat",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 138mkm",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconrca",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.589996337890625,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.yfq",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 139jki",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconwrc",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.589996337890625,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.lum",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 137zde",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            }
+          ],
+          "name": "Frame 390",
+          "componentType": "Flex",
+          "properties": {
+            "gap": {
+              "value": "24px"
+            },
+            "direction": {
+              "value": "column"
+            },
+            "width": {
+              "value": "272px"
+            },
+            "justifyContent": {
+              "value": "center"
+            },
+            "alignItems": {
+              "value": "center"
+            },
+            "grow": {
+              "value": "1"
+            },
+            "basis": {
+              "value": "272px"
+            },
+            "height": {
+              "value": "618px"
+            },
+            "position": {
+              "value": "relative"
+            },
+            "padding": {
+              "value": "24px 24px 24px 24px"
+            },
+            "backgroundColor": {
+              "value": "rgba(255,255,255,1)"
+            }
+          },
+          "overrides": {},
+          "variants": []
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "name": "Hobby",
+              "componentType": "Text",
+              "properties": {
+                "fontFamily": {
+                  "value": "Inter"
+                },
+                "fontSize": {
+                  "value": "40px"
+                },
+                "label": {
+                  "value": "Hobby"
+                },
+                "fontWeight": {
+                  "value": "700"
+                },
+                "color": {
+                  "value": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)"
+                },
+                "lineHeight": {
+                  "value": "48px"
+                },
+                "textAlign": {
+                  "value": "center"
+                },
+                "display": {
+                  "value": "flex"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "flex-start"
+                },
+                "width": {
+                  "value": "224px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "$10/mo",
+              "componentType": "Text",
+              "properties": {
+                "fontFamily": {
+                  "value": "Inter"
+                },
+                "fontSize": {
+                  "value": "32px"
+                },
+                "label": {
+                  "value": "$10/mo"
+                },
+                "fontWeight": {
+                  "value": "700"
+                },
+                "color": {
+                  "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                },
+                "lineHeight": {
+                  "value": "40px"
+                },
+                "textAlign": {
+                  "value": "center"
+                },
+                "display": {
+                  "value": "flex"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "flex-start"
+                },
+                "width": {
+                  "value": "224px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Buttoncej",
+              "componentType": "Button",
+              "properties": {
+                "display": {
+                  "value": "flex"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "label": {
+                  "value": "Primary Button"
+                },
+                "size": {
+                  "value": "large"
+                },
+                "variation": {
+                  "value": "primary"
+                }
+              },
+              "overrides": {
+                "Icon[0]": {
+                  "hiddenNode": "true"
+                },
+                "Icon[1]": {
+                  "hiddenNode": "true"
+                }
+              },
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Dividerovm",
+              "componentType": "Divider",
+              "properties": {
+                "width": {
+                  "value": "224px"
+                },
+                "height": {
+                  "value": "2px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "size": {
+                  "value": "default"
+                },
+                "orientation": {
+                  "value": "horizontal"
+                }
+              },
+              "overrides": {
+                "View[0]": {
+                  "width": "224px",
+                  "height": "2px"
+                }
+              },
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconxzy",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.59002685546875,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.vxv",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 138upy",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconpjz",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.59002685546875,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.gwp",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 139tvb",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconhpq",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.59002685546875,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.riv",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 137fsd",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            }
+          ],
+          "name": "Frame 391",
+          "componentType": "Flex",
+          "properties": {
+            "gap": {
+              "value": "24px"
+            },
+            "direction": {
+              "value": "column"
+            },
+            "width": {
+              "value": "272px"
+            },
+            "justifyContent": {
+              "value": "center"
+            },
+            "alignItems": {
+              "value": "center"
+            },
+            "grow": {
+              "value": "1"
+            },
+            "basis": {
+              "value": "272px"
+            },
+            "height": {
+              "value": "618px"
+            },
+            "position": {
+              "value": "relative"
+            },
+            "padding": {
+              "value": "24px 24px 24px 24px"
+            },
+            "backgroundColor": {
+              "value": "rgba(255,255,255,1)"
+            }
+          },
+          "overrides": {},
+          "variants": []
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "name": "Premium",
+              "componentType": "Text",
+              "properties": {
+                "fontFamily": {
+                  "value": "Inter"
+                },
+                "fontSize": {
+                  "value": "40px"
+                },
+                "label": {
+                  "value": "Premium"
+                },
+                "fontWeight": {
+                  "value": "700"
+                },
+                "color": {
+                  "value": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)"
+                },
+                "lineHeight": {
+                  "value": "48px"
+                },
+                "textAlign": {
+                  "value": "center"
+                },
+                "display": {
+                  "value": "flex"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "flex-start"
+                },
+                "width": {
+                  "value": "224px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "$100/mo",
+              "componentType": "Text",
+              "properties": {
+                "fontFamily": {
+                  "value": "Inter"
+                },
+                "fontSize": {
+                  "value": "32px"
+                },
+                "label": {
+                  "value": "$100/mo"
+                },
+                "fontWeight": {
+                  "value": "700"
+                },
+                "color": {
+                  "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                },
+                "lineHeight": {
+                  "value": "40px"
+                },
+                "textAlign": {
+                  "value": "center"
+                },
+                "display": {
+                  "value": "flex"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "flex-start"
+                },
+                "width": {
+                  "value": "224px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Buttonizv",
+              "componentType": "Button",
+              "properties": {
+                "display": {
+                  "value": "flex"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "label": {
+                  "value": "Primary Button"
+                },
+                "size": {
+                  "value": "large"
+                },
+                "variation": {
+                  "value": "primary"
+                }
+              },
+              "overrides": {
+                "Icon[0]": {
+                  "hiddenNode": "true"
+                },
+                "Icon[1]": {
+                  "hiddenNode": "true"
+                }
+              },
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Dividerftq",
+              "componentType": "Divider",
+              "properties": {
+                "width": {
+                  "value": "224px"
+                },
+                "height": {
+                  "value": "2px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "size": {
+                  "value": "default"
+                },
+                "orientation": {
+                  "value": "horizontal"
+                }
+              },
+              "overrides": {
+                "View[0]": {
+                  "width": "224px",
+                  "height": "2px"
+                }
+              },
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconoyx",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.59002685546875,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.kai",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 138lgm",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconcsj",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.59002685546875,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.nuy",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 139vsq",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Icongvd",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.59002685546875,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.hjl",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 137kjg",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            }
+          ],
+          "name": "Frame 392",
+          "componentType": "Flex",
+          "properties": {
+            "gap": {
+              "value": "24px"
+            },
+            "direction": {
+              "value": "column"
+            },
+            "width": {
+              "value": "272px"
+            },
+            "justifyContent": {
+              "value": "center"
+            },
+            "alignItems": {
+              "value": "center"
+            },
+            "grow": {
+              "value": "1"
+            },
+            "basis": {
+              "value": "272px"
+            },
+            "height": {
+              "value": "618px"
+            },
+            "position": {
+              "value": "relative"
+            },
+            "padding": {
+              "value": "24px 24px 24px 24px"
+            },
+            "backgroundColor": {
+              "value": "rgba(255,255,255,1)"
+            }
+          },
+          "overrides": {},
+          "variants": []
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "name": "Enterprise",
+              "componentType": "Text",
+              "properties": {
+                "fontFamily": {
+                  "value": "Inter"
+                },
+                "fontSize": {
+                  "value": "40px"
+                },
+                "label": {
+                  "value": "Enterprise"
+                },
+                "fontWeight": {
+                  "value": "700"
+                },
+                "color": {
+                  "value": "rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)"
+                },
+                "lineHeight": {
+                  "value": "48px"
+                },
+                "textAlign": {
+                  "value": "center"
+                },
+                "display": {
+                  "value": "flex"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "flex-start"
+                },
+                "width": {
+                  "value": "224px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Contact us",
+              "componentType": "Text",
+              "properties": {
+                "fontFamily": {
+                  "value": "Inter"
+                },
+                "fontSize": {
+                  "value": "32px"
+                },
+                "label": {
+                  "value": "Contact us"
+                },
+                "fontWeight": {
+                  "value": "700"
+                },
+                "color": {
+                  "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                },
+                "lineHeight": {
+                  "value": "40px"
+                },
+                "textAlign": {
+                  "value": "center"
+                },
+                "display": {
+                  "value": "flex"
+                },
+                "direction": {
+                  "value": "column"
+                },
+                "justifyContent": {
+                  "value": "flex-start"
+                },
+                "width": {
+                  "value": "224px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Buttonwez",
+              "componentType": "Button",
+              "properties": {
+                "display": {
+                  "value": "flex"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "label": {
+                  "value": "Primary Button"
+                },
+                "size": {
+                  "value": "large"
+                },
+                "variation": {
+                  "value": "primary"
+                }
+              },
+              "overrides": {
+                "Icon[0]": {
+                  "hiddenNode": "true"
+                },
+                "Icon[1]": {
+                  "hiddenNode": "true"
+                }
+              },
+              "variants": []
+            },
+            {
+              "children": [],
+              "name": "Dividerzxk",
+              "componentType": "Divider",
+              "properties": {
+                "width": {
+                  "value": "224px"
+                },
+                "height": {
+                  "value": "2px"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "size": {
+                  "value": "default"
+                },
+                "orientation": {
+                  "value": "horizontal"
+                }
+              },
+              "overrides": {
+                "View[0]": {
+                  "width": "224px",
+                  "height": "2px"
+                }
+              },
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconkmb",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.5899658203125,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.zfj",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor123123."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 138udv",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconzyv",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.5899658203125,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.dcz",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 139cwp",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "name": "Iconsrt",
+                  "componentType": "IconCheck",
+                  "properties": {
+                    "width": {
+                      "value": "24px"
+                    },
+                    "height": {
+                      "value": "24px"
+                    },
+                    "shrink": {
+                      "value": "0"
+                    },
+                    "overflow": {
+                      "value": "hidden"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    },
+                    "color": {
+                      "value": "rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)"
+                    },
+                    "type": {
+                      "value": "check"
+                    },
+                    "fontSize": {
+                      "value": "24px"
+                    }
+                  },
+                  "overrides": {
+                    "Icon[1]": {
+                      "width": "17.59000015258789px",
+                      "height": "13.40999984741211px",
+                      "pathData": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z",
+                      "viewBox": "{\"minX\":0,\"minY\":0,\"width\":17.5899658203125,\"height\":13.41015625}",
+                      "left": "3.4100000858306885px",
+                      "top": "5.590000152587891px"
+                    }
+                  },
+                  "variants": []
+                },
+                {
+                  "children": [],
+                  "name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.rug",
+                  "componentType": "Text",
+                  "properties": {
+                    "fontFamily": {
+                      "value": "Inter"
+                    },
+                    "fontSize": {
+                      "value": "16px"
+                    },
+                    "label": {
+                      "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                    },
+                    "fontWeight": {
+                      "value": "400"
+                    },
+                    "color": {
+                      "value": "rgba(48.000000938773155,64.00000378489494,80.00000283122063,1)"
+                    },
+                    "lineHeight": {
+                      "value": "24px"
+                    },
+                    "textAlign": {
+                      "value": "left"
+                    },
+                    "display": {
+                      "value": "flex"
+                    },
+                    "direction": {
+                      "value": "column"
+                    },
+                    "justifyContent": {
+                      "value": "flex-start"
+                    },
+                    "letterSpacing": {
+                      "value": "0.010000000000000009px"
+                    },
+                    "width": {
+                      "value": "184px"
+                    },
+                    "grow": {
+                      "value": "1"
+                    },
+                    "basis": {
+                      "value": "184px"
+                    },
+                    "position": {
+                      "value": "relative"
+                    },
+                    "padding": {
+                      "value": "0px 0px 0px 0px"
+                    }
+                  },
+                  "overrides": {},
+                  "variants": []
+                }
+              ],
+              "name": "Frame 137pog",
+              "componentType": "Flex",
+              "properties": {
+                "gap": {
+                  "value": "16px"
+                },
+                "direction": {
+                  "value": "row"
+                },
+                "alignItems": {
+                  "value": "flex-start"
+                },
+                "shrink": {
+                  "value": "0"
+                },
+                "alignSelf": {
+                  "value": "stretch"
+                },
+                "position": {
+                  "value": "relative"
+                },
+                "padding": {
+                  "value": "0px 0px 0px 0px"
+                }
+              },
+              "overrides": {},
+              "variants": []
+            }
+          ],
+          "name": "Frame 393",
+          "componentType": "Flex",
+          "properties": {
+            "gap": {
+              "value": "24px"
+            },
+            "direction": {
+              "value": "column"
+            },
+            "width": {
+              "value": "272px"
+            },
+            "justifyContent": {
+              "value": "center"
+            },
+            "alignItems": {
+              "value": "center"
+            },
+            "grow": {
+              "value": "1"
+            },
+            "basis": {
+              "value": "272px"
+            },
+            "height": {
+              "value": "618px"
+            },
+            "position": {
+              "value": "relative"
+            },
+            "padding": {
+              "value": "24px 24px 24px 24px"
+            },
+            "backgroundColor": {
+              "value": "rgba(255,255,255,1)"
+            }
+          },
+          "overrides": {},
+          "variants": []
+        }
+      ],
+      "name": "Frame 63",
+      "componentType": "Flex",
+      "properties": {
+        "gap": {
+          "value": "24px"
+        },
+        "direction": {
+          "value": "row"
+        },
+        "width": {
+          "value": "1160px"
+        },
+        "alignItems": {
+          "value": "flex-start"
+        },
+        "grow": {
+          "value": "1"
+        },
+        "basis": {
+          "value": "1160px"
+        },
+        "height": {
+          "value": "618px"
+        },
+        "position": {
+          "value": "relative"
+        },
+        "padding": {
+          "value": "0px 0px 0px 0px"
+        }
+      },
+      "overrides": {},
+      "variants": []
+    }
+  ],
+  "id": "1392:12275",
+  "bindingProperties": {},
+  "componentType": "Flex",
+  "properties": {
+    "gap": {
+      "value": "24px"
+    },
+    "direction": {
+      "value": "row"
+    },
+    "width": {
+      "value": "1440px"
+    },
+    "justifyContent": {
+      "value": "center"
+    },
+    "alignItems": {
+      "value": "center"
+    },
+    "overflow": {
+      "value": "hidden"
+    },
+    "position": {
+      "value": "relative"
+    },
+    "padding": {
+      "value": "40px 140px 40px 140px"
+    },
+    "backgroundColor": {
+      "value": "rgba(239.00000095367432,240.00000089406967,240.00000089406967,1)"
+    }
+  },
+  "overrides": {},
+  "variants": []
+}
