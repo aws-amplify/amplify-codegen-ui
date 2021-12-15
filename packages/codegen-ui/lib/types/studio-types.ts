@@ -321,13 +321,18 @@ export type ConcatenatedStudioComponentProperty = {
 };
 
 /**
+ * These are the string values accepted by operator
+ */
+export type RelationalOperator = 'eq' | 'ne' | 'le' | 'lt' | 'ge' | 'gt';
+
+/**
  * Component property that represents a conditional expression
  */
 export type ConditionalStudioComponentProperty = {
   condition: {
     property: string;
     field?: string;
-    operator: string;
+    operator: RelationalOperator;
     operand: string | number | boolean;
     then: StudioComponentProperty;
     else: StudioComponentProperty;
