@@ -360,4 +360,154 @@ describe('Complex Components', () => {
       });
     });
   });
+
+  it('Complex 10', () => {
+    cy.get('#complex-test-10').within(() => {
+      cy.get('.amplify-flex')
+        .should(
+          'have.attr',
+          'style',
+          // eslint-disable-next-line max-len
+          'align-items: center; background-color: rgb(239, 240, 240); flex-direction: row; gap: 24px; justify-content: center; overflow: hidden; padding: 40px 140px; position: relative; width: 1440px;',
+        )
+        .within(() => {
+          cy.get('.amplify-flex')
+            .should(
+              'have.attr',
+              'style',
+              // eslint-disable-next-line max-len
+              'align-items: flex-start; flex-basis: 1160px; flex-direction: row; gap: 24px; flex-grow: 1; height: 618px; padding: 0px; position: relative; width: 1160px;',
+            )
+            .within(() => {
+              cy.get('.amplify-flex')
+                .eq(0)
+                .should(
+                  'have.attr',
+                  'style',
+                  // eslint-disable-next-line max-len
+                  'align-items: center; background-color: rgb(255, 255, 255); flex-basis: 272px; flex-direction: column; gap: 24px; flex-grow: 1; height: 618px; justify-content: center; padding: 24px; position: relative; width: 272px;',
+                )
+                .within(() => {
+                  cy.get('.amplify-text').eq(0).contains('Free').should(
+                    'have.attr',
+                    'style',
+                    // eslint-disable-next-line max-len
+                    'align-self: stretch; color: rgb(13, 26, 38); flex-direction: column; display: flex; font-family: Inter; font-size: 40px; font-weight: 700; justify-content: flex-start; line-height: 48px; padding: 0px; position: relative; flex-shrink: 0; text-align: center; width: 224px;',
+                  );
+                  cy.get('.amplify-button').contains('Primary Button');
+                  cy.get('.amplify-flex')
+                    .eq(0)
+                    .should(
+                      'have.attr',
+                      'style',
+                      // eslint-disable-next-line max-len
+                      'align-items: flex-start; align-self: stretch; flex-direction: row; gap: 16px; padding: 0px; position: relative; flex-shrink: 0;',
+                    )
+                    .within(() => {
+                      cy.get('.amplify-icon').should(
+                        'have.attr',
+                        'style',
+                        // eslint-disable-next-line max-len
+                        'color: rgb(64, 170, 191); font-size: 24px; height: 24px; overflow: hidden; padding: 0px; position: relative; flex-shrink: 0; width: 24px;',
+                      );
+                      cy.get('.amplify-text')
+                        .should(
+                          'have.attr',
+                          'style',
+                          // eslint-disable-next-line max-len
+                          'flex-basis: 184px; color: rgb(48, 64, 80); flex-direction: column; display: flex; font-family: Inter; font-size: 16px; font-weight: 400; flex-grow: 1; justify-content: flex-start; letter-spacing: 0.01px; line-height: 24px; padding: 0px; position: relative; text-align: left; width: 184px;',
+                        )
+                        .contains('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.');
+                    });
+                });
+              cy.get('.amplify-flex')
+                .eq(12)
+                .should(
+                  'have.attr',
+                  'style',
+                  // eslint-disable-next-line max-len
+                  'align-items: center; background-color: rgb(255, 255, 255); flex-basis: 272px; flex-direction: column; gap: 24px; flex-grow: 1; height: 618px; justify-content: center; padding: 24px; position: relative; width: 272px;',
+                )
+                .within(() => {
+                  cy.get('.amplify-text').eq(0).contains('Enterprise').should(
+                    'have.attr',
+                    'style',
+                    // eslint-disable-next-line max-len
+                    'align-self: stretch; color: rgb(13, 26, 38); flex-direction: column; display: flex; font-family: Inter; font-size: 40px; font-weight: 700; justify-content: flex-start; line-height: 48px; padding: 0px; position: relative; flex-shrink: 0; text-align: center; width: 224px;',
+                  );
+                  cy.get('.amplify-button').contains('Primary Button');
+                  cy.get('.amplify-flex')
+                    .eq(0)
+                    .should(
+                      'have.attr',
+                      'style',
+                      // eslint-disable-next-line max-len
+                      'align-items: flex-start; align-self: stretch; flex-direction: row; gap: 16px; padding: 0px; position: relative; flex-shrink: 0;',
+                    )
+                    .within(() => {
+                      cy.get('.amplify-icon').should(
+                        'have.attr',
+                        'style',
+                        // eslint-disable-next-line max-len
+                        'color: rgb(64, 170, 191); font-size: 24px; height: 24px; overflow: hidden; padding: 0px; position: relative; flex-shrink: 0; width: 24px;',
+                      );
+                      cy.get('.amplify-text')
+                        .should(
+                          'have.attr',
+                          'style',
+                          // eslint-disable-next-line max-len
+                          'flex-basis: 184px; color: rgb(48, 64, 80); flex-direction: column; display: flex; font-family: Inter; font-size: 16px; font-weight: 400; flex-grow: 1; justify-content: flex-start; letter-spacing: 0.01px; line-height: 24px; padding: 0px; position: relative; text-align: left; width: 184px;',
+                        )
+                        .contains(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor123123.',
+                        );
+                    });
+                });
+            });
+        });
+    });
+  });
+
+  it('Complex 11', () => {
+    cy.get('#complex-test-11').within(() => {
+      cy.get('.amplify-flex')
+        .should(
+          'have.attr',
+          'style',
+          'align-items: flex-start; flex-direction: row; gap: 24px; padding: 0px; position: relative; width: 1160px;',
+        )
+        .within(() => {
+          cy.get('.amplify-flex')
+            .should(
+              'have.attr',
+              'style',
+              // eslint-disable-next-line max-len
+              'align-items: flex-start; background-color: rgb(255, 255, 255); flex-basis: 667px; flex-direction: row; gap: 0px; flex-grow: 1; height: 1148px; padding: 32px 0px; position: relative; width: 667px;',
+            )
+            .within(() => {
+              cy.get('.amplify-flex').within(() => {
+                cy.get('.amplify-button').contains('Place Order').should(
+                  'have.attr',
+                  'style',
+                  // eslint-disable-next-line max-len
+                  'display: flex; left: 32px; position: absolute; top: 822px; width: 405px;',
+                );
+                cy.get('.amplify-badge').contains('Discount - 10% off').should(
+                  'have.attr',
+                  'style',
+                  // eslint-disable-next-line max-len
+                  'background-color: rgb(214, 245, 219); color: rgb(54, 94, 61); flex-direction: column; display: flex; font-family: Inter; font-size: 16px; font-weight: 700; justify-content: flex-start; left: 32px; letter-spacing: 0.49px; line-height: 20px; position: absolute; text-align: left; top: 0px; width: 405px;',
+                );
+                cy.get('.amplify-flex')
+                  .debug()
+                  .within(() => {
+                    cy.get('.amplify-flex').within(() => {
+                      cy.get('.amplify-label').contains('Label');
+                    });
+                  });
+              });
+            });
+        });
+    });
+  });
 });

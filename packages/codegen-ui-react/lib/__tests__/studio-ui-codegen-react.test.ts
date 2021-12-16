@@ -192,6 +192,14 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('complexTest9');
       expect(generatedCode.componentText).toMatchSnapshot();
     });
+    it('should render complex sample 10', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest10');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+    it('should render complex sample 11', () => {
+      const generatedCode = generateWithAmplifyRenderer('complexTest11');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
   });
 
   describe('concat and conditional transform', () => {
