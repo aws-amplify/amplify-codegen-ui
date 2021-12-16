@@ -7,6 +7,7 @@
 [![GitHub](https://img.shields.io/github/license/aws-amplify/amplify-codegen-ui)](LICENSE)
 [![Discord](https://img.shields.io/discord/308323056592486420?logo=discord)](https://discord.gg/jWVbPfC)
 [![Build](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/check.yml/badge.svg)](https://github.com/aws-amplify/amplify-codegen-ui/actions/workflows/check.yml)
+[![CircleCI](https://circleci.com/gh/aws-amplify/amplify-codegen-ui/tree/main.svg?style=shield)](https://circleci.com/gh/aws-amplify/amplify-codegen-ui/tree/main)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/aws-amplify/amplify-codegen-ui.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/aws-amplify/amplify-codegen-ui/context:javascript)
 [![codecov](https://codecov.io/gh/aws-amplify/amplify-codegen-ui/branch/main/graph/badge.svg?token=opw1LYK6Jn)](https://codecov.io/gh/aws-amplify/amplify-codegen-ui)
 [![Open Bugs](https://img.shields.io/github/issues/aws-amplify/amplify-codegen-ui/bug?color=d73a4a&label=bugs)](https://github.com/aws-amplify/amplify-codegen-ui/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
