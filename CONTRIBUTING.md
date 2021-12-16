@@ -125,8 +125,11 @@ Studio UI does not yet consume Codegen UI from NPM and instead the Codegen UI so
 
 A pre-release is automatically published to NPM when the following cirteria are met:
 
-- A commit is pushed to then `main` or `develop` branch.
+- A commit is pushed to then `main` branch.
 - The commit is not a release commit (i.e. `chore(release): v...`).
+- The commit has changes to a leaf package source.
+  - Ex. updating `.circleci/config.yml` will not make a pre-release, but changes `packages/codegen-ui/lib/studio-node.ts` will.
+- Lerna will only look back a single commit. If the HEAD commit does not meet previous cirteria the pre-release will not be published.
 
 The pre-release will increment the patch version of each package and append meta information including the short commit hash.
 These changes will **NOT** be pushed back to the GitHub repo.
@@ -134,8 +137,8 @@ These changes will **NOT** be pushed back to the GitHub repo.
 Example:
 
 ```
- - @aws-amplify/codegen-ui-react => 1.1.1-2baaca9.0
- - @aws-amplify/codegen-ui => 1.1.1-2baaca9.0
+ - @aws-amplify/codegen-ui-react => 1.1.1-alpha.270+2baaca9
+ - @aws-amplify/codegen-ui => 1.1.1-alpha.270+2baaca9
 ```
 
 The pre-release will be published under the `next` dist tag.
@@ -154,8 +157,8 @@ To create a tagged release create a pull request or push directly to a branch wi
 The branch name must not contain any additional forward slashes after `tagged-release/`.
 The tagged release will use the same versioning process as the pre-release except:
 
-- the preid will inlcude the branch name with `tagged-release/` removed. (Ex. `1.1.1-fix-properties-2baaca9.0`)
-- the release will be published with the dist tag as the tagged release name. (Ex. `fix-properties`)
+- the preid will be the branch name with `tagged-release/` removed. (Ex. `1.1.1-fix-properties.270+2baaca9`)
+- the release will not be published under any dist tag
 
 ### Icons
 
