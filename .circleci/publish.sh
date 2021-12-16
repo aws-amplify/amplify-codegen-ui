@@ -4,10 +4,32 @@ if [[ `git log --format=%s -n 1` =~ ^chore\(release\):\ v.* ]]; then
   # production release
   npx lerna publish from-git --ignore-scripts -y;
 else
+  SHORT_SHA1=$(echo $CIRCLE_SHA1 | cut -c -7)
+
   # pre-release or tagged release
   # if branch starts with tagged-release/ then do tagged release, else pre-release
-  npx lerna publish --canary --ignore-scripts -y \
-    --preid $([[ $CIRCLE_BRANCH =~ ^tagged-release\/.* ]] \
-      && echo $(echo $CIRCLE_BRANCH | sed 's:.*/::') --no-pre-dist-tag \
-      || echo alpha --pre-dist-tag next);
+  if [[ $CIRCLE_BRANCH =~ ^tagged-release\/.* ]]; then
+    TAGGED_RELEASE_NAME=$(echo $CIRCLE_BRANCH | sed 's:.*/::')
+    npx lerna version prerelease \
+      --amend \
+      --ignore-scripts \
+      --no-commit-hooks \
+      --preid ${TAGGED_RELEASE_NAME}-${SHORT_SHA1} \
+      -y
+    npx lerna publish from-git \
+      --ignore-scripts \
+      --pre-dist-tag $TAGGED_RELEASE_NAME \
+      -y;
+  else
+    npx lerna version prerelease \
+      --amend \
+      --ignore-scripts \
+      --no-commit-hooks \
+      --preid $SHORT_SHA1 \
+      -y
+    npx lerna publish from-git \
+      --ignore-scripts \
+      --pre-dist-tag next \
+      -y;
+  fi;
 fi
