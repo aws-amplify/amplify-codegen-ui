@@ -43,6 +43,8 @@ The integraiton tests verify:
 
 The `integration-test` GitHub workflow performs these integration tests in CI.
 
+[Install jq](https://stedolan.github.io/jq/download/) before running the integration tests.
+
 To run integration tests locally, execute the following:
 
 ```sh

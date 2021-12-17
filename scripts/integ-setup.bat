@@ -22,3 +22,11 @@ call lerna add --no-ci --scope integration-test react-router-dom
 call lerna add --no-ci --scope integration-test @types/react-router-dom
 call lerna add --no-ci --dev --scope integration-test cypress
 call lerna add --no-ci --dev --scope integration-test wait-on
+call lerna add --no-ci --scope integration-test os-browserify
+call lerna add --no-ci --scope integration-test path-browserify
+call lerna add --no-ci --scope integration-test @types/node
+call lerna add --no-ci --scope integration-test react-app-rewired
+
+chdir packages\integration-test
+call jq ".scripts.start = \"react-app-rewired start\" | .scripts.build = \"react-app-rewired build\" | .scripts.test = \"react-app-rewired test\"" package.json > tmp.json
+move tmp.json package.json
