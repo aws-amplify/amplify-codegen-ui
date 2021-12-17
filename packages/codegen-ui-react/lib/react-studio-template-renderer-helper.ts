@@ -35,8 +35,6 @@ import ts, {
   createProgram,
 } from 'typescript';
 import { createDefaultMapFromNodeModules, createSystem, createVirtualCompilerHost } from '@typescript/vfs';
-import prettier from 'prettier';
-import parserTypescript from 'prettier/parser-typescript';
 import path from 'path';
 import { ReactRenderConfig, ScriptKind, ScriptTarget, ModuleKind } from './react-render-config';
 
@@ -73,7 +71,7 @@ export function transpile(
       },
     }).outputText;
 
-    const componentText = prettier.format(transpiledCode, { parser: 'typescript', plugins: [parserTypescript] });
+    const componentText = formatCode(transpiledCode);
 
     /*
      * createProgram is less performant than traspileModule and should only be used when necessary.
@@ -121,7 +119,7 @@ export function transpile(
     };
   }
 
-  return { componentText: prettier.format(code, { parser: 'typescript', plugins: [parserTypescript] }) };
+  return { componentText: formatCode(code) };
 }
 
 export function buildPrinter(fileName: string, renderConfig: ReactRenderConfig) {
@@ -185,4 +183,20 @@ export function bindingPropertyUsesHook(
   binding: StudioComponentDataPropertyBinding | StudioComponentSimplePropertyBinding,
 ): boolean {
   return isDataPropertyBinding(binding) && 'predicate' in binding.bindingProperties;
+}
+
+// optional import prettier
+export function formatCode(code: string): string {
+  try {
+    // eslint-disable-next-line global-require, import/no-extraneous-dependencies, @typescript-eslint/no-var-requires
+    const prettier = require('prettier');
+    // eslint-disable-next-line global-require, import/no-extraneous-dependencies, @typescript-eslint/no-var-requires
+    const parserTypescript = require('prettier/parser-typescript');
+
+    if (prettier && parserTypescript) {
+      return prettier.format(code, { parser: 'typescript', plugins: [parserTypescript] });
+    }
+  } catch {} // eslint-disable-line no-empty
+
+  return code;
 }
