@@ -866,6 +866,7 @@ import {
   Variant,
   getOverrideProps,
   getOverridesFromVariants,
+  mergeVariantsAndOverrides,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
 
@@ -922,26 +923,6 @@ export default function ComplexTest4(
       variantValues: { colors: \\"Red/Orange\\" },
     },
   ];
-  const mergeVariantsAndOverrides = (
-    variants: EscapeHatchProps,
-    overrides: EscapeHatchProps
-  ): EscapeHatchProps => {
-    const overrideKeys = new Set(Object.keys(overrides));
-    const sharedKeys = Object.keys(variants).filter((variantKey) =>
-      overrideKeys.has(variantKey)
-    );
-    const merged = Object.fromEntries(
-      sharedKeys.map((sharedKey) => [
-        sharedKey,
-        { ...variants[sharedKey], ...overrides[sharedKey] },
-      ])
-    );
-    return {
-      ...variants,
-      ...overrides,
-      ...merged,
-    };
-  };
   const overrides = mergeVariantsAndOverrides(
     getOverridesFromVariants(variants, props),
     overridesProp || {}
@@ -1280,6 +1261,7 @@ import {
   Variant,
   getOverrideProps,
   getOverridesFromVariants,
+  mergeVariantsAndOverrides,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
@@ -1525,26 +1507,6 @@ export default function ComplexTest9(
       },
     },
   ];
-  const mergeVariantsAndOverrides = (
-    variants: EscapeHatchProps,
-    overrides: EscapeHatchProps
-  ): EscapeHatchProps => {
-    const overrideKeys = new Set(Object.keys(overrides));
-    const sharedKeys = Object.keys(variants).filter((variantKey) =>
-      overrideKeys.has(variantKey)
-    );
-    const merged = Object.fromEntries(
-      sharedKeys.map((sharedKey) => [
-        sharedKey,
-        { ...variants[sharedKey], ...overrides[sharedKey] },
-      ])
-    );
-    return {
-      ...variants,
-      ...overrides,
-      ...merged,
-    };
-  };
   const overrides = mergeVariantsAndOverrides(
     getOverridesFromVariants(variants, props),
     overridesProp || {}
@@ -3813,6 +3775,7 @@ import {
   Variant,
   getOverrideProps,
   getOverridesFromVariants,
+  mergeVariantsAndOverrides,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
@@ -3833,26 +3796,6 @@ export default function ViewPrimitive(
       overrides: { View: { label: \\"componentWithVariantsWithLabelProp\\" } },
     },
   ];
-  const mergeVariantsAndOverrides = (
-    variants: EscapeHatchProps,
-    overrides: EscapeHatchProps
-  ): EscapeHatchProps => {
-    const overrideKeys = new Set(Object.keys(overrides));
-    const sharedKeys = Object.keys(variants).filter((variantKey) =>
-      overrideKeys.has(variantKey)
-    );
-    const merged = Object.fromEntries(
-      sharedKeys.map((sharedKey) => [
-        sharedKey,
-        { ...variants[sharedKey], ...overrides[sharedKey] },
-      ])
-    );
-    return {
-      ...variants,
-      ...overrides,
-      ...merged,
-    };
-  };
   const overrides = mergeVariantsAndOverrides(
     getOverridesFromVariants(variants, props),
     overridesProp || {}
@@ -3881,6 +3824,7 @@ import {
   Variant,
   getOverrideProps,
   getOverridesFromVariants,
+  mergeVariantsAndOverrides,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
@@ -3913,26 +3857,6 @@ export default function CustomButton(
       overrides: { Button: { width: \\"500\\" } },
     },
   ];
-  const mergeVariantsAndOverrides = (
-    variants: EscapeHatchProps,
-    overrides: EscapeHatchProps
-  ): EscapeHatchProps => {
-    const overrideKeys = new Set(Object.keys(overrides));
-    const sharedKeys = Object.keys(variants).filter((variantKey) =>
-      overrideKeys.has(variantKey)
-    );
-    const merged = Object.fromEntries(
-      sharedKeys.map((sharedKey) => [
-        sharedKey,
-        { ...variants[sharedKey], ...overrides[sharedKey] },
-      ])
-    );
-    return {
-      ...variants,
-      ...overrides,
-      ...merged,
-    };
-  };
   const overrides = mergeVariantsAndOverrides(
     getOverridesFromVariants(variants, props),
     overridesProp || {}
@@ -3957,6 +3881,7 @@ import {
   Variant,
   getOverrideProps,
   getOverridesFromVariants,
+  mergeVariantsAndOverrides,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
@@ -4004,26 +3929,6 @@ export default function CustomButton(
       },
     },
   ];
-  const mergeVariantsAndOverrides = (
-    variants: EscapeHatchProps,
-    overrides: EscapeHatchProps
-  ): EscapeHatchProps => {
-    const overrideKeys = new Set(Object.keys(overrides));
-    const sharedKeys = Object.keys(variants).filter((variantKey) =>
-      overrideKeys.has(variantKey)
-    );
-    const merged = Object.fromEntries(
-      sharedKeys.map((sharedKey) => [
-        sharedKey,
-        { ...variants[sharedKey], ...overrides[sharedKey] },
-      ])
-    );
-    return {
-      ...variants,
-      ...overrides,
-      ...merged,
-    };
-  };
   const overrides = mergeVariantsAndOverrides(
     getOverridesFromVariants(variants, props),
     overridesProp || {}
