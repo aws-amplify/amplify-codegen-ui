@@ -146,29 +146,32 @@ export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): Str
     case 'string':
       switch (type) {
         case undefined:
-          return factory.createStringLiteral(value as string);
         case 'String':
+        case 'string':
           return factory.createStringLiteral(value as string);
-        case 'Object':
-        case 'Number':
-        case 'Boolean':
+        default:
           try {
             const parsedValue = JSON.parse(value as string);
-
-            if (typeof parsedValue === 'number') {
-              return factory.createJsxExpression(undefined, factory.createNumericLiteral(parsedValue, undefined));
+            if (type && typeof parsedValue !== type.toLowerCase()) {
+              throw new Error(`Parsed value type "${typeof parsedValue}" and type "${type}" mismatch`);
             }
-            if (typeof parsedValue === 'boolean') {
-              return factory.createJsxExpression(undefined, parsedValue ? factory.createTrue() : factory.createFalse());
+            switch (typeof parsedValue) {
+              case 'number':
+                return factory.createJsxExpression(undefined, factory.createNumericLiteral(parsedValue, undefined));
+              case 'boolean':
+                return factory.createJsxExpression(
+                  undefined,
+                  parsedValue ? factory.createTrue() : factory.createFalse(),
+                );
+              // object, array, and null
+              case 'object':
+                return factory.createJsxExpression(undefined, jsonToLiteral(parsedValue));
+              default:
+                throw new Error(`Unsupported value type ${parsedValue} for "${value}"`);
             }
-            // object, array, and null
-            if (typeof parsedValue === 'object') {
-              return factory.createJsxExpression(undefined, jsonToLiteral(parsedValue));
-            }
-          } catch {} // eslint-disable-line no-empty
-          throw new Error(`Failed to parse value "${value}" as type ${type}`);
-        default:
-          throw new Error(`Invalid type ${type} for "${value}"`);
+          } catch {
+            throw new Error(`Failed to parse value "${value}" as type ${type}`);
+          }
       }
     default:
       throw new Error(`Invalid type ${typeof value} for "${value}"`);

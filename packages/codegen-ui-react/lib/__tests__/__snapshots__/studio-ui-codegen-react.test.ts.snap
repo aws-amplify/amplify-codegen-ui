@@ -76,6 +76,7 @@ export default function CustomButton(
     <Button
       color=\\"#ff0000\\"
       width={20}
+      isDisabled={true}
       {...rest}
       {...getOverrideProps(overrides, \\"Button\\")}
     ></Button>
