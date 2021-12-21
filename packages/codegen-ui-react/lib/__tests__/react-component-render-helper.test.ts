@@ -108,6 +108,7 @@ describe('react-component-render-helper', () => {
 
     test('parsed number', () => {
       assertASTMatchesSnapshot(buildFixedJsxExpression({ value: '400', type: 'Number' }));
+      assertASTMatchesSnapshot(buildFixedJsxExpression({ value: '400', type: 'number' }));
     });
 
     test('boolean', () => {
@@ -144,6 +145,16 @@ describe('react-component-render-helper', () => {
 
     test('parsed null', () => {
       assertASTMatchesSnapshot(buildFixedJsxExpression({ value: 'null', type: 'Object' }));
+    });
+
+    test('type mismatch error', () => {
+      expect(() => buildFixedJsxExpression({ value: 'true', type: 'number' })).toThrow(
+        'Parsed value type "boolean" and specified type "number" mismatch',
+      );
+    });
+
+    test('json parse error', () => {
+      expect(() => buildFixedJsxExpression({ value: '⭐', type: 'number' })).toThrow('Failed to parse value "⭐"');
     });
   });
 });

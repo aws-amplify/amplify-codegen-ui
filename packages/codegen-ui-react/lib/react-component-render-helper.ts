@@ -145,34 +145,41 @@ export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): Str
     case 'boolean':
       return factory.createJsxExpression(undefined, value ? factory.createTrue() : factory.createFalse());
     case 'string':
-      switch (type) {
-        case undefined:
-          return factory.createStringLiteral(value as string);
-        case 'String':
-          return factory.createStringLiteral(value as string);
-        case 'Object':
-        case 'Number':
-        case 'Boolean':
-          try {
-            const parsedValue = JSON.parse(value as string);
-
-            if (typeof parsedValue === 'number') {
-              return factory.createJsxExpression(undefined, factory.createNumericLiteral(parsedValue, undefined));
-            }
-            if (typeof parsedValue === 'boolean') {
-              return factory.createJsxExpression(undefined, parsedValue ? factory.createTrue() : factory.createFalse());
-            }
-            // object, array, and null
-            if (typeof parsedValue === 'object') {
-              return factory.createJsxExpression(undefined, jsonToLiteral(parsedValue));
-            }
-          } catch {} // eslint-disable-line no-empty
-          throw new Error(`Failed to parse value "${value}" as type ${type}`);
-        default:
-          throw new Error(`Invalid type ${type} for "${value}"`);
-      }
+      return stringToJsxExpression(value as string, type);
     default:
       throw new Error(`Invalid type ${typeof value} for "${value}"`);
+  }
+}
+
+function stringToJsxExpression(strValue: string, type: string | undefined) {
+  switch (type) {
+    case undefined:
+    case 'String':
+    case 'string':
+      return factory.createStringLiteral(strValue);
+    default:
+      try {
+        const parsedValue = JSON.parse(strValue);
+        if (type && typeof parsedValue !== type.toLowerCase()) {
+          throw new Error(`Parsed value type "${typeof parsedValue}" and specified type "${type}" mismatch`);
+        }
+
+        switch (typeof parsedValue) {
+          case 'number':
+            return factory.createJsxExpression(undefined, factory.createNumericLiteral(parsedValue, undefined));
+          case 'boolean':
+            return factory.createJsxExpression(undefined, parsedValue ? factory.createTrue() : factory.createFalse());
+          // object, array, and null
+          default:
+            return factory.createJsxExpression(undefined, jsonToLiteral(parsedValue));
+        }
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          throw new Error(`Failed to parse value "${strValue}"`);
+        } else {
+          throw e;
+        }
+      }
   }
 }
 

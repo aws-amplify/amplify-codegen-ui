@@ -9,6 +9,10 @@
     "width": {
       "type": "Number",
       "value": "20"
+    },
+    "isDisabled": {
+      "type": "boolean",
+      "value": "true"
     }
   }
 }
