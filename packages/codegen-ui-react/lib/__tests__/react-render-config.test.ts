@@ -18,7 +18,7 @@ import { scriptKindToFileExtensionNonReact } from '..';
 import { scriptKindToFileExtension } from '../react-render-config';
 
 describe('ReactRenderConfig', () => {
-  describe('scriptKindToFileExtension', () => {
+  describe('scriptKindToFileExtensionTest', () => {
     test('JS', () => {
       expect(scriptKindToFileExtension(ScriptKind.JS)).toEqual('js');
     });
