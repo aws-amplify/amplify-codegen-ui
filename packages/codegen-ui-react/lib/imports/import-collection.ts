@@ -25,7 +25,7 @@ export class ImportCollection {
     this.addImport(importPackage, importValue);
   }
 
-  addImport(packageName: string, importName: string) {
+  addImport(packageName: string, importName: string, as?: string) {
     if (!this.#collection.has(packageName)) {
       this.#collection.set(packageName, new Set());
     }
@@ -33,7 +33,11 @@ export class ImportCollection {
     const existingPackage = this.#collection.get(packageName);
 
     if (!existingPackage?.has(importName)) {
-      existingPackage?.add(importName);
+      if (as) {
+        existingPackage?.add(`${importName} as ${as}`);
+      } else {
+        existingPackage?.add(importName);
+      }
     }
   }
 
@@ -86,6 +90,14 @@ export class ImportCollection {
               [...imports].indexOf('default') >= 0 ? factory.createIdentifier(path.basename(moduleName)) : undefined,
               factory.createNamedImports(
                 namedImports.map((item) => {
+                  // import { foo as bar } from './module';
+                  const renamedImport = item.match(/^(.*) as (.*)$/);
+                  if (renamedImport) {
+                    return factory.createImportSpecifier(
+                      factory.createIdentifier(renamedImport[1]),
+                      factory.createIdentifier(renamedImport[2]),
+                    );
+                  }
                   return factory.createImportSpecifier(undefined, factory.createIdentifier(item));
                 }),
               ),

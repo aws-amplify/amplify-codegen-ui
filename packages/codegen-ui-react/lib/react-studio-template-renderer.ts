@@ -62,7 +62,7 @@ import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
-import { getComponentPropName } from './react-component-render-helper';
+import { getComponentPropName, getModelImportName } from './react-component-render-helper';
 import {
   transpile,
   buildPrinter,
@@ -421,7 +421,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           undefined,
           propName,
           factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
+          factory.createTypeReferenceNode(getModelImportName(binding.bindingProperties.model), undefined),
         );
         propSignatures.push(propSignature);
       }
@@ -698,7 +698,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           this.importCollection.addMappedImport(ImportValue.SORT_PREDICATE);
           statements.push(this.buildPaginationStatement(propName, model, sort));
         }
-        this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+        this.importCollection.addImport(ImportSource.LOCAL_MODELS, model, getModelImportName(model));
         statements.push(
           this.buildPropPrecedentStatement(
             propName,
@@ -760,9 +760,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
              * }
              */
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
-            statements.push(this.buildCreateDataStorePredicateCall(bindingProperties.model, propName));
+            statements.push(this.buildCreateDataStorePredicateCall(`${bindingProperties.model}Model`, propName));
             const { model } = bindingProperties;
-            this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+            this.importCollection.addImport(ImportSource.LOCAL_MODELS, model, getModelImportName(model));
 
             /* const buttonColorDataStore = useDataStoreBinding({
              *   type: "collection"
@@ -978,7 +978,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const objectProperties = [
       factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(callType)),
-      factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(bindingModel)),
+      factory.createPropertyAssignment(
+        factory.createIdentifier('model'),
+        factory.createIdentifier(getModelImportName(bindingModel)),
+      ),
     ]
       .concat(
         criteriaName

@@ -115,6 +115,11 @@ describe('amplify render tests', () => {
       expect(generatedCode.componentText).toMatchSnapshot();
     });
 
+    it('should allow binding with same name as model', () => {
+      const generatedCode = generateWithAmplifyRenderer('bindingWithSameNameAsModel');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+
     it('should not have useDataStoreBinding when there is no predicate', () => {
       const generatedCode = generateWithAmplifyRenderer('dataBindingWithoutPredicate');
       expect(generatedCode.componentText).toMatchSnapshot();

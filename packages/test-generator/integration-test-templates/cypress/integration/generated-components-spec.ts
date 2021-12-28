@@ -114,6 +114,10 @@ describe('Generated Components', () => {
   });
 
   describe('Data Binding', () => {
+    it('Renders DataStore binding with same name as model', () => {
+      cy.get('#sameNameAsModel').contains('No name!');
+    });
+
     describe('Simple Property Binding', () => {
       it('Renders the Bound property', () => {
         cy.get('#simplePropIsDisabled').get('[disabled]');

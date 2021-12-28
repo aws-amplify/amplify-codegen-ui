@@ -148,7 +148,10 @@ export default function Test(props: TestProps): React.ReactElement {
 exports[`amplify render tests collection should render collection with data binding 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { User, UserPreferences } from \\"../models\\";
+import {
+  User as UserModel,
+  UserPreferences as UserPreferencesModel,
+} from \\"../models\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
@@ -166,7 +169,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     width?: Number;
     backgroundColor?: String;
-    buttonColor?: UserPreferences;
+    buttonColor?: UserPreferencesModel;
     items?: any[];
   } & {
     overrides?: EscapeHatchProps | undefined | null;
@@ -196,7 +199,7 @@ export default function CollectionOfCustomButtons(
       ? items
       : useDataStoreBinding({
           type: \\"collection\\",
-          model: User,
+          model: UserModel,
           criteria: buttonUserFilter,
         }).items;
   const buttonColorFilterObj = {
@@ -205,10 +208,10 @@ export default function CollectionOfCustomButtons(
     operator: \\"eq\\",
   };
   const buttonColorFilter =
-    createDataStorePredicate<UserPreferences>(buttonColorFilterObj);
+    createDataStorePredicate<UserPreferencesModel>(buttonColorFilterObj);
   const buttonColorDataStore = useDataStoreBinding({
     type: \\"collection\\",
-    model: UserPreferences,
+    model: UserPreferencesModel,
     criteria: buttonColorFilter,
   }).items[0];
   const buttonColor =
@@ -248,7 +251,10 @@ exports[`amplify render tests collection should render collection with data bind
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { User, UserPreferences } from \\"../models\\";
+import {
+  User as UserModel,
+  UserPreferences as UserPreferencesModel,
+} from \\"../models\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
@@ -267,7 +273,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     width?: Number;
     backgroundColor?: String;
-    buttonColor?: UserPreferences;
+    buttonColor?: UserPreferencesModel;
     items?: any[];
   } & {
     overrides?: EscapeHatchProps | undefined | null;
@@ -301,7 +307,7 @@ export default function CollectionOfCustomButtons(
       ? items
       : useDataStoreBinding({
           type: \\"collection\\",
-          model: User,
+          model: UserModel,
           criteria: buttonUserFilter,
           pagination: buttonUserPagination,
         }).items;
@@ -311,10 +317,10 @@ export default function CollectionOfCustomButtons(
     operator: \\"eq\\",
   };
   const buttonColorFilter =
-    createDataStorePredicate<UserPreferences>(buttonColorFilterObj);
+    createDataStorePredicate<UserPreferencesModel>(buttonColorFilterObj);
   const buttonColorDataStore = useDataStoreBinding({
     type: \\"collection\\",
-    model: UserPreferences,
+    model: UserPreferencesModel,
     criteria: buttonColorFilter,
   }).items[0];
   const buttonColor =
@@ -356,7 +362,10 @@ export default function CollectionOfCustomButtons(
 exports[`amplify render tests collection should render collection with data binding if binding name is items 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { User, UserPreferences } from \\"../models\\";
+import {
+  User as UserModel,
+  UserPreferences as UserPreferencesModel,
+} from \\"../models\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
@@ -374,7 +383,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     width?: Number;
     backgroundColor?: String;
-    buttonColor?: UserPreferences;
+    buttonColor?: UserPreferencesModel;
     items?: any[];
   } & {
     overrides?: EscapeHatchProps | undefined | null;
@@ -404,7 +413,7 @@ export default function CollectionOfCustomButtons(
       ? itemsProp
       : useDataStoreBinding({
           type: \\"collection\\",
-          model: User,
+          model: UserModel,
           criteria: itemsFilter,
         }).items;
   const buttonColorFilterObj = {
@@ -413,10 +422,10 @@ export default function CollectionOfCustomButtons(
     operator: \\"eq\\",
   };
   const buttonColorFilter =
-    createDataStorePredicate<UserPreferences>(buttonColorFilterObj);
+    createDataStorePredicate<UserPreferencesModel>(buttonColorFilterObj);
   const buttonColorDataStore = useDataStoreBinding({
     type: \\"collection\\",
-    model: UserPreferences,
+    model: UserPreferencesModel,
     criteria: buttonColorFilter,
   }).items[0];
   const buttonColor =
@@ -462,7 +471,7 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import ListingCard from \\"./ListingCard\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
-import { UntitledModel } from \\"../models\\";
+import { UntitledModel as UntitledModelModel } from \\"../models\\";
 
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -481,7 +490,7 @@ export default function ListingCardCollection(
       ? items
       : useDataStoreBinding({
           type: \\"collection\\",
-          model: UntitledModel,
+          model: UntitledModelModel,
         }).items;
   return (
     /* @ts-ignore: TS2322 */
@@ -3627,7 +3636,7 @@ export default function TextWithDataBinding(
 exports[`amplify render tests component with data binding should add model imports 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { User } from \\"../models\\";
+import { User as UserModel } from \\"../models\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
@@ -3638,7 +3647,7 @@ export type ComponentWithDataBindingProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     width?: Number;
     isDisabled?: Boolean;
-    buttonUser?: User;
+    buttonUser?: UserModel;
     buttonColor?: String;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
@@ -3670,10 +3679,56 @@ export default function ComponentWithDataBinding(
 "
 `;
 
+exports[`amplify render tests component with data binding should allow binding with same name as model 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { User as UserModel } from \\"../models\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export type ComponentWithDataBindingProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    width?: Number;
+    isDisabled?: Boolean;
+    User?: UserModel;
+    buttonColor?: String;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ComponentWithDataBinding(
+  props: ComponentWithDataBindingProps
+): React.ReactElement {
+  const {
+    width,
+    isDisabled,
+    User,
+    buttonColor,
+    overrides: overridesProp,
+    ...rest
+  } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      labelWidth={width}
+      disabled={isDisabled}
+      children={User?.username || \\"hspain@gmail.com\\"}
+      {...rest}
+      {...getOverrideProps(overrides, \\"Button\\")}
+    ></Button>
+  );
+}
+"
+`;
+
 exports[`amplify render tests component with data binding should not have useDataStoreBinding when there is no predicate 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { UntitledModel } from \\"../models\\";
+import { UntitledModel as UntitledModelModel } from \\"../models\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
@@ -3682,7 +3737,7 @@ import { Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type SectionHeadingProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    newProp6fd1?: UntitledModel;
+    newProp6fd1?: UntitledModelModel;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -4017,7 +4072,7 @@ export default function ChildComponentWithStaticConcatenation(
 exports[`amplify render tests concat and conditional transform should render component with concatenation prop 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { User } from \\"../models\\";
+import { User as UserModel } from \\"../models\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
@@ -4027,7 +4082,7 @@ import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     width?: Number;
-    buttonUser?: User;
+    buttonUser?: UserModel;
     buttonColor?: String;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
@@ -4062,7 +4117,7 @@ export default function CustomButton(
 exports[`amplify render tests concat and conditional transform should render component with conditional data binding prop 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { User } from \\"../models\\";
+import { User as UserModel } from \\"../models\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
@@ -4072,7 +4127,7 @@ import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     width?: Number;
-    buttonUser?: User;
+    buttonUser?: UserModel;
     buttonColor?: String;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
@@ -4120,7 +4175,7 @@ export default function CustomButton(
 exports[`amplify render tests concat and conditional transform should render component with conditional data binding prop from a bug 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import { Student } from \\"../models\\";
+import { Student as StudentModel } from \\"../models\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
@@ -4129,7 +4184,7 @@ import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type ConditionalComponentWithDataBindingProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    student?: Student;
+    student?: StudentModel;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -4697,7 +4752,7 @@ import {
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Collection, CollectionProps, Text } from \\"@aws-amplify/ui-react\\";
-import { User } from \\"../models\\";
+import { User as UserModel } from \\"../models\\";
 
 export type CollectionDefaultValueProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -4714,7 +4769,7 @@ export default function CollectionDefaultValue(
       ? items
       : useDataStoreBinding({
           type: \\"collection\\",
-          model: User,
+          model: UserModel,
         }).items;
   return (
     /* @ts-ignore: TS2322 */

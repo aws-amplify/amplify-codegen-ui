@@ -26,6 +26,16 @@ exports[`ImportCollection addImport one relative import 1`] = `
 import { User } from \\"../models\\";"
 `;
 
+exports[`ImportCollection addImport one renamed import 1`] = `
+"import React from \\"react\\";
+import { Text, getOverrideProps as renamed } from \\"@aws-amplify/ui-react\\";"
+`;
+
+exports[`ImportCollection addImport renamed and original import 1`] = `
+"import React from \\"react\\";
+import { getOverrideProps, getOverrideProps as renamed } from \\"@aws-amplify/ui-react\\";"
+`;
+
 exports[`ImportCollection buildImportStatements multiple imports 1`] = `
 "import React from \\"react\\";
 import { Button, getOverrideProps } from \\"@aws-amplify/ui-react\\";

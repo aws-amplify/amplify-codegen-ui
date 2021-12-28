@@ -18,3 +18,4 @@ export { default as ComponentWithDataBindingWithoutPredicate } from './component
 export { default as ComponentWithSimplePropertyBinding } from './componentWithSimplePropertyBinding.json';
 export { default as ComponentWithAuthBinding } from './componentWithAuthBinding.json';
 export { default as CompWithMultipleBindingsWithPred } from './componentWithMultipleDataBindingsWithPredicate.json';
+export { default as BindingWithSameNameAsModel } from './bindingWithSameNameAsModel.json';

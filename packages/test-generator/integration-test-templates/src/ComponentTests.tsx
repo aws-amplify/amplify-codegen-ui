@@ -46,6 +46,7 @@ import {
   ComponentWithDataBindingWithoutPredicate,
   ComponentWithDataBindingWithPredicate,
   ComponentWithMultipleDataBindingsWithPredicate,
+  BindingWithSameNameAsModel,
   CollectionWithBinding,
   CollectionWithSort,
   ParsedFixedValues,
@@ -266,6 +267,7 @@ export default function ComponentTests() {
             priceUSD: 2200,
           }}
         />
+        <BindingWithSameNameAsModel id="sameNameAsModel" />
       </div>
       <div id="collections">
         <h2>Collections</h2>

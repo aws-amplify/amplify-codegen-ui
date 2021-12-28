@@ -1,0 +1,41 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "ComponentWithDataBinding",
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
+    },
+    "isDisabled": {
+      "type": "Boolean"
+    },
+    "User": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User"
+      }
+    },
+    "buttonColor": {
+      "type": "String"
+    }
+  },
+  "properties": {
+    "label": {
+      "bindingProperties": {
+        "property": "User",
+        "field": "username"
+      },
+      "defaultValue": "hspain@gmail.com"
+    },
+    "labelWidth": {
+      "bindingProperties": {
+        "property": "width"
+      }
+    },
+    "disabled": {
+      "bindingProperties": {
+        "property": "isDisabled"
+      }
+    }
+  }
+}

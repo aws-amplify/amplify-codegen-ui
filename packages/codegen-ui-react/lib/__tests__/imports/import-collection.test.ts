@@ -69,6 +69,20 @@ describe('ImportCollection', () => {
       importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
       assertImportCollectionMatchesSnapshot(importCollection);
     });
+
+    test('one renamed import', () => {
+      const importCollection = new ImportCollection();
+      importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps', 'renamed');
+      importCollection.addImport('@aws-amplify/ui-react', 'Text');
+      assertImportCollectionMatchesSnapshot(importCollection);
+    });
+
+    test('renamed and original import', () => {
+      const importCollection = new ImportCollection();
+      importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps', 'renamed');
+      importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
+      assertImportCollectionMatchesSnapshot(importCollection);
+    });
   });
 
   test('mergeCollections', () => {

@@ -1,0 +1,41 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "BindingWithSameNameAsModel",
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
+    },
+    "isDisabled": {
+      "type": "Boolean"
+    },
+    "User": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User"
+      }
+    },
+    "buttonColor": {
+      "type": "String"
+    }
+  },
+  "properties": {
+    "label": {
+      "bindingProperties": {
+        "property": "User",
+        "field": "firstName"
+      },
+      "defaultValue": "No name!"
+    },
+    "labelWidth": {
+      "bindingProperties": {
+        "property": "width"
+      }
+    },
+    "disabled": {
+      "bindingProperties": {
+        "property": "isDisabled"
+      }
+    }
+  }
+}

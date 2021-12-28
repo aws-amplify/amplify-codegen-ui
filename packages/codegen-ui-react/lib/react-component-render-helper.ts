@@ -52,6 +52,10 @@ export function getComponentPropName(componentName?: string): string {
   return 'ComponentWithoutNameProps';
 }
 
+export function getModelImportName(modelName: string): string {
+  return `${modelName}Model`;
+}
+
 export type ComponentPropertyValueTypes =
   | ConcatenatedStudioComponentProperty
   | ConditionalStudioComponentProperty
@@ -457,7 +461,11 @@ export function addBindingPropertiesImports(
   if ('bindingProperties' in component) {
     Object.entries(component.bindingProperties).forEach(([, binding]) => {
       if ('bindingProperties' in binding && 'model' in binding.bindingProperties) {
-        importCollection.addImport(ImportSource.LOCAL_MODELS, binding.bindingProperties.model);
+        importCollection.addImport(
+          ImportSource.LOCAL_MODELS,
+          binding.bindingProperties.model,
+          getModelImportName(binding.bindingProperties.model),
+        );
       }
     });
   }
