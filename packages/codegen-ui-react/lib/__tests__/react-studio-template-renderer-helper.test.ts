@@ -114,5 +114,15 @@ describe('react-studio-template-renderer-helper', () => {
 
       expect(formatCode(code)).toEqual(code);
     });
+
+    it('does not swallow prettier errors', () => {
+      jest.mock('prettier', () => ({
+        format: jest.fn(() => {
+          throw new Error('Failed to format');
+        }),
+      }));
+
+      expect(() => formatCode(code)).toThrowErrorMatchingSnapshot();
+    });
   });
 });

@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`react-studio-template-renderer-helper formatCode does not swallow prettier errors 1`] = `"Failed to format"`;
+
 exports[`react-studio-template-renderer-helper formatCode formats code when prettier is installed 1`] = `
 "const foo = 1;
 const bar = false;
