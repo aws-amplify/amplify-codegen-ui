@@ -29,6 +29,8 @@ export { default as IconPrimitive } from './IconPrimitive.json';
 export { default as ImagePrimitive } from './ImagePrimitive.json';
 export { default as LinkPrimitive } from './LinkPrimitive.json';
 export { default as LoaderPrimitive } from './LoaderPrimitive.json';
+export { default as MenuButtonPrimitive } from './MenuButtonPrimitive.json';
+export { default as MenuPrimitive } from './MenuPrimitive.json';
 export { default as PaginationPrimitive } from './PaginationPrimitive.json';
 export { default as PasswordFieldPrimitive } from './PasswordFieldPrimitive.json';
 export { default as PhoneNumberFieldPrimitive } from './PhoneNumberFieldPrimitive.json';

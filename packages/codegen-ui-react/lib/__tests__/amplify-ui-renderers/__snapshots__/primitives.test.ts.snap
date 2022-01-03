@@ -34,6 +34,12 @@ exports[`Primitives Link 1`] = `"<Link {...rest} {...getOverrideProps(overrides,
 
 exports[`Primitives Loader 1`] = `"<Loader {...rest} {...getOverrideProps(overrides, \\"Loader\\")}></Loader>"`;
 
+exports[`Primitives Menu 1`] = `"<Menu {...rest} {...getOverrideProps(overrides, \\"Menu\\")}></Menu>"`;
+
+exports[`Primitives MenuButton 1`] = `"<MenuButton {...rest} {...getOverrideProps(overrides, \\"MenuButton\\")}></MenuButton>"`;
+
+exports[`Primitives MenuItem 1`] = `"<MenuItem {...rest} {...getOverrideProps(overrides, \\"MenuItem\\")}></MenuItem>"`;
+
 exports[`Primitives Pagination 1`] = `"<Pagination {...rest} {...getOverrideProps(overrides, \\"Pagination\\")}></Pagination>"`;
 
 exports[`Primitives PasswordField 1`] = `"<PasswordField {...rest} {...getOverrideProps(overrides, \\"PasswordField\\")}></PasswordField>"`;

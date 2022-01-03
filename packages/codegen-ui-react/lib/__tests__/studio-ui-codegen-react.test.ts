@@ -447,6 +447,14 @@ describe('amplify render tests', () => {
     test('Table', () => {
       expect(generateWithAmplifyRenderer('primitives/TablePrimitive').componentText).toMatchSnapshot();
     });
+
+    test('Menu', () => {
+      expect(generateWithAmplifyRenderer('primitives/MenuPrimitive').componentText).toMatchSnapshot();
+    });
+
+    test('MenuButton', () => {
+      expect(generateWithAmplifyRenderer('primitives/MenuButtonPrimitive').componentText).toMatchSnapshot();
+    });
   });
 
   describe('icon-indices', () => {
