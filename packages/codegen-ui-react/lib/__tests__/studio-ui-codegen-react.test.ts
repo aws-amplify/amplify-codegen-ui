@@ -443,6 +443,10 @@ describe('amplify render tests', () => {
     test('Built-in Iconset', () => {
       expect(generateWithAmplifyRenderer('builtInIconset').componentText).toMatchSnapshot();
     });
+
+    test('Table', () => {
+      expect(generateWithAmplifyRenderer('primitives/TablePrimitive').componentText).toMatchSnapshot();
+    });
   });
 
   describe('icon-indices', () => {

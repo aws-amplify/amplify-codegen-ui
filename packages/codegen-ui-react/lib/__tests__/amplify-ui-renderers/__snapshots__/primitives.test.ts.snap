@@ -62,6 +62,18 @@ exports[`Primitives SwitchField 1`] = `"<SwitchField {...rest} {...getOverridePr
 
 exports[`Primitives TabItem 1`] = `"<TabItem {...rest} {...getOverrideProps(overrides, \\"TabItem\\")}></TabItem>"`;
 
+exports[`Primitives Table 1`] = `"<Table {...rest} {...getOverrideProps(overrides, \\"Table\\")}></Table>"`;
+
+exports[`Primitives TableBody 1`] = `"<TableBody {...rest} {...getOverrideProps(overrides, \\"TableBody\\")}></TableBody>"`;
+
+exports[`Primitives TableCell 1`] = `"<TableCell {...rest} {...getOverrideProps(overrides, \\"TableCell\\")}></TableCell>"`;
+
+exports[`Primitives TableFoot 1`] = `"<TableFoot {...rest} {...getOverrideProps(overrides, \\"TableFoot\\")}></TableFoot>"`;
+
+exports[`Primitives TableHead 1`] = `"<TableHead {...rest} {...getOverrideProps(overrides, \\"TableHead\\")}></TableHead>"`;
+
+exports[`Primitives TableRow 1`] = `"<TableRow {...rest} {...getOverrideProps(overrides, \\"TableRow\\")}></TableRow>"`;
+
 exports[`Primitives Tabs 1`] = `"<Tabs {...rest} {...getOverrideProps(overrides, \\"Tabs\\")}></Tabs>"`;
 
 exports[`Primitives Text 1`] = `"<Text {...rest} {...getOverrideProps(overrides, \\"Text\\")}></Text>"`;

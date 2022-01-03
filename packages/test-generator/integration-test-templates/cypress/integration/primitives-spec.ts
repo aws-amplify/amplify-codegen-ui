@@ -295,6 +295,49 @@ describe('Primitives', () => {
     });
   });
 
+  describe('Table', () => {
+    it('Basic', () => {
+      cy.get('#table')
+        .find('.amplify-table')
+        .within(() => {
+          cy.get('.amplify-table__caption').should('have.text', 'Some fruits');
+          cy.get('.amplify-table__head').within(() => {
+            cy.get('.amplify-table__th').eq(0).should('have.text', 'Citrus');
+            cy.get('.amplify-table__th').eq(1).should('have.text', 'Stone Fruit');
+            cy.get('.amplify-table__th').eq(2).should('have.text', 'Berry');
+          });
+          cy.get('.amplify-table__body').within(() => {
+            cy.get('.amplify-table__row')
+              .eq(0)
+              .within(() => {
+                cy.get('.amplify-table__td').eq(0).should('have.text', 'Orange');
+                cy.get('.amplify-table__td').eq(1).should('have.text', 'Nectarine');
+                cy.get('.amplify-table__td').eq(2).should('have.text', 'Raspberry');
+              });
+            cy.get('.amplify-table__row')
+              .eq(1)
+              .within(() => {
+                cy.get('.amplify-table__td').eq(0).should('have.text', 'Grapefruit');
+                cy.get('.amplify-table__td').eq(1).should('have.text', 'Apricot');
+                cy.get('.amplify-table__td').eq(2).should('have.text', 'Blueberry');
+              });
+            cy.get('.amplify-table__row')
+              .eq(2)
+              .within(() => {
+                cy.get('.amplify-table__td').eq(0).should('have.text', 'Lime');
+                cy.get('.amplify-table__td').eq(1).should('have.text', 'Peach');
+                cy.get('.amplify-table__td').eq(2).should('have.text', 'Strawberry');
+              });
+          });
+          cy.get('.amplify-table__foot').within(() => {
+            cy.get('.amplify-table__th').eq(0).should('have.text', 'Citrus');
+            cy.get('.amplify-table__th').eq(1).should('have.text', 'Stone Fruit');
+            cy.get('.amplify-table__th').eq(2).should('have.text', 'Berry');
+          });
+        });
+    });
+  });
+
   describe('Text', () => {
     it('Basic', () => {
       cy.get('#text').find('.amplify-text').should('have.text', 'Hello world');
