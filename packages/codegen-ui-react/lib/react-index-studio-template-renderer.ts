@@ -19,12 +19,7 @@ import { StudioTemplateRenderer, StudioTheme, StudioComponent } from '@aws-ampli
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection } from './imports';
 import { ReactOutputManager } from './react-output-manager';
-import {
-  transpile,
-  buildPrinter,
-  defaultRenderConfig,
-  getDeclarationFilename,
-} from './react-studio-template-renderer-helper';
+import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 import { RequiredKeys } from './utils/type-utils';
 
 type StudioSchema = StudioComponent | StudioTheme;
@@ -61,15 +56,12 @@ export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
       .map((exportStatement) => printer.printNode(EmitHint.Unspecified, exportStatement, file))
       .join(EOL);
 
-    const { componentText, declaration } = transpile(exportStatements, this.renderConfig);
+    const { componentText } = transpile(exportStatements, this.renderConfig);
 
     return {
       componentText,
       renderComponentToFilesystem: async (outputPath: string) => {
         await this.renderComponentToFilesystem(componentText)(this.fileName)(outputPath);
-        if (declaration) {
-          await this.renderComponentToFilesystem(declaration)(getDeclarationFilename(this.fileName))(outputPath);
-        }
       },
     };
   }
@@ -86,6 +78,7 @@ export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
          * Type checker isn't detecting that name can't be undefined here
          * including this (and return cast) to appease the checker.
          */
+        /* istanbul ignore if */
         if (name === undefined) {
           return undefined;
         }
