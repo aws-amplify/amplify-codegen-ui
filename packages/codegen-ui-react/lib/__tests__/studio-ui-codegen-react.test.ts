@@ -297,6 +297,17 @@ describe('amplify render tests', () => {
     });
   });
 
+  describe('source maps', () => {
+    it('should render inline source maps', () => {
+      expect(
+        generateWithAmplifyRenderer('componentWithUserSpecificAttributes', {
+          script: ScriptKind.JS,
+          inlineSourceMap: true,
+        }).componentText,
+      ).toMatchSnapshot();
+    });
+  });
+
   describe('theme', () => {
     it('should render the theme', () => {
       expect(generateWithThemeRenderer('theme')).toMatchSnapshot();

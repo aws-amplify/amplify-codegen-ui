@@ -5574,6 +5574,73 @@ export default function ParsedFixedValues(
 }
 `;
 
+exports[`amplify render tests source maps should render inline source maps 1`] = `
+"var __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === \\"function\\")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (
+          e.indexOf(p[i]) < 0 &&
+          Object.prototype.propertyIsEnumerable.call(s, p[i])
+        )
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
+/* eslint-disable */
+import React from \\"react\\";
+import { getOverrideProps, useAuth } from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, Image } from \\"@aws-amplify/ui-react\\";
+export default function Profile(props) {
+  var _a, _b;
+  const { overrides: overridesProp } = props,
+    rest = __rest(props, [\\"overrides\\"]);
+  const overrides = Object.assign({}, overridesProp);
+  const {
+    username,
+    picture: userImage,
+    [\\"custom:favorite_icecream\\"]: customUserAttributeIcecream,
+  } = (_b =
+    (_a = useAuth().user) === null || _a === void 0
+      ? void 0
+      : _a.attributes) !== null && _b !== void 0
+    ? _b
+    : {};
+  return React.createElement(
+    Flex,
+    Object.assign({}, rest, getOverrideProps(overrides, \\"Flex\\")),
+    React.createElement(
+      Image,
+      Object.assign(
+        { src: userImage },
+        getOverrideProps(overrides, \\"Flex.Image[0]\\")
+      )
+    ),
+    React.createElement(
+      Button,
+      Object.assign(
+        { children: username },
+        getOverrideProps(overrides, \\"Flex.Button[0]\\")
+      )
+    ),
+    React.createElement(
+      Button,
+      Object.assign(
+        { children: customUserAttributeIcecream },
+        getOverrideProps(overrides, \\"Flex.Button[1]\\")
+      )
+    )
+  );
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssTUFBTSxPQUFPLENBQUM7QUFDMUIsT0FBTyxFQUFvQixnQkFBZ0IsRUFBRSxPQUFPLEVBQUUsTUFBTSxnQ0FBZ0MsQ0FBQztBQUM3RixPQUFPLEVBQUUsTUFBTSxFQUFFLElBQUksRUFBYSxLQUFLLEVBQUUsTUFBTSx1QkFBdUIsQ0FBQztBQUt2RSxNQUFNLENBQUMsT0FBTyxVQUFVLE9BQU8sQ0FBQyxLQUFtQjs7SUFDL0MsTUFBTSxFQUFFLFNBQVMsRUFBRSxhQUFhLEtBQWMsS0FBSyxFQUFkLElBQUksVUFBSyxLQUFLLEVBQTdDLGFBQXFDLENBQVEsQ0FBQztJQUNwRCxNQUFNLFNBQVMscUJBQVEsYUFBYSxDQUFFLENBQUM7SUFDdkMsTUFBTSxFQUFFLFFBQVEsRUFBRSxPQUFPLEVBQUUsU0FBUyxFQUFFLENBQUMsMEJBQTBCLENBQUMsRUFBRSwyQkFBMkIsRUFBRSxHQUFHLE1BQUEsTUFBQSxPQUFPLEVBQUUsQ0FBQyxJQUFJLDBDQUFFLFVBQVUsbUNBQUksRUFBRSxDQUFDO0lBQ3JJLE9BQU8sQ0FBQyxvQkFBQyxJQUFJLG9CQUFLLElBQUksRUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsTUFBTSxDQUFDO1FBQUUsb0JBQUMsS0FBSyxrQkFBQyxHQUFHLEVBQUUsU0FBUyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxlQUFlLENBQUMsRUFBVTtRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLFFBQVEsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsZ0JBQWdCLENBQUMsRUFBVztRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLDJCQUEyQixJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxnQkFBZ0IsQ0FBQyxFQUFXLENBQU8sQ0FBQyxDQUFDO0FBQ2xXLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBlc2xpbnQtZGlzYWJsZSAqL1xuaW1wb3J0IFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IHsgRXNjYXBlSGF0Y2hQcm9wcywgZ2V0T3ZlcnJpZGVQcm9wcywgdXNlQXV0aCB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3QvaW50ZXJuYWxcIjtcbmltcG9ydCB7IEJ1dHRvbiwgRmxleCwgRmxleFByb3BzLCBJbWFnZSB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3RcIjtcblxuZXhwb3J0IHR5cGUgUHJvZmlsZVByb3BzID0gUmVhY3QuUHJvcHNXaXRoQ2hpbGRyZW48UGFydGlhbDxGbGV4UHJvcHM+ICYge1xuICAgIG92ZXJyaWRlcz86IEVzY2FwZUhhdGNoUHJvcHMgfCB1bmRlZmluZWQgfCBudWxsO1xufT47XG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQcm9maWxlKHByb3BzOiBQcm9maWxlUHJvcHMpOiBSZWFjdC5SZWFjdEVsZW1lbnQge1xuICAgIGNvbnN0IHsgb3ZlcnJpZGVzOiBvdmVycmlkZXNQcm9wLCAuLi5yZXN0IH0gPSBwcm9wcztcbiAgICBjb25zdCBvdmVycmlkZXMgPSB7IC4uLm92ZXJyaWRlc1Byb3AgfTtcbiAgICBjb25zdCB7IHVzZXJuYW1lLCBwaWN0dXJlOiB1c2VySW1hZ2UsIFtcImN1c3RvbTpmYXZvcml0ZV9pY2VjcmVhbVwiXTogY3VzdG9tVXNlckF0dHJpYnV0ZUljZWNyZWFtIH0gPSB1c2VBdXRoKCkudXNlcj8uYXR0cmlidXRlcyA/PyB7fTtcbiAgICByZXR1cm4gKDxGbGV4IHsuLi5yZXN0fSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiRmxleFwiKX0+PEltYWdlIHNyYz17dXNlckltYWdlfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiRmxleC5JbWFnZVswXVwiKX0+PC9JbWFnZT48QnV0dG9uIGNoaWxkcmVuPXt1c2VybmFtZX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcIkZsZXguQnV0dG9uWzBdXCIpfT48L0J1dHRvbj48QnV0dG9uIGNoaWxkcmVuPXtjdXN0b21Vc2VyQXR0cmlidXRlSWNlY3JlYW19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJGbGV4LkJ1dHRvblsxXVwiKX0+PC9CdXR0b24+PC9GbGV4Pik7XG59Il19
+"
+`;
+
 exports[`amplify render tests theme should render the theme 1`] = `
 "/* eslint-disable */
 import { createTheme } from \\"@aws-amplify/ui-react\\";
