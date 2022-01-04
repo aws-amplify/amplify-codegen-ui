@@ -165,6 +165,25 @@ describe('Primitives', () => {
     });
   });
 
+  describe('Menu', () => {
+    it('Basic', () => {
+      cy.get('#menu')
+        .find('.amplify-menu-trigger')
+        .find('path')
+        .should('have.attr', 'd', 'M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z');
+
+      cy.get('.amplify-menu-content__item').should('not.exist');
+      cy.get('#menu').find('.amplify-menu-trigger').click();
+      cy.get('.amplify-menu-content__item').should('have.text', 'Item');
+    });
+  });
+
+  describe('MenuButton', () => {
+    it('Basic', () => {
+      cy.get('#menu-button').find('.amplify-button').should('have.text', 'Menu Button');
+    });
+  });
+
   describe('Pagination', () => {
     it('Basic', () => {
       cy.get('#pagination')

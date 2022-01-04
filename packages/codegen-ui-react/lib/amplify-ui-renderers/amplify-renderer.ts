@@ -33,6 +33,8 @@ import {
   ImageProps,
   LinkProps,
   LoaderProps,
+  MenuItemProps,
+  MenuProps,
   PaginationProps,
   PasswordFieldProps,
   PhoneNumberFieldProps,
@@ -201,6 +203,27 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Loader:
         return new ReactComponentWithChildrenRenderer<LoaderProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.MenuButton:
+        return new ReactComponentWithChildrenRenderer<ButtonProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.MenuItem:
+        return new ReactComponentWithChildrenRenderer<MenuItemProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.Menu:
+        return new ReactComponentWithChildrenRenderer<MenuProps>(
           component,
           this.importCollection,
           parent,

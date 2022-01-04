@@ -33,6 +33,8 @@ import {
   ImagePrimitive,
   LinkPrimitive,
   LoaderPrimitive,
+  MenuButtonPrimitive,
+  MenuPrimitive,
   PaginationPrimitive,
   PasswordFieldPrimitive,
   PhoneNumberFieldPrimitive,
@@ -122,6 +124,14 @@ export default function PrimitivesTests() {
       <View id="loader">
         <Heading>Loader</Heading>
         <LoaderPrimitive />
+      </View>
+      <View id="menu">
+        <Heading>Menu</Heading>
+        <MenuPrimitive />
+      </View>
+      <View id="menu-button">
+        <Heading>Menu Button</Heading>
+        <MenuButtonPrimitive />
       </View>
       <View id="pagination">
         <Heading>Pagination</Heading>
