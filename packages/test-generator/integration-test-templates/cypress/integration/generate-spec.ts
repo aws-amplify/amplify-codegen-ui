@@ -94,6 +94,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'StepperFieldPrimitive',
   'SwitchFieldPrimitive',
   'TabsPrimitive',
+  'TablePrimitive',
   'TextPrimitive',
   'TextFieldPrimitive',
   'ToggleButtonPrimitive',

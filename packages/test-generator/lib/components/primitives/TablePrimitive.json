@@ -1,0 +1,207 @@
+{
+  "componentType": "Table",
+  "name": "TablePrimitive",
+  "properties": {
+    "caption": {
+      "value": "Some fruits"
+    },
+    "highlightOnHover": {
+      "value": "true",
+      "type": "boolean"
+    },
+    "size": {
+      "value": "small"
+    },
+    "variation": {
+      "value": "striped"
+    }
+  },
+  "children": [
+    {
+      "componentType": "TableHead",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "TableRow",
+          "properties": {},
+          "children": [
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "as": {
+                  "value": "th"
+                }, 
+                "label": {
+                  "value": "Citrus"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "as": {
+                  "value": "th"
+                }, 
+                "label": {
+                  "value": "Stone Fruit"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "as": {
+                  "value": "th"
+                }, 
+                "label": {
+                  "value": "Berry"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "componentType": "TableBody",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "TableRow",
+          "properties": {},
+          "children": [
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "label": {
+                  "value": "Orange"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "label": {
+                  "value": "Nectarine"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "label": {
+                  "value": "Raspberry"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentType": "TableRow",
+          "properties": {},
+          "children": [
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "label": {
+                  "value": "Grapefruit"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "label": {
+                  "value": "Apricot"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "label": {
+                  "value": "Blueberry"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentType": "TableRow",
+          "properties": {},
+          "children": [
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "label": {
+                  "value": "Lime"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "label": {
+                  "value": "Peach"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "label": {
+                  "value": "Strawberry"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "componentType": "TableFoot",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "TableRow",
+          "properties": {},
+          "children": [
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "as": {
+                  "value": "th"
+                }, 
+                "label": {
+                  "value": "Citrus"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "as": {
+                  "value": "th"
+                }, 
+                "label": {
+                  "value": "Stone Fruit"
+                }
+              }
+            },
+            {
+              "componentType": "TableCell",
+              "properties": {
+                "as": {
+                  "value": "th"
+                }, 
+                "label": {
+                  "value": "Berry"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

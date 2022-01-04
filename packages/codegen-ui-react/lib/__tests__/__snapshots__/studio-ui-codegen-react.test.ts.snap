@@ -5334,6 +5334,186 @@ export default function SliderFieldPrimitive(
 "
 `;
 
+exports[`amplify render tests primitives Table 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFoot,
+  TableHead,
+  TableProps,
+  TableRow,
+} from \\"@aws-amplify/ui-react\\";
+
+export type TablePrimitiveProps = React.PropsWithChildren<
+  Partial<TableProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function TablePrimitive(
+  props: TablePrimitiveProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Table
+      caption=\\"Some fruits\\"
+      highlightOnHover={true}
+      size=\\"small\\"
+      variation=\\"striped\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"Table\\")}
+    >
+      <TableHead {...getOverrideProps(overrides, \\"Table.TableHead[0]\\")}>
+        <TableRow
+          {...getOverrideProps(overrides, \\"Table.TableHead[0].TableRow[0]\\")}
+        >
+          <TableCell
+            as=\\"th\\"
+            children=\\"Citrus\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableHead[0].TableRow[0].TableCell[0]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Stone Fruit\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableHead[0].TableRow[0].TableCell[1]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Berry\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableHead[0].TableRow[0].TableCell[2]\\"
+            )}
+          ></TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody {...getOverrideProps(overrides, \\"Table.TableBody[0]\\")}>
+        <TableRow
+          {...getOverrideProps(overrides, \\"Table.TableBody[0].TableRow[0]\\")}
+        >
+          <TableCell
+            children=\\"Orange\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableBody[0].TableRow[0].TableCell[0]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            children=\\"Nectarine\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableBody[0].TableRow[0].TableCell[1]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            children=\\"Raspberry\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableBody[0].TableRow[0].TableCell[2]\\"
+            )}
+          ></TableCell>
+        </TableRow>
+        <TableRow
+          {...getOverrideProps(overrides, \\"Table.TableBody[0].TableRow[1]\\")}
+        >
+          <TableCell
+            children=\\"Grapefruit\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableBody[0].TableRow[1].TableCell[0]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            children=\\"Apricot\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableBody[0].TableRow[1].TableCell[1]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            children=\\"Blueberry\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableBody[0].TableRow[1].TableCell[2]\\"
+            )}
+          ></TableCell>
+        </TableRow>
+        <TableRow
+          {...getOverrideProps(overrides, \\"Table.TableBody[0].TableRow[2]\\")}
+        >
+          <TableCell
+            children=\\"Lime\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableBody[0].TableRow[2].TableCell[0]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            children=\\"Peach\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableBody[0].TableRow[2].TableCell[1]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            children=\\"Strawberry\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableBody[0].TableRow[2].TableCell[2]\\"
+            )}
+          ></TableCell>
+        </TableRow>
+      </TableBody>
+      <TableFoot {...getOverrideProps(overrides, \\"Table.TableFoot[0]\\")}>
+        <TableRow
+          {...getOverrideProps(overrides, \\"Table.TableFoot[0].TableRow[0]\\")}
+        >
+          <TableCell
+            as=\\"th\\"
+            children=\\"Citrus\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableFoot[0].TableRow[0].TableCell[0]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Stone Fruit\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableFoot[0].TableRow[0].TableCell[1]\\"
+            )}
+          ></TableCell>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Berry\\"
+            {...getOverrideProps(
+              overrides,
+              \\"Table.TableFoot[0].TableRow[0].TableCell[2]\\"
+            )}
+          ></TableCell>
+        </TableRow>
+      </TableFoot>
+    </Table>
+  );
+}
+"
+`;
+
 exports[`amplify render tests primitives TextField 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
