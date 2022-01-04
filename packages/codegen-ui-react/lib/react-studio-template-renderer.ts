@@ -1073,6 +1073,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isBuiltInIcon(component.componentType)) {
       return 'IconProps';
     }
+    // MenuButton primitive uses ButtonProps
+    if (component.componentType === Primitive.MenuButton) {
+      return 'ButtonProps';
+    }
     return `${component.componentType}Props`;
   }
 

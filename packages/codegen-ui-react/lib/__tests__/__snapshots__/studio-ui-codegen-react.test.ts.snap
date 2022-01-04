@@ -5298,6 +5298,69 @@ export default function unknown_component_name(
 "
 `;
 
+exports[`amplify render tests primitives Menu 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Menu, MenuItem, MenuProps } from \\"@aws-amplify/ui-react\\";
+
+export type MenuPrimitiveProps = React.PropsWithChildren<
+  Partial<MenuProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function MenuPrimitive(
+  props: MenuPrimitiveProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Menu {...rest} {...getOverrideProps(overrides, \\"Menu\\")}>
+      <MenuItem
+        children=\\"Item\\"
+        {...getOverrideProps(overrides, \\"Menu.MenuItem[0]\\")}
+      ></MenuItem>
+    </Menu>
+  );
+}
+"
+`;
+
+exports[`amplify render tests primitives MenuButton 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { ButtonProps, MenuButton } from \\"@aws-amplify/ui-react\\";
+
+export type MenuButtonPrimitiveProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function MenuButtonPrimitive(
+  props: MenuButtonPrimitiveProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  return (
+    /* @ts-ignore: TS2322 */
+    <MenuButton
+      children=\\"Menu Button\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"MenuButton\\")}
+    ></MenuButton>
+  );
+}
+"
+`;
+
 exports[`amplify render tests primitives SliderField 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

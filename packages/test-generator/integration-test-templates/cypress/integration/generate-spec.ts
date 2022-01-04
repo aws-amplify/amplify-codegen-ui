@@ -80,6 +80,8 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'ImagePrimitive',
   'LinkPrimitive',
   'LoaderPrimitive',
+  'MenuButtonPrimitive',
+  'MenuPrimitive',
   'PaginationPrimitive',
   'PasswordFieldPrimitive',
   'PhoneNumberFieldPrimitive',
