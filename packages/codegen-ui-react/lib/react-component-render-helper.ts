@@ -318,6 +318,7 @@ export function getSyntaxKindToken(operator: RelationalOperator): BinaryOperator
       return factory.createToken(SyntaxKind.GreaterThanEqualsToken);
     case 'gt':
       return factory.createToken(SyntaxKind.GreaterThanToken);
+    /* istanbul ignore next */
     default:
       return undefined;
   }
