@@ -48,6 +48,12 @@ import {
   SwitchFieldProps,
   TabItemProps,
   TabsProps,
+  TableCellProps,
+  TableBodyProps,
+  TableFootProps,
+  TableHeadProps,
+  TableProps,
+  TableRowProps,
   TextFieldProps,
   ToggleButtonProps,
   ToggleButtonGroupProps,
@@ -296,6 +302,48 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Tabs:
         return new ReactComponentWithChildrenRenderer<TabsProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.Table:
+        return new ReactComponentWithChildrenRenderer<TableProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.TableBody:
+        return new ReactComponentWithChildrenRenderer<TableBodyProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.TableCell:
+        return new ReactComponentWithChildrenRenderer<TableCellProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.TableFoot:
+        return new ReactComponentWithChildrenRenderer<TableFootProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.TableHead:
+        return new ReactComponentWithChildrenRenderer<TableHeadProps>(
+          component,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.TableRow:
+        return new ReactComponentWithChildrenRenderer<TableRowProps>(
           component,
           this.importCollection,
           parent,
