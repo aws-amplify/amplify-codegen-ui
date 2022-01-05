@@ -47,7 +47,7 @@ jobs:
         working-directory: amplify-cli/packages/amplify-util-uibuilder
         run: npm test
       - name: Create a test react app
-        run: npx create-react-app e2e-test-app --scripts-version 4.0.3
+        run: npx create-react-app e2e-test-app
       - name: Install test app dependencies
         working-directory: e2e-test-app
         run: |
