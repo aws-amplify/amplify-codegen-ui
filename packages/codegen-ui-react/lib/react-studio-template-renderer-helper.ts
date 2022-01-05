@@ -187,16 +187,19 @@ export function bindingPropertyUsesHook(
 
 // optional import prettier
 export function formatCode(code: string): string {
+  let prettier = null;
+  let parserTypescript = null;
+
   try {
     // eslint-disable-next-line global-require, import/no-extraneous-dependencies, @typescript-eslint/no-var-requires
-    const prettier = require('prettier');
+    prettier = require('prettier');
     // eslint-disable-next-line global-require, import/no-extraneous-dependencies, @typescript-eslint/no-var-requires
-    const parserTypescript = require('prettier/parser-typescript');
-
-    if (prettier && parserTypescript) {
-      return prettier.format(code, { parser: 'typescript', plugins: [parserTypescript] });
-    }
+    parserTypescript = require('prettier/parser-typescript');
   } catch {} // eslint-disable-line no-empty
+
+  if (prettier && parserTypescript) {
+    return prettier.format(code, { parser: 'typescript', plugins: [parserTypescript] });
+  }
 
   return code;
 }
