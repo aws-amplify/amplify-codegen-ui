@@ -23,6 +23,7 @@ import {
   StudioComponent,
   StudioComponentChild,
   StudioComponentProperty,
+  StudioGenericEvent,
 } from '@aws-amplify/codegen-ui';
 
 import {
@@ -417,14 +418,15 @@ export function buildOpeningElementAttributes(prop: StudioComponentProperty, nam
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
 
-/* Tempory stub function to map from generic event name to React event name. Final implementation will be included in
+/*
+ * Tempory stub function to map from generic event name to React event name. Final implementation will be included in
  * amplify-ui.
  */
-export function mapGenericEventToReact(genericEventBinding: string): string {
+export function mapGenericEventToReact(genericEventBinding: StudioGenericEvent): string {
   switch (genericEventBinding) {
-    case 'click':
+    case StudioGenericEvent.click:
       return 'onClick';
-    case 'change':
+    case StudioGenericEvent.change:
       return 'onChange';
     default:
       throw new Error(`${genericEventBinding} is not a possible event.`);
@@ -435,8 +437,7 @@ export function mapGenericEventToReact(genericEventBinding: string): string {
  *
  * Example: onClick={invokeAction("signOutAction")}
  */
-export function buildOpeningElementActions(genericEventBinding: string, action: string): JsxAttribute {
-  // TODO: map from generic to platform
+export function buildOpeningElementActions(genericEventBinding: StudioGenericEvent, action: string): JsxAttribute {
   const reactActionBinding = mapGenericEventToReact(genericEventBinding);
   return factory.createJsxAttribute(
     factory.createIdentifier(reactActionBinding),

@@ -13,7 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ComponentRendererBase, StudioNode, StudioComponent, StudioComponentChild } from '@aws-amplify/codegen-ui';
+import {
+  ComponentRendererBase,
+  StudioNode,
+  StudioComponent,
+  StudioComponentChild,
+  StudioGenericEvent,
+} from '@aws-amplify/codegen-ui';
 import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory, JsxSelfClosingElement } from 'typescript';
 
 import {
@@ -50,20 +56,23 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   }
 
   protected renderOpeningElement(): JsxOpeningElement {
-    const attributes = Object.entries(this.component.properties)
-      .map(([key, value]) => buildOpeningElementAttributes(value, key))
-      .concat(
-        Object.entries(this.component.eventProperties || {}).map(([key, value]) =>
-          // pass as bindingProperties to reuse logic
-          buildOpeningElementAttributes({ bindingProperties: { property: value } }, mapGenericEventToReact(key)),
-        ),
-      );
-
-    if ('events' in this.component && this.component.events !== undefined) {
-      attributes.push(
-        ...Object.entries(this.component.events).map(([key, value]) => buildOpeningElementActions(key, value)),
-      );
-    }
+    const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementAttributes(value, key),
+    );
+    const eventPropertyAttributes = Object.entries(this.component.eventProperties || {}).map(([key, value]) =>
+      // pass as bindingProperties to reuse logic
+      buildOpeningElementAttributes(
+        { bindingProperties: { property: value } },
+        mapGenericEventToReact(key as StudioGenericEvent),
+      ),
+    );
+    const eventAttributes =
+      'events' in this.component && this.component.events !== undefined
+        ? Object.entries(this.component.events).map(([key, value]) =>
+            buildOpeningElementActions(key as StudioGenericEvent, value),
+          )
+        : [];
+    const attributes = propertyAttributes.concat(eventPropertyAttributes).concat(eventAttributes);
 
     this.addPropsSpreadAttributes(attributes);
 

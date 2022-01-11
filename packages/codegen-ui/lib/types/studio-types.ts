@@ -485,6 +485,11 @@ export enum StudioComponentPropertyBindingType {
   Event = 'Event',
 }
 
+export enum StudioGenericEvent {
+  click = 'click',
+  change = 'change',
+}
+
 /**
  * This represents the model and field you want to bind
  * a component property to
