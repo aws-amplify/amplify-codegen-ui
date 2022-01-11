@@ -23,6 +23,7 @@ export type ReactRenderConfig = FrameworkRenderConfig & {
   target?: ScriptTarget;
   module?: ModuleKind;
   renderTypeDeclarations?: boolean;
+  inlineSourceMap?: boolean;
 };
 
 export function scriptKindToFileExtension(scriptKind: ScriptKind): string {

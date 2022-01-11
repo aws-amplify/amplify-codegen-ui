@@ -60,7 +60,7 @@ export function transpile(
   code: string,
   renderConfig: ReactRenderConfig,
 ): { componentText: string; declaration?: string } {
-  const { target, module, script, renderTypeDeclarations } = renderConfig;
+  const { target, module, script, renderTypeDeclarations, inlineSourceMap } = renderConfig;
   if (script === ScriptKind.JS || script === ScriptKind.JSX) {
     const transpiledCode = transpileModule(code, {
       compilerOptions: {
@@ -68,6 +68,8 @@ export function transpile(
         module,
         jsx: script === ScriptKind.JS ? ts.JsxEmit.React : ts.JsxEmit.Preserve,
         esModuleInterop: true,
+        inlineSourceMap,
+        inlineSources: inlineSourceMap,
       },
     }).outputText;
 
