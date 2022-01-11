@@ -3,6 +3,7 @@ name: Latest Canary
 on:
   schedule:
     - cron: '30 17,19,21,23 * * *'
+  workflow_dispatch:
 
 jobs:
   amplify-cli-tests:
