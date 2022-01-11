@@ -15,6 +15,7 @@
  */
 import * as yup from 'yup';
 import { InvalidInputError } from './errors';
+import { StudioGenericEvent } from './types';
 
 const alphaNumString = () => {
   return yup.string().matches(/^[a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string' });
@@ -40,6 +41,16 @@ const propertiesSchema = (value: Object) => {
   );
 };
 
+const eventPropertiesSchema = yup
+  .object(
+    Object.fromEntries(
+      Object.keys(StudioGenericEvent)
+        .filter((eventType) => Number.isNaN(Number(eventType)))
+        .map((eventType) => [eventType, yup.string().optional()]),
+    ),
+  )
+  .noUnknown();
+
 /**
  * Component Schema Definitions
  */
@@ -56,6 +67,7 @@ const studioComponentChildSchema: any = yup.object({
   bindingProperties: yup.object().nullable(),
   collectionProperties: yup.object().nullable(),
   actions: yup.object().nullable(),
+  eventProperties: eventPropertiesSchema.nullable(),
 });
 
 const studioComponentSchema = yup.object({
@@ -71,6 +83,7 @@ const studioComponentSchema = yup.object({
   bindingProperties: yup.object().nullable(),
   collectionProperties: yup.object().nullable(),
   actions: yup.object().nullable(),
+  eventProperties: eventPropertiesSchema.nullable(),
 });
 
 /**
