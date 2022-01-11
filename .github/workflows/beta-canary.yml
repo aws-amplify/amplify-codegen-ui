@@ -1,0 +1,51 @@
+name: Beta Canary
+
+on:
+  schedule:
+    - cron: '30 17,19,21,23 * * *'
+
+jobs:
+  amplify-cli-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+        with:
+          path: amplify-codegen-ui
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install Beta Amplfy CLI
+        run: npm i -g @aws-amplify/cli@beta
+      - name: Create a test react app
+        run: npx create-react-app e2e-test-app
+      - name: Install test app dependencies
+        working-directory: e2e-test-app
+        run: |
+          npm i aws-amplify @aws-amplify/ui-react
+          npm i --save-dev cypress
+      - name: Run CLI Pull in test app
+        working-directory: e2e-test-app
+        run: |
+          FORCE_RENDER=1 amplify pull --appId ${{ secrets.E2E_TEST_APP_ID }} --envName staging -y --providers "{\
+            \"awscloudformation\":{\
+              \"configLevel\":\"project\",\
+              \"useProfile\":false,\
+              \"profileName\":\"default\",\
+              \"accessKeyId\":\"${{ secrets.E2E_TEST_ACCESS_KEY }}\",\
+              \"secretAccessKey\":\"${{ secrets.E2E_TEST_SECRET_KEY }}\",\
+              \"region\":\"us-west-2\"\
+            }\
+          }"
+      - name: Write test files
+        working-directory: e2e-test-app
+        run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates/. .
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: e2e-test-app
+          install: false
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
