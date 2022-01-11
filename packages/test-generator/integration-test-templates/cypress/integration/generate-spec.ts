@@ -132,6 +132,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'GoldenComponentWithTypedProp',
   'GoldenComponentWithVariants',
   'GoldenTheme',
+  'Event',
 ]);
 const EXPECTED_INVALID_INPUT_CASES = new Set([
   'ComponentMissingProperties',

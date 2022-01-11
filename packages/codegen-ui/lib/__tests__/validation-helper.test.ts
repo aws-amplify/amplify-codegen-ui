@@ -169,6 +169,44 @@ describe('validation-helper', () => {
         ],
       });
     });
+
+    test('allows eventBindings with valid names', () => {
+      validateComponentSchema({
+        name: 'CustomComponent',
+        componentType: 'View',
+        properties: {},
+        children: [
+          {
+            name: 'I Have Spaces',
+            componentType: 'Button',
+            properties: {},
+            eventProperties: {
+              click: 'onButtonClick',
+            },
+          },
+        ],
+      });
+    });
+
+    test('fails eventBindings with invalid names', () => {
+      expect(() => {
+        validateComponentSchema({
+          name: 'CustomComponent',
+          componentType: 'View',
+          properties: {},
+          children: [
+            {
+              name: 'I Have Spaces',
+              componentType: 'Button',
+              properties: {},
+              eventProperties: {
+                myclick: 'onButtonClick',
+              },
+            },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
   });
 
   describe('validateThemeSchema', () => {
