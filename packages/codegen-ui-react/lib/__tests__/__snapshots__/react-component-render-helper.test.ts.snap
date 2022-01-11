@@ -1,6 +1,268 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`react-component-render-helper buildChildElement bound property 1`] = `
+NodeObject {
+  "dotDotDotToken": undefined,
+  "end": -1,
+  "expression": IdentifierObject {
+    "end": -1,
+    "escapedText": "prop",
+    "flags": 8,
+    "kind": 79,
+    "modifierFlagsCache": 0,
+    "originalKeywordKind": undefined,
+    "parent": undefined,
+    "pos": -1,
+    "transformFlags": 0,
+  },
+  "flags": 8,
+  "kind": 286,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 2,
+}
+`;
+
+exports[`react-component-render-helper buildChildElement collection bound property 1`] = `
+NodeObject {
+  "dotDotDotToken": undefined,
+  "end": -1,
+  "expression": IdentifierObject {
+    "end": -1,
+    "escapedText": "item",
+    "flags": 8,
+    "kind": 79,
+    "modifierFlagsCache": 0,
+    "originalKeywordKind": undefined,
+    "parent": undefined,
+    "pos": -1,
+    "transformFlags": 0,
+  },
+  "flags": 8,
+  "kind": 286,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 2,
+}
+`;
+
+exports[`react-component-render-helper buildChildElement concatenated property 1`] = `
+NodeObject {
+  "dotDotDotToken": undefined,
+  "end": -1,
+  "expression": NodeObject {
+    "end": -1,
+    "flags": 8,
+    "head": TokenObject {
+      "end": -1,
+      "flags": 8,
+      "kind": 15,
+      "modifierFlagsCache": 0,
+      "parent": undefined,
+      "pos": -1,
+      "rawText": "",
+      "templateFlags": 0,
+      "text": "",
+      "transformFlags": 512,
+    },
+    "kind": 221,
+    "modifierFlagsCache": 0,
+    "parent": undefined,
+    "pos": -1,
+    "templateSpans": Array [],
+    "transformFlags": 512,
+  },
+  "flags": 8,
+  "kind": 286,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 514,
+}
+`;
+
+exports[`react-component-render-helper buildChildElement conditonal property 1`] = `
+NodeObject {
+  "dotDotDotToken": undefined,
+  "end": -1,
+  "expression": NodeObject {
+    "dotDotDotToken": undefined,
+    "end": -1,
+    "expression": NodeObject {
+      "colonToken": TokenObject {
+        "end": -1,
+        "flags": 8,
+        "kind": 58,
+        "modifierFlagsCache": 0,
+        "parent": undefined,
+        "pos": -1,
+        "transformFlags": 0,
+      },
+      "condition": NodeObject {
+        "end": -1,
+        "expression": NodeObject {
+          "end": -1,
+          "flags": 8,
+          "kind": 219,
+          "left": IdentifierObject {
+            "end": -1,
+            "escapedText": "prop",
+            "flags": 8,
+            "kind": 79,
+            "modifierFlagsCache": 0,
+            "originalKeywordKind": undefined,
+            "parent": undefined,
+            "pos": -1,
+            "transformFlags": 0,
+          },
+          "modifierFlagsCache": 0,
+          "operatorToken": TokenObject {
+            "end": -1,
+            "flags": 8,
+            "kind": 55,
+            "modifierFlagsCache": 0,
+            "parent": undefined,
+            "pos": -1,
+            "transformFlags": 0,
+          },
+          "parent": undefined,
+          "pos": -1,
+          "right": NodeObject {
+            "end": -1,
+            "flags": 8,
+            "kind": 219,
+            "left": IdentifierObject {
+              "end": -1,
+              "escapedText": "prop",
+              "flags": 8,
+              "kind": 79,
+              "modifierFlagsCache": 0,
+              "originalKeywordKind": undefined,
+              "parent": undefined,
+              "pos": -1,
+              "transformFlags": 0,
+            },
+            "modifierFlagsCache": 0,
+            "operatorToken": TokenObject {
+              "end": -1,
+              "flags": 8,
+              "kind": 34,
+              "modifierFlagsCache": 0,
+              "parent": undefined,
+              "pos": -1,
+              "transformFlags": 0,
+            },
+            "parent": undefined,
+            "pos": -1,
+            "right": TokenObject {
+              "end": -1,
+              "flags": 8,
+              "kind": 8,
+              "modifierFlagsCache": 0,
+              "numericLiteralFlags": 0,
+              "parent": undefined,
+              "pos": -1,
+              "text": "0",
+              "transformFlags": 0,
+            },
+            "transformFlags": 0,
+          },
+          "transformFlags": 0,
+        },
+        "flags": 8,
+        "kind": 210,
+        "modifierFlagsCache": 0,
+        "parent": undefined,
+        "pos": -1,
+        "transformFlags": 0,
+      },
+      "end": -1,
+      "flags": 8,
+      "kind": 220,
+      "modifierFlagsCache": 0,
+      "parent": undefined,
+      "pos": -1,
+      "questionToken": TokenObject {
+        "end": -1,
+        "flags": 8,
+        "kind": 57,
+        "modifierFlagsCache": 0,
+        "parent": undefined,
+        "pos": -1,
+        "transformFlags": 0,
+      },
+      "transformFlags": 0,
+      "whenFalse": TokenObject {
+        "end": -1,
+        "flags": 8,
+        "hasExtendedUnicodeEscape": undefined,
+        "kind": 10,
+        "modifierFlagsCache": 0,
+        "parent": undefined,
+        "pos": -1,
+        "singleQuote": undefined,
+        "text": "bar",
+        "transformFlags": 0,
+      },
+      "whenTrue": TokenObject {
+        "end": -1,
+        "flags": 8,
+        "hasExtendedUnicodeEscape": undefined,
+        "kind": 10,
+        "modifierFlagsCache": 0,
+        "parent": undefined,
+        "pos": -1,
+        "singleQuote": undefined,
+        "text": "foo",
+        "transformFlags": 0,
+      },
+    },
+    "flags": 8,
+    "kind": 286,
+    "modifierFlagsCache": 0,
+    "parent": undefined,
+    "pos": -1,
+    "transformFlags": 2,
+  },
+  "flags": 8,
+  "kind": 286,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 2,
+}
+`;
+
+exports[`react-component-render-helper buildChildElement fixed property 1`] = `
+NodeObject {
+  "dotDotDotToken": undefined,
+  "end": -1,
+  "expression": TokenObject {
+    "end": -1,
+    "flags": 8,
+    "hasExtendedUnicodeEscape": undefined,
+    "kind": 10,
+    "modifierFlagsCache": 0,
+    "parent": undefined,
+    "pos": -1,
+    "singleQuote": undefined,
+    "text": "foo",
+    "transformFlags": 0,
+  },
+  "flags": 8,
+  "kind": 286,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 2,
+}
+`;
+
 exports[`react-component-render-helper buildFixedJsxExpression boolean 1`] = `"{true}"`;
+
+exports[`react-component-render-helper buildFixedJsxExpression json parse error 1`] = `"Failed to parse value \\"⭐\\""`;
 
 exports[`react-component-render-helper buildFixedJsxExpression number 1`] = `"{400}"`;
 
@@ -27,3 +289,79 @@ exports[`react-component-render-helper buildFixedJsxExpression string wrapped nu
 exports[`react-component-render-helper buildFixedJsxExpression string wrapped number 1`] = `"\\"400\\""`;
 
 exports[`react-component-render-helper buildFixedJsxExpression string wrapped object 1`] = `"\\"{\\\\\\"transponder\\\\\\": \\\\\\"rocinante\\\\\\"}\\""`;
+
+exports[`react-component-render-helper buildFixedJsxExpression type mismatch error 1`] = `"Parsed value type \\"boolean\\" and specified type \\"number\\" mismatch"`;
+
+exports[`react-component-render-helper buildFixedJsxExpression unsupported type 1`] = `"Invalid type object for \\"Sun Dec 17 1995 03:24:00 GMT+0000 (Coordinated Universal Time)\\""`;
+
+exports[`react-component-render-helper getSyntaxKindToken eq 1`] = `
+TokenObject {
+  "end": -1,
+  "flags": 8,
+  "kind": 34,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 0,
+}
+`;
+
+exports[`react-component-render-helper getSyntaxKindToken ge 1`] = `
+TokenObject {
+  "end": -1,
+  "flags": 8,
+  "kind": 33,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 0,
+}
+`;
+
+exports[`react-component-render-helper getSyntaxKindToken gt 1`] = `
+TokenObject {
+  "end": -1,
+  "flags": 8,
+  "kind": 31,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 0,
+}
+`;
+
+exports[`react-component-render-helper getSyntaxKindToken le 1`] = `
+TokenObject {
+  "end": -1,
+  "flags": 8,
+  "kind": 32,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 0,
+}
+`;
+
+exports[`react-component-render-helper getSyntaxKindToken lt 1`] = `
+TokenObject {
+  "end": -1,
+  "flags": 8,
+  "kind": 29,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 0,
+}
+`;
+
+exports[`react-component-render-helper getSyntaxKindToken ne 1`] = `
+TokenObject {
+  "end": -1,
+  "flags": 8,
+  "kind": 35,
+  "modifierFlagsCache": 0,
+  "parent": undefined,
+  "pos": -1,
+  "transformFlags": 0,
+}
+`;

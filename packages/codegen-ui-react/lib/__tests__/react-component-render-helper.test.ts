@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { RelationalOperator } from '@aws-amplify/codegen-ui';
 import {
   getFixedComponentPropValueExpression,
   ComponentPropertyValueTypes,
@@ -23,6 +24,9 @@ import {
   isConcatenatedProperty,
   isConditionalProperty,
   buildFixedJsxExpression,
+  isDefaultValueOnly,
+  getSyntaxKindToken,
+  buildChildElement,
 } from '../react-component-render-helper';
 
 import { assertASTMatchesSnapshot } from './__utils__/snapshot-helpers';
@@ -148,13 +152,101 @@ describe('react-component-render-helper', () => {
     });
 
     test('type mismatch error', () => {
-      expect(() => buildFixedJsxExpression({ value: 'true', type: 'number' })).toThrow(
-        'Parsed value type "boolean" and specified type "number" mismatch',
-      );
+      expect(() => buildFixedJsxExpression({ value: 'true', type: 'number' })).toThrowErrorMatchingSnapshot();
     });
 
     test('json parse error', () => {
-      expect(() => buildFixedJsxExpression({ value: '⭐', type: 'number' })).toThrow('Failed to parse value "⭐"');
+      expect(() => buildFixedJsxExpression({ value: '⭐', type: 'number' })).toThrowErrorMatchingSnapshot();
+    });
+
+    test('unsupported type', () => {
+      expect(() =>
+        buildFixedJsxExpression({ value: new Date('December 17, 1995 03:24:00'), type: 'unsupported' }),
+      ).toThrowErrorMatchingSnapshot();
+    });
+  });
+
+  describe('isDefaultValueOnly', () => {
+    test('defaultValue and not bound property', () => {
+      const prop = {
+        defaultValue: 'default',
+        value: 'something',
+      };
+      expect(isDefaultValueOnly(prop)).toBeTruthy();
+    });
+
+    test('not defaultValue', () => {
+      const prop = {
+        collectionBindingProperties: {
+          property: 'prop',
+        },
+      };
+      expect(isDefaultValueOnly(prop)).toBeFalsy();
+    });
+  });
+
+  describe('getSyntaxKindToken', () => {
+    test('eq', () => {
+      expect(getSyntaxKindToken('eq')).toMatchSnapshot();
+    });
+
+    test('ne', () => {
+      expect(getSyntaxKindToken('ne')).toMatchSnapshot();
+    });
+
+    test('le', () => {
+      expect(getSyntaxKindToken('le')).toMatchSnapshot();
+    });
+
+    test('lt', () => {
+      expect(getSyntaxKindToken('lt')).toMatchSnapshot();
+    });
+
+    test('ge', () => {
+      expect(getSyntaxKindToken('ge')).toMatchSnapshot();
+    });
+
+    test('gt', () => {
+      expect(getSyntaxKindToken('gt')).toMatchSnapshot();
+    });
+  });
+
+  describe('buildChildElement', () => {
+    test('no prop', () => {
+      expect(buildChildElement()).toBeUndefined();
+    });
+
+    test('fixed property', () => {
+      const prop = { value: 'foo' };
+      expect(buildChildElement(prop)).toMatchSnapshot();
+    });
+
+    test('bound property', () => {
+      const prop = { bindingProperties: { property: 'prop' } };
+      expect(buildChildElement(prop)).toMatchSnapshot();
+    });
+
+    test('collection bound property', () => {
+      const prop = { collectionBindingProperties: { property: 'prop' } };
+      expect(buildChildElement(prop)).toMatchSnapshot();
+    });
+
+    test('concatenated property', () => {
+      const prop = { concat: [] };
+      expect(buildChildElement(prop)).toMatchSnapshot();
+    });
+
+    test('conditonal property', () => {
+      const prop = {
+        condition: {
+          property: 'prop',
+          operator: 'eq' as RelationalOperator,
+          operand: 0,
+          then: { value: 'foo' },
+          else: { value: 'bar' },
+        },
+      };
+      expect(buildChildElement(prop)).toMatchSnapshot();
     });
   });
 });
