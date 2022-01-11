@@ -260,6 +260,10 @@ NodeObject {
 }
 `;
 
+exports[`react-component-render-helper buildContionalExpression operandType does not exist 1`] = `"{(user?.age && user?.age > \\"18\\") ? \\"Vote\\" : \\"Sorry you cannot vote\\"}"`;
+
+exports[`react-component-render-helper buildContionalExpression operandType exists 1`] = `"{(user?.age && user?.age > 18) ? \\"Vote\\" : \\"Sorry you cannot vote\\"}"`;
+
 exports[`react-component-render-helper buildFixedJsxExpression boolean 1`] = `"{true}"`;
 
 exports[`react-component-render-helper buildFixedJsxExpression json parse error 1`] = `"Failed to parse value \\"⭐\\""`;

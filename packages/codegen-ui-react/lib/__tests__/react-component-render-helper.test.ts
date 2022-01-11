@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { RelationalOperator } from '@aws-amplify/codegen-ui';
+import { RelationalOperator, ConditionalStudioComponentProperty } from '@aws-amplify/codegen-ui';
 import {
   getFixedComponentPropValueExpression,
   ComponentPropertyValueTypes,
@@ -27,9 +27,33 @@ import {
   isDefaultValueOnly,
   getSyntaxKindToken,
   buildChildElement,
+  buildConditionalExpression,
 } from '../react-component-render-helper';
 
 import { assertASTMatchesSnapshot } from './__utils__/snapshot-helpers';
+
+function buildConditionalWithOperand(operand: string, type?: string) {
+  const conditional: ConditionalStudioComponentProperty = {
+    condition: {
+      property: 'user',
+      field: 'age',
+      operator: 'gt',
+      operand,
+      then: {
+        value: 'Vote',
+      },
+      else: {
+        value: 'Sorry you cannot vote',
+      },
+    },
+  };
+
+  if (type) {
+    conditional.condition.operandType = type;
+  }
+
+  return conditional;
+}
 
 describe('react-component-render-helper', () => {
   test('getFixedComponentPropValueExpression', () => {
@@ -52,20 +76,7 @@ describe('react-component-render-helper', () => {
       ConcatenatedStudioComponentProperty: { checker: isConcatenatedProperty, property: { concat: [] } },
       ConditionalStudioComponentProperty: {
         checker: isConditionalProperty,
-        property: {
-          condition: {
-            property: 'user',
-            field: 'age',
-            operator: 'gt',
-            operand: '18',
-            then: {
-              value: 'Vote',
-            },
-            else: {
-              value: 'Sorry you cannot vote',
-            },
-          },
-        },
+        property: buildConditionalWithOperand('18'),
       },
       FixedStudioComponentProperty: { checker: isFixedPropertyWithValue, property: { value: 'testValue' } },
       BoundStudioComponentProperty: {
@@ -247,6 +258,24 @@ describe('react-component-render-helper', () => {
         },
       };
       expect(buildChildElement(prop)).toMatchSnapshot();
+    });
+  });
+
+  describe('buildContionalExpression', () => {
+    test('operandType exists', () => {
+      const exp = buildConditionalExpression(buildConditionalWithOperand('18', 'number'));
+      assertASTMatchesSnapshot(exp);
+    });
+
+    test('operandType does not exist', () => {
+      const exp = buildConditionalExpression(buildConditionalWithOperand('18'));
+      assertASTMatchesSnapshot(exp);
+    });
+
+    test('operand and operandType mismatch', () => {
+      expect(() => buildConditionalExpression(buildConditionalWithOperand('18', 'boolean'))).toThrow(
+        'Parsed value 18 and type boolean mismatch',
+      );
     });
   });
 });

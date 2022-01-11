@@ -334,6 +334,7 @@ export type ConditionalStudioComponentProperty = {
     field?: string;
     operator: RelationalOperator;
     operand: string | number | boolean;
+    operandType?: string;
     then: StudioComponentProperty;
     else: StudioComponentProperty;
   };
