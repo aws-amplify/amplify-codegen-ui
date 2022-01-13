@@ -36,6 +36,7 @@ import {
   JsxExpression,
   BinaryOperatorToken,
   JsxChild,
+  PrimaryExpression,
 } from 'typescript';
 
 import { ImportCollection, ImportSource } from './imports';
@@ -324,19 +325,44 @@ export function getSyntaxKindToken(operator: RelationalOperator): BinaryOperator
   }
 }
 
-export function getConditionalOperandExpression(operand: string | number | boolean): Expression {
-  switch (typeof operand) {
+export function getConditionalOperandExpression(
+  operand: string | number | boolean,
+  operandType: string | undefined,
+): Expression {
+  if (typeof operand === 'string' && operandType && operandType !== 'string') {
+    return stringValueToTypedLiteral(operand, operandType);
+  }
+  return typedValueToJsxLiteral(operand);
+}
+
+function stringValueToTypedLiteral(value: any, valueType: string): PrimaryExpression {
+  try {
+    const typedVal = JSON.parse(value);
+    if (valueType === typeof typedVal) {
+      return typedValueToJsxLiteral(typedVal);
+    }
+    throw Error(`Parsed value ${value} and type ${valueType} mismatch`);
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return factory.createStringLiteral(value);
+    }
+    throw err;
+  }
+}
+
+function typedValueToJsxLiteral(value: any): PrimaryExpression {
+  switch (typeof value) {
     case 'number':
-      return factory.createNumericLiteral(operand);
+      return factory.createNumericLiteral(value);
     case 'boolean':
-      return operand ? factory.createTrue() : factory.createFalse();
+      return value ? factory.createTrue() : factory.createFalse();
     default:
-      return factory.createStringLiteral(operand);
+      return factory.createStringLiteral(value);
   }
 }
 
 export function buildConditionalExpression(prop: ConditionalStudioComponentProperty): JsxExpression {
-  const { property, field, operand, operator, then } = prop.condition;
+  const { property, field, operand, operandType, operator, then } = prop.condition;
   const elseBlock = prop.condition.else;
   const operatorToken = getSyntaxKindToken(operator);
 
@@ -360,7 +386,11 @@ export function buildConditionalExpression(prop: ConditionalStudioComponentPrope
         factory.createBinaryExpression(
           propertyAccess,
           factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-          factory.createBinaryExpression(propertyAccess, operatorToken, getConditionalOperandExpression(operand)),
+          factory.createBinaryExpression(
+            propertyAccess,
+            operatorToken,
+            getConditionalOperandExpression(operand, operandType),
+          ),
         ),
       ),
       factory.createToken(SyntaxKind.QuestionToken),
