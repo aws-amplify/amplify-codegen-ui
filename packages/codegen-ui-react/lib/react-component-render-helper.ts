@@ -22,6 +22,7 @@ import {
   RelationalOperator,
   WorkflowStudioComponentProperty,
   FormStudioComponentProperty,
+  StudioComponentAuthProperty,
   StudioComponent,
   StudioComponentChild,
 } from '@aws-amplify/codegen-ui';
@@ -60,7 +61,8 @@ export type ComponentPropertyValueTypes =
   | BoundStudioComponentProperty
   | CollectionStudioComponentProperty
   | WorkflowStudioComponentProperty
-  | FormStudioComponentProperty;
+  | FormStudioComponentProperty
+  | StudioComponentAuthProperty;
 
 export function isFixedPropertyWithValue(prop: ComponentPropertyValueTypes): prop is FixedStudioComponentProperty {
   return 'value' in prop;
@@ -68,6 +70,10 @@ export function isFixedPropertyWithValue(prop: ComponentPropertyValueTypes): pro
 
 export function isBoundProperty(prop: ComponentPropertyValueTypes): prop is BoundStudioComponentProperty {
   return 'bindingProperties' in prop;
+}
+
+export function isAuthProperty(prop: ComponentPropertyValueTypes): prop is StudioComponentAuthProperty {
+  return 'userAttribute' in prop;
 }
 
 export function isCollectionItemBoundProperty(
@@ -106,6 +112,15 @@ export function buildBindingExpression(prop: BoundStudioComponentProperty): Expr
 
 export function buildBindingAttr(prop: BoundStudioComponentProperty, propName: string): JsxAttribute {
   const expr = buildBindingExpression(prop);
+  return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
+}
+
+export function buildAuthBindingExpression(prop: StudioComponentAuthProperty): Expression {
+  return factory.createIdentifier(prop.userAttribute);
+}
+
+export function buildUserAuthAttr(prop: StudioComponentAuthProperty, propName: string): JsxAttribute {
+  const expr = buildAuthBindingExpression(prop);
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
@@ -288,6 +303,10 @@ export function resolvePropToExpression(prop: ComponentPropertyValueTypes): Expr
         ? buildBindingExpression(prop)
         : buildBindingWithDefaultExpression(prop, prop.defaultValue);
     return expr;
+  }
+
+  if (isAuthProperty(prop)) {
+    return buildAuthBindingExpression(prop);
   }
   if (isCollectionItemBoundProperty(prop)) {
     const expr =

@@ -5837,23 +5837,12 @@ exports[`amplify render tests source maps should render inline source maps 1`] =
   };
 /* eslint-disable */
 import React from \\"react\\";
-import { getOverrideProps, useAuth } from \\"@aws-amplify/ui-react/internal\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, Image } from \\"@aws-amplify/ui-react\\";
 export default function Profile(props) {
-  var _a, _b;
   const { overrides: overridesProp } = props,
     rest = __rest(props, [\\"overrides\\"]);
   const overrides = Object.assign({}, overridesProp);
-  const {
-    username,
-    picture: userImage,
-    [\\"custom:favorite_icecream\\"]: customUserAttributeIcecream,
-  } = (_b =
-    (_a = useAuth().user) === null || _a === void 0
-      ? void 0
-      : _a.attributes) !== null && _b !== void 0
-    ? _b
-    : {};
   return React.createElement(
     Flex,
     Object.assign({}, rest, getOverrideProps(overrides, \\"Flex\\")),
@@ -5880,7 +5869,7 @@ export default function Profile(props) {
     )
   );
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssTUFBTSxPQUFPLENBQUM7QUFDMUIsT0FBTyxFQUFvQixnQkFBZ0IsRUFBRSxPQUFPLEVBQUUsTUFBTSxnQ0FBZ0MsQ0FBQztBQUM3RixPQUFPLEVBQUUsTUFBTSxFQUFFLElBQUksRUFBYSxLQUFLLEVBQUUsTUFBTSx1QkFBdUIsQ0FBQztBQUt2RSxNQUFNLENBQUMsT0FBTyxVQUFVLE9BQU8sQ0FBQyxLQUFtQjs7SUFDL0MsTUFBTSxFQUFFLFNBQVMsRUFBRSxhQUFhLEtBQWMsS0FBSyxFQUFkLElBQUksVUFBSyxLQUFLLEVBQTdDLGFBQXFDLENBQVEsQ0FBQztJQUNwRCxNQUFNLFNBQVMscUJBQVEsYUFBYSxDQUFFLENBQUM7SUFDdkMsTUFBTSxFQUFFLFFBQVEsRUFBRSxPQUFPLEVBQUUsU0FBUyxFQUFFLENBQUMsMEJBQTBCLENBQUMsRUFBRSwyQkFBMkIsRUFBRSxHQUFHLE1BQUEsTUFBQSxPQUFPLEVBQUUsQ0FBQyxJQUFJLDBDQUFFLFVBQVUsbUNBQUksRUFBRSxDQUFDO0lBQ3JJLE9BQU8sQ0FBQyxvQkFBQyxJQUFJLG9CQUFLLElBQUksRUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsTUFBTSxDQUFDO1FBQUUsb0JBQUMsS0FBSyxrQkFBQyxHQUFHLEVBQUUsU0FBUyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxlQUFlLENBQUMsRUFBVTtRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLFFBQVEsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsZ0JBQWdCLENBQUMsRUFBVztRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLDJCQUEyQixJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxnQkFBZ0IsQ0FBQyxFQUFXLENBQU8sQ0FBQyxDQUFDO0FBQ2xXLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBlc2xpbnQtZGlzYWJsZSAqL1xuaW1wb3J0IFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IHsgRXNjYXBlSGF0Y2hQcm9wcywgZ2V0T3ZlcnJpZGVQcm9wcywgdXNlQXV0aCB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3QvaW50ZXJuYWxcIjtcbmltcG9ydCB7IEJ1dHRvbiwgRmxleCwgRmxleFByb3BzLCBJbWFnZSB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3RcIjtcblxuZXhwb3J0IHR5cGUgUHJvZmlsZVByb3BzID0gUmVhY3QuUHJvcHNXaXRoQ2hpbGRyZW48UGFydGlhbDxGbGV4UHJvcHM+ICYge1xuICAgIG92ZXJyaWRlcz86IEVzY2FwZUhhdGNoUHJvcHMgfCB1bmRlZmluZWQgfCBudWxsO1xufT47XG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQcm9maWxlKHByb3BzOiBQcm9maWxlUHJvcHMpOiBSZWFjdC5SZWFjdEVsZW1lbnQge1xuICAgIGNvbnN0IHsgb3ZlcnJpZGVzOiBvdmVycmlkZXNQcm9wLCAuLi5yZXN0IH0gPSBwcm9wcztcbiAgICBjb25zdCBvdmVycmlkZXMgPSB7IC4uLm92ZXJyaWRlc1Byb3AgfTtcbiAgICBjb25zdCB7IHVzZXJuYW1lLCBwaWN0dXJlOiB1c2VySW1hZ2UsIFtcImN1c3RvbTpmYXZvcml0ZV9pY2VjcmVhbVwiXTogY3VzdG9tVXNlckF0dHJpYnV0ZUljZWNyZWFtIH0gPSB1c2VBdXRoKCkudXNlcj8uYXR0cmlidXRlcyA/PyB7fTtcbiAgICByZXR1cm4gKDxGbGV4IHsuLi5yZXN0fSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiRmxleFwiKX0+PEltYWdlIHNyYz17dXNlckltYWdlfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiRmxleC5JbWFnZVswXVwiKX0+PC9JbWFnZT48QnV0dG9uIGNoaWxkcmVuPXt1c2VybmFtZX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcIkZsZXguQnV0dG9uWzBdXCIpfT48L0J1dHRvbj48QnV0dG9uIGNoaWxkcmVuPXtjdXN0b21Vc2VyQXR0cmlidXRlSWNlY3JlYW19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJGbGV4LkJ1dHRvblsxXVwiKX0+PC9CdXR0b24+PC9GbGV4Pik7XG59Il19
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssTUFBTSxPQUFPLENBQUM7QUFDMUIsT0FBTyxFQUFvQixnQkFBZ0IsRUFBRSxNQUFNLGdDQUFnQyxDQUFDO0FBQ3BGLE9BQU8sRUFBRSxNQUFNLEVBQUUsSUFBSSxFQUFhLEtBQUssRUFBRSxNQUFNLHVCQUF1QixDQUFDO0FBS3ZFLE1BQU0sQ0FBQyxPQUFPLFVBQVUsT0FBTyxDQUFDLEtBQW1CO0lBQy9DLE1BQU0sRUFBRSxTQUFTLEVBQUUsYUFBYSxLQUFjLEtBQUssRUFBZCxJQUFJLFVBQUssS0FBSyxFQUE3QyxhQUFxQyxDQUFRLENBQUM7SUFDcEQsTUFBTSxTQUFTLHFCQUFRLGFBQWEsQ0FBRSxDQUFDO0lBQ3ZDLE9BQU8sQ0FBQyxvQkFBQyxJQUFJLG9CQUFLLElBQUksRUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsTUFBTSxDQUFDO1FBQUUsb0JBQUMsS0FBSyxrQkFBQyxHQUFHLEVBQUUsU0FBUyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxlQUFlLENBQUMsRUFBVTtRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLFFBQVEsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsZ0JBQWdCLENBQUMsRUFBVztRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLDJCQUEyQixJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxnQkFBZ0IsQ0FBQyxFQUFXLENBQU8sQ0FBQyxDQUFDO0FBQ2xXLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBlc2xpbnQtZGlzYWJsZSAqL1xuaW1wb3J0IFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IHsgRXNjYXBlSGF0Y2hQcm9wcywgZ2V0T3ZlcnJpZGVQcm9wcyB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3QvaW50ZXJuYWxcIjtcbmltcG9ydCB7IEJ1dHRvbiwgRmxleCwgRmxleFByb3BzLCBJbWFnZSB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3RcIjtcblxuZXhwb3J0IHR5cGUgUHJvZmlsZVByb3BzID0gUmVhY3QuUHJvcHNXaXRoQ2hpbGRyZW48UGFydGlhbDxGbGV4UHJvcHM+ICYge1xuICAgIG92ZXJyaWRlcz86IEVzY2FwZUhhdGNoUHJvcHMgfCB1bmRlZmluZWQgfCBudWxsO1xufT47XG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQcm9maWxlKHByb3BzOiBQcm9maWxlUHJvcHMpOiBSZWFjdC5SZWFjdEVsZW1lbnQge1xuICAgIGNvbnN0IHsgb3ZlcnJpZGVzOiBvdmVycmlkZXNQcm9wLCAuLi5yZXN0IH0gPSBwcm9wcztcbiAgICBjb25zdCBvdmVycmlkZXMgPSB7IC4uLm92ZXJyaWRlc1Byb3AgfTtcbiAgICByZXR1cm4gKDxGbGV4IHsuLi5yZXN0fSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiRmxleFwiKX0+PEltYWdlIHNyYz17dXNlckltYWdlfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiRmxleC5JbWFnZVswXVwiKX0+PC9JbWFnZT48QnV0dG9uIGNoaWxkcmVuPXt1c2VybmFtZX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcIkZsZXguQnV0dG9uWzBdXCIpfT48L0J1dHRvbj48QnV0dG9uIGNoaWxkcmVuPXtjdXN0b21Vc2VyQXR0cmlidXRlSWNlY3JlYW19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJGbGV4LkJ1dHRvblsxXVwiKX0+PC9CdXR0b24+PC9GbGV4Pik7XG59Il19
 "
 `;
 
@@ -5977,7 +5966,6 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
-  useAuth,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, Image } from \\"@aws-amplify/ui-react\\";
 
@@ -5989,11 +5977,6 @@ export type ProfileProps = React.PropsWithChildren<
 export default function Profile(props: ProfileProps): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
-  const {
-    username,
-    picture: userImage,
-    [\\"custom:favorite_icecream\\"]: customUserAttributeIcecream,
-  } = useAuth().user?.attributes ?? {};
   return (
     /* @ts-ignore: TS2322 */
     <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>

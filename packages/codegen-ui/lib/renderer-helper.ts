@@ -17,7 +17,6 @@ import {
   StudioComponent,
   StudioComponentChild,
   StudioComponentDataPropertyBinding,
-  StudioComponentAuthPropertyBinding,
   StudioComponentStoragePropertyBinding,
   StudioComponentEventPropertyBinding,
   StudioComponentSimplePropertyBinding,
@@ -32,6 +31,22 @@ export function isStudioComponentWithBinding(
   component: StudioComponent | StudioComponentChild,
 ): component is StudioComponent {
   return 'bindingProperties' in component;
+}
+
+export function hasAuthProperty(component: StudioComponent | StudioComponentChild): component is StudioComponent {
+  return component.properties.userAttribute !== undefined;
+}
+
+export function isStudioComponentWithAuthProperty(
+  component: StudioComponent | StudioComponentChild,
+): component is StudioComponent {
+  if (hasAuthProperty(component)) {
+    return true;
+  }
+  if (component.children && component.children.length > 0) {
+    return component.children?.some((child) => isStudioComponentWithAuthProperty(child));
+  }
+  return false;
 }
 
 /**
@@ -59,7 +74,6 @@ export function isStudioComponentWithActions(
 export function isDataPropertyBinding(
   prop:
     | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
     | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,
@@ -67,21 +81,9 @@ export function isDataPropertyBinding(
   return 'type' in prop && prop.type === 'Data';
 }
 
-export function isAuthPropertyBinding(
-  prop:
-    | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
-    | StudioComponentStoragePropertyBinding
-    | StudioComponentEventPropertyBinding
-    | StudioComponentSimplePropertyBinding,
-): prop is StudioComponentAuthPropertyBinding {
-  return 'type' in prop && prop.type === 'Authentication';
-}
-
 export function isStoragePropertyBinding(
   prop:
     | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
     | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,
@@ -92,7 +94,6 @@ export function isStoragePropertyBinding(
 export function isSimplePropertyBinding(
   prop:
     | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
     | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,

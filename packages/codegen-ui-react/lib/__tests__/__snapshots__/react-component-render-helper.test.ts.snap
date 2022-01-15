@@ -296,7 +296,7 @@ exports[`react-component-render-helper buildFixedJsxExpression string wrapped ob
 
 exports[`react-component-render-helper buildFixedJsxExpression type mismatch error 1`] = `"Parsed value type \\"boolean\\" and specified type \\"number\\" mismatch"`;
 
-exports[`react-component-render-helper buildFixedJsxExpression unsupported type 1`] = `"Invalid type object for \\"Sun Dec 17 1995 03:24:00 GMT+0000 (Coordinated Universal Time)\\""`;
+exports[`react-component-render-helper buildFixedJsxExpression unsupported type 1`] = `"Invalid type object for \\"Sun Dec 17 1995 03:24:00 GMT-0800 (Pacific Standard Time)\\""`;
 
 exports[`react-component-render-helper getSyntaxKindToken eq 1`] = `
 TokenObject {

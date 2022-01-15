@@ -15,14 +15,12 @@
  */
 import {
   StudioComponentDataPropertyBinding,
-  StudioComponentAuthPropertyBinding,
   StudioComponentStoragePropertyBinding,
   StudioComponentSimplePropertyBinding,
 } from '../types';
 import {
   isStudioComponentWithBinding,
   isDataPropertyBinding,
-  isAuthPropertyBinding,
   isStoragePropertyBinding,
   isSimplePropertyBinding,
   isStudioComponentWithCollectionProperties,
@@ -32,7 +30,6 @@ import {
 describe('render-helper', () => {
   const bindingProperties: {
     data: StudioComponentDataPropertyBinding;
-    auth: StudioComponentAuthPropertyBinding;
     storage: StudioComponentStoragePropertyBinding;
     boolean: StudioComponentSimplePropertyBinding;
     string: StudioComponentSimplePropertyBinding;
@@ -43,12 +40,6 @@ describe('render-helper', () => {
       type: 'Data',
       bindingProperties: {
         model: 'User',
-      },
-    },
-    auth: {
-      type: 'Authentication',
-      bindingProperties: {
-        userAttribute: 'username',
       },
     },
     storage: {
@@ -175,14 +166,6 @@ describe('render-helper', () => {
       expect(isDataPropertyBinding(bindingProperties.data)).toBeTruthy();
       const { data, ...otherTypes } = bindingProperties;
       Object.values(otherTypes).forEach((otherType) => expect(isDataPropertyBinding(otherType)).toBeFalsy());
-    });
-  });
-
-  describe('isAuthPropertyBinding', () => {
-    test('property has type Authentication', () => {
-      expect(isAuthPropertyBinding(bindingProperties.auth)).toBeTruthy();
-      const { auth, ...otherTypes } = bindingProperties;
-      Object.values(otherTypes).forEach((otherType) => expect(isAuthPropertyBinding(otherType)).toBeFalsy());
     });
   });
 
