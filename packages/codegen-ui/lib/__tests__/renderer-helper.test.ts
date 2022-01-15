@@ -15,24 +15,24 @@
  */
 import {
   StudioComponentDataPropertyBinding,
-  StudioComponentAuthPropertyBinding,
   StudioComponentStoragePropertyBinding,
   StudioComponentSimplePropertyBinding,
+  StudioComponent,
 } from '../types';
 import {
+  hasAuthProperty,
   isStudioComponentWithBinding,
   isDataPropertyBinding,
-  isAuthPropertyBinding,
   isStoragePropertyBinding,
   isSimplePropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
+  isStudioComponentWithAuthProperty,
 } from '../renderer-helper';
 
 describe('render-helper', () => {
   const bindingProperties: {
     data: StudioComponentDataPropertyBinding;
-    auth: StudioComponentAuthPropertyBinding;
     storage: StudioComponentStoragePropertyBinding;
     boolean: StudioComponentSimplePropertyBinding;
     string: StudioComponentSimplePropertyBinding;
@@ -43,12 +43,6 @@ describe('render-helper', () => {
       type: 'Data',
       bindingProperties: {
         model: 'User',
-      },
-    },
-    auth: {
-      type: 'Authentication',
-      bindingProperties: {
-        userAttribute: 'username',
       },
     },
     storage: {
@@ -178,14 +172,6 @@ describe('render-helper', () => {
     });
   });
 
-  describe('isAuthPropertyBinding', () => {
-    test('property has type Authentication', () => {
-      expect(isAuthPropertyBinding(bindingProperties.auth)).toBeTruthy();
-      const { auth, ...otherTypes } = bindingProperties;
-      Object.values(otherTypes).forEach((otherType) => expect(isAuthPropertyBinding(otherType)).toBeFalsy());
-    });
-  });
-
   describe('isStoragePropertyBinding', () => {
     test('property has type Storage', () => {
       expect(isStoragePropertyBinding(bindingProperties.storage)).toBeTruthy();
@@ -202,6 +188,78 @@ describe('render-helper', () => {
       expect(isSimplePropertyBinding(bindingProperties.date)).toBeTruthy();
       const { boolean, string, number, date, ...otherTypes } = bindingProperties;
       Object.values(otherTypes).forEach((otherType) => expect(isSimplePropertyBinding(otherType)).toBeFalsy());
+    });
+  });
+
+  describe('Auth attributes', () => {
+    const componentWithoutAuthAttribute = {
+      componentType: 'View',
+      name: 'MyBindingView',
+      properties: {},
+    };
+    const componentWithAuthAttribute = {
+      componentType: 'View',
+      name: 'MyBindingView',
+      properties: {
+        label: {
+          userAttribute: 'picture',
+        },
+      },
+    };
+    describe('hasAuthProperty', () => {
+      test('property not containing user attributes', () => {
+        expect(hasAuthProperty(componentWithoutAuthAttribute)).toBeFalsy();
+      });
+      test('property containing user attributes', () => {
+        expect(hasAuthProperty(componentWithAuthAttribute)).toBeTruthy();
+      });
+    });
+    describe('isStudioComponentWithAuthProperty', () => {
+      test('parent not containing user attributes', () => {
+        expect(isStudioComponentWithAuthProperty(componentWithoutAuthAttribute)).toBeFalsy();
+      });
+      test('parent containing user attributes', () => {
+        expect(isStudioComponentWithAuthProperty(componentWithAuthAttribute)).toBeTruthy();
+      });
+      test('child containing user attributes', () => {
+        const testComponent: StudioComponent = {
+          id: '1234-5678-9010',
+          componentType: 'Flex',
+          name: 'Profile',
+          children: [
+            {
+              name: 'child1',
+              componentType: 'Image',
+              properties: {
+                src: {
+                  userAttribute: 'username',
+                },
+              },
+            },
+            {
+              name: 'child2',
+              componentType: 'Button',
+              properties: {
+                label: {
+                  userAttribute: 'picture',
+                },
+              },
+            },
+            {
+              name: 'child3',
+              componentType: 'Button',
+              properties: {
+                label: {
+                  userAttribute: 'customUserAttributeIcecream',
+                },
+              },
+            },
+          ],
+          properties: {},
+          bindingProperties: {},
+        };
+        expect(isStudioComponentWithAuthProperty(testComponent)).toBeTruthy();
+      });
     });
   });
 });

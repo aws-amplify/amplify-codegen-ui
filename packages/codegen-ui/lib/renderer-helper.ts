@@ -14,14 +14,21 @@
   limitations under the License.
  */
 import {
+  BoundStudioComponentProperty,
+  CollectionStudioComponentProperty,
+  ConcatenatedStudioComponentProperty,
+  ConditionalStudioComponentProperty,
+  FixedStudioComponentProperty,
+  FormStudioComponentProperty,
   StudioComponent,
+  StudioComponentAuthProperty,
   StudioComponentChild,
   StudioComponentDataPropertyBinding,
-  StudioComponentAuthPropertyBinding,
-  StudioComponentStoragePropertyBinding,
   StudioComponentEventPropertyBinding,
-  StudioComponentSimplePropertyBinding,
   StudioComponentPropertyType,
+  StudioComponentSimplePropertyBinding,
+  StudioComponentStoragePropertyBinding,
+  WorkflowStudioComponentProperty,
 } from './types';
 
 export const StudioRendererConstants = {
@@ -32,6 +39,36 @@ export function isStudioComponentWithBinding(
   component: StudioComponent | StudioComponentChild,
 ): component is StudioComponent {
   return 'bindingProperties' in component;
+}
+
+export function hasAuthProperty(component: StudioComponent | StudioComponentChild): component is StudioComponent {
+  return Object.values(component.properties).some((val) => isAuthProperty(val));
+}
+
+export type ComponentPropertyValueTypes =
+  | ConcatenatedStudioComponentProperty
+  | ConditionalStudioComponentProperty
+  | FixedStudioComponentProperty
+  | BoundStudioComponentProperty
+  | CollectionStudioComponentProperty
+  | WorkflowStudioComponentProperty
+  | FormStudioComponentProperty
+  | StudioComponentAuthProperty;
+
+export function isAuthProperty(prop: ComponentPropertyValueTypes): prop is StudioComponentAuthProperty {
+  return 'userAttribute' in prop;
+}
+
+export function isStudioComponentWithAuthProperty(
+  component: StudioComponent | StudioComponentChild,
+): component is StudioComponent {
+  if (hasAuthProperty(component)) {
+    return true;
+  }
+  if (component.children) {
+    return component.children.some((child) => isStudioComponentWithAuthProperty(child));
+  }
+  return false;
 }
 
 /**
@@ -59,7 +96,6 @@ export function isStudioComponentWithActions(
 export function isDataPropertyBinding(
   prop:
     | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
     | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,
@@ -67,21 +103,9 @@ export function isDataPropertyBinding(
   return 'type' in prop && prop.type === 'Data';
 }
 
-export function isAuthPropertyBinding(
-  prop:
-    | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
-    | StudioComponentStoragePropertyBinding
-    | StudioComponentEventPropertyBinding
-    | StudioComponentSimplePropertyBinding,
-): prop is StudioComponentAuthPropertyBinding {
-  return 'type' in prop && prop.type === 'Authentication';
-}
-
 export function isStoragePropertyBinding(
   prop:
     | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
     | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,
@@ -92,7 +116,6 @@ export function isStoragePropertyBinding(
 export function isSimplePropertyBinding(
   prop:
     | StudioComponentDataPropertyBinding
-    | StudioComponentAuthPropertyBinding
     | StudioComponentStoragePropertyBinding
     | StudioComponentEventPropertyBinding
     | StudioComponentSimplePropertyBinding,
