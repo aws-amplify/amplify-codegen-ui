@@ -86,7 +86,7 @@ export type StudioComponent = {
     [propertyName: string]: StudioComponentDataConfiguration;
   };
 
-  eventProperties?: StudioComponentEventProperties;
+  events?: StudioComponentEvents;
 
   /**
    * Component actions
@@ -147,7 +147,7 @@ export type NewStudioComponent = {
     [propertyName: string]: StudioComponentDataPropertyBinding;
   };
 
-  eventProperties?: StudioComponentEventProperties;
+  events?: StudioComponentEvents;
 };
 
 export type StudioComponentSimplePropertyBinding = {
@@ -185,15 +185,7 @@ export type StudioComponentChild = {
    */
   children?: StudioComponentChild[];
 
-  eventProperties?: StudioComponentEventProperties;
-
-  /**
-   * Event <-> Action mapping (e.g click => SignOutAction)
-   * When an event is triggered, an action is executed
-   */
-  events?: {
-    [eventName: string]: string;
-  };
+  events?: StudioComponentEvents;
 };
 
 /**
@@ -526,8 +518,14 @@ export type StudioComponentStorageBindingProperty = {
   key?: string;
 };
 
-export type StudioComponentEventProperties = {
-  [eventName: string]: string;
+export type StudioComponentEvent = BoundStudioComponentEvent;
+
+export type BoundStudioComponentEvent = {
+  bindingEvent: string;
+};
+
+export type StudioComponentEvents = {
+  [eventName: string]: StudioComponentEvent;
 };
 
 export type StudioTheme = {

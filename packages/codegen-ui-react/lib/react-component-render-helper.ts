@@ -24,6 +24,8 @@ import {
   StudioComponentChild,
   StudioComponentProperty,
   StudioGenericEvent,
+  StudioComponentEvent,
+  BoundStudioComponentEvent,
 } from '@aws-amplify/codegen-ui';
 
 import {
@@ -75,10 +77,12 @@ export function isConditionalProperty(prop: StudioComponentProperty): prop is Co
   return 'condition' in prop;
 }
 
-export function isDefaultValueOnly(
-  prop: StudioComponentProperty,
-): prop is CollectionStudioComponentProperty | BoundStudioComponentProperty {
+export function isDefaultValueOnly(prop: StudioComponentProperty): prop is CollectionStudioComponentProperty {
   return 'defaultValue' in prop && !(isCollectionItemBoundProperty(prop) || isBoundProperty(prop));
+}
+
+export function isBoundEvent(prop: StudioComponentProperty | StudioComponentEvent): prop is StudioComponentEvent {
+  return 'bindingEvent' in prop;
 }
 
 /**
@@ -127,6 +131,11 @@ export function buildBindingAttrWithDefault(
     factory.createIdentifier(propName),
     factory.createJsxExpression(undefined, binaryExpr),
   );
+}
+
+export function buildBindingEvent(prop: BoundStudioComponentEvent, propName: string): JsxAttribute {
+  const expr = factory.createIdentifier(prop.bindingEvent);
+  return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
 export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
@@ -426,7 +435,7 @@ export function buildChildElement(prop?: StudioComponentProperty): JsxChild | un
   return expression && factory.createJsxExpression(undefined, expression);
 }
 
-export function buildOpeningElementAttributes(prop: StudioComponentProperty, name: string): JsxAttribute {
+export function buildOpeningElementProperties(prop: StudioComponentProperty, name: string): JsxAttribute {
   if (isFixedPropertyWithValue(prop)) {
     return buildFixedAttr(prop, name);
   }
@@ -445,6 +454,13 @@ export function buildOpeningElementAttributes(prop: StudioComponentProperty, nam
   }
   if (isConditionalProperty(prop)) {
     return buildConditionalAttr(prop, name);
+  }
+  return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
+}
+
+export function buildOpeningElementEvents(prop: StudioComponentEvent, name: string): JsxAttribute {
+  if (isBoundEvent(prop)) {
+    return buildBindingEvent(prop, name);
   }
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
