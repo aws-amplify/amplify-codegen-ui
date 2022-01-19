@@ -24,8 +24,8 @@ import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, 
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 import {
   addBindingPropertiesImports,
-  buildOpeningElementAttributes,
-  buildOpeningElementActions,
+  buildOpeningElementProperties,
+  buildOpeningElementEvents,
   mapGenericEventToReact,
 } from './react-component-render-helper';
 import Primitive, { PrimitiveChildrenPropMapping } from './primitive';
@@ -61,22 +61,12 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
 
   protected renderOpeningElement(): JsxOpeningElement {
     const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementAttributes(value, key),
+      buildOpeningElementProperties(value, key),
     );
-    const eventPropertyAttributes = Object.entries(this.component.eventProperties || {}).map(([key, value]) =>
-      // pass as bindingProperties to reuse logic
-      buildOpeningElementAttributes(
-        { bindingProperties: { property: value } },
-        mapGenericEventToReact(key as StudioGenericEvent),
-      ),
+    const eventAttributes = Object.entries(this.component.events || {}).map(([key, value]) =>
+      buildOpeningElementEvents(value, mapGenericEventToReact(key as StudioGenericEvent)),
     );
-    const eventAttributes =
-      'events' in this.component && this.component.events !== undefined
-        ? Object.entries(this.component.events).map(([key, value]) =>
-            buildOpeningElementActions(key as StudioGenericEvent, value),
-          )
-        : [];
-    const attributes = propertyAttributes.concat(eventPropertyAttributes).concat(eventAttributes);
+    const attributes = propertyAttributes.concat(eventAttributes);
 
     this.addPropsSpreadAttributes(attributes);
 
@@ -89,7 +79,7 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
 
   protected renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
     const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementAttributes(value, key),
+      buildOpeningElementProperties(value, key),
     );
 
     const itemsAttribute = factory.createJsxAttribute(

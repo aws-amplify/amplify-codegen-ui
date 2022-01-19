@@ -24,8 +24,8 @@ import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory, JsxSelfClosin
 
 import {
   addBindingPropertiesImports,
-  buildOpeningElementAttributes,
-  buildOpeningElementActions,
+  buildOpeningElementProperties,
+  buildOpeningElementEvents,
   mapGenericEventToReact,
 } from './react-component-render-helper';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
@@ -57,22 +57,12 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
 
   protected renderOpeningElement(): JsxOpeningElement {
     const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementAttributes(value, key),
+      buildOpeningElementProperties(value, key),
     );
-    const eventPropertyAttributes = Object.entries(this.component.eventProperties || {}).map(([key, value]) =>
-      // pass as bindingProperties to reuse logic
-      buildOpeningElementAttributes(
-        { bindingProperties: { property: value } },
-        mapGenericEventToReact(key as StudioGenericEvent),
-      ),
+    const eventAttributes = Object.entries(this.component.events || {}).map(([key, value]) =>
+      buildOpeningElementEvents(value, mapGenericEventToReact(key as StudioGenericEvent)),
     );
-    const eventAttributes =
-      'events' in this.component && this.component.events !== undefined
-        ? Object.entries(this.component.events).map(([key, value]) =>
-            buildOpeningElementActions(key as StudioGenericEvent, value),
-          )
-        : [];
-    const attributes = propertyAttributes.concat(eventPropertyAttributes).concat(eventAttributes);
+    const attributes = propertyAttributes.concat(eventAttributes);
 
     this.addPropsSpreadAttributes(attributes);
 
