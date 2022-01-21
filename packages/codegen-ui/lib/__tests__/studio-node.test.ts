@@ -62,6 +62,134 @@ describe('StudioNode', () => {
     });
   });
 
+  describe('hasAncestorOfType', () => {
+    test('it returns false with no parent', () => {
+      const node = new StudioNode({
+        componentType: 'View',
+        name: 'Node',
+        properties: {},
+      });
+      expect(node.hasAncestorOfType('Collection')).toBeFalsy();
+    });
+
+    test('it returns false with node is of type, but not parent', () => {
+      const parent = new StudioNode({
+        componentType: 'View',
+        name: 'Parent Node',
+        properties: {},
+      });
+      const node = new StudioNode(
+        {
+          componentType: 'Collection',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeFalsy();
+    });
+
+    test('it returns true if immediate parent is of type', () => {
+      const parent = new StudioNode({
+        componentType: 'Collection',
+        name: 'Parent Node',
+        properties: {},
+      });
+      const node = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeTruthy();
+    });
+
+    test('it returns true if ancestor is of type', () => {
+      const greatGrandParent = new StudioNode({
+        componentType: 'View',
+        name: 'Great GrandParent Node',
+        properties: {},
+      });
+      const grandParent = new StudioNode(
+        {
+          componentType: 'Collection',
+          name: 'GrandParent Node',
+          properties: {},
+        },
+        greatGrandParent,
+      );
+      const parent = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Parent Node',
+          properties: {},
+        },
+        grandParent,
+      );
+      const node = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeTruthy();
+    });
+
+    test('it returns true if top-level ancestor is of type', () => {
+      const grandParent = new StudioNode({
+        componentType: 'Collection',
+        name: 'GrandParent Node',
+        properties: {},
+      });
+      const parent = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Parent Node',
+          properties: {},
+        },
+        grandParent,
+      );
+      const node = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeTruthy();
+    });
+
+    test('it false if no ancestor of type exists', () => {
+      const grandParent = new StudioNode({
+        componentType: 'view',
+        name: 'GrandParent Node',
+        properties: {},
+      });
+      const parent = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Parent Node',
+          properties: {},
+        },
+        grandParent,
+      );
+      const node = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeFalsy();
+    });
+  });
+
   describe('getOverrideKey', () => {
     test('returns for parent', () => {
       const rootComponent = createStudioNodeOfType('Flex', createStudioNodeOfType('Button'));

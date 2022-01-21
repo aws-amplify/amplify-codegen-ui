@@ -194,6 +194,11 @@ describe('Generated Components', () => {
       cy.get('[aria-label="Go to page 2"]').click();
       cy.get('#paginatedCollection').contains('Beachside Cottage - $1000');
     });
+
+    it('Supports overrideItems with context injection', () => {
+      cy.get('#collectionWithOverrideItems').contains('0 - Doodle, Yankee');
+      cy.get('#collectionWithOverrideItems').contains('1 - Cap, Feather');
+    });
   });
 
   describe('Default Value', () => {
