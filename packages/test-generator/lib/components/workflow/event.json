@@ -21,15 +21,19 @@
     {
       "componentType": "TextField",
       "properties": {},
-      "eventProperties": {
-        "change": "onTextFieldChange"
+      "events": {
+        "change": {
+          "bindingEvent": "onTextFieldChange"
+        }
       }
     },
     {
       "componentType": "Button",
       "properties": {},
-      "eventProperties": {
-        "click": "onButtonClick"
+      "events": {
+        "click": {
+          "bindingEvent": "onButtonClick"
+        }
       }
     },
     {
