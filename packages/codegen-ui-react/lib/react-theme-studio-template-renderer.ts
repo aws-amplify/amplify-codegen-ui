@@ -29,6 +29,7 @@ import {
   StudioThemeValue,
   validateThemeSchema,
   InvalidInputError,
+  handleCodegenErrors,
 } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection, ImportValue } from './imports';
@@ -38,6 +39,7 @@ import {
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
+  formatCode,
 } from './react-studio-template-renderer-helper';
 import { RequiredKeys } from './utils/type-utils';
 
@@ -85,6 +87,18 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
         }
       },
     };
+  }
+
+  /**
+   * Exposing an additional method to allow rendering the theme json object
+   * from the API response type.
+   */
+  @handleCodegenErrors
+  renderThemeJson(): string {
+    const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
+    const themeJson = printer.printNode(EmitHint.Unspecified, this.buildThemeObject(), file);
+    // prettier fails if we don't provide a valid statement, so wrapping in a statement and removing after formatting
+    return formatCode(`const a = ${themeJson};`).replace('const a =', '').replace(';', '').trim();
   }
 
   /*
