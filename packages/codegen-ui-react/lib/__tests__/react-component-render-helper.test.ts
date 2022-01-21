@@ -173,7 +173,8 @@ describe('react-component-render-helper', () => {
     test('unsupported type', () => {
       expect(() =>
         buildFixedJsxExpression({ value: new Date('December 17, 1995 03:24:00'), type: 'unsupported' }),
-      ).toThrowErrorMatchingSnapshot();
+      ).toThrowError();
+      // Not using a snapshot here since the error message changes based on timezone
     });
   });
 
