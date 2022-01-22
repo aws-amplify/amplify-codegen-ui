@@ -9,7 +9,7 @@
         "variant": "primary"
       },
       "overrides": {
-        "Button": {
+        "CustomButton": {
           "label": "componentWithVariantsWithMappedChildrenProp",
           "children": "componentWithVariantsWithChildrenProp",
           "fontSize": "12px"
@@ -21,13 +21,8 @@
         "variant": "secondary"
       },
       "overrides": {
-        "Button": {
+        "CustomButton": {
           "fontSize": "40px"
-        },
-        "Button.Text": {
-          "fontSize": "40px",
-          "label": "componentWithVariantsWithMappedChildrenProp",
-          "children": "componentWithVariantsWithChildrenProp"
         }
       }
     },
@@ -37,7 +32,7 @@
         "size": "large"
       },
       "overrides": {
-        "Button": {
+        "CustomButton": {
           "width": "500",
           "label": "componentWithVariantsWithMappedChildrenProp"
         }

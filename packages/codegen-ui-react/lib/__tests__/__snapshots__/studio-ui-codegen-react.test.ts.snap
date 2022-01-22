@@ -30,18 +30,18 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
       direction=\\"row\\"
       justifyContent=\\"space-between\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"SiteHeader\\")}
     >
       <Heading
         level={1}
         children=\\"Title\\"
-        {...getOverrideProps(overrides, \\"Flex.Heading[0]\\")}
+        {...getOverrideProps(overrides, \\"Heading1\\")}
       ></Heading>
       <Button
         variation=\\"primary\\"
         children=\\"Log off\\"
         onClick={invokeAction(\\"signOutAction\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
+        {...getOverrideProps(overrides, \\"Button1\\")}
       ></Button>
     </Flex>
   );
@@ -78,7 +78,7 @@ export default function CustomButton(
       width={20}
       isDisabled={true}
       {...rest}
-      {...getOverrideProps(overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"CustomButton\\")}
     ></Button>
   );
 }
@@ -109,7 +109,7 @@ export default function CustomText(props: CustomTextProps): React.ReactElement {
       width=\\"20px\\"
       children=\\"Text Value\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Text\\")}
+      {...getOverrideProps(overrides, \\"CustomText\\")}
     ></Text>
   );
 }
@@ -139,7 +139,7 @@ export default function Test(props: TestProps): React.ReactElement {
       fontFamily=\\"Times New Roman\\"
       fontSize=\\"20px\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"View\\")}
+      {...getOverrideProps(overrides, \\"Test\\")}
     ></View>
   );
 }
@@ -225,7 +225,7 @@ export default function CollectionOfCustomButtons(
       backgroundColor={backgroundColor}
       items={buttonUser || []}
       {...rest}
-      {...getOverrideProps(overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"CollectionOfCustomButtons\\")}
     >
       {(item, index) => (
         <Flex
@@ -333,7 +333,7 @@ export default function CollectionOfCustomButtons(
       backgroundColor={backgroundColor}
       items={buttonUser || []}
       {...rest}
-      {...getOverrideProps(overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"CollectionOfCustomButtons\\")}
     >
       {(item, index) => (
         <Flex
@@ -437,7 +437,7 @@ export default function CollectionOfCustomButtons(
       backgroundColor={backgroundColor}
       items={items || []}
       {...rest}
-      {...getOverrideProps(overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"CollectionOfCustomButtons\\")}
     >
       {(item, index) => (
         <Flex
@@ -501,7 +501,7 @@ export default function ListingCardCollection(
       order=\\"left-to-right\\"
       items={bananas || []}
       {...rest}
-      {...getOverrideProps(overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"ListingCardCollection\\")}
     >
       {(item, index) => (
         <ListingCard
@@ -549,7 +549,7 @@ export default function ListingCardCollection(
       isPaginated=\\"true\\"
       items={items || []}
       {...rest}
-      {...getOverrideProps(overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"ListingCardCollection\\")}
     >
       {(item, index) => (
         <ListingCard
@@ -584,12 +584,8 @@ export default function ViewWithButton(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
-      <Button
-        color=\\"#ff0000\\"
-        width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"View.Button[0]\\")}
-      ></Button>
+    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
+      <Button color=\\"#ff0000\\" width=\\"20px\\"></Button>
     </View>
   );
 }
@@ -618,12 +614,8 @@ export default function ViewWithCustomButton(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
-      <CustomButton
-        color=\\"#ff0000\\"
-        width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"View.CustomButton[0]\\")}
-      ></CustomButton>
+    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithCustomButton\\")}>
+      <CustomButton color=\\"#ff0000\\" width=\\"20px\\"></CustomButton>
     </View>
   );
 }
@@ -651,12 +643,8 @@ export default function ViewWithButton(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
-      <Button
-        color=\\"#ff0000\\"
-        width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"View.Button[0]\\")}
-      ></Button>
+    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
+      <Button color=\\"#ff0000\\" width=\\"20px\\"></Button>
     </View>
   );
 }
@@ -693,7 +681,7 @@ export default function ComplexTest1(
       position=\\"relative\\"
       direction=\\"row\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest1\\")}
     >
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -707,7 +695,7 @@ export default function ComplexTest1(
         fontWeight=\\"400\\"
         height=\\"14px\\"
         children=\\"Hi harriso\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"Hi harriso\\")}
       ></Text>
     </Flex>
   );
@@ -746,7 +734,7 @@ export default function ComplexTest2(
       direction=\\"row\\"
       height=\\"289px\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest2\\")}
     >
       <Flex
         padding=\\"10px 10px 10px 10px\\"
@@ -758,7 +746,7 @@ export default function ComplexTest2(
         position=\\"relative\\"
         height=\\"100%\\"
         direction=\\"column\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
+        {...getOverrideProps(overrides, \\"Container\\")}
       >
         <View
           width=\\"123px\\"
@@ -767,7 +755,7 @@ export default function ComplexTest2(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
           height=\\"125px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[0]\\")}
+          {...getOverrideProps(overrides, \\"RectangleRed\\")}
         ></View>
         <View
           width=\\"123px\\"
@@ -776,7 +764,7 @@ export default function ComplexTest2(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/153x289?text=Amplify+Studio+is+Awesome!\\"
           height=\\"122px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[1]\\")}
+          {...getOverrideProps(overrides, \\"RectangleYellow\\")}
         ></View>
       </Flex>
     </Flex>
@@ -817,7 +805,7 @@ export default function ComplexTest3(
       justifyContent=\\"center\\"
       direction=\\"column\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest3\\")}
     >
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -831,7 +819,7 @@ export default function ComplexTest3(
         fontWeight=\\"400\\"
         height=\\"29px\\"
         children=\\"Hello World!\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"Hello World!\\")}
       ></Text>
       <View
         width=\\"390px\\"
@@ -840,12 +828,12 @@ export default function ComplexTest3(
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/430x452?text=Amplify+Studio+is+Awesome!\\"
         height=\\"69px\\"
-        {...getOverrideProps(overrides, \\"Flex.View[0]\\")}
+        {...getOverrideProps(overrides, \\"Rectangle 58\\")}
       ></View>
       <ReneButton
         width=\\"293px\\"
         height=\\"45px\\"
-        {...getOverrideProps(overrides, \\"Flex.ReneButton[0]\\")}
+        {...getOverrideProps(overrides, \\"ReneButton\\")}
       ></ReneButton>
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -859,7 +847,7 @@ export default function ComplexTest3(
         fontWeight=\\"400\\"
         height=\\"29px\\"
         children=\\"Testing 123\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
+        {...getOverrideProps(overrides, \\"Testing 123\\")}
       ></Text>
     </Flex>
   );
@@ -893,7 +881,7 @@ export default function ComplexTest4(
   const variants: Variant[] = [
     {
       overrides: {
-        Flex: {
+        ComplexTest4: {
           padding: \\"10px 10px 10px 10px\\",
           backgroundColor: \\"rgb(255,255,255)\\",
           overflow: \\"hidden\\",
@@ -902,7 +890,7 @@ export default function ComplexTest4(
           position: \\"relative\\",
           direction: \\"row\\",
         },
-        \\"Flex.Flex.View[1]\\": {
+        RectangleBlue: {
           padding: \\"0px 0px 0px 0px\\",
           backgroundColor: \\"rgb(255,153.00000607967377,0)\\",
           top: \\"1px\\",
@@ -912,7 +900,7 @@ export default function ComplexTest4(
           position: \\"absolute\\",
           height: \\"122px\\",
         },
-        \\"Flex.Flex.View[0]\\": {
+        RectangleGreen: {
           padding: \\"0px 0px 0px 0px\\",
           backgroundColor: \\"rgb(255,0,0)\\",
           top: \\"0px\\",
@@ -922,7 +910,7 @@ export default function ComplexTest4(
           position: \\"absolute\\",
           height: \\"123px\\",
         },
-        \\"Flex.Flex[0]\\": {
+        GroupTest: {
           width: \\"323px\\",
           padding: \\"0px 0px 0px 0px\\",
           position: \\"relative\\",
@@ -947,14 +935,14 @@ export default function ComplexTest4(
       position=\\"relative\\"
       direction=\\"row\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest4\\")}
     >
       <Flex
         width=\\"323px\\"
         padding=\\"0px 0px 0px 0px\\"
         position=\\"relative\\"
         height=\\"123px\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
+        {...getOverrideProps(overrides, \\"GroupTest\\")}
       >
         <View
           padding=\\"0px 0px 0px 0px\\"
@@ -965,7 +953,7 @@ export default function ComplexTest4(
           width=\\"122px\\"
           position=\\"absolute\\"
           height=\\"123px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[0]\\")}
+          {...getOverrideProps(overrides, \\"RectangleGreen\\")}
         ></View>
         <View
           padding=\\"0px 0px 0px 0px\\"
@@ -976,7 +964,7 @@ export default function ComplexTest4(
           width=\\"120px\\"
           position=\\"absolute\\"
           height=\\"122px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[1]\\")}
+          {...getOverrideProps(overrides, \\"RectangleBlue\\")}
         ></View>
       </Flex>
     </Flex>
@@ -1014,7 +1002,7 @@ export default function ComplexTest5(
       gap=\\"0\\"
       direction=\\"row\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest5\\")}
     >
       <View
         width=\\"120px\\"
@@ -1023,7 +1011,7 @@ export default function ComplexTest5(
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
         height=\\"120px\\"
-        {...getOverrideProps(overrides, \\"Flex.View[0]\\")}
+        {...getOverrideProps(overrides, \\"RectangleGreen\\")}
       ></View>
       <View
         width=\\"120px\\"
@@ -1032,7 +1020,7 @@ export default function ComplexTest5(
         position=\\"relative\\"
         src=\\"https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!\\"
         height=\\"120px\\"
-        {...getOverrideProps(overrides, \\"Flex.View[1]\\")}
+        {...getOverrideProps(overrides, \\"RectangleBlue\\")}
       ></View>
     </Flex>
   );
@@ -1069,7 +1057,7 @@ export default function ComplexTest6(
       gap=\\"22px\\"
       direction=\\"column\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest6\\")}
     >
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -1083,7 +1071,7 @@ export default function ComplexTest6(
         fontWeight=\\"700\\"
         height=\\"29px\\"
         children=\\"Name\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"Name\\")}
       ></Text>
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -1097,7 +1085,7 @@ export default function ComplexTest6(
         fontWeight=\\"400\\"
         height=\\"14px\\"
         children=\\"Price / Address\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[1]\\")}
+        {...getOverrideProps(overrides, \\"Price / Address\\")}
       ></Text>
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -1111,7 +1099,7 @@ export default function ComplexTest6(
         fontWeight=\\"400\\"
         height=\\"14px\\"
         children=\\"Sqft\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[2]\\")}
+        {...getOverrideProps(overrides, \\"Sqft\\")}
       ></Text>
     </Flex>
   );
@@ -1146,7 +1134,7 @@ export default function ComplexTest7(
       position=\\"relative\\"
       height=\\"192px\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"View\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest7\\")}
     >
       <Image
         border=\\"4px SOLID rgb(0,0,0)\\"
@@ -1158,7 +1146,7 @@ export default function ComplexTest7(
         width=\\"150.84925842285156px\\"
         position=\\"absolute\\"
         height=\\"196px\\"
-        {...getOverrideProps(overrides, \\"View.Image[0]\\")}
+        {...getOverrideProps(overrides, \\"Imageexy\\")}
       ></Image>
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -1174,7 +1162,7 @@ export default function ComplexTest7(
         fontWeight=\\"400\\"
         height=\\"27.839996337890625px\\"
         children=\\"Test\\"
-        {...getOverrideProps(overrides, \\"View.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"Test\\")}
       ></Text>
       <Image
         border=\\"4px SOLID rgb(0,0,0)\\"
@@ -1186,7 +1174,7 @@ export default function ComplexTest7(
         width=\\"169.42330932617188px\\"
         position=\\"absolute\\"
         height=\\"189.0880126953125px\\"
-        {...getOverrideProps(overrides, \\"View.Image[1]\\")}
+        {...getOverrideProps(overrides, \\"Imagecgh\\")}
       ></Image>
     </View>
   );
@@ -1225,7 +1213,7 @@ export default function ComplexTest8(
       direction=\\"row\\"
       height=\\"243px\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest8\\")}
     >
       <Flex
         padding=\\"0px 0px 0px 0px\\"
@@ -1235,7 +1223,7 @@ export default function ComplexTest8(
         position=\\"relative\\"
         height=\\"723px\\"
         direction=\\"column\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
+        {...getOverrideProps(overrides, \\"Frame 107\\")}
       >
         <View
           width=\\"145px\\"
@@ -1244,7 +1232,7 @@ export default function ComplexTest8(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
           height=\\"119px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[0]\\")}
+          {...getOverrideProps(overrides, \\"Rectangle 57\\")}
         ></View>
         <View
           width=\\"145px\\"
@@ -1253,7 +1241,7 @@ export default function ComplexTest8(
           position=\\"relative\\"
           src=\\"https://via.placeholder.com/472x723?text=Amplify+Studio+is+Awesome!\\"
           height=\\"124px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].View[1]\\")}
+          {...getOverrideProps(overrides, \\"Rectangle 56\\")}
         ></View>
       </Flex>
     </Flex>
@@ -1290,7 +1278,7 @@ export default function ComplexTest9(
       nodeId: \\"2878:3221\\",
       variantValues: { mode: \\"Light\\" },
       overrides: {
-        \\"Flex.Flex[0].Flex[0].Text[0]\\": {
+        \\"LOREM IPSUM\\": {
           fontFamily: \\"Inter\\",
           fontSize: \\"16px\\",
           fontWeight: \\"700\\",
@@ -1309,7 +1297,7 @@ export default function ComplexTest9(
           padding: \\"0px 0px 0px 0px\\",
           children: \\"LOREM IPSUM\\",
         },
-        \\"Flex.Flex[0].Flex[0].Flex[0].Text[0]\\": {
+        \\"Ut enim ad minim veniam quis nostrud\\": {
           fontFamily: \\"Inter\\",
           fontSize: \\"40px\\",
           fontWeight: \\"700\\",
@@ -1327,27 +1315,28 @@ export default function ComplexTest9(
           padding: \\"0px 0px 0px 0px\\",
           children: \\"Ut enim ad minim veniam quis nostrud\\",
         },
-        \\"Flex.Flex[0].Flex[0].Flex[0].Text[1]\\": {
-          fontFamily: \\"Inter\\",
-          fontSize: \\"16px\\",
-          fontWeight: \\"400\\",
-          color:
-            \\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\",
-          lineHeight: \\"24px\\",
-          textAlign: \\"center\\",
-          display: \\"flex\\",
-          direction: \\"column\\",
-          justifyContent: \\"flex-start\\",
-          letterSpacing: \\"0.010000000000000009px\\",
-          width: \\"701px\\",
-          shrink: \\"0\\",
-          alignSelf: \\"stretch\\",
-          position: \\"relative\\",
-          padding: \\"0px 0px 0px 0px\\",
-          children:
-            \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.\\",
-        },
-        \\"Flex.Flex[0].Flex[0].Flex[0]\\": {
+        \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.\\":
+          {
+            fontFamily: \\"Inter\\",
+            fontSize: \\"16px\\",
+            fontWeight: \\"400\\",
+            color:
+              \\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\",
+            lineHeight: \\"24px\\",
+            textAlign: \\"center\\",
+            display: \\"flex\\",
+            direction: \\"column\\",
+            justifyContent: \\"flex-start\\",
+            letterSpacing: \\"0.010000000000000009px\\",
+            width: \\"701px\\",
+            shrink: \\"0\\",
+            alignSelf: \\"stretch\\",
+            position: \\"relative\\",
+            padding: \\"0px 0px 0px 0px\\",
+            children:
+              \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.\\",
+          },
+        Message: {
           gap: \\"16px\\",
           direction: \\"column\\",
           justifyContent: \\"center\\",
@@ -1357,7 +1346,7 @@ export default function ComplexTest9(
           position: \\"relative\\",
           padding: \\"0px 0px 0px 0px\\",
         },
-        \\"Flex.Flex[0].Flex[0].Button[0]\\": {
+        Button: {
           display: \\"flex\\",
           shrink: \\"0\\",
           width: \\"206px\\",
@@ -1365,7 +1354,7 @@ export default function ComplexTest9(
           variation: \\"primary\\",
           children: \\"Primary Button\\",
         },
-        \\"Flex.Flex[0].Flex[0]\\": {
+        HeroMessage: {
           gap: \\"24px\\",
           direction: \\"column\\",
           justifyContent: \\"center\\",
@@ -1375,7 +1364,7 @@ export default function ComplexTest9(
           position: \\"relative\\",
           padding: \\"0px 0px 0px 0px\\",
         },
-        \\"Flex.Flex[0]\\": {
+        Left: {
           gap: \\"10px\\",
           direction: \\"column\\",
           height: \\"324px\\",
@@ -1389,7 +1378,7 @@ export default function ComplexTest9(
           padding: \\"120px 120px 120px 120px\\",
           backgroundColor: \\"rgba(255,255,255,1)\\",
         },
-        Flex: {
+        ComplexTest9: {
           gap: \\"0\\",
           direction: \\"row\\",
           width: \\"941px\\",
@@ -1405,7 +1394,7 @@ export default function ComplexTest9(
       nodeId: \\"2878:3272\\",
       variantValues: { mode: \\"Dark\\" },
       overrides: {
-        \\"Flex.Flex[0].Flex[0].Text[0]\\": {
+        \\"LOREM IPSUM\\": {
           fontFamily: \\"Inter\\",
           fontSize: \\"16px\\",
           fontWeight: \\"700\\",
@@ -1424,7 +1413,7 @@ export default function ComplexTest9(
           padding: \\"0px 0px 0px 0px\\",
           children: \\"TestMessage1\\",
         },
-        \\"Flex.Flex[0].Flex[0].Flex[0].Text[0]\\": {
+        \\"Ut enim ad minim veniam quis nostrud\\": {
           fontFamily: \\"Inter\\",
           fontSize: \\"40px\\",
           fontWeight: \\"700\\",
@@ -1442,26 +1431,27 @@ export default function ComplexTest9(
           padding: \\"0px 0px 0px 0px\\",
           children: \\"TestMessage2\\",
         },
-        \\"Flex.Flex[0].Flex[0].Flex[0].Text[1]\\": {
-          fontFamily: \\"Inter\\",
-          fontSize: \\"16px\\",
-          fontWeight: \\"400\\",
-          color:
-            \\"rgba(233.00000131130219,249.00000035762787,252.00000017881393,1)\\",
-          lineHeight: \\"24px\\",
-          textAlign: \\"center\\",
-          display: \\"flex\\",
-          direction: \\"column\\",
-          justifyContent: \\"flex-start\\",
-          letterSpacing: \\"0.010000000000000009px\\",
-          width: \\"445px\\",
-          shrink: \\"0\\",
-          alignSelf: \\"stretch\\",
-          position: \\"relative\\",
-          padding: \\"0px 0px 0px 0px\\",
-          children: \\"TestMessage3\\",
-        },
-        \\"Flex.Flex[0].Flex[0].Flex[0]\\": {
+        \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.\\":
+          {
+            fontFamily: \\"Inter\\",
+            fontSize: \\"16px\\",
+            fontWeight: \\"400\\",
+            color:
+              \\"rgba(233.00000131130219,249.00000035762787,252.00000017881393,1)\\",
+            lineHeight: \\"24px\\",
+            textAlign: \\"center\\",
+            display: \\"flex\\",
+            direction: \\"column\\",
+            justifyContent: \\"flex-start\\",
+            letterSpacing: \\"0.010000000000000009px\\",
+            width: \\"445px\\",
+            shrink: \\"0\\",
+            alignSelf: \\"stretch\\",
+            position: \\"relative\\",
+            padding: \\"0px 0px 0px 0px\\",
+            children: \\"TestMessage3\\",
+          },
+        Message: {
           gap: \\"16px\\",
           direction: \\"column\\",
           justifyContent: \\"center\\",
@@ -1471,7 +1461,7 @@ export default function ComplexTest9(
           position: \\"relative\\",
           padding: \\"0px 0px 0px 0px\\",
         },
-        \\"Flex.Flex[0].Flex[0].Button[0]\\": {
+        Button: {
           display: \\"flex\\",
           shrink: \\"0\\",
           width: \\"174px\\",
@@ -1479,7 +1469,7 @@ export default function ComplexTest9(
           variation: \\"primary\\",
           children: \\"TestButton1\\",
         },
-        \\"Flex.Flex[0].Flex[0]\\": {
+        HeroMessage: {
           gap: \\"24px\\",
           direction: \\"column\\",
           justifyContent: \\"center\\",
@@ -1489,7 +1479,7 @@ export default function ComplexTest9(
           position: \\"relative\\",
           padding: \\"0px 0px 0px 0px\\",
         },
-        \\"Flex.Flex[0]\\": {
+        Left: {
           gap: \\"10px\\",
           direction: \\"column\\",
           height: \\"422px\\",
@@ -1503,7 +1493,7 @@ export default function ComplexTest9(
           padding: \\"120px 120px 120px 120px\\",
           backgroundColor: \\"rgba(0,63.750030398368835,76.50000303983688,1)\\",
         },
-        Flex: {
+        ComplexTest9: {
           gap: \\"0\\",
           direction: \\"row\\",
           width: \\"908px\\",
@@ -1532,7 +1522,7 @@ export default function ComplexTest9(
       position=\\"relative\\"
       padding=\\"0px 0px 0px 0px\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest9\\")}
     >
       <Flex
         gap=\\"10px\\"
@@ -1547,7 +1537,7 @@ export default function ComplexTest9(
         position=\\"relative\\"
         padding=\\"120px 120px 120px 120px\\"
         backgroundColor=\\"rgba(255,255,255,1)\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
+        {...getOverrideProps(overrides, \\"Left\\")}
       >
         <Flex
           gap=\\"24px\\"
@@ -1558,7 +1548,7 @@ export default function ComplexTest9(
           alignSelf=\\"stretch\\"
           position=\\"relative\\"
           padding=\\"0px 0px 0px 0px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0]\\")}
+          {...getOverrideProps(overrides, \\"HeroMessage\\")}
         >
           <Text
             fontFamily=\\"Inter\\"
@@ -1577,7 +1567,7 @@ export default function ComplexTest9(
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
             children=\\"LOREM IPSUM\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Text[0]\\")}
+            {...getOverrideProps(overrides, \\"LOREM IPSUM\\")}
           ></Text>
           <Flex
             gap=\\"16px\\"
@@ -1588,7 +1578,7 @@ export default function ComplexTest9(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[0]\\")}
+            {...getOverrideProps(overrides, \\"Message\\")}
           >
             <Text
               fontFamily=\\"Inter\\"
@@ -1608,7 +1598,7 @@ export default function ComplexTest9(
               children=\\"Ut enim ad minim veniam quis nostrud\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[0].Text[0]\\"
+                \\"Ut enim ad minim veniam quis nostrud\\"
               )}
             ></Text>
             <Text
@@ -1630,7 +1620,7 @@ export default function ComplexTest9(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[0].Text[1]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.\\"
               )}
             ></Text>
           </Flex>
@@ -1641,7 +1631,7 @@ export default function ComplexTest9(
             size=\\"large\\"
             variation=\\"primary\\"
             children=\\"Primary Button\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Button[0]\\")}
+            {...getOverrideProps(overrides, \\"Button\\")}
           ></Button>
         </Flex>
       </Flex>
@@ -1690,7 +1680,7 @@ export default function ComplexTest10(
       padding=\\"40px 140px 40px 140px\\"
       backgroundColor=\\"rgba(239.00000095367432,240.00000089406967,240.00000089406967,1)\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest10\\")}
     >
       <Flex
         gap=\\"24px\\"
@@ -1702,7 +1692,7 @@ export default function ComplexTest10(
         height=\\"618px\\"
         position=\\"relative\\"
         padding=\\"0px 0px 0px 0px\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
+        {...getOverrideProps(overrides, \\"Frame 63\\")}
       >
         <Flex
           gap=\\"24px\\"
@@ -1716,7 +1706,7 @@ export default function ComplexTest10(
           position=\\"relative\\"
           padding=\\"24px 24px 24px 24px\\"
           backgroundColor=\\"rgba(255,255,255,1)\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0]\\")}
+          {...getOverrideProps(overrides, \\"Frame 390\\")}
         >
           <Text
             fontFamily=\\"Inter\\"
@@ -1734,7 +1724,7 @@ export default function ComplexTest10(
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
             children=\\"Free\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Text[0]\\")}
+            {...getOverrideProps(overrides, \\"Free\\")}
           ></Text>
           <Text
             fontFamily=\\"Inter\\"
@@ -1752,7 +1742,7 @@ export default function ComplexTest10(
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
             children=\\"$0/mo\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Text[1]\\")}
+            {...getOverrideProps(overrides, \\"$0/mo\\")}
           ></Text>
           <Button
             display=\\"flex\\"
@@ -1761,7 +1751,7 @@ export default function ComplexTest10(
             size=\\"large\\"
             variation=\\"primary\\"
             children=\\"Primary Button\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Button[0]\\")}
+            {...getOverrideProps(overrides, \\"Buttondmi\\")}
           ></Button>
           <Divider
             width=\\"224px\\"
@@ -1770,7 +1760,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             size=\\"default\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Divider[0]\\")}
+            {...getOverrideProps(overrides, \\"Dividerxhd\\")}
           ></Divider>
           <Flex
             gap=\\"16px\\"
@@ -1780,7 +1770,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[0]\\")}
+            {...getOverrideProps(overrides, \\"Frame 138mkm\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -1792,10 +1782,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[0].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconunz\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -1816,7 +1803,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[0].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.oat\\"
               )}
             ></Text>
           </Flex>
@@ -1828,7 +1815,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[1]\\")}
+            {...getOverrideProps(overrides, \\"Frame 139jki\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -1840,10 +1827,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[1].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconrca\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -1864,7 +1848,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[1].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.yfq\\"
               )}
             ></Text>
           </Flex>
@@ -1876,7 +1860,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[2]\\")}
+            {...getOverrideProps(overrides, \\"Frame 137zde\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -1888,10 +1872,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconwrc\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -1912,7 +1893,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.lum\\"
               )}
             ></Text>
           </Flex>
@@ -1929,7 +1910,7 @@ export default function ComplexTest10(
           position=\\"relative\\"
           padding=\\"24px 24px 24px 24px\\"
           backgroundColor=\\"rgba(255,255,255,1)\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[1]\\")}
+          {...getOverrideProps(overrides, \\"Frame 391\\")}
         >
           <Text
             fontFamily=\\"Inter\\"
@@ -1947,7 +1928,7 @@ export default function ComplexTest10(
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
             children=\\"Hobby\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[1].Text[0]\\")}
+            {...getOverrideProps(overrides, \\"Hobby\\")}
           ></Text>
           <Text
             fontFamily=\\"Inter\\"
@@ -1965,7 +1946,7 @@ export default function ComplexTest10(
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
             children=\\"$10/mo\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[1].Text[1]\\")}
+            {...getOverrideProps(overrides, \\"$10/mo\\")}
           ></Text>
           <Button
             display=\\"flex\\"
@@ -1974,7 +1955,7 @@ export default function ComplexTest10(
             size=\\"large\\"
             variation=\\"primary\\"
             children=\\"Primary Button\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[1].Button[0]\\")}
+            {...getOverrideProps(overrides, \\"Buttoncej\\")}
           ></Button>
           <Divider
             width=\\"224px\\"
@@ -1983,7 +1964,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             size=\\"default\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[1].Divider[0]\\")}
+            {...getOverrideProps(overrides, \\"Dividerovm\\")}
           ></Divider>
           <Flex
             gap=\\"16px\\"
@@ -1993,7 +1974,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[1].Flex[0]\\")}
+            {...getOverrideProps(overrides, \\"Frame 138upy\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -2005,10 +1986,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[1].Flex[0].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconxzy\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -2029,7 +2007,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[1].Flex[0].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.vxv\\"
               )}
             ></Text>
           </Flex>
@@ -2041,7 +2019,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[1].Flex[1]\\")}
+            {...getOverrideProps(overrides, \\"Frame 139tvb\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -2053,10 +2031,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[1].Flex[1].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconpjz\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -2077,7 +2052,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[1].Flex[1].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.gwp\\"
               )}
             ></Text>
           </Flex>
@@ -2089,7 +2064,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[1].Flex[2]\\")}
+            {...getOverrideProps(overrides, \\"Frame 137fsd\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -2101,10 +2076,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[1].Flex[2].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconhpq\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -2125,7 +2097,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[1].Flex[2].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.riv\\"
               )}
             ></Text>
           </Flex>
@@ -2142,7 +2114,7 @@ export default function ComplexTest10(
           position=\\"relative\\"
           padding=\\"24px 24px 24px 24px\\"
           backgroundColor=\\"rgba(255,255,255,1)\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[2]\\")}
+          {...getOverrideProps(overrides, \\"Frame 392\\")}
         >
           <Text
             fontFamily=\\"Inter\\"
@@ -2160,7 +2132,7 @@ export default function ComplexTest10(
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
             children=\\"Premium\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[2].Text[0]\\")}
+            {...getOverrideProps(overrides, \\"Premium\\")}
           ></Text>
           <Text
             fontFamily=\\"Inter\\"
@@ -2178,7 +2150,7 @@ export default function ComplexTest10(
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
             children=\\"$100/mo\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[2].Text[1]\\")}
+            {...getOverrideProps(overrides, \\"$100/mo\\")}
           ></Text>
           <Button
             display=\\"flex\\"
@@ -2187,7 +2159,7 @@ export default function ComplexTest10(
             size=\\"large\\"
             variation=\\"primary\\"
             children=\\"Primary Button\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[2].Button[0]\\")}
+            {...getOverrideProps(overrides, \\"Buttonizv\\")}
           ></Button>
           <Divider
             width=\\"224px\\"
@@ -2196,7 +2168,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             size=\\"default\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[2].Divider[0]\\")}
+            {...getOverrideProps(overrides, \\"Dividerftq\\")}
           ></Divider>
           <Flex
             gap=\\"16px\\"
@@ -2206,7 +2178,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[2].Flex[0]\\")}
+            {...getOverrideProps(overrides, \\"Frame 138lgm\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -2218,10 +2190,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[2].Flex[0].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconoyx\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -2242,7 +2211,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[2].Flex[0].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.kai\\"
               )}
             ></Text>
           </Flex>
@@ -2254,7 +2223,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[2].Flex[1]\\")}
+            {...getOverrideProps(overrides, \\"Frame 139vsq\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -2266,10 +2235,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[2].Flex[1].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconcsj\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -2290,7 +2256,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[2].Flex[1].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.nuy\\"
               )}
             ></Text>
           </Flex>
@@ -2302,7 +2268,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[2].Flex[2]\\")}
+            {...getOverrideProps(overrides, \\"Frame 137kjg\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -2314,10 +2280,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[2].Flex[2].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Icongvd\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -2338,7 +2301,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[2].Flex[2].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.hjl\\"
               )}
             ></Text>
           </Flex>
@@ -2355,7 +2318,7 @@ export default function ComplexTest10(
           position=\\"relative\\"
           padding=\\"24px 24px 24px 24px\\"
           backgroundColor=\\"rgba(255,255,255,1)\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[3]\\")}
+          {...getOverrideProps(overrides, \\"Frame 393\\")}
         >
           <Text
             fontFamily=\\"Inter\\"
@@ -2373,7 +2336,7 @@ export default function ComplexTest10(
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
             children=\\"Enterprise\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[3].Text[0]\\")}
+            {...getOverrideProps(overrides, \\"Enterprise\\")}
           ></Text>
           <Text
             fontFamily=\\"Inter\\"
@@ -2391,7 +2354,7 @@ export default function ComplexTest10(
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
             children=\\"Contact us\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[3].Text[1]\\")}
+            {...getOverrideProps(overrides, \\"Contact us\\")}
           ></Text>
           <Button
             display=\\"flex\\"
@@ -2400,7 +2363,7 @@ export default function ComplexTest10(
             size=\\"large\\"
             variation=\\"primary\\"
             children=\\"Primary Button\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[3].Button[0]\\")}
+            {...getOverrideProps(overrides, \\"Buttonwez\\")}
           ></Button>
           <Divider
             width=\\"224px\\"
@@ -2409,7 +2372,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             size=\\"default\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[3].Divider[0]\\")}
+            {...getOverrideProps(overrides, \\"Dividerzxk\\")}
           ></Divider>
           <Flex
             gap=\\"16px\\"
@@ -2419,7 +2382,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[3].Flex[0]\\")}
+            {...getOverrideProps(overrides, \\"Frame 138udv\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -2431,10 +2394,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[3].Flex[0].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconkmb\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -2455,7 +2415,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor123123.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[3].Flex[0].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.zfj\\"
               )}
             ></Text>
           </Flex>
@@ -2467,7 +2427,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[3].Flex[1]\\")}
+            {...getOverrideProps(overrides, \\"Frame 139cwp\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -2479,10 +2439,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[3].Flex[1].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconzyv\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -2503,7 +2460,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[3].Flex[1].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.dcz\\"
               )}
             ></Text>
           </Flex>
@@ -2515,7 +2472,7 @@ export default function ComplexTest10(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 0px 0px 0px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[3].Flex[2]\\")}
+            {...getOverrideProps(overrides, \\"Frame 137pog\\")}
           >
             <IconCheck
               width=\\"24px\\"
@@ -2527,10 +2484,7 @@ export default function ComplexTest10(
               color=\\"rgba(63.999996185302734,169.83334600925446,191.00000381469727,1)\\"
               type=\\"check\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[3].Flex[2].IconCheck[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconsrt\\")}
             ></IconCheck>
             <Text
               fontFamily=\\"Inter\\"
@@ -2551,7 +2505,7 @@ export default function ComplexTest10(
               children=\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[3].Flex[2].Text[0]\\"
+                \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.rug\\"
               )}
             ></Text>
           </Flex>
@@ -2605,7 +2559,7 @@ export default function ComplexTest11(
       position=\\"relative\\"
       padding=\\"0px 0px 0px 0px\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"ComplexTest11\\")}
     >
       <Flex
         gap=\\"0\\"
@@ -2618,7 +2572,7 @@ export default function ComplexTest11(
         position=\\"relative\\"
         padding=\\"32px 0px 32px 0px\\"
         backgroundColor=\\"rgba(255,255,255,1)\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
+        {...getOverrideProps(overrides, \\"Frame 411\\")}
       >
         <Flex
           gap=\\"32px\\"
@@ -2631,7 +2585,7 @@ export default function ComplexTest11(
           height=\\"1084px\\"
           position=\\"relative\\"
           padding=\\"0px 0px 0px 0px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0]\\")}
+          {...getOverrideProps(overrides, \\"Frame 313vza\\")}
         >
           <Flex
             gap=\\"24px\\"
@@ -2640,7 +2594,7 @@ export default function ComplexTest11(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 32px 0px 32px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[0]\\")}
+            {...getOverrideProps(overrides, \\"Frame 406\\")}
           >
             <Text
               fontFamily=\\"Inter\\"
@@ -2656,10 +2610,7 @@ export default function ComplexTest11(
               position=\\"relative\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Info\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[0].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Info\\")}
             ></Text>
             <TextField
               display=\\"flex\\"
@@ -2668,10 +2619,7 @@ export default function ComplexTest11(
               label=\\"Label\\"
               size=\\"large\\"
               variation=\\"default\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[0].TextField[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"TextFieldlrg\\")}
             ></TextField>
             <TextField
               display=\\"flex\\"
@@ -2680,10 +2628,7 @@ export default function ComplexTest11(
               label=\\"Label\\"
               size=\\"large\\"
               variation=\\"default\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[0].TextField[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"TextFieldbcu\\")}
             ></TextField>
           </Flex>
           <Divider
@@ -2692,7 +2637,7 @@ export default function ComplexTest11(
             alignSelf=\\"stretch\\"
             size=\\"small\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Divider[0]\\")}
+            {...getOverrideProps(overrides, \\"Dividervgv\\")}
           ></Divider>
           <Flex
             gap=\\"24px\\"
@@ -2701,7 +2646,7 @@ export default function ComplexTest11(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 32px 0px 32px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[1]\\")}
+            {...getOverrideProps(overrides, \\"Frame 409\\")}
           >
             <Text
               fontFamily=\\"Inter\\"
@@ -2717,10 +2662,7 @@ export default function ComplexTest11(
               position=\\"relative\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Shipping\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[1].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Shippinguim\\")}
             ></Text>
             <TextField
               display=\\"flex\\"
@@ -2729,10 +2671,7 @@ export default function ComplexTest11(
               label=\\"Label\\"
               size=\\"large\\"
               variation=\\"default\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[1].TextField[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"TextFieldxak\\")}
             ></TextField>
             <TextField
               display=\\"flex\\"
@@ -2741,10 +2680,7 @@ export default function ComplexTest11(
               label=\\"Label\\"
               size=\\"large\\"
               variation=\\"default\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[1].TextField[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"TextFieldsju\\")}
             ></TextField>
             <Flex
               gap=\\"24px\\"
@@ -2754,10 +2690,7 @@ export default function ComplexTest11(
               alignSelf=\\"stretch\\"
               position=\\"relative\\"
               padding=\\"0px 0px 0px 0px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[1].Flex[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Frame 407\\")}
             >
               <TextField
                 width=\\"289.5px\\"
@@ -2768,10 +2701,7 @@ export default function ComplexTest11(
                 label=\\"Label\\"
                 size=\\"large\\"
                 variation=\\"default\\"
-                {...getOverrideProps(
-                  overrides,
-                  \\"Flex.Flex[0].Flex[0].Flex[1].Flex[0].TextField[0]\\"
-                )}
+                {...getOverrideProps(overrides, \\"TextFieldmoq\\")}
               ></TextField>
               <SelectField
                 width=\\"289.5px\\"
@@ -2782,10 +2712,7 @@ export default function ComplexTest11(
                 label=\\"Label\\"
                 size=\\"large\\"
                 variation=\\"default\\"
-                {...getOverrideProps(
-                  overrides,
-                  \\"Flex.Flex[0].Flex[0].Flex[1].Flex[0].SelectField[0]\\"
-                )}
+                {...getOverrideProps(overrides, \\"SelectFieldqqj\\")}
               ></SelectField>
             </Flex>
             <Flex
@@ -2796,10 +2723,7 @@ export default function ComplexTest11(
               alignSelf=\\"stretch\\"
               position=\\"relative\\"
               padding=\\"0px 0px 0px 0px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[1].Flex[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Frame 408\\")}
             >
               <TextField
                 width=\\"289.5px\\"
@@ -2810,10 +2734,7 @@ export default function ComplexTest11(
                 label=\\"Label\\"
                 size=\\"large\\"
                 variation=\\"default\\"
-                {...getOverrideProps(
-                  overrides,
-                  \\"Flex.Flex[0].Flex[0].Flex[1].Flex[1].TextField[0]\\"
-                )}
+                {...getOverrideProps(overrides, \\"TextFieldnts\\")}
               ></TextField>
               <SelectField
                 width=\\"289.5px\\"
@@ -2824,10 +2745,7 @@ export default function ComplexTest11(
                 label=\\"Label\\"
                 size=\\"large\\"
                 variation=\\"default\\"
-                {...getOverrideProps(
-                  overrides,
-                  \\"Flex.Flex[0].Flex[0].Flex[1].Flex[1].SelectField[0]\\"
-                )}
+                {...getOverrideProps(overrides, \\"SelectFieldpiz\\")}
               ></SelectField>
             </Flex>
           </Flex>
@@ -2837,7 +2755,7 @@ export default function ComplexTest11(
             alignSelf=\\"stretch\\"
             size=\\"small\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Divider[1]\\")}
+            {...getOverrideProps(overrides, \\"Dividerluf\\")}
           ></Divider>
           <Flex
             gap=\\"24px\\"
@@ -2846,7 +2764,7 @@ export default function ComplexTest11(
             alignSelf=\\"stretch\\"
             position=\\"relative\\"
             padding=\\"0px 32px 0px 32px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[2]\\")}
+            {...getOverrideProps(overrides, \\"Frame 313pea\\")}
           >
             <Text
               fontFamily=\\"Inter\\"
@@ -2862,10 +2780,7 @@ export default function ComplexTest11(
               position=\\"relative\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Card info\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Card info\\")}
             ></Text>
             <TextField
               display=\\"flex\\"
@@ -2874,10 +2789,7 @@ export default function ComplexTest11(
               label=\\"Label\\"
               size=\\"large\\"
               variation=\\"default\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].TextField[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"TextFieldavv\\")}
             ></TextField>
             <TextField
               display=\\"flex\\"
@@ -2886,10 +2798,7 @@ export default function ComplexTest11(
               label=\\"Label\\"
               size=\\"large\\"
               variation=\\"default\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].TextField[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"TextFieldakg\\")}
             ></TextField>
             <Flex
               gap=\\"24px\\"
@@ -2899,10 +2808,7 @@ export default function ComplexTest11(
               alignSelf=\\"stretch\\"
               position=\\"relative\\"
               padding=\\"0px 0px 0px 0px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].Flex[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Frame 410\\")}
             >
               <SelectField
                 width=\\"289.5px\\"
@@ -2913,10 +2819,7 @@ export default function ComplexTest11(
                 label=\\"Label\\"
                 size=\\"large\\"
                 variation=\\"default\\"
-                {...getOverrideProps(
-                  overrides,
-                  \\"Flex.Flex[0].Flex[0].Flex[2].Flex[0].SelectField[0]\\"
-                )}
+                {...getOverrideProps(overrides, \\"SelectFieldugk\\")}
               ></SelectField>
               <SelectField
                 width=\\"289.5px\\"
@@ -2927,10 +2830,7 @@ export default function ComplexTest11(
                 label=\\"Label\\"
                 size=\\"large\\"
                 variation=\\"default\\"
-                {...getOverrideProps(
-                  overrides,
-                  \\"Flex.Flex[0].Flex[0].Flex[2].Flex[0].SelectField[1]\\"
-                )}
+                {...getOverrideProps(overrides, \\"SelectFieldqku\\")}
               ></SelectField>
             </Flex>
           </Flex>
@@ -2945,7 +2845,7 @@ export default function ComplexTest11(
         position=\\"relative\\"
         padding=\\"32px 0px 32px 0px\\"
         backgroundColor=\\"rgba(255,255,255,1)\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[1]\\")}
+        {...getOverrideProps(overrides, \\"Frame 412\\")}
       >
         <Flex
           padding=\\"0px 0px 0px 0px\\"
@@ -2953,7 +2853,7 @@ export default function ComplexTest11(
           height=\\"870px\\"
           shrink=\\"0\\"
           position=\\"relative\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0]\\")}
+          {...getOverrideProps(overrides, \\"Group 320\\")}
         >
           <View
             padding=\\"0px 0px 0px 0px\\"
@@ -2962,7 +2862,7 @@ export default function ComplexTest11(
             position=\\"absolute\\"
             left=\\"32px\\"
             top=\\"194px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].View[0]\\")}
+            {...getOverrideProps(overrides, \\"Group 314\\")}
           >
             <Image
               width=\\"89px\\"
@@ -2971,10 +2871,7 @@ export default function ComplexTest11(
               left=\\"0px\\"
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[0].Image[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"imagefpq\\")}
             ></Image>
             <Text
               fontFamily=\\"Inter\\"
@@ -2992,10 +2889,7 @@ export default function ComplexTest11(
               top=\\"112px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Order Summary\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[0].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Order Summaryogp\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3013,10 +2907,7 @@ export default function ComplexTest11(
               top=\\"32px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Black\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[0].Text[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Blackjlp\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3034,10 +2925,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Basic Tee\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[0].Text[2]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Basic Teebko\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3055,10 +2943,7 @@ export default function ComplexTest11(
               top=\\"64px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Large\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[0].Text[3]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Largeqzy\\")}
             ></Text>
             <IconDelete
               width=\\"24px\\"
@@ -3071,10 +2956,7 @@ export default function ComplexTest11(
               color=\\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\"
               type=\\"delete\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[0].IconDelete[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconvrz\\")}
             ></IconDelete>
             <SelectField
               width=\\"64px\\"
@@ -3085,10 +2967,7 @@ export default function ComplexTest11(
               size=\\"small\\"
               labelHidden=\\"true\\"
               variation=\\"default\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[0].SelectField[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"SelectFieldglx\\")}
             ></SelectField>
           </View>
           <Divider
@@ -3098,7 +2977,7 @@ export default function ComplexTest11(
             top=\\"362px\\"
             size=\\"small\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].Divider[0]\\")}
+            {...getOverrideProps(overrides, \\"Dividerqbo\\")}
           ></Divider>
           <Divider
             width=\\"469px\\"
@@ -3107,7 +2986,7 @@ export default function ComplexTest11(
             top=\\"161px\\"
             size=\\"small\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].Divider[1]\\")}
+            {...getOverrideProps(overrides, \\"Dividerxgl\\")}
           ></Divider>
           <Divider
             width=\\"469px\\"
@@ -3116,7 +2995,7 @@ export default function ComplexTest11(
             top=\\"72px\\"
             size=\\"small\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].Divider[2]\\")}
+            {...getOverrideProps(overrides, \\"Dividerpxl\\")}
           ></Divider>
           <View
             padding=\\"0px 0px 0px 0px\\"
@@ -3125,7 +3004,7 @@ export default function ComplexTest11(
             position=\\"absolute\\"
             left=\\"32px\\"
             top=\\"395px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].View[1]\\")}
+            {...getOverrideProps(overrides, \\"Group 315\\")}
           >
             <Image
               width=\\"89px\\"
@@ -3134,10 +3013,7 @@ export default function ComplexTest11(
               left=\\"0px\\"
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[1].Image[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"imageklz\\")}
             ></Image>
             <Text
               fontFamily=\\"Inter\\"
@@ -3155,10 +3031,7 @@ export default function ComplexTest11(
               top=\\"112px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Order Summary\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[1].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Order Summaryiil\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3176,10 +3049,7 @@ export default function ComplexTest11(
               top=\\"32px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Black\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[1].Text[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Blackrig\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3197,10 +3067,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Basic Tee\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[1].Text[2]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Basic Teeyvl\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3218,10 +3085,7 @@ export default function ComplexTest11(
               top=\\"64px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Large\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[1].Text[3]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Largedkg\\")}
             ></Text>
             <IconDelete
               width=\\"24px\\"
@@ -3234,10 +3098,7 @@ export default function ComplexTest11(
               color=\\"rgba(13.000000175088644,26.000000350177288,38.0000015348196,1)\\"
               type=\\"delete\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[1].IconDelete[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconzad\\")}
             ></IconDelete>
             <SelectField
               width=\\"64px\\"
@@ -3248,10 +3109,7 @@ export default function ComplexTest11(
               size=\\"small\\"
               labelHidden=\\"true\\"
               variation=\\"default\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[1].SelectField[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"SelectFieldawu\\")}
             ></SelectField>
           </View>
           <Divider
@@ -3261,7 +3119,7 @@ export default function ComplexTest11(
             top=\\"563px\\"
             size=\\"small\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].Divider[3]\\")}
+            {...getOverrideProps(overrides, \\"Dividercos\\")}
           ></Divider>
           <View
             padding=\\"0px 0px 0px 0px\\"
@@ -3270,7 +3128,7 @@ export default function ComplexTest11(
             position=\\"absolute\\"
             left=\\"32px\\"
             top=\\"596px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].View[2]\\")}
+            {...getOverrideProps(overrides, \\"Group 316\\")}
           >
             <Text
               fontFamily=\\"Inter\\"
@@ -3289,10 +3147,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Subtotal\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[2].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Subtotal\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3310,10 +3165,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"$320.00\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[2].Text[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"$320.00\\")}
             ></Text>
           </View>
           <View
@@ -3323,7 +3175,7 @@ export default function ComplexTest11(
             position=\\"absolute\\"
             left=\\"32px\\"
             top=\\"636px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].View[3]\\")}
+            {...getOverrideProps(overrides, \\"Group 317\\")}
           >
             <Text
               fontFamily=\\"Inter\\"
@@ -3342,10 +3194,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Shipping\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[3].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Shippingtjp\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3363,10 +3212,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"$15.00\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[3].Text[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"$15.00\\")}
             ></Text>
           </View>
           <View
@@ -3376,7 +3222,7 @@ export default function ComplexTest11(
             position=\\"absolute\\"
             left=\\"32px\\"
             top=\\"676px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].View[4]\\")}
+            {...getOverrideProps(overrides, \\"Group 318\\")}
           >
             <Text
               fontFamily=\\"Inter\\"
@@ -3395,10 +3241,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Taxes\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[4].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Taxes\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3416,10 +3259,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"$26.80\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[4].Text[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"$26.80\\")}
             ></Text>
           </View>
           <Divider
@@ -3429,7 +3269,7 @@ export default function ComplexTest11(
             top=\\"716px\\"
             size=\\"small\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].Divider[4]\\")}
+            {...getOverrideProps(overrides, \\"Dividerelu\\")}
           ></Divider>
           <View
             padding=\\"0px 0px 0px 0px\\"
@@ -3438,7 +3278,7 @@ export default function ComplexTest11(
             position=\\"absolute\\"
             left=\\"32px\\"
             top=\\"733px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].View[5]\\")}
+            {...getOverrideProps(overrides, \\"Group 319\\")}
           >
             <Text
               fontFamily=\\"Inter\\"
@@ -3457,10 +3297,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Total\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[5].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Total\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3478,10 +3315,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"$361.80\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[5].Text[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"$361.80\\")}
             ></Text>
           </View>
           <Divider
@@ -3491,7 +3325,7 @@ export default function ComplexTest11(
             top=\\"789px\\"
             size=\\"small\\"
             orientation=\\"horizontal\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].Divider[5]\\")}
+            {...getOverrideProps(overrides, \\"Divideruix\\")}
           ></Divider>
           <Button
             position=\\"absolute\\"
@@ -3502,7 +3336,7 @@ export default function ComplexTest11(
             size=\\"large\\"
             variation=\\"primary\\"
             children=\\"Place Order\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].Button[0]\\")}
+            {...getOverrideProps(overrides, \\"Button\\")}
           ></Button>
           <View
             padding=\\"0px 0px 0px 0px\\"
@@ -3511,7 +3345,7 @@ export default function ComplexTest11(
             position=\\"absolute\\"
             left=\\"32px\\"
             top=\\"105px\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].View[6]\\")}
+            {...getOverrideProps(overrides, \\"Group 313\\")}
           >
             <IconShoppingBag
               width=\\"24px\\"
@@ -3523,10 +3357,7 @@ export default function ComplexTest11(
               padding=\\"0px 0px 0px 0px\\"
               type=\\"shopping_bag\\"
               fontSize=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[6].IconShoppingBag[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconhpw\\")}
             ></IconShoppingBag>
             <Text
               fontFamily=\\"Inter\\"
@@ -3543,10 +3374,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"Cart (2)\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[6].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Cart (2)\\")}
             ></Text>
             <Text
               fontFamily=\\"Inter\\"
@@ -3563,10 +3391,7 @@ export default function ComplexTest11(
               top=\\"0px\\"
               padding=\\"0px 0px 0px 0px\\"
               children=\\"$101.70\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[1].Flex[0].View[6].Text[1]\\"
-              )}
+              {...getOverrideProps(overrides, \\"$101.70\\")}
             ></Text>
           </View>
           <Badge
@@ -3588,7 +3413,7 @@ export default function ComplexTest11(
             size=\\"default\\"
             variation=\\"success\\"
             children=\\"Discount - 10% off\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[1].Flex[0].Badge[0]\\")}
+            {...getOverrideProps(overrides, \\"Badge\\")}
           ></Badge>
         </Flex>
       </Flex>
@@ -3626,7 +3451,7 @@ export default function TextWithDataBinding(
       width=\\"20px\\"
       children={textValue}
       {...rest}
-      {...getOverrideProps(overrides, \\"Text\\")}
+      {...getOverrideProps(overrides, \\"TextWithDataBinding\\")}
     ></Text>
   );
 }
@@ -3672,7 +3497,7 @@ export default function ComponentWithDataBinding(
       disabled={isDisabled}
       children={buttonUser?.username || \\"hspain@gmail.com\\"}
       {...rest}
-      {...getOverrideProps(overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"ComponentWithDataBinding\\")}
     ></Button>
   );
 }
@@ -3708,11 +3533,11 @@ export default function SectionHeading(
       backgroundColor=\\"rgb(255,255,255)\\"
       direction=\\"column\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"SectionHeading\\")}
     >
       <Flex
         tes={newProp6fd1.untitledfield}
-        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
+        {...getOverrideProps(overrides, \\"Heading\\")}
       >
         <Text
           fontFamily=\\"Inter\\"
@@ -3722,7 +3547,7 @@ export default function SectionHeading(
           lineHeight=\\"48px\\"
           fontWeight=\\"300\\"
           children=\\"Heading 2\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Text[0]\\")}
+          {...getOverrideProps(overrides, \\"Heading 2\\")}
         ></Text>
       </Flex>
       <Text
@@ -3733,7 +3558,7 @@ export default function SectionHeading(
         lineHeight=\\"48px\\"
         fontWeight=\\"400\\"
         children=\\"subtitle\\"
-        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"subtitle\\")}
       ></Text>
     </Flex>
   );
@@ -3764,10 +3589,13 @@ export default function ChildComponentWithDataBinding(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
+    <Button
+      {...rest}
+      {...getOverrideProps(overrides, \\"ChildComponentWithDataBinding\\")}
+    >
       <Text
         children={textValue}
-        {...getOverrideProps(overrides, \\"Button.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"TextWithDataBinding\\")}
       ></Text>
     </Button>
   );
@@ -3802,7 +3630,9 @@ export default function ViewPrimitive(
   const variants: Variant[] = [
     {
       variantValues: { variant: \\"primary\\" },
-      overrides: { View: { label: \\"componentWithVariantsWithLabelProp\\" } },
+      overrides: {
+        ViewPrimitive: { label: \\"componentWithVariantsWithLabelProp\\" },
+      },
     },
   ];
   const overrides = mergeVariantsAndOverrides(
@@ -3814,7 +3644,7 @@ export default function ViewPrimitive(
     <View
       children=\\"Nice view! 🏔\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"View\\")}
+      {...getOverrideProps(overrides, \\"ViewPrimitive\\")}
     ></View>
   );
 }
@@ -3852,18 +3682,15 @@ export default function CustomButton(
   const variants: Variant[] = [
     {
       variantValues: { variant: \\"primary\\" },
-      overrides: { Button: { fontSize: \\"12px\\" } },
+      overrides: { CustomButton: { fontSize: \\"12px\\" } },
     },
     {
       variantValues: { variant: \\"secondary\\" },
-      overrides: {
-        Button: { fontSize: \\"40px\\" },
-        \\"Button.Text\\": { fontSize: \\"40px\\" },
-      },
+      overrides: { CustomButton: { fontSize: \\"40px\\" } },
     },
     {
       variantValues: { variant: \\"primary\\", size: \\"large\\" },
-      overrides: { Button: { width: \\"500\\" } },
+      overrides: { CustomButton: { width: \\"500\\" } },
     },
   ];
   const overrides = mergeVariantsAndOverrides(
@@ -3872,7 +3699,7 @@ export default function CustomButton(
   );
   return (
     /* @ts-ignore: TS2322 */
-    <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}></Button>
+    <Button {...rest} {...getOverrideProps(overrides, \\"CustomButton\\")}></Button>
   );
 }
 ",
@@ -3910,7 +3737,7 @@ export default function CustomButton(
     {
       variantValues: { variant: \\"primary\\" },
       overrides: {
-        Button: {
+        CustomButton: {
           label: \\"componentWithVariantsWithMappedChildrenProp\\",
           children: \\"componentWithVariantsWithChildrenProp\\",
           fontSize: \\"12px\\",
@@ -3919,19 +3746,12 @@ export default function CustomButton(
     },
     {
       variantValues: { variant: \\"secondary\\" },
-      overrides: {
-        Button: { fontSize: \\"40px\\" },
-        \\"Button.Text\\": {
-          fontSize: \\"40px\\",
-          label: \\"componentWithVariantsWithMappedChildrenProp\\",
-          children: \\"componentWithVariantsWithChildrenProp\\",
-        },
-      },
+      overrides: { CustomButton: { fontSize: \\"40px\\" } },
     },
     {
       variantValues: { variant: \\"primary\\", size: \\"large\\" },
       overrides: {
-        Button: {
+        CustomButton: {
           width: \\"500\\",
           children: \\"componentWithVariantsWithMappedChildrenProp\\",
         },
@@ -3944,7 +3764,7 @@ export default function CustomButton(
   );
   return (
     /* @ts-ignore: TS2322 */
-    <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}></Button>
+    <Button {...rest} {...getOverrideProps(overrides, \\"CustomButton\\")}></Button>
   );
 }
 ",
@@ -3977,12 +3797,18 @@ export default function ChildComponentWithDataBoundConcatenation(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
+    <Button
+      {...rest}
+      {...getOverrideProps(
+        overrides,
+        \\"ChildComponentWithDataBoundConcatenation\\"
+      )}
+    >
       <Text
         children={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
           buttonUser?.lastname || \\"Spain\\"
         }\`}
-        {...getOverrideProps(overrides, \\"Button.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"TextWithConcatenation\\")}
       ></Text>
     </Button>
   );
@@ -4012,10 +3838,13 @@ export default function ChildComponentWithStaticConcatenation(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Button {...rest} {...getOverrideProps(overrides, \\"Button\\")}>
+    <Button
+      {...rest}
+      {...getOverrideProps(overrides, \\"ChildComponentWithStaticConcatenation\\")}
+    >
       <Text
         children={\`\${\\"Concatenate\\"}\${\\" \\"}\${\\"Me!\\"}\`}
-        {...getOverrideProps(overrides, \\"Button.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"TextWithConcatenation\\")}
       ></Text>
     </Button>
   );
@@ -4061,7 +3890,7 @@ export default function CustomButton(
         buttonUser?.lastname || \\"Spain\\"
       }\`}
       {...rest}
-      {...getOverrideProps(overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"CustomButton\\")}
     ></Button>
   );
 }
@@ -4119,7 +3948,7 @@ export default function CustomButton(
         buttonUser?.lastname || \\"Spain\\"
       }\`}
       {...rest}
-      {...getOverrideProps(overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"CustomButton\\")}
     ></Button>
   );
 }
@@ -4150,7 +3979,10 @@ export default function ConditionalComponentWithDataBinding(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>
+    <Flex
+      {...rest}
+      {...getOverrideProps(overrides, \\"ConditionalComponentWithDataBinding\\")}
+    >
       <Text
         value={
           student?.id && student?.id == \\"idstringuserinput\\"
@@ -4162,7 +3994,7 @@ export default function ConditionalComponentWithDataBinding(
             ? student?.createdAt
             : student?.id
         }
-        {...getOverrideProps(overrides, \\"Flex.Text[0]\\")}
+        {...getOverrideProps(overrides, \\"Placeholder text\\")}
       ></Text>
       <Button
         value={
@@ -4170,7 +4002,7 @@ export default function ConditionalComponentWithDataBinding(
             ? student?.createdAt
             : student?.id
         }
-        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
+        {...getOverrideProps(overrides, \\"Placeholder Button\\")}
       ></Button>
     </Flex>
   );
@@ -4204,7 +4036,7 @@ export default function CustomButton(
     <Button
       disabled={buttonColor && buttonColor == \\"red\\" ? true : false}
       {...rest}
-      {...getOverrideProps(overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"CustomButton\\")}
     ></Button>
   );
 }
@@ -4233,10 +4065,8 @@ export default function CustomChildren(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <MyView {...rest} {...getOverrideProps(overrides, \\"MyView\\")}>
-      <CustomButton
-        {...getOverrideProps(overrides, \\"MyView.CustomButton[0]\\")}
-      ></CustomButton>
+    <MyView {...rest} {...getOverrideProps(overrides, \\"CustomChildren\\")}>
+      <CustomButton></CustomButton>
     </MyView>
   );
 }
@@ -4287,11 +4117,8 @@ export default function CustomChildren(props) {
   var overrides = __assign({}, overridesProp);
   return React.createElement(
     MyView,
-    __assign({}, rest, getOverrideProps(overrides, \\"MyView\\")),
-    React.createElement(
-      CustomButton,
-      __assign({}, getOverrideProps(overrides, \\"MyView.CustomButton[0]\\"))
-    )
+    __assign({}, rest, getOverrideProps(overrides, \\"CustomChildren\\")),
+    React.createElement(CustomButton, null)
   );
 }
 "
@@ -4330,10 +4157,11 @@ export default function CustomParentAndChildren(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <ViewTest {...rest} {...getOverrideProps(overrides, \\"ViewTest\\")}>
-      <CustomButton
-        {...getOverrideProps(overrides, \\"ViewTest.CustomButton[0]\\")}
-      ></CustomButton>
+    <ViewTest
+      {...rest}
+      {...getOverrideProps(overrides, \\"CustomParentAndChildren\\")}
+    >
+      <CustomButton></CustomButton>
     </ViewTest>
   );
 }
@@ -4384,11 +4212,8 @@ export default function CustomParentAndChildren(props) {
   var overrides = __assign({}, overridesProp);
   return React.createElement(
     ViewTest,
-    __assign({}, rest, getOverrideProps(overrides, \\"ViewTest\\")),
-    React.createElement(
-      CustomButton,
-      __assign({}, getOverrideProps(overrides, \\"ViewTest.CustomButton[0]\\"))
-    )
+    __assign({}, rest, getOverrideProps(overrides, \\"CustomParentAndChildren\\")),
+    React.createElement(CustomButton, null)
   );
 }
 "
@@ -4427,8 +4252,8 @@ export default function CustomParent(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <MyView {...rest} {...getOverrideProps(overrides, \\"MyView\\")}>
-      <Button {...getOverrideProps(overrides, \\"MyView.Button[0]\\")}></Button>
+    <MyView {...rest} {...getOverrideProps(overrides, \\"CustomParent\\")}>
+      <Button></Button>
     </MyView>
   );
 }
@@ -4479,11 +4304,8 @@ export default function CustomParent(props) {
   var overrides = __assign({}, overridesProp);
   return React.createElement(
     MyView,
-    __assign({}, rest, getOverrideProps(overrides, \\"MyView\\")),
-    React.createElement(
-      Button,
-      __assign({}, getOverrideProps(overrides, \\"MyView.Button[0]\\"))
-    )
+    __assign({}, rest, getOverrideProps(overrides, \\"CustomParent\\")),
+    React.createElement(Button, null)
   );
 }
 "
@@ -4543,14 +4365,8 @@ export default function ViewWithButton(props) {
   var overrides = __assign({}, overridesProp);
   return React.createElement(
     View,
-    __assign({}, rest, getOverrideProps(overrides, \\"View\\")),
-    React.createElement(
-      Button,
-      __assign(
-        { color: \\"#ff0000\\", width: \\"20px\\" },
-        getOverrideProps(overrides, \\"View.Button[0]\\")
-      )
-    )
+    __assign({}, rest, getOverrideProps(overrides, \\"ViewWithButton\\")),
+    React.createElement(Button, { color: \\"#ff0000\\", width: \\"20px\\" })
   );
 }
 "
@@ -4583,12 +4399,8 @@ export default function ViewWithButton(props) {
     rest = __rest(props, [\\"overrides\\"]);
   const overrides = Object.assign({}, overridesProp);
   return (
-    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
-      <Button
-        color=\\"#ff0000\\"
-        width=\\"20px\\"
-        {...getOverrideProps(overrides, \\"View.Button[0]\\")}
-      ></Button>
+    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
+      <Button color=\\"#ff0000\\" width=\\"20px\\"></Button>
     </View>
   );
 }
@@ -4633,15 +4445,12 @@ function ViewWithButton(props) {
     Object.assign(
       {},
       rest,
-      (0, internal_1.getOverrideProps)(overrides, \\"View\\")
+      (0, internal_1.getOverrideProps)(overrides, \\"ViewWithButton\\")
     ),
-    react_1.default.createElement(
-      ui_react_1.Button,
-      Object.assign(
-        { color: \\"#ff0000\\", width: \\"20px\\" },
-        (0, internal_1.getOverrideProps)(overrides, \\"View.Button[0]\\")
-      )
-    )
+    react_1.default.createElement(ui_react_1.Button, {
+      color: \\"#ff0000\\",
+      width: \\"20px\\",
+    })
   );
 }
 exports.default = ViewWithButton;
@@ -4686,7 +4495,7 @@ export default function BoundDefaultValue(
     <Text
       children={label || \\"Bound Default\\"}
       {...rest}
-      {...getOverrideProps(overrides, \\"Text\\")}
+      {...getOverrideProps(overrides, \\"BoundDefaultValue\\")}
     ></Text>
   );
 }
@@ -4733,7 +4542,7 @@ export default function CollectionDefaultValue(
     <Collection
       items={user || []}
       {...rest}
-      {...getOverrideProps(overrides, \\"Collection\\")}
+      {...getOverrideProps(overrides, \\"CollectionDefaultValue\\")}
     >
       {(item, index) => (
         <Text
@@ -4782,7 +4591,7 @@ export default function SimpleAndBoundDefaultValue(
     <Text
       children={label || \\"Bound Double Default\\"}
       {...rest}
-      {...getOverrideProps(overrides, \\"Text\\")}
+      {...getOverrideProps(overrides, \\"SimpleAndBoundDefaultValue\\")}
     ></Text>
   );
 }
@@ -4823,7 +4632,7 @@ export default function SimplePropertyBindingDefaultValue(
     <Text
       children={label}
       {...rest}
-      {...getOverrideProps(overrides, \\"Text\\")}
+      {...getOverrideProps(overrides, \\"SimplePropertyBindingDefaultValue\\")}
     ></Text>
   );
 }
@@ -4869,7 +4678,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
       gap=\\"16px\\"
       direction=\\"column\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"SocialA\\")}
     >
       <Flex
         padding=\\"0px 0px 0px 0px\\"
@@ -4879,7 +4688,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
         gap=\\"40px\\"
         position=\\"relative\\"
         direction=\\"row\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[0]\\")}
+        {...getOverrideProps(overrides, \\"Body\\")}
       >
         <Flex
           padding=\\"0px 0px 0px 0px\\"
@@ -4890,7 +4699,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
           basis=\\"712px\\"
           direction=\\"column\\"
           height=\\"344px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0]\\")}
+          {...getOverrideProps(overrides, \\"Text\\")}
         >
           <Flex
             padding=\\"0px 0px 0px 0px\\"
@@ -4899,7 +4708,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
             shrink=\\"0\\"
             gap=\\"16px\\"
             direction=\\"column\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[0]\\")}
+            {...getOverrideProps(overrides, \\"Headline\\")}
           >
             <Text
               padding=\\"0px 0px 0px 0px\\"
@@ -4919,7 +4728,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
               children=\\"New Amplify Studio gives designers the ability to export UI to React code\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[0].Text[0]\\"
+                \\"New Amplify Studio gives designers the ability to export UI to React code\\"
               )}
             ></Text>
             <Flex
@@ -4930,10 +4739,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
               gap=\\"16px\\"
               position=\\"relative\\"
               direction=\\"row\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[0].Flex[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Frame\\")}
             >
               <Text
                 padding=\\"0px 0px 0px 0px\\"
@@ -4950,10 +4756,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
                 fontWeight=\\"400\\"
                 direction=\\"column\\"
                 children=\\"Nikhil S\\"
-                {...getOverrideProps(
-                  overrides,
-                  \\"Flex.Flex[0].Flex[0].Flex[0].Flex[0].Text[0]\\"
-                )}
+                {...getOverrideProps(overrides, \\"Nikhil S\\")}
               ></Text>
               <Text
                 padding=\\"0px 0px 0px 0px\\"
@@ -4971,10 +4774,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
                 fontWeight=\\"400\\"
                 direction=\\"column\\"
                 children=\\"2nd December 2021\\"
-                {...getOverrideProps(
-                  overrides,
-                  \\"Flex.Flex[0].Flex[0].Flex[0].Flex[0].Text[1]\\"
-                )}
+                {...getOverrideProps(overrides, \\"2nd December 2021\\")}
               ></Text>
             </Flex>
           </Flex>
@@ -4986,7 +4786,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
             gap=\\"16px\\"
             position=\\"relative\\"
             direction=\\"row\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[1]\\")}
+            {...getOverrideProps(overrides, \\"Article\\")}
           >
             <IconArrowForward
               padding=\\"0px 0px 0px 0px\\"
@@ -4998,10 +4798,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
               position=\\"relative\\"
               type=\\"arrow_forward\\"
               height=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[1].IconArrowForward[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconynp\\")}
             ></IconArrowForward>
             <Text
               padding=\\"0px 0px 0px 0px\\"
@@ -5021,7 +4818,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
               children=\\"AWS Amplify Studio is a visual development environment for building full-stack web and mobile apps that grows with your business. Studio builds on existing backend building capabilities in AWS Amplify, allowing you to build your UI faster with a set of ready-to-use UI components that are editable in Figma. With Studio, you can quickly build an entire web app, front-to-back, with minimal coding, while still maintaining full control over your app design and behavior through code. Ship faster, scale effortlessly, and delight every user.\\"
               {...getOverrideProps(
                 overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[1].Text[0]\\"
+                \\"AWS Amplify Studio is a visual development environment for building full-stack web and mobile apps that grows with your business. Studio builds on existing backend building capabilities in AWS Amplify, allowing you to build your UI faster with a set of ready-to-use UI components that are editable in Figma. With Studio, you can quickly build an entire web app, front-to-back, with minimal coding, while still maintaining full control over your app design and behavior through code. Ship faster, scale effortlessly, and delight every user.\\"
               )}
             ></Text>
           </Flex>
@@ -5033,7 +4830,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
             width=\\"165px\\"
             position=\\"relative\\"
             direction=\\"row\\"
-            {...getOverrideProps(overrides, \\"Flex.Flex[0].Flex[0].Flex[2]\\")}
+            {...getOverrideProps(overrides, \\"Shareakz\\")}
           >
             <Text
               padding=\\"0px 0px 0px 0px\\"
@@ -5050,10 +4847,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
               fontWeight=\\"400\\"
               direction=\\"column\\"
               children=\\"Share\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].Text[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Sharedgc\\")}
             ></Text>
             <IconBookmarkBorder
               padding=\\"0px 0px 0px 0px\\"
@@ -5065,10 +4859,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
               position=\\"relative\\"
               type=\\"bookmark_border\\"
               height=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].IconBookmarkBorder[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconsrv\\")}
             ></IconBookmarkBorder>
             <IconShare
               padding=\\"0px 0px 0px 0px\\"
@@ -5080,10 +4871,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
               position=\\"relative\\"
               type=\\"share\\"
               height=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].IconShare[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconwdz\\")}
             ></IconShare>
             <IconMoreVert
               padding=\\"0px 0px 0px 0px\\"
@@ -5095,10 +4883,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
               position=\\"relative\\"
               type=\\"more_vert\\"
               height=\\"24px\\"
-              {...getOverrideProps(
-                overrides,
-                \\"Flex.Flex[0].Flex[0].Flex[2].IconMoreVert[0]\\"
-              )}
+              {...getOverrideProps(overrides, \\"Iconxpr\\")}
             ></IconMoreVert>
           </Flex>
         </Flex>
@@ -5109,7 +4894,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
           borderRadius=\\"16px\\"
           shrink=\\"0\\"
           height=\\"160px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[0].Image[0]\\")}
+          {...getOverrideProps(overrides, \\"image\\")}
         ></Image>
       </Flex>
       <Flex
@@ -5120,7 +4905,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
         gap=\\"16px\\"
         position=\\"relative\\"
         direction=\\"row\\"
-        {...getOverrideProps(overrides, \\"Flex.Flex[1]\\")}
+        {...getOverrideProps(overrides, \\"Read moreudv\\")}
       >
         <IconArrowForward
           padding=\\"0px 0px 0px 0px\\"
@@ -5132,7 +4917,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
           position=\\"relative\\"
           type=\\"arrow_forward\\"
           height=\\"24px\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[1].IconArrowForward[0]\\")}
+          {...getOverrideProps(overrides, \\"Iconlxm\\")}
         ></IconArrowForward>
         <Text
           padding=\\"0px 0px 0px 0px\\"
@@ -5152,7 +4937,7 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
           fontWeight=\\"400\\"
           direction=\\"column\\"
           children=\\"Read more\\"
-          {...getOverrideProps(overrides, \\"Flex.Flex[1].Text[0]\\")}
+          {...getOverrideProps(overrides, \\"Read morepbe\\")}
         ></Text>
       </Flex>
     </Flex>
@@ -5185,13 +4970,9 @@ export default function MyIcons(props: MyIconsProps): React.ReactElement {
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <View {...rest} {...getOverrideProps(overrides, \\"View\\")}>
-      <IconCloud
-        {...getOverrideProps(overrides, \\"View.IconCloud[0]\\")}
-      ></IconCloud>
-      <IconBrightness_1
-        {...getOverrideProps(overrides, \\"View.IconBrightness_1[0]\\")}
-      ></IconBrightness_1>
+    <View {...rest} {...getOverrideProps(overrides, \\"MyIcons\\")}>
+      <IconCloud></IconCloud>
+      <IconBrightness_1></IconBrightness_1>
     </View>
   );
 }
@@ -5224,7 +5005,7 @@ export default function CheckBoxFieldPrimitive(
       name=\\"subscribe\\"
       value=\\"yes\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"CheckboxField\\")}
+      {...getOverrideProps(overrides, \\"CheckBoxFieldPrimitive\\")}
     ></CheckboxField>
   );
 }
@@ -5256,19 +5037,17 @@ export default function ExpanderPrimitive(
       type=\\"single\\"
       isCollapsible={true}
       {...rest}
-      {...getOverrideProps(overrides, \\"Expander\\")}
+      {...getOverrideProps(overrides, \\"ExpanderPrimitive\\")}
     >
       <ExpanderItem
         title=\\"title1\\"
         value=\\"ExpanderItem1\\"
         children=\\"ExpanderItem1Content\\"
-        {...getOverrideProps(overrides, \\"Expander.ExpanderItem[0]\\")}
       ></ExpanderItem>
       <ExpanderItem
         title=\\"title2\\"
         value=\\"ExpanderItem2\\"
         children=\\"ExpanderItem2Content\\"
-        {...getOverrideProps(overrides, \\"Expander.ExpanderItem[1]\\")}
       ></ExpanderItem>
     </Expander>
   );
@@ -5279,11 +5058,8 @@ export default function ExpanderPrimitive(
 exports[`amplify render tests primitives ExpanderItem 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
 import { ExpanderItem, ExpanderItemProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
 export type ComponentWithoutNameProps = React.PropsWithChildren<
   Partial<ExpanderItemProps> & {
@@ -5302,7 +5078,6 @@ export default function unknown_component_name(
       value=\\"ExpanderItem1\\"
       children=\\"ExpanderItem1Content\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"ExpanderItem\\")}
     ></ExpanderItem>
   );
 }
@@ -5330,11 +5105,8 @@ export default function MenuPrimitive(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Menu {...rest} {...getOverrideProps(overrides, \\"Menu\\")}>
-      <MenuItem
-        children=\\"Item\\"
-        {...getOverrideProps(overrides, \\"Menu.MenuItem[0]\\")}
-      ></MenuItem>
+    <Menu {...rest} {...getOverrideProps(overrides, \\"MenuPrimitive\\")}>
+      <MenuItem children=\\"Item\\"></MenuItem>
     </Menu>
   );
 }
@@ -5365,7 +5137,7 @@ export default function MenuButtonPrimitive(
     <MenuButton
       children=\\"Menu Button\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"MenuButton\\")}
+      {...getOverrideProps(overrides, \\"MenuButtonPrimitive\\")}
     ></MenuButton>
   );
 }
@@ -5401,7 +5173,7 @@ export default function SliderFieldPrimitive(
       max={100}
       step={1}
       {...rest}
-      {...getOverrideProps(overrides, \\"SliderField\\")}
+      {...getOverrideProps(overrides, \\"SliderFieldPrimitive\\")}
     ></SliderField>
   );
 }
@@ -5443,143 +5215,37 @@ export default function TablePrimitive(
       size=\\"small\\"
       variation=\\"striped\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Table\\")}
+      {...getOverrideProps(overrides, \\"TablePrimitive\\")}
     >
-      <TableHead {...getOverrideProps(overrides, \\"Table.TableHead[0]\\")}>
-        <TableRow
-          {...getOverrideProps(overrides, \\"Table.TableHead[0].TableRow[0]\\")}
-        >
-          <TableCell
-            as=\\"th\\"
-            children=\\"Citrus\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableHead[0].TableRow[0].TableCell[0]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            as=\\"th\\"
-            children=\\"Stone Fruit\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableHead[0].TableRow[0].TableCell[1]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            as=\\"th\\"
-            children=\\"Berry\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableHead[0].TableRow[0].TableCell[2]\\"
-            )}
-          ></TableCell>
+      <TableHead>
+        <TableRow>
+          <TableCell as=\\"th\\" children=\\"Citrus\\"></TableCell>
+          <TableCell as=\\"th\\" children=\\"Stone Fruit\\"></TableCell>
+          <TableCell as=\\"th\\" children=\\"Berry\\"></TableCell>
         </TableRow>
       </TableHead>
-      <TableBody {...getOverrideProps(overrides, \\"Table.TableBody[0]\\")}>
-        <TableRow
-          {...getOverrideProps(overrides, \\"Table.TableBody[0].TableRow[0]\\")}
-        >
-          <TableCell
-            children=\\"Orange\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableBody[0].TableRow[0].TableCell[0]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            children=\\"Nectarine\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableBody[0].TableRow[0].TableCell[1]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            children=\\"Raspberry\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableBody[0].TableRow[0].TableCell[2]\\"
-            )}
-          ></TableCell>
+      <TableBody>
+        <TableRow>
+          <TableCell children=\\"Orange\\"></TableCell>
+          <TableCell children=\\"Nectarine\\"></TableCell>
+          <TableCell children=\\"Raspberry\\"></TableCell>
         </TableRow>
-        <TableRow
-          {...getOverrideProps(overrides, \\"Table.TableBody[0].TableRow[1]\\")}
-        >
-          <TableCell
-            children=\\"Grapefruit\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableBody[0].TableRow[1].TableCell[0]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            children=\\"Apricot\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableBody[0].TableRow[1].TableCell[1]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            children=\\"Blueberry\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableBody[0].TableRow[1].TableCell[2]\\"
-            )}
-          ></TableCell>
+        <TableRow>
+          <TableCell children=\\"Grapefruit\\"></TableCell>
+          <TableCell children=\\"Apricot\\"></TableCell>
+          <TableCell children=\\"Blueberry\\"></TableCell>
         </TableRow>
-        <TableRow
-          {...getOverrideProps(overrides, \\"Table.TableBody[0].TableRow[2]\\")}
-        >
-          <TableCell
-            children=\\"Lime\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableBody[0].TableRow[2].TableCell[0]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            children=\\"Peach\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableBody[0].TableRow[2].TableCell[1]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            children=\\"Strawberry\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableBody[0].TableRow[2].TableCell[2]\\"
-            )}
-          ></TableCell>
+        <TableRow>
+          <TableCell children=\\"Lime\\"></TableCell>
+          <TableCell children=\\"Peach\\"></TableCell>
+          <TableCell children=\\"Strawberry\\"></TableCell>
         </TableRow>
       </TableBody>
-      <TableFoot {...getOverrideProps(overrides, \\"Table.TableFoot[0]\\")}>
-        <TableRow
-          {...getOverrideProps(overrides, \\"Table.TableFoot[0].TableRow[0]\\")}
-        >
-          <TableCell
-            as=\\"th\\"
-            children=\\"Citrus\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableFoot[0].TableRow[0].TableCell[0]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            as=\\"th\\"
-            children=\\"Stone Fruit\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableFoot[0].TableRow[0].TableCell[1]\\"
-            )}
-          ></TableCell>
-          <TableCell
-            as=\\"th\\"
-            children=\\"Berry\\"
-            {...getOverrideProps(
-              overrides,
-              \\"Table.TableFoot[0].TableRow[0].TableCell[2]\\"
-            )}
-          ></TableCell>
+      <TableFoot>
+        <TableRow>
+          <TableCell as=\\"th\\" children=\\"Citrus\\"></TableCell>
+          <TableCell as=\\"th\\" children=\\"Stone Fruit\\"></TableCell>
+          <TableCell as=\\"th\\" children=\\"Berry\\"></TableCell>
         </TableRow>
       </TableFoot>
     </Table>
@@ -5615,7 +5281,7 @@ export default function TextFieldPrimitive<Multiline extends boolean>(
       placeholder=\\"Holden\\"
       descriptiveText=\\"Please enter valid name\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"TextField\\")}
+      {...getOverrideProps(overrides, \\"TextFieldPrimitive\\")}
     ></TextField>
   );
 }
@@ -5644,12 +5310,15 @@ export default function ViewWithButton(
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <View padding-left {...rest} {...getOverrideProps(overrides, \\"View\\")}>
+    <View
+      padding-left
+      {...rest}
+      {...getOverrideProps(overrides, \\"ViewWithButton\\")}
+    >
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
         buttonText=\\"Click Me\\"
-        {...getOverrideProps(overrides, \\"View.CustomButton[0]\\")}
       ></CustomButton>
     </View>
   );
@@ -5696,36 +5365,36 @@ export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
       direction=\\"row\\"
       justifyContent=\\"space-between\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"Flex\\")}
+      {...getOverrideProps(overrides, \\"SiteHeader\\")}
     >
       <Heading
         level={1}
         children=\\"Title\\"
-        {...getOverrideProps(overrides, \\"Flex.Heading[0]\\")}
+        {...getOverrideProps(overrides, \\"Heading1\\")}
       ></Heading>
       <Button
         variation=\\"primary\\"
         children=\\"Open Amplify Docs\\"
         onClick={invokeAction(\\"openAmplifyDocs\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
+        {...getOverrideProps(overrides, \\"Button1\\")}
       ></Button>
       <Button
         variation=\\"primary\\"
         children=\\"Navigate to FAQ Page\\"
         onClick={invokeAction(\\"navigateToFAQPage\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[1]\\")}
+        {...getOverrideProps(overrides, \\"Button2\\")}
       ></Button>
       <Button
         variation=\\"primary\\"
         children=\\"Reload Page\\"
         onClick={invokeAction(\\"reloadPage\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[2]\\")}
+        {...getOverrideProps(overrides, \\"Button3\\")}
       ></Button>
       <Button
         variation=\\"primary\\"
         children=\\"Redirect To Footer (No History Update)\\"
         onClick={invokeAction(\\"redirectToFooter\\")}
-        {...getOverrideProps(overrides, \\"Flex.Button[3]\\")}
+        {...getOverrideProps(overrides, \\"Button4\\")}
       ></Button>
     </Flex>
   );
@@ -5762,63 +5431,19 @@ export default function ParsedFixedValues(
     <View
       id=\\"parsed-fixed-values\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"View\\")}
+      {...getOverrideProps(overrides, \\"ParsedFixedValues\\")}
     >
-      <Input
-        id=\\"string-value\\"
-        value=\\"raw string value\\"
-        {...getOverrideProps(overrides, \\"View.Input[0]\\")}
-      ></Input>
-      <Input
-        id=\\"number-value\\"
-        value=\\"67548\\"
-        {...getOverrideProps(overrides, \\"View.Input[1]\\")}
-      ></Input>
-      <Input
-        id=\\"parsed-number-value\\"
-        value={67548}
-        {...getOverrideProps(overrides, \\"View.Input[2]\\")}
-      ></Input>
-      <Input
-        id=\\"boolean-value\\"
-        value=\\"true\\"
-        {...getOverrideProps(overrides, \\"View.Input[3]\\")}
-      ></Input>
-      <Input
-        id=\\"parsed-boolean-value\\"
-        value={true}
-        {...getOverrideProps(overrides, \\"View.Input[4]\\")}
-      ></Input>
-      <Input
-        id=\\"json-value\\"
-        value='{\\"foo\\": \\"bar\\"}'
-        {...getOverrideProps(overrides, \\"View.Input[5]\\")}
-      ></Input>
-      <Input
-        id=\\"parsed-json-value\\"
-        value={{ foo: \\"bar\\" }}
-        {...getOverrideProps(overrides, \\"View.Input[6]\\")}
-      ></Input>
-      <Input
-        id=\\"array-value\\"
-        value=\\"[1,2,3]\\"
-        {...getOverrideProps(overrides, \\"View.Input[7]\\")}
-      ></Input>
-      <Input
-        id=\\"parsed-array-value\\"
-        value={[1, 2, 3]}
-        {...getOverrideProps(overrides, \\"View.Input[8]\\")}
-      ></Input>
-      <Input
-        id=\\"null-value\\"
-        value=\\"null\\"
-        {...getOverrideProps(overrides, \\"View.Input[9]\\")}
-      ></Input>
-      <Input
-        id=\\"parsed-null-value\\"
-        value={null}
-        {...getOverrideProps(overrides, \\"View.Input[10]\\")}
-      ></Input>
+      <Input id=\\"string-value\\" value=\\"raw string value\\"></Input>
+      <Input id=\\"number-value\\" value=\\"67548\\"></Input>
+      <Input id=\\"parsed-number-value\\" value={67548}></Input>
+      <Input id=\\"boolean-value\\" value=\\"true\\"></Input>
+      <Input id=\\"parsed-boolean-value\\" value={true}></Input>
+      <Input id=\\"json-value\\" value='{\\"foo\\": \\"bar\\"}'></Input>
+      <Input id=\\"parsed-json-value\\" value={{ foo: \\"bar\\" }}></Input>
+      <Input id=\\"array-value\\" value=\\"[1,2,3]\\"></Input>
+      <Input id=\\"parsed-array-value\\" value={[1, 2, 3]}></Input>
+      <Input id=\\"null-value\\" value=\\"null\\"></Input>
+      <Input id=\\"parsed-null-value\\" value={null}></Input>
     </View>
   );
 }
@@ -5867,31 +5492,13 @@ export default function Profile(props) {
     : {};
   return React.createElement(
     Flex,
-    Object.assign({}, rest, getOverrideProps(overrides, \\"Flex\\")),
-    React.createElement(
-      Image,
-      Object.assign(
-        { src: userImage },
-        getOverrideProps(overrides, \\"Flex.Image[0]\\")
-      )
-    ),
-    React.createElement(
-      Button,
-      Object.assign(
-        { children: username },
-        getOverrideProps(overrides, \\"Flex.Button[0]\\")
-      )
-    ),
-    React.createElement(
-      Button,
-      Object.assign(
-        { children: customUserAttributeIcecream },
-        getOverrideProps(overrides, \\"Flex.Button[1]\\")
-      )
-    )
+    Object.assign({}, rest, getOverrideProps(overrides, \\"Profile\\")),
+    React.createElement(Image, { src: userImage }),
+    React.createElement(Button, { children: username }),
+    React.createElement(Button, { children: customUserAttributeIcecream })
   );
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssTUFBTSxPQUFPLENBQUM7QUFDMUIsT0FBTyxFQUFvQixnQkFBZ0IsRUFBRSxPQUFPLEVBQUUsTUFBTSxnQ0FBZ0MsQ0FBQztBQUM3RixPQUFPLEVBQUUsTUFBTSxFQUFFLElBQUksRUFBYSxLQUFLLEVBQUUsTUFBTSx1QkFBdUIsQ0FBQztBQUt2RSxNQUFNLENBQUMsT0FBTyxVQUFVLE9BQU8sQ0FBQyxLQUFtQjs7SUFDL0MsTUFBTSxFQUFFLFNBQVMsRUFBRSxhQUFhLEtBQWMsS0FBSyxFQUFkLElBQUksVUFBSyxLQUFLLEVBQTdDLGFBQXFDLENBQVEsQ0FBQztJQUNwRCxNQUFNLFNBQVMscUJBQVEsYUFBYSxDQUFFLENBQUM7SUFDdkMsTUFBTSxFQUFFLFFBQVEsRUFBRSxPQUFPLEVBQUUsU0FBUyxFQUFFLENBQUMsMEJBQTBCLENBQUMsRUFBRSwyQkFBMkIsRUFBRSxHQUFHLE1BQUEsTUFBQSxPQUFPLEVBQUUsQ0FBQyxJQUFJLDBDQUFFLFVBQVUsbUNBQUksRUFBRSxDQUFDO0lBQ3JJLE9BQU8sQ0FBQyxvQkFBQyxJQUFJLG9CQUFLLElBQUksRUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsTUFBTSxDQUFDO1FBQUUsb0JBQUMsS0FBSyxrQkFBQyxHQUFHLEVBQUUsU0FBUyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxlQUFlLENBQUMsRUFBVTtRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLFFBQVEsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsZ0JBQWdCLENBQUMsRUFBVztRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLDJCQUEyQixJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxnQkFBZ0IsQ0FBQyxFQUFXLENBQU8sQ0FBQyxDQUFDO0FBQ2xXLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBlc2xpbnQtZGlzYWJsZSAqL1xuaW1wb3J0IFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IHsgRXNjYXBlSGF0Y2hQcm9wcywgZ2V0T3ZlcnJpZGVQcm9wcywgdXNlQXV0aCB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3QvaW50ZXJuYWxcIjtcbmltcG9ydCB7IEJ1dHRvbiwgRmxleCwgRmxleFByb3BzLCBJbWFnZSB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3RcIjtcblxuZXhwb3J0IHR5cGUgUHJvZmlsZVByb3BzID0gUmVhY3QuUHJvcHNXaXRoQ2hpbGRyZW48UGFydGlhbDxGbGV4UHJvcHM+ICYge1xuICAgIG92ZXJyaWRlcz86IEVzY2FwZUhhdGNoUHJvcHMgfCB1bmRlZmluZWQgfCBudWxsO1xufT47XG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQcm9maWxlKHByb3BzOiBQcm9maWxlUHJvcHMpOiBSZWFjdC5SZWFjdEVsZW1lbnQge1xuICAgIGNvbnN0IHsgb3ZlcnJpZGVzOiBvdmVycmlkZXNQcm9wLCAuLi5yZXN0IH0gPSBwcm9wcztcbiAgICBjb25zdCBvdmVycmlkZXMgPSB7IC4uLm92ZXJyaWRlc1Byb3AgfTtcbiAgICBjb25zdCB7IHVzZXJuYW1lLCBwaWN0dXJlOiB1c2VySW1hZ2UsIFtcImN1c3RvbTpmYXZvcml0ZV9pY2VjcmVhbVwiXTogY3VzdG9tVXNlckF0dHJpYnV0ZUljZWNyZWFtIH0gPSB1c2VBdXRoKCkudXNlcj8uYXR0cmlidXRlcyA/PyB7fTtcbiAgICByZXR1cm4gKDxGbGV4IHsuLi5yZXN0fSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiRmxleFwiKX0+PEltYWdlIHNyYz17dXNlckltYWdlfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiRmxleC5JbWFnZVswXVwiKX0+PC9JbWFnZT48QnV0dG9uIGNoaWxkcmVuPXt1c2VybmFtZX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcIkZsZXguQnV0dG9uWzBdXCIpfT48L0J1dHRvbj48QnV0dG9uIGNoaWxkcmVuPXtjdXN0b21Vc2VyQXR0cmlidXRlSWNlY3JlYW19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJGbGV4LkJ1dHRvblsxXVwiKX0+PC9CdXR0b24+PC9GbGV4Pik7XG59Il19
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssTUFBTSxPQUFPLENBQUM7QUFDMUIsT0FBTyxFQUFvQixnQkFBZ0IsRUFBRSxPQUFPLEVBQUUsTUFBTSxnQ0FBZ0MsQ0FBQztBQUM3RixPQUFPLEVBQUUsTUFBTSxFQUFFLElBQUksRUFBYSxLQUFLLEVBQUUsTUFBTSx1QkFBdUIsQ0FBQztBQUt2RSxNQUFNLENBQUMsT0FBTyxVQUFVLE9BQU8sQ0FBQyxLQUFtQjs7SUFDL0MsTUFBTSxFQUFFLFNBQVMsRUFBRSxhQUFhLEtBQWMsS0FBSyxFQUFkLElBQUksVUFBSyxLQUFLLEVBQTdDLGFBQXFDLENBQVEsQ0FBQztJQUNwRCxNQUFNLFNBQVMscUJBQVEsYUFBYSxDQUFFLENBQUM7SUFDdkMsTUFBTSxFQUFFLFFBQVEsRUFBRSxPQUFPLEVBQUUsU0FBUyxFQUFFLENBQUMsMEJBQTBCLENBQUMsRUFBRSwyQkFBMkIsRUFBRSxHQUFHLE1BQUEsTUFBQSxPQUFPLEVBQUUsQ0FBQyxJQUFJLDBDQUFFLFVBQVUsbUNBQUksRUFBRSxDQUFDO0lBQ3JJLE9BQU8sQ0FBQyxvQkFBQyxJQUFJLG9CQUFLLElBQUksRUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsU0FBUyxDQUFDO1FBQUUsb0JBQUMsS0FBSyxJQUFDLEdBQUcsRUFBRSxTQUFTLEdBQVU7UUFBQSxvQkFBQyxNQUFNLElBQUMsUUFBUSxFQUFFLFFBQVEsR0FBVztRQUFBLG9CQUFDLE1BQU0sSUFBQyxRQUFRLEVBQUUsMkJBQTJCLEdBQVcsQ0FBTyxDQUFDLENBQUM7QUFDN00sQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qIGVzbGludC1kaXNhYmxlICovXG5pbXBvcnQgUmVhY3QgZnJvbSBcInJlYWN0XCI7XG5pbXBvcnQgeyBFc2NhcGVIYXRjaFByb3BzLCBnZXRPdmVycmlkZVByb3BzLCB1c2VBdXRoIH0gZnJvbSBcIkBhd3MtYW1wbGlmeS91aS1yZWFjdC9pbnRlcm5hbFwiO1xuaW1wb3J0IHsgQnV0dG9uLCBGbGV4LCBGbGV4UHJvcHMsIEltYWdlIH0gZnJvbSBcIkBhd3MtYW1wbGlmeS91aS1yZWFjdFwiO1xuXG5leHBvcnQgdHlwZSBQcm9maWxlUHJvcHMgPSBSZWFjdC5Qcm9wc1dpdGhDaGlsZHJlbjxQYXJ0aWFsPEZsZXhQcm9wcz4gJiB7XG4gICAgb3ZlcnJpZGVzPzogRXNjYXBlSGF0Y2hQcm9wcyB8IHVuZGVmaW5lZCB8IG51bGw7XG59PjtcbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIFByb2ZpbGUocHJvcHM6IFByb2ZpbGVQcm9wcyk6IFJlYWN0LlJlYWN0RWxlbWVudCB7XG4gICAgY29uc3QgeyBvdmVycmlkZXM6IG92ZXJyaWRlc1Byb3AsIC4uLnJlc3QgfSA9IHByb3BzO1xuICAgIGNvbnN0IG92ZXJyaWRlcyA9IHsgLi4ub3ZlcnJpZGVzUHJvcCB9O1xuICAgIGNvbnN0IHsgdXNlcm5hbWUsIHBpY3R1cmU6IHVzZXJJbWFnZSwgW1wiY3VzdG9tOmZhdm9yaXRlX2ljZWNyZWFtXCJdOiBjdXN0b21Vc2VyQXR0cmlidXRlSWNlY3JlYW0gfSA9IHVzZUF1dGgoKS51c2VyPy5hdHRyaWJ1dGVzID8/IHt9O1xuICAgIHJldHVybiAoPEZsZXggey4uLnJlc3R9IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJQcm9maWxlXCIpfT48SW1hZ2Ugc3JjPXt1c2VySW1hZ2V9PjwvSW1hZ2U+PEJ1dHRvbiBjaGlsZHJlbj17dXNlcm5hbWV9PjwvQnV0dG9uPjxCdXR0b24gY2hpbGRyZW49e2N1c3RvbVVzZXJBdHRyaWJ1dGVJY2VjcmVhbX0+PC9CdXR0b24+PC9GbGV4Pik7XG59Il19
 "
 `;
 
@@ -5920,19 +5527,10 @@ export default function Profile(props: ProfileProps): React.ReactElement {
   } = useAuth().user?.attributes ?? {};
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>
-      <Image
-        src={userImage}
-        {...getOverrideProps(overrides, \\"Flex.Image[0]\\")}
-      ></Image>
-      <Button
-        children={username}
-        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
-      ></Button>
-      <Button
-        children={customUserAttributeIcecream}
-        {...getOverrideProps(overrides, \\"Flex.Button[1]\\")}
-      ></Button>
+    <Flex {...rest} {...getOverrideProps(overrides, \\"Profile\\")}>
+      <Image src={userImage}></Image>
+      <Button children={username}></Button>
+      <Button children={customUserAttributeIcecream}></Button>
     </Flex>
   );
 }

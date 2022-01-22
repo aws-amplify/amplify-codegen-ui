@@ -13,7 +13,7 @@
         "variant": "greeting"
       },
       "overrides": {
-        "Text": {
+        "ComponentWithVariantAndOverrides": {
           "children": "Hello"
         }
       }
@@ -23,7 +23,7 @@
         "variant": "farewell"
       },
       "overrides": {
-        "Text": {
+        "ComponentWithVariantAndOverrides": {
           "children": "Goodbye"
         }
       }

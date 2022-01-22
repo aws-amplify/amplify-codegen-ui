@@ -9,7 +9,7 @@
                 "variant": "primary"
             },
             "overrides": {
-                "Button": {
+                "GoldenComponentWithVariants": {
                     "fontSize": "12px"
                 }
             }
@@ -19,7 +19,7 @@
                 "variant": "secondary"
             },
             "overrides": {
-                "Button": {
+                "GoldenComponentWithVariants": {
                     "fontSize": "40px"
                 }
             }
@@ -30,7 +30,7 @@
                 "size": "large"
             },
             "overrides": {
-                "Button": {
+                "GoldenComponentWithVariants": {
                     "width": "500"
                 }
             }

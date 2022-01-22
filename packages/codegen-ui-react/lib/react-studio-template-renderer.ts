@@ -31,7 +31,7 @@ import {
   StudioComponentAction,
   StudioComponentSimplePropertyBinding,
   handleCodegenErrors,
-  StudioNode,
+  StudioComponentChild,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -1150,11 +1150,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     this.component.variants.forEach((variant) => {
-      // loop through the keys in the dict. Ex. Button, Flex.Flex[0].Flex[0].Button[0]
-      Object.entries(variant.overrides).forEach(([overrideKey, value]) => {
+      Object.entries(variant.overrides).forEach(([name, value]) => {
         const propsInOverrides = value;
-        const componentType = StudioNode.getComponentTypeFromOverrideKey(overrideKey);
-        if (isPrimitive(componentType)) {
+        const componentType = this.getComponentTypeFromName(name);
+        if (componentType && isPrimitive(componentType)) {
           const childrenPropMapping = PrimitiveChildrenPropMapping[Primitive[componentType as Primitive]];
           if (childrenPropMapping !== undefined) {
             // only remap if children prop is not defined in this particular overrides section
@@ -1166,6 +1165,40 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         }
       });
     });
+  }
+
+  /**
+   * Build a mapping from component name to component type,
+   * pull out the specific component type for the given name.
+   * This is required for synthetic prop mapping of variants,
+   * since we're performing it at the top level, but need
+   * to know the underlying type given the override key.
+   */
+  private getComponentTypeFromName(name: string): string | undefined {
+    const componentNameToTypeMap = this.buildComponentNameToTypeMap(this.component);
+    return componentNameToTypeMap[name];
+  }
+
+  /**
+   * Helper to recurse through the component tree and build the name to type mapping.
+   */
+  private buildComponentNameToTypeMap(component: StudioComponent | StudioComponentChild): Record<string, string> {
+    const localMap: Record<string, string> = {};
+    if (component.name) {
+      localMap[component.name] = component.componentType;
+    }
+    if (component.children) {
+      Object.entries(
+        component.children
+          .map((child) => this.buildComponentNameToTypeMap(child))
+          .reduce((previous, next) => {
+            return { ...previous, ...next };
+          }, {}),
+      ).forEach(([name, componentType]) => {
+        localMap[name] = componentType;
+      });
+    }
+    return localMap;
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement;
