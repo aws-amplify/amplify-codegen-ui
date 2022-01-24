@@ -220,17 +220,17 @@ export default function ComponentTests() {
         <ComponentWithVariantAndOverrides id="variantAndOverrideVariantValue" variant="greeting" />
         <ComponentWithVariantAndOverrides
           id="variantAndOverrideOverrideApplied"
-          overrides={{ Text: { children: 'Overriden Text' } }}
+          overrides={{ ComponentWithVariantAndOverrides: { children: 'Overriden Text' } }}
         />
         <ComponentWithVariantAndOverrides
           id="variantAndOverrideVariantValueAndNonOverlappingOverride"
           variant="farewell"
-          overrides={{ Text: { color: 'red' } }}
+          overrides={{ ComponentWithVariantAndOverrides: { color: 'red' } }}
         />
         <ComponentWithVariantAndOverrides
           id="variantAndOverrideVariantValueAndOverlappingOverride"
           variant="farewell"
-          overrides={{ Text: { children: 'Overriden Text' } }}
+          overrides={{ ComponentWithVariantAndOverrides: { children: 'Overriden Text' } }}
         />
       </div>
       <div id="data-binding">
@@ -303,6 +303,26 @@ export default function ComponentTests() {
           ]}
         />
         <PaginatedCollection id="paginatedCollection" />
+        <CollectionWithBinding
+          id="collectionWithOverrideItems"
+          items={[
+            {
+              id: '1',
+              firstName: 'Yankee',
+              lastName: 'Doodle',
+            },
+            {
+              id: '2',
+              firstName: 'Feather',
+              lastName: 'Cap',
+            },
+          ]}
+          overrideItems={({ item, index }: { item: any; index: number }) => {
+            return {
+              children: `${index} - ${item.lastName}, ${item.firstName}`,
+            };
+          }}
+        />
       </div>
       <div id="default-value">
         <h2>Default Value</h2>
@@ -328,9 +348,9 @@ export default function ComponentTests() {
         <ComponentWithNestedOverrides
           id="componentWithNestedOverrides"
           overrides={{
-            Flex: { backgroundColor: 'red' },
-            'Flex.Flex[2]': { backgroundColor: 'green' },
-            'Flex.Flex[1].Flex[0]': { backgroundColor: 'blue' },
+            ComponentWithNestedOverrides: { backgroundColor: 'red' },
+            ChildFlex3: { backgroundColor: 'green' },
+            ChildChildFlex1: { backgroundColor: 'blue' },
           }}
         />
       </div>
