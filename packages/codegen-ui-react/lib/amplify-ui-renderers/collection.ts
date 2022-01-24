@@ -15,8 +15,9 @@
  */
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import { isStudioComponentWithCollectionProperties, StudioComponentChild } from '@aws-amplify/codegen-ui';
-import { factory, JsxChild, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
+import { factory, JsxChild, JsxElement, JsxExpression, JsxOpeningElement, SyntaxKind } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
+import { buildOpeningElementAttributes } from '../react-component-render-helper';
 
 export default class CollectionRenderer extends ReactComponentWithChildrenRenderer<BaseComponentProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
@@ -34,6 +35,33 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
 
     return element;
+  }
+
+  private renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
+    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementAttributes(value, key),
+    );
+
+    const itemsAttribute = factory.createJsxAttribute(
+      factory.createIdentifier('items'),
+      factory.createJsxExpression(
+        undefined,
+        factory.createBinaryExpression(
+          factory.createIdentifier(itemsVariableName || 'items'),
+          factory.createToken(SyntaxKind.BarBarToken),
+          factory.createArrayLiteralExpression([], false),
+        ),
+      ),
+    );
+    propsArray.push(itemsAttribute);
+
+    this.addPropsSpreadAttributes(propsArray);
+
+    return factory.createJsxOpeningElement(
+      factory.createIdentifier(this.component.componentType),
+      undefined,
+      factory.createJsxAttributes(propsArray),
+    );
   }
 
   private addKeyPropertyToChildren(children: StudioComponentChild[]) {

@@ -13,10 +13,7 @@
         "variant": "primary"
       },
       "overrides": {
-        "Button": {
-          "fontSize": "12px"
-        },
-        "Button.Text": {
+        "ComponentWithVariant": {
           "fontSize": "12px"
         }
       }
@@ -26,7 +23,7 @@
         "variant": "secondary"
       },
       "overrides": {
-        "Button": {
+        "ComponentWithVariant": {
           "fontSize": "40px"
         }
       }
@@ -37,7 +34,7 @@
         "size": "large"
       },
       "overrides": {
-        "Button": {
+        "ComponentWithVariant": {
           "width": "500px"
         }
       }
@@ -47,7 +44,7 @@
         "variant": "success"
       },
       "overrides": {
-        "Button": {
+        "ComponentWithVariant": {
           "label": "ComponentWithVariantWithMappedChildrenProp",
           "fontSize": "15px"
         }
@@ -58,7 +55,7 @@
         "variant": "light"
       },
       "overrides": {
-        "Button": {
+        "ComponentWithVariant": {
           "label": "ComponentWithVariantWithMappedChildrenProp",
           "children": "ComponentWithVariantWithChildrenProp",
           "fontSize": "16px"
