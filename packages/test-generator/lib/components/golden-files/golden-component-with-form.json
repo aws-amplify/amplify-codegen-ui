@@ -5,12 +5,12 @@
     "children": [
         {
             "componentType": "Input",
-            "name": "123",
+            "name": "Input1",
             "properties": {}
         },
         {
             "componentType": "Input",
-            "name": "123",
+            "name": "Input2",
             "properties": {
                 "name": {
                     "value": "name"
@@ -19,7 +19,7 @@
         },
         {
             "componentType": "Input",
-            "name": "123",
+            "name": "Input3",
             "properties": {
                 "name": {
                     "value": "email"
@@ -28,7 +28,7 @@
         },
         {
             "componentType": "Button",
-            "name": "123",
+            "name": "Button1",
             "properties": {
                 "onClick": {
                     "model": "User",

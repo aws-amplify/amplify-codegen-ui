@@ -9,7 +9,7 @@
         "variant": "primary"
       },
       "overrides": {
-        "Button": {
+        "CustomButton": {
           "fontSize": "12px"
         }
       }
@@ -19,10 +19,7 @@
         "variant": "secondary"
       },
       "overrides": {
-        "Button": {
-          "fontSize": "40px"
-        },
-        "Button.Text": {
+        "CustomButton": {
           "fontSize": "40px"
         }
       }
@@ -33,7 +30,7 @@
         "size": "large"
       },
       "overrides": {
-        "Button": {
+        "CustomButton": {
           "width": "500"
         }
       }

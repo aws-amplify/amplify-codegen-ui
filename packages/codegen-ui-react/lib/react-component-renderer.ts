@@ -20,7 +20,6 @@ import {
   JsxOpeningElement,
   factory,
   JsxSelfClosingElement,
-  JsxSpreadAttribute,
   SyntaxKind,
 } from 'typescript';
 
@@ -82,24 +81,28 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       attributes.push(propsAttr);
     }
 
-    const overrideAttr = this.node.hasAncestorOfType('Collection')
-      ? this.buildCollectionOverridePropsAttribute()
-      : this.buildGetOverridePropsAttribute();
-    attributes.push(overrideAttr);
+    if (this.node.hasAncestorOfType('Collection')) {
+      this.addCollectionOverridePropsAttribute(attributes);
+    } else {
+      this.addGetOverridePropsAttribute(attributes);
+    }
   }
 
-  private buildGetOverridePropsAttribute(): JsxSpreadAttribute {
-    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
-    return factory.createJsxSpreadAttribute(
-      factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
-        factory.createIdentifier('overrides'),
-        factory.createStringLiteral(this.node.getOverrideKey()),
-      ]),
-    );
+  private addGetOverridePropsAttribute(attributes: JsxAttributeLike[]) {
+    if (this.node.component.name) {
+      const overrideAttr = factory.createJsxSpreadAttribute(
+        factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
+          factory.createIdentifier('overrides'),
+          factory.createStringLiteral(this.node.component.name),
+        ]),
+      );
+      this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
+      attributes.push(overrideAttr);
+    }
   }
 
-  private buildCollectionOverridePropsAttribute(): JsxSpreadAttribute {
-    return factory.createJsxSpreadAttribute(
+  private addCollectionOverridePropsAttribute(attributes: JsxAttributeLike[]) {
+    const overrideAttr = factory.createJsxSpreadAttribute(
       factory.createParenthesizedExpression(
         factory.createBinaryExpression(
           factory.createIdentifier('overrideItems'),
@@ -116,5 +119,6 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
         ),
       ),
     );
+    attributes.push(overrideAttr);
   }
 }
