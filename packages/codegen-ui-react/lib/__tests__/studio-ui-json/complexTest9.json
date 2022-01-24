@@ -361,7 +361,7 @@
         "mode": "Light"
       },
       "overrides": {
-        "Flex.Flex[0].Flex[0].Text[0]": {
+        "LOREM IPSUM": {
           "fontFamily": "Inter",
           "fontSize": "16px",
           "label": "LOREM IPSUM",
@@ -379,7 +379,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0].Flex[0].Flex[0].Text[0]": {
+        "Ut enim ad minim veniam quis nostrud": {
           "fontFamily": "Inter",
           "fontSize": "40px",
           "label": "Ut enim ad minim veniam quis nostrud",
@@ -396,7 +396,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0].Flex[0].Flex[0].Text[1]": {
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.": {
           "fontFamily": "Inter",
           "fontSize": "16px",
           "label": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
@@ -414,7 +414,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0].Flex[0].Flex[0]": {
+        "Message": {
           "gap": "16px",
           "direction": "column",
           "justifyContent": "center",
@@ -424,7 +424,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0].Flex[0].Button[0]": {
+        "Button": {
           "display": "flex",
           "shrink": "0",
           "width": "206px",
@@ -432,7 +432,7 @@
           "size": "large",
           "variation": "primary"
         },
-        "Flex.Flex[0].Flex[0]": {
+        "HeroMessage": {
           "gap": "24px",
           "direction": "column",
           "justifyContent": "center",
@@ -442,7 +442,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0]": {
+        "Left": {
           "gap": "10px",
           "direction": "column",
           "height": "324px",
@@ -456,7 +456,7 @@
           "padding": "120px 120px 120px 120px",
           "backgroundColor": "rgba(255,255,255,1)"
         },
-        "Flex": {
+        "ComplexTest9": {
           "gap": "0",
           "direction": "row",
           "width": "941px",
@@ -474,7 +474,7 @@
         "mode": "Dark"
       },
       "overrides": {
-        "Flex.Flex[0].Flex[0].Text[0]": {
+        "LOREM IPSUM": {
           "fontFamily": "Inter",
           "fontSize": "16px",
           "label": "TestMessage1",
@@ -492,7 +492,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0].Flex[0].Flex[0].Text[0]": {
+        "Ut enim ad minim veniam quis nostrud": {
           "fontFamily": "Inter",
           "fontSize": "40px",
           "label": "TestMessage2",
@@ -509,7 +509,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0].Flex[0].Flex[0].Text[1]": {
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.": {
           "fontFamily": "Inter",
           "fontSize": "16px",
           "label": "TestMessage3",
@@ -527,7 +527,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0].Flex[0].Flex[0]": {
+        "Message": {
           "gap": "16px",
           "direction": "column",
           "justifyContent": "center",
@@ -537,7 +537,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0].Flex[0].Button[0]": {
+        "Button": {
           "display": "flex",
           "shrink": "0",
           "width": "174px",
@@ -545,7 +545,7 @@
           "size": "large",
           "variation": "primary"
         },
-        "Flex.Flex[0].Flex[0]": {
+        "HeroMessage": {
           "gap": "24px",
           "direction": "column",
           "justifyContent": "center",
@@ -555,7 +555,7 @@
           "position": "relative",
           "padding": "0px 0px 0px 0px"
         },
-        "Flex.Flex[0]": {
+        "Left": {
           "gap": "10px",
           "direction": "column",
           "height": "422px",
@@ -569,7 +569,7 @@
           "padding": "120px 120px 120px 120px",
           "backgroundColor": "rgba(0,63.750030398368835,76.50000303983688,1)"
         },
-        "Flex": {
+        "ComplexTest9": {
           "gap": "0",
           "direction": "row",
           "width": "908px",
