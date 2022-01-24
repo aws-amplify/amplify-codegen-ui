@@ -15,7 +15,6 @@
  */
 /* eslint-disable no-new */
 import { StudioNode } from '../studio-node';
-import { StudioComponentChild } from '../types';
 
 describe('StudioNode', () => {
   describe('isRoot', () => {
@@ -62,101 +61,131 @@ describe('StudioNode', () => {
     });
   });
 
-  describe('getOverrideKey', () => {
-    test('returns for parent', () => {
-      const rootComponent = createStudioNodeOfType('Flex', createStudioNodeOfType('Button'));
-
-      expect(rootComponent.getOverrideKey()).toEqual('Flex');
+  describe('hasAncestorOfType', () => {
+    test('it returns false with no parent', () => {
+      const node = new StudioNode({
+        componentType: 'View',
+        name: 'Node',
+        properties: {},
+      });
+      expect(node.hasAncestorOfType('Collection')).toBeFalsy();
     });
 
-    test('returns only one child', () => {
-      const button1 = createStudioNodeOfType('Button');
-      createStudioNodeOfType('Flex', button1);
-
-      expect(button1.getOverrideKey()).toEqual('Flex.Button[0]');
+    test('it returns false with node is of type, but not parent', () => {
+      const parent = new StudioNode({
+        componentType: 'View',
+        name: 'Parent Node',
+        properties: {},
+      });
+      const node = new StudioNode(
+        {
+          componentType: 'Collection',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeFalsy();
     });
 
-    test('returns index 0 for first of multiple elements', () => {
-      const button1 = createStudioNodeOfType('Button');
-      createStudioNodeOfType('Flex', button1, createStudioNodeOfType('Button'), createStudioNodeOfType('Tooltip'));
-
-      expect(button1.getOverrideKey()).toEqual('Flex.Button[0]');
+    test('it returns true if immediate parent is of type', () => {
+      const parent = new StudioNode({
+        componentType: 'Collection',
+        name: 'Parent Node',
+        properties: {},
+      });
+      const node = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeTruthy();
     });
 
-    test('returns index 0 for first of element of type', () => {
-      const button1 = createStudioNodeOfType('Button');
-      const button2 = createStudioNodeOfType('Button');
-      const tooltip1 = createStudioNodeOfType('Tooltip');
-      createStudioNodeOfType('Flex', button1, button2, tooltip1);
-
-      expect(tooltip1.getOverrideKey()).toEqual('Flex.Tooltip[0]');
+    test('it returns true if ancestor is of type', () => {
+      const greatGrandParent = new StudioNode({
+        componentType: 'View',
+        name: 'Great GrandParent Node',
+        properties: {},
+      });
+      const grandParent = new StudioNode(
+        {
+          componentType: 'Collection',
+          name: 'GrandParent Node',
+          properties: {},
+        },
+        greatGrandParent,
+      );
+      const parent = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Parent Node',
+          properties: {},
+        },
+        grandParent,
+      );
+      const node = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeTruthy();
     });
 
-    test('returns index 1 for second of element of type', () => {
-      const button1 = createStudioNodeOfType('Button');
-      const button2 = createStudioNodeOfType('Button');
-      const tooltip1 = createStudioNodeOfType('Tooltip');
-      createStudioNodeOfType('Flex', button1, button2, tooltip1);
-
-      expect(button2.getOverrideKey()).toEqual('Flex.Button[1]');
+    test('it returns true if top-level ancestor is of type', () => {
+      const grandParent = new StudioNode({
+        componentType: 'Collection',
+        name: 'GrandParent Node',
+        properties: {},
+      });
+      const parent = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Parent Node',
+          properties: {},
+        },
+        grandParent,
+      );
+      const node = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeTruthy();
     });
 
-    /**
-     * <Flex> <-- rootComponent: 'Flex'
-     *     <Flex />
-     *     <Flex />
-     *     <Flex> <-- thirdComponentOfType: 'Flex.Flex[2]'
-     *         <Button />
-     *         <Button> <-- secondSubChildOfType: 'Flex.Flex[2].Button[1]'
-     *             <Tooltip /> <-- firstSubSubChild: 'Flex.Flex[2].Button[1].Tooltip[0]'
-     *         </Button>
-     *     </Flex>
-     *     <Tooltip />
-     *     <Button />
-     * </Flex>
-     */
-    test('returns for deeply nested elements', () => {
-      const firstSubSubChild = createStudioNodeOfType('Tooltip');
-
-      const firstSubChildOfType = createStudioNodeOfType('Button');
-      const secondSubChildOfType = createStudioNodeOfType('Button', firstSubSubChild);
-
-      const flex1 = createStudioNodeOfType('Flex');
-      const flex2 = createStudioNodeOfType('Flex');
-      const flex3 = createStudioNodeOfType('Flex', firstSubChildOfType, secondSubChildOfType);
-      const flex4 = createStudioNodeOfType('Flex');
-      const tooltip1 = createStudioNodeOfType('Tooltip');
-      const button1 = createStudioNodeOfType('Button');
-
-      createStudioNodeOfType('Flex', flex1, flex2, flex3, flex4, tooltip1, button1);
-
-      expect(flex3.getOverrideKey()).toEqual('Flex.Flex[2]');
-      expect(secondSubChildOfType.getOverrideKey()).toEqual('Flex.Flex[2].Button[1]');
-      expect(firstSubSubChild.getOverrideKey()).toEqual('Flex.Flex[2].Button[1].Tooltip[0]');
-    });
-  });
-
-  describe('getComponentTypeFromOverrideKey', () => {
-    test('get component type from override key with only root component', () => {
-      const actual = StudioNode.getComponentTypeFromOverrideKey('Flex');
-      expect(actual).toEqual('Flex');
-    });
-
-    test('get component type from override key with nested component', () => {
-      const actual = StudioNode.getComponentTypeFromOverrideKey('Flex.Flex[2].Button[1]');
-      expect(actual).toEqual('Button');
+    test('it false if no ancestor of type exists', () => {
+      const grandParent = new StudioNode({
+        componentType: 'view',
+        name: 'GrandParent Node',
+        properties: {},
+      });
+      const parent = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Parent Node',
+          properties: {},
+        },
+        grandParent,
+      );
+      const node = new StudioNode(
+        {
+          componentType: 'View',
+          name: 'Node',
+          properties: {},
+        },
+        parent,
+      );
+      expect(node.hasAncestorOfType('Collection')).toBeFalsy();
     });
   });
 });
-
-const createStudioNodeOfType = (type: string, ...children: StudioNode[]): StudioNode => {
-  const node = new StudioNode({
-    componentType: type,
-    name: type,
-    properties: {},
-    children: children.map((child) => child.component as StudioComponentChild),
-  });
-  // eslint-disable-next-line no-return-assign, no-param-reassign
-  children.forEach((child) => (child.parent = node));
-  return node;
-};
