@@ -13,7 +13,7 @@
         "mode": "test"
       },
       "overrides": {
-        "View": {
+        "ComponentWithVariantsAndNotOverrideChildProp": {
           "label": "componentWithVariantsWithLabelProp"
         }
       }

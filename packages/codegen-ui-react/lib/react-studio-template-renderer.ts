@@ -30,7 +30,7 @@ import {
   StudioComponentAction,
   StudioComponentSimplePropertyBinding,
   handleCodegenErrors,
-  StudioNode,
+  StudioComponentChild,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -401,37 +401,71 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private buildComponentPropNode(component: StudioComponent): TypeNode | undefined {
     const propSignatures: PropertySignature[] = [];
-    const bindingProps = component.bindingProperties;
-    if (bindingProps === undefined || !isStudioComponentWithBinding(component)) {
-      return undefined;
+    if (component.bindingProperties !== undefined && isStudioComponentWithBinding(component)) {
+      Object.entries(component.bindingProperties).forEach(([propName, binding]) => {
+        if (isSimplePropertyBinding(binding)) {
+          const propSignature = factory.createPropertySignature(
+            undefined,
+            propName,
+            factory.createToken(SyntaxKind.QuestionToken),
+            factory.createTypeReferenceNode(binding.type, undefined),
+          );
+          propSignatures.push(propSignature);
+        } else if (isDataPropertyBinding(binding)) {
+          const propSignature = factory.createPropertySignature(
+            undefined,
+            propName,
+            factory.createToken(SyntaxKind.QuestionToken),
+            factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
+          );
+          propSignatures.push(propSignature);
+        }
+      });
     }
-    Object.entries(component.bindingProperties).forEach(([propName, binding]) => {
-      if (isSimplePropertyBinding(binding)) {
-        const propSignature = factory.createPropertySignature(
-          undefined,
-          propName,
-          factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(binding.type, undefined),
-        );
-        propSignatures.push(propSignature);
-      } else if (isDataPropertyBinding(binding)) {
-        const propSignature = factory.createPropertySignature(
-          undefined,
-          propName,
-          factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
-        );
-        propSignatures.push(propSignature);
-      }
-    });
     if (component.componentType === 'Collection') {
-      const propSignature = factory.createPropertySignature(
-        undefined,
-        'items',
-        factory.createToken(SyntaxKind.QuestionToken),
-        factory.createTypeReferenceNode('any[]', undefined),
+      propSignatures.push(
+        factory.createPropertySignature(
+          undefined,
+          'items',
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode('any[]', undefined),
+        ),
       );
-      propSignatures.push(propSignature);
+      propSignatures.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier('overrideItems'),
+          factory.createToken(ts.SyntaxKind.QuestionToken),
+          factory.createFunctionTypeNode(
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createObjectBindingPattern([
+                  factory.createBindingElement(
+                    undefined,
+                    factory.createIdentifier('item'),
+                    factory.createIdentifier('any'),
+                    undefined,
+                  ),
+                  factory.createBindingElement(
+                    undefined,
+                    factory.createIdentifier('index'),
+                    factory.createIdentifier('number'),
+                    undefined,
+                  ),
+                ]),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+          ),
+        ),
+      );
     }
     if (propSignatures.length === 0) {
       return undefined;
@@ -468,6 +502,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           )
         : factory.createBindingElement(undefined, undefined, factory.createIdentifier('items'), undefined);
       elements.push(bindingElement);
+      elements.push(
+        factory.createBindingElement(undefined, undefined, factory.createIdentifier('overrideItems'), undefined),
+      );
     }
 
     // remove overrides from rest of props
@@ -1087,11 +1124,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     this.component.variants.forEach((variant) => {
-      // loop through the keys in the dict. Ex. Button, Flex.Flex[0].Flex[0].Button[0]
-      Object.entries(variant.overrides).forEach(([overrideKey, value]) => {
+      Object.entries(variant.overrides).forEach(([name, value]) => {
         const propsInOverrides = value;
-        const componentType = StudioNode.getComponentTypeFromOverrideKey(overrideKey);
-        if (isPrimitive(componentType)) {
+        const componentType = this.getComponentTypeFromName(name);
+        if (componentType && isPrimitive(componentType)) {
           const childrenPropMapping = PrimitiveChildrenPropMapping[Primitive[componentType as Primitive]];
           if (childrenPropMapping !== undefined) {
             // only remap if children prop is not defined in this particular overrides section
@@ -1103,6 +1139,40 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         }
       });
     });
+  }
+
+  /**
+   * Build a mapping from component name to component type,
+   * pull out the specific component type for the given name.
+   * This is required for synthetic prop mapping of variants,
+   * since we're performing it at the top level, but need
+   * to know the underlying type given the override key.
+   */
+  private getComponentTypeFromName(name: string): string | undefined {
+    const componentNameToTypeMap = this.buildComponentNameToTypeMap(this.component);
+    return componentNameToTypeMap[name];
+  }
+
+  /**
+   * Helper to recurse through the component tree and build the name to type mapping.
+   */
+  private buildComponentNameToTypeMap(component: StudioComponent | StudioComponentChild): Record<string, string> {
+    const localMap: Record<string, string> = {};
+    if (component.name) {
+      localMap[component.name] = component.componentType;
+    }
+    if (component.children) {
+      Object.entries(
+        component.children
+          .map((child) => this.buildComponentNameToTypeMap(child))
+          .reduce((previous, next) => {
+            return { ...previous, ...next };
+          }, {}),
+      ).forEach(([name, componentType]) => {
+        localMap[name] = componentType;
+      });
+    }
+    return localMap;
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement;
