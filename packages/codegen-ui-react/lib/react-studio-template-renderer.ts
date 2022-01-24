@@ -19,13 +19,12 @@ import {
   isStudioComponentWithBinding,
   isSimplePropertyBinding,
   isDataPropertyBinding,
-  isAuthPropertyBinding,
+  isStudioComponentWithAuthProperty,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
   isStudioComponentWithActions,
   StudioComponent,
   StudioComponentPredicate,
-  StudioComponentAuthPropertyBinding,
   StudioComponentSort,
   StudioComponentVariant,
   StudioComponentAction,
@@ -51,7 +50,6 @@ import ts, {
   ObjectLiteralExpression,
   CallExpression,
   Identifier,
-  ComputedPropertyName,
   ArrowFunction,
   LiteralExpression,
   BooleanLiteral,
@@ -544,56 +542,32 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private buildUseAuthenticatedUserStatement(component: StudioComponent): Statement | undefined {
-    if (isStudioComponentWithBinding(component)) {
-      const authPropertyBindings = Object.entries(component.bindingProperties).filter(([, binding]) =>
-        isAuthPropertyBinding(binding),
-      );
-      if (authPropertyBindings.length) {
-        // create destructuring statements
-        // { propertyName: newName, ['custom:property']: customProperty }
-        const bindings = factory.createObjectBindingPattern(
-          authPropertyBindings.map(([propName, binding]) => {
-            const {
-              bindingProperties: { userAttribute },
-            } = binding as StudioComponentAuthPropertyBinding;
-            let propertyName: undefined | Identifier | ComputedPropertyName = factory.createIdentifier(userAttribute);
-            if (userAttribute.startsWith('custom:')) {
-              propertyName = factory.createComputedPropertyName(factory.createStringLiteral(userAttribute));
-            } else if (propName === userAttribute) {
-              propertyName = undefined;
-            }
-            return factory.createBindingElement(undefined, propertyName, factory.createIdentifier(propName), undefined);
-          }),
-        );
-
-        // get values from useAuthenticatedUser
-        // const { property } = useAuth().user?.attributes || {};
-        return factory.createVariableStatement(
-          undefined,
-          factory.createVariableDeclarationList(
-            [
-              factory.createVariableDeclaration(
-                bindings,
-                undefined,
-                undefined,
-                factory.createBinaryExpression(
-                  factory.createPropertyAccessChain(
-                    factory.createPropertyAccessExpression(
-                      factory.createCallExpression(factory.createIdentifier('useAuth'), undefined, []),
-                      factory.createIdentifier('user'),
-                    ),
-                    factory.createToken(ts.SyntaxKind.QuestionDotToken),
-                    factory.createIdentifier('attributes'),
+    if (isStudioComponentWithAuthProperty(component)) {
+      return factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('authAttributes'),
+              undefined,
+              undefined,
+              factory.createBinaryExpression(
+                factory.createPropertyAccessChain(
+                  factory.createPropertyAccessExpression(
+                    factory.createCallExpression(factory.createIdentifier('useAuth'), undefined, []),
+                    factory.createIdentifier('user'),
                   ),
-                  factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
-                  factory.createObjectLiteralExpression([], false),
+                  factory.createToken(ts.SyntaxKind.QuestionDotToken),
+                  factory.createIdentifier('attributes'),
                 ),
+                factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                factory.createObjectLiteralExpression([], false),
               ),
-            ],
-            ts.NodeFlags.Const,
-          ),
-        );
-      }
+            ),
+          ],
+          ts.NodeFlags.Const,
+        ),
+      );
     }
 
     return undefined;

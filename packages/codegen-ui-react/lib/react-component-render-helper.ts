@@ -14,15 +14,16 @@
   limitations under the License.
  */
 import {
+  BoundStudioComponentProperty,
+  CollectionStudioComponentProperty,
+  ComponentPropertyValueTypes,
   ConcatenatedStudioComponentProperty,
   ConditionalStudioComponentProperty,
   FixedStudioComponentProperty,
-  BoundStudioComponentProperty,
-  CollectionStudioComponentProperty,
+  isAuthProperty,
   RelationalOperator,
-  WorkflowStudioComponentProperty,
-  FormStudioComponentProperty,
   StudioComponent,
+  StudioComponentAuthProperty,
   StudioComponentChild,
 } from '@aws-amplify/codegen-ui';
 
@@ -52,15 +53,6 @@ export function getComponentPropName(componentName?: string): string {
   }
   return 'ComponentWithoutNameProps';
 }
-
-export type ComponentPropertyValueTypes =
-  | ConcatenatedStudioComponentProperty
-  | ConditionalStudioComponentProperty
-  | FixedStudioComponentProperty
-  | BoundStudioComponentProperty
-  | CollectionStudioComponentProperty
-  | WorkflowStudioComponentProperty
-  | FormStudioComponentProperty;
 
 export function isFixedPropertyWithValue(prop: ComponentPropertyValueTypes): prop is FixedStudioComponentProperty {
   return 'value' in prop;
@@ -107,6 +99,20 @@ export function buildBindingExpression(prop: BoundStudioComponentProperty): Expr
 export function buildBindingAttr(prop: BoundStudioComponentProperty, propName: string): JsxAttribute {
   const expr = buildBindingExpression(prop);
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
+}
+
+function buildAuthExpression(prop: StudioComponentAuthProperty): Expression {
+  return factory.createElementAccessExpression(
+    factory.createIdentifier('authAttributes'),
+    factory.createStringLiteral(prop.userAttribute),
+  );
+}
+
+export function buildUserAuthAttr(prop: StudioComponentAuthProperty, propName: string): JsxAttribute {
+  return factory.createJsxAttribute(
+    factory.createIdentifier(propName),
+    factory.createJsxExpression(undefined, buildAuthExpression(prop)),
+  );
 }
 
 export function buildBindingWithDefaultExpression(
@@ -289,6 +295,10 @@ export function resolvePropToExpression(prop: ComponentPropertyValueTypes): Expr
         : buildBindingWithDefaultExpression(prop, prop.defaultValue);
     return expr;
   }
+
+  if (isAuthProperty(prop)) {
+    return buildAuthExpression(prop);
+  }
   if (isCollectionItemBoundProperty(prop)) {
     const expr =
       prop.defaultValue === undefined
@@ -443,6 +453,9 @@ export function buildOpeningElementAttributes(prop: ComponentPropertyValueTypes,
     return prop.defaultValue === undefined
       ? buildBindingAttr(prop, propName)
       : buildBindingAttrWithDefault(prop, propName, prop.defaultValue);
+  }
+  if (isAuthProperty(prop)) {
+    return buildUserAuthAttr(prop, propName);
   }
   if (isCollectionItemBoundProperty(prop)) {
     return prop.defaultValue === undefined
