@@ -78,7 +78,6 @@ export type StudioComponent = {
   bindingProperties: {
     [propertyName: string]:
       | StudioComponentDataPropertyBinding
-      | StudioComponentAuthPropertyBinding
       | StudioComponentStoragePropertyBinding
       | StudioComponentSimplePropertyBinding
       | StudioComponentEventPropertyBinding;
@@ -142,7 +141,6 @@ export type NewStudioComponent = {
   bindingProperties: {
     [propertyName: string]:
       | StudioComponentDataPropertyBinding
-      | StudioComponentAuthPropertyBinding
       | StudioComponentStoragePropertyBinding
       | StudioComponentSimplePropertyBinding
       | StudioComponentEventPropertyBinding;
@@ -260,6 +258,7 @@ export type StudioComponentProperty = (
   | ConditionalStudioComponentProperty
   | WorkflowStudioComponentProperty
   | FormStudioComponentProperty
+  | StudioComponentAuthProperty
 ) &
   CommonPropertyValues;
 
@@ -435,16 +434,11 @@ export type FormBindingElement = {
  * This represent the configuration for binding a component property
  * to Amplify specific information
  */
-export type StudioComponentAuthPropertyBinding = {
+export type StudioComponentAuthProperty = {
   /**
-   * This declares where the data is coming from to bind to
+   * This is the value of the user attribute
    */
-  type: 'Authentication';
-
-  /**
-   * This is the value of the data binding
-   */
-  bindingProperties: StudioComponentAuthBindingProperty;
+  userAttribute: string;
 };
 
 /**
