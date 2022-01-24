@@ -14,7 +14,15 @@
   limitations under the License.
  */
 import { ComponentRendererBase, StudioNode, StudioComponent, StudioComponentChild } from '@aws-amplify/codegen-ui';
-import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory, JsxSelfClosingElement } from 'typescript';
+import {
+  JsxAttributeLike,
+  JsxElement,
+  JsxOpeningElement,
+  factory,
+  JsxSelfClosingElement,
+  JsxSpreadAttribute,
+  SyntaxKind,
+} from 'typescript';
 
 import {
   addBindingPropertiesImports,
@@ -68,19 +76,45 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     );
   }
 
-  private addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
+  protected addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
       const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('rest'));
       attributes.push(propsAttr);
     }
 
-    const overrideAttr = factory.createJsxSpreadAttribute(
+    const overrideAttr = this.node.hasAncestorOfType('Collection')
+      ? this.buildCollectionOverridePropsAttribute()
+      : this.buildGetOverridePropsAttribute();
+    attributes.push(overrideAttr);
+  }
+
+  private buildGetOverridePropsAttribute(): JsxSpreadAttribute {
+    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
+    return factory.createJsxSpreadAttribute(
       factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
         factory.createIdentifier('overrides'),
         factory.createStringLiteral(this.node.getOverrideKey()),
       ]),
     );
-    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
-    attributes.push(overrideAttr);
+  }
+
+  private buildCollectionOverridePropsAttribute(): JsxSpreadAttribute {
+    return factory.createJsxSpreadAttribute(
+      factory.createParenthesizedExpression(
+        factory.createBinaryExpression(
+          factory.createIdentifier('overrideItems'),
+          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+          factory.createCallExpression(factory.createIdentifier('overrideItems'), undefined, [
+            factory.createObjectLiteralExpression(
+              [
+                factory.createShorthandPropertyAssignment(factory.createIdentifier('item'), undefined),
+                factory.createShorthandPropertyAssignment(factory.createIdentifier('index'), undefined),
+              ],
+              false,
+            ),
+          ]),
+        ),
+      ),
+    );
   }
 }

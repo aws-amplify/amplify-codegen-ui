@@ -303,6 +303,26 @@ export default function ComponentTests() {
           ]}
         />
         <PaginatedCollection id="paginatedCollection" />
+        <CollectionWithBinding
+          id="collectionWithOverrideItems"
+          items={[
+            {
+              id: '1',
+              firstName: 'Yankee',
+              lastName: 'Doodle',
+            },
+            {
+              id: '2',
+              firstName: 'Feather',
+              lastName: 'Cap',
+            },
+          ]}
+          overrideItems={({ item, index }: { item: any; index: number }) => {
+            return {
+              children: `${index} - ${item.lastName}, ${item.firstName}`,
+            };
+          }}
+        />
       </div>
       <div id="default-value">
         <h2>Default Value</h2>

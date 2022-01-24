@@ -403,37 +403,71 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private buildComponentPropNode(component: StudioComponent): TypeNode | undefined {
     const propSignatures: PropertySignature[] = [];
-    const bindingProps = component.bindingProperties;
-    if (bindingProps === undefined || !isStudioComponentWithBinding(component)) {
-      return undefined;
+    if (component.bindingProperties !== undefined && isStudioComponentWithBinding(component)) {
+      Object.entries(component.bindingProperties).forEach(([propName, binding]) => {
+        if (isSimplePropertyBinding(binding)) {
+          const propSignature = factory.createPropertySignature(
+            undefined,
+            propName,
+            factory.createToken(SyntaxKind.QuestionToken),
+            factory.createTypeReferenceNode(binding.type, undefined),
+          );
+          propSignatures.push(propSignature);
+        } else if (isDataPropertyBinding(binding)) {
+          const propSignature = factory.createPropertySignature(
+            undefined,
+            propName,
+            factory.createToken(SyntaxKind.QuestionToken),
+            factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
+          );
+          propSignatures.push(propSignature);
+        }
+      });
     }
-    Object.entries(component.bindingProperties).forEach(([propName, binding]) => {
-      if (isSimplePropertyBinding(binding)) {
-        const propSignature = factory.createPropertySignature(
-          undefined,
-          propName,
-          factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(binding.type, undefined),
-        );
-        propSignatures.push(propSignature);
-      } else if (isDataPropertyBinding(binding)) {
-        const propSignature = factory.createPropertySignature(
-          undefined,
-          propName,
-          factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
-        );
-        propSignatures.push(propSignature);
-      }
-    });
     if (component.componentType === 'Collection') {
-      const propSignature = factory.createPropertySignature(
-        undefined,
-        'items',
-        factory.createToken(SyntaxKind.QuestionToken),
-        factory.createTypeReferenceNode('any[]', undefined),
+      propSignatures.push(
+        factory.createPropertySignature(
+          undefined,
+          'items',
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode('any[]', undefined),
+        ),
       );
-      propSignatures.push(propSignature);
+      propSignatures.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier('overrideItems'),
+          factory.createToken(ts.SyntaxKind.QuestionToken),
+          factory.createFunctionTypeNode(
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createObjectBindingPattern([
+                  factory.createBindingElement(
+                    undefined,
+                    factory.createIdentifier('item'),
+                    factory.createIdentifier('any'),
+                    undefined,
+                  ),
+                  factory.createBindingElement(
+                    undefined,
+                    factory.createIdentifier('index'),
+                    factory.createIdentifier('number'),
+                    undefined,
+                  ),
+                ]),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+          ),
+        ),
+      );
     }
     if (propSignatures.length === 0) {
       return undefined;
@@ -470,6 +504,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           )
         : factory.createBindingElement(undefined, undefined, factory.createIdentifier('items'), undefined);
       elements.push(bindingElement);
+      elements.push(
+        factory.createBindingElement(undefined, undefined, factory.createIdentifier('overrideItems'), undefined),
+      );
     }
 
     // remove overrides from rest of props

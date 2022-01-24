@@ -19,7 +19,16 @@ import {
   StudioComponent,
   StudioComponentChild,
 } from '@aws-amplify/codegen-ui';
-import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
+import {
+  JsxAttributeLike,
+  JsxElement,
+  JsxChild,
+  JsxOpeningElement,
+  SyntaxKind,
+  Expression,
+  factory,
+  JsxSpreadAttribute,
+} from 'typescript';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 import {
   addBindingPropertiesImports,
@@ -77,47 +86,46 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
     );
   }
 
-  protected renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
-    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementAttributes(value, key),
-    );
-
-    const itemsAttribute = factory.createJsxAttribute(
-      factory.createIdentifier('items'),
-      factory.createJsxExpression(
-        undefined,
-        factory.createBinaryExpression(
-          factory.createIdentifier(itemsVariableName || 'items'),
-          factory.createToken(SyntaxKind.BarBarToken),
-          factory.createArrayLiteralExpression([], false),
-        ),
-      ),
-    );
-    propsArray.push(itemsAttribute);
-
-    this.addPropsSpreadAttributes(propsArray);
-
-    return factory.createJsxOpeningElement(
-      factory.createIdentifier(this.component.componentType),
-      undefined,
-      factory.createJsxAttributes(propsArray),
-    );
-  }
-
-  private addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
+  protected addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
       const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('rest'));
       attributes.push(propsAttr);
     }
 
-    const overrideAttr = factory.createJsxSpreadAttribute(
+    const overrideAttr = this.node.hasAncestorOfType('Collection')
+      ? this.buildCollectionOverridePropsAttribute()
+      : this.buildGetOverridePropsAttribute();
+    attributes.push(overrideAttr);
+  }
+
+  private buildGetOverridePropsAttribute(): JsxSpreadAttribute {
+    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
+    return factory.createJsxSpreadAttribute(
       factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
         factory.createIdentifier('overrides'),
         factory.createStringLiteral(this.node.getOverrideKey()),
       ]),
     );
-    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
-    attributes.push(overrideAttr);
+  }
+
+  private buildCollectionOverridePropsAttribute(): JsxSpreadAttribute {
+    return factory.createJsxSpreadAttribute(
+      factory.createParenthesizedExpression(
+        factory.createBinaryExpression(
+          factory.createIdentifier('overrideItems'),
+          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+          factory.createCallExpression(factory.createIdentifier('overrideItems'), undefined, [
+            factory.createObjectLiteralExpression(
+              [
+                factory.createShorthandPropertyAssignment(factory.createIdentifier('item'), undefined),
+                factory.createShorthandPropertyAssignment(factory.createIdentifier('index'), undefined),
+              ],
+              false,
+            ),
+          ]),
+        ),
+      ),
+    );
   }
 
   private addBoundExpressionAttributes(
