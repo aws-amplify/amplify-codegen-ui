@@ -36,6 +36,16 @@ export class StudioNode {
     return [this];
   }
 
+  /**
+   * Return true if any ancestor node of the current node has type `componentType`.
+   */
+  hasAncestorOfType(componentType: string): boolean {
+    const ancestorComponentTypes = this.getComponentPathToRoot().map((node) => node.component.componentType);
+    // We don't want to check if the current node has type, so shift that element out.
+    ancestorComponentTypes.shift();
+    return ancestorComponentTypes.some((ancestorComponentType) => ancestorComponentType === componentType);
+  }
+
   getOverrideIndex(): number {
     if (this.parent === undefined || this.parent.component.children === undefined) {
       return -1;

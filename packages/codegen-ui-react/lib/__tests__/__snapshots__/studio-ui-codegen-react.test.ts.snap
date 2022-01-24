@@ -151,17 +151,17 @@ exports[`amplify render tests collection should render collection with data bind
 import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
-  EscapeHatchProps,
-  createDataStorePredicate,
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
-import {
   Button,
   Collection,
   CollectionProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  createDataStorePredicate,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
 
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -169,6 +169,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     backgroundColor?: String;
     buttonColor?: UserPreferences;
     items?: any[];
+    overrideItems?: ({ item: any, index: number }) => EscapeHatchProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -181,6 +182,7 @@ export default function CollectionOfCustomButtons(
     backgroundColor,
     buttonColor: buttonColorProp,
     items,
+    overrideItems,
     overrides: overridesProp,
     ...rest
   } = props;
@@ -228,14 +230,14 @@ export default function CollectionOfCustomButtons(
       {(item, index) => (
         <Flex
           key={item.id}
-          {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}
+          {...(overrideItems && overrideItems({ item, index }))}
         >
           <Button
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
             disabled={isDisabled}
             children={item.username || \\"hspain@gmail.com\\"}
-            {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[0]\\")}
+            {...(overrideItems && overrideItems({ item, index }))}
           ></Button>
         </Flex>
       )}
@@ -251,17 +253,17 @@ Object {
 import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
-  EscapeHatchProps,
-  createDataStorePredicate,
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
-import {
   Button,
   Collection,
   CollectionProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  createDataStorePredicate,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
 import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
 
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
@@ -270,6 +272,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     backgroundColor?: String;
     buttonColor?: UserPreferences;
     items?: any[];
+    overrideItems?: ({ item: any, index: number }) => EscapeHatchProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -282,6 +285,7 @@ export default function CollectionOfCustomButtons(
     backgroundColor,
     buttonColor: buttonColorProp,
     items,
+    overrideItems,
     overrides: overridesProp,
     ...rest
   } = props;
@@ -334,14 +338,14 @@ export default function CollectionOfCustomButtons(
       {(item, index) => (
         <Flex
           key={item.id}
-          {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}
+          {...(overrideItems && overrideItems({ item, index }))}
         >
           <Button
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
             disabled={isDisabled}
             children={item.username || \\"hspain@gmail.com\\"}
-            {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[0]\\")}
+            {...(overrideItems && overrideItems({ item, index }))}
           ></Button>
         </Flex>
       )}
@@ -359,17 +363,17 @@ exports[`amplify render tests collection should render collection with data bind
 import React from \\"react\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
-  EscapeHatchProps,
-  createDataStorePredicate,
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
-import {
   Button,
   Collection,
   CollectionProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  createDataStorePredicate,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
 
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -377,6 +381,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     backgroundColor?: String;
     buttonColor?: UserPreferences;
     items?: any[];
+    overrideItems?: ({ item: any, index: number }) => EscapeHatchProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -389,6 +394,7 @@ export default function CollectionOfCustomButtons(
     backgroundColor,
     buttonColor: buttonColorProp,
     items: itemsProp,
+    overrideItems,
     overrides: overridesProp,
     ...rest
   } = props;
@@ -436,14 +442,14 @@ export default function CollectionOfCustomButtons(
       {(item, index) => (
         <Flex
           key={item.id}
-          {...getOverrideProps(overrides, \\"Collection.Flex[0]\\")}
+          {...(overrideItems && overrideItems({ item, index }))}
         >
           <Button
             labelWidth={width}
             backgroundColor={buttonColor?.favoriteColor}
             disabled={isDisabled}
             children={item.username || \\"hspain@gmail.com\\"}
-            {...getOverrideProps(overrides, \\"Collection.Flex[0].Button[0]\\")}
+            {...(overrideItems && overrideItems({ item, index }))}
           ></Button>
         </Flex>
       )}
@@ -456,18 +462,19 @@ export default function CollectionOfCustomButtons(
 exports[`amplify render tests collection should render collection with data binding with no predicate 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
+import ListingCard from \\"./ListingCard\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import ListingCard from \\"./ListingCard\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 import { UntitledModel } from \\"../models\\";
 
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
+    overrideItems?: ({ item: any, index: number }) => EscapeHatchProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -475,7 +482,7 @@ export type ListingCardCollectionProps = React.PropsWithChildren<
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): React.ReactElement {
-  const { items, overrides: overridesProp, ...rest } = props;
+  const { items, overrideItems, overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   const bananas =
     items !== undefined
@@ -503,7 +510,7 @@ export default function ListingCardCollection(
           marginTop=\\"0\\"
           marginLeft=\\"0\\"
           key={item.id}
-          {...getOverrideProps(overrides, \\"Collection.ListingCard[0]\\")}
+          {...(overrideItems && overrideItems({ item, index }))}
         ></ListingCard>
       )}
     </Collection>
@@ -515,16 +522,17 @@ export default function ListingCardCollection(
 exports[`amplify render tests collection should render collection without data binding 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
+import ListingCard from \\"./ListingCard\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import ListingCard from \\"./ListingCard\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
+    overrideItems?: ({ item: any, index: number }) => EscapeHatchProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -532,7 +540,7 @@ export type ListingCardCollectionProps = React.PropsWithChildren<
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): React.ReactElement {
-  const { items, overrides: overridesProp, ...rest } = props;
+  const { items, overrideItems, overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
@@ -546,7 +554,7 @@ export default function ListingCardCollection(
       {(item, index) => (
         <ListingCard
           key={item.id}
-          {...getOverrideProps(overrides, \\"Collection.ListingCard[0]\\")}
+          {...(overrideItems && overrideItems({ item, index }))}
         ></ListingCard>
       )}
     </Collection>
@@ -4692,23 +4700,26 @@ exports[`amplify render tests default value should render collection default val
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
+import { Collection, CollectionProps, Text } from \\"@aws-amplify/ui-react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Collection, CollectionProps, Text } from \\"@aws-amplify/ui-react\\";
 import { User } from \\"../models\\";
 
 export type CollectionDefaultValueProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
+    items?: any[];
+    overrideItems?: ({ item: any, index: number }) => EscapeHatchProps;
+  } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
 export default function CollectionDefaultValue(
   props: CollectionDefaultValueProps
 ): React.ReactElement {
-  const { items, overrides: overridesProp, ...rest } = props;
+  const { items, overrideItems, overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   const user =
     items !== undefined
@@ -4728,7 +4739,7 @@ export default function CollectionDefaultValue(
         <Text
           key={item.id}
           children={item.username || \\"Collection Default Value\\"}
-          {...getOverrideProps(overrides, \\"Collection.Text[0]\\")}
+          {...(overrideItems && overrideItems({ item, index }))}
         ></Text>
       )}
     </Collection>
