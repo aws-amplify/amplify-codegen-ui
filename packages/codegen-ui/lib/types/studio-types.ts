@@ -87,13 +87,6 @@ export type StudioComponent = {
   };
 
   events?: StudioComponentEvents;
-
-  /**
-   * Component actions
-   */
-  actions?: {
-    [actionName: string]: StudioComponentAction;
-  };
 };
 
 /**
@@ -246,7 +239,6 @@ export type StudioComponentProperty = (
   | CollectionStudioComponentProperty
   | ConcatenatedStudioComponentProperty
   | ConditionalStudioComponentProperty
-  | WorkflowStudioComponentProperty
   | FormStudioComponentProperty
   | StudioComponentAuthProperty
 ) &
@@ -327,14 +319,6 @@ export type ConditionalStudioComponentProperty = {
     then: StudioComponentProperty;
     else: StudioComponentProperty;
   };
-};
-
-/**
- * This represents a component property that is configured with either
- * data bound values
- */
-export type WorkflowStudioComponentProperty = {
-  event: string;
 };
 
 /**
@@ -513,7 +497,7 @@ export type StudioComponentStorageBindingProperty = {
   key?: string;
 };
 
-export type StudioComponentEvent = BoundStudioComponentEvent;
+export type StudioComponentEvent = BoundStudioComponentEvent | ActionStudioComponentEvent;
 
 export type BoundStudioComponentEvent = {
   bindingEvent: string;
@@ -541,47 +525,14 @@ export type StudioThemeValue = {
   children?: StudioThemeValues[];
 };
 
-/**
- * Component action types
- */
-export type StudioComponentAction = AmplifyAuthSignOutAction | NavigationAction;
+export type ActionStudioComponentEvent = NavigationAction;
 
-/**
- * Amplify Auth signout Action type
- */
-export type AmplifyAuthSignOutAction = {
-  type: 'Amplify.Auth.SignOut';
-  parameters?: {
-    global: boolean;
-  };
-};
-
-/**
- * Navigation related action types.
- */
-export type NavigationAction = NavigationRedirectAction | NavigationOpenAction | NavigationRefreshAction;
-
-/**
- * Redirect action type
- */
-export type NavigationRedirectAction = {
-  type: 'Navigation.Redirect';
+export type NavigationAction = {
+  action: 'Amplify.Navigation';
   parameters: {
-    href: string;
-    replaceHistory?: boolean; // Default to false
+    type: StudioComponentProperty;
+    url?: StudioComponentProperty;
+    anchor?: StudioComponentProperty;
+    target?: StudioComponentProperty;
   };
-};
-
-/**
- * Redirect action type
- */
-export type NavigationOpenAction = {
-  type: 'Navigation.Open';
-  parameters: {
-    href: string;
-  };
-};
-
-export type NavigationRefreshAction = {
-  type: 'Navigation.Refresh';
 };

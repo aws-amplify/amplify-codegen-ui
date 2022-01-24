@@ -1,5 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`amplify render tests actions navigation action 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useNavigateAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export type NavigateButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function NavigateButton(
+  props: NavigateButtonProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const action = useNavigateAction({
+    type: \\"url\\",
+    url: \\"https://www.amazon.com/\\",
+    target: \\"newtab\\",
+  });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Go to Amazon.com (Open in new tab)\\"
+      onClick={() => {
+        action.run();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"Button\\")}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests basic component tests should generate a simple button component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

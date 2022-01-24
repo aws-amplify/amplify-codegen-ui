@@ -28,7 +28,6 @@ import {
   StudioComponentPropertyType,
   StudioComponentSimplePropertyBinding,
   StudioComponentStoragePropertyBinding,
-  WorkflowStudioComponentProperty,
   StudioComponentPropertyBinding,
 } from './types';
 
@@ -52,7 +51,6 @@ export type ComponentPropertyValueTypes =
   | FixedStudioComponentProperty
   | BoundStudioComponentProperty
   | CollectionStudioComponentProperty
-  | WorkflowStudioComponentProperty
   | FormStudioComponentProperty
   | StudioComponentAuthProperty;
 
@@ -86,12 +84,6 @@ export function isStudioComponentWithVariants(
   component: StudioComponent | StudioComponentChild,
 ): component is StudioComponent & Required<Pick<StudioComponent, 'variants'>> {
   return 'variants' in component && component.variants !== undefined && component.variants.length > 0;
-}
-
-export function isStudioComponentWithActions(
-  component: StudioComponent | StudioComponentChild,
-): component is StudioComponent & Required<Pick<StudioComponent, 'actions'>> {
-  return 'actions' in component && component.actions !== undefined;
 }
 
 export function isDataPropertyBinding(
