@@ -20,14 +20,13 @@ import {
   isSimplePropertyBinding,
   isDataPropertyBinding,
   isStudioComponentWithAuthProperty,
+  isEventPropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
-  isStudioComponentWithActions,
   StudioComponent,
   StudioComponentPredicate,
   StudioComponentSort,
   StudioComponentVariant,
-  StudioComponentAction,
   StudioComponentSimplePropertyBinding,
   handleCodegenErrors,
   StudioComponentChild,
@@ -66,9 +65,9 @@ import {
   buildPrinter,
   defaultRenderConfig,
   getDeclarationFilename,
-  json,
   jsonToLiteral,
   bindingPropertyUsesHook,
+  json,
 } from './react-studio-template-renderer-helper';
 import Primitive, {
   isPrimitive,
@@ -77,6 +76,7 @@ import Primitive, {
   PrimitiveChildrenPropMapping,
 } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
+import { getComponentActions, buildUseActionStatement } from './action';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -419,6 +419,29 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
           );
           propSignatures.push(propSignature);
+        } else if (isEventPropertyBinding(binding)) {
+          this.importCollection.addImport('react', 'SyntheticEvent');
+          const propSignature = factory.createPropertySignature(
+            undefined,
+            propName,
+            factory.createToken(SyntaxKind.QuestionToken),
+            factory.createFunctionTypeNode(
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('event'),
+                  undefined,
+                  factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
+                  undefined,
+                ),
+              ],
+              factory.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword),
+            ),
+          );
+          propSignatures.push(propSignature);
         }
       });
     }
@@ -479,7 +502,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithBinding(component)) {
       Object.entries(component.bindingProperties).forEach((entry) => {
         const [propName, binding] = entry;
-        if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding)) {
+        if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding) || isEventPropertyBinding(binding)) {
           const usesHook = bindingPropertyUsesHook(binding);
           const bindingElement = factory.createBindingElement(
             undefined,
@@ -570,10 +593,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(entry);
     });
 
-    const actionStatement = this.buildUseActionsStatement(component);
-    if (actionStatement !== undefined) {
-      statements.push(actionStatement);
-    }
+    const useActionStatements = this.buildUseActionStatements(component);
+    useActionStatements.forEach((entry) => {
+      statements.push(entry);
+    });
 
     return statements;
   }
@@ -944,41 +967,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  /* Build useActions hook with component.actions passed
-   *
-   * Example:
-   * const { invokeAction } = useActions({
-   *   signOutAction: {
-   *     type: "Amplify.Auth.SignOut",
-   *     parameters: { global: true },
-   *   },
-   * });
-   */
-  private buildUseActionsStatement(component: StudioComponent): Statement | undefined {
-    if (isStudioComponentWithActions(component)) {
-      return factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createObjectBindingPattern([
-                factory.createBindingElement(undefined, undefined, factory.createIdentifier('invokeAction'), undefined),
-              ]),
-              undefined,
-              undefined,
-              factory.createCallExpression(factory.createIdentifier('useActions'), undefined, [
-                this.actionsToObjectLiteralExpression(component.actions),
-              ]),
-            ),
-          ],
-          ts.NodeFlags.Const,
-        ),
-      );
-    }
-
-    return undefined;
-  }
-
   private buildUseDataStoreBindingCall(
     callType: string,
     bindingModel: string,
@@ -1035,9 +1023,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private actionsToObjectLiteralExpression(actions: { [actionName: string]: StudioComponentAction }) {
-    // TODO: support property bindings
-    return jsonToLiteral(actions as json);
+  private buildUseActionStatements(component: StudioComponent): Statement[] {
+    const actions = getComponentActions(component);
+    if (actions) {
+      return actions.map((action) => buildUseActionStatement(action, this.importCollection));
+    }
+    return [];
   }
 
   private buildPredicateDeclaration(name: string, predicate: StudioComponentPredicate): VariableStatement {

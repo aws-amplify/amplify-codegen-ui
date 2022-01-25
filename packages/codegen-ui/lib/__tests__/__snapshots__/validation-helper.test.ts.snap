@@ -4,6 +4,8 @@ exports[`validation-helper validateComponentSchema child component requires comp
 
 exports[`validation-helper validateComponentSchema deeply nested child components requires properties 1`] = `"children[0].children[0].children[0].properties is a required field"`;
 
+exports[`validation-helper validateComponentSchema fails eventBindings with invalid names 1`] = `"children[0].events field has unspecified keys: myclick"`;
+
 exports[`validation-helper validateComponentSchema fails on componentType with leading number 1`] = `"Expected an alphanumeric string, starting with a character"`;
 
 exports[`validation-helper validateComponentSchema fails on componentType with whitespace 1`] = `"Expected an alphanumeric string, starting with a character"`;

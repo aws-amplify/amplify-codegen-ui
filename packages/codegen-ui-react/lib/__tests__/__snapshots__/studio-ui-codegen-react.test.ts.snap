@@ -1,49 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`amplify render tests actions should render sign out action 1`] = `
+exports[`amplify render tests actions navigation action 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useNavigateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, Heading } from \\"@aws-amplify/ui-react\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
-export type SiteHeaderProps = React.PropsWithChildren<
-  Partial<FlexProps> & {
+export type NavigateButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
+export default function NavigateButton(
+  props: NavigateButtonProps
+): React.ReactElement {
   const { overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
-  const { invokeAction } = useActions({
-    signOutAction: {
-      type: \\"Amplify.Auth.SignOut\\",
-      parameters: { global: true },
-    },
+  const action = useNavigateAction({
+    type: \\"url\\",
+    url: \\"https://www.amazon.com/\\",
+    target: \\"newtab\\",
   });
   return (
     /* @ts-ignore: TS2322 */
-    <Flex
-      direction=\\"row\\"
-      justifyContent=\\"space-between\\"
+    <Button
+      children=\\"Go to Amazon.com (Open in new tab)\\"
+      onClick={() => {
+        action.run();
+      }}
       {...rest}
-      {...getOverrideProps(overrides, \\"SiteHeader\\")}
-    >
-      <Heading
-        level={1}
-        children=\\"Title\\"
-        {...getOverrideProps(overrides, \\"Heading1\\")}
-      ></Heading>
-      <Button
-        variation=\\"primary\\"
-        children=\\"Log off\\"
-        onClick={invokeAction(\\"signOutAction\\")}
-        {...getOverrideProps(overrides, \\"Button1\\")}
-      ></Button>
-    </Flex>
+      {...getOverrideProps(overrides, \\"NavigateButton\\")}
+    ></Button>
   );
 }
 ",
@@ -5326,7 +5318,7 @@ export default function ViewWithButton(
 "
 `;
 
-exports[`amplify render tests should render navigation actions 1`] = `
+exports[`amplify render tests should render events 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
@@ -5334,68 +5326,31 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, Heading } from \\"@aws-amplify/ui-react\\";
+import Input from \\"./Input\\";
+import { Button, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
+import { SyntheticEvent } from \\"react\\";
 
-export type SiteHeaderProps = React.PropsWithChildren<
+export type EventProps = React.PropsWithChildren<
   Partial<FlexProps> & {
+    onButtonClick?: (event: SyntheticEvent) => void;
+    onInputChange?: (event: SyntheticEvent) => void;
+  } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function SiteHeader(props: SiteHeaderProps): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
+export default function Event(props: EventProps): React.ReactElement {
+  const {
+    onButtonClick,
+    onInputChange,
+    overrides: overridesProp,
+    ...rest
+  } = props;
   const overrides = { ...overridesProp };
-  const { invokeAction } = useActions({
-    openAmplifyDocs: {
-      type: \\"Navigation.Open\\",
-      parameters: { href: \\"docs.amplify.aws\\" },
-    },
-    redirectToFooter: {
-      type: \\"Navigation.Redirect\\",
-      parameters: { href: \\"#footer-id\\", replaceHistory: true },
-    },
-    navigateToFAQPage: {
-      type: \\"Navigation.Redirect\\",
-      parameters: { href: \\"/faq\\" },
-    },
-    reloadPage: { type: \\"Navigation.Refresh\\" },
-  });
   return (
     /* @ts-ignore: TS2322 */
-    <Flex
-      direction=\\"row\\"
-      justifyContent=\\"space-between\\"
-      {...rest}
-      {...getOverrideProps(overrides, \\"SiteHeader\\")}
-    >
-      <Heading
-        level={1}
-        children=\\"Title\\"
-        {...getOverrideProps(overrides, \\"Heading1\\")}
-      ></Heading>
-      <Button
-        variation=\\"primary\\"
-        children=\\"Open Amplify Docs\\"
-        onClick={invokeAction(\\"openAmplifyDocs\\")}
-        {...getOverrideProps(overrides, \\"Button1\\")}
-      ></Button>
-      <Button
-        variation=\\"primary\\"
-        children=\\"Navigate to FAQ Page\\"
-        onClick={invokeAction(\\"navigateToFAQPage\\")}
-        {...getOverrideProps(overrides, \\"Button2\\")}
-      ></Button>
-      <Button
-        variation=\\"primary\\"
-        children=\\"Reload Page\\"
-        onClick={invokeAction(\\"reloadPage\\")}
-        {...getOverrideProps(overrides, \\"Button3\\")}
-      ></Button>
-      <Button
-        variation=\\"primary\\"
-        children=\\"Redirect To Footer (No History Update)\\"
-        onClick={invokeAction(\\"redirectToFooter\\")}
-        {...getOverrideProps(overrides, \\"Button4\\")}
-      ></Button>
+    <Flex {...rest} {...getOverrideProps(overrides, \\"Event\\")}>
+      <Input onChange={onInputChange}></Input>
+      <Button onClick={onButtonClick}></Button>
     </Flex>
   );
 }

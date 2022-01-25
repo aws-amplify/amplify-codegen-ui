@@ -16,7 +16,6 @@
 import {
   BoundStudioComponentProperty,
   CollectionStudioComponentProperty,
-  ComponentPropertyValueTypes,
   ConcatenatedStudioComponentProperty,
   ConditionalStudioComponentProperty,
   FixedStudioComponentProperty,
@@ -25,6 +24,11 @@ import {
   StudioComponent,
   StudioComponentAuthProperty,
   StudioComponentChild,
+  StudioComponentProperty,
+  StudioGenericEvent,
+  StudioComponentEvent,
+  BoundStudioComponentEvent,
+  ActionStudioComponentEvent,
 } from '@aws-amplify/codegen-ui';
 
 import {
@@ -38,6 +42,11 @@ import {
   BinaryOperatorToken,
   JsxChild,
   PrimaryExpression,
+  ObjectLiteralExpression,
+  NumericLiteral,
+  BooleanLiteral,
+  NullLiteral,
+  ArrayLiteralExpression,
 } from 'typescript';
 
 import { ImportCollection, ImportSource } from './imports';
@@ -54,32 +63,40 @@ export function getComponentPropName(componentName?: string): string {
   return 'ComponentWithoutNameProps';
 }
 
-export function isFixedPropertyWithValue(prop: ComponentPropertyValueTypes): prop is FixedStudioComponentProperty {
+export function isFixedPropertyWithValue(prop: StudioComponentProperty): prop is FixedStudioComponentProperty {
   return 'value' in prop;
 }
 
-export function isBoundProperty(prop: ComponentPropertyValueTypes): prop is BoundStudioComponentProperty {
+export function isBoundProperty(prop: StudioComponentProperty): prop is BoundStudioComponentProperty {
   return 'bindingProperties' in prop;
 }
 
 export function isCollectionItemBoundProperty(
-  prop: ComponentPropertyValueTypes,
+  prop: StudioComponentProperty,
 ): prop is CollectionStudioComponentProperty {
   return 'collectionBindingProperties' in prop;
 }
 
-export function isConcatenatedProperty(prop: ComponentPropertyValueTypes): prop is ConcatenatedStudioComponentProperty {
+export function isConcatenatedProperty(prop: StudioComponentProperty): prop is ConcatenatedStudioComponentProperty {
   return 'concat' in prop;
 }
 
-export function isConditionalProperty(prop: ComponentPropertyValueTypes): prop is ConditionalStudioComponentProperty {
+export function isConditionalProperty(prop: StudioComponentProperty): prop is ConditionalStudioComponentProperty {
   return 'condition' in prop;
 }
 
 export function isDefaultValueOnly(
-  prop: ComponentPropertyValueTypes,
+  prop: StudioComponentProperty,
 ): prop is CollectionStudioComponentProperty | BoundStudioComponentProperty {
   return 'defaultValue' in prop && !(isCollectionItemBoundProperty(prop) || isBoundProperty(prop));
+}
+
+export function isBoundEvent(event: StudioComponentEvent): event is BoundStudioComponentEvent {
+  return 'bindingEvent' in event;
+}
+
+export function isActionEvent(event: StudioComponentEvent): event is ActionStudioComponentEvent {
+  return 'action' in event;
 }
 
 /**
@@ -144,21 +161,70 @@ export function buildBindingAttrWithDefault(
   );
 }
 
-export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
+export function buildBindingEvent(event: BoundStudioComponentEvent, eventName: string): JsxAttribute {
+  const expr = factory.createIdentifier(event.bindingEvent);
+  return factory.createJsxAttribute(factory.createIdentifier(eventName), factory.createJsxExpression(undefined, expr));
+}
+
+export function buildActionEvent(event: ActionStudioComponentEvent, eventName: string): JsxAttribute {
+  return factory.createJsxAttribute(
+    factory.createIdentifier(eventName),
+    factory.createJsxExpression(
+      undefined,
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createBlock(
+          [
+            factory.createExpressionStatement(
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  // TODO: use unique identifier
+                  factory.createIdentifier('action'),
+                  factory.createIdentifier('run'),
+                ),
+                undefined,
+                [],
+              ),
+            ),
+          ],
+          false,
+        ),
+      ),
+    ),
+  );
+}
+
+export function buildFixedLiteralExpression(
+  prop: FixedStudioComponentProperty,
+): ObjectLiteralExpression | StringLiteral | NumericLiteral | BooleanLiteral | NullLiteral | ArrayLiteralExpression {
   const { value, type } = prop;
   switch (typeof value) {
     case 'number':
-      return factory.createJsxExpression(undefined, factory.createNumericLiteral(value, undefined));
+      return factory.createNumericLiteral(value, undefined);
     case 'boolean':
-      return factory.createJsxExpression(undefined, value ? factory.createTrue() : factory.createFalse());
+      return value ? factory.createTrue() : factory.createFalse();
     case 'string':
-      return stringToJsxExpression(value as string, type);
+      return fixedPropertyWithTypeToLiteral(value, type);
     default:
       throw new Error(`Invalid type ${typeof value} for "${value}"`);
   }
 }
 
-function stringToJsxExpression(strValue: string, type: string | undefined) {
+export function buildFixedJsxExpression(prop: FixedStudioComponentProperty): StringLiteral | JsxExpression {
+  const expression = buildFixedLiteralExpression(prop);
+
+  // do not wrap strings with brackets
+  if (expression.kind === SyntaxKind.StringLiteral) {
+    return expression;
+  }
+  return factory.createJsxExpression(undefined, buildFixedLiteralExpression(prop));
+}
+
+function fixedPropertyWithTypeToLiteral(strValue: string, type?: string) {
   switch (type) {
     case undefined:
     case 'String':
@@ -173,12 +239,12 @@ function stringToJsxExpression(strValue: string, type: string | undefined) {
 
         switch (typeof parsedValue) {
           case 'number':
-            return factory.createJsxExpression(undefined, factory.createNumericLiteral(parsedValue, undefined));
+            return factory.createNumericLiteral(parsedValue, undefined);
           case 'boolean':
-            return factory.createJsxExpression(undefined, parsedValue ? factory.createTrue() : factory.createFalse());
+            return parsedValue ? factory.createTrue() : factory.createFalse();
           // object, array, and null
           default:
-            return factory.createJsxExpression(undefined, jsonToLiteral(parsedValue));
+            return jsonToLiteral(parsedValue);
         }
       } catch (e) {
         if (e instanceof SyntaxError) {
@@ -276,7 +342,7 @@ export function buildConcatAttr(prop: ConcatenatedStudioComponentProperty, propN
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
-export function resolvePropToExpression(prop: ComponentPropertyValueTypes): Expression {
+export function resolvePropToExpression(prop: StudioComponentProperty): Expression {
   if (isFixedPropertyWithValue(prop)) {
     const propValue = prop.value;
     switch (typeof propValue) {
@@ -416,7 +482,7 @@ export function buildConditionalAttr(prop: ConditionalStudioComponentProperty, p
   return factory.createJsxAttribute(factory.createIdentifier(propName), expr);
 }
 
-export function buildChildElement(prop?: ComponentPropertyValueTypes): JsxChild | undefined {
+export function buildChildElement(prop?: StudioComponentProperty): JsxChild | undefined {
   if (!prop) {
     return undefined;
   }
@@ -445,60 +511,56 @@ export function buildChildElement(prop?: ComponentPropertyValueTypes): JsxChild 
   return expression && factory.createJsxExpression(undefined, expression);
 }
 
-export function buildOpeningElementAttributes(prop: ComponentPropertyValueTypes, propName: string): JsxAttribute {
+export function buildOpeningElementProperties(prop: StudioComponentProperty, name: string): JsxAttribute {
   if (isFixedPropertyWithValue(prop)) {
-    return buildFixedAttr(prop, propName);
+    return buildFixedAttr(prop, name);
   }
   if (isBoundProperty(prop)) {
     return prop.defaultValue === undefined
-      ? buildBindingAttr(prop, propName)
-      : buildBindingAttrWithDefault(prop, propName, prop.defaultValue);
+      ? buildBindingAttr(prop, name)
+      : buildBindingAttrWithDefault(prop, name, prop.defaultValue);
   }
   if (isAuthProperty(prop)) {
-    return buildUserAuthAttr(prop, propName);
+    return buildUserAuthAttr(prop, name);
   }
   if (isCollectionItemBoundProperty(prop)) {
     return prop.defaultValue === undefined
-      ? buildCollectionBindingAttr(prop, propName)
-      : buildCollectionBindingAttrWithDefault(prop, propName, prop.defaultValue);
+      ? buildCollectionBindingAttr(prop, name)
+      : buildCollectionBindingAttrWithDefault(prop, name, prop.defaultValue);
   }
   if (isConcatenatedProperty(prop)) {
-    return buildConcatAttr(prop, propName);
+    return buildConcatAttr(prop, name);
   }
   if (isConditionalProperty(prop)) {
-    return buildConditionalAttr(prop, propName);
+    return buildConditionalAttr(prop, name);
   }
-  return factory.createJsxAttribute(factory.createIdentifier(propName), undefined);
+  return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
 
-/* Tempory stub function to map from generic event name to React event name. Final implementation will be included in
+export function buildOpeningElementEvents(event: StudioComponentEvent, name: string): JsxAttribute {
+  if (isBoundEvent(event)) {
+    return buildBindingEvent(event, name);
+  }
+  if (isActionEvent(event)) {
+    return buildActionEvent(event, name);
+  }
+
+  return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
+}
+
+/*
+ * Tempory stub function to map from generic event name to React event name. Final implementation will be included in
  * amplify-ui.
  */
-function mapGenericEventToReact(genericEventBinding: string): string {
+export function mapGenericEventToReact(genericEventBinding: StudioGenericEvent): string {
   switch (genericEventBinding) {
-    case 'click':
+    case StudioGenericEvent.click:
       return 'onClick';
+    case StudioGenericEvent.change:
+      return 'onChange';
     default:
       throw new Error(`${genericEventBinding} is not a possible event.`);
   }
-}
-
-/* Build React attribute for actions
- *
- * Example: onClick={invokeAction("signOutAction")}
- */
-export function buildOpeningElementActions(genericEventBinding: string, action: string): JsxAttribute {
-  // TODO: map from generic to platform
-  const reactActionBinding = mapGenericEventToReact(genericEventBinding);
-  return factory.createJsxAttribute(
-    factory.createIdentifier(reactActionBinding),
-    factory.createJsxExpression(
-      undefined,
-      factory.createCallExpression(factory.createIdentifier('invokeAction'), undefined, [
-        factory.createStringLiteral(action),
-      ]),
-    ),
-  );
 }
 
 export function addBindingPropertiesImports(

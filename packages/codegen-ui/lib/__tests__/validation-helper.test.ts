@@ -170,6 +170,48 @@ describe('validation-helper', () => {
       });
     });
 
+    test('allows eventBindings with valid names', () => {
+      validateComponentSchema({
+        name: 'CustomComponent',
+        componentType: 'View',
+        properties: {},
+        children: [
+          {
+            name: 'I Have Spaces',
+            componentType: 'Button',
+            properties: {},
+            events: {
+              click: {
+                bindingEvent: 'onButtonClick',
+              },
+            },
+          },
+        ],
+      });
+    });
+
+    test('fails eventBindings with invalid names', () => {
+      expect(() => {
+        validateComponentSchema({
+          name: 'CustomComponent',
+          componentType: 'View',
+          properties: {},
+          children: [
+            {
+              name: 'I Have Spaces',
+              componentType: 'Button',
+              properties: {},
+              events: {
+                myclick: {
+                  bindingEvent: 'onButtonClick',
+                },
+              },
+            },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     test('throws on all components sharing a name', () => {
       expect(() => {
         validateComponentSchema({
