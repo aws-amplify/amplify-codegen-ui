@@ -1,0 +1,142 @@
+/*
+  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ */
+
+import ts, { Statement, factory, ObjectLiteralExpression, Expression } from 'typescript';
+import {
+  InvalidInputError,
+  StudioComponent,
+  StudioComponentChild,
+  ActionStudioComponentEvent,
+  StudioComponentProperty,
+} from '@aws-amplify/codegen-ui';
+import {
+  isFixedPropertyWithValue,
+  isBoundProperty,
+  isConcatenatedProperty,
+  isConditionalProperty,
+  buildBindingExpression,
+  buildBindingWithDefaultExpression,
+  buildConcatExpression,
+  buildConditionalExpression,
+  buildFixedLiteralExpression,
+  isActionEvent,
+} from './react-component-render-helper';
+import { ImportCollection, ImportSource } from './imports';
+
+enum Action {
+  'Amplify.Navigate' = 'Amplify.Navigate',
+}
+
+export default Action;
+
+export const ActionNameMapping: Partial<Record<Action, string>> = {
+  [Action['Amplify.Navigate']]: 'useNavigateAction',
+};
+
+export function isAction(action: string): action is Action {
+  return Object.values(Action).includes(action as Action);
+}
+
+export function getActionHookName(action: string): string {
+  const actionName = ActionNameMapping[Action[action as Action]];
+  if (actionName === undefined) {
+    throw new InvalidInputError(`${action} is not a valid action.`);
+  }
+  return actionName;
+}
+
+export function getComponentActions(component: StudioComponent | StudioComponentChild): ActionStudioComponentEvent[] {
+  // TODO: add unique identifier to each action
+  const actions = [];
+  if (component.events) {
+    actions.push(...Object.values(component.events).filter(isActionEvent));
+  }
+  if (component.children) {
+    actions.push(...component.children.map(getComponentActions).flat());
+  }
+  return actions;
+}
+
+export function buildUseActionStatement(
+  action: ActionStudioComponentEvent,
+  importCollection: ImportCollection,
+): Statement {
+  const actionHookName = getActionHookName(action.action);
+  importCollection.addImport(ImportSource.UI_REACT_INTERNAL, actionHookName);
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          // TODO: update to unique name
+          factory.createIdentifier('action'),
+          undefined,
+          undefined,
+          factory.createCallExpression(factory.createIdentifier(actionHookName), undefined, [
+            buildActionParameters(action),
+          ]),
+        ),
+      ],
+      ts.NodeFlags.Const,
+    ),
+  );
+}
+
+/* Transform the action parameters field to literal
+ *
+ * model and fields are special cases. All other fields are StudioComponentProperty
+ */
+export function buildActionParameters(action: ActionStudioComponentEvent): ObjectLiteralExpression {
+  if (action.parameters) {
+    // TODO: add special case for model and fields
+    return factory.createObjectLiteralExpression(
+      Object.entries(action.parameters).map(
+        ([key, value]) =>
+          factory.createPropertyAssignment(
+            factory.createIdentifier(key),
+            actionParameterToExpression(value as StudioComponentProperty),
+          ),
+        false,
+      ),
+    );
+  }
+  // TODO: determine what should be used when no parameters
+  return factory.createObjectLiteralExpression([], false);
+}
+
+export function actionParameterToExpression(parameter: StudioComponentProperty): Expression {
+  if (isFixedPropertyWithValue(parameter)) {
+    return buildFixedLiteralExpression(parameter);
+  }
+
+  if (isBoundProperty(parameter)) {
+    return parameter.defaultValue === undefined
+      ? buildBindingExpression(parameter)
+      : buildBindingWithDefaultExpression(parameter, parameter.defaultValue);
+  }
+
+  if (isConcatenatedProperty(parameter)) {
+    return buildConcatExpression(parameter);
+  }
+
+  if (isConditionalProperty(parameter)) {
+    return buildConditionalExpression(parameter);
+  }
+
+  // TODO add user specific attributes
+
+  throw new Error(`Invalid action parameter: ${JSON.stringify(parameter)}.`);
+}

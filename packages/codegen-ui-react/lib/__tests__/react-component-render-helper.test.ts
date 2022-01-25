@@ -13,10 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { RelationalOperator, ConditionalStudioComponentProperty } from '@aws-amplify/codegen-ui';
+import {
+  RelationalOperator,
+  ConditionalStudioComponentProperty,
+  StudioComponentProperty,
+} from '@aws-amplify/codegen-ui';
 import {
   getFixedComponentPropValueExpression,
-  ComponentPropertyValueTypes,
   getComponentPropName,
   isFixedPropertyWithValue,
   isBoundProperty,
@@ -72,7 +75,7 @@ describe('react-component-render-helper', () => {
   });
 
   describe('property type checkers', () => {
-    const propertyTypes: { [propertyType: string]: { checker: Function; property: ComponentPropertyValueTypes } } = {
+    const propertyTypes: { [propertyType: string]: { checker: Function; property: StudioComponentProperty } } = {
       ConcatenatedStudioComponentProperty: { checker: isConcatenatedProperty, property: { concat: [] } },
       ConditionalStudioComponentProperty: {
         checker: isConditionalProperty,
