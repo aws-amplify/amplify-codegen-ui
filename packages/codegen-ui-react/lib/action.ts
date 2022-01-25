@@ -38,12 +38,14 @@ import { ImportCollection, ImportSource } from './imports';
 
 enum Action {
   'Amplify.Navigate' = 'Amplify.Navigate',
+  'Amplify.DataStoreCreateItem' = 'Amplify.DataStoreCreateItem',
 }
 
 export default Action;
 
 export const ActionNameMapping: Partial<Record<Action, string>> = {
   [Action['Amplify.Navigate']]: 'useNavigateAction',
+  [Action['Amplify.DataStoreCreateItem']]: 'useDataStoreCreateAction',
 };
 
 export function isAction(action: string): action is Action {
@@ -86,7 +88,7 @@ export function buildUseActionStatement(
           undefined,
           undefined,
           factory.createCallExpression(factory.createIdentifier(actionHookName), undefined, [
-            buildActionParameters(action),
+            buildActionParameters(action, importCollection),
           ]),
         ),
       ],
@@ -99,22 +101,47 @@ export function buildUseActionStatement(
  *
  * model and fields are special cases. All other fields are StudioComponentProperty
  */
-export function buildActionParameters(action: ActionStudioComponentEvent): ObjectLiteralExpression {
+export function buildActionParameters(
+  action: ActionStudioComponentEvent,
+  importCollection: ImportCollection,
+): ObjectLiteralExpression {
   if (action.parameters) {
     // TODO: add special case for model and fields
     return factory.createObjectLiteralExpression(
-      Object.entries(action.parameters).map(
-        ([key, value]) =>
-          factory.createPropertyAssignment(
-            factory.createIdentifier(key),
-            actionParameterToExpression(value as StudioComponentProperty),
-          ),
-        false,
+      Object.entries(action.parameters).map(([key, value]) =>
+        factory.createPropertyAssignment(
+          factory.createIdentifier(key),
+          getActionParameterValue(key, value, importCollection),
+        ),
       ),
+      false,
     );
   }
   // TODO: determine what should be used when no parameters
   return factory.createObjectLiteralExpression([], false);
+}
+
+export function getActionParameterValue(
+  key: string,
+  value: StudioComponentProperty | { [key: string]: StudioComponentProperty } | string,
+  importCollection: ImportCollection,
+): Expression {
+  if (key === 'model') {
+    importCollection.addImport(ImportSource.LOCAL_MODELS, value as string);
+    return factory.createIdentifier(value as string);
+  }
+  if (key === 'fields') {
+    return factory.createObjectLiteralExpression(
+      Object.entries(value).map(([fieldsKey, fieldsValue]) =>
+        factory.createPropertyAssignment(
+          factory.createIdentifier(fieldsKey),
+          getActionParameterValue(fieldsKey, fieldsValue, importCollection),
+        ),
+      ),
+      false,
+    );
+  }
+  return actionParameterToExpression(value as StudioComponentProperty);
 }
 
 export function actionParameterToExpression(parameter: StudioComponentProperty): Expression {
