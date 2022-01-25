@@ -57,6 +57,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'CollectionWithSort',
   'CollectionWithBindingItemsName',
   'PaginatedCollection',
+  'SearchableCollection',
   'CustomParent',
   'CustomChildren',
   'CustomParentAndChildren',
