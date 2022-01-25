@@ -1,5 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`amplify render tests actions DataStoreCreate action 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useDataStoreCreateAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+import { Customer } from \\"../models\\";
+
+export type CreateCustomerButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function CreateCustomerButton(
+  props: CreateCustomerButtonProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const action = useDataStoreCreateAction({
+    model: Customer,
+    fields: { firstName: \\"Din\\", lastName: \\"Djarin\\" },
+  });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Save\\"
+      onClick={() => {
+        action.run();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"CreateCustomerButton\\")}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests actions navigation action 1`] = `
 Object {
   "componentText": "/* eslint-disable */
