@@ -297,6 +297,10 @@ describe('amplify render tests', () => {
     it('navigation action', () => {
       expect(generateWithAmplifyRenderer('workflow/navigationAction')).toMatchSnapshot();
     });
+
+    it('DataStoreCreate action', () => {
+      expect(generateWithAmplifyRenderer('workflow/dataStoreCreateAction')).toMatchSnapshot();
+    });
   });
 
   it('should render events', () => {
