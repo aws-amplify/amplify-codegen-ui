@@ -28,7 +28,7 @@ import {
   StudioComponentPropertyType,
   StudioComponentSimplePropertyBinding,
   StudioComponentStoragePropertyBinding,
-  WorkflowStudioComponentProperty,
+  StudioComponentPropertyBinding,
 } from './types';
 
 export const StudioRendererConstants = {
@@ -51,7 +51,6 @@ export type ComponentPropertyValueTypes =
   | FixedStudioComponentProperty
   | BoundStudioComponentProperty
   | CollectionStudioComponentProperty
-  | WorkflowStudioComponentProperty
   | FormStudioComponentProperty
   | StudioComponentAuthProperty;
 
@@ -87,38 +86,20 @@ export function isStudioComponentWithVariants(
   return 'variants' in component && component.variants !== undefined && component.variants.length > 0;
 }
 
-export function isStudioComponentWithActions(
-  component: StudioComponent | StudioComponentChild,
-): component is StudioComponent & Required<Pick<StudioComponent, 'actions'>> {
-  return 'actions' in component && component.actions !== undefined;
-}
-
 export function isDataPropertyBinding(
-  prop:
-    | StudioComponentDataPropertyBinding
-    | StudioComponentStoragePropertyBinding
-    | StudioComponentEventPropertyBinding
-    | StudioComponentSimplePropertyBinding,
+  prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentDataPropertyBinding {
   return 'type' in prop && prop.type === 'Data';
 }
 
 export function isStoragePropertyBinding(
-  prop:
-    | StudioComponentDataPropertyBinding
-    | StudioComponentStoragePropertyBinding
-    | StudioComponentEventPropertyBinding
-    | StudioComponentSimplePropertyBinding,
+  prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentStoragePropertyBinding {
   return 'type' in prop && prop.type === 'Storage';
 }
 
 export function isSimplePropertyBinding(
-  prop:
-    | StudioComponentDataPropertyBinding
-    | StudioComponentStoragePropertyBinding
-    | StudioComponentEventPropertyBinding
-    | StudioComponentSimplePropertyBinding,
+  prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentSimplePropertyBinding {
   return (
     'type' in prop &&
@@ -129,4 +110,10 @@ export function isSimplePropertyBinding(
       StudioComponentPropertyType.Date.toString(),
     ].includes(prop.type)
   );
+}
+
+export function isEventPropertyBinding(
+  prop: StudioComponentPropertyBinding,
+): prop is StudioComponentEventPropertyBinding {
+  return 'type' in prop && prop.type === 'Event';
 }

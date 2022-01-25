@@ -15,6 +15,7 @@
  */
 import * as yup from 'yup';
 import { InvalidInputError } from './errors';
+import { StudioGenericEvent } from './types';
 
 const alphaNumString = () => {
   return yup.string().matches(/^[a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string' });
@@ -40,6 +41,16 @@ const propertiesSchema = (value: Object) => {
   );
 };
 
+const eventsSchema = yup
+  .object(
+    Object.fromEntries(
+      Object.keys(StudioGenericEvent)
+        .filter((eventType) => Number.isNaN(Number(eventType)))
+        .map((eventType) => [eventType, yup.object().nullable()]),
+    ),
+  )
+  .noUnknown();
+
 /**
  * Component Schema Definitions
  */
@@ -56,6 +67,7 @@ const studioComponentChildSchema: any = yup.object({
   bindingProperties: yup.object().nullable(),
   collectionProperties: yup.object().nullable(),
   actions: yup.object().nullable(),
+  events: eventsSchema.nullable(),
 });
 
 const studioComponentSchema = yup
@@ -72,6 +84,7 @@ const studioComponentSchema = yup
     bindingProperties: yup.object().nullable(),
     collectionProperties: yup.object().nullable(),
     actions: yup.object().nullable(),
+    events: eventsSchema.nullable(),
   })
   // eslint-disable-next-line func-names
   .test('unique-component-names', 'All component names must be unique', function (value) {
