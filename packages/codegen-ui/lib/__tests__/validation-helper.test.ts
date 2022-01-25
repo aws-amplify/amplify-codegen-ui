@@ -211,6 +211,40 @@ describe('validation-helper', () => {
         });
       }).toThrowErrorMatchingSnapshot();
     });
+
+    test('throws on all components sharing a name', () => {
+      expect(() => {
+        validateComponentSchema({
+          name: 'MyComp',
+          componentType: 'Flex',
+          properties: {},
+          children: [
+            {
+              name: 'MyComp',
+              componentType: 'Button',
+              properties: {},
+            },
+            {
+              name: 'DeepComp',
+              componentType: 'View',
+              properties: {},
+              children: [
+                {
+                  name: 'DeepComp',
+                  componentType: 'Tooltip',
+                  properties: {},
+                },
+                {
+                  name: 'UniqueName',
+                  componentType: 'Button',
+                  properties: {},
+                },
+              ],
+            },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
   });
 
   describe('validateThemeSchema', () => {

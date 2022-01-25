@@ -118,7 +118,7 @@
     "variants": [
       {
         "overrides": {
-          "Flex": {
+          "ComplexTest4": {
             "padding": "10px 10px 10px 10px",
             "backgroundColor": "rgb(255,255,255)",
             "overflow": "hidden",
@@ -127,7 +127,7 @@
             "position": "relative",
             "direction": "row"
           },
-          "Flex.Flex.View[1]": {
+          "RectangleBlue": {
             "padding": "0px 0px 0px 0px",
             "backgroundColor": "rgb(255,153.00000607967377,0)",
             "top": "1px",
@@ -137,7 +137,7 @@
             "position": "absolute",
             "height": "122px"
           },
-          "Flex.Flex.View[0]": {
+          "RectangleGreen": {
             "padding": "0px 0px 0px 0px",
             "backgroundColor": "rgb(255,0,0)",
             "top": "0px",
@@ -147,7 +147,7 @@
             "position": "absolute",
             "height": "123px"
           },
-          "Flex.Flex[0]": {
+          "GroupTest": {
             "width": "323px",
             "padding": "0px 0px 0px 0px",
             "position": "relative",

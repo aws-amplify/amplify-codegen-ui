@@ -10,6 +10,8 @@ exports[`validation-helper validateComponentSchema fails on componentType with l
 
 exports[`validation-helper validateComponentSchema fails on componentType with whitespace 1`] = `"Expected an alphanumeric string, starting with a character"`;
 
+exports[`validation-helper validateComponentSchema throws on all components sharing a name 1`] = `"Duplicate names are not allowed within a component, found duplicates of [\\"DeepComp\\",\\"MyComp\\"]"`;
+
 exports[`validation-helper validateComponentSchema top-level component requires componentType 1`] = `"componentType is a required field"`;
 
 exports[`validation-helper validateComponentSchema top-level component requires componentType to be the correct type 1`] = `"componentType must be a \`string\` type, but the final value was: \`2\`."`;

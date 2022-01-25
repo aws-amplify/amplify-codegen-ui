@@ -20,7 +20,14 @@ import {
   StudioComponentChild,
   StudioGenericEvent,
 } from '@aws-amplify/codegen-ui';
-import { JsxAttributeLike, JsxElement, JsxOpeningElement, factory, JsxSelfClosingElement } from 'typescript';
+import {
+  JsxAttributeLike,
+  JsxElement,
+  JsxOpeningElement,
+  factory,
+  JsxSelfClosingElement,
+  SyntaxKind,
+} from 'typescript';
 
 import {
   addBindingPropertiesImports,
@@ -73,19 +80,50 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     );
   }
 
-  private addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
+  protected addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
       const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('rest'));
       attributes.push(propsAttr);
     }
 
+    if (this.node.hasAncestorOfType('Collection')) {
+      this.addCollectionOverridePropsAttribute(attributes);
+    } else {
+      this.addGetOverridePropsAttribute(attributes);
+    }
+  }
+
+  private addGetOverridePropsAttribute(attributes: JsxAttributeLike[]) {
+    if (this.node.component.name) {
+      const overrideAttr = factory.createJsxSpreadAttribute(
+        factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
+          factory.createIdentifier('overrides'),
+          factory.createStringLiteral(this.node.component.name),
+        ]),
+      );
+      this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
+      attributes.push(overrideAttr);
+    }
+  }
+
+  private addCollectionOverridePropsAttribute(attributes: JsxAttributeLike[]) {
     const overrideAttr = factory.createJsxSpreadAttribute(
-      factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
-        factory.createIdentifier('overrides'),
-        factory.createStringLiteral(this.node.getOverrideKey()),
-      ]),
+      factory.createParenthesizedExpression(
+        factory.createBinaryExpression(
+          factory.createIdentifier('overrideItems'),
+          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+          factory.createCallExpression(factory.createIdentifier('overrideItems'), undefined, [
+            factory.createObjectLiteralExpression(
+              [
+                factory.createShorthandPropertyAssignment(factory.createIdentifier('item'), undefined),
+                factory.createShorthandPropertyAssignment(factory.createIdentifier('index'), undefined),
+              ],
+              false,
+            ),
+          ]),
+        ),
+      ),
     );
-    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDE_PROPS);
     attributes.push(overrideAttr);
   }
 }

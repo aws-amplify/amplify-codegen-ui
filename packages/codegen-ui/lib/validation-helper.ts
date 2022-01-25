@@ -70,21 +70,67 @@ const studioComponentChildSchema: any = yup.object({
   events: eventsSchema.nullable(),
 });
 
-const studioComponentSchema = yup.object({
-  name: alphaNumString().nullable(),
-  id: yup.string().nullable(),
-  sourceId: yup.string().nullable(),
-  componentType: alphaNumNoLeadingNumberString().required(),
-  properties: yup.lazy((value) => propertiesSchema(value).required()),
-  children: yup.array(studioComponentChildSchema).nullable(),
-  figmaMetadata: yup.object().nullable(),
-  variants: yup.array().nullable(),
-  overrides: yup.object().nullable(),
-  bindingProperties: yup.object().nullable(),
-  collectionProperties: yup.object().nullable(),
-  actions: yup.object().nullable(),
-  events: eventsSchema.nullable(),
-});
+const studioComponentSchema = yup
+  .object({
+    name: alphaNumString().nullable(),
+    id: yup.string().nullable(),
+    sourceId: yup.string().nullable(),
+    componentType: alphaNumNoLeadingNumberString().required(),
+    properties: yup.lazy((value) => propertiesSchema(value).required()),
+    children: yup.array(studioComponentChildSchema).nullable(),
+    figmaMetadata: yup.object().nullable(),
+    variants: yup.array().nullable(),
+    overrides: yup.object().nullable(),
+    bindingProperties: yup.object().nullable(),
+    collectionProperties: yup.object().nullable(),
+    actions: yup.object().nullable(),
+    events: eventsSchema.nullable(),
+  })
+  // eslint-disable-next-line func-names
+  .test('unique-component-names', 'All component names must be unique', function (value) {
+    const { path, createError } = this;
+    const { duplicateNames } = findCollidingNames(value);
+    if (duplicateNames.size > 0) {
+      return createError({
+        path,
+        message: `Duplicate names are not allowed within a component, found duplicates of ${JSON.stringify([
+          ...duplicateNames,
+        ])}`,
+      });
+    }
+    return true;
+  });
+
+type ComponentNameMetadata = {
+  names: Set<string>;
+  duplicateNames: Set<string>;
+};
+
+const findCollidingNames = (value: any): ComponentNameMetadata => {
+  const names = value.name ? new Set([value.name]) : new Set();
+  const componentNameMetadata: ComponentNameMetadata = { names, duplicateNames: new Set() };
+  if (!value.children) {
+    return componentNameMetadata;
+  }
+  const childComponentNameMetadata = value.children
+    .map((child: any) => findCollidingNames(child))
+    .reduce(
+      (previous: ComponentNameMetadata, next: ComponentNameMetadata) => mergeComponentNameMetadata(previous, next),
+      { names: new Set(), duplicateNames: new Set() },
+    );
+  return mergeComponentNameMetadata(componentNameMetadata, childComponentNameMetadata);
+};
+
+const mergeComponentNameMetadata = (lhs: ComponentNameMetadata, rhs: ComponentNameMetadata): ComponentNameMetadata => {
+  const names = new Set([...lhs.names, ...rhs.names]);
+  const duplicateNames = new Set([...lhs.duplicateNames, ...rhs.duplicateNames]);
+  lhs.names.forEach((lhsName) => {
+    if (rhs.names.has(lhsName)) {
+      duplicateNames.add(lhsName);
+    }
+  });
+  return { names, duplicateNames };
+};
 
 /**
  * Theme Schema Definitions
