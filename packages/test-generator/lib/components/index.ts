@@ -16,8 +16,6 @@
 export { default as ViewWithButton } from './viewWithButton.json';
 export { default as ViewTest } from './viewTest.json';
 export { default as CustomButton } from './customButton.json';
-export { default as ComponentWithActionSignOut } from './componentWithActionSignOut.json';
-export { default as ComponentWithActionNavigation } from './componentWithActionNavigation.json';
 export { default as ParsedFixedValues } from './parsedFixedValues.json';
 export { default as MyIconCloud } from './myIconCloud.json';
 export { default as Icons } from './icons.json';
@@ -33,3 +31,4 @@ export * from './primitives';
 export * from './errors';
 export * from './variants';
 export * from './golden-files';
+export * from './workflow';

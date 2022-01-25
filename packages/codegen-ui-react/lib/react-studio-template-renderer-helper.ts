@@ -17,6 +17,7 @@ import {
   isDataPropertyBinding,
   StudioComponentDataPropertyBinding,
   StudioComponentSimplePropertyBinding,
+  StudioComponentEventPropertyBinding,
   InternalError,
   InvalidInputError,
 } from '@aws-amplify/codegen-ui';
@@ -182,7 +183,10 @@ export function jsonToLiteral(
 }
 
 export function bindingPropertyUsesHook(
-  binding: StudioComponentDataPropertyBinding | StudioComponentSimplePropertyBinding,
+  binding:
+    | StudioComponentDataPropertyBinding
+    | StudioComponentSimplePropertyBinding
+    | StudioComponentEventPropertyBinding,
 ): boolean {
   return isDataPropertyBinding(binding) && 'predicate' in binding.bindingProperties;
 }
