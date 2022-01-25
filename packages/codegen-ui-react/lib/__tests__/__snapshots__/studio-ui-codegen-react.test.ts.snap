@@ -34,7 +34,7 @@ export default function NavigateButton(
         action.run();
       }}
       {...rest}
-      {...getOverrideProps(overrides, \\"Button\\")}
+      {...getOverrideProps(overrides, \\"NavigateButton\\")}
     ></Button>
   );
 }
@@ -5348,15 +5348,9 @@ export default function Event(props: EventProps): React.ReactElement {
   const overrides = { ...overridesProp };
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"Flex\\")}>
-      <Input
-        onChange={onInputChange}
-        {...getOverrideProps(overrides, \\"Flex.Input[0]\\")}
-      ></Input>
-      <Button
-        onClick={onButtonClick}
-        {...getOverrideProps(overrides, \\"Flex.Button[0]\\")}
-      ></Button>
+    <Flex {...rest} {...getOverrideProps(overrides, \\"Event\\")}>
+      <Input onChange={onInputChange}></Input>
+      <Button onClick={onButtonClick}></Button>
     </Flex>
   );
 }

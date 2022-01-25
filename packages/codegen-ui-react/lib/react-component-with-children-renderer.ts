@@ -77,33 +77,6 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
     );
   }
 
-  protected renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
-    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementProperties(value, key),
-    );
-
-    const itemsAttribute = factory.createJsxAttribute(
-      factory.createIdentifier('items'),
-      factory.createJsxExpression(
-        undefined,
-        factory.createBinaryExpression(
-          factory.createIdentifier(itemsVariableName || 'items'),
-          factory.createToken(SyntaxKind.BarBarToken),
-          factory.createArrayLiteralExpression([], false),
-        ),
-      ),
-    );
-    propsArray.push(itemsAttribute);
-
-    this.addPropsSpreadAttributes(propsArray);
-
-    return factory.createJsxOpeningElement(
-      factory.createIdentifier(this.component.componentType),
-      undefined,
-      factory.createJsxAttributes(propsArray),
-    );
-  }
-
   protected addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
     if (this.node.isRoot()) {
       const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('rest'));
