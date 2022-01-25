@@ -180,8 +180,10 @@ describe('validation-helper', () => {
             name: 'I Have Spaces',
             componentType: 'Button',
             properties: {},
-            eventProperties: {
-              click: 'onButtonClick',
+            events: {
+              click: {
+                bindingEvent: 'onButtonClick',
+              },
             },
           },
         ],
@@ -199,8 +201,10 @@ describe('validation-helper', () => {
               name: 'I Have Spaces',
               componentType: 'Button',
               properties: {},
-              eventProperties: {
-                myclick: 'onButtonClick',
+              events: {
+                myclick: {
+                  bindingEvent: 'onButtonClick',
+                },
               },
             },
           ],

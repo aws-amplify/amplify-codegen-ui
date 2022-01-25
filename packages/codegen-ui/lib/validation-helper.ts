@@ -41,12 +41,12 @@ const propertiesSchema = (value: Object) => {
   );
 };
 
-const eventPropertiesSchema = yup
+const eventsSchema = yup
   .object(
     Object.fromEntries(
       Object.keys(StudioGenericEvent)
         .filter((eventType) => Number.isNaN(Number(eventType)))
-        .map((eventType) => [eventType, yup.string().optional()]),
+        .map((eventType) => [eventType, yup.object().nullable()]),
     ),
   )
   .noUnknown();
@@ -67,7 +67,7 @@ const studioComponentChildSchema: any = yup.object({
   bindingProperties: yup.object().nullable(),
   collectionProperties: yup.object().nullable(),
   actions: yup.object().nullable(),
-  eventProperties: eventPropertiesSchema.nullable(),
+  events: eventsSchema.nullable(),
 });
 
 const studioComponentSchema = yup.object({
@@ -83,7 +83,7 @@ const studioComponentSchema = yup.object({
   bindingProperties: yup.object().nullable(),
   collectionProperties: yup.object().nullable(),
   actions: yup.object().nullable(),
-  eventProperties: eventPropertiesSchema.nullable(),
+  events: eventsSchema.nullable(),
 });
 
 /**
