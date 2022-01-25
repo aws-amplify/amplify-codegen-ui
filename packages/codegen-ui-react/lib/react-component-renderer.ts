@@ -13,7 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ComponentRendererBase, StudioNode, StudioComponent, StudioComponentChild } from '@aws-amplify/codegen-ui';
+import {
+  ComponentRendererBase,
+  StudioNode,
+  StudioComponent,
+  StudioComponentChild,
+  StudioGenericEvent,
+} from '@aws-amplify/codegen-ui';
 import {
   JsxAttributeLike,
   JsxElement,
@@ -25,8 +31,9 @@ import {
 
 import {
   addBindingPropertiesImports,
-  buildOpeningElementAttributes,
-  buildOpeningElementActions,
+  buildOpeningElementProperties,
+  buildOpeningElementEvents,
+  mapGenericEventToReact,
 } from './react-component-render-helper';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 
@@ -56,15 +63,13 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   }
 
   protected renderOpeningElement(): JsxOpeningElement {
-    const attributes = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementAttributes(value, key),
+    const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) =>
+      buildOpeningElementProperties(value, key),
     );
-
-    if ('events' in this.component && this.component.events !== undefined) {
-      attributes.push(
-        ...Object.entries(this.component.events).map(([key, value]) => buildOpeningElementActions(key, value)),
-      );
-    }
+    const eventAttributes = Object.entries(this.component.events || {}).map(([key, value]) =>
+      buildOpeningElementEvents(value, mapGenericEventToReact(key as StudioGenericEvent)),
+    );
+    const attributes = propertyAttributes.concat(eventAttributes);
 
     this.addPropsSpreadAttributes(attributes);
 

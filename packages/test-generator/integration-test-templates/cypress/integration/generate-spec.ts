@@ -17,8 +17,6 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'ViewWithButton',
   'ViewTest',
   'CustomButton',
-  'ComponentWithActionSignOut',
-  'ComponentWithActionNavigation',
   'ParsedFixedValues',
   'MyIconCloud',
   'Icons',
@@ -111,7 +109,6 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'ViewWithButton',
   'ViewTest',
   'CustomButton',
-  'ComponentWithActionSignOut',
   'GoldenBasicComponent',
   'GoldenCollectionWithDataBindingAndPagination',
   'GoldenCollectionWithDataBindingAndSort',
@@ -133,6 +130,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'GoldenComponentWithTypedProp',
   'GoldenComponentWithVariants',
   'GoldenTheme',
+  'Event',
 ]);
 const EXPECTED_INVALID_INPUT_CASES = new Set([
   'ComponentMissingProperties',

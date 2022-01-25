@@ -1,0 +1,66 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "Event",
+  "bindingProperties": {
+    "buttonClicked": {
+      "type": "String"
+    },
+    "textChanged": {
+      "type": "String"
+    },
+    "onButtonClick": {
+      "type": "Event"
+    },
+    "onTextFieldChange": {
+      "type": "Event"
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "TextField",
+      "properties": {},
+      "events": {
+        "change": {
+          "bindingEvent": "onTextFieldChange"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "properties": {},
+      "events": {
+        "click": {
+          "bindingEvent": "onButtonClick"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "properties": {
+        "id": {
+          "value": "button-clicked"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "buttonClicked"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "properties": {
+        "id": {
+          "value": "text-changed"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "textChanged"
+          }
+        }
+      }
+    }
+  ]
+}
