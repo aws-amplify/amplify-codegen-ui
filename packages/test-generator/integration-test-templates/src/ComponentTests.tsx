@@ -56,6 +56,7 @@ import {
   ComponentWithBoundPropertyConditional,
   ComponentWithNestedOverrides,
   PaginatedCollection,
+  SearchableCollection,
   ComponentWithAuthBinding,
   MyIconCloud,
 } from './ui-components'; // eslint-disable-line import/extensions
@@ -303,6 +304,7 @@ export default function ComponentTests() {
           ]}
         />
         <PaginatedCollection id="paginatedCollection" />
+        <SearchableCollection id="searchableCollection" />
         <CollectionWithBinding
           id="collectionWithOverrideItems"
           items={[
