@@ -2,9 +2,9 @@ name: Check
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, feature/*, tagged-release/*]
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, feature/*, tagged-release/*]
 
 jobs:
   amplify-cli-tests:
