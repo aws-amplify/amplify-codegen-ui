@@ -142,7 +142,7 @@ describe('Generated Components', () => {
           cy.get('#authBinding [alt="User Image"]');
         });
 
-        it('Renders user data is available', () => {
+        it('Renders user data if available', () => {
           // TODO: Implement me.
         });
       });
@@ -193,6 +193,13 @@ describe('Generated Components', () => {
       cy.get('#paginatedCollection').contains('Beachside Cottage - $1000').should('not.exist');
       cy.get('[aria-label="Go to page 2"]').click();
       cy.get('#paginatedCollection').contains('Beachside Cottage - $1000');
+    });
+
+    it('It renders searchable collections', () => {
+      cy.get('#searchableCollection').contains('Mountain Retreat - $1800');
+      cy.get('#searchableCollection').siblings('.amplify-collection-search').type('Cabin');
+      cy.get('#searchableCollection').contains('Mountain Retreat - $1800').should('not.exist');
+      cy.get('#searchableCollection').contains('Cabin in the Woods - $600/night');
     });
 
     it('Supports overrideItems with context injection', () => {
