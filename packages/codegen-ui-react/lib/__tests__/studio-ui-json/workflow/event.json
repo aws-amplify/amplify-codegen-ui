@@ -1,0 +1,34 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "Event",
+  "bindingProperties": {
+    "onButtonClick": {
+      "type": "Event"
+    },
+    "onInputChange": {
+      "type": "Event"
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Input",
+      "properties": {},
+      "events": {
+        "change": {
+          "bindingEvent": "onInputChange"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "properties": {},
+      "events": {
+        "click": {
+          "bindingEvent": "onButtonClick"
+        }
+      }
+    }
+  ]
+}

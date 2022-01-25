@@ -17,7 +17,7 @@ import { BaseComponentProps } from '@aws-amplify/ui-react';
 import { isStudioComponentWithCollectionProperties, StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { factory, JsxChild, JsxElement, JsxExpression, JsxOpeningElement, SyntaxKind } from 'typescript';
 import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
-import { buildOpeningElementAttributes } from '../react-component-render-helper';
+import { buildOpeningElementProperties } from '../react-component-render-helper';
 
 export default class CollectionRenderer extends ReactComponentWithChildrenRenderer<BaseComponentProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
@@ -39,7 +39,7 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
 
   private renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
     const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementAttributes(value, key),
+      buildOpeningElementProperties(value, key),
     );
 
     const itemsAttribute = factory.createJsxAttribute(
