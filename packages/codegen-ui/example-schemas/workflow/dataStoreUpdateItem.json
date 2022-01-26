@@ -1,12 +1,15 @@
 {
   "componentType": "Button",
-  "name": "CreateCustomerButton",
+  "name": "UpdateCustomerButton",
   "properties": {},
   "events": {
     "click": {
-      "action": "Amplify.DataStoreCreateItem",
+      "action": "Amplify.DataStoreUpdateItem",
       "parameters": {
         "model": "Customer",
+        "id": {
+          "value": "d9887268-47dd-4899-9568-db5809218751"
+        },
         "fields": {
           "firstName": {
             "value": "Din"
@@ -20,7 +23,7 @@
   },
   "properties": {
     "children": {
-      "value": "Save"
+      "value": "Update"
     }
   }
 }
