@@ -1,0 +1,23 @@
+{
+    "componentType": "Button",
+    "name": "NavigateButton",
+    "properties": {
+      "children": {
+        "value": "Go to About section"
+      }
+    },
+    "events": {
+      "click": {
+        "action": "Amplify.Navigate",
+        "parameters": {
+          "type": {
+            "value": "anchor"
+          },
+          "about": {
+            "value": "#about"
+          }
+        }
+      }
+    }
+  }
+  

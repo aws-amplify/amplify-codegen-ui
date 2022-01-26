@@ -503,6 +503,34 @@ export type BoundStudioComponentEvent = {
   bindingEvent: string;
 };
 
+export type ActionStudioComponentEvent = NavigationAction | AuthSignOutAction | AuthUpdateUserAttributesAction;
+
+export type NavigationAction = {
+  action: 'Amplify.Navigation';
+  parameters: {
+    type: StudioComponentProperty;
+    url?: StudioComponentProperty;
+    anchor?: StudioComponentProperty;
+    target?: StudioComponentProperty;
+  };
+};
+
+export type AuthSignOutAction = {
+  action: 'Amplify.AuthSignOut';
+  parameters: {
+    global: StudioComponentProperty;
+  };
+};
+
+export type AuthUpdateUserAttributesAction = {
+  action: 'Amplify.AuthUpdateUserAttributes';
+  parameters: {
+    attributes: {
+      [propertyName: string]: StudioComponentProperty;
+    };
+  };
+};
+
 export type StudioComponentEvents = {
   [eventName: string]: StudioComponentEvent;
 };
@@ -523,16 +551,4 @@ export type StudioThemeValues = {
 export type StudioThemeValue = {
   value?: string;
   children?: StudioThemeValues[];
-};
-
-export type ActionStudioComponentEvent = NavigationAction;
-
-export type NavigationAction = {
-  action: 'Amplify.Navigation';
-  parameters: {
-    type: StudioComponentProperty;
-    url?: StudioComponentProperty;
-    anchor?: StudioComponentProperty;
-    target?: StudioComponentProperty;
-  };
 };

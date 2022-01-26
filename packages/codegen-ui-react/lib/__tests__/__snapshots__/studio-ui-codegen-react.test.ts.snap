@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`amplify render tests actions DataStoreCreate action 1`] = `
+exports[`amplify render tests actions DataStore DataStoreCreate action 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
@@ -44,7 +44,172 @@ export default function CreateCustomerButton(
 }
 `;
 
-exports[`amplify render tests actions navigation action 1`] = `
+exports[`amplify render tests actions auth signs out 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useAuthSignOutAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export type SignOutButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function SignOutButton(
+  props: SignOutButtonProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const action = useAuthSignOutAction({ global: false });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Sign out\\"
+      onClick={() => {
+        action.run();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"SignOutButton\\")}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests actions auth updates user attributes 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  updateUserAttributesAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export type UpdateUserAttributeButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function UpdateUserAttributeButton(
+  props: UpdateUserAttributeButtonProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const action = updateUserAttributesAction({
+    attributes: { email: \\"newemail@domain.com\\", displayname: \\"newdisplayname\\" },
+  });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Sign out\\"
+      onClick={() => {
+        action.run();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"UpdateUserAttributeButton\\")}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests actions navigation anchor navigation action 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useNavigateAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export type NavigateButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function NavigateButton(
+  props: NavigateButtonProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const action = useNavigateAction({ type: \\"anchor\\", about: \\"#about\\" });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Go to About section\\"
+      onClick={() => {
+        action.run();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"NavigateButton\\")}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests actions navigation hard navigation action 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useNavigateAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export type NavigateButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function NavigateButton(
+  props: NavigateButtonProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const overrides = { ...overridesProp };
+  const action = useNavigateAction({
+    type: \\"url\\",
+    url: \\"https://www.amazon.com/\\",
+  });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Go to Amazon.com\\"
+      onClick={() => {
+        action.run();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"NavigateButton\\")}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests actions navigation new tab navigation action 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
