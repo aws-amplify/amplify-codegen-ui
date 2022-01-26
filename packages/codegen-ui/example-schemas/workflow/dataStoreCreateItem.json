@@ -1,0 +1,26 @@
+{
+  "componentType": "Button",
+  "name": "CreateCustomerButton",
+  "properties": {},
+  "events": {
+    "click": {
+      "action": "Amplify.DataStoreCreateItem",
+      "parameters": {
+        "model": "Customer",
+        "fields": {
+          "firstName": {
+            "value": "Din"
+          },
+          "lastName": {
+            "value": "Djarin"
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "children": {
+      "value": "Create"
+    }
+  }
+}

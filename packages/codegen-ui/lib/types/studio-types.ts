@@ -503,7 +503,13 @@ export type BoundStudioComponentEvent = {
   bindingEvent: string;
 };
 
-export type ActionStudioComponentEvent = NavigationAction | AuthSignOutAction | AuthUpdateUserAttributesAction;
+export type ActionStudioComponentEvent =
+  | NavigationAction
+  | AuthSignOutAction
+  | AuthUpdateUserAttributesAction
+  | DataStoreCreateItemAction
+  | DataStoreUpdateItemAction
+  | DataStoreDeleteItemAction;
 
 export type NavigationAction = {
   action: 'Amplify.Navigation';
@@ -528,6 +534,35 @@ export type AuthUpdateUserAttributesAction = {
     attributes: {
       [propertyName: string]: StudioComponentProperty;
     };
+  };
+};
+
+export type DataStoreCreateItemAction = {
+  action: 'Amplify.DataStoreCreateItemAction';
+  parameters: {
+    model: string;
+    fields: {
+      [propertyName: string]: StudioComponentProperty;
+    };
+  };
+};
+
+export type DataStoreUpdateItemAction = {
+  action: 'Amplify.DataStoreUpdateItemAction';
+  parameters: {
+    model: string;
+    id: StudioComponentProperty;
+    fields: {
+      [propertyName: string]: StudioComponentProperty;
+    };
+  };
+};
+
+export type DataStoreDeleteItemAction = {
+  action: 'Amplify.DataStoreDeleteItemAction';
+  parameters: {
+    model: string;
+    id: StudioComponentProperty;
   };
 };
 
