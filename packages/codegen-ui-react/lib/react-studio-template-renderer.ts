@@ -531,11 +531,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     // remove overrides from rest of props
+    const hasVariant = isStudioComponentWithVariants(component);
     elements.push(
       factory.createBindingElement(
         undefined,
-        factory.createIdentifier('overrides'),
-        factory.createIdentifier('overridesProp'),
+        hasVariant ? factory.createIdentifier('overrides') : undefined,
+        factory.createIdentifier(hasVariant ? 'overridesProp' : 'overrides'),
         undefined,
       ),
     );
@@ -575,7 +576,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       this.importCollection.addMappedImport(ImportValue.MERGE_VARIANTS_OVERRIDES);
     }
 
-    statements.push(this.buildOverridesDeclaration(isStudioComponentWithVariants(component)));
+    if (isStudioComponentWithVariants(component)) {
+      statements.push(this.buildOverridesFromVariantsAndProp());
+    }
 
     const authStatement = this.buildUseAuthenticatedUserStatement(component);
     if (authStatement !== undefined) {
@@ -665,39 +668,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   /**
-   * case: hasVariants = true => const overrides = { ...getOverridesFromVariants(variants, props) };
-   * case: hasVariants = false => const overrides = { ...overridesProp };
+   * const overrides = mergeVariantsAndOverrides(
+   *   getOverridesFromVariants(variants, props),
+   *   overridesProp || {}
+   * );
    */
-  private buildOverridesDeclaration(hasVariants: boolean): VariableStatement {
-    if (hasVariants) {
-      this.importCollection.addMappedImport(ImportValue.GET_OVERRIDES_FROM_VARIANTS);
-      this.importCollection.addMappedImport(ImportValue.VARIANT);
-
-      return factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createIdentifier('overrides'),
-              undefined,
-              undefined,
-              factory.createCallExpression(factory.createIdentifier('mergeVariantsAndOverrides'), undefined, [
-                factory.createCallExpression(factory.createIdentifier('getOverridesFromVariants'), undefined, [
-                  factory.createIdentifier('variants'),
-                  factory.createIdentifier('props'),
-                ]),
-                factory.createBinaryExpression(
-                  factory.createIdentifier('overridesProp'),
-                  factory.createToken(ts.SyntaxKind.BarBarToken),
-                  factory.createObjectLiteralExpression([], false),
-                ),
-              ]),
-            ),
-          ],
-          ts.NodeFlags.Const,
-        ),
-      );
-    }
+  private buildOverridesFromVariantsAndProp() {
+    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDES_FROM_VARIANTS);
+    this.importCollection.addMappedImport(ImportValue.VARIANT);
 
     return factory.createVariableStatement(
       undefined,
@@ -707,8 +685,16 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createIdentifier('overrides'),
             undefined,
             undefined,
-            factory.createObjectLiteralExpression([
-              factory.createSpreadAssignment(factory.createIdentifier('overridesProp')),
+            factory.createCallExpression(factory.createIdentifier('mergeVariantsAndOverrides'), undefined, [
+              factory.createCallExpression(factory.createIdentifier('getOverridesFromVariants'), undefined, [
+                factory.createIdentifier('variants'),
+                factory.createIdentifier('props'),
+              ]),
+              factory.createBinaryExpression(
+                factory.createIdentifier('overridesProp'),
+                factory.createToken(ts.SyntaxKind.BarBarToken),
+                factory.createObjectLiteralExpression([], false),
+              ),
             ]),
           ),
         ],
