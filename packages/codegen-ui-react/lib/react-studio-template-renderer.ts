@@ -76,7 +76,7 @@ import Primitive, {
   PrimitiveChildrenPropMapping,
 } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
-import { getComponentActions, buildUseActionStatement } from './action';
+import { getComponentActions, buildUseActionStatement } from './workflow';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -1012,7 +1012,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   private buildUseActionStatements(component: StudioComponent): Statement[] {
     const actions = getComponentActions(component);
     if (actions) {
-      return actions.map((action) => buildUseActionStatement(action, this.importCollection));
+      return actions.map(({ action, identifier }) =>
+        buildUseActionStatement(action, identifier, this.importCollection),
+      );
     }
     return [];
   }
