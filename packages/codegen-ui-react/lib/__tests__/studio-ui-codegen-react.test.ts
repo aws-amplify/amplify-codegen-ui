@@ -311,8 +311,16 @@ describe('amplify render tests', () => {
     });
 
     describe('DataStore', () => {
-      it('DataStoreCreate action', () => {
-        expect(generateWithAmplifyRenderer('workflow/dataStoreCreateAction')).toMatchSnapshot();
+      it('DataStoreCreateItem', () => {
+        expect(generateWithAmplifyRenderer('workflow/dataStoreCreateItem')).toMatchSnapshot();
+      });
+
+      it('DataStoreUpdateItem', () => {
+        expect(generateWithAmplifyRenderer('workflow/dataStoreUpdateItem')).toMatchSnapshot();
+      });
+
+      it('DataStoreDeleteItem', () => {
+        expect(generateWithAmplifyRenderer('workflow/dataStoreDeleteItem')).toMatchSnapshot();
       });
     });
   });
