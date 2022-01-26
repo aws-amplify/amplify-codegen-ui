@@ -1,0 +1,20 @@
+{
+    "componentType": "Button",
+    "name": "ReloadButton",
+    "properties": {
+      "children": {
+        "value": "Reload the page."
+      }
+    },
+    "events": {
+      "click": {
+        "action": "Amplify.Navigate",
+        "parameters": {
+          "type": {
+            "value": "reload"
+          }
+        }
+      }
+    }
+  }
+  
