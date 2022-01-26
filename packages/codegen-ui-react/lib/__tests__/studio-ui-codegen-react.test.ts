@@ -294,12 +294,34 @@ describe('amplify render tests', () => {
   });
 
   describe('actions', () => {
-    it('navigation action', () => {
-      expect(generateWithAmplifyRenderer('workflow/navigationAction')).toMatchSnapshot();
+    describe('navigation', () => {
+      it('hard navigation action', () => {
+        expect(generateWithAmplifyRenderer('workflow/hardNavigationAction')).toMatchSnapshot();
+      });
+
+      it('new tab navigation action', () => {
+        expect(generateWithAmplifyRenderer('workflow/newTabNavigationAction')).toMatchSnapshot();
+      });
+
+      it('anchor navigation action', () => {
+        expect(generateWithAmplifyRenderer('workflow/anchorNavigationAction')).toMatchSnapshot();
+      });
     });
 
-    it('DataStoreCreate action', () => {
-      expect(generateWithAmplifyRenderer('workflow/dataStoreCreateAction')).toMatchSnapshot();
+    describe('auth', () => {
+      it('signs out', () => {
+        expect(generateWithAmplifyRenderer('workflow/authSignOutAction')).toMatchSnapshot();
+      });
+
+      it('updates user attributes', () => {
+        expect(generateWithAmplifyRenderer('workflow/authUpdateUserAttributesAction')).toMatchSnapshot();
+      });
+    });
+
+    describe('DataStore', () => {
+      it('DataStoreCreate action', () => {
+        expect(generateWithAmplifyRenderer('workflow/dataStoreCreateAction')).toMatchSnapshot();
+      });
     });
   });
 
