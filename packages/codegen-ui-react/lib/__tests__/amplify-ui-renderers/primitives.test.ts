@@ -14,8 +14,7 @@
   limitations under the License.
  */
 import { StudioComponent } from '@aws-amplify/codegen-ui';
-import { assertASTMatchesSnapshot } from '../__utils__/snapshot-helpers';
-
+import { assertASTMatchesSnapshot } from '../__utils__';
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
 import Primitive from '../../primitive';
 

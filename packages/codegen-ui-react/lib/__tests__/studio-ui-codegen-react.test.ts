@@ -14,30 +14,22 @@
   limitations under the License.
  */
 import { StudioTemplateRendererFactory, StudioComponent } from '@aws-amplify/codegen-ui';
-import fs from 'fs';
-import { join } from 'path';
 import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '..';
 import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
-
-function loadSchemaFromJSONFile(jsonSchemaFile: string): StudioComponent {
-  return JSON.parse(
-    fs.readFileSync(join(__dirname, 'studio-ui-json', `${jsonSchemaFile}.json`), 'utf-8'),
-  ) as StudioComponent;
-}
+import { loadSchemaFromJSONFile } from './__utils__';
 
 function generateWithAmplifyRenderer(
   jsonSchemaFile: string,
   renderConfig: ReactRenderConfig = {},
   isSampleCodeSnippet = false,
 ): { componentText: string; declaration?: string } {
-  const schema = loadSchemaFromJSONFile(jsonSchemaFile);
   const rendererFactory = new StudioTemplateRendererFactory(
     (component: StudioComponent) => new AmplifyRenderer(component, renderConfig),
   );
-  if (isSampleCodeSnippet) {
-    return { componentText: rendererFactory.buildRenderer(schema).renderSampleCodeSnippet().compText };
-  }
-  return rendererFactory.buildRenderer(schema).renderComponent();
+  const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile(jsonSchemaFile));
+  return isSampleCodeSnippet
+    ? { componentText: renderer.renderSampleCodeSnippet().compText }
+    : renderer.renderComponent();
 }
 
 describe('amplify render tests', () => {
