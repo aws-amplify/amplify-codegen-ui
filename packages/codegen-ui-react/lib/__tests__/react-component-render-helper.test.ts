@@ -33,7 +33,7 @@ import {
   buildConditionalExpression,
 } from '../react-component-render-helper';
 
-import { assertASTMatchesSnapshot } from './__utils__/snapshot-helpers';
+import { assertASTMatchesSnapshot } from './__utils__';
 
 function buildConditionalWithOperand(operand: string, type?: string) {
   const conditional: ConditionalStudioComponentProperty = {
