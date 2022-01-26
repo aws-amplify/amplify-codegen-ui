@@ -20,8 +20,7 @@ export type CreateCustomerButtonProps = React.PropsWithChildren<
 export default function CreateCustomerButton(
   props: CreateCustomerButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   const action = useDataStoreCreateAction({
     model: Customer,
     fields: { firstName: \\"Din\\", lastName: \\"Djarin\\" },
@@ -64,8 +63,7 @@ export type DeleteCustomerButtonProps = React.PropsWithChildren<
 export default function DeleteCustomerButton(
   props: DeleteCustomerButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   const action = useDataStoreDeleteAction({
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
@@ -108,8 +106,7 @@ export type UpdateCustomerButtonProps = React.PropsWithChildren<
 export default function UpdateCustomerButton(
   props: UpdateCustomerButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   const action = useDataStoreUpdateAction({
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
@@ -152,8 +149,7 @@ export type SignOutButtonProps = React.PropsWithChildren<
 export default function SignOutButton(
   props: SignOutButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   const action = useAuthSignOutAction({ global: false });
   return (
     /* @ts-ignore: TS2322 */
@@ -192,8 +188,7 @@ export type UpdateUserAttributeButtonProps = React.PropsWithChildren<
 export default function UpdateUserAttributeButton(
   props: UpdateUserAttributeButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   const action = updateUserAttributesAction({
     attributes: { email: \\"newemail@domain.com\\", displayname: \\"newdisplayname\\" },
   });
@@ -234,8 +229,7 @@ export type NavigateButtonProps = React.PropsWithChildren<
 export default function NavigateButton(
   props: NavigateButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   const action = useNavigateAction({ type: \\"anchor\\", about: \\"#about\\" });
   return (
     /* @ts-ignore: TS2322 */
@@ -274,8 +268,7 @@ export type NavigateButtonProps = React.PropsWithChildren<
 export default function NavigateButton(
   props: NavigateButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   const action = useNavigateAction({
     type: \\"url\\",
     url: \\"https://www.amazon.com/\\",
@@ -317,8 +310,7 @@ export type NavigateButtonProps = React.PropsWithChildren<
 export default function NavigateButton(
   props: NavigateButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   const action = useNavigateAction({
     type: \\"url\\",
     url: \\"https://www.amazon.com/\\",
@@ -359,8 +351,7 @@ export type CustomButtonProps = React.PropsWithChildren<
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Button
@@ -390,8 +381,7 @@ export type CustomTextProps = React.PropsWithChildren<
   }
 >;
 export default function CustomText(props: CustomTextProps): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Text
@@ -421,8 +411,7 @@ export type TestProps = React.PropsWithChildren<
   }
 >;
 export default function Test(props: TestProps): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <View
@@ -473,10 +462,9 @@ export default function CollectionOfCustomButtons(
     buttonColor: buttonColorProp,
     items,
     overrideItems,
-    overrides: overridesProp,
+    overrides,
     ...rest
   } = props;
-  const overrides = { ...overridesProp };
   const buttonUserFilterObj = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
@@ -576,10 +564,9 @@ export default function CollectionOfCustomButtons(
     buttonColor: buttonColorProp,
     items,
     overrideItems,
-    overrides: overridesProp,
+    overrides,
     ...rest
   } = props;
-  const overrides = { ...overridesProp };
   const buttonUserFilterObj = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
@@ -685,10 +672,9 @@ export default function CollectionOfCustomButtons(
     buttonColor: buttonColorProp,
     items: itemsProp,
     overrideItems,
-    overrides: overridesProp,
+    overrides,
     ...rest
   } = props;
-  const overrides = { ...overridesProp };
   const itemsFilterObj = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
@@ -772,8 +758,7 @@ export type ListingCardCollectionProps = React.PropsWithChildren<
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): React.ReactElement {
-  const { items, overrideItems, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { items, overrideItems, overrides, ...rest } = props;
   const bananas =
     items !== undefined
       ? items
@@ -830,8 +815,7 @@ export type ListingCardCollectionProps = React.PropsWithChildren<
 export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): React.ReactElement {
-  const { items, overrideItems, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { items, overrideItems, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Collection
@@ -870,8 +854,7 @@ export type ViewWithButtonProps = React.PropsWithChildren<
 export default function ViewWithButton(
   props: ViewWithButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
@@ -900,8 +883,7 @@ export type ViewWithCustomButtonProps = React.PropsWithChildren<
 export default function ViewWithCustomButton(
   props: ViewWithCustomButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <View {...rest} {...getOverrideProps(overrides, \\"ViewWithCustomButton\\")}>
@@ -929,8 +911,7 @@ export type ViewWithButtonProps = React.PropsWithChildren<
 export default function ViewWithButton(
   props: ViewWithButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
@@ -958,8 +939,7 @@ export type ComplexTest1Props = React.PropsWithChildren<
 export default function ComplexTest1(
   props: ComplexTest1Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -1010,8 +990,7 @@ export type ComplexTest2Props = React.PropsWithChildren<
 export default function ComplexTest2(
   props: ComplexTest2Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -1081,8 +1060,7 @@ export type ComplexTest3Props = React.PropsWithChildren<
 export default function ComplexTest3(
   props: ComplexTest3Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -1280,8 +1258,7 @@ export type ComplexTest5Props = React.PropsWithChildren<
 export default function ComplexTest5(
   props: ComplexTest5Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -1335,8 +1312,7 @@ export type ComplexTest6Props = React.PropsWithChildren<
 export default function ComplexTest6(
   props: ComplexTest6Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -1414,8 +1390,7 @@ export type ComplexTest7Props = React.PropsWithChildren<
 export default function ComplexTest7(
   props: ComplexTest7Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <View
@@ -1489,8 +1464,7 @@ export type ComplexTest8Props = React.PropsWithChildren<
 export default function ComplexTest8(
   props: ComplexTest8Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -1955,8 +1929,7 @@ export type ComplexTest10Props = React.PropsWithChildren<
 export default function ComplexTest10(
   props: ComplexTest10Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -2837,8 +2810,7 @@ export type ComplexTest11Props = React.PropsWithChildren<
 export default function ComplexTest11(
   props: ComplexTest11Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -3732,8 +3704,7 @@ export type TextWithDataBindingProps = React.PropsWithChildren<
 export default function TextWithDataBinding(
   props: TextWithDataBindingProps
 ): React.ReactElement {
-  const { textValue, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { textValue, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Text
@@ -3771,15 +3742,8 @@ export type ComponentWithDataBindingProps = React.PropsWithChildren<
 export default function ComponentWithDataBinding(
   props: ComponentWithDataBindingProps
 ): React.ReactElement {
-  const {
-    width,
-    isDisabled,
-    buttonUser,
-    buttonColor,
-    overrides: overridesProp,
-    ...rest
-  } = props;
-  const overrides = { ...overridesProp };
+  const { width, isDisabled, buttonUser, buttonColor, overrides, ...rest } =
+    props;
   return (
     /* @ts-ignore: TS2322 */
     <Button
@@ -3814,8 +3778,7 @@ export type SectionHeadingProps = React.PropsWithChildren<
 export default function SectionHeading(
   props: SectionHeadingProps
 ): React.ReactElement {
-  const { newProp6fd1, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { newProp6fd1, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -3875,8 +3838,7 @@ export type ChildComponentWithDataBindingProps = React.PropsWithChildren<
 export default function ChildComponentWithDataBinding(
   props: ChildComponentWithDataBindingProps
 ): React.ReactElement {
-  const { textValue, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { textValue, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Button
@@ -4083,8 +4045,7 @@ export type ChildComponentWithDataBoundConcatenationProps =
 export default function ChildComponentWithDataBoundConcatenation(
   props: ChildComponentWithDataBoundConcatenationProps
 ): React.ReactElement {
-  const { textValue, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { textValue, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Button
@@ -4124,8 +4085,7 @@ export type ChildComponentWithStaticConcatenationProps =
 export default function ChildComponentWithStaticConcatenation(
   props: ChildComponentWithStaticConcatenationProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Button
@@ -4164,14 +4124,7 @@ export type CustomButtonProps = React.PropsWithChildren<
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const {
-    width,
-    buttonUser,
-    buttonColor,
-    overrides: overridesProp,
-    ...rest
-  } = props;
-  const overrides = { ...overridesProp };
+  const { width, buttonUser, buttonColor, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Button
@@ -4209,14 +4162,7 @@ export type CustomButtonProps = React.PropsWithChildren<
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const {
-    width,
-    buttonUser,
-    buttonColor,
-    overrides: overridesProp,
-    ...rest
-  } = props;
-  const overrides = { ...overridesProp };
+  const { width, buttonUser, buttonColor, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Button
@@ -4265,8 +4211,7 @@ export type ConditionalComponentWithDataBindingProps = React.PropsWithChildren<
 export default function ConditionalComponentWithDataBinding(
   props: ConditionalComponentWithDataBindingProps
 ): React.ReactElement {
-  const { student, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { student, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -4319,8 +4264,7 @@ export type CustomButtonProps = React.PropsWithChildren<
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const { buttonColor, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { buttonColor, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Button
@@ -4351,8 +4295,7 @@ export type CustomChildrenProps = React.PropsWithChildren<
 export default function CustomChildren(
   props: CustomChildrenProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <MyView {...rest} {...getOverrideProps(overrides, \\"CustomChildren\\")}>
@@ -4402,9 +4345,8 @@ import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import CustomButton from \\"./CustomButton\\";
 import MyView from \\"./MyView\\";
 export default function CustomChildren(props) {
-  var overridesProp = props.overrides,
+  var overrides = props.overrides,
     rest = __rest(props, [\\"overrides\\"]);
-  var overrides = __assign({}, overridesProp);
   return React.createElement(
     MyView,
     __assign({}, rest, getOverrideProps(overrides, \\"CustomChildren\\")),
@@ -4443,8 +4385,7 @@ export type CustomParentAndChildrenProps = React.PropsWithChildren<
 export default function CustomParentAndChildren(
   props: CustomParentAndChildrenProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <ViewTest
@@ -4497,9 +4438,8 @@ import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import CustomButton from \\"./CustomButton\\";
 import ViewTest from \\"./ViewTest\\";
 export default function CustomParentAndChildren(props) {
-  var overridesProp = props.overrides,
+  var overrides = props.overrides,
     rest = __rest(props, [\\"overrides\\"]);
-  var overrides = __assign({}, overridesProp);
   return React.createElement(
     ViewTest,
     __assign({}, rest, getOverrideProps(overrides, \\"CustomParentAndChildren\\")),
@@ -4538,8 +4478,7 @@ export type CustomParentProps = React.PropsWithChildren<
 export default function CustomParent(
   props: CustomParentProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <MyView {...rest} {...getOverrideProps(overrides, \\"CustomParent\\")}>
@@ -4589,9 +4528,8 @@ import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Button } from \\"@aws-amplify/ui-react\\";
 import MyView from \\"./MyView\\";
 export default function CustomParent(props) {
-  var overridesProp = props.overrides,
+  var overrides = props.overrides,
     rest = __rest(props, [\\"overrides\\"]);
-  var overrides = __assign({}, overridesProp);
   return React.createElement(
     MyView,
     __assign({}, rest, getOverrideProps(overrides, \\"CustomParent\\")),
@@ -4650,9 +4588,8 @@ import React from \\"react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, View } from \\"@aws-amplify/ui-react\\";
 export default function ViewWithButton(props) {
-  var overridesProp = props.overrides,
+  var overrides = props.overrides,
     rest = __rest(props, [\\"overrides\\"]);
-  var overrides = __assign({}, overridesProp);
   return React.createElement(
     View,
     __assign({}, rest, getOverrideProps(overrides, \\"ViewWithButton\\")),
@@ -4685,9 +4622,8 @@ import React from \\"react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, View } from \\"@aws-amplify/ui-react\\";
 export default function ViewWithButton(props) {
-  const { overrides: overridesProp } = props,
+  const { overrides } = props,
     rest = __rest(props, [\\"overrides\\"]);
-  const overrides = Object.assign({}, overridesProp);
   return (
     <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
       <Button color=\\"#ff0000\\" width=\\"20px\\"></Button>
@@ -4727,9 +4663,8 @@ const react_1 = __importDefault(require(\\"react\\"));
 const internal_1 = require(\\"@aws-amplify/ui-react/internal\\");
 const ui_react_1 = require(\\"@aws-amplify/ui-react\\");
 function ViewWithButton(props) {
-  const { overrides: overridesProp } = props,
+  const { overrides } = props,
     rest = __rest(props, [\\"overrides\\"]);
-  const overrides = Object.assign({}, overridesProp);
   return react_1.default.createElement(
     ui_react_1.View,
     Object.assign(
@@ -4778,8 +4713,7 @@ export type BoundDefaultValueProps = React.PropsWithChildren<
 export default function BoundDefaultValue(
   props: BoundDefaultValueProps
 ): React.ReactElement {
-  const { label, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { label, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Text
@@ -4818,8 +4752,7 @@ export type CollectionDefaultValueProps = React.PropsWithChildren<
 export default function CollectionDefaultValue(
   props: CollectionDefaultValueProps
 ): React.ReactElement {
-  const { items, overrideItems, overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { items, overrideItems, overrides, ...rest } = props;
   const user =
     items !== undefined
       ? items
@@ -4870,12 +4803,7 @@ export type SimpleAndBoundDefaultValueProps = React.PropsWithChildren<
 export default function SimpleAndBoundDefaultValue(
   props: SimpleAndBoundDefaultValueProps
 ): React.ReactElement {
-  const {
-    label = \\"Simple Double Default\\",
-    overrides: overridesProp,
-    ...rest
-  } = props;
-  const overrides = { ...overridesProp };
+  const { label = \\"Simple Double Default\\", overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Text
@@ -4911,12 +4839,7 @@ export type SimplePropertyBindingDefaultValueProps = React.PropsWithChildren<
 export default function SimplePropertyBindingDefaultValue(
   props: SimplePropertyBindingDefaultValueProps
 ): React.ReactElement {
-  const {
-    label = \\"Default Binding Property\\",
-    overrides: overridesProp,
-    ...rest
-  } = props;
-  const overrides = { ...overridesProp };
+  const { label = \\"Default Binding Property\\", overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Text
@@ -4956,8 +4879,7 @@ export type SocialAProps = React.PropsWithChildren<
   }
 >;
 export default function SocialA(props: SocialAProps): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -5256,8 +5178,7 @@ export type MyIconsProps = React.PropsWithChildren<
   }
 >;
 export default function MyIcons(props: MyIconsProps): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <View {...rest} {...getOverrideProps(overrides, \\"MyIcons\\")}>
@@ -5286,8 +5207,7 @@ export type CheckBoxFieldPrimitiveProps = React.PropsWithChildren<
 export default function CheckBoxFieldPrimitive(
   props: CheckBoxFieldPrimitiveProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <CheckboxField
@@ -5319,8 +5239,7 @@ export type ExpanderPrimitiveProps = React.PropsWithChildren<
 export default function ExpanderPrimitive(
   props: ExpanderPrimitiveProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Expander
@@ -5359,8 +5278,7 @@ export type ComponentWithoutNameProps = React.PropsWithChildren<
 export default function unknown_component_name(
   props: unknown_component_nameProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <ExpanderItem
@@ -5391,8 +5309,7 @@ export type MenuPrimitiveProps = React.PropsWithChildren<
 export default function MenuPrimitive(
   props: MenuPrimitiveProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Menu {...rest} {...getOverrideProps(overrides, \\"MenuPrimitive\\")}>
@@ -5420,8 +5337,7 @@ export type MenuButtonPrimitiveProps = React.PropsWithChildren<
 export default function MenuButtonPrimitive(
   props: MenuButtonPrimitiveProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <MenuButton
@@ -5451,8 +5367,7 @@ export type SliderFieldPrimitiveProps = React.PropsWithChildren<
 export default function SliderFieldPrimitive(
   props: SliderFieldPrimitiveProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <SliderField
@@ -5495,8 +5410,7 @@ export type TablePrimitiveProps = React.PropsWithChildren<
 export default function TablePrimitive(
   props: TablePrimitiveProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Table
@@ -5562,8 +5476,7 @@ export type TextFieldPrimitiveProps<Multiline extends boolean> =
 export default function TextFieldPrimitive<Multiline extends boolean>(
   props: TextFieldPrimitiveProps<Multiline>
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <TextField
@@ -5596,8 +5509,7 @@ export type ViewWithButtonProps = React.PropsWithChildren<
 export default function ViewWithButton(
   props: ViewWithButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <View
@@ -5637,13 +5549,7 @@ export type EventProps = React.PropsWithChildren<
   }
 >;
 export default function Event(props: EventProps): React.ReactElement {
-  const {
-    onButtonClick,
-    onInputChange,
-    overrides: overridesProp,
-    ...rest
-  } = props;
-  const overrides = { ...overridesProp };
+  const { onButtonClick, onInputChange, overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <Flex {...rest} {...getOverrideProps(overrides, \\"Event\\")}>
@@ -5677,8 +5583,7 @@ export type ParsedFixedValuesProps = React.PropsWithChildren<
 export default function ParsedFixedValues(
   props: ParsedFixedValuesProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
     <View
@@ -5730,9 +5635,8 @@ import { getOverrideProps, useAuth } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, Image } from \\"@aws-amplify/ui-react\\";
 export default function Profile(props) {
   var _a, _b;
-  const { overrides: overridesProp } = props,
+  const { overrides } = props,
     rest = __rest(props, [\\"overrides\\"]);
-  const overrides = Object.assign({}, overridesProp);
   const authAttributes =
     (_b =
       (_a = useAuth().user) === null || _a === void 0
@@ -5766,7 +5670,7 @@ export default function Profile(props) {
     )
   );
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssTUFBTSxPQUFPLENBQUM7QUFDMUIsT0FBTyxFQUFvQixnQkFBZ0IsRUFBRSxPQUFPLEVBQUUsTUFBTSxnQ0FBZ0MsQ0FBQztBQUM3RixPQUFPLEVBQUUsTUFBTSxFQUFFLElBQUksRUFBYSxLQUFLLEVBQUUsTUFBTSx1QkFBdUIsQ0FBQztBQUt2RSxNQUFNLENBQUMsT0FBTyxVQUFVLE9BQU8sQ0FBQyxLQUFtQjs7SUFDL0MsTUFBTSxFQUFFLFNBQVMsRUFBRSxhQUFhLEtBQWMsS0FBSyxFQUFkLElBQUksVUFBSyxLQUFLLEVBQTdDLGFBQXFDLENBQVEsQ0FBQztJQUNwRCxNQUFNLFNBQVMscUJBQVEsYUFBYSxDQUFFLENBQUM7SUFDdkMsTUFBTSxjQUFjLEdBQUcsTUFBQSxNQUFBLE9BQU8sRUFBRSxDQUFDLElBQUksMENBQUUsVUFBVSxtQ0FBSSxFQUFFLENBQUM7SUFDeEQsT0FBTyxDQUFDLG9CQUFDLElBQUksb0JBQUssSUFBSSxFQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxTQUFTLENBQUM7UUFBRSxvQkFBQyxLQUFLLGtCQUFDLEdBQUcsRUFBRSxjQUFjLENBQUMsVUFBVSxDQUFDLElBQU0sZ0JBQWdCLENBQUMsU0FBUyxFQUFFLFFBQVEsQ0FBQyxFQUFVO1FBQUEsb0JBQUMsTUFBTSxrQkFBQyxRQUFRLEVBQUUsY0FBYyxDQUFDLFNBQVMsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVztRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLGNBQWMsQ0FBQywwQkFBMEIsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVyxDQUFPLENBQUMsQ0FBQztBQUMvWCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyogZXNsaW50LWRpc2FibGUgKi9cbmltcG9ydCBSZWFjdCBmcm9tIFwicmVhY3RcIjtcbmltcG9ydCB7IEVzY2FwZUhhdGNoUHJvcHMsIGdldE92ZXJyaWRlUHJvcHMsIHVzZUF1dGggfSBmcm9tIFwiQGF3cy1hbXBsaWZ5L3VpLXJlYWN0L2ludGVybmFsXCI7XG5pbXBvcnQgeyBCdXR0b24sIEZsZXgsIEZsZXhQcm9wcywgSW1hZ2UgfSBmcm9tIFwiQGF3cy1hbXBsaWZ5L3VpLXJlYWN0XCI7XG5cbmV4cG9ydCB0eXBlIFByb2ZpbGVQcm9wcyA9IFJlYWN0LlByb3BzV2l0aENoaWxkcmVuPFBhcnRpYWw8RmxleFByb3BzPiAmIHtcbiAgICBvdmVycmlkZXM/OiBFc2NhcGVIYXRjaFByb3BzIHwgdW5kZWZpbmVkIHwgbnVsbDtcbn0+O1xuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUHJvZmlsZShwcm9wczogUHJvZmlsZVByb3BzKTogUmVhY3QuUmVhY3RFbGVtZW50IHtcbiAgICBjb25zdCB7IG92ZXJyaWRlczogb3ZlcnJpZGVzUHJvcCwgLi4ucmVzdCB9ID0gcHJvcHM7XG4gICAgY29uc3Qgb3ZlcnJpZGVzID0geyAuLi5vdmVycmlkZXNQcm9wIH07XG4gICAgY29uc3QgYXV0aEF0dHJpYnV0ZXMgPSB1c2VBdXRoKCkudXNlcj8uYXR0cmlidXRlcyA/PyB7fTtcbiAgICByZXR1cm4gKDxGbGV4IHsuLi5yZXN0fSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiUHJvZmlsZVwiKX0+PEltYWdlIHNyYz17YXV0aEF0dHJpYnV0ZXNbXCJ1c2VybmFtZVwiXX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcImNoaWxkMVwiKX0+PC9JbWFnZT48QnV0dG9uIGNoaWxkcmVuPXthdXRoQXR0cmlidXRlc1tcInBpY3R1cmVcIl19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJjaGlsZDJcIil9PjwvQnV0dG9uPjxCdXR0b24gY2hpbGRyZW49e2F1dGhBdHRyaWJ1dGVzW1wiY3VzdG9tOmZhdm9yaXRlX2ljZWNyZWFtXCJdfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiY2hpbGQzXCIpfT48L0J1dHRvbj48L0ZsZXg+KTtcbn0iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssTUFBTSxPQUFPLENBQUM7QUFDMUIsT0FBTyxFQUFvQixnQkFBZ0IsRUFBRSxPQUFPLEVBQUUsTUFBTSxnQ0FBZ0MsQ0FBQztBQUM3RixPQUFPLEVBQUUsTUFBTSxFQUFFLElBQUksRUFBYSxLQUFLLEVBQUUsTUFBTSx1QkFBdUIsQ0FBQztBQUt2RSxNQUFNLENBQUMsT0FBTyxVQUFVLE9BQU8sQ0FBQyxLQUFtQjs7SUFDL0MsTUFBTSxFQUFFLFNBQVMsS0FBYyxLQUFLLEVBQWQsSUFBSSxVQUFLLEtBQUssRUFBOUIsYUFBc0IsQ0FBUSxDQUFDO0lBQ3JDLE1BQU0sY0FBYyxHQUFHLE1BQUEsTUFBQSxPQUFPLEVBQUUsQ0FBQyxJQUFJLDBDQUFFLFVBQVUsbUNBQUksRUFBRSxDQUFDO0lBQ3hELE9BQU8sQ0FBQyxvQkFBQyxJQUFJLG9CQUFLLElBQUksRUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsU0FBUyxDQUFDO1FBQUUsb0JBQUMsS0FBSyxrQkFBQyxHQUFHLEVBQUUsY0FBYyxDQUFDLFVBQVUsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVTtRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLGNBQWMsQ0FBQyxTQUFTLENBQUMsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsUUFBUSxDQUFDLEVBQVc7UUFBQSxvQkFBQyxNQUFNLGtCQUFDLFFBQVEsRUFBRSxjQUFjLENBQUMsMEJBQTBCLENBQUMsSUFBTSxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsUUFBUSxDQUFDLEVBQVcsQ0FBTyxDQUFDLENBQUM7QUFDL1gsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qIGVzbGludC1kaXNhYmxlICovXG5pbXBvcnQgUmVhY3QgZnJvbSBcInJlYWN0XCI7XG5pbXBvcnQgeyBFc2NhcGVIYXRjaFByb3BzLCBnZXRPdmVycmlkZVByb3BzLCB1c2VBdXRoIH0gZnJvbSBcIkBhd3MtYW1wbGlmeS91aS1yZWFjdC9pbnRlcm5hbFwiO1xuaW1wb3J0IHsgQnV0dG9uLCBGbGV4LCBGbGV4UHJvcHMsIEltYWdlIH0gZnJvbSBcIkBhd3MtYW1wbGlmeS91aS1yZWFjdFwiO1xuXG5leHBvcnQgdHlwZSBQcm9maWxlUHJvcHMgPSBSZWFjdC5Qcm9wc1dpdGhDaGlsZHJlbjxQYXJ0aWFsPEZsZXhQcm9wcz4gJiB7XG4gICAgb3ZlcnJpZGVzPzogRXNjYXBlSGF0Y2hQcm9wcyB8IHVuZGVmaW5lZCB8IG51bGw7XG59PjtcbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIFByb2ZpbGUocHJvcHM6IFByb2ZpbGVQcm9wcyk6IFJlYWN0LlJlYWN0RWxlbWVudCB7XG4gICAgY29uc3QgeyBvdmVycmlkZXMsIC4uLnJlc3QgfSA9IHByb3BzO1xuICAgIGNvbnN0IGF1dGhBdHRyaWJ1dGVzID0gdXNlQXV0aCgpLnVzZXI/LmF0dHJpYnV0ZXMgPz8ge307XG4gICAgcmV0dXJuICg8RmxleCB7Li4ucmVzdH0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcIlByb2ZpbGVcIil9PjxJbWFnZSBzcmM9e2F1dGhBdHRyaWJ1dGVzW1widXNlcm5hbWVcIl19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJjaGlsZDFcIil9PjwvSW1hZ2U+PEJ1dHRvbiBjaGlsZHJlbj17YXV0aEF0dHJpYnV0ZXNbXCJwaWN0dXJlXCJdfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiY2hpbGQyXCIpfT48L0J1dHRvbj48QnV0dG9uIGNoaWxkcmVuPXthdXRoQXR0cmlidXRlc1tcImN1c3RvbTpmYXZvcml0ZV9pY2VjcmVhbVwiXX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcImNoaWxkM1wiKX0+PC9CdXR0b24+PC9GbGV4Pik7XG59Il19
 "
 `;
 
@@ -5786,8 +5690,7 @@ export type ProfileProps = React.PropsWithChildren<
   }
 >;
 export default function Profile(props: ProfileProps): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
-  const overrides = { ...overridesProp };
+  const { overrides, ...rest } = props;
   const authAttributes = useAuth().user?.attributes ?? {};
   return (
     /* @ts-ignore: TS2322 */
