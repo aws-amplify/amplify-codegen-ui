@@ -1,7 +1,11 @@
 {
   "componentType": "Button",
   "name": "NavigateButton",
-  "properties": {},
+  "properties": {
+    "children": {
+      "value": "Go to Amazon.com"
+    }
+  },
   "events": {
     "click": {
       "action": "Amplify.Navigate",
@@ -11,16 +15,8 @@
         },
         "url": {
           "value": "https://www.amazon.com/"
-        },
-        "target": {
-          "value": "newtab"
         }
       }
-    }
-  },
-  "properties": {
-    "children": {
-      "value": "Go to Amazon.com (Open in new tab)"
     }
   }
 }

@@ -1,0 +1,20 @@
+{
+    "componentType": "Button",
+    "name": "SignOutButton",
+    "properties": {
+      "label": {
+        "value": "Sign out"
+      }
+    },
+    "events": {
+      "click": {
+        "action": "Amplify.AuthSignOut",
+        "parameters": {
+          "global": {
+            "value": false
+          }
+        }
+      }
+    }
+  }
+  
