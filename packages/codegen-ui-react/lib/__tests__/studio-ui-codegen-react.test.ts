@@ -298,6 +298,10 @@ describe('amplify render tests', () => {
       it('anchor navigation action', () => {
         expect(generateWithAmplifyRenderer('workflow/anchorNavigationAction')).toMatchSnapshot();
       });
+
+      it('reload navigation action', () => {
+        expect(generateWithAmplifyRenderer('workflow/reloadNavigationAction')).toMatchSnapshot();
+      });
     });
 
     describe('auth', () => {
