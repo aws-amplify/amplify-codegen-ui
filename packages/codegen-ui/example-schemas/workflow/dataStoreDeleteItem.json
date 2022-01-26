@@ -1,0 +1,21 @@
+{
+  "componentType": "Button",
+  "name": "DeleteCustomerButton",
+  "properties": {},
+  "events": {
+    "click": {
+      "action": "Amplify.DataStoreDeleteItem",
+      "parameters": {
+        "model": "Customer",
+        "id": {
+          "value": "d9887268-47dd-4899-9568-db5809218751"
+        }
+      }
+    }
+  },
+  "properties": {
+    "children": {
+      "value": "Delete"
+    }
+  }
+}

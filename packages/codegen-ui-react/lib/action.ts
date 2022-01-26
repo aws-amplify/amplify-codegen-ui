@@ -39,6 +39,8 @@ import { ImportCollection, ImportSource } from './imports';
 enum Action {
   'Amplify.Navigate' = 'Amplify.Navigate',
   'Amplify.DataStoreCreateItem' = 'Amplify.DataStoreCreateItem',
+  'Amplify.DataStoreUpdateItem' = 'Amplify.DataStoreUpdateItem',
+  'Amplify.DataStoreDeleteItem' = 'Amplify.DataStoreDeleteItem',
   'Amplify.AuthSignOut' = 'Amplify.AuthSignOut',
   'Amplify.AuthUpdateUserAttributes' = 'Amplify.AuthUpdateUserAttributes',
 }
@@ -48,6 +50,8 @@ export default Action;
 export const ActionNameMapping: Partial<Record<Action, string>> = {
   [Action['Amplify.Navigate']]: 'useNavigateAction',
   [Action['Amplify.DataStoreCreateItem']]: 'useDataStoreCreateAction',
+  [Action['Amplify.DataStoreUpdateItem']]: 'useDataStoreUpdateAction',
+  [Action['Amplify.DataStoreDeleteItem']]: 'useDataStoreDeleteAction',
   [Action['Amplify.AuthSignOut']]: 'useAuthSignOutAction',
   [Action['Amplify.AuthUpdateUserAttributes']]: 'updateUserAttributesAction',
 };
