@@ -334,6 +334,45 @@ export default function NavigateButton(
 }
 `;
 
+exports[`amplify render tests actions navigation reload navigation action 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useNavigateAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export type ReloadButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ReloadButton(
+  props: ReloadButtonProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const action = useNavigateAction({ type: \\"reload\\" });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Reload the page.\\"
+      onClick={() => {
+        action.run();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"ReloadButton\\")}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests basic component tests should generate a simple button component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
