@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { ImportCollection } from '../../imports';
-import { assertASTMatchesSnapshot } from '../__utils__/snapshot-helpers';
+import { assertASTMatchesSnapshot } from '../__utils__';
 
 function assertImportCollectionMatchesSnapshot(importCollection: ImportCollection) {
   assertASTMatchesSnapshot(importCollection.buildImportStatements());

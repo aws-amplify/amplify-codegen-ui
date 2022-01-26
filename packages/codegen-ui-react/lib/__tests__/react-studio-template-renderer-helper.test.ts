@@ -14,17 +14,10 @@
   limitations under the License.
  */
 import { StudioTemplateRendererFactory, StudioComponent } from '@aws-amplify/codegen-ui';
-import fs from 'fs';
-import { join } from 'path';
 import { ScriptTarget, ScriptKind } from '..';
 import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
 import { formatCode } from '../react-studio-template-renderer-helper';
-
-function loadSchemaFromJSONFile(jsonSchemaFile: string): StudioComponent {
-  return JSON.parse(
-    fs.readFileSync(join(__dirname, 'studio-ui-json', `${jsonSchemaFile}.json`), 'utf-8'),
-  ) as StudioComponent;
-}
+import { loadSchemaFromJSONFile } from './__utils__';
 
 function generateDeclarationForScriptTarget(jsonSchemaFile: string, target: ScriptTarget): any {
   const rendererFactory = new StudioTemplateRendererFactory(
