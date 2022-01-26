@@ -14,23 +14,15 @@
   limitations under the License.
  */
 import { StudioTemplateRendererFactory, StudioTheme } from '@aws-amplify/codegen-ui';
-import fs from 'fs';
-import { join } from 'path';
 import { ScriptTarget, ScriptKind, ReactRenderConfig } from '..';
 import { ReactThemeStudioTemplateRenderer } from '../react-theme-studio-template-renderer';
-
-function loadThemeFromJSONFile(jsonThemeFile: string): StudioTheme {
-  return JSON.parse(
-    fs.readFileSync(join(__dirname, 'studio-ui-json', `${jsonThemeFile}.json`), 'utf-8'),
-  ) as StudioTheme;
-}
+import { loadSchemaFromJSONFile } from './__utils__';
 
 function generateWithThemeRenderer(jsonFile: string, renderConfig: ReactRenderConfig = {}): string {
   const rendererFactory = new StudioTemplateRendererFactory(
     (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
   );
-  const theme = loadThemeFromJSONFile(jsonFile);
-  return rendererFactory.buildRenderer(theme).renderComponent().componentText;
+  return rendererFactory.buildRenderer(loadSchemaFromJSONFile(jsonFile)).renderComponent().componentText;
 }
 
 describe('react theme renderer tests', () => {
@@ -53,8 +45,7 @@ describe('react theme renderer tests', () => {
       const rendererFactory = new StudioTemplateRendererFactory(
         (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, {}),
       );
-      const theme = loadThemeFromJSONFile('theme');
-      expect(rendererFactory.buildRenderer(theme).renderThemeJson()).toMatchSnapshot();
+      expect(rendererFactory.buildRenderer(loadSchemaFromJSONFile('theme')).renderThemeJson()).toMatchSnapshot();
     });
   });
 });
