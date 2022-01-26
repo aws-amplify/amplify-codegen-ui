@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { MockTemplateRenderer } from './__utils__/mock-classes';
+import { MockTemplateRenderer } from './__utils__';
 
 describe('ReactStudioTemplateRenderer', () => {
   describe('renderSampleCodeSnippet', () => {
