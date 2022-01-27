@@ -33,8 +33,8 @@ import {
   buildConditionalExpression,
   buildFixedLiteralExpression,
   isActionEvent,
-} from './react-component-render-helper';
-import { ImportCollection, ImportSource } from './imports';
+} from '../react-component-render-helper';
+import { ImportCollection, ImportSource } from '../imports';
 
 enum Action {
   'Amplify.Navigate' = 'Amplify.Navigate',
@@ -68,11 +68,18 @@ export function getActionHookName(action: string): string {
   return actionName;
 }
 
-export function getComponentActions(component: StudioComponent | StudioComponentChild): ActionStudioComponentEvent[] {
-  // TODO: add unique identifier to each action
+export function getComponentActions(component: StudioComponent | StudioComponentChild): {
+  action: ActionStudioComponentEvent;
+  identifier: string;
+}[] {
   const actions = [];
   if (component.events) {
-    actions.push(...Object.values(component.events).filter(isActionEvent));
+    actions.push(
+      ...Object.entries(component.events)
+        // need 'action is ...' so that typescript will know all items after filter are ActionStudioComponentEvent type
+        .filter((action): action is [string, ActionStudioComponentEvent] => isActionEvent(action[1]))
+        .map(([event, action]) => ({ action, identifier: getActionIdentifier(component.name, event) })),
+    );
   }
   if (component.children) {
     actions.push(...component.children.map(getComponentActions).flat());
@@ -80,8 +87,14 @@ export function getComponentActions(component: StudioComponent | StudioComponent
   return actions;
 }
 
+export function getActionIdentifier(componentName: string | undefined, event: string) {
+  const name = componentName || '';
+  return [name.charAt(0).toLowerCase() + name.slice(1), event.charAt(0).toUpperCase() + event.slice(1)].join('');
+}
+
 export function buildUseActionStatement(
   action: ActionStudioComponentEvent,
+  identifier: string,
   importCollection: ImportCollection,
 ): Statement {
   const actionHookName = getActionHookName(action.action);
@@ -91,8 +104,7 @@ export function buildUseActionStatement(
     factory.createVariableDeclarationList(
       [
         factory.createVariableDeclaration(
-          // TODO: update to unique name
-          factory.createIdentifier('action'),
+          factory.createIdentifier(identifier),
           undefined,
           undefined,
           factory.createCallExpression(factory.createIdentifier(actionHookName), undefined, [

@@ -13,13 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import {
-  ComponentRendererBase,
-  StudioNode,
-  StudioComponent,
-  StudioComponentChild,
-  StudioGenericEvent,
-} from '@aws-amplify/codegen-ui';
+import { ComponentRendererBase, StudioNode, StudioComponent, StudioComponentChild } from '@aws-amplify/codegen-ui';
 import {
   JsxAttributeLike,
   JsxElement,
@@ -29,12 +23,8 @@ import {
   SyntaxKind,
 } from 'typescript';
 
-import {
-  addBindingPropertiesImports,
-  buildOpeningElementProperties,
-  buildOpeningElementEvents,
-  mapGenericEventToReact,
-} from './react-component-render-helper';
+import { addBindingPropertiesImports, buildOpeningElementProperties } from './react-component-render-helper';
+import { buildOpeningElementEvents } from './workflow';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
@@ -67,7 +57,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       buildOpeningElementProperties(value, key),
     );
     const eventAttributes = Object.entries(this.component.events || {}).map(([key, value]) =>
-      buildOpeningElementEvents(value, mapGenericEventToReact(key as StudioGenericEvent)),
+      buildOpeningElementEvents(value, key, this.component.name),
     );
     const attributes = propertyAttributes.concat(eventAttributes);
 

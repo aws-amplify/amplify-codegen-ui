@@ -25,7 +25,6 @@ import {
   StudioComponentAuthProperty,
   StudioComponentChild,
   StudioComponentProperty,
-  StudioGenericEvent,
   StudioComponentEvent,
   BoundStudioComponentEvent,
   ActionStudioComponentEvent,
@@ -158,43 +157,6 @@ export function buildBindingAttrWithDefault(
   return factory.createJsxAttribute(
     factory.createIdentifier(propName),
     factory.createJsxExpression(undefined, binaryExpr),
-  );
-}
-
-export function buildBindingEvent(event: BoundStudioComponentEvent, eventName: string): JsxAttribute {
-  const expr = factory.createIdentifier(event.bindingEvent);
-  return factory.createJsxAttribute(factory.createIdentifier(eventName), factory.createJsxExpression(undefined, expr));
-}
-
-export function buildActionEvent(event: ActionStudioComponentEvent, eventName: string): JsxAttribute {
-  return factory.createJsxAttribute(
-    factory.createIdentifier(eventName),
-    factory.createJsxExpression(
-      undefined,
-      factory.createArrowFunction(
-        undefined,
-        undefined,
-        [],
-        undefined,
-        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-        factory.createBlock(
-          [
-            factory.createExpressionStatement(
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  // TODO: use unique identifier
-                  factory.createIdentifier('action'),
-                  factory.createIdentifier('run'),
-                ),
-                undefined,
-                [],
-              ),
-            ),
-          ],
-          false,
-        ),
-      ),
-    ),
   );
 }
 
@@ -535,32 +497,6 @@ export function buildOpeningElementProperties(prop: StudioComponentProperty, nam
     return buildConditionalAttr(prop, name);
   }
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
-}
-
-export function buildOpeningElementEvents(event: StudioComponentEvent, name: string): JsxAttribute {
-  if (isBoundEvent(event)) {
-    return buildBindingEvent(event, name);
-  }
-  if (isActionEvent(event)) {
-    return buildActionEvent(event, name);
-  }
-
-  return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
-}
-
-/*
- * Tempory stub function to map from generic event name to React event name. Final implementation will be included in
- * amplify-ui.
- */
-export function mapGenericEventToReact(genericEventBinding: StudioGenericEvent): string {
-  switch (genericEventBinding) {
-    case StudioGenericEvent.click:
-      return 'onClick';
-    case StudioGenericEvent.change:
-      return 'onChange';
-    default:
-      throw new Error(`${genericEventBinding} is not a possible event.`);
-  }
 }
 
 export function addBindingPropertiesImports(
