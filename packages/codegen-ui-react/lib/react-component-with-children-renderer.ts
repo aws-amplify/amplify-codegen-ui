@@ -18,16 +18,11 @@ import {
   StudioNode,
   StudioComponent,
   StudioComponentChild,
-  StudioGenericEvent,
 } from '@aws-amplify/codegen-ui';
 import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
-import {
-  addBindingPropertiesImports,
-  buildOpeningElementProperties,
-  buildOpeningElementEvents,
-  mapGenericEventToReact,
-} from './react-component-render-helper';
+import { addBindingPropertiesImports, buildOpeningElementProperties } from './react-component-render-helper';
+import { buildOpeningElementEvents } from './workflow';
 import Primitive, { PrimitiveChildrenPropMapping } from './primitive';
 
 export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithChildrenRendererBase<
@@ -64,7 +59,7 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
       buildOpeningElementProperties(value, key),
     );
     const eventAttributes = Object.entries(this.component.events || {}).map(([key, value]) =>
-      buildOpeningElementEvents(value, mapGenericEventToReact(key as StudioGenericEvent)),
+      buildOpeningElementEvents(value, key, this.component.name),
     );
     const attributes = propertyAttributes.concat(eventAttributes);
 
