@@ -18,3 +18,4 @@ export { default as CollectionWithSort } from './collectionWithSort.json';
 export { default as CollectionWithBindingItemsName } from './collectionWithBindingItemsName.json';
 export { default as PaginatedCollection } from './paginatedCollection.json';
 export { default as SearchableCollection } from './searchableCollection.json';
+export { default as SimpleUserCollection } from './simpleUserCollection.json';

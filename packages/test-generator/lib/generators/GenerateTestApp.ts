@@ -42,8 +42,6 @@ const GOLDEN_COMPONENTS = [
 
 const DISABLED_SCHEMAS = [
   ...GOLDEN_COMPONENTS, // Disabling golden components except to refresh examples
-  'ComponentWithActionSignOut', // TODO: Support Auth Action E2E Tests
-  'ComponentWithActionNavigation', // TODO: Support Navigation Action E2E Tests
   'ComponentMissingProperties', // Expected failure cases
   'ComponentMissingType', // Expected failure cases
   'InvalidTheme', // Expected failure cases

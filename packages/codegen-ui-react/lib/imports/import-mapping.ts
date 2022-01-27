@@ -18,6 +18,8 @@ export enum ImportSource {
   UI_REACT_INTERNAL = '@aws-amplify/ui-react/internal',
   AMPLIFY_DATASTORE = '@aws-amplify/datastore',
   LOCAL_MODELS = '../models',
+  // TODO: Remove me, just used for local testing while action bindings are WIP
+  MOCK_HELPERS = '../mock-helpers',
 }
 
 export enum ImportValue {
@@ -57,5 +59,5 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.USE_DATA_STORE_UPDATE_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_DATA_STORE_DELETE_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_AUTH_SIGN_OUT_ACTION]: ImportSource.UI_REACT_INTERNAL,
-  [ImportValue.USE_STATE_MUTATION_ACTION]: ImportSource.UI_REACT_INTERNAL,
+  [ImportValue.USE_STATE_MUTATION_ACTION]: ImportSource.MOCK_HELPERS,
 };

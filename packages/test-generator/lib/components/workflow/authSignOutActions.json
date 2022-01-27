@@ -1,0 +1,51 @@
+{
+  "componentType": "Flex",
+  "name": "AuthSignOutActions",
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Button",
+      "name": "LocalSignOut",
+      "properties": {
+        "id": {
+          "value": "sign-out-local"
+        },
+        "label": {
+          "value": "Sign out (local only)"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.AuthSignOut",
+          "parameters": {
+            "global": {
+              "value": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "GlobalSignOut",
+      "properties": {
+        "id": {
+          "value": "sign-out-global"
+        },
+        "label": {
+          "value": "Sign out (global)"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.AuthSignOut",
+          "parameters": {
+            "global": {
+              "value": true
+            }
+          }
+        }
+      }
+    }
+  ]
+}
