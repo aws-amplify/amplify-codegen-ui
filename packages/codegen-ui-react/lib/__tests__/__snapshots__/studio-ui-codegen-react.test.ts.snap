@@ -21,7 +21,7 @@ export default function CreateCustomerButton(
   props: CreateCustomerButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const action = useDataStoreCreateAction({
+  const createCustomerButtonClick = useDataStoreCreateAction({
     model: Customer,
     fields: { firstName: \\"Din\\", lastName: \\"Djarin\\" },
   });
@@ -30,7 +30,7 @@ export default function CreateCustomerButton(
     <Button
       children=\\"Create\\"
       onClick={() => {
-        action.run();
+        createCustomerButtonClick.run();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"CreateCustomerButton\\")}
@@ -64,7 +64,7 @@ export default function DeleteCustomerButton(
   props: DeleteCustomerButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const action = useDataStoreDeleteAction({
+  const deleteCustomerButtonClick = useDataStoreDeleteAction({
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
   });
@@ -73,7 +73,7 @@ export default function DeleteCustomerButton(
     <Button
       children=\\"Delete\\"
       onClick={() => {
-        action.run();
+        deleteCustomerButtonClick.run();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"DeleteCustomerButton\\")}
@@ -107,7 +107,7 @@ export default function UpdateCustomerButton(
   props: UpdateCustomerButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const action = useDataStoreUpdateAction({
+  const updateCustomerButtonClick = useDataStoreUpdateAction({
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
     fields: { firstName: \\"Din\\", lastName: \\"Djarin\\" },
@@ -117,7 +117,7 @@ export default function UpdateCustomerButton(
     <Button
       children=\\"Update\\"
       onClick={() => {
-        action.run();
+        updateCustomerButtonClick.run();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"UpdateCustomerButton\\")}
@@ -150,13 +150,13 @@ export default function SignOutButton(
   props: SignOutButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const action = useAuthSignOutAction({ global: false });
+  const signOutButtonClick = useAuthSignOutAction({ global: false });
   return (
     /* @ts-ignore: TS2322 */
     <Button
       children=\\"Sign out\\"
       onClick={() => {
-        action.run();
+        signOutButtonClick.run();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"SignOutButton\\")}
@@ -189,7 +189,7 @@ export default function UpdateUserAttributeButton(
   props: UpdateUserAttributeButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const action = updateUserAttributesAction({
+  const updateUserAttributeButtonClick = updateUserAttributesAction({
     attributes: { email: \\"newemail@domain.com\\", displayname: \\"newdisplayname\\" },
   });
   return (
@@ -197,7 +197,7 @@ export default function UpdateUserAttributeButton(
     <Button
       children=\\"Sign out\\"
       onClick={() => {
-        action.run();
+        updateUserAttributeButtonClick.run();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"UpdateUserAttributeButton\\")}
@@ -230,13 +230,16 @@ export default function NavigateButton(
   props: NavigateButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const action = useNavigateAction({ type: \\"anchor\\", about: \\"#about\\" });
+  const navigateButtonClick = useNavigateAction({
+    type: \\"anchor\\",
+    about: \\"#about\\",
+  });
   return (
     /* @ts-ignore: TS2322 */
     <Button
       children=\\"Go to About section\\"
       onClick={() => {
-        action.run();
+        navigateButtonClick.run();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
@@ -269,7 +272,7 @@ export default function NavigateButton(
   props: NavigateButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const action = useNavigateAction({
+  const navigateButtonClick = useNavigateAction({
     type: \\"url\\",
     url: \\"https://www.amazon.com/\\",
   });
@@ -278,7 +281,7 @@ export default function NavigateButton(
     <Button
       children=\\"Go to Amazon.com\\"
       onClick={() => {
-        action.run();
+        navigateButtonClick.run();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
@@ -311,7 +314,7 @@ export default function NavigateButton(
   props: NavigateButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const action = useNavigateAction({
+  const navigateButtonClick = useNavigateAction({
     type: \\"url\\",
     url: \\"https://www.amazon.com/\\",
     target: \\"newtab\\",
@@ -321,7 +324,7 @@ export default function NavigateButton(
     <Button
       children=\\"Go to Amazon.com (Open in new tab)\\"
       onClick={() => {
-        action.run();
+        navigateButtonClick.run();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
@@ -354,13 +357,13 @@ export default function ReloadButton(
   props: ReloadButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const action = useNavigateAction({ type: \\"reload\\" });
+  const reloadButtonClick = useNavigateAction({ type: \\"reload\\" });
   return (
     /* @ts-ignore: TS2322 */
     <Button
       children=\\"Reload the page.\\"
       onClick={() => {
-        action.run();
+        reloadButtonClick.run();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"ReloadButton\\")}
