@@ -84,16 +84,31 @@ export function buildActionEvent(
 }
 
 /*
- * Tempory stub function to map from generic event name to React event name. Final implementation will be included in
- * amplify-ui.
+ * Temporary hardcoded mapping of generic to react events, long-term this will be exported by amplify-ui.
  */
+const genericEventToReactEventMapping = {
+  [StudioGenericEvent.click]: 'onClick',
+  [StudioGenericEvent.doubleclick]: 'onDoubleClick',
+  [StudioGenericEvent.mousedown]: 'onMouseDown',
+  [StudioGenericEvent.mouseenter]: 'onMouseEnter',
+  [StudioGenericEvent.mouseleave]: 'onMouseLeave',
+  [StudioGenericEvent.mousemove]: 'onMouseMove',
+  [StudioGenericEvent.mouseout]: 'onMouseOut',
+  [StudioGenericEvent.mouseover]: 'onMouseOver',
+  [StudioGenericEvent.mouseup]: 'onMouseUp',
+  [StudioGenericEvent.change]: 'onChange',
+  [StudioGenericEvent.input]: 'onInput',
+  [StudioGenericEvent.focus]: 'onFocus',
+  [StudioGenericEvent.blur]: 'onBlur',
+  [StudioGenericEvent.keydown]: 'onKeyDown',
+  [StudioGenericEvent.keypress]: 'onKeyPress',
+  [StudioGenericEvent.keyup]: 'onKeyUp',
+};
+
 export function mapGenericEventToReact(genericEventBinding: StudioGenericEvent): string {
-  switch (genericEventBinding) {
-    case StudioGenericEvent.click:
-      return 'onClick';
-    case StudioGenericEvent.change:
-      return 'onChange';
-    default:
-      throw new Error(`${genericEventBinding} is not a possible event.`);
+  const reactEventMapping = genericEventToReactEventMapping[genericEventBinding];
+  if (!reactEventMapping) {
+    throw new Error(`${genericEventBinding} is not a possible event.`);
   }
+  return reactEventMapping;
 }

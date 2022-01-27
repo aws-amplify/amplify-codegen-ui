@@ -459,7 +459,21 @@ export enum StudioComponentPropertyBindingType {
 
 export enum StudioGenericEvent {
   click = 'click',
+  doubleclick = 'doubleclick',
+  mousedown = 'mousedown',
+  mouseenter = 'mouseenter',
+  mouseleave = 'mouseleave',
+  mousemove = 'mousemove',
+  mouseout = 'mouseout',
+  mouseover = 'mouseover',
+  mouseup = 'mouseup',
   change = 'change',
+  input = 'input',
+  focus = 'focus',
+  blur = 'blur',
+  keydown = 'keydown',
+  keypress = 'keypress',
+  keyup = 'keyup',
 }
 
 /**

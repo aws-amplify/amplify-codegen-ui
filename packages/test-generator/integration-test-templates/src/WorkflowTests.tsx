@@ -13,27 +13,98 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import React, { useState, SyntheticEvent } from 'react';
+import { useState, SyntheticEvent } from 'react';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider } from '@aws-amplify/ui-react';
 import { Event } from './ui-components'; // eslint-disable-line import/extensions
 
 export default function ComplexTests() {
-  const [textChanged, setTextChanged] = useState('');
-  const [buttonClicked, setButtonClicked] = useState('');
+  const [clicked, click] = useState('');
+  const [doubleclicked, doubleclick] = useState('');
+  const [mouseddown, mousedown] = useState('');
+  const [mouseentered, mouseenter] = useState('');
+  const [mouseleft, mouseleave] = useState('');
+  const [mousemoved, mousemove] = useState('');
+  const [mousedout, mouseout] = useState('');
+  const [mousedover, mouseover] = useState('');
+  const [mousedup, mouseup] = useState('');
+  const [changed, change] = useState('');
+  const [inputted, input] = useState('');
+  const [focused, focus] = useState('');
+  const [blurred, blur] = useState('');
+  const [keyeddown, keydown] = useState('');
+  const [keypressed, keypress] = useState('');
+  const [keyedup, keyup] = useState('');
+
   return (
     <AmplifyProvider>
       <Heading>Event</Heading>
       <View id="event">
         <Event
-          onTextFieldChange={(event: SyntheticEvent) => {
-            setTextChanged((event.target as HTMLInputElement).value);
+          click={() => {
+            click('✅');
           }}
-          onButtonClick={() => {
-            setButtonClicked('button clicked');
+          clicked={clicked}
+          doubleclick={() => {
+            doubleclick('✅');
           }}
-          textChanged={textChanged}
-          buttonClicked={buttonClicked}
+          doubleclicked={doubleclicked}
+          mousedown={() => {
+            mousedown('✅');
+          }}
+          mouseddown={mouseddown}
+          mouseenter={() => {
+            mouseenter('✅');
+          }}
+          mouseentered={mouseentered}
+          mouseleave={() => {
+            mouseleave('✅');
+          }}
+          mouseleft={mouseleft}
+          mousemove={() => {
+            mousemove('✅');
+          }}
+          mousemoved={mousemoved}
+          mouseout={() => {
+            mouseout('✅');
+          }}
+          mousedout={mousedout}
+          mouseover={() => {
+            mouseover('✅');
+          }}
+          mousedover={mousedover}
+          mouseup={() => {
+            mouseup('✅');
+          }}
+          mousedup={mousedup}
+          change={(event: SyntheticEvent) => {
+            change((event.target as HTMLInputElement).value);
+          }}
+          changed={changed}
+          input={(event: SyntheticEvent) => {
+            input((event.target as HTMLInputElement).value);
+          }}
+          inputted={inputted}
+          focus={() => {
+            focus('✅');
+          }}
+          focused={focused}
+          blur={() => {
+            blur('✅');
+          }}
+          blurred={blurred}
+          keydown={() => {
+            keydown('✅');
+          }}
+          keyeddown={keyeddown}
+          keypress={() => {
+            keypress('✅');
+          }}
+          keypressed={keypressed}
+          keyup={() => {
+            keyup('✅');
+          }}
+          keyedup={keyedup}
         />
       </View>
       <Divider />

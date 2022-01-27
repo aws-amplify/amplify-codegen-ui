@@ -5578,25 +5578,139 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import Input from \\"./Input\\";
-import { Button, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, Text, TextField } from \\"@aws-amplify/ui-react\\";
 import { SyntheticEvent } from \\"react\\";
 
-export type EventProps = React.PropsWithChildren<
+export type EventsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    onButtonClick?: (event: SyntheticEvent) => void;
-    onInputChange?: (event: SyntheticEvent) => void;
+    click?: (event: SyntheticEvent) => void;
+    doubleclick?: (event: SyntheticEvent) => void;
+    mousedown?: (event: SyntheticEvent) => void;
+    mouseenter?: (event: SyntheticEvent) => void;
+    mouseleave?: (event: SyntheticEvent) => void;
+    mousemove?: (event: SyntheticEvent) => void;
+    mouseout?: (event: SyntheticEvent) => void;
+    mouseover?: (event: SyntheticEvent) => void;
+    mouseup?: (event: SyntheticEvent) => void;
+    change?: (event: SyntheticEvent) => void;
+    input?: (event: SyntheticEvent) => void;
+    focus?: (event: SyntheticEvent) => void;
+    blur?: (event: SyntheticEvent) => void;
+    keydown?: (event: SyntheticEvent) => void;
+    keypress?: (event: SyntheticEvent) => void;
+    keyup?: (event: SyntheticEvent) => void;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function Event(props: EventProps): React.ReactElement {
-  const { onButtonClick, onInputChange, overrides, ...rest } = props;
+export default function Events(props: EventsProps): React.ReactElement {
+  const {
+    click,
+    doubleclick,
+    mousedown,
+    mouseenter,
+    mouseleave,
+    mousemove,
+    mouseout,
+    mouseover,
+    mouseup,
+    change,
+    input,
+    focus,
+    blur,
+    keydown,
+    keypress,
+    keyup,
+    overrides,
+    ...rest
+  } = props;
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"Event\\")}>
-      <Input onChange={onInputChange}></Input>
-      <Button onClick={onButtonClick}></Button>
+    <Flex {...rest} {...getOverrideProps(overrides, \\"Events\\")}>
+      <Flex {...getOverrideProps(overrides, \\"GenericEvents\\")}>
+        <Text
+          children=\\"click\\"
+          onClick={click}
+          {...getOverrideProps(overrides, \\"click\\")}
+        ></Text>
+        <Text
+          children=\\"doubleclick\\"
+          onDoubleClick={doubleclick}
+          {...getOverrideProps(overrides, \\"doubleclick\\")}
+        ></Text>
+        <Text
+          children=\\"mousedown\\"
+          onMouseDown={mousedown}
+          {...getOverrideProps(overrides, \\"mousedown\\")}
+        ></Text>
+        <Text
+          children=\\"mouseenter\\"
+          onMouseEnter={mouseenter}
+          {...getOverrideProps(overrides, \\"mouseenter\\")}
+        ></Text>
+        <Text
+          children=\\"mouseleave\\"
+          onMouseLeave={mouseleave}
+          {...getOverrideProps(overrides, \\"mouseleave\\")}
+        ></Text>
+        <Text
+          children=\\"mousemove\\"
+          onMouseMove={mousemove}
+          {...getOverrideProps(overrides, \\"mousemove\\")}
+        ></Text>
+        <Text
+          children=\\"mouseout\\"
+          onMouseOut={mouseout}
+          {...getOverrideProps(overrides, \\"mouseout\\")}
+        ></Text>
+        <Text
+          children=\\"mouseover\\"
+          onMouseOver={mouseover}
+          {...getOverrideProps(overrides, \\"mouseover\\")}
+        ></Text>
+        <Text
+          children=\\"mouseup\\"
+          onMouseUp={mouseup}
+          {...getOverrideProps(overrides, \\"mouseup\\")}
+        ></Text>
+      </Flex>
+      <Flex {...getOverrideProps(overrides, \\"FieldEvents\\")}>
+        <TextField
+          defaultValue=\\"change\\"
+          onChange={change}
+          {...getOverrideProps(overrides, \\"change\\")}
+        ></TextField>
+        <TextField
+          defaultValue=\\"input\\"
+          onInput={input}
+          {...getOverrideProps(overrides, \\"input\\")}
+        ></TextField>
+        <TextField
+          defaultValue=\\"focus\\"
+          onFocus={focus}
+          {...getOverrideProps(overrides, \\"focus\\")}
+        ></TextField>
+        <TextField
+          defaultValue=\\"blur\\"
+          onBlur={blur}
+          {...getOverrideProps(overrides, \\"blur\\")}
+        ></TextField>
+        <TextField
+          defaultValue=\\"keydown\\"
+          onKeyDown={keydown}
+          {...getOverrideProps(overrides, \\"keydown\\")}
+        ></TextField>
+        <TextField
+          defaultValue=\\"keypress\\"
+          onKeyPress={keypress}
+          {...getOverrideProps(overrides, \\"keypress\\")}
+        ></TextField>
+        <TextField
+          defaultValue=\\"keyup\\"
+          onKeyUp={keyup}
+          {...getOverrideProps(overrides, \\"keyup\\")}
+        ></TextField>
+      </Flex>
     </Flex>
   );
 }
