@@ -3,61 +3,603 @@
   "componentType": "Flex",
   "name": "Event",
   "bindingProperties": {
-    "buttonClicked": {
-      "type": "String"
-    },
-    "textChanged": {
-      "type": "String"
-    },
-    "onButtonClick": {
+    "click": {
       "type": "Event"
     },
-    "onTextFieldChange": {
+    "clicked": {
+      "type": "String"
+    },
+    "doubleclick": {
       "type": "Event"
+    },
+    "doubleclicked": {
+      "type": "String"
+    },
+    "mousedown": {
+      "type": "Event"
+    },
+    "mouseddown": {
+      "type": "String"
+    },
+    "mouseenter": {
+      "type": "Event"
+    },
+    "mouseentered": {
+      "type": "String"
+    },
+    "mouseleave": {
+      "type": "Event"
+    },
+    "mouseleft": {
+      "type": "String"
+    },
+    "mousemove": {
+      "type": "Event"
+    },
+    "mousemoved": {
+      "type": "String"
+    },
+    "mouseout": {
+      "type": "Event"
+    },
+    "mousedout": {
+      "type": "String"
+    },
+    "mouseover": {
+      "type": "Event"
+    },
+    "mousedover": {
+      "type": "String"
+    },
+    "mouseup": {
+      "type": "Event"
+    },
+    "mousedup": {
+      "type": "String"
+    },
+    "change": {
+      "type": "Event"
+    },
+    "changed": {
+      "type": "String"
+    },
+    "input": {
+      "type": "Event"
+    },
+    "inputted": {
+      "type": "String"
+    },
+    "focus": {
+      "type": "Event"
+    },
+    "focused": {
+      "type": "String"
+    },
+    "blur": {
+      "type": "Event"
+    },
+    "blurred": {
+      "type": "String"
+    },
+    "keydown": {
+      "type": "Event"
+    },
+    "keyeddown": {
+      "type": "String"
+    },
+    "keypress": {
+      "type": "Event"
+    },
+    "keypressed": {
+      "type": "String"
+    },
+    "keyup": {
+      "type": "Event"
+    },
+    "keyedup": {
+      "type": "String"
     }
   },
   "properties": {},
   "children": [
     {
-      "componentType": "TextField",
-      "properties": {},
-      "events": {
-        "change": {
-          "bindingEvent": "onTextFieldChange"
+      "componentType": "Text",
+      "name": "click",
+      "properties": {
+        "id": {
+          "value": "click"
+        },
+        "label": {
+          "value": "click"
         }
-      }
-    },
-    {
-      "componentType": "Button",
-      "properties": {},
+      },
       "events": {
         "click": {
-          "bindingEvent": "onButtonClick"
+          "bindingEvent": "click"
         }
       }
     },
     {
       "componentType": "Text",
+      "name": "clicked",
       "properties": {
         "id": {
-          "value": "button-clicked"
+          "value": "clicked"
         },
         "label": {
           "bindingProperties": {
-            "property": "buttonClicked"
+            "property": "clicked"
+          }
+        }
+      }
+    },
+
+    {
+      "componentType": "Text",
+      "name": "doubleclick",
+      "properties": {
+        "id": {
+          "value": "doubleclick"
+        },
+        "label": {
+          "value": "doubleclick"
+        }
+      },
+      "events": {
+        "doubleclick": {
+          "bindingEvent": "doubleclick"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "doubleclicked",
+      "properties": {
+        "id": {
+          "value": "doubleclicked"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "doubleclicked"
           }
         }
       }
     },
     {
       "componentType": "Text",
+      "name": "mousedown",
       "properties": {
         "id": {
-          "value": "text-changed"
+          "value": "mousedown"
+        },
+        "label": {
+          "value": "mousedown"
+        }
+      },
+      "events": {
+        "mousedown": {
+          "bindingEvent": "mousedown"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mouseddown",
+      "properties": {
+        "id": {
+          "value": "mouseddown"
         },
         "label": {
           "bindingProperties": {
-            "property": "textChanged"
+            "property": "mouseddown"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mouseenter",
+      "properties": {
+        "id": {
+          "value": "mouseenter"
+        },
+        "label": {
+          "value": "mouseenter"
+        }
+      },
+      "events": {
+        "mouseenter": {
+          "bindingEvent": "mouseenter"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mouseentered",
+      "properties": {
+        "id": {
+          "value": "mouseentered"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "mouseentered"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mouseleave",
+      "properties": {
+        "id": {
+          "value": "mouseleave"
+        },
+        "label": {
+          "value": "mouseleave"
+        }
+      },
+      "events": {
+        "mouseleave": {
+          "bindingEvent": "mouseleave"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mouseleft",
+      "properties": {
+        "id": {
+          "value": "mouseleft"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "mouseleft"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mousemove",
+      "properties": {
+        "id": {
+          "value": "mousemove"
+        },
+        "label": {
+          "value": "mousemove"
+        }
+      },
+      "events": {
+        "mousemove": {
+          "bindingEvent": "mousemove"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mousemoved",
+      "properties": {
+        "id": {
+          "value": "mousemoved"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "mousemoved"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mouseout",
+      "properties": {
+        "id": {
+          "value": "mouseout"
+        },
+        "label": {
+          "value": "mouseout"
+        }
+      },
+      "events": {
+        "mouseout": {
+          "bindingEvent": "mouseout"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mousedout",
+      "properties": {
+        "id": {
+          "value": "mousedout"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "mousedout"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mouseover",
+      "properties": {
+        "id": {
+          "value": "mouseover"
+        },
+        "label": {
+          "value": "mouseover"
+        }
+      },
+      "events": {
+        "mouseover": {
+          "bindingEvent": "mouseover"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mousedover",
+      "properties": {
+        "id": {
+          "value": "mousedover"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "mousedover"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mouseup",
+      "properties": {
+        "id": {
+          "value": "mouseup"
+        },
+        "label": {
+          "value": "mouseup"
+        }
+      },
+      "events": {
+        "mouseup": {
+          "bindingEvent": "mouseup"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "mousedup",
+      "properties": {
+        "id": {
+          "value": "mousedup"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "mousedup"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "TextField",
+      "name": "change",
+      "properties": {
+        "id": {
+          "value": "change"
+        },
+        "defaultValue": {
+          "value": "change"
+        }
+      },
+      "events": {
+        "change": {
+          "bindingEvent": "change"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "changed",
+      "properties": {
+        "id": {
+          "value": "changed"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "changed"
+          }
+        }
+      }
+    },
+
+    {
+      "componentType": "TextField",
+      "name": "input",
+      "properties": {
+        "id": {
+          "value": "input"
+        },
+        "defaultValue": {
+          "value": "input"
+        }
+      },
+      "events": {
+        "input": {
+          "bindingEvent": "input"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "inputted",
+      "properties": {
+        "id": {
+          "value": "inputted"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "inputted"
+          }
+        }
+      }
+    },
+
+    {
+      "componentType": "TextField",
+      "name": "focus",
+      "properties": {
+        "id": {
+          "value": "focus"
+        },
+        "defaultValue": {
+          "value": "focus"
+        }
+      },
+      "events": {
+        "focus": {
+          "bindingEvent": "focus"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "focused",
+      "properties": {
+        "id": {
+          "value": "focused"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "focused"
+          }
+        }
+      }
+    },
+
+
+    {
+      "componentType": "TextField",
+      "name": "blur",
+      "properties": {
+        "id": {
+          "value": "blur"
+        },
+        "defaultValue": {
+          "value": "blur"
+        }
+      },
+      "events": {
+        "blur": {
+          "bindingEvent": "blur"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "blurred",
+      "properties": {
+        "id": {
+          "value": "blurred"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "blurred"
+          }
+        }
+      }
+    },
+
+    {
+      "componentType": "TextField",
+      "name": "keydown",
+      "properties": {
+        "id": {
+          "value": "keydown"
+        },
+        "defaultValue": {
+          "value": "keydown"
+        }
+      },
+      "events": {
+        "keydown": {
+          "bindingEvent": "keydown"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "keyeddown",
+      "properties": {
+        "id": {
+          "value": "keyeddown"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "keyeddown"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "TextField",
+      "name": "keypress",
+      "properties": {
+        "id": {
+          "value": "keypress"
+        },
+        "defaultValue": {
+          "value": "keypress"
+        }
+      },
+      "events": {
+        "keypress": {
+          "bindingEvent": "keypress"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "keypressed",
+      "properties": {
+        "id": {
+          "value": "keypressed"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "keypressed"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "TextField",
+      "name": "keyup",
+      "properties": {
+        "id": {
+          "value": "keyup"
+        },
+        "defaultValue": {
+          "value": "keyup"
+        }
+      },
+      "events": {
+        "keyup": {
+          "bindingEvent": "keyup"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "keyedup",
+      "properties": {
+        "id": {
+          "value": "keyedup"
+        },
+        "label": {
+          "bindingProperties": {
+            "property": "keyedup"
           }
         }
       }
