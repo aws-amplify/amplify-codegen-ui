@@ -506,7 +506,6 @@ export type BoundStudioComponentEvent = {
 export type ActionStudioComponentEvent =
   | NavigationAction
   | AuthSignOutAction
-  | AuthUpdateUserAttributesAction
   | DataStoreCreateItemAction
   | DataStoreUpdateItemAction
   | DataStoreDeleteItemAction;
@@ -525,15 +524,6 @@ export type AuthSignOutAction = {
   action: 'Amplify.AuthSignOut';
   parameters: {
     global: StudioComponentProperty;
-  };
-};
-
-export type AuthUpdateUserAttributesAction = {
-  action: 'Amplify.AuthUpdateUserAttributes';
-  parameters: {
-    attributes: {
-      [propertyName: string]: StudioComponentProperty;
-    };
   };
 };
 

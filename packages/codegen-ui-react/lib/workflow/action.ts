@@ -42,7 +42,6 @@ enum Action {
   'Amplify.DataStoreUpdateItem' = 'Amplify.DataStoreUpdateItem',
   'Amplify.DataStoreDeleteItem' = 'Amplify.DataStoreDeleteItem',
   'Amplify.AuthSignOut' = 'Amplify.AuthSignOut',
-  'Amplify.AuthUpdateUserAttributes' = 'Amplify.AuthUpdateUserAttributes',
 }
 
 export default Action;
@@ -53,7 +52,6 @@ export const ActionNameMapping: Partial<Record<Action, string>> = {
   [Action['Amplify.DataStoreUpdateItem']]: 'useDataStoreUpdateAction',
   [Action['Amplify.DataStoreDeleteItem']]: 'useDataStoreDeleteAction',
   [Action['Amplify.AuthSignOut']]: 'useAuthSignOutAction',
-  [Action['Amplify.AuthUpdateUserAttributes']]: 'updateUserAttributesAction',
 };
 
 export function isAction(action: string): action is Action {
@@ -150,7 +148,7 @@ export function getActionParameterValue(
     importCollection.addImport(ImportSource.LOCAL_MODELS, value as string);
     return factory.createIdentifier(value as string);
   }
-  if (key === 'fields' || key === 'attributes') {
+  if (key === 'fields') {
     return factory.createObjectLiteralExpression(
       Object.entries(value).map(([nestedKey, nestedValue]) =>
         factory.createPropertyAssignment(
