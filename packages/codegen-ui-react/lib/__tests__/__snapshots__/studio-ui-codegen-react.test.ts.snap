@@ -169,47 +169,6 @@ export default function SignOutButton(
 }
 `;
 
-exports[`amplify render tests actions auth updates user attributes 1`] = `
-Object {
-  "componentText": "/* eslint-disable */
-import React from \\"react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-  updateUserAttributesAction,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-
-export type UpdateUserAttributeButtonProps = React.PropsWithChildren<
-  Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
-  }
->;
-export default function UpdateUserAttributeButton(
-  props: UpdateUserAttributeButtonProps
-): React.ReactElement {
-  const { overrides, ...rest } = props;
-  const updateUserAttributeButtonClick = updateUserAttributesAction({
-    attributes: { email: \\"newemail@domain.com\\", displayname: \\"newdisplayname\\" },
-  });
-  return (
-    /* @ts-ignore: TS2322 */
-    <Button
-      children=\\"Sign out\\"
-      onClick={() => {
-        updateUserAttributeButtonClick.run();
-      }}
-      {...rest}
-      {...getOverrideProps(overrides, \\"UpdateUserAttributeButton\\")}
-    ></Button>
-  );
-}
-",
-  "declaration": undefined,
-  "renderComponentToFilesystem": [Function],
-}
-`;
-
 exports[`amplify render tests actions navigation anchor navigation action 1`] = `
 Object {
   "componentText": "/* eslint-disable */
