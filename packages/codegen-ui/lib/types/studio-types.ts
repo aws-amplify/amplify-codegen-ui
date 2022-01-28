@@ -553,8 +553,10 @@ export type MutationAction = {
 export type MutationActionSetStateParameter = {
   componentName: string;
   property: string;
-  value: StudioComponentProperty;
+  set: StudioComponentProperty;
 } & CommonPropertyValues;
+
+export type StateReference = StateStudioComponentProperty | MutationActionSetStateParameter;
 
 export type StudioComponentEvents = {
   [eventName: string]: StudioComponentEvent;

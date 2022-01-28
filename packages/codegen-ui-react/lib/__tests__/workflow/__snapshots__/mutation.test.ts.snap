@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getActionStateParameters basic 1`] = `
+Array [
+  Object {
+    "componentName": "ColoredBox",
+    "property": "backgroundColor",
+    "set": Object {
+      "value": "something",
+    },
+  },
+]
+`;
+
+exports[`getComponentStateReferences basic 1`] = `
+Array [
+  Object {
+    "componentName": "UserNameTextField",
+    "property": "value",
+  },
+]
+`;
