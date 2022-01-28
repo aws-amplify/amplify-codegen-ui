@@ -308,10 +308,6 @@ describe('amplify render tests', () => {
       it('signs out', () => {
         expect(generateWithAmplifyRenderer('workflow/authSignOutAction')).toMatchSnapshot();
       });
-
-      it('updates user attributes', () => {
-        expect(generateWithAmplifyRenderer('workflow/authUpdateUserAttributesAction')).toMatchSnapshot();
-      });
     });
 
     describe('DataStore', () => {
