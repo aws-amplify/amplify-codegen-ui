@@ -1,34 +1,296 @@
 {
   "id": "1234-5678-9010",
   "componentType": "Flex",
-  "name": "Event",
+  "name": "Events",
   "bindingProperties": {
-    "onButtonClick": {
+    "click": {
       "type": "Event"
     },
-    "onInputChange": {
-      "type": "Event"
+    "doubleclick": {
+        "type": "Event"
+    },
+    "mousedown": {
+        "type": "Event"
+    },
+    "mouseenter": {
+        "type": "Event"
+    },
+    "mouseleave": {
+        "type": "Event"
+    },
+    "mousemove": {
+        "type": "Event"
+    },
+    "mouseout": {
+        "type": "Event"
+    },
+    "mouseover": {
+        "type": "Event"
+    },
+    "mouseup": {
+        "type": "Event"
+    },
+    "change": {
+        "type": "Event"
+    },
+    "input": {
+        "type": "Event"
+    },
+    "focus": {
+        "type": "Event"
+    },
+    "blur": {
+        "type": "Event"
+    },
+    "keydown": {
+        "type": "Event"
+    },
+    "keypress": {
+        "type": "Event"
+    },
+    "keyup": {
+        "type": "Event"
     }
   },
   "properties": {},
   "children": [
     {
-      "componentType": "Input",
+      "componentType": "Flex",
+      "name": "GenericEvents",
       "properties": {},
-      "events": {
-        "change": {
-          "bindingEvent": "onInputChange"
+      "children": [
+        {
+          "componentType": "Text",
+          "name": "click",
+          "properties": {
+            "label": {
+              "value": "click"
+            }
+          },
+          "events": {
+            "click": {
+              "bindingEvent": "click"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "doubleclick",
+          "properties": {
+            "label": {
+              "value": "doubleclick"
+            }
+          },
+          "events": {
+            "doubleclick": {
+              "bindingEvent": "doubleclick"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "mousedown",
+          "properties": {
+            "label": {
+              "value": "mousedown"
+            }
+          },
+          "events": {
+            "mousedown": {
+              "bindingEvent": "mousedown"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "mouseenter",
+          "properties": {
+            "label": {
+              "value": "mouseenter"
+            }
+          },
+          "events": {
+            "mouseenter": {
+              "bindingEvent": "mouseenter"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "mouseleave",
+          "properties": {
+            "label": {
+              "value": "mouseleave"
+            }
+          },
+          "events": {
+            "mouseleave": {
+              "bindingEvent": "mouseleave"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "mousemove",
+          "properties": {
+            "label": {
+              "value": "mousemove"
+            }
+          },
+          "events": {
+            "mousemove": {
+              "bindingEvent": "mousemove"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "mouseout",
+          "properties": {
+            "label": {
+              "value": "mouseout"
+            }
+          },
+          "events": {
+            "mouseout": {
+              "bindingEvent": "mouseout"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "mouseover",
+          "properties": {
+            "label": {
+              "value": "mouseover"
+            }
+          },
+          "events": {
+            "mouseover": {
+              "bindingEvent": "mouseover"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "mouseup",
+          "properties": {
+            "label": {
+              "value": "mouseup"
+            }
+          },
+          "events": {
+            "mouseup": {
+              "bindingEvent": "mouseup"
+            }
+          }
         }
-      }
+      ]
     },
     {
-      "componentType": "Button",
+      "componentType": "Flex",
+      "name": "FieldEvents",
       "properties": {},
-      "events": {
-        "click": {
-          "bindingEvent": "onButtonClick"
+      "children": [
+        {
+          "componentType": "TextField",
+          "name": "change",
+          "properties": {
+            "defaultValue": {
+              "value": "change"
+            }
+          },
+          "events": {
+            "change": {
+              "bindingEvent": "change"
+            }
+          }
+        },
+        {
+          "componentType": "TextField",
+          "name": "input",
+          "properties": {
+            "defaultValue": {
+              "value": "input"
+            }
+          },
+          "events": {
+            "input": {
+              "bindingEvent": "input"
+            }
+          }
+        },
+        {
+          "componentType": "TextField",
+          "name": "focus",
+          "properties": {
+            "defaultValue": {
+              "value": "focus"
+            }
+          },
+          "events": {
+            "focus": {
+              "bindingEvent": "focus"
+            }
+          }
+        },
+        {
+          "componentType": "TextField",
+          "name": "blur",
+          "properties": {
+            "defaultValue": {
+              "value": "blur"
+            }
+          },
+          "events": {
+            "blur": {
+              "bindingEvent": "blur"
+            }
+          }
+        },
+        {
+          "componentType": "TextField",
+          "name": "keydown",
+          "properties": {
+            "defaultValue": {
+              "value": "keydown"
+            }
+          },
+          "events": {
+            "keydown": {
+              "bindingEvent": "keydown"
+            }
+          }
+        },
+        {
+          "componentType": "TextField",
+          "name": "keypress",
+          "properties": {
+            "defaultValue": {
+              "value": "keypress"
+            }
+          },
+          "events": {
+            "keypress": {
+              "bindingEvent": "keypress"
+            }
+          }
+        },
+        {
+          "componentType": "TextField",
+          "name": "keyup",
+          "properties": {
+            "defaultValue": {
+              "value": "keyup"
+            }
+          },
+          "events": {
+            "keyup": {
+              "bindingEvent": "keyup"
+            }
+          }
         }
-      }
+      ]
     }
   ]
 }
