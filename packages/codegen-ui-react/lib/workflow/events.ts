@@ -67,10 +67,7 @@ export function buildActionEvent(
           [
             factory.createExpressionStatement(
               factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier(getActionIdentifier(componentName, eventName)),
-                  factory.createIdentifier('run'),
-                ),
+                factory.createIdentifier(getActionIdentifier(componentName, eventName)),
                 undefined,
                 [],
               ),
