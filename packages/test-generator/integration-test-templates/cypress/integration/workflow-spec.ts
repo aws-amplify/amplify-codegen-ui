@@ -18,27 +18,106 @@ describe('Workflow', () => {
     cy.visit('http://localhost:3000/workflow-tests');
   });
 
-  describe('Events', () => {
-    it('click event', () => {
-      cy.get('#event')
-        .find('.amplify-flex')
-        .within(() => {
-          const text = 'button clicked';
-          cy.get('#button-clicked').should('not.have.text', text);
-          cy.get('.amplify-button').click();
-          cy.get('#button-clicked').should('have.text', text);
-        });
+  const defaultText = '✅';
+
+  describe('Synthetic Events', () => {
+    it('click', () => {
+      cy.get('#clicked').should('not.have.text', defaultText);
+      cy.get('#click').click();
+      cy.get('#clicked').should('have.text', defaultText);
     });
 
-    it('text event', () => {
-      cy.get('#event')
-        .find('.amplify-flex')
-        .within(() => {
-          const text = 'text changed';
-          cy.get('#text-changed').should('not.have.text', text);
-          cy.get('.amplify-input').type(text);
-          cy.get('#text-changed').should('have.text', text);
-        });
+    it('doubleclick', () => {
+      cy.get('#doubleclicked').should('not.have.text', defaultText);
+      cy.get('#doubleclick').dblclick();
+      cy.get('#doubleclicked').should('have.text', defaultText);
+    });
+
+    it('mousedown', () => {
+      cy.get('#mouseddown').should('not.have.text', defaultText);
+      cy.get('#mousedown').trigger('mousedown');
+      cy.get('#mouseddown').should('have.text', defaultText);
+    });
+
+    it('mouseenter', () => {
+      cy.get('#mouseentered').should('not.have.text', defaultText);
+      cy.get('#mouseenter').click(); // Implicit mouseenter, trigger doesn't seem to work in cypress here
+      cy.get('#mouseentered').should('have.text', defaultText);
+    });
+
+    it('mouseleave', () => {
+      cy.get('#mouseleft').should('not.have.text', defaultText);
+      cy.get('#mouseleave').click();
+      cy.get('#mouseenter').click(); // Implicit mouseleave, trigger doesn't seem to work in cypress here
+      cy.get('#mouseleft').should('have.text', defaultText);
+    });
+
+    it('mousemove', () => {
+      cy.get('#mousemoved').should('not.have.text', defaultText);
+      cy.get('#mousemove').trigger('mousemove');
+      cy.get('#mousemoved').should('have.text', defaultText);
+    });
+
+    it('mouseout', () => {
+      cy.get('#mousedout').should('not.have.text', defaultText);
+      cy.get('#mouseout').trigger('mouseout');
+      cy.get('#mousedout').should('have.text', defaultText);
+    });
+
+    it('mouseover', () => {
+      cy.get('#mousedover').should('not.have.text', defaultText);
+      cy.get('#mouseover').trigger('mouseover');
+      cy.get('#mousedover').should('have.text', defaultText);
+    });
+
+    it('mouseup', () => {
+      cy.get('#mousedup').should('not.have.text', defaultText);
+      cy.get('#mouseup').trigger('mouseup');
+      cy.get('#mousedup').should('have.text', defaultText);
+    });
+
+    it('change', () => {
+      cy.get('#changed').should('not.have.text', defaultText);
+      cy.get('#change').clear().type(defaultText);
+      cy.get('#changed').should('have.text', defaultText);
+    });
+
+    it('input', () => {
+      cy.get('#inputted').should('not.have.text', defaultText);
+      cy.get('#input').clear().type(defaultText);
+      cy.get('#inputted').should('have.text', defaultText);
+    });
+
+    it('focus', () => {
+      cy.get('#focused').should('not.have.text', defaultText);
+      cy.get('#focus').click();
+      cy.get('#focused').should('have.text', defaultText);
+    });
+
+    it('blur', () => {
+      cy.get('#blurred').should('not.have.text', defaultText);
+      cy.get('#blur').click();
+      cy.get('#blurred').should('not.have.text', defaultText);
+      cy.get('#focus').click();
+      cy.get('#blurred').should('have.text', defaultText);
+    });
+
+    it('keydown', () => {
+      cy.get('#keyeddown').should('not.have.text', defaultText);
+      cy.get('#keydown').type(defaultText);
+      cy.get('#keyeddown').should('have.text', defaultText);
+    });
+
+    it('keypress', () => {
+      cy.get('#keypressed').should('not.have.text', defaultText);
+      cy.get('#keypress').type(defaultText);
+      cy.get('#keypressed').should('have.text', defaultText);
+    });
+
+    it('keyup', () => {
+      cy.get('#keyedup').should('not.have.text', defaultText);
+      cy.get('#keyup').type(defaultText);
+      cy.get('#keyedup').should('have.text', defaultText);
     });
   });
 });
