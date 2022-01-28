@@ -30,7 +30,7 @@ export default function CreateCustomerButton(
     <Button
       children=\\"Create\\"
       onClick={() => {
-        createCustomerButtonClick.run();
+        createCustomerButtonClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"CreateCustomerButton\\")}
@@ -73,7 +73,7 @@ export default function DeleteCustomerButton(
     <Button
       children=\\"Delete\\"
       onClick={() => {
-        deleteCustomerButtonClick.run();
+        deleteCustomerButtonClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"DeleteCustomerButton\\")}
@@ -117,7 +117,7 @@ export default function UpdateCustomerButton(
     <Button
       children=\\"Update\\"
       onClick={() => {
-        updateCustomerButtonClick.run();
+        updateCustomerButtonClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"UpdateCustomerButton\\")}
@@ -156,7 +156,7 @@ export default function SignOutButton(
     <Button
       children=\\"Sign out\\"
       onClick={() => {
-        signOutButtonClick.run();
+        signOutButtonClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"SignOutButton\\")}
@@ -198,7 +198,7 @@ export default function NavigateButton(
     <Button
       children=\\"Go to About section\\"
       onClick={() => {
-        navigateButtonClick.run();
+        navigateButtonClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
@@ -240,7 +240,7 @@ export default function NavigateButton(
     <Button
       children=\\"Go to Amazon.com\\"
       onClick={() => {
-        navigateButtonClick.run();
+        navigateButtonClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
@@ -283,7 +283,7 @@ export default function NavigateButton(
     <Button
       children=\\"Go to Amazon.com (Open in new tab)\\"
       onClick={() => {
-        navigateButtonClick.run();
+        navigateButtonClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
@@ -322,7 +322,7 @@ export default function ReloadButton(
     <Button
       children=\\"Reload the page.\\"
       onClick={() => {
-        reloadButtonClick.run();
+        reloadButtonClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"ReloadButton\\")}
