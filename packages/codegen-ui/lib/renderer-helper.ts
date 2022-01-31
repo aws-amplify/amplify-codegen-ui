@@ -19,7 +19,7 @@ import {
   ConcatenatedStudioComponentProperty,
   ConditionalStudioComponentProperty,
   FixedStudioComponentProperty,
-  FormStudioComponentProperty,
+  StateStudioComponentProperty,
   StudioComponent,
   StudioComponentAuthProperty,
   StudioComponentChild,
@@ -51,7 +51,7 @@ export type ComponentPropertyValueTypes =
   | FixedStudioComponentProperty
   | BoundStudioComponentProperty
   | CollectionStudioComponentProperty
-  | FormStudioComponentProperty
+  | StateStudioComponentProperty
   | StudioComponentAuthProperty;
 
 export function isAuthProperty(prop: ComponentPropertyValueTypes): prop is StudioComponentAuthProperty {

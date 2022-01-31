@@ -5159,6 +5159,104 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
 "
 `;
 
+exports[`amplify render tests mutations form 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useDataStoreUpdateAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
+import { Customer } from \\"../models\\";
+
+export type MyFormProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function MyForm(props: MyFormProps): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [usernameTextFieldValue, setUsernameTextFieldValue] =
+    useStateMutationAction(\\"vizsla\\");
+  const submitButtonClick = useDataStoreUpdateAction({
+    model: Customer,
+    id: \\"d9887268-47dd-4899-9568-db5809218751\\",
+    fields: { username: usernameTextFieldValue },
+  });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"MyForm\\")}>
+      <TextField
+        label=\\"Username\\"
+        value={usernameTextFieldValue}
+        onChange={setUsernameTextFieldValue}
+        {...getOverrideProps(overrides, \\"UsernameTextField\\")}
+      ></TextField>
+      <Button
+        children=\\"Submit\\"
+        onClick={() => {
+          submitButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"SubmitButton\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests mutations internal mutation 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
+
+export type ColorChangeOnClickProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ColorChangeOnClick(
+  props: ColorChangeOnClickProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [coloredBoxBackgroundColor, setColoredBoxBackgroundColor] =
+    useStateMutationAction(\\"red\\");
+  const colorChangerButtonClick = () => {
+    setColoredBoxBackgroundColor(\\"blue\\");
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"ColorChangeOnClick\\")}>
+      <Flex
+        backgroundColor={coloredBoxBackgroundColor}
+        {...getOverrideProps(overrides, \\"ColoredBox\\")}
+      ></Flex>
+      <Button
+        children=\\"Change Color\\"
+        onClick={() => {
+          colorChangerButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"ColorChangerButton\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests primitives Built-in Iconset 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

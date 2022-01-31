@@ -21,19 +21,9 @@ import {
   StudioComponentChild,
   ActionStudioComponentEvent,
   StudioComponentProperty,
+  MutationAction,
 } from '@aws-amplify/codegen-ui';
-import {
-  isFixedPropertyWithValue,
-  isBoundProperty,
-  isConcatenatedProperty,
-  isConditionalProperty,
-  buildBindingExpression,
-  buildBindingWithDefaultExpression,
-  buildConcatExpression,
-  buildConditionalExpression,
-  buildFixedLiteralExpression,
-  isActionEvent,
-} from '../react-component-render-helper';
+import { isActionEvent, propertyToExpression, getSetStateName } from '../react-component-render-helper';
 import { ImportCollection, ImportSource } from '../imports';
 
 enum Action {
@@ -42,6 +32,7 @@ enum Action {
   'Amplify.DataStoreUpdateItem' = 'Amplify.DataStoreUpdateItem',
   'Amplify.DataStoreDeleteItem' = 'Amplify.DataStoreDeleteItem',
   'Amplify.AuthSignOut' = 'Amplify.AuthSignOut',
+  'Amplify.Mutation' = 'Amplify.Mutation',
 }
 
 export default Action;
@@ -52,10 +43,15 @@ export const ActionNameMapping: Partial<Record<Action, string>> = {
   [Action['Amplify.DataStoreUpdateItem']]: 'useDataStoreUpdateAction',
   [Action['Amplify.DataStoreDeleteItem']]: 'useDataStoreDeleteAction',
   [Action['Amplify.AuthSignOut']]: 'useAuthSignOutAction',
+  [Action['Amplify.Mutation']]: 'useStateMutationAction',
 };
 
 export function isAction(action: string): action is Action {
   return Object.values(Action).includes(action as Action);
+}
+
+export function isMutationAction(action: ActionStudioComponentEvent): action is MutationAction {
+  return (action.action as Action) === Action['Amplify.Mutation'];
 }
 
 export function getActionHookName(action: string): string {
@@ -95,6 +91,10 @@ export function buildUseActionStatement(
   identifier: string,
   importCollection: ImportCollection,
 ): Statement {
+  if (isMutationAction(action)) {
+    return buildMutationActionStatement(action, identifier);
+  }
+
   const actionHookName = getActionHookName(action.action);
   importCollection.addImport(ImportSource.UI_REACT_INTERNAL, actionHookName);
   return factory.createVariableStatement(
@@ -108,6 +108,41 @@ export function buildUseActionStatement(
           factory.createCallExpression(factory.createIdentifier(actionHookName), undefined, [
             buildActionParameters(action, importCollection),
           ]),
+        ),
+      ],
+      ts.NodeFlags.Const,
+    ),
+  );
+}
+
+export function buildMutationActionStatement(action: MutationAction, identifier: string) {
+  const setState = getSetStateName(action.parameters.state);
+
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier(identifier),
+          undefined,
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [],
+            undefined,
+            factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createExpressionStatement(
+                  factory.createCallExpression(factory.createIdentifier(setState), undefined, [
+                    propertyToExpression(action.parameters.state.set),
+                  ]),
+                ),
+              ],
+              true,
+            ),
+          ),
         ),
       ],
       ts.NodeFlags.Const,
@@ -159,29 +194,5 @@ export function getActionParameterValue(
       false,
     );
   }
-  return actionParameterToExpression(value as StudioComponentProperty);
-}
-
-export function actionParameterToExpression(parameter: StudioComponentProperty): Expression {
-  if (isFixedPropertyWithValue(parameter)) {
-    return buildFixedLiteralExpression(parameter);
-  }
-
-  if (isBoundProperty(parameter)) {
-    return parameter.defaultValue === undefined
-      ? buildBindingExpression(parameter)
-      : buildBindingWithDefaultExpression(parameter, parameter.defaultValue);
-  }
-
-  if (isConcatenatedProperty(parameter)) {
-    return buildConcatExpression(parameter);
-  }
-
-  if (isConditionalProperty(parameter)) {
-    return buildConditionalExpression(parameter);
-  }
-
-  // TODO add user specific attributes
-
-  throw new Error(`Invalid action parameter: ${JSON.stringify(parameter)}.`);
+  return propertyToExpression(value as StudioComponentProperty);
 }
