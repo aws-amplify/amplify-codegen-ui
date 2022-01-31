@@ -19,6 +19,7 @@ import {
   ConcatenatedStudioComponentProperty,
   ConditionalStudioComponentProperty,
   FixedStudioComponentProperty,
+  StateStudioComponentProperty,
   isAuthProperty,
   RelationalOperator,
   StudioComponent,
@@ -28,6 +29,7 @@ import {
   StudioComponentEvent,
   BoundStudioComponentEvent,
   ActionStudioComponentEvent,
+  MutationActionSetStateParameter,
 } from '@aws-amplify/codegen-ui';
 
 import {
@@ -82,6 +84,14 @@ export function isConcatenatedProperty(prop: StudioComponentProperty): prop is C
 
 export function isConditionalProperty(prop: StudioComponentProperty): prop is ConditionalStudioComponentProperty {
   return 'condition' in prop;
+}
+
+export function isStateProperty(property: StudioComponentProperty): property is StateStudioComponentProperty {
+  return 'componentName' in property && 'property' in property;
+}
+
+export function isSetStateParameter(parameter: StudioComponentProperty): parameter is MutationActionSetStateParameter {
+  return 'componentName' in parameter && 'property' in parameter && 'set' in parameter;
 }
 
 export function isDefaultValueOnly(
@@ -304,6 +314,45 @@ export function buildConcatAttr(prop: ConcatenatedStudioComponentProperty, propN
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
+export function buildStateExpression(prop: StateStudioComponentProperty): Expression {
+  return factory.createIdentifier(getStateName(prop));
+}
+
+export function buildStateAttr(prop: StateStudioComponentProperty, propName: string): JsxAttribute {
+  const expr = buildStateExpression(prop);
+  return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
+}
+
+export function propertyToExpression(property: StudioComponentProperty): Expression {
+  if (isFixedPropertyWithValue(property)) {
+    return buildFixedLiteralExpression(property);
+  }
+
+  if (isBoundProperty(property)) {
+    return property.defaultValue === undefined
+      ? buildBindingExpression(property)
+      : buildBindingWithDefaultExpression(property, property.defaultValue);
+  }
+
+  if (isConcatenatedProperty(property)) {
+    return buildConcatExpression(property);
+  }
+
+  if (isConditionalProperty(property)) {
+    return buildConditionalExpression(property);
+  }
+
+  if (isStateProperty(property)) {
+    return buildStateExpression(property);
+  }
+
+  if (isAuthProperty(property)) {
+    return buildAuthExpression(property);
+  }
+
+  throw new Error(`Invalid property: ${JSON.stringify(property)}.`);
+}
+
 export function resolvePropToExpression(prop: StudioComponentProperty): Expression {
   if (isFixedPropertyWithValue(prop)) {
     const propValue = prop.value;
@@ -510,4 +559,17 @@ export function addBindingPropertiesImports(
       }
     });
   }
+}
+
+export function getStateName(stateReference: StateStudioComponentProperty): string {
+  const { componentName, property } = stateReference;
+  return [
+    componentName.charAt(0).toLowerCase() + componentName.slice(1),
+    property.charAt(0).toUpperCase() + property.slice(1),
+  ].join('');
+}
+
+export function getSetStateName(stateReference: StateStudioComponentProperty): string {
+  const stateName = getStateName(stateReference);
+  return ['set', stateName.charAt(0).toUpperCase() + stateName.slice(1)].join('');
 }

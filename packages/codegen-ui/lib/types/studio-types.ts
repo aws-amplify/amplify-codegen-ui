@@ -239,8 +239,8 @@ export type StudioComponentProperty = (
   | CollectionStudioComponentProperty
   | ConcatenatedStudioComponentProperty
   | ConditionalStudioComponentProperty
-  | FormStudioComponentProperty
   | StudioComponentAuthProperty
+  | StateStudioComponentProperty
 ) &
   CommonPropertyValues;
 
@@ -321,21 +321,9 @@ export type ConditionalStudioComponentProperty = {
   };
 };
 
-/**
- * This is the configuration for a form binding. This is
- * technically an extension of Workflows but because it is
- * pretty unique, it should be separated out with its own definition
- */
-export type FormStudioComponentProperty = {
-  /**
-   * The model of the DataStore object
-   */
-  model: string;
-
-  /**
-   * The binding configuration for the form
-   */
-  bindings: FormBindings;
+export type StateStudioComponentProperty = {
+  componentName: string;
+  property: string;
 };
 
 /**
@@ -392,22 +380,6 @@ export type StudioComponentEventPropertyBinding = {
    * This declares that the type is of a workflow binding
    */
   type: 'Event';
-};
-
-export type FormBindings = {
-  [key: string]: FormBindingElement;
-};
-
-export type FormBindingElement = {
-  /**
-   * The name of the component to fetch a value from
-   */
-  element: string;
-
-  /**
-   * The property component to get the value from.
-   */
-  property: string;
 };
 
 /**
@@ -522,7 +494,8 @@ export type ActionStudioComponentEvent =
   | AuthSignOutAction
   | DataStoreCreateItemAction
   | DataStoreUpdateItemAction
-  | DataStoreDeleteItemAction;
+  | DataStoreDeleteItemAction
+  | MutationAction;
 
 export type NavigationAction = {
   action: 'Amplify.Navigation';
@@ -569,6 +542,21 @@ export type DataStoreDeleteItemAction = {
     id: StudioComponentProperty;
   };
 };
+
+export type MutationAction = {
+  action: 'Amplify.Mutation';
+  parameters: {
+    state: MutationActionSetStateParameter;
+  };
+};
+
+export type MutationActionSetStateParameter = {
+  componentName: string;
+  property: string;
+  set: StudioComponentProperty;
+};
+
+export type StateReference = StateStudioComponentProperty | MutationActionSetStateParameter;
 
 export type StudioComponentEvents = {
   [eventName: string]: StudioComponentEvent;
