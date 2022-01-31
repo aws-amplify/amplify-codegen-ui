@@ -1,0 +1,46 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "MyForm",
+  "properties": {},
+  "children": [
+    {
+      "componentType": "TextField",
+      "name": "UsernameTextField",
+      "properties": {
+        "label": {
+          "value": "Username"
+        },
+        "value": {
+          "value": "vizsla"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "SubmitButton",
+      "events": {
+        "click": {
+          "action": "Amplify.DataStoreUpdateItem",
+          "parameters": {
+            "model": "Customer",
+            "id": {
+              "value": "d9887268-47dd-4899-9568-db5809218751"
+            },
+            "fields": {
+              "username": {
+                "componentName": "UsernameTextField",
+                "property": "value"
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "children": {
+          "value": "Submit"
+        }
+      }
+    }
+  ]
+}

@@ -13,7 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ComponentRendererBase, StudioNode, StudioComponent, StudioComponentChild } from '@aws-amplify/codegen-ui';
+import {
+  ComponentRendererBase,
+  StudioNode,
+  StudioComponent,
+  StudioComponentChild,
+  StateReference,
+} from '@aws-amplify/codegen-ui';
 import {
   JsxAttributeLike,
   JsxElement,
@@ -22,9 +28,13 @@ import {
   JsxSelfClosingElement,
   SyntaxKind,
 } from 'typescript';
-
-import { addBindingPropertiesImports, buildOpeningElementProperties } from './react-component-render-helper';
-import { buildOpeningElementEvents } from './workflow';
+import {
+  addBindingPropertiesImports,
+  buildOpeningElementProperties,
+  getStateName,
+  getSetStateName,
+} from './react-component-render-helper';
+import { buildOpeningElementEvents, filterStateReferencesForComponent } from './workflow';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
@@ -33,6 +43,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
 > {
   constructor(
     component: StudioComponent | StudioComponentChild,
+    protected stateReferences: StateReference[],
     protected importCollection: ImportCollection,
     protected parent?: StudioNode,
   ) {
@@ -53,13 +64,27 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   }
 
   protected renderOpeningElement(): JsxOpeningElement {
-    const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementProperties(value, key),
-    );
+    const localStateReferences = filterStateReferencesForComponent(this.component, this.stateReferences);
+    const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) => {
+      if (key in localStateReferences) {
+        const stateName = getStateName({ componentName: this.component.name || '', property: key });
+        return buildOpeningElementProperties({ bindingProperties: { property: stateName } }, key);
+      }
+      return buildOpeningElementProperties(value, key);
+    });
     const eventAttributes = Object.entries(this.component.events || {}).map(([key, value]) =>
       buildOpeningElementEvents(value, key, this.component.name),
     );
-    const attributes = propertyAttributes.concat(eventAttributes);
+    const controlEventAttributes = Object.entries(localStateReferences)
+      .filter(([, { addControlEvent }]) => addControlEvent)
+      .map(([key]) =>
+        buildOpeningElementEvents(
+          { bindingEvent: getSetStateName({ componentName: this.component.name || '', property: key }) },
+          'change', // TODO: use component event mapping
+          this.component.name,
+        ),
+      );
+    const attributes = propertyAttributes.concat(eventAttributes).concat(controlEventAttributes);
 
     this.addPropsSpreadAttributes(attributes);
 
