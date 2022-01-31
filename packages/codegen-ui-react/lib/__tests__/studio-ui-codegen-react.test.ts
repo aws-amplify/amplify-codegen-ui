@@ -329,6 +329,16 @@ describe('amplify render tests', () => {
     expect(generateWithAmplifyRenderer('workflow/event')).toMatchSnapshot();
   });
 
+  describe('mutations', () => {
+    it('form', () => {
+      expect(generateWithAmplifyRenderer('workflow/form')).toMatchSnapshot();
+    });
+
+    it('internal mutation', () => {
+      expect(generateWithAmplifyRenderer('workflow/internalMutation')).toMatchSnapshot();
+    });
+  });
+
   describe('default value', () => {
     it('should render bound default value', () => {
       expect(generateWithAmplifyRenderer('default-value-components/boundDefaultValue')).toMatchSnapshot();

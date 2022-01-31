@@ -15,3 +15,4 @@
  */
 export * from './action';
 export * from './events';
+export * from './mutation';
