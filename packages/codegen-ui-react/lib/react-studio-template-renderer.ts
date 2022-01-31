@@ -30,6 +30,8 @@ import {
   StudioComponentSimplePropertyBinding,
   handleCodegenErrors,
   StudioComponentChild,
+  StateStudioComponentProperty,
+  MutationActionSetStateParameter,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -76,7 +78,12 @@ import Primitive, {
   PrimitiveChildrenPropMapping,
 } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
-import { getComponentActions, buildUseActionStatement } from './workflow';
+import {
+  getComponentActions,
+  buildUseActionStatement,
+  getComponentStateReferences,
+  buildStateStatements,
+} from './workflow';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -91,6 +98,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
 
+  stateReferences: (StateStudioComponentProperty | MutationActionSetStateParameter)[] = [];
+
   fileName = `${this.component.name}.tsx`;
 
   constructor(component: StudioComponent, renderConfig: ReactRenderConfig) {
@@ -101,6 +110,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     };
     this.fileName = `${this.component.name}.${scriptKindToFileExtension(this.renderConfig.script)}`;
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
+    this.stateReferences = getComponentStateReferences(this.component);
     this.mapSyntheticPropsForVariants();
   }
 
@@ -277,7 +287,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   renderSampleCodeSnippetJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement {
-    return new SampleCodeRenderer(component, this.importCollection).renderElement();
+    return new SampleCodeRenderer(component, this.stateReferences, this.importCollection).renderElement();
   }
 
   renderBindingPropsType(component: StudioComponent): TypeAliasDeclaration {
@@ -579,6 +589,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithVariants(component)) {
       statements.push(this.buildOverridesFromVariantsAndProp());
     }
+
+    const stateStatements = buildStateStatements(component, this.stateReferences);
+    stateStatements.forEach((entry) => {
+      statements.push(entry);
+    });
 
     const authStatement = this.buildUseAuthenticatedUserStatement(component);
     if (authStatement !== undefined) {
