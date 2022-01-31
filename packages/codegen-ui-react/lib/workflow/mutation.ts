@@ -45,8 +45,7 @@ export function getComponentStateReferences(component: StudioComponent | StudioC
     stateReferences.push(
       ...Object.values(component.events)
         .filter((action): action is ActionStudioComponentEvent => isActionEvent(action))
-        .map((action) => getActionStateParameters(action))
-        .flat(),
+        .flatMap((action) => getActionStateParameters(action)),
     );
   }
 
@@ -65,13 +64,12 @@ export function getActionStateParameters(action: ActionStudioComponentEvent): St
   if (action.parameters) {
     return Object.entries(action.parameters)
       .filter(([key]) => key !== 'model')
-      .map(([key, parameter]) => {
+      .flatMap(([key, parameter]) => {
         if (key === 'fields' || key === 'attributes') {
           return Object.values(parameter);
         }
         return parameter;
       })
-      .flat()
       .filter((parameter) => isStateProperty(parameter) || isSetStateParameter(parameter));
   }
   return [];

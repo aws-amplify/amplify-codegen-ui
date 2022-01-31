@@ -554,7 +554,7 @@ export type MutationActionSetStateParameter = {
   componentName: string;
   property: string;
   set: StudioComponentProperty;
-} & CommonPropertyValues;
+};
 
 export type StateReference = StateStudioComponentProperty | MutationActionSetStateParameter;
 
