@@ -33,11 +33,13 @@ import {
 export function getComponentStateReferences(component: StudioComponent | StudioComponentChild) {
   const stateReferences: StateReference[] = [];
 
-  Object.values(component.properties).forEach((property) => {
-    if (isStateProperty(property)) {
-      stateReferences.push(property);
-    }
-  });
+  if (component.properties) {
+    Object.values(component.properties).forEach((property) => {
+      if (isStateProperty(property)) {
+        stateReferences.push(property);
+      }
+    });
+  }
 
   if (component.events) {
     stateReferences.push(
