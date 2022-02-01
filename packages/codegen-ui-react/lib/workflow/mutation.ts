@@ -13,13 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import ts, { Statement, factory } from 'typescript';
+import ts, { Statement, factory, JsxAttribute } from 'typescript';
 import {
   StudioComponent,
   StudioComponentChild,
   StateStudioComponentProperty,
   ActionStudioComponentEvent,
   StateReference,
+  StudioGenericEvent,
 } from '@aws-amplify/codegen-ui';
 import {
   isActionEvent,
@@ -29,6 +30,8 @@ import {
   getStateName,
   getSetStateName,
 } from '../react-component-render-helper';
+import { ImportCollection, ImportValue } from '../imports';
+import { mapGenericEventToReact } from './events';
 
 export function getComponentStateReferences(component: StudioComponent | StudioComponentChild) {
   const stateReferences: StateReference[] = [];
@@ -75,7 +78,56 @@ export function getActionStateParameters(action: ActionStudioComponentEvent): St
   return [];
 }
 
-export function buildStateStatements(component: StudioComponent, stateReferences: StateReference[]): Statement[] {
+export function buildOpeningElementControlEvents(stateName: string, event: string): JsxAttribute {
+  return factory.createJsxAttribute(
+    factory.createIdentifier(mapGenericEventToReact(event as StudioGenericEvent)),
+    factory.createJsxExpression(
+      undefined,
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('event'),
+            undefined,
+            factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
+            undefined,
+          ),
+        ],
+        undefined,
+        factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+        factory.createBlock(
+          [
+            factory.createExpressionStatement(
+              factory.createCallExpression(factory.createIdentifier(stateName), undefined, [
+                factory.createPropertyAccessExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('event'),
+                    factory.createIdentifier('target'),
+                  ),
+                  factory.createIdentifier('value'),
+                ),
+              ]),
+            ),
+          ],
+          false,
+        ),
+      ),
+    ),
+  );
+}
+
+export function buildStateStatements(
+  component: StudioComponent,
+  stateReferences: StateReference[],
+  importCollection: ImportCollection,
+): Statement[] {
+  if (stateReferences.length > 0) {
+    importCollection.addMappedImport(ImportValue.USE_STATE_MUTATION_ACTION);
+  }
   return stateReferences.map((stateReference) => {
     return factory.createVariableStatement(
       undefined,

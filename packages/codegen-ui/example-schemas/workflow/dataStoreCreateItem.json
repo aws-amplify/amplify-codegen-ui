@@ -1,7 +1,6 @@
 {
   "componentType": "Button",
   "name": "CreateCustomerButton",
-  "properties": {},
   "events": {
     "click": {
       "action": "Amplify.DataStoreCreateItem",

@@ -28,7 +28,11 @@ import {
   getStateName,
   getSetStateName,
 } from './react-component-render-helper';
-import { buildOpeningElementEvents, filterStateReferencesForComponent } from './workflow';
+import {
+  buildOpeningElementControlEvents,
+  buildOpeningElementEvents,
+  filterStateReferencesForComponent,
+} from './workflow';
 import Primitive, { PrimitiveChildrenPropMapping } from './primitive';
 
 export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithChildrenRendererBase<
@@ -76,10 +80,9 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
     const controlEventAttributes = Object.entries(localStateReferences)
       .filter(([, { addControlEvent }]) => addControlEvent)
       .map(([key]) =>
-        buildOpeningElementEvents(
-          { bindingEvent: getSetStateName({ componentName: this.component.name || '', property: key }) },
+        buildOpeningElementControlEvents(
+          getSetStateName({ componentName: this.component.name || '', property: key }),
           'change', // TODO: use component event mapping
-          this.component.name,
         ),
       );
     const attributes = propertyAttributes.concat(eventAttributes).concat(controlEventAttributes);
