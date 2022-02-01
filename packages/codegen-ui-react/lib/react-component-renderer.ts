@@ -34,7 +34,11 @@ import {
   getStateName,
   getSetStateName,
 } from './react-component-render-helper';
-import { buildOpeningElementEvents, filterStateReferencesForComponent } from './workflow';
+import {
+  buildOpeningElementControlEvents,
+  buildOpeningElementEvents,
+  filterStateReferencesForComponent,
+} from './workflow';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
@@ -78,10 +82,9 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     const controlEventAttributes = Object.entries(localStateReferences)
       .filter(([, { addControlEvent }]) => addControlEvent)
       .map(([key]) =>
-        buildOpeningElementEvents(
-          { bindingEvent: getSetStateName({ componentName: this.component.name || '', property: key }) },
+        buildOpeningElementControlEvents(
+          getSetStateName({ componentName: this.component.name || '', property: key }),
           'change', // TODO: use component event mapping
-          this.component.name,
         ),
       );
     const attributes = propertyAttributes.concat(eventAttributes).concat(controlEventAttributes);
