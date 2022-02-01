@@ -1,7 +1,6 @@
 {
   "componentType": "Button",
   "name": "UpdateCustomerButton",
-  "properties": {},
   "events": {
     "click": {
       "action": "Amplify.DataStoreUpdateItem",
