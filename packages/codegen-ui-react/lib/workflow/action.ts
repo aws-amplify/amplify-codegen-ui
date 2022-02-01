@@ -24,7 +24,7 @@ import {
   MutationAction,
 } from '@aws-amplify/codegen-ui';
 import { isActionEvent, propertyToExpression, getSetStateName } from '../react-component-render-helper';
-import { ImportCollection, ImportSource } from '../imports';
+import { ImportCollection, ImportSource, ImportValue } from '../imports';
 
 enum Action {
   'Amplify.Navigate' = 'Amplify.Navigate',
@@ -37,13 +37,13 @@ enum Action {
 
 export default Action;
 
-export const ActionNameMapping: Partial<Record<Action, string>> = {
-  [Action['Amplify.Navigate']]: 'useNavigateAction',
-  [Action['Amplify.DataStoreCreateItem']]: 'useDataStoreCreateAction',
-  [Action['Amplify.DataStoreUpdateItem']]: 'useDataStoreUpdateAction',
-  [Action['Amplify.DataStoreDeleteItem']]: 'useDataStoreDeleteAction',
-  [Action['Amplify.AuthSignOut']]: 'useAuthSignOutAction',
-  [Action['Amplify.Mutation']]: 'useStateMutationAction',
+export const ActionNameMapping: Partial<Record<Action, ImportValue>> = {
+  [Action['Amplify.Navigate']]: ImportValue.USE_NAVIGATE_ACTION,
+  [Action['Amplify.DataStoreCreateItem']]: ImportValue.USE_DATA_STORE_CREATE_ACTION,
+  [Action['Amplify.DataStoreUpdateItem']]: ImportValue.USE_DATA_STORE_UPDATE_ACTION,
+  [Action['Amplify.DataStoreDeleteItem']]: ImportValue.USE_DATA_STORE_DELETE_ACTION,
+  [Action['Amplify.AuthSignOut']]: ImportValue.USE_AUTH_SIGN_OUT_ACTION,
+  [Action['Amplify.Mutation']]: ImportValue.USE_STATE_MUTATION_ACTION,
 };
 
 export function isAction(action: string): action is Action {
@@ -54,7 +54,7 @@ export function isMutationAction(action: ActionStudioComponentEvent): action is 
   return (action.action as Action) === Action['Amplify.Mutation'];
 }
 
-export function getActionHookName(action: string): string {
+export function getActionHookImportValue(action: string): ImportValue {
   const actionName = ActionNameMapping[Action[action as Action]];
   if (actionName === undefined) {
     throw new InvalidInputError(`${action} is not a valid action.`);
@@ -95,8 +95,8 @@ export function buildUseActionStatement(
     return buildMutationActionStatement(action, identifier);
   }
 
-  const actionHookName = getActionHookName(action.action);
-  importCollection.addImport(ImportSource.UI_REACT_INTERNAL, actionHookName);
+  const actionHookImportValue = getActionHookImportValue(action.action);
+  importCollection.addMappedImport(actionHookImportValue);
   return factory.createVariableStatement(
     undefined,
     factory.createVariableDeclarationList(
@@ -105,7 +105,7 @@ export function buildUseActionStatement(
           factory.createIdentifier(identifier),
           undefined,
           undefined,
-          factory.createCallExpression(factory.createIdentifier(actionHookName), undefined, [
+          factory.createCallExpression(factory.createIdentifier(actionHookImportValue), undefined, [
             buildActionParameters(action, importCollection),
           ]),
         ),
