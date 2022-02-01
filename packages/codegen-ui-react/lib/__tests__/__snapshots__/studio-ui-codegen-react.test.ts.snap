@@ -5167,6 +5167,7 @@ import {
   EscapeHatchProps,
   getOverrideProps,
   useDataStoreUpdateAction,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
 import { Customer } from \\"../models\\";
@@ -5191,7 +5192,9 @@ export default function MyForm(props: MyFormProps): React.ReactElement {
       <TextField
         label=\\"Username\\"
         value={usernameTextFieldValue}
-        onChange={setUsernameTextFieldValue}
+        onChange={(event: SyntheticEvent) => {
+          setUsernameTextFieldValue(event.target.value);
+        }}
         {...getOverrideProps(overrides, \\"UsernameTextField\\")}
       ></TextField>
       <Button
@@ -5217,6 +5220,7 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
 

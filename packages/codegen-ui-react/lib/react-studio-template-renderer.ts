@@ -590,7 +590,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(this.buildOverridesFromVariantsAndProp());
     }
 
-    const stateStatements = buildStateStatements(component, this.stateReferences);
+    const stateStatements = buildStateStatements(component, this.stateReferences, this.importCollection);
     stateStatements.forEach((entry) => {
       statements.push(entry);
     });

@@ -32,6 +32,12 @@ export enum ImportValue {
   USE_DATA_STORE_BINDING = 'useDataStoreBinding',
   CREATE_THEME = 'createTheme',
   MERGE_VARIANTS_OVERRIDES = 'mergeVariantsAndOverrides',
+  USE_NAVIGATE_ACTION = 'useNavigateAction',
+  USE_DATA_STORE_CREATE_ACTION = 'useDataStoreCreateAction',
+  USE_DATA_STORE_UPDATE_ACTION = 'useDataStoreUpdateAction',
+  USE_DATA_STORE_DELETE_ACTION = 'useDataStoreDeleteAction',
+  USE_AUTH_SIGN_OUT_ACTION = 'useAuthSignOutAction',
+  USE_STATE_MUTATION_ACTION = 'useStateMutationAction',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
@@ -46,4 +52,10 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.SORT_DIRECTION]: ImportSource.AMPLIFY_DATASTORE,
   [ImportValue.SORT_PREDICATE]: ImportSource.AMPLIFY_DATASTORE,
   [ImportValue.MERGE_VARIANTS_OVERRIDES]: ImportSource.UI_REACT_INTERNAL,
+  [ImportValue.USE_NAVIGATE_ACTION]: ImportSource.UI_REACT_INTERNAL,
+  [ImportValue.USE_DATA_STORE_CREATE_ACTION]: ImportSource.UI_REACT_INTERNAL,
+  [ImportValue.USE_DATA_STORE_UPDATE_ACTION]: ImportSource.UI_REACT_INTERNAL,
+  [ImportValue.USE_DATA_STORE_DELETE_ACTION]: ImportSource.UI_REACT_INTERNAL,
+  [ImportValue.USE_AUTH_SIGN_OUT_ACTION]: ImportSource.UI_REACT_INTERNAL,
+  [ImportValue.USE_STATE_MUTATION_ACTION]: ImportSource.UI_REACT_INTERNAL,
 };
