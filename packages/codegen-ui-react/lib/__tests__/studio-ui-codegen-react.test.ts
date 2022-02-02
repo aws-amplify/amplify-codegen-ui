@@ -337,6 +337,14 @@ describe('amplify render tests', () => {
     it('internal mutation', () => {
       expect(generateWithAmplifyRenderer('workflow/internalMutation')).toMatchSnapshot();
     });
+
+    it('supports mutations on synthetic props', () => {
+      expect(generateWithAmplifyRenderer('workflow/mutationWithSyntheticProp')).toMatchSnapshot();
+    });
+
+    it('supports multiple actions pointing to the same value', () => {
+      expect(generateWithAmplifyRenderer('workflow/buttonsToggleState')).toMatchSnapshot();
+    });
   });
 
   describe('default value', () => {

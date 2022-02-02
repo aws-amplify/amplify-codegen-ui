@@ -29,9 +29,9 @@ import {
   StudioComponentVariant,
   StudioComponentSimplePropertyBinding,
   handleCodegenErrors,
-  StudioComponentChild,
   StateStudioComponentProperty,
   MutationActionSetStateParameter,
+  buildComponentNameToTypeMap,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -1028,7 +1028,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const actions = getComponentActions(component);
     if (actions) {
       return actions.map(({ action, identifier }) =>
-        buildUseActionStatement(action, identifier, this.importCollection),
+        buildUseActionStatement(component, action, identifier, this.importCollection),
       );
     }
     return [];
@@ -1117,10 +1117,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       return;
     }
 
+    const componentNameToTypeMap = buildComponentNameToTypeMap(this.component);
+
     this.component.variants.forEach((variant) => {
       Object.entries(variant.overrides).forEach(([name, value]) => {
         const propsInOverrides = value;
-        const componentType = this.getComponentTypeFromName(name);
+        const componentType = componentNameToTypeMap[name];
         if (componentType && isPrimitive(componentType)) {
           const childrenPropMapping = PrimitiveChildrenPropMapping[Primitive[componentType as Primitive]];
           if (childrenPropMapping !== undefined) {
@@ -1133,40 +1135,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         }
       });
     });
-  }
-
-  /**
-   * Build a mapping from component name to component type,
-   * pull out the specific component type for the given name.
-   * This is required for synthetic prop mapping of variants,
-   * since we're performing it at the top level, but need
-   * to know the underlying type given the override key.
-   */
-  private getComponentTypeFromName(name: string): string | undefined {
-    const componentNameToTypeMap = this.buildComponentNameToTypeMap(this.component);
-    return componentNameToTypeMap[name];
-  }
-
-  /**
-   * Helper to recurse through the component tree and build the name to type mapping.
-   */
-  private buildComponentNameToTypeMap(component: StudioComponent | StudioComponentChild): Record<string, string> {
-    const localMap: Record<string, string> = {};
-    if (component.name) {
-      localMap[component.name] = component.componentType;
-    }
-    if (component.children) {
-      Object.entries(
-        component.children
-          .map((child) => this.buildComponentNameToTypeMap(child))
-          .reduce((previous, next) => {
-            return { ...previous, ...next };
-          }, {}),
-      ).forEach(([name, componentType]) => {
-        localMap[name] = componentType;
-      });
-    }
-    return localMap;
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement;

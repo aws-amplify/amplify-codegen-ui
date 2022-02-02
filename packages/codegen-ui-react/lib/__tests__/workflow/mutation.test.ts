@@ -43,7 +43,7 @@ describe('getComponentStateReferences', () => {
       children: [
         {
           componentType: 'TextField',
-          name: 'UsernameTextField',
+          name: 'UserNameTextField',
           properties: {
             label: {
               value: 'Username',
