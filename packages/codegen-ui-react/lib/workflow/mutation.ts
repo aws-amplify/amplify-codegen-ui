@@ -204,9 +204,6 @@ export function getStateDefaultValue(component: StudioComponent, stateReference:
   const { componentName, property } = stateReference;
   const referencedComponent = getComponentFromComponentTree(component, componentName);
   const componentProperty = referencedComponent.properties[property];
-  if (componentProperty === undefined) {
-    throw new Error(`Invalid state reference. Property ${property} does not exist on component ${componentName}`);
-  }
   return propertyToExpression(componentProperty);
 }
 
