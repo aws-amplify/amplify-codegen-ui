@@ -52,6 +52,7 @@ jobs:
         working-directory: e2e-test-app
         run: |
           npm i aws-amplify @aws-amplify/ui-react
+          npm i @babel/core@7.16.12
           npm i --save-dev cypress
       - name: Run CLI Pull in test app
         working-directory: e2e-test-app

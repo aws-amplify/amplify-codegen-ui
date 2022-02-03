@@ -22,3 +22,4 @@ call lerna add --no-ci --scope integration-test react-router-dom
 call lerna add --no-ci --scope integration-test @types/react-router-dom
 call lerna add --no-ci --dev --scope integration-test cypress
 call lerna add --no-ci --dev --scope integration-test wait-on
+call lerna add --scope integration-test @babel/core@7.16.12
