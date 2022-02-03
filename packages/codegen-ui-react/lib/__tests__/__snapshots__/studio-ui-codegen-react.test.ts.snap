@@ -5261,6 +5261,115 @@ export default function ColorChangeOnClick(
 }
 `;
 
+exports[`amplify render tests mutations supports multiple actions pointing to the same value 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+
+export type ButtonsToggleStateProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ButtonsToggleState(
+  props: ButtonsToggleStateProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [fooBarValueChildren, setFooBarValueChildren] =
+    useStateMutationAction(\\"Baz\\");
+  const fooButtonClick = () => {
+    setFooBarValueChildren(\\"Foo\\");
+  };
+  const barButtonClick = () => {
+    setFooBarValueChildren(\\"Bar\\");
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"ButtonsToggleState\\")}>
+      <Text
+        children={fooBarValueChildren}
+        {...getOverrideProps(overrides, \\"FooBarValue\\")}
+      ></Text>
+      <Button
+        children=\\"Set to Foo\\"
+        onClick={() => {
+          fooButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"FooButton\\")}
+      ></Button>
+      <Button
+        children=\\"Set to Bar\\"
+        onClick={() => {
+          barButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"BarButton\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests mutations supports mutations on synthetic props 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+
+export type MutationWithSyntheticPropProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function MutationWithSyntheticProp(
+  props: MutationWithSyntheticPropProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [fooBarValueChildren, setFooBarValueChildren] =
+    useStateMutationAction(\\"Baz\\");
+  const fooButtonClick = () => {
+    setFooBarValueChildren(\\"Foo\\");
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      {...rest}
+      {...getOverrideProps(overrides, \\"MutationWithSyntheticProp\\")}
+    >
+      <Text
+        children={fooBarValueChildren}
+        {...getOverrideProps(overrides, \\"FooBarValue\\")}
+      ></Text>
+      <Button
+        children=\\"Set to Foo\\"
+        onClick={() => {
+          fooButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"FooButton\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests primitives Built-in Iconset 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

@@ -21,6 +21,7 @@ import {
   ActionStudioComponentEvent,
   StateReference,
   StudioGenericEvent,
+  buildComponentNameToTypeMap,
 } from '@aws-amplify/codegen-ui';
 import {
   isActionEvent,
@@ -32,8 +33,16 @@ import {
 } from '../react-component-render-helper';
 import { ImportCollection, ImportValue } from '../imports';
 import { mapGenericEventToReact } from './events';
+import { getChildPropMappingForComponentName } from './utils';
 
-export function getComponentStateReferences(component: StudioComponent | StudioComponentChild) {
+export function getComponentStateReferences(component: StudioComponent) {
+  const stateReferences = getComponentStateReferencesHelper(component);
+  const componentNameToTypeMap = buildComponentNameToTypeMap(component);
+  const mappedStateReferences = mapSyntheticReferences(stateReferences, componentNameToTypeMap);
+  return mappedStateReferences;
+}
+
+function getComponentStateReferencesHelper(component: StudioComponent | StudioComponentChild) {
   const stateReferences: StateReference[] = [];
 
   if (component.properties) {
@@ -54,13 +63,25 @@ export function getComponentStateReferences(component: StudioComponent | StudioC
 
   if (component.children) {
     component.children.forEach((child) => {
-      stateReferences.push(...getComponentStateReferences(child));
+      stateReferences.push(...getComponentStateReferencesHelper(child));
     });
   }
 
-  // TODO: dedupe state references
-
   return stateReferences;
+}
+
+function mapSyntheticReferences(
+  stateReferences: StateReference[],
+  componentNameToTypeMap: Record<string, string>,
+): StateReference[] {
+  return stateReferences.map((stateReference) => {
+    const { componentName, property } = stateReference;
+    const childrenPropMapping = getChildPropMappingForComponentName(componentNameToTypeMap, componentName);
+    if (childrenPropMapping !== undefined && property === childrenPropMapping) {
+      return { ...stateReference, property: 'children' };
+    }
+    return stateReference;
+  });
 }
 
 export function getActionStateParameters(action: ActionStudioComponentEvent): StateStudioComponentProperty[] {
@@ -120,6 +141,23 @@ export function buildOpeningElementControlEvents(stateName: string, event: strin
   );
 }
 
+/**
+ * Dedupes state references by componentName + property, returning a consolidate
+ * list, stripping the `set` property from them. We do this by serializing to json,
+ * collecting in a set, then deserializing.
+ */
+function dedupeStateReferences(stateReferences: StateReference[]): StateReference[] {
+  const dedupedSerializedRefs = [
+    ...new Set(
+      stateReferences.map((stateReference) => {
+        const { componentName, property } = stateReference;
+        return JSON.stringify({ componentName, property });
+      }),
+    ),
+  ];
+  return dedupedSerializedRefs.map((ref) => JSON.parse(ref));
+}
+
 export function buildStateStatements(
   component: StudioComponent,
   stateReferences: StateReference[],
@@ -128,7 +166,8 @@ export function buildStateStatements(
   if (stateReferences.length > 0) {
     importCollection.addMappedImport(ImportValue.USE_STATE_MUTATION_ACTION);
   }
-  return stateReferences.map((stateReference) => {
+  const dedupedStateReferences = dedupeStateReferences(stateReferences);
+  return dedupedStateReferences.map((stateReference) => {
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
