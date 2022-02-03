@@ -323,7 +323,11 @@ export function buildStateAttr(prop: StateStudioComponentProperty, propName: str
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
-export function propertyToExpression(property: StudioComponentProperty): Expression {
+export function propertyToExpression(property: StudioComponentProperty | undefined): Expression {
+  if (property === undefined) {
+    return factory.createIdentifier('undefined');
+  }
+
   if (isFixedPropertyWithValue(property)) {
     return buildFixedLiteralExpression(property);
   }

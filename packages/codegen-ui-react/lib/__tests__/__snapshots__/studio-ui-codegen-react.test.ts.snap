@@ -5370,6 +5370,126 @@ export default function MutationWithSyntheticProp(
 }
 `;
 
+exports[`amplify render tests mutations supports mutations on visibility props 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Card, CardProps, Text } from \\"@aws-amplify/ui-react\\";
+
+export type UpdateVisibilityProps = React.PropsWithChildren<
+  Partial<CardProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function UpdateVisibility(
+  props: UpdateVisibilityProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [textDisplayDisplay, setTextDisplayDisplay] =
+    useStateMutationAction(\\"block\\");
+  const displayBlockButtonClick = () => {
+    setTextDisplayDisplay(\\"block\\");
+  };
+  const displayNoneButtonClick = () => {
+    setTextDisplayDisplay(\\"none\\");
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Card {...rest} {...getOverrideProps(overrides, \\"UpdateVisibility\\")}>
+      <Text
+        display={textDisplayDisplay}
+        children=\\"This is a text to display.\\"
+        {...getOverrideProps(overrides, \\"TextDisplay\\")}
+      ></Text>
+      <Button
+        children=\\"Show text\\"
+        onClick={() => {
+          displayBlockButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"DisplayBlockButton\\")}
+      ></Button>
+      <Button
+        children=\\"Hide text\\"
+        onClick={() => {
+          displayNoneButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"DisplayNoneButton\\")}
+      ></Button>
+    </Card>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests mutations supports mutations with no initial state 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Card, CardProps, Text } from \\"@aws-amplify/ui-react\\";
+
+export type SetStateWithoutInitialValueProps = React.PropsWithChildren<
+  Partial<CardProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function SetStateWithoutInitialValue(
+  props: SetStateWithoutInitialValueProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [displayBlockButtonDisplay, setDisplayBlockButtonDisplay] =
+    useStateMutationAction(undefined);
+  const displayBlockButtonClick = () => {
+    setDisplayBlockButtonDisplay(\\"block\\");
+  };
+  const displayNoneButtonClick = () => {
+    setDisplayBlockButtonDisplay(\\"none\\");
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Card
+      {...rest}
+      {...getOverrideProps(overrides, \\"SetStateWithoutInitialValue\\")}
+    >
+      <Text
+        children=\\"This is a text to display.\\"
+        {...getOverrideProps(overrides, \\"TextDisplay\\")}
+      ></Text>
+      <Button
+        children=\\"Show text\\"
+        onClick={() => {
+          displayBlockButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"DisplayBlockButton\\")}
+      ></Button>
+      <Button
+        children=\\"Hide text\\"
+        onClick={() => {
+          displayNoneButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"DisplayNoneButton\\")}
+      ></Button>
+    </Card>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests primitives Built-in Iconset 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
