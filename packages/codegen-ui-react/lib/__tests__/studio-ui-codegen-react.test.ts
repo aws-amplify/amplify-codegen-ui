@@ -345,6 +345,14 @@ describe('amplify render tests', () => {
     it('supports multiple actions pointing to the same value', () => {
       expect(generateWithAmplifyRenderer('workflow/buttonsToggleState')).toMatchSnapshot();
     });
+
+    it('supports mutations on visibility props', () => {
+      expect(generateWithAmplifyRenderer('workflow/updateVisibility')).toMatchSnapshot();
+    });
+
+    it('supports mutations with no initial state', () => {
+      expect(generateWithAmplifyRenderer('workflow/setStateWithoutInitialValue')).toMatchSnapshot();
+    });
   });
 
   describe('default value', () => {
