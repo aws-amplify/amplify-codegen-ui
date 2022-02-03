@@ -56,13 +56,13 @@ jobs:
       - name: Run CLI Pull in test app
         working-directory: e2e-test-app
         run: |
-          FORCE_RENDER=1 amplify-dev pull --appId ${{ secrets.E2E_TEST_APP_ID }} --envName staging -y --providers "{\
+          FORCE_RENDER=1 amplify-dev pull --appId ${{ secrets.Q1_RELEASE_E2E_TEST_APP_ID }} --envName staging -y --providers "{\
             \"awscloudformation\":{\
               \"configLevel\":\"project\",\
               \"useProfile\":false,\
               \"profileName\":\"default\",\
-              \"accessKeyId\":\"${{ secrets.E2E_TEST_ACCESS_KEY }}\",\
-              \"secretAccessKey\":\"${{ secrets.E2E_TEST_SECRET_KEY }}\",\
+              \"accessKeyId\":\"${{ secrets.Q1_RELEASE_E2E_TEST_ACCESS_KEY }}\",\
+              \"secretAccessKey\":\"${{ secrets.Q1_RELEASE_E2E_TEST_SECRET_KEY }}\",\
               \"region\":\"us-west-2\"\
             }\
           }"

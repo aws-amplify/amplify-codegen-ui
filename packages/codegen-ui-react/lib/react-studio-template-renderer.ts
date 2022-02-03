@@ -71,12 +71,7 @@ import {
   bindingPropertyUsesHook,
   json,
 } from './react-studio-template-renderer-helper';
-import Primitive, {
-  isPrimitive,
-  PrimitiveTypeParameter,
-  isBuiltInIcon,
-  PrimitiveChildrenPropMapping,
-} from './primitive';
+import { Primitive, isPrimitive, PrimitiveTypeParameter, PrimitiveChildrenPropMapping } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
 import {
   getComponentActions,
@@ -344,7 +339,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const propsType = this.getPropsTypeName(component);
 
     const componentIsPrimitive = isPrimitive(component.componentType);
-    if (componentIsPrimitive || isBuiltInIcon(component.componentType)) {
+    if (componentIsPrimitive) {
       this.importCollection.addImport(ImportSource.UI_REACT, propsType);
     } else {
       this.importCollection.addImport(`./${component.componentType}`, `${component.componentType}Props`);
@@ -1089,9 +1084,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private getPropsTypeName(component: StudioComponent): string {
-    if (isBuiltInIcon(component.componentType)) {
-      return 'IconProps';
-    }
     // MenuButton primitive uses ButtonProps
     if (component.componentType === Primitive.MenuButton) {
       return 'ButtonProps';

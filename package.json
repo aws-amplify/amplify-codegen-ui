@@ -29,8 +29,7 @@
     "integ:test": "run-script-os",
     "integ:test:default": "./scripts/integ-test.sh",
     "integ:test:win32": "scripts\\integ-test.bat",
-    "integ:clean": "npx rimraf packages/integration-test",
-    "iconset": "lerna run iconset"
+    "integ:clean": "npx rimraf packages/integration-test"
   },
   "files": [],
   "devDependencies": {

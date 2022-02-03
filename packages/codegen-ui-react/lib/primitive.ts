@@ -15,13 +15,12 @@
  */
 import { FixedStudioComponentProperty } from '@aws-amplify/codegen-ui';
 import { factory, SyntaxKind, TypeParameterDeclaration, TypeNode } from 'typescript';
-import iconset from './iconset';
 
 export type PrimitiveLevelPropConfiguration<ConfigType> = {
   [componentType: string]: { [eventType: string]: ConfigType };
 };
 
-enum Primitive {
+export enum Primitive {
   Alert = 'Alert',
   Badge = 'Badge',
   Button = 'Button',
@@ -71,49 +70,6 @@ enum Primitive {
   VisuallyHidden = 'VisuallyHidden',
 }
 
-export default Primitive;
-
-export function isPrimitive(componentType: string): boolean {
-  return Object.values(Primitive).includes(componentType as Primitive);
-}
-
-export const PrimitiveChildrenPropMapping: Partial<Record<Primitive, string>> = {
-  [Primitive.Alert]: 'label',
-  [Primitive.Badge]: 'label',
-  [Primitive.Button]: 'label',
-  [Primitive.Heading]: 'label',
-  [Primitive.Link]: 'label',
-  [Primitive.MenuButton]: 'label',
-  [Primitive.MenuItem]: 'label',
-  [Primitive.Radio]: 'label',
-  [Primitive.TableCell]: 'label',
-  [Primitive.Text]: 'label',
-  [Primitive.ToggleButton]: 'label',
-};
-
-export const PrimitiveTypeParameter: Partial<
-  Record<Primitive, { declaration: () => TypeParameterDeclaration[] | undefined; reference: () => TypeNode[] }>
-> = {
-  [Primitive.TextField]: {
-    declaration: () => [
-      factory.createTypeParameterDeclaration(
-        factory.createIdentifier('Multiline'),
-        factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-        undefined,
-      ),
-    ],
-    reference: () => [factory.createTypeReferenceNode(factory.createIdentifier('Multiline'), undefined)],
-  },
-  [Primitive.Collection]: {
-    declaration: () => undefined,
-    reference: () => [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)],
-  },
-};
-
-export function isBuiltInIcon(componentType: string): boolean {
-  return iconset.has(componentType);
-}
-
 /*
  * temporary list of Primitives with a change event. Final implementation will pull from amplify UI
  */
@@ -129,6 +85,20 @@ export const PrimitivesWithChangeEvent: Set<Primitive> = new Set([
   Primitive.SwitchField,
   Primitive.TextField,
 ]);
+
+export const PrimitiveChildrenPropMapping: Partial<Record<Primitive, string>> = {
+  [Primitive.Alert]: 'label',
+  [Primitive.Badge]: 'label',
+  [Primitive.Button]: 'label',
+  [Primitive.Heading]: 'label',
+  [Primitive.Link]: 'label',
+  [Primitive.MenuButton]: 'label',
+  [Primitive.MenuItem]: 'label',
+  [Primitive.Radio]: 'label',
+  [Primitive.TableCell]: 'label',
+  [Primitive.Text]: 'label',
+  [Primitive.ToggleButton]: 'label',
+};
 
 export const PrimitiveDefaultPropertyValue: PrimitiveLevelPropConfiguration<FixedStudioComponentProperty> = {
   [Primitive.CheckboxField]: {
@@ -151,5 +121,28 @@ export const PrimitiveDefaultPropertyValue: PrimitiveLevelPropConfiguration<Fixe
   },
   [Primitive.TextField]: {
     value: { value: '', type: 'string' },
+  },
+};
+
+export function isPrimitive(componentType: string): boolean {
+  return Object.values(Primitive).includes(componentType as Primitive);
+}
+
+export const PrimitiveTypeParameter: Partial<
+  Record<Primitive, { declaration: () => TypeParameterDeclaration[] | undefined; reference: () => TypeNode[] }>
+> = {
+  [Primitive.TextField]: {
+    declaration: () => [
+      factory.createTypeParameterDeclaration(
+        factory.createIdentifier('Multiline'),
+        factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
+        undefined,
+      ),
+    ],
+    reference: () => [factory.createTypeReferenceNode(factory.createIdentifier('Multiline'), undefined)],
+  },
+  [Primitive.Collection]: {
+    declaration: () => undefined,
+    reference: () => [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)],
   },
 };
