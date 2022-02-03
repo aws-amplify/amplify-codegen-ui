@@ -58,7 +58,6 @@ import {
   PaginatedCollection,
   SearchableCollection,
   ComponentWithAuthBinding,
-  MyIconCloud,
 } from './ui-components'; // eslint-disable-line import/extensions
 
 const initializeUserTestData = async (): Promise<void> => {
@@ -355,9 +354,6 @@ export default function ComponentTests() {
             ChildChildFlex1: { backgroundColor: 'blue' },
           }}
         />
-      </div>
-      <div id="icons">
-        <MyIconCloud />
       </div>
     </AmplifyProvider>
   );

@@ -16,7 +16,7 @@
 import { StudioComponent } from '@aws-amplify/codegen-ui';
 import { assertASTMatchesSnapshot } from '../__utils__';
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
-import Primitive from '../../primitive';
+import { Primitive } from '../../primitive';
 
 function testPrimitive(component: StudioComponent) {
   const renderedComponent = new AmplifyRenderer(component, {}).renderJsx(component);

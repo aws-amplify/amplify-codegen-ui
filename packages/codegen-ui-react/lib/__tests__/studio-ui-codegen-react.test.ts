@@ -510,10 +510,6 @@ describe('amplify render tests', () => {
       expect(generateWithAmplifyRenderer('primitives/CheckboxFieldPrimitive').componentText).toMatchSnapshot();
     });
 
-    test('Built-in Iconset', () => {
-      expect(generateWithAmplifyRenderer('builtInIconset').componentText).toMatchSnapshot();
-    });
-
     test('Table', () => {
       expect(generateWithAmplifyRenderer('primitives/TablePrimitive').componentText).toMatchSnapshot();
     });

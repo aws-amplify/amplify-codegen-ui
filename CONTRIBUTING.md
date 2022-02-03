@@ -158,8 +158,3 @@ The tagged release will use the same versioning process as the pre-release excep
 
 - the preid will inlcude the branch name with `tagged-release/` removed. (Ex. `1.1.1-fix-properties-2baaca9.0`)
 - the release will be published with the dist tag as the tagged release name. (Ex. `fix-properties`)
-
-### Icons
-
-The built-in iconset is genereted with `packages/scripts/generateBuiltInIconset.js`.
-When icons are added or removed from `@aws-amplify/ui-react` run `npm run iconset` from the root of the repo to update the icons supported in codegen.
