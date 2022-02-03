@@ -218,7 +218,7 @@
               "children": [
                 {
                   "children": [],
-                  "componentType": "IconArrowForward",
+                  "componentType": "Icon",
                   "name": "Iconynp",
                   "properties": {
                     "padding": {
@@ -247,7 +247,10 @@
                     },
                     "height": {
                       "value": "24px"
-                    }
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
+                    } 
                   }
                 },
                 {
@@ -382,7 +385,7 @@
                 },
                 {
                   "children": [],
-                  "componentType": "IconBookmarkBorder",
+                  "componentType": "Icon",
                   "name": "Iconsrv",
                   "properties": {
                     "padding": {
@@ -411,12 +414,15 @@
                     },
                     "height": {
                       "value": "24px"
-                    }
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
+                    } 
                   }
                 },
                 {
                   "children": [],
-                  "componentType": "IconShare",
+                  "componentType": "Icon",
                   "name": "Iconwdz",
                   "properties": {
                     "padding": {
@@ -445,12 +451,15 @@
                     },
                     "height": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   }
                 },
                 {
                   "children": [],
-                  "componentType": "IconMoreVert",
+                  "componentType": "Icon",
                   "name": "Iconxpr",
                   "properties": {
                     "padding": {
@@ -479,6 +488,9 @@
                     },
                     "height": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   }
                 }
@@ -595,7 +607,7 @@
       "children": [
         {
           "children": [],
-          "componentType": "IconArrowForward",
+          "componentType": "Icon",
           "name": "Iconlxm",
           "properties": {
             "padding": {
@@ -624,6 +636,9 @@
             },
             "height": {
               "value": "24px"
+            },
+            "pathData": {
+              "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
             }
           }
         },
