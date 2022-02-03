@@ -1,0 +1,64 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Card",
+    "name": "SetStateWithoutInitialValue",
+    "bindingProperties": {},
+    "properties": {},
+    "children": [
+        {
+            "componentType": "Text",
+            "name": "TextDisplay",
+            "properties": {
+                "label": {
+                    "value": "This is a text to display."
+                }
+            }
+        },
+        {
+            "componentType": "Button",
+            "name": "DisplayBlockButton",
+            "properties": {
+                "label": {
+                    "value": "Show text"
+                }
+            },
+            "events": {
+                "click": {
+                    "action": "Amplify.Mutation",
+                    "parameters": {
+                        "state": {
+                            "componentName": "DisplayBlockButton",
+                            "property": "display",
+                            "set": {
+                                "value": "block"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "componentType": "Button",
+            "name": "DisplayNoneButton",
+            "properties": {
+                "label": {
+                    "value": "Hide text"
+                }
+            },
+            "events": {
+                "click": {
+                    "action": "Amplify.Mutation",
+                    "parameters": {
+                        "state": {
+                            "componentName": "DisplayBlockButton",
+                            "property": "display",
+                            "set": {
+                                "value": "none"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
