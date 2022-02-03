@@ -15,8 +15,7 @@
     "test": "jest",
     "test:update": "jest --updateSnapshot",
     "build": "tsc -p tsconfig.build.json",
-    "build:watch": "npm run build -- --watch",
-    "iconset": "node scripts/generateBuiltInIconset.js"
+    "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
     "@aws-amplify/ui-react": "^2.1.0",

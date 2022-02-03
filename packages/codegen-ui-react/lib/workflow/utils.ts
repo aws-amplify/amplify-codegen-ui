@@ -15,7 +15,7 @@
  */
 
 import { ComponentMetadata, InvalidInputError } from '@aws-amplify/codegen-ui';
-import Primitive, { PrimitiveChildrenPropMapping } from '../primitive';
+import { Primitive, PrimitiveChildrenPropMapping } from '../primitive';
 
 export const getChildPropMappingForComponentName = (
   componentMetadata: ComponentMetadata,
