@@ -17,7 +17,7 @@ import { StudioGenericEvent, StudioComponentEvent, BoundStudioComponentEvent } f
 import { factory, JsxAttribute, SyntaxKind } from 'typescript';
 import { getActionIdentifier } from './action';
 import { isBoundEvent, isActionEvent } from '../react-component-render-helper';
-import Primitive, { PrimitiveLevelPropConfiguration } from '../primitive';
+import { Primitive, PrimitiveLevelPropConfiguration } from '../primitive';
 
 /*
  * Temporary hardcoded mapping of generic to react events, long-term this will be exported by amplify-ui.

@@ -187,7 +187,7 @@
                 {
                   "children": [],
                   "name": "Iconunz",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -215,6 +215,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -320,7 +323,7 @@
                 {
                   "children": [],
                   "name": "Iconrca",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -348,6 +351,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -453,7 +459,7 @@
                 {
                   "children": [],
                   "name": "Iconwrc",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -481,6 +487,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -803,7 +812,7 @@
                 {
                   "children": [],
                   "name": "Iconxzy",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -831,6 +840,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -936,7 +948,7 @@
                 {
                   "children": [],
                   "name": "Iconpjz",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -964,6 +976,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -1069,7 +1084,7 @@
                 {
                   "children": [],
                   "name": "Iconhpq",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -1097,6 +1112,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -1419,7 +1437,7 @@
                 {
                   "children": [],
                   "name": "Iconoyx",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -1447,6 +1465,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -1552,7 +1573,7 @@
                 {
                   "children": [],
                   "name": "Iconcsj",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -1580,6 +1601,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -1685,7 +1709,7 @@
                 {
                   "children": [],
                   "name": "Icongvd",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -1713,6 +1737,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -2035,7 +2062,7 @@
                 {
                   "children": [],
                   "name": "Iconkmb",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -2063,6 +2090,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -2168,7 +2198,7 @@
                 {
                   "children": [],
                   "name": "Iconzyv",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -2196,6 +2226,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
@@ -2301,7 +2334,7 @@
                 {
                   "children": [],
                   "name": "Iconsrt",
-                  "componentType": "IconCheck",
+                  "componentType": "Icon",
                   "properties": {
                     "width": {
                       "value": "24px"
@@ -2329,6 +2362,9 @@
                     },
                     "fontSize": {
                       "value": "24px"
+                    },
+                    "pathData": {
+                      "value": "M5.59 10.58L1.42 6.41L0 7.82L5.59 13.41L17.59 1.41L16.18 0L5.59 10.58Z"
                     }
                   },
                   "overrides": {
