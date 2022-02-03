@@ -63,8 +63,7 @@ import {
   VisuallyHiddenProps,
   TextProps,
 } from '@aws-amplify/ui-react';
-import Primitive, { isBuiltInIcon } from '../primitive';
-import { iconsetPascalNameMapping } from '../iconset';
+import { Primitive } from '../primitive';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
 import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
@@ -78,27 +77,6 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
   ): JsxElement | JsxFragment | JsxSelfClosingElement {
     const node = new StudioNode(component, parent);
     const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
-
-    if (isBuiltInIcon(component.componentType)) {
-      const { componentType } = component;
-
-      // need to reassign param so object equality comparison works when finding override index
-      // eslint-disable-next-line no-param-reassign
-      component.componentType = iconsetPascalNameMapping.get(component.componentType) || component.componentType;
-
-      const renderedComponent = new ReactComponentWithChildrenRenderer<IconProps>(
-        component,
-        this.componentMetadata,
-        this.importCollection,
-        parent,
-      ).renderElement(renderChildren);
-
-      // return componentType to original value
-      // eslint-disable-next-line no-param-reassign
-      component.componentType = componentType;
-
-      return renderedComponent;
-    }
 
     // add Primitive in alphabetical order
     switch (component.componentType) {

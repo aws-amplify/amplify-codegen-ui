@@ -35,7 +35,8 @@ import {
 import { ImportCollection, ImportValue } from '../imports';
 import { mapGenericEventToReact } from './events';
 import { getChildPropMappingForComponentName } from './utils';
-import Primitive, {
+import {
+  Primitive,
   PrimitivesWithChangeEvent,
   PrimitiveLevelPropConfiguration,
   PrimitiveDefaultPropertyValue,

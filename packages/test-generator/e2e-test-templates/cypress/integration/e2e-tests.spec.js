@@ -19,10 +19,6 @@ describe('e2e-tests', () => {
     cy.visit('localhost:3000');
   });
 
-  it('displays a navbar', () => {
-    cy.get('#navBar').contains('Company');
-  });
-
   it('renders datastore collection', () => {
     cy.get('#blogPosts').contains('Working on E2E Tests');
   });

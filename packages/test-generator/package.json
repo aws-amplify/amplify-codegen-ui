@@ -12,8 +12,7 @@
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "npm run build -- --watch",
     "test": "echo \"No tests\"",
-    "test:update": "echo \"No tests\"",
-    "iconset": "node scripts/generateBuiltInIconsetTests.js"
+    "test:update": "echo \"No tests\""
   },
   "private": true,
   "files": [

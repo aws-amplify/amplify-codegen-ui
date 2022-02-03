@@ -18,8 +18,6 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'ViewTest',
   'CustomButton',
   'ParsedFixedValues',
-  'MyIconCloud',
-  'Icons',
   'BasicComponentBadge',
   'BasicComponentView',
   'BasicComponentButton',
