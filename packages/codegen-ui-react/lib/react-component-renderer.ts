@@ -69,6 +69,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
 
   protected renderOpeningElement(): JsxOpeningElement {
     const localStateReferences = filterStateReferencesForComponent(this.component, this.stateReferences);
+
     const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) => {
       if (key in localStateReferences) {
         const stateName = getStateName({ componentName: this.component.name || '', property: key });
@@ -76,9 +77,19 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       }
       return buildOpeningElementProperties(value, key);
     });
+
+    // Reverse, and create element properties for localStateReferences which are not yet defined props
+    const unmodeledPropertyAttributes = Object.entries(localStateReferences)
+      .filter(([referencedProperty]) => !(referencedProperty in this.component.properties))
+      .map(([referencedProperty]) => {
+        const stateName = getStateName({ componentName: this.component.name || '', property: referencedProperty });
+        return buildOpeningElementProperties({ bindingProperties: { property: stateName } }, referencedProperty);
+      });
+
     const eventAttributes = Object.entries(this.component.events || {}).map(([key, value]) =>
       buildOpeningElementEvents(value, key, this.component.name),
     );
+
     const controlEventAttributes = Object.entries(localStateReferences)
       .filter(([, { addControlEvent }]) => addControlEvent)
       .map(([key]) =>
@@ -87,7 +98,13 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
           'change', // TODO: use component event mapping
         ),
       );
-    const attributes = propertyAttributes.concat(eventAttributes).concat(controlEventAttributes);
+
+    const attributes = [
+      ...propertyAttributes,
+      ...unmodeledPropertyAttributes,
+      ...eventAttributes,
+      ...controlEventAttributes,
+    ];
 
     this.addPropsSpreadAttributes(attributes);
 
