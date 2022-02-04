@@ -1,7 +1,7 @@
 {
     "id": "1234-5678-9010",
     "componentType": "Card",
-    "name": "SetStateWithoutInitialValue",
+    "name": "UpdateVisibility",
     "bindingProperties": {},
     "properties": {},
     "children": [
@@ -11,6 +11,12 @@
             "properties": {
                 "label": {
                     "value": "This is a text to display."
+                },
+                "display": {
+                    "value": "block"
+                },
+                "id": {
+                    "value": "WithInitialTextDisplay"
                 }
             }
         },
@@ -20,6 +26,9 @@
             "properties": {
                 "label": {
                     "value": "Show text"
+                },
+                "id": {
+                    "value": "WithInitialDisplayBlockButton"
                 }
             },
             "events": {
@@ -43,6 +52,9 @@
             "properties": {
                 "label": {
                     "value": "Hide text"
+                },
+                "id": {
+                    "value": "WithInitialDisplayNoneButton"
                 }
             },
             "events": {

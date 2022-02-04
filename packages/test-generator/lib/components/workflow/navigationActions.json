@@ -1,0 +1,108 @@
+{
+  "componentType": "Flex",
+  "name": "NavigationActions",
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Button",
+      "name": "HardNavigate",
+      "properties": {
+        "id": {
+          "value": "hard-navigate"
+        },
+        "children": {
+          "value": "Go to Amazon.com"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.Navigate",
+          "parameters": {
+            "type": {
+              "value": "url"
+            },
+            "url": {
+              "value": "https://www.amazon.com/"
+            }
+          }
+        }
+      }
+    },    
+    {
+      "componentType": "Button",
+      "name": "GoToAnchor",
+      "properties": {
+        "id": {
+          "value": "anchor-navigate"
+        },
+        "children": {
+          "value": "Go to About section"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.Navigate",
+          "parameters": {
+            "type": {
+              "value": "anchor"
+            },
+            "anchor": {
+              "value": "#about"
+            }
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "NewTab",
+      "properties": {
+        "id": {
+          "value": "new-tab"
+        },
+        "children": {
+          "value": "Go to Amazon.com (Open in new tab)"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.Navigate",
+          "parameters": {
+            "type": {
+              "value": "url"
+            },
+            "url": {
+              "value": "https://www.amazon.com/"
+            },
+            "target": {
+              "value": "newtab"
+            }
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "Reload",
+      "properties": {
+        "id": {
+          "value": "reload-page"
+        },
+        "children": {
+          "value": "Reload the page."
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.Navigate",
+          "parameters": {
+            "type": {
+              "value": "reload"
+            }
+          }
+        }
+      }
+    }
+    
+  ]
+}
