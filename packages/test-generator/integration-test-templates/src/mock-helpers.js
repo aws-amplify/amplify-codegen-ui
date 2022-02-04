@@ -13,14 +13,30 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-/* eslint-disable no-undef */
-
 import { useState } from 'react';
-
-const mockedAction = () => () => {};
-
-export const useDataStoreCreateAction = mockedAction;
-export const useDataStoreUpdateAction = mockedAction;
-export const useDataStoreDeleteAction = mockedAction;
+import { DataStore } from '@aws-amplify/datastore';
 
 export const useStateMutationAction = useState;
+
+export const useDataStoreCreateAction =
+  ({ model: Model, fields }) =>
+  async () => {
+    await DataStore.save(new Model(fields));
+  };
+
+export const useDataStoreDeleteAction =
+  ({ model: Model, id }) =>
+  async () => {
+    await DataStore.delete(Model, id);
+  };
+
+export const useDataStoreUpdateAction =
+  ({ model: Model, id, fields }) =>
+  async () => {
+    const original = await DataStore.query(Model, id);
+    await DataStore.save(
+      Model.copyOf(original, (updated) => {
+        Object.assign(updated, fields);
+      }),
+    );
+  };
