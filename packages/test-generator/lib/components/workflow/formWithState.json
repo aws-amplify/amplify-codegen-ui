@@ -2,6 +2,11 @@
   "id": "1234-5678-9010",
   "componentType": "Flex",
   "name": "FormWithState",
+  "bindingProperties": {
+    "idToUpdate": {
+      "type": "String"
+    }
+  },
   "properties": {},
   "children": [
     {
@@ -28,7 +33,9 @@
           "parameters": {
             "model": "User",
             "id": {
-              "value": "d9887268-47dd-4899-9568-db5809218751"
+              "bindingProperties": {
+                "property": "idToUpdate"
+              }
             },
             "fields": {
               "firstName": {

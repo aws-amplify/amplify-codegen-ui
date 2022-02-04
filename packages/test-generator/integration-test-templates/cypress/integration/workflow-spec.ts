@@ -166,7 +166,7 @@ describe('Workflow', () => {
       });
     });
 
-    describe.skip('DataStore', () => {
+    describe('DataStore', () => {
       it('supports creating a datastore item', () => {
         cy.get('#user-collection').contains('Din Djarin').should('not.exist');
         cy.get('#create-item').click();
@@ -195,11 +195,11 @@ describe('Workflow', () => {
         cy.get('#color-changing-box').should('have.css', 'background-color', 'rgb(0, 0, 255)');
       });
 
-      it.skip('supports controlled components for a form', () => {
-        cy.get('#user-collection').contains('viszla123').should('not.exist');
+      it('supports controlled components for a form', () => {
+        cy.get('#user-collection').contains('vizsla123').should('not.exist');
         cy.get('#username-entry').type('123');
         cy.get('#submit-user-form').click();
-        cy.get('#user-collection').contains('viszla123');
+        cy.get('#user-collection').contains('vizsla123');
       });
 
       it('supports synthetic props', () => {
