@@ -13,11 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export { default as Event } from './event.json';
-export { default as AuthSignOutActions } from './authSignOutActions.json';
-export { default as NavigationActions } from './navigationActions.json';
-export { default as InternalMutation } from './internalMutation.json';
-export { default as ButtonsToggleState } from './buttonsToggleState.json';
-export { default as MutationWithSyntheticProp } from './mutationWithSyntheticProp.json';
-export { default as SetStateWithoutInitialValue } from './setStateWithoutInitialValue.json';
-export { default as UpdateVisibility } from './updateVisibility.json';
+/* eslint-disable no-undef */
+
+import { useState } from 'react';
+
+export const useStateMutationAction = useState;

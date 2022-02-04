@@ -13,9 +13,16 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+
+const TEST_ROUTE = 'http://localhost:3000/workflow-tests';
+
 describe('Workflow', () => {
   before(() => {
-    cy.visit('http://localhost:3000/workflow-tests');
+    cy.url().then((url) => {
+      if (url !== TEST_ROUTE) {
+        cy.visit(TEST_ROUTE);
+      }
+    });
   });
 
   const defaultText = '✅';
@@ -118,6 +125,104 @@ describe('Workflow', () => {
       cy.get('#keyedup').should('not.have.text', defaultText);
       cy.get('#keyup').type(defaultText);
       cy.get('#keyedup').should('have.text', defaultText);
+    });
+  });
+
+  describe('Actions', () => {
+    describe('Navigation', () => {
+      it('supports hard navigation events', () => {
+        cy.url().should('include', '/workflow-tests');
+        cy.get('#hard-navigate').click();
+        cy.url().should('eq', 'https://www.amazon.com/');
+        // This shouldn't be necessary given the `before` code, but that's not taking us back as expected
+        cy.visit(TEST_ROUTE);
+      });
+
+      it('supports anchor navigation events', () => {
+        cy.url().should('include', '/workflow-tests');
+        cy.get('#anchor-navigate').click();
+        cy.url().should('include', '/workflow-tests#about');
+      });
+
+      it('supports reload navigation events', () => {
+        cy.get('#i-disappear').click();
+        cy.get('#navigation').contains('I Disappear').should('not.exist');
+        cy.get('#reload-page').click();
+        cy.get('#navigation').contains('I Disappear');
+      });
+    });
+
+    describe('Auth', () => {
+      it('supports local sign out', () => {
+        cy.get('#auth-state').contains('LoggedOutLocally').should('not.exist');
+        cy.get('#sign-out-local').click();
+        cy.get('#auth-state').contains('LoggedOutLocally');
+      });
+
+      it('supports global sign out', () => {
+        cy.get('#auth-state').contains('LoggedOutGlobally').should('not.exist');
+        cy.get('#sign-out-global').click();
+        cy.get('#auth-state').contains('LoggedOutGlobally');
+      });
+    });
+
+    describe.skip('DataStore', () => {
+      it('supports creating a datastore item', () => {
+        cy.get('#user-collection').contains('Din Djarin').should('not.exist');
+        cy.get('#create-item').click();
+        cy.get('#user-collection').contains('Din Djarin');
+      });
+
+      it('supports updating a datastore item', () => {
+        cy.get('#user-collection').contains('UpdateMe Me');
+        cy.get('#user-collection').contains('Moff Gideon').should('not.exist');
+        cy.get('#update-item').click();
+        cy.get('#user-collection').contains('UpdateMe Me').should('not.exist');
+        cy.get('#user-collection').contains('Moff Gideon');
+      });
+
+      it('supports deleting a datastore item', () => {
+        cy.get('#user-collection').contains('DeleteMe Me');
+        cy.get('#delete-item').click();
+        cy.get('#user-collection').contains('DeleteMe Me').should('not.exist');
+      });
+    });
+
+    describe('State & Mutations', () => {
+      it('supports internal mutations', () => {
+        cy.get('#color-changing-box').should('have.css', 'background-color', 'rgb(255, 0, 0)');
+        cy.get('#update-box-color').click();
+        cy.get('#color-changing-box').should('have.css', 'background-color', 'rgb(0, 0, 255)');
+      });
+
+      it.skip('supports controlled components for a form', () => {
+        cy.get('#user-collection').contains('viszla123').should('not.exist');
+        cy.get('#username-entry').type('123');
+        cy.get('#submit-user-form').click();
+        cy.get('#user-collection').contains('viszla123');
+      });
+
+      it('supports synthetic props', () => {
+        cy.get('#FooBarValue').contains('Baz');
+        cy.get('#FooButton').click();
+        cy.get('#FooBarValue').contains('Foo');
+      });
+
+      it('supports two components pointing to the same prop', () => {
+        cy.get('#WithInitialTextDisplay').should('be.visible');
+        cy.get('#WithInitialDisplayNoneButton').click();
+        cy.get('#WithInitialTextDisplay').should('not.be.visible');
+        cy.get('#WithInitialDisplayBlockButton').click();
+        cy.get('#WithInitialTextDisplay').should('be.visible');
+      });
+
+      it('supports mutations without an initial value', () => {
+        cy.get('#NoInitialTextDisplay').should('be.visible');
+        cy.get('#NoInitialDisplayNoneButton').click();
+        cy.get('#NoInitialTextDisplay').should('not.be.visible');
+        cy.get('#NoInitialDisplayBlockButton').click();
+        cy.get('#NoInitialTextDisplay').should('be.visible');
+      });
     });
   });
 });
