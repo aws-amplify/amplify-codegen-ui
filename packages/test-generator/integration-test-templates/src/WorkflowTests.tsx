@@ -56,10 +56,12 @@ export default function ComplexTests() {
   const [idToUpdate, setIdToUpdate] = useState('');
   const [hasDisappeared, setDisappeared] = useState(false);
   const [authState, setAuthState] = useState<AuthState>('LoggedIn');
+  const [formIdToUpdate, setFormIdToUpdate] = useState('');
 
   const initializeUserTestData = async (): Promise<void> => {
     await DataStore.save(new User({ firstName: 'DeleteMe', lastName: 'Me' }));
     await DataStore.save(new User({ firstName: 'UpdateMe', lastName: 'Me' }));
+    await DataStore.save(new User({ firstName: 'FormUpdate', lastName: 'Me' }));
   };
 
   const initializeAuthListener = () => {
@@ -89,6 +91,10 @@ export default function ComplexTests() {
       setIdToDelete(queriedIdToDelete);
       const queriedIdToUpdate = (await DataStore.query(User, (criteria) => criteria.firstName('eq', 'UpdateMe')))[0].id;
       setIdToUpdate(queriedIdToUpdate);
+      const queriedFormIdToUpdate = (
+        await DataStore.query(User, (criteria) => criteria.firstName('eq', 'FormUpdate'))
+      )[0].id;
+      setFormIdToUpdate(queriedFormIdToUpdate);
       initializeAuthListener();
       setInitialized(true);
     };
@@ -201,7 +207,7 @@ export default function ComplexTests() {
       <Divider />
       <View id="state">
         <Heading>State Actions</Heading>
-        <FormWithState />
+        <FormWithState idToUpdate={formIdToUpdate} />
       </View>
       <Divider />
       <View id="mutation">
