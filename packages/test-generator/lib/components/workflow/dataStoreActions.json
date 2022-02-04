@@ -1,0 +1,101 @@
+{
+  "componentType": "Flex",
+  "name": "DataStoreActions",
+  "bindingProperties": {
+    "idToDelete": {
+      "type": "String"
+    },
+    "idToUpdate": {
+      "type": "String"
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Button",
+      "name": "CreateItem",
+      "properties": {
+        "id": {
+          "value": "create-item"
+        },
+        "label": {
+          "value": "Create Item"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.DataStoreCreateItem",
+          "parameters": {
+            "model": "User",
+            "fields": {
+              "firstName": {
+                "value": "Din"
+              },
+              "lastName": {
+                "value": "Djarin"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "UpdateItem",
+      "properties": {
+        "id": {
+          "value": "update-item"
+        },
+        "label": {
+          "value": "Update Item"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.DataStoreUpdateItem",
+          "parameters": {
+            "model": "User",
+            "id": {
+              "bindingProperties": {
+                "property": "idToUpdate"
+              }
+            },
+            "fields": {
+              "firstName": {
+                "value": "Moff"
+              },
+              "lastName": {
+                "value": "Gideon"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "DeleteItem",
+      "properties": {
+        "id": {
+          "value": "delete-item"
+        },
+        "label": {
+          "value": "Delete Item"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.DataStoreDeleteItem",
+          "parameters": {
+            "model": "User",
+            "id": {
+              "bindingProperties": {
+                "property": "idToDelete"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
