@@ -55,9 +55,9 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.SORT_PREDICATE]: ImportSource.AMPLIFY_DATASTORE,
   [ImportValue.MERGE_VARIANTS_OVERRIDES]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_NAVIGATE_ACTION]: ImportSource.UI_REACT_INTERNAL,
-  [ImportValue.USE_DATA_STORE_CREATE_ACTION]: ImportSource.UI_REACT_INTERNAL,
-  [ImportValue.USE_DATA_STORE_UPDATE_ACTION]: ImportSource.UI_REACT_INTERNAL,
-  [ImportValue.USE_DATA_STORE_DELETE_ACTION]: ImportSource.UI_REACT_INTERNAL,
+  [ImportValue.USE_DATA_STORE_CREATE_ACTION]: ImportSource.MOCK_HELPERS,
+  [ImportValue.USE_DATA_STORE_UPDATE_ACTION]: ImportSource.MOCK_HELPERS,
+  [ImportValue.USE_DATA_STORE_DELETE_ACTION]: ImportSource.MOCK_HELPERS,
   [ImportValue.USE_AUTH_SIGN_OUT_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_STATE_MUTATION_ACTION]: ImportSource.MOCK_HELPERS,
 };
