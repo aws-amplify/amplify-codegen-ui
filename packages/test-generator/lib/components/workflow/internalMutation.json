@@ -1,0 +1,52 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "InternalMutation",
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Flex",
+      "name": "ColoredBox",
+      "properties": {
+        "id": {
+          "value": "color-changing-box"
+        },
+        "height": {
+          "value": "20px"
+        },
+        "width": {
+          "value": "20px"
+        },
+        "backgroundColor": {
+          "value": "red"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "ColorChangerButton",
+      "events": {
+        "click": {
+          "action": "Amplify.Mutation",
+          "parameters": {
+            "state": {
+              "componentName": "ColoredBox",
+              "property": "backgroundColor",
+              "set": {
+                "value": "blue"
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "id": {
+          "value": "update-box-color"
+        },
+        "children": {
+          "value": "Change Color"
+        }
+      }
+    }
+  ]
+}
