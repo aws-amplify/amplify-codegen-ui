@@ -5167,9 +5167,9 @@ import {
   EscapeHatchProps,
   getOverrideProps,
   useDataStoreUpdateAction,
-  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
 import { Customer } from \\"../models\\";
 
 export type MyFormProps = React.PropsWithChildren<
@@ -5220,9 +5220,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
-  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type ColorChangeOnClickProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5268,9 +5268,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
-  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type ButtonsToggleStateProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5326,9 +5326,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
-  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type MutationWithSyntheticPropProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5377,9 +5377,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
-  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Card, CardProps, Text } from \\"@aws-amplify/ui-react\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type UpdateVisibilityProps = React.PropsWithChildren<
   Partial<CardProps> & {
@@ -5436,9 +5436,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
-  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Card, CardProps, Text } from \\"@aws-amplify/ui-react\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type SetStateWithoutInitialValueProps = React.PropsWithChildren<
   Partial<CardProps> & {
@@ -5449,13 +5449,13 @@ export default function SetStateWithoutInitialValue(
   props: SetStateWithoutInitialValueProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const [displayBlockButtonDisplay, setDisplayBlockButtonDisplay] =
+  const [textDisplayDisplay, setTextDisplayDisplay] =
     useStateMutationAction(undefined);
   const displayBlockButtonClick = () => {
-    setDisplayBlockButtonDisplay(\\"block\\");
+    setTextDisplayDisplay(\\"block\\");
   };
   const displayNoneButtonClick = () => {
-    setDisplayBlockButtonDisplay(\\"none\\");
+    setTextDisplayDisplay(\\"none\\");
   };
   return (
     /* @ts-ignore: TS2322 */
@@ -5465,6 +5465,7 @@ export default function SetStateWithoutInitialValue(
     >
       <Text
         children=\\"This is a text to display.\\"
+        display={textDisplayDisplay}
         {...getOverrideProps(overrides, \\"TextDisplay\\")}
       ></Text>
       <Button

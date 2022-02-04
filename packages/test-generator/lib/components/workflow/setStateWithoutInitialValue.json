@@ -11,6 +11,9 @@
             "properties": {
                 "label": {
                     "value": "This is a text to display."
+                },
+                "id": {
+                    "value": "NoInitialTextDisplay"
                 }
             }
         },
@@ -20,6 +23,9 @@
             "properties": {
                 "label": {
                     "value": "Show text"
+                },
+                "id": {
+                    "value": "NoInitialDisplayBlockButton"
                 }
             },
             "events": {
@@ -43,6 +49,9 @@
             "properties": {
                 "label": {
                     "value": "Hide text"
+                },
+                "id": {
+                    "value": "NoInitialDisplayNoneButton"
                 }
             },
             "events": {
