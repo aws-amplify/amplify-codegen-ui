@@ -17,4 +17,10 @@
 
 import { useState } from 'react';
 
+const mockedAction = () => () => {};
+
+export const useDataStoreCreateAction = mockedAction;
+export const useDataStoreUpdateAction = mockedAction;
+export const useDataStoreDeleteAction = mockedAction;
+
 export const useStateMutationAction = useState;

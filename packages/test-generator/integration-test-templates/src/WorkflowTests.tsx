@@ -17,6 +17,8 @@ import { useState, SyntheticEvent, useEffect } from 'react';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider, Button } from '@aws-amplify/ui-react';
 import { Hub } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
+import { User } from './models';
 import {
   AuthSignOutActions,
   Event,
@@ -25,6 +27,9 @@ import {
   MutationWithSyntheticProp,
   SetStateWithoutInitialValue,
   UpdateVisibility,
+  DataStoreActions,
+  FormWithState,
+  SimpleUserCollection,
 } from './ui-components'; // eslint-disable-line import/extensions
 
 type AuthState = 'LoggedIn' | 'LoggedOutLocally' | 'LoggedOutGlobally' | 'Error';
@@ -47,8 +52,15 @@ export default function ComplexTests() {
   const [keypressed, keypress] = useState('');
   const [keyedup, keyup] = useState('');
   const [isInitialized, setInitialized] = useState(false);
+  const [idToDelete, setIdToDelete] = useState('');
+  const [idToUpdate, setIdToUpdate] = useState('');
   const [hasDisappeared, setDisappeared] = useState(false);
   const [authState, setAuthState] = useState<AuthState>('LoggedIn');
+
+  const initializeUserTestData = async (): Promise<void> => {
+    await DataStore.save(new User({ firstName: 'DeleteMe', lastName: 'Me' }));
+    await DataStore.save(new User({ firstName: 'UpdateMe', lastName: 'Me' }));
+  };
 
   const initializeAuthListener = () => {
     Hub.listen('ui-actions', (message: any) => {
@@ -70,6 +82,13 @@ export default function ComplexTests() {
 
   useEffect(() => {
     const initializeTestState = async () => {
+      // DataStore.clear() doesn't appear to reliably work in this scenario.
+      indexedDB.deleteDatabase('amplify-datastore');
+      await initializeUserTestData();
+      const queriedIdToDelete = (await DataStore.query(User, (criteria) => criteria.firstName('eq', 'DeleteMe')))[0].id;
+      setIdToDelete(queriedIdToDelete);
+      const queriedIdToUpdate = (await DataStore.query(User, (criteria) => criteria.firstName('eq', 'UpdateMe')))[0].id;
+      setIdToUpdate(queriedIdToUpdate);
       initializeAuthListener();
       setInitialized(true);
     };
@@ -172,6 +191,17 @@ export default function ComplexTests() {
         <Heading>Auth Actions</Heading>
         <AuthSignOutActions />
         <span id="auth-state">{authState}</span>
+      </View>
+      <Divider />
+      <View id="datastore">
+        <Heading>DataStore Actions</Heading>
+        <DataStoreActions idToUpdate={idToUpdate} idToDelete={idToDelete} />
+        <SimpleUserCollection id="user-collection" />
+      </View>
+      <Divider />
+      <View id="state">
+        <Heading>State Actions</Heading>
+        <FormWithState />
       </View>
       <Divider />
       <View id="mutation">

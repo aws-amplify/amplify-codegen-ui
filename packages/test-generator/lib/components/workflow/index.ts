@@ -21,3 +21,5 @@ export { default as ButtonsToggleState } from './buttonsToggleState.json';
 export { default as MutationWithSyntheticProp } from './mutationWithSyntheticProp.json';
 export { default as SetStateWithoutInitialValue } from './setStateWithoutInitialValue.json';
 export { default as UpdateVisibility } from './updateVisibility.json';
+export { default as DataStoreActions } from './dataStoreActions.json';
+export { default as FormWithState } from './formWithState.json';
