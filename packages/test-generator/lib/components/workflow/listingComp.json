@@ -1,0 +1,182 @@
+{
+  "id": "c-vlvpdYPJ1PKs2ALOSk",
+  "name": "ListingComp",
+  "sourceId": "2861:3149",
+  "componentType": "Flex",
+  "properties": {
+      "gap": {
+          "value": "10px"
+      },
+      "direction": {
+          "value": "row"
+      },
+      "width": {
+          "value": "1338px"
+      },
+      "alignItems": {
+          "value": "flex-start"
+      },
+      "overflow": {
+          "value": "hidden"
+      },
+      "position": {
+          "value": "relative"
+      },
+      "padding": {
+          "value": "30px 30px 30px 30px"
+      },
+      "backgroundColor": {
+          "value": "rgba(255,255,255,1)"
+      }
+  },
+  "bindingProperties": {
+      "listing": {
+          "type": "Data",
+          "bindingProperties": {
+              "model": "Listing"
+          }
+      }
+  },
+  "overrides": {},
+  "variants": [],
+  "children": [
+      {
+          "children": [],
+          "componentType": "RoundedImage",
+          "name": "RoundedImage",
+          "properties": {
+              "display": {
+                  "value": "flex"
+              },
+              "shrink": {
+                  "value": "0"
+              },
+              "height": {
+                  "value": "346px"
+              },
+              "src": {
+                  "bindingProperties": {
+                      "field": "imageSrc",
+                      "property": "listing"
+                  },
+                  "configured": true
+              }
+          }
+      },
+      {
+          "children": [
+              {
+                  "children": [],
+                  "componentType": "Heading",
+                  "name": "Heading",
+                  "properties": {
+                      "label": {
+                          "bindingProperties": {
+                              "field": "title",
+                              "property": "listing"
+                          },
+                          "configured": true,
+                          "importedValue": "Zin at the beach with his little pup friends."
+                      },
+                      "alignItems": {
+                          "value": "flex-start"
+                      },
+                      "display": {
+                          "value": "flex"
+                      },
+                      "shrink": {
+                          "value": "0"
+                      },
+                      "alignSelf": {
+                          "value": "stretch"
+                      },
+                      "level": {
+                          "value": "3"
+                      }
+                  }
+              },
+              {
+                  "children": [],
+                  "componentType": "Text",
+                  "name": "MyText",
+                  "properties": {
+                      "label": {
+                          "bindingProperties": {
+                              "property": "listing",
+                              "field": "description"
+                          },
+                          "configured": true,
+                          "importedValue": "Praise!"
+                      },
+                      "display": {
+                          "value": "flex"
+                      }
+                  }
+              },
+              {
+                "children": [],
+                "componentType": "Button",
+                "name": "NavigateButton",
+                "properties": {
+                    "label": {
+                        "value": "Go To Listing"
+                    }
+                },
+                "events": {
+                  "click": {
+                    "action": "Amplify.Navigation",
+                    "parameters": {
+                      "type": {
+                        "value": "url"
+                      },
+                      "url": {
+                        "bindingProperties": {
+                          "property": "listing",
+                          "field": "destinationUrl"
+                        }
+                      },
+                      "target": {
+                          "value": "_blank"
+                      }
+                    }
+                  }
+                }
+            }
+          ],
+          "componentType": "Flex",
+          "name": "Frame 417",
+          "properties": {
+              "gap": {
+                  "value": "18px"
+              },
+              "direction": {
+                  "value": "column"
+              },
+              "width": {
+                  "value": "922px"
+              },
+              "height": {
+                  "value": "328px"
+              },
+              "grow": {
+                  "value": "1"
+              },
+              "basis": {
+                  "value": "922px"
+              },
+              "overflow": {
+                  "value": "hidden"
+              },
+              "position": {
+                  "value": "relative"
+              },
+              "padding": {
+                  "value": "10px 10px 10px 10px"
+              },
+              "backgroundColor": {
+                  "value": "rgba(255,255,255,1)"
+              }
+          }
+      }
+  ]
+}

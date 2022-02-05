@@ -21,6 +21,7 @@ import PrimitivesTests from './PrimitivesTests';
 import ComplexTests from './ComplexTests';
 import IconsetTests from './IconsetTests';
 import SnippetTests from './SnippetTests'; // eslint-disable-line import/extensions
+import AmIADevYet from './AmIADevYet';
 import WorkflowTests from './WorkflowTests';
 
 // use fake endpoint so useDataStoreBinding does not fail
@@ -54,6 +55,9 @@ const HomePage = () => {
         <li>
           <a href="/workflow-tests">Workflow Tests</a>
         </li>
+        <li>
+          <a href="/am-i-a-real-dev-yet">Form Example</a>
+        </li>
       </ul>
     </div>
   );
@@ -70,6 +74,7 @@ export default function App() {
         <Route path="/iconset-tests" element={<IconsetTests />} />
         <Route path="/snippet-tests" element={<SnippetTests />} />
         <Route path="/workflow-tests" element={<WorkflowTests />} />
+        <Route path="/am-i-a-real-dev-yet" element={<AmIADevYet />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>

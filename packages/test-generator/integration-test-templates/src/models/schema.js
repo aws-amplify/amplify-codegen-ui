@@ -189,6 +189,20 @@ export const schema = {
           isRequired: false,
           attributes: [],
         },
+        imageSrc: {
+          name: 'imageSrc',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        destinationUrl: {
+          name: 'destinationUrl',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
         createdAt: {
           name: 'createdAt',
           isArray: false,
