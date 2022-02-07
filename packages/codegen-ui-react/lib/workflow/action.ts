@@ -108,9 +108,11 @@ export function buildUseActionStatement(
           factory.createIdentifier(identifier),
           undefined,
           undefined,
-          factory.createCallExpression(factory.createIdentifier(actionHookImportValue), undefined, [
-            buildActionParameters(action, importCollection),
-          ]),
+          factory.createCallExpression(
+            factory.createIdentifier(actionHookImportValue),
+            undefined,
+            buildActionArguments(action, importCollection),
+          ),
         ),
       ],
       ts.NodeFlags.Const,
@@ -165,24 +167,25 @@ export function buildMutationActionStatement(component: StudioComponent, action:
  *
  * model and fields are special cases. All other fields are StudioComponentProperty
  */
-export function buildActionParameters(
+export function buildActionArguments(
   action: ActionStudioComponentEvent,
   importCollection: ImportCollection,
-): ObjectLiteralExpression {
+): ObjectLiteralExpression[] | undefined {
   if (action.parameters) {
-    // TODO: add special case for model and fields
-    return factory.createObjectLiteralExpression(
-      Object.entries(action.parameters).map(([key, value]) =>
-        factory.createPropertyAssignment(
-          factory.createIdentifier(key),
-          getActionParameterValue(key, value, importCollection),
+    return [
+      factory.createObjectLiteralExpression(
+        Object.entries(action.parameters).map(([key, value]) =>
+          factory.createPropertyAssignment(
+            factory.createIdentifier(key),
+            getActionParameterValue(key, value, importCollection),
+          ),
         ),
+        false,
       ),
-      false,
-    );
+    ];
   }
-  // TODO: determine what should be used when no parameters
-  return factory.createObjectLiteralExpression([], false);
+
+  return undefined;
 }
 
 export function getActionParameterValue(
