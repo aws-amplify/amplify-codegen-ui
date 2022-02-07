@@ -51,7 +51,7 @@ import {
 } from 'typescript';
 
 import { ImportCollection, ImportSource } from './imports';
-import { jsonToLiteral } from './react-studio-template-renderer-helper';
+import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
@@ -181,6 +181,11 @@ export function buildFixedLiteralExpression(
       return value ? factory.createTrue() : factory.createFalse();
     case 'string':
       return fixedPropertyWithTypeToLiteral(value, type);
+    case 'object':
+      if (value instanceof Date) {
+        throw new Error('Date object is not currently supported for fixed literal expression.');
+      }
+      return jsonToLiteral(value as json);
     default:
       throw new Error(`Invalid type ${typeof value} for "${value}"`);
   }

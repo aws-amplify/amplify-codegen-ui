@@ -489,6 +489,10 @@ describe('amplify render tests', () => {
     test('MenuButton', () => {
       expect(generateWithAmplifyRenderer('primitives/MenuButtonPrimitive').componentText).toMatchSnapshot();
     });
+
+    test('Icon', () => {
+      expect(generateWithAmplifyRenderer('primitives/IconPrimitive').componentText).toMatchSnapshot();
+    });
   });
 
   describe('icon-indices', () => {
