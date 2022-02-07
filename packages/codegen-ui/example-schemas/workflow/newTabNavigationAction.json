@@ -8,7 +8,7 @@
     },
     "events": {
       "click": {
-        "action": "Amplify.Navigate",
+        "action": "Amplify.Navigation",
         "parameters": {
           "type": {
             "value": "url"

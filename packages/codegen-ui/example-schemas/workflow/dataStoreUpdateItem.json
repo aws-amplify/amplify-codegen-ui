@@ -3,7 +3,7 @@
   "name": "UpdateCustomerButton",
   "events": {
     "click": {
-      "action": "Amplify.DataStoreUpdateItem",
+      "action": "Amplify.DataStoreUpdateItemAction",
       "parameters": {
         "model": "Customer",
         "id": {

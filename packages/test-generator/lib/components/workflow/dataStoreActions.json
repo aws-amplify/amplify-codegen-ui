@@ -24,7 +24,7 @@
       },
       "events": {
         "click": {
-          "action": "Amplify.DataStoreCreateItem",
+          "action": "Amplify.DataStoreCreateItemAction",
           "parameters": {
             "model": "User",
             "fields": {
@@ -52,7 +52,7 @@
       },
       "events": {
         "click": {
-          "action": "Amplify.DataStoreUpdateItem",
+          "action": "Amplify.DataStoreUpdateItemAction",
           "parameters": {
             "model": "User",
             "id": {
@@ -85,7 +85,7 @@
       },
       "events": {
         "click": {
-          "action": "Amplify.DataStoreDeleteItem",
+          "action": "Amplify.DataStoreDeleteItemAction",
           "parameters": {
             "model": "User",
             "id": {

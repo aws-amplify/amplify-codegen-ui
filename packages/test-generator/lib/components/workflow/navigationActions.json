@@ -16,7 +16,7 @@
       },
       "events": {
         "click": {
-          "action": "Amplify.Navigate",
+          "action": "Amplify.Navigation",
           "parameters": {
             "type": {
               "value": "url"
@@ -41,7 +41,7 @@
       },
       "events": {
         "click": {
-          "action": "Amplify.Navigate",
+          "action": "Amplify.Navigation",
           "parameters": {
             "type": {
               "value": "anchor"
@@ -66,7 +66,7 @@
       },
       "events": {
         "click": {
-          "action": "Amplify.Navigate",
+          "action": "Amplify.Navigation",
           "parameters": {
             "type": {
               "value": "url"
@@ -94,7 +94,7 @@
       },
       "events": {
         "click": {
-          "action": "Amplify.Navigate",
+          "action": "Amplify.Navigation",
           "parameters": {
             "type": {
               "value": "reload"
