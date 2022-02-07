@@ -3,7 +3,7 @@
   "name": "DeleteCustomerButton",
   "events": {
     "click": {
-      "action": "Amplify.DataStoreDeleteItem",
+      "action": "Amplify.DataStoreDeleteItemAction",
       "parameters": {
         "model": "Customer",
         "id": {
