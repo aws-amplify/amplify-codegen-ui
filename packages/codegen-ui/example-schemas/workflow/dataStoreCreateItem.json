@@ -3,7 +3,7 @@
   "name": "CreateCustomerButton",
   "events": {
     "click": {
-      "action": "Amplify.DataStoreCreateItem",
+      "action": "Amplify.DataStoreCreateItemAction",
       "parameters": {
         "model": "Customer",
         "fields": {
