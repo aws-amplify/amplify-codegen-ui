@@ -29,10 +29,10 @@ import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getChildPropMappingForComponentName } from './utils';
 
 enum Action {
-  'Amplify.Navigate' = 'Amplify.Navigate',
-  'Amplify.DataStoreCreateItem' = 'Amplify.DataStoreCreateItem',
-  'Amplify.DataStoreUpdateItem' = 'Amplify.DataStoreUpdateItem',
-  'Amplify.DataStoreDeleteItem' = 'Amplify.DataStoreDeleteItem',
+  'Amplify.Navigation' = 'Amplify.Navigation',
+  'Amplify.DataStoreCreateItemAction' = 'Amplify.DataStoreCreateItemAction',
+  'Amplify.DataStoreUpdateItemAction' = 'Amplify.DataStoreUpdateItemAction',
+  'Amplify.DataStoreDeleteItemAction' = 'Amplify.DataStoreDeleteItemAction',
   'Amplify.AuthSignOut' = 'Amplify.AuthSignOut',
   'Amplify.Mutation' = 'Amplify.Mutation',
 }
@@ -40,10 +40,10 @@ enum Action {
 export default Action;
 
 export const ActionNameMapping: Partial<Record<Action, ImportValue>> = {
-  [Action['Amplify.Navigate']]: ImportValue.USE_NAVIGATE_ACTION,
-  [Action['Amplify.DataStoreCreateItem']]: ImportValue.USE_DATA_STORE_CREATE_ACTION,
-  [Action['Amplify.DataStoreUpdateItem']]: ImportValue.USE_DATA_STORE_UPDATE_ACTION,
-  [Action['Amplify.DataStoreDeleteItem']]: ImportValue.USE_DATA_STORE_DELETE_ACTION,
+  [Action['Amplify.Navigation']]: ImportValue.USE_NAVIGATE_ACTION,
+  [Action['Amplify.DataStoreCreateItemAction']]: ImportValue.USE_DATA_STORE_CREATE_ACTION,
+  [Action['Amplify.DataStoreUpdateItemAction']]: ImportValue.USE_DATA_STORE_UPDATE_ACTION,
+  [Action['Amplify.DataStoreDeleteItemAction']]: ImportValue.USE_DATA_STORE_DELETE_ACTION,
   [Action['Amplify.AuthSignOut']]: ImportValue.USE_AUTH_SIGN_OUT_ACTION,
   [Action['Amplify.Mutation']]: ImportValue.USE_STATE_MUTATION_ACTION,
 };
