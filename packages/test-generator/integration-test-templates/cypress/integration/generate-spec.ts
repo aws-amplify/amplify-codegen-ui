@@ -143,6 +143,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'FormWithState',
   'InternalMutation',
   'TwoWayBindings',
+  'InputMutationOnClick',
 ]);
 const EXPECTED_INVALID_INPUT_CASES = new Set([
   'ComponentMissingProperties',

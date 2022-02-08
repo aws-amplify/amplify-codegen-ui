@@ -30,6 +30,7 @@ import {
   DataStoreActions,
   FormWithState,
   SimpleUserCollection,
+  InputMutationOnClick,
 } from './ui-components'; // eslint-disable-line import/extensions
 
 type AuthState = 'LoggedIn' | 'LoggedOutLocally' | 'LoggedOutGlobally' | 'Error';
@@ -216,6 +217,7 @@ export default function ComplexTests() {
         <MutationWithSyntheticProp />
         <SetStateWithoutInitialValue />
         <UpdateVisibility />
+        <InputMutationOnClick />
       </View>
     </AmplifyProvider>
   );
