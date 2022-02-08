@@ -696,7 +696,7 @@
           "name": "SwitchFieldInput",
           "properties": {
             "label": {
-              "value": "SwitchField"
+              "value": "Subscribe"
             },
             "labelPosition": {
               "value": "start"
