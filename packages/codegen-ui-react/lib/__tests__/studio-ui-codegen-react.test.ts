@@ -353,6 +353,14 @@ describe('amplify render tests', () => {
     it('supports mutations with no initial state', () => {
       expect(generateWithAmplifyRenderer('workflow/setStateWithoutInitialValue')).toMatchSnapshot();
     });
+
+    it('supports two-way data binding on form elements', () => {
+      expect(generateWithAmplifyRenderer('workflow/twoWayBindings')).toMatchSnapshot();
+    });
+
+    it('modifies text in component on input change', () => {
+      expect(generateWithAmplifyRenderer('workflow/inputToTextChange')).toMatchSnapshot();
+    });
   });
 
   describe('default value', () => {
