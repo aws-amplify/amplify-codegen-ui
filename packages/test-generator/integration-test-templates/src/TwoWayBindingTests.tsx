@@ -17,10 +17,24 @@ import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import { TwoWayBindings } from './ui-components'; // eslint-disable-line import/extensions
 
-export default function AmIADevYet() {
+export default function TwoWayBindingTests() {
   return (
     <AmplifyProvider>
-      <TwoWayBindings />
+      <TwoWayBindings
+        overrides={{
+          CheckboxFieldSection: { id: 'checkbox-field-section' },
+          PasswordFieldSection: { id: 'password-field-section' },
+          PhoneNumberFieldSection: { id: 'phone-number-field-section' },
+          RadioGroupFieldSection: { id: 'radio-group-field-section' },
+          RadioGroupFieldValue: { id: 'radio-group-field-value' },
+          SearchFieldSection: { id: 'search-field-section' },
+          SelectFieldSection: { id: 'select-field-section' },
+          SliderFieldSection: { id: 'slider-field-section' },
+          StepperFieldSection: { id: 'stepper-field-section' },
+          SwitchFieldSection: { id: 'switch-field-section' },
+          TextFieldSection: { id: 'text-field-section' },
+        }}
+      />
     </AmplifyProvider>
   );
 }

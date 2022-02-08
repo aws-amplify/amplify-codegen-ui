@@ -21,8 +21,8 @@ import PrimitivesTests from './PrimitivesTests';
 import ComplexTests from './ComplexTests';
 import IconsetTests from './IconsetTests';
 import SnippetTests from './SnippetTests'; // eslint-disable-line import/extensions
-import TwoWayBinding from './TwoWayBinding';
 import WorkflowTests from './WorkflowTests';
+import TwoWayBindingTests from './TwoWayBindingTests';
 
 // use fake endpoint so useDataStoreBinding does not fail
 Amplify.configure({
@@ -56,7 +56,7 @@ const HomePage = () => {
           <a href="/workflow-tests">Workflow Tests</a>
         </li>
         <li>
-          <a href="/two-way-binding">Two Way Binding Example</a>
+          <a href="/two-way-binding-tests">Two Way Binding Tests</a>
         </li>
       </ul>
     </div>
@@ -74,7 +74,7 @@ export default function App() {
         <Route path="/iconset-tests" element={<IconsetTests />} />
         <Route path="/snippet-tests" element={<SnippetTests />} />
         <Route path="/workflow-tests" element={<WorkflowTests />} />
-        <Route path="/two-way-binding" element={<TwoWayBinding />} />
+        <Route path="/two-way-binding-tests" element={<TwoWayBindingTests />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
