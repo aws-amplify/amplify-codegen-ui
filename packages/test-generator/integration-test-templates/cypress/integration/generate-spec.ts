@@ -157,6 +157,7 @@ const TARGET_GENERATORS = ['ES2016_TSX', 'ES2016_JSX', 'ES5_TSX', 'ES5_JSX'];
 describe('Generate Components', () => {
   before(() => {
     cy.visit('http://localhost:3000/generate-tests');
+    cy.get('#btnGenerateAll').click();
   });
 
   it('verifies all tests are categorized', () => {
@@ -185,7 +186,6 @@ describe('Generate Components', () => {
   EXPECTED_SUCCESSFUL_CASES.forEach((testCase) => {
     it(`Generates a successful result for ${testCase}`, () => {
       cy.get(`#generateTest${testCase}`).within(() => {
-        cy.get('button').click();
         TARGET_GENERATORS.forEach((targetName) => {
           cy.get(`.${targetName}`).contains('✅');
         });
@@ -196,7 +196,6 @@ describe('Generate Components', () => {
   EXPECTED_INVALID_INPUT_CASES.forEach((testCase) => {
     it(`Generates an invalid input result for ${testCase}`, () => {
       cy.get(`#generateTest${testCase}`).within(() => {
-        cy.get('button').click();
         TARGET_GENERATORS.forEach((targetName) => {
           cy.get(`.${targetName}`).contains('❌');
           cy.get(`.${targetName}`).contains('InvalidInputError');
@@ -208,7 +207,6 @@ describe('Generate Components', () => {
   EXPECTED_INTERNAL_ERROR_CASES.forEach((testCase) => {
     it(`Generates an internal error result for ${testCase}`, () => {
       cy.get(`#generateTest${testCase}`).within(() => {
-        cy.get('button').click();
         TARGET_GENERATORS.forEach((targetName) => {
           cy.get(`.${targetName}`).contains('❌');
           cy.get(`.${targetName}`).contains('InternalError');
