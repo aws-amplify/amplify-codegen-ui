@@ -236,11 +236,27 @@ export function getComponentFromComponentTree(
   return res;
 }
 
+export type MutationReferences = {
+  [property: string]: { addControlEvent: boolean }[];
+};
+
 export function filterStateReferencesForComponent(
   component: StudioComponent | StudioComponentChild,
   stateReferences: StateReference[],
-): { [property: string]: { addControlEvent: boolean } } {
+): MutationReferences {
   return stateReferences
     .filter(({ componentName }) => componentName === component.name)
-    .reduce((prev, reference) => ({ ...prev, [reference.property]: { addControlEvent: !('set' in reference) } }), {});
+    .reduce(mutationReferenceReducer, {});
+}
+
+function mutationReferenceReducer(
+  mutationReferences: MutationReferences,
+  stateReference: StateReference,
+): MutationReferences {
+  const propertyReferences =
+    stateReference.property in mutationReferences ? mutationReferences[stateReference.property] : [];
+  return {
+    ...mutationReferences,
+    [stateReference.property]: propertyReferences.concat([{ addControlEvent: !('set' in stateReference) }]),
+  };
 }

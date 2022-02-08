@@ -5493,6 +5493,459 @@ export default function SetStateWithoutInitialValue(
 }
 `;
 
+exports[`amplify render tests mutations supports two-way data binding on form elements 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Button,
+  CheckboxField,
+  Flex,
+  FlexProps,
+  Heading,
+  PasswordField,
+  PhoneNumberField,
+  Radio,
+  RadioGroupField,
+  SearchField,
+  SelectField,
+  SliderField,
+  StepperField,
+  SwitchField,
+  Text,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+import option from \\"./option\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
+
+export type TwoWayBindingsProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function TwoWayBindings(
+  props: TwoWayBindingsProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [checkboxFieldInputChecked, setCheckboxFieldInputChecked] =
+    useStateMutationAction(undefined);
+  const [passwordFieldInputValue, setPasswordFieldInputValue] =
+    useStateMutationAction(undefined);
+  const [phoneNumberFieldInputValue, setPhoneNumberFieldInputValue] =
+    useStateMutationAction(undefined);
+  const [radioGroupFieldInputValue, setRadioGroupFieldInputValue] =
+    useStateMutationAction(undefined);
+  const [searchFieldInputValue, setSearchFieldInputValue] =
+    useStateMutationAction(undefined);
+  const [selectFieldInputValue, setSelectFieldInputValue] =
+    useStateMutationAction(undefined);
+  const [sliderFieldInputValue, setSliderFieldInputValue] =
+    useStateMutationAction(undefined);
+  const [stepperFieldInputValue, setStepperFieldInputValue] =
+    useStateMutationAction(undefined);
+  const [switchFieldInputValue, setSwitchFieldInputValue] =
+    useStateMutationAction(undefined);
+  const [textFieldInputValue, setTextFieldInputValue] =
+    useStateMutationAction(undefined);
+  const setCheckboxFieldValueClick = () => {
+    setCheckboxFieldInputChecked(false);
+  };
+  const setPasswordFieldValueClick = () => {
+    setPasswordFieldInputValue(\\"admin123\\");
+  };
+  const setPhoneNumberFieldValueClick = () => {
+    setPhoneNumberFieldInputValue(\\"8675309\\");
+  };
+  const setRadioGroupFieldValueClick = () => {
+    setRadioGroupFieldInputValue(\\"javascript\\");
+  };
+  const setSearchFieldValueClick = () => {
+    setSearchFieldInputValue(\\"UI Docs\\");
+  };
+  const setSelectFieldValueClick = () => {
+    setSelectFieldInputValue(\\"orange\\");
+  };
+  const setSliderFieldValueClick = () => {
+    setSliderFieldInputValue(90);
+  };
+  const setStepperFieldValueClick = () => {
+    setStepperFieldInputValue(9);
+  };
+  const setSwitchFieldValueClick = () => {
+    setSwitchFieldInputValue(true);
+  };
+  const setTextFieldValueClick = () => {
+    setTextFieldInputValue(\\"Hardcoded Value\\");
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      direction=\\"column\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"TwoWayBindings\\")}
+    >
+      <Heading
+        level={1}
+        children=\\"Two-Way Binding Test\\"
+        {...getOverrideProps(overrides, \\"FormHeading\\")}
+      ></Heading>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"CheckboxFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"CheckboxField\\"
+          {...getOverrideProps(overrides, \\"CheckboxFieldHeader\\")}
+        ></Heading>
+        <CheckboxField
+          label=\\"Subscribe\\"
+          name=\\"subscribe\\"
+          value=\\"yes\\"
+          checked={checkboxFieldInputChecked}
+          onChange={(event: SyntheticEvent) => {
+            setCheckboxFieldInputChecked(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"CheckboxFieldInput\\")}
+        ></CheckboxField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"CheckboxFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set CheckboxFieldValue\\"
+          onClick={() => {
+            setCheckboxFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetCheckboxFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"PasswordFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"PasswordField\\"
+          {...getOverrideProps(overrides, \\"PasswordFieldHeader\\")}
+        ></Heading>
+        <PasswordField
+          label=\\"Password\\"
+          name=\\"password\\"
+          value={passwordFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setPasswordFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"PasswordFieldInput\\")}
+        ></PasswordField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"PasswordFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set PasswordFieldValue\\"
+          onClick={() => {
+            setPasswordFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetPasswordFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"PhoneNumberFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"PhoneNumberField\\"
+          {...getOverrideProps(overrides, \\"PhoneNumberFieldHeader\\")}
+        ></Heading>
+        <PhoneNumberField
+          label=\\"Phone Number\\"
+          defaultCountryCode=\\"+1\\"
+          value={phoneNumberFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setPhoneNumberFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"PhoneNumberFieldInput\\")}
+        ></PhoneNumberField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"PhoneNumberFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set PhoneNumberFieldValue\\"
+          onClick={() => {
+            setPhoneNumberFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetPhoneNumberFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"RadioGroupFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"RadioGroupField\\"
+          {...getOverrideProps(overrides, \\"RadioGroupFieldHeader\\")}
+        ></Heading>
+        <RadioGroupField
+          label=\\"Language\\"
+          name=\\"language\\"
+          defaultValue=\\"html\\"
+          value={radioGroupFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setRadioGroupFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"RadioGroupFieldInput\\")}
+        >
+          <Radio
+            value=\\"html\\"
+            children=\\"html\\"
+            {...getOverrideProps(overrides, \\"RadioGroupFieldInputOption1\\")}
+          ></Radio>
+          <Radio
+            value=\\"css\\"
+            children=\\"css\\"
+            {...getOverrideProps(overrides, \\"RadioGroupFieldInputOption2\\")}
+          ></Radio>
+          <Radio
+            value=\\"javascript\\"
+            children=\\"javascript\\"
+            {...getOverrideProps(overrides, \\"RadioGroupFieldInputOption3\\")}
+          ></Radio>
+        </RadioGroupField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"RadioGroupFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set RadioGroupFieldValue\\"
+          onClick={() => {
+            setRadioGroupFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetRadioGroupFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"SearchFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"SearchField\\"
+          {...getOverrideProps(overrides, \\"SearchFieldHeader\\")}
+        ></Heading>
+        <SearchField
+          label=\\"Search\\"
+          value={searchFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setSearchFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"SearchFieldInput\\")}
+        ></SearchField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"SearchFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set SearchFieldValue\\"
+          onClick={() => {
+            setSearchFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetSearchFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"SelectFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"SelectField\\"
+          {...getOverrideProps(overrides, \\"SelectFieldHeader\\")}
+        ></Heading>
+        <SelectField
+          label=\\"Fruit\\"
+          placeholder=\\"Please select a fruit\\"
+          labelHidden={true}
+          value={selectFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setSelectFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"SelectFieldInput\\")}
+        >
+          <option
+            label=\\"Apple\\"
+            value=\\"apple\\"
+            {...getOverrideProps(overrides, \\"SelectFieldInputOption1\\")}
+          ></option>
+          <option
+            label=\\"Banana\\"
+            value=\\"banana\\"
+            {...getOverrideProps(overrides, \\"SelectFieldInputOption2\\")}
+          ></option>
+          <option
+            label=\\"Orange\\"
+            value=\\"orange\\"
+            {...getOverrideProps(overrides, \\"SelectFieldInputOption3\\")}
+          ></option>
+        </SelectField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"SelectFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set SelectFieldValue\\"
+          onClick={() => {
+            setSelectFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetSelectFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"SliderFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"SliderField\\"
+          {...getOverrideProps(overrides, \\"SliderFieldHeader\\")}
+        ></Heading>
+        <SliderField
+          label=\\"Slider\\"
+          defaultValue={50}
+          min={0}
+          max={100}
+          step={1}
+          labelHidden={true}
+          value={sliderFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setSliderFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"SliderFieldInput\\")}
+        ></SliderField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"SliderFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set SliderFieldValue\\"
+          onClick={() => {
+            setSliderFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetSliderFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"StepperFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"StepperField\\"
+          {...getOverrideProps(overrides, \\"StepperFieldHeader\\")}
+        ></Heading>
+        <StepperField
+          label=\\"Stepper\\"
+          defaultValue={0}
+          min={0}
+          max={10}
+          step={1}
+          labelHidden={true}
+          value={stepperFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setStepperFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"StepperFieldInput\\")}
+        ></StepperField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"StepperFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set StepperFieldValue\\"
+          onClick={() => {
+            setStepperFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetStepperFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"SwitchFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"SwitchField\\"
+          {...getOverrideProps(overrides, \\"SwitchFieldHeader\\")}
+        ></Heading>
+        <SwitchField
+          label=\\"SwitchField\\"
+          labelPosition=\\"start\\"
+          isDisabled={false}
+          isLabelHidden={false}
+          value={switchFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setSwitchFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"SwitchFieldInput\\")}
+        ></SwitchField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"SwitchFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set SwitchFieldValue\\"
+          onClick={() => {
+            setSwitchFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetSwitchFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"TextFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"TextField\\"
+          {...getOverrideProps(overrides, \\"TextFieldHeader\\")}
+        ></Heading>
+        <TextField
+          label=\\"Name\\"
+          placeholder=\\"Galadriel\\"
+          value={textFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setTextFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"TextFieldInput\\")}
+        ></TextField>
+        <Text
+          children
+          {...getOverrideProps(overrides, \\"TextFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set TextFieldValue\\"
+          onClick={() => {
+            setTextFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetTextFieldValue\\")}
+        ></Button>
+      </Flex>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests primitives Built-in Iconset 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

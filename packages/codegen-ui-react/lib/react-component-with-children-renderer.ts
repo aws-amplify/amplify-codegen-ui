@@ -88,8 +88,9 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
       buildOpeningElementEvents(value, key, this.component.name),
     );
 
+    // TODO: Should we always control form elements?
     const controlEventAttributes = Object.entries(localStateReferences)
-      .filter(([, { addControlEvent }]) => addControlEvent)
+      .filter(([, references]) => references.some(({ addControlEvent }) => addControlEvent))
       .map(([key]) =>
         buildOpeningElementControlEvents(
           getSetStateName({ componentName: this.component.name || '', property: key }),
