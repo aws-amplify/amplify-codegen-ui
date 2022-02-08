@@ -27,3 +27,4 @@ export { default as FullForm } from './fullForm.json';
 export { default as ListingComp } from './listingComp.json';
 export { default as Listings } from './listings.json';
 export { default as RoundedImage } from './roundedImage.json';
+export { default as TwoWayBindings } from './twoWayBindings.json';

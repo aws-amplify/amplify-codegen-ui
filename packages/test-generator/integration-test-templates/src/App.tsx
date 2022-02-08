@@ -22,6 +22,7 @@ import ComplexTests from './ComplexTests';
 import IconsetTests from './IconsetTests';
 import SnippetTests from './SnippetTests'; // eslint-disable-line import/extensions
 import AmIADevYet from './AmIADevYet';
+import TwoWayBinding from './TwoWayBinding';
 import WorkflowTests from './WorkflowTests';
 
 // use fake endpoint so useDataStoreBinding does not fail
@@ -58,6 +59,9 @@ const HomePage = () => {
         <li>
           <a href="/am-i-a-real-dev-yet">Form Example</a>
         </li>
+        <li>
+          <a href="/two-way-binding">Two Way Binding Example</a>
+        </li>
       </ul>
     </div>
   );
@@ -75,6 +79,7 @@ export default function App() {
         <Route path="/snippet-tests" element={<SnippetTests />} />
         <Route path="/workflow-tests" element={<WorkflowTests />} />
         <Route path="/am-i-a-real-dev-yet" element={<AmIADevYet />} />
+        <Route path="/two-way-binding" element={<TwoWayBinding />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
