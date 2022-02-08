@@ -357,6 +357,10 @@ describe('amplify render tests', () => {
     it('supports two-way data binding on form elements', () => {
       expect(generateWithAmplifyRenderer('workflow/twoWayBindings')).toMatchSnapshot();
     });
+
+    it('modifies text in component on input change', () => {
+      expect(generateWithAmplifyRenderer('workflow/inputToTextChange')).toMatchSnapshot();
+    });
   });
 
   describe('default value', () => {
