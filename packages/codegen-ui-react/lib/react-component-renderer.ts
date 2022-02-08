@@ -91,7 +91,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     );
 
     const controlEventAttributes = Object.entries(localStateReferences)
-      .filter(([, { addControlEvent }]) => addControlEvent)
+      .filter(([, references]) => references.some(({ addControlEvent }) => addControlEvent))
       .map(([key]) =>
         buildOpeningElementControlEvents(
           getSetStateName({ componentName: this.component.name || '', property: key }),
