@@ -1,0 +1,34 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "TwoWayBindings",
+  "properties": {
+    "direction": {
+      "value": "column"
+    }
+  },
+  "children": [
+    {
+      "componentType": "TextField",
+      "name": "TextFieldInput",
+      "properties": {
+        "label": {
+          "value": "Name"
+        },
+        "placeholder": {
+          "value": "Galadriel"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "TextFieldValue",
+      "properties": {
+        "label": {
+          "componentName": "TextFieldInput",
+          "property": "value"
+        }
+      }
+    }
+  ]
+}

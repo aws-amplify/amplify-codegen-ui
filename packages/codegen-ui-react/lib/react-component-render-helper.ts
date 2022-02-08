@@ -398,6 +398,9 @@ export function resolvePropToExpression(prop: StudioComponentProperty): Expressi
   if (isConditionalProperty(prop)) {
     return buildConditionalExpression(prop);
   }
+  if (isStateProperty(prop)) {
+    return buildStateExpression(prop);
+  }
   return factory.createVoidZero();
 }
 
@@ -553,6 +556,9 @@ export function buildOpeningElementProperties(prop: StudioComponentProperty, nam
   }
   if (isConditionalProperty(prop)) {
     return buildConditionalAttr(prop, name);
+  }
+  if (isStateProperty(prop)) {
+    return buildStateAttr(prop, name);
   }
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
