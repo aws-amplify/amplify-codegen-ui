@@ -1,0 +1,816 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "TwoWayBindings",
+  "properties": {
+    "direction": {
+      "value": "column"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Heading",
+      "name": "FormHeading",
+      "properties": {
+        "label": {
+          "value": "Two-Way Binding Test"
+        },
+        "level": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "componentType": "Flex",
+      "name": "CheckboxFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "CheckboxFieldHeader",
+          "properties": {
+            "label": {
+              "value": "CheckboxField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "CheckboxField",
+          "name": "CheckboxFieldInput",
+          "properties": {
+            "label": {
+              "value": "Subscribe"
+            },
+            "name": {
+              "value": "subscribe"
+            },
+            "value": {
+              "value": "yes"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "CheckboxFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "CheckboxFieldInput",
+              "property": "checked"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetCheckboxFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set CheckboxFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "CheckboxFieldInput",
+                  "property": "checked",
+                  "set": {
+                    "value": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "PasswordFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "PasswordFieldHeader",
+          "properties": {
+            "label": {
+              "value": "PasswordField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "PasswordField",
+          "name": "PasswordFieldInput",
+          "properties": {
+            "label": {
+              "value": "Password"
+            },
+            "name": {
+              "value": "password"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "PasswordFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "PasswordFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetPasswordFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set PasswordFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "PasswordFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": "admin123"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "PhoneNumberFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "PhoneNumberFieldHeader",
+          "properties": {
+            "label": {
+              "value": "PhoneNumberField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "PhoneNumberField",
+          "name": "PhoneNumberFieldInput",
+          "properties": {
+            "label": {
+              "value": "Phone Number"
+            },
+            "defaultCountryCode": {
+              "value": "+1"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "PhoneNumberFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "PhoneNumberFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetPhoneNumberFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set PhoneNumberFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "PhoneNumberFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": "8675309"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "RadioGroupFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "RadioGroupFieldHeader",
+          "properties": {
+            "label": {
+              "value": "RadioGroupField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "RadioGroupField",
+          "name": "RadioGroupFieldInput",
+          "properties": {
+            "label": {
+              "value": "Language"
+            },
+            "name": {
+              "value": "language"
+            },
+            "defaultValue": {
+              "value": "html"
+            }
+          },
+          "children": [
+            {
+              "componentType": "Radio",
+              "name": "RadioGroupFieldInputOption1",
+              "properties": {
+                "label": {
+                  "value": "html"
+                },
+                "value": {
+                  "value": "html"
+                }
+              }
+            },
+            {
+              "componentType": "Radio",
+              "name": "RadioGroupFieldInputOption2",
+              "properties": {
+                "label": {
+                  "value": "css"
+                },
+                "value": {
+                  "value": "css"
+                }
+              }
+            },
+            {
+              "componentType": "Radio",
+              "name": "RadioGroupFieldInputOption3",
+              "properties": {
+                "label": {
+                  "value": "javascript"
+                },
+                "value": {
+                  "value": "javascript"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentType": "Text",
+          "name": "RadioGroupFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "RadioGroupFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetRadioGroupFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set RadioGroupFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "RadioGroupFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": "javascript"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "SearchFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "SearchFieldHeader",
+          "properties": {
+            "label": {
+              "value": "SearchField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "SearchField",
+          "name": "SearchFieldInput",
+          "properties": {
+            "label": {
+              "value": "Search"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "SearchFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "SearchFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetSearchFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set SearchFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "SearchFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": "UI Docs"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "SelectFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "SelectFieldHeader",
+          "properties": {
+            "label": {
+              "value": "SelectField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "SelectField",
+          "name": "SelectFieldInput",
+          "properties": {
+            "label": {
+              "value": "Fruit"
+            },
+            "placeholder": {
+              "value": "Please select a fruit"
+            },
+            "labelHidden": {
+              "value": true
+            }
+          },
+          "children": [
+            {
+              "componentType": "option",
+              "name": "SelectFieldInputOption1",
+              "properties": {
+                "label": {
+                  "value": "Apple"
+                },
+                "value": {
+                  "value": "apple"
+                }
+              }
+            },
+            {
+              "componentType": "option",
+              "name": "SelectFieldInputOption2",
+              "properties": {
+                "label": {
+                  "value": "Banana"
+                },
+                "value": {
+                  "value": "banana"
+                }
+              }
+            },
+            {
+              "componentType": "option",
+              "name": "SelectFieldInputOption3",
+              "properties": {
+                "label": {
+                  "value": "Orange"
+                },
+                "value": {
+                  "value": "orange"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentType": "Text",
+          "name": "SelectFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "SelectFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetSelectFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set SelectFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "SelectFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": "orange"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "SliderFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "SliderFieldHeader",
+          "properties": {
+            "label": {
+              "value": "SliderField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "SliderField",
+          "name": "SliderFieldInput",
+          "properties": {
+            "label": {
+              "value": "Slider"
+            },
+            "defaultValue": {
+              "value": 50
+            },
+            "min": {
+              "value": 0
+            },
+            "max": {
+              "value": 100
+            },
+            "step": {
+              "value": 1
+            },
+            "labelHidden": {
+              "value": true
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "SliderFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "SliderFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetSliderFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set SliderFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "SliderFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": 90
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "StepperFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "StepperFieldHeader",
+          "properties": {
+            "label": {
+              "value": "StepperField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "StepperField",
+          "name": "StepperFieldInput",
+          "properties": {
+            "label": {
+              "value": "Stepper"
+            },
+            "defaultValue": {
+              "value": 0
+            },
+            "min": {
+              "value": 0
+            },
+            "max": {
+              "value": 10
+            },
+            "step": {
+              "value": 1
+            },
+            "labelHidden": {
+              "value": true
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "StepperFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "StepperFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetStepperFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set StepperFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "StepperFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": 9
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "SwitchFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "SwitchFieldHeader",
+          "properties": {
+            "label": {
+              "value": "SwitchField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "SwitchField",
+          "name": "SwitchFieldInput",
+          "properties": {
+            "label": {
+              "value": "SwitchField"
+            },
+            "labelPosition": {
+              "value": "start"
+            },
+            "isDisabled": {
+              "value": false
+            },
+            "isLabelHidden": {
+              "value": false
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "SwitchFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "SwitchFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetSwitchFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set SwitchFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "SwitchFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "TextFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "TextFieldHeader",
+          "properties": {
+            "label": {
+              "value": "TextField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "TextField",
+          "name": "TextFieldInput",
+          "properties": {
+            "label": {
+              "value": "Name"
+            },
+            "placeholder": {
+              "value": "Galadriel"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "TextFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "TextFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetTextFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set TextFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "TextFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": "Hardcoded Value"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
