@@ -5263,6 +5263,57 @@ export default function ColorChangeOnClick(
 }
 `;
 
+exports[`amplify render tests mutations modifies text in component on input change 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, Text, TextField } from \\"@aws-amplify/ui-react\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
+
+export type TwoWayBindingsProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function TwoWayBindings(
+  props: TwoWayBindingsProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [textFieldInputValue, setTextFieldInputValue] =
+    useStateMutationAction(undefined);
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      direction=\\"column\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"TwoWayBindings\\")}
+    >
+      <TextField
+        label=\\"Name\\"
+        placeholder=\\"Galadriel\\"
+        value={textFieldInputValue}
+        onChange={(event: SyntheticEvent) => {
+          setTextFieldInputValue(event.target.value);
+        }}
+        {...getOverrideProps(overrides, \\"TextFieldInput\\")}
+      ></TextField>
+      <Text
+        children={textFieldInputValue}
+        {...getOverrideProps(overrides, \\"TextFieldValue\\")}
+      ></Text>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests mutations supports multiple actions pointing to the same value 1`] = `
 Object {
   "componentText": "/* eslint-disable */
@@ -5613,7 +5664,7 @@ export default function TwoWayBindings(
           {...getOverrideProps(overrides, \\"CheckboxFieldInput\\")}
         ></CheckboxField>
         <Text
-          children
+          children={checkboxFieldInputChecked}
           {...getOverrideProps(overrides, \\"CheckboxFieldValue\\")}
         ></Text>
         <Button
@@ -5643,7 +5694,7 @@ export default function TwoWayBindings(
           {...getOverrideProps(overrides, \\"PasswordFieldInput\\")}
         ></PasswordField>
         <Text
-          children
+          children={passwordFieldInputValue}
           {...getOverrideProps(overrides, \\"PasswordFieldValue\\")}
         ></Text>
         <Button
@@ -5673,7 +5724,7 @@ export default function TwoWayBindings(
           {...getOverrideProps(overrides, \\"PhoneNumberFieldInput\\")}
         ></PhoneNumberField>
         <Text
-          children
+          children={phoneNumberFieldInputValue}
           {...getOverrideProps(overrides, \\"PhoneNumberFieldValue\\")}
         ></Text>
         <Button
@@ -5720,7 +5771,7 @@ export default function TwoWayBindings(
           ></Radio>
         </RadioGroupField>
         <Text
-          children
+          children={radioGroupFieldInputValue}
           {...getOverrideProps(overrides, \\"RadioGroupFieldValue\\")}
         ></Text>
         <Button
@@ -5749,7 +5800,7 @@ export default function TwoWayBindings(
           {...getOverrideProps(overrides, \\"SearchFieldInput\\")}
         ></SearchField>
         <Text
-          children
+          children={searchFieldInputValue}
           {...getOverrideProps(overrides, \\"SearchFieldValue\\")}
         ></Text>
         <Button
@@ -5796,7 +5847,7 @@ export default function TwoWayBindings(
           ></option>
         </SelectField>
         <Text
-          children
+          children={selectFieldInputValue}
           {...getOverrideProps(overrides, \\"SelectFieldValue\\")}
         ></Text>
         <Button
@@ -5830,7 +5881,7 @@ export default function TwoWayBindings(
           {...getOverrideProps(overrides, \\"SliderFieldInput\\")}
         ></SliderField>
         <Text
-          children
+          children={sliderFieldInputValue}
           {...getOverrideProps(overrides, \\"SliderFieldValue\\")}
         ></Text>
         <Button
@@ -5864,7 +5915,7 @@ export default function TwoWayBindings(
           {...getOverrideProps(overrides, \\"StepperFieldInput\\")}
         ></StepperField>
         <Text
-          children
+          children={stepperFieldInputValue}
           {...getOverrideProps(overrides, \\"StepperFieldValue\\")}
         ></Text>
         <Button
@@ -5896,7 +5947,7 @@ export default function TwoWayBindings(
           {...getOverrideProps(overrides, \\"SwitchFieldInput\\")}
         ></SwitchField>
         <Text
-          children
+          children={switchFieldInputValue}
           {...getOverrideProps(overrides, \\"SwitchFieldValue\\")}
         ></Text>
         <Button
@@ -5926,7 +5977,7 @@ export default function TwoWayBindings(
           {...getOverrideProps(overrides, \\"TextFieldInput\\")}
         ></TextField>
         <Text
-          children
+          children={textFieldInputValue}
           {...getOverrideProps(overrides, \\"TextFieldValue\\")}
         ></Text>
         <Button
