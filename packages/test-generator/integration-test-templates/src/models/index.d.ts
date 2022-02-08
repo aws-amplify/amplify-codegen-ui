@@ -79,10 +79,6 @@ export declare class Listing {
 
   readonly description?: string;
 
-  readonly imageSrc?: string;
-
-  readonly destinationUrl?: string;
-
   readonly createdAt?: string;
 
   readonly updatedAt?: string;

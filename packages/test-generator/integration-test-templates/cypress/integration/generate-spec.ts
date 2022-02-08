@@ -142,11 +142,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'DataStoreActions',
   'FormWithState',
   'InternalMutation',
-  'FullForm',
-  'Listings',
-  'ListingComp',
-  'RoudedImage',
-  'TwoWayBinding',
+  'TwoWayBindings',
 ]);
 const EXPECTED_INVALID_INPUT_CASES = new Set([
   'ComponentMissingProperties',
