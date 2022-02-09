@@ -32,6 +32,7 @@ import {
   getSetStateName,
 } from '../react-component-render-helper';
 import { ImportCollection, ImportValue } from '../imports';
+import Primitive, { PrimitivesWithChangeEvent } from '../primitive';
 import { mapGenericEventToReact } from './events';
 import { getChildPropMappingForComponentName } from './utils';
 
@@ -246,17 +247,21 @@ export function filterStateReferencesForComponent(
 ): MutationReferences {
   return stateReferences
     .filter(({ componentName }) => componentName === component.name)
-    .reduce(mutationReferenceReducer, {});
+    .reduce(mutationReferenceReducerWithComponentType(component.componentType), {});
 }
 
-function mutationReferenceReducer(
-  mutationReferences: MutationReferences,
-  stateReference: StateReference,
-): MutationReferences {
-  const propertyReferences =
-    stateReference.property in mutationReferences ? mutationReferences[stateReference.property] : [];
-  return {
-    ...mutationReferences,
-    [stateReference.property]: propertyReferences.concat([{ addControlEvent: !('set' in stateReference) }]),
+function mutationReferenceReducerWithComponentType(componentType: string) {
+  return function mutationReferenceReducer(
+    mutationReferences: MutationReferences,
+    stateReference: StateReference,
+  ): MutationReferences {
+    const propertyReferences =
+      stateReference.property in mutationReferences ? mutationReferences[stateReference.property] : [];
+    return {
+      ...mutationReferences,
+      [stateReference.property]: propertyReferences.concat([
+        { addControlEvent: PrimitivesWithChangeEvent.has(componentType as Primitive) || !('set' in stateReference) },
+      ]),
+    };
   };
 }

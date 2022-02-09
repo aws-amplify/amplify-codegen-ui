@@ -108,3 +108,19 @@ export const PrimitiveTypeParameter: Partial<
 export function isBuiltInIcon(componentType: string): boolean {
   return iconset.has(componentType);
 }
+
+/*
+ * temporary list of Primitives with a change event. Final implementation will pull from amplify UI
+ */
+export const PrimitivesWithChangeEvent: Set<Primitive> = new Set([
+  Primitive.CheckboxField,
+  Primitive.PasswordField,
+  Primitive.PhoneNumberField,
+  Primitive.RadioGroupField,
+  Primitive.SearchField,
+  Primitive.SelectField,
+  Primitive.SliderField,
+  Primitive.StepperField,
+  Primitive.SwitchField,
+  Primitive.TextField,
+]);
