@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import ts, { Statement, factory, JsxAttribute } from 'typescript';
+import ts, { Statement, factory, JsxAttribute, JsxExpression } from 'typescript';
 import {
   StudioComponent,
   StudioComponentChild,
@@ -35,6 +35,14 @@ import { ImportCollection, ImportValue } from '../imports';
 import Primitive, { PrimitivesWithChangeEvent } from '../primitive';
 import { mapGenericEventToReact } from './events';
 import { getChildPropMappingForComponentName } from './utils';
+import Primitive, { PrimitiveLevelPropConfiguration } from '../primitive';
+
+type EventHandlerBuilder = (stateName: string) => JsxExpression;
+
+const genericEventToReactEventImplementationOverrides: PrimitiveLevelPropConfiguration<EventHandlerBuilder> = {
+  [Primitive.StepperField]: { [StudioGenericEvent.change]: numericValueCallbackGenerator },
+  [Primitive.SliderField]: { [StudioGenericEvent.change]: numericValueCallbackGenerator },
+};
 
 export function getComponentStateReferences(component: StudioComponent) {
   const stateReferences = getComponentStateReferencesHelper(component);
@@ -100,45 +108,83 @@ export function getActionStateParameters(action: ActionStudioComponentEvent): St
   return [];
 }
 
-export function buildOpeningElementControlEvents(stateName: string, event: string): JsxAttribute {
-  return factory.createJsxAttribute(
-    factory.createIdentifier(mapGenericEventToReact(event as StudioGenericEvent)),
-    factory.createJsxExpression(
+function syntheticEventTargetValueCallbackGenerator(stateName: string): JsxExpression {
+  return factory.createJsxExpression(
+    undefined,
+    factory.createArrowFunction(
       undefined,
-      factory.createArrowFunction(
-        undefined,
-        undefined,
+      undefined,
+      [
+        factory.createParameterDeclaration(
+          undefined,
+          undefined,
+          undefined,
+          factory.createIdentifier('event'),
+          undefined,
+          factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
+          undefined,
+        ),
+      ],
+      undefined,
+      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+      factory.createBlock(
         [
-          factory.createParameterDeclaration(
-            undefined,
-            undefined,
-            undefined,
-            factory.createIdentifier('event'),
-            undefined,
-            factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
-            undefined,
+          factory.createExpressionStatement(
+            factory.createCallExpression(factory.createIdentifier(stateName), undefined, [
+              factory.createPropertyAccessExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('event'),
+                  factory.createIdentifier('target'),
+                ),
+                factory.createIdentifier('value'),
+              ),
+            ]),
           ),
         ],
-        undefined,
-        factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-        factory.createBlock(
-          [
-            factory.createExpressionStatement(
-              factory.createCallExpression(factory.createIdentifier(stateName), undefined, [
-                factory.createPropertyAccessExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier('event'),
-                    factory.createIdentifier('target'),
-                  ),
-                  factory.createIdentifier('value'),
-                ),
-              ]),
-            ),
-          ],
-          false,
-        ),
+        false,
       ),
     ),
+  );
+}
+
+function numericValueCallbackGenerator(stateName: string): JsxExpression {
+  return factory.createJsxExpression(
+    undefined,
+    factory.createArrowFunction(
+      undefined,
+      undefined,
+      [
+        factory.createParameterDeclaration(
+          undefined,
+          undefined,
+          undefined,
+          factory.createIdentifier('value'),
+          undefined,
+          factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+          undefined,
+        ),
+      ],
+      undefined,
+      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+      factory.createCallExpression(factory.createIdentifier(stateName), undefined, [factory.createIdentifier('value')]),
+    ),
+  );
+}
+
+// TODO: Update in here so we can support customer `change` events for form elements.
+export function buildOpeningElementControlEvents(
+  componentType: string,
+  stateName: string,
+  event: string,
+): JsxAttribute {
+  const implementationOverrides = genericEventToReactEventImplementationOverrides[componentType];
+  const controlEventBuilder =
+    implementationOverrides && implementationOverrides[event]
+      ? implementationOverrides[event]
+      : syntheticEventTargetValueCallbackGenerator;
+  return factory.createJsxAttribute(
+    factory.createIdentifier(mapGenericEventToReact(componentType as Primitive, event as StudioGenericEvent)),
+    controlEventBuilder(stateName),
   );
 }
 

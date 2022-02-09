@@ -5362,6 +5362,57 @@ export default function TwoWayBindings(
 }
 `;
 
+exports[`amplify render tests mutations supports a controlled stepper primitive 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, StepperField, Text } from \\"@aws-amplify/ui-react\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
+
+export type StepperControlledElementProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function StepperControlledElement(
+  props: StepperControlledElementProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [inputValue, setInputValue] = useStateMutationAction(undefined);
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      {...rest}
+      {...getOverrideProps(overrides, \\"StepperControlledElement\\")}
+    >
+      <StepperField
+        label=\\"Stepper\\"
+        defaultValue={0}
+        min={0}
+        max={10}
+        step={1}
+        labelHidden={true}
+        value={inputValue}
+        onStepChange={(value: number) => setInputValue(value)}
+        {...getOverrideProps(overrides, \\"Input\\")}
+      ></StepperField>
+      <Text
+        children={inputValue}
+        {...getOverrideProps(overrides, \\"StepperFieldValue\\")}
+      ></Text>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests mutations supports multiple actions pointing to the same value 1`] = `
 Object {
   "componentText": "/* eslint-disable */
@@ -5923,9 +5974,7 @@ export default function TwoWayBindings(
           step={1}
           labelHidden={true}
           value={sliderFieldInputValue}
-          onChange={(event: SyntheticEvent) => {
-            setSliderFieldInputValue(event.target.value);
-          }}
+          onChange={(value: number) => setSliderFieldInputValue(value)}
           {...getOverrideProps(overrides, \\"SliderFieldInput\\")}
         ></SliderField>
         <Text
@@ -5957,9 +6006,7 @@ export default function TwoWayBindings(
           step={1}
           labelHidden={true}
           value={stepperFieldInputValue}
-          onChange={(event: SyntheticEvent) => {
-            setStepperFieldInputValue(event.target.value);
-          }}
+          onStepChange={(value: number) => setStepperFieldInputValue(value)}
           {...getOverrideProps(overrides, \\"StepperFieldInput\\")}
         ></StepperField>
         <Text
