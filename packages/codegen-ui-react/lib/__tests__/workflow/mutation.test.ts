@@ -14,7 +14,11 @@
   limitations under the License.
  */
 import { MutationAction, DataStoreUpdateItemAction } from '@aws-amplify/codegen-ui';
-import { getComponentStateReferences, getActionStateParameters } from '../../workflow/mutation';
+import {
+  getComponentStateReferences,
+  getActionStateParameters,
+  getComponentFromComponentTree,
+} from '../../workflow/mutation';
 
 describe('getComponentStateReferences', () => {
   test('basic', () => {
@@ -91,5 +95,41 @@ describe('getActionStateParameters', () => {
       },
     };
     expect(getActionStateParameters(action)).toMatchSnapshot();
+  });
+});
+
+describe('getComponentFromComponentTree', () => {
+  const grandChildComponent = {
+    componentType: 'TextField',
+    name: 'GrandChildComponent',
+    properties: {},
+  };
+  const childComponent = {
+    componentType: 'Flex',
+    name: 'ChildComponent',
+    properties: {},
+    children: [grandChildComponent],
+  };
+  const component = {
+    componentType: 'Flex',
+    name: 'Component',
+    properties: {},
+    bindingProperties: {},
+    children: [childComponent],
+  };
+  test('same as root component', () => {
+    expect(getComponentFromComponentTree(component, 'Component')).toEqual(component);
+  });
+
+  test('child component', () => {
+    expect(getComponentFromComponentTree(component, 'ChildComponent')).toEqual(childComponent);
+  });
+
+  test('grandchild component', () => {
+    expect(getComponentFromComponentTree(component, 'GrandChildComponent')).toEqual(grandChildComponent);
+  });
+
+  test('not found', () => {
+    expect(() => getComponentFromComponentTree(component, 'NotFoundComponent')).toThrowErrorMatchingSnapshot();
   });
 });
