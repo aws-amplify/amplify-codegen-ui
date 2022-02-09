@@ -66,9 +66,9 @@ export default function ComplexTests() {
   };
 
   const initializeAuthListener = () => {
-    Hub.listen('ui-actions', (message: any) => {
+    Hub.listen('ui', (message: any) => {
       const { event, data } = message && message.payload;
-      if (event === 'AuthSignOut_Finished') {
+      if (event === 'actions:auth:signout:finished') {
         const {
           options: { global },
         } = data;
