@@ -362,6 +362,14 @@ describe('amplify render tests', () => {
       expect(generateWithAmplifyRenderer('workflow/stepperControlledElement')).toMatchSnapshot();
     });
 
+    it('supports a controlled checkbox primitive', () => {
+      expect(generateWithAmplifyRenderer('workflow/checkboxControlledElement')).toMatchSnapshot();
+    });
+
+    it('supports a controlled switch primitive', () => {
+      expect(generateWithAmplifyRenderer('workflow/switchControlledElement')).toMatchSnapshot();
+    });
+
     it('modifies text in component on input change', () => {
       expect(generateWithAmplifyRenderer('workflow/inputToTextChange')).toMatchSnapshot();
     });
