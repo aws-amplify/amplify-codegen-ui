@@ -4,7 +4,7 @@ npm run integ:clean
 npm run build
 
 # create
-(cd packages && npx create-react-app integration-test --use-npm --template typescript)
+(cd packages && npx -y create-react-app integration-test --use-npm --template typescript)
 
 # add files
 npm run integ:templates
