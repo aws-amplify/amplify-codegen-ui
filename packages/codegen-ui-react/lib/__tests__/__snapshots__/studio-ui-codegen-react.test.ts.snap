@@ -5166,9 +5166,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
-import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type InputMutationOnClickProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5369,9 +5369,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Flex, FlexProps, StepperField, Text } from \\"@aws-amplify/ui-react\\";
-import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type StepperControlledElementProps = React.PropsWithChildren<
   Partial<FlexProps> & {
