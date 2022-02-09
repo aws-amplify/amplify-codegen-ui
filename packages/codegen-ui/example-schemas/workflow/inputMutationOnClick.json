@@ -1,0 +1,36 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "InputMutationOnClick",
+  "properties": {},
+  "children": [
+    {
+      "componentType": "TextField",
+      "name": "MyInput",
+      "properties": {}
+    },
+    {
+      "componentType": "Button",
+      "name": "SetInputButton",
+      "events": {
+        "click": {
+          "action": "Amplify.Mutation",
+          "parameters": {
+            "state": {
+              "componentName": "MyInput",
+              "property": "value",
+              "set": {
+                "value": "Razor Crest"
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "children": {
+          "value": "Change Input"
+        }
+      }
+    }
+  ]
+}

@@ -223,6 +223,18 @@ describe('Workflow', () => {
         cy.get('#NoInitialDisplayBlockButton').click();
         cy.get('#NoInitialTextDisplay').should('be.visible');
       });
+
+      it('supports mutations on controlled components', () => {
+        cy.get('#input-mutation-on-click').within(() => {
+          cy.get('input').should('have.attr', 'value', '');
+          cy.get('button').click();
+          cy.get('input').should('have.attr', 'value', 'Razor Crest');
+          cy.get('input').type(' blew up');
+          cy.get('input').should('have.attr', 'value', 'Razor Crest blew up');
+          cy.get('button').click();
+          cy.get('input').should('have.attr', 'value', 'Razor Crest');
+        });
+      });
     });
   });
 });

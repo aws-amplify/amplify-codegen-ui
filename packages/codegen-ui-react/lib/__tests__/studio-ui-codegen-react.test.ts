@@ -361,6 +361,10 @@ describe('amplify render tests', () => {
     it('modifies text in component on input change', () => {
       expect(generateWithAmplifyRenderer('workflow/inputToTextChange')).toMatchSnapshot();
     });
+
+    it('controls an input that is modified by a button', () => {
+      expect(generateWithAmplifyRenderer('workflow/inputMutationOnClick')).toMatchSnapshot();
+    });
   });
 
   describe('default value', () => {
