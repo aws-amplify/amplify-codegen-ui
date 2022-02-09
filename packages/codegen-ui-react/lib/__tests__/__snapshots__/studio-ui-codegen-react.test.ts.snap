@@ -5159,6 +5159,56 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
 "
 `;
 
+exports[`amplify render tests mutations controls an input that is modified by a button 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
+import { useStateMutationAction } from \\"../mock-helpers\\";
+
+export type InputMutationOnClickProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function InputMutationOnClick(
+  props: InputMutationOnClickProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [myInputValue, setMyInputValue] = useStateMutationAction(undefined);
+  const setInputButtonClick = () => {
+    setMyInputValue(\\"Razor Crest\\");
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"InputMutationOnClick\\")}>
+      <TextField
+        value={myInputValue}
+        onChange={(event: SyntheticEvent) => {
+          setMyInputValue(event.target.value);
+        }}
+        {...getOverrideProps(overrides, \\"MyInput\\")}
+      ></TextField>
+      <Button
+        children=\\"Change Input\\"
+        onClick={() => {
+          setInputButtonClick();
+        }}
+        {...getOverrideProps(overrides, \\"SetInputButton\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests mutations form 1`] = `
 Object {
   "componentText": "/* eslint-disable */
