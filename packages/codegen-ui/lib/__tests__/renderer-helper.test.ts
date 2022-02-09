@@ -28,7 +28,7 @@ import {
   isSimplePropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
-  isStudioComponentWithAuthProperty,
+  isStudioComponentWithAuthDependency,
   isEventPropertyBinding,
 } from '../renderer-helper';
 
@@ -216,17 +216,20 @@ describe('render-helper', () => {
       test('property not containing user attributes', () => {
         expect(hasAuthProperty(componentWithoutAuthAttribute)).toBeFalsy();
       });
+
       test('property containing user attributes', () => {
         expect(hasAuthProperty(componentWithAuthAttribute)).toBeTruthy();
       });
     });
-    describe('isStudioComponentWithAuthProperty', () => {
+    describe('isStudioComponentWithAuthDependency', () => {
       test('parent not containing user attributes', () => {
-        expect(isStudioComponentWithAuthProperty(componentWithoutAuthAttribute)).toBeFalsy();
+        expect(isStudioComponentWithAuthDependency(componentWithoutAuthAttribute)).toBeFalsy();
       });
+
       test('parent containing user attributes', () => {
-        expect(isStudioComponentWithAuthProperty(componentWithAuthAttribute)).toBeTruthy();
+        expect(isStudioComponentWithAuthDependency(componentWithAuthAttribute)).toBeTruthy();
       });
+
       test('child containing user attributes', () => {
         const testComponent: StudioComponent = {
           id: '1234-5678-9010',
@@ -264,7 +267,30 @@ describe('render-helper', () => {
           properties: {},
           bindingProperties: {},
         };
-        expect(isStudioComponentWithAuthProperty(testComponent)).toBeTruthy();
+        expect(isStudioComponentWithAuthDependency(testComponent)).toBeTruthy();
+      });
+
+      test('detects auth dependency for events', () => {
+        const testComponent: StudioComponent = {
+          componentType: 'Button',
+          name: 'ComponentWithAuthEventBinding',
+          events: {
+            click: {
+              action: 'Amplify.DataStoreCreateItemAction',
+              parameters: {
+                model: 'User',
+                fields: {
+                  userName: {
+                    userAttribute: 'username',
+                  },
+                },
+              },
+            },
+          },
+          bindingProperties: {},
+          properties: {},
+        };
+        expect(isStudioComponentWithAuthDependency(testComponent)).toBeTruthy();
       });
     });
   });
