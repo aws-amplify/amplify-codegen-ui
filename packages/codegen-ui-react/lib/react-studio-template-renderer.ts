@@ -19,7 +19,7 @@ import {
   isStudioComponentWithBinding,
   isSimplePropertyBinding,
   isDataPropertyBinding,
-  isStudioComponentWithAuthProperty,
+  isStudioComponentWithAuthDependency,
   isEventPropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
@@ -620,7 +620,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private buildUseAuthenticatedUserStatement(component: StudioComponent): Statement | undefined {
-    if (isStudioComponentWithAuthProperty(component)) {
+    if (isStudioComponentWithAuthDependency(component)) {
       return factory.createVariableStatement(
         undefined,
         factory.createVariableDeclarationList(
