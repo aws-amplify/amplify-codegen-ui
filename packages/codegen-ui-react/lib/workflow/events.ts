@@ -13,48 +13,75 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import {
-  StudioGenericEvent,
-  StudioComponentEvent,
-  BoundStudioComponentEvent,
-  ActionStudioComponentEvent,
-} from '@aws-amplify/codegen-ui';
-
+import { StudioGenericEvent, StudioComponentEvent, BoundStudioComponentEvent } from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, SyntaxKind } from 'typescript';
-
 import { getActionIdentifier } from './action';
 import { isBoundEvent, isActionEvent } from '../react-component-render-helper';
+import Primitive, { PrimitiveLevelPropConfiguration } from '../primitive';
+
+/*
+ * Temporary hardcoded mapping of generic to react events, long-term this will be exported by amplify-ui.
+ */
+const genericEventToReactEventMapping = {
+  [StudioGenericEvent.click]: 'onClick',
+  [StudioGenericEvent.doubleclick]: 'onDoubleClick',
+  [StudioGenericEvent.mousedown]: 'onMouseDown',
+  [StudioGenericEvent.mouseenter]: 'onMouseEnter',
+  [StudioGenericEvent.mouseleave]: 'onMouseLeave',
+  [StudioGenericEvent.mousemove]: 'onMouseMove',
+  [StudioGenericEvent.mouseout]: 'onMouseOut',
+  [StudioGenericEvent.mouseover]: 'onMouseOver',
+  [StudioGenericEvent.mouseup]: 'onMouseUp',
+  [StudioGenericEvent.change]: 'onChange',
+  [StudioGenericEvent.input]: 'onInput',
+  [StudioGenericEvent.focus]: 'onFocus',
+  [StudioGenericEvent.blur]: 'onBlur',
+  [StudioGenericEvent.keydown]: 'onKeyDown',
+  [StudioGenericEvent.keypress]: 'onKeyPress',
+  [StudioGenericEvent.keyup]: 'onKeyUp',
+};
+
+const genericEventToReactEventMappingOverrides: PrimitiveLevelPropConfiguration<string> = {
+  [Primitive.StepperField]: {
+    [StudioGenericEvent.change]: 'onStepChange',
+  },
+};
 
 export function buildOpeningElementEvents(
+  componentType: string,
   event: StudioComponentEvent,
   name: string,
   componentName: string | undefined,
 ): JsxAttribute {
   if (isBoundEvent(event)) {
-    return buildBindingEvent(event, name);
+    return buildBindingEvent(componentType, event, name);
   }
   if (isActionEvent(event)) {
-    return buildActionEvent(event, name, componentName);
+    return buildActionEvent(componentType, name, componentName);
   }
 
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
 
-export function buildBindingEvent(event: BoundStudioComponentEvent, eventName: string): JsxAttribute {
+export function buildBindingEvent(
+  componentType: string,
+  event: BoundStudioComponentEvent,
+  eventName: string,
+): JsxAttribute {
   const expr = factory.createIdentifier(event.bindingEvent);
   return factory.createJsxAttribute(
-    factory.createIdentifier(mapGenericEventToReact(eventName as StudioGenericEvent)),
+    factory.createIdentifier(mapGenericEventToReact(componentType as Primitive, eventName as StudioGenericEvent)),
     factory.createJsxExpression(undefined, expr),
   );
 }
 
 export function buildActionEvent(
-  event: ActionStudioComponentEvent,
+  componentType: string,
   eventName: string,
   componentName: string | undefined,
 ): JsxAttribute {
   return factory.createJsxAttribute(
-    factory.createIdentifier(mapGenericEventToReact(eventName as StudioGenericEvent)),
+    factory.createIdentifier(mapGenericEventToReact(componentType as Primitive, eventName as StudioGenericEvent)),
     factory.createJsxExpression(
       undefined,
       factory.createArrowFunction(
@@ -80,29 +107,11 @@ export function buildActionEvent(
   );
 }
 
-/*
- * Temporary hardcoded mapping of generic to react events, long-term this will be exported by amplify-ui.
- */
-const genericEventToReactEventMapping = {
-  [StudioGenericEvent.click]: 'onClick',
-  [StudioGenericEvent.doubleclick]: 'onDoubleClick',
-  [StudioGenericEvent.mousedown]: 'onMouseDown',
-  [StudioGenericEvent.mouseenter]: 'onMouseEnter',
-  [StudioGenericEvent.mouseleave]: 'onMouseLeave',
-  [StudioGenericEvent.mousemove]: 'onMouseMove',
-  [StudioGenericEvent.mouseout]: 'onMouseOut',
-  [StudioGenericEvent.mouseover]: 'onMouseOver',
-  [StudioGenericEvent.mouseup]: 'onMouseUp',
-  [StudioGenericEvent.change]: 'onChange',
-  [StudioGenericEvent.input]: 'onInput',
-  [StudioGenericEvent.focus]: 'onFocus',
-  [StudioGenericEvent.blur]: 'onBlur',
-  [StudioGenericEvent.keydown]: 'onKeyDown',
-  [StudioGenericEvent.keypress]: 'onKeyPress',
-  [StudioGenericEvent.keyup]: 'onKeyUp',
-};
-
-export function mapGenericEventToReact(genericEventBinding: StudioGenericEvent): string {
+export function mapGenericEventToReact(componentType: Primitive, genericEventBinding: StudioGenericEvent): string {
+  const componentOverrides = genericEventToReactEventMappingOverrides[componentType];
+  if (componentOverrides && componentOverrides[genericEventBinding]) {
+    return componentOverrides[genericEventBinding];
+  }
   const reactEventMapping = genericEventToReactEventMapping[genericEventBinding];
   if (!reactEventMapping) {
     throw new Error(`${genericEventBinding} is not a possible event.`);

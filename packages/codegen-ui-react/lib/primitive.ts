@@ -16,6 +16,10 @@
 import { factory, SyntaxKind, TypeParameterDeclaration, TypeNode } from 'typescript';
 import iconset from './iconset';
 
+export type PrimitiveLevelPropConfiguration<ConfigType> = {
+  [componentType: string]: { [eventType: string]: ConfigType };
+};
+
 enum Primitive {
   Alert = 'Alert',
   Badge = 'Badge',
