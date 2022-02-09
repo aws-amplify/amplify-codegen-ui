@@ -1,0 +1,43 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Flex",
+    "name": "StepperControlledElement",
+    "properties": {},
+    "children": [
+      {
+        "componentType": "StepperField",
+        "name": "Input",
+        "properties": {
+          "label": {
+            "value": "Stepper"
+          },
+          "defaultValue": {
+            "value": 0
+          },
+          "min": {
+            "value": 0
+          },
+          "max": {
+            "value": 10
+          },
+          "step": {
+            "value": 1
+          },
+          "labelHidden": {
+            "value": true
+          }
+        }
+      },
+      {
+        "componentType": "Text",
+        "name": "StepperFieldValue",
+        "properties": {
+          "label": {
+            "componentName": "Input",
+            "property": "value"
+          }
+        }
+      }
+    ]
+  }
+  

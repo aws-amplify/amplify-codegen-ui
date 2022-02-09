@@ -358,6 +358,10 @@ describe('amplify render tests', () => {
       expect(generateWithAmplifyRenderer('workflow/twoWayBindings')).toMatchSnapshot();
     });
 
+    it('supports a controlled stepper primitive', () => {
+      expect(generateWithAmplifyRenderer('workflow/stepperControlledElement')).toMatchSnapshot();
+    });
+
     it('modifies text in component on input change', () => {
       expect(generateWithAmplifyRenderer('workflow/inputToTextChange')).toMatchSnapshot();
     });
