@@ -32,10 +32,9 @@ import {
   getSetStateName,
 } from '../react-component-render-helper';
 import { ImportCollection, ImportValue } from '../imports';
-import Primitive, { PrimitivesWithChangeEvent } from '../primitive';
 import { mapGenericEventToReact } from './events';
 import { getChildPropMappingForComponentName } from './utils';
-import Primitive, { PrimitiveLevelPropConfiguration } from '../primitive';
+import Primitive, { PrimitivesWithChangeEvent, PrimitiveLevelPropConfiguration } from '../primitive';
 
 type EventHandlerBuilder = (stateName: string) => JsxExpression;
 
