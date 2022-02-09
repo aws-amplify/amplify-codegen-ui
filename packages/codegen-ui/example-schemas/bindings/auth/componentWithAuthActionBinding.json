@@ -1,0 +1,26 @@
+{
+    "componentType": "Button",
+    "name": "ComponentWithAuthEventBinding",
+    "events": {
+      "click": {
+        "action": "Amplify.DataStoreCreateItemAction",
+        "parameters": {
+          "model": "Customer",
+          "fields": {
+            "userName": {
+              "userAttribute": "username"
+            },
+            "favoriteIceCream": {
+              "userAttribute": "custom:favorite_icecream"
+            }
+          }
+        }
+      }
+    },
+    "properties": {
+      "children": {
+        "value": "Create"
+      }
+    }
+  }
+  
