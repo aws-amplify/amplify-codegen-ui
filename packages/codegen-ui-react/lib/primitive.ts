@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { FixedStudioComponentProperty } from '@aws-amplify/codegen-ui';
 import { factory, SyntaxKind, TypeParameterDeclaration, TypeNode } from 'typescript';
 import iconset from './iconset';
 
@@ -128,3 +129,29 @@ export const PrimitivesWithChangeEvent: Set<Primitive> = new Set([
   Primitive.SwitchField,
   Primitive.TextField,
 ]);
+
+export const PrimitiveDefaultPropertyValue: Partial<
+  Record<Primitive, { [property: string]: FixedStudioComponentProperty }>
+> = {
+  [Primitive.CheckboxField]: {
+    checked: { value: false, type: 'boolean' },
+  },
+  [Primitive.PasswordField]: {
+    value: { value: '', type: 'string' },
+  },
+  [Primitive.PhoneNumberField]: {
+    value: { value: '', type: 'string' },
+  },
+  [Primitive.RadioGroupField]: {
+    value: { value: '', type: 'string' },
+  },
+  [Primitive.SearchField]: {
+    value: { value: '', type: 'string' },
+  },
+  [Primitive.SwitchField]: {
+    isChecked: { value: false, type: 'boolean' },
+  },
+  [Primitive.TextField]: {
+    value: { value: '', type: 'string' },
+  },
+};
