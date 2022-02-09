@@ -265,9 +265,7 @@ export function getComponentFromComponentTree(
     }
 
     if (currentComponent.children) {
-      return currentComponent.children.find(
-        (child: StudioComponentChild) => getComponentFromComponentTreeHelper(child) !== undefined,
-      );
+      return currentComponent.children.map(getComponentFromComponentTreeHelper).find((child) => child !== undefined);
     }
 
     return undefined;
