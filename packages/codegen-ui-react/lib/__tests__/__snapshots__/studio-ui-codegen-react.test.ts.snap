@@ -426,6 +426,50 @@ export default function Test(props: TestProps): React.ReactElement {
 "
 `;
 
+exports[`amplify render tests bindings auth supports auth bindings in actions 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useAuth,
+  useDataStoreCreateAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+import { Customer } from \\"../models\\";
+
+export type ComponentWithAuthEventBindingProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ComponentWithAuthEventBinding(
+  props: ComponentWithAuthEventBindingProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const authAttributes = useAuth().user?.attributes ?? {};
+  const componentWithAuthEventBindingClick = useDataStoreCreateAction({
+    model: Customer,
+    fields: {
+      userName: authAttributes[\\"username\\"],
+      favoriteIceCream: authAttributes[\\"custom:favorite_icecream\\"],
+    },
+  });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Create\\"
+      onClick={() => {
+        componentWithAuthEventBindingClick();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"ComponentWithAuthEventBinding\\")}
+    ></Button>
+  );
+}
+"
+`;
+
 exports[`amplify render tests collection should render collection with data binding 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

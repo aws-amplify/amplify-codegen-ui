@@ -516,4 +516,14 @@ describe('amplify render tests', () => {
       expect(generateWithAmplifyRenderer('iconBug').componentText).toMatchSnapshot();
     });
   });
+
+  describe('bindings', () => {
+    describe('auth', () => {
+      it('supports auth bindings in actions', () => {
+        expect(
+          generateWithAmplifyRenderer('bindings/auth/componentWithAuthActionBinding').componentText,
+        ).toMatchSnapshot();
+      });
+    });
+  });
 });
