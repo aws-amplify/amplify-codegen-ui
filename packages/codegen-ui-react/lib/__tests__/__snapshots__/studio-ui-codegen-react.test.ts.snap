@@ -5362,6 +5362,53 @@ export default function TwoWayBindings(
 }
 `;
 
+exports[`amplify render tests mutations supports a controlled checkbox primitive 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { CheckboxField, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+
+export type CheckboxControlledElementProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function CheckboxControlledElement(
+  props: CheckboxControlledElementProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [inputChecked, setInputChecked] = useStateMutationAction(undefined);
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      {...rest}
+      {...getOverrideProps(overrides, \\"CheckboxControlledElement\\")}
+    >
+      <CheckboxField
+        checked={inputChecked}
+        onChange={(event: SyntheticEvent) => {
+          setInputChecked(event.target.checked);
+        }}
+        {...getOverrideProps(overrides, \\"Input\\")}
+      ></CheckboxField>
+      <Text
+        children={inputChecked}
+        {...getOverrideProps(overrides, \\"CheckboxFieldValue\\")}
+      ></Text>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests mutations supports a controlled stepper primitive 1`] = `
 Object {
   "componentText": "/* eslint-disable */
@@ -5403,6 +5450,48 @@ export default function StepperControlledElement(
       <Text
         children={inputValue}
         {...getOverrideProps(overrides, \\"StepperFieldValue\\")}
+      ></Text>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests mutations supports a controlled switch primitive 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, SwitchField, Text } from \\"@aws-amplify/ui-react\\";
+
+export type SwitchControlledElementProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function SwitchControlledElement(
+  props: SwitchControlledElementProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const [inputIsChecked, setInputIsChecked] = useStateMutationAction(undefined);
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"SwitchControlledElement\\")}>
+      <SwitchField
+        isChecked={inputIsChecked}
+        onChange={() => setInputIsChecked(!inputIsChecked)}
+        {...getOverrideProps(overrides, \\"Input\\")}
+      ></SwitchField>
+      <Text
+        children={inputIsChecked}
+        {...getOverrideProps(overrides, \\"SwitchFieldValue\\")}
       ></Text>
     </Flex>
   );
@@ -5697,7 +5786,7 @@ export default function TwoWayBindings(
     useStateMutationAction(undefined);
   const [stepperFieldInputValue, setStepperFieldInputValue] =
     useStateMutationAction(undefined);
-  const [switchFieldInputValue, setSwitchFieldInputValue] =
+  const [switchFieldInputIsChecked, setSwitchFieldInputIsChecked] =
     useStateMutationAction(undefined);
   const [textFieldInputValue, setTextFieldInputValue] =
     useStateMutationAction(undefined);
@@ -5726,7 +5815,7 @@ export default function TwoWayBindings(
     setStepperFieldInputValue(9);
   };
   const setSwitchFieldValueClick = () => {
-    setSwitchFieldInputValue(true);
+    setSwitchFieldInputIsChecked(true);
   };
   const setTextFieldValueClick = () => {
     setTextFieldInputValue(\\"Hardcoded Value\\");
@@ -5758,7 +5847,7 @@ export default function TwoWayBindings(
           value=\\"yes\\"
           checked={checkboxFieldInputChecked}
           onChange={(event: SyntheticEvent) => {
-            setCheckboxFieldInputChecked(event.target.value);
+            setCheckboxFieldInputChecked(event.target.checked);
           }}
           {...getOverrideProps(overrides, \\"CheckboxFieldInput\\")}
         ></CheckboxField>
@@ -6035,14 +6124,14 @@ export default function TwoWayBindings(
           labelPosition=\\"start\\"
           isDisabled={false}
           isLabelHidden={false}
-          value={switchFieldInputValue}
-          onChange={(event: SyntheticEvent) => {
-            setSwitchFieldInputValue(event.target.value);
-          }}
+          isChecked={switchFieldInputIsChecked}
+          onChange={() =>
+            setSwitchFieldInputIsChecked(!switchFieldInputIsChecked)
+          }
           {...getOverrideProps(overrides, \\"SwitchFieldInput\\")}
         ></SwitchField>
         <Text
-          children={switchFieldInputValue}
+          children={switchFieldInputIsChecked}
           {...getOverrideProps(overrides, \\"SwitchFieldValue\\")}
         ></Text>
         <Button

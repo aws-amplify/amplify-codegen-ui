@@ -96,6 +96,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
         buildOpeningElementControlEvents(
           this.component.componentType,
           getSetStateName({ componentName: this.component.name || '', property: key }),
+          getStateName({ componentName: this.component.name || '', property: key }),
           'change',
         ),
       );
