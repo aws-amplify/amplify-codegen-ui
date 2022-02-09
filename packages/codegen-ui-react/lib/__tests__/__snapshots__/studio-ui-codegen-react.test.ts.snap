@@ -7,9 +7,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useDataStoreCreateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { useDataStoreCreateAction } from \\"../mock-helpers\\";
 import { Customer } from \\"../models\\";
 
 export type CreateCustomerButtonProps = React.PropsWithChildren<
@@ -50,9 +50,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useDataStoreDeleteAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { useDataStoreDeleteAction } from \\"../mock-helpers\\";
 import { Customer } from \\"../models\\";
 
 export type DeleteCustomerButtonProps = React.PropsWithChildren<
@@ -93,9 +93,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useDataStoreUpdateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
-import { useDataStoreUpdateAction } from \\"../mock-helpers\\";
 import { Customer } from \\"../models\\";
 
 export type UpdateCustomerButtonProps = React.PropsWithChildren<
@@ -5216,12 +5216,10 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
-import {
   useDataStoreUpdateAction,
   useStateMutationAction,
-} from \\"../mock-helpers\\";
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
 import { Customer } from \\"../models\\";
 
 export type MyFormProps = React.PropsWithChildren<
@@ -5272,9 +5270,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
-import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type ColorChangeOnClickProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5320,9 +5318,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Flex, FlexProps, Text, TextField } from \\"@aws-amplify/ui-react\\";
-import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type TwoWayBindingsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5371,9 +5369,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
-import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type ButtonsToggleStateProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5429,9 +5427,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
-import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type MutationWithSyntheticPropProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5480,9 +5478,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Card, CardProps, Text } from \\"@aws-amplify/ui-react\\";
-import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type UpdateVisibilityProps = React.PropsWithChildren<
   Partial<CardProps> & {
@@ -5539,9 +5537,9 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Card, CardProps, Text } from \\"@aws-amplify/ui-react\\";
-import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type SetStateWithoutInitialValueProps = React.PropsWithChildren<
   Partial<CardProps> & {
@@ -5601,6 +5599,7 @@ import React from \\"react\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
+  useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Button,
@@ -5621,7 +5620,6 @@ import {
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 import option from \\"./option\\";
-import { useStateMutationAction } from \\"../mock-helpers\\";
 
 export type TwoWayBindingsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
