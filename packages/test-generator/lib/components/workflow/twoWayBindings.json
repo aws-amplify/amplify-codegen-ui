@@ -715,7 +715,7 @@
           "properties": {
             "label": {
               "componentName": "SwitchFieldInput",
-              "property": "value"
+              "property": "isChecked"
             }
           }
         },
@@ -733,7 +733,7 @@
               "parameters": {
                 "state": {
                   "componentName": "SwitchFieldInput",
-                  "property": "value",
+                  "property": "isChecked",
                   "set": {
                     "value": true
                   }

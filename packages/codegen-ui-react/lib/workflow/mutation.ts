@@ -32,15 +32,17 @@ import {
   getSetStateName,
 } from '../react-component-render-helper';
 import { ImportCollection, ImportValue } from '../imports';
+import Primitive, { PrimitivesWithChangeEvent, PrimitiveLevelPropConfiguration } from '../primitive';
 import { mapGenericEventToReact } from './events';
 import { getChildPropMappingForComponentName } from './utils';
-import Primitive, { PrimitivesWithChangeEvent, PrimitiveLevelPropConfiguration } from '../primitive';
 
-type EventHandlerBuilder = (stateName: string) => JsxExpression;
+type EventHandlerBuilder = (setStateName: string, stateName: string) => JsxExpression;
 
 const genericEventToReactEventImplementationOverrides: PrimitiveLevelPropConfiguration<EventHandlerBuilder> = {
-  [Primitive.StepperField]: { [StudioGenericEvent.change]: numericValueCallbackGenerator },
-  [Primitive.SliderField]: { [StudioGenericEvent.change]: numericValueCallbackGenerator },
+  [Primitive.StepperField]: { [StudioGenericEvent.change]: numericValueCallback },
+  [Primitive.SliderField]: { [StudioGenericEvent.change]: numericValueCallback },
+  [Primitive.CheckboxField]: { [StudioGenericEvent.change]: buildSyntheticEventTargetCallback('checked') },
+  [Primitive.SwitchField]: { [StudioGenericEvent.change]: toggleBooleanStateCallback },
 };
 
 export function getComponentStateReferences(component: StudioComponent) {
@@ -107,46 +109,48 @@ export function getActionStateParameters(action: ActionStudioComponentEvent): St
   return [];
 }
 
-function syntheticEventTargetValueCallbackGenerator(stateName: string): JsxExpression {
-  return factory.createJsxExpression(
-    undefined,
-    factory.createArrowFunction(
+function buildSyntheticEventTargetCallback(targetFieldName: string): (setStateName: string) => JsxExpression {
+  return (setStateName: string) => {
+    return factory.createJsxExpression(
       undefined,
-      undefined,
-      [
-        factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          undefined,
-          factory.createIdentifier('event'),
-          undefined,
-          factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
-          undefined,
-        ),
-      ],
-      undefined,
-      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-      factory.createBlock(
+      factory.createArrowFunction(
+        undefined,
+        undefined,
         [
-          factory.createExpressionStatement(
-            factory.createCallExpression(factory.createIdentifier(stateName), undefined, [
-              factory.createPropertyAccessExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('event'),
-                  factory.createIdentifier('target'),
-                ),
-                factory.createIdentifier('value'),
-              ),
-            ]),
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('event'),
+            undefined,
+            factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
+            undefined,
           ),
         ],
-        false,
+        undefined,
+        factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+        factory.createBlock(
+          [
+            factory.createExpressionStatement(
+              factory.createCallExpression(factory.createIdentifier(setStateName), undefined, [
+                factory.createPropertyAccessExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('event'),
+                    factory.createIdentifier('target'),
+                  ),
+                  factory.createIdentifier(targetFieldName),
+                ),
+              ]),
+            ),
+          ],
+          false,
+        ),
       ),
-    ),
-  );
+    );
+  };
 }
 
-function numericValueCallbackGenerator(stateName: string): JsxExpression {
+function numericValueCallback(setStateName: string): JsxExpression {
   return factory.createJsxExpression(
     undefined,
     factory.createArrowFunction(
@@ -165,7 +169,25 @@ function numericValueCallbackGenerator(stateName: string): JsxExpression {
       ],
       undefined,
       factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-      factory.createCallExpression(factory.createIdentifier(stateName), undefined, [factory.createIdentifier('value')]),
+      factory.createCallExpression(factory.createIdentifier(setStateName), undefined, [
+        factory.createIdentifier('value'),
+      ]),
+    ),
+  );
+}
+
+function toggleBooleanStateCallback(setStateName: string, stateName: string): JsxExpression {
+  return factory.createJsxExpression(
+    undefined,
+    factory.createArrowFunction(
+      undefined,
+      undefined,
+      [],
+      undefined,
+      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+      factory.createCallExpression(factory.createIdentifier(setStateName), undefined, [
+        factory.createPrefixUnaryExpression(ts.SyntaxKind.ExclamationToken, factory.createIdentifier(stateName)),
+      ]),
     ),
   );
 }
@@ -173,6 +195,7 @@ function numericValueCallbackGenerator(stateName: string): JsxExpression {
 // TODO: Update in here so we can support customer `change` events for form elements.
 export function buildOpeningElementControlEvents(
   componentType: string,
+  setStateName: string,
   stateName: string,
   event: string,
 ): JsxAttribute {
@@ -180,10 +203,10 @@ export function buildOpeningElementControlEvents(
   const controlEventBuilder =
     implementationOverrides && implementationOverrides[event]
       ? implementationOverrides[event]
-      : syntheticEventTargetValueCallbackGenerator;
+      : buildSyntheticEventTargetCallback('value');
   return factory.createJsxAttribute(
     factory.createIdentifier(mapGenericEventToReact(componentType as Primitive, event as StudioGenericEvent)),
-    controlEventBuilder(stateName),
+    controlEventBuilder(setStateName, stateName),
   );
 }
 
