@@ -4,7 +4,7 @@ call npm run build
 
 :: create
 chdir packages
-call npx create-react-app integration-test --use-npm --template typescript
+call npx -y create-react-app integration-test --use-npm --template typescript
 chdir ..
 
 :: add files
