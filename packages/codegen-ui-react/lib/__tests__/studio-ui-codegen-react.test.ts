@@ -377,6 +377,10 @@ describe('amplify render tests', () => {
     it('controls an input that is modified by a button', () => {
       expect(generateWithAmplifyRenderer('workflow/inputMutationOnClick')).toMatchSnapshot();
     });
+
+    it('supports nested mutation', () => {
+      expect(generateWithAmplifyRenderer('workflow/nestedMutation')).toMatchSnapshot();
+    });
   });
 
   describe('default value', () => {
