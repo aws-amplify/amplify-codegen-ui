@@ -22,6 +22,7 @@ import {
   StateReference,
   StudioGenericEvent,
   buildComponentNameToTypeMap,
+  StudioComponentProperty,
 } from '@aws-amplify/codegen-ui';
 import {
   isActionEvent,
@@ -32,9 +33,13 @@ import {
   getSetStateName,
 } from '../react-component-render-helper';
 import { ImportCollection, ImportValue } from '../imports';
-import Primitive, { PrimitivesWithChangeEvent, PrimitiveLevelPropConfiguration } from '../primitive';
 import { mapGenericEventToReact } from './events';
 import { getChildPropMappingForComponentName } from './utils';
+import Primitive, {
+  PrimitivesWithChangeEvent,
+  PrimitiveLevelPropConfiguration,
+  PrimitiveDefaultPropertyValue,
+} from '../primitive';
 
 type EventHandlerBuilder = (setStateName: string, stateName: string) => JsxExpression;
 
@@ -273,6 +278,14 @@ export function getStateDefaultValue(component: StudioComponent, stateReference:
   const { componentName, property } = stateReference;
   const referencedComponent = getComponentFromComponentTree(component, componentName);
   const componentProperty = referencedComponent.properties[property];
+
+  // does not work for custom components wrapping form components
+  if (
+    componentProperty === undefined &&
+    PrimitiveDefaultPropertyValue[referencedComponent.componentType as Primitive]
+  ) {
+    return propertyToExpression(getDefaultForComponentAndProperty(referencedComponent, property));
+  }
   return propertyToExpression(componentProperty);
 }
 
@@ -301,6 +314,25 @@ export function getComponentFromComponentTree(
   }
 
   return res;
+}
+
+export function getDefaultForComponentAndProperty(
+  component: StudioComponent | StudioComponentChild,
+  property: string,
+): StudioComponentProperty {
+  const { componentType } = component;
+  const componentDefault = PrimitiveDefaultPropertyValue[componentType as Primitive];
+  if (componentDefault && property in componentDefault) {
+    // if component has defaultValue use defaultValue as initial state value
+    if (property === 'value' && component.properties.defaultValue) {
+      // TODO: remove defaultValue becuase coponents canot have value and defaultValue
+      return component.properties.defaultValue;
+    }
+    return componentDefault[property];
+  }
+
+  // use empty string a fallback default
+  return { value: '', type: 'string' };
 }
 
 export type MutationReferences = {
