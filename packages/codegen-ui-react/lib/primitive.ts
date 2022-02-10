@@ -130,9 +130,7 @@ export const PrimitivesWithChangeEvent: Set<Primitive> = new Set([
   Primitive.TextField,
 ]);
 
-export const PrimitiveDefaultPropertyValue: Partial<
-  Record<Primitive, { [property: string]: FixedStudioComponentProperty }>
-> = {
+export const PrimitiveDefaultPropertyValue: PrimitiveLevelPropConfiguration<FixedStudioComponentProperty> = {
   [Primitive.CheckboxField]: {
     checked: { value: false, type: 'boolean' },
   },
