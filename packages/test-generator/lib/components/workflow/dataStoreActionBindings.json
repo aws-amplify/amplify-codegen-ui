@@ -1,0 +1,264 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "DataStoreActionBindings",
+  "properties": {
+    "direction": {
+      "value": "column"
+    }
+  },
+  "bindingProperties": {
+    "listing": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "Listing"
+      }
+    },
+    "user": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User",
+        "predicate": {
+          "field": "firstName",
+          "operand": "Johnny",
+          "operator": "eq"
+        }
+      }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Heading",
+      "name": "Heading",
+      "properties": {
+        "level": {
+          "value": 3
+        },
+        "label": {
+          "value": "DataStore Action Bindings"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "DataStoreValue",
+      "properties": {
+        "label": {
+        	"bindingProperties": {
+            "property": "listing",
+            "field": "title"
+          }
+        }
+      }
+    },
+    {
+      "componentType": "ButtonGroup",
+      "name": "UpdateButtons",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "Button",
+          "name": "FixedPropertyDataStoreUpdateItemAction",
+          "events": {
+            "click": {
+              "action": "Amplify.DataStoreUpdateItemAction",
+              "parameters": {
+              	"model": "Listing",
+              	"id": {
+              	  "bindingProperties": {
+                    "property": "listing",
+                    "field": "id"
+                   }
+              	},
+              	"fields": {
+              		"title": {
+              			"value": "Fixed Value"
+              		}
+              	}
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Fixed Property DataStoreUpdateItemAction"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "BoundPropertyDataStoreUpdateItemAction",
+          "events": {
+            "click": {
+              "action": "Amplify.DataStoreUpdateItemAction",
+              "parameters": {
+              	"model": "Listing",
+              	"id": {
+              	  "bindingProperties": {
+                    "property": "listing",
+                    "field": "id"
+                   }
+              	},
+              	"fields": {
+              		"title": {
+              			"bindingProperties": {
+                      "property": "user",
+                      "field": "lastName"
+                    }
+              		}
+              	}
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Bound Property DataStoreUpdateItemAction"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "ConcatenatedPropertyDataStoreUpdateItemAction",
+          "events": {
+            "click": {
+              "action": "Amplify.DataStoreUpdateItemAction",
+              "parameters": {
+              	"model": "Listing",
+              	"id": {
+              	  "bindingProperties": {
+                    "property": "listing",
+                    "field": "id"
+                   }
+              	},
+              	"fields": {
+              		"title": {
+              			"concat": [
+                      {
+                        "value": "Concatenated"
+                      },
+                      {
+                        "value": " "
+                      },
+                      {
+                        "value": "Value"
+                      }
+                    ]
+              		}
+              	}
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Concatenated Property DataStoreUpdateItemAction"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "ConditionalPropertyDataStoreUpdateItemAction",
+          "events": {
+            "click": {
+              "action": "Amplify.DataStoreUpdateItemAction",
+              "parameters": {
+              	"model": "Listing",
+              	"id": {
+              	  "bindingProperties": {
+                    "property": "listing",
+                    "field": "id"
+                   }
+              	},
+              	"fields": {
+              		"title": {
+              			"condition": {
+                      "property": "user",
+                      "field": "age",
+                      "operator": "eq",
+                      "operand": 45,
+                      "then": {
+                        "value": "Conditional Value"
+                      },
+                      "else": {
+                        "value": "Unconditional Value"
+                      }
+                    }
+              		}
+              	}
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Conditional Property DataStoreUpdateItemAction"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "AuthPropertyDataStoreUpdateItemAction",
+          "events": {
+            "click": {
+              "action": "Amplify.DataStoreUpdateItemAction",
+              "parameters": {
+              	"model": "Listing",
+              	"id": {
+              	  "bindingProperties": {
+                    "property": "listing",
+                    "field": "id"
+                   }
+              	},
+              	"fields": {
+              		"title": {
+              			"userAttribute": "email"
+              		}
+              	}
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Auth Property DataStoreUpdateItemAction"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "StatePropertyDataStoreUpdateItemAction",
+          "events": {
+            "click": {
+              "action": "Amplify.DataStoreUpdateItemAction",
+              "parameters": {
+              	"model": "Listing",
+              	"id": {
+              	  "bindingProperties": {
+                    "property": "listing",
+                    "field": "id"
+                   }
+              	},
+              	"fields": {
+              		"title": {
+              			"componentName": "StateSource",
+                    "property": "label"
+              		}
+              	}
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply State Property DataStoreUpdateItemAction"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "StateSource",
+          "properties": {
+            "label": {
+              "value": "State Value"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

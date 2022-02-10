@@ -26,3 +26,5 @@ export { default as FormWithState } from './formWithState.json';
 export { default as InputMutationOnClick } from './inputMutationOnClick.json';
 export { default as ConditionalInMutation } from './conditionalInMutation.json';
 export { default as TwoWayBindings } from './twoWayBindings.json';
+export { default as MutationActionBindings } from './mutationActionBindings.json';
+export { default as DataStoreActionBindings } from './dataStoreActionBindings.json';
