@@ -144,6 +144,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'InternalMutation',
   'TwoWayBindings',
   'InputMutationOnClick',
+  'ConditionalInMutation',
 ]);
 const EXPECTED_INVALID_INPUT_CASES = new Set([
   'ComponentMissingProperties',
