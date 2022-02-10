@@ -107,6 +107,9 @@ export function getActionStateParameters(action: ActionStudioComponentEvent): St
         if (key === 'fields' || key === 'attributes') {
           return Object.values(parameter);
         }
+        if (isSetStateParameter(parameter)) {
+          return [parameter, parameter.set];
+        }
         return parameter;
       })
       .filter((parameter) => isStateProperty(parameter) || isSetStateParameter(parameter));
@@ -358,7 +361,7 @@ function mutationReferenceReducerWithComponentType(componentType: string) {
     return {
       ...mutationReferences,
       [stateReference.property]: propertyReferences.concat([
-        { addControlEvent: PrimitivesWithChangeEvent.has(componentType as Primitive) || !('set' in stateReference) },
+        { addControlEvent: PrimitivesWithChangeEvent.has(componentType as Primitive) },
       ]),
     };
   };
