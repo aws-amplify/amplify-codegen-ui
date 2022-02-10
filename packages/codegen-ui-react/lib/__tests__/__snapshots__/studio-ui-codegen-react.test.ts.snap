@@ -5223,7 +5223,7 @@ export default function InputMutationOnClick(
   props: InputMutationOnClickProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const [myInputValue, setMyInputValue] = useStateMutationAction(undefined);
+  const [myInputValue, setMyInputValue] = useStateMutationAction(\\"\\");
   const setInputButtonClick = () => {
     setMyInputValue(\\"Razor Crest\\");
   };
@@ -5376,7 +5376,7 @@ export default function TwoWayBindings(
 ): React.ReactElement {
   const { overrides, ...rest } = props;
   const [textFieldInputValue, setTextFieldInputValue] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(\\"\\");
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -5426,7 +5426,7 @@ export default function CheckboxControlledElement(
   props: CheckboxControlledElementProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const [inputChecked, setInputChecked] = useStateMutationAction(undefined);
+  const [inputChecked, setInputChecked] = useStateMutationAction(false);
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -5524,7 +5524,7 @@ export default function SwitchControlledElement(
   props: SwitchControlledElementProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const [inputIsChecked, setInputIsChecked] = useStateMutationAction(undefined);
+  const [inputIsChecked, setInputIsChecked] = useStateMutationAction(false);
   return (
     /* @ts-ignore: TS2322 */
     <Flex {...rest} {...getOverrideProps(overrides, \\"SwitchControlledElement\\")}>
@@ -5815,15 +5815,15 @@ export default function TwoWayBindings(
 ): React.ReactElement {
   const { overrides, ...rest } = props;
   const [checkboxFieldInputChecked, setCheckboxFieldInputChecked] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(false);
   const [passwordFieldInputValue, setPasswordFieldInputValue] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(\\"\\");
   const [phoneNumberFieldInputValue, setPhoneNumberFieldInputValue] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(\\"\\");
   const [radioGroupFieldInputValue, setRadioGroupFieldInputValue] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(\\"html\\");
   const [searchFieldInputValue, setSearchFieldInputValue] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(\\"\\");
   const [selectFieldInputValue, setSelectFieldInputValue] =
     useStateMutationAction(undefined);
   const [sliderFieldInputValue, setSliderFieldInputValue] =
@@ -5831,9 +5831,9 @@ export default function TwoWayBindings(
   const [stepperFieldInputValue, setStepperFieldInputValue] =
     useStateMutationAction(undefined);
   const [switchFieldInputIsChecked, setSwitchFieldInputIsChecked] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(false);
   const [textFieldInputValue, setTextFieldInputValue] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(\\"\\");
   const setCheckboxFieldValueClick = () => {
     setCheckboxFieldInputChecked(false);
   };
