@@ -235,6 +235,14 @@ describe('Workflow', () => {
           cy.get('input').should('have.attr', 'value', 'Razor Crest');
         });
       });
+
+      it('supports conditional in mutation', () => {
+        cy.get('#conditional-in-mutation').within(() => {
+          cy.get('.amplify-text').should('have.text', 'Default Value');
+          cy.get('button').click();
+          cy.get('.amplify-text').should('have.text', 'Conditional Value');
+        });
+      });
     });
   });
 });
