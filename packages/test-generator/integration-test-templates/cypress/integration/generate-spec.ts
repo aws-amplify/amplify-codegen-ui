@@ -145,6 +145,8 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'InputMutationOnClick',
   'ConditionalInMutation',
   'TwoWayBindings',
+  'MutationActionBindings',
+  'DataStoreActionBindings',
 ]);
 const EXPECTED_INVALID_INPUT_CASES = new Set([
   'ComponentMissingProperties',

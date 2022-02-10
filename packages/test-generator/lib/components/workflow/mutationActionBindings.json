@@ -1,0 +1,225 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "MutationActionBindings",
+  "properties": {
+    "direction": {
+      "value": "column"
+    }
+  },
+  "bindingProperties": {
+    "user": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User",
+        "predicate": {
+          "field": "firstName",
+          "operand": "Johnny",
+          "operator": "eq"
+        }
+      }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Heading",
+      "name": "Heading",
+      "properties": {
+        "level": {
+          "value": 3
+        },
+        "label": {
+          "value": "Mutation Action Bindings"
+        }
+      }
+    },
+    {
+      "componentType": "Text",
+      "name": "MutatedValue",
+      "properties": {
+        "label": {
+          "value": "Default Value"
+        }
+      }
+    },
+    {
+      "componentType": "ButtonGroup",
+      "name": "MutationButtons",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "Button",
+          "name": "FixedPropertyMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "MutatedValue",
+                  "property": "label",
+                  "set": {
+                    "value": "Fixed Value"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Fixed Property Mutation"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "BoundPropertyMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "MutatedValue",
+                  "property": "label",
+                  "set": {
+                    "bindingProperties": {
+                      "property": "user",
+                      "field": "lastName"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Bound Property Mutation"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "ConcatenatedPropertyMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "MutatedValue",
+                  "property": "label",
+                  "set": {
+                    "concat": [
+                      {
+                        "value": "Concatenated"
+                      },
+                      {
+                        "value": " "
+                      },
+                      {
+                        "value": "Value"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Concatenated Property Mutation"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "ConditionalPropertyMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "MutatedValue",
+                  "property": "label",
+                  "set": {
+                    "condition": {
+                      "property": "user",
+                      "field": "age",
+                      "operator": "eq",
+                      "operand": 45,
+                      "then": {
+                        "value": "Conditional Value"
+                      },
+                      "else": {
+                        "value": "Unconditional Value"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Conditional Property Mutation"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "AuthPropertyMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "MutatedValue",
+                  "property": "label",
+                  "set": {
+                    "userAttribute": "email"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply Auth Property Mutation"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "StatePropertyMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "MutatedValue",
+                  "property": "label",
+                  "set": {
+                    "componentName": "StateSource",
+                    "property": "label"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Apply State Property Mutation"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "StateSource",
+          "properties": {
+            "label": {
+              "value": "State Value"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
