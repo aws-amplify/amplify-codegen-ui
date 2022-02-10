@@ -23,6 +23,7 @@ import IconsetTests from './IconsetTests';
 import SnippetTests from './SnippetTests'; // eslint-disable-line import/extensions
 import WorkflowTests from './WorkflowTests';
 import TwoWayBindingTests from './TwoWayBindingTests';
+import ActionBindingTests from './ActionBindingTests';
 
 // use fake endpoint so useDataStoreBinding does not fail
 Amplify.configure({
@@ -58,6 +59,9 @@ const HomePage = () => {
         <li>
           <a href="/two-way-binding-tests">Two Way Binding Tests</a>
         </li>
+        <li>
+          <a href="/action-binding-tests">Action Binding Test</a>
+        </li>
       </ul>
     </div>
   );
@@ -75,6 +79,7 @@ export default function App() {
         <Route path="/snippet-tests" element={<SnippetTests />} />
         <Route path="/workflow-tests" element={<WorkflowTests />} />
         <Route path="/two-way-binding-tests" element={<TwoWayBindingTests />} />
+        <Route path="/action-binding-tests" element={<ActionBindingTests />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
