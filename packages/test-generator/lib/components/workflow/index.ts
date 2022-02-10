@@ -25,3 +25,4 @@ export { default as DataStoreActions } from './dataStoreActions.json';
 export { default as FormWithState } from './formWithState.json';
 export { default as TwoWayBindings } from './twoWayBindings.json';
 export { default as InputMutationOnClick } from './inputMutationOnClick.json';
+export { default as ConditionalInMutation } from './conditionalInMutation.json';
