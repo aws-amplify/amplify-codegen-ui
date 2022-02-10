@@ -335,6 +335,73 @@ export default function ReloadButton(
 }
 `;
 
+exports[`amplify render tests actions with conditional in parameters 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import { User } from \\"../models\\";
+import {
+  EscapeHatchProps,
+  createDataStorePredicate,
+  getOverrideProps,
+  useDataStoreBinding,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+
+export type ConditionalInMutationProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    user?: User;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ConditionalInMutation(
+  props: ConditionalInMutationProps
+): React.ReactElement {
+  const { user: userProp, overrides, ...rest } = props;
+  const [mutatedValueChildren, setMutatedValueChildren] =
+    useStateMutationAction(\\"Default Value\\");
+  const userFilterObj = {
+    field: \\"firstName\\",
+    operand: \\"Johnny\\",
+    operator: \\"eq\\",
+  };
+  const userFilter = createDataStorePredicate<User>(userFilterObj);
+  const userDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: User,
+    criteria: userFilter,
+  }).items[0];
+  const user = userProp !== undefined ? userProp : userDataStore;
+  const conditionalPropertyMutationClick = () => {
+    setMutatedValueChildren(
+      user?.age && user?.age == 45 ? \\"Conditional Value\\" : \\"Unconditional Value\\"
+    );
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"ConditionalInMutation\\")}>
+      <Text
+        children={mutatedValueChildren}
+        {...getOverrideProps(overrides, \\"MutatedValue\\")}
+      ></Text>
+      <Button
+        children=\\"Apply Conditional Property Mutation\\"
+        onClick={() => {
+          conditionalPropertyMutationClick();
+        }}
+        {...getOverrideProps(overrides, \\"ConditionalPropertyMutation\\")}
+      ></Button>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests basic component tests should generate a simple button component 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

@@ -31,6 +31,7 @@ import {
   FormWithState,
   SimpleUserCollection,
   InputMutationOnClick,
+  ConditionalInMutation,
 } from './ui-components'; // eslint-disable-line import/extensions
 
 type AuthState = 'LoggedIn' | 'LoggedOutLocally' | 'LoggedOutGlobally' | 'Error';
@@ -218,6 +219,7 @@ export default function ComplexTests() {
         <SetStateWithoutInitialValue />
         <UpdateVisibility />
         <InputMutationOnClick />
+        <ConditionalInMutation user={{ age: 45 }} />
       </View>
     </AmplifyProvider>
   );
