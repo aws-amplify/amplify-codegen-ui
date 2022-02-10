@@ -323,6 +323,10 @@ describe('amplify render tests', () => {
         expect(generateWithAmplifyRenderer('workflow/dataStoreDeleteItem')).toMatchSnapshot();
       });
     });
+
+    it('with conditional in parameters', () => {
+      expect(generateWithAmplifyRenderer('workflow/conditionalInMutation')).toMatchSnapshot();
+    });
   });
 
   it('should render events', () => {

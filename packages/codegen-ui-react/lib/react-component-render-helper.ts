@@ -460,7 +460,7 @@ function typedValueToJsxLiteral(value: any): PrimaryExpression {
   }
 }
 
-export function buildConditionalExpression(prop: ConditionalStudioComponentProperty): JsxExpression {
+export function buildConditionalExpression(prop: ConditionalStudioComponentProperty): Expression {
   const { property, field, operand, operandType, operator, then } = prop.condition;
   const elseBlock = prop.condition.else;
   const operatorToken = getSyntaxKindToken(operator);
@@ -478,31 +478,28 @@ export function buildConditionalExpression(prop: ConditionalStudioComponentPrope
         )
       : factory.createIdentifier(property);
 
-  return factory.createJsxExpression(
-    undefined,
-    factory.createConditionalExpression(
-      factory.createParenthesizedExpression(
+  return factory.createConditionalExpression(
+    factory.createParenthesizedExpression(
+      factory.createBinaryExpression(
+        propertyAccess,
+        factory.createToken(SyntaxKind.AmpersandAmpersandToken),
         factory.createBinaryExpression(
           propertyAccess,
-          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-          factory.createBinaryExpression(
-            propertyAccess,
-            operatorToken,
-            getConditionalOperandExpression(operand, operandType),
-          ),
+          operatorToken,
+          getConditionalOperandExpression(operand, operandType),
         ),
       ),
-      factory.createToken(SyntaxKind.QuestionToken),
-      resolvePropToExpression(then),
-      factory.createToken(SyntaxKind.ColonToken),
-      resolvePropToExpression(elseBlock),
     ),
+    factory.createToken(SyntaxKind.QuestionToken),
+    resolvePropToExpression(then),
+    factory.createToken(SyntaxKind.ColonToken),
+    resolvePropToExpression(elseBlock),
   );
 }
 
 export function buildConditionalAttr(prop: ConditionalStudioComponentProperty, propName: string): JsxAttribute {
   const expr = buildConditionalExpression(prop);
-  return factory.createJsxAttribute(factory.createIdentifier(propName), expr);
+  return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
 export function buildChildElement(prop?: StudioComponentProperty): JsxChild | undefined {
