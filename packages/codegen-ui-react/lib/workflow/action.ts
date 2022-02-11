@@ -22,7 +22,7 @@ import {
   ActionStudioComponentEvent,
   StudioComponentProperty,
   MutationAction,
-  buildComponentNameToTypeMap,
+  ComponentMetadata,
 } from '@aws-amplify/codegen-ui';
 import { isActionEvent, propertyToExpression, getSetStateName } from '../react-component-render-helper';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
@@ -89,13 +89,13 @@ export function getActionIdentifier(componentName: string | undefined, event: st
 }
 
 export function buildUseActionStatement(
-  component: StudioComponent,
+  componentMetadata: ComponentMetadata,
   action: ActionStudioComponentEvent,
   identifier: string,
   importCollection: ImportCollection,
 ): Statement {
   if (isMutationAction(action)) {
-    return buildMutationActionStatement(component, action, identifier);
+    return buildMutationActionStatement(componentMetadata, action, identifier);
   }
 
   const actionHookImportValue = getActionHookImportValue(action.action);
@@ -120,10 +120,16 @@ export function buildUseActionStatement(
   );
 }
 
-export function buildMutationActionStatement(component: StudioComponent, action: MutationAction, identifier: string) {
-  const componentNameToTypeMap = buildComponentNameToTypeMap(component);
+export function buildMutationActionStatement(
+  componentMetadata: ComponentMetadata,
+  action: MutationAction,
+  identifier: string,
+) {
   const { componentName, property } = action.parameters.state;
-  const childrenPropMapping = getChildPropMappingForComponentName(componentNameToTypeMap, componentName);
+  const childrenPropMapping = getChildPropMappingForComponentName(
+    componentMetadata.componentNameToTypeMap,
+    componentName,
+  );
   const stateReference =
     childrenPropMapping !== undefined && property === childrenPropMapping
       ? { ...action.parameters.state, property: 'children' }
