@@ -31,7 +31,8 @@ import {
   handleCodegenErrors,
   StateStudioComponentProperty,
   MutationActionSetStateParameter,
-  buildComponentNameToTypeMap,
+  ComponentMetadata,
+  computeComponentMetadata,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -98,6 +99,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
 
+  protected componentMetadata: ComponentMetadata;
+
   stateReferences: (StateStudioComponentProperty | MutationActionSetStateParameter)[] = [];
 
   fileName = `${this.component.name}.tsx`;
@@ -109,8 +112,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       ...renderConfig,
     };
     this.fileName = `${this.component.name}.${scriptKindToFileExtension(this.renderConfig.script)}`;
+    this.componentMetadata = computeComponentMetadata(this.component);
+
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
-    this.stateReferences = getComponentStateReferences(this.component);
+    this.stateReferences = getComponentStateReferences(this.componentMetadata);
     this.mapSyntheticPropsForVariants();
   }
 
@@ -611,7 +616,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(entry);
     });
 
-    const useActionStatements = this.buildUseActionStatements(component);
+    const useActionStatements = this.buildUseActionStatements();
     useActionStatements.forEach((entry) => {
       statements.push(entry);
     });
@@ -1024,11 +1029,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     );
   }
 
-  private buildUseActionStatements(component: StudioComponent): Statement[] {
-    const actions = getComponentActions(component);
+  private buildUseActionStatements(): Statement[] {
+    const actions = getComponentActions(this.component);
     if (actions) {
       return actions.map(({ action, identifier }) =>
-        buildUseActionStatement(component, action, identifier, this.importCollection),
+        buildUseActionStatement(this.componentMetadata, action, identifier, this.importCollection),
       );
     }
     return [];
@@ -1117,12 +1122,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       return;
     }
 
-    const componentNameToTypeMap = buildComponentNameToTypeMap(this.component);
-
     this.component.variants.forEach((variant) => {
       Object.entries(variant.overrides).forEach(([name, value]) => {
         const propsInOverrides = value;
-        const componentType = componentNameToTypeMap[name];
+        const componentType = this.componentMetadata.componentNameToTypeMap[name];
         if (componentType && isPrimitive(componentType)) {
           const childrenPropMapping = PrimitiveChildrenPropMapping[Primitive[componentType as Primitive]];
           if (childrenPropMapping !== undefined) {
