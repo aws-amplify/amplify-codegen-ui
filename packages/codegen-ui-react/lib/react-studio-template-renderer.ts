@@ -160,7 +160,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     // do not produce declaration becuase it is not used
     const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
 
-    return { compText, importsText };
+    return { compText, importsText, requiredDataModels: this.componentMetadata.requiredDataModels };
   }
 
   renderComponentInternal() {
