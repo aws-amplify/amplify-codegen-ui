@@ -21,11 +21,10 @@ import {
   ActionStudioComponentEvent,
   StateReference,
   StudioGenericEvent,
-  buildComponentNameToTypeMap,
   StudioComponentProperty,
+  ComponentMetadata,
 } from '@aws-amplify/codegen-ui';
 import {
-  isActionEvent,
   isStateProperty,
   isSetStateParameter,
   propertyToExpression,
@@ -50,45 +49,8 @@ const genericEventToReactEventImplementationOverrides: PrimitiveLevelPropConfigu
   [Primitive.SwitchField]: { [StudioGenericEvent.change]: toggleBooleanStateCallback },
 };
 
-export function getComponentStateReferences(component: StudioComponent) {
-  const stateReferences = getComponentStateReferencesHelper(component);
-  const componentNameToTypeMap = buildComponentNameToTypeMap(component);
-  const mappedStateReferences = mapSyntheticReferences(stateReferences, componentNameToTypeMap);
-  return mappedStateReferences;
-}
-
-function getComponentStateReferencesHelper(component: StudioComponent | StudioComponentChild) {
-  const stateReferences: StateReference[] = [];
-
-  if (component.properties) {
-    Object.values(component.properties).forEach((property) => {
-      if (isStateProperty(property)) {
-        stateReferences.push(property);
-      }
-    });
-  }
-
-  if (component.events) {
-    stateReferences.push(
-      ...Object.values(component.events)
-        .filter((action): action is ActionStudioComponentEvent => isActionEvent(action))
-        .flatMap((action) => getActionStateParameters(action)),
-    );
-  }
-
-  if (component.children) {
-    component.children.forEach((child) => {
-      stateReferences.push(...getComponentStateReferencesHelper(child));
-    });
-  }
-
-  return stateReferences;
-}
-
-function mapSyntheticReferences(
-  stateReferences: StateReference[],
-  componentNameToTypeMap: Record<string, string>,
-): StateReference[] {
+export function getComponentStateReferences(componentMetadata: ComponentMetadata) {
+  const { stateReferences, componentNameToTypeMap } = componentMetadata;
   return stateReferences.map((stateReference) => {
     const { componentName, property } = stateReference;
     const childrenPropMapping = getChildPropMappingForComponentName(componentNameToTypeMap, componentName);
