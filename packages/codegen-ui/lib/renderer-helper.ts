@@ -24,7 +24,6 @@ import {
   StudioComponentStoragePropertyBinding,
   StudioComponentPropertyBinding,
   StudioComponentProperty,
-  ActionStudioComponentEvent,
 } from './types';
 
 export const StudioRendererConstants = {
@@ -37,53 +36,8 @@ export function isStudioComponentWithBinding(
   return 'bindingProperties' in component;
 }
 
-export function hasAuthProperty(component: StudioComponent | StudioComponentChild): boolean {
-  return Object.values(component.properties).some((val) => isAuthProperty(val));
-}
-
-function hasAuthAction(component: StudioComponent | StudioComponentChild): boolean {
-  const actions = component.events
-    ? (Object.values(component.events).filter((event) => 'action' in event) as ActionStudioComponentEvent[])
-    : [];
-  return actions.some(doesActionHaveAuthBinding);
-}
-
-/**
- * This should be written in a more generic way. Enumerating each case to get it out quickly.
- */
-function doesActionHaveAuthBinding(action: ActionStudioComponentEvent): boolean {
-  switch (action.action) {
-    case 'Amplify.Navigation':
-      return Object.values(action.parameters).some(isAuthProperty);
-    case 'Amplify.AuthSignOut':
-      return Object.values(action.parameters).some(isAuthProperty);
-    case 'Amplify.DataStoreCreateItemAction':
-      return Object.values(action.parameters.fields).some(isAuthProperty);
-    case 'Amplify.DataStoreUpdateItemAction':
-      return isAuthProperty(action.parameters.id) || Object.values(action.parameters.fields).some(isAuthProperty);
-    case 'Amplify.DataStoreDeleteItemAction':
-      return isAuthProperty(action.parameters.id);
-    case 'Amplify.Mutation':
-      return action.parameters.state.set && isAuthProperty(action.parameters.state.set);
-    default:
-      throw new Error(`Action ${JSON.stringify(action)} could not be scanned for auth bindings.`);
-  }
-}
-
 export function isAuthProperty(prop: StudioComponentProperty): prop is StudioComponentAuthProperty {
   return 'userAttribute' in prop;
-}
-
-export function isStudioComponentWithAuthDependency(
-  component: StudioComponent | StudioComponentChild,
-): component is StudioComponent {
-  if (hasAuthProperty(component) || hasAuthAction(component)) {
-    return true;
-  }
-  if (component.children) {
-    return component.children.some(isStudioComponentWithAuthDependency);
-  }
-  return false;
 }
 
 /**
