@@ -19,7 +19,6 @@ import {
   isStudioComponentWithBinding,
   isSimplePropertyBinding,
   isDataPropertyBinding,
-  isStudioComponentWithAuthDependency,
   isEventPropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
@@ -600,7 +599,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(entry);
     });
 
-    const authStatement = this.buildUseAuthenticatedUserStatement(component);
+    const authStatement = this.buildUseAuthenticatedUserStatement();
     if (authStatement !== undefined) {
       this.importCollection.addMappedImport(ImportValue.USE_AUTH);
       statements.push(authStatement);
@@ -624,8 +623,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return statements;
   }
 
-  private buildUseAuthenticatedUserStatement(component: StudioComponent): Statement | undefined {
-    if (isStudioComponentWithAuthDependency(component)) {
+  private buildUseAuthenticatedUserStatement(): Statement | undefined {
+    if (this.componentMetadata.hasAuthBindings) {
       return factory.createVariableStatement(
         undefined,
         factory.createVariableDeclarationList(
