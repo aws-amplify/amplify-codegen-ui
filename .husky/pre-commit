@@ -8,4 +8,10 @@ fi
 
 . "$(dirname "$0")/_/husky.sh"
 
+if [ `git config --get-all secrets.patterns | wc -l` == 0 ]; then
+  echo "Git secrets are not configured. To configure please follow instructions here: https://github.com/awslabs/git-secrets."
+  exit 1
+fi
+
 npx --no-install lint-staged
+git-secrets --scan
