@@ -14,3 +14,4 @@
   limitations under the License.
  */
 export * from './component-mapping-utils';
+export * from './component-metadata';
