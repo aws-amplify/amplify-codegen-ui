@@ -23,6 +23,7 @@ import {
   StudioGenericEvent,
   StudioComponentProperty,
   ComponentMetadata,
+  getComponentFromComponentTree,
 } from '@aws-amplify/codegen-ui';
 import {
   isStateProperty,
@@ -49,11 +50,10 @@ const genericEventToReactEventImplementationOverrides: PrimitiveLevelPropConfigu
   [Primitive.SwitchField]: { [StudioGenericEvent.change]: toggleBooleanStateCallback },
 };
 
-export function getComponentStateReferences(componentMetadata: ComponentMetadata) {
-  const { stateReferences, componentNameToTypeMap } = componentMetadata;
-  return stateReferences.map((stateReference) => {
+export function mapSyntheticStateReferences(componentMetadata: ComponentMetadata) {
+  return componentMetadata.stateReferences.map((stateReference) => {
     const { componentName, property } = stateReference;
-    const childrenPropMapping = getChildPropMappingForComponentName(componentNameToTypeMap, componentName);
+    const childrenPropMapping = getChildPropMappingForComponentName(componentMetadata, componentName);
     if (childrenPropMapping !== undefined && property === childrenPropMapping) {
       return { ...stateReference, property: 'children' };
     }
@@ -199,13 +199,13 @@ function dedupeStateReferences(stateReferences: StateReference[]): StateReferenc
 
 export function buildStateStatements(
   component: StudioComponent,
-  stateReferences: StateReference[],
+  componentMetadata: ComponentMetadata,
   importCollection: ImportCollection,
 ): Statement[] {
-  if (stateReferences.length > 0) {
+  if (componentMetadata.stateReferences.length > 0) {
     importCollection.addMappedImport(ImportValue.USE_STATE_MUTATION_ACTION);
   }
-  const dedupedStateReferences = dedupeStateReferences(stateReferences);
+  const dedupedStateReferences = dedupeStateReferences(componentMetadata.stateReferences);
   return dedupedStateReferences.map((stateReference) => {
     return factory.createVariableStatement(
       undefined,
@@ -229,7 +229,7 @@ export function buildStateStatements(
             undefined,
             undefined,
             factory.createCallExpression(factory.createIdentifier('useStateMutationAction'), undefined, [
-              getStateDefaultValue(component, stateReference),
+              getStateDefaultValue(component, componentMetadata, stateReference),
             ]),
           ),
         ],
@@ -239,7 +239,11 @@ export function buildStateStatements(
   });
 }
 
-export function getStateDefaultValue(component: StudioComponent, stateReference: StateStudioComponentProperty) {
+export function getStateDefaultValue(
+  component: StudioComponent,
+  componentMetadata: ComponentMetadata,
+  stateReference: StateStudioComponentProperty,
+) {
   const { componentName, property } = stateReference;
   const referencedComponent = getComponentFromComponentTree(component, componentName);
   const componentProperty = referencedComponent.properties[property];
@@ -249,36 +253,9 @@ export function getStateDefaultValue(component: StudioComponent, stateReference:
     componentProperty === undefined &&
     PrimitiveDefaultPropertyValue[referencedComponent.componentType as Primitive]
   ) {
-    return propertyToExpression(getDefaultForComponentAndProperty(referencedComponent, property));
+    return propertyToExpression(componentMetadata, getDefaultForComponentAndProperty(referencedComponent, property));
   }
-  return propertyToExpression(componentProperty);
-}
-
-export function getComponentFromComponentTree(
-  component: StudioComponent,
-  componentName: string,
-): StudioComponent | StudioComponentChild {
-  const getComponentFromComponentTreeHelper = (
-    currentComponent: StudioComponent | StudioComponentChild,
-  ): StudioComponent | StudioComponentChild | undefined => {
-    if (currentComponent.name === componentName) {
-      return currentComponent;
-    }
-
-    if (currentComponent.children) {
-      return currentComponent.children.map(getComponentFromComponentTreeHelper).find((child) => child !== undefined);
-    }
-
-    return undefined;
-  };
-
-  const res = getComponentFromComponentTreeHelper(component);
-
-  if (res === undefined) {
-    throw new Error(`Component ${componentName} not found in component tree ${component.name}`);
-  }
-
-  return res;
+  return propertyToExpression(componentMetadata, componentProperty);
 }
 
 export function getDefaultForComponentAndProperty(
