@@ -17,18 +17,15 @@ import {
   StudioComponentDataPropertyBinding,
   StudioComponentStoragePropertyBinding,
   StudioComponentSimplePropertyBinding,
-  StudioComponent,
   StudioComponentEventPropertyBinding,
 } from '../types';
 import {
-  hasAuthProperty,
   isStudioComponentWithBinding,
   isDataPropertyBinding,
   isStoragePropertyBinding,
   isSimplePropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
-  isStudioComponentWithAuthDependency,
   isEventPropertyBinding,
 } from '../renderer-helper';
 
@@ -194,104 +191,6 @@ describe('render-helper', () => {
       expect(isSimplePropertyBinding(bindingProperties.date)).toBeTruthy();
       const { boolean, string, number, date, ...otherTypes } = bindingProperties;
       Object.values(otherTypes).forEach((otherType) => expect(isSimplePropertyBinding(otherType)).toBeFalsy());
-    });
-  });
-
-  describe('Auth attributes', () => {
-    const componentWithoutAuthAttribute = {
-      componentType: 'View',
-      name: 'MyBindingView',
-      properties: {},
-    };
-    const componentWithAuthAttribute = {
-      componentType: 'View',
-      name: 'MyBindingView',
-      properties: {
-        label: {
-          userAttribute: 'picture',
-        },
-      },
-    };
-    describe('hasAuthProperty', () => {
-      test('property not containing user attributes', () => {
-        expect(hasAuthProperty(componentWithoutAuthAttribute)).toBeFalsy();
-      });
-
-      test('property containing user attributes', () => {
-        expect(hasAuthProperty(componentWithAuthAttribute)).toBeTruthy();
-      });
-    });
-    describe('isStudioComponentWithAuthDependency', () => {
-      test('parent not containing user attributes', () => {
-        expect(isStudioComponentWithAuthDependency(componentWithoutAuthAttribute)).toBeFalsy();
-      });
-
-      test('parent containing user attributes', () => {
-        expect(isStudioComponentWithAuthDependency(componentWithAuthAttribute)).toBeTruthy();
-      });
-
-      test('child containing user attributes', () => {
-        const testComponent: StudioComponent = {
-          id: '1234-5678-9010',
-          componentType: 'Flex',
-          name: 'Profile',
-          children: [
-            {
-              name: 'child1',
-              componentType: 'Image',
-              properties: {
-                src: {
-                  userAttribute: 'username',
-                },
-              },
-            },
-            {
-              name: 'child2',
-              componentType: 'Button',
-              properties: {
-                label: {
-                  userAttribute: 'picture',
-                },
-              },
-            },
-            {
-              name: 'child3',
-              componentType: 'Button',
-              properties: {
-                label: {
-                  userAttribute: 'customUserAttributeIcecream',
-                },
-              },
-            },
-          ],
-          properties: {},
-          bindingProperties: {},
-        };
-        expect(isStudioComponentWithAuthDependency(testComponent)).toBeTruthy();
-      });
-
-      test('detects auth dependency for events', () => {
-        const testComponent: StudioComponent = {
-          componentType: 'Button',
-          name: 'ComponentWithAuthEventBinding',
-          events: {
-            click: {
-              action: 'Amplify.DataStoreCreateItemAction',
-              parameters: {
-                model: 'User',
-                fields: {
-                  userName: {
-                    userAttribute: 'username',
-                  },
-                },
-              },
-            },
-          },
-          bindingProperties: {},
-          properties: {},
-        };
-        expect(isStudioComponentWithAuthDependency(testComponent)).toBeTruthy();
-      });
     });
   });
 
