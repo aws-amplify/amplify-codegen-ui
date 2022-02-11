@@ -18,7 +18,7 @@ import {
   StudioNode,
   StudioComponent,
   StudioComponentChild,
-  StateReference,
+  ComponentMetadata,
 } from '@aws-amplify/codegen-ui';
 import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
@@ -42,7 +42,7 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
 > {
   constructor(
     component: StudioComponent | StudioComponentChild,
-    protected stateReferences: StateReference[],
+    protected componentMetadata: ComponentMetadata,
     protected importCollection: ImportCollection,
     protected parent?: StudioNode,
   ) {
@@ -66,14 +66,21 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
   }
 
   protected renderOpeningElement(): JsxOpeningElement {
-    const localStateReferences = filterStateReferencesForComponent(this.component, this.stateReferences);
+    const localStateReferences = filterStateReferencesForComponent(
+      this.component,
+      this.componentMetadata.stateReferences,
+    );
 
     const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) => {
       if (key in localStateReferences) {
         const stateName = getStateName({ componentName: this.component.name || '', property: key });
-        return buildOpeningElementProperties({ bindingProperties: { property: stateName } }, key);
+        return buildOpeningElementProperties(
+          this.componentMetadata,
+          { bindingProperties: { property: stateName } },
+          key,
+        );
       }
-      return buildOpeningElementProperties(value, key);
+      return buildOpeningElementProperties(this.componentMetadata, value, key);
     });
 
     // Reverse, and create element properties for localStateReferences which are not yet defined props
@@ -81,7 +88,11 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
       .filter(([referencedProperty]) => !(referencedProperty in this.component.properties))
       .map(([referencedProperty]) => {
         const stateName = getStateName({ componentName: this.component.name || '', property: referencedProperty });
-        return buildOpeningElementProperties({ bindingProperties: { property: stateName } }, referencedProperty);
+        return buildOpeningElementProperties(
+          this.componentMetadata,
+          { bindingProperties: { property: stateName } },
+          referencedProperty,
+        );
       });
 
     const eventAttributes = Object.entries(this.component.events || {}).map(([key, value]) =>

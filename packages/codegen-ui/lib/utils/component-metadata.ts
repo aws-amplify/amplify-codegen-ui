@@ -20,10 +20,8 @@ import {
   StudioComponentEvent,
   StudioComponentProperty,
   StudioComponentPropertyBinding,
-  StateStudioComponentProperty,
+  StateReference,
 } from '../types';
-
-type StateReference = StateStudioComponentProperty;
 
 export type ComponentMetadata = {
   hasAuthBindings: boolean;
@@ -64,19 +62,24 @@ function computeComponentMetadataHelper(component: StudioComponent | StudioCompo
 
 // Because object equality won't catch dupes here, we'll map by component Name, dedupe
 // properties, then unroll to a list.
+// Dont dedupe setters though, since they'll all be their own ref
 function dedupeStateReferences(stateReferences: StateReference[]): StateReference[] {
   const stateReferenceMap: Record<string, Set<string>> = {};
-  stateReferences.forEach(({ componentName, property }) => {
-    if (!(componentName in stateReferenceMap)) {
-      stateReferenceMap[componentName] = new Set([]);
-    }
-    stateReferenceMap[componentName].add(property);
-  });
-  return Object.entries(stateReferenceMap).flatMap(([componentName, properties]) =>
-    [...properties].map((property) => {
-      return { componentName, property };
-    }),
-  );
+  stateReferences
+    .filter((stateReference) => !('set' in stateReference))
+    .forEach(({ componentName, property }) => {
+      if (!(componentName in stateReferenceMap)) {
+        stateReferenceMap[componentName] = new Set([]);
+      }
+      stateReferenceMap[componentName].add(property);
+    });
+  return Object.entries(stateReferenceMap)
+    .flatMap(([componentName, properties]) =>
+      [...properties].map((property) => {
+        return { componentName, property };
+      }),
+    )
+    .concat(stateReferences.filter((stateReference) => 'set' in stateReference));
 }
 
 function dedupeComponentMetadata(componentMetadata: ComponentMetadata): ComponentMetadata {
@@ -129,12 +132,10 @@ function generateModelMetadata(model: string): ComponentMetadata {
 }
 
 function generateReferenceMetadata(reference: StateReference): ComponentMetadata {
-  // Unpacking the reference, so we don't bring additional values in.
-  const { componentName, property } = reference;
   return {
     hasAuthBindings: false,
     requiredDataModels: [],
-    stateReferences: [{ componentName, property }],
+    stateReferences: [reference],
     componentNameToTypeMap: {},
   };
 }

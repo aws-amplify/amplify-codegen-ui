@@ -88,7 +88,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       const renderedComponent = new ReactComponentWithChildrenRenderer<IconProps>(
         component,
-        this.stateReferences,
+        this.componentMetadata,
         this.importCollection,
         parent,
       ).renderElement(renderChildren);
@@ -105,7 +105,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Alert:
         return new ReactComponentWithChildrenRenderer<AlertProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -113,7 +113,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Badge:
         return new ReactComponentWithChildrenRenderer<BadgeProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -121,7 +121,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Button:
         return new ReactComponentWithChildrenRenderer<ButtonProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -129,7 +129,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.ButtonGroup:
         return new ReactComponentWithChildrenRenderer<ButtonGroupProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -137,7 +137,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Card:
         return new ReactComponentWithChildrenRenderer<CardProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -145,20 +145,20 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.CheckboxField:
         return new ReactComponentWithChildrenRenderer<CheckboxFieldProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
 
       case Primitive.Collection:
-        return new CollectionRenderer(component, this.stateReferences, this.importCollection, parent).renderElement(
+        return new CollectionRenderer(component, this.componentMetadata, this.importCollection, parent).renderElement(
           renderChildren,
         );
 
       case Primitive.Divider:
         return new ReactComponentRenderer<DividerProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement();
@@ -166,7 +166,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Expander:
         return new ReactComponentWithChildrenRenderer<ExpanderProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -174,7 +174,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.ExpanderItem:
         return new ReactComponentWithChildrenRenderer<ExpanderItemProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -182,7 +182,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Flex:
         return new ReactComponentWithChildrenRenderer<FlexProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -190,7 +190,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Grid:
         return new ReactComponentWithChildrenRenderer<GridProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -198,7 +198,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Heading:
         return new ReactComponentWithChildrenRenderer<HeadingProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -206,7 +206,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Icon:
         return new ReactComponentWithChildrenRenderer<IconProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -214,7 +214,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Image:
         return new ReactComponentRenderer<ImageProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement();
@@ -222,7 +222,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Link:
         return new ReactComponentWithChildrenRenderer<LinkProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -230,7 +230,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Loader:
         return new ReactComponentWithChildrenRenderer<LoaderProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -238,7 +238,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.MenuButton:
         return new ReactComponentWithChildrenRenderer<ButtonProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -246,7 +246,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.MenuItem:
         return new ReactComponentWithChildrenRenderer<MenuItemProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -254,7 +254,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Menu:
         return new ReactComponentWithChildrenRenderer<MenuProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -262,7 +262,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Pagination:
         return new ReactComponentWithChildrenRenderer<PaginationProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -270,7 +270,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.PasswordField:
         return new ReactComponentWithChildrenRenderer<PasswordFieldProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -278,7 +278,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.PhoneNumberField:
         return new ReactComponentWithChildrenRenderer<PhoneNumberFieldProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -286,7 +286,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Placeholder:
         return new ReactComponentWithChildrenRenderer<PlaceholderProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -294,7 +294,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Radio:
         return new ReactComponentWithChildrenRenderer<RadioProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -302,7 +302,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.RadioGroupField:
         return new ReactComponentWithChildrenRenderer<RadioGroupFieldProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -310,7 +310,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Rating:
         return new ReactComponentWithChildrenRenderer<RatingProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -318,7 +318,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.ScrollView:
         return new ReactComponentWithChildrenRenderer<ScrollViewProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -326,7 +326,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.SearchField:
         return new ReactComponentWithChildrenRenderer<SearchFieldProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -334,7 +334,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.SelectField:
         return new ReactComponentWithChildrenRenderer<SelectFieldProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -342,7 +342,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.SliderField:
         return new ReactComponentRenderer<SliderFieldProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement();
@@ -350,7 +350,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.StepperField:
         return new ReactComponentWithChildrenRenderer<StepperFieldProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -358,7 +358,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.SwitchField:
         return new ReactComponentWithChildrenRenderer<SwitchFieldProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -366,7 +366,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.TabItem:
         return new ReactComponentWithChildrenRenderer<TabItemProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -374,7 +374,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Tabs:
         return new ReactComponentWithChildrenRenderer<TabsProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -382,7 +382,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Table:
         return new ReactComponentWithChildrenRenderer<TableProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -390,7 +390,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.TableBody:
         return new ReactComponentWithChildrenRenderer<TableBodyProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -398,7 +398,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.TableCell:
         return new ReactComponentWithChildrenRenderer<TableCellProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -406,7 +406,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.TableFoot:
         return new ReactComponentWithChildrenRenderer<TableFootProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -414,7 +414,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.TableHead:
         return new ReactComponentWithChildrenRenderer<TableHeadProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -422,7 +422,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.TableRow:
         return new ReactComponentWithChildrenRenderer<TableRowProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -430,7 +430,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.Text:
         return new ReactComponentWithChildrenRenderer<TextProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -438,7 +438,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.TextField:
         return new ReactComponentWithChildrenRenderer<TextFieldProps<boolean>>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -446,7 +446,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.ToggleButton:
         return new ReactComponentWithChildrenRenderer<ToggleButtonProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -454,7 +454,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.ToggleButtonGroup:
         return new ReactComponentWithChildrenRenderer<ToggleButtonGroupProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -462,7 +462,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.View:
         return new ReactComponentWithChildrenRenderer<ViewProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -470,7 +470,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       case Primitive.VisuallyHidden:
         return new ReactComponentWithChildrenRenderer<VisuallyHiddenProps>(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
@@ -478,7 +478,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
       default:
         return new CustomComponentRenderer(
           component,
-          this.stateReferences,
+          this.componentMetadata,
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
