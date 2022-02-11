@@ -48,11 +48,7 @@ export const ActionNameMapping: Partial<Record<Action, ImportValue>> = {
   [Action['Amplify.Mutation']]: ImportValue.USE_STATE_MUTATION_ACTION,
 };
 
-export function isAction(action: string): action is Action {
-  return Object.values(Action).includes(action as Action);
-}
-
-export function isMutationAction(action: ActionStudioComponentEvent): action is MutationAction {
+function isMutationAction(action: ActionStudioComponentEvent): action is MutationAction {
   return (action.action as Action) === Action['Amplify.Mutation'];
 }
 
@@ -111,7 +107,7 @@ export function buildUseActionStatement(
           factory.createCallExpression(
             factory.createIdentifier(actionHookImportValue),
             undefined,
-            buildActionArguments(action, importCollection),
+            buildActionArguments(componentMetadata, action, importCollection),
           ),
         ),
       ],
@@ -125,11 +121,9 @@ export function buildMutationActionStatement(
   action: MutationAction,
   identifier: string,
 ) {
+  // TODO: Hi there
   const { componentName, property } = action.parameters.state;
-  const childrenPropMapping = getChildPropMappingForComponentName(
-    componentMetadata.componentNameToTypeMap,
-    componentName,
-  );
+  const childrenPropMapping = getChildPropMappingForComponentName(componentMetadata, componentName);
   const stateReference =
     childrenPropMapping !== undefined && property === childrenPropMapping
       ? { ...action.parameters.state, property: 'children' }
@@ -155,7 +149,7 @@ export function buildMutationActionStatement(
               [
                 factory.createExpressionStatement(
                   factory.createCallExpression(factory.createIdentifier(setState), undefined, [
-                    propertyToExpression(action.parameters.state.set),
+                    propertyToExpression(componentMetadata, action.parameters.state.set),
                   ]),
                 ),
               ],
@@ -174,6 +168,7 @@ export function buildMutationActionStatement(
  * model and fields are special cases. All other fields are StudioComponentProperty
  */
 export function buildActionArguments(
+  componentMetadata: ComponentMetadata,
   action: ActionStudioComponentEvent,
   importCollection: ImportCollection,
 ): ObjectLiteralExpression[] | undefined {
@@ -183,7 +178,7 @@ export function buildActionArguments(
         Object.entries(action.parameters).map(([key, value]) =>
           factory.createPropertyAssignment(
             factory.createIdentifier(key),
-            getActionParameterValue(key, value, importCollection),
+            getActionParameterValue(componentMetadata, key, value, importCollection),
           ),
         ),
         false,
@@ -195,6 +190,7 @@ export function buildActionArguments(
 }
 
 export function getActionParameterValue(
+  componentMetadata: ComponentMetadata,
   key: string,
   value: StudioComponentProperty | { [key: string]: StudioComponentProperty } | string,
   importCollection: ImportCollection,
@@ -208,11 +204,11 @@ export function getActionParameterValue(
       Object.entries(value).map(([nestedKey, nestedValue]) =>
         factory.createPropertyAssignment(
           factory.createIdentifier(nestedKey),
-          getActionParameterValue(nestedKey, nestedValue, importCollection),
+          getActionParameterValue(componentMetadata, nestedKey, nestedValue, importCollection),
         ),
       ),
       false,
     );
   }
-  return propertyToExpression(value as StudioComponentProperty);
+  return propertyToExpression(componentMetadata, value as StudioComponentProperty);
 }

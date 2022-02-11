@@ -39,7 +39,7 @@ export default class CollectionRenderer extends ReactComponentWithChildrenRender
 
   private renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
     const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementProperties(value, key),
+      buildOpeningElementProperties(this.componentMetadata, value, key),
     );
 
     const itemsAttribute = factory.createJsxAttribute(
