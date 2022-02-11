@@ -30,6 +30,7 @@ import {
   BoundStudioComponentEvent,
   ActionStudioComponentEvent,
   MutationActionSetStateParameter,
+  ComponentMetadata,
 } from '@aws-amplify/codegen-ui';
 
 import {
@@ -52,6 +53,7 @@ import {
 
 import { ImportCollection, ImportSource } from './imports';
 import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
+import { getChildPropMappingForComponentName } from './workflow/utils';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
@@ -319,16 +321,28 @@ export function buildConcatAttr(prop: ConcatenatedStudioComponentProperty, propN
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
-export function buildStateExpression(prop: StateStudioComponentProperty): Expression {
-  return factory.createIdentifier(getStateName(prop));
+export function buildStateExpression(
+  componentMetadata: ComponentMetadata,
+  { componentName, property }: StateStudioComponentProperty,
+): Expression {
+  const childrenPropMapping = getChildPropMappingForComponentName(componentMetadata, componentName);
+  const mappedSyntheticProperty = property === childrenPropMapping ? 'children' : property;
+  return factory.createIdentifier(getStateName({ componentName, property: mappedSyntheticProperty }));
 }
 
-export function buildStateAttr(prop: StateStudioComponentProperty, propName: string): JsxAttribute {
-  const expr = buildStateExpression(prop);
+export function buildStateAttr(
+  componentMetadata: ComponentMetadata,
+  prop: StateStudioComponentProperty,
+  propName: string,
+): JsxAttribute {
+  const expr = buildStateExpression(componentMetadata, prop);
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
-export function propertyToExpression(property: StudioComponentProperty | undefined): Expression {
+export function propertyToExpression(
+  componentMetadata: ComponentMetadata,
+  property: StudioComponentProperty | undefined,
+): Expression {
   if (property === undefined) {
     return factory.createIdentifier('undefined');
   }
@@ -348,11 +362,11 @@ export function propertyToExpression(property: StudioComponentProperty | undefin
   }
 
   if (isConditionalProperty(property)) {
-    return buildConditionalExpression(property);
+    return buildConditionalExpression(componentMetadata, property);
   }
 
   if (isStateProperty(property)) {
-    return buildStateExpression(property);
+    return buildStateExpression(componentMetadata, property);
   }
 
   if (isAuthProperty(property)) {
@@ -362,7 +376,10 @@ export function propertyToExpression(property: StudioComponentProperty | undefin
   throw new Error(`Invalid property: ${JSON.stringify(property)}.`);
 }
 
-export function resolvePropToExpression(prop: StudioComponentProperty): Expression {
+export function resolvePropToExpression(
+  componentMetadata: ComponentMetadata,
+  prop: StudioComponentProperty,
+): Expression {
   if (isFixedPropertyWithValue(prop)) {
     const propValue = prop.value;
     switch (typeof propValue) {
@@ -396,10 +413,10 @@ export function resolvePropToExpression(prop: StudioComponentProperty): Expressi
     return buildConcatExpression(prop);
   }
   if (isConditionalProperty(prop)) {
-    return buildConditionalExpression(prop);
+    return buildConditionalExpression(componentMetadata, prop);
   }
   if (isStateProperty(prop)) {
-    return buildStateExpression(prop);
+    return buildStateExpression(componentMetadata, prop);
   }
   return factory.createVoidZero();
 }
@@ -460,7 +477,10 @@ function typedValueToJsxLiteral(value: any): PrimaryExpression {
   }
 }
 
-export function buildConditionalExpression(prop: ConditionalStudioComponentProperty): Expression {
+export function buildConditionalExpression(
+  componentMetadata: ComponentMetadata,
+  prop: ConditionalStudioComponentProperty,
+): Expression {
   const { property, field, operand, operandType, operator, then } = prop.condition;
   const elseBlock = prop.condition.else;
   const operatorToken = getSyntaxKindToken(operator);
@@ -491,18 +511,25 @@ export function buildConditionalExpression(prop: ConditionalStudioComponentPrope
       ),
     ),
     factory.createToken(SyntaxKind.QuestionToken),
-    resolvePropToExpression(then),
+    resolvePropToExpression(componentMetadata, then),
     factory.createToken(SyntaxKind.ColonToken),
-    resolvePropToExpression(elseBlock),
+    resolvePropToExpression(componentMetadata, elseBlock),
   );
 }
 
-export function buildConditionalAttr(prop: ConditionalStudioComponentProperty, propName: string): JsxAttribute {
-  const expr = buildConditionalExpression(prop);
+export function buildConditionalAttr(
+  componentMetadata: ComponentMetadata,
+  prop: ConditionalStudioComponentProperty,
+  propName: string,
+): JsxAttribute {
+  const expr = buildConditionalExpression(componentMetadata, prop);
   return factory.createJsxAttribute(factory.createIdentifier(propName), factory.createJsxExpression(undefined, expr));
 }
 
-export function buildChildElement(prop?: StudioComponentProperty): JsxChild | undefined {
+export function buildChildElement(
+  componentMetadata: ComponentMetadata,
+  prop?: StudioComponentProperty,
+): JsxChild | undefined {
   if (!prop) {
     return undefined;
   }
@@ -526,12 +553,16 @@ export function buildChildElement(prop?: StudioComponentProperty): JsxChild | un
     expression = buildConcatExpression(prop);
   }
   if (isConditionalProperty(prop)) {
-    expression = buildConditionalExpression(prop);
+    expression = buildConditionalExpression(componentMetadata, prop);
   }
   return expression && factory.createJsxExpression(undefined, expression);
 }
 
-export function buildOpeningElementProperties(prop: StudioComponentProperty, name: string): JsxAttribute {
+export function buildOpeningElementProperties(
+  componentMetadata: ComponentMetadata,
+  prop: StudioComponentProperty,
+  name: string,
+): JsxAttribute {
   if (isFixedPropertyWithValue(prop)) {
     return buildFixedAttr(prop, name);
   }
@@ -552,10 +583,10 @@ export function buildOpeningElementProperties(prop: StudioComponentProperty, nam
     return buildConcatAttr(prop, name);
   }
   if (isConditionalProperty(prop)) {
-    return buildConditionalAttr(prop, name);
+    return buildConditionalAttr(componentMetadata, prop, name);
   }
   if (isStateProperty(prop)) {
-    return buildStateAttr(prop, name);
+    return buildStateAttr(componentMetadata, prop, name);
   }
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }

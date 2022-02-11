@@ -5863,12 +5863,12 @@ export default function NestedMutation(
   props: NestedMutationProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const [mutatedValueChildren, setMutatedValueChildren] =
-    useStateMutationAction(\\"Default Value\\");
   const [stateSourceChildren, setStateSourceChildren] =
     useStateMutationAction(\\"State Value\\");
+  const [mutatedValueChildren, setMutatedValueChildren] =
+    useStateMutationAction(\\"Default Value\\");
   const statePropertyMutationClick = () => {
-    setMutatedValueChildren(stateSourceLabel);
+    setMutatedValueChildren(stateSourceChildren);
   };
   return (
     /* @ts-ignore: TS2322 */

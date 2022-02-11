@@ -12,9 +12,7 @@ Array [
 ]
 `;
 
-exports[`getComponentFromComponentTree not found 1`] = `"Component NotFoundComponent not found in component tree Component"`;
-
-exports[`getComponentStateReferences basic 1`] = `
+exports[`mapSyntheticStateReferences basic 1`] = `
 Array [
   Object {
     "componentName": "UserNameTextField",

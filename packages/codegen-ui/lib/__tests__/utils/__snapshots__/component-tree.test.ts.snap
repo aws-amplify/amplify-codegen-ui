@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getComponentFromComponentTree not found 1`] = `"Component NotFoundComponent not found in component tree Component"`;
