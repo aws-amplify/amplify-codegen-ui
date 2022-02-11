@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { MutationAction, DataStoreUpdateItemAction } from '@aws-amplify/codegen-ui';
+import { MutationAction, ComponentMetadata } from '@aws-amplify/codegen-ui';
 import {
   getComponentStateReferences,
   getActionStateParameters,
@@ -22,61 +22,13 @@ import {
 
 describe('getComponentStateReferences', () => {
   test('basic', () => {
-    const clickEvent: DataStoreUpdateItemAction = {
-      action: 'Amplify.DataStoreUpdateItemAction',
-      parameters: {
-        model: 'Customer',
-        id: {
-          value: 'd9887268-47dd-4899-9568-db5809218751',
-        },
-        fields: {
-          username: {
-            componentName: 'UserNameTextField',
-            property: 'value',
-          },
-        },
-      },
+    const componentMetadata: ComponentMetadata = {
+      hasAuthBindings: false,
+      requiredDataModels: [],
+      stateReferences: [{ componentName: 'UserNameTextField', property: 'value' }],
+      componentNameToTypeMap: { UserNameTextField: 'TextField' },
     };
-
-    const component = {
-      id: '1234-5678-9010',
-      componentType: 'Flex',
-      name: 'MyForm',
-      properties: {},
-      bindingProperties: {},
-      children: [
-        {
-          componentType: 'TextField',
-          name: 'UserNameTextField',
-          properties: {
-            label: {
-              value: 'Username',
-            },
-            value: {
-              value: 'vizsla',
-            },
-          },
-          bindingProperties: {},
-        },
-        {
-          componentType: 'Button',
-          name: 'SubmitButton',
-          properties: {
-            label: {
-              value: 'Username',
-            },
-            value: {
-              value: 'vizsla',
-            },
-          },
-          bindingProperties: {},
-          events: {
-            click: clickEvent,
-          },
-        },
-      ],
-    };
-    expect(getComponentStateReferences(component)).toMatchSnapshot();
+    expect(getComponentStateReferences(componentMetadata)).toMatchSnapshot();
   });
 });
 
