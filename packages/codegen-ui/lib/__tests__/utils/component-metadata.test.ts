@@ -509,7 +509,7 @@ describe('computeComponentMetadata', () => {
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
 
-    it('mutation events with set dedupe against bindings', () => {
+    it('mutation events with set does not dedupe against bindings', () => {
       const component: StudioComponent = {
         componentType: 'Text',
         properties: {},
@@ -544,7 +544,10 @@ describe('computeComponentMetadata', () => {
       const expectedMetadata: ComponentMetadata = {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
-        stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
+        stateReferences: [
+          { componentName: 'UserNameField', property: 'value' },
+          { componentName: 'UserNameField', property: 'value', set: { value: 'Setter' } },
+        ],
         componentNameToTypeMap: {},
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
@@ -729,8 +732,8 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: true,
         requiredDataModels: ['User', 'Listing'],
         stateReferences: [
-          { componentName: 'NestedComponent', property: 'color' },
           { componentName: 'NicknameField', property: 'value' },
+          { componentName: 'NestedComponent', property: 'color', set: { bindingProperties: { property: 'color' } } },
         ],
         componentNameToTypeMap: {
           TopLevelComponent: 'Flex',

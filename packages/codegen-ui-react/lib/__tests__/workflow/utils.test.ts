@@ -14,27 +14,33 @@
   limitations under the License.
  */
 
+import { ComponentMetadata } from '@aws-amplify/codegen-ui';
 import { getChildPropMappingForComponentName } from '../../workflow/utils';
 
 describe('getChildPropMappingForComponentName', () => {
-  const componentNameToTypeMap = {
-    MyFlex: 'Flex',
-    MyButton: 'Button',
+  const componentMetadata: ComponentMetadata = {
+    componentNameToTypeMap: {
+      MyFlex: 'Flex',
+      MyButton: 'Button',
+    },
+    hasAuthBindings: false,
+    requiredDataModels: [],
+    stateReferences: [],
   };
 
   test('throws on missing name mapping', () => {
     expect(() => {
-      getChildPropMappingForComponentName(componentNameToTypeMap, 'MissingComponent');
+      getChildPropMappingForComponentName(componentMetadata, 'MissingComponent');
     }).toThrowErrorMatchingInlineSnapshot(
       `"Invalid definition, found reference to component name MissingComponent which wasn't found in the schema."`,
     );
   });
 
   test('returns mapping for synthetic mapped prop', () => {
-    expect(getChildPropMappingForComponentName(componentNameToTypeMap, 'MyButton')).toEqual('label');
+    expect(getChildPropMappingForComponentName(componentMetadata, 'MyButton')).toEqual('label');
   });
 
   test('returns undefined for non-mapped component', () => {
-    expect(getChildPropMappingForComponentName(componentNameToTypeMap, 'MyFlex')).toBeUndefined();
+    expect(getChildPropMappingForComponentName(componentMetadata, 'MyFlex')).toBeUndefined();
   });
 });

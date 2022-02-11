@@ -28,8 +28,6 @@ import {
   StudioComponentVariant,
   StudioComponentSimplePropertyBinding,
   handleCodegenErrors,
-  StateStudioComponentProperty,
-  MutationActionSetStateParameter,
   ComponentMetadata,
   computeComponentMetadata,
 } from '@aws-amplify/codegen-ui';
@@ -81,7 +79,7 @@ import { RequiredKeys } from './utils/type-utils';
 import {
   getComponentActions,
   buildUseActionStatement,
-  getComponentStateReferences,
+  mapSyntheticStateReferences,
   buildStateStatements,
 } from './workflow';
 
@@ -100,8 +98,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   protected componentMetadata: ComponentMetadata;
 
-  stateReferences: (StateStudioComponentProperty | MutationActionSetStateParameter)[] = [];
-
   fileName = `${this.component.name}.tsx`;
 
   constructor(component: StudioComponent, renderConfig: ReactRenderConfig) {
@@ -113,9 +109,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     this.fileName = `${this.component.name}.${scriptKindToFileExtension(this.renderConfig.script)}`;
     this.componentMetadata = computeComponentMetadata(this.component);
 
-    // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
-    this.stateReferences = getComponentStateReferences(this.componentMetadata);
+    this.componentMetadata.stateReferences = mapSyntheticStateReferences(this.componentMetadata);
     this.mapSyntheticPropsForVariants();
+
+    // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
   }
 
   @handleCodegenErrors
@@ -291,7 +288,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   renderSampleCodeSnippetJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement {
-    return new SampleCodeRenderer(component, this.stateReferences, this.importCollection).renderElement();
+    return new SampleCodeRenderer(component, this.componentMetadata, this.importCollection).renderElement();
   }
 
   renderBindingPropsType(component: StudioComponent): TypeAliasDeclaration {
@@ -594,7 +591,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(this.buildOverridesFromVariantsAndProp());
     }
 
-    const stateStatements = buildStateStatements(component, this.stateReferences, this.importCollection);
+    const stateStatements = buildStateStatements(component, this.componentMetadata, this.importCollection);
     stateStatements.forEach((entry) => {
       statements.push(entry);
     });

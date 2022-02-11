@@ -14,14 +14,14 @@
   limitations under the License.
  */
 
-import { InvalidInputError } from '@aws-amplify/codegen-ui';
+import { ComponentMetadata, InvalidInputError } from '@aws-amplify/codegen-ui';
 import Primitive, { PrimitiveChildrenPropMapping } from '../primitive';
 
 export const getChildPropMappingForComponentName = (
-  componentNameToTypeMap: Record<string, string>,
+  componentMetadata: ComponentMetadata,
   componentName: string,
 ): string | undefined => {
-  const referencedComponentType = componentNameToTypeMap[componentName];
+  const referencedComponentType = componentMetadata.componentNameToTypeMap[componentName];
   if (!referencedComponentType) {
     throw new InvalidInputError(
       `Invalid definition, found reference to component name ${componentName} which wasn't found in the schema.`,
