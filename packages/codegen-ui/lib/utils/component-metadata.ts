@@ -41,7 +41,7 @@ export function computeComponentMetadata(component: StudioComponent): ComponentM
   const { bindingProperties, collectionProperties } = component;
   return dedupeComponentMetadata(
     reduceComponentMetadata([
-      ...Object.values(bindingProperties).map(computeBindingPropertyMetadata),
+      ...(bindingProperties ? Object.values(bindingProperties).map(computeBindingPropertyMetadata) : []),
       ...(collectionProperties ? Object.values(collectionProperties).map(computeCollectionPropertyMetadata) : []),
       computeComponentMetadataHelper(component),
     ]),
@@ -52,7 +52,7 @@ export function computeComponentMetadata(component: StudioComponent): ComponentM
 function computeComponentMetadataHelper(component: StudioComponent | StudioComponentChild): ComponentMetadata {
   return reduceComponentMetadata([
     generateNameMappingMetadata(component.name, component.componentType),
-    ...Object.values(component.properties).map(computePropertyMetadata),
+    ...(component.properties ? Object.values(component.properties).map(computePropertyMetadata) : []),
     ...(component.events ? Object.values(component.events).map(computeEventMetadata) : []),
     ...(component.children ? component.children.map(computeComponentMetadataHelper) : []),
   ]);
