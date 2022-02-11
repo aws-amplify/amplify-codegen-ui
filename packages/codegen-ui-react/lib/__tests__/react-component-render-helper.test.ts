@@ -17,6 +17,7 @@ import {
   RelationalOperator,
   ConditionalStudioComponentProperty,
   StudioComponentProperty,
+  ComponentMetadata,
 } from '@aws-amplify/codegen-ui';
 import {
   getFixedComponentPropValueExpression,
@@ -56,6 +57,15 @@ function buildConditionalWithOperand(operand: string, type?: string) {
   }
 
   return conditional;
+}
+
+function buildEmptyComponentMetadata(): ComponentMetadata {
+  return {
+    hasAuthBindings: false,
+    requiredDataModels: [],
+    stateReferences: [],
+    componentNameToTypeMap: {},
+  };
 }
 
 describe('react-component-render-helper', () => {
@@ -228,27 +238,27 @@ describe('react-component-render-helper', () => {
 
   describe('buildChildElement', () => {
     test('no prop', () => {
-      expect(buildChildElement()).toBeUndefined();
+      expect(buildChildElement(buildEmptyComponentMetadata())).toBeUndefined();
     });
 
     test('fixed property', () => {
       const prop = { value: 'foo' };
-      expect(buildChildElement(prop)).toMatchSnapshot();
+      expect(buildChildElement(buildEmptyComponentMetadata(), prop)).toMatchSnapshot();
     });
 
     test('bound property', () => {
       const prop = { bindingProperties: { property: 'prop' } };
-      expect(buildChildElement(prop)).toMatchSnapshot();
+      expect(buildChildElement(buildEmptyComponentMetadata(), prop)).toMatchSnapshot();
     });
 
     test('collection bound property', () => {
       const prop = { collectionBindingProperties: { property: 'prop' } };
-      expect(buildChildElement(prop)).toMatchSnapshot();
+      expect(buildChildElement(buildEmptyComponentMetadata(), prop)).toMatchSnapshot();
     });
 
     test('concatenated property', () => {
       const prop = { concat: [] };
-      expect(buildChildElement(prop)).toMatchSnapshot();
+      expect(buildChildElement(buildEmptyComponentMetadata(), prop)).toMatchSnapshot();
     });
 
     test('conditonal property', () => {
@@ -261,25 +271,28 @@ describe('react-component-render-helper', () => {
           else: { value: 'bar' },
         },
       };
-      expect(buildChildElement(prop)).toMatchSnapshot();
+      expect(buildChildElement(buildEmptyComponentMetadata(), prop)).toMatchSnapshot();
     });
   });
 
   describe('buildContionalExpression', () => {
     test('operandType exists', () => {
-      const exp = buildConditionalExpression(buildConditionalWithOperand('18', 'number'));
+      const exp = buildConditionalExpression(
+        buildEmptyComponentMetadata(),
+        buildConditionalWithOperand('18', 'number'),
+      );
       assertASTMatchesSnapshot(exp);
     });
 
     test('operandType does not exist', () => {
-      const exp = buildConditionalExpression(buildConditionalWithOperand('18'));
+      const exp = buildConditionalExpression(buildEmptyComponentMetadata(), buildConditionalWithOperand('18'));
       assertASTMatchesSnapshot(exp);
     });
 
     test('operand and operandType mismatch', () => {
-      expect(() => buildConditionalExpression(buildConditionalWithOperand('18', 'boolean'))).toThrow(
-        'Parsed value 18 and type boolean mismatch',
-      );
+      expect(() =>
+        buildConditionalExpression(buildEmptyComponentMetadata(), buildConditionalWithOperand('18', 'boolean')),
+      ).toThrow('Parsed value 18 and type boolean mismatch');
     });
   });
 });
