@@ -50,6 +50,18 @@ const genericEventToReactEventImplementationOverrides: PrimitiveLevelPropConfigu
   [Primitive.SwitchField]: { [StudioGenericEvent.change]: toggleBooleanStateCallback },
 };
 
+const PrimitiveDefaultValuePropMapping: PrimitiveLevelPropConfiguration<string> = new Proxy(
+  {
+    [Primitive.CheckboxField]: { checked: 'defaultChecked' },
+    [Primitive.SwitchField]: { isChecked: 'defaultChecked' },
+  },
+  {
+    get(target, name, ...args) {
+      return name in target ? Reflect.get(target, name, ...args) : { value: 'defaultValue' };
+    },
+  },
+);
+
 export function mapSyntheticStateReferences(componentMetadata: ComponentMetadata) {
   return componentMetadata.stateReferences.map((stateReference) => {
     const { componentName, property } = stateReference;
@@ -229,7 +241,7 @@ export function buildStateStatements(
             undefined,
             undefined,
             factory.createCallExpression(factory.createIdentifier('useStateMutationAction'), undefined, [
-              getStateDefaultValue(component, componentMetadata, stateReference),
+              getStateInitialValue(component, componentMetadata, stateReference),
             ]),
           ),
         ],
@@ -239,7 +251,7 @@ export function buildStateStatements(
   });
 }
 
-export function getStateDefaultValue(
+export function getStateInitialValue(
   component: StudioComponent,
   componentMetadata: ComponentMetadata,
   stateReference: StateStudioComponentProperty,
@@ -248,33 +260,34 @@ export function getStateDefaultValue(
   const referencedComponent = getComponentFromComponentTree(component, componentName);
   const componentProperty = referencedComponent.properties[property];
 
-  // does not work for custom components wrapping form components
-  if (
-    componentProperty === undefined &&
-    PrimitiveDefaultPropertyValue[referencedComponent.componentType as Primitive]
-  ) {
+  if (componentProperty === undefined) {
+    const defaultPropMapping = PrimitiveDefaultValuePropMapping[referencedComponent.componentType as Primitive];
+    if (property in defaultPropMapping && referencedComponent.properties[defaultPropMapping[property]]) {
+      const defaultProp = referencedComponent.properties[defaultPropMapping[property]];
+      // eslint-disable-next-line no-param-reassign
+      delete referencedComponent.properties[defaultPropMapping[property]];
+      return propertyToExpression(componentMetadata, defaultProp);
+    }
+
     return propertyToExpression(componentMetadata, getDefaultForComponentAndProperty(referencedComponent, property));
   }
+
   return propertyToExpression(componentMetadata, componentProperty);
 }
 
 export function getDefaultForComponentAndProperty(
   component: StudioComponent | StudioComponentChild,
   property: string,
-): StudioComponentProperty {
+): StudioComponentProperty | undefined {
   const { componentType } = component;
   const componentDefault = PrimitiveDefaultPropertyValue[componentType as Primitive];
   if (componentDefault && property in componentDefault) {
     // if component has defaultValue use defaultValue as initial state value
-    if (property === 'value' && component.properties.defaultValue) {
-      // TODO: remove defaultValue becuase coponents canot have value and defaultValue
-      return component.properties.defaultValue;
-    }
     return componentDefault[property];
   }
 
-  // use empty string a fallback default
-  return { value: '', type: 'string' };
+  // use empty string as fallback default
+  return undefined;
 }
 
 export type MutationReferences = {
