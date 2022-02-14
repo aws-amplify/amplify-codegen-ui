@@ -5843,6 +5843,49 @@ export default function SetStateWithoutInitialValue(
 }
 `;
 
+exports[`amplify render tests mutations supports names that cant be directly turned into methodnames 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useNavigateAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+
+export type InvalidNameForMethodProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function InvalidNameForMethod(
+  props: InvalidNameForMethodProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const loremipsumdolorsitametconsecteturadipiscingelitseddoeiusmodtemporincididuntutlaboreClick =
+    useNavigateAction({ type: \\"url\\", url: \\"emails\\" });
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex {...rest} {...getOverrideProps(overrides, \\"InvalidNameForMethod\\")}>
+      <Text
+        onClick={() => {
+          loremipsumdolorsitametconsecteturadipiscingelitseddoeiusmodtemporincididuntutlaboreClick();
+        }}
+        {...getOverrideProps(
+          overrides,
+          \\"\\\\u201CLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.\\\\u201D\\"
+        )}
+      ></Text>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests mutations supports nested mutation 1`] = `
 Object {
   "componentText": "/* eslint-disable */
