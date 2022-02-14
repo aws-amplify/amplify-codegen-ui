@@ -23,6 +23,7 @@ import {
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
   StudioComponent,
+  StudioComponentChild,
   StudioComponentPredicate,
   StudioComponentSort,
   StudioComponentVariant,
@@ -111,6 +112,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     this.componentMetadata.stateReferences = mapSyntheticStateReferences(this.componentMetadata);
     this.mapSyntheticPropsForVariants();
+    this.mapSyntheticProps();
 
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
   }
@@ -136,6 +138,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   @handleCodegenErrors
   renderComponentOnly() {
+    // buildVariableStatements must be called before renderJsx
+    // so that some properties can be removed from opening element
+    const variableStatements = this.buildVariableStatements(this.component);
     const jsx = this.renderJsx(this.component);
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
@@ -151,6 +156,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const wrappedFunction = this.renderFunctionWrapper(
       this.component.name ?? StudioRendererConstants.unknownName,
+      variableStatements,
       jsx,
       false,
     );
@@ -168,10 +174,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
+    // buildVariableStatements must be called before renderJsx
+    // so that some properties can be removed from opening element
+    const variableStatements = this.buildVariableStatements(this.component);
     const jsx = this.renderJsx(this.component);
 
     const wrappedFunction = this.renderFunctionWrapper(
       this.component.name ?? StudioRendererConstants.unknownName,
+      variableStatements,
       jsx,
       true,
     );
@@ -212,23 +222,25 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   renderFunctionWrapper(
     componentName: string,
+    variableStatements: Statement[],
     jsx: JsxElement | JsxFragment | JsxSelfClosingElement,
     renderExport: boolean,
   ): FunctionDeclaration {
     const componentPropType = getComponentPropName(componentName);
-    const codeBlockContent = this.buildVariableStatements(this.component);
-    const jsxStatement = factory.createParenthesizedExpression(
-      this.renderConfig.script !== ScriptKind.TSX
-        ? jsx
-        : /* add ts-ignore comment above jsx statement. Generated props are incompatible with amplify-ui props */
-          addSyntheticLeadingComment(
-            factory.createParenthesizedExpression(jsx),
-            SyntaxKind.MultiLineCommentTrivia,
-            ' @ts-ignore: TS2322 ',
-            true,
-          ),
+    const jsxStatement = factory.createReturnStatement(
+      factory.createParenthesizedExpression(
+        this.renderConfig.script !== ScriptKind.TSX
+          ? jsx
+          : /* add ts-ignore comment above jsx statement. Generated props are incompatible with amplify-ui props */
+            addSyntheticLeadingComment(
+              factory.createParenthesizedExpression(jsx),
+              SyntaxKind.MultiLineCommentTrivia,
+              ' @ts-ignore: TS2322 ',
+              true,
+            ),
+      ),
     );
-    codeBlockContent.push(factory.createReturnStatement(jsxStatement));
+    const codeBlockContent = variableStatements.concat([jsxStatement]);
     const modifiers: Modifier[] = renderExport
       ? [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DefaultKeyword)]
       : [];
@@ -1134,6 +1146,36 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         }
       });
     });
+  }
+
+  /* Some additional props are added to Amplify primitives in Studio. These "sythetic" props are mapped to real props
+   * on the primitives.
+   *
+   * Example: Text prop label is mapped to to Text prop Children
+   *
+   * This is done so that nonadvanced users of Studio do not need to interact with props that might confuse them.
+   */
+  private mapSyntheticProps() {
+    function mapSyntheticPropsForComponent(component: StudioComponent | StudioComponentChild) {
+      // properties.children will take precedent over mapped children prop
+      if (component.properties.children === undefined) {
+        const childrenPropMapping = PrimitiveChildrenPropMapping[Primitive[component.componentType as Primitive]];
+
+        if (childrenPropMapping !== undefined) {
+          const mappedChildrenProp = component.properties[childrenPropMapping];
+          if (mappedChildrenProp !== undefined) {
+            component.properties.children = mappedChildrenProp; // eslint-disable-line no-param-reassign
+            delete component.properties[childrenPropMapping]; // eslint-disable-line no-param-reassign
+          }
+        }
+      }
+
+      if (component.children !== undefined) {
+        component.children.forEach(mapSyntheticPropsForComponent);
+      }
+    }
+
+    mapSyntheticPropsForComponent(this.component);
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement;

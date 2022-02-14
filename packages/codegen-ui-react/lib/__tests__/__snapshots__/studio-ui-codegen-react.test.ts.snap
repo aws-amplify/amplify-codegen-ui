@@ -9,8 +9,8 @@ import {
   getOverrideProps,
   useDataStoreCreateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 import { Customer } from \\"../models\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type CreateCustomerButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -52,8 +52,8 @@ import {
   getOverrideProps,
   useDataStoreDeleteAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 import { Customer } from \\"../models\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type DeleteCustomerButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -95,8 +95,8 @@ import {
   getOverrideProps,
   useDataStoreUpdateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 import { Customer } from \\"../models\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type UpdateCustomerButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -339,7 +339,6 @@ exports[`amplify render tests actions with conditional in parameters 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { User } from \\"../models\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
@@ -347,6 +346,7 @@ import {
   useDataStoreBinding,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
+import { User } from \\"../models\\";
 import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type ConditionalInMutationProps = React.PropsWithChildren<
@@ -502,8 +502,8 @@ import {
   useAuth,
   useDataStoreCreateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 import { Customer } from \\"../models\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type ComponentWithAuthEventBindingProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
@@ -540,6 +540,12 @@ export default function ComponentWithAuthEventBinding(
 exports[`amplify render tests collection should render collection with data binding 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  createDataStorePredicate,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
@@ -547,12 +553,6 @@ import {
   CollectionProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  createDataStorePredicate,
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
 
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -641,13 +641,6 @@ exports[`amplify render tests collection should render collection with data bind
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { User, UserPreferences } from \\"../models\\";
-import {
-  Button,
-  Collection,
-  CollectionProps,
-  Flex,
-} from \\"@aws-amplify/ui-react\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
@@ -655,6 +648,13 @@ import {
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
+import { User, UserPreferences } from \\"../models\\";
+import {
+  Button,
+  Collection,
+  CollectionProps,
+  Flex,
+} from \\"@aws-amplify/ui-react\\";
 
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -750,6 +750,12 @@ export default function CollectionOfCustomButtons(
 exports[`amplify render tests collection should render collection with data binding if binding name is items 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  createDataStorePredicate,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
 import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
@@ -757,12 +763,6 @@ import {
   CollectionProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  createDataStorePredicate,
-  getOverrideProps,
-  useDataStoreBinding,
-} from \\"@aws-amplify/ui-react/internal\\";
 
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -850,14 +850,14 @@ export default function CollectionOfCustomButtons(
 exports[`amplify render tests collection should render collection with data binding with no predicate 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import ListingCard from \\"./ListingCard\\";
+import { UntitledModel } from \\"../models\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
+import ListingCard from \\"./ListingCard\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
-import { UntitledModel } from \\"../models\\";
 
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -4845,13 +4845,13 @@ exports[`amplify render tests default value should render collection default val
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
-import { Collection, CollectionProps, Text } from \\"@aws-amplify/ui-react\\";
+import { User } from \\"../models\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { User } from \\"../models\\";
+import { Collection, CollectionProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type CollectionDefaultValueProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -4881,8 +4881,8 @@ export default function CollectionDefaultValue(
     >
       {(item, index) => (
         <Text
-          key={item.id}
           children={item.username || \\"Collection Default Value\\"}
+          key={item.id}
           {...(overrideItems && overrideItems({ item, index }))}
         ></Text>
       )}
@@ -5330,8 +5330,8 @@ import {
   useDataStoreUpdateAction,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
 import { Customer } from \\"../models\\";
+import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
 
 export type MyFormProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5540,7 +5540,7 @@ export default function StepperControlledElement(
   props: StepperControlledElementProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const [inputValue, setInputValue] = useStateMutationAction(undefined);
+  const [inputValue, setInputValue] = useStateMutationAction(0);
   return (
     /* @ts-ignore: TS2322 */
     <Flex
@@ -5549,7 +5549,6 @@ export default function StepperControlledElement(
     >
       <StepperField
         label=\\"Stepper\\"
-        defaultValue={0}
         min={0}
         max={10}
         step={1}
@@ -5991,9 +5990,9 @@ export default function TwoWayBindings(
   const [selectFieldInputValue, setSelectFieldInputValue] =
     useStateMutationAction(undefined);
   const [sliderFieldInputValue, setSliderFieldInputValue] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(50);
   const [stepperFieldInputValue, setStepperFieldInputValue] =
-    useStateMutationAction(undefined);
+    useStateMutationAction(0);
   const [switchFieldInputIsChecked, setSwitchFieldInputIsChecked] =
     useStateMutationAction(false);
   const [textFieldInputValue, setTextFieldInputValue] =
@@ -6143,7 +6142,6 @@ export default function TwoWayBindings(
         <RadioGroupField
           label=\\"Language\\"
           name=\\"language\\"
-          defaultValue=\\"html\\"
           value={radioGroupFieldInputValue}
           onChange={(event: SyntheticEvent) => {
             setRadioGroupFieldInputValue(event.target.value);
@@ -6265,7 +6263,6 @@ export default function TwoWayBindings(
         ></Heading>
         <SliderField
           label=\\"Slider\\"
-          defaultValue={50}
           min={0}
           max={100}
           step={1}
@@ -6297,7 +6294,6 @@ export default function TwoWayBindings(
         ></Heading>
         <StepperField
           label=\\"Stepper\\"
-          defaultValue={0}
           min={0}
           max={10}
           step={1}
