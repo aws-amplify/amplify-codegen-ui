@@ -66,7 +66,9 @@ function computeComponentMetadataHelper(component: StudioComponent | StudioCompo
 function dedupeStateReferences(stateReferences: StateReference[]): StateReference[] {
   const stateReferenceMap: Record<string, Set<string>> = {};
   stateReferences
-    .filter((stateReference) => !('set' in stateReference))
+    .filter(
+      (stateReference) => !('set' in stateReference) || stateReference.set === null || stateReference.set === undefined,
+    )
     .forEach(({ componentName, property }) => {
       if (!(componentName in stateReferenceMap)) {
         stateReferenceMap[componentName] = new Set([]);
@@ -79,7 +81,7 @@ function dedupeStateReferences(stateReferences: StateReference[]): StateReferenc
         return { componentName, property };
       }),
     )
-    .concat(stateReferences.filter((stateReference) => 'set' in stateReference));
+    .concat(stateReferences.filter((stateReference) => 'set' in stateReference && stateReference.set));
 }
 
 function dedupeComponentMetadata(componentMetadata: ComponentMetadata): ComponentMetadata {
@@ -183,20 +185,20 @@ function computeBindingPropertyMetadata(bindingProperty: StudioComponentProperty
 function computePropertyMetadata(property: StudioComponentProperty): ComponentMetadata {
   return reduceComponentMetadata(
     ([] as ComponentMetadata[])
-      .concat('concat' in property ? property.concat.map(computePropertyMetadata) : [])
-      .concat('userAttribute' in property ? [generateAuthBindingMetadata()] : [])
+      .concat('concat' in property && property.concat ? property.concat.map(computePropertyMetadata) : [])
+      .concat('userAttribute' in property && property.userAttribute ? [generateAuthBindingMetadata()] : [])
       .concat(
-        'condition' in property && 'then' in property.condition
+        'condition' in property && property.condition && 'then' in property.condition && property.condition.then
           ? [computePropertyMetadata(property.condition.then)]
           : [],
       )
       .concat(
-        'condition' in property && 'else' in property.condition
+        'condition' in property && property.condition && 'else' in property.condition && property.condition.else
           ? [computePropertyMetadata(property.condition.else)]
           : [],
       )
       .concat(
-        'componentName' in property && 'property' in property
+        'componentName' in property && property.componentName && 'property' in property && property.property
           ? [generateReferenceMetadata(property as StateReference)]
           : [],
       ),
@@ -208,7 +210,7 @@ function computePropertyMetadata(property: StudioComponentProperty): ComponentMe
  */
 
 function computeEventMetadata(event: StudioComponentEvent): ComponentMetadata {
-  if (!('action' in event)) {
+  if (!('action' in event) || event.action === undefined || event.action === null) {
     return generateEmptyMetadata();
   }
 

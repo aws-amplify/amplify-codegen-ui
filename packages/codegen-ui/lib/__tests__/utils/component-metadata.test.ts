@@ -745,5 +745,123 @@ describe('computeComponentMetadata', () => {
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
+
+    it('supports undefined values coming in from the sdk', () => {
+      const component: StudioComponent = {
+        componentType: 'Flex',
+        name: 'TopLevelComponent',
+        properties: {},
+        bindingProperties: {
+          color: {
+            type: 'String',
+          },
+        },
+        collectionProperties: {
+          user: {
+            model: 'User',
+          },
+        },
+        children: [
+          {
+            componentType: 'Flex',
+            name: 'NestedComponent',
+            properties: {},
+            children: [
+              {
+                componentType: 'Button',
+                name: 'NestedButton',
+                properties: {},
+                events: {
+                  click: {
+                    action: 'Amplify.Mutation',
+                    parameters: {
+                      state: {
+                        componentName: 'NestedComponent',
+                        property: 'color',
+                        set: {
+                          bindingProperties: {
+                            property: 'color',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            componentType: 'TextField',
+            name: 'NicknameField',
+            properties: {
+              label: {
+                value: 'Enter your nickname',
+                concat: undefined,
+                condition: undefined,
+              },
+            },
+          },
+          {
+            componentType: 'Button',
+            name: 'MyButton',
+            properties: {
+              label: {
+                concat: [
+                  {
+                    value: 'Click Me - ',
+                  },
+                  {
+                    userAttribute: 'firstName',
+                  },
+                ],
+              },
+            },
+            events: {
+              click: {
+                action: 'Amplify.DataStoreCreateItemAction',
+                parameters: {
+                  model: 'Listing',
+                  fields: {
+                    name: {
+                      userAttribute: 'firstName',
+                    },
+                    preferredName: {
+                      condition: {
+                        property: 'color',
+                        operator: 'eq',
+                        operand: 'blue',
+                        then: {
+                          value: 'Nice Color',
+                        },
+                        else: {
+                          componentName: 'NicknameField',
+                          property: 'value',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      };
+      const expectedMetadata: ComponentMetadata = {
+        hasAuthBindings: true,
+        requiredDataModels: ['User', 'Listing'],
+        stateReferences: [
+          { componentName: 'NicknameField', property: 'value' },
+          { componentName: 'NestedComponent', property: 'color', set: { bindingProperties: { property: 'color' } } },
+        ],
+        componentNameToTypeMap: {
+          TopLevelComponent: 'Flex',
+          NestedComponent: 'Flex',
+          MyButton: 'Button',
+          NestedButton: 'Button',
+          NicknameField: 'TextField',
+        },
+      };
+      expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
+    });
   });
 });
