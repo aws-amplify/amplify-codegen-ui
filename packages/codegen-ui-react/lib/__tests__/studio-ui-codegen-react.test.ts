@@ -385,6 +385,10 @@ describe('amplify render tests', () => {
     it('supports nested mutation', () => {
       expect(generateWithAmplifyRenderer('workflow/nestedMutation')).toMatchSnapshot();
     });
+
+    it('supports names that cant be directly turned into methodnames', () => {
+      expect(generateWithAmplifyRenderer('workflow/invalidNameForMethod')).toMatchSnapshot();
+    });
   });
 
   describe('default value', () => {
