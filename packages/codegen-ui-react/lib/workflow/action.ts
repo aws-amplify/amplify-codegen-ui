@@ -79,8 +79,15 @@ export function getComponentActions(component: StudioComponent | StudioComponent
   return actions;
 }
 
+// Scrub all non-alphanum characters, and any leading numbers so we can generate a legal
+// variable name.
+function sanitizeName(componentName: string): string {
+  return componentName.replaceAll(/[^a-zA-Z0-9]/g, '').replace(/^[0-9]*/, '');
+}
+
 export function getActionIdentifier(componentName: string | undefined, event: string) {
-  const name = componentName || '';
+  const inputName = componentName || '';
+  const name = sanitizeName(inputName);
   return [name.charAt(0).toLowerCase() + name.slice(1), event.charAt(0).toUpperCase() + event.slice(1)].join('');
 }
 
@@ -121,7 +128,6 @@ export function buildMutationActionStatement(
   action: MutationAction,
   identifier: string,
 ) {
-  // TODO: Hi there
   const { componentName, property } = action.parameters.state;
   const childrenPropMapping = getChildPropMappingForComponentName(componentMetadata, componentName);
   const stateReference =
