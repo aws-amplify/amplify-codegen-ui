@@ -21,7 +21,6 @@ import {
   StudioComponentEventPropertyBinding,
   StudioComponentPropertyType,
   StudioComponentSimplePropertyBinding,
-  StudioComponentStoragePropertyBinding,
   StudioComponentPropertyBinding,
   StudioComponentProperty,
 } from './types';
@@ -60,12 +59,6 @@ export function isDataPropertyBinding(
   prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentDataPropertyBinding {
   return 'type' in prop && prop.type === 'Data';
-}
-
-export function isStoragePropertyBinding(
-  prop: StudioComponentPropertyBinding,
-): prop is StudioComponentStoragePropertyBinding {
-  return 'type' in prop && prop.type === 'Storage';
 }
 
 export function isSimplePropertyBinding(
