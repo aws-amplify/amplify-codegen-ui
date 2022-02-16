@@ -93,4 +93,7 @@ export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
         );
       }) as ExportDeclaration[];
   }
+
+  // no-op
+  validateSchema() {}
 }
