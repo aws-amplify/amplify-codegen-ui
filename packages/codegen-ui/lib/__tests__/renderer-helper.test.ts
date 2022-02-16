@@ -15,14 +15,12 @@
  */
 import {
   StudioComponentDataPropertyBinding,
-  StudioComponentStoragePropertyBinding,
   StudioComponentSimplePropertyBinding,
   StudioComponentEventPropertyBinding,
 } from '../types';
 import {
   isStudioComponentWithBinding,
   isDataPropertyBinding,
-  isStoragePropertyBinding,
   isSimplePropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
@@ -32,7 +30,6 @@ import {
 describe('render-helper', () => {
   const bindingProperties: {
     data: StudioComponentDataPropertyBinding;
-    storage: StudioComponentStoragePropertyBinding;
     boolean: StudioComponentSimplePropertyBinding;
     string: StudioComponentSimplePropertyBinding;
     number: StudioComponentSimplePropertyBinding;
@@ -43,12 +40,6 @@ describe('render-helper', () => {
       type: 'Data',
       bindingProperties: {
         model: 'User',
-      },
-    },
-    storage: {
-      type: 'Storage',
-      bindingProperties: {
-        bucket: 'test-bucket',
       },
     },
     boolean: {
@@ -172,14 +163,6 @@ describe('render-helper', () => {
       expect(isDataPropertyBinding(bindingProperties.data)).toBeTruthy();
       const { data, ...otherTypes } = bindingProperties;
       Object.values(otherTypes).forEach((otherType) => expect(isDataPropertyBinding(otherType)).toBeFalsy());
-    });
-  });
-
-  describe('isStoragePropertyBinding', () => {
-    test('property has type Storage', () => {
-      expect(isStoragePropertyBinding(bindingProperties.storage)).toBeTruthy();
-      const { storage, ...otherTypes } = bindingProperties;
-      Object.values(otherTypes).forEach((otherType) => expect(isStoragePropertyBinding(otherType)).toBeFalsy());
     });
   });
 
