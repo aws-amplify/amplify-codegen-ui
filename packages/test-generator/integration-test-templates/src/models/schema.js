@@ -226,8 +226,99 @@ export const schema = {
         },
       ],
     },
+    ComplexModel: {
+      name: 'ComplexModel',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        listElement: {
+          name: 'listElement',
+          isArray: true,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+          isArrayNullable: false,
+        },
+        myCustomField: {
+          name: 'myCustomField',
+          isArray: false,
+          type: {
+            nonModel: 'CustomType',
+          },
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'ComplexModels',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'auth',
+          properties: {
+            rules: [
+              {
+                allow: 'public',
+                operations: ['create', 'update', 'delete', 'read'],
+              },
+            ],
+          },
+        },
+      ],
+    },
   },
   enums: {},
-  nonModels: {},
+  nonModels: {
+    CustomType: {
+      name: 'CustomType',
+      fields: {
+        StringVal: {
+          name: 'StringVal',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        NumVal: {
+          name: 'NumVal',
+          isArray: false,
+          type: 'Int',
+          isRequired: false,
+          attributes: [],
+        },
+        BoolVal: {
+          name: 'BoolVal',
+          isArray: false,
+          type: 'Boolean',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+    },
+  },
   version: 'f6252c821249b6b1abda9fb24481c5a4',
 };
