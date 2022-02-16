@@ -39,4 +39,6 @@ export class MockTemplateRenderer extends StudioTemplateRenderer<
       renderComponentToFilesystem: jest.fn(),
     };
   }
+
+  validateSchema() {}
 }

@@ -60,7 +60,6 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 
   constructor(theme: StudioTheme, renderConfig: ReactRenderConfig) {
     super(theme, new ReactOutputManager(), renderConfig);
-    validateThemeSchema(theme);
     this.renderConfig = {
       ...defaultRenderConfig,
       ...renderConfig,
@@ -193,5 +192,9 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
         false,
       ),
     );
+  }
+
+  validateSchema(theme: StudioTheme) {
+    validateThemeSchema(theme);
   }
 }
