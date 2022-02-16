@@ -13,12 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FixedStudioComponentProperty, BoundStudioComponentProperty } from './properties';
+const RelationalOperators = ['eq', 'ne', 'le', 'lt', 'ge', 'gt'];
 
-export type FixedOrBoundProps = {
-  [propertyName: string]: FixedStudioComponentProperty | BoundStudioComponentProperty;
-};
+export type RelationalOperator = 'eq' | 'ne' | 'le' | 'lt' | 'ge' | 'gt';
 
-export type WrappedComponentProperties<TPropIn> = {
-  [key in keyof TPropIn]: FixedStudioComponentProperty | BoundStudioComponentProperty;
-};
+/**
+ * Checks to see if the value passed in is actually a RelationalOperator
+ */
+export function isRelationalOperator(value: string): value is RelationalOperator {
+  return RelationalOperators.includes(value);
+}
