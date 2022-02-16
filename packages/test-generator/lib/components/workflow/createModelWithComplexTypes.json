@@ -1,0 +1,28 @@
+{
+  "componentType": "Button",
+  "name": "CreateModelWithComplexTypes",
+  "properties": {
+    "label": {
+      "value": "Create Item"
+    }
+  },
+  "events": {
+    "click": {
+      "action": "Amplify.DataStoreCreateItemAction",
+      "parameters": {
+        "model": "ComplexModel",
+        "fields": {
+          "listElement": {
+            "value": "[\"a\",\"b\",\"c\",\"1\",\"2\",\"3\"]",
+            "type": "Object"
+          },
+          "myCustomField": {
+            "value": "{\"StringVal\":\"hi there\",\"NumVal\":7,\"BoolVal\":false}",
+            "type": "Object"
+          }
+        }
+      }
+    }
+  },
+  "children": []
+}
