@@ -244,5 +244,15 @@ describe('Workflow', () => {
         });
       });
     });
+
+    describe('complex models', () => {
+      it('can create models with nested objects and lists', () => {
+        cy.get('#complex-model').within(() => {
+          cy.get('button').click();
+          cy.contains('"listElement":["a","b","c","1","2","3"]');
+          cy.contains('"listElement":["a","b","c","1","2","3"]');
+        });
+      });
+    });
   });
 });
