@@ -31,6 +31,7 @@ import {
   handleCodegenErrors,
   ComponentMetadata,
   computeComponentMetadata,
+  validateComponentSchema,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -1176,6 +1177,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     }
 
     mapSyntheticPropsForComponent(this.component);
+  }
+
+  validateSchema(component: StudioComponent) {
+    validateComponentSchema(component);
   }
 
   abstract renderJsx(component: StudioComponent): JsxElement | JsxFragment | JsxSelfClosingElement;

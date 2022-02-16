@@ -33,7 +33,9 @@ export abstract class StudioTemplateRenderer<
     protected component: TStudioType,
     protected outputManager: TOutputManager,
     protected renderConfig: FrameworkRenderConfig,
-  ) {}
+  ) {
+    this.validateSchema(component);
+  }
 
   /**
    * Renders the entire first order component. It returns the
@@ -50,4 +52,6 @@ export abstract class StudioTemplateRenderer<
     return (fileName: string) => (outputPath: string) =>
       this.outputManager.writeComponent(componentContent, path.join(outputPath, fileName));
   }
+
+  protected abstract validateSchema(component: TStudioType): void;
 }

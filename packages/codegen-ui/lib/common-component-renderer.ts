@@ -15,7 +15,6 @@
  */
 import { StudioComponent, StudioComponentChild, WrappedComponentProperties } from './types';
 import { StudioNode } from './studio-node';
-import { validateComponentSchema } from './validation-helper';
 
 /**
  * Shared class for rendering components.
@@ -27,10 +26,6 @@ export abstract class CommonComponentRenderer<TPropIn> {
   protected node: StudioNode;
 
   constructor(protected component: StudioComponent | StudioComponentChild, protected parent?: StudioNode) {
-    // Run schema validation on the top-level component.
-    if (this.parent === undefined) {
-      validateComponentSchema(this.component as StudioComponent);
-    }
     const flattenedProps = Object.entries(component.properties).map((prop) => {
       return [prop[0], prop[1]];
     });
