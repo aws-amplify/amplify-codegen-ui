@@ -6,6 +6,7 @@
   "children": [
     {
       "componentType": "TabItem",
+      "name": "TabItem1",
       "properties": {
         "title": {
           "value": "Tab 1"
@@ -17,6 +18,7 @@
     },
     {
       "componentType": "TabItem",
+      "name": "TabItem2",
       "properties": {
         "title": {
           "value": "Tab 2"

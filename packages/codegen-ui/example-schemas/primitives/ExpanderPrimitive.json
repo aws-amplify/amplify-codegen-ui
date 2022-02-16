@@ -15,6 +15,7 @@
   "children": [
     {
       "componentType": "ExpanderItem",
+      "name": "ExpanderItem1",
       "properties": {
         "title": {
           "value": "title1"
@@ -29,6 +30,7 @@
     },
     {
       "componentType": "ExpanderItem",
+      "name": "ExpanderItem2",
       "properties": {
         "title": {
           "value": "title2"

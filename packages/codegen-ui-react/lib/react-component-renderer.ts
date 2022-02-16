@@ -75,7 +75,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
 
     const propertyAttributes = Object.entries(this.component.properties).map(([key, value]) => {
       if (key in localStateReferences) {
-        const stateName = getStateName({ componentName: this.component.name || '', property: key });
+        const stateName = getStateName({ componentName: this.component.name, property: key });
         return buildOpeningElementProperties(
           this.componentMetadata,
           { bindingProperties: { property: stateName } },
@@ -89,7 +89,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     const unmodeledPropertyAttributes = Object.entries(localStateReferences)
       .filter(([referencedProperty]) => !(referencedProperty in this.component.properties))
       .map(([referencedProperty]) => {
-        const stateName = getStateName({ componentName: this.component.name || '', property: referencedProperty });
+        const stateName = getStateName({ componentName: this.component.name, property: referencedProperty });
         return buildOpeningElementProperties(
           this.componentMetadata,
           { bindingProperties: { property: stateName } },
@@ -106,8 +106,8 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       .map(([key]) =>
         buildOpeningElementControlEvents(
           this.component.componentType,
-          getSetStateName({ componentName: this.component.name || '', property: key }),
-          getStateName({ componentName: this.component.name || '', property: key }),
+          getSetStateName({ componentName: this.component.name, property: key }),
+          getStateName({ componentName: this.component.name, property: key }),
           'change',
         ),
       );
