@@ -13,12 +13,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FixedStudioComponentProperty, BoundStudioComponentProperty } from './properties';
-
-export type FixedOrBoundProps = {
-  [propertyName: string]: FixedStudioComponentProperty | BoundStudioComponentProperty;
+export type StudioTheme = {
+  name: string;
+  id?: string;
+  values: StudioThemeValues[];
+  // overrides is a special case because it is an array of values
+  overrides?: StudioThemeValues[];
 };
 
-export type WrappedComponentProperties<TPropIn> = {
-  [key in keyof TPropIn]: FixedStudioComponentProperty | BoundStudioComponentProperty;
+export type StudioThemeValues = {
+  key: string;
+  value: StudioThemeValue;
+};
+
+export type StudioThemeValue = {
+  value?: string;
+  children?: StudioThemeValues[];
 };
