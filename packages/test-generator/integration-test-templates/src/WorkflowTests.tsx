@@ -18,7 +18,8 @@ import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider, Button } from '@aws-amplify/ui-react';
 import { Hub } from 'aws-amplify';
 import { DataStore } from '@aws-amplify/datastore';
-import { User } from './models';
+import { useDataStoreBinding } from '@aws-amplify/ui-react/internal';
+import { ComplexModel, User } from './models';
 import {
   AuthSignOutActions,
   Event,
@@ -32,6 +33,7 @@ import {
   SimpleUserCollection,
   InputMutationOnClick,
   ConditionalInMutation,
+  CreateModelWithComplexTypes,
 } from './ui-components'; // eslint-disable-line import/extensions
 
 type AuthState = 'LoggedIn' | 'LoggedOutLocally' | 'LoggedOutGlobally' | 'Error';
@@ -103,6 +105,11 @@ export default function ComplexTests() {
 
     initializeTestState();
   }, []);
+
+  const complexModels = useDataStoreBinding({
+    type: 'collection',
+    model: ComplexModel,
+  });
 
   if (!isInitialized) {
     return null;
@@ -220,6 +227,13 @@ export default function ComplexTests() {
         <UpdateVisibility />
         <InputMutationOnClick />
         <ConditionalInMutation user={{ age: 45 }} />
+      </View>
+      <Divider />
+      <View id="complex-model">
+        <CreateModelWithComplexTypes />
+        {complexModels && complexModels.items && complexModels.items.length === 1 && (
+          <code>{JSON.stringify(complexModels.items[0])}</code>
+        )}
       </View>
     </AmplifyProvider>
   );

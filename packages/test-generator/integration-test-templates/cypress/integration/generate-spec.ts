@@ -147,6 +147,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'TwoWayBindings',
   'MutationActionBindings',
   'DataStoreActionBindings',
+  'CreateModelWithComplexTypes',
 ]);
 const EXPECTED_INVALID_INPUT_CASES = new Set([
   'ComponentMissingProperties',
