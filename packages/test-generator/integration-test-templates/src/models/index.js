@@ -17,6 +17,6 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
-const { UserPreference, User, Listing } = initSchema(schema);
+const { UserPreference, User, Listing, ComplexModel } = initSchema(schema);
 
-export { UserPreference, User, Listing };
+export { UserPreference, User, Listing, ComplexModel };
