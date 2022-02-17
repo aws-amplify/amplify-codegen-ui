@@ -56,6 +56,7 @@ import {
   TableHeadProps,
   TableProps,
   TableRowProps,
+  TextAreaFieldProps,
   TextFieldProps,
   ToggleButtonProps,
   ToggleButtonGroupProps,
@@ -407,6 +408,14 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Text:
         return new ReactComponentWithChildrenRenderer<TextProps>(
+          component,
+          this.componentMetadata,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case Primitive.TextAreaField:
+        return new ReactComponentWithChildrenRenderer<TextAreaFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,

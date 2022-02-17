@@ -63,6 +63,7 @@ export enum Primitive {
   Tabs = 'Tabs',
   TabItem = 'TabItem',
   Text = 'Text',
+  TextAreaField = 'TextAreaField',
   TextField = 'TextField',
   ToggleButton = 'ToggleButton',
   ToggleButtonGroup = 'ToggleButtonGroup',
@@ -83,6 +84,7 @@ export const PrimitivesWithChangeEvent: Set<Primitive> = new Set([
   Primitive.SliderField,
   Primitive.StepperField,
   Primitive.SwitchField,
+  Primitive.TextAreaField,
   Primitive.TextField,
 ]);
 
@@ -118,6 +120,9 @@ export const PrimitiveDefaultPropertyValue: PrimitiveLevelPropConfiguration<Fixe
   },
   [Primitive.SwitchField]: {
     isChecked: { value: false, type: 'boolean' },
+  },
+  [Primitive.TextAreaField]: {
+    value: { value: '', type: 'string' },
   },
   [Primitive.TextField]: {
     value: { value: '', type: 'string' },
