@@ -6,6 +6,7 @@
   "children": [
     {
       "componentType": "MenuItem",
+      "name": "MyMenuItem",
       "properties": {
         "label": {
           "value": "Item"

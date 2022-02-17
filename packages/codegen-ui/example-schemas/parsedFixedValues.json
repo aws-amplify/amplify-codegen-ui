@@ -10,6 +10,7 @@
   "children": [
     {
       "componentType": "Input",
+      "name": "MyInputString",
       "properties": {
         "id": {
           "value": "string-value"
@@ -21,6 +22,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputNumber",
       "properties": {
         "id": {
           "value": "number-value"
@@ -32,6 +34,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputParsedNumber",
       "properties": {
         "id": {
           "value": "parsed-number-value"
@@ -44,6 +47,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputBoolean",
       "properties": {
         "id": {
           "value": "boolean-value"
@@ -55,6 +59,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputPrasedBoolean",
       "properties": {
         "id": {
           "value": "parsed-boolean-value"
@@ -67,6 +72,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputJson",
       "properties": {
         "id": {
           "value": "json-value"
@@ -78,6 +84,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputParsedJson",
       "properties": {
         "id": {
           "value": "parsed-json-value"
@@ -90,6 +97,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputArray",
       "properties": {
         "id": {
           "value": "array-value"
@@ -101,6 +109,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputParsedArray",
       "properties": {
         "id": {
           "value": "parsed-array-value"
@@ -113,6 +122,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputNull",
       "properties": {
         "id": {
           "value": "null-value"
@@ -124,6 +134,7 @@
     },
     {
       "componentType": "Input",
+      "name": "MyInputParsedNull",
       "properties": {
         "id": {
           "value": "parsed-null-value"

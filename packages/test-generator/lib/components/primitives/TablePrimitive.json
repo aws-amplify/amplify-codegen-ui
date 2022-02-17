@@ -19,14 +19,17 @@
   "children": [
     {
       "componentType": "TableHead",
+      "name": "MyTableHead",
       "properties": {},
       "children": [
         {
           "componentType": "TableRow",
+          "name": "MyTableRow",
           "properties": {},
           "children": [
             {
               "componentType": "TableCell",
+              "name": "MyTableCellCitrus",
               "properties": {
                 "as": {
                   "value": "th"
@@ -38,6 +41,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "MyTableCellStoneFruit",
               "properties": {
                 "as": {
                   "value": "th"
@@ -49,6 +53,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "MyTableCellBerry",
               "properties": {
                 "as": {
                   "value": "th"
@@ -64,14 +69,17 @@
     },
     {
       "componentType": "TableBody",
+      "name": "MyTableBody",
       "properties": {},
       "children": [
         {
           "componentType": "TableRow",
+          "name": "TableRow1",
           "properties": {},
           "children": [
             {
               "componentType": "TableCell",
+              "name": "TableCell11",
               "properties": {
                 "label": {
                   "value": "Orange"
@@ -80,6 +88,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "TableCell12",
               "properties": {
                 "label": {
                   "value": "Nectarine"
@@ -88,6 +97,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "TableCell13",
               "properties": {
                 "label": {
                   "value": "Raspberry"
@@ -98,10 +108,12 @@
         },
         {
           "componentType": "TableRow",
+          "name": "TableRow2",
           "properties": {},
           "children": [
             {
               "componentType": "TableCell",
+              "name": "TableCell21",
               "properties": {
                 "label": {
                   "value": "Grapefruit"
@@ -110,6 +122,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "TableCell22",
               "properties": {
                 "label": {
                   "value": "Apricot"
@@ -118,6 +131,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "TableCell23",
               "properties": {
                 "label": {
                   "value": "Blueberry"
@@ -128,10 +142,12 @@
         },
         {
           "componentType": "TableRow",
+          "name": "TableRow3",
           "properties": {},
           "children": [
             {
               "componentType": "TableCell",
+              "name": "TableCell31",
               "properties": {
                 "label": {
                   "value": "Lime"
@@ -140,6 +156,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "TableCell32",
               "properties": {
                 "label": {
                   "value": "Peach"
@@ -148,6 +165,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "TableCell33",
               "properties": {
                 "label": {
                   "value": "Strawberry"
@@ -160,14 +178,17 @@
     },
     {
       "componentType": "TableFoot",
+      "name": "MyTableFoot",
       "properties": {},
       "children": [
         {
           "componentType": "TableRow",
+          "name": "TableRowFoot",
           "properties": {},
           "children": [
             {
               "componentType": "TableCell",
+              "name": "TableCellFoot1",
               "properties": {
                 "as": {
                   "value": "th"
@@ -179,6 +200,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "TableCellFoot2",
               "properties": {
                 "as": {
                   "value": "th"
@@ -190,6 +212,7 @@
             },
             {
               "componentType": "TableCell",
+              "name": "TableCellFoot3",
               "properties": {
                 "as": {
                   "value": "th"

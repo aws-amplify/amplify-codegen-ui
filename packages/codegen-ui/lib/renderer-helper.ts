@@ -25,10 +25,6 @@ import {
   StudioComponentProperty,
 } from './types';
 
-export const StudioRendererConstants = {
-  unknownName: 'unknown_component_name',
-};
-
 export function isStudioComponentWithBinding(
   component: StudioComponent | StudioComponentChild,
 ): component is StudioComponent {

@@ -7,6 +7,7 @@
     {
       "id": "0987-6543-3211",
       "componentType": "Button",
+      "name": "MyButton",
       "properties": {
         "color": {
           "value": "#ff0000"

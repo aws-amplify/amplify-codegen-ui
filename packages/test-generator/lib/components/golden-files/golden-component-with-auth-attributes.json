@@ -6,6 +6,7 @@
   "children": [
     {
       "componentType": "Image",
+      "name": "MyImage",
       "properties": {
         "src": {
           "userAttribute": "picture"
@@ -17,6 +18,7 @@
     },
     {
       "componentType": "Button",
+      "name": "Button1",
       "properties": {
         "label": {
           "userAttribute": "username"
@@ -25,6 +27,7 @@
     },
     {
       "componentType": "Button",
+      "name": "Button2",
       "properties": {
         "label": {
           "userAttribute": "custom:favorite_icecream"
