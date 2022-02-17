@@ -44,8 +44,7 @@ describe('Workflow', () => {
       cy.get('#mutated-value').contains('Conditional Value');
     });
 
-    // Auth Bindings not yet supported in functional tests
-    it.skip('supports auth bindings', () => {
+    it('supports auth bindings', () => {
       cy.get('#mutated-value').contains('Auth Value').should('not.exist');
       cy.contains('Apply Auth Property Mutation').click();
       cy.get('#mutated-value').contains('Auth Value');
@@ -83,8 +82,7 @@ describe('Workflow', () => {
       cy.get('#data-store-value').contains('Conditional Value');
     });
 
-    // Auth Bindings not yet supported in functional tests
-    it.skip('supports auth bindings', () => {
+    it('supports auth bindings', () => {
       cy.get('#data-store-value').contains('Auth Value').should('not.exist');
       cy.contains('Apply Auth Property DataStoreUpdateItemAction').click();
       cy.get('#data-store-value').contains('Auth Value');
