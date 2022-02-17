@@ -1,0 +1,149 @@
+name: Canaries
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # Run every 30m
+  workflow_dispatch:
+
+jobs:
+  beta-canary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+        with:
+          path: amplify-codegen-ui
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install Beta Amplfy CLI
+        run: npm i -g @aws-amplify/cli@beta
+      - name: Create a test react app
+        run: npx create-react-app e2e-test-app
+      - name: Install test app dependencies
+        working-directory: e2e-test-app
+        run: |
+          npm i aws-amplify @aws-amplify/ui-react
+          npm i --save-dev cypress
+      - name: Run CLI Pull in test app
+        working-directory: e2e-test-app
+        run: |
+          FORCE_RENDER=1 amplify pull --appId ${{ secrets.E2E_TEST_APP_ID }} --envName staging -y --providers "{\
+            \"awscloudformation\":{\
+              \"configLevel\":\"project\",\
+              \"useProfile\":false,\
+              \"profileName\":\"default\",\
+              \"accessKeyId\":\"${{ secrets.E2E_TEST_ACCESS_KEY }}\",\
+              \"secretAccessKey\":\"${{ secrets.E2E_TEST_SECRET_KEY }}\",\
+              \"region\":\"us-west-2\"\
+            }\
+          }"
+      - name: Write test files
+        working-directory: e2e-test-app
+        run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates/. .
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: e2e-test-app
+          install: false
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+
+  write-beta-canary-failure-metric:
+    runs-on: ubuntu-latest
+    needs: beta-canary
+    if: ${{ failure() }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.CANARY_METRIC_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.CANARY_METRIC_SECRET_KEY }}
+          aws-region: us-west-2
+      - run: aws cloudwatch put-metric-data --metric-name BetaSuccessRate --namespace CodegenUiCanaries --value 0
+
+  write-beta-canary-success-metric:
+    runs-on: ubuntu-latest
+    needs: beta-canary
+    if: ${{ success() }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.CANARY_METRIC_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.CANARY_METRIC_SECRET_KEY }}
+          aws-region: us-west-2
+      - run: aws cloudwatch put-metric-data --metric-name BetaSuccessRate --namespace CodegenUiCanaries --value 1
+
+  release-canary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Studio Codegen
+        uses: actions/checkout@v2
+        with:
+          path: amplify-codegen-ui
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
+      - name: Install Latest Amplfy CLI
+        run: npm i -g @aws-amplify/cli@latest
+      - name: Create a test react app
+        run: npx create-react-app e2e-test-app
+      - name: Install test app dependencies
+        working-directory: e2e-test-app
+        run: |
+          npm i aws-amplify @aws-amplify/ui-react
+          npm i --save-dev cypress
+      - name: Run CLI Pull in test app
+        working-directory: e2e-test-app
+        run: |
+          FORCE_RENDER=1 amplify pull --appId ${{ secrets.E2E_TEST_APP_ID }} --envName staging -y --providers "{\
+            \"awscloudformation\":{\
+              \"configLevel\":\"project\",\
+              \"useProfile\":false,\
+              \"profileName\":\"default\",\
+              \"accessKeyId\":\"${{ secrets.E2E_TEST_ACCESS_KEY }}\",\
+              \"secretAccessKey\":\"${{ secrets.E2E_TEST_SECRET_KEY }}\",\
+              \"region\":\"us-west-2\"\
+            }\
+          }"
+      - name: Write test files
+        working-directory: e2e-test-app
+        run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates/. .
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: e2e-test-app
+          install: false
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+
+  write-release-canary-failure-metric:
+    runs-on: ubuntu-latest
+    needs: release-canary
+    if: ${{ failure() }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.CANARY_METRIC_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.CANARY_METRIC_SECRET_KEY }}
+          aws-region: us-west-2
+      - run: aws cloudwatch put-metric-data --metric-name ReleaseSuccessRate --namespace CodegenUiCanaries --value 0
+
+  write-release-canary-success-metric:
+    runs-on: ubuntu-latest
+    needs: release-canary
+    if: ${{ success() }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.CANARY_METRIC_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.CANARY_METRIC_SECRET_KEY }}
+          aws-region: us-west-2
+      - run: aws cloudwatch put-metric-data --metric-name ReleaseSuccessRate --namespace CodegenUiCanaries --value 1
