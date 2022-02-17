@@ -59,6 +59,7 @@ import {
   SearchableCollection,
   ComponentWithAuthBinding,
 } from './ui-components'; // eslint-disable-line import/extensions
+import { initializeAuthMockData } from './mock-utils';
 
 const initializeUserTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'Real', lastName: 'LUser3', age: 29 }));
@@ -131,6 +132,11 @@ export default function ComponentTests() {
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
       await Promise.all([initializeUserTestData(), initializeListingTestData()]);
+      initializeAuthMockData({
+        picture: 'http://media.corporate-ir.net/media_files/IROL/17/176060/Oct18/AWS.png',
+        username: 'TestUser',
+        'custom:favorite_icecream': 'Mint Chip',
+      });
       setInitialized(true);
     };
 
