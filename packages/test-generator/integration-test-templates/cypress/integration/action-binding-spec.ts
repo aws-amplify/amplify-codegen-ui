@@ -28,6 +28,7 @@ describe('Workflow', () => {
 
     it('supports bound prop bindings', () => {
       cy.get('#mutated-value').contains('Bound Value').should('not.exist');
+      cy.contains('Current Binding - Bound Value');
       cy.contains('Apply Bound Property Mutation').click();
       cy.get('#mutated-value').contains('Bound Value');
     });
