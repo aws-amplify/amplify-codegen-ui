@@ -6638,6 +6638,7 @@ import {
   StepperField,
   SwitchField,
   Text,
+  TextAreaField,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 import option from \\"./option\\";
@@ -6671,6 +6672,8 @@ export default function TwoWayBindings(
     useStateMutationAction(false);
   const [textFieldInputValue, setTextFieldInputValue] =
     useStateMutationAction(\\"\\");
+  const [textAreaFieldInputValue, setTextAreaFieldInputValue] =
+    useStateMutationAction(\\"\\");
   const setCheckboxFieldValueClick = () => {
     setCheckboxFieldInputChecked(false);
   };
@@ -6700,6 +6703,9 @@ export default function TwoWayBindings(
   };
   const setTextFieldValueClick = () => {
     setTextFieldInputValue(\\"Hardcoded Value\\");
+  };
+  const setTextAreaFieldValueClick = () => {
+    setTextAreaFieldInputValue(\\"Hardcoded Value\\");
   };
   return (
     /* @ts-ignore: TS2322 */
@@ -7048,6 +7054,36 @@ export default function TwoWayBindings(
             setTextFieldValueClick();
           }}
           {...getOverrideProps(overrides, \\"SetTextFieldValue\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"TextAreaFieldSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"TextAreaField\\"
+          {...getOverrideProps(overrides, \\"TextAreaFieldHeader\\")}
+        ></Heading>
+        <TextAreaField
+          label=\\"Name\\"
+          placeholder=\\"Galadriel\\"
+          value={textAreaFieldInputValue}
+          onChange={(event: SyntheticEvent) => {
+            setTextAreaFieldInputValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"TextAreaFieldInput\\")}
+        ></TextAreaField>
+        <Text
+          children={textAreaFieldInputValue}
+          {...getOverrideProps(overrides, \\"TextAreaFieldValue\\")}
+        ></Text>
+        <Button
+          children=\\"Set TextAreaFieldValue\\"
+          onClick={() => {
+            setTextAreaFieldValueClick();
+          }}
+          {...getOverrideProps(overrides, \\"SetTextAreaFieldValue\\")}
         ></Button>
       </Flex>
     </Flex>
@@ -7419,6 +7455,38 @@ export default function TablePrimitive(
         </TableRow>
       </TableFoot>
     </Table>
+  );
+}
+"
+`;
+
+exports[`amplify render tests primitives TextAreaField 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { TextAreaField, TextAreaFieldProps } from \\"@aws-amplify/ui-react\\";
+
+export type TextAreaFieldPrimitiveProps = React.PropsWithChildren<
+  Partial<TextAreaFieldProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function TextAreaFieldPrimitive(
+  props: TextAreaFieldPrimitiveProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <TextAreaField
+      label=\\"Name\\"
+      placeholder=\\"Holden\\"
+      descriptiveText=\\"Please enter valid name\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"TextAreaFieldPrimitive\\")}
+    ></TextAreaField>
   );
 }
 "
