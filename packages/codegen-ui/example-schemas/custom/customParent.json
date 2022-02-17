@@ -3,9 +3,12 @@
   "componentType": "MyView",
   "name": "CustomParent",
   "properties": {},
-  "children": [{
-    "componentType": "Button",
-    "name": "MyButton",
-    "properties": {}
-  }]
+  "children": [
+    {
+      "componentType": "Button",
+      "name": "MyButton",
+      "properties": {}
+    }
+  ],
+  "schemaVersion": "1.0"
 }

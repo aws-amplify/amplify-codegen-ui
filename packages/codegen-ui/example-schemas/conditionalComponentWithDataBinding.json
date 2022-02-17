@@ -1,96 +1,97 @@
 {
-    "name": "ConditionalComponentWithDataBinding",
-    "children": [
-        {
-            "children": [],
-            "name": "Placeholder text",
-            "componentType": "Text",
-            "properties": {
-                "value": {
-                    "condition": {
-                        "property": "student",
-                        "operator": "eq",
-                        "operand": "idstringuserinput",
-                        "then": {
-                            "bindingProperties": {
-                                "property": "student",
-                                "field": "createdAt"
-                            }
-                        },
-                        "else": {
-                            "bindingProperties": {
-                                "property": "student",
-                                "field": "id"
-                            }
-                        },
-                        "field": "id"
-                    }
-                },
-              "label": {
-                "condition": {
-                  "property": "student",
-                  "operator": "eq",
-                  "operand": "idstringuserinput",
-                  "then": {
-                    "bindingProperties": {
-                      "property": "student",
-                      "field": "createdAt"
-                    }
-                  },
-                  "else": {
-                    "bindingProperties": {
-                      "property": "student",
-                      "field": "id"
-                    }
-                  },
-                  "field": "id"
-                }
+  "name": "ConditionalComponentWithDataBinding",
+  "children": [
+    {
+      "children": [],
+      "name": "Placeholder text",
+      "componentType": "Text",
+      "properties": {
+        "value": {
+          "condition": {
+            "property": "student",
+            "operator": "eq",
+            "operand": "idstringuserinput",
+            "then": {
+              "bindingProperties": {
+                "property": "student",
+                "field": "createdAt"
               }
             },
-            "overrides": {},
-            "variants": []
-        },
-      {
-        "children": [],
-        "name": "Placeholder Button",
-        "componentType": "Button",
-        "properties": {
-          "value": {
-            "condition": {
-              "property": "student",
-              "operator": "eq",
-              "operand": "idstringuserinput",
-              "then": {
-                "bindingProperties": {
-                  "property": "student",
-                  "field": "createdAt"
-                }
-              },
-              "else": {
-                "bindingProperties": {
-                  "property": "student",
-                  "field": "id"
-                }
-              },
-              "field": "id"
-            }
+            "else": {
+              "bindingProperties": {
+                "property": "student",
+                "field": "id"
+              }
+            },
+            "field": "id"
           }
         },
-        "overrides": {},
-        "variants": []
-      }
-    ],
-    "id": "c-YR5rdCGjwJCxfzvGlu",
-    "bindingProperties": {
-        "student": {
-            "type": "Data",
-            "bindingProperties": {
-                "model": "Student"
-            }
+        "label": {
+          "condition": {
+            "property": "student",
+            "operator": "eq",
+            "operand": "idstringuserinput",
+            "then": {
+              "bindingProperties": {
+                "property": "student",
+                "field": "createdAt"
+              }
+            },
+            "else": {
+              "bindingProperties": {
+                "property": "student",
+                "field": "id"
+              }
+            },
+            "field": "id"
+          }
         }
+      },
+      "overrides": {},
+      "variants": []
     },
-    "componentType": "Flex",
-    "properties": {},
-    "overrides": {},
-    "variants": []
+    {
+      "children": [],
+      "name": "Placeholder Button",
+      "componentType": "Button",
+      "properties": {
+        "value": {
+          "condition": {
+            "property": "student",
+            "operator": "eq",
+            "operand": "idstringuserinput",
+            "then": {
+              "bindingProperties": {
+                "property": "student",
+                "field": "createdAt"
+              }
+            },
+            "else": {
+              "bindingProperties": {
+                "property": "student",
+                "field": "id"
+              }
+            },
+            "field": "id"
+          }
+        }
+      },
+      "overrides": {},
+      "variants": []
+    }
+  ],
+  "id": "c-YR5rdCGjwJCxfzvGlu",
+  "bindingProperties": {
+    "student": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "Student"
+      }
+    }
+  },
+  "componentType": "Flex",
+  "properties": {},
+  "overrides": {},
+  "variants": [],
+  "schemaVersion": "1.0"
 }

@@ -14,5 +14,6 @@
       "type": "boolean",
       "value": "true"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

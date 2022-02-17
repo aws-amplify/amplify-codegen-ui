@@ -1,5 +1,6 @@
 {
   "componentType": "Button",
   "name": "ReneButton",
-  "properties": {}
+  "properties": {},
+  "schemaVersion": "1.0"
 }

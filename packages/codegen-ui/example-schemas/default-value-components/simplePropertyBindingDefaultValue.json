@@ -14,5 +14,6 @@
         "property": "label"
       }
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

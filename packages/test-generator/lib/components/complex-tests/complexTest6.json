@@ -1,154 +1,155 @@
 {
-    "appId": "d12i42jzsrnwt4",
-    "bindingProperties": {},
-    "children": [
-      {
-        "children": [],
-        "componentType": "Text",
-        "name": "Name",
-        "properties": {
-          "padding": {
-            "value": "0px 0px 0px 0px"
-          },
-          "fontFamily": {
-            "value": "Inter"
-          },
-          "color": {
-            "value": "rgb(0,0,0)"
-          },
-          "textAlign": {
-            "value": "left"
-          },
-          "width": {
-            "value": "68px"
-          },
-          "fontSize": {
-            "value": "24px"
-          },
-          "lineHeight": {
-            "value": "28.125px"
-          },
-          "position": {
-            "value": "relative"
-          },
-          "label": {
-            "value": "Name"
-          },
-          "fontWeight": {
-            "value": "700"
-          },
-          "height": {
-            "value": "29px"
-          }
+  "appId": "d12i42jzsrnwt4",
+  "bindingProperties": {},
+  "children": [
+    {
+      "children": [],
+      "componentType": "Text",
+      "name": "Name",
+      "properties": {
+        "padding": {
+          "value": "0px 0px 0px 0px"
+        },
+        "fontFamily": {
+          "value": "Inter"
+        },
+        "color": {
+          "value": "rgb(0,0,0)"
+        },
+        "textAlign": {
+          "value": "left"
+        },
+        "width": {
+          "value": "68px"
+        },
+        "fontSize": {
+          "value": "24px"
+        },
+        "lineHeight": {
+          "value": "28.125px"
+        },
+        "position": {
+          "value": "relative"
+        },
+        "label": {
+          "value": "Name"
+        },
+        "fontWeight": {
+          "value": "700"
+        },
+        "height": {
+          "value": "29px"
         }
-      },
-      {
-        "children": [],
-        "componentType": "Text",
-        "name": "Price / Address",
-        "properties": {
-          "padding": {
-            "value": "0px 0px 0px 0px"
-          },
-          "fontFamily": {
-            "value": "Roboto"
-          },
-          "color": {
-            "value": "rgb(0,0,0)"
-          },
-          "textAlign": {
-            "value": "left"
-          },
-          "width": {
-            "value": "83px"
-          },
-          "fontSize": {
-            "value": "12px"
-          },
-          "lineHeight": {
-            "value": "14.0625px"
-          },
-          "position": {
-            "value": "relative"
-          },
-          "label": {
-            "value": "Price / Address"
-          },
-          "fontWeight": {
-            "value": "400"
-          },
-          "height": {
-            "value": "14px"
-          }
-        }
-      },
-      {
-        "children": [],
-        "componentType": "Text",
-        "name": "Sqft",
-        "properties": {
-          "padding": {
-            "value": "0px 0px 0px 0px"
-          },
-          "fontFamily": {
-            "value": "Roboto"
-          },
-          "color": {
-            "value": "rgb(0,0,0)"
-          },
-          "textAlign": {
-            "value": "left"
-          },
-          "width": {
-            "value": "23px"
-          },
-          "fontSize": {
-            "value": "12px"
-          },
-          "lineHeight": {
-            "value": "14.0625px"
-          },
-          "position": {
-            "value": "relative"
-          },
-          "label": {
-            "value": "Sqft"
-          },
-          "fontWeight": {
-            "value": "400"
-          },
-          "height": {
-            "value": "14px"
-          }
-        }
-      }
-    ],
-    "componentType": "Flex",
-    "createdAt": "2021-10-29T19:06:43.761Z",
-    "environmentName": "staging",
-    "id": "c-szi3h4hsySGWXomQxO",
-    "name": "ComplexTest6",
-    "overrides": {},
-    "properties": {
-      "padding": {
-        "value": "21px 42px 21px 42px"
-      },
-      "backgroundColor": {
-        "value": "rgb(255,255,255)"
-      },
-      "overflow": {
-        "value": "hidden"
-      },
-      "position": {
-        "value": "relative"
-      },
-      "gap": {
-        "value": "22px"
-      },
-      "direction": {
-        "value": "column"
       }
     },
-    "sourceId": "207:7",
-    "variants": []
-  }
+    {
+      "children": [],
+      "componentType": "Text",
+      "name": "Price / Address",
+      "properties": {
+        "padding": {
+          "value": "0px 0px 0px 0px"
+        },
+        "fontFamily": {
+          "value": "Roboto"
+        },
+        "color": {
+          "value": "rgb(0,0,0)"
+        },
+        "textAlign": {
+          "value": "left"
+        },
+        "width": {
+          "value": "83px"
+        },
+        "fontSize": {
+          "value": "12px"
+        },
+        "lineHeight": {
+          "value": "14.0625px"
+        },
+        "position": {
+          "value": "relative"
+        },
+        "label": {
+          "value": "Price / Address"
+        },
+        "fontWeight": {
+          "value": "400"
+        },
+        "height": {
+          "value": "14px"
+        }
+      }
+    },
+    {
+      "children": [],
+      "componentType": "Text",
+      "name": "Sqft",
+      "properties": {
+        "padding": {
+          "value": "0px 0px 0px 0px"
+        },
+        "fontFamily": {
+          "value": "Roboto"
+        },
+        "color": {
+          "value": "rgb(0,0,0)"
+        },
+        "textAlign": {
+          "value": "left"
+        },
+        "width": {
+          "value": "23px"
+        },
+        "fontSize": {
+          "value": "12px"
+        },
+        "lineHeight": {
+          "value": "14.0625px"
+        },
+        "position": {
+          "value": "relative"
+        },
+        "label": {
+          "value": "Sqft"
+        },
+        "fontWeight": {
+          "value": "400"
+        },
+        "height": {
+          "value": "14px"
+        }
+      }
+    }
+  ],
+  "componentType": "Flex",
+  "createdAt": "2021-10-29T19:06:43.761Z",
+  "environmentName": "staging",
+  "id": "c-szi3h4hsySGWXomQxO",
+  "name": "ComplexTest6",
+  "overrides": {},
+  "properties": {
+    "padding": {
+      "value": "21px 42px 21px 42px"
+    },
+    "backgroundColor": {
+      "value": "rgb(255,255,255)"
+    },
+    "overflow": {
+      "value": "hidden"
+    },
+    "position": {
+      "value": "relative"
+    },
+    "gap": {
+      "value": "22px"
+    },
+    "direction": {
+      "value": "column"
+    }
+  },
+  "sourceId": "207:7",
+  "variants": [],
+  "schemaVersion": "1.0"
+}

@@ -10,5 +10,6 @@
     }
   },
   "overrides": {},
-  "name": "ViewTest"
+  "name": "ViewTest",
+  "schemaVersion": "1.0"
 }

@@ -15,5 +15,6 @@
       },
       "defaultValue": "Bound Double Default"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

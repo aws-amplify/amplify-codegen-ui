@@ -15,5 +15,6 @@
       "type": "Number",
       "value": "1"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

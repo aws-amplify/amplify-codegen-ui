@@ -8,8 +8,7 @@
       "id": "0987-6543-3211",
       "componentType": "Button",
       "name": "MyButton",
-      "properties": {
-      },
+      "properties": {},
       "children": [
         {
           "id": "1234-5678-9010",
@@ -23,5 +22,6 @@
         }
       ]
     }
-  ]
+  ],
+  "schemaVersion": "1.0"
 }
