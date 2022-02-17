@@ -31,6 +31,7 @@ describe('Primitives', () => {
         name: `My${primitive}`,
         properties: {},
         bindingProperties: {},
+        schemaVersion: '1.0',
       });
     });
   });

@@ -51,6 +51,31 @@ const eventsSchema = yup
   )
   .noUnknown();
 
+const schemaVersionSchema = () => {
+  const versionNumberRegex = /^(\d+)\.(\d+)$/;
+  const supportedMajorVersion = '1';
+  const supportedMinorVersion = '0';
+  return (
+    yup
+      .string()
+      // eslint-disable-next-line no-template-curly-in-string
+      .test('schemaVersion', 'unsupported schemaVersion ${originalValue}', (value: string | undefined) => {
+        if (value === undefined) {
+          return true;
+        }
+        const match = value.match(versionNumberRegex);
+        if (match === null) {
+          return false;
+        }
+        const [, majorVersion, minorVersion] = match;
+        if (majorVersion !== supportedMajorVersion || minorVersion > supportedMinorVersion) {
+          return false;
+        }
+        return true;
+      })
+  );
+};
+
 /**
  * Component Schema Definitions
  */
@@ -74,6 +99,7 @@ const studioComponentSchema = yup
     name: alphaNumString().required(),
     id: yup.string().nullable(),
     sourceId: yup.string().nullable(),
+    schemaVersion: yup.lazy(() => schemaVersionSchema().required()),
     componentType: alphaNumNoLeadingNumberString().required(),
     properties: yup.lazy((value) => propertiesSchema(value).required()),
     children: yup.array(studioComponentChildSchema).nullable(),

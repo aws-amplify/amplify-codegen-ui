@@ -22,6 +22,7 @@ describe('validation-helper', () => {
         name: 'MyBindingView',
         componentType: 'View',
         properties: {},
+        schemaVersion: '1.0',
       });
     });
 
@@ -30,6 +31,7 @@ describe('validation-helper', () => {
         validateComponentSchema({
           name: 'MyBindingView',
           properties: {},
+          schemaVersion: '1.0',
         });
       }).toThrowErrorMatchingSnapshot();
     });
@@ -39,6 +41,7 @@ describe('validation-helper', () => {
         name: 'MyBindingView',
         componentType: 'View',
         properties: {},
+        schemaVersion: '1.0',
         sourceId: null,
       });
     });
@@ -48,6 +51,7 @@ describe('validation-helper', () => {
         validateComponentSchema({
           componentType: 'View',
           name: 'MyBindingView',
+          schemaVersion: '1.0',
         });
       }).toThrowErrorMatchingSnapshot();
     });
@@ -57,6 +61,7 @@ describe('validation-helper', () => {
         validateComponentSchema({
           componentType: 'View',
           name: 'MyBindingView',
+          schemaVersion: '1.0',
           properties: {
             pathData: {},
           },
@@ -69,6 +74,7 @@ describe('validation-helper', () => {
         validateComponentSchema({
           componentType: 'View',
           name: 'MyBindingView',
+          schemaVersion: '1.0',
           properties: 'property',
         });
       }).toThrowErrorMatchingSnapshot();
@@ -80,6 +86,7 @@ describe('validation-helper', () => {
           componentType: 2,
           name: 'MyBindingView',
           properties: {},
+          schemaVersion: '1.0',
         });
       }).toThrowErrorMatchingSnapshot();
     });
@@ -89,6 +96,7 @@ describe('validation-helper', () => {
         validateComponentSchema({
           componentType: 'View',
           properties: {},
+          schemaVersion: '1.0',
         });
       }).toThrowErrorMatchingSnapshot();
     });
@@ -99,6 +107,7 @@ describe('validation-helper', () => {
           componentType: 'View',
           name: 'MyBindingView',
           properties: {},
+          schemaVersion: '1.0',
           children: [
             {
               componentType: 3,
@@ -116,6 +125,7 @@ describe('validation-helper', () => {
           componentType: 'View',
           name: 'MyBindingView',
           properties: {},
+          schemaVersion: '1.0',
           children: [
             {
               componentType: 'View',
@@ -132,6 +142,7 @@ describe('validation-helper', () => {
           componentType: 'View',
           name: 'MyBindingView',
           properties: {},
+          schemaVersion: '1.0',
           children: [
             {
               componentType: 'View',
@@ -162,6 +173,7 @@ describe('validation-helper', () => {
           componentType: 'View',
           name: 'MyBindingView',
           properties: {},
+          schemaVersion: '1.0',
           children: [
             {
               componentType: 'View',
@@ -192,6 +204,7 @@ describe('validation-helper', () => {
           name: 'CustomComponent',
           componentType: 'View 2',
           properties: {},
+          schemaVersion: '1.0',
         });
       }).toThrowErrorMatchingSnapshot();
     });
@@ -202,6 +215,7 @@ describe('validation-helper', () => {
           name: 'CustomComponent',
           componentType: '2View',
           properties: {},
+          schemaVersion: '1.0',
         });
       }).toThrowErrorMatchingSnapshot();
     });
@@ -211,6 +225,7 @@ describe('validation-helper', () => {
         name: 'CustomComponent',
         componentType: 'View2',
         properties: {},
+        schemaVersion: '1.0',
       });
     });
 
@@ -219,6 +234,7 @@ describe('validation-helper', () => {
         name: 'CustomComponent',
         componentType: 'View',
         properties: {},
+        schemaVersion: '1.0',
         children: [
           {
             name: 'I Have Spaces',
@@ -234,6 +250,7 @@ describe('validation-helper', () => {
         name: 'CustomComponent',
         componentType: 'View',
         properties: {},
+        schemaVersion: '1.0',
         children: [
           {
             name: 'I Have Spaces',
@@ -255,6 +272,7 @@ describe('validation-helper', () => {
           name: 'CustomComponent',
           componentType: 'View',
           properties: {},
+          schemaVersion: '1.0',
           children: [
             {
               name: 'I Have Spaces',
@@ -277,6 +295,7 @@ describe('validation-helper', () => {
           name: 'MyComp',
           componentType: 'Flex',
           properties: {},
+          schemaVersion: '1.0',
           children: [
             {
               name: 'MyComp',
@@ -301,6 +320,38 @@ describe('validation-helper', () => {
               ],
             },
           ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('throws on unsupported schema version', () => {
+      expect(() => {
+        validateComponentSchema({
+          name: 'MyComp',
+          componentType: 'Flex',
+          properties: {},
+          schemaVersion: '1.1',
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('throws on invalid schema version', () => {
+      expect(() => {
+        validateComponentSchema({
+          name: 'MyComp',
+          componentType: 'Flex',
+          properties: {},
+          schemaVersion: '1.1.4',
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('top-level component requires schemaVersion', () => {
+      expect(() => {
+        validateComponentSchema({
+          name: 'MyComp',
+          componentType: 'Flex',
+          properties: {},
         });
       }).toThrowErrorMatchingSnapshot();
     });
