@@ -1,23 +1,23 @@
 {
-    "componentType": "Button",
-    "name": "NavigateButton",
-    "properties": {
-      "children": {
-        "value": "Go to About section"
-      }
-    },
-    "events": {
-      "click": {
-        "action": "Amplify.Navigation",
-        "parameters": {
-          "type": {
-            "value": "anchor"
-          },
-          "about": {
-            "value": "#about"
-          }
+  "componentType": "Button",
+  "name": "NavigateButton",
+  "properties": {
+    "children": {
+      "value": "Go to About section"
+    }
+  },
+  "events": {
+    "click": {
+      "action": "Amplify.Navigation",
+      "parameters": {
+        "type": {
+          "value": "anchor"
+        },
+        "about": {
+          "value": "#about"
         }
       }
     }
-  }
-  
+  },
+  "schemaVersion": "1.0"
+}

@@ -48,5 +48,6 @@
     "children": {
       "value": "Conditional Text"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

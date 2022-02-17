@@ -43,5 +43,6 @@
         "property": "width"
       }
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

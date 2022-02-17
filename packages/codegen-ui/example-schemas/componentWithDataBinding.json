@@ -37,5 +37,6 @@
         "property": "isDisabled"
       }
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

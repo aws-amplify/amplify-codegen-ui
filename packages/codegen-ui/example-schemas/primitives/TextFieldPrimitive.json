@@ -12,5 +12,6 @@
     "descriptiveText": {
       "value": "Please enter valid name"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

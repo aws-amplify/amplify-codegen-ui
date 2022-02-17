@@ -133,7 +133,6 @@
         }
       }
     },
-
     {
       "componentType": "Text",
       "name": "doubleclick",
@@ -413,7 +412,6 @@
         }
       }
     },
-
     {
       "componentType": "TextField",
       "name": "input",
@@ -445,7 +443,6 @@
         }
       }
     },
-
     {
       "componentType": "TextField",
       "name": "focus",
@@ -477,8 +474,6 @@
         }
       }
     },
-
-
     {
       "componentType": "TextField",
       "name": "blur",
@@ -510,7 +505,6 @@
         }
       }
     },
-
     {
       "componentType": "TextField",
       "name": "keydown",
@@ -604,5 +598,6 @@
         }
       }
     }
-  ]
+  ],
+  "schemaVersion": "1.0"
 }

@@ -1,26 +1,26 @@
 {
-    "componentType": "Button",
-    "name": "NavigateButton",
-    "properties": {
-      "children": {
-        "value": "Go to Amazon.com (Open in new tab)"
-      }
-    },
-    "events": {
-      "click": {
-        "action": "Amplify.Navigation",
-        "parameters": {
-          "type": {
-            "value": "url"
-          },
-          "url": {
-            "value": "https://www.amazon.com/"
-          },
-          "target": {
-            "value": "newtab"
-          }
+  "componentType": "Button",
+  "name": "NavigateButton",
+  "properties": {
+    "children": {
+      "value": "Go to Amazon.com (Open in new tab)"
+    }
+  },
+  "events": {
+    "click": {
+      "action": "Amplify.Navigation",
+      "parameters": {
+        "type": {
+          "value": "url"
+        },
+        "url": {
+          "value": "https://www.amazon.com/"
+        },
+        "target": {
+          "value": "newtab"
         }
       }
     }
-  }
-  
+  },
+  "schemaVersion": "1.0"
+}

@@ -19,5 +19,6 @@
     "textValue": {
       "type": "String"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

@@ -1,88 +1,89 @@
 {
-    "id": "1234-5678-9010",
-    "name": "GoldenTheme",
-    "values": [
-      {
-        "key": "tokens",
-        "value": {
-          "children": [
-            {
-              "key": "colors",
-              "value": {
-                "children": [
-                  {
-                    "key": "font",
-                    "value": {
-                      "children": [
-                        {
-                          "key": "primary",
-                          "value": {
-                            "children": [
-                              {
-                                "key": "value",
-                                "value": {
-                                  "value": "#008080"
-                                }
+  "id": "1234-5678-9010",
+  "name": "GoldenTheme",
+  "values": [
+    {
+      "key": "tokens",
+      "value": {
+        "children": [
+          {
+            "key": "colors",
+            "value": {
+              "children": [
+                {
+                  "key": "font",
+                  "value": {
+                    "children": [
+                      {
+                        "key": "primary",
+                        "value": {
+                          "children": [
+                            {
+                              "key": "value",
+                              "value": {
+                                "value": "#008080"
                               }
-                            ]
-                          }
+                            }
+                          ]
                         }
-                      ]
-                    }
+                      }
+                    ]
                   }
-                ]
-              }
+                }
+              ]
             }
-          ]
-        }
+          }
+        ]
       }
-    ],
-    "overrides": [
-      {
-        "key": "colorMode",
-        "value": {
-          "value": "dark"
-        }
-      },
-      {
-        "key": "tokens",
-        "value": {
-          "children": [
-            {
-              "key": "colors",
-              "value": {
-                "children": [
-                  {
-                    "key": "black",
-                    "value": {
-                      "children": [
-                        {
-                          "key": "value",
-                          "value": {
-                            "value": "#fff"
-                          }
+    }
+  ],
+  "overrides": [
+    {
+      "key": "colorMode",
+      "value": {
+        "value": "dark"
+      }
+    },
+    {
+      "key": "tokens",
+      "value": {
+        "children": [
+          {
+            "key": "colors",
+            "value": {
+              "children": [
+                {
+                  "key": "black",
+                  "value": {
+                    "children": [
+                      {
+                        "key": "value",
+                        "value": {
+                          "value": "#fff"
                         }
-                      ]
-                    }
-                  },
-                  {
-                    "key": "white",
-                    "value": {
-                      "children": [
-                        {
-                          "key": "value",
-                          "value": {
-                            "value": "#000"
-                          }
-                        }
-                      ]
-                    }
+                      }
+                    ]
                   }
-                ]
-              }
+                },
+                {
+                  "key": "white",
+                  "value": {
+                    "children": [
+                      {
+                        "key": "value",
+                        "value": {
+                          "value": "#000"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
             }
-          ]
-        }
+          }
+        ]
       }
-    ]
-  }
+    }
+  ],
+  "schemaVersion": "1.0"
+}

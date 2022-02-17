@@ -1,40 +1,41 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Button",
-    "name": "GoldenComponentWithDataBindingAndDatastoreDefault",
-    "bindingProperties": {
-        "width": {
-            "type": "Number"
-        },
-        "buttonUser": {
-            "type": "Data",
-            "bindingProperties": {
-                "model": "User"
-            },
-            "defaultValue": {
-                "predicates": {
-                    "eq": {
-                        "ID": "1234"
-                    }
-                }
-            }
-        },
-        "buttonColor": {
-            "type": "String"
-        }
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "GoldenComponentWithDataBindingAndDatastoreDefault",
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
     },
-    "properties": {
-        "label": {
-            "bindingProperties": {
-                "property": "buttonUser",
-                "field": "username"
-            },
-            "defaultValue": "hspain@gmail.com"
-        },
-        "labelWidth": {
-            "bindingProperties": {
-                "property": "width"
-            }
+    "buttonUser": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User"
+      },
+      "defaultValue": {
+        "predicates": {
+          "eq": {
+            "ID": "1234"
+          }
         }
+      }
+    },
+    "buttonColor": {
+      "type": "String"
     }
+  },
+  "properties": {
+    "label": {
+      "bindingProperties": {
+        "property": "buttonUser",
+        "field": "username"
+      },
+      "defaultValue": "hspain@gmail.com"
+    },
+    "labelWidth": {
+      "bindingProperties": {
+        "property": "width"
+      }
+    }
+  },
+  "schemaVersion": "1.0"
 }

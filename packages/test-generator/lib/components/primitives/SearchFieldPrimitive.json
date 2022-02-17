@@ -9,5 +9,6 @@
     "placeholder": {
       "value": "Search"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

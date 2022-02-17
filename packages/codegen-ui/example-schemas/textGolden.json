@@ -12,5 +12,6 @@
     "label": {
       "value": "Text Value"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }
