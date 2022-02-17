@@ -9,5 +9,6 @@
     "children": {
       "value": "Alert Text"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

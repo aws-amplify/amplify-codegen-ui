@@ -39,5 +39,6 @@
       }
     }
   ],
-  "bindingProperties": {}
+  "bindingProperties": {},
+  "schemaVersion": "1.0"
 }

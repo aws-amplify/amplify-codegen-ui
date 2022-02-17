@@ -16,5 +16,6 @@
     "children": {
       "value": "Simple Property Binding"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

@@ -1,5 +1,5 @@
 {
   "name": "ComponentMissingProperties",
-  "componentType": "View"
+  "componentType": "View",
+  "schemaVersion": "1.0"
 }
-  

@@ -1,24 +1,24 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Flex",
-    "name": "CheckboxControlledElement",
-    "properties": {},
-    "children": [
-      {
-        "componentType": "CheckboxField",
-        "name": "Input",
-        "properties": {}
-      },
-      {
-        "componentType": "Text",
-        "name": "CheckboxFieldValue",
-        "properties": {
-          "label": {
-            "componentName": "Input",
-            "property": "checked"
-          }
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "CheckboxControlledElement",
+  "properties": {},
+  "children": [
+    {
+      "componentType": "CheckboxField",
+      "name": "Input",
+      "properties": {}
+    },
+    {
+      "componentType": "Text",
+      "name": "CheckboxFieldValue",
+      "properties": {
+        "label": {
+          "componentName": "Input",
+          "property": "checked"
         }
       }
-    ]
-  }
-  
+    }
+  ],
+  "schemaVersion": "1.0"
+}

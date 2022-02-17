@@ -1,86 +1,87 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Flex",
-    "name": "ComponentWithNestedOverrides",
-    "properties": {
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "ComponentWithNestedOverrides",
+  "properties": {
+    "padding": {
+      "value": "10px"
+    }
+  },
+  "children": [
+    {
+      "name": "ChildFlex1",
+      "componentType": "Flex",
+      "properties": {
+        "id": {
+          "value": "ChildFlex1"
+        },
+        "children": {
+          "value": "ChildFlex1"
+        },
         "padding": {
-            "value": "10px"
+          "value": "10px"
         }
+      }
     },
-    "children": [
-        {
-            "name": "ChildFlex1",
-            "componentType": "Flex",
-            "properties": {
-                "id": {
-                    "value": "ChildFlex1"
-                },
-                "children": {
-                    "value": "ChildFlex1"
-                },
-                "padding": {
-                    "value": "10px"
-                }
-            }
+    {
+      "name": "ChildFlex2",
+      "componentType": "Flex",
+      "properties": {
+        "id": {
+          "value": "ChildFlex2"
         },
-        {
-            "name": "ChildFlex2",
-            "componentType": "Flex",
-            "properties": {
-                "id": {
-                    "value": "ChildFlex2"
-                },
-                "padding": {
-                    "value": "10px"
-                }
-            },
-            "children": [
-                {
-                    "name": "ChildChildFlex1",
-                    "componentType": "Flex",
-                    "properties": {
-                        "id": {
-                            "value": "ChildChildFlex1"
-                        },
-                        "children": {
-                            "value": "ChildChildFlex1"
-                        },
-                        "padding": {
-                            "value": "10px"
-                        }
-                    }
-                },
-                {
-                    "name": "ChildChildFlex2",
-                    "componentType": "Flex",
-                    "properties": {
-                        "id": {
-                            "value": "ChildChildFlex2"
-                        },
-                        "children": {
-                            "value": "ChildChildFlex2"
-                        },
-                        "padding": {
-                            "value": "10px"
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "ChildFlex3",
-            "componentType": "Flex",
-            "properties": {
-                "id": {
-                    "value": "ChildFlex3"
-                },
-                "children": {
-                    "value": "ChildFlex3"
-                },
-                "padding": {
-                    "value": "10px"
-                }
-            }
+        "padding": {
+          "value": "10px"
         }
-    ]
+      },
+      "children": [
+        {
+          "name": "ChildChildFlex1",
+          "componentType": "Flex",
+          "properties": {
+            "id": {
+              "value": "ChildChildFlex1"
+            },
+            "children": {
+              "value": "ChildChildFlex1"
+            },
+            "padding": {
+              "value": "10px"
+            }
+          }
+        },
+        {
+          "name": "ChildChildFlex2",
+          "componentType": "Flex",
+          "properties": {
+            "id": {
+              "value": "ChildChildFlex2"
+            },
+            "children": {
+              "value": "ChildChildFlex2"
+            },
+            "padding": {
+              "value": "10px"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ChildFlex3",
+      "componentType": "Flex",
+      "properties": {
+        "id": {
+          "value": "ChildFlex3"
+        },
+        "children": {
+          "value": "ChildFlex3"
+        },
+        "padding": {
+          "value": "10px"
+        }
+      }
+    }
+  ],
+  "schemaVersion": "1.0"
 }
