@@ -10,6 +10,7 @@
   "children": [
     {
       "componentType": "Button",
+      "name": "ButtonRocket",
       "properties": {
         "label": {
           "value": "🚀"
@@ -18,6 +19,7 @@
     },
     {
       "componentType": "Button",
+      "name": "ButtonMoon",
       "properties": {
         "label": {
           "value": "🌕"
@@ -26,6 +28,7 @@
     },
     {
       "componentType": "Button",
+      "name": "ButtonStar",
       "properties": {
         "label": {
           "value": "⭐"

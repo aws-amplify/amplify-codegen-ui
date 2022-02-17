@@ -16,6 +16,7 @@
   "children": [
     {
       "componentType": "Radio",
+      "name": "HtmlRadio",
       "properties": {
         "value": {
           "value": "html"
@@ -27,6 +28,7 @@
     },
     {
       "componentType": "Radio",
+      "name": "CssRadio",
       "properties": {
         "value": {
           "value": "css"
@@ -38,6 +40,7 @@
     },
     {
       "componentType": "Radio",
+      "name": "JavascriptRadio",
       "properties": {
         "value": {
           "value": "javascript"

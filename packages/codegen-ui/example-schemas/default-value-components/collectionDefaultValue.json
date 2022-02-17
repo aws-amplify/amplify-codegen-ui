@@ -11,6 +11,7 @@
   "children": [
     {
       "componentType": "Text",
+      "name": "MyText",
       "properties": {
         "label": {
           "collectionBindingProperties": {

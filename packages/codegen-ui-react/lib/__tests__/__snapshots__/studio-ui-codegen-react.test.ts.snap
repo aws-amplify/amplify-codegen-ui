@@ -970,7 +970,11 @@ export default function ViewWithButton(
   return (
     /* @ts-ignore: TS2322 */
     <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
-      <Button color=\\"#ff0000\\" width=\\"20px\\"></Button>
+      <Button
+        color=\\"#ff0000\\"
+        width=\\"20px\\"
+        {...getOverrideProps(overrides, \\"MyButton\\")}
+      ></Button>
     </View>
   );
 }
@@ -999,7 +1003,11 @@ export default function ViewWithCustomButton(
   return (
     /* @ts-ignore: TS2322 */
     <View {...rest} {...getOverrideProps(overrides, \\"ViewWithCustomButton\\")}>
-      <CustomButton color=\\"#ff0000\\" width=\\"20px\\"></CustomButton>
+      <CustomButton
+        color=\\"#ff0000\\"
+        width=\\"20px\\"
+        {...getOverrideProps(overrides, \\"MyCustomButton\\")}
+      ></CustomButton>
     </View>
   );
 }
@@ -1027,7 +1035,11 @@ export default function ViewWithButton(
   return (
     /* @ts-ignore: TS2322 */
     <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
-      <Button color=\\"#ff0000\\" width=\\"20px\\"></Button>
+      <Button
+        color=\\"#ff0000\\"
+        width=\\"20px\\"
+        {...getOverrideProps(overrides, \\"MyButton\\")}
+      ></Button>
     </View>
   );
 }
@@ -4425,7 +4437,9 @@ export default function CustomChildren(
   return (
     /* @ts-ignore: TS2322 */
     <MyView {...rest} {...getOverrideProps(overrides, \\"CustomChildren\\")}>
-      <CustomButton></CustomButton>
+      <CustomButton
+        {...getOverrideProps(overrides, \\"MyCustomButton\\")}
+      ></CustomButton>
     </MyView>
   );
 }
@@ -4476,7 +4490,10 @@ export default function CustomChildren(props) {
   return React.createElement(
     MyView,
     __assign({}, rest, getOverrideProps(overrides, \\"CustomChildren\\")),
-    React.createElement(CustomButton, null)
+    React.createElement(
+      CustomButton,
+      __assign({}, getOverrideProps(overrides, \\"MyCustomButton\\"))
+    )
   );
 }
 "
@@ -4518,7 +4535,9 @@ export default function CustomParentAndChildren(
       {...rest}
       {...getOverrideProps(overrides, \\"CustomParentAndChildren\\")}
     >
-      <CustomButton></CustomButton>
+      <CustomButton
+        {...getOverrideProps(overrides, \\"MyCustomButton\\")}
+      ></CustomButton>
     </ViewTest>
   );
 }
@@ -4569,7 +4588,10 @@ export default function CustomParentAndChildren(props) {
   return React.createElement(
     ViewTest,
     __assign({}, rest, getOverrideProps(overrides, \\"CustomParentAndChildren\\")),
-    React.createElement(CustomButton, null)
+    React.createElement(
+      CustomButton,
+      __assign({}, getOverrideProps(overrides, \\"MyCustomButton\\"))
+    )
   );
 }
 "
@@ -4608,7 +4630,7 @@ export default function CustomParent(
   return (
     /* @ts-ignore: TS2322 */
     <MyView {...rest} {...getOverrideProps(overrides, \\"CustomParent\\")}>
-      <Button></Button>
+      <Button {...getOverrideProps(overrides, \\"MyButton\\")}></Button>
     </MyView>
   );
 }
@@ -4659,7 +4681,10 @@ export default function CustomParent(props) {
   return React.createElement(
     MyView,
     __assign({}, rest, getOverrideProps(overrides, \\"CustomParent\\")),
-    React.createElement(Button, null)
+    React.createElement(
+      Button,
+      __assign({}, getOverrideProps(overrides, \\"MyButton\\"))
+    )
   );
 }
 "
@@ -4719,7 +4744,13 @@ export default function ViewWithButton(props) {
   return React.createElement(
     View,
     __assign({}, rest, getOverrideProps(overrides, \\"ViewWithButton\\")),
-    React.createElement(Button, { color: \\"#ff0000\\", width: \\"20px\\" })
+    React.createElement(
+      Button,
+      __assign(
+        { color: \\"#ff0000\\", width: \\"20px\\" },
+        getOverrideProps(overrides, \\"MyButton\\")
+      )
+    )
   );
 }
 "
@@ -4752,7 +4783,11 @@ export default function ViewWithButton(props) {
     rest = __rest(props, [\\"overrides\\"]);
   return (
     <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
-      <Button color=\\"#ff0000\\" width=\\"20px\\"></Button>
+      <Button
+        color=\\"#ff0000\\"
+        width=\\"20px\\"
+        {...getOverrideProps(overrides, \\"MyButton\\")}
+      ></Button>
     </View>
   );
 }
@@ -4798,10 +4833,13 @@ function ViewWithButton(props) {
       rest,
       (0, internal_1.getOverrideProps)(overrides, \\"ViewWithButton\\")
     ),
-    react_1.default.createElement(ui_react_1.Button, {
-      color: \\"#ff0000\\",
-      width: \\"20px\\",
-    })
+    react_1.default.createElement(
+      ui_react_1.Button,
+      Object.assign(
+        { color: \\"#ff0000\\", width: \\"20px\\" },
+        (0, internal_1.getOverrideProps)(overrides, \\"MyButton\\")
+      )
+    )
   );
 }
 exports.default = ViewWithButton;
@@ -6457,11 +6495,13 @@ export default function ExpanderPrimitive(
         title=\\"title1\\"
         value=\\"ExpanderItem1\\"
         children=\\"ExpanderItem1Content\\"
+        {...getOverrideProps(overrides, \\"ExpanderItem1\\")}
       ></ExpanderItem>
       <ExpanderItem
         title=\\"title2\\"
         value=\\"ExpanderItem2\\"
         children=\\"ExpanderItem2Content\\"
+        {...getOverrideProps(overrides, \\"ExpanderItem2\\")}
       ></ExpanderItem>
     </Expander>
   );
@@ -6472,16 +6512,19 @@ export default function ExpanderPrimitive(
 exports[`amplify render tests primitives ExpanderItem 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
 import { ExpanderItem, ExpanderItemProps } from \\"@aws-amplify/ui-react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 
-export type ComponentWithoutNameProps = React.PropsWithChildren<
+export type MyExpanderItemProps = React.PropsWithChildren<
   Partial<ExpanderItemProps> & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function unknown_component_name(
-  props: unknown_component_nameProps
+export default function MyExpanderItem(
+  props: MyExpanderItemProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
   return (
@@ -6491,6 +6534,7 @@ export default function unknown_component_name(
       value=\\"ExpanderItem1\\"
       children=\\"ExpanderItem1Content\\"
       {...rest}
+      {...getOverrideProps(overrides, \\"MyExpanderItem\\")}
     ></ExpanderItem>
   );
 }
@@ -6555,7 +6599,10 @@ export default function MenuPrimitive(
   return (
     /* @ts-ignore: TS2322 */
     <Menu {...rest} {...getOverrideProps(overrides, \\"MenuPrimitive\\")}>
-      <MenuItem children=\\"Item\\"></MenuItem>
+      <MenuItem
+        children=\\"Item\\"
+        {...getOverrideProps(overrides, \\"MyMenuItem\\")}
+      ></MenuItem>
     </Menu>
   );
 }
@@ -6663,35 +6710,86 @@ export default function TablePrimitive(
       {...rest}
       {...getOverrideProps(overrides, \\"TablePrimitive\\")}
     >
-      <TableHead>
-        <TableRow>
-          <TableCell as=\\"th\\" children=\\"Citrus\\"></TableCell>
-          <TableCell as=\\"th\\" children=\\"Stone Fruit\\"></TableCell>
-          <TableCell as=\\"th\\" children=\\"Berry\\"></TableCell>
+      <TableHead {...getOverrideProps(overrides, \\"MyTableHead\\")}>
+        <TableRow {...getOverrideProps(overrides, \\"MyTableRow\\")}>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Citrus\\"
+            {...getOverrideProps(overrides, \\"MyTableCellCitrus\\")}
+          ></TableCell>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Stone Fruit\\"
+            {...getOverrideProps(overrides, \\"MyTableCellStoneFruit\\")}
+          ></TableCell>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Berry\\"
+            {...getOverrideProps(overrides, \\"MyTableCellBerry\\")}
+          ></TableCell>
         </TableRow>
       </TableHead>
-      <TableBody>
-        <TableRow>
-          <TableCell children=\\"Orange\\"></TableCell>
-          <TableCell children=\\"Nectarine\\"></TableCell>
-          <TableCell children=\\"Raspberry\\"></TableCell>
+      <TableBody {...getOverrideProps(overrides, \\"MyTableBody\\")}>
+        <TableRow {...getOverrideProps(overrides, \\"TableRow1\\")}>
+          <TableCell
+            children=\\"Orange\\"
+            {...getOverrideProps(overrides, \\"TableCell11\\")}
+          ></TableCell>
+          <TableCell
+            children=\\"Nectarine\\"
+            {...getOverrideProps(overrides, \\"TableCell12\\")}
+          ></TableCell>
+          <TableCell
+            children=\\"Raspberry\\"
+            {...getOverrideProps(overrides, \\"TableCell13\\")}
+          ></TableCell>
         </TableRow>
-        <TableRow>
-          <TableCell children=\\"Grapefruit\\"></TableCell>
-          <TableCell children=\\"Apricot\\"></TableCell>
-          <TableCell children=\\"Blueberry\\"></TableCell>
+        <TableRow {...getOverrideProps(overrides, \\"TableRow2\\")}>
+          <TableCell
+            children=\\"Grapefruit\\"
+            {...getOverrideProps(overrides, \\"TableCell21\\")}
+          ></TableCell>
+          <TableCell
+            children=\\"Apricot\\"
+            {...getOverrideProps(overrides, \\"TableCell22\\")}
+          ></TableCell>
+          <TableCell
+            children=\\"Blueberry\\"
+            {...getOverrideProps(overrides, \\"TableCell23\\")}
+          ></TableCell>
         </TableRow>
-        <TableRow>
-          <TableCell children=\\"Lime\\"></TableCell>
-          <TableCell children=\\"Peach\\"></TableCell>
-          <TableCell children=\\"Strawberry\\"></TableCell>
+        <TableRow {...getOverrideProps(overrides, \\"TableRow3\\")}>
+          <TableCell
+            children=\\"Lime\\"
+            {...getOverrideProps(overrides, \\"TableCell31\\")}
+          ></TableCell>
+          <TableCell
+            children=\\"Peach\\"
+            {...getOverrideProps(overrides, \\"TableCell32\\")}
+          ></TableCell>
+          <TableCell
+            children=\\"Strawberry\\"
+            {...getOverrideProps(overrides, \\"TableCell33\\")}
+          ></TableCell>
         </TableRow>
       </TableBody>
-      <TableFoot>
-        <TableRow>
-          <TableCell as=\\"th\\" children=\\"Citrus\\"></TableCell>
-          <TableCell as=\\"th\\" children=\\"Stone Fruit\\"></TableCell>
-          <TableCell as=\\"th\\" children=\\"Berry\\"></TableCell>
+      <TableFoot {...getOverrideProps(overrides, \\"MyTableFoot\\")}>
+        <TableRow {...getOverrideProps(overrides, \\"TableRowFoot\\")}>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Citrus\\"
+            {...getOverrideProps(overrides, \\"TableCellFoot1\\")}
+          ></TableCell>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Stone Fruit\\"
+            {...getOverrideProps(overrides, \\"TableCellFoot2\\")}
+          ></TableCell>
+          <TableCell
+            as=\\"th\\"
+            children=\\"Berry\\"
+            {...getOverrideProps(overrides, \\"TableCellFoot3\\")}
+          ></TableCell>
         </TableRow>
       </TableFoot>
     </Table>
@@ -6763,6 +6861,7 @@ export default function ViewWithButton(
         color=\\"#ff0000\\"
         width=\\"20px\\"
         buttonText=\\"Click Me\\"
+        {...getOverrideProps(overrides, \\"MyCustomButton\\")}
       ></CustomButton>
     </View>
   );
@@ -6947,17 +7046,61 @@ export default function ParsedFixedValues(
       {...rest}
       {...getOverrideProps(overrides, \\"ParsedFixedValues\\")}
     >
-      <Input id=\\"string-value\\" value=\\"raw string value\\"></Input>
-      <Input id=\\"number-value\\" value=\\"67548\\"></Input>
-      <Input id=\\"parsed-number-value\\" value={67548}></Input>
-      <Input id=\\"boolean-value\\" value=\\"true\\"></Input>
-      <Input id=\\"parsed-boolean-value\\" value={true}></Input>
-      <Input id=\\"json-value\\" value='{\\"foo\\": \\"bar\\"}'></Input>
-      <Input id=\\"parsed-json-value\\" value={{ foo: \\"bar\\" }}></Input>
-      <Input id=\\"array-value\\" value=\\"[1,2,3]\\"></Input>
-      <Input id=\\"parsed-array-value\\" value={[1, 2, 3]}></Input>
-      <Input id=\\"null-value\\" value=\\"null\\"></Input>
-      <Input id=\\"parsed-null-value\\" value={null}></Input>
+      <Input
+        id=\\"string-value\\"
+        value=\\"raw string value\\"
+        {...getOverrideProps(overrides, \\"MyInputString\\")}
+      ></Input>
+      <Input
+        id=\\"number-value\\"
+        value=\\"67548\\"
+        {...getOverrideProps(overrides, \\"MyInputNumber\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-number-value\\"
+        value={67548}
+        {...getOverrideProps(overrides, \\"MyInputParsedNumber\\")}
+      ></Input>
+      <Input
+        id=\\"boolean-value\\"
+        value=\\"true\\"
+        {...getOverrideProps(overrides, \\"MyInputBoolean\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-boolean-value\\"
+        value={true}
+        {...getOverrideProps(overrides, \\"MyInputPrasedBoolean\\")}
+      ></Input>
+      <Input
+        id=\\"json-value\\"
+        value='{\\"foo\\": \\"bar\\"}'
+        {...getOverrideProps(overrides, \\"MyInputJson\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-json-value\\"
+        value={{ foo: \\"bar\\" }}
+        {...getOverrideProps(overrides, \\"MyInputParsedJson\\")}
+      ></Input>
+      <Input
+        id=\\"array-value\\"
+        value=\\"[1,2,3]\\"
+        {...getOverrideProps(overrides, \\"MyInputArray\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-array-value\\"
+        value={[1, 2, 3]}
+        {...getOverrideProps(overrides, \\"MyInputParsedArray\\")}
+      ></Input>
+      <Input
+        id=\\"null-value\\"
+        value=\\"null\\"
+        {...getOverrideProps(overrides, \\"MyInputNull\\")}
+      ></Input>
+      <Input
+        id=\\"parsed-null-value\\"
+        value={null}
+        {...getOverrideProps(overrides, \\"MyInputParsedNull\\")}
+      ></Input>
     </View>
   );
 }

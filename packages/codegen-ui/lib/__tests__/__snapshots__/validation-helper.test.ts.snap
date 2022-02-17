@@ -2,6 +2,10 @@
 
 exports[`validation-helper validateComponentSchema child component requires componentType to be the correct type 1`] = `"children[0].componentType must be a \`string\` type, but the final value was: \`3\`."`;
 
+exports[`validation-helper validateComponentSchema child component requires name 1`] = `"children[0].name is a required field"`;
+
+exports[`validation-helper validateComponentSchema deeply nested child components requires name 1`] = `"children[0].children[0].children[0].name is a required field"`;
+
 exports[`validation-helper validateComponentSchema deeply nested child components requires properties 1`] = `"children[0].children[0].children[0].properties is a required field"`;
 
 exports[`validation-helper validateComponentSchema fails eventBindings with invalid names 1`] = `"children[0].events field has unspecified keys: myclick"`;
@@ -15,6 +19,8 @@ exports[`validation-helper validateComponentSchema throws on all components shar
 exports[`validation-helper validateComponentSchema top-level component requires componentType 1`] = `"componentType is a required field"`;
 
 exports[`validation-helper validateComponentSchema top-level component requires componentType to be the correct type 1`] = `"componentType must be a \`string\` type, but the final value was: \`2\`."`;
+
+exports[`validation-helper validateComponentSchema top-level component requires name 1`] = `"name is a required field"`;
 
 exports[`validation-helper validateComponentSchema top-level component requires non-empty property values 1`] = `"property cannot be empty."`;
 
