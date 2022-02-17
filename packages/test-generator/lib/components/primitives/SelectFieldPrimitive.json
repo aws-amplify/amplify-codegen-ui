@@ -13,6 +13,7 @@
   "children": [
     {
       "componentType": "View",
+      "name": "AppleView",
       "properties": {
         "as": {
           "value": "option"
@@ -27,6 +28,7 @@
     },
     {
       "componentType": "View",
+      "name": "BananaView",
       "properties": {
         "as": {
           "value": "option"
@@ -41,6 +43,7 @@
     },
     {
       "componentType": "View",
+      "name": "OrangeView",
       "properties": {
         "as": {
           "value": "option"

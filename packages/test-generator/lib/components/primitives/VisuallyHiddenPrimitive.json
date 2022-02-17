@@ -10,6 +10,7 @@
   "children": [
     {
       "componentType": "VisuallyHidden",
+      "name": "Donemark",
       "properties": {
         "children": {
           "value": "Donemark"
@@ -18,6 +19,7 @@
     },
     {
       "componentType": "Text",
+      "name": "MyText",
       "properties": {
         "children": {
           "value": "✅"

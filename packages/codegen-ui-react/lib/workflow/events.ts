@@ -51,7 +51,7 @@ export function buildOpeningElementEvents(
   componentType: string,
   event: StudioComponentEvent,
   name: string,
-  componentName: string | undefined,
+  componentName: string,
 ): JsxAttribute {
   if (isBoundEvent(event)) {
     return buildBindingEvent(componentType, event, name);
@@ -75,11 +75,7 @@ export function buildBindingEvent(
   );
 }
 
-export function buildActionEvent(
-  componentType: string,
-  eventName: string,
-  componentName: string | undefined,
-): JsxAttribute {
+export function buildActionEvent(componentType: string, eventName: string, componentName: string): JsxAttribute {
   return factory.createJsxAttribute(
     factory.createIdentifier(mapGenericEventToReact(componentType as Primitive, eventName as StudioGenericEvent)),
     factory.createJsxExpression(

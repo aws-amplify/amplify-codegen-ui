@@ -5,6 +5,7 @@
   "properties": {},
   "children": [{
     "componentType": "Button",
+    "name": "MyButton",
     "properties": {}
   }]
 }

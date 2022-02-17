@@ -19,6 +19,7 @@
     "children": [
         {
             "componentType": "Button",
+            "name": "MyButton",
             "properties": {
                 "label": {
                     "bindingProperties": {

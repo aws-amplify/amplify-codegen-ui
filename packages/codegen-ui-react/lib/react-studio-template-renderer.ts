@@ -15,7 +15,6 @@
  */
 import {
   StudioTemplateRenderer,
-  StudioRendererConstants,
   isStudioComponentWithBinding,
   isSimplePropertyBinding,
   isDataPropertyBinding,
@@ -116,9 +115,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   @handleCodegenErrors
   renderSampleCodeSnippet() {
     const jsx = this.renderSampleCodeSnippetJsx(this.component);
-    const imports = this.importCollection.buildSampleSnippetImports(
-      this.component.name ?? StudioRendererConstants.unknownName,
-    );
+    const imports = this.importCollection.buildSampleSnippetImports(this.component.name);
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
     let importsText = '';
@@ -150,12 +147,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       importsText += result + EOL;
     });
 
-    const wrappedFunction = this.renderFunctionWrapper(
-      this.component.name ?? StudioRendererConstants.unknownName,
-      variableStatements,
-      jsx,
-      false,
-    );
+    const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, false);
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
@@ -175,12 +167,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const variableStatements = this.buildVariableStatements(this.component);
     const jsx = this.renderJsx(this.component);
 
-    const wrappedFunction = this.renderFunctionWrapper(
-      this.component.name ?? StudioRendererConstants.unknownName,
-      variableStatements,
-      jsx,
-      true,
-    );
+    const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, true);
     const propsDeclaration = this.renderBindingPropsType(this.component);
 
     const imports = this.importCollection.buildImportStatements();

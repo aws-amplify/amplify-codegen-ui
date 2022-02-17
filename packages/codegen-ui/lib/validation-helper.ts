@@ -56,8 +56,7 @@ const eventsSchema = yup
  */
 const studioComponentChildSchema: any = yup.object({
   componentType: alphaNumNoLeadingNumberString().required(),
-  // TODO: Name is required in the studio-types file, but doesn't seem to need to be. Relaxing the restriction here.
-  name: yup.string().nullable(),
+  name: yup.string().required(),
   properties: yup.lazy((value) => propertiesSchema(value).required()),
   // Doing lazy eval here since we reference our own type otherwise
   children: yup.lazy(() => yup.array(studioComponentChildSchema.default(undefined))),
@@ -72,7 +71,7 @@ const studioComponentChildSchema: any = yup.object({
 
 const studioComponentSchema = yup
   .object({
-    name: alphaNumString().nullable(),
+    name: alphaNumString().required(),
     id: yup.string().nullable(),
     sourceId: yup.string().nullable(),
     componentType: alphaNumNoLeadingNumberString().required(),
