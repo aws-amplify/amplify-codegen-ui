@@ -84,6 +84,15 @@ describe('validation-helper', () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
+    test('top-level component requires name', () => {
+      expect(() => {
+        validateComponentSchema({
+          componentType: 'View',
+          properties: {},
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     test('child component requires componentType to be the correct type', () => {
       expect(() => {
         validateComponentSchema({
@@ -93,6 +102,23 @@ describe('validation-helper', () => {
           children: [
             {
               componentType: 3,
+              name: 'MyChildComponent',
+              properties: {},
+            },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('child component requires name', () => {
+      expect(() => {
+        validateComponentSchema({
+          componentType: 'View',
+          name: 'MyBindingView',
+          properties: {},
+          children: [
+            {
+              componentType: 'View',
               properties: {},
             },
           ],
@@ -109,14 +135,47 @@ describe('validation-helper', () => {
           children: [
             {
               componentType: 'View',
+              name: 'MyChildView',
               properties: {},
               children: [
                 {
                   componentType: 'View',
+                  name: 'MyGrandChildView',
                   properties: {},
                   children: [
                     {
                       componentType: 'Button',
+                      name: 'MyGreatGrandChildView',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('deeply nested child components requires name', () => {
+      expect(() => {
+        validateComponentSchema({
+          componentType: 'View',
+          name: 'MyBindingView',
+          properties: {},
+          children: [
+            {
+              componentType: 'View',
+              name: 'MyChildView',
+              properties: {},
+              children: [
+                {
+                  componentType: 'View',
+                  name: 'MyGrandChildView',
+                  properties: {},
+                  children: [
+                    {
+                      componentType: 'Button',
+                      properties: {},
                     },
                   ],
                 },

@@ -16,6 +16,7 @@
   "children": [
     {
       "componentType": "View",
+      "name": "View1",
       "properties": {
         "backgroundColor": {
           "value": "var(--amplify-colors-blue-10)"
@@ -24,6 +25,7 @@
     },
     {
       "componentType": "View",
+      "name": "View2",
       "properties": {
         "backgroundColor": {
           "value": "var(--amplify-colors-blue-20)"
@@ -32,6 +34,7 @@
     },
     {
       "componentType": "View",
+      "name": "View3",
       "properties": {
         "backgroundColor": {
           "value": "var(--amplify-colors-blue-40)"
@@ -40,6 +43,7 @@
     },
     {
       "componentType": "View",
+      "name": "View4",
       "properties": {
         "backgroundColor": {
           "value": "var(--amplify-colors-blue-60)"

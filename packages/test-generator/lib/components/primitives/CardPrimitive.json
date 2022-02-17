@@ -6,6 +6,7 @@
   "children": [
     {
       "componentType": "Image",
+      "name": "MyImage",
       "properties": {
         "src": {
           "value": "/road-to-milford-new-zealand-800w.jpg"
@@ -20,6 +21,7 @@
     },
     {
       "componentType": "View",
+      "name": "MyView",
       "properties": {
         "padding": {
           "value": "1rem"
@@ -28,10 +30,12 @@
       "children": [
         {
           "componentType": "Flex",
+          "name": "MyFlex",
           "properties": {},
           "children": [
             {
               "componentType": "Badge",
+              "name": "Badge1",
               "properties": {
                 "backgroundColor": {
                   "value": "lightgreen"
@@ -43,6 +47,7 @@
             },
             {
               "componentType": "Badge",
+              "name": "Badge2",
               "properties": {
                 "backgroundColor": {
                   "value": "lightblue"

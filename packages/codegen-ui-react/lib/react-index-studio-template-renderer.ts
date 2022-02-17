@@ -71,27 +71,21 @@ export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
    * export { default as ButtonComponent } from './ButtonComponent';
    */
   private buildExports(): ExportDeclaration[] {
-    return this.component
-      .filter(({ name }) => name !== undefined)
-      .map(({ name }) => {
-        /**
-         * Type checker isn't detecting that name can't be undefined here
-         * including this (and return cast) to appease the checker.
-         */
-        /* istanbul ignore if */
-        if (name === undefined) {
-          return undefined;
-        }
-        return factory.createExportDeclaration(
-          undefined,
-          undefined,
-          false,
-          factory.createNamedExports([
-            factory.createExportSpecifier(factory.createIdentifier('default'), factory.createIdentifier(name)),
-          ]),
-          factory.createStringLiteral(`./${name}`),
-        );
-      }) as ExportDeclaration[];
+    return this.component.map(({ name }) => {
+      /**
+       * Type checker isn't detecting that name can't be undefined here
+       * including this (and return cast) to appease the checker.
+       */
+      return factory.createExportDeclaration(
+        undefined,
+        undefined,
+        false,
+        factory.createNamedExports([
+          factory.createExportSpecifier(factory.createIdentifier('default'), factory.createIdentifier(name)),
+        ]),
+        factory.createStringLiteral(`./${name}`),
+      );
+    }) as ExportDeclaration[];
   }
 
   // no-op

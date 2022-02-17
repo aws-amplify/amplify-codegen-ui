@@ -7,11 +7,3 @@ Object {
 ",
 }
 `;
-
-exports[`ReactStudioTemplateRenderer renderSampleCodeSnippet component without name 1`] = `
-Object {
-  "compText": "<unknown_component_name />",
-  "importsText": "import { unknown_component_name } from \\"./ui-components\\";
-",
-}
-`;
