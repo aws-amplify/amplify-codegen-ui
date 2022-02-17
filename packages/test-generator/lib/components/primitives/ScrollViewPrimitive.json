@@ -13,6 +13,7 @@
   "children": [
     {
       "componentType": "Image",
+      "name": "MyImage",
       "properties": {
         "width": {
           "value": "800px"

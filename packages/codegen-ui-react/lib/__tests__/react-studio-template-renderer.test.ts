@@ -19,6 +19,7 @@ describe('ReactStudioTemplateRenderer', () => {
   describe('renderSampleCodeSnippet', () => {
     const component = {
       componentType: 'Text',
+      name: 'MyText',
       bindingProperties: {},
       properties: {
         children: {
@@ -29,11 +30,6 @@ describe('ReactStudioTemplateRenderer', () => {
 
     test('component with name', () => {
       const renderer = new MockTemplateRenderer({ ...component, name: 'MyText' }, {});
-      expect(renderer.renderSampleCodeSnippet()).toMatchSnapshot();
-    });
-
-    test('component without name', () => {
-      const renderer = new MockTemplateRenderer(component, {});
       expect(renderer.renderSampleCodeSnippet()).toMatchSnapshot();
     });
   });

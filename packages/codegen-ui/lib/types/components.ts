@@ -25,7 +25,7 @@ export type StudioComponent = {
   /**
    * The name of the customized component
    */
-  name?: string;
+  name: string;
 
   /**
    *  This is the unique global identifier for each component

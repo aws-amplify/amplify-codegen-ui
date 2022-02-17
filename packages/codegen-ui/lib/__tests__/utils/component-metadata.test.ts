@@ -21,6 +21,7 @@ describe('computeComponentMetadata', () => {
     test('returns false for no binding', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
       };
@@ -28,7 +29,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: [],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -36,6 +39,7 @@ describe('computeComponentMetadata', () => {
     test('builds for top-level auth binding', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {
           label: {
             userAttribute: 'email',
@@ -47,7 +51,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: true,
         requiredDataModels: [],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -93,6 +99,7 @@ describe('computeComponentMetadata', () => {
     test('builds for auth binding in action', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
         events: {
@@ -113,7 +120,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: true,
         requiredDataModels: ['User'],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -121,6 +130,7 @@ describe('computeComponentMetadata', () => {
     test('builds for nested auth binding in action', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
         events: {
@@ -148,7 +158,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: true,
         requiredDataModels: ['User'],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -158,6 +170,7 @@ describe('computeComponentMetadata', () => {
     it('returns no required data models if there are no state references', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
       };
@@ -165,7 +178,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: [],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -173,6 +188,7 @@ describe('computeComponentMetadata', () => {
     it('returns models in events', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
         events: {
@@ -189,7 +205,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -197,6 +215,7 @@ describe('computeComponentMetadata', () => {
     it('returns models in binding properties', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {
           user: {
@@ -211,7 +230,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -219,6 +240,7 @@ describe('computeComponentMetadata', () => {
     it('returns models in collection properties', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
         collectionProperties: {
@@ -231,7 +253,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -239,6 +263,7 @@ describe('computeComponentMetadata', () => {
     it('returns multiple different models', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {
           user: {
@@ -262,7 +287,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: ['User', 'Listing'],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -270,6 +297,7 @@ describe('computeComponentMetadata', () => {
     it('dedupes models', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {
           user: {
@@ -293,7 +321,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -303,6 +333,7 @@ describe('computeComponentMetadata', () => {
     it('returns for no state binding', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
       };
@@ -310,7 +341,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: [],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -318,6 +351,7 @@ describe('computeComponentMetadata', () => {
     it('returns for state binding in prop', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {
           label: {
             componentName: 'UserNameField',
@@ -330,7 +364,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: [],
         stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -338,6 +374,7 @@ describe('computeComponentMetadata', () => {
     it('returns for nested state binding in prop', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {
           label: {
             concat: [
@@ -354,7 +391,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: [],
         stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -362,6 +401,7 @@ describe('computeComponentMetadata', () => {
     it('returns for state binding in event', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
         events: {
@@ -383,7 +423,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
         stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -391,6 +433,7 @@ describe('computeComponentMetadata', () => {
     it('returns for nested state binding in event', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
         events: {
@@ -419,7 +462,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
         stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -427,6 +472,7 @@ describe('computeComponentMetadata', () => {
     it('returns multiple state bindings', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {
           label: {
             componentName: 'NicknameField',
@@ -463,7 +509,9 @@ describe('computeComponentMetadata', () => {
           { componentName: 'NicknameField', property: 'value' },
           { componentName: 'UserNameField', property: 'value' },
         ],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -471,6 +519,7 @@ describe('computeComponentMetadata', () => {
     it('dedupes state bindings', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {
           label: {
             componentName: 'UserNameField',
@@ -504,7 +553,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
         stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -512,6 +563,7 @@ describe('computeComponentMetadata', () => {
     it('mutation events with set does not dedupe against bindings', () => {
       const component: StudioComponent = {
         componentType: 'Text',
+        name: 'MyText',
         properties: {},
         bindingProperties: {},
         events: {
@@ -548,7 +600,9 @@ describe('computeComponentMetadata', () => {
           { componentName: 'UserNameField', property: 'value' },
           { componentName: 'UserNameField', property: 'value', set: { value: 'Setter' } },
         ],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyText: 'Text',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });
@@ -576,6 +630,7 @@ describe('computeComponentMetadata', () => {
     test('builds for a single component with no name', () => {
       const component: StudioComponent = {
         componentType: 'Flex',
+        name: 'MyFlex',
         properties: {},
         bindingProperties: {},
       };
@@ -583,7 +638,9 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: false,
         requiredDataModels: [],
         stateReferences: [],
-        componentNameToTypeMap: {},
+        componentNameToTypeMap: {
+          MyFlex: 'Flex',
+        },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
     });

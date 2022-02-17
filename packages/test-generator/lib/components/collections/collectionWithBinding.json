@@ -56,10 +56,12 @@
   "children": [
     {
       "componentType": "Flex",
+      "name": "MyFlex",
       "properties": {},
       "children": [
         {
           "componentType": "Button",
+          "name": "MyButton",
           "properties": {
             "backgroundColor": {
               "bindingProperties": {

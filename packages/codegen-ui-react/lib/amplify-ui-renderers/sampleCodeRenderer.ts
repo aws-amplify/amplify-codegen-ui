@@ -15,12 +15,10 @@
  */
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import { factory, JsxAttribute, JsxAttributeLike, JsxSelfClosingElement } from 'typescript';
-import { StudioRendererConstants } from '@aws-amplify/codegen-ui';
 import { ReactComponentRenderer } from '../react-component-renderer';
 
 export default class SampleCodeRenderer extends ReactComponentRenderer<BaseComponentProps> {
   renderElement(): JsxSelfClosingElement {
-    const tagName = this.component.name ?? StudioRendererConstants.unknownName;
     // const prop = new Map<string, BoundStudioComponentProperty>();
     // this.collectExposedProps(this.component, prop);
 
@@ -39,7 +37,7 @@ export default class SampleCodeRenderer extends ReactComponentRenderer<BaseCompo
     */
 
     return factory.createJsxSelfClosingElement(
-      factory.createIdentifier(tagName),
+      factory.createIdentifier(this.component.name),
       undefined,
       factory.createJsxAttributes(propsArray),
     );

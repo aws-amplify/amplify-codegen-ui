@@ -10,6 +10,7 @@
   "children": [
     {
       "componentType": "TextField",
+      "name": "StringValue",
       "properties": {
         "id": {
           "value": "string-value"
@@ -24,6 +25,7 @@
     },
     {
       "componentType": "TextField",
+      "name": "StringNumberValue",
       "properties": {
         "id": {
           "value": "string-number-value"
@@ -38,6 +40,7 @@
     },
     {
       "componentType": "Rating",
+      "name": "ParsedNumberValue",
       "properties": {
         "id": {
           "value": "parsed-number-value"
@@ -50,6 +53,7 @@
     },
     {
       "componentType": "TextField",
+      "name": "StringBooleanValue",
       "properties": {
         "id": {
           "value": "string-boolean-value"
@@ -64,6 +68,7 @@
     },
     {
       "componentType": "TextField",
+      "name": "ParsedBooleanValue",
       "properties": {
         "id": {
           "value": "parsed-boolean-value"
@@ -79,6 +84,7 @@
     },
     {
       "componentType": "TextField",
+      "name": "StringJsonValue",
       "properties": {
         "id": {
           "value": "string-json-value"
@@ -93,6 +99,7 @@
     },
     {
       "componentType": "Icon",
+      "name": "ParsedJsonValue",
       "properties": {
         "id": {
           "value": "parsed-json-value"
@@ -111,6 +118,7 @@
     },
     {
       "componentType": "TextField",
+      "name": "StringArrayValue",
       "properties": {
         "id": {
           "value": "string-array-value"
@@ -125,6 +133,7 @@
     },
     {
       "componentType": "Badge",
+      "name": "ParsedArrayValue",
       "properties": {
         "id": {
           "value": "parsed-array-value"
@@ -137,6 +146,7 @@
     },
     {
       "componentType": "TextField",
+      "name": "StringNullValue",
       "properties": {
         "id": {
           "value": "string-null-value"
@@ -151,6 +161,7 @@
     },
     {
       "componentType": "Badge",
+      "name": "ParsedNullValue",
       "properties": {
         "id": {
           "value": "parsed-null-value"

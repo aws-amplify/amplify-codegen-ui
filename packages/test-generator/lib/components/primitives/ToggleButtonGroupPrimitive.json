@@ -10,6 +10,7 @@
   "children": [
     {
       "componentType": "ToggleButton",
+      "name": "BoldButton",
       "properties": {
         "value": {
           "value": "bold"
@@ -21,6 +22,7 @@
     },
     {
       "componentType": "ToggleButton",
+      "name": "ItalicButton",
       "properties": {
         "value": {
           "value": "italic"
@@ -32,6 +34,7 @@
     },
     {
       "componentType": "ToggleButton",
+      "name": "UnderlineButton",
       "properties": {
         "value": {
           "value": "underline"
@@ -43,6 +46,7 @@
     },
     {
       "componentType": "ToggleButton",
+      "name": "ColorButton",
       "properties": {
         "value": {
           "value": "color-fill"
