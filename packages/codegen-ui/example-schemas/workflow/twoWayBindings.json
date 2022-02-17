@@ -811,6 +811,74 @@
           }
         }
       ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "TextAreaFieldSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "TextAreaFieldHeader",
+          "properties": {
+            "label": {
+              "value": "TextAreaField"
+            },
+            "level": {
+              "value": 5
+            }
+          }
+        },
+        {
+          "componentType": "TextAreaField",
+          "name": "TextAreaFieldInput",
+          "properties": {
+            "label": {
+              "value": "Name"
+            },
+            "placeholder": {
+              "value": "Galadriel"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "TextAreaFieldValue",
+          "properties": {
+            "label": {
+              "componentName": "TextAreaFieldInput",
+              "property": "value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "SetTextAreaFieldValue",
+          "properties": {
+            "label": {
+              "value": "Set TextAreaFieldValue"
+            }
+          },
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "TextAreaFieldInput",
+                  "property": "value",
+                  "set": {
+                    "value": "Hardcoded Value"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   ],
   "schemaVersion": "1.0"

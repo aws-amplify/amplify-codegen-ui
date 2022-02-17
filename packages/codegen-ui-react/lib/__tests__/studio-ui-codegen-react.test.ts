@@ -520,6 +520,10 @@ describe('amplify render tests', () => {
       expect(generateWithAmplifyRenderer('primitives/ExpanderItemPrimitive').componentText).toMatchSnapshot();
     });
 
+    test('TextAreaField', () => {
+      expect(generateWithAmplifyRenderer('primitives/TextAreaFieldPrimitive').componentText).toMatchSnapshot();
+    });
+
     test('TextField', () => {
       expect(generateWithAmplifyRenderer('primitives/TextFieldPrimitive').componentText).toMatchSnapshot();
     });

@@ -1,0 +1,17 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "TextAreaField",
+  "name": "TextAreaFieldPrimitive",
+  "properties": {
+    "label": {
+      "value": "Name"
+    },
+    "placeholder": {
+      "value": "Holden"
+    },
+    "descriptiveText": {
+      "value": "Please enter valid name"
+    }
+  },
+  "schemaVersion": "1.0"
+}
