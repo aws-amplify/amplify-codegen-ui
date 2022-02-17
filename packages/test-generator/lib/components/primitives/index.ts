@@ -47,6 +47,7 @@ export { default as SwitchFieldPrimitive } from './SwitchFieldPrimitive.json';
 export { default as TabsPrimitive } from './TabsPrimitive.json';
 export { default as TablePrimitive } from './TablePrimitive.json';
 export { default as TextPrimitive } from './TextPrimitive.json';
+export { default as TextAreaFieldPrimitive } from './TextAreaFieldPrimitive.json';
 export { default as TextFieldPrimitive } from './TextFieldPrimitive.json';
 export { default as ToggleButtonPrimitive } from './ToggleButtonPrimitive.json';
 export { default as ToggleButtonGroupPrimitive } from './ToggleButtonGroupPrimitive.json';
