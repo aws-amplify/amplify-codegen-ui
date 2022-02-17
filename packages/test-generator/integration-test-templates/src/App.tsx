@@ -23,10 +23,12 @@ import SnippetTests from './SnippetTests'; // eslint-disable-line import/extensi
 import WorkflowTests from './WorkflowTests';
 import TwoWayBindingTests from './TwoWayBindingTests';
 import ActionBindingTests from './ActionBindingTests';
+import { DATA_STORE_MOCK_EXPORTS, AUTH_MOCK_EXPORTS } from './mock-utils';
 
 // use fake endpoint so useDataStoreBinding does not fail
 Amplify.configure({
-  aws_appsync_graphqlEndpoint: 'https://fake-appsync-endpoint/graphql',
+  ...DATA_STORE_MOCK_EXPORTS,
+  ...AUTH_MOCK_EXPORTS,
 });
 
 const HomePage = () => {

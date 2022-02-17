@@ -133,17 +133,16 @@ describe('Generated Components', () => {
         cy.get('#dataStoreBindingWithPredicateWithOverride').contains('Override Name');
       });
 
-      it('Renders with wired data model', () => {
-        // TODO: Implement me.
-      });
-
       describe('Auth Binding', () => {
         it('Renders if user data is not available', () => {
           cy.get('#authBinding [alt="User Image"]');
         });
 
         it('Renders user data if available', () => {
-          // TODO: Implement me.
+          cy.get('#data-binding').within(() => {
+            cy.contains('TestUser');
+            cy.contains('Mint Chip');
+          });
         });
       });
 
@@ -153,10 +152,6 @@ describe('Generated Components', () => {
         });
       });
     });
-  });
-
-  describe('Action Binding', () => {
-    // TODO: Write Action Binding Cases
   });
 
   describe('Collections', () => {
