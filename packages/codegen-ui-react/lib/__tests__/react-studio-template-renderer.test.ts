@@ -21,6 +21,7 @@ describe('ReactStudioTemplateRenderer', () => {
       componentType: 'Text',
       name: 'MyText',
       bindingProperties: {},
+      schemaVersion: '1.0',
       properties: {
         children: {
           value: 'value',

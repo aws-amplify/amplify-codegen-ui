@@ -16,6 +16,10 @@ exports[`validation-helper validateComponentSchema fails on componentType with w
 
 exports[`validation-helper validateComponentSchema throws on all components sharing a name 1`] = `"Duplicate names are not allowed within a component, found duplicates of [\\"DeepComp\\",\\"MyComp\\"]"`;
 
+exports[`validation-helper validateComponentSchema throws on invalid schema version 1`] = `"unsupported schemaVersion 1.1.4"`;
+
+exports[`validation-helper validateComponentSchema throws on unsupported schema version 1`] = `"unsupported schemaVersion 1.1"`;
+
 exports[`validation-helper validateComponentSchema top-level component requires componentType 1`] = `"componentType is a required field"`;
 
 exports[`validation-helper validateComponentSchema top-level component requires componentType to be the correct type 1`] = `"componentType must be a \`string\` type, but the final value was: \`2\`."`;
@@ -27,6 +31,8 @@ exports[`validation-helper validateComponentSchema top-level component requires 
 exports[`validation-helper validateComponentSchema top-level component requires properties 1`] = `"properties is a required field"`;
 
 exports[`validation-helper validateComponentSchema top-level component requires properties to be the correct type 1`] = `"properties must be a \`object\` type, but the final value was: \`\\"property\\"\`."`;
+
+exports[`validation-helper validateComponentSchema top-level component requires schemaVersion 1`] = `"schemaVersion is a required field"`;
 
 exports[`validation-helper validateThemeSchema children objects should not be empty 1`] = `"values[1].key is a required field, values[1].value is a required field"`;
 

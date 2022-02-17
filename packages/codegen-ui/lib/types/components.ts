@@ -38,6 +38,11 @@ export type StudioComponent = {
   sourceId?: string;
 
   /**
+   * The version of the schema for this component when it was imported from Figma.
+   */
+  schemaVersion?: string;
+
+  /**
    * This should map to the components available including Amplify
    * UI components and other custom components
    */
