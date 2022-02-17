@@ -9,5 +9,6 @@
     "href": {
       "value": "/primitives-tests"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

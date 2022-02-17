@@ -1,34 +1,35 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Flex",
-    "name": "GoldenComponentWithEvent",
-    "bindingProperties": {
-        "onButtonClick": {
-            "type": "Event"
-        },
-        "onInputChange": {
-            "type": "Event"
-        }
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "GoldenComponentWithEvent",
+  "bindingProperties": {
+    "onButtonClick": {
+      "type": "Event"
     },
-    "properties": {},
-    "children": [
-        {
-            "componentType": "Input",
-            "name": "MyInput",
-            "properties": {
-                "onChange": {
-                    "event": "onInputChange"
-                }
-            }
-        },
-        {
-            "componentType": "Button",
-            "name": "MyButton",
-            "properties": {
-                "onClick": {
-                    "event": "onButtonClick"
-                }
-            }
+    "onInputChange": {
+      "type": "Event"
+    }
+  },
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Input",
+      "name": "MyInput",
+      "properties": {
+        "onChange": {
+          "event": "onInputChange"
         }
-    ]
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "MyButton",
+      "properties": {
+        "onClick": {
+          "event": "onButtonClick"
+        }
+      }
+    }
+  ],
+  "schemaVersion": "1.0"
 }

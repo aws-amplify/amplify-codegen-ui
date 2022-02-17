@@ -12,5 +12,6 @@
     "label": {
       "value": "Hello world!"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

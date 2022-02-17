@@ -16,5 +16,6 @@
     "children": {
       "value": "Delete"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

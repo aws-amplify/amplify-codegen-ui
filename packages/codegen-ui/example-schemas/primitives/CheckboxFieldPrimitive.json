@@ -1,17 +1,17 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "CheckboxField",
-    "name": "CheckBoxFieldPrimitive",
-    "properties": {
-      "label": {
-        "value": "Subscribe"
-      },
-      "name": {
-        "value": "subscribe"
-      },
-      "value": {
-        "value": "yes"
-      }
+  "id": "1234-5678-9010",
+  "componentType": "CheckboxField",
+  "name": "CheckBoxFieldPrimitive",
+  "properties": {
+    "label": {
+      "value": "Subscribe"
+    },
+    "name": {
+      "value": "subscribe"
+    },
+    "value": {
+      "value": "yes"
     }
-  }
-  
+  },
+  "schemaVersion": "1.0"
+}

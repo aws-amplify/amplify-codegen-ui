@@ -1,14 +1,15 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Button",
-    "name": "GoldenComponentWithTypedProp",
-    "bindingProperties": {},
-    "properties": {
-        "color": {
-            "value": "#ff0000"
-        },
-        "width": {
-            "value": 20
-        }
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "GoldenComponentWithTypedProp",
+  "bindingProperties": {},
+  "properties": {
+    "color": {
+      "value": "#ff0000"
+    },
+    "width": {
+      "value": 20
     }
+  },
+  "schemaVersion": "1.0"
 }

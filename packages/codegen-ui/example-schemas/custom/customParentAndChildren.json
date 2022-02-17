@@ -3,9 +3,12 @@
   "componentType": "ViewTest",
   "name": "CustomParentAndChildren",
   "properties": {},
-  "children": [{
-    "componentType": "CustomButton",
-    "name": "MyCustomButton",
-    "properties": {}
-  }]
+  "children": [
+    {
+      "componentType": "CustomButton",
+      "name": "MyCustomButton",
+      "properties": {}
+    }
+  ],
+  "schemaVersion": "1.0"
 }

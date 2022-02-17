@@ -1,104 +1,105 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Collection",
-    "name": "GoldenCollectionWithDataBindingAndSort",
-    "properties": {
-        "type": {
-            "value": "list"
-        },
-        "gap": {
-            "value": "1.5rem"
-        },
-        "backgroundColor": {
-            "bindingProperties": {
-                "property": "backgroundColor"
-            }
-        }
+  "id": "1234-5678-9010",
+  "componentType": "Collection",
+  "name": "GoldenCollectionWithDataBindingAndSort",
+  "properties": {
+    "type": {
+      "value": "list"
     },
-    "bindingProperties": {
-        "width": {
-            "type": "Number"
-        },
-        "backgroundColor": {
-            "type": "String"
-        },
-        "buttonColor": {
-            "type": "Data",
-            "bindingProperties": {
-                "model": "UserPreferences",
-                "predicate": {
-                    "field": "userID",
-                    "operand": "user@email.com",
-                    "operator": "eq"
-                }
-            }
-        }
+    "gap": {
+      "value": "1.5rem"
     },
-    "collectionProperties": {
-        "buttonUser": {
-            "model": "User",
-            "sort": [
-                {
-                    "field": "firstName",
-                    "direction": "ASC"
-                },
-                {
-                    "field": "lastName",
-                    "direction": "DESC"
-                }
-            ],
-            "predicate": {
-                "and": [
-                    {
-                        "field": "age",
-                        "operand": "10",
-                        "operator": "gt"
-                    },
-                    {
-                        "field": "lastName",
-                        "operand": "L",
-                        "operator": "beginsWith"
-                    }
-                ]
-            }
-        }
+    "backgroundColor": {
+      "bindingProperties": {
+        "property": "backgroundColor"
+      }
+    }
+  },
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
     },
-    "children": [
+    "backgroundColor": {
+      "type": "String"
+    },
+    "buttonColor": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "UserPreferences",
+        "predicate": {
+          "field": "userID",
+          "operand": "user@email.com",
+          "operator": "eq"
+        }
+      }
+    }
+  },
+  "collectionProperties": {
+    "buttonUser": {
+      "model": "User",
+      "sort": [
         {
-            "name": "Parent",
-            "componentType": "Flex",
-            "properties": {},
-            "children": [
-                {
-                    "name": "Button",
-                    "componentType": "Button",
-                    "properties": {
-                        "label": {
-                            "collectionBindingProperties": {
-                                "property": "buttonUser",
-                                "field": "username"
-                            },
-                            "defaultValue": "hspain@gmail.com"
-                        },
-                        "labelWidth": {
-                            "bindingProperties": {
-                                "property": "width"
-                            }
-                        },
-                        "backgroundColor": {
-                            "bindingProperties": {
-                                "property": "buttonColor",
-                                "field": "favoriteColor"
-                            }
-                        },
-                        "disabled": {
-                            "bindingProperties": {
-                                "property": "isDisabled"
-                            }
-                        }
-                    }
-                }
-            ]
+          "field": "firstName",
+          "direction": "ASC"
+        },
+        {
+          "field": "lastName",
+          "direction": "DESC"
         }
-    ]
+      ],
+      "predicate": {
+        "and": [
+          {
+            "field": "age",
+            "operand": "10",
+            "operator": "gt"
+          },
+          {
+            "field": "lastName",
+            "operand": "L",
+            "operator": "beginsWith"
+          }
+        ]
+      }
+    }
+  },
+  "children": [
+    {
+      "name": "Parent",
+      "componentType": "Flex",
+      "properties": {},
+      "children": [
+        {
+          "name": "Button",
+          "componentType": "Button",
+          "properties": {
+            "label": {
+              "collectionBindingProperties": {
+                "property": "buttonUser",
+                "field": "username"
+              },
+              "defaultValue": "hspain@gmail.com"
+            },
+            "labelWidth": {
+              "bindingProperties": {
+                "property": "width"
+              }
+            },
+            "backgroundColor": {
+              "bindingProperties": {
+                "property": "buttonColor",
+                "field": "favoriteColor"
+              }
+            },
+            "disabled": {
+              "bindingProperties": {
+                "property": "isDisabled"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "schemaVersion": "1.0"
 }

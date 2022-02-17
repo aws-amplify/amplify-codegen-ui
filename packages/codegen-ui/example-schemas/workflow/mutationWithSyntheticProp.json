@@ -1,41 +1,41 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Flex",
-    "name": "MutationWithSyntheticProp",
-    "properties": {},
-    "children": [
-      {
-        "componentType": "Text",
-        "name": "FooBarValue",
-        "properties": {
-          "label": {
-            "value": "Baz"
-          }
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "MutationWithSyntheticProp",
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Text",
+      "name": "FooBarValue",
+      "properties": {
+        "label": {
+          "value": "Baz"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "FooButton",
+      "properties": {
+        "label": {
+          "value": "Set to Foo"
         }
       },
-      {
-        "componentType": "Button",
-        "name": "FooButton",
-        "properties": {
-          "label": {
-            "value": "Set to Foo"
-          }
-        },
-        "events": {
-          "click": {
-            "action": "Amplify.Mutation",
-            "parameters": {
-              "state": {
-                "componentName": "FooBarValue",
-                "property": "label",
-                "set": {
-                  "value": "Foo"
-                }
+      "events": {
+        "click": {
+          "action": "Amplify.Mutation",
+          "parameters": {
+            "state": {
+              "componentName": "FooBarValue",
+              "property": "label",
+              "set": {
+                "value": "Foo"
               }
             }
           }
         }
       }
-    ]
-  }
-    
+    }
+  ],
+  "schemaVersion": "1.0"
+}

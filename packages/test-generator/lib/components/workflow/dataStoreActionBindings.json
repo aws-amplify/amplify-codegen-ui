@@ -44,7 +44,7 @@
       "name": "DataStoreValue",
       "properties": {
         "label": {
-        	"bindingProperties": {
+          "bindingProperties": {
             "property": "listing",
             "field": "title"
           }
@@ -63,18 +63,18 @@
             "click": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
-              	"model": "Listing",
-              	"id": {
-              	  "bindingProperties": {
+                "model": "Listing",
+                "id": {
+                  "bindingProperties": {
                     "property": "listing",
                     "field": "id"
-                   }
-              	},
-              	"fields": {
-              		"title": {
-              			"value": "Fixed Value"
-              		}
-              	}
+                  }
+                },
+                "fields": {
+                  "title": {
+                    "value": "Fixed Value"
+                  }
+                }
               }
             }
           },
@@ -91,21 +91,21 @@
             "click": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
-              	"model": "Listing",
-              	"id": {
-              	  "bindingProperties": {
+                "model": "Listing",
+                "id": {
+                  "bindingProperties": {
                     "property": "listing",
                     "field": "id"
-                   }
-              	},
-              	"fields": {
-              		"title": {
-              			"bindingProperties": {
+                  }
+                },
+                "fields": {
+                  "title": {
+                    "bindingProperties": {
                       "property": "user",
                       "field": "lastName"
                     }
-              		}
-              	}
+                  }
+                }
               }
             }
           },
@@ -122,16 +122,16 @@
             "click": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
-              	"model": "Listing",
-              	"id": {
-              	  "bindingProperties": {
+                "model": "Listing",
+                "id": {
+                  "bindingProperties": {
                     "property": "listing",
                     "field": "id"
-                   }
-              	},
-              	"fields": {
-              		"title": {
-              			"concat": [
+                  }
+                },
+                "fields": {
+                  "title": {
+                    "concat": [
                       {
                         "value": "Concatenated"
                       },
@@ -142,8 +142,8 @@
                         "value": "Value"
                       }
                     ]
-              		}
-              	}
+                  }
+                }
               }
             }
           },
@@ -160,16 +160,16 @@
             "click": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
-              	"model": "Listing",
-              	"id": {
-              	  "bindingProperties": {
+                "model": "Listing",
+                "id": {
+                  "bindingProperties": {
                     "property": "listing",
                     "field": "id"
-                   }
-              	},
-              	"fields": {
-              		"title": {
-              			"condition": {
+                  }
+                },
+                "fields": {
+                  "title": {
+                    "condition": {
                       "property": "user",
                       "field": "age",
                       "operator": "eq",
@@ -181,8 +181,8 @@
                         "value": "Unconditional Value"
                       }
                     }
-              		}
-              	}
+                  }
+                }
               }
             }
           },
@@ -199,18 +199,18 @@
             "click": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
-              	"model": "Listing",
-              	"id": {
-              	  "bindingProperties": {
+                "model": "Listing",
+                "id": {
+                  "bindingProperties": {
                     "property": "listing",
                     "field": "id"
-                   }
-              	},
-              	"fields": {
-              		"title": {
-              			"userAttribute": "email"
-              		}
-              	}
+                  }
+                },
+                "fields": {
+                  "title": {
+                    "userAttribute": "email"
+                  }
+                }
               }
             }
           },
@@ -227,19 +227,19 @@
             "click": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
-              	"model": "Listing",
-              	"id": {
-              	  "bindingProperties": {
+                "model": "Listing",
+                "id": {
+                  "bindingProperties": {
                     "property": "listing",
                     "field": "id"
-                   }
-              	},
-              	"fields": {
-              		"title": {
-              			"componentName": "StateSource",
+                  }
+                },
+                "fields": {
+                  "title": {
+                    "componentName": "StateSource",
                     "property": "label"
-              		}
-              	}
+                  }
+                }
               }
             }
           },
@@ -260,5 +260,6 @@
         }
       ]
     }
-  ]
+  ],
+  "schemaVersion": "1.0"
 }
