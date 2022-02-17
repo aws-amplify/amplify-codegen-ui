@@ -23,5 +23,6 @@
       },
       "defaultValue": "Buddy"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

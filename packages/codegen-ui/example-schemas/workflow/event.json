@@ -7,49 +7,49 @@
       "type": "Event"
     },
     "doubleclick": {
-        "type": "Event"
+      "type": "Event"
     },
     "mousedown": {
-        "type": "Event"
+      "type": "Event"
     },
     "mouseenter": {
-        "type": "Event"
+      "type": "Event"
     },
     "mouseleave": {
-        "type": "Event"
+      "type": "Event"
     },
     "mousemove": {
-        "type": "Event"
+      "type": "Event"
     },
     "mouseout": {
-        "type": "Event"
+      "type": "Event"
     },
     "mouseover": {
-        "type": "Event"
+      "type": "Event"
     },
     "mouseup": {
-        "type": "Event"
+      "type": "Event"
     },
     "change": {
-        "type": "Event"
+      "type": "Event"
     },
     "input": {
-        "type": "Event"
+      "type": "Event"
     },
     "focus": {
-        "type": "Event"
+      "type": "Event"
     },
     "blur": {
-        "type": "Event"
+      "type": "Event"
     },
     "keydown": {
-        "type": "Event"
+      "type": "Event"
     },
     "keypress": {
-        "type": "Event"
+      "type": "Event"
     },
     "keyup": {
-        "type": "Event"
+      "type": "Event"
     }
   },
   "properties": {},
@@ -292,5 +292,6 @@
         }
       ]
     }
-  ]
+  ],
+  "schemaVersion": "1.0"
 }

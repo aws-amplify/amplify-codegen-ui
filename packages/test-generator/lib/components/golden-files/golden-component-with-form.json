@@ -1,53 +1,54 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Flex",
-    "name": "GoldenComponentWithForm",
-    "children": [
-        {
-            "componentType": "Input",
-            "name": "Input1",
-            "properties": {}
-        },
-        {
-            "componentType": "Input",
-            "name": "Input2",
-            "properties": {
-                "name": {
-                    "value": "name"
-                }
-            }
-        },
-        {
-            "componentType": "Input",
-            "name": "Input3",
-            "properties": {
-                "name": {
-                    "value": "email"
-                }
-            }
-        },
-        {
-            "componentType": "Button",
-            "name": "Button1",
-            "properties": {
-                "onClick": {
-                    "model": "User",
-                    "bindings": {
-                        "name": {
-                            "element": "name",
-                            "property": "value"
-                        },
-                        "email": {
-                            "element": "email",
-                            "property": "value"
-                        }
-                    }
-                },
-                "children": {
-                    "value": "Save"
-                }
-            }
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "GoldenComponentWithForm",
+  "children": [
+    {
+      "componentType": "Input",
+      "name": "Input1",
+      "properties": {}
+    },
+    {
+      "componentType": "Input",
+      "name": "Input2",
+      "properties": {
+        "name": {
+          "value": "name"
         }
-    ],
-    "properties": {}
+      }
+    },
+    {
+      "componentType": "Input",
+      "name": "Input3",
+      "properties": {
+        "name": {
+          "value": "email"
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "Button1",
+      "properties": {
+        "onClick": {
+          "model": "User",
+          "bindings": {
+            "name": {
+              "element": "name",
+              "property": "value"
+            },
+            "email": {
+              "element": "email",
+              "property": "value"
+            }
+          }
+        },
+        "children": {
+          "value": "Save"
+        }
+      }
+    }
+  ],
+  "properties": {},
+  "schemaVersion": "1.0"
 }

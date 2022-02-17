@@ -1,84 +1,85 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Collection",
-    "name": "CollectionWithBindingItemsName",
-    "properties": {
-      "type": {
-        "value": "list"
-      },
-      "isPaginated": {
-        "value": true
-      },
-      "gap": {
-        "value": "1.5rem"
-      },
-      "backgroundColor": {
-        "bindingProperties": {
-          "property": "backgroundColor"
-        }
-      }
+  "id": "1234-5678-9010",
+  "componentType": "Collection",
+  "name": "CollectionWithBindingItemsName",
+  "properties": {
+    "type": {
+      "value": "list"
     },
-    "bindingProperties": {
-      "backgroundColor": {
-        "type": "String"
-      },
-      "buttonColor": {
-        "type": "Data",
-        "bindingProperties": {
-          "model": "UserPreference",
-          "predicate": {
-            "field": "userID",
-            "operand": "user@email.com",
-            "operator": "eq"
-          }
-        }
-      }
+    "isPaginated": {
+      "value": true
     },
-    "collectionProperties": {
-      "items": {
-        "model": "User",
+    "gap": {
+      "value": "1.5rem"
+    },
+    "backgroundColor": {
+      "bindingProperties": {
+        "property": "backgroundColor"
+      }
+    }
+  },
+  "bindingProperties": {
+    "backgroundColor": {
+      "type": "String"
+    },
+    "buttonColor": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "UserPreference",
         "predicate": {
-          "and": [
-            {
-              "field": "age",
-              "operand": "10",
-              "operator": "gt"
-            },
-            {
-              "field": "lastName",
-              "operand": "L",
-              "operator": "beginsWith"
-            }
-          ]
+          "field": "userID",
+          "operand": "user@email.com",
+          "operator": "eq"
         }
       }
-    },
-    "children": [
-      {
-        "componentType": "Flex",
-        "name": "MyFlex",
-        "properties": {},
-        "children": [
+    }
+  },
+  "collectionProperties": {
+    "items": {
+      "model": "User",
+      "predicate": {
+        "and": [
           {
-            "componentType": "Button",
-            "name": "MyButton",
-            "properties": {
-              "backgroundColor": {
-                "bindingProperties": {
-                  "property": "buttonColor",
-                  "field": "favoriteColor"
-                }
-              },
-              "children": {
-                "collectionBindingProperties": {
-                  "property": "items",
-                  "field": "firstName"
-                },
-                "defaultValue": "Default"
-              }
-            }
+            "field": "age",
+            "operand": "10",
+            "operator": "gt"
+          },
+          {
+            "field": "lastName",
+            "operand": "L",
+            "operator": "beginsWith"
           }
         ]
       }
-    ]
-  }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Flex",
+      "name": "MyFlex",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "Button",
+          "name": "MyButton",
+          "properties": {
+            "backgroundColor": {
+              "bindingProperties": {
+                "property": "buttonColor",
+                "field": "favoriteColor"
+              }
+            },
+            "children": {
+              "collectionBindingProperties": {
+                "property": "items",
+                "field": "firstName"
+              },
+              "defaultValue": "Default"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "schemaVersion": "1.0"
+}

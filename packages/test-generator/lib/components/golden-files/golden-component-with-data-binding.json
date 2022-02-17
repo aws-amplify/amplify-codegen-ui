@@ -1,41 +1,42 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Button",
-    "name": "GoldenComponentWithDataBinding",
-    "bindingProperties": {
-        "width": {
-            "type": "Number"
-        },
-        "isDisabled": {
-            "type": "Boolean"
-        },
-        "buttonUser": {
-            "type": "Data",
-            "bindingProperties": {
-                "model": "User"
-            }
-        },
-        "buttonColor": {
-            "type": "String"
-        }
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "GoldenComponentWithDataBinding",
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
     },
-    "properties": {
-        "label": {
-            "bindingProperties": {
-                "property": "buttonUser",
-                "field": "username"
-            },
-            "defaultValue": "hspain@gmail.com"
-        },
-        "labelWidth": {
-            "bindingProperties": {
-                "property": "width"
-            }
-        },
-        "disabled": {
-            "bindingProperties": {
-                "property": "isDisabled"
-            }
-        }
+    "isDisabled": {
+      "type": "Boolean"
+    },
+    "buttonUser": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User"
+      }
+    },
+    "buttonColor": {
+      "type": "String"
     }
+  },
+  "properties": {
+    "label": {
+      "bindingProperties": {
+        "property": "buttonUser",
+        "field": "username"
+      },
+      "defaultValue": "hspain@gmail.com"
+    },
+    "labelWidth": {
+      "bindingProperties": {
+        "property": "width"
+      }
+    },
+    "disabled": {
+      "bindingProperties": {
+        "property": "isDisabled"
+      }
+    }
+  },
+  "schemaVersion": "1.0"
 }

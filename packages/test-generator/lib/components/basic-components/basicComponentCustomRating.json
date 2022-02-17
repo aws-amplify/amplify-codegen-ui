@@ -7,5 +7,6 @@
       "value": "3.5",
       "type": "Number"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

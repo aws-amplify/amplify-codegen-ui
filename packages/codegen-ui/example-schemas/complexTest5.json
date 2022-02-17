@@ -1,84 +1,85 @@
 {
-    "appId": "d12i42jzsrnwt4",
-    "bindingProperties": {},
-    "children": [
-      {
-        "children": [],
-        "componentType": "View",
-        "name": "RectangleGreen",
-        "properties": {
-          "width": {
-            "value": "120px"
-          },
-          "padding": {
-            "value": "0px 0px 0px 0px"
-          },
-          "backgroundColor": {
-            "value": "rgb(35.699965953826904,0,255)"
-          },
-          "position": {
-            "value": "relative"
-          },
-          "src": {
-            "value": "https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!"
-          },
-          "height": {
-            "value": "120px"
-          }
+  "appId": "d12i42jzsrnwt4",
+  "bindingProperties": {},
+  "children": [
+    {
+      "children": [],
+      "componentType": "View",
+      "name": "RectangleGreen",
+      "properties": {
+        "width": {
+          "value": "120px"
+        },
+        "padding": {
+          "value": "0px 0px 0px 0px"
+        },
+        "backgroundColor": {
+          "value": "rgb(35.699965953826904,0,255)"
+        },
+        "position": {
+          "value": "relative"
+        },
+        "src": {
+          "value": "https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!"
+        },
+        "height": {
+          "value": "120px"
         }
-      },
-      {
-        "children": [],
-        "componentType": "View",
-        "name": "RectangleBlue",
-        "properties": {
-          "width": {
-            "value": "120px"
-          },
-          "padding": {
-            "value": "0px 0px 0px 0px"
-          },
-          "backgroundColor": {
-            "value": "rgb(0,255,25.49997568130493)"
-          },
-          "position": {
-            "value": "relative"
-          },
-          "src": {
-            "value": "https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!"
-          },
-          "height": {
-            "value": "120px"
-          }
-        }
-      }
-    ],
-    "componentType": "Flex",
-    "createdAt": "2021-10-29T19:06:43.886Z",
-    "environmentName": "staging",
-    "id": "c-4DHVBARfOiuFxEWkax",
-    "name": "ComplexTest5",
-    "overrides": {},
-    "properties": {
-      "padding": {
-        "value": "0px 0px 0px 0px"
-      },
-      "backgroundColor": {
-        "value": "rgb(255,255,255)"
-      },
-      "position": {
-        "value": "relative"
-      },
-      "alignItems": {
-        "value": "flex-start"
-      },
-      "gap": {
-        "value": "0"
-      },
-      "direction": {
-        "value": "row"
       }
     },
-    "sourceId": "101:12",
-    "variants": []
-  }
+    {
+      "children": [],
+      "componentType": "View",
+      "name": "RectangleBlue",
+      "properties": {
+        "width": {
+          "value": "120px"
+        },
+        "padding": {
+          "value": "0px 0px 0px 0px"
+        },
+        "backgroundColor": {
+          "value": "rgb(0,255,25.49997568130493)"
+        },
+        "position": {
+          "value": "relative"
+        },
+        "src": {
+          "value": "https://via.placeholder.com/240x120?text=Amplify+Studio+is+Awesome!"
+        },
+        "height": {
+          "value": "120px"
+        }
+      }
+    }
+  ],
+  "componentType": "Flex",
+  "createdAt": "2021-10-29T19:06:43.886Z",
+  "environmentName": "staging",
+  "id": "c-4DHVBARfOiuFxEWkax",
+  "name": "ComplexTest5",
+  "overrides": {},
+  "properties": {
+    "padding": {
+      "value": "0px 0px 0px 0px"
+    },
+    "backgroundColor": {
+      "value": "rgb(255,255,255)"
+    },
+    "position": {
+      "value": "relative"
+    },
+    "alignItems": {
+      "value": "flex-start"
+    },
+    "gap": {
+      "value": "0"
+    },
+    "direction": {
+      "value": "row"
+    }
+  },
+  "sourceId": "101:12",
+  "variants": [],
+  "schemaVersion": "1.0"
+}

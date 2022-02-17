@@ -12,5 +12,6 @@
     "label": {
       "value": "Basic Component Text"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

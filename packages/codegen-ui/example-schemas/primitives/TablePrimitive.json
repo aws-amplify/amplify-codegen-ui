@@ -33,7 +33,7 @@
               "properties": {
                 "as": {
                   "value": "th"
-                }, 
+                },
                 "label": {
                   "value": "Citrus"
                 }
@@ -45,7 +45,7 @@
               "properties": {
                 "as": {
                   "value": "th"
-                }, 
+                },
                 "label": {
                   "value": "Stone Fruit"
                 }
@@ -57,7 +57,7 @@
               "properties": {
                 "as": {
                   "value": "th"
-                }, 
+                },
                 "label": {
                   "value": "Berry"
                 }
@@ -192,7 +192,7 @@
               "properties": {
                 "as": {
                   "value": "th"
-                }, 
+                },
                 "label": {
                   "value": "Citrus"
                 }
@@ -204,7 +204,7 @@
               "properties": {
                 "as": {
                   "value": "th"
-                }, 
+                },
                 "label": {
                   "value": "Stone Fruit"
                 }
@@ -216,7 +216,7 @@
               "properties": {
                 "as": {
                   "value": "th"
-                }, 
+                },
                 "label": {
                   "value": "Berry"
                 }
@@ -226,5 +226,6 @@
         }
       ]
     }
-  ]
+  ],
+  "schemaVersion": "1.0"
 }

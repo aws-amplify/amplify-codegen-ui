@@ -18,5 +18,6 @@
       },
       "defaultValue": "Al"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }
