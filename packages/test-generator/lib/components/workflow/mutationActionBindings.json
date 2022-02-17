@@ -71,6 +71,25 @@
           }
         },
         {
+          "componentType": "Text",
+          "name": "BoundPropertyExistenceCheck",
+          "properties": {
+            "label": {
+              "concat": [
+                {
+                  "value": "Current Binding - "
+                },
+                {
+                  "bindingProperties": {
+                    "property": "user",
+                    "field": "lastName"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
           "componentType": "Button",
           "name": "BoundPropertyMutation",
           "events": {
