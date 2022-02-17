@@ -33,6 +33,7 @@ export default function TwoWayBindingTests() {
           StepperFieldSection: { id: 'stepper-field-section' },
           SwitchFieldSection: { id: 'switch-field-section' },
           TextFieldSection: { id: 'text-field-section' },
+          TextAreaFieldSection: { id: 'text-area-field-section' },
         }}
       />
     </AmplifyProvider>

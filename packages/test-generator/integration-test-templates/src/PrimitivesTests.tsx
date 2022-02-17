@@ -51,6 +51,7 @@ import {
   TabsPrimitive,
   TablePrimitive,
   TextPrimitive,
+  TextAreaFieldPrimitive,
   TextFieldPrimitive,
   ToggleButtonPrimitive,
   ToggleButtonGroupPrimitive,
@@ -196,6 +197,10 @@ export default function PrimitivesTests() {
       <View id="text">
         <Heading>Text</Heading>
         <TextPrimitive />
+      </View>
+      <View id="text-area-field">
+        <Heading>Text Area Field</Heading>
+        <TextAreaFieldPrimitive />
       </View>
       <View id="text-field">
         <Heading>Text Field</Heading>
