@@ -1,73 +1,74 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Card",
-    "name": "SetStateWithoutInitialValue",
-    "bindingProperties": {},
-    "properties": {},
-    "children": [
-        {
-            "componentType": "Text",
-            "name": "TextDisplay",
-            "properties": {
-                "label": {
-                    "value": "This is a text to display."
-                },
-                "id": {
-                    "value": "NoInitialTextDisplay"
-                }
-            }
+  "id": "1234-5678-9010",
+  "componentType": "Card",
+  "name": "SetStateWithoutInitialValue",
+  "bindingProperties": {},
+  "properties": {},
+  "children": [
+    {
+      "componentType": "Text",
+      "name": "TextDisplay",
+      "properties": {
+        "label": {
+          "value": "This is a text to display."
         },
-        {
-            "componentType": "Button",
-            "name": "DisplayBlockButton",
-            "properties": {
-                "label": {
-                    "value": "Show text"
-                },
-                "id": {
-                    "value": "NoInitialDisplayBlockButton"
-                }
-            },
-            "events": {
-                "click": {
-                    "action": "Amplify.Mutation",
-                    "parameters": {
-                        "state": {
-                            "componentName": "TextDisplay",
-                            "property": "display",
-                            "set": {
-                                "value": "block"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "componentType": "Button",
-            "name": "DisplayNoneButton",
-            "properties": {
-                "label": {
-                    "value": "Hide text"
-                },
-                "id": {
-                    "value": "NoInitialDisplayNoneButton"
-                }
-            },
-            "events": {
-                "click": {
-                    "action": "Amplify.Mutation",
-                    "parameters": {
-                        "state": {
-                            "componentName": "TextDisplay",
-                            "property": "display",
-                            "set": {
-                                "value": "none"
-                            }
-                        }
-                    }
-                }
-            }
+        "id": {
+          "value": "NoInitialTextDisplay"
         }
-    ]
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "DisplayBlockButton",
+      "properties": {
+        "label": {
+          "value": "Show text"
+        },
+        "id": {
+          "value": "NoInitialDisplayBlockButton"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.Mutation",
+          "parameters": {
+            "state": {
+              "componentName": "TextDisplay",
+              "property": "display",
+              "set": {
+                "value": "block"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "componentType": "Button",
+      "name": "DisplayNoneButton",
+      "properties": {
+        "label": {
+          "value": "Hide text"
+        },
+        "id": {
+          "value": "NoInitialDisplayNoneButton"
+        }
+      },
+      "events": {
+        "click": {
+          "action": "Amplify.Mutation",
+          "parameters": {
+            "state": {
+              "componentName": "TextDisplay",
+              "property": "display",
+              "set": {
+                "value": "none"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "schemaVersion": "1.0"
 }

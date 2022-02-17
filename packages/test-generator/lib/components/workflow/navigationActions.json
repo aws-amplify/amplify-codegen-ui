@@ -27,7 +27,7 @@
           }
         }
       }
-    },    
+    },
     {
       "componentType": "Button",
       "name": "GoToAnchor",
@@ -103,6 +103,6 @@
         }
       }
     }
-    
-  ]
+  ],
+  "schemaVersion": "1.0"
 }

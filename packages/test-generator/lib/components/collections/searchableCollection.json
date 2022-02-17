@@ -1,62 +1,62 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Collection",
-    "name": "SearchableCollection",
-    "properties": {
-      "type": {
-        "value": "list"
-      },
-      "isSearchable": {
-        "value": true
-      },
-      "direction": {
-        "value": "row"
-      },
-      "itemsPerPage": {
-        "value": 5
-      }
+  "id": "1234-5678-9010",
+  "componentType": "Collection",
+  "name": "SearchableCollection",
+  "properties": {
+    "type": {
+      "value": "list"
     },
-    "collectionProperties": {
-      "listings": {
-        "model": "Listing"
-      }
+    "isSearchable": {
+      "value": true
     },
-    "children": [
-      {
-        "componentType": "Flex",
-        "name": "MyFlex",
-        "properties": {},
-        "children": [
-          {
-            "componentType": "Badge",
-            "name": "MyBadge",
-            "properties": {
-              "children": {
-                "concat": [
-                  {
-                    "collectionBindingProperties": {
-                      "property": "listing",
-                      "field": "title"
-                    }
-                  },
-                  {
-                    "value" : " - $"
-                  },
-                  {
-                    "collectionBindingProperties": {
-                      "property": "listing",
-                      "field": "priceUSD"
-                    }
-                  },
-                  {
-                    "value" : "/night"
+    "direction": {
+      "value": "row"
+    },
+    "itemsPerPage": {
+      "value": 5
+    }
+  },
+  "collectionProperties": {
+    "listings": {
+      "model": "Listing"
+    }
+  },
+  "children": [
+    {
+      "componentType": "Flex",
+      "name": "MyFlex",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "Badge",
+          "name": "MyBadge",
+          "properties": {
+            "children": {
+              "concat": [
+                {
+                  "collectionBindingProperties": {
+                    "property": "listing",
+                    "field": "title"
                   }
-                ]
-              }
+                },
+                {
+                  "value": " - $"
+                },
+                {
+                  "collectionBindingProperties": {
+                    "property": "listing",
+                    "field": "priceUSD"
+                  }
+                },
+                {
+                  "value": "/night"
+                }
+              ]
             }
           }
-        ]
-      }
-    ]
-  }
-  
+        }
+      ]
+    }
+  ],
+  "schemaVersion": "1.0"
+}

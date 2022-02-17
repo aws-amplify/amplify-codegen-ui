@@ -11,5 +11,6 @@
     "children": {
       "value": "ExpanderItem1Content"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

@@ -2886,5 +2886,6 @@
     }
   },
   "overrides": {},
-  "variants": []
+  "variants": [],
+  "schemaVersion": "1.0"
 }

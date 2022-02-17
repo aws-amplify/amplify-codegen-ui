@@ -35,5 +35,6 @@
       }
     }
   ],
-  "properties": {}
+  "properties": {},
+  "schemaVersion": "1.0"
 }

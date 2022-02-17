@@ -96,5 +96,6 @@
     }
   },
   "appId": "d1rxgz43y8l9ij",
-  "environmentName": "staging"
+  "environmentName": "staging",
+  "schemaVersion": "1.0"
 }

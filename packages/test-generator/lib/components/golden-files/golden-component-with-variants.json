@@ -1,40 +1,41 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Button",
-    "name": "GoldenComponentWithVariants",
-    "properties": {},
-    "variants": [
-        {
-            "variantValues": {
-                "variant": "primary"
-            },
-            "overrides": {
-                "GoldenComponentWithVariants": {
-                    "fontSize": "12px"
-                }
-            }
-        },
-        {
-            "variantValues": {
-                "variant": "secondary"
-            },
-            "overrides": {
-                "GoldenComponentWithVariants": {
-                    "fontSize": "40px"
-                }
-            }
-        },
-        {
-            "variantValues": {
-                "variant": "primary",
-                "size": "large"
-            },
-            "overrides": {
-                "GoldenComponentWithVariants": {
-                    "width": "500"
-                }
-            }
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "GoldenComponentWithVariants",
+  "properties": {},
+  "variants": [
+    {
+      "variantValues": {
+        "variant": "primary"
+      },
+      "overrides": {
+        "GoldenComponentWithVariants": {
+          "fontSize": "12px"
         }
-    ],
-    "bindingProperties": {}
+      }
+    },
+    {
+      "variantValues": {
+        "variant": "secondary"
+      },
+      "overrides": {
+        "GoldenComponentWithVariants": {
+          "fontSize": "40px"
+        }
+      }
+    },
+    {
+      "variantValues": {
+        "variant": "primary",
+        "size": "large"
+      },
+      "overrides": {
+        "GoldenComponentWithVariants": {
+          "width": "500"
+        }
+      }
+    }
+  ],
+  "bindingProperties": {},
+  "schemaVersion": "1.0"
 }

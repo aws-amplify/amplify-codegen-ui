@@ -3,5 +3,6 @@
   "componentType": "Divider",
   "name": "BasicComponentDivider",
   "properties": {},
-  "children": []
+  "children": [],
+  "schemaVersion": "1.0"
 }

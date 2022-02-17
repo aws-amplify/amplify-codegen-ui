@@ -49,5 +49,6 @@
     "bananas": {
       "model": "UntitledModel"
     }
-  }
+  },
+  "schemaVersion": "1.0"
 }

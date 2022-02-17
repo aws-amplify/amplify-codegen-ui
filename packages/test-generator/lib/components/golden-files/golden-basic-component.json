@@ -1,7 +1,8 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Button",
-    "name": "GoldenBasicComponent",
-    "properties": {},
-    "bindingProperties": {}
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "GoldenBasicComponent",
+  "properties": {},
+  "bindingProperties": {},
+  "schemaVersion": "1.0"
 }

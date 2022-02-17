@@ -1,84 +1,85 @@
 {
-    "id": "1234-5678-9010",
-    "componentType": "Collection",
-    "name": "GoldenCollectionWithSpecificRecord",
-    "properties": {
-        "type": {
-            "value": "list"
-        },
-        "gap": {
-            "value": "1.5rem"
-        },
-        "backgroundColor": {
-            "bindingProperties": {
-                "property": "backgroundColor"
-            }
-        }
+  "id": "1234-5678-9010",
+  "componentType": "Collection",
+  "name": "GoldenCollectionWithSpecificRecord",
+  "properties": {
+    "type": {
+      "value": "list"
     },
-    "bindingProperties": {
-        "width": {
-            "type": "Number"
-        },
-        "backgroundColor": {
-            "type": "String"
-        },
-        "buttonColor": {
-            "type": "Data",
-            "bindingProperties": {
-                "model": "UserPreferences",
-                "predicate": {
-                    "field": "userID",
-                    "operand": "user@email.com",
-                    "operator": "eq"
-                }
-            }
-        }
+    "gap": {
+      "value": "1.5rem"
     },
-    "collectionProperties": {
-        "buttonUser": {
-            "model": "User",
-            "identifiers": [
-                "abcdefg",
-                "1234567"
-            ]
-        }
+    "backgroundColor": {
+      "bindingProperties": {
+        "property": "backgroundColor"
+      }
+    }
+  },
+  "bindingProperties": {
+    "width": {
+      "type": "Number"
     },
-    "children": [
+    "backgroundColor": {
+      "type": "String"
+    },
+    "buttonColor": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "UserPreferences",
+        "predicate": {
+          "field": "userID",
+          "operand": "user@email.com",
+          "operator": "eq"
+        }
+      }
+    }
+  },
+  "collectionProperties": {
+    "buttonUser": {
+      "model": "User",
+      "identifiers": [
+        "abcdefg",
+        "1234567"
+      ]
+    }
+  },
+  "children": [
+    {
+      "name": "Parent",
+      "componentType": "Flex",
+      "properties": {},
+      "children": [
         {
-            "name": "Parent",
-            "componentType": "Flex",
-            "properties": {},
-            "children": [
-                {
-                    "name": "Button",
-                    "componentType": "Button",
-                    "properties": {
-                        "label": {
-                            "collectionBindingProperties": {
-                                "property": "buttonUser",
-                                "field": "username"
-                            },
-                            "defaultValue": "hspain@gmail.com"
-                        },
-                        "labelWidth": {
-                            "bindingProperties": {
-                                "property": "width"
-                            }
-                        },
-                        "backgroundColor": {
-                            "bindingProperties": {
-                                "property": "buttonColor",
-                                "field": "favoriteColor"
-                            }
-                        },
-                        "disabled": {
-                            "bindingProperties": {
-                                "property": "isDisabled"
-                            }
-                        }
-                    }
-                }
-            ]
+          "name": "Button",
+          "componentType": "Button",
+          "properties": {
+            "label": {
+              "collectionBindingProperties": {
+                "property": "buttonUser",
+                "field": "username"
+              },
+              "defaultValue": "hspain@gmail.com"
+            },
+            "labelWidth": {
+              "bindingProperties": {
+                "property": "width"
+              }
+            },
+            "backgroundColor": {
+              "bindingProperties": {
+                "property": "buttonColor",
+                "field": "favoriteColor"
+              }
+            },
+            "disabled": {
+              "bindingProperties": {
+                "property": "isDisabled"
+              }
+            }
+          }
         }
-    ]
+      ]
+    }
+  ],
+  "schemaVersion": "1.0"
 }
