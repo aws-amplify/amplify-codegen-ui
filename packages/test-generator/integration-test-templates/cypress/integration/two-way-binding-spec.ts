@@ -203,4 +203,22 @@ describe('Workflow', () => {
       });
     });
   });
+
+  describe('TextAreaField', () => {
+    it('updates on ui interaction', () => {
+      cy.get('#text-area-field-section').within(() => {
+        cy.contains('Entered Value').should('not.exist');
+        cy.get('textarea').type('Entered Value');
+        cy.contains('Entered Value');
+      });
+    });
+
+    it('updates on state mutation', () => {
+      cy.get('#text-area-field-section').within(() => {
+        cy.contains('Hardcoded Value').should('not.exist');
+        cy.contains('Set TextAreaFieldValue').click();
+        cy.contains('Hardcoded Value');
+      });
+    });
+  });
 });

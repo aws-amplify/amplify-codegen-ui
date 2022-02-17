@@ -84,6 +84,8 @@ exports[`Primitives Tabs 1`] = `"<Tabs {...rest} {...getOverrideProps(overrides,
 
 exports[`Primitives Text 1`] = `"<Text {...rest} {...getOverrideProps(overrides, \\"MyText\\")}></Text>"`;
 
+exports[`Primitives TextAreaField 1`] = `"<TextAreaField {...rest} {...getOverrideProps(overrides, \\"MyTextAreaField\\")}></TextAreaField>"`;
+
 exports[`Primitives TextField 1`] = `"<TextField {...rest} {...getOverrideProps(overrides, \\"MyTextField\\")}></TextField>"`;
 
 exports[`Primitives ToggleButton 1`] = `"<ToggleButton {...rest} {...getOverrideProps(overrides, \\"MyToggleButton\\")}></ToggleButton>"`;

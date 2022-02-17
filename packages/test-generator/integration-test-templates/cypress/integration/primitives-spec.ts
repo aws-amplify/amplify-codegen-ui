@@ -363,6 +363,18 @@ describe('Primitives', () => {
     });
   });
 
+  describe('TextAreaField', () => {
+    it('Basic', () => {
+      cy.get('#text-area-field')
+        .find('.amplify-textareafield')
+        .within(() => {
+          cy.get('.amplify-label').contains('Name');
+          cy.get('.amplify-text').contains('Please enter valid name');
+          cy.get('.amplify-textarea').should('have.attr', 'placeholder', 'Holden');
+        });
+    });
+  });
+
   describe('TextField', () => {
     it('Basic', () => {
       cy.get('#text-field')
