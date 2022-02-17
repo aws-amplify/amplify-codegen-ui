@@ -21,6 +21,7 @@ import { useDataStoreBinding } from '@aws-amplify/ui-react/internal';
 import { User, Listing } from './models';
 // eslint-disable-next-line import/extensions
 import { MutationActionBindings, DataStoreActionBindings } from './ui-components';
+import { initializeAuthMockData } from './mock-utils';
 
 export default function ActionBindingTests() {
   const [isInitialized, setInitialized] = useState(false);
@@ -31,6 +32,7 @@ export default function ActionBindingTests() {
       indexedDB.deleteDatabase('amplify-datastore');
       await DataStore.save(new Listing({ title: 'Default Value' }));
       await DataStore.save(new User({ firstName: 'Johnny', lastName: 'Bound Value', age: 45 }));
+      initializeAuthMockData({ email: 'Auth Value' });
       setInitialized(true);
     };
 
