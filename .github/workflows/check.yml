@@ -43,9 +43,6 @@ jobs:
         run: |
           npm i ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
           npm i ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
-      - name: Test amplify-category-studio
-        working-directory: amplify-cli/packages/amplify-util-uibuilder
-        run: npm test
       - name: Create a test react app
         run: npx create-react-app e2e-test-app
       - name: Install test app dependencies
@@ -66,13 +63,6 @@ jobs:
               \"region\":\"us-west-2\"\
             }\
           }"
-      - name: Verify Components Are Generated
-        working-directory: e2e-test-app
-        run: |
-          if [ $(ls ./src/ui-components/ | wc -l) -lt 1 ]
-          then
-            exit 1
-          fi
       - name: Write test files
         working-directory: e2e-test-app
         run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates/. .
