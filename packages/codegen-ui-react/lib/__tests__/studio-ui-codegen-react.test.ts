@@ -223,6 +223,11 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('componentWithVariants');
       expect(generatedCode).toMatchSnapshot();
     });
+
+    it('should render object variants', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithObjectVariants');
+      expect(generatedCode).toMatchSnapshot();
+    });
   });
 
   describe('component with variants with mapped children prop', () => {
