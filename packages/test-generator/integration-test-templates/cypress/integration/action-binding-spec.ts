@@ -95,4 +95,54 @@ describe('Workflow', () => {
       cy.get('#data-store-value').contains('State Value');
     });
   });
+
+  describe('Initial Value Bindings', () => {
+    it('supports fixed values', () => {
+      cy.get('#fixed-value-initial-binding-section').within(() => {
+        cy.contains('Fixed Value');
+        cy.contains('Mutate').click();
+        cy.contains('Mutated Value');
+      });
+    });
+
+    it.skip('supports bound values', () => {
+      cy.get('#bound-value-initial-binding-section').within(() => {
+        cy.contains('Bound Value');
+        cy.contains('Mutate').click();
+        cy.contains('Mutated Value');
+      });
+    });
+
+    it('supports concat values', () => {
+      cy.get('#concat-value-initial-binding-section').within(() => {
+        cy.contains('Concat Value');
+        cy.contains('Mutate').click();
+        cy.contains('Mutated Value');
+      });
+    });
+
+    it.skip('supports conditional values', () => {
+      cy.get('#conditional-value-initial-binding-section').within(() => {
+        cy.contains('Conditional Value');
+        cy.contains('Mutate').click();
+        cy.contains('Mutated Value');
+      });
+    });
+
+    it.skip('supports auth values', () => {
+      cy.get('#auth-value-initial-binding-section').within(() => {
+        cy.contains('Auth Value');
+        cy.contains('Mutate').click();
+        cy.contains('Mutated Value');
+      });
+    });
+
+    it('supports state values', () => {
+      cy.get('#state-value-initial-binding-section').within(() => {
+        cy.contains('State Value');
+        cy.contains('Mutate').click();
+        cy.contains('Mutated Value');
+      });
+    });
+  });
 });

@@ -574,22 +574,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     statements.push(statement);
 
     if (isStudioComponentWithVariants(component)) {
-      statements.push(this.buildVariantDeclaration(component.variants));
-      // TODO: In components, replace props.override with override (defined here).
-    }
-
-    if (isStudioComponentWithVariants(component)) {
       this.importCollection.addMappedImport(ImportValue.MERGE_VARIANTS_OVERRIDES);
-    }
-
-    if (isStudioComponentWithVariants(component)) {
+      statements.push(this.buildVariantDeclaration(component.variants));
       statements.push(this.buildOverridesFromVariantsAndProp());
     }
-
-    const stateStatements = buildStateStatements(component, this.componentMetadata, this.importCollection);
-    stateStatements.forEach((entry) => {
-      statements.push(entry);
-    });
 
     const authStatement = this.buildUseAuthenticatedUserStatement();
     if (authStatement !== undefined) {
@@ -604,6 +592,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const useStoreBindingStatements = this.buildUseDataStoreBindingStatements(component);
     useStoreBindingStatements.forEach((entry) => {
+      statements.push(entry);
+    });
+
+    const stateStatements = buildStateStatements(component, this.componentMetadata, this.importCollection);
+    stateStatements.forEach((entry) => {
       statements.push(entry);
     });
 
