@@ -20,7 +20,7 @@ import { DataStore } from '@aws-amplify/datastore';
 import { useDataStoreBinding } from '@aws-amplify/ui-react/internal';
 import { User, Listing } from './models';
 // eslint-disable-next-line import/extensions
-import { MutationActionBindings, DataStoreActionBindings } from './ui-components';
+import { MutationActionBindings, DataStoreActionBindings, InitialValueBindings } from './ui-components';
 import { initializeAuthMockData } from './mock-utils';
 
 export default function ActionBindingTests() {
@@ -62,6 +62,16 @@ export default function ActionBindingTests() {
         listing={listing}
         overrides={{
           DataStoreValue: { id: 'data-store-value' },
+        }}
+      />
+      <InitialValueBindings
+        overrides={{
+          FixedValueInitialBindingSection: { id: 'fixed-value-initial-binding-section' },
+          BoundValueInitialBindingSection: { id: 'bound-value-initial-binding-section' },
+          ConcatValueInitialBindingSection: { id: 'concat-value-initial-binding-section' },
+          ConditionalValueInitialBindingSection: { id: 'conditional-value-initial-binding-section' },
+          AuthValueInitialBindingSection: { id: 'auth-value-initial-binding-section' },
+          StateValueInitialBindingSection: { id: 'state-value-initial-binding-section' },
         }}
       />
     </AmplifyProvider>

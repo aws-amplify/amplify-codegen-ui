@@ -360,8 +360,6 @@ export default function ConditionalInMutation(
   props: ConditionalInMutationProps
 ): React.ReactElement {
   const { user: userProp, overrides, ...rest } = props;
-  const [mutatedValueChildren, setMutatedValueChildren] =
-    useStateMutationAction(\\"Default Value\\");
   const userFilterObj = {
     field: \\"firstName\\",
     operand: \\"Johnny\\",
@@ -374,6 +372,8 @@ export default function ConditionalInMutation(
     criteria: userFilter,
   }).items[0];
   const user = userProp !== undefined ? userProp : userDataStore;
+  const [mutatedValueChildren, setMutatedValueChildren] =
+    useStateMutationAction(\\"Default Value\\");
   const conditionalPropertyMutationClick = () => {
     setMutatedValueChildren(
       user?.age && user?.age == 45 ? \\"Conditional Value\\" : \\"Unconditional Value\\"
