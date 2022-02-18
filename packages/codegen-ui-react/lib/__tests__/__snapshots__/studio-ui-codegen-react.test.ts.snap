@@ -4044,6 +4044,77 @@ export default function ViewPrimitive(
 }
 `;
 
+exports[`amplify render tests component with variants should render object variants 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  Variant,
+  getOverrideProps,
+  getOverridesFromVariants,
+  mergeVariantsAndOverrides,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Icon, IconProps } from \\"@aws-amplify/ui-react\\";
+
+export type IconVariantsProps = React.PropsWithChildren<
+  Partial<IconProps> & {
+    variant?: \\"primary\\" | \\"secondary\\";
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function IconVariants(
+  props: IconVariantsProps
+): React.ReactElement {
+  const { overrides: overridesProp, ...rest } = props;
+  const variants: Variant[] = [
+    {
+      variantValues: { variant: \\"primary\\" },
+      overrides: {
+        IconVariants: {
+          paths: [
+            {
+              d: \\"M18 6V4h2V2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14v-2h-4.03c1.23-.91 2.03-2.36 2.03-4v-5H8v5c0 1.64.81 3.09 2.03 4H6V4h2v2c0 .55.45 1 1 1h8c.55 0 1-.45 1-1z\\",
+              fill: \\"black\\",
+            },
+          ],
+        },
+      },
+    },
+    {
+      variantValues: { variant: \\"secondary\\" },
+      overrides: {
+        IconVariants: {
+          paths: [
+            {
+              d: \\"M18 6V4h2V2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14v-2h-4.03c1.23-.91 2.03-2.36 2.03-4v-5H8v5c0 1.64.81 3.09 2.03 4H6V4h2v2c0 .55.45 1 1 1h8c.55 0 1-.45 1-1z\\",
+              fill: \\"black\\",
+            },
+            {
+              d: \\"M18 6V4h2V2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14v-2h-4.03c1.23-.91 2.03-2.36 2.03-4v-5H8v5c0 1.64.81 3.09 2.03 4H6V4h2v2c0 .55.45 1 1 1h8c.55 0 1-.45 1-1z\\",
+              fill: \\"white\\",
+            },
+          ],
+        },
+      },
+    },
+  ];
+  const overrides = mergeVariantsAndOverrides(
+    getOverridesFromVariants(variants, props),
+    overridesProp || {}
+  );
+  return (
+    /* @ts-ignore: TS2322 */
+    <Icon {...rest} {...getOverrideProps(overrides, \\"IconVariants\\")}></Icon>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests component with variants should render variants with options provided 1`] = `
 Object {
   "componentText": "/* eslint-disable */
