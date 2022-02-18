@@ -663,7 +663,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createArrayTypeNode(
               factory.createTypeReferenceNode(factory.createIdentifier('Variant'), undefined),
             ),
-            jsonToLiteral(variants as json),
+            jsonToLiteral(variants as json, true),
           ),
         ],
         ts.NodeFlags.Const,
