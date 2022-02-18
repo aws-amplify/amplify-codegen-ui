@@ -29,3 +29,4 @@ export { default as TwoWayBindings } from './twoWayBindings.json';
 export { default as MutationActionBindings } from './mutationActionBindings.json';
 export { default as DataStoreActionBindings } from './dataStoreActionBindings.json';
 export { default as CreateModelWithComplexTypes } from './createModelWithComplexTypes.json';
+export { default as InitialValueBindings } from './initialValueBindings.json';
