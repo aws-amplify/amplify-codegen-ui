@@ -24,6 +24,7 @@ import {
   StudioComponentProperty,
   ComponentMetadata,
   getComponentFromComponentTree,
+  computeStateReferenceMetadata,
 } from '@aws-amplify/codegen-ui';
 import {
   isStateProperty,
@@ -62,6 +63,43 @@ const PrimitiveDefaultValuePropMapping: PrimitiveLevelPropConfiguration<string> 
     },
   },
 );
+
+/**
+ * TODO: Determine if we should be initializing state values w/ these data deps to `undefined`,
+ * then only setting the value here in the useEffect once the dependencies are no longer null.
+ *
+ * This way we'll be able to still use the useEffect for an initialization once the data values have settled,
+ * and we won't overwrite whatever mutation applies to them if useAuth or useData changes.
+ */
+export function buildUseEffectStatements(
+  component: StudioComponent,
+  componentMetadata: ComponentMetadata,
+): Statement[] {
+  const stateReferenceMetadata = computeStateReferenceMetadata(component, componentMetadata.stateReferences);
+  return stateReferenceMetadata
+    .filter(({ dataDependencies }) => dataDependencies.length > 0)
+    .map(({ stateReference, dataDependencies }) => {
+      return factory.createExpressionStatement(
+        factory.createCallExpression(factory.createIdentifier('useEffect'), undefined, [
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [],
+            undefined,
+            factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock([
+              factory.createExpressionStatement(
+                factory.createCallExpression(factory.createIdentifier(getSetStateName(stateReference)), undefined, [
+                  getStateInitialValue(component, componentMetadata, stateReference),
+                ]),
+              ),
+            ]),
+          ),
+          factory.createArrayLiteralExpression(dataDependencies.map(factory.createIdentifier), false),
+        ]),
+      );
+    });
+}
 
 export function mapSyntheticStateReferences(componentMetadata: ComponentMetadata) {
   return componentMetadata.stateReferences.map((stateReference) => {

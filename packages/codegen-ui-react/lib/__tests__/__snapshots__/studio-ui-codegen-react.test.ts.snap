@@ -5731,100 +5731,240 @@ export default function SwitchControlledElement(
 }
 `;
 
-exports[`amplify render tests mutations supports invalid statement names for mutation targets 1`] = `
+exports[`amplify render tests mutations supports all initial value binding types 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import React from \\"react\\";
 import {
   EscapeHatchProps,
+  createDataStorePredicate,
   getOverrideProps,
+  useAuth,
+  useDataStoreBinding,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Listing } from \\"../models\\";
-import { Flex, FlexProps, Image, Text } from \\"@aws-amplify/ui-react\\";
+import { User } from \\"../models\\";
+import { useEffect } from \\"react\\";
+import { Button, Flex, FlexProps, Heading, Text } from \\"@aws-amplify/ui-react\\";
 
-export type CardAProps = React.PropsWithChildren<
+export type InitialValueBindingsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    listing?: Listing;
+    user?: User;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
-export default function CardA(props: CardAProps): React.ReactElement {
-  const { listing, overrides, ...rest } = props;
-  const [classicLongSleeveTShirtChildren, setClassicLongSleeveTShirtChildren] =
-    useStateMutationAction(\\"Classic Long Sleeve T-Shirt\\");
-  const Click = () => {
-    setClassicLongSleeveTShirtChildren(listing?.titl);
+export default function InitialValueBindings(
+  props: InitialValueBindingsProps
+): React.ReactElement {
+  const { user: userProp, overrides, ...rest } = props;
+  const authAttributes = useAuth().user?.attributes ?? {};
+  const userFilterObj = {
+    field: \\"firstName\\",
+    operand: \\"Johnny\\",
+    operator: \\"eq\\",
   };
+  const userFilter = createDataStorePredicate<User>(userFilterObj);
+  const userDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: User,
+    criteria: userFilter,
+  }).items[0];
+  const user = userProp !== undefined ? userProp : userDataStore;
+  const [stateSourceChildren, setStateSourceChildren] =
+    useStateMutationAction(\\"State Value\\");
+  const [fixedValueContentsChildren, setFixedValueContentsChildren] =
+    useStateMutationAction(\\"Fixed Value\\");
+  const [boundValueContentsChildren, setBoundValueContentsChildren] =
+    useStateMutationAction(user?.lastName);
+  const [concatValueContentsChildren, setConcatValueContentsChildren] =
+    useStateMutationAction(\`\${\\"Concat\\"}\${\\" \\"}\${\\"Value\\"}\`);
+  const [
+    conditionalValueContentsChildren,
+    setConditionalValueContentsChildren,
+  ] = useStateMutationAction(
+    user?.lastName && user?.lastName == \\"Bound Value\\"
+      ? \\"Conditional Value\\"
+      : \\"Unconditional Value\\"
+  );
+  const [authValueContentsChildren, setAuthValueContentsChildren] =
+    useStateMutationAction(authAttributes[\\"email\\"]);
+  const [stateValueContentsChildren, setStateValueContentsChildren] =
+    useStateMutationAction(stateSourceChildren);
+  const fixedValueMutationClick = () => {
+    setFixedValueContentsChildren(\\"Mutated Value\\");
+  };
+  const boundValueMutationClick = () => {
+    setBoundValueContentsChildren(\\"Mutated Value\\");
+  };
+  const concatValueMutationClick = () => {
+    setConcatValueContentsChildren(\\"Mutated Value\\");
+  };
+  const conditionalValueMutationClick = () => {
+    setConditionalValueContentsChildren(\\"Mutated Value\\");
+  };
+  const authValueMutationClick = () => {
+    setAuthValueContentsChildren(\\"Mutated Value\\");
+  };
+  const stateValueMutationClick = () => {
+    setStateValueContentsChildren(\\"Mutated Value\\");
+  };
+  useEffect(() => {
+    setBoundValueContentsChildren(user?.lastName);
+  }, [user]);
+  useEffect(() => {
+    setConditionalValueContentsChildren(
+      user?.lastName && user?.lastName == \\"Bound Value\\"
+        ? \\"Conditional Value\\"
+        : \\"Unconditional Value\\"
+    );
+  }, [user]);
+  useEffect(() => {
+    setAuthValueContentsChildren(authAttributes[\\"email\\"]);
+  }, [authAttributes]);
   return (
     /* @ts-ignore: TS2322 */
     <Flex
-      gap=\\"16px\\"
       direction=\\"column\\"
-      justifyContent=\\"center\\"
-      position=\\"relative\\"
-      padding=\\"0px 0px 0px 0px\\"
-      backgroundColor=\\"rgba(255,255,255,1)\\"
       {...rest}
-      {...getOverrideProps(overrides, \\"CardA\\")}
+      {...getOverrideProps(overrides, \\"InitialValueBindings\\")}
     >
-      <Image
-        height=\\"400px\\"
-        shrink=\\"0\\"
-        alignSelf=\\"stretch\\"
-        position=\\"relative\\"
-        padding=\\"0px 0px 0px 0px\\"
-        {...getOverrideProps(overrides, \\"image\\")}
-      ></Image>
+      <Heading
+        level={3}
+        children=\\"Mutation Initial Value Bindings\\"
+        {...getOverrideProps(overrides, \\"Heading\\")}
+      ></Heading>
       <Flex
-        gap=\\"8px\\"
-        direction=\\"column\\"
-        shrink=\\"0\\"
-        alignSelf=\\"stretch\\"
-        position=\\"relative\\"
-        padding=\\"0px 0px 0px 0px\\"
-        {...getOverrideProps(overrides, \\"Text Grouping\\")}
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"FixedValueInitialBindingSection\\")}
       >
+        <Heading
+          level={5}
+          children=\\"Fixed Initial Value\\"
+          {...getOverrideProps(overrides, \\"FixedValueHeading\\")}
+        ></Heading>
         <Text
-          fontFamily=\\"Inter\\"
-          fontSize=\\"16px\\"
-          fontWeight=\\"400\\"
-          color=\\"rgba(0,0,0,1)\\"
-          lineHeight=\\"24px\\"
-          textAlign=\\"left\\"
-          display=\\"flex\\"
-          direction=\\"column\\"
-          justifyContent=\\"flex-start\\"
-          letterSpacing=\\"0.01px\\"
-          shrink=\\"0\\"
-          alignSelf=\\"stretch\\"
-          position=\\"relative\\"
-          padding=\\"0px 0px 0px 0px\\"
-          whiteSpace=\\"pre-wrap\\"
-          children={classicLongSleeveTShirtChildren}
-          {...getOverrideProps(overrides, \\"Classic Long Sleeve T-Shirt\\")}
+          children={fixedValueContentsChildren}
+          {...getOverrideProps(overrides, \\"FixedValueContents\\")}
         ></Text>
-        <Text
-          fontFamily=\\"Inter\\"
-          fontSize=\\"14px\\"
-          fontWeight=\\"400\\"
-          color=\\"rgba(43,51,59,1)\\"
-          lineHeight=\\"24px\\"
-          textAlign=\\"left\\"
-          display=\\"flex\\"
-          direction=\\"column\\"
-          justifyContent=\\"flex-start\\"
-          shrink=\\"0\\"
-          alignSelf=\\"stretch\\"
-          position=\\"relative\\"
-          padding=\\"0px 0px 0px 0px\\"
-          whiteSpace=\\"pre-wrap\\"
-          children=\\"$99\\"
+        <Button
+          children=\\"Mutate\\"
           onClick={() => {
-            Click();
+            fixedValueMutationClick();
           }}
-          {...getOverrideProps(overrides, \\"$99\\")}
+          {...getOverrideProps(overrides, \\"FixedValueMutation\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"BoundValueInitialBindingSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"Bound Initial Value\\"
+          {...getOverrideProps(overrides, \\"BoundValueHeading\\")}
+        ></Heading>
+        <Text
+          children={boundValueContentsChildren}
+          {...getOverrideProps(overrides, \\"BoundValueContents\\")}
+        ></Text>
+        <Button
+          children=\\"Mutate\\"
+          onClick={() => {
+            boundValueMutationClick();
+          }}
+          {...getOverrideProps(overrides, \\"BoundValueMutation\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"ConcatValueInitialBindingSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"Concat Initial Value\\"
+          {...getOverrideProps(overrides, \\"ConcatValueHeading\\")}
+        ></Heading>
+        <Text
+          children={concatValueContentsChildren}
+          {...getOverrideProps(overrides, \\"ConcatValueContents\\")}
+        ></Text>
+        <Button
+          children=\\"Mutate\\"
+          onClick={() => {
+            concatValueMutationClick();
+          }}
+          {...getOverrideProps(overrides, \\"ConcatValueMutation\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(
+          overrides,
+          \\"ConditionalValueInitialBindingSection\\"
+        )}
+      >
+        <Heading
+          level={5}
+          children=\\"Conditional Initial Value\\"
+          {...getOverrideProps(overrides, \\"ConditionalValueHeading\\")}
+        ></Heading>
+        <Text
+          children={conditionalValueContentsChildren}
+          {...getOverrideProps(overrides, \\"ConditionalValueContents\\")}
+        ></Text>
+        <Button
+          children=\\"Mutate\\"
+          onClick={() => {
+            conditionalValueMutationClick();
+          }}
+          {...getOverrideProps(overrides, \\"ConditionalValueMutation\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"AuthValueInitialBindingSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"Auth Initial Value\\"
+          {...getOverrideProps(overrides, \\"AuthValueHeading\\")}
+        ></Heading>
+        <Text
+          children={authValueContentsChildren}
+          {...getOverrideProps(overrides, \\"AuthValueContents\\")}
+        ></Text>
+        <Button
+          children=\\"Mutate\\"
+          onClick={() => {
+            authValueMutationClick();
+          }}
+          {...getOverrideProps(overrides, \\"AuthValueMutation\\")}
+        ></Button>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"StateValueInitialBindingSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"State Initial Value\\"
+          {...getOverrideProps(overrides, \\"StateValueHeading\\")}
+        ></Heading>
+        <Text
+          children={stateValueContentsChildren}
+          {...getOverrideProps(overrides, \\"StateValueContents\\")}
+        ></Text>
+        <Button
+          children=\\"Mutate\\"
+          onClick={() => {
+            stateValueMutationClick();
+          }}
+          {...getOverrideProps(overrides, \\"StateValueMutation\\")}
+        ></Button>
+        <Text
+          children={stateSourceChildren}
+          {...getOverrideProps(overrides, \\"StateSource\\")}
         ></Text>
       </Flex>
     </Flex>
@@ -5834,154 +5974,6 @@ export default function CardA(props: CardAProps): React.ReactElement {
   "declaration": undefined,
   "renderComponentToFilesystem": [Function],
 }
-`;
-
-exports[`amplify render tests mutations supports invalid statement names for mutation targets with ES5 1`] = `
-"var __assign =
-  (this && this.__assign) ||
-  function () {
-    __assign =
-      Object.assign ||
-      function (t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-          s = arguments[i];
-          for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-      };
-    return __assign.apply(this, arguments);
-  };
-var __rest =
-  (this && this.__rest) ||
-  function (s, e) {
-    var t = {};
-    for (var p in s)
-      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === \\"function\\")
-      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-        if (
-          e.indexOf(p[i]) < 0 &&
-          Object.prototype.propertyIsEnumerable.call(s, p[i])
-        )
-          t[p[i]] = s[p[i]];
-      }
-    return t;
-  };
-/* eslint-disable */
-import React from \\"react\\";
-import {
-  getOverrideProps,
-  useStateMutationAction,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, Image, Text } from \\"@aws-amplify/ui-react\\";
-export default function CardA(props) {
-  var listing = props.listing,
-    overrides = props.overrides,
-    rest = __rest(props, [\\"listing\\", \\"overrides\\"]);
-  var _a = useStateMutationAction(\\"Classic Long Sleeve T-Shirt\\"),
-    classicLongSleeveTShirtChildren = _a[0],
-    setClassicLongSleeveTShirtChildren = _a[1];
-  var Click = function () {
-    setClassicLongSleeveTShirtChildren(
-      listing === null || listing === void 0 ? void 0 : listing.titl
-    );
-  };
-  return React.createElement(
-    Flex,
-    __assign(
-      {
-        gap: \\"16px\\",
-        direction: \\"column\\",
-        justifyContent: \\"center\\",
-        position: \\"relative\\",
-        padding: \\"0px 0px 0px 0px\\",
-        backgroundColor: \\"rgba(255,255,255,1)\\",
-      },
-      rest,
-      getOverrideProps(overrides, \\"CardA\\")
-    ),
-    React.createElement(
-      Image,
-      __assign(
-        {
-          height: \\"400px\\",
-          shrink: \\"0\\",
-          alignSelf: \\"stretch\\",
-          position: \\"relative\\",
-          padding: \\"0px 0px 0px 0px\\",
-        },
-        getOverrideProps(overrides, \\"image\\")
-      )
-    ),
-    React.createElement(
-      Flex,
-      __assign(
-        {
-          gap: \\"8px\\",
-          direction: \\"column\\",
-          shrink: \\"0\\",
-          alignSelf: \\"stretch\\",
-          position: \\"relative\\",
-          padding: \\"0px 0px 0px 0px\\",
-        },
-        getOverrideProps(overrides, \\"Text Grouping\\")
-      ),
-      React.createElement(
-        Text,
-        __assign(
-          {
-            fontFamily: \\"Inter\\",
-            fontSize: \\"16px\\",
-            fontWeight: \\"400\\",
-            color: \\"rgba(0,0,0,1)\\",
-            lineHeight: \\"24px\\",
-            textAlign: \\"left\\",
-            display: \\"flex\\",
-            direction: \\"column\\",
-            justifyContent: \\"flex-start\\",
-            letterSpacing: \\"0.01px\\",
-            shrink: \\"0\\",
-            alignSelf: \\"stretch\\",
-            position: \\"relative\\",
-            padding: \\"0px 0px 0px 0px\\",
-            whiteSpace: \\"pre-wrap\\",
-            children: classicLongSleeveTShirtChildren,
-          },
-          getOverrideProps(overrides, \\"Classic Long Sleeve T-Shirt\\")
-        )
-      ),
-      React.createElement(
-        Text,
-        __assign(
-          {
-            fontFamily: \\"Inter\\",
-            fontSize: \\"14px\\",
-            fontWeight: \\"400\\",
-            color: \\"rgba(43,51,59,1)\\",
-            lineHeight: \\"24px\\",
-            textAlign: \\"left\\",
-            display: \\"flex\\",
-            direction: \\"column\\",
-            justifyContent: \\"flex-start\\",
-            shrink: \\"0\\",
-            alignSelf: \\"stretch\\",
-            position: \\"relative\\",
-            padding: \\"0px 0px 0px 0px\\",
-            whiteSpace: \\"pre-wrap\\",
-            children: \\"$99\\",
-            onClick: function () {
-              Click();
-            },
-          },
-          getOverrideProps(overrides, \\"$99\\")
-        )
-      )
-    )
-  );
-}
-"
 `;
 
 exports[`amplify render tests mutations supports multiple actions pointing to the same value 1`] = `

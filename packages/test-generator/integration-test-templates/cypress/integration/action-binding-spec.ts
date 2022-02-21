@@ -105,7 +105,7 @@ describe('Workflow', () => {
       });
     });
 
-    it.skip('supports bound values', () => {
+    it('supports bound values', () => {
       cy.get('#bound-value-initial-binding-section').within(() => {
         cy.contains('Bound Value');
         cy.contains('Mutate').click();
@@ -121,7 +121,7 @@ describe('Workflow', () => {
       });
     });
 
-    it.skip('supports conditional values', () => {
+    it('supports conditional values', () => {
       cy.get('#conditional-value-initial-binding-section').within(() => {
         cy.contains('Conditional Value');
         cy.contains('Mutate').click();
@@ -129,7 +129,7 @@ describe('Workflow', () => {
       });
     });
 
-    it.skip('supports auth values', () => {
+    it('supports auth values', () => {
       cy.get('#auth-value-initial-binding-section').within(() => {
         cy.contains('Auth Value');
         cy.contains('Mutate').click();
