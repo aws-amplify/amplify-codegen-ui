@@ -88,7 +88,7 @@ export function buildUseEffectStatements(
             factory.createBlock([
               factory.createExpressionStatement(
                 factory.createCallExpression(factory.createIdentifier(getSetStateName(reference)), undefined, [
-                  getStateInitialValue(component, componentMetadata, reference),
+                  getStateInitialValue(component, componentMetadata, { reference, dataDependencies: [] }),
                 ]),
               ),
             ]),
@@ -283,7 +283,7 @@ export function buildStateStatements(
             undefined,
             undefined,
             factory.createCallExpression(factory.createIdentifier('useStateMutationAction'), undefined, [
-              getStateInitialValue(component, componentMetadata, stateReference.reference),
+              getStateInitialValue(component, componentMetadata, stateReference),
             ]),
           ),
         ],
@@ -296,13 +296,16 @@ export function buildStateStatements(
 export function getStateInitialValue(
   component: StudioComponent,
   componentMetadata: ComponentMetadata,
-  stateReference: StateStudioComponentProperty,
+  stateReference: StateReferenceMetadata,
 ) {
-  const { componentName, property } = stateReference;
+  const {
+    reference: { componentName, property },
+    dataDependencies,
+  } = stateReference;
   const referencedComponent = getComponentFromComponentTree(component, componentName);
   const componentProperty = referencedComponent.properties[property];
 
-  if (componentProperty === undefined) {
+  if (componentProperty === undefined || dataDependencies.length > 0) {
     const defaultPropMapping = PrimitiveDefaultValuePropMapping[referencedComponent.componentType as Primitive];
     if (property in defaultPropMapping && referencedComponent.properties[defaultPropMapping[property]]) {
       const defaultProp = referencedComponent.properties[defaultPropMapping[property]];
