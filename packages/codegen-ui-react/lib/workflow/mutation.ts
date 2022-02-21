@@ -63,20 +63,42 @@ const PrimitiveDefaultValuePropMapping: PrimitiveLevelPropConfiguration<string> 
   },
 );
 
-/**
- * TODO: Determine if we should be initializing state values w/ these data deps to `undefined`,
- * then only setting the value here in the useEffect once the dependencies are no longer null.
- *
- * This way we'll be able to still use the useEffect for an initialization once the data values have settled,
- * and we won't overwrite whatever mutation applies to them if useAuth or useData changes.
- */
 export function buildUseEffectStatements(
   component: StudioComponent,
   componentMetadata: ComponentMetadata,
 ): Statement[] {
   return componentMetadata.stateReferences
     .filter(({ dataDependencies }) => dataDependencies.length > 0)
-    .map(({ reference, dataDependencies }) => {
+    .map((stateReference) => {
+      const { reference, dataDependencies } = stateReference;
+      const dependencyConditions = dataDependencies.flatMap((dataDependency) => [
+        // prevents components from changing to an uncontrolled state
+        factory.createBinaryExpression(
+          getStateInitialValue(component, componentMetadata, { reference, dataDependencies: [] }),
+          factory.createToken(ts.SyntaxKind.ExclamationEqualsEqualsToken),
+          factory.createIdentifier('undefined'),
+        ),
+        factory.createBinaryExpression(
+          factory.createIdentifier(dataDependency),
+          factory.createToken(ts.SyntaxKind.ExclamationEqualsEqualsToken),
+          factory.createIdentifier('undefined'),
+        ),
+      ]);
+      const conditions = [
+        ...dependencyConditions,
+        factory.createBinaryExpression(
+          factory.createIdentifier(getStateName(reference)),
+          factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+          getStateInitialValue(component, componentMetadata, stateReference),
+        ),
+      ];
+      const binaryExpression = conditions.reduce((expression, currentCondition) => {
+        return factory.createBinaryExpression(
+          factory.createParenthesizedExpression(currentCondition),
+          factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+          expression,
+        );
+      });
       return factory.createExpressionStatement(
         factory.createCallExpression(factory.createIdentifier('useEffect'), undefined, [
           factory.createArrowFunction(
@@ -86,10 +108,13 @@ export function buildUseEffectStatements(
             undefined,
             factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
             factory.createBlock([
-              factory.createExpressionStatement(
-                factory.createCallExpression(factory.createIdentifier(getSetStateName(reference)), undefined, [
-                  getStateInitialValue(component, componentMetadata, { reference, dataDependencies: [] }),
-                ]),
+              factory.createIfStatement(
+                binaryExpression,
+                factory.createExpressionStatement(
+                  factory.createCallExpression(factory.createIdentifier(getSetStateName(reference)), undefined, [
+                    getStateInitialValue(component, componentMetadata, { reference, dataDependencies: [] }),
+                  ]),
+                ),
               ),
             ]),
           ),
