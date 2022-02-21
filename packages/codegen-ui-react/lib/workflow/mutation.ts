@@ -19,12 +19,11 @@ import {
   StudioComponentChild,
   StateStudioComponentProperty,
   ActionStudioComponentEvent,
-  StateReference,
   StudioGenericEvent,
   StudioComponentProperty,
   ComponentMetadata,
   getComponentFromComponentTree,
-  computeStateReferenceMetadata,
+  StateReferenceMetadata,
 } from '@aws-amplify/codegen-ui';
 import {
   isStateProperty,
@@ -75,10 +74,9 @@ export function buildUseEffectStatements(
   component: StudioComponent,
   componentMetadata: ComponentMetadata,
 ): Statement[] {
-  const stateReferenceMetadata = computeStateReferenceMetadata(component, componentMetadata.stateReferences);
-  return stateReferenceMetadata
+  return componentMetadata.stateReferences
     .filter(({ dataDependencies }) => dataDependencies.length > 0)
-    .map(({ stateReference, dataDependencies }) => {
+    .map(({ reference, dataDependencies }) => {
       return factory.createExpressionStatement(
         factory.createCallExpression(factory.createIdentifier('useEffect'), undefined, [
           factory.createArrowFunction(
@@ -89,8 +87,8 @@ export function buildUseEffectStatements(
             factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
             factory.createBlock([
               factory.createExpressionStatement(
-                factory.createCallExpression(factory.createIdentifier(getSetStateName(stateReference)), undefined, [
-                  getStateInitialValue(component, componentMetadata, stateReference),
+                factory.createCallExpression(factory.createIdentifier(getSetStateName(reference)), undefined, [
+                  getStateInitialValue(component, componentMetadata, reference),
                 ]),
               ),
             ]),
@@ -103,10 +101,12 @@ export function buildUseEffectStatements(
 
 export function mapSyntheticStateReferences(componentMetadata: ComponentMetadata) {
   return componentMetadata.stateReferences.map((stateReference) => {
-    const { componentName, property } = stateReference;
+    const {
+      reference: { componentName, property },
+    } = stateReference;
     const childrenPropMapping = getChildPropMappingForComponentName(componentMetadata, componentName);
     if (childrenPropMapping !== undefined && property === childrenPropMapping) {
-      return { ...stateReference, property: 'children' };
+      return { ...stateReference, reference: { ...stateReference.reference, property: 'children' } };
     }
     return stateReference;
   });
@@ -232,16 +232,19 @@ export function buildOpeningElementControlEvents(
 }
 
 /**
- * Dedupes state references by componentName + property, returning a consolidate
+ * Dedupes state references by componentName, property, and dataDependencies, returning a consolidate
  * list, stripping the `set` property from them. We do this by serializing to json,
  * collecting in a set, then deserializing.
  */
-function dedupeStateReferences(stateReferences: StateReference[]): StateReference[] {
+function dedupeStateReferences(stateReferences: StateReferenceMetadata[]): StateReferenceMetadata[] {
   const dedupedSerializedRefs = [
     ...new Set(
       stateReferences.map((stateReference) => {
-        const { componentName, property } = stateReference;
-        return JSON.stringify({ componentName, property });
+        const {
+          reference: { componentName, property },
+          dataDependencies,
+        } = stateReference;
+        return JSON.stringify({ reference: { componentName, property }, dataDependencies: dataDependencies.sort() });
       }),
     ),
   ];
@@ -267,20 +270,20 @@ export function buildStateStatements(
               factory.createBindingElement(
                 undefined,
                 undefined,
-                factory.createIdentifier(getStateName(stateReference)),
+                factory.createIdentifier(getStateName(stateReference.reference)),
                 undefined,
               ),
               factory.createBindingElement(
                 undefined,
                 undefined,
-                factory.createIdentifier(getSetStateName(stateReference)),
+                factory.createIdentifier(getSetStateName(stateReference.reference)),
                 undefined,
               ),
             ]),
             undefined,
             undefined,
             factory.createCallExpression(factory.createIdentifier('useStateMutationAction'), undefined, [
-              getStateInitialValue(component, componentMetadata, stateReference),
+              getStateInitialValue(component, componentMetadata, stateReference.reference),
             ]),
           ),
         ],
@@ -335,23 +338,23 @@ export type MutationReferences = {
 
 export function filterStateReferencesForComponent(
   component: StudioComponent | StudioComponentChild,
-  stateReferences: StateReference[],
+  stateReferences: StateReferenceMetadata[],
 ): MutationReferences {
   return stateReferences
-    .filter(({ componentName }) => componentName === component.name)
+    .filter(({ reference: { componentName } }) => componentName === component.name)
     .reduce(mutationReferenceReducerWithComponentType(component.componentType), {});
 }
 
 function mutationReferenceReducerWithComponentType(componentType: string) {
   return function mutationReferenceReducer(
     mutationReferences: MutationReferences,
-    stateReference: StateReference,
+    stateReference: StateReferenceMetadata,
   ): MutationReferences {
-    const propertyReferences =
-      stateReference.property in mutationReferences ? mutationReferences[stateReference.property] : [];
+    const { reference } = stateReference;
+    const propertyReferences = reference.property in mutationReferences ? mutationReferences[reference.property] : [];
     return {
       ...mutationReferences,
-      [stateReference.property]: propertyReferences.concat([
+      [reference.property]: propertyReferences.concat([
         { addControlEvent: PrimitivesWithChangeEvent.has(componentType as Primitive) },
       ]),
     };

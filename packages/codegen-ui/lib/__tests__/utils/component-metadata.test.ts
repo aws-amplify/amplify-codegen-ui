@@ -359,13 +359,25 @@ describe('computeComponentMetadata', () => {
           },
         },
         bindingProperties: {},
+        children: [
+          {
+            componentType: 'TextField',
+            name: 'UserNameField',
+            properties: {
+              value: {
+                value: 'username',
+              },
+            },
+          },
+        ],
       };
       const expectedMetadata: ComponentMetadata = {
         hasAuthBindings: false,
         requiredDataModels: [],
-        stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
+        stateReferences: [{ reference: { componentName: 'UserNameField', property: 'value' }, dataDependencies: [] }],
         componentNameToTypeMap: {
           MyText: 'Text',
+          UserNameField: 'TextField',
         },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
@@ -386,13 +398,25 @@ describe('computeComponentMetadata', () => {
           },
         },
         bindingProperties: {},
+        children: [
+          {
+            componentType: 'TextField',
+            name: 'UserNameField',
+            properties: {
+              value: {
+                value: 'username',
+              },
+            },
+          },
+        ],
       };
       const expectedMetadata: ComponentMetadata = {
         hasAuthBindings: false,
         requiredDataModels: [],
-        stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
+        stateReferences: [{ reference: { componentName: 'UserNameField', property: 'value' }, dataDependencies: [] }],
         componentNameToTypeMap: {
           MyText: 'Text',
+          UserNameField: 'TextField',
         },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
@@ -418,13 +442,25 @@ describe('computeComponentMetadata', () => {
             },
           },
         },
+        children: [
+          {
+            componentType: 'TextField',
+            name: 'UserNameField',
+            properties: {
+              value: {
+                value: 'username',
+              },
+            },
+          },
+        ],
       };
       const expectedMetadata: ComponentMetadata = {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
-        stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
+        stateReferences: [{ reference: { componentName: 'UserNameField', property: 'value' }, dataDependencies: [] }],
         componentNameToTypeMap: {
           MyText: 'Text',
+          UserNameField: 'TextField',
         },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
@@ -457,13 +493,25 @@ describe('computeComponentMetadata', () => {
             },
           },
         },
+        children: [
+          {
+            componentType: 'TextField',
+            name: 'UserNameField',
+            properties: {
+              value: {
+                value: 'username',
+              },
+            },
+          },
+        ],
       };
       const expectedMetadata: ComponentMetadata = {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
-        stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
+        stateReferences: [{ reference: { componentName: 'UserNameField', property: 'value' }, dataDependencies: [] }],
         componentNameToTypeMap: {
           MyText: 'Text',
+          UserNameField: 'TextField',
         },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
@@ -501,16 +549,38 @@ describe('computeComponentMetadata', () => {
             },
           },
         },
+        children: [
+          {
+            componentType: 'TextField',
+            name: 'UserNameField',
+            properties: {
+              value: {
+                value: 'username',
+              },
+            },
+          },
+          {
+            componentType: 'TextField',
+            name: 'NicknameField',
+            properties: {
+              value: {
+                value: 'nickname',
+              },
+            },
+          },
+        ],
       };
       const expectedMetadata: ComponentMetadata = {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
         stateReferences: [
-          { componentName: 'NicknameField', property: 'value' },
-          { componentName: 'UserNameField', property: 'value' },
+          { reference: { componentName: 'NicknameField', property: 'value' }, dataDependencies: [] },
+          { reference: { componentName: 'UserNameField', property: 'value' }, dataDependencies: [] },
         ],
         componentNameToTypeMap: {
           MyText: 'Text',
+          UserNameField: 'TextField',
+          NicknameField: 'TextField',
         },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
@@ -548,13 +618,25 @@ describe('computeComponentMetadata', () => {
             },
           },
         },
+        children: [
+          {
+            componentType: 'TextField',
+            name: 'UserNameField',
+            properties: {
+              value: {
+                value: 'username',
+              },
+            },
+          },
+        ],
       };
       const expectedMetadata: ComponentMetadata = {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
-        stateReferences: [{ componentName: 'UserNameField', property: 'value' }],
+        stateReferences: [{ reference: { componentName: 'UserNameField', property: 'value' }, dataDependencies: [] }],
         componentNameToTypeMap: {
           MyText: 'Text',
+          UserNameField: 'TextField',
         },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
@@ -592,16 +674,31 @@ describe('computeComponentMetadata', () => {
             },
           },
         },
+        children: [
+          {
+            componentType: 'TextField',
+            name: 'UserNameField',
+            properties: {
+              value: {
+                value: 'username',
+              },
+            },
+          },
+        ],
       };
       const expectedMetadata: ComponentMetadata = {
         hasAuthBindings: false,
         requiredDataModels: ['User'],
         stateReferences: [
-          { componentName: 'UserNameField', property: 'value' },
-          { componentName: 'UserNameField', property: 'value', set: { value: 'Setter' } },
+          { reference: { componentName: 'UserNameField', property: 'value' }, dataDependencies: [] },
+          {
+            reference: { componentName: 'UserNameField', property: 'value', set: { value: 'Setter' } },
+            dataDependencies: [],
+          },
         ],
         componentNameToTypeMap: {
           MyText: 'Text',
+          UserNameField: 'TextField',
         },
       };
       expect(computeComponentMetadata(component)).toEqual(expectedMetadata);
@@ -789,8 +886,15 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: true,
         requiredDataModels: ['User', 'Listing'],
         stateReferences: [
-          { componentName: 'NicknameField', property: 'value' },
-          { componentName: 'NestedComponent', property: 'color', set: { bindingProperties: { property: 'color' } } },
+          { reference: { componentName: 'NicknameField', property: 'value' }, dataDependencies: [] },
+          {
+            reference: {
+              componentName: 'NestedComponent',
+              property: 'color',
+              set: { bindingProperties: { property: 'color' } },
+            },
+            dataDependencies: [],
+          },
         ],
         componentNameToTypeMap: {
           TopLevelComponent: 'Flex',
@@ -907,8 +1011,15 @@ describe('computeComponentMetadata', () => {
         hasAuthBindings: true,
         requiredDataModels: ['User', 'Listing'],
         stateReferences: [
-          { componentName: 'NicknameField', property: 'value' },
-          { componentName: 'NestedComponent', property: 'color', set: { bindingProperties: { property: 'color' } } },
+          { reference: { componentName: 'NicknameField', property: 'value' }, dataDependencies: [] },
+          {
+            reference: {
+              componentName: 'NestedComponent',
+              property: 'color',
+              set: { bindingProperties: { property: 'color' } },
+            },
+            dataDependencies: [],
+          },
         ],
         componentNameToTypeMap: {
           TopLevelComponent: 'Flex',
