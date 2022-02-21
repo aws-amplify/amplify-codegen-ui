@@ -5745,7 +5745,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { User } from \\"../models\\";
 import { useEffect } from \\"react\\";
-import { Button, Flex, FlexProps, Heading, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  FlexProps,
+  Heading,
+  Text,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
 
 export type InitialValueBindingsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
@@ -5776,21 +5783,19 @@ export default function InitialValueBindings(
   const [fixedValueContentsChildren, setFixedValueContentsChildren] =
     useStateMutationAction(\\"Fixed Value\\");
   const [boundValueContentsChildren, setBoundValueContentsChildren] =
-    useStateMutationAction(user?.lastName);
+    useStateMutationAction(undefined);
   const [concatValueContentsChildren, setConcatValueContentsChildren] =
     useStateMutationAction(\`\${\\"Concat\\"}\${\\" \\"}\${\\"Value\\"}\`);
   const [
     conditionalValueContentsChildren,
     setConditionalValueContentsChildren,
-  ] = useStateMutationAction(
-    user?.lastName && user?.lastName == \\"Bound Value\\"
-      ? \\"Conditional Value\\"
-      : \\"Unconditional Value\\"
-  );
+  ] = useStateMutationAction(undefined);
   const [authValueContentsChildren, setAuthValueContentsChildren] =
-    useStateMutationAction(authAttributes[\\"email\\"]);
+    useStateMutationAction(undefined);
   const [stateValueContentsChildren, setStateValueContentsChildren] =
     useStateMutationAction(stateSourceChildren);
+  const [textFieldValueContentsValue, setTextFieldValueContentsValue] =
+    useStateMutationAction(\\"\\");
   const fixedValueMutationClick = () => {
     setFixedValueContentsChildren(\\"Mutated Value\\");
   };
@@ -5809,6 +5814,9 @@ export default function InitialValueBindings(
   const stateValueMutationClick = () => {
     setStateValueContentsChildren(\\"Mutated Value\\");
   };
+  const textFieldValueMutationClick = () => {
+    setTextFieldValueContentsValue(\\"Mutated Value\\");
+  };
   useEffect(() => {
     setBoundValueContentsChildren(user?.lastName);
   }, [user]);
@@ -5821,6 +5829,9 @@ export default function InitialValueBindings(
   }, [user]);
   useEffect(() => {
     setAuthValueContentsChildren(authAttributes[\\"email\\"]);
+  }, [authAttributes]);
+  useEffect(() => {
+    setTextFieldValueContentsValue(authAttributes[\\"email\\"]);
   }, [authAttributes]);
   return (
     /* @ts-ignore: TS2322 */
@@ -5966,6 +5977,30 @@ export default function InitialValueBindings(
           children={stateSourceChildren}
           {...getOverrideProps(overrides, \\"StateSource\\")}
         ></Text>
+      </Flex>
+      <Flex
+        direction=\\"row\\"
+        {...getOverrideProps(overrides, \\"TextFieldValueInitialBindingSection\\")}
+      >
+        <Heading
+          level={5}
+          children=\\"Text Field Initial Value\\"
+          {...getOverrideProps(overrides, \\"TextFieldValueHeading\\")}
+        ></Heading>
+        <TextField
+          value={textFieldValueContentsValue}
+          onChange={(event: SyntheticEvent) => {
+            setTextFieldValueContentsValue(event.target.value);
+          }}
+          {...getOverrideProps(overrides, \\"TextFieldValueContents\\")}
+        ></TextField>
+        <Button
+          children=\\"Mutate\\"
+          onClick={() => {
+            textFieldValueMutationClick();
+          }}
+          {...getOverrideProps(overrides, \\"TextFieldValueMutation\\")}
+        ></Button>
       </Flex>
     </Flex>
   );
