@@ -15,3 +15,4 @@
  */
 export * from './component-metadata';
 export * from './component-tree';
+export * from './state-reference-metadata';
