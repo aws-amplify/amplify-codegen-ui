@@ -1,0 +1,402 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Flex",
+  "name": "InitialValueBindings",
+  "properties": {
+    "direction": {
+      "value": "column"
+    }
+  },
+  "bindingProperties": {
+    "user": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User",
+        "predicate": {
+          "field": "firstName",
+          "operand": "Johnny",
+          "operator": "eq"
+        }
+      }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Heading",
+      "name": "Heading",
+      "properties": {
+        "level": {
+          "value": 3
+        },
+        "label": {
+          "value": "Mutation Initial Value Bindings"
+        }
+      }
+    },
+    {
+      "componentType": "Flex",
+      "name": "FixedValueInitialBindingSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "FixedValueHeading",
+          "properties": {
+            "level": {
+              "value": 5
+            },
+            "label": {
+              "value": "Fixed Initial Value"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "FixedValueContents",
+          "properties": {
+            "label": {
+              "value": "Fixed Value"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "FixedValueMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "FixedValueContents",
+                  "property": "label",
+                  "set": {
+                    "value": "Mutated Value"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Mutate"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "BoundValueInitialBindingSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "BoundValueHeading",
+          "properties": {
+            "level": {
+              "value": 5
+            },
+            "label": {
+              "value": "Bound Initial Value"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "BoundValueContents",
+          "properties": {
+            "label": {
+              "bindingProperties": {
+                "property": "user",
+                "field": "lastName"
+              }
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "BoundValueMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "BoundValueContents",
+                  "property": "label",
+                  "set": {
+                    "value": "Mutated Value"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Mutate"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "ConcatValueInitialBindingSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "ConcatValueHeading",
+          "properties": {
+            "level": {
+              "value": 5
+            },
+            "label": {
+              "value": "Concat Initial Value"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "ConcatValueContents",
+          "properties": {
+            "label": {
+              "concat": [
+                {
+                  "value": "Concat"
+                },
+                {
+                  "value": " "
+                },
+                {
+                  "value": "Value"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "ConcatValueMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "ConcatValueContents",
+                  "property": "label",
+                  "set": {
+                    "value": "Mutated Value"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Mutate"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "ConditionalValueInitialBindingSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "ConditionalValueHeading",
+          "properties": {
+            "level": {
+              "value": 5
+            },
+            "label": {
+              "value": "Conditional Initial Value"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "ConditionalValueContents",
+          "properties": {
+            "label": {
+              "condition": {
+                "property": "user",
+                "field": "lastName",
+                "operator": "eq",
+                "operand": "Bound Value",
+                "then": {
+                  "value": "Conditional Value"
+                },
+                "else": {
+                  "value": "Unconditional Value"
+                }
+              }
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "ConditionalValueMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "ConditionalValueContents",
+                  "property": "label",
+                  "set": {
+                    "value": "Mutated Value"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Mutate"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "AuthValueInitialBindingSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "AuthValueHeading",
+          "properties": {
+            "level": {
+              "value": 5
+            },
+            "label": {
+              "value": "Auth Initial Value"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "AuthValueContents",
+          "properties": {
+            "label": {
+              "userAttribute": "email"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "AuthValueMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "AuthValueContents",
+                  "property": "label",
+                  "set": {
+                    "value": "Mutated Value"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Mutate"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "StateValueInitialBindingSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "StateValueHeading",
+          "properties": {
+            "level": {
+              "value": 5
+            },
+            "label": {
+              "value": "State Initial Value"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "StateValueContents",
+          "properties": {
+            "label": {
+              "componentName": "StateSource",
+              "property": "label"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "StateValueMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "StateValueContents",
+                  "property": "label",
+                  "set": {
+                    "value": "Mutated Value"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Mutate"
+            }
+          }
+        },
+        {
+          "componentType": "Text",
+          "name": "StateSource",
+          "properties": {
+            "label": {
+              "value": "State Value"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "schemaVersion": "1.0"
+}
