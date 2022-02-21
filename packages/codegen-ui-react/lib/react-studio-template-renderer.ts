@@ -77,6 +77,7 @@ import {
   buildUseActionStatement,
   mapSyntheticStateReferences,
   buildStateStatements,
+  buildUseEffectStatements,
 } from './workflow';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -602,6 +603,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     const useActionStatements = this.buildUseActionStatements();
     useActionStatements.forEach((entry) => {
+      statements.push(entry);
+    });
+
+    const useEffectStatements = buildUseEffectStatements(component, this.componentMetadata);
+    useEffectStatements.forEach((entry) => {
+      this.importCollection.addMappedImport(ImportValue.USE_EFFECT);
       statements.push(entry);
     });
 
