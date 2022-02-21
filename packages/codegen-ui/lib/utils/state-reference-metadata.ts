@@ -16,10 +16,6 @@
 import { StudioComponent, StudioComponentProperty, StateReference } from '../types';
 import { getComponentFromComponentTree } from './component-tree';
 
-/**
- * TODO: UNIT TESTS ON ME
- */
-
 export type StateReferenceMetadata = {
   reference: StateReference;
   dataDependencies: string[];
@@ -47,7 +43,7 @@ function reduceDataDependencies(dataDependencies: string[]): string[] {
  * Property Functions
  */
 
-function computeDataDependenciesForStudioComponentProperty(property: StudioComponentProperty): string[] {
+export function computeDataDependenciesForStudioComponentProperty(property: StudioComponentProperty): string[] {
   return reduceDataDependencies(
     ([] as string[])
       .concat(
