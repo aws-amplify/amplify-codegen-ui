@@ -21,7 +21,7 @@ import { getComponentFromComponentTree } from './component-tree';
  */
 
 export type StateReferenceMetadata = {
-  stateReference: StateReference;
+  reference: StateReference;
   dataDependencies: string[];
 };
 
@@ -33,31 +33,10 @@ export function computeStateReferenceMetadata(
   component: StudioComponent,
   stateReferences: StateReference[],
 ): StateReferenceMetadata[] {
-  return dedupeStateReferences(stateReferences).map((stateReference) => {
-    const dataDependencies = computeDataDependenciesForStateReference(component, stateReference);
-    return { stateReference, dataDependencies };
+  return stateReferences.map((reference) => {
+    const dataDependencies = computeDataDependenciesForStateReference(component, reference);
+    return { reference, dataDependencies };
   });
-}
-
-/**
- * Utility Functions
- */
-
-/**
- * Dedupes state references by componentName + property, returning a consolidate
- * list, stripping the `set` property from them. We do this by serializing to json,
- * collecting in a set, then deserializing.
- */
-function dedupeStateReferences(stateReferences: StateReference[]): StateReference[] {
-  const dedupedSerializedRefs = [
-    ...new Set(
-      stateReferences.map((stateReference) => {
-        const { componentName, property } = stateReference;
-        return JSON.stringify({ componentName, property });
-      }),
-    ),
-  ];
-  return dedupedSerializedRefs.map((ref) => JSON.parse(ref));
 }
 
 function reduceDataDependencies(dataDependencies: string[]): string[] {

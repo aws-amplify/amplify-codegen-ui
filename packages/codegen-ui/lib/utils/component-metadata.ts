@@ -22,11 +22,12 @@ import {
   StudioComponentPropertyBinding,
   StateReference,
 } from '../types';
+import { StateReferenceMetadata, computeStateReferenceMetadata } from './state-reference-metadata';
 
 export type ComponentMetadata = {
   hasAuthBindings: boolean;
   requiredDataModels: string[];
-  stateReferences: StateReference[];
+  stateReferences: StateReferenceMetadata[];
   componentNameToTypeMap: Record<string, string>;
 };
 
@@ -37,13 +38,21 @@ export type ComponentMetadata = {
 // Check top-level binding properties, then call helper on the chilren.
 export function computeComponentMetadata(component: StudioComponent): ComponentMetadata {
   const { bindingProperties, collectionProperties } = component;
-  return dedupeComponentMetadata(
+  const componentMetadataWithoutDataDependencies = dedupeComponentMetadata(
     reduceComponentMetadata([
       ...(bindingProperties ? Object.values(bindingProperties).map(computeBindingPropertyMetadata) : []),
       ...(collectionProperties ? Object.values(collectionProperties).map(computeCollectionPropertyMetadata) : []),
       computeComponentMetadataHelper(component),
     ]),
   );
+
+  return {
+    ...componentMetadataWithoutDataDependencies,
+    stateReferences: computeStateReferenceMetadata(
+      component,
+      componentMetadataWithoutDataDependencies.stateReferences.map(({ reference }) => reference),
+    ),
+  };
 }
 
 // Check names, properties, events, and recurse through children.
@@ -63,13 +72,11 @@ function computeComponentMetadataHelper(component: StudioComponent | StudioCompo
 // Because object equality won't catch dupes here, we'll map by component Name, dedupe
 // properties, then unroll to a list.
 // Dont dedupe setters though, since they'll all be their own ref
-function dedupeStateReferences(stateReferences: StateReference[]): StateReference[] {
+function dedupeStateReferences(stateReferences: StateReferenceMetadata[]): StateReferenceMetadata[] {
   const stateReferenceMap: Record<string, Set<string>> = {};
   stateReferences
-    .filter(
-      (stateReference) => !('set' in stateReference) || stateReference.set === null || stateReference.set === undefined,
-    )
-    .forEach(({ componentName, property }) => {
+    .filter(({ reference }) => !('set' in reference) || reference.set === null || reference.set === undefined)
+    .forEach(({ reference: { componentName, property } }) => {
       if (!(componentName in stateReferenceMap)) {
         stateReferenceMap[componentName] = new Set([]);
       }
@@ -78,10 +85,11 @@ function dedupeStateReferences(stateReferences: StateReference[]): StateReferenc
   return Object.entries(stateReferenceMap)
     .flatMap(([componentName, properties]) =>
       [...properties].map((property) => {
-        return { componentName, property };
+        const dataDependencies: string[] = [];
+        return { reference: { componentName, property }, dataDependencies };
       }),
     )
-    .concat(stateReferences.filter((stateReference) => 'set' in stateReference && stateReference.set));
+    .concat(stateReferences.filter(({ reference }) => 'set' in reference && reference.set));
 }
 
 function dedupeComponentMetadata(componentMetadata: ComponentMetadata): ComponentMetadata {
@@ -137,7 +145,7 @@ function generateReferenceMetadata(reference: StateReference): ComponentMetadata
   return {
     hasAuthBindings: false,
     requiredDataModels: [],
-    stateReferences: [reference],
+    stateReferences: [{ reference, dataDependencies: [] }],
     componentNameToTypeMap: {},
   };
 }

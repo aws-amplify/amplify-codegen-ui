@@ -21,7 +21,7 @@ describe('mapSyntheticStateReferences', () => {
     const componentMetadata: ComponentMetadata = {
       hasAuthBindings: false,
       requiredDataModels: [],
-      stateReferences: [{ componentName: 'UserNameTextField', property: 'value' }],
+      stateReferences: [{ reference: { componentName: 'UserNameTextField', property: 'value' }, dataDependencies: [] }],
       componentNameToTypeMap: { UserNameTextField: 'TextField' },
     };
     expect(mapSyntheticStateReferences(componentMetadata)).toMatchSnapshot();
