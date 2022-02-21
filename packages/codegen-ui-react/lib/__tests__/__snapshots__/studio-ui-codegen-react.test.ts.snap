@@ -5818,20 +5818,42 @@ export default function InitialValueBindings(
     setTextFieldValueContentsValue(\\"Mutated Value\\");
   };
   useEffect(() => {
-    setBoundValueContentsChildren(user?.lastName);
+    if (
+      boundValueContentsChildren === undefined &&
+      user !== undefined &&
+      user?.lastName !== undefined
+    )
+      setBoundValueContentsChildren(user?.lastName);
   }, [user]);
   useEffect(() => {
-    setConditionalValueContentsChildren(
-      user?.lastName && user?.lastName == \\"Bound Value\\"
+    if (
+      conditionalValueContentsChildren === undefined &&
+      user !== undefined &&
+      (user?.lastName && user?.lastName == \\"Bound Value\\"
         ? \\"Conditional Value\\"
-        : \\"Unconditional Value\\"
-    );
+        : \\"Unconditional Value\\") !== undefined
+    )
+      setConditionalValueContentsChildren(
+        user?.lastName && user?.lastName == \\"Bound Value\\"
+          ? \\"Conditional Value\\"
+          : \\"Unconditional Value\\"
+      );
   }, [user]);
   useEffect(() => {
-    setAuthValueContentsChildren(authAttributes[\\"email\\"]);
+    if (
+      authValueContentsChildren === undefined &&
+      authAttributes !== undefined &&
+      authAttributes[\\"email\\"] !== undefined
+    )
+      setAuthValueContentsChildren(authAttributes[\\"email\\"]);
   }, [authAttributes]);
   useEffect(() => {
-    setTextFieldValueContentsValue(authAttributes[\\"email\\"]);
+    if (
+      textFieldValueContentsValue === \\"\\" &&
+      authAttributes !== undefined &&
+      authAttributes[\\"email\\"] !== undefined
+    )
+      setTextFieldValueContentsValue(authAttributes[\\"email\\"]);
   }, [authAttributes]);
   return (
     /* @ts-ignore: TS2322 */
