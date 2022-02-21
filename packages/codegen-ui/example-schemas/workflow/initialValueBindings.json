@@ -396,6 +396,61 @@
           }
         }
       ]
+    },
+    {
+      "componentType": "Flex",
+      "name": "TextFieldValueInitialBindingSection",
+      "properties": {
+        "direction": {
+          "value": "row"
+        }
+      },
+      "children": [
+        {
+          "componentType": "Heading",
+          "name": "TextFieldValueHeading",
+          "properties": {
+            "level": {
+              "value": 5
+            },
+            "label": {
+              "value": "Text Field Initial Value"
+            }
+          }
+        },
+        {
+          "componentType": "TextField",
+          "name": "TextFieldValueContents",
+          "properties": {
+            "value": {
+              "userAttribute": "email"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "name": "TextFieldValueMutation",
+          "events": {
+            "click": {
+              "action": "Amplify.Mutation",
+              "parameters": {
+                "state": {
+                  "componentName": "TextFieldValueContents",
+                  "property": "value",
+                  "set": {
+                    "value": "Mutated Value"
+                  }
+                }
+              }
+            }
+          },
+          "properties": {
+            "children": {
+              "value": "Mutate"
+            }
+          }
+        }
+      ]
     }
   ],
   "schemaVersion": "1.0"
