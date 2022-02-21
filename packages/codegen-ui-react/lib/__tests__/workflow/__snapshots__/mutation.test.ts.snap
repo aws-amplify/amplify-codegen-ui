@@ -15,8 +15,11 @@ Array [
 exports[`mapSyntheticStateReferences basic 1`] = `
 Array [
   Object {
-    "componentName": "UserNameTextField",
-    "property": "value",
+    "dataDependencies": Array [],
+    "reference": Object {
+      "componentName": "UserNameTextField",
+      "property": "value",
+    },
   },
 ]
 `;
