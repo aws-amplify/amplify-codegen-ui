@@ -72,6 +72,7 @@ export default function ActionBindingTests() {
           ConditionalValueInitialBindingSection: { id: 'conditional-value-initial-binding-section' },
           AuthValueInitialBindingSection: { id: 'auth-value-initial-binding-section' },
           StateValueInitialBindingSection: { id: 'state-value-initial-binding-section' },
+          TextFieldValueInitialBindingSection: { id: 'text-field-value-initial-binding-section' },
         }}
       />
     </AmplifyProvider>
