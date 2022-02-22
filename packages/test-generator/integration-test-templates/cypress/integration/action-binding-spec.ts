@@ -144,5 +144,17 @@ describe('Workflow', () => {
         cy.contains('Mutated Value');
       });
     });
+
+    it('supports values in text fields', () => {
+      cy.get('#text-field-value-initial-binding-section').within(() => {
+        cy.get('input').should('have.attr', 'value', 'Auth Value');
+        cy.get('button').click();
+        cy.get('input').should('have.attr', 'value', 'Mutated Value');
+        cy.get('input').type(' with typing');
+        cy.get('input').should('have.attr', 'value', 'Mutated Value with typing');
+        cy.get('button').click();
+        cy.get('input').should('have.attr', 'value', 'Mutated Value');
+      });
+    });
   });
 });
