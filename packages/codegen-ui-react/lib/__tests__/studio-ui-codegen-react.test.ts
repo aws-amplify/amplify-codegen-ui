@@ -406,6 +406,8 @@ describe('amplify render tests', () => {
           script: ScriptKind.JS,
         }).componentText,
       ).toMatchSnapshot();
+    });
+
     it('supports all initial value binding types', () => {
       expect(generateWithAmplifyRenderer('workflow/initialValueBindings')).toMatchSnapshot();
     });
