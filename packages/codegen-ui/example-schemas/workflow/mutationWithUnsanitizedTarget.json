@@ -1,0 +1,213 @@
+{
+    "id" : "c-K6Xeic3SjLZLz96HrE",
+    "name" : "CardA",
+    "sourceId" : "1558:5790",
+    "componentType" : "Flex",
+    "properties" : {
+      "gap" : {
+        "value" : "16px"
+      },
+      "direction" : {
+        "value" : "column"
+      },
+      "justifyContent" : {
+        "value" : "center"
+      },
+      "position" : {
+        "value" : "relative"
+      },
+      "padding" : {
+        "value" : "0px 0px 0px 0px"
+      },
+      "backgroundColor" : {
+        "value" : "rgba(255,255,255,1)"
+      }
+    },
+    "bindingProperties" : {
+      "listing" : {
+        "type" : "Data",
+        "bindingProperties" : {
+          "model" : "Listing"
+        }
+      }
+    },
+    "overrides" : { },
+    "variants" : [ ],
+    "children" : [ {
+      "children" : [ ],
+      "componentType" : "Image",
+      "name" : "image",
+      "properties" : {
+        "height" : {
+          "value" : "400px"
+        },
+        "shrink" : {
+          "value" : "0"
+        },
+        "alignSelf" : {
+          "value" : "stretch"
+        },
+        "position" : {
+          "value" : "relative"
+        },
+        "padding" : {
+          "value" : "0px 0px 0px 0px"
+        }
+      },
+      "events" : { }
+    }, {
+      "children" : [ {
+        "children" : [ ],
+        "componentType" : "Text",
+        "name" : "Classic Long Sleeve T-Shirt",
+        "properties" : {
+          "fontFamily" : {
+            "value" : "Inter"
+          },
+          "fontSize" : {
+            "value" : "16px"
+          },
+          "label" : {
+            "value" : "Classic Long Sleeve T-Shirt"
+          },
+          "fontWeight" : {
+            "value" : "400"
+          },
+          "color" : {
+            "value" : "rgba(0,0,0,1)"
+          },
+          "lineHeight" : {
+            "value" : "24px"
+          },
+          "textAlign" : {
+            "value" : "left"
+          },
+          "display" : {
+            "value" : "flex"
+          },
+          "direction" : {
+            "value" : "column"
+          },
+          "justifyContent" : {
+            "value" : "flex-start"
+          },
+          "letterSpacing" : {
+            "value" : "0.01px"
+          },
+          "shrink" : {
+            "value" : "0"
+          },
+          "alignSelf" : {
+            "value" : "stretch"
+          },
+          "position" : {
+            "value" : "relative"
+          },
+          "padding" : {
+            "value" : "0px 0px 0px 0px"
+          },
+          "whiteSpace" : {
+            "value" : "pre-wrap"
+          }
+        },
+        "events" : { }
+      }, {
+        "children" : [ ],
+        "componentType" : "Text",
+        "name" : "$99",
+        "properties" : {
+          "fontFamily" : {
+            "value" : "Inter"
+          },
+          "fontSize" : {
+            "value" : "14px"
+          },
+          "label" : {
+            "value" : "$99"
+          },
+          "fontWeight" : {
+            "value" : "400"
+          },
+          "color" : {
+            "value" : "rgba(43,51,59,1)"
+          },
+          "lineHeight" : {
+            "value" : "24px"
+          },
+          "textAlign" : {
+            "value" : "left"
+          },
+          "display" : {
+            "value" : "flex"
+          },
+          "direction" : {
+            "value" : "column"
+          },
+          "justifyContent" : {
+            "value" : "flex-start"
+          },
+          "shrink" : {
+            "value" : "0"
+          },
+          "alignSelf" : {
+            "value" : "stretch"
+          },
+          "position" : {
+            "value" : "relative"
+          },
+          "padding" : {
+            "value" : "0px 0px 0px 0px"
+          },
+          "whiteSpace" : {
+            "value" : "pre-wrap"
+          }
+        },
+        "events" : {
+          "click" : {
+            "action" : "Amplify.Mutation",
+            "parameters" : {
+              "state" : {
+                "componentName" : "Classic Long Sleeve T-Shirt",
+                "property" : "label",
+                "set" : {
+                  "bindingProperties" : {
+                    "property" : "listing",
+                    "field" : "titl"
+                  }
+                }
+              }
+            }
+          }
+        }
+      } ],
+      "componentType" : "Flex",
+      "name" : "Text Grouping",
+      "properties" : {
+        "gap" : {
+          "value" : "8px"
+        },
+        "direction" : {
+          "value" : "column"
+        },
+        "shrink" : {
+          "value" : "0"
+        },
+        "alignSelf" : {
+          "value" : "stretch"
+        },
+        "position" : {
+          "value" : "relative"
+        },
+        "padding" : {
+          "value" : "0px 0px 0px 0px"
+        }
+      },
+      "events" : { }
+    } ],
+    "collectionProperties" : { },
+    "schemaVersion" : "1.0",
+    "appId" : "dpkfm6ge03fz3",
+    "environmentName" : "staging",
+    "createdAt" : "2021-11-30T21:42:16.945Z",
+    "modifiedAt" : "2021-11-30T21:42:16.945Z"
+  }

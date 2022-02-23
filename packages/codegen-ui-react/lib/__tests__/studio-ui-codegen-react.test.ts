@@ -394,6 +394,19 @@ describe('amplify render tests', () => {
     it('supports names that cant be directly turned into methodnames', () => {
       expect(generateWithAmplifyRenderer('workflow/invalidNameForMethod')).toMatchSnapshot();
     });
+
+    it('supports invalid statement names for mutation targets', () => {
+      expect(generateWithAmplifyRenderer('workflow/mutationWithUnsanitizedTarget')).toMatchSnapshot();
+    });
+
+    it('supports invalid statement names for mutation targets with ES5', () => {
+      expect(
+        generateWithAmplifyRenderer('workflow/mutationWithUnsanitizedTarget', {
+          target: ScriptTarget.ES5,
+          script: ScriptKind.JS,
+        }).componentText,
+      ).toMatchSnapshot();
+    });
   });
 
   describe('default value', () => {
