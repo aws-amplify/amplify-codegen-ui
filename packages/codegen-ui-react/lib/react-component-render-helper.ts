@@ -607,7 +607,7 @@ export function addBindingPropertiesImports(
 // Scrub all non-alphanum characters, and any leading numbers so we can generate a legal
 // variable name.
 export function sanitizeName(componentName: string): string {
-  return componentName.replaceAll(/[^a-zA-Z0-9]/g, '').replace(/^[0-9]*/, '');
+  return componentName.replace(/[^a-zA-Z0-9]/g, '').replace(/^[0-9]*/, '');
 }
 
 export function getStateName(stateReference: StateStudioComponentProperty): string {
