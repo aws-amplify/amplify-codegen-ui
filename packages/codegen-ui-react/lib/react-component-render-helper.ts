@@ -55,6 +55,7 @@ import { ImportCollection, ImportSource } from './imports';
 import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 import { getChildPropMappingForComponentName } from './workflow/utils';
 import nameReplacements from './name-replacements';
+import keywords from './keywords';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
@@ -116,10 +117,14 @@ export function isActionEvent(event: StudioComponentEvent): event is ActionStudi
  * case: no field =>  <prop.bindingProperties.property>
  */
 export function buildBindingExpression(prop: BoundStudioComponentProperty): Expression {
+  const {
+    bindingProperties: { property },
+  } = prop;
+  const identifier = factory.createIdentifier(keywords.has(property) ? `${property}Prop` : property);
   return prop.bindingProperties.field === undefined
-    ? factory.createIdentifier(prop.bindingProperties.property)
+    ? identifier
     : factory.createPropertyAccessChain(
-        factory.createIdentifier(prop.bindingProperties.property),
+        identifier,
         factory.createToken(SyntaxKind.QuestionDotToken),
         prop.bindingProperties.field,
       );

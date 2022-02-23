@@ -537,6 +537,39 @@ export default function ComponentWithAuthEventBinding(
 "
 `;
 
+exports[`amplify render tests bindings data supports bindings with reserved keywords 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import { Class } from \\"../models\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
+
+export type DataBindingNamedClassProps = React.PropsWithChildren<
+  Partial<TextProps> & {
+    class?: Class;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function DataBindingNamedClass(
+  props: DataBindingNamedClassProps
+): React.ReactElement {
+  const { class: classProp, overrides, ...rest } = props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <Text
+      children={classProp?.name}
+      {...rest}
+      {...getOverrideProps(overrides, \\"DataBindingNamedClass\\")}
+    ></Text>
+  );
+}
+"
+`;
+
 exports[`amplify render tests collection should render collection with data binding 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
