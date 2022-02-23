@@ -6033,6 +6033,259 @@ export default function InitialValueBindings(
 }
 `;
 
+exports[`amplify render tests mutations supports invalid statement names for mutation targets 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Listing } from \\"../models\\";
+import { Flex, FlexProps, Image, Text } from \\"@aws-amplify/ui-react\\";
+
+export type CardAProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    listing?: Listing;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function CardA(props: CardAProps): React.ReactElement {
+  const { listing, overrides, ...rest } = props;
+  const [classicLongSleeveTShirtChildren, setClassicLongSleeveTShirtChildren] =
+    useStateMutationAction(\\"Classic Long Sleeve T-Shirt\\");
+  const Click = () => {
+    setClassicLongSleeveTShirtChildren(listing?.titl);
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      gap=\\"16px\\"
+      direction=\\"column\\"
+      justifyContent=\\"center\\"
+      position=\\"relative\\"
+      padding=\\"0px 0px 0px 0px\\"
+      backgroundColor=\\"rgba(255,255,255,1)\\"
+      {...rest}
+      {...getOverrideProps(overrides, \\"CardA\\")}
+    >
+      <Image
+        height=\\"400px\\"
+        shrink=\\"0\\"
+        alignSelf=\\"stretch\\"
+        position=\\"relative\\"
+        padding=\\"0px 0px 0px 0px\\"
+        {...getOverrideProps(overrides, \\"image\\")}
+      ></Image>
+      <Flex
+        gap=\\"8px\\"
+        direction=\\"column\\"
+        shrink=\\"0\\"
+        alignSelf=\\"stretch\\"
+        position=\\"relative\\"
+        padding=\\"0px 0px 0px 0px\\"
+        {...getOverrideProps(overrides, \\"Text Grouping\\")}
+      >
+        <Text
+          fontFamily=\\"Inter\\"
+          fontSize=\\"16px\\"
+          fontWeight=\\"400\\"
+          color=\\"rgba(0,0,0,1)\\"
+          lineHeight=\\"24px\\"
+          textAlign=\\"left\\"
+          display=\\"flex\\"
+          direction=\\"column\\"
+          justifyContent=\\"flex-start\\"
+          letterSpacing=\\"0.01px\\"
+          shrink=\\"0\\"
+          alignSelf=\\"stretch\\"
+          position=\\"relative\\"
+          padding=\\"0px 0px 0px 0px\\"
+          whiteSpace=\\"pre-wrap\\"
+          children={classicLongSleeveTShirtChildren}
+          {...getOverrideProps(overrides, \\"Classic Long Sleeve T-Shirt\\")}
+        ></Text>
+        <Text
+          fontFamily=\\"Inter\\"
+          fontSize=\\"14px\\"
+          fontWeight=\\"400\\"
+          color=\\"rgba(43,51,59,1)\\"
+          lineHeight=\\"24px\\"
+          textAlign=\\"left\\"
+          display=\\"flex\\"
+          direction=\\"column\\"
+          justifyContent=\\"flex-start\\"
+          shrink=\\"0\\"
+          alignSelf=\\"stretch\\"
+          position=\\"relative\\"
+          padding=\\"0px 0px 0px 0px\\"
+          whiteSpace=\\"pre-wrap\\"
+          children=\\"$99\\"
+          onClick={() => {
+            Click();
+          }}
+          {...getOverrideProps(overrides, \\"$99\\")}
+        ></Text>
+      </Flex>
+    </Flex>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests mutations supports invalid statement names for mutation targets with ES5 1`] = `
+"var __assign =
+  (this && this.__assign) ||
+  function () {
+    __assign =
+      Object.assign ||
+      function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+          for (var p in s)
+            if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+      };
+    return __assign.apply(this, arguments);
+  };
+var __rest =
+  (this && this.__rest) ||
+  function (s, e) {
+    var t = {};
+    for (var p in s)
+      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === \\"function\\")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (
+          e.indexOf(p[i]) < 0 &&
+          Object.prototype.propertyIsEnumerable.call(s, p[i])
+        )
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
+/* eslint-disable */
+import React from \\"react\\";
+import {
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, Image, Text } from \\"@aws-amplify/ui-react\\";
+export default function CardA(props) {
+  var listing = props.listing,
+    overrides = props.overrides,
+    rest = __rest(props, [\\"listing\\", \\"overrides\\"]);
+  var _a = useStateMutationAction(\\"Classic Long Sleeve T-Shirt\\"),
+    classicLongSleeveTShirtChildren = _a[0],
+    setClassicLongSleeveTShirtChildren = _a[1];
+  var Click = function () {
+    setClassicLongSleeveTShirtChildren(
+      listing === null || listing === void 0 ? void 0 : listing.titl
+    );
+  };
+  return React.createElement(
+    Flex,
+    __assign(
+      {
+        gap: \\"16px\\",
+        direction: \\"column\\",
+        justifyContent: \\"center\\",
+        position: \\"relative\\",
+        padding: \\"0px 0px 0px 0px\\",
+        backgroundColor: \\"rgba(255,255,255,1)\\",
+      },
+      rest,
+      getOverrideProps(overrides, \\"CardA\\")
+    ),
+    React.createElement(
+      Image,
+      __assign(
+        {
+          height: \\"400px\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+        },
+        getOverrideProps(overrides, \\"image\\")
+      )
+    ),
+    React.createElement(
+      Flex,
+      __assign(
+        {
+          gap: \\"8px\\",
+          direction: \\"column\\",
+          shrink: \\"0\\",
+          alignSelf: \\"stretch\\",
+          position: \\"relative\\",
+          padding: \\"0px 0px 0px 0px\\",
+        },
+        getOverrideProps(overrides, \\"Text Grouping\\")
+      ),
+      React.createElement(
+        Text,
+        __assign(
+          {
+            fontFamily: \\"Inter\\",
+            fontSize: \\"16px\\",
+            fontWeight: \\"400\\",
+            color: \\"rgba(0,0,0,1)\\",
+            lineHeight: \\"24px\\",
+            textAlign: \\"left\\",
+            display: \\"flex\\",
+            direction: \\"column\\",
+            justifyContent: \\"flex-start\\",
+            letterSpacing: \\"0.01px\\",
+            shrink: \\"0\\",
+            alignSelf: \\"stretch\\",
+            position: \\"relative\\",
+            padding: \\"0px 0px 0px 0px\\",
+            whiteSpace: \\"pre-wrap\\",
+            children: classicLongSleeveTShirtChildren,
+          },
+          getOverrideProps(overrides, \\"Classic Long Sleeve T-Shirt\\")
+        )
+      ),
+      React.createElement(
+        Text,
+        __assign(
+          {
+            fontFamily: \\"Inter\\",
+            fontSize: \\"14px\\",
+            fontWeight: \\"400\\",
+            color: \\"rgba(43,51,59,1)\\",
+            lineHeight: \\"24px\\",
+            textAlign: \\"left\\",
+            display: \\"flex\\",
+            direction: \\"column\\",
+            justifyContent: \\"flex-start\\",
+            shrink: \\"0\\",
+            alignSelf: \\"stretch\\",
+            position: \\"relative\\",
+            padding: \\"0px 0px 0px 0px\\",
+            whiteSpace: \\"pre-wrap\\",
+            children: \\"$99\\",
+            onClick: function () {
+              Click();
+            },
+          },
+          getOverrideProps(overrides, \\"$99\\")
+        )
+      )
+    )
+  );
+}
+"
+`;
+
 exports[`amplify render tests mutations supports multiple actions pointing to the same value 1`] = `
 Object {
   "componentText": "/* eslint-disable */
