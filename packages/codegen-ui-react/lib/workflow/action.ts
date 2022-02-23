@@ -24,7 +24,7 @@ import {
   MutationAction,
   ComponentMetadata,
 } from '@aws-amplify/codegen-ui';
-import { isActionEvent, propertyToExpression, getSetStateName } from '../react-component-render-helper';
+import { isActionEvent, propertyToExpression, getSetStateName, sanitizeName } from '../react-component-render-helper';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getChildPropMappingForComponentName } from './utils';
 
@@ -77,12 +77,6 @@ export function getComponentActions(component: StudioComponent | StudioComponent
     actions.push(...component.children.map(getComponentActions).flat());
   }
   return actions;
-}
-
-// Scrub all non-alphanum characters, and any leading numbers so we can generate a legal
-// variable name.
-function sanitizeName(componentName: string): string {
-  return componentName.replaceAll(/[^a-zA-Z0-9]/g, '').replace(/^[0-9]*/, '');
 }
 
 export function getActionIdentifier(componentName: string, event: string) {
