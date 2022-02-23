@@ -604,12 +604,19 @@ export function addBindingPropertiesImports(
   }
 }
 
+// Scrub all non-alphanum characters, and any leading numbers so we can generate a legal
+// variable name.
+export function sanitizeName(componentName: string): string {
+  return componentName.replaceAll(/[^a-zA-Z0-9]/g, '').replace(/^[0-9]*/, '');
+}
+
 export function getStateName(stateReference: StateStudioComponentProperty): string {
   const { componentName, property } = stateReference;
-  return [
+  const rawStateName = [
     componentName.charAt(0).toLowerCase() + componentName.slice(1),
     property.charAt(0).toUpperCase() + property.slice(1),
   ].join('');
+  return sanitizeName(rawStateName);
 }
 
 export function getSetStateName(stateReference: StateStudioComponentProperty): string {
