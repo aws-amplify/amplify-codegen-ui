@@ -346,14 +346,14 @@ describe('validation-helper', () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
-    test('top-level component does not require schemaVersion', () => {
+    test('top-level component requires schemaVersion', () => {
       expect(() => {
         validateComponentSchema({
           name: 'MyComp',
           componentType: 'Flex',
           properties: {},
         });
-      }).not.toThrowError();
+      }).toThrowErrorMatchingSnapshot();
     });
   });
 

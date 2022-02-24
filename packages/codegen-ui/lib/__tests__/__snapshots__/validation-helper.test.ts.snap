@@ -32,6 +32,8 @@ exports[`validation-helper validateComponentSchema top-level component requires 
 
 exports[`validation-helper validateComponentSchema top-level component requires properties to be the correct type 1`] = `"properties must be a \`object\` type, but the final value was: \`\\"property\\"\`."`;
 
+exports[`validation-helper validateComponentSchema top-level component requires schemaVersion 1`] = `"schemaVersion is a required field"`;
+
 exports[`validation-helper validateThemeSchema children objects should not be empty 1`] = `"values[1].key is a required field, values[1].value is a required field"`;
 
 exports[`validation-helper validateThemeSchema overrides should contain the right shape 1`] = `"overrides[0].key is a required field"`;

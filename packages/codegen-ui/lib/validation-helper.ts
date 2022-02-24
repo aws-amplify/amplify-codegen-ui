@@ -99,7 +99,7 @@ const studioComponentSchema = yup
     name: alphaNumString().required(),
     id: yup.string().nullable(),
     sourceId: yup.string().nullable(),
-    schemaVersion: yup.lazy(() => schemaVersionSchema().nullable()),
+    schemaVersion: yup.lazy(() => schemaVersionSchema().required()),
     componentType: alphaNumNoLeadingNumberString().required(),
     properties: yup.lazy((value) => propertiesSchema(value).required()),
     children: yup.array(studioComponentChildSchema).nullable(),
