@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v1.2.0...v2.0.0) (2022-02-25)
+
+
+### Bug Fixes
+
+* add missing import statement, and correct controlled component state tracking ([#374](https://github.com/aws-amplify/amplify-codegen-ui/issues/374)) ([f6dfa0f](https://github.com/aws-amplify/amplify-codegen-ui/commit/f6dfa0fc26a7dbb65746c0ecb900404d1c4a9159))
+* add override for stepper field controlled change event ([#389](https://github.com/aws-amplify/amplify-codegen-ui/issues/389)) ([ebd2542](https://github.com/aws-amplify/amplify-codegen-ui/commit/ebd2542bb39416a4403c72274a68069235b8fedc))
+* add state for state reference in set state param ([#397](https://github.com/aws-amplify/amplify-codegen-ui/issues/397)) ([3a031b6](https://github.com/aws-amplify/amplify-codegen-ui/commit/3a031b616113199e30215cb6a55ca165e7546a7c))
+* allow operand type to be specified in ConditionalStudioComponentProperty ([#335](https://github.com/aws-amplify/amplify-codegen-ui/issues/335)) ([3b3932b](https://github.com/aws-amplify/amplify-codegen-ui/commit/3b3932bf3824a63043700034e7d4d74fd8f329d9))
+* bringing action names back inline with external model ([#382](https://github.com/aws-amplify/amplify-codegen-ui/issues/382)) ([91f6786](https://github.com/aws-amplify/amplify-codegen-ui/commit/91f678614e242e762ca5217cd3fee12d461f844c))
+* do not swallow prettier.format errors ([#321](https://github.com/aws-amplify/amplify-codegen-ui/issues/321)) ([628a5cc](https://github.com/aws-amplify/amplify-codegen-ui/commit/628a5ccb0138c93971264c4ea84d4be56068213e))
+* don't use replaceAll since it's not supported in ES2015 ([eb3f04e](https://github.com/aws-amplify/amplify-codegen-ui/commit/eb3f04eabfcc7b2aea59810de8bb377945e59d31))
+* enable authAttributes statement for component with auth action binding ([#395](https://github.com/aws-amplify/amplify-codegen-ui/issues/395)) ([9190dd6](https://github.com/aws-amplify/amplify-codegen-ui/commit/9190dd6d59e67ab18d6ee8dddf137a39af52952b))
+* ensure value is not undefined before accessing in computeComponentMetadata ([c0e2cee](https://github.com/aws-amplify/amplify-codegen-ui/commit/c0e2cee1f4b929940c5aed8fd8ad3f2f7fe284c3))
+* get grand child from component tree ([#394](https://github.com/aws-amplify/amplify-codegen-ui/issues/394)) ([b427d09](https://github.com/aws-amplify/amplify-codegen-ui/commit/b427d09b53841746f1ad46341d90d55705c2b9ba))
+* map prop to children prop for variant ([#297](https://github.com/aws-amplify/amplify-codegen-ui/issues/297)) ([1d606fa](https://github.com/aws-amplify/amplify-codegen-ui/commit/1d606fac4e8be1103aa1ce7e68c6d72d339e39e6))
+* move validate schema to template renderer ([459f5ff](https://github.com/aws-amplify/amplify-codegen-ui/commit/459f5ffad0e43718c20015e1efa4541bfe3feaee))
+* proper use of type from ui builder backend ([#317](https://github.com/aws-amplify/amplify-codegen-ui/issues/317)) ([61dc5aa](https://github.com/aws-amplify/amplify-codegen-ui/commit/61dc5aa71a58455bee7c1dbdf40436fe6e8a1abc))
+* remove defaultValue if value is added to component ([7e26b20](https://github.com/aws-amplify/amplify-codegen-ui/commit/7e26b20e9da6a2bf75192af54378700ab40bfdb4))
+* sanitize component name before generating statement declarations ([6c24129](https://github.com/aws-amplify/amplify-codegen-ui/commit/6c241295cc61edcb1a8c6983bbac19276aa36821))
+* support mutation targets with invalid js names ([24c9eac](https://github.com/aws-amplify/amplify-codegen-ui/commit/24c9eacb4d4ba449ceb2bab176333f0c00d5e047))
+* support synthetic prop mutation, and duplicate mutations on the same property ([#375](https://github.com/aws-amplify/amplify-codegen-ui/issues/375)) ([d3818ec](https://github.com/aws-amplify/amplify-codegen-ui/commit/d3818ec296701091fd6302e0777954740fb39472))
+* use correct syntax for conditonals as action parameter ([#398](https://github.com/aws-amplify/amplify-codegen-ui/issues/398)) ([300114c](https://github.com/aws-amplify/amplify-codegen-ui/commit/300114c013fb92aad2961583703d7bb4ddcc3862))
+
+
+### Features
+
+* add canary for CLI Codegen UI functionality against beta and latest tags ([#329](https://github.com/aws-amplify/amplify-codegen-ui/issues/329)) ([b925697](https://github.com/aws-amplify/amplify-codegen-ui/commit/b92569775215f45f4ea02d663cf52bd814241cb3))
+* add canary for CLI Codegen UI functionality against beta and latest tags ([#331](https://github.com/aws-amplify/amplify-codegen-ui/issues/331)) ([b41d3d7](https://github.com/aws-amplify/amplify-codegen-ui/commit/b41d3d711d4fd8857782ee2d7b954323f17c8ce9))
+* add control event to all state references with change event ([#388](https://github.com/aws-amplify/amplify-codegen-ui/issues/388)) ([53b7e75](https://github.com/aws-amplify/amplify-codegen-ui/commit/53b7e75a2a74296640c3ecb31f674f50aa08f989))
+* add default initial value for form component state ([#396](https://github.com/aws-amplify/amplify-codegen-ui/issues/396)) ([b676997](https://github.com/aws-amplify/amplify-codegen-ui/commit/b6769978dfb8433f48ccf224f3fd9ba506570c24))
+* add git secrets check and scan ([#402](https://github.com/aws-amplify/amplify-codegen-ui/issues/402)) ([00a4ac5](https://github.com/aws-amplify/amplify-codegen-ui/commit/00a4ac5f565a6b8ff2f83828e9ec5e6a9ff8486e))
+* add Menu primitive ([#322](https://github.com/aws-amplify/amplify-codegen-ui/issues/322)) ([fe26cca](https://github.com/aws-amplify/amplify-codegen-ui/commit/fe26cca9843ef909160cf4861f0d8134b844b85e))
+* add mutations ([#371](https://github.com/aws-amplify/amplify-codegen-ui/issues/371)) ([04b3d27](https://github.com/aws-amplify/amplify-codegen-ui/commit/04b3d2700726cbc4d57648a55dad9d8b6d495371))
+* add option to render inline source map ([#324](https://github.com/aws-amplify/amplify-codegen-ui/issues/324)) ([46f4ac5](https://github.com/aws-amplify/amplify-codegen-ui/commit/46f4ac5832c2175e7ca6cc23ea4d34f4c2a2caeb))
+* add requiredDataModels to renderComponentOnly method ([325d369](https://github.com/aws-amplify/amplify-codegen-ui/commit/325d36940aca0afd42ac8ac65cf2d573d705e89d))
+* add schema version and validation ([90f9846](https://github.com/aws-amplify/amplify-codegen-ui/commit/90f9846088378b7599ba3b0ce453b8e360964dd9))
+* add special case for fields and model action parameters ([#358](https://github.com/aws-amplify/amplify-codegen-ui/issues/358)) ([36505eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/36505eb4b70d98c9156b1f6853bd72d9f07d6d68))
+* add support for auth actions ([#361](https://github.com/aws-amplify/amplify-codegen-ui/issues/361)) ([e6c18cf](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6c18cfee448c8f0f10e558205f3905f6492ea5c))
+* add support for DataStore actions ([#365](https://github.com/aws-amplify/amplify-codegen-ui/issues/365)) ([0289052](https://github.com/aws-amplify/amplify-codegen-ui/commit/028905237e52fed3c78ea18d0b447668927dc80e))
+* add Table primitive ([#323](https://github.com/aws-amplify/amplify-codegen-ui/issues/323)) ([605284f](https://github.com/aws-amplify/amplify-codegen-ui/commit/605284fdbe9f09b7440ad949cb8dbab1f936f995))
+* add TextAreaField primitive ([1573489](https://github.com/aws-amplify/amplify-codegen-ui/commit/1573489facbd72379148ddacceeb9cbb9305245d))
+* adding form with actions example ([b11929a](https://github.com/aws-amplify/amplify-codegen-ui/commit/b11929ae0d64b69732d82f2022195400f68cde06))
+* adding method to compute component metadata ([#400](https://github.com/aws-amplify/amplify-codegen-ui/issues/400)) ([867233f](https://github.com/aws-amplify/amplify-codegen-ui/commit/867233f0b5db2f3d51dbc20744735a29fab0bd28))
+* allow objects to be passed into properties to support paths in icons ([#384](https://github.com/aws-amplify/amplify-codegen-ui/issues/384)) ([874e5e6](https://github.com/aws-amplify/amplify-codegen-ui/commit/874e5e6d300c5ebc1c8e9682e413b2734cf2558a))
+* allow running canaries manually from GH ([#333](https://github.com/aws-amplify/amplify-codegen-ui/issues/333)) ([8e459b4](https://github.com/aws-amplify/amplify-codegen-ui/commit/8e459b43520d679a407db07e7278af1492d69b4e))
+* conditionally set state in useEffect hooks ([a3ef729](https://github.com/aws-amplify/amplify-codegen-ui/commit/a3ef729780559542abe7f93a6ba2010210650224))
+* expose renderThemeJson method to generating themes in studio ui ([#340](https://github.com/aws-amplify/amplify-codegen-ui/issues/340)) ([e130fd0](https://github.com/aws-amplify/amplify-codegen-ui/commit/e130fd0e7f6d1bc969d20b026f2d0beb24d75fd4))
+* import buildMergeOverrides from amplify-ui ([#316](https://github.com/aws-amplify/amplify-codegen-ui/issues/316)) ([5b2b838](https://github.com/aws-amplify/amplify-codegen-ui/commit/5b2b838769fe42db46a2b8b27b73258a8c54e2ec))
+* make prettier an optional dependency ([#307](https://github.com/aws-amplify/amplify-codegen-ui/issues/307)) ([ad941cd](https://github.com/aws-amplify/amplify-codegen-ui/commit/ad941cd3756c5f21cde6c1bc9c1fa45793380152))
+* poc for useEffect to manage state dependencies ([ce65105](https://github.com/aws-amplify/amplify-codegen-ui/commit/ce651059cded8415d342123961dde4fe13c5e3a1))
+* try and marshall variant values to json objects to support icon viewBox/paths ([d0dd300](https://github.com/aws-amplify/amplify-codegen-ui/commit/d0dd300bfad5a4e495fa26c19d22c7b597930b31))
+* use default initial value for data dependent states ([022f9c5](https://github.com/aws-amplify/amplify-codegen-ui/commit/022f9c5361d72248507f3878f9450c3c995d77d7))
+* use unique identifier for actions ([#366](https://github.com/aws-amplify/amplify-codegen-ui/issues/366)) ([bbddbb5](https://github.com/aws-amplify/amplify-codegen-ui/commit/bbddbb59188123fc7669f167bafeb9e8274891e6))
+* various workflow cleanup ([#383](https://github.com/aws-amplify/amplify-codegen-ui/issues/383)) ([db2c7c6](https://github.com/aws-amplify/amplify-codegen-ui/commit/db2c7c614102b3b811eb081bfbf30d0430dbf889))
+
+
+### Reverts
+
+* Revert "ci: fix pre-release and tagged release (#313)" ([565e7e9](https://github.com/aws-amplify/amplify-codegen-ui/commit/565e7e9dbe5a3d4c604b5f17c1c1dab7d5ef12f6)), closes [#313](https://github.com/aws-amplify/amplify-codegen-ui/issues/313)
+
+
+### BREAKING CHANGES
+
+* schamaVersion is now a required field
+
+
+
+
+
 # [1.2.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v1.0.0...v1.2.0) (2021-12-13)
 
 
