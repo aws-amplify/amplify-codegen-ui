@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v1.2.0...v2.0.0) (2022-02-25)
+
+
+### Bug Fixes
+
+* bringing action names back inline with external model ([#382](https://github.com/aws-amplify/amplify-codegen-ui/issues/382)) ([91f6786](https://github.com/aws-amplify/amplify-codegen-ui/commit/91f678614e242e762ca5217cd3fee12d461f844c))
+* map prop to children prop for variant ([#297](https://github.com/aws-amplify/amplify-codegen-ui/issues/297)) ([1d606fa](https://github.com/aws-amplify/amplify-codegen-ui/commit/1d606fac4e8be1103aa1ce7e68c6d72d339e39e6))
+* use correct syntax for conditonals as action parameter ([#398](https://github.com/aws-amplify/amplify-codegen-ui/issues/398)) ([300114c](https://github.com/aws-amplify/amplify-codegen-ui/commit/300114c013fb92aad2961583703d7bb4ddcc3862))
+
+
+### Features
+
+* add control event to all state references with change event ([#388](https://github.com/aws-amplify/amplify-codegen-ui/issues/388)) ([53b7e75](https://github.com/aws-amplify/amplify-codegen-ui/commit/53b7e75a2a74296640c3ecb31f674f50aa08f989))
+* add Menu primitive ([#322](https://github.com/aws-amplify/amplify-codegen-ui/issues/322)) ([fe26cca](https://github.com/aws-amplify/amplify-codegen-ui/commit/fe26cca9843ef909160cf4861f0d8134b844b85e))
+* add Table primitive ([#323](https://github.com/aws-amplify/amplify-codegen-ui/issues/323)) ([605284f](https://github.com/aws-amplify/amplify-codegen-ui/commit/605284fdbe9f09b7440ad949cb8dbab1f936f995))
+* add TextAreaField primitive ([1573489](https://github.com/aws-amplify/amplify-codegen-ui/commit/1573489facbd72379148ddacceeb9cbb9305245d))
+* adding form with actions example ([b11929a](https://github.com/aws-amplify/amplify-codegen-ui/commit/b11929ae0d64b69732d82f2022195400f68cde06))
+* poc for useEffect to manage state dependencies ([ce65105](https://github.com/aws-amplify/amplify-codegen-ui/commit/ce651059cded8415d342123961dde4fe13c5e3a1))
+* use default initial value for data dependent states ([022f9c5](https://github.com/aws-amplify/amplify-codegen-ui/commit/022f9c5361d72248507f3878f9450c3c995d77d7))
+
+
+
+
+
 # [1.2.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v1.0.0...v1.2.0) (2021-12-13)
 
 
