@@ -54,6 +54,7 @@ import {
 import { ImportCollection, ImportSource } from './imports';
 import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 import { getChildPropMappingForComponentName } from './workflow/utils';
+import nameReplacements from './name-replacements';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
@@ -607,7 +608,9 @@ export function addBindingPropertiesImports(
 // Scrub all non-alphanum characters, and any leading numbers so we can generate a legal
 // variable name.
 export function sanitizeName(componentName: string): string {
-  return componentName.replace(/[^a-zA-Z0-9]/g, '').replace(/^[0-9]*/, '');
+  return nameReplacements
+    .reduce((name, [character, replacement]) => name.replace(character, replacement), componentName)
+    .replace(/[^a-zA-Z]/g, ''); // remove any stray non alpha characters
 }
 
 export function getStateName(stateReference: StateStudioComponentProperty): string {

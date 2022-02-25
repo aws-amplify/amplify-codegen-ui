@@ -26,7 +26,9 @@ describe('getActionIdentifier', () => {
         '“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.”',
         'click',
       ),
-    ).toMatch('loremipsumdolorsitametconsecteturadipiscingelitseddoeiusmodtemporincididuntutlaboreClick');
+    ).toMatch(
+      'loremipsumdolorsitametCommaconsecteturadipiscingelitCommaseddoeiusmodtemporincididuntutlaborePeriodClick',
+    );
   });
 
   test('generates legal bindings for names starting with a number', () => {
@@ -35,6 +37,8 @@ describe('getActionIdentifier', () => {
         '2“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.”',
         'click',
       ),
-    ).toMatch('loremipsumdolorsitametconsecteturadipiscingelitseddoeiusmodtemporincididuntutlaboreClick');
+    ).toMatch(
+      'twoLoremipsumdolorsitametCommaconsecteturadipiscingelitCommaseddoeiusmodtemporincididuntutlaborePeriodClick',
+    );
   });
 });
