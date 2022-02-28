@@ -30,3 +30,4 @@ export * from './errors';
 export * from './variants';
 export * from './golden-files';
 export * from './workflow';
+export * from './bindings';

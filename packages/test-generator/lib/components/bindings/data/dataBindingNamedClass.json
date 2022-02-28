@@ -1,0 +1,22 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Text",
+  "name": "DataBindingNamedClass",
+  "bindingProperties": {
+    "class": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "Class"
+      }
+    }
+  },
+  "properties": {
+    "label": {
+      "bindingProperties": {
+        "property": "class",
+        "field": "name"
+      }
+    }
+  },
+  "schemaVersion": "1.0"
+}

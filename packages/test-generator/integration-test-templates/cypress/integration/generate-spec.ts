@@ -148,6 +148,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'DataStoreActionBindings',
   'CreateModelWithComplexTypes',
   'InitialValueBindings',
+  'DataBindingNamedClass',
 ]);
 const EXPECTED_INVALID_INPUT_CASES = new Set([
   'ComponentMissingProperties',

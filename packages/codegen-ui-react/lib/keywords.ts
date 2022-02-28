@@ -13,10 +13,48 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-// @ts-check
-import { initSchema } from '@aws-amplify/datastore';
-import { schema } from './schema';
-
-const { UserPreference, User, Listing, ComplexModel, Class } = initSchema(schema);
-
-export { UserPreference, User, Listing, ComplexModel, Class };
+export default new Set([
+  'break',
+  'case',
+  'catch',
+  'class',
+  'const',
+  'continue',
+  'debugger',
+  'default',
+  'delete',
+  'do',
+  'else',
+  'export',
+  'extends',
+  'finally',
+  'for',
+  'function',
+  'if',
+  'import',
+  'in',
+  'instanceof',
+  'new',
+  'return',
+  'super',
+  'switch',
+  'this',
+  'throw',
+  'try',
+  'typeof',
+  'var',
+  'void',
+  'while',
+  'with',
+  'yield',
+  'implements',
+  'interface',
+  'let',
+  'package',
+  'private',
+  'protected',
+  'public',
+  'static',
+  'yield',
+  'await',
+]);

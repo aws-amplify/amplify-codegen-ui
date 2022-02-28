@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { DataStore } from 'aws-amplify';
-import { User, Listing } from './models';
+import { User, Listing, Class } from './models';
 import {
   ViewTest,
   ViewWithButton,
@@ -58,6 +58,7 @@ import {
   PaginatedCollection,
   SearchableCollection,
   ComponentWithAuthBinding,
+  DataBindingNamedClass,
 } from './ui-components'; // eslint-disable-line import/extensions
 import { initializeAuthMockData } from './mock-utils';
 
@@ -360,6 +361,9 @@ export default function ComponentTests() {
             ChildChildFlex1: { backgroundColor: 'blue' },
           }}
         />
+      </div>
+      <div id="reserved-keywords">
+        <DataBindingNamedClass class={new Class({ name: 'biology' })} />
       </div>
     </AmplifyProvider>
   );

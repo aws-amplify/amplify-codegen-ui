@@ -32,6 +32,10 @@ type ComplexModelMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
 
+type ClassMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
 export declare class UserPreference {
   readonly id: string;
 
@@ -122,4 +126,20 @@ export declare class ComplexModel {
       draft: MutableModel<ComplexModel, ComplexModelMetaData>,
     ) => MutableModel<ComplexModel, ComplexModelMetaData> | void,
   ): ComplexModel;
+}
+
+export declare class Class {
+  readonly id: string;
+
+  readonly name?: string;
+
+  readonly createdAt?: string;
+
+  readonly updatedAt?: string;
+
+  constructor(init: ModelInit<Class, ClassMetaData>);
+  static copyOf(
+    source: Class,
+    mutator: (draft: MutableModel<Class, ClassMetaData>) => MutableModel<Class, ClassMetaData> | void,
+  ): Class;
 }

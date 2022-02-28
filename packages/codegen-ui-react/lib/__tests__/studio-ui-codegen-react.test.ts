@@ -567,5 +567,11 @@ describe('amplify render tests', () => {
         ).toMatchSnapshot();
       });
     });
+
+    describe('data', () => {
+      it('supports bindings with reserved keywords', () => {
+        expect(generateWithAmplifyRenderer('bindings/data/dataBindingNamedClass').componentText).toMatchSnapshot();
+      });
+    });
   });
 });

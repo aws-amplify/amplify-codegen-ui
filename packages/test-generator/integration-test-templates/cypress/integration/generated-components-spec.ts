@@ -360,4 +360,10 @@ describe('Generated Components', () => {
       cy.get('p.amplify-text').should('have.css', 'color', 'rgb(0, 128, 128)');
     });
   });
+
+  describe('Reserved Keywords', () => {
+    it('renders with reseverd keywords props', () => {
+      cy.get('#reserved-keywords').find('.amplify-text').should('have.text', 'biology');
+    });
+  });
 });

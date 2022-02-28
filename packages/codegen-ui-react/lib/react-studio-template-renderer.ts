@@ -79,6 +79,7 @@ import {
   buildStateStatements,
   buildUseEffectStatements,
 } from './workflow';
+import keywords from './keywords';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -511,10 +512,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const [propName, binding] = entry;
         if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding) || isEventPropertyBinding(binding)) {
           const usesHook = bindingPropertyUsesHook(binding);
+          const shouldAssignToDifferentName = usesHook || keywords.has(propName);
+          const propVariableName = shouldAssignToDifferentName ? `${propName}Prop` : propName;
           const bindingElement = factory.createBindingElement(
             undefined,
-            usesHook ? factory.createIdentifier(propName) : undefined,
-            factory.createIdentifier(usesHook ? `${propName}Prop` : propName),
+            shouldAssignToDifferentName ? factory.createIdentifier(propName) : undefined,
+            factory.createIdentifier(propVariableName),
             isSimplePropertyBinding(binding) ? this.getDefaultValue(binding) : undefined,
           );
           elements.push(bindingElement);
