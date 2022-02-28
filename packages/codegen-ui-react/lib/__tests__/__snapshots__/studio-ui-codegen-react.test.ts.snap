@@ -6056,7 +6056,7 @@ export default function CardA(props: CardAProps): React.ReactElement {
   const { listing, overrides, ...rest } = props;
   const [classicLongSleeveTShirtChildren, setClassicLongSleeveTShirtChildren] =
     useStateMutationAction(\\"Classic Long Sleeve T-Shirt\\");
-  const Click = () => {
+  const dollarNineNineClick = () => {
     setClassicLongSleeveTShirtChildren(listing?.titl);
   };
   return (
@@ -6124,7 +6124,7 @@ export default function CardA(props: CardAProps): React.ReactElement {
           whiteSpace=\\"pre-wrap\\"
           children=\\"$99\\"
           onClick={() => {
-            Click();
+            dollarNineNineClick();
           }}
           {...getOverrideProps(overrides, \\"$99\\")}
         ></Text>
@@ -6185,7 +6185,7 @@ export default function CardA(props) {
   var _a = useStateMutationAction(\\"Classic Long Sleeve T-Shirt\\"),
     classicLongSleeveTShirtChildren = _a[0],
     setClassicLongSleeveTShirtChildren = _a[1];
-  var Click = function () {
+  var dollarNineNineClick = function () {
     setClassicLongSleeveTShirtChildren(
       listing === null || listing === void 0 ? void 0 : listing.titl
     );
@@ -6274,7 +6274,7 @@ export default function CardA(props) {
             whiteSpace: \\"pre-wrap\\",
             children: \\"$99\\",
             onClick: function () {
-              Click();
+              dollarNineNineClick();
             },
           },
           getOverrideProps(overrides, \\"$99\\")
@@ -6536,14 +6536,14 @@ export default function InvalidNameForMethod(
   props: InvalidNameForMethodProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const loremipsumdolorsitametconsecteturadipiscingelitseddoeiusmodtemporincididuntutlaboreClick =
+  const loremipsumdolorsitametCommaconsecteturadipiscingelitCommaseddoeiusmodtemporincididuntutlaborePeriodClick =
     useNavigateAction({ type: \\"url\\", url: \\"emails\\" });
   return (
     /* @ts-ignore: TS2322 */
     <Flex {...rest} {...getOverrideProps(overrides, \\"InvalidNameForMethod\\")}>
       <Text
         onClick={() => {
-          loremipsumdolorsitametconsecteturadipiscingelitseddoeiusmodtemporincididuntutlaboreClick();
+          loremipsumdolorsitametCommaconsecteturadipiscingelitCommaseddoeiusmodtemporincididuntutlaborePeriodClick();
         }}
         {...getOverrideProps(
           overrides,
