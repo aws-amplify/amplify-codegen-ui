@@ -2,7 +2,7 @@
   "componentType": "Button",
   "name": "DeleteCustomerButton",
   "events": {
-    "click": {
+    "onClick": {
       "action": "Amplify.DataStoreDeleteItemAction",
       "parameters": {
         "model": "Customer",

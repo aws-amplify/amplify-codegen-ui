@@ -120,67 +120,67 @@ export default function ComplexTests() {
       <View id="event">
         <Heading>Events</Heading>
         <Event
-          click={() => {
+          onClick={() => {
             click('✅');
           }}
           clicked={clicked}
-          doubleclick={() => {
+          onDoubleClick={() => {
             doubleclick('✅');
           }}
           doubleclicked={doubleclicked}
-          mousedown={() => {
+          onMouseDown={() => {
             mousedown('✅');
           }}
           mouseddown={mouseddown}
-          mouseenter={() => {
+          onMouseEnter={() => {
             mouseenter('✅');
           }}
           mouseentered={mouseentered}
-          mouseleave={() => {
+          onMouseLeave={() => {
             mouseleave('✅');
           }}
           mouseleft={mouseleft}
-          mousemove={() => {
+          onMouseMove={() => {
             mousemove('✅');
           }}
           mousemoved={mousemoved}
-          mouseout={() => {
+          onMouseOut={() => {
             mouseout('✅');
           }}
           mousedout={mousedout}
-          mouseover={() => {
+          onMouseOver={() => {
             mouseover('✅');
           }}
           mousedover={mousedover}
-          mouseup={() => {
+          onMouseUp={() => {
             mouseup('✅');
           }}
           mousedup={mousedup}
-          change={(event: SyntheticEvent) => {
+          onChange={(event: SyntheticEvent) => {
             change((event.target as HTMLInputElement).value);
           }}
           changed={changed}
-          input={(event: SyntheticEvent) => {
+          onInput={(event: SyntheticEvent) => {
             input((event.target as HTMLInputElement).value);
           }}
           inputted={inputted}
-          focus={() => {
+          onFocus={() => {
             focus('✅');
           }}
           focused={focused}
-          blur={() => {
+          onBlur={() => {
             blur('✅');
           }}
           blurred={blurred}
-          keydown={() => {
+          onKeyDown={() => {
             keydown('✅');
           }}
           keyeddown={keyeddown}
-          keypress={() => {
+          onKeyPress={() => {
             keypress('✅');
           }}
           keypressed={keypressed}
-          keyup={() => {
+          onKeyUp={() => {
             keyup('✅');
           }}
           keyedup={keyedup}

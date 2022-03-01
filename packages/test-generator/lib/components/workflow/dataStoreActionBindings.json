@@ -60,7 +60,7 @@
           "componentType": "Button",
           "name": "FixedPropertyDataStoreUpdateItemAction",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
                 "model": "Listing",
@@ -88,7 +88,7 @@
           "componentType": "Button",
           "name": "BoundPropertyDataStoreUpdateItemAction",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
                 "model": "Listing",
@@ -119,7 +119,7 @@
           "componentType": "Button",
           "name": "ConcatenatedPropertyDataStoreUpdateItemAction",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
                 "model": "Listing",
@@ -157,7 +157,7 @@
           "componentType": "Button",
           "name": "ConditionalPropertyDataStoreUpdateItemAction",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
                 "model": "Listing",
@@ -196,7 +196,7 @@
           "componentType": "Button",
           "name": "AuthPropertyDataStoreUpdateItemAction",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
                 "model": "Listing",
@@ -224,7 +224,7 @@
           "componentType": "Button",
           "name": "StatePropertyDataStoreUpdateItemAction",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.DataStoreUpdateItemAction",
               "parameters": {
                 "model": "Listing",

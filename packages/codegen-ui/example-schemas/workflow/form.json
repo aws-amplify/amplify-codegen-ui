@@ -20,7 +20,7 @@
       "componentType": "Button",
       "name": "SubmitButton",
       "events": {
-        "click": {
+        "onClick": {
           "action": "Amplify.DataStoreUpdateItemAction",
           "parameters": {
             "model": "Customer",

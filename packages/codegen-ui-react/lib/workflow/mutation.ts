@@ -45,10 +45,10 @@ import {
 type EventHandlerBuilder = (setStateName: string, stateName: string) => JsxExpression;
 
 const genericEventToReactEventImplementationOverrides: PrimitiveLevelPropConfiguration<EventHandlerBuilder> = {
-  [Primitive.StepperField]: { [StudioGenericEvent.change]: numericValueCallback },
-  [Primitive.SliderField]: { [StudioGenericEvent.change]: numericValueCallback },
-  [Primitive.CheckboxField]: { [StudioGenericEvent.change]: buildSyntheticEventTargetCallback('checked') },
-  [Primitive.SwitchField]: { [StudioGenericEvent.change]: toggleBooleanStateCallback },
+  [Primitive.StepperField]: { [StudioGenericEvent.onChange]: numericValueCallback },
+  [Primitive.SliderField]: { [StudioGenericEvent.onChange]: numericValueCallback },
+  [Primitive.CheckboxField]: { [StudioGenericEvent.onChange]: buildSyntheticEventTargetCallback('checked') },
+  [Primitive.SwitchField]: { [StudioGenericEvent.onChange]: toggleBooleanStateCallback },
 };
 
 const PrimitiveDefaultValuePropMapping: PrimitiveLevelPropConfiguration<string> = new Proxy(
@@ -238,7 +238,6 @@ function toggleBooleanStateCallback(setStateName: string, stateName: string): Js
   );
 }
 
-// TODO: Update in here so we can support customer `change` events for form elements.
 export function buildOpeningElementControlEvents(
   componentType: string,
   setStateName: string,

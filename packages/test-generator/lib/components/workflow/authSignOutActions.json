@@ -15,7 +15,7 @@
         }
       },
       "events": {
-        "click": {
+        "onClick": {
           "action": "Amplify.AuthSignOut",
           "parameters": {
             "global": {
@@ -37,7 +37,7 @@
         }
       },
       "events": {
-        "click": {
+        "onClick": {
           "action": "Amplify.AuthSignOut",
           "parameters": {
             "global": {

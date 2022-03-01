@@ -163,7 +163,7 @@
           }
         },
         "events" : {
-          "click" : {
+          "onClick" : {
             "action" : "Amplify.Mutation",
             "parameters" : {
               "state" : {

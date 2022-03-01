@@ -67,7 +67,7 @@
           "componentType": "Button",
           "name": "FixedValueMutation",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.Mutation",
               "parameters": {
                 "state": {
@@ -125,7 +125,7 @@
           "componentType": "Button",
           "name": "BoundValueMutation",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.Mutation",
               "parameters": {
                 "state": {
@@ -190,7 +190,7 @@
           "componentType": "Button",
           "name": "ConcatValueMutation",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.Mutation",
               "parameters": {
                 "state": {
@@ -256,7 +256,7 @@
           "componentType": "Button",
           "name": "ConditionalValueMutation",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.Mutation",
               "parameters": {
                 "state": {
@@ -311,7 +311,7 @@
           "componentType": "Button",
           "name": "AuthValueMutation",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.Mutation",
               "parameters": {
                 "state": {
@@ -367,7 +367,7 @@
           "componentType": "Button",
           "name": "StateValueMutation",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.Mutation",
               "parameters": {
                 "state": {
@@ -431,7 +431,7 @@
           "componentType": "Button",
           "name": "TextFieldValueMutation",
           "events": {
-            "click": {
+            "onClick": {
               "action": "Amplify.Mutation",
               "parameters": {
                 "state": {

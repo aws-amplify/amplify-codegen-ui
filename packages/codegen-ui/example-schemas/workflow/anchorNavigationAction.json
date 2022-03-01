@@ -7,7 +7,7 @@
     }
   },
   "events": {
-    "click": {
+    "onClick": {
       "action": "Amplify.Navigation",
       "parameters": {
         "type": {

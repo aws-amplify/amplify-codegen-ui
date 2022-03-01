@@ -19,6 +19,7 @@ import {
   StudioComponent,
   StudioComponentChild,
   ComponentMetadata,
+  StudioGenericEvent,
 } from '@aws-amplify/codegen-ui';
 import {
   JsxAttributeLike,
@@ -108,7 +109,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
           this.component.componentType,
           getSetStateName({ componentName: this.component.name, property: key }),
           getStateName({ componentName: this.component.name, property: key }),
-          'change',
+          StudioGenericEvent.onChange,
         ),
       );
 

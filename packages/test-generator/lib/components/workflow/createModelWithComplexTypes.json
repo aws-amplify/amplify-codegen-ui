@@ -7,7 +7,7 @@
     }
   },
   "events": {
-    "click": {
+    "onClick": {
       "action": "Amplify.DataStoreCreateItemAction",
       "parameters": {
         "model": "ComplexModel",

@@ -2,7 +2,7 @@
   "componentType": "Button",
   "name": "ComponentWithAuthEventBinding",
   "events": {
-    "click": {
+    "onClick": {
       "action": "Amplify.DataStoreCreateItemAction",
       "parameters": {
         "model": "Customer",

@@ -23,27 +23,27 @@ import { Primitive, PrimitiveLevelPropConfiguration } from '../primitive';
  * Temporary hardcoded mapping of generic to react events, long-term this will be exported by amplify-ui.
  */
 const genericEventToReactEventMapping = {
-  [StudioGenericEvent.click]: 'onClick',
-  [StudioGenericEvent.doubleclick]: 'onDoubleClick',
-  [StudioGenericEvent.mousedown]: 'onMouseDown',
-  [StudioGenericEvent.mouseenter]: 'onMouseEnter',
-  [StudioGenericEvent.mouseleave]: 'onMouseLeave',
-  [StudioGenericEvent.mousemove]: 'onMouseMove',
-  [StudioGenericEvent.mouseout]: 'onMouseOut',
-  [StudioGenericEvent.mouseover]: 'onMouseOver',
-  [StudioGenericEvent.mouseup]: 'onMouseUp',
-  [StudioGenericEvent.change]: 'onChange',
-  [StudioGenericEvent.input]: 'onInput',
-  [StudioGenericEvent.focus]: 'onFocus',
-  [StudioGenericEvent.blur]: 'onBlur',
-  [StudioGenericEvent.keydown]: 'onKeyDown',
-  [StudioGenericEvent.keypress]: 'onKeyPress',
-  [StudioGenericEvent.keyup]: 'onKeyUp',
+  [StudioGenericEvent.onClick]: 'onClick',
+  [StudioGenericEvent.onDoubleClick]: 'onDoubleClick',
+  [StudioGenericEvent.onMouseDown]: 'onMouseDown',
+  [StudioGenericEvent.onMouseEnter]: 'onMouseEnter',
+  [StudioGenericEvent.onMouseLeave]: 'onMouseLeave',
+  [StudioGenericEvent.onMouseMove]: 'onMouseMove',
+  [StudioGenericEvent.onMouseOut]: 'onMouseOut',
+  [StudioGenericEvent.onMouseOver]: 'onMouseOver',
+  [StudioGenericEvent.onMouseUp]: 'onMouseUp',
+  [StudioGenericEvent.onChange]: 'onChange',
+  [StudioGenericEvent.onInput]: 'onInput',
+  [StudioGenericEvent.onFocus]: 'onFocus',
+  [StudioGenericEvent.onBlur]: 'onBlur',
+  [StudioGenericEvent.onKeyDown]: 'onKeyDown',
+  [StudioGenericEvent.onKeyPress]: 'onKeyPress',
+  [StudioGenericEvent.onKeyUp]: 'onKeyUp',
 };
 
 const genericEventToReactEventMappingOverrides: PrimitiveLevelPropConfiguration<string> = {
   [Primitive.StepperField]: {
-    [StudioGenericEvent.change]: 'onStepChange',
+    [StudioGenericEvent.onChange]: 'onStepChange',
   },
 };
 
