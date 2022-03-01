@@ -21,7 +21,7 @@ export default function CreateCustomerButton(
   props: CreateCustomerButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const createCustomerButtonClick = useDataStoreCreateAction({
+  const createCustomerButtonOnClick = useDataStoreCreateAction({
     model: Customer,
     fields: { firstName: \\"Din\\", lastName: \\"Djarin\\" },
   });
@@ -30,7 +30,7 @@ export default function CreateCustomerButton(
     <Button
       children=\\"Create\\"
       onClick={() => {
-        createCustomerButtonClick();
+        createCustomerButtonOnClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"CreateCustomerButton\\")}
@@ -64,7 +64,7 @@ export default function DeleteCustomerButton(
   props: DeleteCustomerButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const deleteCustomerButtonClick = useDataStoreDeleteAction({
+  const deleteCustomerButtonOnClick = useDataStoreDeleteAction({
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
   });
@@ -73,7 +73,7 @@ export default function DeleteCustomerButton(
     <Button
       children=\\"Delete\\"
       onClick={() => {
-        deleteCustomerButtonClick();
+        deleteCustomerButtonOnClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"DeleteCustomerButton\\")}
@@ -107,7 +107,7 @@ export default function UpdateCustomerButton(
   props: UpdateCustomerButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const updateCustomerButtonClick = useDataStoreUpdateAction({
+  const updateCustomerButtonOnClick = useDataStoreUpdateAction({
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
     fields: { firstName: \\"Din\\", lastName: \\"Djarin\\" },
@@ -117,7 +117,7 @@ export default function UpdateCustomerButton(
     <Button
       children=\\"Update\\"
       onClick={() => {
-        updateCustomerButtonClick();
+        updateCustomerButtonOnClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"UpdateCustomerButton\\")}
@@ -150,13 +150,13 @@ export default function SignOutButton(
   props: SignOutButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const signOutButtonClick = useAuthSignOutAction({ global: false });
+  const signOutButtonOnClick = useAuthSignOutAction({ global: false });
   return (
     /* @ts-ignore: TS2322 */
     <Button
       children=\\"Sign out\\"
       onClick={() => {
-        signOutButtonClick();
+        signOutButtonOnClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"SignOutButton\\")}
@@ -189,7 +189,7 @@ export default function NavigateButton(
   props: NavigateButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const navigateButtonClick = useNavigateAction({
+  const navigateButtonOnClick = useNavigateAction({
     type: \\"anchor\\",
     about: \\"#about\\",
   });
@@ -198,7 +198,7 @@ export default function NavigateButton(
     <Button
       children=\\"Go to About section\\"
       onClick={() => {
-        navigateButtonClick();
+        navigateButtonOnClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
@@ -231,7 +231,7 @@ export default function NavigateButton(
   props: NavigateButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const navigateButtonClick = useNavigateAction({
+  const navigateButtonOnClick = useNavigateAction({
     type: \\"url\\",
     url: \\"https://www.amazon.com/\\",
   });
@@ -240,7 +240,7 @@ export default function NavigateButton(
     <Button
       children=\\"Go to Amazon.com\\"
       onClick={() => {
-        navigateButtonClick();
+        navigateButtonOnClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
@@ -273,7 +273,7 @@ export default function NavigateButton(
   props: NavigateButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const navigateButtonClick = useNavigateAction({
+  const navigateButtonOnClick = useNavigateAction({
     type: \\"url\\",
     url: \\"https://www.amazon.com/\\",
     target: \\"newtab\\",
@@ -283,7 +283,7 @@ export default function NavigateButton(
     <Button
       children=\\"Go to Amazon.com (Open in new tab)\\"
       onClick={() => {
-        navigateButtonClick();
+        navigateButtonOnClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
@@ -316,13 +316,13 @@ export default function ReloadButton(
   props: ReloadButtonProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const reloadButtonClick = useNavigateAction({ type: \\"reload\\" });
+  const reloadButtonOnClick = useNavigateAction({ type: \\"reload\\" });
   return (
     /* @ts-ignore: TS2322 */
     <Button
       children=\\"Reload the page.\\"
       onClick={() => {
-        reloadButtonClick();
+        reloadButtonOnClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"ReloadButton\\")}
@@ -374,7 +374,7 @@ export default function ConditionalInMutation(
   const user = userProp !== undefined ? userProp : userDataStore;
   const [mutatedValueChildren, setMutatedValueChildren] =
     useStateMutationAction(\\"Default Value\\");
-  const conditionalPropertyMutationClick = () => {
+  const conditionalPropertyMutationOnClick = () => {
     setMutatedValueChildren(
       user?.age && user?.age == 45 ? \\"Conditional Value\\" : \\"Unconditional Value\\"
     );
@@ -389,7 +389,7 @@ export default function ConditionalInMutation(
       <Button
         children=\\"Apply Conditional Property Mutation\\"
         onClick={() => {
-          conditionalPropertyMutationClick();
+          conditionalPropertyMutationOnClick();
         }}
         {...getOverrideProps(overrides, \\"ConditionalPropertyMutation\\")}
       ></Button>
@@ -515,7 +515,7 @@ export default function ComponentWithAuthEventBinding(
 ): React.ReactElement {
   const { overrides, ...rest } = props;
   const authAttributes = useAuth().user?.attributes ?? {};
-  const componentWithAuthEventBindingClick = useDataStoreCreateAction({
+  const componentWithAuthEventBindingOnClick = useDataStoreCreateAction({
     model: Customer,
     fields: {
       userName: authAttributes[\\"username\\"],
@@ -527,7 +527,7 @@ export default function ComponentWithAuthEventBinding(
     <Button
       children=\\"Create\\"
       onClick={() => {
-        componentWithAuthEventBindingClick();
+        componentWithAuthEventBindingOnClick();
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"ComponentWithAuthEventBinding\\")}
@@ -5443,7 +5443,7 @@ export default function InputMutationOnClick(
 ): React.ReactElement {
   const { overrides, ...rest } = props;
   const [myInputValue, setMyInputValue] = useStateMutationAction(\\"\\");
-  const setInputButtonClick = () => {
+  const setInputButtonOnClick = () => {
     setMyInputValue(\\"Razor Crest\\");
   };
   return (
@@ -5459,7 +5459,7 @@ export default function InputMutationOnClick(
       <Button
         children=\\"Change Input\\"
         onClick={() => {
-          setInputButtonClick();
+          setInputButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"SetInputButton\\")}
       ></Button>
@@ -5494,7 +5494,7 @@ export default function MyForm(props: MyFormProps): React.ReactElement {
   const { overrides, ...rest } = props;
   const [usernameTextFieldValue, setUsernameTextFieldValue] =
     useStateMutationAction(\\"vizsla\\");
-  const submitButtonClick = useDataStoreUpdateAction({
+  const submitButtonOnClick = useDataStoreUpdateAction({
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
     fields: { username: usernameTextFieldValue },
@@ -5513,7 +5513,7 @@ export default function MyForm(props: MyFormProps): React.ReactElement {
       <Button
         children=\\"Submit\\"
         onClick={() => {
-          submitButtonClick();
+          submitButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"SubmitButton\\")}
       ></Button>
@@ -5548,7 +5548,7 @@ export default function ColorChangeOnClick(
   const { overrides, ...rest } = props;
   const [coloredBoxBackgroundColor, setColoredBoxBackgroundColor] =
     useStateMutationAction(\\"red\\");
-  const colorChangerButtonClick = () => {
+  const colorChangerButtonOnClick = () => {
     setColoredBoxBackgroundColor(\\"blue\\");
   };
   return (
@@ -5561,7 +5561,7 @@ export default function ColorChangeOnClick(
       <Button
         children=\\"Change Color\\"
         onClick={() => {
-          colorChangerButtonClick();
+          colorChangerButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"ColorChangerButton\\")}
       ></Button>
@@ -5829,25 +5829,25 @@ export default function InitialValueBindings(
     useStateMutationAction(stateSourceChildren);
   const [textFieldValueContentsValue, setTextFieldValueContentsValue] =
     useStateMutationAction(\\"\\");
-  const fixedValueMutationClick = () => {
+  const fixedValueMutationOnClick = () => {
     setFixedValueContentsChildren(\\"Mutated Value\\");
   };
-  const boundValueMutationClick = () => {
+  const boundValueMutationOnClick = () => {
     setBoundValueContentsChildren(\\"Mutated Value\\");
   };
-  const concatValueMutationClick = () => {
+  const concatValueMutationOnClick = () => {
     setConcatValueContentsChildren(\\"Mutated Value\\");
   };
-  const conditionalValueMutationClick = () => {
+  const conditionalValueMutationOnClick = () => {
     setConditionalValueContentsChildren(\\"Mutated Value\\");
   };
-  const authValueMutationClick = () => {
+  const authValueMutationOnClick = () => {
     setAuthValueContentsChildren(\\"Mutated Value\\");
   };
-  const stateValueMutationClick = () => {
+  const stateValueMutationOnClick = () => {
     setStateValueContentsChildren(\\"Mutated Value\\");
   };
-  const textFieldValueMutationClick = () => {
+  const textFieldValueMutationOnClick = () => {
     setTextFieldValueContentsValue(\\"Mutated Value\\");
   };
   useEffect(() => {
@@ -5916,7 +5916,7 @@ export default function InitialValueBindings(
         <Button
           children=\\"Mutate\\"
           onClick={() => {
-            fixedValueMutationClick();
+            fixedValueMutationOnClick();
           }}
           {...getOverrideProps(overrides, \\"FixedValueMutation\\")}
         ></Button>
@@ -5937,7 +5937,7 @@ export default function InitialValueBindings(
         <Button
           children=\\"Mutate\\"
           onClick={() => {
-            boundValueMutationClick();
+            boundValueMutationOnClick();
           }}
           {...getOverrideProps(overrides, \\"BoundValueMutation\\")}
         ></Button>
@@ -5958,7 +5958,7 @@ export default function InitialValueBindings(
         <Button
           children=\\"Mutate\\"
           onClick={() => {
-            concatValueMutationClick();
+            concatValueMutationOnClick();
           }}
           {...getOverrideProps(overrides, \\"ConcatValueMutation\\")}
         ></Button>
@@ -5982,7 +5982,7 @@ export default function InitialValueBindings(
         <Button
           children=\\"Mutate\\"
           onClick={() => {
-            conditionalValueMutationClick();
+            conditionalValueMutationOnClick();
           }}
           {...getOverrideProps(overrides, \\"ConditionalValueMutation\\")}
         ></Button>
@@ -6003,7 +6003,7 @@ export default function InitialValueBindings(
         <Button
           children=\\"Mutate\\"
           onClick={() => {
-            authValueMutationClick();
+            authValueMutationOnClick();
           }}
           {...getOverrideProps(overrides, \\"AuthValueMutation\\")}
         ></Button>
@@ -6024,7 +6024,7 @@ export default function InitialValueBindings(
         <Button
           children=\\"Mutate\\"
           onClick={() => {
-            stateValueMutationClick();
+            stateValueMutationOnClick();
           }}
           {...getOverrideProps(overrides, \\"StateValueMutation\\")}
         ></Button>
@@ -6052,7 +6052,7 @@ export default function InitialValueBindings(
         <Button
           children=\\"Mutate\\"
           onClick={() => {
-            textFieldValueMutationClick();
+            textFieldValueMutationOnClick();
           }}
           {...getOverrideProps(overrides, \\"TextFieldValueMutation\\")}
         ></Button>
@@ -6089,7 +6089,7 @@ export default function CardA(props: CardAProps): React.ReactElement {
   const { listing, overrides, ...rest } = props;
   const [classicLongSleeveTShirtChildren, setClassicLongSleeveTShirtChildren] =
     useStateMutationAction(\\"Classic Long Sleeve T-Shirt\\");
-  const dollarNineNineClick = () => {
+  const dollarNineNineOnClick = () => {
     setClassicLongSleeveTShirtChildren(listing?.titl);
   };
   return (
@@ -6157,7 +6157,7 @@ export default function CardA(props: CardAProps): React.ReactElement {
           whiteSpace=\\"pre-wrap\\"
           children=\\"$99\\"
           onClick={() => {
-            dollarNineNineClick();
+            dollarNineNineOnClick();
           }}
           {...getOverrideProps(overrides, \\"$99\\")}
         ></Text>
@@ -6218,7 +6218,7 @@ export default function CardA(props) {
   var _a = useStateMutationAction(\\"Classic Long Sleeve T-Shirt\\"),
     classicLongSleeveTShirtChildren = _a[0],
     setClassicLongSleeveTShirtChildren = _a[1];
-  var dollarNineNineClick = function () {
+  var dollarNineNineOnClick = function () {
     setClassicLongSleeveTShirtChildren(
       listing === null || listing === void 0 ? void 0 : listing.titl
     );
@@ -6307,7 +6307,7 @@ export default function CardA(props) {
             whiteSpace: \\"pre-wrap\\",
             children: \\"$99\\",
             onClick: function () {
-              dollarNineNineClick();
+              dollarNineNineOnClick();
             },
           },
           getOverrideProps(overrides, \\"$99\\")
@@ -6341,10 +6341,10 @@ export default function ButtonsToggleState(
   const { overrides, ...rest } = props;
   const [fooBarValueChildren, setFooBarValueChildren] =
     useStateMutationAction(\\"Baz\\");
-  const fooButtonClick = () => {
+  const fooButtonOnClick = () => {
     setFooBarValueChildren(\\"Foo\\");
   };
-  const barButtonClick = () => {
+  const barButtonOnClick = () => {
     setFooBarValueChildren(\\"Bar\\");
   };
   return (
@@ -6357,14 +6357,14 @@ export default function ButtonsToggleState(
       <Button
         children=\\"Set to Foo\\"
         onClick={() => {
-          fooButtonClick();
+          fooButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"FooButton\\")}
       ></Button>
       <Button
         children=\\"Set to Bar\\"
         onClick={() => {
-          barButtonClick();
+          barButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"BarButton\\")}
       ></Button>
@@ -6399,7 +6399,7 @@ export default function MutationWithSyntheticProp(
   const { overrides, ...rest } = props;
   const [fooBarValueChildren, setFooBarValueChildren] =
     useStateMutationAction(\\"Baz\\");
-  const fooButtonClick = () => {
+  const fooButtonOnClick = () => {
     setFooBarValueChildren(\\"Foo\\");
   };
   return (
@@ -6415,7 +6415,7 @@ export default function MutationWithSyntheticProp(
       <Button
         children=\\"Set to Foo\\"
         onClick={() => {
-          fooButtonClick();
+          fooButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"FooButton\\")}
       ></Button>
@@ -6450,10 +6450,10 @@ export default function UpdateVisibility(
   const { overrides, ...rest } = props;
   const [textDisplayDisplay, setTextDisplayDisplay] =
     useStateMutationAction(\\"block\\");
-  const displayBlockButtonClick = () => {
+  const displayBlockButtonOnClick = () => {
     setTextDisplayDisplay(\\"block\\");
   };
-  const displayNoneButtonClick = () => {
+  const displayNoneButtonOnClick = () => {
     setTextDisplayDisplay(\\"none\\");
   };
   return (
@@ -6467,14 +6467,14 @@ export default function UpdateVisibility(
       <Button
         children=\\"Show text\\"
         onClick={() => {
-          displayBlockButtonClick();
+          displayBlockButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"DisplayBlockButton\\")}
       ></Button>
       <Button
         children=\\"Hide text\\"
         onClick={() => {
-          displayNoneButtonClick();
+          displayNoneButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"DisplayNoneButton\\")}
       ></Button>
@@ -6509,10 +6509,10 @@ export default function SetStateWithoutInitialValue(
   const { overrides, ...rest } = props;
   const [textDisplayDisplay, setTextDisplayDisplay] =
     useStateMutationAction(undefined);
-  const displayBlockButtonClick = () => {
+  const displayBlockButtonOnClick = () => {
     setTextDisplayDisplay(\\"block\\");
   };
-  const displayNoneButtonClick = () => {
+  const displayNoneButtonOnClick = () => {
     setTextDisplayDisplay(\\"none\\");
   };
   return (
@@ -6529,14 +6529,14 @@ export default function SetStateWithoutInitialValue(
       <Button
         children=\\"Show text\\"
         onClick={() => {
-          displayBlockButtonClick();
+          displayBlockButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"DisplayBlockButton\\")}
       ></Button>
       <Button
         children=\\"Hide text\\"
         onClick={() => {
-          displayNoneButtonClick();
+          displayNoneButtonOnClick();
         }}
         {...getOverrideProps(overrides, \\"DisplayNoneButton\\")}
       ></Button>
@@ -6569,14 +6569,14 @@ export default function InvalidNameForMethod(
   props: InvalidNameForMethodProps
 ): React.ReactElement {
   const { overrides, ...rest } = props;
-  const loremipsumdolorsitametCommaconsecteturadipiscingelitCommaseddoeiusmodtemporincididuntutlaborePeriodClick =
+  const loremipsumdolorsitametCommaconsecteturadipiscingelitCommaseddoeiusmodtemporincididuntutlaborePeriodOnClick =
     useNavigateAction({ type: \\"url\\", url: \\"emails\\" });
   return (
     /* @ts-ignore: TS2322 */
     <Flex {...rest} {...getOverrideProps(overrides, \\"InvalidNameForMethod\\")}>
       <Text
         onClick={() => {
-          loremipsumdolorsitametCommaconsecteturadipiscingelitCommaseddoeiusmodtemporincididuntutlaborePeriodClick();
+          loremipsumdolorsitametCommaconsecteturadipiscingelitCommaseddoeiusmodtemporincididuntutlaborePeriodOnClick();
         }}
         {...getOverrideProps(
           overrides,
@@ -6616,7 +6616,7 @@ export default function NestedMutation(
     useStateMutationAction(\\"State Value\\");
   const [mutatedValueChildren, setMutatedValueChildren] =
     useStateMutationAction(\\"Default Value\\");
-  const statePropertyMutationClick = () => {
+  const statePropertyMutationOnClick = () => {
     setMutatedValueChildren(stateSourceChildren);
   };
   return (
@@ -6629,7 +6629,7 @@ export default function NestedMutation(
       <Button
         children=\\"Apply State Property Mutation\\"
         onClick={() => {
-          statePropertyMutationClick();
+          statePropertyMutationOnClick();
         }}
         {...getOverrideProps(overrides, \\"StatePropertyMutation\\")}
       ></Button>
@@ -6707,37 +6707,37 @@ export default function TwoWayBindings(
     useStateMutationAction(\\"\\");
   const [textAreaFieldInputValue, setTextAreaFieldInputValue] =
     useStateMutationAction(\\"\\");
-  const setCheckboxFieldValueClick = () => {
+  const setCheckboxFieldValueOnClick = () => {
     setCheckboxFieldInputChecked(false);
   };
-  const setPasswordFieldValueClick = () => {
+  const setPasswordFieldValueOnClick = () => {
     setPasswordFieldInputValue(\\"admin123\\");
   };
-  const setPhoneNumberFieldValueClick = () => {
+  const setPhoneNumberFieldValueOnClick = () => {
     setPhoneNumberFieldInputValue(\\"8675309\\");
   };
-  const setRadioGroupFieldValueClick = () => {
+  const setRadioGroupFieldValueOnClick = () => {
     setRadioGroupFieldInputValue(\\"javascript\\");
   };
-  const setSearchFieldValueClick = () => {
+  const setSearchFieldValueOnClick = () => {
     setSearchFieldInputValue(\\"UI Docs\\");
   };
-  const setSelectFieldValueClick = () => {
+  const setSelectFieldValueOnClick = () => {
     setSelectFieldInputValue(\\"orange\\");
   };
-  const setSliderFieldValueClick = () => {
+  const setSliderFieldValueOnClick = () => {
     setSliderFieldInputValue(90);
   };
-  const setStepperFieldValueClick = () => {
+  const setStepperFieldValueOnClick = () => {
     setStepperFieldInputValue(9);
   };
-  const setSwitchFieldValueClick = () => {
+  const setSwitchFieldValueOnClick = () => {
     setSwitchFieldInputIsChecked(true);
   };
-  const setTextFieldValueClick = () => {
+  const setTextFieldValueOnClick = () => {
     setTextFieldInputValue(\\"Hardcoded Value\\");
   };
-  const setTextAreaFieldValueClick = () => {
+  const setTextAreaFieldValueOnClick = () => {
     setTextAreaFieldInputValue(\\"Hardcoded Value\\");
   };
   return (
@@ -6778,7 +6778,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set CheckboxFieldValue\\"
           onClick={() => {
-            setCheckboxFieldValueClick();
+            setCheckboxFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetCheckboxFieldValue\\")}
         ></Button>
@@ -6808,7 +6808,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set PasswordFieldValue\\"
           onClick={() => {
-            setPasswordFieldValueClick();
+            setPasswordFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetPasswordFieldValue\\")}
         ></Button>
@@ -6838,7 +6838,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set PhoneNumberFieldValue\\"
           onClick={() => {
-            setPhoneNumberFieldValueClick();
+            setPhoneNumberFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetPhoneNumberFieldValue\\")}
         ></Button>
@@ -6884,7 +6884,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set RadioGroupFieldValue\\"
           onClick={() => {
-            setRadioGroupFieldValueClick();
+            setRadioGroupFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetRadioGroupFieldValue\\")}
         ></Button>
@@ -6913,7 +6913,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set SearchFieldValue\\"
           onClick={() => {
-            setSearchFieldValueClick();
+            setSearchFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetSearchFieldValue\\")}
         ></Button>
@@ -6960,7 +6960,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set SelectFieldValue\\"
           onClick={() => {
-            setSelectFieldValueClick();
+            setSelectFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetSelectFieldValue\\")}
         ></Button>
@@ -6991,7 +6991,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set SliderFieldValue\\"
           onClick={() => {
-            setSliderFieldValueClick();
+            setSliderFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetSliderFieldValue\\")}
         ></Button>
@@ -7022,7 +7022,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set StepperFieldValue\\"
           onClick={() => {
-            setStepperFieldValueClick();
+            setStepperFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetStepperFieldValue\\")}
         ></Button>
@@ -7054,7 +7054,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set SwitchFieldValue\\"
           onClick={() => {
-            setSwitchFieldValueClick();
+            setSwitchFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetSwitchFieldValue\\")}
         ></Button>
@@ -7084,7 +7084,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set TextFieldValue\\"
           onClick={() => {
-            setTextFieldValueClick();
+            setTextFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetTextFieldValue\\")}
         ></Button>
@@ -7114,7 +7114,7 @@ export default function TwoWayBindings(
         <Button
           children=\\"Set TextAreaFieldValue\\"
           onClick={() => {
-            setTextAreaFieldValueClick();
+            setTextAreaFieldValueOnClick();
           }}
           {...getOverrideProps(overrides, \\"SetTextAreaFieldValue\\")}
         ></Button>
@@ -7609,44 +7609,44 @@ import { SyntheticEvent } from \\"react\\";
 
 export type EventsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    click?: (event: SyntheticEvent) => void;
-    doubleclick?: (event: SyntheticEvent) => void;
-    mousedown?: (event: SyntheticEvent) => void;
-    mouseenter?: (event: SyntheticEvent) => void;
-    mouseleave?: (event: SyntheticEvent) => void;
-    mousemove?: (event: SyntheticEvent) => void;
-    mouseout?: (event: SyntheticEvent) => void;
-    mouseover?: (event: SyntheticEvent) => void;
-    mouseup?: (event: SyntheticEvent) => void;
-    change?: (event: SyntheticEvent) => void;
-    input?: (event: SyntheticEvent) => void;
-    focus?: (event: SyntheticEvent) => void;
-    blur?: (event: SyntheticEvent) => void;
-    keydown?: (event: SyntheticEvent) => void;
-    keypress?: (event: SyntheticEvent) => void;
-    keyup?: (event: SyntheticEvent) => void;
+    onClick?: (event: SyntheticEvent) => void;
+    onDoubleClick?: (event: SyntheticEvent) => void;
+    onMouseDown?: (event: SyntheticEvent) => void;
+    onMouseEnter?: (event: SyntheticEvent) => void;
+    onMouseLeave?: (event: SyntheticEvent) => void;
+    onMouseMove?: (event: SyntheticEvent) => void;
+    onMouseOut?: (event: SyntheticEvent) => void;
+    onMouseOver?: (event: SyntheticEvent) => void;
+    onMouseUp?: (event: SyntheticEvent) => void;
+    onChange?: (event: SyntheticEvent) => void;
+    onInput?: (event: SyntheticEvent) => void;
+    onFocus?: (event: SyntheticEvent) => void;
+    onBlur?: (event: SyntheticEvent) => void;
+    onKeyDown?: (event: SyntheticEvent) => void;
+    onKeyPress?: (event: SyntheticEvent) => void;
+    onKeyUp?: (event: SyntheticEvent) => void;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
 >;
 export default function Events(props: EventsProps): React.ReactElement {
   const {
-    click,
-    doubleclick,
-    mousedown,
-    mouseenter,
-    mouseleave,
-    mousemove,
-    mouseout,
-    mouseover,
-    mouseup,
-    change,
-    input,
-    focus,
-    blur,
-    keydown,
-    keypress,
-    keyup,
+    onClick,
+    onDoubleClick,
+    onMouseDown,
+    onMouseEnter,
+    onMouseLeave,
+    onMouseMove,
+    onMouseOut,
+    onMouseOver,
+    onMouseUp,
+    onChange,
+    onInput,
+    onFocus,
+    onBlur,
+    onKeyDown,
+    onKeyPress,
+    onKeyUp,
     overrides,
     ...rest
   } = props;
@@ -7655,86 +7655,86 @@ export default function Events(props: EventsProps): React.ReactElement {
     <Flex {...rest} {...getOverrideProps(overrides, \\"Events\\")}>
       <Flex {...getOverrideProps(overrides, \\"GenericEvents\\")}>
         <Text
-          children=\\"click\\"
-          onClick={click}
-          {...getOverrideProps(overrides, \\"click\\")}
+          children=\\"onClick\\"
+          onClick={onClick}
+          {...getOverrideProps(overrides, \\"onClick\\")}
         ></Text>
         <Text
-          children=\\"doubleclick\\"
-          onDoubleClick={doubleclick}
-          {...getOverrideProps(overrides, \\"doubleclick\\")}
+          children=\\"onDoubleClick\\"
+          onDoubleClick={onDoubleClick}
+          {...getOverrideProps(overrides, \\"onDoubleClick\\")}
         ></Text>
         <Text
-          children=\\"mousedown\\"
-          onMouseDown={mousedown}
-          {...getOverrideProps(overrides, \\"mousedown\\")}
+          children=\\"onMouseDown\\"
+          onMouseDown={onMouseDown}
+          {...getOverrideProps(overrides, \\"onMouseDown\\")}
         ></Text>
         <Text
-          children=\\"mouseenter\\"
-          onMouseEnter={mouseenter}
-          {...getOverrideProps(overrides, \\"mouseenter\\")}
+          children=\\"onMouseEnter\\"
+          onMouseEnter={onMouseEnter}
+          {...getOverrideProps(overrides, \\"onMouseEnter\\")}
         ></Text>
         <Text
-          children=\\"mouseleave\\"
-          onMouseLeave={mouseleave}
-          {...getOverrideProps(overrides, \\"mouseleave\\")}
+          children=\\"onMouseLeave\\"
+          onMouseLeave={onMouseLeave}
+          {...getOverrideProps(overrides, \\"onMouseLeave\\")}
         ></Text>
         <Text
           children=\\"mousemove\\"
           onMouseMove={mousemove}
-          {...getOverrideProps(overrides, \\"mousemove\\")}
+          {...getOverrideProps(overrides, \\"onMouseMove\\")}
         ></Text>
         <Text
-          children=\\"mouseout\\"
-          onMouseOut={mouseout}
-          {...getOverrideProps(overrides, \\"mouseout\\")}
+          children=\\"onMouseOut\\"
+          onMouseOut={onMouseOut}
+          {...getOverrideProps(overrides, \\"onMouseOut\\")}
         ></Text>
         <Text
-          children=\\"mouseover\\"
-          onMouseOver={mouseover}
-          {...getOverrideProps(overrides, \\"mouseover\\")}
+          children=\\"onMouseOver\\"
+          onMouseOver={onMouseOver}
+          {...getOverrideProps(overrides, \\"onMouseOver\\")}
         ></Text>
         <Text
-          children=\\"mouseup\\"
-          onMouseUp={mouseup}
-          {...getOverrideProps(overrides, \\"mouseup\\")}
+          children=\\"onMouseUp\\"
+          onMouseUp={onMouseUp}
+          {...getOverrideProps(overrides, \\"onMouseUp\\")}
         ></Text>
       </Flex>
       <Flex {...getOverrideProps(overrides, \\"FieldEvents\\")}>
         <TextField
-          defaultValue=\\"change\\"
-          onChange={change}
-          {...getOverrideProps(overrides, \\"change\\")}
+          defaultValue=\\"onChange\\"
+          onChange={onChange}
+          {...getOverrideProps(overrides, \\"onChange\\")}
         ></TextField>
         <TextField
-          defaultValue=\\"input\\"
-          onInput={input}
-          {...getOverrideProps(overrides, \\"input\\")}
+          defaultValue=\\"onInput\\"
+          onInput={onInput}
+          {...getOverrideProps(overrides, \\"onInput\\")}
         ></TextField>
         <TextField
-          defaultValue=\\"focus\\"
-          onFocus={focus}
-          {...getOverrideProps(overrides, \\"focus\\")}
+          defaultValue=\\"onFocus\\"
+          onFocus={onFocus}
+          {...getOverrideProps(overrides, \\"onFocus\\")}
         ></TextField>
         <TextField
-          defaultValue=\\"blur\\"
-          onBlur={blur}
-          {...getOverrideProps(overrides, \\"blur\\")}
+          defaultValue=\\"onBlur\\"
+          onBlur={onBlur}
+          {...getOverrideProps(overrides, \\"onBlur\\")}
         ></TextField>
         <TextField
-          defaultValue=\\"keydown\\"
-          onKeyDown={keydown}
-          {...getOverrideProps(overrides, \\"keydown\\")}
+          defaultValue=\\"onKeyDown\\"
+          onKeyDown={onKeyDown}
+          {...getOverrideProps(overrides, \\"onKeyDown\\")}
         ></TextField>
         <TextField
-          defaultValue=\\"keypress\\"
-          onKeyPress={keypress}
-          {...getOverrideProps(overrides, \\"keypress\\")}
+          defaultValue=\\"onKeyPress\\"
+          onKeyPress={onKeyPress}
+          {...getOverrideProps(overrides, \\"onKeyPress\\")}
         ></TextField>
         <TextField
-          defaultValue=\\"keyup\\"
-          onKeyUp={keyup}
-          {...getOverrideProps(overrides, \\"keyup\\")}
+          defaultValue=\\"onKeyUp\\"
+          onKeyUp={onKeyUp}
+          {...getOverrideProps(overrides, \\"onKeyUp\\")}
         ></TextField>
       </Flex>
     </Flex>

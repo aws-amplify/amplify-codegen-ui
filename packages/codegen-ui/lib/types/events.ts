@@ -16,22 +16,22 @@
 import { ActionStudioComponentEvent } from './actions';
 
 export enum StudioGenericEvent {
-  click = 'click',
-  doubleclick = 'doubleclick',
-  mousedown = 'mousedown',
-  mouseenter = 'mouseenter',
-  mouseleave = 'mouseleave',
-  mousemove = 'mousemove',
-  mouseout = 'mouseout',
-  mouseover = 'mouseover',
-  mouseup = 'mouseup',
-  change = 'change',
-  input = 'input',
-  focus = 'focus',
-  blur = 'blur',
-  keydown = 'keydown',
-  keypress = 'keypress',
-  keyup = 'keyup',
+  onClick = 'onClick',
+  onDoubleClick = 'onDoubleClick',
+  onMouseDown = 'onMouseDown',
+  onMouseEnter = 'onMouseEnter',
+  onMouseLeave = 'onMouseLeave',
+  onMouseMove = 'onMouseMove',
+  onMouseOut = 'onMouseOut',
+  onMouseOver = 'onMouseOver',
+  onMouseUp = 'onMouseUp',
+  onChange = 'onChange',
+  onInput = 'onInput',
+  onFocus = 'onFocus',
+  onBlur = 'onBlur',
+  onKeyDown = 'onKeyDown',
+  onKeyPress = 'onKeyPress',
+  onKeyUp = 'onKeyUp',
 }
 
 export type StudioComponentEvent = BoundStudioComponentEvent | ActionStudioComponentEvent;

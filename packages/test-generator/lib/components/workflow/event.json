@@ -3,97 +3,97 @@
   "componentType": "Flex",
   "name": "Event",
   "bindingProperties": {
-    "click": {
+    "onClick": {
       "type": "Event"
     },
     "clicked": {
       "type": "String"
     },
-    "doubleclick": {
+    "onDoubleClick": {
       "type": "Event"
     },
     "doubleclicked": {
       "type": "String"
     },
-    "mousedown": {
+    "onMouseDown": {
       "type": "Event"
     },
     "mouseddown": {
       "type": "String"
     },
-    "mouseenter": {
+    "onMouseEnter": {
       "type": "Event"
     },
     "mouseentered": {
       "type": "String"
     },
-    "mouseleave": {
+    "onMouseLeave": {
       "type": "Event"
     },
     "mouseleft": {
       "type": "String"
     },
-    "mousemove": {
+    "onMouseMove": {
       "type": "Event"
     },
     "mousemoved": {
       "type": "String"
     },
-    "mouseout": {
+    "onMouseOut": {
       "type": "Event"
     },
     "mousedout": {
       "type": "String"
     },
-    "mouseover": {
+    "onMouseOver": {
       "type": "Event"
     },
     "mousedover": {
       "type": "String"
     },
-    "mouseup": {
+    "onMouseUp": {
       "type": "Event"
     },
     "mousedup": {
       "type": "String"
     },
-    "change": {
+    "onChange": {
       "type": "Event"
     },
     "changed": {
       "type": "String"
     },
-    "input": {
+    "onInput": {
       "type": "Event"
     },
     "inputted": {
       "type": "String"
     },
-    "focus": {
+    "onFocus": {
       "type": "Event"
     },
     "focused": {
       "type": "String"
     },
-    "blur": {
+    "onBlur": {
       "type": "Event"
     },
     "blurred": {
       "type": "String"
     },
-    "keydown": {
+    "onKeyDown": {
       "type": "Event"
     },
     "keyeddown": {
       "type": "String"
     },
-    "keypress": {
+    "onKeyPress": {
       "type": "Event"
     },
     "keypressed": {
       "type": "String"
     },
-    "keyup": {
+    "onKeyUp": {
       "type": "Event"
     },
     "keyedup": {
@@ -114,8 +114,8 @@
         }
       },
       "events": {
-        "click": {
-          "bindingEvent": "click"
+        "onClick": {
+          "bindingEvent": "onClick"
         }
       }
     },
@@ -145,8 +145,8 @@
         }
       },
       "events": {
-        "doubleclick": {
-          "bindingEvent": "doubleclick"
+        "onDoubleClick": {
+          "bindingEvent": "onDoubleClick"
         }
       }
     },
@@ -176,8 +176,8 @@
         }
       },
       "events": {
-        "mousedown": {
-          "bindingEvent": "mousedown"
+        "onMouseDown": {
+          "bindingEvent": "onMouseDown"
         }
       }
     },
@@ -207,8 +207,8 @@
         }
       },
       "events": {
-        "mouseenter": {
-          "bindingEvent": "mouseenter"
+        "onMouseEnter": {
+          "bindingEvent": "onMouseEnter"
         }
       }
     },
@@ -238,8 +238,8 @@
         }
       },
       "events": {
-        "mouseleave": {
-          "bindingEvent": "mouseleave"
+        "onMouseLeave": {
+          "bindingEvent": "onMouseLeave"
         }
       }
     },
@@ -269,8 +269,8 @@
         }
       },
       "events": {
-        "mousemove": {
-          "bindingEvent": "mousemove"
+        "onMouseMove": {
+          "bindingEvent": "onMouseMove"
         }
       }
     },
@@ -300,8 +300,8 @@
         }
       },
       "events": {
-        "mouseout": {
-          "bindingEvent": "mouseout"
+        "onMouseOut": {
+          "bindingEvent": "onMouseOut"
         }
       }
     },
@@ -331,8 +331,8 @@
         }
       },
       "events": {
-        "mouseover": {
-          "bindingEvent": "mouseover"
+        "onMouseOver": {
+          "bindingEvent": "onMouseOver"
         }
       }
     },
@@ -362,8 +362,8 @@
         }
       },
       "events": {
-        "mouseup": {
-          "bindingEvent": "mouseup"
+        "onMouseUp": {
+          "bindingEvent": "onMouseUp"
         }
       }
     },
@@ -393,8 +393,8 @@
         }
       },
       "events": {
-        "change": {
-          "bindingEvent": "change"
+        "onChange": {
+          "bindingEvent": "onChange"
         }
       }
     },
@@ -424,8 +424,8 @@
         }
       },
       "events": {
-        "input": {
-          "bindingEvent": "input"
+        "onInput": {
+          "bindingEvent": "onInput"
         }
       }
     },
@@ -455,8 +455,8 @@
         }
       },
       "events": {
-        "focus": {
-          "bindingEvent": "focus"
+        "onFocus": {
+          "bindingEvent": "onFocus"
         }
       }
     },
@@ -486,8 +486,8 @@
         }
       },
       "events": {
-        "blur": {
-          "bindingEvent": "blur"
+        "onBlur": {
+          "bindingEvent": "onBlur"
         }
       }
     },
@@ -517,8 +517,8 @@
         }
       },
       "events": {
-        "keydown": {
-          "bindingEvent": "keydown"
+        "onKeyDown": {
+          "bindingEvent": "onKeyDown"
         }
       }
     },
@@ -548,8 +548,8 @@
         }
       },
       "events": {
-        "keypress": {
-          "bindingEvent": "keypress"
+        "onKeyPress": {
+          "bindingEvent": "onKeyPress"
         }
       }
     },
@@ -579,8 +579,8 @@
         }
       },
       "events": {
-        "keyup": {
-          "bindingEvent": "keyup"
+        "onKeyUp": {
+          "bindingEvent": "onKeyUp"
         }
       }
     },

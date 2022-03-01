@@ -22,7 +22,7 @@
         }
       },
       "events": {
-        "click": {
+        "onClick": {
           "action": "Amplify.Mutation",
           "parameters": {
             "state": {
@@ -45,7 +45,7 @@
         }
       },
       "events": {
-        "click": {
+        "onClick": {
           "action": "Amplify.Mutation",
           "parameters": {
             "state": {

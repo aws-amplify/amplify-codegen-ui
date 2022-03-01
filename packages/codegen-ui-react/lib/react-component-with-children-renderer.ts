@@ -19,6 +19,7 @@ import {
   StudioComponent,
   StudioComponentChild,
   ComponentMetadata,
+  StudioGenericEvent,
 } from '@aws-amplify/codegen-ui';
 import { JsxAttributeLike, JsxElement, JsxChild, JsxOpeningElement, SyntaxKind, Expression, factory } from 'typescript';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
@@ -105,7 +106,7 @@ export class ReactComponentWithChildrenRenderer<TPropIn> extends ComponentWithCh
           this.component.componentType,
           getSetStateName({ componentName: this.component.name, property: key }),
           getStateName({ componentName: this.component.name, property: key }),
-          'change',
+          StudioGenericEvent.onChange,
         ),
       );
 

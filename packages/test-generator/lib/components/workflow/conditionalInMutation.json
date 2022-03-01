@@ -34,7 +34,7 @@
       "componentType": "Button",
       "name": "ConditionalPropertyMutation",
       "events": {
-        "click": {
+        "onClick": {
           "action": "Amplify.Mutation",
           "parameters": {
             "state": {

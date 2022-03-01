@@ -257,7 +257,7 @@ describe('validation-helper', () => {
             componentType: 'Button',
             properties: {},
             events: {
-              click: {
+              onClick: {
                 bindingEvent: 'onButtonClick',
               },
             },
