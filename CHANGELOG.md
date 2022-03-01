@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.0.0...v2.1.0) (2022-03-01)
+
+
+### Bug Fixes
+
+* address reserved keywords in bindings ([#431](https://github.com/aws-amplify/amplify-codegen-ui/issues/431)) ([fd0a2a5](https://github.com/aws-amplify/amplify-codegen-ui/commit/fd0a2a599b68e17c0e66663d16451dc5541cf137))
+* use react style event names ([#445](https://github.com/aws-amplify/amplify-codegen-ui/issues/445)) ([6396930](https://github.com/aws-amplify/amplify-codegen-ui/commit/639693067f7d08e405f8265acbd6e0229da78cfc))
+
+
+### Features
+
+* replace non-alpha characters with description ([#440](https://github.com/aws-amplify/amplify-codegen-ui/issues/440)) ([d25c3b8](https://github.com/aws-amplify/amplify-codegen-ui/commit/d25c3b85fed3c33503935023880ab102c6f77ce3))
+
+
+
+
+
 # [2.0.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v1.2.0...v2.0.0) (2022-02-25)
 
 
