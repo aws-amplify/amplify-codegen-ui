@@ -1,0 +1,29 @@
+/* eslint-disable */
+import React from "react";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from "@aws-amplify/ui-react/internal";
+import CustomButton from "./CustomButton";
+import { View, ViewProps } from "@aws-amplify/ui-react";
+
+export type ViewWithCustomButtonProps = React.PropsWithChildren<
+  Partial<ViewProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ViewWithCustomButton(
+  props: ViewWithCustomButtonProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <View {...rest} {...getOverrideProps(overrides, "ViewWithCustomButton")}>
+      <CustomButton
+        color="#ff0000"
+        width="20px"
+        {...getOverrideProps(overrides, "MyCustomButton")}
+      ></CustomButton>
+    </View>
+  );
+}
