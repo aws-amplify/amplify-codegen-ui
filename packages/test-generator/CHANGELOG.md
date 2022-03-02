@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.1.0...v2.1.1) (2022-03-02)
+
+
+### Bug Fixes
+
+* export aliased component name on data model collision ([63e5317](https://github.com/aws-amplify/amplify-codegen-ui/commit/63e53178dc8e284990c1bbfdb1ad192be633cb7c))
+
+
+
+
+
 # [2.1.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.0.0...v2.1.0) (2022-03-01)
 
 
