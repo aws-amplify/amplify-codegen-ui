@@ -149,6 +149,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'CreateModelWithComplexTypes',
   'InitialValueBindings',
   'DataBindingNamedClass',
+  'User',
 ]);
 const EXPECTED_INVALID_INPUT_CASES = new Set([
   'ComponentMissingProperties',

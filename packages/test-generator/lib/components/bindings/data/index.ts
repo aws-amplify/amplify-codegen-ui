@@ -14,3 +14,4 @@
   limitations under the License.
  */
 export { default as DataBindingNamedClass } from './dataBindingNamedClass.json';
+export { default as User } from './User.json';
