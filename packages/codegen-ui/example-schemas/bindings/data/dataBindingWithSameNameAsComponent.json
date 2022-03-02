@@ -1,0 +1,27 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Text",
+  "name": "User",
+  "bindingProperties": {
+    "user": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "User",
+        "predicate": {
+          "field": "firstName",
+          "operand": "Al",
+          "operator": "eq"
+        }
+      }      
+    }
+  },
+  "properties": {
+    "label": {
+      "bindingProperties": {
+        "property": "user",
+        "field": "name"
+      }
+    }
+  },
+  "schemaVersion": "1.0"
+}
