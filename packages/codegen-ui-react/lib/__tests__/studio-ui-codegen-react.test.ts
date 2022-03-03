@@ -572,12 +572,6 @@ describe('amplify render tests', () => {
       it('supports bindings with reserved keywords', () => {
         expect(generateWithAmplifyRenderer('bindings/data/dataBindingNamedClass').componentText).toMatchSnapshot();
       });
-
-      it('supports bindings with the same name as a model', () => {
-        expect(
-          generateWithAmplifyRenderer('bindings/data/dataBindingWithSameNameAsComponent').componentText,
-        ).toMatchSnapshot();
-      });
     });
   });
 });

@@ -59,7 +59,6 @@ import {
   SearchableCollection,
   ComponentWithAuthBinding,
   DataBindingNamedClass,
-  User as UserComponent,
 } from './ui-components'; // eslint-disable-line import/extensions
 import { initializeAuthMockData } from './mock-utils';
 
@@ -366,7 +365,6 @@ export default function ComponentTests() {
       <div id="reserved-keywords">
         <DataBindingNamedClass class={new Class({ name: 'biology' })} />
       </div>
-      <UserComponent id="user-component" />
     </AmplifyProvider>
   );
 }

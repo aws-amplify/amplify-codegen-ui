@@ -60,7 +60,7 @@ import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
-import { getComponentNameWithoutCollision, getComponentPropName } from './react-component-render-helper';
+import { getComponentPropName } from './react-component-render-helper';
 import {
   transpile,
   buildPrinter,
@@ -212,7 +212,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     renderExport: boolean,
   ): FunctionDeclaration {
     const componentPropType = getComponentPropName(componentName);
-    const componentNameWithoutCollision = getComponentNameWithoutCollision(componentName, this.componentMetadata);
     const jsxStatement = factory.createReturnStatement(
       factory.createParenthesizedExpression(
         this.renderConfig.script !== ScriptKind.TSX
@@ -237,7 +236,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       undefined,
       modifiers,
       undefined,
-      factory.createIdentifier(componentNameWithoutCollision),
+      factory.createIdentifier(componentName),
       typeParameter ? typeParameter.declaration() : undefined,
       [
         factory.createParameterDeclaration(

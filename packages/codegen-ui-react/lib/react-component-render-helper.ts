@@ -631,28 +631,3 @@ export function getSetStateName(stateReference: StateStudioComponentProperty): s
   const stateName = getStateName(stateReference);
   return ['set', stateName.charAt(0).toUpperCase() + stateName.slice(1)].join('');
 }
-
-/**
- * If we determine there are other contextual contraints we wish to apply to our component names, logic
- * should be added here.
- */
-function doesComponentNameCollideWithContext(componentName: string, componentMetadata: ComponentMetadata): boolean {
-  return componentMetadata.requiredDataModels.includes(componentName);
-}
-
-/**
- * If the component name collides with some other name in component context, suffix w/ a digit, and search
- * that suffix space until you find a viable name. Because we expose this as a default export, the name
- * is corrected in the `index` file which customers can import from.
- */
-export function getComponentNameWithoutCollision(componentName: string, componentMetadata: ComponentMetadata): string {
-  if (!doesComponentNameCollideWithContext(componentName, componentMetadata)) {
-    return componentName;
-  }
-
-  let suffix = 0;
-  while (doesComponentNameCollideWithContext(`${componentName}${suffix}`, componentMetadata)) {
-    suffix += 1;
-  }
-  return `${componentName}${suffix}`;
-}
