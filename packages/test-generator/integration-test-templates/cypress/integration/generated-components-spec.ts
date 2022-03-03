@@ -366,10 +366,4 @@ describe('Generated Components', () => {
       cy.get('#reserved-keywords').find('.amplify-text').should('have.text', 'biology');
     });
   });
-
-  describe('Conflicting names', () => {
-    it('renders with same name as a data model', () => {
-      cy.get('#user-component').contains('LUser2');
-    });
-  });
 });

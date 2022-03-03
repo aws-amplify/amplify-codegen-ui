@@ -32,7 +32,6 @@ import {
   getSyntaxKindToken,
   buildChildElement,
   buildConditionalExpression,
-  getComponentNameWithoutCollision,
 } from '../react-component-render-helper';
 
 import { assertASTMatchesSnapshot } from './__utils__';
@@ -294,34 +293,6 @@ describe('react-component-render-helper', () => {
       expect(() =>
         buildConditionalExpression(buildEmptyComponentMetadata(), buildConditionalWithOperand('18', 'boolean')),
       ).toThrow('Parsed value 18 and type boolean mismatch');
-    });
-  });
-
-  describe('getComponentNameWithoutCollision', () => {
-    const generateComponentMetadataWithModels = (requiredDataModels: string[]): ComponentMetadata => {
-      return {
-        requiredDataModels,
-        hasAuthBindings: false,
-        stateReferences: [],
-        componentNameToTypeMap: {},
-      };
-    };
-
-    it('returns the component name with no collision', () => {
-      expect(getComponentNameWithoutCollision('User', generateComponentMetadataWithModels([]))).toEqual('User');
-    });
-
-    it('returns a component name with suffix if there is a collision', () => {
-      expect(getComponentNameWithoutCollision('User', generateComponentMetadataWithModels(['User']))).toEqual('User0');
-    });
-
-    it('searches for a valid name until it finds one', () => {
-      expect(
-        getComponentNameWithoutCollision(
-          'User',
-          generateComponentMetadataWithModels(['User', 'User0', 'User1', 'User2']),
-        ),
-      ).toEqual('User3');
     });
   });
 });
