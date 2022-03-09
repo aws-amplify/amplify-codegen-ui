@@ -307,8 +307,8 @@ describe('Primitives', () => {
         .find('div')
         .within(() => {
           cy.get('.amplify-tabs').within(() => {
-            cy.get('div').eq(0).should('have.text', 'Tab 1');
-            cy.get('div').eq(1).should('have.text', 'Tab 2');
+            cy.get('button').eq(0).should('have.text', 'Tab 1');
+            cy.get('button').eq(1).should('have.text', 'Tab 2');
           });
         });
     });
