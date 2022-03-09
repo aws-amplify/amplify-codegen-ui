@@ -733,19 +733,45 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           statements.push(this.buildPaginationStatement(propName, model, sort));
         }
         this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+        /**
+         * const userDataStore = useDataStoreBinding({
+         *  type: "collection",
+         *  model: User,
+         *  ...
+         * }).items;
+         */
+        statements.push(
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createIdentifier(this.getDataStoreName(propName)),
+                  undefined,
+                  undefined,
+                  factory.createPropertyAccessExpression(
+                    this.buildUseDataStoreBindingCall(
+                      'collection',
+                      model,
+                      predicate ? this.getFilterName(propName) : undefined,
+                      sort ? this.getPaginationName(propName) : undefined,
+                    ),
+                    factory.createIdentifier('items'),
+                  ),
+                ),
+              ],
+              ts.NodeFlags.Const,
+            ),
+          ),
+        );
+        /**
+         * const items = itemsProp !== undefined ? itemsProp : userDataStore;
+         */
         statements.push(
           this.buildPropPrecedentStatement(
             propName,
             this.hasCollectionPropertyNamedItems(component) ? 'itemsProp' : 'items',
-            factory.createPropertyAccessExpression(
-              this.buildUseDataStoreBindingCall(
-                'collection',
-                model,
-                predicate ? this.getFilterName(propName) : undefined,
-                sort ? this.getPaginationName(propName) : undefined,
-              ),
-              'items',
-            ),
+            factory.createIdentifier(this.getDataStoreName(propName)),
           ),
         );
       });
@@ -798,7 +824,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             const { model } = bindingProperties;
             this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
 
-            /* const buttonColorDataStore = useDataStoreBinding({
+            /**
+             * const buttonColorDataStore = useDataStoreBinding({
              *   type: "collection"
              *   ...
              * }).items[0];
@@ -825,7 +852,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                 ),
               ),
             );
-
+            /**
+             * const buttonColor =
+             *  buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
+             */
             statements.push(
               factory.createVariableStatement(
                 undefined,

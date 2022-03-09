@@ -617,14 +617,12 @@ export default function CollectionOfCustomButtons(
     ],
   };
   const buttonUserFilter = createDataStorePredicate<User>(buttonUserFilterObj);
-  const buttonUser =
-    items !== undefined
-      ? items
-      : useDataStoreBinding({
-          type: \\"collection\\",
-          model: User,
-          criteria: buttonUserFilter,
-        }).items;
+  const buttonUserDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: User,
+    criteria: buttonUserFilter,
+  }).items;
+  const buttonUser = items !== undefined ? items : buttonUserDataStore;
   const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
@@ -723,15 +721,13 @@ export default function CollectionOfCustomButtons(
     sort: (s: SortPredicate<User>) =>
       s.firstName(SortDirection.ASCENDING).lastName(SortDirection.DESCENDING),
   };
-  const buttonUser =
-    items !== undefined
-      ? items
-      : useDataStoreBinding({
-          type: \\"collection\\",
-          model: User,
-          criteria: buttonUserFilter,
-          pagination: buttonUserPagination,
-        }).items;
+  const buttonUserDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: User,
+    criteria: buttonUserFilter,
+    pagination: buttonUserPagination,
+  }).items;
+  const buttonUser = items !== undefined ? items : buttonUserDataStore;
   const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
@@ -827,14 +823,12 @@ export default function CollectionOfCustomButtons(
     ],
   };
   const itemsFilter = createDataStorePredicate<User>(itemsFilterObj);
-  const items =
-    itemsProp !== undefined
-      ? itemsProp
-      : useDataStoreBinding({
-          type: \\"collection\\",
-          model: User,
-          criteria: itemsFilter,
-        }).items;
+  const itemsDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: User,
+    criteria: itemsFilter,
+  }).items;
+  const items = itemsProp !== undefined ? itemsProp : itemsDataStore;
   const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
@@ -904,13 +898,11 @@ export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): React.ReactElement {
   const { items, overrideItems, overrides, ...rest } = props;
-  const bananas =
-    items !== undefined
-      ? items
-      : useDataStoreBinding({
-          type: \\"collection\\",
-          model: UntitledModel,
-        }).items;
+  const bananasDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: UntitledModel,
+  }).items;
+  const bananas = items !== undefined ? items : bananasDataStore;
   return (
     /* @ts-ignore: TS2322 */
     <Collection
@@ -5021,13 +5013,11 @@ export default function CollectionDefaultValue(
   props: CollectionDefaultValueProps
 ): React.ReactElement {
   const { items, overrideItems, overrides, ...rest } = props;
-  const user =
-    items !== undefined
-      ? items
-      : useDataStoreBinding({
-          type: \\"collection\\",
-          model: User,
-        }).items;
+  const userDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: User,
+  }).items;
+  const user = items !== undefined ? items : userDataStore;
   return (
     /* @ts-ignore: TS2322 */
     <Collection
