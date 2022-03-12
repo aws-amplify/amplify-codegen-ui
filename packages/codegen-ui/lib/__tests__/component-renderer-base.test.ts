@@ -13,12 +13,21 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { TextProps } from '@aws-amplify/ui-react';
+/* eslint-disable max-classes-per-file */
 import { ComponentRendererBase } from '../component-renderer-base';
+import { StudioComponentChild } from '../types';
 
-class MockComponentRenderer extends ComponentRendererBase<TextProps, string> {
+type ComponentProps = {};
+
+class MockComponentRenderer extends ComponentRendererBase<ComponentProps, string, undefined> {
   renderElement(): string {
     return this.component.name || '';
+  }
+}
+
+class MockComponentRendererWithChildren extends ComponentRendererBase<ComponentProps, string, string> {
+  renderElement(renderChildren: (children: StudioComponentChild[], component?: string) => string[]): string {
+    return `${this.component.name},${renderChildren(this.component.children || []).join(',')}`;
   }
 }
 
@@ -32,5 +41,22 @@ describe('ComponentRendererBase', () => {
         properties: {},
       }).renderElement(),
     ).toEqual(name);
+  });
+
+  test('renderElement with children', () => {
+    expect(
+      new MockComponentRendererWithChildren({
+        componentType: 'Button',
+        name: 'MyButton',
+        properties: {},
+        children: [
+          {
+            componentType: 'Text',
+            name: 'MyText',
+            properties: {},
+          },
+        ],
+      }).renderElement((children) => children.map((child) => child.name)),
+    ).toEqual('MyButton,MyText');
   });
 });

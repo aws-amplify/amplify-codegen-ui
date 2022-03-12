@@ -16,10 +16,10 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import { isStudioComponentWithCollectionProperties, StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { factory, JsxChild, JsxElement, JsxExpression, JsxOpeningElement, SyntaxKind } from 'typescript';
-import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
+import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildOpeningElementProperties } from '../react-component-render-helper';
 
-export default class CollectionRenderer extends ReactComponentWithChildrenRenderer<BaseComponentProps> {
+export default class CollectionRenderer extends ReactComponentRenderer<BaseComponentProps> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
     this.addKeyPropertyToChildren(this.component.children ?? []);
     const childrenJsx = this.component.children ? renderChildren(this.component.children ?? []) : [];

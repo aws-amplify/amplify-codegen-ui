@@ -28,6 +28,7 @@ import {
   factory,
   JsxSelfClosingElement,
   SyntaxKind,
+  JsxChild,
 } from 'typescript';
 import {
   addBindingPropertiesImports,
@@ -44,7 +45,8 @@ import { ImportCollection, ImportSource, ImportValue } from './imports';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   TPropIn,
-  JsxElement | JsxSelfClosingElement
+  JsxElement | JsxSelfClosingElement,
+  JsxChild
 > {
   constructor(
     component: StudioComponent | StudioComponentChild,
@@ -56,10 +58,14 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     addBindingPropertiesImports(component, importCollection);
   }
 
-  renderElement(): JsxElement | JsxSelfClosingElement {
+  renderElement(
+    renderChildren: ((children: StudioComponentChild[]) => JsxChild[]) | undefined = undefined,
+  ): JsxElement | JsxSelfClosingElement {
+    const children = this.component.children ?? [];
+
     const element = factory.createJsxElement(
       this.renderOpeningElement(),
-      [],
+      renderChildren ? renderChildren(children) : [],
       factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
