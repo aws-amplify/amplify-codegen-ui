@@ -142,7 +142,7 @@ export function buildPrinter(fileName: string, renderConfig: ReactRenderConfig) 
 }
 
 export function getDeclarationFilename(filename: string): string {
-  return `${path.basename(filename, '.tsx')}.d.ts`;
+  return `${path.basename(filename, filename.includes('.tsx') ? '.tsx' : '.jsx')}.d.ts`;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
