@@ -16,7 +16,7 @@
 import { StudioTemplateRendererFactory, StudioComponent } from '@aws-amplify/codegen-ui';
 import { ScriptTarget, ScriptKind } from '..';
 import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
-import { formatCode } from '../react-studio-template-renderer-helper';
+import { formatCode, getDeclarationFilename } from '../react-studio-template-renderer-helper';
 import { loadSchemaFromJSONFile } from './__utils__';
 
 function generateDeclarationForScriptTarget(jsonSchemaFile: string, target: ScriptTarget): any {
@@ -116,6 +116,15 @@ describe('react-studio-template-renderer-helper', () => {
       }));
 
       expect(() => formatCode(code)).toThrowErrorMatchingSnapshot();
+    });
+  });
+  describe('generate declaration file', () => {
+    it('generate declaration file with .tsx extension', () => {
+      expect(getDeclarationFilename('component/TestComponent.tsx')).toEqual('TestComponent.d.ts');
+    });
+
+    it('generate declaration file with .jsx extension', () => {
+      expect(getDeclarationFilename('component/TestComponent.jsx')).toEqual('TestComponent.d.ts');
     });
   });
 });
