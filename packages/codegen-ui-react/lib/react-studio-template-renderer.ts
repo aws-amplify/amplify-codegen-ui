@@ -493,7 +493,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                 undefined,
               ),
             ],
-            factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+            factory.createTypeReferenceNode(factory.createIdentifier('Record<string, string>'), undefined),
           ),
         ),
       );
