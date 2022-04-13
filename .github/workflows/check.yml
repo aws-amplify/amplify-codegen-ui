@@ -41,8 +41,10 @@ jobs:
       - name: Install updated codegen libraries
         working-directory: amplify-cli/packages/amplify-util-uibuilder
         run: |
-          npm i /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
-          npm i /home/runner/work/amplify-codegen-ui/amplify-codegen-ui/amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
+            tar -xzfv ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
+            tar -xzfv ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
+            npm i ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*
+            npm i ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*
       - name: Create a test react app
         run: npx create-react-app e2e-test-app
       - name: Install test app dependencies
