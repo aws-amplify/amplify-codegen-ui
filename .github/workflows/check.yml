@@ -41,6 +41,9 @@ jobs:
       - name: Install updated codegen libraries
         working-directory: amplify-cli/packages/amplify-util-uibuilder
         run: |
+          ls ../../../amplify-codegen-ui/packages
+          ls ../../../amplify-codegen-ui/packages/codegen-ui
+          ls ../../../amplify-codegen-ui/packages/codegen-ui-react
           npm i ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
           npm i ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
       - name: Create a test react app
