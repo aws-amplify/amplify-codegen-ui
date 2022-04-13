@@ -34,6 +34,24 @@
                 "property": "user",
                 "field": "lastName"
               }
+            },
+            {
+              "value": " | age: "
+            },
+            {
+              "collectionBindingProperties": {
+                "property": "user",
+                "field": "age"
+              }
+            },
+            {
+              "value": " | isLoggedIn: "
+            },
+            {
+              "collectionBindingProperties": {
+                "property": "user",
+                "field": "isLoggedIn"
+              }
             }
           ]
         }

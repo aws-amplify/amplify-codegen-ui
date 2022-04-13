@@ -19,6 +19,7 @@ export enum ImportSource {
   UI_REACT_INTERNAL = '@aws-amplify/ui-react/internal',
   AMPLIFY_DATASTORE = '@aws-amplify/datastore',
   LOCAL_MODELS = '../models',
+  LOCAL_SCHEMA = '../models/schema',
 }
 
 export enum ImportValue {

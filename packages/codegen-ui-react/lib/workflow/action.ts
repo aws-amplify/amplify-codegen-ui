@@ -48,6 +48,12 @@ export const ActionNameMapping: Partial<Record<Action, ImportValue>> = {
   [Action['Amplify.Mutation']]: ImportValue.USE_STATE_MUTATION_ACTION,
 };
 
+const DataStoreActions = new Set([
+  Action['Amplify.DataStoreCreateItemAction'],
+  Action['Amplify.DataStoreDeleteItemAction'],
+  Action['Amplify.DataStoreUpdateItemAction'],
+]);
+
 function isMutationAction(action: ActionStudioComponentEvent): action is MutationAction {
   return (action.action as Action) === Action['Amplify.Mutation'];
 }
@@ -172,20 +178,26 @@ export function buildActionArguments(
   importCollection: ImportCollection,
 ): ObjectLiteralExpression[] | undefined {
   if (action.parameters) {
-    return [
-      factory.createObjectLiteralExpression(
-        Object.entries(action.parameters).map(([key, value]) =>
-          factory.createPropertyAssignment(
-            factory.createIdentifier(key),
-            getActionParameterValue(componentMetadata, key, value, importCollection),
-          ),
-        ),
-        false,
+    const properties = Object.entries(action.parameters).map(([key, value]) =>
+      factory.createPropertyAssignment(
+        factory.createIdentifier(key),
+        getActionParameterValue(componentMetadata, key, value, importCollection),
       ),
-    ];
+    );
+
+    if (DataStoreActions.has(action.action as Action)) {
+      addSchemaToArguments(properties, importCollection);
+    }
+    return [factory.createObjectLiteralExpression(properties, false)];
   }
 
   return undefined;
+}
+
+export function addSchemaToArguments(properties: ts.PropertyAssignment[], importCollection: ImportCollection) {
+  const SCHEMA = 'schema';
+  properties.push(factory.createPropertyAssignment(factory.createIdentifier(SCHEMA), factory.createIdentifier(SCHEMA)));
+  importCollection.addImport(ImportSource.LOCAL_SCHEMA, SCHEMA);
 }
 
 export function getActionParameterValue(

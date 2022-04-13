@@ -10,6 +10,7 @@ import {
   useDataStoreCreateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
+import { schema } from \\"../models/schema\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type CreateCustomerButtonProps = React.PropsWithChildren<
@@ -24,6 +25,7 @@ export default function CreateCustomerButton(
   const createCustomerButtonOnClick = useDataStoreCreateAction({
     model: Customer,
     fields: { firstName: \\"Din\\", lastName: \\"Djarin\\" },
+    schema: schema,
   });
   return (
     /* @ts-ignore: TS2322 */
@@ -53,6 +55,7 @@ import {
   useDataStoreDeleteAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
+import { schema } from \\"../models/schema\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type DeleteCustomerButtonProps = React.PropsWithChildren<
@@ -67,6 +70,7 @@ export default function DeleteCustomerButton(
   const deleteCustomerButtonOnClick = useDataStoreDeleteAction({
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
+    schema: schema,
   });
   return (
     /* @ts-ignore: TS2322 */
@@ -96,6 +100,7 @@ import {
   useDataStoreUpdateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
+import { schema } from \\"../models/schema\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type UpdateCustomerButtonProps = React.PropsWithChildren<
@@ -111,6 +116,7 @@ export default function UpdateCustomerButton(
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
     fields: { firstName: \\"Din\\", lastName: \\"Djarin\\" },
+    schema: schema,
   });
   return (
     /* @ts-ignore: TS2322 */
@@ -503,6 +509,7 @@ import {
   useDataStoreCreateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
+import { schema } from \\"../models/schema\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
 export type ComponentWithAuthEventBindingProps = React.PropsWithChildren<
@@ -521,6 +528,7 @@ export default function ComponentWithAuthEventBinding(
       userName: authAttributes[\\"username\\"],
       favoriteIceCream: authAttributes[\\"custom:favorite_icecream\\"],
     },
+    schema: schema,
   });
   return (
     /* @ts-ignore: TS2322 */
@@ -5473,6 +5481,7 @@ import {
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
+import { schema } from \\"../models/schema\\";
 import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
 
 export type MyFormProps = React.PropsWithChildren<
@@ -5488,6 +5497,7 @@ export default function MyForm(props: MyFormProps): React.ReactElement {
     model: Customer,
     id: \\"d9887268-47dd-4899-9568-db5809218751\\",
     fields: { username: usernameTextFieldValue },
+    schema: schema,
   });
   return (
     /* @ts-ignore: TS2322 */
