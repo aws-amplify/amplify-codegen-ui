@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.1.2...v2.2.0) (2022-04-13)
+
+
+### Bug Fixes
+
+* change tabs to buttons per UI release 2.9.0 ([1db38f3](https://github.com/aws-amplify/amplify-codegen-ui/commit/1db38f3fd4f581a7b91ae782cb272a801ac78364))
+* make complex integ tests agnostic to style order ([b8e9922](https://github.com/aws-amplify/amplify-codegen-ui/commit/b8e9922e565bcba2a1c10d6def2d5a4996c87ec7))
+* remove jsx ext from declaration file ext ([#458](https://github.com/aws-amplify/amplify-codegen-ui/issues/458)) ([e4062c8](https://github.com/aws-amplify/amplify-codegen-ui/commit/e4062c8760b3c850125c7ab5c6ae7d4e2258c598))
+
+
+### Features
+
+* support type casting for DataStore hooks ([#460](https://github.com/aws-amplify/amplify-codegen-ui/issues/460)) ([79953c5](https://github.com/aws-amplify/amplify-codegen-ui/commit/79953c5d7dfd20d68238089fe9900532f1e9e0e6))
+
+
+
+
+
 ## [2.1.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.1.1...v2.1.2) (2022-03-03)
 
 
