@@ -24,7 +24,7 @@ export class ReactRequiredDependencyProvider extends RequiredDependencyProvider<
     return [
       {
         dependencyName: '@aws-amplify/ui-react',
-        supportedSemVerPattern: '^2.10.3',
+        supportedSemVerPattern: '^2.13.0',
         reason: 'Required to leverage amplify ui primitives, and studio component helper functions.',
       },
     ];
