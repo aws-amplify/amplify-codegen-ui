@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { DataStore } from 'aws-amplify';
@@ -128,8 +128,13 @@ const initializeListingTestData = async (): Promise<void> => {
 
 export default function ComponentTests() {
   const [isInitialized, setInitialized] = useState(false);
+  const initializeStarted = useRef(false);
+
   useEffect(() => {
     const initializeTestUserData = async () => {
+      if (initializeStarted.current) {
+        return;
+      }
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
       await Promise.all([initializeUserTestData(), initializeListingTestData()]);
@@ -142,6 +147,7 @@ export default function ComponentTests() {
     };
 
     initializeTestUserData();
+    initializeStarted.current = true;
   }, []);
 
   if (!isInitialized) {

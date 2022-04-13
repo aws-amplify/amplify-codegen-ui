@@ -167,18 +167,21 @@ describe('Workflow', () => {
     });
 
     describe('DataStore', () => {
-      it('supports creating a datastore item', () => {
-        cy.get('#user-collection').contains('Din Djarin').should('not.exist');
+      it('supports creating a datastore item, type-casting scalar values', () => {
+        const expected = 'Din Djarin | age: 200 | isLoggedIn: true';
+        cy.get('#user-collection').contains(expected).should('not.exist');
         cy.get('#create-item').click();
-        cy.get('#user-collection').contains('Din Djarin');
+        cy.get('#user-collection').contains(expected);
       });
 
-      it('supports updating a datastore item', () => {
-        cy.get('#user-collection').contains('UpdateMe Me');
-        cy.get('#user-collection').contains('Moff Gideon').should('not.exist');
+      it('supports updating a datastore item, type-casting scalar values', () => {
+        const before = 'UpdateMe Me';
+        const after = 'Moff Gideon | age: 200 | isLoggedIn: true';
+        cy.get('#user-collection').contains(before);
+        cy.get('#user-collection').contains(after).should('not.exist');
         cy.get('#update-item').click();
-        cy.get('#user-collection').contains('UpdateMe Me').should('not.exist');
-        cy.get('#user-collection').contains('Moff Gideon');
+        cy.get('#user-collection').contains(before).should('not.exist');
+        cy.get('#user-collection').contains(after);
       });
 
       it('supports deleting a datastore item', () => {

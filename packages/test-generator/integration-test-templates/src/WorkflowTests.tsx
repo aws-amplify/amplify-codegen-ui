@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { useState, SyntheticEvent, useEffect } from 'react';
+import { useState, SyntheticEvent, useEffect, useRef } from 'react';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider, Button } from '@aws-amplify/ui-react';
 import { Hub } from 'aws-amplify';
@@ -61,6 +61,7 @@ export default function ComplexTests() {
   const [hasDisappeared, setDisappeared] = useState(false);
   const [authState, setAuthState] = useState<AuthState>('LoggedIn');
   const [formIdToUpdate, setFormIdToUpdate] = useState('');
+  const initializeStarted = useRef(false);
 
   const initializeUserTestData = async (): Promise<void> => {
     await DataStore.save(new User({ firstName: 'DeleteMe', lastName: 'Me' }));
@@ -88,22 +89,29 @@ export default function ComplexTests() {
 
   useEffect(() => {
     const initializeTestState = async () => {
+      if (initializeStarted.current) {
+        return;
+      }
       // DataStore.clear() doesn't appear to reliably work in this scenario.
-      indexedDB.deleteDatabase('amplify-datastore');
-      await initializeUserTestData();
-      const queriedIdToDelete = (await DataStore.query(User, (criteria) => criteria.firstName('eq', 'DeleteMe')))[0].id;
-      setIdToDelete(queriedIdToDelete);
-      const queriedIdToUpdate = (await DataStore.query(User, (criteria) => criteria.firstName('eq', 'UpdateMe')))[0].id;
-      setIdToUpdate(queriedIdToUpdate);
-      const queriedFormIdToUpdate = (
-        await DataStore.query(User, (criteria) => criteria.firstName('eq', 'FormUpdate'))
-      )[0].id;
-      setFormIdToUpdate(queriedFormIdToUpdate);
-      initializeAuthListener();
-      setInitialized(true);
+      indexedDB.deleteDatabase('amplify-datastore').onsuccess = async function () {
+        await initializeUserTestData();
+        const queriedIdToDelete = (await DataStore.query(User, (criteria) => criteria.firstName('eq', 'DeleteMe')))[0]
+          .id;
+        setIdToDelete(queriedIdToDelete);
+        const queriedIdToUpdate = (await DataStore.query(User, (criteria) => criteria.firstName('eq', 'UpdateMe')))[0]
+          .id;
+        setIdToUpdate(queriedIdToUpdate);
+        const queriedFormIdToUpdate = (
+          await DataStore.query(User, (criteria) => criteria.firstName('eq', 'FormUpdate'))
+        )[0].id;
+        setFormIdToUpdate(queriedFormIdToUpdate);
+        initializeAuthListener();
+        setInitialized(true);
+      };
     };
 
     initializeTestState();
+    initializeStarted.current = true;
   }, []);
 
   const complexModels = useDataStoreBinding({
