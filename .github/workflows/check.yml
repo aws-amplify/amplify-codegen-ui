@@ -34,8 +34,7 @@ jobs:
         run: npm run build
       - name: Package amplify-codegen-ui
         working-directory: amplify-codegen-ui
-        run: |
-            lerna exec npm pack
+        run: lerna exec npm pack
       - name: Build amplify-cli
         working-directory: amplify-cli
         run: yarn setup-dev
