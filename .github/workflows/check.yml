@@ -36,18 +36,14 @@ jobs:
         working-directory: amplify-codegen-ui
         run: |
             lerna exec npm pack
-            cd packages/codegen-ui
-            ls *.tgz | xargs -n1 tar zxvf
-            cd ../codegen-ui-react
-            ls *.tgz | xargs -n1 tar zxvf
       - name: Build amplify-cli
         working-directory: amplify-cli
         run: yarn setup-dev
       - name: Install updated codegen libraries
         working-directory: amplify-cli/packages/amplify-util-uibuilder
         run: |
-            npm i ../../../amplify-codegen-ui/packages/codegen-ui/package
-            npm i ../../../amplify-codegen-ui/packages/codegen-ui-react/package
+          yarn add ../../../amplify-codegen-ui/packages/codegen-ui/aws-amplify-codegen-ui-*.tgz
+          yarn add ../../../amplify-codegen-ui/packages/codegen-ui-react/aws-amplify-codegen-ui-react-*.tgz
       - name: Create a test react app
         run: npx create-react-app e2e-test-app
       - name: Install test app dependencies
