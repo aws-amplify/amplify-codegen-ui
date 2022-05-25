@@ -68,7 +68,6 @@ import { Primitive } from '../primitive';
 import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
 import CustomComponentRenderer from './customComponent';
 import CollectionRenderer from './collection';
-import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
 import { ReactComponentRenderer } from '../react-component-renderer';
 
 export class AmplifyRenderer extends ReactStudioTemplateRenderer {
@@ -82,7 +81,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
     // add Primitive in alphabetical order
     switch (component.componentType) {
       case Primitive.Alert:
-        return new ReactComponentWithChildrenRenderer<AlertProps>(
+        return new ReactComponentRenderer<AlertProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -90,7 +89,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Badge:
-        return new ReactComponentWithChildrenRenderer<BadgeProps>(
+        return new ReactComponentRenderer<BadgeProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -98,7 +97,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Button:
-        return new ReactComponentWithChildrenRenderer<ButtonProps>(
+        return new ReactComponentRenderer<ButtonProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -106,7 +105,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.ButtonGroup:
-        return new ReactComponentWithChildrenRenderer<ButtonGroupProps>(
+        return new ReactComponentRenderer<ButtonGroupProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -114,7 +113,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Card:
-        return new ReactComponentWithChildrenRenderer<CardProps>(
+        return new ReactComponentRenderer<CardProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -122,7 +121,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.CheckboxField:
-        return new ReactComponentWithChildrenRenderer<CheckboxFieldProps>(
+        return new ReactComponentRenderer<CheckboxFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -143,7 +142,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement();
 
       case Primitive.Expander:
-        return new ReactComponentWithChildrenRenderer<ExpanderProps>(
+        return new ReactComponentRenderer<ExpanderProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -151,7 +150,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.ExpanderItem:
-        return new ReactComponentWithChildrenRenderer<ExpanderItemProps>(
+        return new ReactComponentRenderer<ExpanderItemProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -159,7 +158,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Flex:
-        return new ReactComponentWithChildrenRenderer<FlexProps>(
+        return new ReactComponentRenderer<FlexProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -167,7 +166,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Grid:
-        return new ReactComponentWithChildrenRenderer<GridProps>(
+        return new ReactComponentRenderer<GridProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -175,7 +174,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Heading:
-        return new ReactComponentWithChildrenRenderer<HeadingProps>(
+        return new ReactComponentRenderer<HeadingProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -183,7 +182,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Icon:
-        return new ReactComponentWithChildrenRenderer<IconProps>(
+        return new ReactComponentRenderer<IconProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -199,7 +198,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement();
 
       case Primitive.Link:
-        return new ReactComponentWithChildrenRenderer<LinkProps>(
+        return new ReactComponentRenderer<LinkProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -207,7 +206,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Loader:
-        return new ReactComponentWithChildrenRenderer<LoaderProps>(
+        return new ReactComponentRenderer<LoaderProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -215,7 +214,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.MenuButton:
-        return new ReactComponentWithChildrenRenderer<ButtonProps>(
+        return new ReactComponentRenderer<ButtonProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -223,7 +222,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.MenuItem:
-        return new ReactComponentWithChildrenRenderer<MenuItemProps>(
+        return new ReactComponentRenderer<MenuItemProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -231,7 +230,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Menu:
-        return new ReactComponentWithChildrenRenderer<MenuProps>(
+        return new ReactComponentRenderer<MenuProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -239,7 +238,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Pagination:
-        return new ReactComponentWithChildrenRenderer<PaginationProps>(
+        return new ReactComponentRenderer<PaginationProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -247,7 +246,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.PasswordField:
-        return new ReactComponentWithChildrenRenderer<PasswordFieldProps>(
+        return new ReactComponentRenderer<PasswordFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -255,7 +254,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.PhoneNumberField:
-        return new ReactComponentWithChildrenRenderer<PhoneNumberFieldProps>(
+        return new ReactComponentRenderer<PhoneNumberFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -263,7 +262,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Placeholder:
-        return new ReactComponentWithChildrenRenderer<PlaceholderProps>(
+        return new ReactComponentRenderer<PlaceholderProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -271,7 +270,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Radio:
-        return new ReactComponentWithChildrenRenderer<RadioProps>(
+        return new ReactComponentRenderer<RadioProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -279,7 +278,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.RadioGroupField:
-        return new ReactComponentWithChildrenRenderer<RadioGroupFieldProps>(
+        return new ReactComponentRenderer<RadioGroupFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -287,7 +286,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Rating:
-        return new ReactComponentWithChildrenRenderer<RatingProps>(
+        return new ReactComponentRenderer<RatingProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -295,7 +294,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.ScrollView:
-        return new ReactComponentWithChildrenRenderer<ScrollViewProps>(
+        return new ReactComponentRenderer<ScrollViewProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -303,7 +302,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.SearchField:
-        return new ReactComponentWithChildrenRenderer<SearchFieldProps>(
+        return new ReactComponentRenderer<SearchFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -311,7 +310,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.SelectField:
-        return new ReactComponentWithChildrenRenderer<SelectFieldProps>(
+        return new ReactComponentRenderer<SelectFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -327,7 +326,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement();
 
       case Primitive.StepperField:
-        return new ReactComponentWithChildrenRenderer<StepperFieldProps>(
+        return new ReactComponentRenderer<StepperFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -335,7 +334,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.SwitchField:
-        return new ReactComponentWithChildrenRenderer<SwitchFieldProps>(
+        return new ReactComponentRenderer<SwitchFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -343,7 +342,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TabItem:
-        return new ReactComponentWithChildrenRenderer<TabItemProps>(
+        return new ReactComponentRenderer<TabItemProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -351,7 +350,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Tabs:
-        return new ReactComponentWithChildrenRenderer<TabsProps>(
+        return new ReactComponentRenderer<TabsProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -359,7 +358,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Table:
-        return new ReactComponentWithChildrenRenderer<TableProps>(
+        return new ReactComponentRenderer<TableProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -367,7 +366,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TableBody:
-        return new ReactComponentWithChildrenRenderer<TableBodyProps>(
+        return new ReactComponentRenderer<TableBodyProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -375,7 +374,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TableCell:
-        return new ReactComponentWithChildrenRenderer<TableCellProps>(
+        return new ReactComponentRenderer<TableCellProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -383,7 +382,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TableFoot:
-        return new ReactComponentWithChildrenRenderer<TableFootProps>(
+        return new ReactComponentRenderer<TableFootProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -391,7 +390,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TableHead:
-        return new ReactComponentWithChildrenRenderer<TableHeadProps>(
+        return new ReactComponentRenderer<TableHeadProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -399,7 +398,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TableRow:
-        return new ReactComponentWithChildrenRenderer<TableRowProps>(
+        return new ReactComponentRenderer<TableRowProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -407,7 +406,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Text:
-        return new ReactComponentWithChildrenRenderer<TextProps>(
+        return new ReactComponentRenderer<TextProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -415,7 +414,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TextAreaField:
-        return new ReactComponentWithChildrenRenderer<TextAreaFieldProps>(
+        return new ReactComponentRenderer<TextAreaFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -423,7 +422,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TextField:
-        return new ReactComponentWithChildrenRenderer<TextFieldProps<boolean>>(
+        return new ReactComponentRenderer<TextFieldProps<boolean>>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -431,7 +430,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.ToggleButton:
-        return new ReactComponentWithChildrenRenderer<ToggleButtonProps>(
+        return new ReactComponentRenderer<ToggleButtonProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -439,7 +438,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.ToggleButtonGroup:
-        return new ReactComponentWithChildrenRenderer<ToggleButtonGroupProps>(
+        return new ReactComponentRenderer<ToggleButtonGroupProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -447,7 +446,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.View:
-        return new ReactComponentWithChildrenRenderer<ViewProps>(
+        return new ReactComponentRenderer<ViewProps>(
           component,
           this.componentMetadata,
           this.importCollection,
@@ -455,7 +454,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.VisuallyHidden:
-        return new ReactComponentWithChildrenRenderer<VisuallyHiddenProps>(
+        return new ReactComponentRenderer<VisuallyHiddenProps>(
           component,
           this.componentMetadata,
           this.importCollection,

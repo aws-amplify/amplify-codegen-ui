@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './react-component-with-children-renderer';
 export * from './react-component-renderer';
 export * from './imports';
 export * from './react-studio-template-renderer';
