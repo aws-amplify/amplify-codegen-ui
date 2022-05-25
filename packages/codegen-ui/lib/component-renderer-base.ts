@@ -13,18 +13,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { DividerProps, TextProps, ImageProps } from '@aws-amplify/ui-react';
-
+import { StudioComponentChild } from './types';
 import { CommonComponentRenderer } from './common-component-renderer';
 
-type SourceProp = DividerProps | ImageProps | TextProps;
-
-/**
- * This is a base class for a renderer that renders components with no children.
- */
 export abstract class ComponentRendererBase<
-  TPropIn extends SourceProp,
+  TPropIn,
   TElementOut,
+  TElementChild,
 > extends CommonComponentRenderer<TPropIn> {
-  abstract renderElement(): TElementOut;
+  abstract renderElement(
+    renderChildren?: (children: StudioComponentChild[], component?: TElementOut) => TElementChild[],
+  ): TElementOut;
 }

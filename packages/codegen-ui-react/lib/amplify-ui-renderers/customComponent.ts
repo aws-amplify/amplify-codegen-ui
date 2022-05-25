@@ -15,9 +15,9 @@
  */
 import { StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { JsxChild, JsxElement, factory } from 'typescript';
-import { ReactComponentWithChildrenRenderer } from '../react-component-with-children-renderer';
+import { ReactComponentRenderer } from '../react-component-renderer';
 
-export default class CustomComponentRenderer<TPropIn> extends ReactComponentWithChildrenRenderer<TPropIn> {
+export default class CustomComponentRenderer<TPropIn> extends ReactComponentRenderer<TPropIn> {
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
     const children = this.component.children ? this.component.children : [];
     const element = factory.createJsxElement(
