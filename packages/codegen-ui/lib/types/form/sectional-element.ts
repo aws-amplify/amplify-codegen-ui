@@ -13,14 +13,30 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './actions';
-export * from './components';
-export * from './bindings';
-export * from './events';
-export * from './figma';
-export * from './properties';
-export * from './theme';
-export * from './relational-operator';
-export * from './studio-schema';
-export * from './form';
-export * from './data';
+import { StudioFieldPosition } from './position';
+/**
+ * Sectional elements are visual helpers for the form. They don't have any data associated with them.
+ */
+type HeadingSectionalElement = {
+  type: 'Heading';
+
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+
+  text: string;
+};
+
+type TextSectionalElement = {
+  type: 'Text';
+
+  text: string;
+};
+
+type DividerSectionalElement = {
+  type: 'Divider';
+};
+
+export type SectionalElement = { position: StudioFieldPosition; name: string } & (
+  | HeadingSectionalElement
+  | DividerSectionalElement
+  | TextSectionalElement
+);
