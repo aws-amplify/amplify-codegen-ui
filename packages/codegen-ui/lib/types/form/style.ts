@@ -13,14 +13,21 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './actions';
-export * from './components';
-export * from './bindings';
-export * from './events';
-export * from './figma';
-export * from './properties';
-export * from './theme';
-export * from './relational-operator';
-export * from './studio-schema';
-export * from './form';
-export * from './data';
+type FormStyleConfigCommon = {
+  tokenReference?: string;
+};
+
+type FormStyleConfig = {
+  value?: string;
+} & FormStyleConfigCommon;
+
+type FormAlignmentConfig = {
+  value?: 'left' | 'center' | 'right';
+} & FormStyleConfigCommon;
+
+export type StudioFormStyle = {
+  horizontalGap?: FormStyleConfig;
+  verticalGap?: FormStyleConfig;
+  outerPadding?: FormStyleConfig;
+  alignment?: FormAlignmentConfig;
+};

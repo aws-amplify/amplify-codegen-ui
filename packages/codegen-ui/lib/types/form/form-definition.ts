@@ -13,14 +13,27 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './actions';
-export * from './components';
-export * from './bindings';
-export * from './events';
-export * from './figma';
-export * from './properties';
-export * from './theme';
-export * from './relational-operator';
-export * from './studio-schema';
-export * from './form';
-export * from './data';
+import { StudioFormStyle } from './style';
+
+export type FormDefinitionElementProps = {
+  isReadOnly?: boolean;
+  isRequired?: boolean;
+  label?: string;
+  placeholder?: string;
+  minValue?: number;
+  maxValue?: number;
+  step?: number;
+  level?: number;
+  text?: string;
+};
+
+export type FormDefinition = {
+  form: {
+    props: {
+      layoutStyle: StudioFormStyle;
+    };
+  };
+  elements: { [element: string]: { componentType: string; dataType?: string; props: FormDefinitionElementProps } };
+  buttons: { [key: string]: string };
+  elementMatrix: string[][];
+};
