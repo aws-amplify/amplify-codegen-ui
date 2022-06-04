@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@aws-amplify/ui-react": "^2.1.0",
+    "cypress": "^10.0.2",
     "eslint-plugin-cypress": "2.12.1",
     "pascalcase": "1.0.0"
   }

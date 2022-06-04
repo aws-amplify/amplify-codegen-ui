@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import React from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import { Heading, View } from '@aws-amplify/ui-react';
 import {
@@ -57,9 +57,41 @@ import {
   ToggleButtonGroupPrimitive,
   ViewPrimitive,
   VisuallyHiddenPrimitive,
-} from './ui-components'; // eslint-disable-line import/extensions
+  // eslint-disable-next-line import/extensions
+} from './ui-components';
+import { initializeListingTestData } from './mock-utils';
 
 export default function PrimitivesTests() {
+  const [isInitialized, setInitialized] = useState(false);
+  const initializeStarted = useRef(false);
+
+  useEffect(() => {
+    const initializeTestUserData = async () => {
+      if (initializeStarted.current) {
+        return;
+      }
+      // DataStore.clear() doesn't appear to reliably work in this scenario.
+      const ddbRequest = indexedDB.deleteDatabase('amplify-datastore');
+      await new Promise((res, rej) => {
+        ddbRequest.onsuccess = () => {
+          res(true);
+        };
+        ddbRequest.onerror = () => {
+          rej(ddbRequest.error);
+        };
+      });
+      await Promise.all([initializeListingTestData()]);
+      setInitialized(true);
+    };
+
+    initializeTestUserData();
+    initializeStarted.current = true;
+  }, []);
+
+  if (!isInitialized) {
+    return null;
+  }
+
   return (
     <>
       <View id="alert">
