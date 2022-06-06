@@ -4,7 +4,7 @@
     "outDir": "./dist",
     "module": "commonjs",
     "sourceMap": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": ["./lib"]
 }

@@ -14,6 +14,8 @@
   limitations under the License.
  */
 import { Buffer } from 'buffer';
+import { DataStore } from 'aws-amplify';
+import { Listing } from './models';
 
 const TEST_REGION = 'us-west-2';
 const TEST_POOL_NAME = 'testpool';
@@ -55,4 +57,60 @@ export const initializeAuthMockData = (authAttributes: Record<string, string>) =
       exp: expiryTimestamp,
     }),
   );
+};
+export const initializeListingTestData = async (): Promise<void> => {
+  await DataStore.save(
+    new Listing({ title: 'Cozy Bungalow', priceUSD: 1500, description: 'Lorem ipsum dolor sit amet' }),
+  );
+  await DataStore.save(
+    new Listing({
+      title: 'Mountain Retreat',
+      priceUSD: 1800,
+      description: 'consectetur adipiscing elit, sed do eiusmod tempor incididunt',
+    }),
+  );
+  await DataStore.save(
+    new Listing({
+      title: 'Quiet Cottage',
+      priceUSD: 1100,
+      description: 'ut labore et dolore magna aliqua. Ut enim ad minim veniam',
+    }),
+  );
+  await DataStore.save(
+    new Listing({
+      title: 'Creekside Hideaway',
+      priceUSD: 950,
+      description: 'quis nostrud exercitation ullamco laboris nisi ut aliquip',
+    }),
+  );
+  await DataStore.save(
+    new Listing({
+      title: 'Cabin in the Woods',
+      priceUSD: 600,
+      description: 'ex ea commodo consequat. Duis aute irure dolor in reprehenderit',
+    }),
+  );
+  await DataStore.save(
+    new Listing({
+      title: 'Cabin at the Lake (unit 1)',
+      priceUSD: 700,
+      description: 'in voluptate velit esse cillum dolore eu fugiat nulla pariatur',
+    }),
+  );
+  await DataStore.save(
+    new Listing({
+      title: 'Cabin at the Lake (unit 2)',
+      priceUSD: 800,
+      description: 'Excepteur sint occaecat cupidatat non proident',
+    }),
+  );
+  await DataStore.save(
+    new Listing({
+      title: 'Beachside Cottage',
+      priceUSD: 1000,
+      description: 'sunt in culpa qui officia deserunt mollit anim id est laborum',
+    }),
+  );
+  await DataStore.save(new Listing({ title: 'Lush Resort', priceUSD: 3500, description: 'Its real nice' }));
+  await DataStore.save(new Listing({ title: 'Chalet away from home', priceUSD: 5000, description: 'youll like it' }));
 };

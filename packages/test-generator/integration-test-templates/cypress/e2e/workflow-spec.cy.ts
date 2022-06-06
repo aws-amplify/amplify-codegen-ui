@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-
 const TEST_ROUTE = 'http://localhost:3000/workflow-tests';
 
 describe('Workflow', () => {
