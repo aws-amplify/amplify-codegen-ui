@@ -50,6 +50,7 @@ jobs:
           start: npm start
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
+          config-file: cypress.config.js
 
   write-beta-canary-failure-metric:
     runs-on: ubuntu-latest
@@ -121,6 +122,7 @@ jobs:
           start: npm start
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
+          config-file: cypress.config.js
 
   write-release-canary-failure-metric:
     runs-on: ubuntu-latest
