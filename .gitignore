@@ -8,6 +8,7 @@
 
 # testing
 coverage/
+aws-amplify-codegen-ui-*.tgz
 
 # production
 /build
