@@ -18,12 +18,12 @@
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
-    "@aws-amplify/ui-react": "^2.1.0",
-    "@types/node": "^16.3.3",
+    "@aws-amplify/ui-react": "^2.19.0",
+    "@types/node": "^17.0.41",
     "@types/react": "^17.0.4",
     "@types/semver": "^7.3.9",
-    "pascalcase": "1.0.0",
-    "semver": "^7.3.5"
+    "pascalcase": "2.0.0",
+    "semver": "^7.3.7"
   },
   "dependencies": {
     "@aws-amplify/codegen-ui": "2.2.0",
