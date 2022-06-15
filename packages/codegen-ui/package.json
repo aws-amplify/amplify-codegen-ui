@@ -1,6 +1,6 @@
 {
   "name": "@aws-amplify/codegen-ui",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "generic component code generation interface definitions",
   "author": "Amazon Web Services",
   "homepage": "https://docs.amplify.aws/",
