@@ -32,6 +32,8 @@ type StudioFormDataType = {
  * This is the base type for all StudioForms
  */
 export type StudioForm = {
+  name: string;
+
   dataType: StudioFormDataType;
 
   fields: StudioFormFields;
