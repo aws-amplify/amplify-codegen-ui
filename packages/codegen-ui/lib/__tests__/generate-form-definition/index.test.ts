@@ -19,6 +19,7 @@ describe('generateFormDefinition', () => {
   it('should map DataStore model fields', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        name: 'sampleForm',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {},
         sectionalElements: [],
@@ -38,6 +39,7 @@ describe('generateFormDefinition', () => {
   it('should override field configurations from DataStore', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        name: 'mySampleForm',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: [],
@@ -57,6 +59,7 @@ describe('generateFormDefinition', () => {
   it('should not add overrides to the matrix', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        name: 'mySampleForm',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: [],
@@ -71,6 +74,7 @@ describe('generateFormDefinition', () => {
   it('should add fields that do not exist in DataStore', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        name: 'mySampleForm',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: [],
@@ -86,6 +90,7 @@ describe('generateFormDefinition', () => {
   it('should add fields that do not exist in DataStore to the matrix', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        name: 'mySampleForm',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: [],
@@ -99,6 +104,7 @@ describe('generateFormDefinition', () => {
   it('should add sectional elements', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        name: 'mySampleForm',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {},
         sectionalElements: [
@@ -118,6 +124,7 @@ describe('generateFormDefinition', () => {
     const style = { verticalGap: { value: '10px' }, horizontalGap: { tokenReference: 'color.primary.solid' } };
     const formDefinition = generateFormDefinition({
       form: {
+        name: 'mySampleForm',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {},
         sectionalElements: [],
@@ -131,6 +138,7 @@ describe('generateFormDefinition', () => {
   it('should not leave empty rows in the matrix', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        name: 'mySampleForm',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {
           weight: { excluded: true },
@@ -156,6 +164,7 @@ describe('generateFormDefinition', () => {
   it('should correctly map positions', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        name: 'mySampleForm',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {
           weight: { position: { rightOf: 'age' } },
@@ -182,6 +191,7 @@ describe('generateFormDefinition', () => {
 it('should requeue if related element is not yet found', () => {
   const formDefinition = generateFormDefinition({
     form: {
+      name: 'mySampleForm',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
       fields: {
         color: { position: { below: 'name' } },
@@ -204,6 +214,7 @@ it('should requeue if related element is not yet found', () => {
 it('should handle fields without position', () => {
   const formDefinition = generateFormDefinition({
     form: {
+      name: 'mySampleForm',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
       fields: {
         color: { position: { below: 'name' } },
