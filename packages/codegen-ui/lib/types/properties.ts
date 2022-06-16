@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import { RelationalOperator } from './relational-operator';
+import { StringFormat } from './string-format';
 
 /**
  * This is a dictionary of properties. Each key represents
@@ -38,6 +39,10 @@ export type CommonPropertyValues = {
    * has not been overridden from import, this field will remain undefined.
    */
   importedValue?: string;
+  /**
+   * The format in which to display the component property in
+   */
+  stringFormat?: StringFormat;
 };
 
 export type StudioComponentProperty =

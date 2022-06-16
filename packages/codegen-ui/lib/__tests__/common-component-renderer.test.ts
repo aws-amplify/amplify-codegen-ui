@@ -13,11 +13,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { BaseComponentProps } from '@aws-amplify/ui-react';
 import { StudioNode } from '../studio-node';
 import { CommonComponentRenderer } from '../common-component-renderer';
 
-class MockComponentRenderer extends CommonComponentRenderer<BaseComponentProps> {}
+class MockComponentRenderer extends CommonComponentRenderer<{ mockProp: any }> {}
 
 describe('common-component-renderer', () => {
   test('constructor', () => {

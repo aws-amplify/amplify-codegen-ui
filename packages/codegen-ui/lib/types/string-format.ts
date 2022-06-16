@@ -13,15 +13,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './actions';
-export * from './components';
-export * from './bindings';
-export * from './events';
-export * from './figma';
-export * from './properties';
-export * from './theme';
-export * from './relational-operator';
-export * from './studio-schema';
-export * from './form';
-export * from './data';
-export * from './string-format';
+
+export type DateFormat = {
+  dateFormat: 'locale' | 'MM/DD/YYYY' | 'DD.MM.YYYY' | 'YYYY.MM.DD' | 'Mmm DD, YYYY';
+};
+
+export type TimeFormat = {
+  timeFormat: 'locale' | '12hr' | '24hr';
+};
+
+export type DateTimeFormat = {
+  timeFormat:
+    | 'locale'
+    | {
+        dateFormat: DateFormat;
+        timeFormat: TimeFormat;
+      };
+};
+
+export type StringFormat = DateFormat | TimeFormat | DateTimeFormat;
