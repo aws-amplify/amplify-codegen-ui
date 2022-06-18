@@ -18,6 +18,8 @@ import { findIndices, addDataStoreModelField, removeFromMatrix, removeAndReturnI
 import { StudioForm, DataStoreModelField, SectionalElement, StudioFormFieldConfig, FormDefinition } from '../types';
 import { mapElement } from './helpers/map-element';
 
+export { mapFormToComponent } from './form-to-component';
+
 /**
  * Helper that turns the StudioForm model into definition that can be used to render
  * UI Components in the customer project and shapes representing UI Components in Studio.

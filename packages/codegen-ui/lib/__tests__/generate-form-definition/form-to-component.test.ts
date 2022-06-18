@@ -21,6 +21,7 @@ describe('formToComponent', () => {
   it('should map datastore model fields', () => {
     const myForm: StudioForm = {
       name: 'mySampleForm',
+      formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
       fields: {},
       sectionalElements: [],

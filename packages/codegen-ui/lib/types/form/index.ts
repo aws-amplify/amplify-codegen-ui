@@ -27,12 +27,18 @@ type StudioFormDataType = {
 
   dataTypeName: string;
 };
+/**
+ * Form Action type definition
+ */
+type StudioFormActionType = 'create' | 'update';
 
 /**
  * This is the base type for all StudioForms
  */
 export type StudioForm = {
   name: string;
+
+  formActionType: StudioFormActionType;
 
   dataType: StudioFormDataType;
 

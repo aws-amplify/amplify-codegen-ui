@@ -39,6 +39,7 @@ const genericEventToReactEventMapping = {
   [StudioGenericEvent.onKeyDown]: 'onKeyDown',
   [StudioGenericEvent.onKeyPress]: 'onKeyPress',
   [StudioGenericEvent.onKeyUp]: 'onKeyUp',
+  [StudioGenericEvent.onSubmit]: 'onSubmit',
 };
 
 const genericEventToReactEventMappingOverrides: PrimitiveLevelPropConfiguration<string> = {

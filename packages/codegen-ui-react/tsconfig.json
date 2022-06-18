@@ -5,5 +5,8 @@
     "sourceMap": true,
     "skipLibCheck": true
   },
+  "references": [
+    { "path": "../codegen-ui" }
+  ],
   "include": ["./lib", "index.ts"]
 }
