@@ -32,6 +32,7 @@ export enum StudioGenericEvent {
   onKeyDown = 'onKeyDown',
   onKeyPress = 'onKeyPress',
   onKeyUp = 'onKeyUp',
+  onSubmit = 'onSubmit',
 }
 
 export type StudioComponentEvent = BoundStudioComponentEvent | ActionStudioComponentEvent;

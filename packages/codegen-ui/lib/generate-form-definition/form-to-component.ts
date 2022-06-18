@@ -21,6 +21,9 @@ import {
   StudioForm,
   StudioComponentChild,
   StudioComponentProperty,
+  DataStoreCreateItemAction,
+  DataStoreUpdateItemAction,
+  FixedStudioComponentProperty,
 } from '../types';
 
 // map the datastore schema fields into form fields
@@ -135,6 +138,47 @@ export const ctaButtonConfig = (): StudioComponentChild => {
   };
 };
 
+export const mapOnSubmitEvent = (
+  form: StudioForm,
+  childrenFormFields: StudioComponentChild[],
+): DataStoreCreateItemAction | DataStoreUpdateItemAction => {
+  if (form.formActionType === 'create') {
+    return {
+      action: 'Amplify.DataStoreCreateItemAction',
+      parameters: {
+        model: form.dataType.dataTypeName,
+        fields: childrenFormFields.reduce(
+          (prev: { [propertyName: string]: StudioComponentProperty }, { name, properties }) => {
+            return {
+              ...prev,
+              [(properties.name as any).value]: {
+                componentName: name,
+                property: 'value',
+              },
+            };
+          },
+          {},
+        ),
+      },
+    } as DataStoreCreateItemAction;
+  }
+  /**
+   * TODO: Read DataStore Spec to find CustomPrimaryKey if not ID
+   */
+  const { value: primaryKey } = childrenFormFields.find(
+    ({ properties }) => (properties.name as FixedStudioComponentProperty).value === 'id',
+  )?.properties.name as FixedStudioComponentProperty;
+  return {
+    action: 'Amplify.DataStoreUpdateItemAction',
+    parameters: {
+      model: form.dataType.dataTypeName,
+      id: {
+        value: primaryKey || 'id',
+      },
+    },
+  } as DataStoreUpdateItemAction;
+};
+
 export const mapFormToComponent = (form: StudioForm, dataSchema: SchemaModel): StudioComponent => {
   // here we can merge the datastore schema with the form
   // right now it's only creating fields from the existing datastore schema
@@ -145,29 +189,10 @@ export const mapFormToComponent = (form: StudioForm, dataSchema: SchemaModel): S
     name: form.name,
     properties: {},
     bindingProperties: {
-      onCancel: {
-        type: 'Event',
-      },
+      onCancel: { type: 'Event' },
     },
     events: {
-      onSubmit: {
-        action: 'Amplify.DataStoreCreateItemAction',
-        parameters: {
-          model: form.dataType.dataTypeName,
-          fields: childrenFormFields.reduce(
-            (prev: { [propertyName: string]: StudioComponentProperty }, { name, properties }) => {
-              return {
-                ...prev,
-                [(properties.name as any).value]: {
-                  componentName: name,
-                  property: 'value',
-                },
-              };
-            },
-            {},
-          ),
-        },
-      },
+      onSubmit: mapOnSubmitEvent(form, childrenFormFields),
     },
     // codegen will default to rendering the component with this name
     componentType: 'form',

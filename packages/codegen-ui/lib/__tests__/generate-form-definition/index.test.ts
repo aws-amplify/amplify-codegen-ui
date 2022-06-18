@@ -20,6 +20,7 @@ describe('generateFormDefinition', () => {
     const formDefinition = generateFormDefinition({
       form: {
         name: 'sampleForm',
+        formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {},
         sectionalElements: [],
@@ -40,6 +41,7 @@ describe('generateFormDefinition', () => {
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
+        formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: [],
@@ -60,6 +62,7 @@ describe('generateFormDefinition', () => {
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
+        formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: [],
@@ -75,6 +78,7 @@ describe('generateFormDefinition', () => {
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
+        formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: [],
@@ -91,6 +95,7 @@ describe('generateFormDefinition', () => {
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
+        formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: [],
@@ -105,6 +110,7 @@ describe('generateFormDefinition', () => {
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
+        formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {},
         sectionalElements: [
@@ -125,6 +131,7 @@ describe('generateFormDefinition', () => {
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
+        formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {},
         sectionalElements: [],
@@ -139,6 +146,7 @@ describe('generateFormDefinition', () => {
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
+        formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {
           weight: { excluded: true },
@@ -165,6 +173,7 @@ describe('generateFormDefinition', () => {
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
+        formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {
           weight: { position: { rightOf: 'age' } },
@@ -192,6 +201,7 @@ it('should requeue if related element is not yet found', () => {
   const formDefinition = generateFormDefinition({
     form: {
       name: 'mySampleForm',
+      formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
       fields: {
         color: { position: { below: 'name' } },
@@ -215,6 +225,7 @@ it('should handle fields without position', () => {
   const formDefinition = generateFormDefinition({
     form: {
       name: 'mySampleForm',
+      formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
       fields: {
         color: { position: { below: 'name' } },
