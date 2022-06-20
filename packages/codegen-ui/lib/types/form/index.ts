@@ -44,7 +44,7 @@ export type StudioForm = {
 
   fields: StudioFormFields;
 
-  sectionalElements: SectionalElement[];
+  sectionalElements: { [elementName: string]: SectionalElement };
 
   style: StudioFormStyle;
 };

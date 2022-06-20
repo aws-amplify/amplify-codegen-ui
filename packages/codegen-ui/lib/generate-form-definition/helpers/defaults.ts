@@ -13,25 +13,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioFormStyle } from './style';
+import { StudioFormStyle } from '../../types';
 
-export type FormDefinitionElementProps = {
-  isReadOnly?: boolean;
-  isRequired?: boolean;
-  label?: string;
-  placeholder?: string;
-  minValue?: number;
-  maxValue?: number;
-  step?: number;
-  level?: number;
-  text?: string;
-};
-
-export type FormDefinition = {
-  form: {
-    layoutStyle: StudioFormStyle;
-  };
-  elements: { [element: string]: { componentType: string; dataType?: string; props: FormDefinitionElementProps } };
-  buttons: { [key: string]: string };
-  elementMatrix: string[][];
+export const FORM_DEFINITION_DEFAULTS: { styles: StudioFormStyle } = {
+  styles: {
+    horizontalGap: {
+      value: '15px',
+    },
+    verticalGap: {
+      value: '15px',
+    },
+    outerPadding: {
+      value: '20px',
+    },
+  },
 };

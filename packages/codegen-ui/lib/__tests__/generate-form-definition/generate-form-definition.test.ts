@@ -23,7 +23,7 @@ describe('generateFormDefinition', () => {
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {},
-        sectionalElements: [],
+        sectionalElements: {},
         style: {},
       },
       modelInfo: { fields: [{ name: 'name', type: 'String', isReadOnly: false, isRequired: true, isArray: false }] },
@@ -44,7 +44,7 @@ describe('generateFormDefinition', () => {
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
-        sectionalElements: [],
+        sectionalElements: {},
         style: {},
       },
       modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false }] },
@@ -65,7 +65,7 @@ describe('generateFormDefinition', () => {
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
-        sectionalElements: [],
+        sectionalElements: {},
         style: {},
       },
       modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false }] },
@@ -81,7 +81,7 @@ describe('generateFormDefinition', () => {
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
-        sectionalElements: [],
+        sectionalElements: {},
         style: {},
       },
       modelInfo: { fields: [] },
@@ -98,7 +98,7 @@ describe('generateFormDefinition', () => {
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
-        sectionalElements: [],
+        sectionalElements: {},
         style: {},
       },
       modelInfo: { fields: [] },
@@ -113,9 +113,9 @@ describe('generateFormDefinition', () => {
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {},
-        sectionalElements: [
-          { type: 'Heading', name: 'Heading123', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
-        ],
+        sectionalElements: {
+          Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
+        },
         style: {},
       },
       modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false }] },
@@ -127,19 +127,23 @@ describe('generateFormDefinition', () => {
   });
 
   it('should apply layout style', () => {
-    const style = { verticalGap: { value: '10px' }, horizontalGap: { tokenReference: 'color.primary.solid' } };
+    const style = {
+      verticalGap: { value: '10px' },
+      horizontalGap: { tokenReference: 'color.primary.solid' },
+      outerPadding: { value: '30px' },
+    };
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {},
-        sectionalElements: [],
+        sectionalElements: {},
         style,
       },
       modelInfo: { fields: [] },
     });
-    expect(formDefinition.form.props.layoutStyle).toStrictEqual(style);
+    expect(formDefinition.form.layoutStyle).toStrictEqual(style);
   });
 
   it('should not leave empty rows in the matrix', () => {
@@ -153,9 +157,10 @@ describe('generateFormDefinition', () => {
           name: { excluded: true },
           age: { excluded: true },
         },
-        sectionalElements: [
-          { type: 'Heading', name: 'Heading123', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
-        ],
+        sectionalElements: {
+          Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
+        },
+
         style: {},
       },
       modelInfo: {
@@ -180,9 +185,10 @@ describe('generateFormDefinition', () => {
           name: { position: { below: 'Heading123' } },
           age: { position: { rightOf: 'name' } },
         },
-        sectionalElements: [
-          { type: 'Heading', name: 'Heading123', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
-        ],
+        sectionalElements: {
+          Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
+        },
+
         style: {},
       },
       modelInfo: {
@@ -209,9 +215,10 @@ it('should requeue if related element is not yet found', () => {
         age: { position: { rightOf: 'name' } },
         name: { position: { below: 'Heading123' } },
       },
-      sectionalElements: [
-        { type: 'Heading', name: 'Heading123', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
-      ],
+      sectionalElements: {
+        Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
+      },
+
       style: {},
     },
     modelInfo: {
@@ -234,9 +241,10 @@ it('should handle fields without position', () => {
         name: { label: 'Name' },
         bark: { label: 'Bark' },
       },
-      sectionalElements: [
-        { type: 'Heading', name: 'Heading123', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
-      ],
+      sectionalElements: {
+        Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
+      },
+
       style: {},
     },
     modelInfo: {
@@ -244,4 +252,26 @@ it('should handle fields without position', () => {
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color'], ['bark']]);
+});
+
+it('should fill out styles using defaults', () => {
+  const definitionForFormWithoutStyle = generateFormDefinition({
+    form: {
+      name: 'mySampleForm',
+      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+      fields: {},
+      sectionalElements: {},
+
+      style: {},
+    },
+    modelInfo: {
+      fields: [],
+    },
+  });
+
+  expect(definitionForFormWithoutStyle.form.layoutStyle).toStrictEqual({
+    horizontalGap: { value: '15px' },
+    verticalGap: { value: '15px' },
+    outerPadding: { value: '20px' },
+  });
 });

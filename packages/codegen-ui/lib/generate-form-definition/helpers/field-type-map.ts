@@ -17,59 +17,69 @@
 /**
  * Maps data types to UI Components
  */
-export const FIELD_TYPE_MAP: { [type: string]: { defaultComponent: string; supportedComponents?: Set<string> } } = {
+export const FIELD_TYPE_MAP: { [type: string]: { defaultComponent: string; supportedComponents: Set<string> } } = {
   ID: {
     defaultComponent: 'TextField',
+    supportedComponents: new Set(['TextField']),
   },
   String: {
     defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextAreaField']),
+    supportedComponents: new Set(['TextAreaField', 'TextField']),
   },
   Int: {
     defaultComponent: 'TextField',
-    supportedComponents: new Set(['SliderField', 'StepperField']),
+    supportedComponents: new Set(['SliderField', 'StepperField', 'TextField']),
   },
   Float: {
     defaultComponent: 'TextField',
-    supportedComponents: new Set(['SliderField', 'StepperField']),
+    supportedComponents: new Set(['SliderField', 'StepperField', 'TextField']),
   },
   AWSDate: {
     defaultComponent: 'TextField',
+    supportedComponents: new Set(['TextField']),
   },
   AWSTime: {
     defaultComponent: 'TextField',
+    supportedComponents: new Set(['TextField']),
   },
   AWSDateTime: {
     defaultComponent: 'TextField',
+    supportedComponents: new Set(['TextField']),
   },
   AWSTimestamp: {
     defaultComponent: 'TextField',
+    supportedComponents: new Set(['TextField']),
   },
   AWSEmail: {
     defaultComponent: 'TextField',
+    supportedComponents: new Set(['TextField']),
   },
   AWSURL: {
     defaultComponent: 'TextField',
+    supportedComponents: new Set(['TextField']),
   },
   AWSIPAddress: {
     defaultComponent: 'TextField',
+    supportedComponents: new Set(['TextField']),
   },
   Boolean: {
     defaultComponent: 'SwitchField',
-    supportedComponents: new Set(['ToggleButton', 'CheckboxField', 'RadioGroupField']),
+    supportedComponents: new Set(['ToggleButton', 'CheckboxField', 'RadioGroupField', 'SwitchField']),
   },
   AWSJSON: {
     defaultComponent: 'TextAreaField',
-    supportedComponents: new Set(['TextField']),
+    supportedComponents: new Set(['TextField', 'TextAreaField']),
   },
   AWSPhone: {
     defaultComponent: 'PhoneNumberField',
+    supportedComponents: new Set(['PhoneNumberField']),
   },
   enum: {
     defaultComponent: 'SelectField',
-    supportedComponents: new Set(['RadioGroupField']),
+    supportedComponents: new Set(['RadioGroupField', 'SelectField']),
   },
   nonModel: {
     defaultComponent: 'SelectField',
+    supportedComponents: new Set(['SelectField']),
   },
 };
