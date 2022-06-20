@@ -19,3 +19,4 @@ export * from './form-field';
 export * from './sectional-element';
 export * from './field-type-map';
 export * from './map-element';
+export * from './map-styles';

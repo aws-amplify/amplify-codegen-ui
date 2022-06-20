@@ -41,10 +41,7 @@ export function mapFormFieldConfig(
     const dataType = formDefinition.elements[element.name]?.dataType;
 
     if (dataType) {
-      if (
-        FIELD_TYPE_MAP[dataType].defaultComponent !== config.inputType.type &&
-        !FIELD_TYPE_MAP[dataType].supportedComponents?.has(config.inputType.type)
-      ) {
+      if (!FIELD_TYPE_MAP[dataType]?.supportedComponents.has(config.inputType.type)) {
         throw new InvalidInputError(
           `The input type ${config.inputType.type} is not supported for data type ${dataType}`,
         );

@@ -35,7 +35,7 @@ type DividerSectionalElement = {
   type: 'Divider';
 };
 
-export type SectionalElement = { position: StudioFieldPosition; name: string } & (
+export type SectionalElement = { position: StudioFieldPosition } & (
   | HeadingSectionalElement
   | DividerSectionalElement
   | TextSectionalElement
