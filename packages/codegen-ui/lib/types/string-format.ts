@@ -23,11 +23,11 @@ export type TimeFormat = {
 };
 
 export type DateTimeFormat = {
-  timeFormat:
+  dateTimeFormat:
     | 'locale'
     | {
-        dateFormat: DateFormat;
-        timeFormat: TimeFormat;
+        dateFormat: DateFormat['dateFormat'];
+        timeFormat: TimeFormat['timeFormat'];
       };
 };
 
