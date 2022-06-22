@@ -40,8 +40,8 @@ describe('string-formatter tests', () => {
       date.setSeconds(23, 222);
 
       expect(formatTime(awsTime, 'locale')).toBe(date.toLocaleTimeString());
-      expect(formatTime(awsTime, '12hr')).toBe('3:45:23 PM');
-      expect(formatTime(awsTime, '24hr')).toBe('15:45:23');
+      expect(formatTime(awsTime, 'hours12')).toBe('3:45:23 PM');
+      expect(formatTime(awsTime, 'hours24')).toBe('15:45:23');
 
       const invalidTime = 'Not:time:';
       expect(formatTime(invalidTime, 'locale')).toBe(invalidTime);
@@ -55,7 +55,7 @@ describe('string-formatter tests', () => {
       const mixedFormatting: DateTimeFormat = {
         dateTimeFormat: {
           dateFormat: 'DD.MM.YYYY',
-          timeFormat: '12hr',
+          timeFormat: 'hours12',
         },
       };
 

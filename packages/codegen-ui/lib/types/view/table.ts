@@ -14,21 +14,18 @@
   limitations under the License.
  */
 
-export type DateFormat = {
-  dateFormat: 'locale' | 'MM/DD/YYYY' | 'DD.MM.YYYY' | 'YYYY.MM.DD' | 'Mmm DD, YYYY';
-};
+import { FieldPosition } from './position';
+import { ViewValueFormatting } from './value';
 
-export type TimeFormat = {
-  timeFormat: 'locale' | 'hours12' | 'hours24';
-};
-
-export type DateTimeFormat = {
-  dateTimeFormat:
-    | 'locale'
-    | {
-        dateFormat: DateFormat['dateFormat'];
-        timeFormat: TimeFormat['timeFormat'];
-      };
-};
-
-export type StringFormat = DateFormat | TimeFormat | DateTimeFormat;
+export interface ColumnConfig {
+  excluded?: boolean;
+  isSticky?: boolean;
+  label?: string;
+  maxDisplayItems?: number;
+  position?: FieldPosition;
+  sortable?: Boolean;
+  valueFormatting?: ViewValueFormatting;
+}
+export interface ColumnsMap {
+  [String: string]: ColumnConfig;
+}

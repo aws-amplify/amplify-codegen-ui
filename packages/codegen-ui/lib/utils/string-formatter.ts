@@ -69,9 +69,9 @@ export function formatTime(time: string, format: TimeFormat['timeFormat']): stri
   switch (format) {
     case 'locale':
       return validTime.toLocaleTimeString();
-    case '24hr':
+    case 'hours24':
       return validTime.toLocaleTimeString('en-gb');
-    case '12hr':
+    case 'hours12':
       return validTime.toLocaleTimeString('en-us');
     default:
       return time;

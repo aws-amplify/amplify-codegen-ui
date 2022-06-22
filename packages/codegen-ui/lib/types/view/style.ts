@@ -14,21 +14,21 @@
   limitations under the License.
  */
 
-export type DateFormat = {
-  dateFormat: 'locale' | 'MM/DD/YYYY' | 'DD.MM.YYYY' | 'YYYY.MM.DD' | 'Mmm DD, YYYY';
-};
+export declare type ViewAlignment = 'left' | 'right' | 'center';
 
-export type TimeFormat = {
-  timeFormat: 'locale' | 'hours12' | 'hours24';
-};
+export interface ViewAlignmentConfig {
+  tokenReference?: String;
+  value?: ViewAlignment;
+}
 
-export type DateTimeFormat = {
-  dateTimeFormat:
-    | 'locale'
-    | {
-        dateFormat: DateFormat['dateFormat'];
-        timeFormat: TimeFormat['timeFormat'];
-      };
-};
+export interface ViewStyle {
+  alignment?: ViewAlignmentConfig;
+  horizontalGap?: ViewStyleConfig;
+  outerPadding?: ViewStyleConfig;
+  verticalGap?: ViewStyleConfig;
+}
 
-export type StringFormat = DateFormat | TimeFormat | DateTimeFormat;
+export interface ViewStyleConfig {
+  tokenReference?: String;
+  value?: String;
+}
