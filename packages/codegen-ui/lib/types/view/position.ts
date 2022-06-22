@@ -14,21 +14,10 @@
   limitations under the License.
  */
 
-export type DateFormat = {
-  dateFormat: 'locale' | 'MM/DD/YYYY' | 'DD.MM.YYYY' | 'YYYY.MM.DD' | 'Mmm DD, YYYY';
-};
+export declare type FixedPosition = 'first';
 
-export type TimeFormat = {
-  timeFormat: 'locale' | 'hours12' | 'hours24';
-};
-
-export type DateTimeFormat = {
-  dateTimeFormat:
-    | 'locale'
-    | {
-        dateFormat: DateFormat['dateFormat'];
-        timeFormat: TimeFormat['timeFormat'];
-      };
-};
-
-export type StringFormat = DateFormat | TimeFormat | DateTimeFormat;
+export interface FieldPosition {
+  below?: string;
+  fixed?: FixedPosition;
+  rightOf?: string;
+}
