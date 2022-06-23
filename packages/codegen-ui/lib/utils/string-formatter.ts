@@ -19,6 +19,10 @@ import { DateFormat, DateTimeFormat, TimeFormat } from '../types';
 const invalidDateStr = 'Invalid Date';
 
 export function formatDate(date: string, format: DateFormat['dateFormat']): string {
+  if (date === undefined || date === null) {
+    return date;
+  }
+
   // AWSDate: YYYY-MM-DD (ISO 8601)
   const validDate = new Date(Date.parse(date));
   if (validDate.toString() === invalidDateStr) {
@@ -48,6 +52,10 @@ export function formatDate(date: string, format: DateFormat['dateFormat']): stri
 }
 
 export function formatTime(time: string, format: TimeFormat['timeFormat']): string {
+  if (time === undefined || time === null) {
+    return time;
+  }
+
   // AWSTime: hh:mm:ss.sss (24hr format - ISO 8601)
   const splitTime = time.split(/:|Z/);
 
@@ -79,6 +87,10 @@ export function formatTime(time: string, format: TimeFormat['timeFormat']): stri
 }
 
 export function formatDateTime(dateTimeStr: string, format: DateTimeFormat['dateTimeFormat']): string {
+  if (dateTimeStr === undefined || dateTimeStr === null) {
+    return dateTimeStr;
+  }
+
   // AWSTimestamp: millis before or after 1970-01-01-T00:00*Z*
   // AWSDateTime: hh:mm:ss.sss (24hr format - ISO 8601)
   const dateTime = /^\d+$/.test(dateTimeStr)
