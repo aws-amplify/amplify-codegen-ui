@@ -14,6 +14,21 @@
   limitations under the License.
  */
 
+export enum DATE {
+  LOCALE = 'locale',
+  MDY = 'MM/DD/YYYY',
+  DMY = 'DD.MM.YYYY',
+  YMD = 'YYYY.MM.DD',
+  MmmDY = 'Mmm DD, YYYY',
+  test = 'test',
+}
+
+export enum TIME {
+  LOCALE = 'locale',
+  HOURS_12 = 'hours12',
+  HOURS_24 = 'hours24',
+}
+
 export type DateFormat = {
   dateFormat: 'locale' | 'MM/DD/YYYY' | 'DD.MM.YYYY' | 'YYYY.MM.DD' | 'Mmm DD, YYYY';
 };

@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { DateTimeFormat } from '../types';
+import { DateTimeFormat, DATE, TIME } from '../types';
 import { formatDate, formatTime, formatDateTime } from '../utils/string-formatter';
 
 describe('string-formatter tests', () => {
@@ -29,6 +29,9 @@ describe('string-formatter tests', () => {
 
       const invalidDate = 'Not a date';
       expect(formatDate(invalidDate, 'Mmm DD, YYYY')).toBe(invalidDate);
+
+      const nullish = undefined;
+      expect(formatDate(nullish as any, DATE.DMY)).toBe(nullish);
     });
 
     test('Time formats', () => {
@@ -45,6 +48,9 @@ describe('string-formatter tests', () => {
 
       const invalidTime = 'Not:time:';
       expect(formatTime(invalidTime, 'locale')).toBe(invalidTime);
+
+      const nullish = undefined;
+      expect(formatTime(nullish as any, TIME.HOURS_24)).toBe(nullish);
     });
 
     test('Datetime formats', () => {
@@ -54,8 +60,8 @@ describe('string-formatter tests', () => {
 
       const mixedFormatting: DateTimeFormat = {
         dateTimeFormat: {
-          dateFormat: 'DD.MM.YYYY',
-          timeFormat: 'hours12',
+          dateFormat: DATE.DMY,
+          timeFormat: TIME.HOURS_12,
         },
       };
 
@@ -67,6 +73,9 @@ describe('string-formatter tests', () => {
 
       const awsTimeStamp = '1582991123222';
       expect(formatDateTime(awsTimeStamp, mixedFormatting.dateTimeFormat)).toBe('29.02.2020 - 3:45:23 PM');
+
+      const nullish = undefined;
+      expect(formatDateTime(nullish as any, mixedFormatting.dateTimeFormat)).toBe(nullish);
     });
   });
 });
