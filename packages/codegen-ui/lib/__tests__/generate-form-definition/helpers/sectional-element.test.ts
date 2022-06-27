@@ -14,13 +14,13 @@
   limitations under the License.
  */
 
-import { mapSectionalElement } from '../../../generate-form-definition/helpers';
+import { mapSectionalElement, getFormDefinitionSectionalElement } from '../../../generate-form-definition/helpers';
 import { FormDefinition, SectionalElement } from '../../../types';
 
 describe('mapSectionalElement', () => {
   it('should throw if there is already an element with the same name', () => {
     const formDefinition: FormDefinition = {
-      form: { props: { layoutStyle: {} } },
+      form: { layoutStyle: {} },
       elements: { Heading123: { componentType: 'Heading', props: {} } },
       buttons: {},
       elementMatrix: [],
@@ -29,7 +29,7 @@ describe('mapSectionalElement', () => {
     const element: { type: string; name: string; config: SectionalElement } = {
       type: 'sectionalElement',
       name: 'Heading123',
-      config: { type: 'Heading', level: 1, text: 'My Heading', position: { fixed: 'first' }, name: 'Heading123' },
+      config: { type: 'Heading', level: 1, text: 'My Heading', position: { fixed: 'first' } },
     };
 
     expect(() => mapSectionalElement(element, formDefinition)).toThrow();
@@ -37,7 +37,7 @@ describe('mapSectionalElement', () => {
 
   it('should map configurations', () => {
     const formDefinition: FormDefinition = {
-      form: { props: { layoutStyle: {} } },
+      form: { layoutStyle: {} },
       elements: {},
       buttons: {},
       elementMatrix: [],
@@ -46,14 +46,63 @@ describe('mapSectionalElement', () => {
     const element: { type: string; name: string; config: SectionalElement } = {
       type: 'sectionalElement',
       name: 'Heading123',
-      config: { type: 'Heading', level: 1, text: 'My Heading', position: { fixed: 'first' }, name: 'Heading123' },
+      config: { type: 'Heading', level: 1, text: 'My Heading', position: { fixed: 'first' } },
     };
 
     mapSectionalElement(element, formDefinition);
 
     expect(formDefinition.elements.Heading123).toStrictEqual({
       componentType: 'Heading',
-      props: { level: 1, text: 'My Heading' },
+      props: { level: 1, children: 'My Heading' },
     });
+  });
+});
+
+describe('getFormDefinitionSectionalElement', () => {
+  it('should map Text', () => {
+    const config: SectionalElement = {
+      type: 'Text',
+      text: 'MyText',
+      position: { fixed: 'first' },
+    };
+
+    expect(getFormDefinitionSectionalElement(config)).toStrictEqual({
+      componentType: 'Text',
+      props: { children: 'MyText' },
+    });
+  });
+
+  it('should map Divider', () => {
+    const config: SectionalElement = {
+      type: 'Divider',
+      position: { fixed: 'first' },
+      orientation: 'horizontal',
+    };
+
+    expect(getFormDefinitionSectionalElement(config)).toStrictEqual({
+      componentType: 'Divider',
+      props: { orientation: 'horizontal' },
+    });
+  });
+
+  it('should map Heading', () => {
+    const config: SectionalElement = {
+      type: 'Heading',
+      position: { fixed: 'first' },
+    };
+
+    expect(getFormDefinitionSectionalElement(config)).toStrictEqual({
+      componentType: 'Heading',
+      props: { children: 'text' },
+    });
+  });
+
+  it('should throw if componentType is unmappable', () => {
+    const config: SectionalElement = {
+      type: 'Invalid',
+      position: { fixed: 'first' },
+    };
+
+    expect(() => getFormDefinitionSectionalElement(config)).toThrow();
   });
 });

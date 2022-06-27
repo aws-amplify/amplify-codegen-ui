@@ -14,46 +14,33 @@
   limitations under the License.
  */
 
-type StudioFieldBaseConfig = {
+// represents API shape after type casting
+export type StudioFieldInputConfig = {
+  type: string;
+
   required?: boolean;
 
   readOnly?: boolean;
-};
-
-type StudioFieldTextFieldConfig = {
-  type: 'TextField';
-
-  placeholder?: string;
-};
-
-type StudioFieldSelectListFieldConfig = {
-  type: 'SelectField';
 
   placeholder?: string;
 
-  valueMappings: { value: string; displayValue: string }[];
+  defaultValue?: string | number;
+
+  descriptiveText?: string;
+
+  defaultChecked?: boolean;
+
+  defaultCountryCode?: string;
+
+  valueMappings?: { value: string; displayValue: string }[];
+
+  name?: string;
+
+  minValue?: number;
+
+  maxValue?: number;
+
+  step?: number;
+
+  value?: string;
 };
-
-type StudioFieldRadioListFieldConfig = {
-  type: 'RadioGroupField';
-
-  valueMappings: { value: string; displayValue: string }[];
-};
-
-type StudioFieldSliderFieldConfig = {
-  type: 'SliderField';
-
-  minValue: number;
-
-  maxValue: number;
-
-  step: number;
-};
-
-export type StudioFieldInputConfig = (
-  | StudioFieldTextFieldConfig
-  | StudioFieldSelectListFieldConfig
-  | StudioFieldRadioListFieldConfig
-  | StudioFieldSliderFieldConfig
-) &
-  StudioFieldBaseConfig;

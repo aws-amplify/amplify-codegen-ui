@@ -15,9 +15,10 @@
  */
 
 import { StudioFormStyle } from './style';
-import { StudioFormFields, StudioFormFieldConfig } from './fields';
+import { StudioFormFields, StudioFormFieldConfig, StudioGenericFieldConfig } from './fields';
 import { SectionalElement } from './sectional-element';
-import { FormDefinition, FormDefinitionElementProps } from './form-definition';
+import { FormDefinition, ModelFieldsConfigs } from './form-definition';
+import { StudioFieldInputConfig } from './input-config';
 
 /**
  * Data type definition for StudioForm
@@ -49,4 +50,15 @@ export type StudioForm = {
   style: StudioFormStyle;
 };
 
-export type { StudioFormStyle, SectionalElement, StudioFormFieldConfig, FormDefinition, FormDefinitionElementProps };
+export * from './form-definition-element';
+
+export type {
+  StudioFormStyle,
+  SectionalElement,
+  StudioFormFieldConfig,
+  FormDefinition,
+  StudioFieldInputConfig,
+  StudioGenericFieldConfig,
+  StudioFormFields,
+  ModelFieldsConfigs,
+};

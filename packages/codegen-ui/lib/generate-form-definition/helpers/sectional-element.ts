@@ -13,8 +13,53 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FormDefinition, SectionalElement, FormDefinitionElementProps } from '../../types';
+import { FormDefinition, SectionalElement, FormDefinitionSectionalElement } from '../../types';
 import { InvalidInputError } from '../../errors';
+import { deleteUndefined } from './mapper-utils';
+import { FORM_DEFINITION_DEFAULTS } from './defaults';
+
+export function getFormDefinitionSectionalElement(config: SectionalElement): FormDefinitionSectionalElement {
+  const componentType = config.type;
+
+  let formDefinitionElement: FormDefinitionSectionalElement;
+
+  switch (componentType) {
+    case 'Text':
+      formDefinitionElement = {
+        componentType: 'Text',
+        props: {
+          children: config.text || FORM_DEFINITION_DEFAULTS.sectionalElement.text,
+        },
+      };
+      break;
+
+    case 'Divider':
+      formDefinitionElement = {
+        componentType: 'Divider',
+        props: {
+          orientation: config.orientation === 'vertical' ? 'vertical' : 'horizontal',
+        },
+      };
+      break;
+
+    case 'Heading':
+      formDefinitionElement = {
+        componentType: 'Heading',
+        props: {
+          level: config.level,
+          children: config.text || FORM_DEFINITION_DEFAULTS.sectionalElement.text,
+        },
+      };
+      break;
+    default:
+      throw new InvalidInputError(`componentType ${componentType} could not be mapped`);
+  }
+
+  deleteUndefined(formDefinitionElement);
+  deleteUndefined(formDefinitionElement.props);
+
+  return formDefinitionElement;
+}
 
 /**
  * Impure function that adds sectional elements to the form definition
@@ -27,17 +72,6 @@ export function mapSectionalElement(
   if (formDefinition.elements[element.name]) {
     throw new InvalidInputError(`There is are form elements with the same name: ${element.name}`);
   }
-
-  const props: FormDefinitionElementProps = {};
-
-  if ('level' in element.config) {
-    props.level = element.config.level;
-  }
-
-  if ('text' in element.config) {
-    props.text = element.config.text;
-  }
-
-  formDefinition.elements[element.name] = { componentType: element.config.type, props };
+  formDefinition.elements[element.name] = getFormDefinitionSectionalElement(element.config);
 }
 /* eslint-enable no-param-reassign */

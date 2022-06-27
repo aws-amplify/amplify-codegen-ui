@@ -14,17 +14,24 @@
   limitations under the License.
  */
 
+import { FormDefinitionInputElement } from '../../types';
+
 /**
  * Maps data types to UI Components
  */
-export const FIELD_TYPE_MAP: { [type: string]: { defaultComponent: string; supportedComponents: Set<string> } } = {
+export const FIELD_TYPE_MAP: {
+  [key: string]: {
+    defaultComponent: FormDefinitionInputElement['componentType'];
+    supportedComponents: Set<FormDefinitionInputElement['componentType']>;
+  };
+} = {
   ID: {
     defaultComponent: 'TextField',
     supportedComponents: new Set(['TextField']),
   },
   String: {
     defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextAreaField', 'TextField']),
+    supportedComponents: new Set(['TextAreaField', 'TextField', 'PasswordField']),
   },
   Int: {
     defaultComponent: 'TextField',

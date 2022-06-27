@@ -16,17 +16,20 @@
 
 import { mapFormFieldConfig } from './form-field';
 import { mapSectionalElement } from './sectional-element';
-import { FormDefinition, SectionalElement, StudioFormFieldConfig } from '../../types';
+import { FormDefinition, SectionalElement, StudioGenericFieldConfig, ModelFieldsConfigs } from '../../types';
 /**
  * Impure function that maps element to the form definition
  */
 export function mapElement(
-  element: { type: string; name: string; config: SectionalElement | StudioFormFieldConfig },
+  element:
+    | { type: 'field'; name: string; config: StudioGenericFieldConfig }
+    | { type: 'sectionalElement'; name: string; config: SectionalElement },
   formDefinition: FormDefinition,
+  modelFieldsConfigs: ModelFieldsConfigs,
 ) {
   if (element.type === 'field') {
-    mapFormFieldConfig(element, formDefinition);
+    mapFormFieldConfig(element, formDefinition, modelFieldsConfigs);
   } else if (element.type === 'sectionalElement') {
-    mapSectionalElement(element as { type: string; name: string; config: SectionalElement }, formDefinition);
+    mapSectionalElement(element, formDefinition);
   }
 }
