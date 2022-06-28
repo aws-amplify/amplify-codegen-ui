@@ -15,12 +15,12 @@
  */
 
 import { addDataStoreModelField } from '../../../generate-form-definition/helpers';
-import { FormDefinition } from '../../../types';
+import { FormDefinition, ModelFieldsConfigs } from '../../../types';
 
 describe('addDataStoreModelField', () => {
-  it('should map the component type, data type and props to the form definition', () => {
+  it('should map to elementMatrix and add to modelFieldsConfigs', () => {
     const formDefinition: FormDefinition = {
-      form: { props: { layoutStyle: {} } },
+      form: { layoutStyle: {} },
       elements: {},
       buttons: {},
       elementMatrix: [],
@@ -28,16 +28,20 @@ describe('addDataStoreModelField', () => {
 
     const dataStoreModelField = { name: 'name', type: 'String', isReadOnly: false, isRequired: false, isArray: false };
 
-    addDataStoreModelField(formDefinition, dataStoreModelField);
+    const modelFieldsConfigs: ModelFieldsConfigs = {};
 
-    expect(formDefinition.elements.name.componentType).toBe('TextField');
-    expect(formDefinition.elements.name.dataType).toBe('String');
-    expect(formDefinition.elements.name.props).toStrictEqual({ label: 'name', isRequired: false, isReadOnly: false });
+    addDataStoreModelField(formDefinition, modelFieldsConfigs, dataStoreModelField);
+
+    expect(formDefinition.elementMatrix).toStrictEqual([['name']]);
+    expect(modelFieldsConfigs.name).toStrictEqual({
+      label: 'name',
+      inputType: { type: 'TextField', required: false, readOnly: false, name: 'name', value: 'true' },
+    });
   });
 
   it('should throw if field is an array', () => {
     const formDefinition: FormDefinition = {
-      form: { props: { layoutStyle: {} } },
+      form: { layoutStyle: {} },
       elements: {},
       buttons: {},
       elementMatrix: [],
@@ -45,12 +49,12 @@ describe('addDataStoreModelField', () => {
 
     const dataStoreModelField = { name: 'name', type: 'String', isReadOnly: false, isRequired: false, isArray: true };
 
-    expect(() => addDataStoreModelField(formDefinition, dataStoreModelField)).toThrow();
+    expect(() => addDataStoreModelField(formDefinition, {}, dataStoreModelField)).toThrow();
   });
 
   it('should throw if there is no default component', () => {
     const formDefinition: FormDefinition = {
-      form: { props: { layoutStyle: {} } },
+      form: { layoutStyle: {} },
       elements: {},
       buttons: {},
       elementMatrix: [],
@@ -64,6 +68,6 @@ describe('addDataStoreModelField', () => {
       isArray: false,
     };
 
-    expect(() => addDataStoreModelField(formDefinition, dataStoreModelField)).toThrow();
+    expect(() => addDataStoreModelField(formDefinition, {}, dataStoreModelField)).toThrow();
   });
 });

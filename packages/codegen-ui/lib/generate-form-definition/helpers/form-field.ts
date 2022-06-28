@@ -13,72 +13,246 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FormDefinition, StudioFormFieldConfig } from '../../types';
-import { FIELD_TYPE_MAP } from './field-type-map';
+import { FormDefinition, FormDefinitionInputElement, StudioGenericFieldConfig, ModelFieldsConfigs } from '../../types';
 import { InvalidInputError } from '../../errors';
+import { FORM_DEFINITION_DEFAULTS } from './defaults';
+import { deleteUndefined, getFirstDefinedValue, getFirstNumber, getFirstString } from './mapper-utils';
+
+function getOptionsFromValueMappings(
+  valueMappings: { displayValue: string; value: string }[],
+): { value: string; children: string }[] {
+  return valueMappings.map(({ displayValue, value }) => {
+    return { value, children: displayValue };
+  });
+}
+
+/**
+ * pure function that maps fieldConfig to definition Element
+ */
+
+export function getFormDefinitionInputElement(
+  config: StudioGenericFieldConfig,
+  baseConfig?: StudioGenericFieldConfig,
+): FormDefinitionInputElement {
+  const componentType = config.inputType?.type || baseConfig?.inputType?.type;
+
+  if (!componentType) {
+    throw new InvalidInputError('Field config is missing input type');
+  }
+
+  let formDefinitionElement: FormDefinitionInputElement;
+  switch (componentType) {
+    case 'TextField':
+      formDefinitionElement = {
+        componentType: 'TextField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
+          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
+          defaultValue: getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+        },
+      };
+      break;
+    case 'SwitchField':
+      formDefinitionElement = {
+        componentType: 'SwitchField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          defaultChecked: getFirstDefinedValue([
+            config.inputType?.defaultChecked,
+            baseConfig?.inputType?.defaultChecked,
+          ]),
+          isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
+          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+        },
+      };
+
+      break;
+
+    case 'PhoneNumberField':
+      formDefinitionElement = {
+        componentType: 'PhoneNumberField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          defaultCountryCode:
+            config.inputType?.defaultCountryCode ||
+            baseConfig?.inputType?.defaultCountryCode ||
+            FORM_DEFINITION_DEFAULTS.field.inputType.defaultCountryCode,
+          isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
+          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
+          defaultValue: getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+        },
+      };
+      break;
+
+    case 'SelectField':
+      formDefinitionElement = {
+        componentType: 'SelectField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
+          isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+        },
+        options: getOptionsFromValueMappings(
+          config.inputType?.valueMappings || baseConfig?.inputType?.valueMappings || [],
+        ),
+        defaultValue: getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+      };
+      break;
+
+    case 'TextAreaField':
+      formDefinitionElement = {
+        componentType: 'TextAreaField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
+          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
+          defaultValue: getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+        },
+      };
+      break;
+
+    case 'SliderField':
+      formDefinitionElement = {
+        componentType: 'SliderField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          min: getFirstDefinedValue([config.inputType?.minValue, baseConfig?.inputType?.minValue]),
+          max: getFirstDefinedValue([config.inputType?.maxValue, baseConfig?.inputType?.maxValue]),
+          step: getFirstDefinedValue([config.inputType?.step, baseConfig?.inputType?.step]),
+          isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          defaultValue: getFirstNumber([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
+        },
+      };
+      break;
+
+    case 'StepperField':
+      formDefinitionElement = {
+        componentType: 'StepperField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          min: getFirstDefinedValue([config.inputType?.minValue, baseConfig?.inputType?.minValue]),
+          max: getFirstDefinedValue([config.inputType?.maxValue, baseConfig?.inputType?.maxValue]),
+          step: getFirstDefinedValue([config.inputType?.step, baseConfig?.inputType?.step]),
+          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          defaultValue: getFirstNumber([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
+        },
+      };
+
+      break;
+
+    case 'ToggleButton':
+      formDefinitionElement = {
+        componentType: 'ToggleButton',
+        props: {
+          children: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          defaultPressed: getFirstDefinedValue([
+            config.inputType?.defaultChecked,
+            baseConfig?.inputType?.defaultChecked,
+          ]),
+        },
+      };
+      break;
+
+    case 'CheckboxField':
+      formDefinitionElement = {
+        componentType: 'CheckboxField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          name: config.inputType?.name || baseConfig?.inputType?.name || FORM_DEFINITION_DEFAULTS.field.inputType.name,
+          value:
+            config.inputType?.value || baseConfig?.inputType?.value || FORM_DEFINITION_DEFAULTS.field.inputType.value,
+          isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          defaultChecked: getFirstDefinedValue([
+            config.inputType?.defaultChecked,
+            baseConfig?.inputType?.defaultChecked,
+          ]),
+        },
+      };
+      break;
+
+    case 'RadioGroupField':
+      formDefinitionElement = {
+        componentType: 'RadioGroupField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          name: config.inputType?.name || baseConfig?.inputType?.name || FORM_DEFINITION_DEFAULTS.field.inputType.name,
+          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          defaultValue: getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
+        },
+        radios: getOptionsFromValueMappings(
+          config.inputType?.valueMappings ||
+            baseConfig?.inputType?.valueMappings ||
+            FORM_DEFINITION_DEFAULTS.field.inputType.valueMappings,
+        ),
+      };
+      break;
+
+    case 'PasswordField':
+      formDefinitionElement = {
+        componentType: 'PasswordField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
+          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
+          defaultValue: getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+        },
+      };
+      break;
+
+    default:
+      throw new InvalidInputError(`componentType ${componentType} could not be mapped`);
+  }
+
+  deleteUndefined(formDefinitionElement);
+  deleteUndefined(formDefinitionElement.props);
+
+  return formDefinitionElement;
+}
 
 /**
  * Impure function that adds field configurations to formDefinition
  */
 /* eslint-disable no-param-reassign */
 export function mapFormFieldConfig(
-  element: { type: string; name: string; config: StudioFormFieldConfig },
+  element: { type: string; name: string; config: StudioGenericFieldConfig },
   formDefinition: FormDefinition,
+  modelFieldsConfigs: ModelFieldsConfigs,
 ) {
-  const { config } = element;
+  formDefinition.elements[element.name] = getFormDefinitionInputElement(
+    element.config,
+    modelFieldsConfigs[element.name],
+  );
+}
 
-  if ('label' in config && config.label) {
-    formDefinition.elements[element.name] = {
-      ...formDefinition.elements[element.name],
-      props: {
-        ...formDefinition.elements[element.name]?.props,
-        label: config.label,
-      },
-    };
-  }
+/* eslint-enable no-param-reassign */
 
-  if ('inputType' in config && config.inputType) {
-    const dataType = formDefinition.elements[element.name]?.dataType;
-
-    if (dataType) {
-      if (!FIELD_TYPE_MAP[dataType]?.supportedComponents.has(config.inputType.type)) {
-        throw new InvalidInputError(
-          `The input type ${config.inputType.type} is not supported for data type ${dataType}`,
-        );
-      }
+/**
+ * Impure function that adds field configurations to formDefinition
+ * for model fields that are not currently in the definition
+ */
+/* eslint-disable no-param-reassign */
+export function mapMissingConfigs(modelFieldsConfigs: ModelFieldsConfigs, formDefinition: FormDefinition) {
+  Object.entries(modelFieldsConfigs).forEach(([fieldName, fieldConfig]) => {
+    if (!formDefinition.elements[fieldName]) {
+      formDefinition.elements[fieldName] = getFormDefinitionInputElement(fieldConfig);
     }
-
-    const newProps = { ...formDefinition.elements[element.name]?.props };
-
-    if ('required' in config.inputType) {
-      newProps.isRequired = config.inputType.required;
-    }
-
-    if ('readOnly' in config.inputType) {
-      newProps.isReadOnly = config.inputType.readOnly;
-    }
-
-    if ('placeholder' in config.inputType) {
-      newProps.placeholder = config.inputType.placeholder;
-    }
-
-    if ('minValue' in config.inputType) {
-      newProps.minValue = config.inputType.minValue;
-    }
-
-    if ('maxValue' in config.inputType) {
-      newProps.maxValue = config.inputType.maxValue;
-    }
-
-    if ('step' in config.inputType) {
-      newProps.step = config.inputType.step;
-    }
-
-    formDefinition.elements[element.name] = {
-      ...formDefinition.elements[element.name],
-      componentType: config.inputType.type,
-      props: newProps,
-    };
-  }
+  });
 }
 /* eslint-enable no-param-reassign */

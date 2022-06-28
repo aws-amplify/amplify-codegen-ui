@@ -14,24 +14,16 @@
   limitations under the License.
  */
 import { StudioFormStyle } from './style';
+import { FormDefinitionElement } from './form-definition-element';
+import { StudioGenericFieldConfig } from './fields';
 
-export type FormDefinitionElementProps = {
-  isReadOnly?: boolean;
-  isRequired?: boolean;
-  label?: string;
-  placeholder?: string;
-  minValue?: number;
-  maxValue?: number;
-  step?: number;
-  level?: number;
-  text?: string;
-};
+export type ModelFieldsConfigs = { [key: string]: StudioGenericFieldConfig };
 
 export type FormDefinition = {
   form: {
     layoutStyle: StudioFormStyle;
   };
-  elements: { [element: string]: { componentType: string; dataType?: string; props: FormDefinitionElementProps } };
+  elements: { [element: string]: FormDefinitionElement };
   buttons: { [key: string]: string };
   elementMatrix: string[][];
 };

@@ -32,7 +32,7 @@ type ExcludedStudioFieldConfig = {
   excluded: true;
 };
 
-type StudioGenericFieldConfig = {
+export type StudioGenericFieldConfig = {
   /**
    * The configuration for what type of input is used.
    */

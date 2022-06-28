@@ -14,9 +14,24 @@
   limitations under the License.
  */
 
-import { findIndices, addDataStoreModelField, removeFromMatrix, removeAndReturnItemOnward, mapStyles } from './helpers';
-import { StudioForm, DataStoreModelField, SectionalElement, StudioFormFieldConfig, FormDefinition } from '../types';
-import { mapElement } from './helpers/map-element';
+import {
+  findIndices,
+  addDataStoreModelField,
+  removeFromMatrix,
+  removeAndReturnItemOnward,
+  mapStyles,
+  mapElement,
+  mapMissingConfigs,
+} from './helpers';
+import {
+  StudioForm,
+  DataStoreModelField,
+  SectionalElement,
+  StudioFormFieldConfig,
+  FormDefinition,
+  StudioGenericFieldConfig,
+  ModelFieldsConfigs,
+} from '../types';
 
 /**
  * Helper that turns the StudioForm model into definition that can be used to render
@@ -39,9 +54,10 @@ export function generateFormDefinition({
     elementMatrix: [],
   };
 
+  const modelFieldsConfigs: ModelFieldsConfigs = {};
   if (modelInfo) {
     modelInfo.fields.forEach((field) => {
-      addDataStoreModelField(formDefinition, field);
+      addDataStoreModelField(formDefinition, modelFieldsConfigs, field);
     });
   }
 
@@ -73,7 +89,14 @@ export function generateFormDefinition({
     } else if ('position' in element.config && element.config.position && 'rightOf' in element.config.position) {
       rightOfElementQueue.push(element);
     } else {
-      mapElement(element, formDefinition);
+      // typecasting since ExcludedStudioFieldConfig is filtered out
+      mapElement(
+        element as
+          | { type: 'field'; name: string; config: StudioGenericFieldConfig }
+          | { type: 'sectionalElement'; name: string; config: SectionalElement },
+        formDefinition,
+        modelFieldsConfigs,
+      );
       if (
         'position' in element.config &&
         element.config.position &&
@@ -126,8 +149,14 @@ export function generateFormDefinition({
       if (!relationIndices) {
         rightOfElementQueue.push(element);
       } else {
-        mapElement(element, formDefinition);
-
+        // typecasting since ExcludedStudioFieldConfig is filtered out
+        mapElement(
+          element as
+            | { type: 'field'; name: string; config: StudioGenericFieldConfig }
+            | { type: 'sectionalElement'; name: string; config: SectionalElement },
+          formDefinition,
+          modelFieldsConfigs,
+        );
         const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
         if (previousIndices) {
           const removedItems = removeAndReturnItemOnward(previousIndices, formDefinition);
@@ -138,6 +167,8 @@ export function generateFormDefinition({
       }
     }
   }
+
+  mapMissingConfigs(modelFieldsConfigs, formDefinition);
 
   formDefinition.form.layoutStyle = mapStyles(form.style);
 

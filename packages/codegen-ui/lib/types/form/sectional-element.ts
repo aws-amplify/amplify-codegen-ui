@@ -16,27 +16,16 @@
 import { StudioFieldPosition } from './position';
 /**
  * Sectional elements are visual helpers for the form. They don't have any data associated with them.
+ * Shape below represent API shapes after typecasting
  */
-type HeadingSectionalElement = {
-  type: 'Heading';
 
-  level: 1 | 2 | 3 | 4 | 5 | 6;
+export type SectionalElement = {
+  position: StudioFieldPosition;
+  type: string;
 
-  text: string;
+  level?: number;
+
+  text?: string;
+
+  orientation?: string;
 };
-
-type TextSectionalElement = {
-  type: 'Text';
-
-  text: string;
-};
-
-type DividerSectionalElement = {
-  type: 'Divider';
-};
-
-export type SectionalElement = { position: StudioFieldPosition } & (
-  | HeadingSectionalElement
-  | DividerSectionalElement
-  | TextSectionalElement
-);

@@ -13,6 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export { FIELD_TYPE_MAP } from './helpers/field-type-map';
+export { FIELD_TYPE_MAP, getFormDefinitionInputElement, getFormDefinitionSectionalElement } from './helpers';
 export { generateFormDefinition } from './generate-form-definition';
 export { mapFormToComponent } from './form-to-component';

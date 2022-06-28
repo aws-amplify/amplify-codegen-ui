@@ -24,7 +24,7 @@ describe('formToComponent', () => {
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
       fields: {},
-      sectionalElements: [],
+      sectionalElements: {},
       style: {},
     };
 

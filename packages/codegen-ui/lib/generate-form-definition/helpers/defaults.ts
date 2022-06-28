@@ -13,9 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioFormStyle } from '../../types';
 
-export const FORM_DEFINITION_DEFAULTS: { styles: StudioFormStyle } = {
+export const FORM_DEFINITION_DEFAULTS = {
   styles: {
     horizontalGap: {
       value: '15px',
@@ -26,5 +25,19 @@ export const FORM_DEFINITION_DEFAULTS: { styles: StudioFormStyle } = {
     outerPadding: {
       value: '20px',
     },
+  },
+
+  field: {
+    inputType: {
+      label: 'Label',
+      defaultCountryCode: '+1',
+      value: 'true',
+      name: 'fieldName',
+      valueMappings: [{ value: 'value', displayValue: 'Label' }],
+    },
+  },
+
+  sectionalElement: {
+    text: 'text',
   },
 };

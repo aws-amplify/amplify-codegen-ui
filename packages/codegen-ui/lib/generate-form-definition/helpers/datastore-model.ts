@@ -14,17 +14,20 @@
   limitations under the License.
  */
 
-import { DataStoreModelField, FormDefinition } from '../../types';
+import { DataStoreModelField, FormDefinition, ModelFieldsConfigs } from '../../types';
 import { FIELD_TYPE_MAP } from './field-type-map';
 import { InvalidInputError } from '../../errors';
 
 /**
- * Impure function that adds fields from DataStore to formDefinition
+ * Impure function that adds fields from DataStore to temporary util object, modelFieldsConfigs
+ * and to the formDefinition
  */
 /* eslint-disable no-param-reassign */
-export function addDataStoreModelField(formDefinition: FormDefinition, field: DataStoreModelField) {
-  formDefinition.elementMatrix.push([field.name]);
-
+export function addDataStoreModelField(
+  formDefinition: FormDefinition,
+  modelFieldsConfigs: ModelFieldsConfigs,
+  field: DataStoreModelField,
+) {
   if (field.isArray) {
     throw new InvalidInputError('Array types are not yet supported');
   }
@@ -36,10 +39,18 @@ export function addDataStoreModelField(formDefinition: FormDefinition, field: Da
     throw new InvalidInputError('Field type could not be mapped to a component');
   }
 
-  formDefinition.elements[field.name] = {
-    componentType: defaultComponent,
-    props: { label: field.name, isRequired: field.isRequired, isReadOnly: field.isReadOnly },
-    dataType,
+  formDefinition.elementMatrix.push([field.name]);
+
+  // TODO: map Enums to valueMappings
+  modelFieldsConfigs[field.name] = {
+    label: field.name,
+    inputType: {
+      type: defaultComponent,
+      required: field.isRequired,
+      readOnly: field.isReadOnly,
+      name: field.name,
+      value: 'true',
+    },
   };
 }
 /* eslint-enable no-param-reassign */
