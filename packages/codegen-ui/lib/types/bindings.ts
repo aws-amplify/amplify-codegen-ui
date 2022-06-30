@@ -17,7 +17,8 @@ export type StudioComponentPropertyBinding =
   | StudioComponentDataPropertyBinding
   | StudioComponentStoragePropertyBinding
   | StudioComponentSimplePropertyBinding
-  | StudioComponentEventPropertyBinding;
+  | StudioComponentEventPropertyBinding
+  | StudioComponentSlotBinding;
 
 /**
  * These are the primitive value types
@@ -27,6 +28,7 @@ export enum StudioComponentPropertyType {
   Number = 'Number',
   Boolean = 'Boolean',
   Date = 'Date',
+  Slot = 'Slot',
 }
 
 export type StudioComponentSimplePropertyBinding = {
@@ -80,6 +82,24 @@ export type StudioComponentStoragePropertyBinding = {
    * This is the value of the data binding
    */
   bindingProperties: StudioComponentStorageBindingProperty;
+};
+
+/**
+ * This represent the configuration for a binding to be a user-defined JSX Element
+ */
+export type StudioComponentSlotBinding = {
+  /**
+   * This declares that the binding is a Slot type
+   */
+  type: 'Slot';
+  bindingProperties: StudioComponentSlotBindingProperty;
+};
+
+/**
+ * This represents the exposed top-level prop to be mapped as the children property
+ */
+export type StudioComponentSlotBindingProperty = {
+  slotName: string;
 };
 
 /**
