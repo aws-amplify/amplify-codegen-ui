@@ -63,5 +63,8 @@
       "ts",
       "js"
     ]
+  },
+  "resolutions": {
+    "@types/eslint": "8.4.3"
   }
 }

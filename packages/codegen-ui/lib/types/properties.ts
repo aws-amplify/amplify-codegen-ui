@@ -47,6 +47,7 @@ export type CommonPropertyValues = {
 
 export type StudioComponentProperty =
   | FixedStudioComponentProperty
+  | SlotStudioComponentProperty
   | BoundStudioComponentProperty
   | CollectionStudioComponentProperty
   | ConcatenatedStudioComponentProperty
@@ -145,4 +146,8 @@ export type StudioComponentAuthProperty = {
 export type StateStudioComponentProperty = {
   componentName: string;
   property: string;
+} & CommonPropertyValues;
+
+export type SlotStudioComponentProperty = {
+  slotName: string;
 } & CommonPropertyValues;

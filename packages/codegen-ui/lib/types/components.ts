@@ -112,6 +112,11 @@ export type StudioComponentChild = {
   children?: StudioComponentChild[];
 
   events?: StudioComponentEvents;
+
+  /**
+   * The id if the component in its source system (Figma, Sketch, etc.)
+   */
+  sourceId?: string;
 };
 
 /**
