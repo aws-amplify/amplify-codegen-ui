@@ -16,7 +16,7 @@
 
 import {
   findIndices,
-  addDataStoreModelField,
+  addDataStoreModelFields,
   removeFromMatrix,
   removeAndReturnItemOnward,
   mapStyles,
@@ -25,12 +25,12 @@ import {
 } from './helpers';
 import {
   StudioForm,
-  DataStoreModelField,
   SectionalElement,
   StudioFormFieldConfig,
   FormDefinition,
   StudioGenericFieldConfig,
   ModelFieldsConfigs,
+  Schema,
 } from '../types';
 
 /**
@@ -42,10 +42,10 @@ import {
  */
 export function generateFormDefinition({
   form,
-  modelInfo,
+  dataStore,
 }: {
   form: StudioForm;
-  modelInfo?: { fields: DataStoreModelField[] };
+  dataStore?: { schema: Schema };
 }): FormDefinition {
   const formDefinition: FormDefinition = {
     form: { layoutStyle: {} },
@@ -55,9 +55,12 @@ export function generateFormDefinition({
   };
 
   const modelFieldsConfigs: ModelFieldsConfigs = {};
-  if (modelInfo) {
-    modelInfo.fields.forEach((field) => {
-      addDataStoreModelField(formDefinition, modelFieldsConfigs, field);
+  if (dataStore && form.dataType.dataSourceType === 'DataStore') {
+    addDataStoreModelFields({
+      formDefinition,
+      schema: dataStore.schema,
+      modelFieldsConfigs,
+      modelName: form.dataType.dataTypeName,
     });
   }
 

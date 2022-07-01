@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { addDataStoreModelField } from '../../../generate-form-definition/helpers';
+import { addDataStoreModelFields } from '../../../generate-form-definition/helpers';
 import { FormDefinition, ModelFieldsConfigs } from '../../../types';
 
 describe('addDataStoreModelField', () => {
@@ -26,11 +26,25 @@ describe('addDataStoreModelField', () => {
       elementMatrix: [],
     };
 
-    const dataStoreModelField = { name: 'name', type: 'String', isReadOnly: false, isRequired: false, isArray: false };
+    const field1 = { name: 'name', type: 'String' as const, isReadOnly: false, isRequired: false, isArray: false };
+
+    const schema = {
+      models: {
+        Dog: {
+          name: 'Dog',
+          pluralName: 'Dogs',
+          fields: {
+            [field1.name]: field1,
+          },
+        },
+      },
+      enums: {},
+      version: 'version',
+    };
 
     const modelFieldsConfigs: ModelFieldsConfigs = {};
 
-    addDataStoreModelField(formDefinition, modelFieldsConfigs, dataStoreModelField);
+    addDataStoreModelFields({ formDefinition, modelFieldsConfigs, schema, modelName: 'Dog' });
 
     expect(formDefinition.elementMatrix).toStrictEqual([['name']]);
     expect(modelFieldsConfigs.name).toStrictEqual({
@@ -47,9 +61,25 @@ describe('addDataStoreModelField', () => {
       elementMatrix: [],
     };
 
-    const dataStoreModelField = { name: 'name', type: 'String', isReadOnly: false, isRequired: false, isArray: true };
+    const field1 = { name: 'name', type: 'String' as const, isReadOnly: false, isRequired: false, isArray: true };
 
-    expect(() => addDataStoreModelField(formDefinition, {}, dataStoreModelField)).toThrow();
+    const schema = {
+      models: {
+        Dog: {
+          name: 'Dog',
+          pluralName: 'Dogs',
+          fields: {
+            [field1.name]: field1,
+          },
+        },
+      },
+      enums: {},
+      version: 'version',
+    };
+
+    const modelFieldsConfigs: ModelFieldsConfigs = {};
+
+    expect(() => addDataStoreModelFields({ formDefinition, modelFieldsConfigs, schema, modelName: 'Dog' })).toThrow();
   });
 
   it('should throw if there is no default component', () => {
@@ -60,14 +90,30 @@ describe('addDataStoreModelField', () => {
       elementMatrix: [],
     };
 
-    const dataStoreModelField = {
+    const field1 = {
       name: 'name',
-      type: 'ErrantType',
+      type: 'ErrantType' as any,
       isReadOnly: false,
       isRequired: false,
       isArray: false,
     };
 
-    expect(() => addDataStoreModelField(formDefinition, {}, dataStoreModelField)).toThrow();
+    const schema = {
+      models: {
+        Dog: {
+          name: 'Dog',
+          pluralName: 'Dogs',
+          fields: {
+            [field1.name]: field1,
+          },
+        },
+      },
+      enums: {},
+      version: 'version',
+    };
+
+    const modelFieldsConfigs: ModelFieldsConfigs = {};
+
+    expect(() => addDataStoreModelFields({ formDefinition, modelFieldsConfigs, schema, modelName: 'Dog' })).toThrow();
   });
 });

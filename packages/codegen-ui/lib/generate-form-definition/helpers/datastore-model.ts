@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { DataStoreModelField, FormDefinition, ModelFieldsConfigs } from '../../types';
+import { FormDefinition, ModelFieldsConfigs, Schema } from '../../types';
 import { FIELD_TYPE_MAP } from './field-type-map';
 import { InvalidInputError } from '../../errors';
 
@@ -23,34 +23,48 @@ import { InvalidInputError } from '../../errors';
  * and to the formDefinition
  */
 /* eslint-disable no-param-reassign */
-export function addDataStoreModelField(
-  formDefinition: FormDefinition,
-  modelFieldsConfigs: ModelFieldsConfigs,
-  field: DataStoreModelField,
-) {
-  if (field.isArray) {
-    throw new InvalidInputError('Array types are not yet supported');
+export function addDataStoreModelFields({
+  formDefinition,
+  modelFieldsConfigs,
+  schema,
+  modelName,
+}: {
+  formDefinition: FormDefinition;
+  modelFieldsConfigs: ModelFieldsConfigs;
+  schema: Schema;
+  modelName: string;
+}) {
+  const model = schema.models[modelName];
+
+  if (!model) {
+    throw new InvalidInputError(`Model ${modelName} is not found in your schema`);
   }
 
-  const dataType = typeof field.type === 'string' ? field.type : Object.keys(field.type)[0];
-  const defaultComponent = FIELD_TYPE_MAP[dataType]?.defaultComponent;
+  Object.values(model.fields).forEach((field) => {
+    if (field.isArray) {
+      throw new InvalidInputError('Array types are not yet supported');
+    }
 
-  if (!defaultComponent) {
-    throw new InvalidInputError('Field type could not be mapped to a component');
-  }
+    const dataType = typeof field.type === 'string' ? field.type : Object.keys(field.type)[0];
+    const defaultComponent = FIELD_TYPE_MAP[dataType]?.defaultComponent;
 
-  formDefinition.elementMatrix.push([field.name]);
+    if (!defaultComponent) {
+      throw new InvalidInputError('Field type could not be mapped to a component');
+    }
 
-  // TODO: map Enums to valueMappings
-  modelFieldsConfigs[field.name] = {
-    label: field.name,
-    inputType: {
-      type: defaultComponent,
-      required: field.isRequired,
-      readOnly: field.isReadOnly,
-      name: field.name,
-      value: 'true',
-    },
-  };
+    formDefinition.elementMatrix.push([field.name]);
+
+    // TODO: map Enums to valueMappings
+    modelFieldsConfigs[field.name] = {
+      label: field.name,
+      inputType: {
+        type: defaultComponent,
+        required: field.isRequired,
+        readOnly: field.isReadOnly,
+        name: field.name,
+        value: 'true',
+      },
+    };
+  });
 }
 /* eslint-enable no-param-reassign */

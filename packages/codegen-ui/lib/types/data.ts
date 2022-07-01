@@ -16,15 +16,5 @@
 
 // exporting types and scalar functions from aws-amplify
 // as these will be used when loading in dataschema for form generation
-export type { SchemaModel, ModelFields } from '@aws-amplify/datastore';
+export type { SchemaModel, ModelFields, Schema } from '@aws-amplify/datastore';
 export { isGraphQLScalarType } from '@aws-amplify/datastore';
-
-type FieldType = string | { model: string } | { nonModel: string } | { enum: string };
-
-export type DataStoreModelField = {
-  name: string;
-  type: FieldType;
-  isReadOnly: boolean;
-  isRequired: boolean;
-  isArray: boolean;
-};

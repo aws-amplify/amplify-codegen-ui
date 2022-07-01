@@ -17,6 +17,8 @@ import { generateFormDefinition } from '../../generate-form-definition';
 
 describe('generateFormDefinition', () => {
   it('should map DataStore model fields', () => {
+    const field1 = { name: 'name', type: 'String' as const, isReadOnly: false, isRequired: true, isArray: false };
+
     const formDefinition = generateFormDefinition({
       form: {
         name: 'sampleForm',
@@ -26,7 +28,21 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [{ name: 'name', type: 'String', isReadOnly: false, isRequired: true, isArray: false }] },
+      dataStore: {
+        schema: {
+          models: {
+            Dog: {
+              name: 'Dog',
+              pluralName: 'Dogs',
+              fields: {
+                [field1.name]: field1,
+              },
+            },
+          },
+          enums: {},
+          version: 'version',
+        },
+      },
     });
     expect(formDefinition.elements).toStrictEqual({
       name: {
@@ -37,6 +53,8 @@ describe('generateFormDefinition', () => {
   });
 
   it('should override field configurations from DataStore', () => {
+    const field1 = { name: 'weight', type: 'Float' as const, isReadOnly: false, isRequired: true, isArray: false };
+
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
@@ -46,7 +64,21 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false }] },
+      dataStore: {
+        schema: {
+          models: {
+            Dog: {
+              name: 'Dog',
+              pluralName: 'Dogs',
+              fields: {
+                [field1.name]: field1,
+              },
+            },
+          },
+          enums: {},
+          version: 'version',
+        },
+      },
     });
     expect(formDefinition.elements).toStrictEqual({
       weight: {
@@ -57,6 +89,8 @@ describe('generateFormDefinition', () => {
   });
 
   it('should not add overrides to the matrix', () => {
+    const field1 = { name: 'weight', type: 'Float' as const, isReadOnly: false, isRequired: true, isArray: false };
+
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
@@ -66,7 +100,21 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false }] },
+      dataStore: {
+        schema: {
+          models: {
+            Dog: {
+              name: 'Dog',
+              pluralName: 'Dogs',
+              fields: {
+                [field1.name]: field1,
+              },
+            },
+          },
+          enums: {},
+          version: 'version',
+        },
+      },
     });
 
     expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
@@ -82,7 +130,19 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [] },
+      dataStore: {
+        schema: {
+          models: {
+            Dog: {
+              name: 'Dog',
+              pluralName: 'Dogs',
+              fields: {},
+            },
+          },
+          enums: {},
+          version: 'version',
+        },
+      },
     });
     expect(formDefinition.elements).toStrictEqual({
       weight: { componentType: 'SliderField', props: { min: 1, max: 100, step: 2, label: 'Label' } },
@@ -99,12 +159,26 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [] },
+      dataStore: {
+        schema: {
+          models: {
+            Dog: {
+              name: 'Dog',
+              pluralName: 'Dogs',
+              fields: {},
+            },
+          },
+          enums: {},
+          version: 'version',
+        },
+      },
     });
     expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
   });
 
   it('should add sectional elements', () => {
+    const field1 = { name: 'weight', type: 'Float' as const, isReadOnly: false, isRequired: true, isArray: false };
+
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
@@ -116,7 +190,21 @@ describe('generateFormDefinition', () => {
         },
         style: {},
       },
-      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false }] },
+      dataStore: {
+        schema: {
+          models: {
+            Dog: {
+              name: 'Dog',
+              pluralName: 'Dogs',
+              fields: {
+                [field1.name]: field1,
+              },
+            },
+          },
+          enums: {},
+          version: 'version',
+        },
+      },
     });
     expect(formDefinition.elements.Heading123).toStrictEqual({
       componentType: 'Heading',
@@ -139,12 +227,28 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style,
       },
-      modelInfo: { fields: [] },
+      dataStore: {
+        schema: {
+          models: {
+            Dog: {
+              name: 'Dog',
+              pluralName: 'Dogs',
+              fields: {},
+            },
+          },
+          enums: {},
+          version: 'version',
+        },
+      },
     });
     expect(formDefinition.form.layoutStyle).toStrictEqual(style);
   });
 
   it('should not leave empty rows in the matrix', () => {
+    const field1 = { name: 'name', type: 'String' as const, isReadOnly: false, isRequired: true, isArray: false };
+    const field2 = { name: 'weight', type: 'Float' as const, isReadOnly: false, isRequired: true, isArray: false };
+    const field3 = { name: 'age', type: 'Int' as const, isReadOnly: false, isRequired: true, isArray: false };
+
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
@@ -161,18 +265,32 @@ describe('generateFormDefinition', () => {
 
         style: {},
       },
-      modelInfo: {
-        fields: [
-          { name: 'name', type: 'String', isReadOnly: false, isRequired: true, isArray: false },
-          { name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false },
-          { name: 'age', type: 'Int', isReadOnly: false, isRequired: true, isArray: false },
-        ],
+      dataStore: {
+        schema: {
+          models: {
+            Dog: {
+              name: 'Dog',
+              pluralName: 'Dogs',
+              fields: {
+                [field1.name]: field1,
+                [field2.name]: field2,
+                [field3.name]: field3,
+              },
+            },
+          },
+          enums: {},
+          version: 'version',
+        },
       },
     });
     expect(formDefinition.elementMatrix).toStrictEqual([['Heading123']]);
   });
 
   it('should correctly map positions', () => {
+    const field1 = { name: 'name', type: 'String' as const, isReadOnly: false, isRequired: true, isArray: false };
+    const field2 = { name: 'weight', type: 'Float' as const, isReadOnly: false, isRequired: true, isArray: false };
+    const field3 = { name: 'age', type: 'Int' as const, isReadOnly: false, isRequired: true, isArray: false };
+
     const formDefinition = generateFormDefinition({
       form: {
         name: 'mySampleForm',
@@ -189,12 +307,22 @@ describe('generateFormDefinition', () => {
 
         style: {},
       },
-      modelInfo: {
-        fields: [
-          { name: 'name', type: 'String', isReadOnly: false, isRequired: true, isArray: false },
-          { name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false },
-          { name: 'age', type: 'Int', isReadOnly: false, isRequired: true, isArray: false },
-        ],
+      dataStore: {
+        schema: {
+          models: {
+            Dog: {
+              name: 'Dog',
+              pluralName: 'Dogs',
+              fields: {
+                [field1.name]: field1,
+                [field2.name]: field2,
+                [field3.name]: field3,
+              },
+            },
+          },
+          enums: {},
+          version: 'version',
+        },
       },
     });
     expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight']]);
@@ -219,8 +347,18 @@ it('should requeue if related element is not yet found', () => {
 
       style: {},
     },
-    modelInfo: {
-      fields: [],
+    dataStore: {
+      schema: {
+        models: {
+          Dog: {
+            name: 'Dog',
+            pluralName: 'Dogs',
+            fields: {},
+          },
+        },
+        enums: {},
+        version: 'version',
+      },
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color']]);
@@ -245,8 +383,18 @@ it('should handle fields without position', () => {
 
       style: {},
     },
-    modelInfo: {
-      fields: [],
+    dataStore: {
+      schema: {
+        models: {
+          Dog: {
+            name: 'Dog',
+            pluralName: 'Dogs',
+            fields: {},
+          },
+        },
+        enums: {},
+        version: 'version',
+      },
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color'], ['bark']]);
@@ -263,8 +411,18 @@ it('should fill out styles using defaults', () => {
 
       style: {},
     },
-    modelInfo: {
-      fields: [],
+    dataStore: {
+      schema: {
+        models: {
+          Dog: {
+            name: 'Dog',
+            pluralName: 'Dogs',
+            fields: {},
+          },
+        },
+        enums: {},
+        version: 'version',
+      },
     },
   });
 
