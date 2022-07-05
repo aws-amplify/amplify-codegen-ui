@@ -13,10 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { SchemaModel, ModelFields, isGraphQLScalarType } from '@aws-amplify/datastore';
 import {
-  SchemaModel,
-  ModelFields,
-  isGraphQLScalarType,
   StudioComponent,
   StudioForm,
   StudioComponentChild,
