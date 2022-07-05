@@ -81,11 +81,11 @@ export const FIELD_TYPE_MAP: {
     defaultComponent: 'PhoneNumberField',
     supportedComponents: new Set(['PhoneNumberField']),
   },
-  enum: {
+  Enum: {
     defaultComponent: 'SelectField',
     supportedComponents: new Set(['RadioGroupField', 'SelectField']),
   },
-  nonModel: {
+  Relationship: {
     defaultComponent: 'SelectField',
     supportedComponents: new Set(['SelectField']),
   },

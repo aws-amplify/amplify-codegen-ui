@@ -16,8 +16,7 @@
 
 // exporting types and scalar functions from aws-amplify
 // as these will be used when loading in dataschema for form generation
-export type { SchemaModel, ModelFields } from '@aws-amplify/datastore';
-export { isGraphQLScalarType } from '@aws-amplify/datastore';
+export type { SchemaModel } from '@aws-amplify/datastore';
 
 type FieldType = string | { model: string } | { nonModel: string } | { enum: string };
 
@@ -27,4 +26,53 @@ export type DataStoreModelField = {
   isReadOnly: boolean;
   isRequired: boolean;
   isArray: boolean;
+};
+
+export type DataFieldDataType =
+  | 'ID'
+  | 'String'
+  | 'Int'
+  | 'Float'
+  | 'AWSDate'
+  | 'AWSTime'
+  | 'AWSDateTime'
+  | 'AWSTimestamp'
+  | 'AWSEmail'
+  | 'AWSURL'
+  | 'AWSIPAddress'
+  | 'Boolean'
+  | 'AWSJSON'
+  | 'AWSPhone'
+  | { enum: string }
+  | { model: string }
+  | { nonModel: string };
+
+export type GenericDataField = {
+  dataType: DataFieldDataType;
+
+  required: boolean;
+
+  readOnly: boolean;
+
+  isArray: boolean;
+
+  relationship?: {
+    type: 'HAS_ONE' | 'HAS_MANY' | 'BELONGS_TO';
+
+    relatedModelName: string;
+  };
+};
+
+export type GenericDataModel = {
+  fields: { [fieldName: string]: GenericDataField };
+};
+
+export type GenericDataSchema = {
+  dataSourceType: 'DataStore';
+
+  models: { [modelName: string]: GenericDataModel };
+
+  enums: { [enumName: string]: { values: string[] } };
+
+  nonModels: { [nonModelName: string]: GenericDataModel };
 };
