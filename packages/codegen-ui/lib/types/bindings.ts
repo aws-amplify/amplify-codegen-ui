@@ -28,7 +28,7 @@ export enum StudioComponentPropertyType {
   Number = 'Number',
   Boolean = 'Boolean',
   Date = 'Date',
-  Slot = 'Slot',
+  Slot = 'Amplify.Slot',
 }
 
 export type StudioComponentSimplePropertyBinding = {
@@ -91,7 +91,7 @@ export type StudioComponentSlotBinding = {
   /**
    * This declares that the binding is a Slot type
    */
-  type: 'Slot';
+  type: 'Amplify.Slot';
   bindingProperties: StudioComponentSlotBindingProperty;
 };
 
