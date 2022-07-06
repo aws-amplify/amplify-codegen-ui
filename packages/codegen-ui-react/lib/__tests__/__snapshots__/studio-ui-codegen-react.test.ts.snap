@@ -3890,6 +3890,42 @@ export default function TextWithDataBinding(
 "
 `;
 
+exports[`amplify render tests component with binding should render slot binding 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+
+export type ComponentWithSlotBindingProps = React.PropsWithChildren<
+  Partial<FlexProps> & {
+    mySlot?: React.ReactNode;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ComponentWithSlotBinding(
+  props: ComponentWithSlotBindingProps
+): React.ReactElement {
+  const { mySlot, overrides, ...rest } = props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <Flex
+      {...rest}
+      {...getOverrideProps(overrides, \\"ComponentWithSlotBinding\\")}
+    >
+      <View
+        children={mySlot}
+        {...getOverrideProps(overrides, \\"Rectangle\\")}
+      ></View>
+    </Flex>
+  );
+}
+"
+`;
+
 exports[`amplify render tests component with data binding should add model imports 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";

@@ -20,6 +20,7 @@ import {
   StudioComponentEventPropertyBinding,
   InternalError,
   InvalidInputError,
+  StudioComponentSlotBinding,
 } from '@aws-amplify/codegen-ui';
 import ts, {
   createPrinter,
@@ -201,7 +202,8 @@ export function bindingPropertyUsesHook(
   binding:
     | StudioComponentDataPropertyBinding
     | StudioComponentSimplePropertyBinding
-    | StudioComponentEventPropertyBinding,
+    | StudioComponentEventPropertyBinding
+    | StudioComponentSlotBinding,
 ): boolean {
   return isDataPropertyBinding(binding) && 'predicate' in binding.bindingProperties;
 }

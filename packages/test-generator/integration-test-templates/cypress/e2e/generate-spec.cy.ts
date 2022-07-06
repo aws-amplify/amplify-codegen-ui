@@ -33,6 +33,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'ComponentWithSimplePropertyBinding',
   'ComponentWithAuthBinding',
   'CompWithMultipleBindingsWithPred',
+  'ComponentWithSlotBinding',
   'BoundDefaultValue',
   'SimplePropertyBindingDefaultValue',
   'SimpleAndBouldDefaultValue',

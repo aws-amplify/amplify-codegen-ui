@@ -43,6 +43,7 @@ import {
   CollectionDefaultValue,
   MyTheme,
   ComponentWithSimplePropertyBinding,
+  ComponentWithSlotBinding,
   ComponentWithDataBindingWithoutPredicate,
   ComponentWithDataBindingWithPredicate,
   ComponentWithMultipleDataBindingsWithPredicate,
@@ -279,6 +280,7 @@ export default function ComponentTests() {
             priceUSD: 2200,
           }}
         />
+        <ComponentWithSlotBinding id="slotBinding" mySlot={<div>Customer component</div>} />
       </div>
       <div id="collections">
         <h2>Collections</h2>

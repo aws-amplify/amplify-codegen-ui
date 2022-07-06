@@ -35,6 +35,7 @@ import {
   buildOpeningElementProperties,
   getStateName,
   getSetStateName,
+  hasChildrenProp,
 } from './react-component-render-helper';
 import {
   buildOpeningElementControlEvents,
@@ -65,7 +66,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
 
     const element = factory.createJsxElement(
       this.renderOpeningElement(),
-      renderChildren ? renderChildren(children) : [],
+      renderChildren && !hasChildrenProp(this.component.properties) ? renderChildren(children) : [],
       factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 

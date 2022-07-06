@@ -28,7 +28,6 @@ export enum StudioComponentPropertyType {
   Number = 'Number',
   Boolean = 'Boolean',
   Date = 'Date',
-  Slot = 'Amplify.Slot',
 }
 
 export type StudioComponentSimplePropertyBinding = {
@@ -92,14 +91,6 @@ export type StudioComponentSlotBinding = {
    * This declares that the binding is a Slot type
    */
   type: 'Amplify.Slot';
-  bindingProperties: StudioComponentSlotBindingProperty;
-};
-
-/**
- * This represents the exposed top-level prop to be mapped as the children property
- */
-export type StudioComponentSlotBindingProperty = {
-  slotName: string;
 };
 
 /**

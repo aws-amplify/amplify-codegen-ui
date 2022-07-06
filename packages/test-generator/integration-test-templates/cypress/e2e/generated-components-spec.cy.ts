@@ -152,6 +152,15 @@ describe('Generated Components', () => {
         });
       });
     });
+
+    describe('Slot Binding', () => {
+      it('Renders component passed into the slot, overriding nested components', () => {
+        cy.get('#slotBinding').within(() => {
+          cy.contains('Customer component');
+          cy.contains('Nested child text').should('not.exist');
+        });
+      });
+    });
   });
 
   describe('Collections', () => {
