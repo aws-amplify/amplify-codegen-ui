@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponentDataConfiguration, StudioComponentPropertyBinding } from './bindings';
+import { StudioComponentBindingProperties, StudioComponentDataConfiguration } from './bindings';
 import { StudioComponentEvents } from './events';
 import { FigmaMetadata } from './figma';
 import { StudioComponentProperties } from './properties';
@@ -73,9 +73,8 @@ export type StudioComponent = {
    */
   overrides?: StudioComponentOverrides;
 
-  bindingProperties: {
-    [propertyName: string]: StudioComponentPropertyBinding;
-  };
+  bindingProperties: StudioComponentBindingProperties;
+
   /**
    * These are the collection properties
    */

@@ -13,11 +13,16 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export type StudioComponentPropertyBinding =
+export type StudioComponentBindingProperties = {
+  [propertyName: string]: StudioComponentPropertyBinding;
+};
+
+  export type StudioComponentPropertyBinding =
   | StudioComponentDataPropertyBinding
   | StudioComponentStoragePropertyBinding
   | StudioComponentSimplePropertyBinding
-  | StudioComponentEventPropertyBinding;
+  | StudioComponentEventPropertyBinding
+  | StudioComponentSlotPropertyBinding;
 
 /**
  * These are the primitive value types
@@ -80,6 +85,14 @@ export type StudioComponentStoragePropertyBinding = {
    * This is the value of the data binding
    */
   bindingProperties: StudioComponentStorageBindingProperty;
+};
+
+/**
+ * This represent the configuration for binding a component property
+ * to a component or if it's on a collection, a function that returns a component
+ */
+export type StudioComponentSlotPropertyBinding = {
+  type: 'Amplify.Slot';
 };
 
 /**
