@@ -601,7 +601,10 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     backgroundColor?: String;
     buttonColor?: UserPreferences;
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => Record<string, unknown>;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -701,7 +704,10 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     backgroundColor?: String;
     buttonColor?: UserPreferences;
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => Record<string, unknown>;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -807,7 +813,10 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     backgroundColor?: String;
     buttonColor?: UserPreferences;
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => Record<string, unknown>;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -897,7 +906,10 @@ import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => Record<string, unknown>;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -952,7 +964,10 @@ import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => Record<string, unknown>;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -5012,7 +5027,10 @@ import { Collection, CollectionProps, Text } from \\"@aws-amplify/ui-react\\";
 export type CollectionDefaultValueProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => Record<string, unknown>;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }

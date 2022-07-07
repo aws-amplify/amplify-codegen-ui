@@ -201,6 +201,15 @@ describe('Generated Components', () => {
       cy.get('#collectionWithOverrideItems').contains('0 - Doodle, Yankee');
       cy.get('#collectionWithOverrideItems').contains('1 - Cap, Feather');
     });
+
+    it('Supports overrideItems that return JSX.Element prop values', () => {
+      cy.get('#collectionWithJSXOverrideItems').within(() => {
+        cy.contains('Yankee');
+        cy.contains('Doodle');
+        cy.contains('Feather');
+        cy.contains('Cap');
+      });
+    });
   });
 
   describe('Default Value', () => {

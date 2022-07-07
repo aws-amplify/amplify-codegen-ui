@@ -474,26 +474,29 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                 undefined,
                 undefined,
                 undefined,
-                factory.createObjectBindingPattern([
-                  factory.createBindingElement(
+                factory.createIdentifier('collectionItem'),
+                undefined,
+                factory.createTypeLiteralNode([
+                  factory.createPropertySignature(
                     undefined,
                     factory.createIdentifier('item'),
-                    factory.createIdentifier('any'),
                     undefined,
+                    factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
                   ),
-                  factory.createBindingElement(
+                  factory.createPropertySignature(
                     undefined,
                     factory.createIdentifier('index'),
-                    factory.createIdentifier('number'),
                     undefined,
+                    factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
                   ),
                 ]),
                 undefined,
-                undefined,
-                undefined,
               ),
             ],
-            factory.createTypeReferenceNode(factory.createIdentifier('Record<string, string>'), undefined),
+            factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
+              factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+              factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+            ]),
           ),
         ),
       );
