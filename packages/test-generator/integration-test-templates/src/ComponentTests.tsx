@@ -333,9 +333,34 @@ export default function ComponentTests() {
               lastName: 'Cap',
             },
           ]}
-          overrideItems={({ item, index }: { item: any; index: number }) => {
+          overrideItems={({ item, index }) => {
             return {
               children: `${index} - ${item.lastName}, ${item.firstName}`,
+            };
+          }}
+        />
+        <CollectionWithBinding
+          id="collectionWithJSXOverrideItems"
+          items={[
+            {
+              id: '1',
+              firstName: 'Yankee',
+              lastName: 'Doodle',
+            },
+            {
+              id: '2',
+              firstName: 'Feather',
+              lastName: 'Cap',
+            },
+          ]}
+          overrideItems={({ item }) => {
+            return {
+              children: (
+                <>
+                  <div>{item.lastName}</div>
+                  <div>{item.firstName}</div>
+                </>
+              ),
             };
           }}
         />

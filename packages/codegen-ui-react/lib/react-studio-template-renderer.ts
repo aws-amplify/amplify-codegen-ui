@@ -332,7 +332,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (componentIsPrimitive) {
       this.importCollection.addImport(ImportSource.UI_REACT, propsType);
     } else {
-      this.importCollection.addImport(`./${component.componentType}`, `${component.componentType}Props`);
+      this.importCollection.addImport(
+        `./${component.componentType}`,
+        `${getComponentPropName(component.componentType)}`,
+      );
     }
 
     const propsTypeParameter = componentIsPrimitive
@@ -466,6 +469,16 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       });
     }
     if (component.componentType === 'Collection') {
+      const child = component.children?.[0];
+      if (!child) {
+        throw new Error(`Collection component must have a child`);
+      }
+
+      const childComponentName = child.name;
+      const childComponentProps = getComponentPropName(childComponentName);
+
+      this.importCollection.addImport(`./${childComponentName}`, `${childComponentProps}`);
+
       propSignatures.push(
         factory.createPropertySignature(
           undefined,
@@ -486,26 +499,26 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                 undefined,
                 undefined,
                 undefined,
-                factory.createObjectBindingPattern([
-                  factory.createBindingElement(
+                factory.createIdentifier('collectionItem'),
+                undefined,
+                factory.createTypeLiteralNode([
+                  factory.createPropertySignature(
                     undefined,
                     factory.createIdentifier('item'),
-                    factory.createIdentifier('any'),
                     undefined,
+                    factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
                   ),
-                  factory.createBindingElement(
+                  factory.createPropertySignature(
                     undefined,
                     factory.createIdentifier('index'),
-                    factory.createIdentifier('number'),
                     undefined,
+                    factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
                   ),
                 ]),
                 undefined,
-                undefined,
-                undefined,
               ),
             ],
-            factory.createTypeReferenceNode(factory.createIdentifier('Record<string, string>'), undefined),
+            factory.createTypeReferenceNode(factory.createIdentifier(childComponentProps), undefined),
           ),
         ),
       );
