@@ -32,6 +32,7 @@ import {
   getSyntaxKindToken,
   buildChildElement,
   buildConditionalExpression,
+  hasChildrenProp,
 } from '../react-component-render-helper';
 
 import { assertASTMatchesSnapshot } from './__utils__';
@@ -293,6 +294,20 @@ describe('react-component-render-helper', () => {
       expect(() =>
         buildConditionalExpression(buildEmptyComponentMetadata(), buildConditionalWithOperand('18', 'boolean')),
       ).toThrow('Parsed value 18 and type boolean mismatch');
+    });
+  });
+
+  describe('hasChildrenProp', () => {
+    test('returns true if children property exists', () => {
+      expect(
+        hasChildrenProp({ width: { value: '10px' }, children: { bindingProperties: { property: 'mySlot' } } }),
+      ).toBe(true);
+    });
+
+    test('returns false if children property does not exist', () => {
+      expect(
+        hasChildrenProp({ width: { value: '10px' }, height: { bindingProperties: { property: 'myHeight' } } }),
+      ).toBe(false);
     });
   });
 });

@@ -31,6 +31,7 @@ import {
   ComponentMetadata,
   computeComponentMetadata,
   validateComponentSchema,
+  isSlotBinding,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -450,6 +451,17 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             ),
           );
           propSignatures.push(propSignature);
+        } else if (isSlotBinding(binding)) {
+          const propSignature = factory.createPropertySignature(
+            undefined,
+            propName,
+            factory.createToken(SyntaxKind.QuestionToken),
+            factory.createTypeReferenceNode(
+              factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('ReactNode')),
+              undefined,
+            ),
+          );
+          propSignatures.push(propSignature);
         }
       });
     }
@@ -510,7 +522,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithBinding(component)) {
       Object.entries(component.bindingProperties).forEach((entry) => {
         const [propName, binding] = entry;
-        if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding) || isEventPropertyBinding(binding)) {
+        if (
+          isSimplePropertyBinding(binding) ||
+          isDataPropertyBinding(binding) ||
+          isEventPropertyBinding(binding) ||
+          isSlotBinding(binding)
+        ) {
           const usesHook = bindingPropertyUsesHook(binding);
           const shouldAssignToDifferentName = usesHook || keywords.has(propName);
           const propVariableName = shouldAssignToDifferentName ? `${propName}Prop` : propName;

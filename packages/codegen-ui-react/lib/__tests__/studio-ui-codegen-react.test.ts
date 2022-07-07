@@ -216,6 +216,11 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('textWithDataBinding');
       expect(generatedCode.componentText).toMatchSnapshot();
     });
+
+    it('should render slot binding', () => {
+      const generatedCode = generateWithAmplifyRenderer('slotBinding');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
   });
 
   describe('component with variants', () => {

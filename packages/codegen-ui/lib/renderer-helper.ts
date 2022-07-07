@@ -23,6 +23,7 @@ import {
   StudioComponentSimplePropertyBinding,
   StudioComponentPropertyBinding,
   StudioComponentProperty,
+  StudioComponentSlotBinding,
 } from './types';
 
 export function isStudioComponentWithBinding(
@@ -75,4 +76,8 @@ export function isEventPropertyBinding(
   prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentEventPropertyBinding {
   return 'type' in prop && prop.type === 'Event';
+}
+
+export function isSlotBinding(prop: StudioComponentPropertyBinding): prop is StudioComponentSlotBinding {
+  return 'type' in prop && prop.type === 'Amplify.Slot';
 }
