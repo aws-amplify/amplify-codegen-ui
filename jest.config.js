@@ -8,5 +8,5 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'core', 'node'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/.(ts|tsx|js|jsx)$', '!src/**/*.test.(ts|tsx|js|jsx)$', '!src/**/*.d.ts'],
-  projects: ['<rootDir>/packages/codegen-ui-react'],
+  projects: ['<rootDir>/packages/codegen-ui', '<rootDir>/packages/codegen-ui-react'],
 };

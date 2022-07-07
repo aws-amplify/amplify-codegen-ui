@@ -1,0 +1,364 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`amplify form renderer tests custom form tests should render a custom backed form 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+export default function customDataForm(props) {
+  const {
+    onSubmit: customDataFormOnSubmit,
+    onCancel,
+    overrides,
+    ...rest
+  } = props;
+  const [customDataFormFields, setCustomDataFormFields] =
+    useStateMutationAction({});
+  return (
+    <form
+      onSubmit={async (event) => {
+        event.preventDefault();
+        customDataFormOnSubmit(customDataFormFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"customDataForm\\")}
+    >
+      <Grid
+        columnGap=\\"15px\\"
+        rowGap=\\"15px\\"
+        {...getOverrideProps(overrides, \\"customDataFormGrid\\")}
+      >
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid0\\")}
+        >
+          <TextField
+            label=\\"name\\"
+            isRequired={true}
+            defaultValue=\\"John Doe\\"
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid1\\")}
+        >
+          <TextField
+            label=\\"E-mail\\"
+            isRequired={true}
+            defaultValue=\\"johndoe@amplify.com\\"
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+      </Grid>
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          label=\\"Cancel\\"
+          type=\\"button\\"
+          {...getOverrideProps(overrides, \\"CancelButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            label=\\"Clear\\"
+            type=\\"reset\\"
+            {...getOverrideProps(overrides, \\"ClearButton\\")}
+          ></Button>
+          <Button
+            label=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </form>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a custom backed form 2`] = `
+"import React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type customDataFormProps = React.PropsWithChildren<{
+    overrides?: EscapeHatchProps | undefined | null;
+} & {
+    onSubmit: (fields: Record<string, string>) => void;
+    onCancel?: () => void;
+}>;
+export default function customDataForm(props: customDataFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  getOverrideProps,
+  useDataStoreCreateAction,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Post } from \\"../models\\";
+import { schema } from \\"../models/schema\\";
+import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+export default function myPostForm(props) {
+  const { onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
+    props;
+  const [myPostFormFields, setMyPostFormFields] = useStateMutationAction({});
+  const myPostFormOnSubmit = useDataStoreCreateAction({
+    model: Post,
+    fields: myPostFormFields,
+    schema: schema,
+  });
+  return (
+    <form
+      onSubmit={async (event) => {
+        event.preventDefault();
+        myPostFormOnSubmit();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"myPostForm\\")}
+    >
+      <Grid
+        columnGap=\\"15px\\"
+        rowGap=\\"15px\\"
+        {...getOverrideProps(overrides, \\"myPostFormGrid\\")}
+      >
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid0\\")}
+        >
+          <TextField
+            label=\\"caption\\"
+            isRequired={false}
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid1\\")}
+        >
+          <TextField
+            label=\\"username\\"
+            isRequired={false}
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid2\\")}
+        >
+          <TextField
+            label=\\"post_url\\"
+            isRequired={false}
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid3\\")}
+        >
+          <TextField
+            label=\\"profile_url\\"
+            isRequired={false}
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+      </Grid>
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          label=\\"Cancel\\"
+          type=\\"button\\"
+          {...getOverrideProps(overrides, \\"CancelButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            label=\\"Clear\\"
+            type=\\"reset\\"
+            {...getOverrideProps(overrides, \\"ClearButton\\")}
+          ></Button>
+          <Button
+            label=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </form>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should generate a create form 2`] = `
+"import React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type myPostFormProps = React.PropsWithChildren<{
+    overrides?: EscapeHatchProps | undefined | null;
+} & {
+    onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
+    onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
+        saveSuccessful: string;
+        errorMessage?: string;
+    }) => void;
+    onCancel?: () => void;
+}>;
+export default function myPostForm(props: myPostFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should generate a update form 1`] = `
+"/* eslint-disable */
+import React from \\"react\\";
+import {
+  getOverrideProps,
+  useDataStoreUpdateAction,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Post } from \\"../models\\";
+import { schema } from \\"../models/schema\\";
+import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+export default function myPostForm(props) {
+  const { id, onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
+    props;
+  const [myPostFormFields, setMyPostFormFields] = useStateMutationAction({});
+  const myPostFormOnSubmit = useDataStoreUpdateAction({
+    model: Post,
+    fields: myPostFormFields,
+    id: id,
+    schema: schema,
+  });
+  return (
+    <form
+      onSubmit={async (event) => {
+        event.preventDefault();
+        myPostFormOnSubmit();
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"myPostForm\\")}
+    >
+      <Grid
+        columnGap=\\"15px\\"
+        rowGap=\\"15px\\"
+        {...getOverrideProps(overrides, \\"myPostFormGrid\\")}
+      >
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid0\\")}
+        >
+          <TextField
+            label=\\"caption\\"
+            isRequired={false}
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid1\\")}
+        >
+          <TextField
+            label=\\"username\\"
+            isRequired={false}
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid2\\")}
+        >
+          <TextField
+            label=\\"post_url\\"
+            isRequired={false}
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid3\\")}
+        >
+          <TextField
+            label=\\"profile_url\\"
+            isRequired={false}
+            {...getOverrideProps(overrides, \\"TextField0\\")}
+          ></TextField>
+        </Grid>
+      </Grid>
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          label=\\"Cancel\\"
+          type=\\"button\\"
+          {...getOverrideProps(overrides, \\"CancelButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            label=\\"Clear\\"
+            type=\\"reset\\"
+            {...getOverrideProps(overrides, \\"ClearButton\\")}
+          ></Button>
+          <Button
+            label=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </form>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should generate a update form 2`] = `
+"import React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type myPostFormProps = React.PropsWithChildren<{
+    overrides?: EscapeHatchProps | undefined | null;
+} & {
+    id: string;
+    onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
+    onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
+        saveSuccessful: string;
+        errorMessage?: string;
+    }) => void;
+    onCancel?: () => void;
+}>;
+export default function myPostForm(props: myPostFormProps): React.ReactElement;
+"
+`;

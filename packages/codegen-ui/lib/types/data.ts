@@ -14,9 +14,18 @@
   limitations under the License.
  */
 
+import { ModelField, SchemaNonModels } from '@aws-amplify/datastore';
+
 // exporting types and scalar functions from aws-amplify
 // as these will be used when loading in dataschema for form generation
-export type { SchemaModel } from '@aws-amplify/datastore';
+export type { SchemaModel, ModelFields, ModelField, SchemaNonModels } from '@aws-amplify/datastore';
+export { isGraphQLScalarType } from '@aws-amplify/datastore';
+
+export type SchemaEnums = Record<string, SchemaEnum>;
+export type SchemaEnum = {
+  name: string;
+  values: string[];
+};
 
 type FieldType = string | { model: string } | { nonModel: string } | { enum: string };
 
@@ -90,4 +99,10 @@ export type GenericDataSchema = {
   enums: { [enumName: string]: { values: string[] } };
 
   nonModels: { [nonModelName: string]: GenericDataModel };
+};
+
+export type DataStoreModelInfo = {
+  fields: ModelField[];
+  enum?: SchemaEnums;
+  nonModelFields?: SchemaNonModels;
 };

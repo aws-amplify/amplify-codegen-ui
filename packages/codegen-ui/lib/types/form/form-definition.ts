@@ -26,4 +26,5 @@ export type FormDefinition = {
   elements: { [element: string]: FormDefinitionElement };
   buttons: { [key: string]: string };
   elementMatrix: string[][];
+  inputFields?: string[];
 };

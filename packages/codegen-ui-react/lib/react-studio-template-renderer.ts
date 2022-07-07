@@ -537,7 +537,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return factory.createTypeLiteralNode(propSignatures);
   }
 
-  private buildVariableStatements(component: StudioComponent): Statement[] {
+  protected buildVariableStatements(component: StudioComponent): Statement[] {
     const statements: Statement[] = [];
     const elements: BindingElement[] = [];
     if (isStudioComponentWithBinding(component)) {

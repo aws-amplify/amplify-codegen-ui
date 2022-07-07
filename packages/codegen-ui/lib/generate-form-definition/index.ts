@@ -15,4 +15,4 @@
  */
 export { FIELD_TYPE_MAP, getFormDefinitionInputElement, getFormDefinitionSectionalElement } from './helpers';
 export { generateFormDefinition } from './generate-form-definition';
-export { mapFormToComponent } from './form-to-component';
+export { mapFormDefinitionToComponent } from './form-to-component';
