@@ -15,6 +15,7 @@
  */
 import { StudioFieldPosition } from './position';
 import { StudioFieldInputConfig } from './input-config';
+import { FieldValidationConfiguration } from './form-validation';
 
 /**
  * Field configurations for StudioForm
@@ -23,6 +24,7 @@ type StudioFieldConfig = {
   label?: string;
 
   position?: StudioFieldPosition;
+  validations?: FieldValidationConfiguration[];
 };
 
 /**
