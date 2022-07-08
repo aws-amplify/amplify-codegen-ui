@@ -39,7 +39,9 @@ export function addDataStoreModelField(
     throw new InvalidInputError('Field type could not be mapped to a component');
   }
 
-  formDefinition.elementMatrix.push([field.name]);
+  if (!field.isReadOnly && field.name !== 'id' && field.type !== 'ID' && !field.isRequired) {
+    formDefinition.elementMatrix.push([field.name]);
+  }
 
   // TODO: map Enums to valueMappings
   modelFieldsConfigs[field.name] = {

@@ -274,3 +274,66 @@ it('should fill out styles using defaults', () => {
     outerPadding: { value: '20px' },
   });
 });
+
+it('should skip adding read-only fields to element matrix', () => {
+  const formDefinition = generateFormDefinition({
+    form: {
+      name: 'sampleForm',
+      formActionType: 'create',
+      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+      fields: {},
+      sectionalElements: {},
+      style: {},
+    },
+    modelInfo: { fields: [{ name: 'name', type: 'String', isReadOnly: true, isRequired: true, isArray: false }] },
+  });
+  expect(formDefinition.elements).toStrictEqual({
+    name: {
+      componentType: 'TextField',
+      props: { label: 'name', isRequired: true, isReadOnly: true },
+    },
+  });
+  expect(formDefinition.elementMatrix).toStrictEqual([]);
+});
+
+it('should add to element matrix if readOnly exists', () => {
+  const formDefinition = generateFormDefinition({
+    form: {
+      name: 'sampleForm',
+      formActionType: 'create',
+      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+      fields: { name: { inputType: { type: 'TextField', readOnly: false } } },
+      sectionalElements: {},
+      style: {},
+    },
+    modelInfo: { fields: [{ name: 'name', type: 'String', isReadOnly: true, isRequired: true, isArray: false }] },
+  });
+  expect(formDefinition.elements).toStrictEqual({
+    name: {
+      componentType: 'TextField',
+      props: { label: 'name', isRequired: true, isReadOnly: false },
+    },
+  });
+  expect(formDefinition.elementMatrix).toStrictEqual([['name']]);
+});
+
+it('should skip adding id field to element matrix', () => {
+  const formDefinition = generateFormDefinition({
+    form: {
+      name: 'sampleForm',
+      formActionType: 'create',
+      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+      fields: {},
+      sectionalElements: {},
+      style: {},
+    },
+    modelInfo: { fields: [{ name: 'id', type: 'ID', isReadOnly: false, isRequired: true, isArray: false }] },
+  });
+  expect(formDefinition.elements).toStrictEqual({
+    id: {
+      componentType: 'TextField',
+      props: { label: 'id', isRequired: true, isReadOnly: false },
+    },
+  });
+  expect(formDefinition.elementMatrix).toStrictEqual([]);
+});

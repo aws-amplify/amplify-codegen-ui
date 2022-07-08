@@ -70,4 +70,62 @@ describe('addDataStoreModelField', () => {
 
     expect(() => addDataStoreModelField(formDefinition, {}, dataStoreModelField)).toThrow();
   });
+
+  it('should skip generation of id field from data store model', () => {
+    const formDefinition: FormDefinition = {
+      form: { layoutStyle: {} },
+      elements: {},
+      buttons: {},
+      elementMatrix: [],
+    };
+
+    const dataStoreModelField = { name: 'id', type: 'ID', isReadOnly: true, isRequired: true, isArray: false };
+
+    const modelFieldsConfigs: ModelFieldsConfigs = {};
+
+    addDataStoreModelField(formDefinition, modelFieldsConfigs, dataStoreModelField);
+
+    expect(formDefinition.elementMatrix).toStrictEqual([]);
+    expect(modelFieldsConfigs).toStrictEqual({
+      id: {
+        inputType: {
+          name: 'id',
+          readOnly: true,
+          required: true,
+          type: 'TextField',
+          value: 'true',
+        },
+        label: 'id',
+      },
+    });
+  });
+
+  it('should skip generation of read only fields from data store model', () => {
+    const formDefinition: FormDefinition = {
+      form: { layoutStyle: {} },
+      elements: {},
+      buttons: {},
+      elementMatrix: [],
+    };
+
+    const dataStoreModelField = { name: 'name', type: 'Boolean', isReadOnly: true, isRequired: false, isArray: false };
+
+    const modelFieldsConfigs: ModelFieldsConfigs = {};
+
+    addDataStoreModelField(formDefinition, modelFieldsConfigs, dataStoreModelField);
+
+    expect(formDefinition.elementMatrix).toStrictEqual([]);
+    expect(modelFieldsConfigs).toStrictEqual({
+      name: {
+        inputType: {
+          name: 'name',
+          readOnly: true,
+          required: false,
+          type: 'SwitchField',
+          value: 'true',
+        },
+        label: 'name',
+      },
+    });
+  });
 });
