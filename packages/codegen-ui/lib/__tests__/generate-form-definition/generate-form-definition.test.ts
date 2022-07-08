@@ -56,6 +56,52 @@ describe('generateFormDefinition', () => {
     });
   });
 
+  it('should add to elementMatrix if readOnly override exists', () => {
+    const formDefinition = generateFormDefinition({
+      form: {
+        name: 'mySampleForm',
+        formActionType: 'create',
+        dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+        fields: {
+          weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2, readOnly: false } },
+        },
+        sectionalElements: {},
+        style: {},
+      },
+      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: true, isRequired: true, isArray: false }] },
+    });
+    expect(formDefinition.elements).toStrictEqual({
+      weight: {
+        componentType: 'SliderField',
+        props: { label: 'weight', min: 1, max: 100, step: 2, isDisabled: false, isRequired: true },
+      },
+    });
+    expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
+  });
+
+  it('should not add to elementMatrix if readOnly override does not exist', () => {
+    const formDefinition = generateFormDefinition({
+      form: {
+        name: 'mySampleForm',
+        formActionType: 'create',
+        dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+        fields: {
+          weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } },
+        },
+        sectionalElements: {},
+        style: {},
+      },
+      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: true, isRequired: true, isArray: false }] },
+    });
+    expect(formDefinition.elements).toStrictEqual({
+      weight: {
+        componentType: 'SliderField',
+        props: { label: 'weight', min: 1, max: 100, step: 2, isDisabled: true, isRequired: true },
+      },
+    });
+    expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
+  });
+
   it('should not add overrides to the matrix', () => {
     const formDefinition = generateFormDefinition({
       form: {
@@ -294,6 +340,27 @@ it('should skip adding read-only fields to element matrix', () => {
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([]);
+});
+
+it('should add to element matrix if readOnly exists', () => {
+  const formDefinition = generateFormDefinition({
+    form: {
+      name: 'sampleForm',
+      formActionType: 'create',
+      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+      fields: { name: { inputType: { type: 'TextField', readOnly: false } } },
+      sectionalElements: {},
+      style: {},
+    },
+    modelInfo: { fields: [{ name: 'name', type: 'String', isReadOnly: true, isRequired: true, isArray: false }] },
+  });
+  expect(formDefinition.elements).toStrictEqual({
+    name: {
+      componentType: 'TextField',
+      props: { label: 'name', isRequired: true, isReadOnly: false },
+    },
+  });
+  expect(formDefinition.elementMatrix).toStrictEqual([['name']]);
 });
 
 it('should skip adding id field to element matrix', () => {
