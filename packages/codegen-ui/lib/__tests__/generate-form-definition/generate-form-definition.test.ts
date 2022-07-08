@@ -56,52 +56,6 @@ describe('generateFormDefinition', () => {
     });
   });
 
-  it('should add to elementMatrix if readOnly override exists', () => {
-    const formDefinition = generateFormDefinition({
-      form: {
-        name: 'mySampleForm',
-        formActionType: 'create',
-        dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
-        fields: {
-          weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2, readOnly: false } },
-        },
-        sectionalElements: {},
-        style: {},
-      },
-      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: true, isRequired: true, isArray: false }] },
-    });
-    expect(formDefinition.elements).toStrictEqual({
-      weight: {
-        componentType: 'SliderField',
-        props: { label: 'weight', min: 1, max: 100, step: 2, isDisabled: false, isRequired: true },
-      },
-    });
-    expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
-  });
-
-  it('should not add to elementMatrix if readOnly override does not exist', () => {
-    const formDefinition = generateFormDefinition({
-      form: {
-        name: 'mySampleForm',
-        formActionType: 'create',
-        dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
-        fields: {
-          weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } },
-        },
-        sectionalElements: {},
-        style: {},
-      },
-      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: true, isRequired: true, isArray: false }] },
-    });
-    expect(formDefinition.elements).toStrictEqual({
-      weight: {
-        componentType: 'SliderField',
-        props: { label: 'weight', min: 1, max: 100, step: 2, isDisabled: true, isRequired: true },
-      },
-    });
-    expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
-  });
-
   it('should not add overrides to the matrix', () => {
     const formDefinition = generateFormDefinition({
       form: {
