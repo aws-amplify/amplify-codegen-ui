@@ -594,6 +594,7 @@ import {
   CollectionProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
+import { MyFlexProps } from \\"./MyFlex\\";
 
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -601,7 +602,10 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     backgroundColor?: String;
     buttonColor?: UserPreferences;
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => MyFlexProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -694,6 +698,7 @@ import {
   CollectionProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
+import { MyFlexProps } from \\"./MyFlex\\";
 
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -701,7 +706,10 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     backgroundColor?: String;
     buttonColor?: UserPreferences;
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => MyFlexProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -800,6 +808,7 @@ import {
   CollectionProps,
   Flex,
 } from \\"@aws-amplify/ui-react\\";
+import { MyFlexProps } from \\"./MyFlex\\";
 
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
@@ -807,7 +816,10 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     backgroundColor?: String;
     buttonColor?: UserPreferences;
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => MyFlexProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -891,13 +903,16 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import ListingCard from \\"./ListingCard\\";
+import ListingCard, { ListingCardProps } from \\"./ListingCard\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => ListingCardProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -942,7 +957,7 @@ export default function ListingCardCollection(
 exports[`amplify render tests collection should render collection without data binding 1`] = `
 "/* eslint-disable */
 import React from \\"react\\";
-import ListingCard from \\"./ListingCard\\";
+import ListingCard, { ListingCardProps } from \\"./ListingCard\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
@@ -952,7 +967,10 @@ import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => ListingCardProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
@@ -5044,11 +5062,15 @@ import {
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Collection, CollectionProps, Text } from \\"@aws-amplify/ui-react\\";
+import { MyTextProps } from \\"./MyText\\";
 
 export type CollectionDefaultValueProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
-    overrideItems?: ({ item: any, index: number }) => Record<string, string>;
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => MyTextProps;
   } & {
     overrides?: EscapeHatchProps | undefined | null;
   }
