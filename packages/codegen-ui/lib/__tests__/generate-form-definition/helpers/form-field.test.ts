@@ -15,12 +15,11 @@
  */
 
 import { mapFormFieldConfig, getFormDefinitionInputElement } from '../../../generate-form-definition/helpers';
-import { FormDefinition, ModelFieldsConfigs, StudioGenericFieldConfig } from '../../../types';
+import { FormDefinition, ModelFieldsConfigs, StudioFormFieldConfig, StudioGenericFieldConfig } from '../../../types';
 
 describe('mapFormFieldConfig', () => {
   it('should map fields', () => {
-    const element: { type: string; name: string; config: StudioGenericFieldConfig } = {
-      type: 'field',
+    const element: { name: string; config: StudioGenericFieldConfig } = {
       name: 'price',
       config: {
         label: 'Price',
@@ -60,6 +59,33 @@ describe('mapFormFieldConfig', () => {
       componentType: 'SliderField',
       props: { label: 'Price', isDisabled: true, min: 0, max: 100, step: 1, isRequired: true },
     });
+  });
+
+  it('should throw if there is attempt to map excluded field', () => {
+    const element: { name: string; config: StudioFormFieldConfig } = {
+      name: 'price',
+      config: { excluded: true },
+    };
+
+    const formDefinition: FormDefinition = {
+      form: { layoutStyle: {} },
+      elements: {},
+      buttons: {},
+      elementMatrix: [['price']],
+    };
+
+    const modelFieldsConfigs: ModelFieldsConfigs = {
+      price: {
+        label: 'price',
+        inputType: {
+          type: 'TextField',
+          readOnly: false,
+          required: false,
+        },
+      },
+    };
+
+    expect(() => mapFormFieldConfig(element, formDefinition, modelFieldsConfigs)).toThrow();
   });
 });
 

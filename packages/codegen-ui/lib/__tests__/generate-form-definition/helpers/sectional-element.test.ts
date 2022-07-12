@@ -26,8 +26,7 @@ describe('mapSectionalElement', () => {
       elementMatrix: [],
     };
 
-    const element: { type: string; name: string; config: SectionalElement } = {
-      type: 'sectionalElement',
+    const element: { name: string; config: SectionalElement } = {
       name: 'Heading123',
       config: { type: 'Heading', level: 1, text: 'My Heading', position: { fixed: 'first' } },
     };
@@ -43,8 +42,7 @@ describe('mapSectionalElement', () => {
       elementMatrix: [],
     };
 
-    const element: { type: string; name: string; config: SectionalElement } = {
-      type: 'sectionalElement',
+    const element: { name: string; config: SectionalElement } = {
       name: 'Heading123',
       config: { type: 'Heading', level: 1, text: 'My Heading', position: { fixed: 'first' } },
     };

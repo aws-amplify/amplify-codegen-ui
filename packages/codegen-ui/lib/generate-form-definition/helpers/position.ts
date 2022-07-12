@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FormDefinition } from '../../types';
+import { FormDefinition, StudioFieldPosition } from '../../types';
 
 /**
  * Helper that returns the row and column indices of a string in a two-dimensional array
@@ -37,3 +37,84 @@ export function removeAndReturnItemOnward(indices: [number, number], formDefinit
   const row = formDefinition.elementMatrix[indices[0]];
   return row.splice(indices[1], row.length - indices[1]);
 }
+
+/* eslint-disable no-param-reassign */
+
+/**
+ * Impure function that maps the element matrix of form definition
+ * from a queue of sectional and input elements.
+ */
+export function mapElementMatrix({
+  elementQueue,
+  formDefinition,
+}: {
+  formDefinition: FormDefinition;
+  elementQueue: { name: string; position?: StudioFieldPosition; excluded?: boolean }[];
+}): void {
+  const rightOfElementQueue: typeof elementQueue = [];
+
+  // map elements with no position; position below; position fixed to first
+  while (elementQueue.length) {
+    const element = elementQueue.shift();
+    if (!element) {
+      break;
+    }
+    if (element.excluded) {
+      const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
+
+      if (previousIndices) {
+        removeFromMatrix(previousIndices, formDefinition);
+      }
+    } else if (element.position && 'rightOf' in element.position && element.position.rightOf) {
+      rightOfElementQueue.push(element);
+    } else if (element.position && 'below' in element.position && element.position.below) {
+      const relationIndices = findIndices(element.position.below, formDefinition.elementMatrix);
+      if (!relationIndices) {
+        elementQueue.push(element);
+      } else {
+        const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
+        if (previousIndices) {
+          removeFromMatrix(previousIndices, formDefinition);
+        }
+        formDefinition.elementMatrix.splice(relationIndices[0] + 1, 0, [element.name]);
+      }
+    } else if (element.position && 'fixed' in element.position && element.position.fixed === 'first') {
+      const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
+      if (previousIndices) {
+        removeFromMatrix(previousIndices, formDefinition);
+      }
+      formDefinition.elementMatrix.unshift([element.name]);
+    } else {
+      const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
+      if (!previousIndices) {
+        formDefinition.elementMatrix.push([element.name]);
+      }
+    }
+  }
+
+  // map elements with rightOf position
+  while (rightOfElementQueue.length) {
+    const element = rightOfElementQueue.shift();
+    if (!element) {
+      break;
+    }
+    if (element.position && 'rightOf' in element.position && element.position.rightOf) {
+      const relationIndices = findIndices(element.position.rightOf, formDefinition.elementMatrix);
+      if (!relationIndices) {
+        rightOfElementQueue.push(element);
+      } else {
+        const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
+        if (previousIndices) {
+          const removedItems = removeAndReturnItemOnward(previousIndices, formDefinition);
+          formDefinition.elementMatrix[relationIndices[0]].splice(relationIndices[1] + 1, 0, ...removedItems);
+        } else {
+          formDefinition.elementMatrix[relationIndices[0]].splice(relationIndices[1] + 1, 0, element.name);
+        }
+      }
+    }
+  }
+
+  // filter out empty rows
+  formDefinition.elementMatrix = formDefinition.elementMatrix.filter((row) => row.length);
+}
+/* eslint-enable no-param-reassign */
