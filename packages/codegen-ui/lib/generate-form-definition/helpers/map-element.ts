@@ -16,20 +16,31 @@
 
 import { mapFormFieldConfig } from './form-field';
 import { mapSectionalElement } from './sectional-element';
-import { FormDefinition, SectionalElement, StudioGenericFieldConfig, ModelFieldsConfigs } from '../../types';
+import { FormDefinition, ModelFieldsConfigs, StudioForm } from '../../types';
+import { InternalError } from '../../errors';
 /**
  * Impure function that maps element to the form definition
  */
-export function mapElement(
-  element:
-    | { type: 'field'; name: string; config: StudioGenericFieldConfig }
-    | { type: 'sectionalElement'; name: string; config: SectionalElement },
-  formDefinition: FormDefinition,
-  modelFieldsConfigs: ModelFieldsConfigs,
-) {
-  if (element.type === 'field') {
-    mapFormFieldConfig(element, formDefinition, modelFieldsConfigs);
-  } else if (element.type === 'sectionalElement') {
-    mapSectionalElement(element, formDefinition);
-  }
+export function mapElements({
+  formDefinition,
+  modelFieldsConfigs,
+  form,
+}: {
+  form: StudioForm;
+  formDefinition: FormDefinition;
+  modelFieldsConfigs: ModelFieldsConfigs;
+}) {
+  formDefinition.elementMatrix.forEach((row) => {
+    row.forEach((elementName) => {
+      if (form.fields[elementName]) {
+        mapFormFieldConfig({ name: elementName, config: form.fields[elementName] }, formDefinition, modelFieldsConfigs);
+      } else if (modelFieldsConfigs[elementName]) {
+        mapFormFieldConfig({ name: elementName, config: modelFieldsConfigs[elementName] }, formDefinition, {});
+      } else if (form.sectionalElements[elementName]) {
+        mapSectionalElement({ name: elementName, config: form.sectionalElements[elementName] }, formDefinition);
+      } else {
+        throw new InternalError(`${elementName} could not be found`);
+      }
+    });
+  });
 }

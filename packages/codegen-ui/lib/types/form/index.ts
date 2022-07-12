@@ -19,6 +19,7 @@ import { StudioFormFields, StudioFormFieldConfig, StudioGenericFieldConfig } fro
 import { SectionalElement } from './sectional-element';
 import { FormDefinition, ModelFieldsConfigs } from './form-definition';
 import { StudioFieldInputConfig } from './input-config';
+import { StudioFieldPosition } from './position';
 
 /**
  * Data type definition for StudioForm
@@ -61,4 +62,5 @@ export type {
   StudioGenericFieldConfig,
   StudioFormFields,
   ModelFieldsConfigs,
+  StudioFieldPosition,
 };

@@ -39,7 +39,9 @@ export function addDataStoreModelField(
     throw new InvalidInputError('Field type could not be mapped to a component');
   }
 
-  if (!field.isReadOnly && field.name !== 'id' && field.type !== 'ID' && !field.isRequired) {
+  const isAutoExcludedField = field.isReadOnly || (field.name === 'id' && field.type === 'ID' && field.isRequired);
+
+  if (!isAutoExcludedField) {
     formDefinition.elementMatrix.push([field.name]);
   }
 

@@ -14,24 +14,8 @@
   limitations under the License.
  */
 
-import {
-  findIndices,
-  addDataStoreModelField,
-  removeFromMatrix,
-  removeAndReturnItemOnward,
-  mapStyles,
-  mapElement,
-  mapMissingConfigs,
-} from './helpers';
-import {
-  StudioForm,
-  DataStoreModelField,
-  SectionalElement,
-  StudioFormFieldConfig,
-  FormDefinition,
-  StudioGenericFieldConfig,
-  ModelFieldsConfigs,
-} from '../types';
+import { addDataStoreModelField, mapElementMatrix, mapStyles, mapElements } from './helpers';
+import { StudioForm, DataStoreModelField, FormDefinition, ModelFieldsConfigs, StudioFieldPosition } from '../types';
 
 /**
  * Helper that turns the StudioForm model into definition that can be used to render
@@ -61,118 +45,27 @@ export function generateFormDefinition({
     });
   }
 
-  const elementQueue: { type: string; name: string; config: SectionalElement | StudioFormFieldConfig }[] =
-    Object.entries(form.fields)
-      .map(([fieldName, fieldConfig]) => ({ type: 'field', name: fieldName, config: fieldConfig }))
-      .concat(
-        Object.entries(form.sectionalElements).map(([elementName, elementConfig]) => ({
-          type: 'sectionalElement',
-          name: elementName,
-          config: elementConfig,
-        })),
-      );
+  const elementQueue: { name: string; position?: StudioFieldPosition; excluded?: boolean }[] = Object.entries(
+    form.fields,
+  )
+    .map(([fieldName, fieldConfig]) => ({
+      name: fieldName,
+      position: 'position' in fieldConfig ? fieldConfig.position : undefined,
+      excluded: 'excluded' in fieldConfig ? fieldConfig.excluded : false,
+    }))
+    .concat(
+      Object.entries(form.sectionalElements).map(([elementName, elementConfig]) => ({
+        name: elementName,
+        position: elementConfig.position,
+        excluded: false,
+      })),
+    );
 
-  const rightOfElementQueue: typeof elementQueue = [];
+  mapElementMatrix({ elementQueue, formDefinition });
 
-  // map elements with no position; position below; position fixed to first
-  while (elementQueue.length) {
-    const element = elementQueue.shift();
-    if (!element) {
-      break;
-    }
-    if ('excluded' in element.config && element.config.excluded) {
-      const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
-
-      if (previousIndices) {
-        removeFromMatrix(previousIndices, formDefinition);
-      }
-    } else if ('position' in element.config && element.config.position && 'rightOf' in element.config.position) {
-      rightOfElementQueue.push(element);
-    } else {
-      // typecasting since ExcludedStudioFieldConfig is filtered out
-      mapElement(
-        element as
-          | { type: 'field'; name: string; config: StudioGenericFieldConfig }
-          | { type: 'sectionalElement'; name: string; config: SectionalElement },
-        formDefinition,
-        modelFieldsConfigs,
-      );
-      if (
-        'position' in element.config &&
-        element.config.position &&
-        'below' in element.config.position &&
-        element.config.position.below
-      ) {
-        const relationIndices = findIndices(element.config.position.below, formDefinition.elementMatrix);
-        if (!relationIndices) {
-          elementQueue.push(element);
-        } else {
-          const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
-          if (previousIndices) {
-            removeFromMatrix(previousIndices, formDefinition);
-          }
-          formDefinition.elementMatrix.splice(relationIndices[0] + 1, 0, [element.name]);
-        }
-      } else if (
-        'position' in element.config &&
-        element.config.position &&
-        'fixed' in element.config.position &&
-        element.config.position.fixed === 'first'
-      ) {
-        const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
-        if (previousIndices) {
-          removeFromMatrix(previousIndices, formDefinition);
-        }
-        formDefinition.elementMatrix.unshift([element.name]);
-      } else {
-        const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
-        if (!previousIndices) {
-          formDefinition.elementMatrix.push([element.name]);
-        }
-      }
-    }
-  }
-
-  // map elements with rightOf position
-  while (rightOfElementQueue.length) {
-    const element = rightOfElementQueue.shift();
-    if (!element) {
-      break;
-    }
-    if (
-      'position' in element.config &&
-      element.config.position &&
-      'rightOf' in element.config.position &&
-      element.config.position.rightOf
-    ) {
-      const relationIndices = findIndices(element.config.position.rightOf, formDefinition.elementMatrix);
-      if (!relationIndices) {
-        rightOfElementQueue.push(element);
-      } else {
-        // typecasting since ExcludedStudioFieldConfig is filtered out
-        mapElement(
-          element as
-            | { type: 'field'; name: string; config: StudioGenericFieldConfig }
-            | { type: 'sectionalElement'; name: string; config: SectionalElement },
-          formDefinition,
-          modelFieldsConfigs,
-        );
-        const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
-        if (previousIndices) {
-          const removedItems = removeAndReturnItemOnward(previousIndices, formDefinition);
-          formDefinition.elementMatrix[relationIndices[0]].splice(relationIndices[1] + 1, 0, ...removedItems);
-        } else {
-          formDefinition.elementMatrix[relationIndices[0]].splice(relationIndices[1] + 1, 0, element.name);
-        }
-      }
-    }
-  }
-
-  mapMissingConfigs(modelFieldsConfigs, formDefinition);
+  mapElements({ form, formDefinition, modelFieldsConfigs });
 
   formDefinition.form.layoutStyle = mapStyles(form.style);
-
-  formDefinition.elementMatrix = formDefinition.elementMatrix.filter((row) => row.length);
 
   return formDefinition;
 }

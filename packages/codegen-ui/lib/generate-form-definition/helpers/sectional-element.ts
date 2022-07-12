@@ -66,7 +66,7 @@ export function getFormDefinitionSectionalElement(config: SectionalElement): For
  */
 /* eslint-disable no-param-reassign */
 export function mapSectionalElement(
-  element: { type: string; name: string; config: SectionalElement },
+  element: { name: string; config: SectionalElement },
   formDefinition: FormDefinition,
 ) {
   if (formDefinition.elements[element.name]) {

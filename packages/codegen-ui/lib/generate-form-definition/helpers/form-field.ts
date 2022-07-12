@@ -13,8 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FormDefinition, FormDefinitionInputElement, StudioGenericFieldConfig, ModelFieldsConfigs } from '../../types';
-import { InvalidInputError } from '../../errors';
+import {
+  FormDefinition,
+  FormDefinitionInputElement,
+  StudioGenericFieldConfig,
+  ModelFieldsConfigs,
+  StudioFormFieldConfig,
+} from '../../types';
+import { InternalError, InvalidInputError } from '../../errors';
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
 import { deleteUndefined, getFirstDefinedValue, getFirstNumber, getFirstString } from './mapper-utils';
 
@@ -231,28 +237,16 @@ export function getFormDefinitionInputElement(
  */
 /* eslint-disable no-param-reassign */
 export function mapFormFieldConfig(
-  element: { type: string; name: string; config: StudioGenericFieldConfig },
+  element: { name: string; config: StudioFormFieldConfig },
   formDefinition: FormDefinition,
   modelFieldsConfigs: ModelFieldsConfigs,
 ) {
+  if ('excluded' in element.config) {
+    throw new InternalError(`Attempted to map excluded element ${element.name}`);
+  }
   formDefinition.elements[element.name] = getFormDefinitionInputElement(
     element.config,
     modelFieldsConfigs[element.name],
   );
-}
-
-/* eslint-enable no-param-reassign */
-
-/**
- * Impure function that adds field configurations to formDefinition
- * for model fields that are not currently in the definition
- */
-/* eslint-disable no-param-reassign */
-export function mapMissingConfigs(modelFieldsConfigs: ModelFieldsConfigs, formDefinition: FormDefinition) {
-  Object.entries(modelFieldsConfigs).forEach(([fieldName, fieldConfig]) => {
-    if (!formDefinition.elements[fieldName]) {
-      formDefinition.elements[fieldName] = getFormDefinitionInputElement(fieldConfig);
-    }
-  });
 }
 /* eslint-enable no-param-reassign */
