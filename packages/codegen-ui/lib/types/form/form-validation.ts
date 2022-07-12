@@ -26,10 +26,14 @@ export enum ValidationTypes {
   EQUAL_TO_NUM = 'EqualTo',
   BE_BEFORE = 'BeBefore',
   BE_AFTER = 'BeAfter',
+  EMAIL = 'Email',
+  JSON = 'JSON',
+  IP_ADDRESS = 'IpAddress',
+  URL = 'URL',
 }
 
 export type BaseValidation = {
-  validationMessage: string;
+  validationMessage?: string;
 };
 
 export type StringValidationType = {
@@ -49,11 +53,16 @@ export type NumberValidationType = {
 
 export type DateValidationType = {
   type: ValidationTypes.BE_BEFORE | ValidationTypes.BE_AFTER;
-  values: string;
+  values: string | number;
 } & BaseValidation;
 
-export type RequiredValidtionType = {
-  type: ValidationTypes.REQUIRED;
+export type GenericValidationType = {
+  type:
+    | ValidationTypes.REQUIRED
+    | ValidationTypes.EMAIL
+    | ValidationTypes.JSON
+    | ValidationTypes.IP_ADDRESS
+    | ValidationTypes.URL;
 } & BaseValidation;
 
 export type FieldValidationConfiguration =
@@ -61,6 +70,6 @@ export type FieldValidationConfiguration =
   | StringLengthValidationType
   | NumberValidationType
   | DateValidationType
-  | RequiredValidtionType;
+  | GenericValidationType;
 
-export type ValidationResponse = { hasError: boolean; errorMessage: string };
+export type ValidationResponse = { hasError: boolean; errorMessage?: string };
