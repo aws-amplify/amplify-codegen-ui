@@ -47,5 +47,14 @@ describe('react theme renderer tests', () => {
       );
       expect(rendererFactory.buildRenderer(loadSchemaFromJSONFile('theme')).renderThemeJson()).toMatchSnapshot();
     });
+
+    it('should render theme json with breakpoints correctly', () => {
+      const rendererFactory = new StudioTemplateRendererFactory(
+        (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, {}),
+      );
+      expect(
+        rendererFactory.buildRenderer(loadSchemaFromJSONFile('themeWithBreakpoints')).renderThemeJson(),
+      ).toMatchSnapshot();
+    });
   });
 });

@@ -26,6 +26,33 @@ exports[`react theme renderer tests renderThemeJson should render theme json cor
 }"
 `;
 
+exports[`react theme renderer tests renderThemeJson should render theme json with breakpoints correctly 1`] = `
+"{
+  name: \\"MyTheme\\",
+  tokens: {
+    components: {
+      alert: {
+        backgroundColor: \\"hsl(210, 5%, 90%)\\",
+        padding: \\"0.75rem 1rem\\",
+        info: { backgroundColor: \\"hsl(220, 85%, 85%)\\" },
+        error: { backgroundColor: \\"hsl(0, 75%, 85%)\\" },
+        warning: { backgroundColor: \\"hsl(30, 75%, 85%)\\" },
+        success: { backgroundColor: \\"hsl(130, 75%, 85%)\\" },
+      },
+    },
+  },
+  breakpoints: { values: { base: 0 }, defaultBreakpoint: \\"base\\" },
+  overrides: [
+    {
+      colorMode: \\"dark\\",
+      tokens: {
+        colors: { black: { value: \\"#fff\\" }, white: { value: \\"#000\\" } },
+      },
+    },
+  ],
+}"
+`;
+
 exports[`react theme renderer tests theme should render the theme 1`] = `
 "/* eslint-disable */
 import { createTheme } from \\"@aws-amplify/ui-react\\";
