@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import { SchemaModel, ModelFields, isGraphQLScalarType } from '@aws-amplify/datastore';
+import { Hub } from 'aws-amplify';
 import {
   StudioComponent,
   StudioForm,
@@ -139,6 +140,7 @@ export const ctaButtonConfig = (): StudioComponentChild => {
 export const mapOnSubmitEvent = (
   form: StudioForm,
   childrenFormFields: StudioComponentChild[],
+  onSubmitComplete?: Function,
 ): DataStoreCreateItemAction | DataStoreUpdateItemAction => {
   if (form.formActionType === 'create') {
     return {
@@ -157,6 +159,16 @@ export const mapOnSubmitEvent = (
           },
           {},
         ),
+        onSubmit: () => {
+          if (onSubmitComplete) {
+            Hub.listen('ui', (msg) => {
+              const { event, data } = msg.payload;
+              if (event === `actions:datastore:create:finished`) {
+                onSubmitComplete({ saveSuccessful: !!data.errorMessage, errorMessage: data.errorMessage });
+              }
+            });
+          }
+        },
       },
     } as DataStoreCreateItemAction;
   }
@@ -173,11 +185,26 @@ export const mapOnSubmitEvent = (
       id: {
         value: primaryKey || 'id',
       },
+      fields: {},
+      onSubmit: () => {
+        if (onSubmitComplete) {
+          Hub.listen('ui', (msg) => {
+            const { event, data } = msg.payload;
+            if (event === `actions:datastore:update:finished`) {
+              onSubmitComplete({ saveSuccessful: !!data.errorMessage, errorMessage: data.errorMessage });
+            }
+          });
+        }
+      },
     },
   } as DataStoreUpdateItemAction;
 };
 
-export const mapFormToComponent = (form: StudioForm, dataSchema: SchemaModel): StudioComponent => {
+export const mapFormToComponent = (
+  form: StudioForm,
+  dataSchema: SchemaModel,
+  onSubmitComplete?: Function,
+): StudioComponent => {
   // here we can merge the datastore schema with the form
   // right now it's only creating fields from the existing datastore schema
   // TODO: manage merging fields from form and datastore
@@ -190,7 +217,7 @@ export const mapFormToComponent = (form: StudioForm, dataSchema: SchemaModel): S
       onCancel: { type: 'Event' },
     },
     events: {
-      onSubmit: mapOnSubmitEvent(form, childrenFormFields),
+      onSubmit: mapOnSubmitEvent(form, childrenFormFields, onSubmitComplete),
     },
     // codegen will default to rendering the component with this name
     componentType: 'form',

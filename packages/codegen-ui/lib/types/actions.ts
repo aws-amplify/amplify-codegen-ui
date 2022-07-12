@@ -62,6 +62,7 @@ export type DataStoreCreateItemAction = {
     fields: {
       [propertyName: string]: StudioComponentProperty;
     };
+    onSubmit: Function;
   };
 };
 
@@ -73,6 +74,7 @@ export type DataStoreUpdateItemAction = {
     fields: {
       [propertyName: string]: StudioComponentProperty;
     };
+    onSubmit: Function;
   };
 };
 
