@@ -28,6 +28,25 @@ export type DataStoreModelField = {
   isArray: boolean;
 };
 
+export type CommonRelationshipType = {
+  relatedModelName: string;
+};
+
+export type HasManyRelationshipType = {
+  type: 'HAS_MANY';
+  relatedModelField: string;
+} & CommonRelationshipType;
+
+export type HasOneRelationshipType = {
+  type: 'HAS_ONE';
+} & CommonRelationshipType;
+
+export type BelongsToRelationshipType = {
+  type: 'BELONGS_TO';
+} & CommonRelationshipType;
+
+export type GenericDataRelationshipType = HasManyRelationshipType | HasOneRelationshipType | BelongsToRelationshipType;
+
 export type DataFieldDataType =
   | 'ID'
   | 'String'
@@ -56,11 +75,7 @@ export type GenericDataField = {
 
   isArray: boolean;
 
-  relationship?: {
-    type: 'HAS_ONE' | 'HAS_MANY' | 'BELONGS_TO';
-
-    relatedModelName: string;
-  };
+  relationship?: GenericDataRelationshipType;
 };
 
 export type GenericDataModel = {
