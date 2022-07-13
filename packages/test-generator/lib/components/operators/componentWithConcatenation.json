@@ -29,6 +29,12 @@
             "field": "lastName"
           },
           "defaultValue": "Callahan"
+        },
+        {
+          "value": " "
+        },
+        {
+          "userAttribute": "username"
         }
       ]
     }

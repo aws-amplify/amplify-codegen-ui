@@ -30,5 +30,9 @@
     "cypress": "^10.0.2",
     "eslint-plugin-cypress": "2.12.1",
     "pascalcase": "1.0.0"
+  },
+  "overrides": {
+    "hermes-engine": ">=0.10.0",
+    "shell-quote": ">=1.7.3"
   }
 }

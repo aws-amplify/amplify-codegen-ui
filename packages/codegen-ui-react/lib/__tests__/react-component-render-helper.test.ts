@@ -18,6 +18,7 @@ import {
   ConditionalStudioComponentProperty,
   StudioComponentProperty,
   ComponentMetadata,
+  ConcatenatedStudioComponentProperty,
 } from '@aws-amplify/codegen-ui';
 import {
   getFixedComponentPropValueExpression,
@@ -32,6 +33,7 @@ import {
   getSyntaxKindToken,
   buildChildElement,
   buildConditionalExpression,
+  buildConcatExpression,
 } from '../react-component-render-helper';
 
 import { assertASTMatchesSnapshot } from './__utils__';
@@ -293,6 +295,17 @@ describe('react-component-render-helper', () => {
       expect(() =>
         buildConditionalExpression(buildEmptyComponentMetadata(), buildConditionalWithOperand('18', 'boolean')),
       ).toThrow('Parsed value 18 and type boolean mismatch');
+    });
+  });
+
+  describe('buildConcatExpression', () => {
+    test('should build concat with userAttribute', () => {
+      const concatProp: ConcatenatedStudioComponentProperty = {
+        concat: [{ userAttribute: 'email' }, { value: ', welcome!', type: 'string' }],
+      };
+
+      const exp = buildConcatExpression(concatProp);
+      assertASTMatchesSnapshot(exp);
     });
   });
 });
