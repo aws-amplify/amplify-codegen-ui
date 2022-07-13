@@ -15,7 +15,7 @@
  */
 import { Schema as DataStoreSchema, ModelField } from '@aws-amplify/datastore';
 import { InvalidInputError } from './errors';
-import { GenericDataField, GenericDataSchema } from './types';
+import { GenericDataField, GenericDataRelationshipType, GenericDataSchema } from './types';
 
 function getGenericDataField(field: ModelField): GenericDataField {
   return {
@@ -72,11 +72,12 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
 
           let relatedModelName = field.type.model;
 
+          let modelRelationship: GenericDataRelationshipType | undefined;
+
           if (relationshipType === 'HAS_MANY' && 'associatedWith' in field.association) {
             const associatedModel = dataStoreSchema.models[field.type.model];
             const associatedFieldName = field.association.associatedWith;
             const associatedField = associatedModel.fields[associatedFieldName];
-
             // if the associated model is a join table, update relatedModelName to the actual related model
             if (
               typeof associatedField.type === 'object' &&
@@ -99,6 +100,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
                 relatedModelName: model.name,
               });
             }
+            modelRelationship = { type: relationshipType, relatedModelName, relatedModelField: associatedFieldName };
           }
 
           // note implicit relationship for associated field within same model
@@ -107,9 +109,14 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
               type: relationshipType,
               relatedModelName,
             });
+            modelRelationship = { type: relationshipType, relatedModelName };
           }
 
-          genericField.relationship = { type: relationshipType, relatedModelName };
+          if (relationshipType === 'BELONGS_TO') {
+            modelRelationship = { type: relationshipType, relatedModelName };
+          }
+
+          genericField.relationship = modelRelationship;
         }
       }
 

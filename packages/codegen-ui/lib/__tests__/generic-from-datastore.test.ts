@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import { getGenericFromDataStore } from '../generic-from-datastore';
+import { HasManyRelationshipType } from '../types';
 import { schemaWithEnums, schemaWithNonModels, schemaWithRelationships } from './__utils__/mock-schemas';
 
 describe('getGenericFromDataStore', () => {
@@ -60,14 +61,16 @@ describe('getGenericFromDataStore', () => {
       relatedModelName: 'Child',
     });
 
-    expect(genericSchema.models.Student.fields.Teachers.relationship).toStrictEqual({
+    expect(genericSchema.models.Student.fields.Teachers.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
+      relatedModelField: 'student',
     });
 
-    expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual({
+    expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Student',
+      relatedModelField: 'teacher',
     });
 
     expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
@@ -85,9 +88,10 @@ describe('getGenericFromDataStore', () => {
       relatedModelName: 'Lock',
     });
 
-    expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual({
+    expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Dog',
+      relatedModelField: 'ownerID',
     });
 
     expect(genericSchema.models.Dog.fields.ownerID.relationship).toStrictEqual({

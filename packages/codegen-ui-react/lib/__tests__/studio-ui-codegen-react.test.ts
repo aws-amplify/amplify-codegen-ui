@@ -13,24 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioTemplateRendererFactory, StudioComponent } from '@aws-amplify/codegen-ui';
-import { ModuleKind, ScriptTarget, ScriptKind, ReactRenderConfig } from '..';
-import { AmplifyRenderer } from '../amplify-ui-renderers/amplify-renderer';
-import { loadSchemaFromJSONFile } from './__utils__';
-
-function generateWithAmplifyRenderer(
-  jsonSchemaFile: string,
-  renderConfig: ReactRenderConfig = {},
-  isSampleCodeSnippet = false,
-): { componentText: string; declaration?: string } {
-  const rendererFactory = new StudioTemplateRendererFactory(
-    (component: StudioComponent) => new AmplifyRenderer(component, renderConfig),
-  );
-  const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile(jsonSchemaFile));
-  return isSampleCodeSnippet
-    ? { componentText: renderer.renderSampleCodeSnippet().compText }
-    : renderer.renderComponent();
-}
+import { ModuleKind, ScriptTarget, ScriptKind } from '..';
+import { authorHasManySchema, generateWithAmplifyRenderer } from './__utils__';
 
 describe('amplify render tests', () => {
   describe('basic component tests', () => {
@@ -127,6 +111,21 @@ describe('amplify render tests', () => {
     it('should render collection with data binding if binding name is items', () => {
       const generatedCode = generateWithAmplifyRenderer('collectionWithBindingItemsName');
       expect(generatedCode.componentText).toMatchSnapshot();
+    });
+
+    it('should render nested query if model has a hasMany relationship', () => {
+      const { componentText } = generateWithAmplifyRenderer(
+        'authorCollectionComponent',
+        {},
+        false,
+        authorHasManySchema,
+      );
+      expect(componentText).toMatchSnapshot();
+    });
+
+    it('should not render nested query if the data schema is not provided', () => {
+      const { componentText } = generateWithAmplifyRenderer('authorCollectionComponent');
+      expect(componentText).toMatchSnapshot();
     });
   });
 
