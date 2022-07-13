@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.2.1...v2.2.2) (2022-07-13)
+
+
+### Bug Fixes
+
+* handle auth prop in concat ([f7d645e](https://github.com/aws-amplify/amplify-codegen-ui/commit/f7d645e07e91848465e92f450e81d6ed92604057))
+
+
+
+
+
 ## [2.2.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.2.0...v2.2.1) (2022-06-15)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui-test-generator
