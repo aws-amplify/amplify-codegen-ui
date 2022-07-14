@@ -21,6 +21,7 @@ import {
   ObjectLiteralExpression,
   StringLiteral,
   PropertyAssignment,
+  NumericLiteral,
 } from 'typescript';
 import {
   StudioTemplateRenderer,
@@ -137,10 +138,19 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
           factory.createStringLiteral(this.component.name),
         ),
       ]
-        .concat(this.buildThemeValues(this.component.values))
+        .concat(this.splitAndBuildThemeValues(this.component.values))
         .concat(this.buildThemeOverrides(this.component.overrides)),
       true,
     );
+  }
+
+  splitAndBuildThemeValues(values: StudioThemeValues[]): PropertyAssignment[] {
+    return values.map(({ key, value }) => {
+      if (key !== 'breakpoints') {
+        return factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeValue(value));
+      }
+      return factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeBreakpointValue(value));
+    });
   }
 
   /* Removes children and value (needed for smithy) from theme values json
@@ -166,6 +176,40 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
       return factory.createStringLiteral(value);
     }
 
+    throw new InvalidInputError(`Invalid theme value: ${JSON.stringify(value)}`);
+  }
+
+  /* Removes children and value (needed for smithy) from theme values json
+   *
+   * breakpoints: {
+   *   values: {
+   *     base: 0,
+   *     small: 480,
+   *     ...
+   *   }
+   *   defaultBreakpoint: "base",
+   * ...
+   */
+  buildThemeBreakpointValues(values: StudioThemeValues[]): PropertyAssignment[] {
+    return values.map(({ key, value }) =>
+      factory.createPropertyAssignment(factory.createIdentifier(key), this.buildThemeBreakpointValue(value)),
+    );
+  }
+
+  buildThemeBreakpointValue(themeValue: StudioThemeValue): ObjectLiteralExpression | StringLiteral | NumericLiteral {
+    const { children, value } = themeValue;
+    if (children) {
+      if (children[0].key === 'value') {
+        return this.buildThemeBreakpointValue({ value: children[0].value.value });
+      }
+      return factory.createObjectLiteralExpression(this.buildThemeBreakpointValues(children));
+    }
+    if (value) {
+      if (/^[0-9]+$/.test(value)) {
+        return factory.createNumericLiteral(parseInt(value, 10));
+      }
+      return factory.createStringLiteral(value);
+    }
     throw new InvalidInputError(`Invalid theme value: ${JSON.stringify(value)}`);
   }
 
