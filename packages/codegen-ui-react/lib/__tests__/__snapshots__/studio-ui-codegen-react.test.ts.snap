@@ -1430,6 +1430,7 @@ import {
   getOverrideProps,
   getOverridesFromVariants,
   mergeVariantsAndOverrides,
+  useBreakpointValue,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
 
@@ -1443,7 +1444,7 @@ export type ComplexTest4Props = React.PropsWithChildren<
 export default function ComplexTest4(
   props: ComplexTest4Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
+  const { overrides: overridesProp, ...restProp } = props;
   const variants: Variant[] = [
     {
       overrides: {
@@ -1486,8 +1487,20 @@ export default function ComplexTest4(
       variantValues: { colors: \\"Red/Orange\\" },
     },
   ];
+  const breakpointHook = useBreakpointValue({
+    base: \\"base\\",
+    large: \\"large\\",
+    medium: \\"medium\\",
+    small: \\"small\\",
+    xl: \\"xl\\",
+    xxl: \\"xxl\\",
+  });
+  const rest = { style: { transition: \\"all 0.25s\\" }, ...restProp };
   const overrides = mergeVariantsAndOverrides(
-    getOverridesFromVariants(variants, props),
+    getOverridesFromVariants(variants, {
+      breakpoint: breakpointHook,
+      ...props,
+    }),
     overridesProp || {}
   );
   return (
@@ -1821,6 +1834,7 @@ import {
   getOverrideProps,
   getOverridesFromVariants,
   mergeVariantsAndOverrides,
+  useBreakpointValue,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
@@ -1834,7 +1848,7 @@ export type ComplexTest9Props = React.PropsWithChildren<
 export default function ComplexTest9(
   props: ComplexTest9Props
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
+  const { overrides: overridesProp, ...restProp } = props;
   const variants: Variant[] = [
     {
       nodeId: \\"2878:3221\\",
@@ -2068,8 +2082,20 @@ export default function ComplexTest9(
       },
     },
   ];
+  const breakpointHook = useBreakpointValue({
+    base: \\"base\\",
+    large: \\"large\\",
+    medium: \\"medium\\",
+    small: \\"small\\",
+    xl: \\"xl\\",
+    xxl: \\"xxl\\",
+  });
+  const rest = { style: { transition: \\"all 0.25s\\" }, ...restProp };
   const overrides = mergeVariantsAndOverrides(
-    getOverridesFromVariants(variants, props),
+    getOverridesFromVariants(variants, {
+      breakpoint: breakpointHook,
+      ...props,
+    }),
     overridesProp || {}
   );
   return (
@@ -4213,6 +4239,7 @@ import {
   getOverrideProps,
   getOverridesFromVariants,
   mergeVariantsAndOverrides,
+  useBreakpointValue,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
@@ -4226,7 +4253,7 @@ export type ViewPrimitiveProps = React.PropsWithChildren<
 export default function ViewPrimitive(
   props: ViewPrimitiveProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
+  const { overrides: overridesProp, ...restProp } = props;
   const variants: Variant[] = [
     {
       variantValues: { variant: \\"primary\\" },
@@ -4235,8 +4262,20 @@ export default function ViewPrimitive(
       },
     },
   ];
+  const breakpointHook = useBreakpointValue({
+    base: \\"base\\",
+    large: \\"large\\",
+    medium: \\"medium\\",
+    small: \\"small\\",
+    xl: \\"xl\\",
+    xxl: \\"xxl\\",
+  });
+  const rest = { style: { transition: \\"all 0.25s\\" }, ...restProp };
   const overrides = mergeVariantsAndOverrides(
-    getOverridesFromVariants(variants, props),
+    getOverridesFromVariants(variants, {
+      breakpoint: breakpointHook,
+      ...props,
+    }),
     overridesProp || {}
   );
   return (
@@ -4264,6 +4303,7 @@ import {
   getOverrideProps,
   getOverridesFromVariants,
   mergeVariantsAndOverrides,
+  useBreakpointValue,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Icon, IconProps } from \\"@aws-amplify/ui-react\\";
 
@@ -4277,7 +4317,7 @@ export type IconVariantsProps = React.PropsWithChildren<
 export default function IconVariants(
   props: IconVariantsProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
+  const { overrides: overridesProp, ...restProp } = props;
   const variants: Variant[] = [
     {
       variantValues: { variant: \\"primary\\" },
@@ -4310,8 +4350,20 @@ export default function IconVariants(
       },
     },
   ];
+  const breakpointHook = useBreakpointValue({
+    base: \\"base\\",
+    large: \\"large\\",
+    medium: \\"medium\\",
+    small: \\"small\\",
+    xl: \\"xl\\",
+    xxl: \\"xxl\\",
+  });
+  const rest = { style: { transition: \\"all 0.25s\\" }, ...restProp };
   const overrides = mergeVariantsAndOverrides(
-    getOverridesFromVariants(variants, props),
+    getOverridesFromVariants(variants, {
+      breakpoint: breakpointHook,
+      ...props,
+    }),
     overridesProp || {}
   );
   return (
@@ -4335,6 +4387,7 @@ import {
   getOverrideProps,
   getOverridesFromVariants,
   mergeVariantsAndOverrides,
+  useBreakpointValue,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
@@ -4349,7 +4402,7 @@ export type CustomButtonProps = React.PropsWithChildren<
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
+  const { overrides: overridesProp, ...restProp } = props;
   const variants: Variant[] = [
     {
       variantValues: { variant: \\"primary\\" },
@@ -4364,8 +4417,20 @@ export default function CustomButton(
       overrides: { CustomButton: { width: \\"500\\" } },
     },
   ];
+  const breakpointHook = useBreakpointValue({
+    base: \\"base\\",
+    large: \\"large\\",
+    medium: \\"medium\\",
+    small: \\"small\\",
+    xl: \\"xl\\",
+    xxl: \\"xxl\\",
+  });
+  const rest = { style: { transition: \\"all 0.25s\\" }, ...restProp };
   const overrides = mergeVariantsAndOverrides(
-    getOverridesFromVariants(variants, props),
+    getOverridesFromVariants(variants, {
+      breakpoint: breakpointHook,
+      ...props,
+    }),
     overridesProp || {}
   );
   return (
@@ -4389,6 +4454,7 @@ import {
   getOverrideProps,
   getOverridesFromVariants,
   mergeVariantsAndOverrides,
+  useBreakpointValue,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
@@ -4403,7 +4469,7 @@ export type CustomButtonProps = React.PropsWithChildren<
 export default function CustomButton(
   props: CustomButtonProps
 ): React.ReactElement {
-  const { overrides: overridesProp, ...rest } = props;
+  const { overrides: overridesProp, ...restProp } = props;
   const variants: Variant[] = [
     {
       variantValues: { variant: \\"primary\\" },
@@ -4429,8 +4495,20 @@ export default function CustomButton(
       },
     },
   ];
+  const breakpointHook = useBreakpointValue({
+    base: \\"base\\",
+    large: \\"large\\",
+    medium: \\"medium\\",
+    small: \\"small\\",
+    xl: \\"xl\\",
+    xxl: \\"xxl\\",
+  });
+  const rest = { style: { transition: \\"all 0.25s\\" }, ...restProp };
   const overrides = mergeVariantsAndOverrides(
-    getOverridesFromVariants(variants, props),
+    getOverridesFromVariants(variants, {
+      breakpoint: breakpointHook,
+      ...props,
+    }),
     overridesProp || {}
   );
   return (

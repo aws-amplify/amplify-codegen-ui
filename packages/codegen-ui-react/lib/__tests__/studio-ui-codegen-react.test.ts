@@ -44,6 +44,12 @@ describe('amplify render tests', () => {
     it('should generate a simple image component', () => {});
 
     it('should generate a simple string component', () => {});
+
+    it('should generate a basic component without variant specific generation', () => {
+      const generatedCode = generateWithAmplifyRenderer('buttonGolden');
+      expect(generatedCode.componentText.indexOf('restProp')).toEqual(-1);
+      expect(generatedCode.componentText.indexOf('breakpointHook')).toEqual(-1);
+    });
   });
 
   describe('complex component tests', () => {
@@ -231,6 +237,12 @@ describe('amplify render tests', () => {
     it('should render object variants', () => {
       const generatedCode = generateWithAmplifyRenderer('componentWithObjectVariants');
       expect(generatedCode).toMatchSnapshot();
+    });
+
+    it('should have variant specific generation', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithVariants');
+      expect(generatedCode.componentText.indexOf('restProp')).toBeGreaterThanOrEqual(0);
+      expect(generatedCode.componentText.indexOf('breakpointHook')).toBeGreaterThanOrEqual(0);
     });
   });
 
