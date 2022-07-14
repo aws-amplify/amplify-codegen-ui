@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { mocked } from 'ts-jest/utils'; // eslint-disable-line import/no-extraneous-dependencies
 import { existsSync, mkdirSync } from 'fs';
 import { StudioComponent } from '../types';
 import { StudioTemplateRendererFactory } from '../template-renderer-factory';
@@ -34,7 +33,7 @@ describe('StudioTemplateRendererManager', () => {
       (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
     );
 
-    mocked(existsSync).mockImplementation(() => false);
+    jest.mocked(existsSync).mockImplementation(() => false);
     new StudioTemplateRendererManager(rendererFactory, { outputPathDir }); // eslint-disable-line no-new
     expect(existsSync).toHaveBeenCalled();
     expect(mkdirSync).toHaveBeenCalledWith(outputPathDir);
@@ -47,7 +46,7 @@ describe('StudioTemplateRendererManager', () => {
       (component: StudioComponent) => new MockTemplateRenderer(component, outputManager, {}),
     );
 
-    mocked(existsSync).mockImplementation(() => true);
+    jest.mocked(existsSync).mockImplementation(() => true);
     new StudioTemplateRendererManager(rendererFactory, { outputPathDir }); // eslint-disable-line no-new
     expect(existsSync).toHaveBeenCalled();
     expect(mkdirSync).not.toHaveBeenCalled();
