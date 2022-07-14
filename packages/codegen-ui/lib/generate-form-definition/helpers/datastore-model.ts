@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { DataStoreModelField, FormDefinition, ModelFieldsConfigs } from '../../types';
+import { ModelField, FormDefinition, ModelFieldsConfigs } from '../../types';
 import { FIELD_TYPE_MAP } from './field-type-map';
 import { InvalidInputError } from '../../errors';
 
@@ -26,7 +26,7 @@ import { InvalidInputError } from '../../errors';
 export function addDataStoreModelField(
   formDefinition: FormDefinition,
   modelFieldsConfigs: ModelFieldsConfigs,
-  field: DataStoreModelField,
+  field: ModelField,
 ) {
   if (field.isArray) {
     throw new InvalidInputError('Array types are not yet supported');

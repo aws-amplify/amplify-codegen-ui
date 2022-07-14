@@ -13,15 +13,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-type FormStyleConfigCommon = {
+export type FormStyleConfigCommon = {
   tokenReference?: string;
 };
 
-type FormStyleConfig = {
+export type FormStyleConfig = {
   value?: string;
 } & FormStyleConfigCommon;
 
-type FormAlignmentConfig = {
+export type FormAlignmentConfig = {
   value?: 'left' | 'center' | 'right';
 } & FormStyleConfigCommon;
 

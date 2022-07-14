@@ -16,6 +16,7 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import {
   ComponentMetadata,
+  getFormFieldStateName,
   StudioComponent,
   StudioComponentChild,
   StudioForm,
@@ -70,12 +71,17 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
   }
 
   private getFormOnSubmitAttribute(): JsxAttribute {
+    const {
+      name,
+      dataType: { dataSourceType },
+    } = this.form;
+    console.log('getform on siubmit');
     return factory.createJsxAttribute(
       factory.createIdentifier('onSubmit'),
       factory.createJsxExpression(
         undefined,
         factory.createArrowFunction(
-          undefined,
+          [factory.createModifier(SyntaxKind.AsyncKeyword)],
           undefined,
           [
             factory.createParameterDeclaration(
@@ -96,23 +102,90 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 factory.createCallExpression(
                   factory.createPropertyAccessExpression(
                     factory.createIdentifier('event'),
-                    factory.createIdentifier('preventDefault'),
+                    factory.createIdentifier('preventDefault1'),
                   ),
                   undefined,
                   [],
                 ),
               ),
               factory.createExpressionStatement(
-                /**
-                 * TODO: pass in props from functional argument
-                 * for datastore it will be onSubmitBefore & onSubmitComplete
-                 * for byod it will only be onSubmit override function
-                 */
                 factory.createCallExpression(
-                  factory.createIdentifier(getActionIdentifier(this.form.name, 'onSubmit')),
+                  factory.createIdentifier(getActionIdentifier(name, 'onSubmit')),
                   undefined,
-                  [],
+                  dataSourceType === 'DataStore' ? [] : [factory.createIdentifier(getFormFieldStateName(name))],
                 ),
+              ),
+              factory.createTryStatement(
+                factory.createBlock(
+                  [
+                    factory.createExpressionStatement(
+                      factory.createAwaitExpression(
+                        factory.createCallExpression(factory.createIdentifier('myPostFormOnSubmit'), undefined, []),
+                      ),
+                    ),
+                    factory.createIfStatement(
+                      factory.createIdentifier('onSubmitComplete'),
+                      factory.createBlock(
+                        [
+                          factory.createExpressionStatement(
+                            factory.createCallExpression(factory.createIdentifier('onSubmitComplete'), undefined, [
+                              factory.createObjectLiteralExpression(
+                                [
+                                  factory.createPropertyAssignment(
+                                    factory.createIdentifier('saveSuccessful'),
+                                    factory.createTrue(),
+                                  ),
+                                ],
+                                false,
+                              ),
+                            ]),
+                          ),
+                        ],
+                        true,
+                      ),
+                      undefined,
+                    ),
+                  ],
+                  true,
+                ),
+                factory.createCatchClause(
+                  factory.createVariableDeclaration(factory.createIdentifier('err'), undefined, undefined, undefined),
+                  factory.createBlock(
+                    [
+                      factory.createIfStatement(
+                        factory.createIdentifier('onSubmitComplete'),
+                        factory.createBlock(
+                          [
+                            factory.createExpressionStatement(
+                              factory.createCallExpression(factory.createIdentifier('onSubmitComplete'), undefined, [
+                                factory.createObjectLiteralExpression(
+                                  [
+                                    factory.createPropertyAssignment(
+                                      factory.createIdentifier('saveSuccessful'),
+                                      factory.createFalse(),
+                                    ),
+                                    factory.createPropertyAssignment(
+                                      factory.createIdentifier('errorMessage'),
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier('err'),
+                                        factory.createIdentifier('message'),
+                                      ),
+                                    ),
+                                  ],
+                                  false,
+                                ),
+                              ]),
+                            ),
+                          ],
+                          true,
+                        ),
+                        undefined,
+                      ),
+                    ],
+                    true,
+                  ),
+                ),
+                undefined,
               ),
             ],
             false,

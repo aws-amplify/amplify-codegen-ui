@@ -13,18 +13,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioFormStyle } from './style';
-import { FormDefinitionElement } from './form-definition-element';
-import { StudioGenericFieldConfig } from './fields';
+export type FormValidation = {
+  validationType: string;
+  validationRule: string;
+};
 
-export type ModelFieldsConfigs = { [key: string]: StudioGenericFieldConfig };
-
-export type FormDefinition = {
-  form: {
-    layoutStyle: StudioFormStyle;
-  };
-  elements: { [element: string]: FormDefinitionElement };
-  buttons: { [key: string]: string };
-  elementMatrix: string[][];
-  inputFields?: string[];
+export type FormMetadata = {
+  name: string;
+  fieldState: string;
+  onChangeFields: string[];
+  errorStateFields: string[];
+  // indicates the validation function provided for that field
+  // ex. name field has a lengthValidation type where the rule is length > 5
+  onValidationFields?: Record<string, FormValidation[]>;
 };

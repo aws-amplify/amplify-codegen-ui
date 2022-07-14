@@ -191,5 +191,22 @@ const validateSchema = (validator: yup.AnySchema, studioSchema: any) => {
   }
 };
 
+/**
+ * Form Schema Definitions
+ */
+const studioFormSchema = yup.object({
+  name: alphaNumString().required(),
+  id: yup.string().nullable(),
+  formActionType: yup.string().matches(new RegExp('(create|update)')),
+  dataType: yup.object({
+    dataSourceType: yup.string().matches(new RegExp('(DataStore|Custom)')),
+    dataTypeName: yup.string().required(),
+  }),
+  fields: yup.object().nullable(),
+  sectionalElements: yup.object().nullable(),
+  style: yup.object().nullable(),
+});
+
 export const validateComponentSchema = (schema: any) => validateSchema(studioComponentSchema, schema);
 export const validateThemeSchema = (schema: any) => validateSchema(studioThemeSchema, schema);
+export const validateFormSchema = (schema: any) => validateSchema(studioFormSchema, schema);

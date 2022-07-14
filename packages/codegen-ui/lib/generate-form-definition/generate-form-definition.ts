@@ -15,7 +15,7 @@
  */
 
 import { addDataStoreModelField, mapElementMatrix, mapStyles, mapElements } from './helpers';
-import { StudioForm, DataStoreModelField, FormDefinition, ModelFieldsConfigs, StudioFieldPosition } from '../types';
+import { StudioForm, DataStoreModelInfo, FormDefinition, ModelFieldsConfigs, StudioFieldPosition } from '../types';
 
 /**
  * Helper that turns the StudioForm model into definition that can be used to render
@@ -29,7 +29,7 @@ export function generateFormDefinition({
   modelInfo,
 }: {
   form: StudioForm;
-  modelInfo?: { fields: DataStoreModelField[] };
+  modelInfo?: DataStoreModelInfo;
 }): FormDefinition {
   const formDefinition: FormDefinition = {
     form: { layoutStyle: {} },

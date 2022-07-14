@@ -17,3 +17,4 @@ export * from './component-metadata';
 export * from './component-tree';
 export * from './state-reference-metadata';
 export * from './string-formatter';
+export * from './form-component-metadata';
