@@ -33,6 +33,7 @@ import {
   getSyntaxKindToken,
   buildChildElement,
   buildConditionalExpression,
+  hasChildrenProp,
   buildConcatExpression,
 } from '../react-component-render-helper';
 
@@ -298,6 +299,19 @@ describe('react-component-render-helper', () => {
     });
   });
 
+  describe('hasChildrenProp', () => {
+    test('returns true if children property exists', () => {
+      expect(
+        hasChildrenProp({ width: { value: '10px' }, children: { bindingProperties: { property: 'mySlot' } } }),
+      ).toBe(true);
+    });
+
+    test('returns false if children property does not exist', () => {
+      expect(
+        hasChildrenProp({ width: { value: '10px' }, height: { bindingProperties: { property: 'myHeight' } } }),
+      ).toBe(false);
+    });
+  });
   describe('buildConcatExpression', () => {
     test('should build concat with userAttribute', () => {
       const concatProp: ConcatenatedStudioComponentProperty = {

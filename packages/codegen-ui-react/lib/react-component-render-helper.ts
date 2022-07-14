@@ -31,6 +31,7 @@ import {
   ActionStudioComponentEvent,
   MutationActionSetStateParameter,
   ComponentMetadata,
+  StudioComponentProperties,
 } from '@aws-amplify/codegen-ui';
 
 import {
@@ -632,4 +633,8 @@ export function getStateName(stateReference: StateStudioComponentProperty): stri
 export function getSetStateName(stateReference: StateStudioComponentProperty): string {
   const stateName = getStateName(stateReference);
   return ['set', stateName.charAt(0).toUpperCase() + stateName.slice(1)].join('');
+}
+
+export function hasChildrenProp(componentProperties: StudioComponentProperties): boolean {
+  return !!('children' in componentProperties && componentProperties.children);
 }

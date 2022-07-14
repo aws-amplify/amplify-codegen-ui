@@ -17,7 +17,8 @@ export type StudioComponentPropertyBinding =
   | StudioComponentDataPropertyBinding
   | StudioComponentStoragePropertyBinding
   | StudioComponentSimplePropertyBinding
-  | StudioComponentEventPropertyBinding;
+  | StudioComponentEventPropertyBinding
+  | StudioComponentSlotBinding;
 
 /**
  * These are the primitive value types
@@ -80,6 +81,16 @@ export type StudioComponentStoragePropertyBinding = {
    * This is the value of the data binding
    */
   bindingProperties: StudioComponentStorageBindingProperty;
+};
+
+/**
+ * This represent the configuration for a binding to be a user-defined JSX Element
+ */
+export type StudioComponentSlotBinding = {
+  /**
+   * This declares that the binding is a Slot type
+   */
+  type: 'Amplify.Slot';
 };
 
 /**

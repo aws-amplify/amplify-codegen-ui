@@ -156,6 +156,15 @@ describe('Generated Components', () => {
         });
       });
     });
+
+    describe('Slot Binding', () => {
+      it('Renders component passed into the slot, overriding nested components', () => {
+        cy.get('#slotBinding').within(() => {
+          cy.contains('Customer component');
+          cy.contains('Nested child text').should('not.exist');
+        });
+      });
+    });
   });
 
   describe('Collections', () => {
@@ -204,6 +213,15 @@ describe('Generated Components', () => {
     it('Supports overrideItems with context injection', () => {
       cy.get('#collectionWithOverrideItems').contains('0 - Doodle, Yankee');
       cy.get('#collectionWithOverrideItems').contains('1 - Cap, Feather');
+    });
+
+    it('Supports overrideItems that return JSX.Element prop values', () => {
+      cy.get('#collectionWithJSXOverrideItems').within(() => {
+        cy.contains('Yankee');
+        cy.contains('Doodle');
+        cy.contains('Feather');
+        cy.contains('Cap');
+      });
     });
   });
 

@@ -43,6 +43,7 @@ import {
   CollectionDefaultValue,
   MyTheme,
   ComponentWithSimplePropertyBinding,
+  ComponentWithSlotBinding,
   ComponentWithDataBindingWithoutPredicate,
   ComponentWithDataBindingWithPredicate,
   ComponentWithMultipleDataBindingsWithPredicate,
@@ -279,6 +280,7 @@ export default function ComponentTests() {
             priceUSD: 2200,
           }}
         />
+        <ComponentWithSlotBinding id="slotBinding" mySlot={<div>Customer component</div>} />
       </div>
       <div id="collections">
         <h2>Collections</h2>
@@ -331,9 +333,34 @@ export default function ComponentTests() {
               lastName: 'Cap',
             },
           ]}
-          overrideItems={({ item, index }: { item: any; index: number }) => {
+          overrideItems={({ item, index }) => {
             return {
               children: `${index} - ${item.lastName}, ${item.firstName}`,
+            };
+          }}
+        />
+        <CollectionWithBinding
+          id="collectionWithJSXOverrideItems"
+          items={[
+            {
+              id: '1',
+              firstName: 'Yankee',
+              lastName: 'Doodle',
+            },
+            {
+              id: '2',
+              firstName: 'Feather',
+              lastName: 'Cap',
+            },
+          ]}
+          overrideItems={({ item }) => {
+            return {
+              children: (
+                <>
+                  <div>{item.lastName}</div>
+                  <div>{item.firstName}</div>
+                </>
+              ),
             };
           }}
         />

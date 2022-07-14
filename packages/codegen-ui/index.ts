@@ -20,6 +20,8 @@ export * from './lib/component-renderer-base';
 export * from './lib/render-component-response';
 export * from './lib/framework-output-manager';
 export * from './lib/template-renderer-factory';
+export * from './lib/generate-form-definition';
+export * from './lib/generic-from-datastore';
 
 export * from './lib/renderer-helper';
 export * from './lib/validation-helper';

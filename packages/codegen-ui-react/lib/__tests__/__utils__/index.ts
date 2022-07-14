@@ -16,3 +16,5 @@
 export * from './example-schema';
 export * from './mock-classes';
 export * from './snapshot-helpers';
+export * from './mock-data-schemas';
+export * from './amplify-renderer-generator';

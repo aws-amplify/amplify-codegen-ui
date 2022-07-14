@@ -31,6 +31,8 @@ import {
   ComponentMetadata,
   computeComponentMetadata,
   validateComponentSchema,
+  isSlotBinding,
+  GenericDataSchema,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -55,6 +57,7 @@ import ts, {
   BooleanLiteral,
   addSyntheticLeadingComment,
   JsxSelfClosingElement,
+  PropertyAssignment,
 } from 'typescript';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
@@ -69,6 +72,9 @@ import {
   jsonToLiteral,
   bindingPropertyUsesHook,
   json,
+  buildBaseCollectionVariableStatement,
+  buildPropAssignmentWithFilter,
+  buildCollectionWithItemMap,
 } from './react-studio-template-renderer-helper';
 import { Primitive, isPrimitive, PrimitiveTypeParameter, PrimitiveChildrenPropMapping } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
@@ -78,6 +84,7 @@ import {
   mapSyntheticStateReferences,
   buildStateStatements,
   buildUseEffectStatements,
+  getActionIdentifier,
 } from './workflow';
 import keywords from './keywords';
 
@@ -96,9 +103,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   protected componentMetadata: ComponentMetadata;
 
+  protected dataSchema: GenericDataSchema | undefined;
+
   fileName = `${this.component.name}.tsx`;
 
-  constructor(component: StudioComponent, renderConfig: ReactRenderConfig) {
+  constructor(component: StudioComponent, renderConfig: ReactRenderConfig, dataSchema?: GenericDataSchema) {
     super(component, new ReactOutputManager(), renderConfig);
     this.renderConfig = {
       ...defaultRenderConfig,
@@ -110,7 +119,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     this.componentMetadata.stateReferences = mapSyntheticStateReferences(this.componentMetadata);
     this.mapSyntheticPropsForVariants();
     this.mapSyntheticProps();
-
+    this.dataSchema = dataSchema;
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
   }
 
@@ -331,7 +340,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (componentIsPrimitive) {
       this.importCollection.addImport(ImportSource.UI_REACT, propsType);
     } else {
-      this.importCollection.addImport(`./${component.componentType}`, `${component.componentType}Props`);
+      this.importCollection.addImport(
+        `./${component.componentType}`,
+        `${getComponentPropName(component.componentType)}`,
+      );
     }
 
     const propsTypeParameter = componentIsPrimitive
@@ -450,10 +462,31 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             ),
           );
           propSignatures.push(propSignature);
+        } else if (isSlotBinding(binding)) {
+          const propSignature = factory.createPropertySignature(
+            undefined,
+            propName,
+            factory.createToken(SyntaxKind.QuestionToken),
+            factory.createTypeReferenceNode(
+              factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('ReactNode')),
+              undefined,
+            ),
+          );
+          propSignatures.push(propSignature);
         }
       });
     }
     if (component.componentType === 'Collection') {
+      const child = component.children?.[0];
+      if (!child) {
+        throw new Error(`Collection component must have a child`);
+      }
+
+      const childComponentName = child.name;
+      const childComponentProps = getComponentPropName(childComponentName);
+
+      this.importCollection.addImport(`./${childComponentName}`, `${childComponentProps}`);
+
       propSignatures.push(
         factory.createPropertySignature(
           undefined,
@@ -474,26 +507,26 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                 undefined,
                 undefined,
                 undefined,
-                factory.createObjectBindingPattern([
-                  factory.createBindingElement(
+                factory.createIdentifier('collectionItem'),
+                undefined,
+                factory.createTypeLiteralNode([
+                  factory.createPropertySignature(
                     undefined,
                     factory.createIdentifier('item'),
-                    factory.createIdentifier('any'),
                     undefined,
+                    factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
                   ),
-                  factory.createBindingElement(
+                  factory.createPropertySignature(
                     undefined,
                     factory.createIdentifier('index'),
-                    factory.createIdentifier('number'),
                     undefined,
+                    factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
                   ),
                 ]),
                 undefined,
-                undefined,
-                undefined,
               ),
             ],
-            factory.createTypeReferenceNode(factory.createIdentifier('Record<string, string>'), undefined),
+            factory.createTypeReferenceNode(factory.createIdentifier(childComponentProps), undefined),
           ),
         ),
       );
@@ -510,7 +543,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithBinding(component)) {
       Object.entries(component.bindingProperties).forEach((entry) => {
         const [propName, binding] = entry;
-        if (isSimplePropertyBinding(binding) || isDataPropertyBinding(binding) || isEventPropertyBinding(binding)) {
+        if (
+          isSimplePropertyBinding(binding) ||
+          isDataPropertyBinding(binding) ||
+          isEventPropertyBinding(binding) ||
+          isSlotBinding(binding)
+        ) {
           const usesHook = bindingPropertyUsesHook(binding);
           const shouldAssignToDifferentName = usesHook || keywords.has(propName);
           const propVariableName = shouldAssignToDifferentName ? `${propName}Prop` : propName;
@@ -741,27 +779,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
          * }).items;
          */
         statements.push(
-          factory.createVariableStatement(
-            undefined,
-            factory.createVariableDeclarationList(
-              [
-                factory.createVariableDeclaration(
-                  factory.createIdentifier(this.getDataStoreName(propName)),
-                  undefined,
-                  undefined,
-                  factory.createPropertyAccessExpression(
-                    this.buildUseDataStoreBindingCall(
-                      'collection',
-                      model,
-                      predicate ? this.getFilterName(propName) : undefined,
-                      sort ? this.getPaginationName(propName) : undefined,
-                    ),
-                    factory.createIdentifier('items'),
-                  ),
-                ),
-              ],
-              ts.NodeFlags.Const,
-            ),
+          ...this.buildCollectionBindingCall(
+            model,
+            this.getDataStoreName(propName),
+            predicate ? this.getFilterName(propName) : undefined,
+            sort ? this.getPaginationName(propName) : undefined,
           ),
         );
         /**
@@ -995,6 +1017,51 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
       expr,
     );
+  }
+
+  private buildCollectionBindingCall(
+    model: string,
+    modelVariableName: string,
+    criteriaName?: string,
+    paginationName?: string,
+  ) {
+    const statements: Statement[] = [];
+    if (
+      this.dataSchema &&
+      !!this.dataSchema.models[model] &&
+      Object.values(this.dataSchema.models[model].fields).some((field) => field.relationship?.type === 'HAS_MANY')
+    ) {
+      const propAssigments: PropertyAssignment[] = [];
+      Object.entries(this.dataSchema.models[model].fields).forEach(([key, field]) => {
+        if (field.relationship?.type === 'HAS_MANY') {
+          const { relatedModelName, relatedModelField } = field.relationship;
+          this.importCollection.addImport(ImportSource.LOCAL_MODELS, relatedModelName);
+          const itemsName = getActionIdentifier(relatedModelName, 'Items');
+          statements.push(
+            buildBaseCollectionVariableStatement(
+              factory.createIdentifier(itemsName),
+              this.buildUseDataStoreBindingCall('collection', relatedModelName),
+            ),
+          );
+          propAssigments.push(buildPropAssignmentWithFilter(key, itemsName, relatedModelField));
+        }
+      });
+      statements.push(
+        buildCollectionWithItemMap(
+          modelVariableName,
+          this.buildUseDataStoreBindingCall('collection', model, criteriaName, paginationName),
+          propAssigments,
+        ),
+      );
+    } else {
+      statements.push(
+        buildBaseCollectionVariableStatement(
+          factory.createIdentifier(modelVariableName),
+          this.buildUseDataStoreBindingCall('collection', model, criteriaName, paginationName),
+        ),
+      );
+    }
+    return statements;
   }
 
   private buildUseDataStoreBindingCall(

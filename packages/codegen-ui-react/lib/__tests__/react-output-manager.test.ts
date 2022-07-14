@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { mocked } from 'ts-jest/utils'; // eslint-disable-line import/no-extraneous-dependencies
 import { existsSync, mkdirSync, promises as fs } from 'fs';
 import { ReactOutputManager } from '../react-output-manager';
 
@@ -37,16 +36,16 @@ describe('react-output-manager', () => {
     test('writes component', async () => {
       await new ReactOutputManager().writeComponent(input, outputPath);
 
-      expect(mocked(fs.writeFile).mock.calls).toMatchSnapshot();
+      expect(jest.mocked(fs.writeFile).mock.calls).toMatchSnapshot();
     });
 
     test('writes component if dir does not exist', async () => {
-      mocked(existsSync).mockReturnValue(false);
+      jest.mocked(existsSync).mockReturnValue(false);
 
       await new ReactOutputManager().writeComponent(input, outputPath);
 
-      expect(mocked(mkdirSync)).toHaveBeenCalledWith('output');
-      expect(mocked(fs.writeFile)).toHaveBeenCalled();
+      expect(jest.mocked(mkdirSync)).toHaveBeenCalledWith('output');
+      expect(jest.mocked(fs.writeFile)).toHaveBeenCalled();
     });
 
     test('throws error if component text is not set', async () => {

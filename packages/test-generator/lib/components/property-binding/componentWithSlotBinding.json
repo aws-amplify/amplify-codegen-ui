@@ -1,0 +1,38 @@
+{
+    "id": "1234-5678-9010-99",
+    "componentType": "Flex",
+    "name": "ComponentWithSlotBinding",
+    "bindingProperties": {
+      "mySlot": {
+        "type": "Amplify.Slot"
+      }
+    },
+    "children": [
+        {
+            "children": [
+                {
+                    "children": [],
+                    "componentType": "Text",
+                    "name": "ChildText",
+                    "properties": {
+                        "label": {
+                            "value": "Nested child text"
+                        }
+                    }
+                }
+            ],
+            "componentType": "View",
+            "name": "Rectangle",
+            "properties": {
+                "children": {
+                    "bindingProperties": {
+                        "property": "mySlot"
+                    }
+                }
+            }
+        }
+    ],
+    "properties": {},
+    "schemaVersion": "1.0"
+  }
+  
