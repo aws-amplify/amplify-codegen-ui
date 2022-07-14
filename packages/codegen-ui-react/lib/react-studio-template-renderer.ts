@@ -594,7 +594,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       factory.createBindingElement(
         factory.createToken(ts.SyntaxKind.DotDotDotToken),
         undefined,
-        factory.createIdentifier('rest'),
+        factory.createIdentifier(hasVariant ? 'restProp' : 'rest'),
         undefined,
       ),
     );
@@ -618,6 +618,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithVariants(component)) {
       this.importCollection.addMappedImport(ImportValue.MERGE_VARIANTS_OVERRIDES);
       statements.push(this.buildVariantDeclaration(component.variants));
+      statements.push(this.buildDefaultBreakpointMap());
+      statements.push(this.buildRestWithStyle());
       statements.push(this.buildOverridesFromVariantsAndProp());
     }
 
@@ -720,9 +722,100 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   /**
+   *     const breakpointHook = useBreakpointValue({
+   *        base: 'base',
+   *        large: 'large',
+   *        medium: 'medium',
+   *        small: 'small',
+   *        xl: 'xl',
+   *        xxl: 'xxl',
+   *     });
+   */
+  private buildDefaultBreakpointMap() {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('breakpointHook'),
+            undefined,
+            undefined,
+            factory.createCallExpression(factory.createIdentifier('useBreakpointValue'), undefined, [
+              factory.createObjectLiteralExpression(
+                [
+                  factory.createPropertyAssignment(
+                    factory.createIdentifier('base'),
+                    factory.createStringLiteral('base'),
+                  ),
+                  factory.createPropertyAssignment(
+                    factory.createIdentifier('large'),
+                    factory.createStringLiteral('large'),
+                  ),
+                  factory.createPropertyAssignment(
+                    factory.createIdentifier('medium'),
+                    factory.createStringLiteral('medium'),
+                  ),
+                  factory.createPropertyAssignment(
+                    factory.createIdentifier('small'),
+                    factory.createStringLiteral('small'),
+                  ),
+                  factory.createPropertyAssignment(factory.createIdentifier('xl'), factory.createStringLiteral('xl')),
+                  factory.createPropertyAssignment(factory.createIdentifier('xxl'), factory.createStringLiteral('xxl')),
+                ],
+                true,
+              ),
+            ]),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
+  /**
+   *   const rest = {style: {transition:"all 1s"}, ...restProp}
+   */
+  private buildRestWithStyle() {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('rest'),
+            undefined,
+            undefined,
+            factory.createObjectLiteralExpression(
+              [
+                factory.createPropertyAssignment(
+                  factory.createIdentifier('style'),
+                  factory.createObjectLiteralExpression(
+                    [
+                      factory.createPropertyAssignment(
+                        factory.createIdentifier('transition'),
+                        factory.createStringLiteral('all 0.25s'),
+                      ),
+                    ],
+                    false,
+                  ),
+                ),
+                factory.createSpreadAssignment(factory.createIdentifier('restProp')),
+              ],
+              false,
+            ),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
+  /**
    * const overrides = mergeVariantsAndOverrides(
-   *   getOverridesFromVariants(variants, props),
-   *   overridesProp || {}
+   *  getOverridesFromVariants(variants, {
+   *   breakpoint: breakpointHook,
+   *   ...props,
+   *  }),
+   *  overridesProp || {}
    * );
    */
   private buildOverridesFromVariantsAndProp() {
@@ -740,7 +833,16 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createCallExpression(factory.createIdentifier('mergeVariantsAndOverrides'), undefined, [
               factory.createCallExpression(factory.createIdentifier('getOverridesFromVariants'), undefined, [
                 factory.createIdentifier('variants'),
-                factory.createIdentifier('props'),
+                factory.createObjectLiteralExpression(
+                  [
+                    factory.createPropertyAssignment(
+                      factory.createIdentifier('breakpoint'),
+                      factory.createIdentifier('breakpointHook'),
+                    ),
+                    factory.createSpreadAssignment(factory.createIdentifier('props')),
+                  ],
+                  false,
+                ),
               ]),
               factory.createBinaryExpression(
                 factory.createIdentifier('overridesProp'),
