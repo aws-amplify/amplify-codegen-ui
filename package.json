@@ -63,5 +63,11 @@
       "prettier --write",
       "npm run lint:fix"
     ]
+  },
+  "overrides": {
+    "parse-url": ">=6.0.1",
+    "hermes-engine": ">=0.10.0",
+    "got": ">=11.8.5",
+    "shell-quote": ">=1.7.3"
   }
 }
