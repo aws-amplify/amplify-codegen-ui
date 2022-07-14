@@ -69,6 +69,10 @@ describe('Generated Components', () => {
       it('Renders Button text as a concatenated, bound element, with overrides', () => {
         cy.get('#concat-and-conditional').contains('Norm Gunderson');
       });
+
+      it('Renders Button text as a concatenated, auth element', () => {
+        cy.get('#concat-and-conditional').contains('Harry Callahan TestUser');
+      });
     });
 
     describe('Conditional Data', () => {

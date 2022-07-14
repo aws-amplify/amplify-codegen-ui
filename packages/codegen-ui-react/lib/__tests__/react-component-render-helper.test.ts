@@ -18,6 +18,7 @@ import {
   ConditionalStudioComponentProperty,
   StudioComponentProperty,
   ComponentMetadata,
+  ConcatenatedStudioComponentProperty,
 } from '@aws-amplify/codegen-ui';
 import {
   getFixedComponentPropValueExpression,
@@ -33,6 +34,7 @@ import {
   buildChildElement,
   buildConditionalExpression,
   hasChildrenProp,
+  buildConcatExpression,
 } from '../react-component-render-helper';
 
 import { assertASTMatchesSnapshot } from './__utils__';
@@ -308,6 +310,16 @@ describe('react-component-render-helper', () => {
       expect(
         hasChildrenProp({ width: { value: '10px' }, height: { bindingProperties: { property: 'myHeight' } } }),
       ).toBe(false);
+    });
+  });
+  describe('buildConcatExpression', () => {
+    test('should build concat with userAttribute', () => {
+      const concatProp: ConcatenatedStudioComponentProperty = {
+        concat: [{ userAttribute: 'email' }, { value: ', welcome!', type: 'string' }],
+      };
+
+      const exp = buildConcatExpression(concatProp);
+      assertASTMatchesSnapshot(exp);
     });
   });
 });

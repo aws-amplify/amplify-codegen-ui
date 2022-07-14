@@ -302,6 +302,8 @@ export function buildConcatExpression(prop: ConcatenatedStudioComponentProperty)
           ? buildBindingExpression(propItem)
           : buildBindingWithDefaultExpression(propItem, propItem.defaultValue);
       expressions.push(expr);
+    } else if (isAuthProperty(propItem)) {
+      expressions.push(buildAuthExpression(propItem));
     } else if (isCollectionItemBoundProperty(propItem)) {
       const expr =
         propItem.defaultValue === undefined

@@ -250,6 +250,8 @@ NodeObject {
 }
 `;
 
+exports[`react-component-render-helper buildConcatExpression should build concat with userAttribute 1`] = `"\`\${authAttributes[\\"email\\"]}\${\\", welcome!\\"}\`"`;
+
 exports[`react-component-render-helper buildContionalExpression operandType does not exist 1`] = `"(user?.age && user?.age > \\"18\\") ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
 
 exports[`react-component-render-helper buildContionalExpression operandType exists 1`] = `"(user?.age && user?.age > 18) ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
