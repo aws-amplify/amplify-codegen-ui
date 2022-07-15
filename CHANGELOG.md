@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.0...v2.3.1) (2022-07-15)
+
+
+### Bug Fixes
+
+* change recommended ui-react version to ^3.1.0 ([#521](https://github.com/aws-amplify/amplify-codegen-ui/issues/521)) ([33b6d06](https://github.com/aws-amplify/amplify-codegen-ui/commit/33b6d0658b87acd1e6eadc8ae3cb8629b2258b4b))
+
+
+
+
+
 # [2.3.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.2.1...v2.3.0) (2022-07-14)
 
 

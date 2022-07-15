@@ -3,7 +3,7 @@
     "packages/*"
   ],
   "exact": true,
-  "version": "2.3.0",
+  "version": "2.3.1",
   "command": {
     "version": {
       "message": "chore(release): %s"
