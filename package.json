@@ -8,7 +8,6 @@
   "homepage": "https://docs.amplify.aws/",
   "scripts": {
     "test": "lerna run test --stream",
-    "test:ci": "lerna run test --stream -- --ci",
     "test:update": "lerna run test:update --stream",
     "build": "lerna run build --stream",
     "setup-dev": "npm install && lerna bootstrap && lerna run build",
@@ -36,7 +35,7 @@
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
-    "@commitlint/config-lerna-scopes": "^13.1.0",
+    "@commitlint/config-lerna-scopes": "^17.0.2",
     "@types/jest": "^27.5.1",
     "@types/node": "^15.14.0",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
@@ -49,7 +48,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "husky": ">=6",
     "jest": "^27.0.6",
-    "lerna": "^4.0.0",
+    "lerna": "^5.1.8",
     "lint-staged": "^11.2.0",
     "nodemon": "^2.0.14",
     "prettier": "2.3.2",

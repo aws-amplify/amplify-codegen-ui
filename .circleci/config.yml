@@ -65,7 +65,7 @@ jobs:
       - restore_node_modules
       - run:
           name: Unit Test
-          command: npm run test:ci
+          command: npm run test
       - run:
           name: Codecov
           command: npx codecov
