@@ -1,0 +1,11 @@
+{
+  "name": "myPostForm",
+  "formActionType": "update",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "Post"
+  },
+  "fields": {},
+  "sectionalElements": {},
+  "style": {}
+}

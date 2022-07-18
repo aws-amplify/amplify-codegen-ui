@@ -16,6 +16,7 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import {
   ComponentMetadata,
+  getFormFieldStateName,
   StudioComponent,
   StudioComponentChild,
   StudioForm,
@@ -70,12 +71,16 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
   }
 
   private getFormOnSubmitAttribute(): JsxAttribute {
+    const {
+      name,
+      dataType: { dataSourceType },
+    } = this.form;
     return factory.createJsxAttribute(
       factory.createIdentifier('onSubmit'),
       factory.createJsxExpression(
         undefined,
         factory.createArrowFunction(
-          undefined,
+          [factory.createModifier(SyntaxKind.AsyncKeyword)],
           undefined,
           [
             factory.createParameterDeclaration(
@@ -103,15 +108,10 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 ),
               ),
               factory.createExpressionStatement(
-                /**
-                 * TODO: pass in props from functional argument
-                 * for datastore it will be onSubmitBefore & onSubmitComplete
-                 * for byod it will only be onSubmit override function
-                 */
                 factory.createCallExpression(
-                  factory.createIdentifier(getActionIdentifier(this.form.name, 'onSubmit')),
+                  factory.createIdentifier(getActionIdentifier(name, 'onSubmit')),
                   undefined,
-                  [],
+                  dataSourceType === 'DataStore' ? [] : [factory.createIdentifier(getFormFieldStateName(name))],
                 ),
               ),
             ],

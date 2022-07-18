@@ -1,0 +1,30 @@
+{
+  "name": "customDataForm",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "Custom",
+    "dataTypeName": "Post"
+  },
+  "fields": {
+    "name": {
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "name",
+        "defaultValue": "John Doe"
+      },
+      "label": "name"
+    },
+    "email": {
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "email",
+        "defaultValue": "johndoe@amplify.com"
+      },
+      "label": "E-mail"
+    }
+  },
+  "sectionalElements": {},
+  "style": {}
+}

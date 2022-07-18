@@ -13,64 +13,79 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { SchemaModel, ModelFields, isGraphQLScalarType } from '@aws-amplify/datastore';
 import {
   StudioComponent,
-  StudioForm,
   StudioComponentChild,
-  StudioComponentProperty,
-  DataStoreCreateItemAction,
-  DataStoreUpdateItemAction,
-  FixedStudioComponentProperty,
+  FormDefinition,
+  FormDefinitionElement,
+  FormStyleConfig,
+  StudioComponentProperties,
+  StudioFormStyle,
 } from '../types';
 
-// map the datastore schema fields into form fields
-export const mapFieldsToForm = (fields: ModelFields) => {
-  const formFields: StudioComponentChild[] = [];
-  Object.entries(fields).forEach(([fieldName, fieldValue]) => {
-    // TODO: expand studio component child to also support other non text fields
-    if (isGraphQLScalarType(fieldValue.type) && !fieldValue.isArray) {
-      formFields.push({
-        name: `${fieldName}Field`,
-        componentType: 'TextField',
-        properties: {
-          name: {
-            value: fieldName,
-          },
-          label: {
-            value: fieldName,
-          },
-          placeholder: {
-            value: `${fieldValue.type}`,
-          },
-          ...(fieldValue.isRequired && {
-            required: {
-              value: 'true',
-              type: 'boolean',
-            },
-          }),
-        },
-      });
-    }
-  });
-
-  return formFields;
+const getStyleResolvedValue = (config?: FormStyleConfig): string | undefined => {
+  return config?.value ?? config?.tokenReference;
 };
 
-export const mapParentGrid = (name: string, children: StudioComponentChild[] = []): StudioComponentChild => {
+export const resolveStyles = (
+  style: StudioFormStyle,
+): Record<keyof Omit<StudioFormStyle, 'alignment'>, string | undefined> => {
   return {
-    name: `${name}Grid`,
+    verticalGap: getStyleResolvedValue(style.verticalGap),
+    horizontalGap: getStyleResolvedValue(style.horizontalGap),
+    outerPadding: getStyleResolvedValue(style.outerPadding),
+  };
+};
+
+export const parentGrid = (
+  name: string,
+  style: StudioFormStyle,
+  children: StudioComponentChild[],
+): StudioComponentChild => {
+  const { verticalGap, horizontalGap } = resolveStyles(style);
+  return {
+    name,
     componentType: 'Grid',
     properties: {
-      columnGap: {
-        value: '1rem',
-      },
-      rowGap: {
-        value: '1rem',
-      },
+      ...(horizontalGap && { columnGap: { value: horizontalGap } }),
+      ...(verticalGap && { rowGap: { value: verticalGap } }),
     },
     children,
   };
+};
+
+const mapFieldElementProps = (element: FormDefinitionElement) => {
+  const props: StudioComponentProperties = {};
+  Object.entries(element.props).forEach(([key, value]) => {
+    props[key] = { value: `${value}`, type: `${typeof value}` };
+  });
+  return props;
+};
+
+export const fieldComponentMapper = (name: string, formDefinition: FormDefinition): StudioComponentChild => {
+  // will accept a field matrix from a defnition and map
+  const fieldChildren = formDefinition.elementMatrix.map<StudioComponentChild>((row: string[], rowIdx: number) => {
+    return {
+      name: `RowGrid${rowIdx}`,
+      componentType: 'Grid',
+      properties: {
+        columnGap: { value: 'inherit' },
+        rowGap: { value: 'inherit' },
+        ...(row.length > 0 && {
+          templateColumns: { value: `repeat(${row.length}, auto)` },
+        }),
+      },
+      children: row.map<StudioComponentChild>((column, colIdx) => {
+        const element: FormDefinitionElement = formDefinition.elements[column];
+        return {
+          name: `${element.componentType}${colIdx}`,
+          componentType: element.componentType,
+          properties: mapFieldElementProps(element),
+        };
+      }),
+    };
+  });
+  return parentGrid(`${name}Grid`, formDefinition.form.layoutStyle, fieldChildren);
 };
 
 export const ctaButtonConfig = (): StudioComponentChild => {
@@ -117,7 +132,7 @@ export const ctaButtonConfig = (): StudioComponentChild => {
           },
           {
             componentType: 'Button',
-            name: 'onSubmitDataStore',
+            name: 'SubmitButton',
             properties: {
               label: {
                 value: 'Submit',
@@ -136,66 +151,17 @@ export const ctaButtonConfig = (): StudioComponentChild => {
   };
 };
 
-export const mapOnSubmitEvent = (
-  form: StudioForm,
-  childrenFormFields: StudioComponentChild[],
-): DataStoreCreateItemAction | DataStoreUpdateItemAction => {
-  if (form.formActionType === 'create') {
-    return {
-      action: 'Amplify.DataStoreCreateItemAction',
-      parameters: {
-        model: form.dataType.dataTypeName,
-        fields: childrenFormFields.reduce(
-          (prev: { [propertyName: string]: StudioComponentProperty }, { name, properties }) => {
-            return {
-              ...prev,
-              [(properties.name as any).value]: {
-                componentName: name,
-                property: 'value',
-              },
-            };
-          },
-          {},
-        ),
-      },
-    } as DataStoreCreateItemAction;
-  }
-  /**
-   * TODO: Read DataStore Spec to find CustomPrimaryKey if not ID
-   */
-  const { value: primaryKey } = childrenFormFields.find(
-    ({ properties }) => (properties.name as FixedStudioComponentProperty).value === 'id',
-  )?.properties.name as FixedStudioComponentProperty;
-  return {
-    action: 'Amplify.DataStoreUpdateItemAction',
-    parameters: {
-      model: form.dataType.dataTypeName,
-      id: {
-        value: primaryKey || 'id',
-      },
-    },
-  } as DataStoreUpdateItemAction;
-};
-
-export const mapFormToComponent = (form: StudioForm, dataSchema: SchemaModel): StudioComponent => {
-  // here we can merge the datastore schema with the form
-  // right now it's only creating fields from the existing datastore schema
-  // TODO: manage merging fields from form and datastore
-  const childrenFormFields = mapFieldsToForm(dataSchema.fields);
-
+export const mapFormDefinitionToComponent = (name: string, formDefinition: FormDefinition) => {
   const component: StudioComponent = {
-    name: form.name,
+    name,
+    componentType: 'form',
     properties: {},
     bindingProperties: {
       onCancel: { type: 'Event' },
     },
-    events: {
-      onSubmit: mapOnSubmitEvent(form, childrenFormFields),
-    },
-    // codegen will default to rendering the component with this name
-    componentType: 'form',
-    children: [mapParentGrid(form.name, childrenFormFields), ctaButtonConfig()],
+    events: {},
+    // TODO: change cta button config based on formDefinition cta layout
+    children: [fieldComponentMapper(name, formDefinition), ctaButtonConfig()],
   };
-
   return component;
 };

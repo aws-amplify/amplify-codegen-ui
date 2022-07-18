@@ -13,15 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import {
-  StudioNode,
-  StudioComponent,
-  StudioComponentChild,
-  mapFormToComponent,
-  SchemaModel,
-  StudioForm,
-} from '@aws-amplify/codegen-ui';
+import { StudioNode, StudioComponent, StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { JsxElement, JsxFragment, JsxSelfClosingElement } from 'typescript';
+
 // add primitives in alphabetical order
 import {
   AlertProps,
@@ -72,34 +66,24 @@ import {
   TextProps,
 } from '@aws-amplify/ui-react';
 import { Primitive } from '../primitive';
-import { ReactStudioTemplateRenderer } from '../react-studio-template-renderer';
 import CustomComponentRenderer from './customComponent';
 import FormRenderer from './form';
 import { ReactComponentRenderer } from '../react-component-renderer';
-import { ReactRenderConfig } from '../react-render-config';
+import { ReactFormTemplateRenderer } from '../forms';
 
-export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
-  protected form: StudioForm;
-
-  constructor(form: StudioForm, modelSchema: SchemaModel, renderConfig: ReactRenderConfig) {
-    const component = mapFormToComponent(form, modelSchema);
-    super(component, renderConfig);
-    this.form = form;
-    // TODO: update metadata with form definition (either here or in render element)
-  }
-
+export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
   renderJsx(
-    component: StudioComponent | StudioComponentChild,
+    formComponent: StudioComponent | StudioComponentChild,
     parent?: StudioNode,
   ): JsxElement | JsxFragment | JsxSelfClosingElement {
-    const node = new StudioNode(component, parent);
+    const node = new StudioNode(formComponent, parent);
     const renderChildren = (children: StudioComponentChild[]) => children.map((child) => this.renderJsx(child, node));
 
     // add Primitive in alphabetical order
-    switch (component.componentType) {
+    switch (formComponent.componentType) {
       case Primitive.Alert:
         return new ReactComponentRenderer<AlertProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -107,7 +91,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Badge:
         return new ReactComponentRenderer<BadgeProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -115,7 +99,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Button:
         return new ReactComponentRenderer<ButtonProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -123,7 +107,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.ButtonGroup:
         return new ReactComponentRenderer<ButtonGroupProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -131,7 +115,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Card:
         return new ReactComponentRenderer<CardProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -139,7 +123,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.CheckboxField:
         return new ReactComponentRenderer<CheckboxFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -147,8 +131,9 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case 'form':
         return new FormRenderer(
-          component,
-          this.form,
+          formComponent,
+          // this component is the current form
+          this.component,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -156,7 +141,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Divider:
         return new ReactComponentRenderer<DividerProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -164,7 +149,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Expander:
         return new ReactComponentRenderer<ExpanderProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -172,7 +157,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.ExpanderItem:
         return new ReactComponentRenderer<ExpanderItemProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -180,7 +165,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Flex:
         return new ReactComponentRenderer<FlexProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -188,7 +173,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Grid:
         return new ReactComponentRenderer<GridProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -196,7 +181,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Heading:
         return new ReactComponentRenderer<HeadingProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -204,7 +189,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Icon:
         return new ReactComponentRenderer<IconProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -212,7 +197,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Image:
         return new ReactComponentRenderer<ImageProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -220,7 +205,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Link:
         return new ReactComponentRenderer<LinkProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -228,7 +213,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Loader:
         return new ReactComponentRenderer<LoaderProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -236,7 +221,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.MenuButton:
         return new ReactComponentRenderer<ButtonProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -244,7 +229,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.MenuItem:
         return new ReactComponentRenderer<MenuItemProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -252,7 +237,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Menu:
         return new ReactComponentRenderer<MenuProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -260,7 +245,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Pagination:
         return new ReactComponentRenderer<PaginationProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -268,7 +253,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.PasswordField:
         return new ReactComponentRenderer<PasswordFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -276,7 +261,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.PhoneNumberField:
         return new ReactComponentRenderer<PhoneNumberFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -284,7 +269,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Placeholder:
         return new ReactComponentRenderer<PlaceholderProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -292,7 +277,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Radio:
         return new ReactComponentRenderer<RadioProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -300,7 +285,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.RadioGroupField:
         return new ReactComponentRenderer<RadioGroupFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -308,7 +293,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Rating:
         return new ReactComponentRenderer<RatingProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -316,7 +301,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.ScrollView:
         return new ReactComponentRenderer<ScrollViewProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -324,7 +309,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.SearchField:
         return new ReactComponentRenderer<SearchFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -332,7 +317,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.SelectField:
         return new ReactComponentRenderer<SelectFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -340,7 +325,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.SliderField:
         return new ReactComponentRenderer<SliderFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -348,7 +333,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.StepperField:
         return new ReactComponentRenderer<StepperFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -356,7 +341,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.SwitchField:
         return new ReactComponentRenderer<SwitchFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -364,7 +349,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.TabItem:
         return new ReactComponentRenderer<TabItemProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -372,7 +357,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Tabs:
         return new ReactComponentRenderer<TabsProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -380,7 +365,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Table:
         return new ReactComponentRenderer<TableProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -388,7 +373,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.TableBody:
         return new ReactComponentRenderer<TableBodyProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -396,7 +381,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.TableCell:
         return new ReactComponentRenderer<TableCellProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -404,7 +389,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.TableFoot:
         return new ReactComponentRenderer<TableFootProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -412,7 +397,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.TableHead:
         return new ReactComponentRenderer<TableHeadProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -420,7 +405,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.TableRow:
         return new ReactComponentRenderer<TableRowProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -428,7 +413,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.Text:
         return new ReactComponentRenderer<TextProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -436,7 +421,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.TextAreaField:
         return new ReactComponentRenderer<TextAreaFieldProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -444,7 +429,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.TextField:
         return new ReactComponentRenderer<TextFieldProps<boolean>>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -452,7 +437,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.ToggleButton:
         return new ReactComponentRenderer<ToggleButtonProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -460,7 +445,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.ToggleButtonGroup:
         return new ReactComponentRenderer<ToggleButtonGroupProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -468,7 +453,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.View:
         return new ReactComponentRenderer<ViewProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -476,7 +461,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       case Primitive.VisuallyHidden:
         return new ReactComponentRenderer<VisuallyHiddenProps>(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,
@@ -484,7 +469,7 @@ export class AmplifyFormRenderer extends ReactStudioTemplateRenderer {
 
       default:
         return new CustomComponentRenderer(
-          component,
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,

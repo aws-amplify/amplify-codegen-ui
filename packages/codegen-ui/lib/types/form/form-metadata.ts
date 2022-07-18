@@ -13,15 +13,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './react-component-renderer';
-export * from './imports';
-export * from './react-studio-template-renderer';
-export * from './react-theme-studio-template-renderer';
-export * from './react-output-config';
-export * from './react-render-config';
-export * from './react-output-manager';
-export * from './amplify-ui-renderers/amplify-renderer';
-export * from './amplify-ui-renderers/amplify-form-renderer';
-export * from './primitive';
-export * from './react-index-studio-template-renderer';
-export * from './react-required-dependency-provider';
+export type FormValidation = {
+  validationType: string;
+  validationRule: string;
+};
+
+export type FormMetadata = {
+  name: string;
+  fieldState: string;
+  onChangeFields: string[];
+  errorStateFields: string[];
+  // indicates the validation function provided for that field
+  // ex. name field has a lengthValidation type where the rule is length > 5
+  onValidationFields?: Record<string, FormValidation[]>;
+};
