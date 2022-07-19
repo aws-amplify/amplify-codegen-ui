@@ -15,7 +15,7 @@
  */
 
 import { StudioTemplateRendererFactory } from '@aws-amplify/codegen-ui/lib/template-renderer-factory';
-import { DataStoreModelInfo, StudioForm, SchemaModel } from '@aws-amplify/codegen-ui';
+import { StudioForm, Schema, GenericDataSchema, getGenericFromDataStore } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, AmplifyFormRenderer, ModuleKind, ScriptKind, ScriptTarget } from '..';
 import { loadSchemaFromJSONFile } from './__utils__';
 
@@ -31,13 +31,13 @@ export const generateWithAmplifyFormRenderer = (
   dataSchemaJsonFile: string | undefined,
   renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
 ): { componentText: string; declaration?: string } => {
-  let dataStoreInfo: DataStoreModelInfo | undefined;
+  let dataSchema: GenericDataSchema | undefined;
   if (dataSchemaJsonFile) {
-    const { fields } = loadSchemaFromJSONFile<SchemaModel>(dataSchemaJsonFile);
-    dataStoreInfo = { fields: Object.values(fields).map((value) => value) };
+    const dataStoreSchema = loadSchemaFromJSONFile<Schema>(dataSchemaJsonFile);
+    dataSchema = getGenericFromDataStore(dataStoreSchema);
   }
   const rendererFactory = new StudioTemplateRendererFactory(
-    (component: StudioForm) => new AmplifyFormRenderer(component, dataStoreInfo, renderConfig),
+    (component: StudioForm) => new AmplifyFormRenderer(component, dataSchema, renderConfig),
   );
 
   const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile<StudioForm>(formJsonFile));

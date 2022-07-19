@@ -17,9 +17,9 @@
 import {
   ComponentMetadata,
   computeComponentMetadata,
-  DataStoreModelInfo,
   FormDefinition,
   generateFormDefinition,
+  GenericDataSchema,
   handleCodegenErrors,
   mapFormDefinitionToComponent,
   mapFormMetadata,
@@ -86,10 +86,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
   public fileName: string;
 
-  /*
-  TODO: Change to use generic dataschema
-   */
-  constructor(component: StudioForm, modelInfo: DataStoreModelInfo | undefined, renderConfig: ReactRenderConfig) {
+  constructor(component: StudioForm, dataSchema: GenericDataSchema | undefined, renderConfig: ReactRenderConfig) {
     super(component, new ReactOutputManager(), renderConfig);
     this.renderConfig = {
       ...defaultRenderConfig,
@@ -98,7 +95,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // the super class creates a component aka form which is what we pass in this extended implmentation
     this.fileName = `${this.component.name}.${scriptKindToFileExtension(this.renderConfig.script)}`;
 
-    this.formDefinition = generateFormDefinition({ form: component, modelInfo });
+    this.formDefinition = generateFormDefinition({ form: component, dataSchema });
 
     // create a studio component which will represent the structure of the form
     this.formComponent = mapFormDefinitionToComponent(this.component.name, this.formDefinition);
