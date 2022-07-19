@@ -21,7 +21,23 @@ export default function customDataForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        if (onSubmitBefore) {
+          onSubmitBefore({ fields: customDataFormFields });
+        }
         customDataFormOnSubmit(customDataFormFields);
+        try {
+          await customDataFormOnSubmit(customDataFormFields);
+          if (onSubmitComplete) {
+            onSubmitComplete({ saveSuccessful: true });
+          }
+        } catch (err) {
+          if (onSubmitComplete) {
+            onSubmitComplete({
+              saveSuccessful: false,
+              errorMessage: err.message,
+            });
+          }
+        }
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"customDataForm\\")}
@@ -125,7 +141,23 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        if (onSubmitBefore) {
+          onSubmitBefore({ fields: myPostFormFields });
+        }
         myPostFormOnSubmit();
+        try {
+          await myPostFormOnSubmit();
+          if (onSubmitComplete) {
+            onSubmitComplete({ saveSuccessful: true });
+          }
+        } catch (err) {
+          if (onSubmitComplete) {
+            onSubmitComplete({
+              saveSuccessful: false,
+              errorMessage: err.message,
+            });
+          }
+        }
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"myPostForm\\")}
@@ -256,7 +288,23 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        if (onSubmitBefore) {
+          onSubmitBefore({ fields: myPostFormFields });
+        }
         myPostFormOnSubmit();
+        try {
+          await myPostFormOnSubmit();
+          if (onSubmitComplete) {
+            onSubmitComplete({ saveSuccessful: true });
+          }
+        } catch (err) {
+          if (onSubmitComplete) {
+            onSubmitComplete({
+              saveSuccessful: false,
+              errorMessage: err.message,
+            });
+          }
+        }
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"myPostForm\\")}

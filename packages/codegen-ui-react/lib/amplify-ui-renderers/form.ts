@@ -24,9 +24,10 @@ import {
 } from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, SyntaxKind } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
-import { buildOpeningElementProperties } from '../react-component-render-helper';
+import { buildOpeningElementProperties, getStateName } from '../react-component-render-helper';
 import { ImportCollection } from '../imports';
 import { getActionIdentifier } from '../workflow';
+import { FieldStateVariable } from '../forms/form-renderer-helper';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -107,12 +108,110 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                   [],
                 ),
               ),
+              factory.createIfStatement(
+                factory.createIdentifier('onSubmitBefore'),
+                factory.createBlock(
+                  [
+                    factory.createExpressionStatement(
+                      factory.createCallExpression(factory.createIdentifier('onSubmitBefore'), undefined, [
+                        factory.createObjectLiteralExpression(
+                          [
+                            factory.createPropertyAssignment(
+                              factory.createIdentifier('fields'),
+                              factory.createIdentifier(getStateName(FieldStateVariable(name))),
+                            ),
+                          ],
+                          false,
+                        ),
+                      ]),
+                    ),
+                  ],
+                  true,
+                ),
+                undefined,
+              ),
               factory.createExpressionStatement(
                 factory.createCallExpression(
                   factory.createIdentifier(getActionIdentifier(name, 'onSubmit')),
                   undefined,
                   dataSourceType === 'DataStore' ? [] : [factory.createIdentifier(getFormFieldStateName(name))],
                 ),
+              ),
+              factory.createTryStatement(
+                factory.createBlock(
+                  [
+                    factory.createExpressionStatement(
+                      factory.createAwaitExpression(
+                        factory.createCallExpression(
+                          factory.createIdentifier(getActionIdentifier(name, 'onSubmit')),
+                          undefined,
+                          dataSourceType === 'DataStore' ? [] : [factory.createIdentifier(getFormFieldStateName(name))],
+                        ),
+                      ),
+                    ),
+                    factory.createIfStatement(
+                      factory.createIdentifier('onSubmitComplete'),
+                      factory.createBlock(
+                        [
+                          factory.createExpressionStatement(
+                            factory.createCallExpression(factory.createIdentifier('onSubmitComplete'), undefined, [
+                              factory.createObjectLiteralExpression(
+                                [
+                                  factory.createPropertyAssignment(
+                                    factory.createIdentifier('saveSuccessful'),
+                                    factory.createTrue(),
+                                  ),
+                                ],
+                                false,
+                              ),
+                            ]),
+                          ),
+                        ],
+                        true,
+                      ),
+                      undefined,
+                    ),
+                  ],
+                  true,
+                ),
+                factory.createCatchClause(
+                  factory.createVariableDeclaration(factory.createIdentifier('err'), undefined, undefined, undefined),
+                  factory.createBlock(
+                    [
+                      factory.createIfStatement(
+                        factory.createIdentifier('onSubmitComplete'),
+                        factory.createBlock(
+                          [
+                            factory.createExpressionStatement(
+                              factory.createCallExpression(factory.createIdentifier('onSubmitComplete'), undefined, [
+                                factory.createObjectLiteralExpression(
+                                  [
+                                    factory.createPropertyAssignment(
+                                      factory.createIdentifier('saveSuccessful'),
+                                      factory.createFalse(),
+                                    ),
+                                    factory.createPropertyAssignment(
+                                      factory.createIdentifier('errorMessage'),
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier('err'),
+                                        factory.createIdentifier('message'),
+                                      ),
+                                    ),
+                                  ],
+                                  false,
+                                ),
+                              ]),
+                            ),
+                          ],
+                          true,
+                        ),
+                        undefined,
+                      ),
+                    ],
+                    true,
+                  ),
+                ),
+                undefined,
               ),
             ],
             false,
