@@ -21,11 +21,17 @@ export default function customDataForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        let onSubmitBeforeFields = {};
         if (onSubmitBefore) {
-          onSubmitBefore({ fields: customDataFormFields });
+          onSubmitBeforeFields = onSubmitBefore({
+            fields: customDataFormFields,
+          });
         }
         try {
-          await customDataFormOnSubmit(customDataFormFields);
+          await customDataFormOnSubmit(
+            customDataFormFields,
+            onSubmitBeforeFields
+          );
           if (onSubmitComplete) {
             onSubmitComplete({ saveSuccessful: true });
           }
@@ -140,8 +146,9 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        let onSubmitBeforeFields = {};
         if (onSubmitBefore) {
-          onSubmitBefore({ fields: myPostFormFields });
+          onSubmitBeforeFields = onSubmitBefore({ fields: myPostFormFields });
         }
         try {
           await myPostFormOnSubmit();
@@ -286,8 +293,9 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        let onSubmitBeforeFields = {};
         if (onSubmitBefore) {
-          onSubmitBefore({ fields: myPostFormFields });
+          onSubmitBeforeFields = onSubmitBefore({ fields: myPostFormFields });
         }
         try {
           await myPostFormOnSubmit();

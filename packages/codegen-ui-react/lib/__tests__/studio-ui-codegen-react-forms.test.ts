@@ -70,7 +70,9 @@ describe('amplify form renderer tests', () => {
   describe('custom form tests', () => {
     it('should render a custom backed form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-create', undefined);
-      expect(componentText).toContain('customDataFormOnSubmit(customDataFormFields)');
+      expect(componentText.replace(/\s/g, '')).toContain(
+        'customDataFormOnSubmit(customDataFormFields,onSubmitBeforeFields)',
+      );
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
