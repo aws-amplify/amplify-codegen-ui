@@ -31,9 +31,9 @@ function generateThemeObject(jsonFile: string): any {
   );
   const themeJson = rendererFactory.buildRenderer(loadSchemaFromJSONFile(jsonFile)).renderThemeJson();
   /* eslint-disable @typescript-eslint/no-implied-eval */
-  const themeObject = new Function(`return ${themeJson}`)();
+  const themeObject = new Function(`return ${themeJson}`);
   /* eslint-enable @typescript-eslint/no-implied-eval */
-  return themeObject;
+  return themeObject();
 }
 
 describe('react theme renderer tests', () => {
