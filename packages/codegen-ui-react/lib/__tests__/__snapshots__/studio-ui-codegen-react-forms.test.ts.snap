@@ -8,6 +8,7 @@ import {
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
 export default function customDataForm(props) {
   const {
     onSubmit: customDataFormOnSubmit,
@@ -21,20 +22,21 @@ export default function customDataForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        let onSubmitBeforeFields = {};
         if (onSubmitBefore) {
-          onSubmitBeforeFields = onSubmitBefore({
-            fields: customDataFormFields,
-          });
+          setCustomDataFormFields(
+            onSubmitBefore({ fields: customDataFormFields })
+          );
         }
         try {
-          await customDataFormOnSubmit(
-            customDataFormFields,
-            onSubmitBeforeFields
+          await DataStore.save(
+            new Post(
+              useTypeCastFields({
+                fields: customDataFormFields,
+                modelName: Post.name,
+                schema,
+              })
+            )
           );
-          if (onSubmitComplete) {
-            onSubmitComplete({ saveSuccessful: true });
-          }
         } catch (err) {
           if (onSubmitComplete) {
             onSubmitComplete({
@@ -133,6 +135,7 @@ import {
 import { Post } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
   const { onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
     props;
@@ -146,15 +149,19 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        let onSubmitBeforeFields = {};
         if (onSubmitBefore) {
-          onSubmitBeforeFields = onSubmitBefore({ fields: myPostFormFields });
+          setMyPostFormFields(onSubmitBefore({ fields: myPostFormFields }));
         }
         try {
-          await myPostFormOnSubmit();
-          if (onSubmitComplete) {
-            onSubmitComplete({ saveSuccessful: true });
-          }
+          await DataStore.save(
+            new Post(
+              useTypeCastFields({
+                fields: myPostFormFields,
+                modelName: Post.name,
+                schema,
+              })
+            )
+          );
         } catch (err) {
           if (onSubmitComplete) {
             onSubmitComplete({
@@ -279,6 +286,7 @@ import {
 import { Post } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
   const { id, onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
     props;
@@ -293,15 +301,19 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        let onSubmitBeforeFields = {};
         if (onSubmitBefore) {
-          onSubmitBeforeFields = onSubmitBefore({ fields: myPostFormFields });
+          setMyPostFormFields(onSubmitBefore({ fields: myPostFormFields }));
         }
         try {
-          await myPostFormOnSubmit();
-          if (onSubmitComplete) {
-            onSubmitComplete({ saveSuccessful: true });
-          }
+          await DataStore.save(
+            new Post(
+              useTypeCastFields({
+                fields: myPostFormFields,
+                modelName: Post.name,
+                schema,
+              })
+            )
+          );
         } catch (err) {
           if (onSubmitComplete) {
             onSubmitComplete({

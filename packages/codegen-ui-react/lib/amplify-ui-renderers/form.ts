@@ -16,17 +16,15 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import {
   ComponentMetadata,
-  getFormFieldStateName,
   StudioComponent,
   StudioComponentChild,
   StudioForm,
   StudioNode,
 } from '@aws-amplify/codegen-ui';
-import ts, { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, SyntaxKind } from 'typescript';
+import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, SyntaxKind } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
-import { buildOpeningElementProperties, getStateName } from '../react-component-render-helper';
+import { buildOpeningElementProperties, getStateName, getSetStateName } from '../react-component-render-helper';
 import { ImportCollection } from '../imports';
-import { getActionIdentifier } from '../workflow';
 import { FieldStateVariable } from '../forms/form-renderer-helper';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
@@ -50,6 +48,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport('aws-amplify', 'DataStore');
 
     return element;
   }
@@ -74,7 +73,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
   private getFormOnSubmitAttribute(): JsxAttribute {
     const {
       name,
-      dataType: { dataSourceType },
+      dataType: { dataTypeName },
     } = this.form;
     return factory.createJsxAttribute(
       factory.createIdentifier('onSubmit'),
@@ -108,39 +107,27 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                   [],
                 ),
               ),
-              factory.createVariableStatement(
-                undefined,
-                factory.createVariableDeclarationList(
-                  [
-                    factory.createVariableDeclaration(
-                      factory.createIdentifier('onSubmitBeforeFields'),
-                      undefined,
-                      undefined,
-                      factory.createObjectLiteralExpression([], false),
-                    ),
-                  ],
-                  ts.NodeFlags.Let,
-                ),
-              ),
               factory.createIfStatement(
                 factory.createIdentifier('onSubmitBefore'),
                 factory.createBlock(
                   [
                     factory.createExpressionStatement(
-                      factory.createBinaryExpression(
-                        factory.createIdentifier('onSubmitBeforeFields'),
-                        factory.createToken(ts.SyntaxKind.EqualsToken),
-                        factory.createCallExpression(factory.createIdentifier('onSubmitBefore'), undefined, [
-                          factory.createObjectLiteralExpression(
-                            [
-                              factory.createPropertyAssignment(
-                                factory.createIdentifier('fields'),
-                                factory.createIdentifier(getStateName(FieldStateVariable(name))),
-                              ),
-                            ],
-                            false,
-                          ),
-                        ]),
+                      factory.createCallExpression(
+                        factory.createIdentifier(getSetStateName(FieldStateVariable(name))),
+                        undefined,
+                        [
+                          factory.createCallExpression(factory.createIdentifier('onSubmitBefore'), undefined, [
+                            factory.createObjectLiteralExpression(
+                              [
+                                factory.createPropertyAssignment(
+                                  factory.createIdentifier('fields'),
+                                  factory.createIdentifier(getStateName(FieldStateVariable(name))),
+                                ),
+                              ],
+                              false,
+                            ),
+                          ]),
+                        ],
                       ),
                     ),
                   ],
@@ -154,38 +141,43 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                     factory.createExpressionStatement(
                       factory.createAwaitExpression(
                         factory.createCallExpression(
-                          factory.createIdentifier(getActionIdentifier(name, 'onSubmit')),
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('DataStore'),
+                            factory.createIdentifier('save'),
+                          ),
                           undefined,
-                          dataSourceType === 'DataStore'
-                            ? []
-                            : [
-                                factory.createIdentifier(getFormFieldStateName(name)),
-                                factory.createIdentifier('onSubmitBeforeFields'),
-                              ],
-                        ),
-                      ),
-                    ),
-                    factory.createIfStatement(
-                      factory.createIdentifier('onSubmitComplete'),
-                      factory.createBlock(
-                        [
-                          factory.createExpressionStatement(
-                            factory.createCallExpression(factory.createIdentifier('onSubmitComplete'), undefined, [
-                              factory.createObjectLiteralExpression(
+                          [
+                            factory.createNewExpression(factory.createIdentifier(dataTypeName), undefined, [
+                              factory.createCallExpression(
+                                factory.createIdentifier('useTypeCastFields'),
+                                [factory.createTypeReferenceNode(factory.createIdentifier(dataTypeName), undefined)],
                                 [
-                                  factory.createPropertyAssignment(
-                                    factory.createIdentifier('saveSuccessful'),
-                                    factory.createTrue(),
+                                  factory.createObjectLiteralExpression(
+                                    [
+                                      factory.createPropertyAssignment(
+                                        factory.createIdentifier('fields'),
+                                        factory.createIdentifier(getStateName(FieldStateVariable(name))),
+                                      ),
+                                      factory.createPropertyAssignment(
+                                        factory.createIdentifier('modelName'),
+                                        factory.createPropertyAccessExpression(
+                                          factory.createIdentifier(dataTypeName),
+                                          factory.createIdentifier('name'),
+                                        ),
+                                      ),
+                                      factory.createShorthandPropertyAssignment(
+                                        factory.createIdentifier('schema'),
+                                        undefined,
+                                      ),
+                                    ],
+                                    true,
                                   ),
                                 ],
-                                false,
                               ),
                             ]),
-                          ),
-                        ],
-                        true,
+                          ],
+                        ),
                       ),
-                      undefined,
                     ),
                   ],
                   true,
