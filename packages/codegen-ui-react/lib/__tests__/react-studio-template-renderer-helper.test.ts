@@ -125,6 +125,7 @@ describe('react-studio-template-renderer-helper', () => {
 
     it('generate declaration file with .jsx extension', () => {
       expect(getDeclarationFilename('component/TestComponent.jsx')).toEqual('TestComponent.d.ts');
+      console.log('DONE');
     });
   });
 });

@@ -575,6 +575,7 @@ describe('amplify render tests', () => {
     describe('data', () => {
       it('supports bindings with reserved keywords', () => {
         expect(generateWithAmplifyRenderer('bindings/data/dataBindingNamedClass').componentText).toMatchSnapshot();
+        console.log('DONE THIS');
       });
     });
   });
