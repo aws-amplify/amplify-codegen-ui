@@ -26,7 +26,12 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [{ name: 'name', type: 'String', isReadOnly: false, isRequired: true, isArray: false }] },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: { Dog: { fields: { name: { dataType: 'String', readOnly: false, required: true, isArray: false } } } },
+      },
     });
     expect(formDefinition.elements).toStrictEqual({
       name: {
@@ -34,6 +39,21 @@ describe('generateFormDefinition', () => {
         props: { label: 'name', isRequired: true, isReadOnly: false },
       },
     });
+  });
+
+  it('should throw if form has source type DataStore, but no schema is available', () => {
+    expect(() =>
+      generateFormDefinition({
+        form: {
+          name: 'sampleForm',
+          formActionType: 'create',
+          dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+          fields: {},
+          sectionalElements: {},
+          style: {},
+        },
+      }),
+    ).toThrow();
   });
 
   it('should override field configurations from DataStore', () => {
@@ -46,7 +66,12 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false }] },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: { Dog: { fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } } } },
+      },
     });
     expect(formDefinition.elements).toStrictEqual({
       weight: {
@@ -66,7 +91,12 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false }] },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: { Dog: { fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } } } },
+      },
     });
 
     expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
@@ -82,7 +112,7 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [] },
+      dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
     });
     expect(formDefinition.elements).toStrictEqual({
       weight: { componentType: 'SliderField', props: { min: 1, max: 100, step: 2, label: 'Label' } },
@@ -99,7 +129,7 @@ describe('generateFormDefinition', () => {
         sectionalElements: {},
         style: {},
       },
-      modelInfo: { fields: [] },
+      dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
     });
     expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
   });
@@ -109,14 +139,13 @@ describe('generateFormDefinition', () => {
       form: {
         name: 'mySampleForm',
         formActionType: 'create',
-        dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+        dataType: { dataSourceType: 'Custom', dataTypeName: 'dfjkajfl' },
         fields: {},
         sectionalElements: {
           Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
         },
         style: {},
       },
-      modelInfo: { fields: [{ name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false }] },
     });
     expect(formDefinition.elements.Heading123).toStrictEqual({
       componentType: 'Heading',
@@ -134,12 +163,11 @@ describe('generateFormDefinition', () => {
       form: {
         name: 'mySampleForm',
         formActionType: 'create',
-        dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+        dataType: { dataSourceType: 'Custom', dataTypeName: 'dfsdjflk' },
         fields: {},
         sectionalElements: {},
         style,
       },
-      modelInfo: { fields: [] },
     });
     expect(formDefinition.form.layoutStyle).toStrictEqual(style);
   });
@@ -161,12 +189,19 @@ describe('generateFormDefinition', () => {
 
         style: {},
       },
-      modelInfo: {
-        fields: [
-          { name: 'name', type: 'String', isReadOnly: false, isRequired: true, isArray: false },
-          { name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false },
-          { name: 'age', type: 'Int', isReadOnly: false, isRequired: true, isArray: false },
-        ],
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: {
+          Dog: {
+            fields: {
+              name: { dataType: 'String', readOnly: false, required: true, isArray: false },
+              weight: { dataType: 'Float', readOnly: false, required: true, isArray: false },
+              age: { dataType: 'Int', readOnly: false, required: true, isArray: false },
+            },
+          },
+        },
       },
     });
     expect(formDefinition.elementMatrix).toStrictEqual([['Heading123']]);
@@ -189,12 +224,19 @@ describe('generateFormDefinition', () => {
 
         style: {},
       },
-      modelInfo: {
-        fields: [
-          { name: 'name', type: 'String', isReadOnly: false, isRequired: true, isArray: false },
-          { name: 'weight', type: 'Float', isReadOnly: false, isRequired: true, isArray: false },
-          { name: 'age', type: 'Int', isReadOnly: false, isRequired: true, isArray: false },
-        ],
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: {
+          Dog: {
+            fields: {
+              name: { dataType: 'String', readOnly: false, required: true, isArray: false },
+              weight: { dataType: 'Float', readOnly: false, required: true, isArray: false },
+              age: { dataType: 'Int', readOnly: false, required: true, isArray: false },
+            },
+          },
+        },
       },
     });
     expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight']]);
@@ -206,7 +248,7 @@ it('should requeue if related element is not yet found', () => {
     form: {
       name: 'mySampleForm',
       formActionType: 'create',
-      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+      dataType: { dataSourceType: 'Custom', dataTypeName: 'dfjslkfj' },
       fields: {
         color: { position: { below: 'name' }, inputType: { type: 'TextField' } },
         weight: { position: { rightOf: 'age' }, inputType: { type: 'TextField' } },
@@ -219,9 +261,6 @@ it('should requeue if related element is not yet found', () => {
 
       style: {},
     },
-    modelInfo: {
-      fields: [],
-    },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color']]);
 });
@@ -231,7 +270,7 @@ it('should handle fields without position', () => {
     form: {
       name: 'mySampleForm',
       formActionType: 'create',
-      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+      dataType: { dataSourceType: 'Custom', dataTypeName: 'fjsldkfj' },
       fields: {
         color: { position: { below: 'name' }, inputType: { type: 'TextField' } },
         weight: { position: { rightOf: 'age' }, inputType: { type: 'TextField' } },
@@ -245,9 +284,6 @@ it('should handle fields without position', () => {
 
       style: {},
     },
-    modelInfo: {
-      fields: [],
-    },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color'], ['bark']]);
 });
@@ -257,14 +293,11 @@ it('should fill out styles using defaults', () => {
     form: {
       name: 'mySampleForm',
       formActionType: 'create',
-      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+      dataType: { dataSourceType: 'Custom', dataTypeName: 'dfkjad' },
       fields: {},
       sectionalElements: {},
 
       style: {},
-    },
-    modelInfo: {
-      fields: [],
     },
   });
 
@@ -285,7 +318,18 @@ it('should skip read-only fields without overrides', () => {
       sectionalElements: {},
       style: {},
     },
-    modelInfo: { fields: [{ name: 'name', type: 'String', isReadOnly: true, isRequired: true, isArray: false }] },
+    dataSchema: {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Dog: {
+          fields: {
+            name: { dataType: 'String', readOnly: true, required: true, isArray: false },
+          },
+        },
+      },
+    },
   });
   expect(formDefinition.elements).toStrictEqual({});
   expect(formDefinition.elementMatrix).toStrictEqual([]);
@@ -301,7 +345,18 @@ it('should add read-only fields if it has overrides', () => {
       sectionalElements: {},
       style: {},
     },
-    modelInfo: { fields: [{ name: 'name', type: 'String', isReadOnly: true, isRequired: true, isArray: false }] },
+    dataSchema: {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Dog: {
+          fields: {
+            name: { dataType: 'String', readOnly: true, required: true, isArray: false },
+          },
+        },
+      },
+    },
   });
   expect(formDefinition.elements).toStrictEqual({
     name: {
@@ -322,7 +377,18 @@ it('should skip adding id field if it has no overrides', () => {
       sectionalElements: {},
       style: {},
     },
-    modelInfo: { fields: [{ name: 'id', type: 'ID', isReadOnly: false, isRequired: true, isArray: false }] },
+    dataSchema: {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Dog: {
+          fields: {
+            id: { dataType: 'ID', readOnly: false, required: true, isArray: false },
+          },
+        },
+      },
+    },
   });
   expect(formDefinition.elements).toStrictEqual({});
   expect(formDefinition.elementMatrix).toStrictEqual([]);
