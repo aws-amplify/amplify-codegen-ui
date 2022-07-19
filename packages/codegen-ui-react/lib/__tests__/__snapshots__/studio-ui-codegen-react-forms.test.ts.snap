@@ -24,7 +24,6 @@ export default function customDataForm(props) {
         if (onSubmitBefore) {
           onSubmitBefore({ fields: customDataFormFields });
         }
-        customDataFormOnSubmit(customDataFormFields);
         try {
           await customDataFormOnSubmit(customDataFormFields);
           if (onSubmitComplete) {
@@ -144,7 +143,6 @@ export default function myPostForm(props) {
         if (onSubmitBefore) {
           onSubmitBefore({ fields: myPostFormFields });
         }
-        myPostFormOnSubmit();
         try {
           await myPostFormOnSubmit();
           if (onSubmitComplete) {
@@ -291,7 +289,6 @@ export default function myPostForm(props) {
         if (onSubmitBefore) {
           onSubmitBefore({ fields: myPostFormFields });
         }
-        myPostFormOnSubmit();
         try {
           await myPostFormOnSubmit();
           if (onSubmitComplete) {

@@ -130,13 +130,6 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 ),
                 undefined,
               ),
-              factory.createExpressionStatement(
-                factory.createCallExpression(
-                  factory.createIdentifier(getActionIdentifier(name, 'onSubmit')),
-                  undefined,
-                  dataSourceType === 'DataStore' ? [] : [factory.createIdentifier(getFormFieldStateName(name))],
-                ),
-              ),
               factory.createTryStatement(
                 factory.createBlock(
                   [
