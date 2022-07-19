@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { mapModelFieldsConfigs } from '../../../generate-form-definition/helpers';
+import { mapModelFieldsConfigs, getFieldTypeMapKey } from '../../../generate-form-definition/helpers';
 import { FormDefinition, ModelFieldsConfigs, GenericDataSchema } from '../../../types';
 
 describe('mapModelFieldsConfigs', () => {
@@ -106,34 +106,6 @@ describe('mapModelFieldsConfigs', () => {
     ).toThrow();
   });
 
-  it('should throw if there is no default component', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {},
-      elementMatrix: [],
-    };
-
-    const modelFieldsConfigs: ModelFieldsConfigs = {};
-
-    const dataSchema: any = {
-      dataSourceType: 'DataStore',
-      enums: {},
-      nonModels: {},
-      models: {
-        Dog: {
-          fields: {
-            names: { dataType: 'ErrantType', readOnly: false, required: false, isArray: true },
-          },
-        },
-      },
-    };
-
-    expect(() =>
-      mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, modelFieldsConfigs, dataSchema }),
-    ).toThrow();
-  });
-
   it('should generate config from id field but not add it to matrix', () => {
     const formDefinition: FormDefinition = {
       form: { layoutStyle: {} },
@@ -212,5 +184,116 @@ describe('mapModelFieldsConfigs', () => {
         label: 'name',
       },
     });
+  });
+
+  it('should add value mappings from enums', () => {
+    const formDefinition: FormDefinition = {
+      form: { layoutStyle: {} },
+      elements: {},
+      buttons: {},
+      elementMatrix: [],
+    };
+
+    const modelFieldsConfigs: ModelFieldsConfigs = {};
+
+    const nonEnglishAlphabetTest = 'ㅎ🌱يَّة';
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: { City: { values: ['NEW_YORK', 'HOUSTON', 'LOS_ANGELES', nonEnglishAlphabetTest] } },
+      nonModels: {},
+      models: {
+        Dog: {
+          fields: {
+            city: { dataType: { enum: 'City' }, readOnly: false, required: false, isArray: false },
+          },
+        },
+      },
+    };
+
+    mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, modelFieldsConfigs, dataSchema });
+
+    expect(modelFieldsConfigs).toStrictEqual({
+      city: {
+        inputType: {
+          name: 'city',
+          readOnly: false,
+          required: false,
+          type: 'SelectField',
+          value: 'true',
+          valueMappings: {
+            values: [
+              { value: { value: 'NEW_YORK' }, displayValue: { value: 'New york' } },
+              { value: { value: 'HOUSTON' }, displayValue: { value: 'Houston' } },
+              { value: { value: 'LOS_ANGELES' }, displayValue: { value: 'Los angeles' } },
+              { value: { value: nonEnglishAlphabetTest }, displayValue: { value: nonEnglishAlphabetTest } },
+            ],
+          },
+        },
+        label: 'city',
+      },
+    });
+  });
+
+  it('should throw if type is enum but no matching enum provided', () => {
+    const formDefinition: FormDefinition = {
+      form: { layoutStyle: {} },
+      elements: {},
+      buttons: {},
+      elementMatrix: [],
+    };
+
+    const modelFieldsConfigs: ModelFieldsConfigs = {};
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Dog: {
+          fields: {
+            city: { dataType: { enum: 'City' }, readOnly: false, required: false, isArray: false },
+          },
+        },
+      },
+    };
+
+    expect(() =>
+      mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, modelFieldsConfigs, dataSchema }),
+    ).toThrow();
+  });
+});
+
+describe('getFieldTypeMapKey', () => {
+  it('should return `Relationship` if field is of type model or has a related model', () => {
+    expect(
+      getFieldTypeMapKey({
+        dataType: { model: 'Dog' },
+        readOnly: false,
+        required: false,
+        isArray: false,
+      }),
+    ).toBe('Relationship');
+
+    expect(
+      getFieldTypeMapKey({
+        dataType: 'ID',
+        readOnly: false,
+        required: false,
+        isArray: false,
+        relationship: { relatedModelName: 'Dog', type: 'HAS_ONE' },
+      }),
+    ).toBe('Relationship');
+  });
+
+  it('should return `NonModel` if dataType is nonModel', () => {
+    expect(
+      getFieldTypeMapKey({
+        dataType: { nonModel: 'Misc' },
+        readOnly: false,
+        required: false,
+        isArray: false,
+      }),
+    ).toBe('NonModel');
   });
 });

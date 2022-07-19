@@ -28,3 +28,22 @@ export type FormDefinition = {
   elementMatrix: string[][];
   inputFields?: string[];
 };
+
+export type FieldTypeMapKeys =
+  | 'ID'
+  | 'String'
+  | 'Int'
+  | 'Float'
+  | 'AWSDate'
+  | 'AWSTime'
+  | 'AWSDateTime'
+  | 'AWSTimestamp'
+  | 'AWSEmail'
+  | 'AWSURL'
+  | 'AWSIPAddress'
+  | 'Boolean'
+  | 'AWSJSON'
+  | 'AWSPhone'
+  | 'Enum'
+  | 'Relationship'
+  | 'NonModel';
