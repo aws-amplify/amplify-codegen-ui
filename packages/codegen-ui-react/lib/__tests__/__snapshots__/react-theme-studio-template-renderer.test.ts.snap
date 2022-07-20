@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`react theme renderer tests renderThemeJson should render theme json correctly 1`] = `
+exports[`react theme renderer tests renderThemeJson should render theme json successfully 1`] = `
 "{
   name: \\"MyTheme\\",
   tokens: {
