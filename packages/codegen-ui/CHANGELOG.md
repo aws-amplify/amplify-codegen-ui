@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.0...v2.3.1) (2022-07-15)
+
+**Note:** Version bump only for package @aws-amplify/codegen-ui
+
+# [2.3.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.2.1...v2.3.0) (2022-07-14)
+
+### Bug Fixes
+
+- handle auth prop in concat ([f7d645e](https://github.com/aws-amplify/amplify-codegen-ui/commit/f7d645e07e91848465e92f450e81d6ed92604057))
+
+### Features
+
+- adding breakpoint functionality in theme generation ([#515](https://github.com/aws-amplify/amplify-codegen-ui/issues/515)) ([28f97aa](https://github.com/aws-amplify/amplify-codegen-ui/commit/28f97aa7a290e3fd25efc6f0d51a39403d79b947))
+
 ## [2.2.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.2.0...v2.2.1) (2022-06-15)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui
