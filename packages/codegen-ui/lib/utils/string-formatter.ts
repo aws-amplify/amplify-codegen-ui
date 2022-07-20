@@ -18,6 +18,21 @@ import { DateFormat, DateTimeFormat, TimeFormat } from '../types';
 
 const invalidDateStr = 'Invalid Date';
 
+const monthToShortMon: { [mon: string]: string } = {
+  '1': 'Jan',
+  '2': 'Feb',
+  '3': 'Mar',
+  '4': 'Apr',
+  '5': 'May',
+  '6': 'Jun',
+  '7': 'Jul',
+  '8': 'Aug',
+  '9': 'Sep',
+  '10': 'Oct',
+  '11': 'Nov',
+  '12': 'Dec',
+};
+
 export function formatDate(date: string, format: DateFormat['dateFormat']): string {
   if (date === undefined || date === null) {
     return date;
@@ -33,7 +48,10 @@ export function formatDate(date: string, format: DateFormat['dateFormat']): stri
 
   const year = splitDate[0];
   const month = splitDate[1];
-  const day = validDate.toLocaleString('en-us', { day: '2-digit' });
+  const day = splitDate[2];
+
+  // Remove leading zeroes
+  const truncatedMonth = month.replace(/^0+/, '');
 
   switch (format) {
     case 'locale':
@@ -45,7 +63,7 @@ export function formatDate(date: string, format: DateFormat['dateFormat']): stri
     case 'MM/DD/YYYY':
       return `${month}/${day}/${year}`;
     case 'Mmm DD, YYYY':
-      return `${validDate.toLocaleString('en-us', { month: 'short' })} ${day}, ${year}`;
+      return `${monthToShortMon[truncatedMonth]} ${day}, ${year}`;
     default:
       return date;
   }
