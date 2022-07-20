@@ -7,7 +7,14 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextField,
+  useTypeCastFields,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
 export default function customDataForm(props) {
   const {
     onSubmit: customDataFormOnSubmit,
@@ -21,7 +28,29 @@ export default function customDataForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        customDataFormOnSubmit(customDataFormFields);
+        if (onSubmitBefore) {
+          setCustomDataFormFields(
+            onSubmitBefore({ fields: customDataFormFields })
+          );
+        }
+        try {
+          await DataStore.save(
+            new Post(
+              useTypeCastFields({
+                fields: customDataFormFields,
+                modelName: Post.name,
+                schema,
+              })
+            )
+          );
+        } catch (err) {
+          if (onSubmitComplete) {
+            onSubmitComplete({
+              saveSuccessful: false,
+              errorMessage: err.message,
+            });
+          }
+        }
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"customDataForm\\")}
@@ -111,7 +140,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextField,
+  useTypeCastFields,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
   const { onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
     props;
@@ -125,7 +161,27 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        myPostFormOnSubmit();
+        if (onSubmitBefore) {
+          setMyPostFormFields(onSubmitBefore({ fields: myPostFormFields }));
+        }
+        try {
+          await DataStore.save(
+            new Post(
+              useTypeCastFields({
+                fields: myPostFormFields,
+                modelName: Post.name,
+                schema,
+              })
+            )
+          );
+        } catch (err) {
+          if (onSubmitComplete) {
+            onSubmitComplete({
+              saveSuccessful: false,
+              errorMessage: err.message,
+            });
+          }
+        }
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"myPostForm\\")}
@@ -241,7 +297,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextField,
+  useTypeCastFields,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
   const { id, onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
     props;
@@ -256,7 +319,27 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        myPostFormOnSubmit();
+        if (onSubmitBefore) {
+          setMyPostFormFields(onSubmitBefore({ fields: myPostFormFields }));
+        }
+        try {
+          await DataStore.save(
+            new Post(
+              useTypeCastFields({
+                fields: myPostFormFields,
+                modelName: Post.name,
+                schema,
+              })
+            )
+          );
+        } catch (err) {
+          if (onSubmitComplete) {
+            onSubmitComplete({
+              saveSuccessful: false,
+              errorMessage: err.message,
+            });
+          }
+        }
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"myPostForm\\")}
