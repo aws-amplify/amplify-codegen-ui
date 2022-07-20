@@ -14,19 +14,18 @@
   limitations under the License.
  */
 import { EOL } from 'os';
-import { EmitHint, ExportDeclaration, factory } from 'typescript';
-import { StudioTemplateRenderer, StudioTheme, StudioComponent, StudioForm } from '@aws-amplify/codegen-ui';
+import ts, { EmitHint } from 'typescript';
+import { StudioTemplateRenderer } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection } from './imports';
 import { ReactOutputManager } from './react-output-manager';
-import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 import { RequiredKeys } from './utils/type-utils';
+import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
+import { generateValidationFunction } from './utils/forms/validation';
 
-type StudioSchema = StudioComponent | StudioForm | StudioTheme;
-
-export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
+export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
-  StudioSchema[],
+  string[],
   ReactOutputManager,
   {
     componentText: string;
@@ -39,24 +38,36 @@ export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
 
   fileName: string;
 
-  constructor(schemas: StudioSchema[], renderConfig: ReactRenderConfig) {
-    super(schemas, new ReactOutputManager(), renderConfig);
+  /*
+   * list of util functions to generate
+   */
+  utils: string[];
+
+  constructor(utils: string[], renderConfig: ReactRenderConfig) {
+    super(utils, new ReactOutputManager(), renderConfig);
+    this.utils = utils;
     this.renderConfig = {
       ...defaultRenderConfig,
       ...renderConfig,
       renderTypeDeclarations: false, // Never render type declarations for index.js|ts file.
     };
-    this.fileName = `index.${scriptKindToFileExtensionNonReact(this.renderConfig.script)}`;
+    this.fileName = `utils.${scriptKindToFileExtensionNonReact(this.renderConfig.script)}`;
   }
 
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
+    const utilsStatements: (ts.TypeAliasDeclaration | ts.VariableStatement)[] = [];
 
-    const exportStatements = this.buildExports()
-      .map((exportStatement) => printer.printNode(EmitHint.Unspecified, exportStatement, file))
-      .join(EOL);
+    this.utils.forEach((util) => {
+      if (util === 'validation') {
+        utilsStatements.push(...generateValidationFunction());
+      }
+    });
 
-    const { componentText } = transpile(exportStatements, this.renderConfig);
+    const { componentText } = transpile(
+      utilsStatements.map((util) => printer.printNode(EmitHint.Unspecified, util, file)).join(EOL),
+      this.renderConfig,
+    );
 
     return {
       componentText,
@@ -64,28 +75,6 @@ export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
         await this.renderComponentToFilesystem(componentText)(this.fileName)(outputPath);
       },
     };
-  }
-
-  /*
-   * export { default as MyTheme } from './MyTheme';
-   * export { default as ButtonComponent } from './ButtonComponent';
-   */
-  private buildExports(): ExportDeclaration[] {
-    return this.component.map(({ name }) => {
-      /**
-       * Type checker isn't detecting that name can't be undefined here
-       * including this (and return cast) to appease the checker.
-       */
-      return factory.createExportDeclaration(
-        undefined,
-        undefined,
-        false,
-        factory.createNamedExports([
-          factory.createExportSpecifier(factory.createIdentifier('default'), factory.createIdentifier(name)),
-        ]),
-        factory.createStringLiteral(`./${name}`),
-      );
-    }) as ExportDeclaration[];
   }
 
   // no-op
