@@ -15,11 +15,13 @@
  */
 
 /* Test Generator to be used in the browser environment */
-import { StudioComponent, StudioTheme } from '@aws-amplify/codegen-ui';
+import { FormMetadata, StudioComponent, StudioForm, StudioTheme } from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
   ReactThemeStudioTemplateRenderer,
   ReactIndexStudioTemplateRenderer,
+  ReactUtilsStudioTemplateRenderer,
+  AmplifyFormRenderer,
 } from '@aws-amplify/codegen-ui-react';
 import { TestGenerator } from './TestGenerator';
 
@@ -28,16 +30,30 @@ export class BrowserTestGenerator extends TestGenerator {
 
   writeThemeToDisk() {} // no-op
 
+  writeFormToDisk() {
+    return { formMetadata: {} as FormMetadata };
+  } // no-op
+
   writeIndexFileToDisk() {} // no-op
+
+  writeUtilsFileToDisk() {} // no-op
 
   writeSnippetToDisk() {} // no-op
 
-  renderIndexFile(schemas: (StudioComponent | StudioTheme)[]) {
+  renderIndexFile(schemas: (StudioComponent | StudioForm | StudioTheme)[]) {
     return new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig).renderComponent();
+  }
+
+  renderUtilsFile(utils: string[]) {
+    return new ReactUtilsStudioTemplateRenderer(utils, this.renderConfig).renderComponent();
   }
 
   renderComponent(component: StudioComponent) {
     return new AmplifyRenderer(component, this.renderConfig).renderComponentOnly();
+  }
+
+  renderForm(form: StudioForm) {
+    return new AmplifyFormRenderer(form, undefined, this.renderConfig).renderComponentOnly();
   }
 
   renderTheme(theme: StudioTheme) {

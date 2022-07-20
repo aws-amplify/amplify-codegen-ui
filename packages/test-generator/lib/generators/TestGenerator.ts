@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent, StudioTheme } from '@aws-amplify/codegen-ui';
+import { FormMetadata, StudioComponent, StudioForm, StudioTheme } from '@aws-amplify/codegen-ui';
 import {
   ModuleKind,
   ScriptTarget,
@@ -24,6 +24,7 @@ import {
 import log from 'loglevel';
 import * as ComponentSchemas from '../components';
 import * as ThemeSchemas from '../themes';
+import * as FormSchemas from '../forms';
 
 const DEFAULT_RENDER_CONFIG = {
   module: ModuleKind.CommonJS,
@@ -40,7 +41,7 @@ log.setLevel('info');
 export type TestCase = {
   name: string;
   schema: any;
-  testType: 'Component' | 'Theme' | 'Snippet';
+  testType: 'Component' | 'Theme' | 'Form' | 'Snippet';
 };
 
 export type TestGeneratorParams = {
@@ -66,6 +67,7 @@ export abstract class TestGenerator {
 
   generate = (testCases: TestCase[]) => {
     const renderErrors: { [key: string]: any } = {};
+    const utilsFunctions = new Set<string>();
 
     const generateComponent = (testCase: TestCase) => {
       const { name, schema } = testCase;
@@ -112,6 +114,33 @@ export abstract class TestGenerator {
       }
     };
 
+    const generateForm = (testCase: TestCase) => {
+      const { name, schema } = testCase;
+      try {
+        if (this.params.writeToDisk) {
+          const res = this.writeFormToDisk(schema as StudioForm);
+          if (res.formMetadata?.onValidationFields && Object.keys(res.formMetadata.onValidationFields).length) {
+            utilsFunctions.add('validation');
+          }
+        }
+
+        if (this.params.writeToLogger) {
+          const { importsText, compText } = this.renderForm(schema as StudioForm);
+          log.info(`# ${name}`);
+          log.info('## Form Only Output');
+          log.info('### formImports');
+          log.info(this.decorateTypescriptWithMarkdown(importsText));
+          log.info('### formText');
+          log.info(this.decorateTypescriptWithMarkdown(compText));
+        }
+      } catch (err) {
+        if (this.params.immediatelyThrowGenerateErrors) {
+          throw err;
+        }
+        renderErrors[name] = err;
+      }
+    };
+
     const generateIndexFile = (indexFileTestCases: TestCase[]) => {
       const schemas = indexFileTestCases.map((testCase) => testCase.schema);
       try {
@@ -122,6 +151,24 @@ export abstract class TestGenerator {
           const indexFile = this.renderIndexFile(schemas);
           log.info(`# index`);
           log.info(this.decorateTypescriptWithMarkdown(indexFile.componentText));
+        }
+      } catch (err) {
+        if (this.params.immediatelyThrowGenerateErrors) {
+          throw err;
+        }
+        renderErrors.index = err;
+      }
+    };
+
+    const generateUtilsFile = (utils: string[]) => {
+      try {
+        if (this.params.writeToDisk) {
+          this.writeUtilsFileToDisk(utils);
+        }
+        if (this.params.writeToLogger) {
+          const utilsFile = this.renderUtilsFile(utils);
+          log.info(`# utils`);
+          log.info(this.decorateTypescriptWithMarkdown(utilsFile.componentText));
         }
       } catch (err) {
         if (this.params.immediatelyThrowGenerateErrors) {
@@ -162,15 +209,22 @@ export abstract class TestGenerator {
         case 'Theme':
           generateTheme(testCase);
           break;
+        case 'Form':
+          generateForm(testCase);
+          break;
         case 'Snippet':
           generateSnippet([testCase]);
           break;
         default:
-          throw new Error('Expected either a `Component` or `Theme` test case type');
+          throw new Error('Expected either a `Component`, `Theme`, `Form` test case type');
       }
     });
 
     generateIndexFile(testCases);
+
+    if (utilsFunctions.size) {
+      generateUtilsFile([...utilsFunctions]);
+    }
 
     // only test with 4 components for performance
     generateSnippet(testCases.filter((testCase) => testCase.testType === 'Component').slice(0, 4));
@@ -193,13 +247,21 @@ export abstract class TestGenerator {
 
   abstract writeThemeToDisk(theme: StudioTheme): void;
 
+  abstract writeFormToDisk(form: StudioForm): { formMetadata: FormMetadata };
+
   abstract renderComponent(component: StudioComponent): { compText: string; importsText: string };
 
   abstract renderTheme(theme: StudioTheme): { componentText: string };
 
-  abstract writeIndexFileToDisk(schemas: (StudioComponent | StudioTheme)[]): void;
+  abstract renderForm(form: StudioForm): { compText: string; importsText: string };
 
-  abstract renderIndexFile(schemas: (StudioComponent | StudioTheme)[]): { componentText: string };
+  abstract writeIndexFileToDisk(schemas: (StudioComponent | StudioForm | StudioTheme)[]): void;
+
+  abstract renderIndexFile(schemas: (StudioComponent | StudioForm | StudioTheme)[]): { componentText: string };
+
+  abstract writeUtilsFileToDisk(utils: string[]): void;
+
+  abstract renderUtilsFile(utils: string[]): { componentText: string };
 
   abstract writeSnippetToDisk(components: StudioComponent[]): void;
 
@@ -213,6 +275,9 @@ export abstract class TestGenerator {
       }),
       ...Object.entries(ThemeSchemas).map(([name, schema]) => {
         return { name, schema, testType: 'Theme' } as TestCase;
+      }),
+      ...Object.entries(FormSchemas).map(([name, schema]) => {
+        return { name, schema, testType: 'Form' } as TestCase;
       }),
     ].filter((testCase) => !disabledSchemaSet.has(testCase.name));
   }
