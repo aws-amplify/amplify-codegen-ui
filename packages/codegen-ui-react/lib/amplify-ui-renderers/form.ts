@@ -48,6 +48,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    this.importCollection.addImport('@aws-amplify/ui-react', 'useTypeCastFields');
     this.importCollection.addImport('aws-amplify', 'DataStore');
 
     return element;

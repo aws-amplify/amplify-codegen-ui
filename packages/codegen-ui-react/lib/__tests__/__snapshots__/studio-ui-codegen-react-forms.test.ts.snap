@@ -7,7 +7,13 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextField,
+  useTypeCastFields,
+} from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function customDataForm(props) {
   const {
@@ -134,7 +140,13 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextField,
+  useTypeCastFields,
+} from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
   const { onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
@@ -285,7 +297,13 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextField,
+  useTypeCastFields,
+} from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
   const { id, onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
