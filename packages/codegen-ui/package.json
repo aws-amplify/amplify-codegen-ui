@@ -1,6 +1,6 @@
 {
   "name": "@aws-amplify/codegen-ui",
-  "version": "2.2.1",
+  "version": "2.3.1",
   "description": "generic component code generation interface definitions",
   "author": "Amazon Web Services",
   "homepage": "https://docs.amplify.aws/",
@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "test": "jest",
+    "test:ci": "jest --ci --maxWorkers=30%",
     "test:update": "jest --updateSnapshot",
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "npm run build -- --watch"

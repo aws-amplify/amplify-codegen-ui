@@ -25,6 +25,17 @@ function generateWithThemeRenderer(jsonFile: string, renderConfig: ReactRenderCo
   return rendererFactory.buildRenderer(loadSchemaFromJSONFile(jsonFile)).renderComponent().componentText;
 }
 
+function generateThemeObject(jsonFile: string): any {
+  const rendererFactory = new StudioTemplateRendererFactory(
+    (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, {}),
+  );
+  const themeJson = rendererFactory.buildRenderer(loadSchemaFromJSONFile(jsonFile)).renderThemeJson();
+  /* eslint-disable @typescript-eslint/no-implied-eval */
+  const themeObject = new Function(`return ${themeJson}`);
+  /* eslint-enable @typescript-eslint/no-implied-eval */
+  return themeObject();
+}
+
 describe('react theme renderer tests', () => {
   describe('theme', () => {
     it('should render the theme', () => {
@@ -41,11 +52,20 @@ describe('react theme renderer tests', () => {
   });
 
   describe('renderThemeJson', () => {
-    it('should render theme json correctly', () => {
+    it('should render theme json successfully', () => {
       const rendererFactory = new StudioTemplateRendererFactory(
         (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, {}),
       );
       expect(rendererFactory.buildRenderer(loadSchemaFromJSONFile('theme')).renderThemeJson()).toMatchSnapshot();
+    });
+
+    it('should render theme json with breakpoints successfully', () => {
+      const themeObject = generateThemeObject('themeWithBreakpoints');
+      expect(themeObject).toBeDefined();
+      expect(typeof themeObject.breakpoints.values.base).toBe('number');
+      expect(themeObject.breakpoints.values.base).toEqual(0);
+      expect(typeof themeObject.breakpoints.defaultBreakpoint).toBe('string');
+      expect(themeObject.breakpoints.defaultBreakpoint).toBe('base');
     });
   });
 });
