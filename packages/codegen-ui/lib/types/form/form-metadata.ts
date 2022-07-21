@@ -13,17 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export type FormValidation = {
-  validationType: string;
-  validationRule: string;
-};
+import { FieldValidationConfiguration } from './form-validation';
 
 export type FormMetadata = {
   name: string;
   fieldState: string;
   onChangeFields: string[];
   errorStateFields: string[];
-  // indicates the validation function provided for that field
-  // ex. name field has a lengthValidation type where the rule is length > 5
-  onValidationFields?: Record<string, FormValidation[]>;
+  // indicates the validation rule for that field
+  // ex. name field has a string validation type where the rule is char length > 5
+  onValidationFields?: { [field: string]: FieldValidationConfiguration[] };
 };

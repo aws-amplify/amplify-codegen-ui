@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import { FormDefinition, FormMetadata, StudioForm } from '../types';
+import { FieldValidationConfiguration } from '../types/form/form-validation';
 
 export const getFormFieldStateName = (formName: string) => {
   return [formName.charAt(0).toLowerCase() + formName.slice(1), 'Fields'].join('');
@@ -29,6 +30,17 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
       }
       return fields;
     }, []),
+    onValidationFields: Object.entries(form.fields).reduce<{ [field: string]: FieldValidationConfiguration[] }>(
+      (validationFields, [field, config]) => {
+        if ('validations' in config && config.validations?.length) {
+          const updatedFields = validationFields;
+          updatedFields[field] = config.validations;
+          return updatedFields;
+        }
+        return validationFields;
+      },
+      {},
+    ),
     errorStateFields: [],
   };
 };

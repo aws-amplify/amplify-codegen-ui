@@ -48,7 +48,6 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
-    this.importCollection.addImport('@aws-amplify/ui-react', 'useTypeCastFields');
     this.importCollection.addImport('aws-amplify', 'DataStore');
 
     return element;
@@ -149,36 +148,33 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                           undefined,
                           [
                             factory.createNewExpression(factory.createIdentifier(dataTypeName), undefined, [
-                              factory.createCallExpression(
-                                factory.createIdentifier('useTypeCastFields'),
-                                [factory.createTypeReferenceNode(factory.createIdentifier(dataTypeName), undefined)],
-                                [
-                                  factory.createObjectLiteralExpression(
-                                    [
-                                      factory.createPropertyAssignment(
-                                        factory.createIdentifier('fields'),
-                                        factory.createIdentifier(getStateName(FieldStateVariable(name))),
-                                      ),
-                                      factory.createPropertyAssignment(
-                                        factory.createIdentifier('modelName'),
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier(dataTypeName),
-                                          factory.createIdentifier('name'),
-                                        ),
-                                      ),
-                                      factory.createShorthandPropertyAssignment(
-                                        factory.createIdentifier('schema'),
-                                        undefined,
-                                      ),
-                                    ],
-                                    true,
-                                  ),
-                                ],
-                              ),
+                              factory.createIdentifier(getStateName(FieldStateVariable(name))),
                             ]),
                           ],
                         ),
                       ),
+                    ),
+                    factory.createIfStatement(
+                      factory.createIdentifier('onSubmitComplete'),
+                      factory.createBlock(
+                        [
+                          factory.createExpressionStatement(
+                            factory.createCallExpression(factory.createIdentifier('onSubmitComplete'), undefined, [
+                              factory.createObjectLiteralExpression(
+                                [
+                                  factory.createPropertyAssignment(
+                                    factory.createIdentifier('saveSuccessful'),
+                                    factory.createTrue(),
+                                  ),
+                                ],
+                                false,
+                              ),
+                            ]),
+                          ),
+                        ],
+                        true,
+                      ),
+                      undefined,
                     ),
                   ],
                   true,

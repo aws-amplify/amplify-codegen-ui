@@ -168,6 +168,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     return {
       componentText: transpiledComponentText,
       declaration,
+      formMetadata: this.componentMetadata.formMetadata,
       renderComponentToFilesystem: async (outputPath: string) => {
         await this.renderComponentToFilesystem(transpiledComponentText)(this.fileName)(outputPath);
         if (declaration) {

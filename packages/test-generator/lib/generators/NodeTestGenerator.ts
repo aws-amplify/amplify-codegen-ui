@@ -22,11 +22,14 @@ import {
   StudioTemplateRendererFactory,
   StudioComponent,
   StudioTheme,
+  StudioForm,
 } from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
   ReactThemeStudioTemplateRenderer,
   ReactIndexStudioTemplateRenderer,
+  ReactUtilsStudioTemplateRenderer,
+  AmplifyFormRenderer,
 } from '@aws-amplify/codegen-ui-react';
 import { TestGenerator, TestGeneratorParams } from './TestGenerator';
 
@@ -35,13 +38,21 @@ export class NodeTestGenerator extends TestGenerator {
 
   private readonly themeRendererFactory: any;
 
+  private readonly formRendererFactory: any;
+
   private readonly indexRendererFactory: any;
 
-  private readonly rendererManager: any;
+  private readonly utilsRendererFactory: any;
+
+  private readonly componentRendererManager: any;
+
+  private readonly formRendererManager: any;
 
   private readonly themeRendererManager: any;
 
   private readonly indexRendererManager: any;
+
+  private readonly utilsRendererManager: any;
 
   constructor(params: TestGeneratorParams) {
     super(params);
@@ -51,21 +62,39 @@ export class NodeTestGenerator extends TestGenerator {
     this.themeRendererFactory = new StudioTemplateRendererFactory(
       (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, this.renderConfig),
     );
-    this.indexRendererFactory = new StudioTemplateRendererFactory(
-      (schemas: (StudioComponent | StudioTheme)[]) => new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig),
+    this.formRendererFactory = new StudioTemplateRendererFactory(
+      (form: StudioForm) => new AmplifyFormRenderer(form, undefined, this.renderConfig),
     );
-    this.rendererManager = new StudioTemplateRendererManager(this.componentRendererFactory, this.outputConfig);
+    this.indexRendererFactory = new StudioTemplateRendererFactory(
+      (schemas: (StudioComponent | StudioForm | StudioTheme)[]) =>
+        new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig),
+    );
+    this.utilsRendererFactory = new StudioTemplateRendererFactory(
+      (utils: string[]) => new ReactUtilsStudioTemplateRenderer(utils, this.renderConfig),
+    );
+    this.componentRendererManager = new StudioTemplateRendererManager(this.componentRendererFactory, this.outputConfig);
+    this.formRendererManager = new StudioTemplateRendererManager(this.formRendererFactory, this.outputConfig);
     this.themeRendererManager = new StudioTemplateRendererManager(this.themeRendererFactory, this.outputConfig);
     this.indexRendererManager = new StudioTemplateRendererManager(this.indexRendererFactory, this.outputConfig);
+    this.utilsRendererManager = new StudioTemplateRendererManager(this.utilsRendererFactory, this.outputConfig);
   }
 
   writeComponentToDisk(component: StudioComponent) {
-    this.rendererManager.renderSchemaToTemplate(component);
+    this.componentRendererManager.renderSchemaToTemplate(component);
   }
 
   renderComponent(component: StudioComponent) {
     const buildRenderer = this.componentRendererFactory.buildRenderer(component);
     return buildRenderer.renderComponentOnly();
+  }
+
+  writeFormToDisk(form: StudioForm) {
+    return this.formRendererManager.renderSchemaToTemplate(form);
+  }
+
+  renderForm(form: StudioForm) {
+    const buildRenderer = this.formRendererFactory.buildRenderer(form);
+    return buildRenderer.renderFormOnly();
   }
 
   writeSnippetToDisk(components: StudioComponent[]) {
@@ -99,12 +128,21 @@ export class NodeTestGenerator extends TestGenerator {
     return buildRenderer.renderComponent();
   }
 
-  writeIndexFileToDisk(schemas: (StudioComponent | StudioTheme)[]) {
+  writeIndexFileToDisk(schemas: (StudioComponent | StudioTheme | StudioForm)[]) {
     this.indexRendererManager.renderSchemaToTemplate(schemas);
   }
 
-  renderIndexFile(schemas: (StudioComponent | StudioTheme)[]) {
+  renderIndexFile(schemas: (StudioComponent | StudioTheme | StudioForm)[]) {
     const indexRenderer = this.indexRendererFactory.buildRenderer(schemas);
     return indexRenderer.renderComponent();
+  }
+
+  writeUtilsFileToDisk(utils: string[]) {
+    this.utilsRendererManager.renderSchemaToTemplate(utils);
+  }
+
+  renderUtilsFile(utils: string[]) {
+    const utilsRenderer = this.utilsRendererFactory.buildRenderer(utils);
+    return utilsRenderer.renderComponent();
   }
 }
