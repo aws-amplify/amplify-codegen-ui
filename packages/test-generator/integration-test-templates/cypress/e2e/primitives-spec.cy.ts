@@ -265,9 +265,9 @@ describe('Primitives', () => {
       cy.get('#slider-field')
         .find('.amplify-sliderfield')
         .within(() => {
+          cy.get('.amplify-label').contains('50');
           cy.get('.amplify-label').within(() => {
             cy.get('span').eq(0).contains('Slider');
-            cy.get('span').eq(1).contains('50');
           });
           cy.get('.amplify-sliderfield__group')
             .find('span')
@@ -278,7 +278,6 @@ describe('Primitives', () => {
         });
     });
   });
-
   describe('StepperField', () => {
     it('Basic', () => {
       cy.get('#stepper-field').within(() => {
