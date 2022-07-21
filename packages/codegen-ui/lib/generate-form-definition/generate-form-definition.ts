@@ -14,8 +14,9 @@
   limitations under the License.
  */
 
-import { addDataStoreModelField, mapElementMatrix, mapStyles, mapElements } from './helpers';
-import { StudioForm, FormDefinition, ModelFieldsConfigs, StudioFieldPosition, DataStoreModelInfo } from '../types';
+import { mapModelFieldsConfigs, mapElementMatrix, mapStyles, mapElements } from './helpers';
+import { StudioForm, FormDefinition, ModelFieldsConfigs, StudioFieldPosition, GenericDataSchema } from '../types';
+import { InvalidInputError } from '../errors';
 
 /**
  * Helper that turns the StudioForm model into definition that can be used to render
@@ -23,14 +24,13 @@ import { StudioForm, FormDefinition, ModelFieldsConfigs, StudioFieldPosition, Da
  * @param form StudioForm, converted from the API shape.
  * @param modelInfo (Optional) holds type information about the DataStore model fields being represented.
  * @returns a definition that translates to rendered JSX elements.
- * TODO: Change to use generic data schema
  */
 export function generateFormDefinition({
   form,
-  modelInfo,
+  dataSchema,
 }: {
   form: StudioForm;
-  modelInfo?: DataStoreModelInfo;
+  dataSchema?: GenericDataSchema;
 }): FormDefinition {
   const formDefinition: FormDefinition = {
     form: { layoutStyle: {} },
@@ -41,10 +41,13 @@ export function generateFormDefinition({
 
   const modelFieldsConfigs: ModelFieldsConfigs = {};
 
-  if (modelInfo) {
-    modelInfo.fields.forEach((field) => {
-      addDataStoreModelField(formDefinition, modelFieldsConfigs, field);
-    });
+  if (form.dataType.dataSourceType !== 'Custom') {
+    if (!dataSchema) {
+      throw new InvalidInputError(
+        `Data schema is missing for form of data source type ${form.dataType.dataSourceType}`,
+      );
+    }
+    mapModelFieldsConfigs({ dataSchema, formDefinition, modelFieldsConfigs, dataTypeName: form.dataType.dataTypeName });
   }
 
   const elementQueue: { name: string; position?: StudioFieldPosition; excluded?: boolean }[] = Object.entries(

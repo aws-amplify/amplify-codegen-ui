@@ -200,6 +200,7 @@ export default function myPostForm(props) {
           <TextField
             label=\\"caption\\"
             isRequired={false}
+            isReadOnly={false}
             {...getOverrideProps(overrides, \\"TextField0\\")}
           ></TextField>
         </Grid>
@@ -212,6 +213,7 @@ export default function myPostForm(props) {
           <TextField
             label=\\"username\\"
             isRequired={false}
+            isReadOnly={false}
             {...getOverrideProps(overrides, \\"TextField0\\")}
           ></TextField>
         </Grid>
@@ -224,6 +226,7 @@ export default function myPostForm(props) {
           <TextField
             label=\\"post_url\\"
             isRequired={false}
+            isReadOnly={false}
             {...getOverrideProps(overrides, \\"TextField0\\")}
           ></TextField>
         </Grid>
@@ -236,6 +239,7 @@ export default function myPostForm(props) {
           <TextField
             label=\\"profile_url\\"
             isRequired={false}
+            isReadOnly={false}
             {...getOverrideProps(overrides, \\"TextField0\\")}
           ></TextField>
         </Grid>
@@ -358,6 +362,7 @@ export default function myPostForm(props) {
           <TextField
             label=\\"caption\\"
             isRequired={false}
+            isReadOnly={false}
             {...getOverrideProps(overrides, \\"TextField0\\")}
           ></TextField>
         </Grid>
@@ -370,6 +375,7 @@ export default function myPostForm(props) {
           <TextField
             label=\\"username\\"
             isRequired={false}
+            isReadOnly={false}
             {...getOverrideProps(overrides, \\"TextField0\\")}
           ></TextField>
         </Grid>
@@ -382,6 +388,7 @@ export default function myPostForm(props) {
           <TextField
             label=\\"post_url\\"
             isRequired={false}
+            isReadOnly={false}
             {...getOverrideProps(overrides, \\"TextField0\\")}
           ></TextField>
         </Grid>
@@ -394,6 +401,7 @@ export default function myPostForm(props) {
           <TextField
             label=\\"profile_url\\"
             isRequired={false}
+            isReadOnly={false}
             {...getOverrideProps(overrides, \\"TextField0\\")}
           ></TextField>
         </Grid>
