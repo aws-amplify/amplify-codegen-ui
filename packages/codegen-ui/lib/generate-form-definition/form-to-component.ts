@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { SchemaModel, ModelFields, isGraphQLScalarType } from '@aws-amplify/datastore';
+import type { SchemaModel, ModelFields } from '@aws-amplify/datastore';
 import {
   StudioComponent,
   StudioForm,
@@ -23,6 +23,13 @@ import {
   DataStoreUpdateItemAction,
   FixedStudioComponentProperty,
 } from '../types';
+
+/**
+ * TODO: remove once form builder depends more on generic data schema
+ */
+const isGraphQLScalarType = (obj: any): boolean => {
+  return obj && typeof obj !== 'object';
+};
 
 // map the datastore schema fields into form fields
 export const mapFieldsToForm = (fields: ModelFields) => {
@@ -176,7 +183,9 @@ export const mapOnSubmitEvent = (
     },
   } as DataStoreUpdateItemAction;
 };
-
+/**
+ * TODO to be removed when form builder depends on generic data schema
+ */
 export const mapFormToComponent = (form: StudioForm, dataSchema: SchemaModel): StudioComponent => {
   // here we can merge the datastore schema with the form
   // right now it's only creating fields from the existing datastore schema
