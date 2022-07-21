@@ -21,7 +21,7 @@
   "dependencies": {
     "yup": "^0.32.11"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "@aws-amplify/datastore": "^3.7.8"
   },
   "jest": {
@@ -50,5 +50,9 @@
       "ts",
       "js"
     ]
+  },
+  "overrides": {
+    "hermes-engine": ">=0.10.0",
+    "shell-quote": ">=1.7.3"
   }
 }

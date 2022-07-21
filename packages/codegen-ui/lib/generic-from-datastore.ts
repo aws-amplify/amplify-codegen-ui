@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { Schema as DataStoreSchema, ModelField } from '@aws-amplify/datastore';
+import type { Schema as DataStoreSchema, ModelField } from '@aws-amplify/datastore';
 import { InvalidInputError } from './errors';
 import { GenericDataField, GenericDataRelationshipType, GenericDataSchema } from './types';
 
