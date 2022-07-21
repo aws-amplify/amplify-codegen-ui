@@ -49,6 +49,10 @@
     "moduleFileExtensions": [
       "ts",
       "js"
-    ]
+    ],
+    "overrides": {
+      "hermes-engine": ">=0.10.0",
+      "shell-quote": ">=1.7.3"
+    }
   }
 }
