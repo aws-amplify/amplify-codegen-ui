@@ -314,7 +314,7 @@ describe('getFormDefinitionInputElement', () => {
       componentType: 'RadioGroupField',
       props: { label: 'Label', name: 'MyFieldName' },
       valueMappings: {
-        values: [{ value: { value: 'value' }, displayValue: { value: 'Label' } }],
+        values: [{ value: { value: 'Option' } }],
       },
     });
   });
