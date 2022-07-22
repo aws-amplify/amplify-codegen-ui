@@ -19,17 +19,40 @@ import {
   StudioGenericFieldConfig,
   ModelFieldsConfigs,
   StudioFormFieldConfig,
+  StudioFormValueMappings,
 } from '../../types';
 import { InternalError, InvalidInputError } from '../../errors';
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
 import { deleteUndefined, getFirstDefinedValue, getFirstNumber, getFirstString } from './mapper-utils';
 
-function getOptionsFromValueMappings(
-  valueMappings: { displayValue: string; value: string }[],
-): { value: string; children: string }[] {
-  return valueMappings.map(({ displayValue, value }) => {
-    return { value, children: displayValue };
-  });
+export function mergeValueMappings(
+  base?: StudioFormValueMappings,
+  override?: StudioFormValueMappings,
+): StudioFormValueMappings {
+  let values: StudioFormValueMappings['values'] = [];
+
+  if (!base && override) {
+    values = override.values;
+  } else if (base && !override) {
+    values = base.values;
+  } else if (base && override) {
+    const overrideMap = new Map(
+      override.values.map(({ displayValue, value }) => [JSON.stringify(value), displayValue]),
+    );
+    values = base.values.map(({ displayValue, value }) => {
+      const stringifiedBaseValue = JSON.stringify(value);
+      const overrideDisplayValue = overrideMap.get(stringifiedBaseValue);
+      if (overrideDisplayValue) {
+        return { displayValue: overrideDisplayValue, value };
+      }
+      return { displayValue, value };
+    });
+  }
+
+  return {
+    values,
+    bindingProperties: { ...base?.bindingProperties, ...override?.bindingProperties },
+  };
 }
 
 /**
@@ -104,10 +127,9 @@ export function getFormDefinitionInputElement(
           placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
           isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
         },
-        options: getOptionsFromValueMappings(
-          config.inputType?.valueMappings || baseConfig?.inputType?.valueMappings || [],
-        ),
+
         defaultValue: getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+        valueMappings: mergeValueMappings(baseConfig?.inputType?.valueMappings, config.inputType?.valueMappings),
       };
       break;
 
@@ -200,11 +222,10 @@ export function getFormDefinitionInputElement(
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
           isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
         },
-        radios: getOptionsFromValueMappings(
-          config.inputType?.valueMappings ||
-            baseConfig?.inputType?.valueMappings ||
-            FORM_DEFINITION_DEFAULTS.field.inputType.valueMappings,
-        ),
+        valueMappings:
+          baseConfig?.inputType?.valueMappings?.values.length || config?.inputType?.valueMappings?.values.length
+            ? mergeValueMappings(baseConfig?.inputType?.valueMappings, config.inputType?.valueMappings)
+            : FORM_DEFINITION_DEFAULTS.field.inputType.valueMappings,
       };
       break;
 

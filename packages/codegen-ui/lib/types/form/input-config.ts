@@ -14,6 +14,26 @@
   limitations under the License.
  */
 
+import {
+  FixedStudioComponentProperty,
+  ConcatenatedStudioComponentProperty,
+  ConditionalStudioComponentProperty,
+  BoundStudioComponentProperty,
+} from '../properties';
+import { StudioComponentPropertyBinding } from '../bindings';
+
+export type StudioFormInputFieldProperty =
+  | FixedStudioComponentProperty
+  | ConcatenatedStudioComponentProperty
+  | ConditionalStudioComponentProperty
+  | BoundStudioComponentProperty;
+
+export type StudioFormValueMappings = {
+  values: { displayValue?: StudioFormInputFieldProperty; value: StudioFormInputFieldProperty }[];
+
+  bindingProperties?: { [propertyName: string]: StudioComponentPropertyBinding };
+};
+
 // represents API shape after type casting
 export type StudioFieldInputConfig = {
   type: string;
@@ -32,7 +52,7 @@ export type StudioFieldInputConfig = {
 
   defaultCountryCode?: string;
 
-  valueMappings?: { value: string; displayValue: string }[];
+  valueMappings?: StudioFormValueMappings;
 
   name?: string;
 

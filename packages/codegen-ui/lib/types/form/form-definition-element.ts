@@ -13,6 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+
+import { StudioFormValueMappings } from './input-config';
+
 export type FormDefinitionTextFieldElement = {
   componentType: 'TextField';
   props: {
@@ -47,7 +50,7 @@ export type FormDefinitionSelectFieldElement = {
   componentType: 'SelectField';
   props: { label: string; descriptiveText?: string; placeholder?: string; isDisabled?: boolean };
   // needs to be mapped as children of 'option' JSX elements
-  options: { value: string; children: string }[];
+  valueMappings: StudioFormValueMappings;
   // 'selected' attr needs to be mapped onto the 'option' itself, not the SelectField
   defaultValue?: string;
 };
@@ -117,8 +120,8 @@ export type FormDefinitionRadioGroupFieldElement = {
     descriptiveText?: string;
     isRequired?: boolean;
   };
-  // needs to be mapped as children of 'Radio' components
-  radios: { value: string; children: string }[];
+  // needs to be mapped as children of 'Radio' JSX elements
+  valueMappings: StudioFormValueMappings;
 };
 
 export type FormDefinitionPasswordFieldElement = {

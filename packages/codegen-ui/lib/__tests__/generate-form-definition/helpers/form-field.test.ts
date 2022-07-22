@@ -15,6 +15,7 @@
  */
 
 import { mapFormFieldConfig, getFormDefinitionInputElement } from '../../../generate-form-definition/helpers';
+import { mergeValueMappings } from '../../../generate-form-definition/helpers/form-field';
 import { FormDefinition, ModelFieldsConfigs, StudioFormFieldConfig, StudioGenericFieldConfig } from '../../../types';
 
 describe('mapFormFieldConfig', () => {
@@ -147,10 +148,7 @@ describe('getFormDefinitionInputElement', () => {
       inputType: {
         type: 'SelectField',
         readOnly: true,
-        valueMappings: [
-          { displayValue: 'value1Display', value: 'value1' },
-          { displayValue: 'value2Display', value: 'value2' },
-        ],
+        valueMappings: { values: [{ value: { value: 'value1' }, displayvalue: { value: 'displayValue1' } }] },
         defaultValue: 'value1',
       },
     };
@@ -158,10 +156,10 @@ describe('getFormDefinitionInputElement', () => {
     expect(getFormDefinitionInputElement(config)).toStrictEqual({
       componentType: 'SelectField',
       props: { label: 'Label', isDisabled: true },
-      options: [
-        { value: 'value1', children: 'value1Display' },
-        { value: 'value2', children: 'value2Display' },
-      ],
+      valueMappings: {
+        values: [{ value: { value: 'value1' }, displayvalue: { value: 'displayValue1' } }],
+        bindingProperties: {},
+      },
       defaultValue: 'value1',
     });
   });
@@ -289,20 +287,35 @@ describe('getFormDefinitionInputElement', () => {
       inputType: {
         type: 'RadioGroupField',
         name: 'MyFieldName',
-        valueMappings: [
-          { displayValue: 'value1Display', value: 'value1' },
-          { displayValue: 'value2Display', value: 'value2' },
-        ],
+        valueMappings: { values: [{ value: { value: 'value1' }, displayvalue: { value: 'displayValue1' } }] },
       },
     };
 
     expect(getFormDefinitionInputElement(config)).toStrictEqual({
       componentType: 'RadioGroupField',
       props: { label: 'Label', name: 'MyFieldName' },
-      radios: [
-        { value: 'value1', children: 'value1Display' },
-        { value: 'value2', children: 'value2Display' },
-      ],
+      valueMappings: {
+        values: [{ value: { value: 'value1' }, displayvalue: { value: 'displayValue1' } }],
+        bindingProperties: {},
+      },
+    });
+  });
+
+  it('should return default valueMappings for RadioGroupField if no values available', () => {
+    const config = {
+      inputType: {
+        type: 'RadioGroupField',
+        name: 'MyFieldName',
+        valueMappings: { values: [] },
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'RadioGroupField',
+      props: { label: 'Label', name: 'MyFieldName' },
+      valueMappings: {
+        values: [{ value: { value: 'value' }, displayValue: { value: 'Label' } }],
+      },
     });
   });
 
@@ -320,5 +333,63 @@ describe('getFormDefinitionInputElement', () => {
     const config = { label: 'MyLabel' };
 
     expect(() => getFormDefinitionInputElement(config)).toThrow();
+  });
+});
+
+describe('mergeValueMappings', () => {
+  it('should return override values if no base values', () => {
+    expect(mergeValueMappings(undefined, { values: [{ value: { value: 'value1' } }] }).values).toStrictEqual([
+      { value: { value: 'value1' } },
+    ]);
+  });
+
+  it('should return base values if no override values', () => {
+    expect(mergeValueMappings({ values: [{ value: { value: 'value1' } }] }, undefined).values).toStrictEqual([
+      { value: { value: 'value1' } },
+    ]);
+  });
+
+  it('should only return base values with overrides applied if both base and overrides present', () => {
+    const mergedMappings = mergeValueMappings(
+      {
+        values: [
+          { value: { value: 'NEW_YORK' }, displayValue: { value: 'New york' } },
+          { value: { value: 'HOUSTON' }, displayValue: { value: 'Houston' } },
+          { value: { value: 'LOS_ANGELES' }, displayValue: { value: 'Los angeles' } },
+        ],
+      },
+      {
+        values: [
+          { value: { value: 'LOS_ANGELES' }, displayValue: { value: 'LA' } },
+          { value: { value: 'AUSTIN' }, displayValue: { value: 'Austin' } },
+        ],
+      },
+    );
+
+    expect(mergedMappings.values).toStrictEqual([
+      { value: { value: 'NEW_YORK' }, displayValue: { value: 'New york' } },
+      { value: { value: 'HOUSTON' }, displayValue: { value: 'Houston' } },
+      { value: { value: 'LOS_ANGELES' }, displayValue: { value: 'LA' } },
+    ]);
+
+    expect(mergedMappings.values.find((v) => 'value' in v.value && v.value.value === 'AUSTIN')).toBeUndefined();
+  });
+
+  it('should merge base and override bindingProperties', () => {
+    expect(
+      mergeValueMappings(
+        {
+          values: [{ value: { value: 'sdjoiflj' }, displayValue: { bindingProperties: { property: 'Dog' } } }],
+          bindingProperties: {
+            Dog: { type: 'Data', bindingProperties: { model: 'Dog' } },
+            Person: { type: 'Data', bindingProperties: { model: 'Person' } },
+          },
+        },
+        { values: [], bindingProperties: { Dog: { type: 'Data', bindingProperties: { model: 'MyDog' } } } },
+      ).bindingProperties,
+    ).toStrictEqual({
+      Person: { type: 'Data', bindingProperties: { model: 'Person' } },
+      Dog: { type: 'Data', bindingProperties: { model: 'MyDog' } },
+    });
   });
 });

@@ -14,9 +14,33 @@
   limitations under the License.
  */
 
-import { FormDefinition, ModelFieldsConfigs, GenericDataSchema } from '../../types';
+import {
+  FormDefinition,
+  ModelFieldsConfigs,
+  StudioGenericFieldConfig,
+  StudioFieldInputConfig,
+  GenericDataSchema,
+  FieldTypeMapKeys,
+  GenericDataField,
+} from '../../types';
 import { FIELD_TYPE_MAP } from './field-type-map';
 import { InvalidInputError } from '../../errors';
+import { convertToTitleCase } from './mapper-utils';
+
+export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
+  if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
+    return 'Enum';
+  }
+
+  if ((typeof field.dataType === 'object' && 'model' in field.dataType) || field.relationship?.relatedModelName) {
+    return 'Relationship';
+  }
+
+  if (typeof field.dataType === 'object' && 'nonModel' in field.dataType) {
+    return 'NonModel';
+  }
+  return field.dataType;
+}
 
 /**
  * Impure function that adds fields from DataStore to temporary util object, modelFieldsConfigs
@@ -45,21 +69,17 @@ export function mapModelFieldsConfigs({
       throw new InvalidInputError('Array types are not yet supported');
     }
 
-    const dataType = typeof field.dataType === 'string' ? field.dataType : Object.keys(field.dataType)[0];
-    const defaultComponent = FIELD_TYPE_MAP[dataType]?.defaultComponent;
-
-    if (!defaultComponent) {
-      throw new InvalidInputError('Field type could not be mapped to a component');
-    }
-
     const isAutoExcludedField = field.readOnly || (fieldName === 'id' && field.dataType === 'ID' && field.required);
 
     if (!isAutoExcludedField) {
       formDefinition.elementMatrix.push([fieldName]);
     }
 
-    // TODO: map Enums to valueMappings
-    modelFieldsConfigs[fieldName] = {
+    const fieldTypeMapKey = getFieldTypeMapKey(field);
+
+    const { defaultComponent } = FIELD_TYPE_MAP[fieldTypeMapKey];
+
+    const config: StudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
       label: fieldName,
       inputType: {
         type: defaultComponent,
@@ -69,6 +89,21 @@ export function mapModelFieldsConfigs({
         value: 'true',
       },
     };
+
+    if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
+      const fieldEnums = dataSchema.enums[field.dataType.enum];
+      if (!fieldEnums) {
+        throw new InvalidInputError(`Values could not be found for enum ${field.dataType.enum}`);
+      }
+      config.inputType.valueMappings = {
+        values: fieldEnums.values.map((value) => ({
+          displayValue: { value: convertToTitleCase(value) },
+          value: { value },
+        })),
+      };
+    }
+
+    modelFieldsConfigs[fieldName] = config;
   });
 }
 /* eslint-enable no-param-reassign */

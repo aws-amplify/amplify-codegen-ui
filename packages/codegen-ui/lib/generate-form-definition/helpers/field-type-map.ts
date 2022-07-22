@@ -14,13 +14,13 @@
   limitations under the License.
  */
 
-import { FormDefinitionInputElement } from '../../types';
+import { FormDefinitionInputElement, FieldTypeMapKeys } from '../../types';
 
 /**
  * Maps data types to UI Components
  */
 export const FIELD_TYPE_MAP: {
-  [key: string]: {
+  [key in FieldTypeMapKeys]: {
     defaultComponent: FormDefinitionInputElement['componentType'];
     supportedComponents: Set<FormDefinitionInputElement['componentType']>;
   };
@@ -88,5 +88,9 @@ export const FIELD_TYPE_MAP: {
   Relationship: {
     defaultComponent: 'SelectField',
     supportedComponents: new Set(['SelectField']),
+  },
+  NonModel: {
+    defaultComponent: 'TextAreaField',
+    supportedComponents: new Set(['TextAreaField']),
   },
 };
