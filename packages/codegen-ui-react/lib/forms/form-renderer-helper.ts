@@ -14,8 +14,15 @@
   limitations under the License.
  */
 
-import { StateStudioComponentProperty, StudioForm, StudioFormActionType } from '@aws-amplify/codegen-ui';
-import { BindingElement, factory, NodeFlags, PropertySignature, SyntaxKind } from 'typescript';
+import {
+  ComponentMetadata,
+  StateStudioComponentProperty,
+  StudioComponent,
+  StudioComponentChild,
+  StudioForm,
+  StudioFormActionType,
+} from '@aws-amplify/codegen-ui';
+import { BindingElement, Expression, factory, NodeFlags, PropertySignature, SyntaxKind } from 'typescript';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getStateName, getSetStateName } from '../react-component-render-helper';
 import { addSchemaToArguments, getActionHookImportValue, getActionIdentifier } from '../workflow';
@@ -29,6 +36,10 @@ export const FieldStateVariable = (componentName: string): StateStudioComponentP
   componentName,
   property: 'fields',
 });
+
+function capitalizeFirstLetter(val: string) {
+  return val.charAt(0).toUpperCase() + val.slice(1);
+}
 
 /**
  * - formFields
@@ -280,9 +291,229 @@ export const buildFormPropNode = (form: StudioForm) => {
   return factory.createTypeLiteralNode(propSignatures);
 };
 
-/**
- *  TODO
- * - form valid boolean
- * - error objects { hasErrror: boolean, errorMessage: string }
- */
-export const buildValidationStateStatements = () => {};
+export const buildStateMutationStatement = (name: string, defaultValue: Expression) => {
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createArrayBindingPattern([
+            factory.createBindingElement(undefined, undefined, factory.createIdentifier(name), undefined),
+            factory.createBindingElement(
+              undefined,
+              undefined,
+              factory.createIdentifier(`set${capitalizeFirstLetter(name)}`),
+              undefined,
+            ),
+          ]),
+          undefined,
+          undefined,
+          factory.createCallExpression(factory.createIdentifier('useStateMutationAction'), undefined, [defaultValue]),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
+};
+
+export const buildOnChangeStatement = (fieldName: string) => {
+  return factory.createJsxAttribute(
+    factory.createIdentifier('onChange'),
+    factory.createJsxExpression(
+      undefined,
+      factory.createArrowFunction(
+        [factory.createModifier(SyntaxKind.AsyncKeyword)],
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('e'),
+            undefined,
+            undefined,
+            undefined,
+          ),
+        ],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createBlock(
+          [
+            factory.createVariableStatement(
+              undefined,
+              factory.createVariableDeclarationList(
+                [
+                  factory.createVariableDeclaration(
+                    factory.createObjectBindingPattern([
+                      factory.createBindingElement(undefined, undefined, factory.createIdentifier('value'), undefined),
+                    ]),
+                    undefined,
+                    undefined,
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('e'),
+                      factory.createIdentifier('target'),
+                    ),
+                  ),
+                ],
+                NodeFlags.Const,
+              ),
+            ),
+            factory.createVariableStatement(
+              undefined,
+              factory.createVariableDeclarationList(
+                [
+                  factory.createVariableDeclaration(
+                    factory.createIdentifier('isValidResult'),
+                    undefined,
+                    undefined,
+                    factory.createConditionalExpression(
+                      factory.createElementAccessChain(
+                        factory.createIdentifier('onValidate'),
+                        factory.createToken(SyntaxKind.QuestionDotToken),
+                        factory.createStringLiteral(fieldName),
+                      ),
+                      factory.createToken(SyntaxKind.QuestionToken),
+                      factory.createAwaitExpression(
+                        factory.createCallExpression(
+                          factory.createElementAccessExpression(
+                            factory.createIdentifier('onValidate'),
+                            factory.createStringLiteral(fieldName),
+                          ),
+                          undefined,
+                          [factory.createIdentifier('value')],
+                        ),
+                      ),
+                      factory.createToken(SyntaxKind.ColonToken),
+                      factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
+                        factory.createIdentifier('value'),
+                        factory.createIdentifier(`${fieldName}-validation-rules`),
+                      ]),
+                    ),
+                  ),
+                ],
+                NodeFlags.Const,
+              ),
+            ),
+            factory.createExpressionStatement(
+              factory.createCallExpression(
+                factory.createIdentifier(`set${capitalizeFirstLetter(fieldName)}FieldError`),
+                undefined,
+                [
+                  factory.createObjectLiteralExpression(
+                    [
+                      factory.createSpreadAssignment(factory.createIdentifier(`${fieldName}FieldError`)),
+                      factory.createSpreadAssignment(factory.createIdentifier('isValidResult')),
+                    ],
+                    false,
+                  ),
+                ],
+              ),
+            ),
+            factory.createExpressionStatement(
+              factory.createCallExpression(factory.createIdentifier('setFormValid'), undefined, [
+                factory.createPrefixUnaryExpression(
+                  SyntaxKind.ExclamationToken,
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier(`${fieldName}FieldError`),
+                    factory.createIdentifier('hasError'),
+                  ),
+                ),
+              ]),
+            ),
+            factory.createExpressionStatement(
+              factory.createCallExpression(factory.createIdentifier('setModelFields'), undefined, [
+                factory.createObjectLiteralExpression(
+                  [
+                    factory.createSpreadAssignment(factory.createIdentifier('modelFields')),
+                    factory.createPropertyAssignment(
+                      factory.createIdentifier(fieldName),
+                      factory.createIdentifier('value'),
+                    ),
+                  ],
+                  false,
+                ),
+              ]),
+            ),
+          ],
+          true,
+        ),
+      ),
+    ),
+  );
+};
+
+export const addFormAttributes = (
+  component: StudioComponent | StudioComponentChild,
+  componentMetadata: ComponentMetadata,
+) => {
+  const attributes = [];
+  if (component.componentType.includes('Field')) {
+    if (componentMetadata.formMetadata?.onChangeFields.includes(component.name)) {
+      attributes.push(buildOnChangeStatement(component.name));
+    }
+    attributes.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('errorMessage'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(`${component.name}FieldError`),
+            factory.createIdentifier('errorMessage'),
+          ),
+        ),
+      ),
+      factory.createJsxAttribute(
+        factory.createIdentifier('hasError'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(`${component.name}FieldError`),
+            factory.createIdentifier('hasError'),
+          ),
+        ),
+      ),
+    );
+  }
+
+  if (component.name === 'SubmitButton') {
+    attributes.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('isDisabled'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier('formValid')),
+        ),
+      ),
+    );
+  }
+  if (component.name === 'CancelButton') {
+    attributes.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('onClick'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createExpressionStatement(
+                  factory.createBinaryExpression(
+                    factory.createIdentifier('onCancel'),
+                    factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                    factory.createCallExpression(factory.createIdentifier('onCancel'), undefined, []),
+                  ),
+                ),
+              ],
+              false,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  return attributes;
+};

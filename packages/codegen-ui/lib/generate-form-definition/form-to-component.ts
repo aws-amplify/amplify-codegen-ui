@@ -75,10 +75,10 @@ export const fieldComponentMapper = (name: string, formDefinition: FormDefinitio
           templateColumns: { value: `repeat(${row.length}, auto)` },
         }),
       },
-      children: row.map<StudioComponentChild>((column, colIdx) => {
+      children: row.map<StudioComponentChild>((column) => {
         const element: FormDefinitionElement = formDefinition.elements[column];
         return {
-          name: `${element.componentType}${colIdx}`,
+          name: column,
           componentType: element.componentType,
           properties: mapFieldElementProps(element),
         };

@@ -32,12 +32,9 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
     }, []),
     onValidationFields: Object.entries(form.fields).reduce<{ [field: string]: FieldValidationConfiguration[] }>(
       (validationFields, [field, config]) => {
-        if ('validations' in config && config.validations?.length) {
-          const updatedFields = validationFields;
-          updatedFields[field] = config.validations;
-          return updatedFields;
-        }
-        return validationFields;
+        const updatedFields = validationFields;
+        updatedFields[field] = ('validations' in config && config.validations) || [];
+        return updatedFields;
       },
       {},
     ),
