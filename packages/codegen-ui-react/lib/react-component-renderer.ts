@@ -43,6 +43,7 @@ import {
   filterStateReferencesForComponent,
 } from './workflow';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
+import { addFormAttributes } from './forms';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   TPropIn,
@@ -126,6 +127,10 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       ...eventAttributes,
       ...controlEventAttributes,
     ];
+
+    if (this.componentMetadata.formMetadata) {
+      attributes.push(...addFormAttributes(this.component, this.componentMetadata));
+    }
 
     this.addPropsSpreadAttributes(attributes);
 

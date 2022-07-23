@@ -63,6 +63,7 @@ import {
   buildFormPropNode,
   buildDataStoreActionStatement,
   buildMutationBindings,
+  buildStateMutationStatement,
 } from './form-renderer-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
@@ -123,7 +124,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, false);
 
-    const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
+    let result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
+    if (this.componentMetadata.formMetadata?.onValidationFields) {
+      Object.entries(this.componentMetadata.formMetadata?.onValidationFields).forEach(
+        ([fieldName, validationRules]) => {
+          result = result.replace(`${fieldName}-validation-rules`, JSON.stringify(validationRules));
+        },
+      );
+    }
 
     // do not produce declaration becuase it is not used
     const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
@@ -163,6 +171,13 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
 
+    if (this.componentMetadata.formMetadata?.onValidationFields) {
+      Object.entries(this.componentMetadata.formMetadata?.onValidationFields).forEach(
+        ([fieldName, validationRules]) => {
+          componentText = componentText.replace(`${fieldName}-validation-rules`, JSON.stringify(validationRules));
+        },
+      );
+    }
     const { componentText: transpiledComponentText, declaration } = transpile(componentText, this.renderConfig);
 
     return {
@@ -307,8 +322,17 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         ),
       ),
     );
+    if (this.componentMetadata.formMetadata?.onValidationFields) {
+      const fields = Object.keys(this.componentMetadata.formMetadata?.onValidationFields);
+
+      fields.forEach((field) => {
+        statements.push(buildStateMutationStatement(`${field}FieldError`, factory.createObjectLiteralExpression()));
+      });
+      this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
+    }
 
     statements.push(buildFieldStateStatements(this.component.name, this.importCollection));
+    statements.push(buildStateMutationStatement('formValid', factory.createTrue()));
     // build data source action
     if (this.component.dataType.dataSourceType === 'DataStore') {
       statements.push(buildDataStoreActionStatement(this.component, this.importCollection));

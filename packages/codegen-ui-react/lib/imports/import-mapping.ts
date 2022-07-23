@@ -20,6 +20,7 @@ export enum ImportSource {
   AMPLIFY_DATASTORE = '@aws-amplify/datastore',
   LOCAL_MODELS = '../models',
   LOCAL_SCHEMA = '../models/schema',
+  UTILS = './utils.js',
 }
 
 export enum ImportValue {
@@ -41,6 +42,7 @@ export enum ImportValue {
   USE_AUTH_SIGN_OUT_ACTION = 'useAuthSignOutAction',
   USE_STATE_MUTATION_ACTION = 'useStateMutationAction',
   USE_EFFECT = 'useEffect',
+  VALIDATE_FIELD = 'validateField',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
@@ -62,4 +64,5 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.USE_AUTH_SIGN_OUT_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_STATE_MUTATION_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_EFFECT]: ImportSource.REACT,
+  [ImportValue.VALIDATE_FIELD]: ImportSource.UTILS,
 };
