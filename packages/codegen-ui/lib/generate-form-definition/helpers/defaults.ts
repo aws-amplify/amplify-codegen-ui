@@ -33,7 +33,7 @@ export const FORM_DEFINITION_DEFAULTS = {
       defaultCountryCode: '+1',
       value: 'true',
       name: 'fieldName',
-      valueMappings: { values: [{ value: { value: 'value' }, displayValue: { value: 'Label' } }] },
+      valueMappings: { values: [{ value: { value: 'Option' } }] },
     },
   },
 
