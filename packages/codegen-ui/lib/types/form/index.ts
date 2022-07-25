@@ -39,6 +39,8 @@ type StudioFormActionType = 'create' | 'update';
  * This is the base type for all StudioForms
  */
 export type StudioForm = {
+  id: string;
+
   name: string;
 
   formActionType: StudioFormActionType;
