@@ -14,4 +14,5 @@
   limitations under the License.
  */
 
-export { default as BasicForm } from './basic-form-create.json';
+export { default as FormCreate } from './form-create.json';
+export { default as FormUpdate } from './form-update.json';

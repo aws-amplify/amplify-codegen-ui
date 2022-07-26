@@ -1,0 +1,44 @@
+{
+  "name": "FormCreate",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "Custom",
+    "dataTypeName": "Post"
+  },
+  "fields": {
+    "name": {
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "name",
+        "defaultValue": "John Doe"
+      },
+      "label": "name",
+      "validations": [
+        {
+          "type": "Required"
+        }
+      ]
+    },
+    "email": {
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "email",
+        "defaultValue": "johndoe@amplify.com"
+      },
+      "label": "E-mail",
+      "validations": [
+        {
+          "type": "Required"
+        },
+        {
+          "type": "Email",
+          "validationMessage": "Email should be required"
+        }
+      ]
+    }
+  },
+  "sectionalElements": {},
+  "style": {}
+}

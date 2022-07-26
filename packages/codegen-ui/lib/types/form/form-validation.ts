@@ -38,22 +38,22 @@ export type BaseValidation = {
 
 export type StringValidationType = {
   type: ValidationTypes.CONTAINS | ValidationTypes.NOT_CONTAINS | ValidationTypes.END_WITH | ValidationTypes.START_WITH;
-  values: string[];
+  strValues: string[];
 } & BaseValidation;
 
 export type StringLengthValidationType = {
   type: ValidationTypes.LESS_THAN_CHAR_LENGTH | ValidationTypes.GREATER_THAN_CHAR_LENGTH;
-  values: number;
+  numValues: number[];
 } & BaseValidation;
 
 export type NumberValidationType = {
   type: ValidationTypes.LESS_THAN_NUM | ValidationTypes.GREATER_THAN_NUM | ValidationTypes.EQUAL_TO_NUM;
-  values: number[] | number;
+  numValues: number[];
 } & BaseValidation;
 
 export type DateValidationType = {
   type: ValidationTypes.BE_BEFORE | ValidationTypes.BE_AFTER;
-  values: string | number;
+  strValues: string[];
 } & BaseValidation;
 
 export type GenericValidationType = {

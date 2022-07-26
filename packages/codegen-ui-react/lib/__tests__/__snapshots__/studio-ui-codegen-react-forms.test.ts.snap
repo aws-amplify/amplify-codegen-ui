@@ -215,7 +215,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"caption\\"]
                 ? await onValidate[\\"caption\\"](value)
-                : validateField(value, caption - validation - rules);
+                : validateField(
+                    value,
+                    undefined - caption - validation - rules
+                  );
               setCaptionFieldError({ ...captionFieldError, ...isValidResult });
               setFormValid(!captionFieldError.hasError);
               setModelFields({ ...modelFields, caption: value });
@@ -239,7 +242,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"username\\"]
                 ? await onValidate[\\"username\\"](value)
-                : validateField(value, username - validation - rules);
+                : validateField(
+                    value,
+                    undefined - username - validation - rules
+                  );
               setUsernameFieldError({
                 ...usernameFieldError,
                 ...isValidResult,
@@ -266,7 +272,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"post_url\\"]
                 ? await onValidate[\\"post_url\\"](value)
-                : validateField(value, post_url - validation - rules);
+                : validateField(
+                    value,
+                    undefined - post_url - validation - rules
+                  );
               setPost_urlFieldError({
                 ...post_urlFieldError,
                 ...isValidResult,
@@ -293,7 +302,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"profile_url\\"]
                 ? await onValidate[\\"profile_url\\"](value)
-                : validateField(value, profile_url - validation - rules);
+                : validateField(
+                    value,
+                    undefined - profile_url - validation - rules
+                  );
               setProfile_urlFieldError({
                 ...profile_urlFieldError,
                 ...isValidResult,
@@ -425,7 +437,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"caption\\"]
                 ? await onValidate[\\"caption\\"](value)
-                : validateField(value, caption - validation - rules);
+                : validateField(
+                    value,
+                    undefined - caption - validation - rules
+                  );
               setCaptionFieldError({ ...captionFieldError, ...isValidResult });
               setFormValid(!captionFieldError.hasError);
               setModelFields({ ...modelFields, caption: value });
@@ -449,7 +464,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"username\\"]
                 ? await onValidate[\\"username\\"](value)
-                : validateField(value, username - validation - rules);
+                : validateField(
+                    value,
+                    undefined - username - validation - rules
+                  );
               setUsernameFieldError({
                 ...usernameFieldError,
                 ...isValidResult,
@@ -476,7 +494,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"post_url\\"]
                 ? await onValidate[\\"post_url\\"](value)
-                : validateField(value, post_url - validation - rules);
+                : validateField(
+                    value,
+                    undefined - post_url - validation - rules
+                  );
               setPost_urlFieldError({
                 ...post_urlFieldError,
                 ...isValidResult,
@@ -503,7 +524,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"profile_url\\"]
                 ? await onValidate[\\"profile_url\\"](value)
-                : validateField(value, profile_url - validation - rules);
+                : validateField(
+                    value,
+                    undefined - profile_url - validation - rules
+                  );
               setProfile_urlFieldError({
                 ...profile_urlFieldError,
                 ...isValidResult,

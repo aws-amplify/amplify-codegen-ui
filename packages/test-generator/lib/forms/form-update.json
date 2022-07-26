@@ -1,6 +1,6 @@
 {
-  "name": "BasicFormCreate",
-  "formActionType": "create",
+  "name": "FormUpdate",
+  "formActionType": "update",
   "dataType": {
     "dataSourceType": "Custom",
     "dataTypeName": "Post"
@@ -27,16 +27,7 @@
         "name": "email",
         "defaultValue": "johndoe@amplify.com"
       },
-      "label": "E-mail",
-      "validations": [
-        {
-          "type": "Required"
-        },
-        {
-          "type": "Email",
-          "validationMessage": "Email should be required"
-        }
-      ]
+      "label": "E-mail"
     }
   },
   "sectionalElements": {},

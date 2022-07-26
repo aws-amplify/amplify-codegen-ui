@@ -22,6 +22,7 @@ export const getFormFieldStateName = (formName: string) => {
 
 export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition): FormMetadata => {
   return {
+    id: form.id,
     name: form.name,
     fieldState: getFormFieldStateName(form.name),
     onChangeFields: Object.entries(formDefinition.elements).reduce<string[]>((fields, [key, value]) => {

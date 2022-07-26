@@ -47,6 +47,7 @@ describe('mapElements', () => {
     };
 
     const form: StudioForm = {
+      id: '123',
       name: 'sampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -79,6 +80,7 @@ describe('mapElements', () => {
     const modelFieldsConfigs: ModelFieldsConfigs = {};
 
     const form: StudioForm = {
+      id: '123',
       name: 'sampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },

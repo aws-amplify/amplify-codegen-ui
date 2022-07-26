@@ -316,7 +316,7 @@ export const buildStateMutationStatement = (name: string, defaultValue: Expressi
   );
 };
 
-export const buildOnChangeStatement = (fieldName: string) => {
+export const buildOnChangeStatement = (fieldName: string, id: string) => {
   return factory.createJsxAttribute(
     factory.createIdentifier('onChange'),
     factory.createJsxExpression(
@@ -386,7 +386,7 @@ export const buildOnChangeStatement = (fieldName: string) => {
                       factory.createToken(SyntaxKind.ColonToken),
                       factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
                         factory.createIdentifier('value'),
-                        factory.createIdentifier(`${fieldName}-validation-rules`),
+                        factory.createIdentifier(`${id}-${fieldName}-validation-rules`),
                       ]),
                     ),
                   ),
@@ -449,7 +449,7 @@ export const addFormAttributes = (
   const attributes = [];
   if (component.componentType.includes('Field')) {
     if (componentMetadata.formMetadata?.onChangeFields.includes(component.name)) {
-      attributes.push(buildOnChangeStatement(component.name));
+      attributes.push(buildOnChangeStatement(component.name, componentMetadata.formMetadata.id));
     }
     attributes.push(
       factory.createJsxAttribute(
