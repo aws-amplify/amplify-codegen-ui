@@ -93,8 +93,7 @@ export function getFormDefinitionInputElement(
             config.inputType?.defaultChecked,
             baseConfig?.inputType?.defaultChecked,
           ]),
-          isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
-          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
         },
       };
 

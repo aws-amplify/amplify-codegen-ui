@@ -30,7 +30,7 @@ export type FormDefinitionTextFieldElement = {
 
 export type FormDefinitionSwitchFieldElement = {
   componentType: 'SwitchField';
-  props: { label: string; defaultChecked?: boolean; isRequired?: boolean; isReadOnly?: boolean };
+  props: { label: string; defaultChecked?: boolean; isDisabled?: boolean };
 };
 
 export type FormDefinitionPhoneNumberFieldElement = {
