@@ -190,7 +190,7 @@ describe('Primitives', () => {
         .get('.amplify-pagination')
         .get('ol')
         .within(() => {
-          cy.get('li').eq(1).should('have.text', 'Current Page:1');
+          cy.get('li').eq(1).should('have.text', 'Page:1');
           cy.get('li').eq(2).should('have.text', '2');
           cy.get('li').eq(6).should('have.text', '…');
           cy.get('li').eq(7).should('have.text', '10');
