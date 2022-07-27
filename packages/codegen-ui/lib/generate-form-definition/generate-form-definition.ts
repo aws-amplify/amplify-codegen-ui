@@ -35,7 +35,12 @@ export function generateFormDefinition({
   const formDefinition: FormDefinition = {
     form: { layoutStyle: {} },
     elements: {},
-    buttons: {},
+    buttons: {
+      position: 'Bottom',
+      clear: { visible: true },
+      cancel: { visible: true },
+      submit: { visible: true },
+    },
     elementMatrix: [],
   };
 
@@ -71,6 +76,10 @@ export function generateFormDefinition({
   mapElements({ form, formDefinition, modelFieldsConfigs });
 
   formDefinition.form.layoutStyle = mapStyles(form.style);
+
+  if (form.ctaConfig) {
+    formDefinition.buttons = { ...form.ctaConfig };
+  }
 
   return formDefinition;
 }

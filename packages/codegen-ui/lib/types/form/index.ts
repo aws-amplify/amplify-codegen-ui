@@ -21,6 +21,7 @@ import { FormDefinition, ModelFieldsConfigs, FieldTypeMapKeys } from './form-def
 import { StudioFieldInputConfig, StudioFormValueMappings } from './input-config';
 import { StudioFieldPosition } from './position';
 import { FormMetadata } from './form-metadata';
+import { StudioFormButtons } from './form-cta';
 
 /**
  * Data type definition for StudioForm
@@ -52,6 +53,8 @@ export type StudioForm = {
   sectionalElements: { [elementName: string]: SectionalElement };
 
   style: StudioFormStyle;
+
+  ctaConfig?: StudioFormButtons;
 };
 
 export * from './form-definition-element';
@@ -70,4 +73,5 @@ export type {
   StudioFieldPosition,
   FieldTypeMapKeys,
   StudioFormValueMappings,
+  StudioFormButtons,
 };

@@ -88,7 +88,7 @@ export const fieldComponentMapper = (name: string, formDefinition: FormDefinitio
   return parentGrid(`${name}Grid`, formDefinition.form.layoutStyle, fieldChildren);
 };
 
-export const ctaButtonConfig = (): StudioComponentChild => {
+export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponentChild => {
   return {
     name: 'CTAFlex',
     componentType: 'Flex',
@@ -106,7 +106,10 @@ export const ctaButtonConfig = (): StudioComponentChild => {
         name: 'CancelButton',
         properties: {
           label: {
-            value: 'Cancel',
+            value:
+              formDefinition.buttons?.cancel?.visible && formDefinition.buttons?.cancel?.labelOverride
+                ? formDefinition.buttons?.cancel?.labelOverride
+                : 'Cancel',
           },
           type: {
             value: 'button',
@@ -123,7 +126,10 @@ export const ctaButtonConfig = (): StudioComponentChild => {
             name: 'ClearButton',
             properties: {
               label: {
-                value: 'Clear',
+                value:
+                  formDefinition.buttons?.clear?.visible && formDefinition.buttons?.clear?.labelOverride
+                    ? formDefinition.buttons?.clear?.labelOverride
+                    : 'Clear',
               },
               type: {
                 value: 'reset',
@@ -135,7 +141,10 @@ export const ctaButtonConfig = (): StudioComponentChild => {
             name: 'SubmitButton',
             properties: {
               label: {
-                value: 'Submit',
+                value:
+                  formDefinition.buttons?.submit?.visible && formDefinition.buttons?.submit?.labelOverride
+                    ? formDefinition.buttons?.submit?.labelOverride
+                    : 'Submit',
               },
               type: {
                 value: 'submit',
@@ -160,8 +169,7 @@ export const mapFormDefinitionToComponent = (name: string, formDefinition: FormD
       onCancel: { type: 'Event' },
     },
     events: {},
-    // TODO: change cta button config based on formDefinition cta layout
-    children: [fieldComponentMapper(name, formDefinition), ctaButtonConfig()],
+    children: [fieldComponentMapper(name, formDefinition), ctaButtonConfig(formDefinition)],
   };
   return component;
 };

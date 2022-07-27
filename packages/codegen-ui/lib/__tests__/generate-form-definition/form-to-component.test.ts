@@ -25,6 +25,15 @@ describe('formToComponent', () => {
       fields: {},
       sectionalElements: {},
       style: {},
+      ctaConfig: {
+        position: 'Bottom',
+        cancel: {
+          visible: true,
+          labelOverride: 'canc',
+        },
+        submit: { visible: true },
+        clear: { visible: true },
+      },
     };
 
     expect(myForm).toBeDefined();
