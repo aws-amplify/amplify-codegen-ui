@@ -128,7 +128,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     if (this.componentMetadata.formMetadata?.onValidationFields) {
       Object.entries(this.componentMetadata.formMetadata?.onValidationFields).forEach(
         ([fieldName, validationRules]) => {
-          result = result.replace(`${fieldName}-validation-rules`, JSON.stringify(validationRules));
+          result = result.replace(
+            `${this.componentMetadata.formMetadata?.id}-${fieldName}-validation-rules`,
+            JSON.stringify(validationRules),
+          );
         },
       );
     }
@@ -174,7 +177,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     if (this.componentMetadata.formMetadata?.onValidationFields) {
       Object.entries(this.componentMetadata.formMetadata?.onValidationFields).forEach(
         ([fieldName, validationRules]) => {
-          componentText = componentText.replace(`${fieldName}-validation-rules`, JSON.stringify(validationRules));
+          componentText = componentText.replace(
+            `${this.componentMetadata.formMetadata?.id}-${fieldName}-validation-rules`,
+            JSON.stringify(validationRules),
+          );
         },
       );
     }

@@ -31,6 +31,7 @@ describe('form-render utils', () => {
 
   it('should generate a datastore function', () => {
     const form: StudioForm = {
+      id: '123',
       name: 'mySampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
@@ -47,6 +48,7 @@ describe('form-render utils', () => {
 
   it('should generate before & complete types if datastore config is set', () => {
     const form: StudioForm = {
+      id: '123',
       name: 'mySampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
@@ -62,6 +64,7 @@ describe('form-render utils', () => {
 
   it('should generate regular onsubmit if dataSourceType is custom', () => {
     const form: StudioForm = {
+      id: '123',
       name: 'myCustomForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'Custom', dataTypeName: 'Custom' },

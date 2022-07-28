@@ -56,6 +56,7 @@ export type StudioForm = {
 
 export * from './form-definition-element';
 export * from './style';
+export * from './form-validation';
 
 export type {
   SectionalElement,
