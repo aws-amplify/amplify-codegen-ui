@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import factory, { ImportDeclaration } from 'typescript';
+import { ImportDeclaration, factory } from 'typescript';
 import path from 'path';
 import { ImportMapping, ImportValue } from './import-mapping';
 
@@ -51,6 +51,7 @@ export class ImportCollection {
         undefined,
         undefined,
         factory.createImportClause(
+          false,
           undefined,
           factory.createNamedImports([
             factory.createImportSpecifier(undefined, factory.createIdentifier(topComponentName)),
@@ -70,7 +71,11 @@ export class ImportCollection {
               factory.createImportDeclaration(
                 undefined,
                 undefined,
-                factory.createImportClause(factory.createIdentifier('React'), undefined),
+                factory.createImportClause(
+                  false,
+                  undefined,
+                  factory.createNamespaceImport(factory.createIdentifier('React')),
+                ),
                 factory.createStringLiteral('react'),
               ),
             ],
@@ -82,6 +87,7 @@ export class ImportCollection {
             undefined,
             undefined,
             factory.createImportClause(
+              false,
               // use module name as defualt import name
               [...imports].indexOf('default') >= 0 ? factory.createIdentifier(path.basename(moduleName)) : undefined,
               factory.createNamedImports(
