@@ -14,25 +14,23 @@ export default function customDataForm(props) {
   const {
     onSubmit: customDataFormOnSubmit,
     onCancel,
+    onValidate,
     overrides,
     ...rest
   } = props;
   const [nameFieldError, setNameFieldError] = useStateMutationAction({});
   const [emailFieldError, setEmailFieldError] = useStateMutationAction({});
-  const [customDataFormFields, setCustomDataFormFields] =
-    useStateMutationAction({});
+  const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
   return (
     <form
       onSubmit={async (event) => {
         event.preventDefault();
         if (onSubmitBefore) {
-          setCustomDataFormFields(
-            onSubmitBefore({ fields: customDataFormFields })
-          );
+          setModelFields(onSubmitBefore({ fields: modelFields }));
         }
         try {
-          await DataStore.save(new Post(customDataFormFields));
+          await DataStore.save(new Post(modelFields));
           if (onSubmitComplete) {
             onSubmitComplete({ saveSuccessful: true });
           }
@@ -155,32 +153,40 @@ import React from \\"react\\";
 import { validateField } from \\"./utils.js\\";
 import {
   getOverrideProps,
-  useDataStoreCreateAction,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
-import { schema } from \\"../models/schema\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
-  const { onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
-    props;
-  const [myPostFormFields, setMyPostFormFields] = useStateMutationAction({});
+  const {
+    onSubmitBefore,
+    onSubmitComplete,
+    onCancel,
+    onValidate,
+    overrides,
+    ...rest
+  } = props;
+  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({});
+  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction(
+    {}
+  );
+  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction(
+    {}
+  );
+  const [profile_urlFieldError, setProfile_urlFieldError] =
+    useStateMutationAction({});
+  const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
-  const myPostFormOnSubmit = useDataStoreCreateAction({
-    model: Post,
-    fields: myPostFormFields,
-    schema: schema,
-  });
   return (
     <form
       onSubmit={async (event) => {
         event.preventDefault();
         if (onSubmitBefore) {
-          setMyPostFormFields(onSubmitBefore({ fields: myPostFormFields }));
+          setModelFields(onSubmitBefore({ fields: modelFields }));
         }
         try {
-          await DataStore.save(new Post(myPostFormFields));
+          await DataStore.save(new Post(modelFields));
           if (onSubmitComplete) {
             onSubmitComplete({ saveSuccessful: true });
           }
@@ -376,33 +382,41 @@ import React from \\"react\\";
 import { validateField } from \\"./utils.js\\";
 import {
   getOverrideProps,
-  useDataStoreUpdateAction,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
-import { schema } from \\"../models/schema\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
-  const { id, onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
-    props;
-  const [myPostFormFields, setMyPostFormFields] = useStateMutationAction({});
+  const {
+    id,
+    onSubmitBefore,
+    onSubmitComplete,
+    onCancel,
+    onValidate,
+    overrides,
+    ...rest
+  } = props;
+  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({});
+  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction(
+    {}
+  );
+  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction(
+    {}
+  );
+  const [profile_urlFieldError, setProfile_urlFieldError] =
+    useStateMutationAction({});
+  const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
-  const myPostFormOnSubmit = useDataStoreUpdateAction({
-    model: Post,
-    fields: myPostFormFields,
-    id: id,
-    schema: schema,
-  });
   return (
     <form
       onSubmit={async (event) => {
         event.preventDefault();
         if (onSubmitBefore) {
-          setMyPostFormFields(onSubmitBefore({ fields: myPostFormFields }));
+          setModelFields(onSubmitBefore({ fields: modelFields }));
         }
         try {
-          await DataStore.save(new Post(myPostFormFields));
+          await DataStore.save(new Post(modelFields));
           if (onSubmitComplete) {
             onSubmitComplete({ saveSuccessful: true });
           }

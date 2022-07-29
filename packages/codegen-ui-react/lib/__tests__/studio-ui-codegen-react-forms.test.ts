@@ -51,7 +51,7 @@ describe('amplify form renderer tests', () => {
         'forms/post-datastore-create',
         'datastore/post',
       );
-      expect(componentText).toContain('useDataStoreCreateAction');
+      expect(componentText).toContain('DataStore.save');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
@@ -61,7 +61,7 @@ describe('amplify form renderer tests', () => {
         'forms/post-datastore-update',
         'datastore/post',
       );
-      expect(componentText).toContain('useDataStoreUpdateAction');
+      expect(componentText).toContain('DataStore.save');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
@@ -70,7 +70,7 @@ describe('amplify form renderer tests', () => {
   describe('custom form tests', () => {
     it('should render a custom backed form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-create', undefined);
-      expect(componentText.replace(/\s/g, '')).toContain('setCustomDataFormFields(onSubmitBefore');
+      expect(componentText.replace(/\s/g, '')).toContain('setModelFields(onSubmitBefore');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });

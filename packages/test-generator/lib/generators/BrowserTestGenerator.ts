@@ -15,7 +15,13 @@
  */
 
 /* Test Generator to be used in the browser environment */
-import { FormMetadata, StudioComponent, StudioForm, StudioTheme } from '@aws-amplify/codegen-ui';
+import {
+  FormMetadata,
+  getGenericFromDataStore,
+  StudioComponent,
+  StudioForm,
+  StudioTheme,
+} from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
   ReactThemeStudioTemplateRenderer,
@@ -23,6 +29,7 @@ import {
   ReactUtilsStudioTemplateRenderer,
   AmplifyFormRenderer,
 } from '@aws-amplify/codegen-ui-react';
+import schema from '../models/schema';
 import { TestGenerator } from './TestGenerator';
 
 export class BrowserTestGenerator extends TestGenerator {
@@ -53,7 +60,7 @@ export class BrowserTestGenerator extends TestGenerator {
   }
 
   renderForm(form: StudioForm) {
-    return new AmplifyFormRenderer(form, undefined, this.renderConfig).renderComponentOnly();
+    return new AmplifyFormRenderer(form, getGenericFromDataStore(schema), this.renderConfig).renderComponentOnly();
   }
 
   renderTheme(theme: StudioTheme) {
