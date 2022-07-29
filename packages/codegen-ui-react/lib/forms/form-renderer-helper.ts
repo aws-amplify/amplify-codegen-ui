@@ -97,7 +97,7 @@ export const buildMutationBindings = (form: StudioForm) => {
       factory.createBindingElement(
         undefined,
         factory.createIdentifier('onSubmit'),
-        getActionIdentifier(form.name, 'onSubmit'),
+        getActionIdentifier(form.name, 'onSubmit'), // custom onsubmit function with the name of the form
         undefined,
       ),
     );
