@@ -2,7 +2,7 @@
 
 exports[`amplify form renderer tests custom form tests should render a custom backed form 1`] = `
 "/* eslint-disable */
-import React from \\"react\\";
+import * as React from \\"react\\";
 import { validateField } from \\"./utils.js\\";
 import {
   getOverrideProps,
@@ -135,7 +135,7 @@ export default function customDataForm(props) {
 `;
 
 exports[`amplify form renderer tests custom form tests should render a custom backed form 2`] = `
-"import React from \\"react\\";
+"import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 export declare type customDataFormProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
@@ -149,7 +149,7 @@ export default function customDataForm(props: customDataFormProps): React.ReactE
 
 exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
 "/* eslint-disable */
-import React from \\"react\\";
+import * as React from \\"react\\";
 import { validateField } from \\"./utils.js\\";
 import {
   getOverrideProps,
@@ -360,7 +360,7 @@ export default function myPostForm(props) {
 `;
 
 exports[`amplify form renderer tests datastore form tests should generate a create form 2`] = `
-"import React from \\"react\\";
+"import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 export declare type myPostFormProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
@@ -378,7 +378,7 @@ export default function myPostForm(props: myPostFormProps): React.ReactElement;
 
 exports[`amplify form renderer tests datastore form tests should generate a update form 1`] = `
 "/* eslint-disable */
-import React from \\"react\\";
+import * as React from \\"react\\";
 import { validateField } from \\"./utils.js\\";
 import {
   getOverrideProps,
@@ -590,7 +590,7 @@ export default function myPostForm(props) {
 `;
 
 exports[`amplify form renderer tests datastore form tests should generate a update form 2`] = `
-"import React from \\"react\\";
+"import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 export declare type myPostFormProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
