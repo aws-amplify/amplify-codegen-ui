@@ -19,6 +19,7 @@ import { StudioForm } from '../../types';
 describe('formToComponent', () => {
   it('should map datastore model fields', () => {
     const myForm: StudioForm = {
+      id: '123',
       name: 'mySampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },

@@ -1,33 +1,37 @@
 {
+  "id": "123",
   "name": "FormUpdate",
   "formActionType": "update",
   "dataType": {
-    "dataSourceType": "Custom",
-    "dataTypeName": "Post"
+    "dataSourceType": "DataStore",
+    "dataTypeName": "UserPreference"
   },
   "fields": {
-    "name": {
+    "favoriteColor": {
+      "position": {
+        "fixed": "first"
+      },
       "inputType": {
         "required": true,
         "type": "TextField",
-        "name": "name",
+        "name": "favoriteColor",
         "defaultValue": "John Doe"
       },
-      "label": "name",
+      "label": "Favorite Color",
       "validations": [
         {
           "type": "Required"
         }
       ]
     },
-    "email": {
+    "createdAt": {
       "inputType": {
         "required": true,
         "type": "TextField",
-        "name": "email",
-        "defaultValue": "johndoe@amplify.com"
+        "name": "createdat",
+        "defaultValue": "123456"
       },
-      "label": "E-mail"
+      "label": "Created At"
     }
   },
   "sectionalElements": {},
