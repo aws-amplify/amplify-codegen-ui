@@ -349,3 +349,20 @@ export const buildCollectionWithItemMap = (
     ),
   );
 };
+
+export const createHookStatement = (variableName: string, methodName: string, props: ObjectLiteralExpression) => {
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier(variableName),
+          undefined,
+          undefined,
+          factory.createCallExpression(factory.createIdentifier(methodName), undefined, [props]),
+        ),
+      ],
+      ts.NodeFlags.Const,
+    ),
+  );
+};
