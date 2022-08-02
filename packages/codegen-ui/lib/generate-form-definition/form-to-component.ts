@@ -88,7 +88,30 @@ export const fieldComponentMapper = (name: string, formDefinition: FormDefinitio
   return parentGrid(`${name}Grid`, formDefinition.form.layoutStyle, fieldChildren);
 };
 
+const resolveCtaLabels = (
+  formDefinition: FormDefinition,
+): { cancelLabel: string; clearLabel: string; submitLabel: string } => {
+  const cancelLabel =
+    formDefinition.buttons?.cancel?.visible && formDefinition.buttons?.cancel?.labelOverride
+      ? formDefinition.buttons?.cancel?.labelOverride
+      : 'Cancel';
+
+  const clearLabel =
+    formDefinition.buttons?.clear?.visible && formDefinition.buttons?.clear?.labelOverride
+      ? formDefinition.buttons?.clear?.labelOverride
+      : 'Clear';
+
+  const submitLabel =
+    formDefinition.buttons?.submit?.visible && formDefinition.buttons?.submit?.labelOverride
+      ? formDefinition.buttons?.submit?.labelOverride
+      : 'Submit';
+
+  return { cancelLabel, clearLabel, submitLabel };
+};
+
 export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponentChild => {
+  const { cancelLabel, clearLabel, submitLabel } = resolveCtaLabels(formDefinition);
+
   return {
     name: 'CTAFlex',
     componentType: 'Flex',
@@ -106,10 +129,7 @@ export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponent
         name: 'CancelButton',
         properties: {
           label: {
-            value:
-              formDefinition.buttons?.cancel?.visible && formDefinition.buttons?.cancel?.labelOverride
-                ? formDefinition.buttons?.cancel?.labelOverride
-                : 'Cancel',
+            value: cancelLabel,
           },
           type: {
             value: 'button',
@@ -126,10 +146,7 @@ export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponent
             name: 'ClearButton',
             properties: {
               label: {
-                value:
-                  formDefinition.buttons?.clear?.visible && formDefinition.buttons?.clear?.labelOverride
-                    ? formDefinition.buttons?.clear?.labelOverride
-                    : 'Clear',
+                value: clearLabel,
               },
               type: {
                 value: 'reset',
@@ -141,10 +158,7 @@ export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponent
             name: 'SubmitButton',
             properties: {
               label: {
-                value:
-                  formDefinition.buttons?.submit?.visible && formDefinition.buttons?.submit?.labelOverride
-                    ? formDefinition.buttons?.submit?.labelOverride
-                    : 'Submit',
+                value: submitLabel,
               },
               type: {
                 value: 'submit',
