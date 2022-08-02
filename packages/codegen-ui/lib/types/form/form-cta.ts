@@ -13,26 +13,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-type VisibleStudioFormButton = {
-  visible: true;
+type StudioFormButton = {
+  visible: boolean;
 
-  labelOverride?: string;
+  label?: string;
+
+  position?: string;
 };
-
-type HiddenStudioFormButton = {
-  visible: false;
-};
-
-type StudioFormButton = VisibleStudioFormButton | HiddenStudioFormButton;
 
 /**
  * Configuration for each of the specified CTA's
  */
-export type StudioFormButtons = {
+export type StudioFormCTAConfig = {
   /**
    * The position of the CTA's in the form when rendered
    */
-  position?: 'Top' | 'Bottom' | 'TopAndBottom';
+  position?: 'top' | 'bottom' | 'topAndBottom';
 
   clear?: StudioFormButton;
 

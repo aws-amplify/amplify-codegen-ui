@@ -19,6 +19,7 @@ describe('generateFormDefinition', () => {
   it('should map DataStore model fields', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        id: '123',
         name: 'sampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -41,10 +42,69 @@ describe('generateFormDefinition', () => {
     });
   });
 
+  it('should map ctaConfig options', () => {
+    const formDefinition = generateFormDefinition({
+      form: {
+        id: '123',
+        name: 'sampleForm',
+        formActionType: 'create',
+        dataType: { dataSourceType: 'Custom', dataTypeName: 'dfsdjflk' },
+        fields: {},
+        sectionalElements: {},
+        style: {},
+        ctaConfig: {
+          position: 'bottom',
+          cancel: {
+            visible: true,
+            label: 'cancelling',
+          },
+          clear: {
+            visible: false,
+          },
+          submit: {
+            visible: false,
+            label: 'create',
+          },
+        },
+      },
+    });
+    expect(formDefinition.buttons).toStrictEqual({
+      position: 'bottom',
+      cancel: {
+        visible: true,
+        label: 'cancelling',
+      },
+      clear: {
+        visible: false,
+      },
+      submit: {
+        visible: false,
+        label: 'create',
+      },
+    });
+  });
+
+  it('should map empty ctaConfig', () => {
+    const formDefinition = generateFormDefinition({
+      form: {
+        id: '123',
+        name: 'sampleForm',
+        formActionType: 'create',
+        dataType: { dataSourceType: 'Custom', dataTypeName: 'dfsdjflk' },
+        fields: {},
+        sectionalElements: {},
+        style: {},
+        ctaConfig: {},
+      },
+    });
+    expect(formDefinition.buttons).toStrictEqual({});
+  });
+
   it('should throw if form has source type DataStore, but no schema is available', () => {
     expect(() =>
       generateFormDefinition({
         form: {
+          id: '123',
           name: 'sampleForm',
           formActionType: 'create',
           dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -59,6 +119,7 @@ describe('generateFormDefinition', () => {
   it('should override field configurations from DataStore', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        id: '123',
         name: 'mySampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -84,6 +145,7 @@ describe('generateFormDefinition', () => {
   it('should not add overrides to the matrix', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        id: '123',
         name: 'mySampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -105,6 +167,7 @@ describe('generateFormDefinition', () => {
   it('should add fields that do not exist in DataStore', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        id: '123',
         name: 'mySampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -122,6 +185,7 @@ describe('generateFormDefinition', () => {
   it('should add fields that do not exist in DataStore to the matrix', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        id: '123',
         name: 'mySampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -137,6 +201,7 @@ describe('generateFormDefinition', () => {
   it('should add sectional elements', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        id: '123',
         name: 'mySampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'Custom', dataTypeName: 'dfjkajfl' },
@@ -161,6 +226,7 @@ describe('generateFormDefinition', () => {
     };
     const formDefinition = generateFormDefinition({
       form: {
+        id: '123',
         name: 'mySampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'Custom', dataTypeName: 'dfsdjflk' },
@@ -175,6 +241,7 @@ describe('generateFormDefinition', () => {
   it('should not leave empty rows in the matrix', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        id: '123',
         name: 'mySampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -210,6 +277,7 @@ describe('generateFormDefinition', () => {
   it('should correctly map positions', () => {
     const formDefinition = generateFormDefinition({
       form: {
+        id: '123',
         name: 'mySampleForm',
         formActionType: 'create',
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -246,6 +314,7 @@ describe('generateFormDefinition', () => {
 it('should requeue if related element is not yet found', () => {
   const formDefinition = generateFormDefinition({
     form: {
+      id: '123',
       name: 'mySampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'Custom', dataTypeName: 'dfjslkfj' },
@@ -268,6 +337,7 @@ it('should requeue if related element is not yet found', () => {
 it('should handle fields without position', () => {
   const formDefinition = generateFormDefinition({
     form: {
+      id: '123',
       name: 'mySampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'Custom', dataTypeName: 'fjsldkfj' },
@@ -291,6 +361,7 @@ it('should handle fields without position', () => {
 it('should fill out styles using defaults', () => {
   const definitionForFormWithoutStyle = generateFormDefinition({
     form: {
+      id: '123',
       name: 'mySampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'Custom', dataTypeName: 'dfkjad' },
@@ -311,6 +382,7 @@ it('should fill out styles using defaults', () => {
 it('should skip read-only fields without overrides', () => {
   const formDefinition = generateFormDefinition({
     form: {
+      id: '123',
       name: 'sampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -338,6 +410,7 @@ it('should skip read-only fields without overrides', () => {
 it('should add read-only fields if it has overrides', () => {
   const formDefinition = generateFormDefinition({
     form: {
+      id: '123',
       name: 'sampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
@@ -370,6 +443,7 @@ it('should add read-only fields if it has overrides', () => {
 it('should skip adding id field if it has no overrides', () => {
   const formDefinition = generateFormDefinition({
     form: {
+      id: '123',
       name: 'sampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },

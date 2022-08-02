@@ -30,15 +30,15 @@
   "ctaConfig": {
     "clear": {
       "visible": true,
-      "labelOverride": "empty"
+      "label": "empty"
     },
     "cancel": {
       "visible": true,
-      "labelOverride": "go back"
+      "label": "go back"
     },
     "submit": {
       "visible": true,
-      "labelOverride": "create"
+      "label": "create"
     }
   }
 }

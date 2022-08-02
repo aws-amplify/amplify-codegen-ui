@@ -19,6 +19,7 @@ import { StudioForm } from '../../types';
 describe('formToComponent', () => {
   it('should map datastore model fields', () => {
     const myForm: StudioForm = {
+      id: '123',
       name: 'mySampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
@@ -26,10 +27,10 @@ describe('formToComponent', () => {
       sectionalElements: {},
       style: {},
       ctaConfig: {
-        position: 'Bottom',
+        position: 'bottom',
         cancel: {
           visible: true,
-          labelOverride: 'canc',
+          label: 'canc',
         },
         submit: { visible: true },
         clear: { visible: true },

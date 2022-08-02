@@ -35,12 +35,7 @@ export function generateFormDefinition({
   const formDefinition: FormDefinition = {
     form: { layoutStyle: {} },
     elements: {},
-    buttons: {
-      position: 'Bottom',
-      clear: { visible: true },
-      cancel: { visible: true },
-      submit: { visible: true },
-    },
+    buttons: {},
     elementMatrix: [],
   };
 
