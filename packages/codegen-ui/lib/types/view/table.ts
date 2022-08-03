@@ -23,7 +23,7 @@ export interface ColumnConfig {
   label?: string;
   maxDisplayItems?: number;
   position?: FieldPosition;
-  sortable?: Boolean;
+  sortable?: boolean;
   valueFormatting?: ViewValueFormatting;
 }
 export interface ColumnsMap {

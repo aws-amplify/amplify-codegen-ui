@@ -31,8 +31,8 @@ export interface View {
 
 export interface ViewConfiguration {
   columns?: ColumnsMap;
-  disableHeaders?: Boolean;
-  highlightOnHover?: Boolean;
+  disableHeaders?: boolean;
+  highlightOnHover?: boolean;
   type: ViewType;
 }
 
