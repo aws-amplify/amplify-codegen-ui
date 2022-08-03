@@ -13,12 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { StudioFieldPosition } from './position';
+
 type StudioFormButton = {
   visible: boolean;
 
   label?: string;
 
-  position?: string;
+  position?: StudioFieldPosition;
 };
 
 /**
@@ -28,7 +30,7 @@ export type StudioFormCTAConfig = {
   /**
    * The position of the CTA's in the form when rendered
    */
-  position?: 'top' | 'bottom' | 'topAndBottom';
+  position?: string;
 
   clear?: StudioFormButton;
 

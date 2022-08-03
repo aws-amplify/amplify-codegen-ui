@@ -54,7 +54,7 @@ export type StudioForm = {
 
   style: StudioFormStyle;
 
-  ctaConfig?: StudioFormCTAConfig;
+  ctaConfig: StudioFormCTAConfig;
 };
 
 export * from './form-definition-element';

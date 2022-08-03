@@ -92,9 +92,9 @@ export const fieldComponentMapper = (name: string, formDefinition: FormDefinitio
 const resolveCtaLabels = (
   formDefinition: FormDefinition,
 ): { cancelLabel: string; clearLabel: string; submitLabel: string } => {
-  const cancelLabel = formDefinition.buttons?.cancel?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.cancel.label;
-  const clearLabel = formDefinition.buttons?.clear?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.clear.label;
-  const submitLabel = formDefinition.buttons?.submit?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.submit.label;
+  const cancelLabel = formDefinition.buttons.cancel?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.cancel.label;
+  const clearLabel = formDefinition.buttons.clear?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.clear.label;
+  const submitLabel = formDefinition.buttons.submit?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.submit.label;
 
   return { cancelLabel, clearLabel, submitLabel };
 };

@@ -42,13 +42,17 @@ export const FORM_DEFINITION_DEFAULTS = {
   },
 
   ctaConfig: {
+    position: 'bottom',
     cancel: {
+      visible: true,
       label: 'Cancel',
     },
     clear: {
+      visible: true,
       label: 'Clear',
     },
     submit: {
+      visible: true,
       label: 'Submit',
     },
   },
