@@ -59,10 +59,11 @@ describe('mapElements', () => {
     mapElements({ formDefinition, modelFieldsConfigs, form });
     expect(formDefinition.elements).toStrictEqual({
       myText: { componentType: 'Text', props: { children: 'MyText' } },
-      name: { componentType: 'TextField', props: { label: 'Label' } },
+      name: { componentType: 'TextField', props: { label: 'Label' }, studioFormComponentType: 'TextField' },
       price: {
         componentType: 'TextField',
         props: { label: 'price', isRequired: false, isReadOnly: false },
+        studioFormComponentType: 'TextField',
       },
     });
 
