@@ -26,5 +26,19 @@
     }
   },
   "sectionalElements": {},
-  "style": {}
+  "style": {},
+  "ctaConfig": {
+    "clear": {
+      "visible": true,
+      "label": "empty"
+    },
+    "cancel": {
+      "visible": true,
+      "label": "go back"
+    },
+    "submit": {
+      "visible": true,
+      "label": "create"
+    }
+  }
 }

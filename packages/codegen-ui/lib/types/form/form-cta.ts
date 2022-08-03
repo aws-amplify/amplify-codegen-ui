@@ -13,22 +13,28 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-// import { postSchema } from '../__utils__/mock-schemas';
-import { StudioForm } from '../../types';
+import { StudioFieldPosition } from './position';
 
-describe('formToComponent', () => {
-  it('should map datastore model fields', () => {
-    const myForm: StudioForm = {
-      id: '123',
-      name: 'mySampleForm',
-      formActionType: 'create',
-      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
-      fields: {},
-      sectionalElements: {},
-      style: {},
-      ctaConfig: {},
-    };
+type StudioFormButton = {
+  visible: boolean;
 
-    expect(myForm).toBeDefined();
-  });
-});
+  label?: string;
+
+  position?: StudioFieldPosition;
+};
+
+/**
+ * Configuration for each of the specified CTA's
+ */
+export type StudioFormCTAConfig = {
+  /**
+   * The position of the CTA's in the form when rendered
+   */
+  position?: string;
+
+  clear?: StudioFormButton;
+
+  cancel?: StudioFormButton;
+
+  submit?: StudioFormButton;
+};

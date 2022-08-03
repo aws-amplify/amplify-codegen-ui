@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { mapModelFieldsConfigs, mapElementMatrix, mapStyles, mapElements } from './helpers';
+import { mapModelFieldsConfigs, mapElementMatrix, mapStyles, mapElements, mapButtons } from './helpers';
 import { StudioForm, FormDefinition, ModelFieldsConfigs, StudioFieldPosition, GenericDataSchema } from '../types';
 import { InvalidInputError } from '../errors';
 
@@ -71,6 +71,8 @@ export function generateFormDefinition({
   mapElements({ form, formDefinition, modelFieldsConfigs });
 
   formDefinition.form.layoutStyle = mapStyles(form.style);
+
+  formDefinition.buttons = mapButtons(form.ctaConfig);
 
   return formDefinition;
 }

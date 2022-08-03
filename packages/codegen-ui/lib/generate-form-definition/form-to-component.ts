@@ -22,6 +22,7 @@ import {
   StudioComponentProperties,
   StudioFormStyle,
 } from '../types';
+import { FORM_DEFINITION_DEFAULTS } from './helpers/defaults';
 
 const getStyleResolvedValue = (config?: FormStyleConfig): string | undefined => {
   return config?.value ?? config?.tokenReference;
@@ -88,7 +89,19 @@ export const fieldComponentMapper = (name: string, formDefinition: FormDefinitio
   return parentGrid(`${name}Grid`, formDefinition.form.layoutStyle, fieldChildren);
 };
 
-export const ctaButtonConfig = (): StudioComponentChild => {
+const resolveCtaLabels = (
+  formDefinition: FormDefinition,
+): { cancelLabel: string; clearLabel: string; submitLabel: string } => {
+  const cancelLabel = formDefinition.buttons.cancel?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.cancel.label;
+  const clearLabel = formDefinition.buttons.clear?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.clear.label;
+  const submitLabel = formDefinition.buttons.submit?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.submit.label;
+
+  return { cancelLabel, clearLabel, submitLabel };
+};
+
+export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponentChild => {
+  const { cancelLabel, clearLabel, submitLabel } = resolveCtaLabels(formDefinition);
+
   return {
     name: 'CTAFlex',
     componentType: 'Flex',
@@ -106,7 +119,7 @@ export const ctaButtonConfig = (): StudioComponentChild => {
         name: 'CancelButton',
         properties: {
           label: {
-            value: 'Cancel',
+            value: cancelLabel,
           },
           type: {
             value: 'button',
@@ -123,7 +136,7 @@ export const ctaButtonConfig = (): StudioComponentChild => {
             name: 'ClearButton',
             properties: {
               label: {
-                value: 'Clear',
+                value: clearLabel,
               },
               type: {
                 value: 'reset',
@@ -135,7 +148,7 @@ export const ctaButtonConfig = (): StudioComponentChild => {
             name: 'SubmitButton',
             properties: {
               label: {
-                value: 'Submit',
+                value: submitLabel,
               },
               type: {
                 value: 'submit',
@@ -160,8 +173,7 @@ export const mapFormDefinitionToComponent = (name: string, formDefinition: FormD
       onCancel: { type: 'Event' },
     },
     events: {},
-    // TODO: change cta button config based on formDefinition cta layout
-    children: [fieldComponentMapper(name, formDefinition), ctaButtonConfig()],
+    children: [fieldComponentMapper(name, formDefinition), ctaButtonConfig(formDefinition)],
   };
   return component;
 };

@@ -26,6 +26,7 @@ describe('generateFormDefinition', () => {
         fields: {},
         sectionalElements: {},
         style: {},
+        ctaConfig: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -42,6 +43,80 @@ describe('generateFormDefinition', () => {
     });
   });
 
+  it('should map ctaConfig options', () => {
+    const formDefinition = generateFormDefinition({
+      form: {
+        id: '123',
+        name: 'sampleForm',
+        formActionType: 'create',
+        dataType: { dataSourceType: 'Custom', dataTypeName: 'dfsdjflk' },
+        fields: {},
+        sectionalElements: {},
+        style: {},
+        ctaConfig: {
+          position: 'bottom',
+          cancel: {
+            visible: false,
+            label: 'cancelling',
+          },
+          clear: {
+            visible: false,
+            label: 'clearing',
+          },
+          submit: {
+            visible: false,
+            label: 'create',
+          },
+        },
+      },
+    });
+    expect(formDefinition.buttons).toStrictEqual({
+      position: 'bottom',
+      cancel: {
+        visible: false,
+        label: 'cancelling',
+      },
+      clear: {
+        visible: false,
+        label: 'clearing',
+      },
+      submit: {
+        visible: false,
+        label: 'create',
+      },
+    });
+  });
+
+  it('should map empty ctaConfig to defaults', () => {
+    const formDefinition = generateFormDefinition({
+      form: {
+        id: '123',
+        name: 'sampleForm',
+        formActionType: 'create',
+        dataType: { dataSourceType: 'Custom', dataTypeName: 'dfsdjflk' },
+        fields: {},
+        sectionalElements: {},
+        style: {},
+        ctaConfig: {},
+      },
+    });
+    expect(formDefinition.buttons).toStrictEqual({
+      position: 'bottom',
+      cancel: {
+        visible: true,
+        label: 'Cancel',
+      },
+      clear: {
+        visible: true,
+        label: 'Clear',
+      },
+      submit: {
+        visible: true,
+        label: 'Submit',
+      },
+    });
+  });
+
   it('should throw if form has source type DataStore, but no schema is available', () => {
     expect(() =>
       generateFormDefinition({
@@ -53,6 +128,7 @@ describe('generateFormDefinition', () => {
           fields: {},
           sectionalElements: {},
           style: {},
+          ctaConfig: {},
         },
       }),
     ).toThrow();
@@ -68,6 +144,7 @@ describe('generateFormDefinition', () => {
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: {},
         style: {},
+        ctaConfig: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -94,6 +171,7 @@ describe('generateFormDefinition', () => {
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: {},
         style: {},
+        ctaConfig: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -116,6 +194,7 @@ describe('generateFormDefinition', () => {
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: {},
         style: {},
+        ctaConfig: {},
       },
       dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
     });
@@ -134,6 +213,7 @@ describe('generateFormDefinition', () => {
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: {},
         style: {},
+        ctaConfig: {},
       },
       dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
     });
@@ -152,6 +232,7 @@ describe('generateFormDefinition', () => {
           Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
         },
         style: {},
+        ctaConfig: {},
       },
     });
     expect(formDefinition.elements.Heading123).toStrictEqual({
@@ -175,6 +256,7 @@ describe('generateFormDefinition', () => {
         fields: {},
         sectionalElements: {},
         style,
+        ctaConfig: {},
       },
     });
     expect(formDefinition.form.layoutStyle).toStrictEqual(style);
@@ -197,6 +279,7 @@ describe('generateFormDefinition', () => {
         },
 
         style: {},
+        ctaConfig: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -233,6 +316,7 @@ describe('generateFormDefinition', () => {
         },
 
         style: {},
+        ctaConfig: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -271,6 +355,7 @@ it('should requeue if related element is not yet found', () => {
       },
 
       style: {},
+      ctaConfig: {},
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color']]);
@@ -295,6 +380,7 @@ it('should handle fields without position', () => {
       },
 
       style: {},
+      ctaConfig: {},
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color'], ['bark']]);
@@ -311,6 +397,7 @@ it('should fill out styles using defaults', () => {
       sectionalElements: {},
 
       style: {},
+      ctaConfig: {},
     },
   });
 
@@ -331,6 +418,7 @@ it('should skip read-only fields without overrides', () => {
       fields: {},
       sectionalElements: {},
       style: {},
+      ctaConfig: {},
     },
     dataSchema: {
       dataSourceType: 'DataStore',
@@ -359,6 +447,7 @@ it('should add read-only fields if it has overrides', () => {
       fields: { name: { inputType: { type: 'TextField' } } },
       sectionalElements: {},
       style: {},
+      ctaConfig: {},
     },
     dataSchema: {
       dataSourceType: 'DataStore',
@@ -392,6 +481,7 @@ it('should skip adding id field if it has no overrides', () => {
       fields: {},
       sectionalElements: {},
       style: {},
+      ctaConfig: {},
     },
     dataSchema: {
       dataSourceType: 'DataStore',

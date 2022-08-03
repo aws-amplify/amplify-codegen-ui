@@ -106,7 +106,7 @@ export default function customDataForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          label=\\"Cancel\\"
+          label=\\"go back\\"
           type=\\"button\\"
           onClick={() => {
             onCancel && onCancel();
@@ -115,12 +115,12 @@ export default function customDataForm(props) {
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
           <Button
-            label=\\"Clear\\"
+            label=\\"empty\\"
             type=\\"reset\\"
             {...getOverrideProps(overrides, \\"ClearButton\\")}
           ></Button>
           <Button
-            label=\\"Submit\\"
+            label=\\"create\\"
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={!formValid}
