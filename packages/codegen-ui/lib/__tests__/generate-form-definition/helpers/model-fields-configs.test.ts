@@ -15,7 +15,7 @@
  */
 
 import { mapModelFieldsConfigs, getFieldTypeMapKey } from '../../../generate-form-definition/helpers';
-import { FormDefinition, ModelFieldsConfigs, GenericDataSchema } from '../../../types';
+import { FormDefinition, GenericDataSchema } from '../../../types';
 
 describe('mapModelFieldsConfigs', () => {
   it('should map to elementMatrix and add to modelFieldsConfigs', () => {
@@ -39,15 +39,47 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    const modelFieldsConfigs: ModelFieldsConfigs = {};
-
-    mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, modelFieldsConfigs, dataSchema });
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
 
     expect(formDefinition.elementMatrix).toStrictEqual([['name']]);
     expect(modelFieldsConfigs.name).toStrictEqual({
-      label: 'name',
+      label: 'Name',
       inputType: { type: 'TextField', required: false, readOnly: false, name: 'name', value: 'true' },
     });
+  });
+
+  it('should properly map different field names casings to sentence case', () => {
+    const formDefinition: FormDefinition = {
+      form: { layoutStyle: {} },
+      elements: {},
+      buttons: {},
+      elementMatrix: [],
+    };
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Dog: {
+          fields: {
+            name: { dataType: 'String', readOnly: false, required: false, isArray: false },
+            camelCaseField: { dataType: 'String', readOnly: false, required: false, isArray: false },
+            'param-case-field': { dataType: 'String', readOnly: false, required: false, isArray: false },
+            snake_case_field: { dataType: 'String', readOnly: false, required: false, isArray: false },
+          },
+        },
+      },
+    };
+
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
+
+    expect(Object.values(modelFieldsConfigs).map((m) => m.label)).toStrictEqual([
+      'Name',
+      'Camel case field',
+      'Param case field',
+      'Snake case field',
+    ]);
   });
 
   it('should throw if specified model is not found', () => {
@@ -71,11 +103,7 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    const modelFieldsConfigs: ModelFieldsConfigs = {};
-
-    expect(() =>
-      mapModelFieldsConfigs({ dataTypeName: 'Cat', formDefinition, modelFieldsConfigs, dataSchema }),
-    ).toThrow();
+    expect(() => mapModelFieldsConfigs({ dataTypeName: 'Cat', formDefinition, dataSchema })).toThrow();
   });
 
   it('should throw if field is an array', () => {
@@ -85,8 +113,6 @@ describe('mapModelFieldsConfigs', () => {
       buttons: {},
       elementMatrix: [],
     };
-
-    const modelFieldsConfigs: ModelFieldsConfigs = {};
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
@@ -101,9 +127,7 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    expect(() =>
-      mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, modelFieldsConfigs, dataSchema }),
-    ).toThrow();
+    expect(() => mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema })).toThrow();
   });
 
   it('should generate config from id field but not add it to matrix', () => {
@@ -113,8 +137,6 @@ describe('mapModelFieldsConfigs', () => {
       buttons: {},
       elementMatrix: [],
     };
-
-    const modelFieldsConfigs: ModelFieldsConfigs = {};
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
@@ -129,7 +151,7 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, modelFieldsConfigs, dataSchema });
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
 
     expect(formDefinition.elementMatrix).toStrictEqual([]);
     expect(modelFieldsConfigs).toStrictEqual({
@@ -141,7 +163,7 @@ describe('mapModelFieldsConfigs', () => {
           type: 'TextField',
           value: 'true',
         },
-        label: 'id',
+        label: 'Id',
       },
     });
   });
@@ -153,8 +175,6 @@ describe('mapModelFieldsConfigs', () => {
       buttons: {},
       elementMatrix: [],
     };
-
-    const modelFieldsConfigs: ModelFieldsConfigs = {};
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
@@ -169,7 +189,7 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, modelFieldsConfigs, dataSchema });
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
 
     expect(formDefinition.elementMatrix).toStrictEqual([]);
     expect(modelFieldsConfigs).toStrictEqual({
@@ -181,7 +201,7 @@ describe('mapModelFieldsConfigs', () => {
           type: 'TextField',
           value: 'true',
         },
-        label: 'name',
+        label: 'Name',
       },
     });
   });
@@ -193,8 +213,6 @@ describe('mapModelFieldsConfigs', () => {
       buttons: {},
       elementMatrix: [],
     };
-
-    const modelFieldsConfigs: ModelFieldsConfigs = {};
 
     const nonEnglishAlphabetTest = 'ㅎ🌱يَّة';
 
@@ -211,7 +229,7 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, modelFieldsConfigs, dataSchema });
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
 
     expect(modelFieldsConfigs).toStrictEqual({
       city: {
@@ -230,7 +248,7 @@ describe('mapModelFieldsConfigs', () => {
             ],
           },
         },
-        label: 'city',
+        label: 'City',
       },
     });
   });
@@ -242,8 +260,6 @@ describe('mapModelFieldsConfigs', () => {
       buttons: {},
       elementMatrix: [],
     };
-
-    const modelFieldsConfigs: ModelFieldsConfigs = {};
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
@@ -258,9 +274,7 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    expect(() =>
-      mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, modelFieldsConfigs, dataSchema }),
-    ).toThrow();
+    expect(() => mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema })).toThrow();
   });
 });
 

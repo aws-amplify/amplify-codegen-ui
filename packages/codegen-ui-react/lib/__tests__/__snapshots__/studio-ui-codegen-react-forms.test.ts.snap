@@ -214,7 +214,7 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid0\\")}
         >
           <TextField
-            label=\\"caption\\"
+            label=\\"Caption\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
@@ -241,7 +241,7 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid1\\")}
         >
           <TextField
-            label=\\"username\\"
+            label=\\"Username\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
@@ -271,7 +271,7 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid2\\")}
         >
           <TextField
-            label=\\"post_url\\"
+            label=\\"Post url\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
@@ -301,7 +301,7 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid3\\")}
         >
           <TextField
-            label=\\"profile_url\\"
+            label=\\"Profile url\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
@@ -444,7 +444,7 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid0\\")}
         >
           <TextField
-            label=\\"caption\\"
+            label=\\"Caption\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
@@ -471,7 +471,7 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid1\\")}
         >
           <TextField
-            label=\\"username\\"
+            label=\\"Username\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
@@ -501,7 +501,7 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid2\\")}
         >
           <TextField
-            label=\\"post_url\\"
+            label=\\"Post url\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
@@ -531,7 +531,7 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid3\\")}
         >
           <TextField
-            label=\\"profile_url\\"
+            label=\\"Profile url\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
