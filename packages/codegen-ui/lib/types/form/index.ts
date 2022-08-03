@@ -40,7 +40,7 @@ type StudioFormActionType = 'create' | 'update';
  * This is the base type for all StudioForms
  */
 export type StudioForm = {
-  id: string;
+  id?: string;
 
   name: string;
 
@@ -59,6 +59,7 @@ export type StudioForm = {
 
 export * from './form-definition-element';
 export * from './style';
+export * from './form-validation';
 
 export type {
   SectionalElement,

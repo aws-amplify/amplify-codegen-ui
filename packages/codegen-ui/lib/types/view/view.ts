@@ -18,13 +18,13 @@ import { ViewStyle } from './style';
 import { ColumnsMap } from './table';
 
 export interface View {
-  appId: String;
+  appId: string;
   dataSource: ViewDataTypeConfig;
-  environmentName: String;
+  environmentName: string;
   id: string;
   name: ViewName;
-  schemaVersion: String;
-  sourceId?: String;
+  schemaVersion: string;
+  sourceId?: string;
   style: ViewStyle;
   viewConfiguration: ViewConfiguration;
 }
@@ -38,7 +38,7 @@ export interface ViewConfiguration {
 
 export interface ViewDataTypeConfig {
   identifiers?: string[];
-  model?: String;
+  model?: string;
   predicate?: StudioComponentPredicate;
   sort?: StudioComponentSort[];
   type: 'DataStore' | 'Custom';
@@ -49,8 +49,8 @@ export declare type ViewList = View[];
 export declare type ViewName = string;
 
 export interface ViewSummary {
-  appId: String;
-  environmentName: String;
+  appId: string;
+  environmentName: string;
   id: string;
   name: ViewName;
 }

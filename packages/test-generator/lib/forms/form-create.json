@@ -1,42 +1,51 @@
 {
-  "name": "BasicFormCreate",
+  "id": "123",
+  "name": "FormCreate",
   "formActionType": "create",
   "dataType": {
-    "dataSourceType": "Custom",
-    "dataTypeName": "Post"
+    "dataSourceType": "DataStore",
+    "dataTypeName": "User"
   },
   "fields": {
-    "name": {
+    "firstName": {
       "inputType": {
         "required": true,
         "type": "TextField",
-        "name": "name",
-        "defaultValue": "John Doe"
+        "name": "firstName",
+        "defaultValue": "John"
       },
-      "label": "name",
+      "label": "First Name",
       "validations": [
         {
           "type": "Required"
         }
       ]
     },
-    "email": {
+    "loggedInColor": {
       "inputType": {
         "required": true,
         "type": "TextField",
-        "name": "email",
+        "name": "loggedInColor",
         "defaultValue": "johndoe@amplify.com"
       },
-      "label": "E-mail",
+      "label": "Logged In Color",
       "validations": [
         {
           "type": "Required"
-        },
-        {
-          "type": "Email",
-          "validationMessage": "Email should be required"
         }
       ]
+    },
+    "loggedOutColor": {
+      "excluded": true
+    },
+    "lastName": {
+      "excluded": true
+    },
+    "age": {
+      "excluded": true
+    },
+    "isLoggedIn": {
+      "excluded": true
     }
   },
   "sectionalElements": {},

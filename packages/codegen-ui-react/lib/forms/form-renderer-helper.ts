@@ -23,9 +23,9 @@ import {
   StudioFormActionType,
 } from '@aws-amplify/codegen-ui';
 import { BindingElement, Expression, factory, NodeFlags, PropertySignature, SyntaxKind } from 'typescript';
-import { ImportCollection, ImportSource, ImportValue } from '../imports';
+import { ImportCollection, ImportValue } from '../imports';
 import { getStateName, getSetStateName } from '../react-component-render-helper';
-import { addSchemaToArguments, getActionHookImportValue, getActionIdentifier } from '../workflow';
+import { getActionIdentifier } from '../workflow';
 
 export const FormTypeDataStoreMap: Record<StudioFormActionType, string> = {
   create: 'Amplify.DataStoreCreateItemAction',
@@ -70,59 +70,6 @@ export const buildFieldStateStatements = (formName: string, importCollection: Im
           undefined,
           factory.createCallExpression(factory.createIdentifier('useStateMutationAction'), undefined, [
             factory.createObjectLiteralExpression(),
-          ]),
-        ),
-      ],
-      NodeFlags.Const,
-    ),
-  );
-};
-/**
- *
- * @param form StudioForm
- * @param importCollection ImportCollection
- * @returns ActionStatement
- * renders the state variable for datastore and adds imports
- *
- * ex. for form create
- * const myFormonSubmit = useDataStoreCreateAction({
- *  model: myModel,
- *  fields: myFormFields,
- *  schema: schema
- * });
- */
-export const buildDataStoreActionStatement = (form: StudioForm, importCollection: ImportCollection) => {
-  const {
-    dataType: { dataTypeName },
-    formActionType,
-  } = form;
-  const actionHookImportValue = getActionHookImportValue(FormTypeDataStoreMap[formActionType]);
-  importCollection.addMappedImport(actionHookImportValue);
-  importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
-  const properties = [
-    // model name
-    factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(dataTypeName)),
-    // fields object name
-    factory.createPropertyAssignment(
-      factory.createIdentifier('fields'),
-      factory.createIdentifier(getStateName(FieldStateVariable(form.name))),
-    ),
-  ];
-  if (formActionType === 'update') {
-    properties.push(factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('id')));
-  }
-  addSchemaToArguments(properties, importCollection);
-
-  return factory.createVariableStatement(
-    undefined,
-    factory.createVariableDeclarationList(
-      [
-        factory.createVariableDeclaration(
-          factory.createIdentifier(getActionIdentifier(form.name, 'onSubmit')),
-          undefined,
-          undefined,
-          factory.createCallExpression(factory.createIdentifier(actionHookImportValue), undefined, [
-            factory.createObjectLiteralExpression(properties, false),
           ]),
         ),
       ],
@@ -316,7 +263,7 @@ export const buildStateMutationStatement = (name: string, defaultValue: Expressi
   );
 };
 
-export const buildOnChangeStatement = (fieldName: string) => {
+export const buildOnChangeStatement = (fieldName: string, id?: string) => {
   return factory.createJsxAttribute(
     factory.createIdentifier('onChange'),
     factory.createJsxExpression(
@@ -386,7 +333,7 @@ export const buildOnChangeStatement = (fieldName: string) => {
                       factory.createToken(SyntaxKind.ColonToken),
                       factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
                         factory.createIdentifier('value'),
-                        factory.createIdentifier(`${fieldName}-validation-rules`),
+                        factory.createIdentifier(`${id}-${fieldName}-validation-rules`),
                       ]),
                     ),
                   ),
@@ -449,7 +396,7 @@ export const addFormAttributes = (
   const attributes = [];
   if (component.componentType.includes('Field')) {
     if (componentMetadata.formMetadata?.onChangeFields.includes(component.name)) {
-      attributes.push(buildOnChangeStatement(component.name));
+      attributes.push(buildOnChangeStatement(component.name, componentMetadata.formMetadata.id));
     }
     attributes.push(
       factory.createJsxAttribute(

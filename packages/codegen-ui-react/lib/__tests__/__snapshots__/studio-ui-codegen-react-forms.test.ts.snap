@@ -2,7 +2,7 @@
 
 exports[`amplify form renderer tests custom form tests should render a custom backed form 1`] = `
 "/* eslint-disable */
-import React from \\"react\\";
+import * as React from \\"react\\";
 import { validateField } from \\"./utils.js\\";
 import {
   getOverrideProps,
@@ -14,25 +14,23 @@ export default function customDataForm(props) {
   const {
     onSubmit: customDataFormOnSubmit,
     onCancel,
+    onValidate,
     overrides,
     ...rest
   } = props;
   const [nameFieldError, setNameFieldError] = useStateMutationAction({});
   const [emailFieldError, setEmailFieldError] = useStateMutationAction({});
-  const [customDataFormFields, setCustomDataFormFields] =
-    useStateMutationAction({});
+  const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
   return (
     <form
       onSubmit={async (event) => {
         event.preventDefault();
         if (onSubmitBefore) {
-          setCustomDataFormFields(
-            onSubmitBefore({ fields: customDataFormFields })
-          );
+          setModelFields(onSubmitBefore({ fields: modelFields }));
         }
         try {
-          await DataStore.save(new Post(customDataFormFields));
+          await DataStore.save(new Post(modelFields));
           if (onSubmitComplete) {
             onSubmitComplete({ saveSuccessful: true });
           }
@@ -137,7 +135,7 @@ export default function customDataForm(props) {
 `;
 
 exports[`amplify form renderer tests custom form tests should render a custom backed form 2`] = `
-"import React from \\"react\\";
+"import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 export declare type customDataFormProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
@@ -151,36 +149,44 @@ export default function customDataForm(props: customDataFormProps): React.ReactE
 
 exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
 "/* eslint-disable */
-import React from \\"react\\";
+import * as React from \\"react\\";
 import { validateField } from \\"./utils.js\\";
 import {
   getOverrideProps,
-  useDataStoreCreateAction,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
-import { schema } from \\"../models/schema\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
-  const { onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
-    props;
-  const [myPostFormFields, setMyPostFormFields] = useStateMutationAction({});
+  const {
+    onSubmitBefore,
+    onSubmitComplete,
+    onCancel,
+    onValidate,
+    overrides,
+    ...rest
+  } = props;
+  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({});
+  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction(
+    {}
+  );
+  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction(
+    {}
+  );
+  const [profile_urlFieldError, setProfile_urlFieldError] =
+    useStateMutationAction({});
+  const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
-  const myPostFormOnSubmit = useDataStoreCreateAction({
-    model: Post,
-    fields: myPostFormFields,
-    schema: schema,
-  });
   return (
     <form
       onSubmit={async (event) => {
         event.preventDefault();
         if (onSubmitBefore) {
-          setMyPostFormFields(onSubmitBefore({ fields: myPostFormFields }));
+          setModelFields(onSubmitBefore({ fields: modelFields }));
         }
         try {
-          await DataStore.save(new Post(myPostFormFields));
+          await DataStore.save(new Post(modelFields));
           if (onSubmitComplete) {
             onSubmitComplete({ saveSuccessful: true });
           }
@@ -215,7 +221,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"caption\\"]
                 ? await onValidate[\\"caption\\"](value)
-                : validateField(value, caption - validation - rules);
+                : validateField(
+                    value,
+                    undefined - caption - validation - rules
+                  );
               setCaptionFieldError({ ...captionFieldError, ...isValidResult });
               setFormValid(!captionFieldError.hasError);
               setModelFields({ ...modelFields, caption: value });
@@ -239,7 +248,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"username\\"]
                 ? await onValidate[\\"username\\"](value)
-                : validateField(value, username - validation - rules);
+                : validateField(
+                    value,
+                    undefined - username - validation - rules
+                  );
               setUsernameFieldError({
                 ...usernameFieldError,
                 ...isValidResult,
@@ -266,7 +278,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"post_url\\"]
                 ? await onValidate[\\"post_url\\"](value)
-                : validateField(value, post_url - validation - rules);
+                : validateField(
+                    value,
+                    undefined - post_url - validation - rules
+                  );
               setPost_urlFieldError({
                 ...post_urlFieldError,
                 ...isValidResult,
@@ -293,7 +308,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"profile_url\\"]
                 ? await onValidate[\\"profile_url\\"](value)
-                : validateField(value, profile_url - validation - rules);
+                : validateField(
+                    value,
+                    undefined - profile_url - validation - rules
+                  );
               setProfile_urlFieldError({
                 ...profile_urlFieldError,
                 ...isValidResult,
@@ -342,7 +360,7 @@ export default function myPostForm(props) {
 `;
 
 exports[`amplify form renderer tests datastore form tests should generate a create form 2`] = `
-"import React from \\"react\\";
+"import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 export declare type myPostFormProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
@@ -360,37 +378,45 @@ export default function myPostForm(props: myPostFormProps): React.ReactElement;
 
 exports[`amplify form renderer tests datastore form tests should generate a update form 1`] = `
 "/* eslint-disable */
-import React from \\"react\\";
+import * as React from \\"react\\";
 import { validateField } from \\"./utils.js\\";
 import {
   getOverrideProps,
-  useDataStoreUpdateAction,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
-import { schema } from \\"../models/schema\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
-  const { id, onSubmitBefore, onSubmitComplete, onCancel, overrides, ...rest } =
-    props;
-  const [myPostFormFields, setMyPostFormFields] = useStateMutationAction({});
+  const {
+    id,
+    onSubmitBefore,
+    onSubmitComplete,
+    onCancel,
+    onValidate,
+    overrides,
+    ...rest
+  } = props;
+  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({});
+  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction(
+    {}
+  );
+  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction(
+    {}
+  );
+  const [profile_urlFieldError, setProfile_urlFieldError] =
+    useStateMutationAction({});
+  const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
-  const myPostFormOnSubmit = useDataStoreUpdateAction({
-    model: Post,
-    fields: myPostFormFields,
-    id: id,
-    schema: schema,
-  });
   return (
     <form
       onSubmit={async (event) => {
         event.preventDefault();
         if (onSubmitBefore) {
-          setMyPostFormFields(onSubmitBefore({ fields: myPostFormFields }));
+          setModelFields(onSubmitBefore({ fields: modelFields }));
         }
         try {
-          await DataStore.save(new Post(myPostFormFields));
+          await DataStore.save(new Post(modelFields));
           if (onSubmitComplete) {
             onSubmitComplete({ saveSuccessful: true });
           }
@@ -425,7 +451,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"caption\\"]
                 ? await onValidate[\\"caption\\"](value)
-                : validateField(value, caption - validation - rules);
+                : validateField(
+                    value,
+                    undefined - caption - validation - rules
+                  );
               setCaptionFieldError({ ...captionFieldError, ...isValidResult });
               setFormValid(!captionFieldError.hasError);
               setModelFields({ ...modelFields, caption: value });
@@ -449,7 +478,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"username\\"]
                 ? await onValidate[\\"username\\"](value)
-                : validateField(value, username - validation - rules);
+                : validateField(
+                    value,
+                    undefined - username - validation - rules
+                  );
               setUsernameFieldError({
                 ...usernameFieldError,
                 ...isValidResult,
@@ -476,7 +508,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"post_url\\"]
                 ? await onValidate[\\"post_url\\"](value)
-                : validateField(value, post_url - validation - rules);
+                : validateField(
+                    value,
+                    undefined - post_url - validation - rules
+                  );
               setPost_urlFieldError({
                 ...post_urlFieldError,
                 ...isValidResult,
@@ -503,7 +538,10 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"profile_url\\"]
                 ? await onValidate[\\"profile_url\\"](value)
-                : validateField(value, profile_url - validation - rules);
+                : validateField(
+                    value,
+                    undefined - profile_url - validation - rules
+                  );
               setProfile_urlFieldError({
                 ...profile_urlFieldError,
                 ...isValidResult,
@@ -552,7 +590,7 @@ export default function myPostForm(props) {
 `;
 
 exports[`amplify form renderer tests datastore form tests should generate a update form 2`] = `
-"import React from \\"react\\";
+"import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 export declare type myPostFormProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;

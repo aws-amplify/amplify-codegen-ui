@@ -5,76 +5,84 @@ type ValidationResponse = { hasError: boolean; errorMessage?: string };
 
 export const validateField = (
   value: any,
-  validations: { type: string; values?: any; validationMessage: string }[],
+  validations: { type: string; strValues?: string[]; numValues?: number[]; validationMessage: string }[],
 ): ValidationResponse => {
   for (const validation of validations) {
+    if (validation.numValues?.length) {
+      switch (validation.type) {
+        case 'LessThanChar':
+          return {
+            hasError: !(value.length < validation.numValues[0]),
+            errorMessage: validation.validationMessage || `The value must be shorter than ${validation.numValues[0]}`,
+          };
+        case 'GreaterThanChar':
+          return {
+            hasError: !(value.length > validation.numValues[0]),
+            errorMessage: validation.validationMessage || `The value must be longer than ${validation.numValues[0]}`,
+          };
+        case 'LessThanNum':
+          return {
+            hasError: !(value < validation.numValues[0]),
+            errorMessage: validation.validationMessage || `The value must be less than ${validation.numValues[0]}`,
+          };
+        case 'GreaterThanNum':
+          return {
+            hasError: !(value > validation.numValues[0]),
+            errorMessage: validation.validationMessage || `The value must be greater than ${validation.numValues[0]}`,
+          };
+        case 'EqualTo':
+          return {
+            hasError: !validation.numValues.some((el) => el === value),
+            errorMessage:
+              validation.validationMessage || `The value must be equal to ${validation.numValues.join(' or ')}`,
+          };
+        default:
+      }
+    } else if (validation.strValues?.length) {
+      switch (validation.type) {
+        case 'StartWith':
+          return {
+            hasError: !validation.strValues.some((el: any) => value.startsWith(el)),
+            errorMessage:
+              validation.validationMessage || `The value must start with ${validation.strValues.join(', ')}`,
+          };
+        case 'EndWith':
+          return {
+            hasError: !validation.strValues.some((el: any) => value.endsWith(el)),
+            errorMessage: validation.validationMessage || `The value must end with ${validation.strValues.join(', ')}`,
+          };
+        case 'Contains':
+          return {
+            hasError: !validation.strValues.some((el: any) => value.includes(el)),
+            errorMessage: validation.validationMessage || `The value must contain ${validation.strValues.join(', ')}`,
+          };
+        case 'NotContains':
+          return {
+            hasError: !validation.strValues.every((el: any) => !value.includes(el)),
+            errorMessage:
+              validation.validationMessage || `The value must not contain ${validation.strValues.join(', ')}`,
+          };
+        case 'BeAfter':
+          const afterTimeValue = parseInt(validation.strValues[0]);
+          const afterTimeValidator = Number.isNaN(afterTimeValue) ? validation.strValues[0] : afterTimeValue;
+          return {
+            hasError: !(new Date(value) > new Date(afterTimeValidator)),
+            errorMessage: validation.validationMessage || `The value must be after ${validation.strValues[0]}`,
+          };
+        case 'BeBefore':
+          const beforeTimeValue = parseInt(validation.strValues[0]);
+          const beforeTimevalue = Number.isNaN(beforeTimeValue) ? validation.strValues[0] : beforeTimeValue;
+          return {
+            hasError: !(new Date(value) < new Date(beforeTimevalue)),
+            errorMessage: validation.validationMessage || `The value must be before ${validation.strValues[0]}`,
+          };
+      }
+    }
     switch (validation.type) {
       case 'Required':
         return {
           hasError: value === undefined || value === '',
           errorMessage: validation.validationMessage || 'The value is required',
-        };
-      case 'StartWith':
-        return {
-          hasError: !validation.values?.some((el: any) => value.startsWith(el)),
-          errorMessage: validation.validationMessage || `The value must start with ${validation.values?.join(', ')}`,
-        };
-      case 'EndWith':
-        return {
-          hasError: !validation.values?.some((el: any) => value.endsWith(el)),
-          errorMessage: validation.validationMessage || `The value must end with ${validation.values?.join(', ')}`,
-        };
-      case 'Contains':
-        return {
-          hasError: !validation.values?.some((el: any) => value.includes(el)),
-          errorMessage: validation.validationMessage || `The value must contain ${validation.values?.join(', ')}`,
-        };
-      case 'NotContains':
-        return {
-          hasError: !validation.values?.every((el: any) => !value.includes(el)),
-          errorMessage: validation.validationMessage || `The value must not contain ${validation.values?.join(', ')}`,
-        };
-      case 'LessThanChar':
-        return {
-          hasError: !(value.length < validation.values),
-          errorMessage: validation.validationMessage || `The value must be shorter than ${validation.values}`,
-        };
-      case 'GreaterThanChar':
-        return {
-          hasError: !(value.length > validation.values),
-          errorMessage: validation.validationMessage || `The value must be longer than ${validation.values}`,
-        };
-      case 'LessThanNum':
-        return {
-          hasError: !(value < validation.values),
-          errorMessage: validation.validationMessage || `The value must be less than ${validation.values}`,
-        };
-      case 'GreaterThanNum':
-        return {
-          hasError: !(value > validation.values),
-          errorMessage: validation.validationMessage || `The value must be greater than ${validation.values}`,
-        };
-      case 'EqualTo':
-        if (Array.isArray(validation.values)) {
-          return {
-            hasError: !validation.values?.some((el) => el === value),
-            errorMessage:
-              validation.validationMessage || `The value must be equal to ${validation.values?.join(' or ')}`,
-          };
-        }
-        return {
-          hasError: !(value === validation.values),
-          errorMessage: validation.validationMessage || `The value must be equal to ${validation.values}`,
-        };
-      case 'BeAfter':
-        return {
-          hasError: !(new Date(value) > new Date(validation.values)),
-          errorMessage: validation.validationMessage || `The value must be after ${validation.values}`,
-        };
-      case 'BeBefore':
-        return {
-          hasError: !(new Date(value) < new Date(validation.values)),
-          errorMessage: validation.validationMessage || `The value must be before ${validation.values}`,
         };
       case 'Email':
         const EMAIL_ADDRESS_REGEX =
@@ -180,9 +188,15 @@ export const generateValidationFunction = () => {
                       ),
                       factory.createPropertySignature(
                         undefined,
-                        factory.createIdentifier('values'),
+                        factory.createIdentifier('strValues'),
                         factory.createToken(ts.SyntaxKind.QuestionToken),
-                        factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                        factory.createArrayTypeNode(factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)),
+                      ),
+                      factory.createPropertySignature(
+                        undefined,
+                        factory.createIdentifier('numValues'),
+                        factory.createToken(ts.SyntaxKind.QuestionToken),
+                        factory.createArrayTypeNode(factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)),
                       ),
                       factory.createPropertySignature(
                         undefined,
@@ -215,626 +229,24 @@ export const generateValidationFunction = () => {
                     factory.createIdentifier('validations'),
                     factory.createBlock(
                       [
-                        factory.createSwitchStatement(
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('validation'),
-                            factory.createIdentifier('type'),
+                        factory.createIfStatement(
+                          factory.createPropertyAccessChain(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('validation'),
+                              factory.createIdentifier('numValues'),
+                            ),
+                            factory.createToken(ts.SyntaxKind.QuestionDotToken),
+                            factory.createIdentifier('length'),
                           ),
-                          factory.createCaseBlock([
-                            factory.createCaseClause(factory.createStringLiteral('Required'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createBinaryExpression(
-                                        factory.createBinaryExpression(
-                                          factory.createIdentifier('value'),
-                                          factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
-                                          factory.createIdentifier('undefined'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createBinaryExpression(
-                                          factory.createIdentifier('value'),
-                                          factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
-                                          factory.createStringLiteral(''),
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createStringLiteral('The value is required'),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
+                          factory.createBlock(
+                            [
+                              factory.createSwitchStatement(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('validation'),
+                                  factory.createIdentifier('type'),
                                 ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('StartWith'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createCallChain(
-                                          factory.createPropertyAccessChain(
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('validation'),
-                                              factory.createIdentifier('values'),
-                                            ),
-                                            factory.createToken(ts.SyntaxKind.QuestionDotToken),
-                                            factory.createIdentifier('some'),
-                                          ),
-                                          undefined,
-                                          undefined,
-                                          [
-                                            factory.createArrowFunction(
-                                              undefined,
-                                              undefined,
-                                              [
-                                                factory.createParameterDeclaration(
-                                                  undefined,
-                                                  undefined,
-                                                  undefined,
-                                                  factory.createIdentifier('el'),
-                                                  undefined,
-                                                  factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                                                  undefined,
-                                                ),
-                                              ],
-                                              undefined,
-                                              factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-                                              factory.createCallExpression(
-                                                factory.createPropertyAccessExpression(
-                                                  factory.createIdentifier('value'),
-                                                  factory.createIdentifier('startsWith'),
-                                                ),
-                                                undefined,
-                                                [factory.createIdentifier('el')],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must start with ',
-                                            'The value must start with ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createCallChain(
-                                                factory.createPropertyAccessChain(
-                                                  factory.createPropertyAccessExpression(
-                                                    factory.createIdentifier('validation'),
-                                                    factory.createIdentifier('values'),
-                                                  ),
-                                                  factory.createToken(ts.SyntaxKind.QuestionDotToken),
-                                                  factory.createIdentifier('join'),
-                                                ),
-                                                undefined,
-                                                undefined,
-                                                [factory.createStringLiteral(', ')],
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('EndWith'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createCallChain(
-                                          factory.createPropertyAccessChain(
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('validation'),
-                                              factory.createIdentifier('values'),
-                                            ),
-                                            factory.createToken(ts.SyntaxKind.QuestionDotToken),
-                                            factory.createIdentifier('some'),
-                                          ),
-                                          undefined,
-                                          undefined,
-                                          [
-                                            factory.createArrowFunction(
-                                              undefined,
-                                              undefined,
-                                              [
-                                                factory.createParameterDeclaration(
-                                                  undefined,
-                                                  undefined,
-                                                  undefined,
-                                                  factory.createIdentifier('el'),
-                                                  undefined,
-                                                  factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                                                  undefined,
-                                                ),
-                                              ],
-                                              undefined,
-                                              factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-                                              factory.createCallExpression(
-                                                factory.createPropertyAccessExpression(
-                                                  factory.createIdentifier('value'),
-                                                  factory.createIdentifier('endsWith'),
-                                                ),
-                                                undefined,
-                                                [factory.createIdentifier('el')],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must end with ',
-                                            'The value must end with ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createCallChain(
-                                                factory.createPropertyAccessChain(
-                                                  factory.createPropertyAccessExpression(
-                                                    factory.createIdentifier('validation'),
-                                                    factory.createIdentifier('values'),
-                                                  ),
-                                                  factory.createToken(ts.SyntaxKind.QuestionDotToken),
-                                                  factory.createIdentifier('join'),
-                                                ),
-                                                undefined,
-                                                undefined,
-                                                [factory.createStringLiteral(', ')],
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('Contains'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createCallChain(
-                                          factory.createPropertyAccessChain(
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('validation'),
-                                              factory.createIdentifier('values'),
-                                            ),
-                                            factory.createToken(ts.SyntaxKind.QuestionDotToken),
-                                            factory.createIdentifier('some'),
-                                          ),
-                                          undefined,
-                                          undefined,
-                                          [
-                                            factory.createArrowFunction(
-                                              undefined,
-                                              undefined,
-                                              [
-                                                factory.createParameterDeclaration(
-                                                  undefined,
-                                                  undefined,
-                                                  undefined,
-                                                  factory.createIdentifier('el'),
-                                                  undefined,
-                                                  factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                                                  undefined,
-                                                ),
-                                              ],
-                                              undefined,
-                                              factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-                                              factory.createCallExpression(
-                                                factory.createPropertyAccessExpression(
-                                                  factory.createIdentifier('value'),
-                                                  factory.createIdentifier('includes'),
-                                                ),
-                                                undefined,
-                                                [factory.createIdentifier('el')],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must contain ',
-                                            'The value must contain ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createCallChain(
-                                                factory.createPropertyAccessChain(
-                                                  factory.createPropertyAccessExpression(
-                                                    factory.createIdentifier('validation'),
-                                                    factory.createIdentifier('values'),
-                                                  ),
-                                                  factory.createToken(ts.SyntaxKind.QuestionDotToken),
-                                                  factory.createIdentifier('join'),
-                                                ),
-                                                undefined,
-                                                undefined,
-                                                [factory.createStringLiteral(', ')],
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('NotContains'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createCallChain(
-                                          factory.createPropertyAccessChain(
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('validation'),
-                                              factory.createIdentifier('values'),
-                                            ),
-                                            factory.createToken(ts.SyntaxKind.QuestionDotToken),
-                                            factory.createIdentifier('every'),
-                                          ),
-                                          undefined,
-                                          undefined,
-                                          [
-                                            factory.createArrowFunction(
-                                              undefined,
-                                              undefined,
-                                              [
-                                                factory.createParameterDeclaration(
-                                                  undefined,
-                                                  undefined,
-                                                  undefined,
-                                                  factory.createIdentifier('el'),
-                                                  undefined,
-                                                  factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                                                  undefined,
-                                                ),
-                                              ],
-                                              undefined,
-                                              factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-                                              factory.createPrefixUnaryExpression(
-                                                ts.SyntaxKind.ExclamationToken,
-                                                factory.createCallExpression(
-                                                  factory.createPropertyAccessExpression(
-                                                    factory.createIdentifier('value'),
-                                                    factory.createIdentifier('includes'),
-                                                  ),
-                                                  undefined,
-                                                  [factory.createIdentifier('el')],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must not contain ',
-                                            'The value must not contain ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createCallChain(
-                                                factory.createPropertyAccessChain(
-                                                  factory.createPropertyAccessExpression(
-                                                    factory.createIdentifier('validation'),
-                                                    factory.createIdentifier('values'),
-                                                  ),
-                                                  factory.createToken(ts.SyntaxKind.QuestionDotToken),
-                                                  factory.createIdentifier('join'),
-                                                ),
-                                                undefined,
-                                                undefined,
-                                                [factory.createStringLiteral(', ')],
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('LessThanChar'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createParenthesizedExpression(
-                                          factory.createBinaryExpression(
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('value'),
-                                              factory.createIdentifier('length'),
-                                            ),
-                                            factory.createToken(ts.SyntaxKind.LessThanToken),
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('validation'),
-                                              factory.createIdentifier('values'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must be shorter than ',
-                                            'The value must be shorter than ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('validation'),
-                                                factory.createIdentifier('values'),
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('GreaterThanChar'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createParenthesizedExpression(
-                                          factory.createBinaryExpression(
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('value'),
-                                              factory.createIdentifier('length'),
-                                            ),
-                                            factory.createToken(ts.SyntaxKind.GreaterThanToken),
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('validation'),
-                                              factory.createIdentifier('values'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must be longer than ',
-                                            'The value must be longer than ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('validation'),
-                                                factory.createIdentifier('values'),
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('LessThanNum'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createParenthesizedExpression(
-                                          factory.createBinaryExpression(
-                                            factory.createIdentifier('value'),
-                                            factory.createToken(ts.SyntaxKind.LessThanToken),
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('validation'),
-                                              factory.createIdentifier('values'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must be less than ',
-                                            'The value must be less than ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('validation'),
-                                                factory.createIdentifier('values'),
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('GreaterThanNum'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createParenthesizedExpression(
-                                          factory.createBinaryExpression(
-                                            factory.createIdentifier('value'),
-                                            factory.createToken(ts.SyntaxKind.GreaterThanToken),
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('validation'),
-                                              factory.createIdentifier('values'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must be greater than ',
-                                            'The value must be greater than ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('validation'),
-                                                factory.createIdentifier('values'),
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('EqualTo'), [
-                              factory.createIfStatement(
-                                factory.createCallExpression(
-                                  factory.createPropertyAccessExpression(
-                                    factory.createIdentifier('Array'),
-                                    factory.createIdentifier('isArray'),
-                                  ),
-                                  undefined,
-                                  [
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier('validation'),
-                                      factory.createIdentifier('values'),
-                                    ),
-                                  ],
-                                ),
-                                factory.createBlock(
-                                  [
+                                factory.createCaseBlock([
+                                  factory.createCaseClause(factory.createStringLiteral('LessThanChar'), [
                                     factory.createReturnStatement(
                                       factory.createObjectLiteralExpression(
                                         [
@@ -842,16 +254,244 @@ export const generateValidationFunction = () => {
                                             factory.createIdentifier('hasError'),
                                             factory.createPrefixUnaryExpression(
                                               ts.SyntaxKind.ExclamationToken,
-                                              factory.createCallChain(
-                                                factory.createPropertyAccessChain(
+                                              factory.createParenthesizedExpression(
+                                                factory.createBinaryExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('value'),
+                                                    factory.createIdentifier('length'),
+                                                  ),
+                                                  factory.createToken(ts.SyntaxKind.LessThanToken),
+                                                  factory.createElementAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('numValues'),
+                                                    ),
+                                                    factory.createNumericLiteral('0'),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('errorMessage'),
+                                            factory.createBinaryExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createIdentifier('validation'),
+                                                factory.createIdentifier('validationMessage'),
+                                              ),
+                                              factory.createToken(ts.SyntaxKind.BarBarToken),
+                                              factory.createTemplateExpression(
+                                                factory.createTemplateHead(
+                                                  'The value must be shorter than ',
+                                                  'The value must be shorter than ',
+                                                ),
+                                                [
+                                                  factory.createTemplateSpan(
+                                                    factory.createElementAccessExpression(
+                                                      factory.createPropertyAccessExpression(
+                                                        factory.createIdentifier('validation'),
+                                                        factory.createIdentifier('numValues'),
+                                                      ),
+                                                      factory.createNumericLiteral('0'),
+                                                    ),
+                                                    factory.createTemplateTail('', ''),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        true,
+                                      ),
+                                    ),
+                                  ]),
+                                  factory.createCaseClause(factory.createStringLiteral('GreaterThanChar'), [
+                                    factory.createReturnStatement(
+                                      factory.createObjectLiteralExpression(
+                                        [
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('hasError'),
+                                            factory.createPrefixUnaryExpression(
+                                              ts.SyntaxKind.ExclamationToken,
+                                              factory.createParenthesizedExpression(
+                                                factory.createBinaryExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('value'),
+                                                    factory.createIdentifier('length'),
+                                                  ),
+                                                  factory.createToken(ts.SyntaxKind.GreaterThanToken),
+                                                  factory.createElementAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('numValues'),
+                                                    ),
+                                                    factory.createNumericLiteral('0'),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('errorMessage'),
+                                            factory.createBinaryExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createIdentifier('validation'),
+                                                factory.createIdentifier('validationMessage'),
+                                              ),
+                                              factory.createToken(ts.SyntaxKind.BarBarToken),
+                                              factory.createTemplateExpression(
+                                                factory.createTemplateHead(
+                                                  'The value must be longer than ',
+                                                  'The value must be longer than ',
+                                                ),
+                                                [
+                                                  factory.createTemplateSpan(
+                                                    factory.createElementAccessExpression(
+                                                      factory.createPropertyAccessExpression(
+                                                        factory.createIdentifier('validation'),
+                                                        factory.createIdentifier('numValues'),
+                                                      ),
+                                                      factory.createNumericLiteral('0'),
+                                                    ),
+                                                    factory.createTemplateTail('', ''),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        true,
+                                      ),
+                                    ),
+                                  ]),
+                                  factory.createCaseClause(factory.createStringLiteral('LessThanNum'), [
+                                    factory.createReturnStatement(
+                                      factory.createObjectLiteralExpression(
+                                        [
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('hasError'),
+                                            factory.createPrefixUnaryExpression(
+                                              ts.SyntaxKind.ExclamationToken,
+                                              factory.createParenthesizedExpression(
+                                                factory.createBinaryExpression(
+                                                  factory.createIdentifier('value'),
+                                                  factory.createToken(ts.SyntaxKind.LessThanToken),
+                                                  factory.createElementAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('numValues'),
+                                                    ),
+                                                    factory.createNumericLiteral('0'),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('errorMessage'),
+                                            factory.createBinaryExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createIdentifier('validation'),
+                                                factory.createIdentifier('validationMessage'),
+                                              ),
+                                              factory.createToken(ts.SyntaxKind.BarBarToken),
+                                              factory.createTemplateExpression(
+                                                factory.createTemplateHead(
+                                                  'The value must be less than ',
+                                                  'The value must be less than ',
+                                                ),
+                                                [
+                                                  factory.createTemplateSpan(
+                                                    factory.createElementAccessExpression(
+                                                      factory.createPropertyAccessExpression(
+                                                        factory.createIdentifier('validation'),
+                                                        factory.createIdentifier('numValues'),
+                                                      ),
+                                                      factory.createNumericLiteral('0'),
+                                                    ),
+                                                    factory.createTemplateTail('', ''),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        true,
+                                      ),
+                                    ),
+                                  ]),
+                                  factory.createCaseClause(factory.createStringLiteral('GreaterThanNum'), [
+                                    factory.createReturnStatement(
+                                      factory.createObjectLiteralExpression(
+                                        [
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('hasError'),
+                                            factory.createPrefixUnaryExpression(
+                                              ts.SyntaxKind.ExclamationToken,
+                                              factory.createParenthesizedExpression(
+                                                factory.createBinaryExpression(
+                                                  factory.createIdentifier('value'),
+                                                  factory.createToken(ts.SyntaxKind.GreaterThanToken),
+                                                  factory.createElementAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('numValues'),
+                                                    ),
+                                                    factory.createNumericLiteral('0'),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('errorMessage'),
+                                            factory.createBinaryExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createIdentifier('validation'),
+                                                factory.createIdentifier('validationMessage'),
+                                              ),
+                                              factory.createToken(ts.SyntaxKind.BarBarToken),
+                                              factory.createTemplateExpression(
+                                                factory.createTemplateHead(
+                                                  'The value must be greater than ',
+                                                  'The value must be greater than ',
+                                                ),
+                                                [
+                                                  factory.createTemplateSpan(
+                                                    factory.createElementAccessExpression(
+                                                      factory.createPropertyAccessExpression(
+                                                        factory.createIdentifier('validation'),
+                                                        factory.createIdentifier('numValues'),
+                                                      ),
+                                                      factory.createNumericLiteral('0'),
+                                                    ),
+                                                    factory.createTemplateTail('', ''),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        true,
+                                      ),
+                                    ),
+                                  ]),
+                                  factory.createCaseClause(factory.createStringLiteral('EqualTo'), [
+                                    factory.createReturnStatement(
+                                      factory.createObjectLiteralExpression(
+                                        [
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('hasError'),
+                                            factory.createPrefixUnaryExpression(
+                                              ts.SyntaxKind.ExclamationToken,
+                                              factory.createCallExpression(
+                                                factory.createPropertyAccessExpression(
                                                   factory.createPropertyAccessExpression(
                                                     factory.createIdentifier('validation'),
-                                                    factory.createIdentifier('values'),
+                                                    factory.createIdentifier('numValues'),
                                                   ),
-                                                  factory.createToken(ts.SyntaxKind.QuestionDotToken),
                                                   factory.createIdentifier('some'),
                                                 ),
-                                                undefined,
                                                 undefined,
                                                 [
                                                   factory.createArrowFunction(
@@ -895,16 +535,14 @@ export const generateValidationFunction = () => {
                                                 ),
                                                 [
                                                   factory.createTemplateSpan(
-                                                    factory.createCallChain(
-                                                      factory.createPropertyAccessChain(
+                                                    factory.createCallExpression(
+                                                      factory.createPropertyAccessExpression(
                                                         factory.createPropertyAccessExpression(
                                                           factory.createIdentifier('validation'),
-                                                          factory.createIdentifier('values'),
+                                                          factory.createIdentifier('numValues'),
                                                         ),
-                                                        factory.createToken(ts.SyntaxKind.QuestionDotToken),
                                                         factory.createIdentifier('join'),
                                                       ),
-                                                      undefined,
                                                       undefined,
                                                       [factory.createStringLiteral(' or ')],
                                                     ),
@@ -918,27 +556,634 @@ export const generateValidationFunction = () => {
                                         true,
                                       ),
                                     ),
-                                  ],
-                                  true,
-                                ),
-                                undefined,
+                                  ]),
+                                  factory.createDefaultClause([]),
+                                ]),
                               ),
+                            ],
+                            true,
+                          ),
+                          factory.createIfStatement(
+                            factory.createPropertyAccessChain(
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('validation'),
+                                factory.createIdentifier('strValues'),
+                              ),
+                              factory.createToken(ts.SyntaxKind.QuestionDotToken),
+                              factory.createIdentifier('length'),
+                            ),
+                            factory.createBlock(
+                              [
+                                factory.createSwitchStatement(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('validation'),
+                                    factory.createIdentifier('type'),
+                                  ),
+                                  factory.createCaseBlock([
+                                    factory.createCaseClause(factory.createStringLiteral('StartWith'), [
+                                      factory.createReturnStatement(
+                                        factory.createObjectLiteralExpression(
+                                          [
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('hasError'),
+                                              factory.createPrefixUnaryExpression(
+                                                ts.SyntaxKind.ExclamationToken,
+                                                factory.createCallExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('strValues'),
+                                                    ),
+                                                    factory.createIdentifier('some'),
+                                                  ),
+                                                  undefined,
+                                                  [
+                                                    factory.createArrowFunction(
+                                                      undefined,
+                                                      undefined,
+                                                      [
+                                                        factory.createParameterDeclaration(
+                                                          undefined,
+                                                          undefined,
+                                                          undefined,
+                                                          factory.createIdentifier('el'),
+                                                          undefined,
+                                                          factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                                                          undefined,
+                                                        ),
+                                                      ],
+                                                      undefined,
+                                                      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                                                      factory.createCallExpression(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createIdentifier('value'),
+                                                          factory.createIdentifier('startsWith'),
+                                                        ),
+                                                        undefined,
+                                                        [factory.createIdentifier('el')],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('errorMessage'),
+                                              factory.createBinaryExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createIdentifier('validation'),
+                                                  factory.createIdentifier('validationMessage'),
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.BarBarToken),
+                                                factory.createTemplateExpression(
+                                                  factory.createTemplateHead(
+                                                    'The value must start with ',
+                                                    'The value must start with ',
+                                                  ),
+                                                  [
+                                                    factory.createTemplateSpan(
+                                                      factory.createCallExpression(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createPropertyAccessExpression(
+                                                            factory.createIdentifier('validation'),
+                                                            factory.createIdentifier('strValues'),
+                                                          ),
+                                                          factory.createIdentifier('join'),
+                                                        ),
+                                                        undefined,
+                                                        [factory.createStringLiteral(', ')],
+                                                      ),
+                                                      factory.createTemplateTail('', ''),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                          true,
+                                        ),
+                                      ),
+                                    ]),
+                                    factory.createCaseClause(factory.createStringLiteral('EndWith'), [
+                                      factory.createReturnStatement(
+                                        factory.createObjectLiteralExpression(
+                                          [
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('hasError'),
+                                              factory.createPrefixUnaryExpression(
+                                                ts.SyntaxKind.ExclamationToken,
+                                                factory.createCallExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('strValues'),
+                                                    ),
+                                                    factory.createIdentifier('some'),
+                                                  ),
+                                                  undefined,
+                                                  [
+                                                    factory.createArrowFunction(
+                                                      undefined,
+                                                      undefined,
+                                                      [
+                                                        factory.createParameterDeclaration(
+                                                          undefined,
+                                                          undefined,
+                                                          undefined,
+                                                          factory.createIdentifier('el'),
+                                                          undefined,
+                                                          factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                                                          undefined,
+                                                        ),
+                                                      ],
+                                                      undefined,
+                                                      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                                                      factory.createCallExpression(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createIdentifier('value'),
+                                                          factory.createIdentifier('endsWith'),
+                                                        ),
+                                                        undefined,
+                                                        [factory.createIdentifier('el')],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('errorMessage'),
+                                              factory.createBinaryExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createIdentifier('validation'),
+                                                  factory.createIdentifier('validationMessage'),
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.BarBarToken),
+                                                factory.createTemplateExpression(
+                                                  factory.createTemplateHead(
+                                                    'The value must end with ',
+                                                    'The value must end with ',
+                                                  ),
+                                                  [
+                                                    factory.createTemplateSpan(
+                                                      factory.createCallExpression(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createPropertyAccessExpression(
+                                                            factory.createIdentifier('validation'),
+                                                            factory.createIdentifier('strValues'),
+                                                          ),
+                                                          factory.createIdentifier('join'),
+                                                        ),
+                                                        undefined,
+                                                        [factory.createStringLiteral(', ')],
+                                                      ),
+                                                      factory.createTemplateTail('', ''),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                          true,
+                                        ),
+                                      ),
+                                    ]),
+                                    factory.createCaseClause(factory.createStringLiteral('Contains'), [
+                                      factory.createReturnStatement(
+                                        factory.createObjectLiteralExpression(
+                                          [
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('hasError'),
+                                              factory.createPrefixUnaryExpression(
+                                                ts.SyntaxKind.ExclamationToken,
+                                                factory.createCallExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('strValues'),
+                                                    ),
+                                                    factory.createIdentifier('some'),
+                                                  ),
+                                                  undefined,
+                                                  [
+                                                    factory.createArrowFunction(
+                                                      undefined,
+                                                      undefined,
+                                                      [
+                                                        factory.createParameterDeclaration(
+                                                          undefined,
+                                                          undefined,
+                                                          undefined,
+                                                          factory.createIdentifier('el'),
+                                                          undefined,
+                                                          factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                                                          undefined,
+                                                        ),
+                                                      ],
+                                                      undefined,
+                                                      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                                                      factory.createCallExpression(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createIdentifier('value'),
+                                                          factory.createIdentifier('includes'),
+                                                        ),
+                                                        undefined,
+                                                        [factory.createIdentifier('el')],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('errorMessage'),
+                                              factory.createBinaryExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createIdentifier('validation'),
+                                                  factory.createIdentifier('validationMessage'),
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.BarBarToken),
+                                                factory.createTemplateExpression(
+                                                  factory.createTemplateHead(
+                                                    'The value must contain ',
+                                                    'The value must contain ',
+                                                  ),
+                                                  [
+                                                    factory.createTemplateSpan(
+                                                      factory.createCallExpression(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createPropertyAccessExpression(
+                                                            factory.createIdentifier('validation'),
+                                                            factory.createIdentifier('strValues'),
+                                                          ),
+                                                          factory.createIdentifier('join'),
+                                                        ),
+                                                        undefined,
+                                                        [factory.createStringLiteral(', ')],
+                                                      ),
+                                                      factory.createTemplateTail('', ''),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                          true,
+                                        ),
+                                      ),
+                                    ]),
+                                    factory.createCaseClause(factory.createStringLiteral('NotContains'), [
+                                      factory.createReturnStatement(
+                                        factory.createObjectLiteralExpression(
+                                          [
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('hasError'),
+                                              factory.createPrefixUnaryExpression(
+                                                ts.SyntaxKind.ExclamationToken,
+                                                factory.createCallExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('strValues'),
+                                                    ),
+                                                    factory.createIdentifier('every'),
+                                                  ),
+                                                  undefined,
+                                                  [
+                                                    factory.createArrowFunction(
+                                                      undefined,
+                                                      undefined,
+                                                      [
+                                                        factory.createParameterDeclaration(
+                                                          undefined,
+                                                          undefined,
+                                                          undefined,
+                                                          factory.createIdentifier('el'),
+                                                          undefined,
+                                                          factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                                                          undefined,
+                                                        ),
+                                                      ],
+                                                      undefined,
+                                                      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                                                      factory.createPrefixUnaryExpression(
+                                                        ts.SyntaxKind.ExclamationToken,
+                                                        factory.createCallExpression(
+                                                          factory.createPropertyAccessExpression(
+                                                            factory.createIdentifier('value'),
+                                                            factory.createIdentifier('includes'),
+                                                          ),
+                                                          undefined,
+                                                          [factory.createIdentifier('el')],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('errorMessage'),
+                                              factory.createBinaryExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createIdentifier('validation'),
+                                                  factory.createIdentifier('validationMessage'),
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.BarBarToken),
+                                                factory.createTemplateExpression(
+                                                  factory.createTemplateHead(
+                                                    'The value must not contain ',
+                                                    'The value must not contain ',
+                                                  ),
+                                                  [
+                                                    factory.createTemplateSpan(
+                                                      factory.createCallExpression(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createPropertyAccessExpression(
+                                                            factory.createIdentifier('validation'),
+                                                            factory.createIdentifier('strValues'),
+                                                          ),
+                                                          factory.createIdentifier('join'),
+                                                        ),
+                                                        undefined,
+                                                        [factory.createStringLiteral(', ')],
+                                                      ),
+                                                      factory.createTemplateTail('', ''),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                          true,
+                                        ),
+                                      ),
+                                    ]),
+                                    factory.createCaseClause(factory.createStringLiteral('BeAfter'), [
+                                      factory.createVariableStatement(
+                                        undefined,
+                                        factory.createVariableDeclarationList(
+                                          [
+                                            factory.createVariableDeclaration(
+                                              factory.createIdentifier('afterTimeValue'),
+                                              undefined,
+                                              undefined,
+                                              factory.createCallExpression(
+                                                factory.createIdentifier('parseInt'),
+                                                undefined,
+                                                [
+                                                  factory.createElementAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('strValues'),
+                                                    ),
+                                                    factory.createNumericLiteral('0'),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                          ts.NodeFlags.Const,
+                                        ),
+                                      ),
+                                      factory.createVariableStatement(
+                                        undefined,
+                                        factory.createVariableDeclarationList(
+                                          [
+                                            factory.createVariableDeclaration(
+                                              factory.createIdentifier('afterTimeValidator'),
+                                              undefined,
+                                              undefined,
+                                              factory.createConditionalExpression(
+                                                factory.createCallExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('Number'),
+                                                    factory.createIdentifier('isNaN'),
+                                                  ),
+                                                  undefined,
+                                                  [factory.createIdentifier('afterTimeValue')],
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.QuestionToken),
+                                                factory.createElementAccessExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('validation'),
+                                                    factory.createIdentifier('strValues'),
+                                                  ),
+                                                  factory.createNumericLiteral('0'),
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.ColonToken),
+                                                factory.createIdentifier('afterTimeValue'),
+                                              ),
+                                            ),
+                                          ],
+                                          ts.NodeFlags.Const,
+                                        ),
+                                      ),
+                                      factory.createReturnStatement(
+                                        factory.createObjectLiteralExpression(
+                                          [
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('hasError'),
+                                              factory.createPrefixUnaryExpression(
+                                                ts.SyntaxKind.ExclamationToken,
+                                                factory.createParenthesizedExpression(
+                                                  factory.createBinaryExpression(
+                                                    factory.createNewExpression(
+                                                      factory.createIdentifier('Date'),
+                                                      undefined,
+                                                      [factory.createIdentifier('value')],
+                                                    ),
+                                                    factory.createToken(ts.SyntaxKind.GreaterThanToken),
+                                                    factory.createNewExpression(
+                                                      factory.createIdentifier('Date'),
+                                                      undefined,
+                                                      [factory.createIdentifier('afterTimeValidator')],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('errorMessage'),
+                                              factory.createBinaryExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createIdentifier('validation'),
+                                                  factory.createIdentifier('validationMessage'),
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.BarBarToken),
+                                                factory.createTemplateExpression(
+                                                  factory.createTemplateHead(
+                                                    'The value must be after ',
+                                                    'The value must be after ',
+                                                  ),
+                                                  [
+                                                    factory.createTemplateSpan(
+                                                      factory.createElementAccessExpression(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createIdentifier('validation'),
+                                                          factory.createIdentifier('strValues'),
+                                                        ),
+                                                        factory.createNumericLiteral('0'),
+                                                      ),
+                                                      factory.createTemplateTail('', ''),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                          true,
+                                        ),
+                                      ),
+                                    ]),
+                                    factory.createCaseClause(factory.createStringLiteral('BeBefore'), [
+                                      factory.createVariableStatement(
+                                        undefined,
+                                        factory.createVariableDeclarationList(
+                                          [
+                                            factory.createVariableDeclaration(
+                                              factory.createIdentifier('beforeTimeValue'),
+                                              undefined,
+                                              undefined,
+                                              factory.createCallExpression(
+                                                factory.createIdentifier('parseInt'),
+                                                undefined,
+                                                [
+                                                  factory.createElementAccessExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('validation'),
+                                                      factory.createIdentifier('strValues'),
+                                                    ),
+                                                    factory.createNumericLiteral('0'),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                          ts.NodeFlags.Const,
+                                        ),
+                                      ),
+                                      factory.createVariableStatement(
+                                        undefined,
+                                        factory.createVariableDeclarationList(
+                                          [
+                                            factory.createVariableDeclaration(
+                                              factory.createIdentifier('beforeTimevalue'),
+                                              undefined,
+                                              undefined,
+                                              factory.createConditionalExpression(
+                                                factory.createCallExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('Number'),
+                                                    factory.createIdentifier('isNaN'),
+                                                  ),
+                                                  undefined,
+                                                  [factory.createIdentifier('beforeTimeValue')],
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.QuestionToken),
+                                                factory.createElementAccessExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('validation'),
+                                                    factory.createIdentifier('strValues'),
+                                                  ),
+                                                  factory.createNumericLiteral('0'),
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.ColonToken),
+                                                factory.createIdentifier('beforeTimeValue'),
+                                              ),
+                                            ),
+                                          ],
+                                          ts.NodeFlags.Const,
+                                        ),
+                                      ),
+                                      factory.createReturnStatement(
+                                        factory.createObjectLiteralExpression(
+                                          [
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('hasError'),
+                                              factory.createPrefixUnaryExpression(
+                                                ts.SyntaxKind.ExclamationToken,
+                                                factory.createParenthesizedExpression(
+                                                  factory.createBinaryExpression(
+                                                    factory.createNewExpression(
+                                                      factory.createIdentifier('Date'),
+                                                      undefined,
+                                                      [factory.createIdentifier('value')],
+                                                    ),
+                                                    factory.createToken(ts.SyntaxKind.LessThanToken),
+                                                    factory.createNewExpression(
+                                                      factory.createIdentifier('Date'),
+                                                      undefined,
+                                                      [factory.createIdentifier('beforeTimevalue')],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            factory.createPropertyAssignment(
+                                              factory.createIdentifier('errorMessage'),
+                                              factory.createBinaryExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createIdentifier('validation'),
+                                                  factory.createIdentifier('validationMessage'),
+                                                ),
+                                                factory.createToken(ts.SyntaxKind.BarBarToken),
+                                                factory.createTemplateExpression(
+                                                  factory.createTemplateHead(
+                                                    'The value must be before ',
+                                                    'The value must be before ',
+                                                  ),
+                                                  [
+                                                    factory.createTemplateSpan(
+                                                      factory.createElementAccessExpression(
+                                                        factory.createPropertyAccessExpression(
+                                                          factory.createIdentifier('validation'),
+                                                          factory.createIdentifier('strValues'),
+                                                        ),
+                                                        factory.createNumericLiteral('0'),
+                                                      ),
+                                                      factory.createTemplateTail('', ''),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                          true,
+                                        ),
+                                      ),
+                                    ]),
+                                  ]),
+                                ),
+                              ],
+                              true,
+                            ),
+                            undefined,
+                          ),
+                        ),
+                        factory.createSwitchStatement(
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('validation'),
+                            factory.createIdentifier('type'),
+                          ),
+                          factory.createCaseBlock([
+                            factory.createCaseClause(factory.createStringLiteral('Required'), [
                               factory.createReturnStatement(
                                 factory.createObjectLiteralExpression(
                                   [
                                     factory.createPropertyAssignment(
                                       factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createParenthesizedExpression(
-                                          factory.createBinaryExpression(
-                                            factory.createIdentifier('value'),
-                                            factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('validation'),
-                                              factory.createIdentifier('values'),
-                                            ),
-                                          ),
+                                      factory.createBinaryExpression(
+                                        factory.createBinaryExpression(
+                                          factory.createIdentifier('value'),
+                                          factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+                                          factory.createIdentifier('undefined'),
+                                        ),
+                                        factory.createToken(ts.SyntaxKind.BarBarToken),
+                                        factory.createBinaryExpression(
+                                          factory.createIdentifier('value'),
+                                          factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+                                          factory.createStringLiteral(''),
                                         ),
                                       ),
                                     ),
@@ -950,129 +1195,7 @@ export const generateValidationFunction = () => {
                                           factory.createIdentifier('validationMessage'),
                                         ),
                                         factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must be equal to ',
-                                            'The value must be equal to ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('validation'),
-                                                factory.createIdentifier('values'),
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('BeAfter'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createParenthesizedExpression(
-                                          factory.createBinaryExpression(
-                                            factory.createNewExpression(factory.createIdentifier('Date'), undefined, [
-                                              factory.createIdentifier('value'),
-                                            ]),
-                                            factory.createToken(ts.SyntaxKind.GreaterThanToken),
-                                            factory.createNewExpression(factory.createIdentifier('Date'), undefined, [
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('validation'),
-                                                factory.createIdentifier('values'),
-                                              ),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must be after ',
-                                            'The value must be after ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('validation'),
-                                                factory.createIdentifier('values'),
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
-                            factory.createCaseClause(factory.createStringLiteral('BeBefore'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createPrefixUnaryExpression(
-                                        ts.SyntaxKind.ExclamationToken,
-                                        factory.createParenthesizedExpression(
-                                          factory.createBinaryExpression(
-                                            factory.createNewExpression(factory.createIdentifier('Date'), undefined, [
-                                              factory.createIdentifier('value'),
-                                            ]),
-                                            factory.createToken(ts.SyntaxKind.LessThanToken),
-                                            factory.createNewExpression(factory.createIdentifier('Date'), undefined, [
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('validation'),
-                                                factory.createIdentifier('values'),
-                                              ),
-                                            ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createTemplateExpression(
-                                          factory.createTemplateHead(
-                                            'The value must be before ',
-                                            'The value must be before ',
-                                          ),
-                                          [
-                                            factory.createTemplateSpan(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('validation'),
-                                                factory.createIdentifier('values'),
-                                              ),
-                                              factory.createTemplateTail('', ''),
-                                            ),
-                                          ],
-                                        ),
+                                        factory.createStringLiteral('The value is required'),
                                       ),
                                     ),
                                   ],

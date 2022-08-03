@@ -23,9 +23,8 @@ import {
 } from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, SyntaxKind } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
-import { buildOpeningElementProperties, getStateName, getSetStateName } from '../react-component-render-helper';
+import { buildOpeningElementProperties } from '../react-component-render-helper';
 import { ImportCollection } from '../imports';
-import { FieldStateVariable } from '../forms/form-renderer-helper';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -72,7 +71,6 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
 
   private getFormOnSubmitAttribute(): JsxAttribute {
     const {
-      name,
       dataType: { dataTypeName },
     } = this.form;
     return factory.createJsxAttribute(
@@ -112,23 +110,19 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 factory.createBlock(
                   [
                     factory.createExpressionStatement(
-                      factory.createCallExpression(
-                        factory.createIdentifier(getSetStateName(FieldStateVariable(name))),
-                        undefined,
-                        [
-                          factory.createCallExpression(factory.createIdentifier('onSubmitBefore'), undefined, [
-                            factory.createObjectLiteralExpression(
-                              [
-                                factory.createPropertyAssignment(
-                                  factory.createIdentifier('fields'),
-                                  factory.createIdentifier(getStateName(FieldStateVariable(name))),
-                                ),
-                              ],
-                              false,
-                            ),
-                          ]),
-                        ],
-                      ),
+                      factory.createCallExpression(factory.createIdentifier('setModelFields'), undefined, [
+                        factory.createCallExpression(factory.createIdentifier('onSubmitBefore'), undefined, [
+                          factory.createObjectLiteralExpression(
+                            [
+                              factory.createPropertyAssignment(
+                                factory.createIdentifier('fields'),
+                                factory.createIdentifier('modelFields'),
+                              ),
+                            ],
+                            false,
+                          ),
+                        ]),
+                      ]),
                     ),
                   ],
                   true,
@@ -148,7 +142,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                           undefined,
                           [
                             factory.createNewExpression(factory.createIdentifier(dataTypeName), undefined, [
-                              factory.createIdentifier(getStateName(FieldStateVariable(name))),
+                              factory.createIdentifier('modelFields'),
                             ]),
                           ],
                         ),

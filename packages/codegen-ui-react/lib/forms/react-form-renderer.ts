@@ -46,7 +46,7 @@ import {
   SyntaxKind,
   TypeAliasDeclaration,
 } from 'typescript';
-import { ImportCollection, ImportValue } from '../imports';
+import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { PrimitiveTypeParameter, Primitive } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
 import { ReactOutputManager } from '../react-output-manager';
@@ -58,13 +58,7 @@ import {
   transpile,
 } from '../react-studio-template-renderer-helper';
 import { RequiredKeys } from '../utils/type-utils';
-import {
-  buildFieldStateStatements,
-  buildFormPropNode,
-  buildDataStoreActionStatement,
-  buildMutationBindings,
-  buildStateMutationStatement,
-} from './form-renderer-helper';
+import { buildFormPropNode, buildMutationBindings, buildStateMutationStatement } from './form-renderer-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -128,7 +122,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     if (this.componentMetadata.formMetadata?.onValidationFields) {
       Object.entries(this.componentMetadata.formMetadata?.onValidationFields).forEach(
         ([fieldName, validationRules]) => {
-          result = result.replace(`${fieldName}-validation-rules`, JSON.stringify(validationRules));
+          result = result.replace(
+            `${this.componentMetadata.formMetadata?.id}-${fieldName}-validation-rules`,
+            JSON.stringify(validationRules),
+          );
         },
       );
     }
@@ -174,7 +171,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     if (this.componentMetadata.formMetadata?.onValidationFields) {
       Object.entries(this.componentMetadata.formMetadata?.onValidationFields).forEach(
         ([fieldName, validationRules]) => {
-          componentText = componentText.replace(`${fieldName}-validation-rules`, JSON.stringify(validationRules));
+          componentText = componentText.replace(
+            `${this.componentMetadata.formMetadata?.id}-${fieldName}-validation-rules`,
+            JSON.stringify(validationRules),
+          );
         },
       );
     }
@@ -291,7 +291,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     // add in hooks for before/complete with ds and basic onSubmit with props
     elements.push(...buildMutationBindings(this.component));
-
+    // add onValidate prop
+    elements.push(
+      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onValidate'), undefined),
+    );
     // overrides
     elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('overrides'), undefined));
 
@@ -322,20 +325,20 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         ),
       ),
     );
-    if (this.componentMetadata.formMetadata?.onValidationFields) {
-      const fields = Object.keys(this.componentMetadata.formMetadata?.onValidationFields);
-
-      fields.forEach((field) => {
+    if (this.componentMetadata.formMetadata?.onChangeFields.length) {
+      this.componentMetadata.formMetadata?.onChangeFields.forEach((field) => {
         statements.push(buildStateMutationStatement(`${field}FieldError`, factory.createObjectLiteralExpression()));
       });
       this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     }
 
-    statements.push(buildFieldStateStatements(this.component.name, this.importCollection));
+    this.importCollection.addMappedImport(ImportValue.USE_STATE_MUTATION_ACTION);
+
+    statements.push(buildStateMutationStatement('modelFields', factory.createObjectLiteralExpression()));
     statements.push(buildStateMutationStatement('formValid', factory.createTrue()));
-    // build data source action
+    // add model import for datastore type
     if (this.component.dataType.dataSourceType === 'DataStore') {
-      statements.push(buildDataStoreActionStatement(this.component, this.importCollection));
+      this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataType.dataTypeName);
     }
     return statements;
   }

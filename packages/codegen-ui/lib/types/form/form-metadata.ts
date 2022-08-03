@@ -16,6 +16,7 @@
 import { FieldValidationConfiguration } from './form-validation';
 
 export type FormMetadata = {
+  id?: string;
   name: string;
   fieldState: string;
   onChangeFields: string[];

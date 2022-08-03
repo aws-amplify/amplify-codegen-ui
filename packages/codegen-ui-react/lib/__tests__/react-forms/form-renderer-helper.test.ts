@@ -15,8 +15,7 @@
  */
 import { StudioForm } from '@aws-amplify/codegen-ui';
 import { EmitHint, Node } from 'typescript';
-import { ImportCollection } from '../../imports';
-import { buildFormPropNode, buildDataStoreActionStatement } from '../../forms';
+import { buildFormPropNode } from '../../forms';
 import { buildPrinter, defaultRenderConfig } from '../../react-studio-template-renderer-helper';
 
 describe('form-render utils', () => {
@@ -29,24 +28,9 @@ describe('form-render utils', () => {
     };
   });
 
-  it('should generate a datastore function', () => {
-    const form: StudioForm = {
-      name: 'mySampleForm',
-      formActionType: 'create',
-      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
-      fields: {},
-      sectionalElements: {},
-      style: {},
-    };
-    const importCollection = new ImportCollection();
-    const mutationStatement: any = buildDataStoreActionStatement(form, importCollection);
-    expect(mutationStatement).toBeDefined();
-    const node = printNode(mutationStatement);
-    expect(node).toMatchSnapshot();
-  });
-
   it('should generate before & complete types if datastore config is set', () => {
     const form: StudioForm = {
+      id: '123',
       name: 'mySampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
@@ -62,6 +46,7 @@ describe('form-render utils', () => {
 
   it('should generate regular onsubmit if dataSourceType is custom', () => {
     const form: StudioForm = {
+      id: '123',
       name: 'myCustomForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'Custom', dataTypeName: 'Custom' },

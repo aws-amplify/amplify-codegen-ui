@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`form-render utils should generate a datastore function 1`] = `"const mySampleFormOnSubmit = useDataStoreCreateAction({ model: Post, fields: mySampleFormFields, schema: schema });"`;
-
 exports[`form-render utils should generate before & complete types if datastore config is set 1`] = `
 "{
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;

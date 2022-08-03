@@ -1,0 +1,39 @@
+{
+  "id": "123",
+  "name": "FormUpdate",
+  "formActionType": "update",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "UserPreference"
+  },
+  "fields": {
+    "favoriteColor": {
+      "position": {
+        "fixed": "first"
+      },
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "favoriteColor",
+        "defaultValue": "John Doe"
+      },
+      "label": "Favorite Color",
+      "validations": [
+        {
+          "type": "Required"
+        }
+      ]
+    },
+    "createdAt": {
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "createdat",
+        "defaultValue": "123456"
+      },
+      "label": "Created At"
+    }
+  },
+  "sectionalElements": {},
+  "style": {}
+}
