@@ -9,7 +9,6 @@ import {
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
-import { DataStore } from \\"aws-amplify\\";
 export default function customDataForm(props) {
   const {
     onSubmit: customDataFormOnSubmit,
@@ -26,22 +25,7 @@ export default function customDataForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        if (onSubmitBefore) {
-          setModelFields(onSubmitBefore({ fields: modelFields }));
-        }
-        try {
-          await DataStore.save(new Post(modelFields));
-          if (onSubmitComplete) {
-            onSubmitComplete({ saveSuccessful: true });
-          }
-        } catch (err) {
-          if (onSubmitComplete) {
-            onSubmitComplete({
-              saveSuccessful: false,
-              errorMessage: err.message,
-            });
-          }
-        }
+        await customDataFormOnSubmit(modelFields);
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"customDataForm\\")}
