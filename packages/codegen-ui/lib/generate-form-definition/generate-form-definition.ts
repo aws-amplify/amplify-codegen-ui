@@ -39,7 +39,7 @@ export function generateFormDefinition({
     elementMatrix: [],
   };
 
-  const modelFieldsConfigs: ModelFieldsConfigs = {};
+  let modelFieldsConfigs: ModelFieldsConfigs = {};
 
   if (form.dataType.dataSourceType !== 'Custom') {
     if (!dataSchema) {
@@ -47,7 +47,11 @@ export function generateFormDefinition({
         `Data schema is missing for form of data source type ${form.dataType.dataSourceType}`,
       );
     }
-    mapModelFieldsConfigs({ dataSchema, formDefinition, modelFieldsConfigs, dataTypeName: form.dataType.dataTypeName });
+    modelFieldsConfigs = mapModelFieldsConfigs({
+      dataSchema,
+      formDefinition,
+      dataTypeName: form.dataType.dataTypeName,
+    });
   }
 
   const elementQueue: { name: string; position?: StudioFieldPosition; excluded?: boolean }[] = Object.entries(
