@@ -29,12 +29,20 @@ export interface StudioView {
   viewConfiguration: ViewConfiguration;
 }
 
-export interface ViewConfiguration {
+export interface BaseViewConfiguration {
+  type: ViewType;
+}
+
+export interface TableConfiguration extends BaseViewConfiguration {
+  type: 'Table';
   columns?: ColumnsMap;
   disableHeaders?: boolean;
   highlightOnHover?: boolean;
-  type: ViewType;
+  enableOnRowClick?: boolean;
 }
+
+// Append other configuration types here
+export type ViewConfiguration = TableConfiguration;
 
 export interface ViewDataTypeConfig {
   identifiers?: string[];
