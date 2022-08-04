@@ -14,18 +14,19 @@
   limitations under the License.
  */
 
+import { sentenceCase } from 'change-case';
+
+import { InvalidInputError } from '../../errors';
 import {
-  FormDefinition,
-  ModelFieldsConfigs,
-  StudioGenericFieldConfig,
-  StudioFieldInputConfig,
-  GenericDataSchema,
   FieldTypeMapKeys,
+  FormDefinition,
   GenericDataField,
+  GenericDataSchema,
+  ModelFieldsConfigs,
+  StudioFieldInputConfig,
+  StudioGenericFieldConfig,
 } from '../../types';
 import { FIELD_TYPE_MAP } from './field-type-map';
-import { InvalidInputError } from '../../errors';
-import { convertToTitleCase } from './mapper-utils';
 
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
   if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
@@ -46,18 +47,16 @@ export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
  * Impure function that adds fields from DataStore to temporary util object, modelFieldsConfigs
  * and to the formDefinition
  */
-/* eslint-disable no-param-reassign */
 export function mapModelFieldsConfigs({
   dataTypeName,
   formDefinition,
-  modelFieldsConfigs,
   dataSchema,
 }: {
   dataTypeName: string;
   dataSchema: GenericDataSchema;
   formDefinition: FormDefinition;
-  modelFieldsConfigs: ModelFieldsConfigs;
 }) {
+  const modelFieldsConfigs: ModelFieldsConfigs = {};
   const model = dataSchema.models[dataTypeName];
 
   if (!model) {
@@ -80,7 +79,7 @@ export function mapModelFieldsConfigs({
     const { defaultComponent } = FIELD_TYPE_MAP[fieldTypeMapKey];
 
     const config: StudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
-      label: fieldName,
+      label: sentenceCase(fieldName),
       inputType: {
         type: defaultComponent,
         required: field.required,
@@ -95,9 +94,10 @@ export function mapModelFieldsConfigs({
       if (!fieldEnums) {
         throw new InvalidInputError(`Values could not be found for enum ${field.dataType.enum}`);
       }
+
       config.inputType.valueMappings = {
         values: fieldEnums.values.map((value) => ({
-          displayValue: { value: convertToTitleCase(value) },
+          displayValue: { value: sentenceCase(value) ? sentenceCase(value) : value },
           value: { value },
         })),
       };
@@ -105,5 +105,6 @@ export function mapModelFieldsConfigs({
 
     modelFieldsConfigs[fieldName] = config;
   });
+
+  return modelFieldsConfigs;
 }
-/* eslint-enable no-param-reassign */

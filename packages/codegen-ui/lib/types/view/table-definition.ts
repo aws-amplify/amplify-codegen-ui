@@ -14,10 +14,17 @@
   limitations under the License.
  */
 
-export * from './position';
-export * from './style';
-export * from './table';
-export * from './value';
-export * from './view';
-export * from './table-definition';
-export * from './defaults';
+import { ViewStyle } from './style';
+import { ColumnConfig } from './table';
+import { ViewConfiguration, ViewDataTypeConfig } from './view';
+
+export type OverallTableConfig = Omit<ViewConfiguration, 'columns'>;
+
+export type ColumnInfo = ColumnConfig & { header: string };
+
+export type TableDefinition = {
+  tableStyle: ViewStyle;
+  tableConfig: OverallTableConfig;
+  tableDataSource: ViewDataTypeConfig;
+  columns: ColumnInfo[];
+};

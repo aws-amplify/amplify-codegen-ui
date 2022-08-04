@@ -16,13 +16,23 @@
 
 import {
   ComponentMetadata,
+  FieldValidationConfiguration,
   StateStudioComponentProperty,
   StudioComponent,
   StudioComponentChild,
   StudioForm,
   StudioFormActionType,
 } from '@aws-amplify/codegen-ui';
-import { BindingElement, Expression, factory, NodeFlags, PropertySignature, SyntaxKind } from 'typescript';
+import {
+  BindingElement,
+  Expression,
+  factory,
+  NodeFlags,
+  PropertySignature,
+  SyntaxKind,
+  ObjectLiteralElementLike,
+  ObjectLiteralExpression,
+} from 'typescript';
 import { ImportCollection, ImportValue } from '../imports';
 import { getStateName, getSetStateName } from '../react-component-render-helper';
 import { getActionIdentifier } from '../workflow';
@@ -97,7 +107,7 @@ export const buildMutationBindings = (form: StudioForm) => {
       factory.createBindingElement(
         undefined,
         factory.createIdentifier('onSubmit'),
-        getActionIdentifier(form.name, 'onSubmit'),
+        getActionIdentifier(form.name, 'onSubmit'), // custom onsubmit function with the name of the form
         undefined,
       ),
     );
@@ -263,7 +273,7 @@ export const buildStateMutationStatement = (name: string, defaultValue: Expressi
   );
 };
 
-export const buildOnChangeStatement = (fieldName: string, id?: string) => {
+export const buildOnChangeStatement = (fieldName: string, validationRules?: FieldValidationConfiguration[]) => {
   return factory.createJsxAttribute(
     factory.createIdentifier('onChange'),
     factory.createJsxExpression(
@@ -333,7 +343,7 @@ export const buildOnChangeStatement = (fieldName: string, id?: string) => {
                       factory.createToken(SyntaxKind.ColonToken),
                       factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
                         factory.createIdentifier('value'),
-                        factory.createIdentifier(`${id}-${fieldName}-validation-rules`),
+                        createValidationExpression(validationRules),
                       ]),
                     ),
                   ),
@@ -389,14 +399,57 @@ export const buildOnChangeStatement = (fieldName: string, id?: string) => {
   );
 };
 
+export const createValidationExpression = (validationRules: FieldValidationConfiguration[] = []): Expression => {
+  const validateExpressions = validationRules.map<ObjectLiteralExpression>((rule) => {
+    const elements: ObjectLiteralElementLike[] = [
+      factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(rule.type)),
+    ];
+    if ('strValues' in rule) {
+      elements.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier('strValues'),
+          factory.createArrayLiteralExpression(
+            rule.strValues.map((value) => factory.createStringLiteral(value)),
+            false,
+          ),
+        ),
+      );
+    }
+    if ('numValues' in rule) {
+      elements.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier('numValues'),
+          factory.createArrayLiteralExpression(
+            rule.numValues.map((value) => factory.createNumericLiteral(value)),
+            false,
+          ),
+        ),
+      );
+    }
+    if (rule.validationMessage) {
+      elements.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier('validationMessage'),
+          factory.createStringLiteral(rule.validationMessage),
+        ),
+      );
+    }
+    return factory.createObjectLiteralExpression(elements, false);
+  });
+
+  return factory.createArrayLiteralExpression(validateExpressions, true);
+};
+
 export const addFormAttributes = (
   component: StudioComponent | StudioComponentChild,
   componentMetadata: ComponentMetadata,
 ) => {
   const attributes = [];
+  const { formMetadata } = componentMetadata;
   if (component.componentType.includes('Field')) {
-    if (componentMetadata.formMetadata?.onChangeFields.includes(component.name)) {
-      attributes.push(buildOnChangeStatement(component.name, componentMetadata.formMetadata.id));
+    if (formMetadata?.onChangeFields.includes(component.name)) {
+      const validationRules = formMetadata.onValidationFields?.[component.name];
+      attributes.push(buildOnChangeStatement(component.name, validationRules));
     }
     attributes.push(
       factory.createJsxAttribute(
@@ -463,4 +516,107 @@ export const addFormAttributes = (
     );
   }
   return attributes;
+};
+
+export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', modelName: string) => {
+  if (dataStoreActionType === 'update') {
+    return [
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('original'),
+              undefined,
+              undefined,
+              factory.createAwaitExpression(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('DataStore'),
+                    factory.createIdentifier('query'),
+                  ),
+                  undefined,
+                  [factory.createIdentifier(modelName), factory.createIdentifier('id')],
+                ),
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
+      factory.createExpressionStatement(
+        factory.createAwaitExpression(
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('DataStore'),
+              factory.createIdentifier('save'),
+            ),
+            undefined,
+            [
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier(modelName),
+                  factory.createIdentifier('copyOf'),
+                ),
+                undefined,
+                [
+                  factory.createIdentifier('original'),
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier('updated'),
+                        undefined,
+                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createBlock(
+                      [
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('Object'),
+                              factory.createIdentifier('assign'),
+                            ),
+                            undefined,
+                            [factory.createIdentifier('updated'), factory.createIdentifier('modelFields')],
+                          ),
+                        ),
+                      ],
+                      true,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ];
+  }
+  return [
+    factory.createExpressionStatement(
+      factory.createAwaitExpression(
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('DataStore'),
+            factory.createIdentifier('save'),
+          ),
+          undefined,
+          [
+            factory.createNewExpression(factory.createIdentifier(modelName), undefined, [
+              factory.createIdentifier('modelFields'),
+            ]),
+          ],
+        ),
+      ),
+    ),
+  ];
 };

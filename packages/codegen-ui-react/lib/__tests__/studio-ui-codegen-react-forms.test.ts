@@ -13,36 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-
-import { StudioTemplateRendererFactory } from '@aws-amplify/codegen-ui/lib/template-renderer-factory';
-import { StudioForm, Schema, GenericDataSchema, getGenericFromDataStore } from '@aws-amplify/codegen-ui';
-import { ReactRenderConfig, AmplifyFormRenderer, ModuleKind, ScriptKind, ScriptTarget } from '..';
-import { loadSchemaFromJSONFile } from './__utils__';
-
-export const defaultCLIRenderConfig: ReactRenderConfig = {
-  module: ModuleKind.ES2020,
-  target: ScriptTarget.ES2020,
-  script: ScriptKind.JSX,
-  renderTypeDeclarations: true,
-};
-
-export const generateWithAmplifyFormRenderer = (
-  formJsonFile: string,
-  dataSchemaJsonFile: string | undefined,
-  renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
-): { componentText: string; declaration?: string } => {
-  let dataSchema: GenericDataSchema | undefined;
-  if (dataSchemaJsonFile) {
-    const dataStoreSchema = loadSchemaFromJSONFile<Schema>(dataSchemaJsonFile);
-    dataSchema = getGenericFromDataStore(dataStoreSchema);
-  }
-  const rendererFactory = new StudioTemplateRendererFactory(
-    (component: StudioForm) => new AmplifyFormRenderer(component, dataSchema, renderConfig),
-  );
-
-  const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile<StudioForm>(formJsonFile));
-  return renderer.renderComponent();
-};
+import { generateWithAmplifyFormRenderer } from './__utils__';
 
 describe('amplify form renderer tests', () => {
   describe('datastore form tests', () => {
@@ -70,7 +41,7 @@ describe('amplify form renderer tests', () => {
   describe('custom form tests', () => {
     it('should render a custom backed form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-create', undefined);
-      expect(componentText.replace(/\s/g, '')).toContain('setModelFields(onSubmitBefore');
+      expect(componentText.replace(/\s/g, '')).toContain('onSubmit:customDataFormOnSubmit');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });

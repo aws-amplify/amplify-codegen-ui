@@ -32,12 +32,43 @@ export enum ValidationTypes {
   URL = 'URL',
 }
 
+export const ValidationTypeMapping: Record<'StringType' | 'NumberType', ValidationTypes[]> = {
+  StringType: [
+    ValidationTypes.CONTAINS,
+    ValidationTypes.NOT_CONTAINS,
+    ValidationTypes.END_WITH,
+    ValidationTypes.START_WITH,
+    ValidationTypes.BE_BEFORE,
+    ValidationTypes.BE_AFTER,
+  ],
+  NumberType: [
+    ValidationTypes.LESS_THAN_CHAR_LENGTH,
+    ValidationTypes.GREATER_THAN_CHAR_LENGTH,
+    ValidationTypes.LESS_THAN_NUM,
+    ValidationTypes.GREATER_THAN_NUM,
+    ValidationTypes.EQUAL_TO_NUM,
+  ],
+};
+
+export const IsStringTypeValidator = (validator: ValidationTypes): boolean => {
+  return ValidationTypeMapping.StringType.includes(validator);
+};
+
+export const IsNumberTypeValidator = (validator: ValidationTypes): boolean => {
+  return ValidationTypeMapping.NumberType.includes(validator);
+};
+
 export type BaseValidation = {
   validationMessage?: string;
 };
 
 export type StringValidationType = {
   type: ValidationTypes.CONTAINS | ValidationTypes.NOT_CONTAINS | ValidationTypes.END_WITH | ValidationTypes.START_WITH;
+  strValues: string[];
+} & BaseValidation;
+
+export type DateValidationType = {
+  type: ValidationTypes.BE_BEFORE | ValidationTypes.BE_AFTER;
   strValues: string[];
 } & BaseValidation;
 
@@ -51,11 +82,6 @@ export type NumberValidationType = {
   numValues: number[];
 } & BaseValidation;
 
-export type DateValidationType = {
-  type: ValidationTypes.BE_BEFORE | ValidationTypes.BE_AFTER;
-  strValues: string[];
-} & BaseValidation;
-
 export type GenericValidationType = {
   type:
     | ValidationTypes.REQUIRED
@@ -67,9 +93,9 @@ export type GenericValidationType = {
 
 export type FieldValidationConfiguration =
   | StringValidationType
+  | DateValidationType
   | StringLengthValidationType
   | NumberValidationType
-  | DateValidationType
   | GenericValidationType;
 
 export type ValidationResponse = { hasError: boolean; errorMessage?: string };
