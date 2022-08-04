@@ -25,7 +25,17 @@ export type FormDefinitionTextFieldElement = {
     isReadOnly?: boolean;
     placeholder?: string;
     defaultValue?: string;
+    type?: string;
   };
+  studioFormComponentType:
+    | 'TextField'
+    | 'NumberField'
+    | 'DateField'
+    | 'TimeField'
+    | 'DateTimeField'
+    | 'IPAddressField'
+    | 'URLField'
+    | 'EmailField';
 };
 
 export type FormDefinitionSwitchFieldElement = {
@@ -65,6 +75,7 @@ export type FormDefinitionTextAreaFieldElement = {
     placeholder?: string;
     defaultValue?: string;
   };
+  studioFormComponentType: 'JSONField' | 'TextAreaField';
 };
 
 export type FormDefinitionSliderFieldElement = {

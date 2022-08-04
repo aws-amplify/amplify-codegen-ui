@@ -112,6 +112,123 @@ describe('getFormDefinitionInputElement', () => {
         placeholder: 'MyPlaceholder',
         defaultValue: 'MyDefaultValue',
       },
+      studioFormComponentType: 'TextField',
+    });
+  });
+
+  it('should get NumberField', () => {
+    const config = {
+      inputType: {
+        type: 'NumberField',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'Label',
+        type: 'number',
+      },
+      studioFormComponentType: 'NumberField',
+    });
+  });
+
+  it('should get DateField', () => {
+    const config = {
+      inputType: {
+        type: 'DateField',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'Label',
+        type: 'date',
+      },
+      studioFormComponentType: 'DateField',
+    });
+  });
+
+  it('should get TimeField', () => {
+    const config = {
+      inputType: {
+        type: 'TimeField',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'Label',
+        type: 'time',
+      },
+      studioFormComponentType: 'TimeField',
+    });
+  });
+
+  it('should get DateTimeField', () => {
+    const config = {
+      inputType: {
+        type: 'DateTimeField',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'Label',
+        type: 'datetime-local',
+      },
+      studioFormComponentType: 'DateTimeField',
+    });
+  });
+
+  it('should get IPAddressField', () => {
+    const config = {
+      inputType: {
+        type: 'IPAddressField',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'Label',
+      },
+      studioFormComponentType: 'IPAddressField',
+    });
+  });
+
+  it('should get URLField', () => {
+    const config = {
+      inputType: {
+        type: 'URLField',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'Label',
+      },
+      studioFormComponentType: 'URLField',
+    });
+  });
+
+  it('should get EmailField', () => {
+    const config = {
+      inputType: {
+        type: 'EmailField',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'Label',
+      },
+      studioFormComponentType: 'EmailField',
     });
   });
 
@@ -191,6 +308,23 @@ describe('getFormDefinitionInputElement', () => {
         placeholder: 'MyPlaceholder',
         defaultValue: 'MyDefaultValue',
       },
+      studioFormComponentType: 'TextAreaField',
+    });
+  });
+
+  it('should get JSONField', () => {
+    const config = {
+      inputType: {
+        type: 'JSONField',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextAreaField',
+      props: {
+        label: 'Label',
+      },
+      studioFormComponentType: 'JSONField',
     });
   });
 
