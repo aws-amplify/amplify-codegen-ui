@@ -357,7 +357,13 @@ import {
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextAreaField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function myPostForm(props) {
   const {
@@ -369,15 +375,17 @@ export default function myPostForm(props) {
     overrides,
     ...rest
   } = props;
+  const [TextAreaFieldbbd63464FieldError, setTextAreaFieldbbd63464FieldError] =
+    useStateMutationAction({});
   const [captionFieldError, setCaptionFieldError] = useStateMutationAction({});
   const [usernameFieldError, setUsernameFieldError] = useStateMutationAction(
     {}
   );
+  const [profile_urlFieldError, setProfile_urlFieldError] =
+    useStateMutationAction({});
   const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction(
     {}
   );
-  const [profile_urlFieldError, setProfile_urlFieldError] =
-    useStateMutationAction({});
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
   return (
@@ -388,7 +396,12 @@ export default function myPostForm(props) {
           setModelFields(onSubmitBefore({ fields: modelFields }));
         }
         try {
-          await DataStore.save(new Post(modelFields));
+          const original = await DataStore.query(Post, id);
+          await DataStore.save(
+            Post.copyOf(original, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSubmitComplete) {
             onSubmitComplete({ saveSuccessful: true });
           }
@@ -415,6 +428,31 @@ export default function myPostForm(props) {
           templateColumns=\\"repeat(1, auto)\\"
           {...getOverrideProps(overrides, \\"RowGrid0\\")}
         >
+          <TextAreaField
+            label=\\"Label\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              const isValidResult = onValidate?.[\\"TextAreaFieldbbd63464\\"]
+                ? await onValidate[\\"TextAreaFieldbbd63464\\"](value)
+                : validateField(value, []);
+              setTextAreaFieldbbd63464FieldError({
+                ...TextAreaFieldbbd63464FieldError,
+                ...isValidResult,
+              });
+              setFormValid(!TextAreaFieldbbd63464FieldError.hasError);
+              setModelFields({ ...modelFields, TextAreaFieldbbd63464: value });
+            }}
+            errorMessage={TextAreaFieldbbd63464FieldError.errorMessage}
+            hasError={TextAreaFieldbbd63464FieldError.hasError}
+            {...getOverrideProps(overrides, \\"TextAreaFieldbbd63464\\")}
+          ></TextAreaField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid1\\")}
+        >
           <TextField
             label=\\"Caption\\"
             isRequired={false}
@@ -437,7 +475,7 @@ export default function myPostForm(props) {
           columnGap=\\"inherit\\"
           rowGap=\\"inherit\\"
           templateColumns=\\"repeat(1, auto)\\"
-          {...getOverrideProps(overrides, \\"RowGrid1\\")}
+          {...getOverrideProps(overrides, \\"RowGrid2\\")}
         >
           <TextField
             label=\\"Username\\"
@@ -458,33 +496,6 @@ export default function myPostForm(props) {
             errorMessage={usernameFieldError.errorMessage}
             hasError={usernameFieldError.hasError}
             {...getOverrideProps(overrides, \\"username\\")}
-          ></TextField>
-        </Grid>
-        <Grid
-          columnGap=\\"inherit\\"
-          rowGap=\\"inherit\\"
-          templateColumns=\\"repeat(1, auto)\\"
-          {...getOverrideProps(overrides, \\"RowGrid2\\")}
-        >
-          <TextField
-            label=\\"Post url\\"
-            isRequired={false}
-            isReadOnly={false}
-            onChange={async (e) => {
-              const { value } = e.target;
-              const isValidResult = onValidate?.[\\"post_url\\"]
-                ? await onValidate[\\"post_url\\"](value)
-                : validateField(value, []);
-              setPost_urlFieldError({
-                ...post_urlFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!post_urlFieldError.hasError);
-              setModelFields({ ...modelFields, post_url: value });
-            }}
-            errorMessage={post_urlFieldError.errorMessage}
-            hasError={post_urlFieldError.hasError}
-            {...getOverrideProps(overrides, \\"post_url\\")}
           ></TextField>
         </Grid>
         <Grid
@@ -512,6 +523,33 @@ export default function myPostForm(props) {
             errorMessage={profile_urlFieldError.errorMessage}
             hasError={profile_urlFieldError.hasError}
             {...getOverrideProps(overrides, \\"profile_url\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid4\\")}
+        >
+          <TextField
+            label=\\"Post url\\"
+            isRequired={false}
+            isReadOnly={false}
+            onChange={async (e) => {
+              const { value } = e.target;
+              const isValidResult = onValidate?.[\\"post_url\\"]
+                ? await onValidate[\\"post_url\\"](value)
+                : validateField(value, []);
+              setPost_urlFieldError({
+                ...post_urlFieldError,
+                ...isValidResult,
+              });
+              setFormValid(!post_urlFieldError.hasError);
+              setModelFields({ ...modelFields, post_url: value });
+            }}
+            errorMessage={post_urlFieldError.errorMessage}
+            hasError={post_urlFieldError.hasError}
+            {...getOverrideProps(overrides, \\"post_url\\")}
           ></TextField>
         </Grid>
       </Grid>
