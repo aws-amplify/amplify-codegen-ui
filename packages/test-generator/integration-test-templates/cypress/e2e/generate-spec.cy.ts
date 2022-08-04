@@ -30,6 +30,8 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'BasicComponentCustomRating',
   'FormCreate',
   'FormUpdate',
+  'FormCustomCreate',
+  'FormCustomUpdate',
   'ComponentWithDataBindingWithPredicate',
   'ComponentWithDataBindingWithoutPredicate',
   'ComponentWithSimplePropertyBinding',

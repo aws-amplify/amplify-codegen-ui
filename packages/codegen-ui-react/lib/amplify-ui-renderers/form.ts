@@ -26,6 +26,7 @@ import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildOpeningElementProperties } from '../react-component-render-helper';
 import { ImportCollection } from '../imports';
 import { getActionIdentifier } from '../workflow';
+import { buildDataStoreExpression } from '../forms';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -80,6 +81,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
   private getOnSubmitDSCall(): Statement[] {
     const {
       dataType: { dataSourceType, dataTypeName },
+      formActionType,
     } = this.form;
 
     if (dataSourceType === 'Custom') {
@@ -124,22 +126,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
         factory.createTryStatement(
           factory.createBlock(
             [
-              factory.createExpressionStatement(
-                factory.createAwaitExpression(
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('DataStore'),
-                      factory.createIdentifier('save'),
-                    ),
-                    undefined,
-                    [
-                      factory.createNewExpression(factory.createIdentifier(dataTypeName), undefined, [
-                        factory.createIdentifier('modelFields'),
-                      ]),
-                    ],
-                  ),
-                ),
-              ),
+              ...buildDataStoreExpression(formActionType, dataTypeName),
               factory.createIfStatement(
                 factory.createIdentifier('onSubmitComplete'),
                 factory.createBlock(

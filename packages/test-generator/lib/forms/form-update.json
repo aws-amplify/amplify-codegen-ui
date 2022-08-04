@@ -24,6 +24,14 @@
         }
       ]
     },
+    "TextAreaFieldbbd63464": {
+      "inputType": {
+        "type": "TextAreaField"
+      },
+      "position": {
+        "below": "favoriteColor"
+      }
+    },
     "createdAt": {
       "inputType": {
         "required": true,
