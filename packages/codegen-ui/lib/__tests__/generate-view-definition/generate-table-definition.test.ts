@@ -13,12 +13,19 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ColumnInfo, DataStoreModelField, View, ViewConfiguration, ViewDataTypeConfig, ViewStyle } from '../../types';
+import {
+  ColumnInfo,
+  DataStoreModelField,
+  StudioView,
+  ViewDataTypeConfig,
+  ViewStyle,
+  TableConfiguration,
+} from '../../types';
 import { generateTableDefinition } from '../../generate-view-definition/generate-table-definition';
 
 describe('generateTableDefinition', () => {
   test('can generate table definition', () => {
-    const view: View = {
+    const view: StudioView = {
       appId: 'appId',
       environmentName: 'staging',
       id: 'viewId',
@@ -82,10 +89,11 @@ describe('generateTableDefinition', () => {
       },
     };
 
-    const expectedConfig: ViewConfiguration = {
+    const expectedConfig: TableConfiguration = {
       type: 'Table',
       disableHeaders: false,
       highlightOnHover: false,
+      enableOnRowClick: false,
     };
 
     const expectedSource: ViewDataTypeConfig = {
