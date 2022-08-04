@@ -24,6 +24,7 @@ import {
   StudioTheme,
   StudioForm,
   getGenericFromDataStore,
+  StudioSchema,
 } from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
@@ -69,8 +70,7 @@ export class NodeTestGenerator extends TestGenerator {
       (form: StudioForm) => new AmplifyFormRenderer(form, getGenericFromDataStore(schema), this.renderConfig),
     );
     this.indexRendererFactory = new StudioTemplateRendererFactory(
-      (schemas: (StudioComponent | StudioForm | StudioTheme)[]) =>
-        new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig),
+      (schemas: StudioSchema[]) => new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig),
     );
     this.utilsRendererFactory = new StudioTemplateRendererFactory(
       (utils: string[]) => new ReactUtilsStudioTemplateRenderer(utils, this.renderConfig),
@@ -97,7 +97,7 @@ export class NodeTestGenerator extends TestGenerator {
 
   renderForm(form: StudioForm) {
     const buildRenderer = this.formRendererFactory.buildRenderer(form);
-    return buildRenderer.renderFormOnly();
+    return buildRenderer.renderComponentOnly();
   }
 
   writeSnippetToDisk(components: StudioComponent[]) {

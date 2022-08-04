@@ -15,7 +15,7 @@
  */
 import { ImportDeclaration, factory } from 'typescript';
 import path from 'path';
-import { ImportMapping, ImportValue } from './import-mapping';
+import { ImportMapping, ImportValue, ImportSource } from './import-mapping';
 
 export class ImportCollection {
   #collection: Map<string, Set<string>> = new Map();
@@ -35,6 +35,14 @@ export class ImportCollection {
     if (!existingPackage?.has(importName)) {
       existingPackage?.add(importName);
     }
+  }
+
+  hasMappedImport(source: ImportSource) {
+    return this.#collection.has(source);
+  }
+
+  removeImportSource(packageImport: ImportSource) {
+    this.#collection.delete(packageImport);
   }
 
   mergeCollections(otherCollection: ImportCollection) {

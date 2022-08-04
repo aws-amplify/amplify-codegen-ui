@@ -17,7 +17,7 @@ import { StudioComponentPredicate, StudioComponentSort } from '../bindings';
 import { ViewStyle } from './style';
 import { ColumnsMap } from './table';
 
-export interface View {
+export interface StudioView {
   appId: string;
   dataSource: ViewDataTypeConfig;
   environmentName: string;
@@ -44,7 +44,7 @@ export interface ViewDataTypeConfig {
   type: 'DataStore' | 'Custom';
 }
 
-export declare type ViewList = View[];
+export declare type ViewList = StudioView[];
 
 export declare type ViewName = string;
 
