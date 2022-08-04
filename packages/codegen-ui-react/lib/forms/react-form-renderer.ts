@@ -107,6 +107,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
+    // remove the utils import as the component will need to import it from codegen-ui-react directly
+    if (this.importCollection.hasMappedImport(ImportSource.UTILS)) {
+      this.importCollection.removeImportSource(ImportSource.UTILS);
+      this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD_CODEGEN);
+    }
+
     const imports = this.importCollection.buildImportStatements();
 
     let importsText = '';
@@ -118,17 +124,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, false);
 
-    let result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
-    if (this.componentMetadata.formMetadata?.onValidationFields) {
-      Object.entries(this.componentMetadata.formMetadata?.onValidationFields).forEach(
-        ([fieldName, validationRules]) => {
-          result = result.replace(
-            `${this.componentMetadata.formMetadata?.id}-${fieldName}-validation-rules`,
-            JSON.stringify(validationRules),
-          );
-        },
-      );
-    }
+    const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
     // do not produce declaration becuase it is not used
     const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
@@ -168,16 +164,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
 
-    if (this.componentMetadata.formMetadata?.onValidationFields) {
-      Object.entries(this.componentMetadata.formMetadata?.onValidationFields).forEach(
-        ([fieldName, validationRules]) => {
-          componentText = componentText.replace(
-            `${this.componentMetadata.formMetadata?.id}-${fieldName}-validation-rules`,
-            JSON.stringify(validationRules),
-          );
-        },
-      );
-    }
     const { componentText: transpiledComponentText, declaration } = transpile(componentText, this.renderConfig);
 
     return {

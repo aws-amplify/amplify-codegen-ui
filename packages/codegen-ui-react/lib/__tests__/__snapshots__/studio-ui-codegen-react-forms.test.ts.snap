@@ -3,13 +3,12 @@
 exports[`amplify form renderer tests custom form tests should render a custom backed form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"./utils.js\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
-import { DataStore } from \\"aws-amplify\\";
 export default function customDataForm(props) {
   const {
     onSubmit: customDataFormOnSubmit,
@@ -26,22 +25,7 @@ export default function customDataForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        if (onSubmitBefore) {
-          setModelFields(onSubmitBefore({ fields: modelFields }));
-        }
-        try {
-          await DataStore.save(new Post(modelFields));
-          if (onSubmitComplete) {
-            onSubmitComplete({ saveSuccessful: true });
-          }
-        } catch (err) {
-          if (onSubmitComplete) {
-            onSubmitComplete({
-              saveSuccessful: false,
-              errorMessage: err.message,
-            });
-          }
-        }
+        await customDataFormOnSubmit(modelFields);
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"customDataForm\\")}
@@ -150,7 +134,7 @@ export default function customDataForm(props: customDataFormProps): React.ReactE
 exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"./utils.js\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
@@ -214,17 +198,14 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid0\\")}
         >
           <TextField
-            label=\\"caption\\"
+            label=\\"Caption\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"caption\\"]
                 ? await onValidate[\\"caption\\"](value)
-                : validateField(
-                    value,
-                    undefined - caption - validation - rules
-                  );
+                : validateField(value, []);
               setCaptionFieldError({ ...captionFieldError, ...isValidResult });
               setFormValid(!captionFieldError.hasError);
               setModelFields({ ...modelFields, caption: value });
@@ -241,17 +222,14 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid1\\")}
         >
           <TextField
-            label=\\"username\\"
+            label=\\"Username\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"username\\"]
                 ? await onValidate[\\"username\\"](value)
-                : validateField(
-                    value,
-                    undefined - username - validation - rules
-                  );
+                : validateField(value, []);
               setUsernameFieldError({
                 ...usernameFieldError,
                 ...isValidResult,
@@ -271,17 +249,14 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid2\\")}
         >
           <TextField
-            label=\\"post_url\\"
+            label=\\"Post url\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"post_url\\"]
                 ? await onValidate[\\"post_url\\"](value)
-                : validateField(
-                    value,
-                    undefined - post_url - validation - rules
-                  );
+                : validateField(value, []);
               setPost_urlFieldError({
                 ...post_urlFieldError,
                 ...isValidResult,
@@ -301,17 +276,14 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid3\\")}
         >
           <TextField
-            label=\\"profile_url\\"
+            label=\\"Profile url\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"profile_url\\"]
                 ? await onValidate[\\"profile_url\\"](value)
-                : validateField(
-                    value,
-                    undefined - profile_url - validation - rules
-                  );
+                : validateField(value, []);
               setProfile_urlFieldError({
                 ...profile_urlFieldError,
                 ...isValidResult,
@@ -379,7 +351,7 @@ export default function myPostForm(props: myPostFormProps): React.ReactElement;
 exports[`amplify form renderer tests datastore form tests should generate a update form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"./utils.js\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
@@ -444,17 +416,14 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid0\\")}
         >
           <TextField
-            label=\\"caption\\"
+            label=\\"Caption\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"caption\\"]
                 ? await onValidate[\\"caption\\"](value)
-                : validateField(
-                    value,
-                    undefined - caption - validation - rules
-                  );
+                : validateField(value, []);
               setCaptionFieldError({ ...captionFieldError, ...isValidResult });
               setFormValid(!captionFieldError.hasError);
               setModelFields({ ...modelFields, caption: value });
@@ -471,17 +440,14 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid1\\")}
         >
           <TextField
-            label=\\"username\\"
+            label=\\"Username\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"username\\"]
                 ? await onValidate[\\"username\\"](value)
-                : validateField(
-                    value,
-                    undefined - username - validation - rules
-                  );
+                : validateField(value, []);
               setUsernameFieldError({
                 ...usernameFieldError,
                 ...isValidResult,
@@ -501,17 +467,14 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid2\\")}
         >
           <TextField
-            label=\\"post_url\\"
+            label=\\"Post url\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"post_url\\"]
                 ? await onValidate[\\"post_url\\"](value)
-                : validateField(
-                    value,
-                    undefined - post_url - validation - rules
-                  );
+                : validateField(value, []);
               setPost_urlFieldError({
                 ...post_urlFieldError,
                 ...isValidResult,
@@ -531,17 +494,14 @@ export default function myPostForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid3\\")}
         >
           <TextField
-            label=\\"profile_url\\"
+            label=\\"Profile url\\"
             isRequired={false}
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"profile_url\\"]
                 ? await onValidate[\\"profile_url\\"](value)
-                : validateField(
-                    value,
-                    undefined - profile_url - validation - rules
-                  );
+                : validateField(value, []);
               setProfile_urlFieldError({
                 ...profile_urlFieldError,
                 ...isValidResult,

@@ -15,14 +15,12 @@
  */
 import { EOL } from 'os';
 import { EmitHint, ExportDeclaration, factory } from 'typescript';
-import { StudioTemplateRenderer, StudioTheme, StudioComponent, StudioForm } from '@aws-amplify/codegen-ui';
+import { StudioTemplateRenderer, StudioSchema } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 import { RequiredKeys } from './utils/type-utils';
-
-type StudioSchema = StudioComponent | StudioForm | StudioTheme;
 
 export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
   string,

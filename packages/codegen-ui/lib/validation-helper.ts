@@ -15,7 +15,7 @@
  */
 import * as yup from 'yup';
 import { InvalidInputError } from './errors';
-import { StudioGenericEvent } from './types';
+import { StudioGenericEvent, StudioSchema } from './types';
 
 const alphaNumString = () => {
   return yup.string().matches(/^[a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string' });
@@ -196,7 +196,7 @@ const studioFormSchema = yup.object({
 /**
  * Studio Schema Validation Functions and Helpers.
  */
-const validateSchema = (validator: yup.AnySchema, studioSchema: any) => {
+const validateSchema = (validator: yup.AnySchema, studioSchema: StudioSchema) => {
   try {
     validator.validateSync(studioSchema, { strict: true, abortEarly: false });
   } catch (e) {

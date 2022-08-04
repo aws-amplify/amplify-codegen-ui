@@ -16,11 +16,12 @@
 export enum ImportSource {
   REACT = 'react',
   UI_REACT = '@aws-amplify/ui-react',
+  CODEGEN_UI_REACT = '@aws-amplify/codegen-ui-react',
   UI_REACT_INTERNAL = '@aws-amplify/ui-react/internal',
   AMPLIFY_DATASTORE = '@aws-amplify/datastore',
   LOCAL_MODELS = '../models',
   LOCAL_SCHEMA = '../models/schema',
-  UTILS = './utils.js',
+  UTILS = './utils',
 }
 
 export enum ImportValue {
@@ -43,6 +44,7 @@ export enum ImportValue {
   USE_STATE_MUTATION_ACTION = 'useStateMutationAction',
   USE_EFFECT = 'useEffect',
   VALIDATE_FIELD = 'validateField',
+  VALIDATE_FIELD_CODEGEN = 'validateField',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
@@ -65,4 +67,5 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.USE_STATE_MUTATION_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_EFFECT]: ImportSource.REACT,
   [ImportValue.VALIDATE_FIELD]: ImportSource.UTILS,
+  [ImportValue.VALIDATE_FIELD_CODEGEN]: ImportSource.CODEGEN_UI_REACT,
 };

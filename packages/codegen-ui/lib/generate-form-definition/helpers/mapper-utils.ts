@@ -25,23 +25,6 @@ export function getFirstNumber(values: (string | number | undefined)[]): number 
   return values.find((value) => typeof value === 'number') as number | undefined;
 }
 
-export function convertToTitleCase(value: string): string {
-  const ReplaceMap: Record<string, string> = { '-': ' ', _: ' ' };
-
-  return value
-    .split('')
-    .map((char, i) => {
-      if (ReplaceMap[char]) {
-        return ReplaceMap[char];
-      }
-      if (i === 0) {
-        return char.toUpperCase();
-      }
-      return char.toLowerCase();
-    })
-    .join('');
-}
-
 /* eslint-disable no-param-reassign */
 export function deleteUndefined(obj: { [key: string]: unknown }) {
   Object.entries(obj).forEach(([key, value]) => {
