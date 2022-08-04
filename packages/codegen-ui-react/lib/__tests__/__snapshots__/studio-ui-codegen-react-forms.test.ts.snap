@@ -3,7 +3,7 @@
 exports[`amplify form renderer tests custom form tests should render a custom backed form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"./utils.js\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
@@ -134,7 +134,7 @@ export default function customDataForm(props: customDataFormProps): React.ReactE
 exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"./utils.js\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
@@ -205,10 +205,7 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"caption\\"]
                 ? await onValidate[\\"caption\\"](value)
-                : validateField(
-                    value,
-                    undefined - caption - validation - rules
-                  );
+                : validateField(value, []);
               setCaptionFieldError({ ...captionFieldError, ...isValidResult });
               setFormValid(!captionFieldError.hasError);
               setModelFields({ ...modelFields, caption: value });
@@ -232,10 +229,7 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"username\\"]
                 ? await onValidate[\\"username\\"](value)
-                : validateField(
-                    value,
-                    undefined - username - validation - rules
-                  );
+                : validateField(value, []);
               setUsernameFieldError({
                 ...usernameFieldError,
                 ...isValidResult,
@@ -262,10 +256,7 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"post_url\\"]
                 ? await onValidate[\\"post_url\\"](value)
-                : validateField(
-                    value,
-                    undefined - post_url - validation - rules
-                  );
+                : validateField(value, []);
               setPost_urlFieldError({
                 ...post_urlFieldError,
                 ...isValidResult,
@@ -292,10 +283,7 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"profile_url\\"]
                 ? await onValidate[\\"profile_url\\"](value)
-                : validateField(
-                    value,
-                    undefined - profile_url - validation - rules
-                  );
+                : validateField(value, []);
               setProfile_urlFieldError({
                 ...profile_urlFieldError,
                 ...isValidResult,
@@ -363,7 +351,7 @@ export default function myPostForm(props: myPostFormProps): React.ReactElement;
 exports[`amplify form renderer tests datastore form tests should generate a update form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"./utils.js\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
@@ -435,10 +423,7 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"caption\\"]
                 ? await onValidate[\\"caption\\"](value)
-                : validateField(
-                    value,
-                    undefined - caption - validation - rules
-                  );
+                : validateField(value, []);
               setCaptionFieldError({ ...captionFieldError, ...isValidResult });
               setFormValid(!captionFieldError.hasError);
               setModelFields({ ...modelFields, caption: value });
@@ -462,10 +447,7 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"username\\"]
                 ? await onValidate[\\"username\\"](value)
-                : validateField(
-                    value,
-                    undefined - username - validation - rules
-                  );
+                : validateField(value, []);
               setUsernameFieldError({
                 ...usernameFieldError,
                 ...isValidResult,
@@ -492,10 +474,7 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"post_url\\"]
                 ? await onValidate[\\"post_url\\"](value)
-                : validateField(
-                    value,
-                    undefined - post_url - validation - rules
-                  );
+                : validateField(value, []);
               setPost_urlFieldError({
                 ...post_urlFieldError,
                 ...isValidResult,
@@ -522,10 +501,7 @@ export default function myPostForm(props) {
               const { value } = e.target;
               const isValidResult = onValidate?.[\\"profile_url\\"]
                 ? await onValidate[\\"profile_url\\"](value)
-                : validateField(
-                    value,
-                    undefined - profile_url - validation - rules
-                  );
+                : validateField(value, []);
               setProfile_urlFieldError({
                 ...profile_urlFieldError,
                 ...isValidResult,

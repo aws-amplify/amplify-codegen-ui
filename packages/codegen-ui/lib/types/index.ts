@@ -13,6 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { StudioComponent } from './components';
+import { StudioForm } from './form';
+import { StudioTheme } from './theme';
+import { StudioView } from './view';
+
 export * from './actions';
 export * from './components';
 export * from './bindings';
@@ -26,3 +31,5 @@ export * from './form';
 export * from './view';
 export * from './data';
 export * from './string-format';
+
+export type StudioSchema = StudioComponent | StudioForm | StudioView | StudioTheme;
