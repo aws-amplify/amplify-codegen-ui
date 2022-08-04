@@ -60,6 +60,7 @@ export type StudioForm = {
 export * from './form-definition-element';
 export * from './style';
 export * from './form-validation';
+export * from './form-cta';
 
 export type {
   SectionalElement,
@@ -74,5 +75,4 @@ export type {
   StudioFieldPosition,
   FieldTypeMapKeys,
   StudioFormValueMappings,
-  StudioFormCTAConfig,
 };
