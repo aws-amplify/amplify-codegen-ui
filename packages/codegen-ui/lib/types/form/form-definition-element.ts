@@ -14,7 +14,12 @@
   limitations under the License.
  */
 
+import { FieldValidationConfiguration } from './form-validation';
 import { StudioFormValueMappings } from './input-config';
+
+type FormDefinitionInputElementCommon = {
+  validations?: (FieldValidationConfiguration & { unremovable?: true })[];
+};
 
 export type FormDefinitionTextFieldElement = {
   componentType: 'TextField';
@@ -147,7 +152,7 @@ export type FormDefinitionPasswordFieldElement = {
   };
 };
 
-export type FormDefinitionInputElement =
+export type FormDefinitionInputElement = (
   | FormDefinitionTextFieldElement
   | FormDefinitionSwitchFieldElement
   | FormDefinitionPhoneNumberFieldElement
@@ -158,7 +163,9 @@ export type FormDefinitionInputElement =
   | FormDefinitionToggleButtonElement
   | FormDefinitionCheckboxFieldElement
   | FormDefinitionRadioGroupFieldElement
-  | FormDefinitionPasswordFieldElement;
+  | FormDefinitionPasswordFieldElement
+) &
+  FormDefinitionInputElementCommon;
 
 export type FormDefinitionHeadingElement = {
   componentType: 'Heading';

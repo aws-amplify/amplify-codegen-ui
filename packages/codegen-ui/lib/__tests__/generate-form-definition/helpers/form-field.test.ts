@@ -16,7 +16,13 @@
 
 import { mapFormFieldConfig, getFormDefinitionInputElement } from '../../../generate-form-definition/helpers';
 import { mergeValueMappings } from '../../../generate-form-definition/helpers/form-field';
-import { FormDefinition, ModelFieldsConfigs, StudioFormFieldConfig, StudioGenericFieldConfig } from '../../../types';
+import {
+  FormDefinition,
+  ModelFieldsConfigs,
+  StudioFormFieldConfig,
+  StudioGenericFieldConfig,
+  ValidationTypes,
+} from '../../../types';
 
 describe('mapFormFieldConfig', () => {
   it('should map fields', () => {
@@ -197,6 +203,7 @@ describe('getFormDefinitionInputElement', () => {
         label: 'Label',
       },
       studioFormComponentType: 'IPAddressField',
+      validations: [{ type: ValidationTypes.IP_ADDRESS, unremovable: true }],
     });
   });
 
@@ -213,6 +220,7 @@ describe('getFormDefinitionInputElement', () => {
         label: 'Label',
       },
       studioFormComponentType: 'URLField',
+      validations: [{ type: ValidationTypes.URL, unremovable: true }],
     });
   });
 
@@ -229,6 +237,7 @@ describe('getFormDefinitionInputElement', () => {
         label: 'Label',
       },
       studioFormComponentType: 'EmailField',
+      validations: [{ type: ValidationTypes.EMAIL, unremovable: true }],
     });
   });
 
@@ -325,6 +334,7 @@ describe('getFormDefinitionInputElement', () => {
         label: 'Label',
       },
       studioFormComponentType: 'JSONField',
+      validations: [{ type: ValidationTypes.JSON, unremovable: true }],
     });
   });
 

@@ -20,6 +20,8 @@ import {
   ModelFieldsConfigs,
   StudioFormFieldConfig,
   StudioFormValueMappings,
+  FieldValidationConfiguration,
+  ValidationTypes,
 } from '../../types';
 import { InternalError, InvalidInputError } from '../../errors';
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
@@ -53,6 +55,32 @@ export function mergeValueMappings(
     values,
     bindingProperties: { ...base?.bindingProperties, ...override?.bindingProperties },
   };
+}
+
+// pure function that merges in validations in param with defaults
+function getMergedValidations(
+  componentType: string,
+  validations: (FieldValidationConfiguration[] | undefined)[],
+): (FieldValidationConfiguration & { unremovable?: true })[] | undefined {
+  const ComponentTypeToDefaultValidations: {
+    [componentType: string]: (FieldValidationConfiguration & { unremovable: true })[];
+  } = {
+    IPAddressField: [{ type: ValidationTypes.IP_ADDRESS, unremovable: true }],
+    URLField: [{ type: ValidationTypes.URL, unremovable: true }],
+    EmailField: [{ type: ValidationTypes.EMAIL, unremovable: true }],
+    JSONField: [{ type: ValidationTypes.JSON, unremovable: true }],
+  };
+
+  const mergedValidations: (FieldValidationConfiguration & { unremovable?: true })[] =
+    ComponentTypeToDefaultValidations[componentType] ?? [];
+
+  validations.forEach((validationArray) => {
+    if (validationArray) {
+      mergedValidations.concat(validationArray);
+    }
+  });
+
+  return mergedValidations.length ? mergedValidations : undefined;
 }
 
 function getTextFieldType(componentType: string): string | undefined {
@@ -266,6 +294,10 @@ export function getFormDefinitionInputElement(
     default:
       throw new InvalidInputError(`componentType ${componentType} could not be mapped`);
   }
+
+  const mergedValidations = getMergedValidations(componentType, [baseConfig?.validations, config?.validations]);
+
+  formDefinitionElement.validations = mergedValidations;
 
   deleteUndefined(formDefinitionElement);
   deleteUndefined(formDefinitionElement.props);

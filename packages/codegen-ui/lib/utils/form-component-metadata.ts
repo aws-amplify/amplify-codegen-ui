@@ -31,14 +31,21 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
       }
       return fields;
     }, []),
-    onValidationFields: Object.entries(form.fields).reduce<{ [field: string]: FieldValidationConfiguration[] }>(
-      (validationFields, [field, config]) => {
-        const updatedFields = validationFields;
-        updatedFields[field] = ('validations' in config && config.validations) || [];
-        return updatedFields;
-      },
-      {},
-    ),
+    onValidationFields: Object.entries(formDefinition.elements).reduce<{
+      [field: string]: FieldValidationConfiguration[];
+    }>((validationFields, [elementName, elementConfig]) => {
+      const updatedValidationFields = validationFields;
+
+      if ('validations' in elementConfig && elementConfig.validations) {
+        updatedValidationFields[elementName] = elementConfig.validations.map((validation) => {
+          const updatedValidation = validation;
+          delete updatedValidation.unremovable;
+          return updatedValidation;
+        });
+      }
+
+      return updatedValidationFields;
+    }, {}),
     errorStateFields: [],
   };
 };
