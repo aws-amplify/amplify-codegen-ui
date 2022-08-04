@@ -20,6 +20,8 @@ import {
   ModelFieldsConfigs,
   StudioFormFieldConfig,
   StudioFormValueMappings,
+  FieldValidationConfiguration,
+  ValidationTypes,
 } from '../../types';
 import { InternalError, InvalidInputError } from '../../errors';
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
@@ -53,6 +55,32 @@ export function mergeValueMappings(
     values,
     bindingProperties: { ...base?.bindingProperties, ...override?.bindingProperties },
   };
+}
+
+// pure function that merges in validations in param with defaults
+function getMergedValidations(
+  componentType: string,
+  validations: (FieldValidationConfiguration[] | undefined)[],
+): (FieldValidationConfiguration & { immutable?: true })[] | undefined {
+  const ComponentTypeToDefaultValidations: {
+    [componentType: string]: (FieldValidationConfiguration & { immutable: true })[];
+  } = {
+    IPAddressField: [{ type: ValidationTypes.IP_ADDRESS, immutable: true }],
+    URLField: [{ type: ValidationTypes.URL, immutable: true }],
+    EmailField: [{ type: ValidationTypes.EMAIL, immutable: true }],
+    JSONField: [{ type: ValidationTypes.JSON, immutable: true }],
+  };
+
+  const mergedValidations: (FieldValidationConfiguration & { immutable?: true })[] =
+    ComponentTypeToDefaultValidations[componentType] ?? [];
+
+  validations.forEach((validationArray) => {
+    if (validationArray) {
+      mergedValidations.push(...validationArray);
+    }
+  });
+
+  return mergedValidations.length ? mergedValidations : undefined;
 }
 
 function getTextFieldType(componentType: string): string | undefined {
@@ -266,6 +294,10 @@ export function getFormDefinitionInputElement(
     default:
       throw new InvalidInputError(`componentType ${componentType} could not be mapped`);
   }
+
+  const mergedValidations = getMergedValidations(componentType, [baseConfig?.validations, config?.validations]);
+
+  formDefinitionElement.validations = mergedValidations;
 
   deleteUndefined(formDefinitionElement);
   deleteUndefined(formDefinitionElement.props);
