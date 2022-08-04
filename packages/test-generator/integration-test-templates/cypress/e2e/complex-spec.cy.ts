@@ -244,7 +244,6 @@ describe('Complex Components', () => {
         .then((el) => {
           const style = el.attr('style');
           const expectedStyles = [
-            'transition: all 0.25s ease 0s',
             'align-items: flex-start',
             'background-color: rgb(255, 255, 255)',
             'flex-direction: row',

@@ -102,6 +102,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'ToggleButtonGroupPrimitive',
   'ViewPrimitive',
   'VisuallyHiddenPrimitive',
+  'ComponentWithBreakpoint',
   'ComponentWithVariant',
   'ComponentWithVariantAndOverrides',
   'ComponentWithVariantsAndNotOverrideChildProp',

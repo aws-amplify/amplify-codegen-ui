@@ -52,6 +52,17 @@ export function isStudioComponentWithVariants(
   return 'variants' in component && component.variants !== undefined && component.variants.length > 0;
 }
 
+export function isStudioComponentWithBreakpoints(
+  component: StudioComponent | StudioComponentChild,
+): component is StudioComponent & Required<Pick<StudioComponent, 'variants'>> {
+  if (isStudioComponentWithVariants(component)) {
+    return Object.keys(component.variants)
+      .map((i) => component.variants[Number(i)].variantValues.breakpoint !== undefined)
+      .includes(true);
+  }
+  return false;
+}
+
 export function isDataPropertyBinding(
   prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentDataPropertyBinding {

@@ -49,6 +49,7 @@ describe('amplify render tests', () => {
       const generatedCode = generateWithAmplifyRenderer('buttonGolden');
       expect(generatedCode.componentText.includes('restProp')).toBe(false);
       expect(generatedCode.componentText.includes('breakpointHook')).toBe(false);
+      expect(generatedCode.componentText.includes('breakpoint: breakpointHook')).toBe(false);
     });
   });
 
@@ -239,10 +240,11 @@ describe('amplify render tests', () => {
       expect(generatedCode).toMatchSnapshot();
     });
 
-    it('should have variant specific generation', () => {
-      const generatedCode = generateWithAmplifyRenderer('componentWithVariants');
+    it('should have breakpoint specific generation', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithBreakpoint');
       expect(generatedCode.componentText.includes('restProp')).toBe(true);
       expect(generatedCode.componentText.includes('breakpointHook')).toBe(true);
+      expect(generatedCode.componentText.includes('breakpoint: breakpointHook')).toBe(true);
     });
   });
 
