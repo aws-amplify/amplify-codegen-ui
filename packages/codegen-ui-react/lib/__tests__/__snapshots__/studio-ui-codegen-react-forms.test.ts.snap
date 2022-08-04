@@ -90,7 +90,7 @@ export default function customDataForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          label=\\"Cancel\\"
+          children=\\"Cancel\\"
           type=\\"button\\"
           onClick={() => {
             onCancel && onCancel();
@@ -99,12 +99,12 @@ export default function customDataForm(props) {
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
           <Button
-            label=\\"Clear\\"
+            children=\\"Clear\\"
             type=\\"reset\\"
             {...getOverrideProps(overrides, \\"ClearButton\\")}
           ></Button>
           <Button
-            label=\\"Submit\\"
+            children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={!formValid}
@@ -303,7 +303,7 @@ export default function myPostForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          label=\\"Cancel\\"
+          children=\\"Cancel\\"
           type=\\"button\\"
           onClick={() => {
             onCancel && onCancel();
@@ -312,12 +312,12 @@ export default function myPostForm(props) {
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
           <Button
-            label=\\"Clear\\"
+            children=\\"Clear\\"
             type=\\"reset\\"
             {...getOverrideProps(overrides, \\"ClearButton\\")}
           ></Button>
           <Button
-            label=\\"Submit\\"
+            children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={!formValid}
@@ -559,7 +559,7 @@ export default function myPostForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          label=\\"Cancel\\"
+          children=\\"Cancel\\"
           type=\\"button\\"
           onClick={() => {
             onCancel && onCancel();
@@ -568,12 +568,12 @@ export default function myPostForm(props) {
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
           <Button
-            label=\\"Clear\\"
+            children=\\"Clear\\"
             type=\\"reset\\"
             {...getOverrideProps(overrides, \\"ClearButton\\")}
           ></Button>
           <Button
-            label=\\"Submit\\"
+            children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={!formValid}

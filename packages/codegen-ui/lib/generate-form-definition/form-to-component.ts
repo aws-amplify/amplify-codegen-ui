@@ -105,7 +105,7 @@ export const ctaButtonConfig = (): StudioComponentChild => {
         componentType: 'Button',
         name: 'CancelButton',
         properties: {
-          label: {
+          children: {
             value: 'Cancel',
           },
           type: {
@@ -122,7 +122,7 @@ export const ctaButtonConfig = (): StudioComponentChild => {
             componentType: 'Button',
             name: 'ClearButton',
             properties: {
-              label: {
+              children: {
                 value: 'Clear',
               },
               type: {
@@ -134,7 +134,7 @@ export const ctaButtonConfig = (): StudioComponentChild => {
             componentType: 'Button',
             name: 'SubmitButton',
             properties: {
-              label: {
+              children: {
                 value: 'Submit',
               },
               type: {
