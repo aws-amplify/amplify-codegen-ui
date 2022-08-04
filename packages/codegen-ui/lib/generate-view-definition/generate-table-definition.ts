@@ -15,7 +15,7 @@
  */
 
 import {
-  View,
+  StudioView,
   DataStoreModelField,
   TableDefinition,
   DEFAULT_TABLE_CONFIG,
@@ -32,7 +32,7 @@ import { orderAndFilterVisibleColumns } from './helpers';
  * @param fields (Optional) holds type information about the DataStore model fields being represented.
  * @returns a definition that translates to rendered JSX elements.
  */
-export function generateTableDefinition(table: View, fields: DataStoreModelField[]): TableDefinition {
+export function generateTableDefinition(table: StudioView, fields: DataStoreModelField[]): TableDefinition {
   const definition = DEFAULT_TABLE_DEFINITION;
 
   definition.tableStyle = {
