@@ -517,3 +517,106 @@ export const addFormAttributes = (
   }
   return attributes;
 };
+
+export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', modelName: string) => {
+  if (dataStoreActionType === 'update') {
+    return [
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('original'),
+              undefined,
+              undefined,
+              factory.createAwaitExpression(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('DataStore'),
+                    factory.createIdentifier('query'),
+                  ),
+                  undefined,
+                  [factory.createIdentifier(modelName), factory.createIdentifier('id')],
+                ),
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
+      factory.createExpressionStatement(
+        factory.createAwaitExpression(
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('DataStore'),
+              factory.createIdentifier('save'),
+            ),
+            undefined,
+            [
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier(modelName),
+                  factory.createIdentifier('copyOf'),
+                ),
+                undefined,
+                [
+                  factory.createIdentifier('original'),
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier('updated'),
+                        undefined,
+                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createBlock(
+                      [
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('Object'),
+                              factory.createIdentifier('assign'),
+                            ),
+                            undefined,
+                            [factory.createIdentifier('updated'), factory.createIdentifier('modelFields')],
+                          ),
+                        ),
+                      ],
+                      true,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ];
+  }
+  return [
+    factory.createExpressionStatement(
+      factory.createAwaitExpression(
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('DataStore'),
+            factory.createIdentifier('save'),
+          ),
+          undefined,
+          [
+            factory.createNewExpression(factory.createIdentifier(modelName), undefined, [
+              factory.createIdentifier('modelFields'),
+            ]),
+          ],
+        ),
+      ),
+    ),
+  ];
+};

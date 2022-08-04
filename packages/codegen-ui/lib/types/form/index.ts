@@ -57,6 +57,28 @@ export type StudioForm = {
   ctaConfig: StudioFormCTAConfig;
 };
 
+export type FormInputType =
+  | 'TextField'
+  | 'TextAreaField'
+  | 'PasswordField'
+  | 'SliderField'
+  | 'StepperField'
+  | 'StepperField'
+  | 'SwitchField'
+  | 'ToggleButton'
+  | 'CheckboxField'
+  | 'RadioGroupField'
+  | 'PhoneNumberField'
+  | 'SelectField'
+  | 'NumberField'
+  | 'DateField'
+  | 'TimeField'
+  | 'DateTimeField'
+  | 'IPAddressField'
+  | 'URLField'
+  | 'EmailField'
+  | 'JSONField';
+
 export * from './form-definition-element';
 export * from './style';
 export * from './form-validation';

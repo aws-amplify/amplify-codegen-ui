@@ -55,6 +55,16 @@ export function mergeValueMappings(
   };
 }
 
+function getTextFieldType(componentType: string): string | undefined {
+  const ComponentToTypeMap: { [key: string]: string } = {
+    NumberField: 'number',
+    DateField: 'date',
+    TimeField: 'time',
+    DateTimeField: 'datetime-local',
+  };
+  return ComponentToTypeMap[componentType];
+}
+
 /**
  * pure function that maps fieldConfig to definition Element
  */
@@ -72,6 +82,13 @@ export function getFormDefinitionInputElement(
   let formDefinitionElement: FormDefinitionInputElement;
   switch (componentType) {
     case 'TextField':
+    case 'NumberField':
+    case 'DateField':
+    case 'TimeField':
+    case 'DateTimeField':
+    case 'IPAddressField':
+    case 'URLField':
+    case 'EmailField':
       formDefinitionElement = {
         componentType: 'TextField',
         props: {
@@ -81,7 +98,9 @@ export function getFormDefinitionInputElement(
           isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
           placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
           defaultValue: getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
+          type: getTextFieldType(componentType),
         },
+        studioFormComponentType: componentType,
       };
       break;
     case 'SwitchField':
@@ -133,6 +152,7 @@ export function getFormDefinitionInputElement(
       break;
 
     case 'TextAreaField':
+    case 'JSONField':
       formDefinitionElement = {
         componentType: 'TextAreaField',
         props: {
@@ -143,6 +163,7 @@ export function getFormDefinitionInputElement(
           placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
           defaultValue: getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]),
         },
+        studioFormComponentType: componentType,
       };
       break;
 

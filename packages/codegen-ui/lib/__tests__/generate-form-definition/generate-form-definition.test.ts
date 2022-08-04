@@ -39,6 +39,7 @@ describe('generateFormDefinition', () => {
       name: {
         componentType: 'TextField',
         props: { label: 'Name', isRequired: true, isReadOnly: false },
+        studioFormComponentType: 'TextField',
       },
     });
   });
@@ -466,6 +467,7 @@ it('should add read-only fields if it has overrides', () => {
     name: {
       componentType: 'TextField',
       props: { label: 'Name', isRequired: true, isReadOnly: true },
+      studioFormComponentType: 'TextField',
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['name']]);

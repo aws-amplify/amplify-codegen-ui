@@ -14,15 +14,15 @@
   limitations under the License.
  */
 
-import { FormDefinitionInputElement, FieldTypeMapKeys } from '../../types';
+import { FieldTypeMapKeys, FormInputType } from '../../types';
 
 /**
  * Maps data types to UI Components
  */
 export const FIELD_TYPE_MAP: {
   [key in FieldTypeMapKeys]: {
-    defaultComponent: FormDefinitionInputElement['componentType'];
-    supportedComponents: Set<FormDefinitionInputElement['componentType']>;
+    defaultComponent: FormInputType;
+    supportedComponents: Set<FormInputType>;
   };
 } = {
   ID: {
@@ -34,48 +34,48 @@ export const FIELD_TYPE_MAP: {
     supportedComponents: new Set(['TextAreaField', 'TextField', 'PasswordField']),
   },
   Int: {
-    defaultComponent: 'TextField',
-    supportedComponents: new Set(['SliderField', 'StepperField', 'TextField']),
+    defaultComponent: 'NumberField',
+    supportedComponents: new Set(['SliderField', 'StepperField', 'NumberField']),
   },
   Float: {
-    defaultComponent: 'TextField',
-    supportedComponents: new Set(['SliderField', 'StepperField', 'TextField']),
+    defaultComponent: 'NumberField',
+    supportedComponents: new Set(['SliderField', 'StepperField', 'NumberField']),
   },
   AWSDate: {
-    defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextField']),
+    defaultComponent: 'DateField',
+    supportedComponents: new Set(['DateField']),
   },
   AWSTime: {
-    defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextField']),
+    defaultComponent: 'TimeField',
+    supportedComponents: new Set(['TimeField']),
   },
   AWSDateTime: {
-    defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextField']),
+    defaultComponent: 'DateTimeField',
+    supportedComponents: new Set(['DateTimeField']),
   },
   AWSTimestamp: {
-    defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextField']),
+    defaultComponent: 'DateTimeField',
+    supportedComponents: new Set(['DateTimeField']),
   },
   AWSEmail: {
-    defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextField']),
+    defaultComponent: 'EmailField',
+    supportedComponents: new Set(['EmailField']),
   },
   AWSURL: {
-    defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextField']),
+    defaultComponent: 'URLField',
+    supportedComponents: new Set(['URLField']),
   },
   AWSIPAddress: {
-    defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextField']),
+    defaultComponent: 'IPAddressField',
+    supportedComponents: new Set(['IPAddressField']),
   },
   Boolean: {
     defaultComponent: 'SwitchField',
     supportedComponents: new Set(['ToggleButton', 'CheckboxField', 'RadioGroupField', 'SwitchField']),
   },
   AWSJSON: {
-    defaultComponent: 'TextAreaField',
-    supportedComponents: new Set(['TextField', 'TextAreaField']),
+    defaultComponent: 'JSONField',
+    supportedComponents: new Set(['TextField', 'JSONField']),
   },
   AWSPhone: {
     defaultComponent: 'PhoneNumberField',
