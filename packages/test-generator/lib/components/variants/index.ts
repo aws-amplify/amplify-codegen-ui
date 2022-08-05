@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+export { default as ComponentWithBreakpoint } from './componentWithBreakpoint.json';
 export { default as ComponentWithVariant } from './componentWithVariant.json';
 export { default as ComponentWithVariantAndOverrides } from './componentWithVariantAndOverrides.json';
 // eslint-disable-next-line max-len
