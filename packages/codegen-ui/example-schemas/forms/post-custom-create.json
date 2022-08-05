@@ -30,15 +30,15 @@
   "ctaConfig": {
     "clear": {
       "visible": true,
-      "label": "empty"
+      "children": "empty"
     },
     "cancel": {
       "visible": true,
-      "label": "go back"
+      "children": "go back"
     },
     "submit": {
       "visible": true,
-      "label": "create"
+      "children": "create"
     }
   }
 }

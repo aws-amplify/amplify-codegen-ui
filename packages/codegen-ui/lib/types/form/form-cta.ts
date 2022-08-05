@@ -18,7 +18,7 @@ import { StudioFieldPosition } from './position';
 type StudioFormButton = {
   visible: boolean;
 
-  label?: string;
+  children?: string;
 
   position?: StudioFieldPosition;
 };

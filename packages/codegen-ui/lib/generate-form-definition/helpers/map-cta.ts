@@ -22,15 +22,15 @@ export function mapButtons(buttons: StudioFormCTAConfig): StudioFormCTAConfig {
     position: buttons.position ? buttons.position : defaults.position,
     clear: {
       visible: typeof buttons.clear?.visible === 'boolean' ? buttons.clear?.visible : defaults.clear.visible,
-      label: buttons.clear?.label ? buttons.clear.label : defaults.clear.label,
+      children: buttons.clear?.children ? buttons.clear.children : defaults.clear.children,
     },
     cancel: {
       visible: typeof buttons.cancel?.visible === 'boolean' ? buttons.cancel.visible : defaults.cancel.visible,
-      label: buttons.cancel?.label ? buttons.cancel.label : defaults.cancel.label,
+      children: buttons.cancel?.children ? buttons.cancel.children : defaults.cancel.children,
     },
     submit: {
       visible: typeof buttons.submit?.visible === 'boolean' ? buttons.submit.visible : defaults.submit.visible,
-      label: buttons.submit?.label ? buttons.submit.label : defaults.submit.label,
+      children: buttons.submit?.children ? buttons.submit.children : defaults.submit.children,
     },
   };
 }

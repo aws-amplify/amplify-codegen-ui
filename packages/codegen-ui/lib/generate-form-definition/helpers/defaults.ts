@@ -45,15 +45,15 @@ export const FORM_DEFINITION_DEFAULTS = {
     position: 'bottom',
     cancel: {
       visible: true,
-      label: 'Cancel',
+      children: 'Cancel',
     },
     clear: {
       visible: true,
-      label: 'Clear',
+      children: 'Clear',
     },
     submit: {
       visible: true,
-      label: 'Submit',
+      children: 'Submit',
     },
   },
 };

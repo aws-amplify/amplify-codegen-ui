@@ -92,9 +92,9 @@ export const fieldComponentMapper = (name: string, formDefinition: FormDefinitio
 const resolveCtaLabels = (
   formDefinition: FormDefinition,
 ): { cancelLabel: string; clearLabel: string; submitLabel: string } => {
-  const cancelLabel = formDefinition.buttons.cancel?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.cancel.label;
-  const clearLabel = formDefinition.buttons.clear?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.clear.label;
-  const submitLabel = formDefinition.buttons.submit?.label || FORM_DEFINITION_DEFAULTS.ctaConfig.submit.label;
+  const cancelLabel = formDefinition.buttons.cancel?.children || FORM_DEFINITION_DEFAULTS.ctaConfig.cancel.children;
+  const clearLabel = formDefinition.buttons.clear?.children || FORM_DEFINITION_DEFAULTS.ctaConfig.clear.children;
+  const submitLabel = formDefinition.buttons.submit?.children || FORM_DEFINITION_DEFAULTS.ctaConfig.submit.children;
 
   return { cancelLabel, clearLabel, submitLabel };
 };
@@ -118,10 +118,8 @@ export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponent
         componentType: 'Button',
         name: 'CancelButton',
         properties: {
-          label: {
-            value: cancelLabel,
           children: {
-            value: 'Cancel',
+            value: cancelLabel,
           },
           type: {
             value: 'button',
@@ -137,10 +135,8 @@ export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponent
             componentType: 'Button',
             name: 'ClearButton',
             properties: {
-              label: {
-                value: clearLabel,
               children: {
-                value: 'Clear',
+                value: clearLabel,
               },
               type: {
                 value: 'reset',
@@ -151,10 +147,8 @@ export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponent
             componentType: 'Button',
             name: 'SubmitButton',
             properties: {
-              label: {
-                value: submitLabel,
               children: {
-                value: 'Submit',
+                value: submitLabel,
               },
               type: {
                 value: 'submit',
