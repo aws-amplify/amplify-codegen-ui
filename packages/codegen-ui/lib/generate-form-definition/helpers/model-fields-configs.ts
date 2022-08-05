@@ -43,6 +43,47 @@ export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
   return field.dataType;
 }
 
+export function getFieldConfigFromModelField({
+  fieldName,
+  field,
+  dataSchema,
+}: {
+  fieldName: string;
+  field: GenericDataField;
+  dataSchema: GenericDataSchema;
+}): StudioGenericFieldConfig {
+  const fieldTypeMapKey = getFieldTypeMapKey(field);
+
+  const { defaultComponent } = FIELD_TYPE_MAP[fieldTypeMapKey];
+
+  const config: StudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
+    label: sentenceCase(fieldName),
+    inputType: {
+      type: defaultComponent,
+      required: field.required,
+      readOnly: field.readOnly,
+      name: fieldName,
+      value: 'true',
+    },
+  };
+
+  if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
+    const fieldEnums = dataSchema.enums[field.dataType.enum];
+    if (!fieldEnums) {
+      throw new InvalidInputError(`Values could not be found for enum ${field.dataType.enum}`);
+    }
+
+    config.inputType.valueMappings = {
+      values: fieldEnums.values.map((value) => ({
+        displayValue: { value: sentenceCase(value) ? sentenceCase(value) : value },
+        value: { value },
+      })),
+    };
+  }
+
+  return config;
+}
+
 /**
  * Impure function that adds fields from DataStore to temporary util object, modelFieldsConfigs
  * and to the formDefinition
@@ -74,36 +115,7 @@ export function mapModelFieldsConfigs({
       formDefinition.elementMatrix.push([fieldName]);
     }
 
-    const fieldTypeMapKey = getFieldTypeMapKey(field);
-
-    const { defaultComponent } = FIELD_TYPE_MAP[fieldTypeMapKey];
-
-    const config: StudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
-      label: sentenceCase(fieldName),
-      inputType: {
-        type: defaultComponent,
-        required: field.required,
-        readOnly: field.readOnly,
-        name: fieldName,
-        value: 'true',
-      },
-    };
-
-    if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
-      const fieldEnums = dataSchema.enums[field.dataType.enum];
-      if (!fieldEnums) {
-        throw new InvalidInputError(`Values could not be found for enum ${field.dataType.enum}`);
-      }
-
-      config.inputType.valueMappings = {
-        values: fieldEnums.values.map((value) => ({
-          displayValue: { value: sentenceCase(value) ? sentenceCase(value) : value },
-          value: { value },
-        })),
-      };
-    }
-
-    modelFieldsConfigs[fieldName] = config;
+    modelFieldsConfigs[fieldName] = getFieldConfigFromModelField({ fieldName, field, dataSchema });
   });
 
   return modelFieldsConfigs;

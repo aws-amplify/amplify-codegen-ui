@@ -44,6 +44,13 @@ describe('amplify render tests', () => {
     it('should generate a simple image component', () => {});
 
     it('should generate a simple string component', () => {});
+
+    it('should generate a simple component without variant specific generation', () => {
+      const generatedCode = generateWithAmplifyRenderer('buttonGolden');
+      expect(generatedCode.componentText.includes('restProp')).toBe(false);
+      expect(generatedCode.componentText.includes('breakpointHook')).toBe(false);
+      expect(generatedCode.componentText.includes('breakpoint: breakpointHook')).toBe(false);
+    });
   });
 
   describe('complex component tests', () => {
@@ -231,6 +238,13 @@ describe('amplify render tests', () => {
     it('should render object variants', () => {
       const generatedCode = generateWithAmplifyRenderer('componentWithObjectVariants');
       expect(generatedCode).toMatchSnapshot();
+    });
+
+    it('should have breakpoint specific generation', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithBreakpoint');
+      expect(generatedCode.componentText.includes('restProp')).toBe(true);
+      expect(generatedCode.componentText.includes('breakpointHook')).toBe(true);
+      expect(generatedCode.componentText.includes('breakpoint: breakpointHook')).toBe(true);
     });
   });
 

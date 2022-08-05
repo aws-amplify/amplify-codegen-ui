@@ -120,6 +120,8 @@ export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponent
         properties: {
           label: {
             value: cancelLabel,
+          children: {
+            value: 'Cancel',
           },
           type: {
             value: 'button',
@@ -137,6 +139,8 @@ export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponent
             properties: {
               label: {
                 value: clearLabel,
+              children: {
+                value: 'Clear',
               },
               type: {
                 value: 'reset',
@@ -149,6 +153,8 @@ export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponent
             properties: {
               label: {
                 value: submitLabel,
+              children: {
+                value: 'Submit',
               },
               type: {
                 value: 'submit',

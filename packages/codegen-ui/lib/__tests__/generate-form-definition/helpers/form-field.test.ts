@@ -16,7 +16,15 @@
 
 import { mapFormFieldConfig, getFormDefinitionInputElement } from '../../../generate-form-definition/helpers';
 import { mergeValueMappings } from '../../../generate-form-definition/helpers/form-field';
-import { FormDefinition, ModelFieldsConfigs, StudioFormFieldConfig, StudioGenericFieldConfig } from '../../../types';
+import {
+  FormDefinition,
+  GenericValidationType,
+  ModelFieldsConfigs,
+  StringLengthValidationType,
+  StudioFormFieldConfig,
+  StudioGenericFieldConfig,
+  ValidationTypes,
+} from '../../../types';
 
 describe('mapFormFieldConfig', () => {
   it('should map fields', () => {
@@ -197,6 +205,7 @@ describe('getFormDefinitionInputElement', () => {
         label: 'Label',
       },
       studioFormComponentType: 'IPAddressField',
+      validations: [{ type: ValidationTypes.IP_ADDRESS, immutable: true }],
     });
   });
 
@@ -213,6 +222,7 @@ describe('getFormDefinitionInputElement', () => {
         label: 'Label',
       },
       studioFormComponentType: 'URLField',
+      validations: [{ type: ValidationTypes.URL, immutable: true }],
     });
   });
 
@@ -229,6 +239,7 @@ describe('getFormDefinitionInputElement', () => {
         label: 'Label',
       },
       studioFormComponentType: 'EmailField',
+      validations: [{ type: ValidationTypes.EMAIL, immutable: true }],
     });
   });
 
@@ -325,6 +336,38 @@ describe('getFormDefinitionInputElement', () => {
         label: 'Label',
       },
       studioFormComponentType: 'JSONField',
+      validations: [{ type: ValidationTypes.JSON, immutable: true }],
+    });
+  });
+
+  it('should merge validations', () => {
+    const configValidation: StringLengthValidationType = {
+      type: ValidationTypes.LESS_THAN_CHAR_LENGTH,
+      numValues: [4],
+    };
+    const config = {
+      inputType: {
+        type: 'JSONField',
+      },
+      validations: [configValidation],
+    };
+
+    const baseConfigValidation: GenericValidationType = { type: ValidationTypes.REQUIRED };
+
+    const baseConfig = {
+      inputType: {
+        type: 'JSONField',
+      },
+      validations: [baseConfigValidation],
+    };
+
+    expect(getFormDefinitionInputElement(config, baseConfig)).toStrictEqual({
+      componentType: 'TextAreaField',
+      props: {
+        label: 'Label',
+      },
+      studioFormComponentType: 'JSONField',
+      validations: [{ type: ValidationTypes.JSON, immutable: true }, baseConfigValidation, configValidation],
     });
   });
 

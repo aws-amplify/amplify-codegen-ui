@@ -21,6 +21,7 @@ import {
   isEventPropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
+  isStudioComponentWithBreakpoints,
   StudioComponent,
   StudioComponentChild,
   StudioComponentPredicate,
@@ -75,6 +76,7 @@ import {
   buildBaseCollectionVariableStatement,
   buildPropAssignmentWithFilter,
   buildCollectionWithItemMap,
+  createHookStatement,
 } from './react-studio-template-renderer-helper';
 import { Primitive, isPrimitive, PrimitiveTypeParameter, PrimitiveChildrenPropMapping } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
@@ -580,6 +582,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     // remove overrides from rest of props
     const hasVariant = isStudioComponentWithVariants(component);
+    const hasBreakpoint = isStudioComponentWithBreakpoints(component);
     elements.push(
       factory.createBindingElement(
         undefined,
@@ -594,7 +597,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       factory.createBindingElement(
         factory.createToken(ts.SyntaxKind.DotDotDotToken),
         undefined,
-        factory.createIdentifier('rest'),
+        factory.createIdentifier(hasBreakpoint ? 'restProp' : 'rest'),
         undefined,
       ),
     );
@@ -618,7 +621,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithVariants(component)) {
       this.importCollection.addMappedImport(ImportValue.MERGE_VARIANTS_OVERRIDES);
       statements.push(this.buildVariantDeclaration(component.variants));
-      statements.push(this.buildOverridesFromVariantsAndProp());
+      if (hasBreakpoint) {
+        statements.push(this.buildDefaultBreakpointMap());
+        statements.push(this.buildRestWithStyle());
+      }
+      statements.push(this.buildOverridesFromVariantsAndProp(hasBreakpoint));
     }
 
     const authStatement = this.buildUseAuthenticatedUserStatement();
@@ -720,12 +727,91 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   /**
+   *     const breakpointHook = useBreakpointValue({
+   *        base: 'base',
+   *        large: 'large',
+   *        medium: 'medium',
+   *        small: 'small',
+   *        xl: 'xl',
+   *        xxl: 'xxl',
+   *     });
+   */
+  private buildDefaultBreakpointMap() {
+    this.importCollection.addMappedImport(ImportValue.USE_BREAKPOINT_VALUE);
+
+    return createHookStatement(
+      'breakpointHook',
+      'useBreakpointValue',
+      factory.createObjectLiteralExpression(
+        [
+          factory.createPropertyAssignment(factory.createIdentifier('base'), factory.createStringLiteral('base')),
+          factory.createPropertyAssignment(factory.createIdentifier('large'), factory.createStringLiteral('large')),
+          factory.createPropertyAssignment(factory.createIdentifier('medium'), factory.createStringLiteral('medium')),
+          factory.createPropertyAssignment(factory.createIdentifier('small'), factory.createStringLiteral('small')),
+          factory.createPropertyAssignment(factory.createIdentifier('xl'), factory.createStringLiteral('xl')),
+          factory.createPropertyAssignment(factory.createIdentifier('xxl'), factory.createStringLiteral('xxl')),
+        ],
+        true,
+      ),
+    );
+  }
+
+  /**
+   *   const rest = {style: {transition:"all 1s"}, ...restProp}
+   */
+  private buildRestWithStyle() {
+    return factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('rest'),
+            undefined,
+            undefined,
+            factory.createObjectLiteralExpression(
+              [
+                factory.createPropertyAssignment(
+                  factory.createIdentifier('style'),
+                  factory.createObjectLiteralExpression(
+                    [
+                      factory.createPropertyAssignment(
+                        factory.createIdentifier('transition'),
+                        factory.createStringLiteral('all 0.25s'),
+                      ),
+                    ],
+                    false,
+                  ),
+                ),
+                factory.createSpreadAssignment(factory.createIdentifier('restProp')),
+              ],
+              false,
+            ),
+          ),
+        ],
+        ts.NodeFlags.Const,
+      ),
+    );
+  }
+
+  /**
+   * If component hasBreakpoint:
+   *
    * const overrides = mergeVariantsAndOverrides(
-   *   getOverridesFromVariants(variants, props),
-   *   overridesProp || {}
+   *  getOverridesFromVariants(variants, {
+   *   breakpoint: breakpointHook,
+   *   ...props,
+   *  }),
+   *  overridesProp || {}
+   * );
+   *
+   * Else:
+   *
+   * const overrides = mergeVariantsAndOverrides(
+   *  getOverridesFromVariants(variants, props),
+   *  overridesProp || {}
    * );
    */
-  private buildOverridesFromVariantsAndProp() {
+  private buildOverridesFromVariantsAndProp(hasBreakpoint: boolean) {
     this.importCollection.addMappedImport(ImportValue.GET_OVERRIDES_FROM_VARIANTS);
     this.importCollection.addMappedImport(ImportValue.VARIANT);
 
@@ -740,7 +826,18 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createCallExpression(factory.createIdentifier('mergeVariantsAndOverrides'), undefined, [
               factory.createCallExpression(factory.createIdentifier('getOverridesFromVariants'), undefined, [
                 factory.createIdentifier('variants'),
-                factory.createIdentifier('props'),
+                hasBreakpoint
+                  ? factory.createObjectLiteralExpression(
+                      [
+                        factory.createPropertyAssignment(
+                          factory.createIdentifier('breakpoint'),
+                          factory.createIdentifier('breakpointHook'),
+                        ),
+                        factory.createSpreadAssignment(factory.createIdentifier('props')),
+                      ],
+                      false,
+                    )
+                  : factory.createIdentifier('props'),
               ]),
               factory.createBinaryExpression(
                 factory.createIdentifier('overridesProp'),

@@ -1,0 +1,33 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Button",
+  "name": "ComponentWithBreakpoint",
+  "properties": {
+    "children": {
+      "value": "ComponentWithBreakpoint"
+    }
+  },
+  "variants": [
+    {
+      "variantValues": {
+        "breakpoint": "small"
+      },
+      "overrides": {
+        "ComponentWithVariant": {
+          "fontSize": "12px"
+        }
+      }
+    },
+    {
+      "variantValues": {
+        "breakpoint": "medium"
+      },
+      "overrides": {
+        "ComponentWithVariant": {
+          "fontSize": "40px"
+        }
+      }
+    }
+  ],
+  "schemaVersion": "1.0"
+}
