@@ -13,21 +13,4 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-// import { postSchema } from '../__utils__/mock-schemas';
-import { StudioForm } from '../../types';
-
-describe('formToComponent', () => {
-  it('should map datastore model fields', () => {
-    const myForm: StudioForm = {
-      id: '123',
-      name: 'mySampleForm',
-      formActionType: 'create',
-      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
-      fields: {},
-      sectionalElements: {},
-      style: {},
-    };
-
-    expect(myForm).toBeDefined();
-  });
-});
+export { mapFormDefinitionToComponent } from './map-form-definition-to-component';

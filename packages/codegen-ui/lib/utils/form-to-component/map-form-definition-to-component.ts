@@ -21,13 +21,13 @@ import {
   FormStyleConfig,
   StudioComponentProperties,
   StudioFormStyle,
-} from '../types';
+} from '../../types';
 
 const getStyleResolvedValue = (config?: FormStyleConfig): string | undefined => {
   return config?.value ?? config?.tokenReference;
 };
 
-export const resolveStyles = (
+const resolveStyles = (
   style: StudioFormStyle,
 ): Record<keyof Omit<StudioFormStyle, 'alignment'>, string | undefined> => {
   return {
@@ -37,11 +37,7 @@ export const resolveStyles = (
   };
 };
 
-export const parentGrid = (
-  name: string,
-  style: StudioFormStyle,
-  children: StudioComponentChild[],
-): StudioComponentChild => {
+const parentGrid = (name: string, style: StudioFormStyle, children: StudioComponentChild[]): StudioComponentChild => {
   const { verticalGap, horizontalGap } = resolveStyles(style);
   return {
     name,
@@ -62,7 +58,7 @@ const mapFieldElementProps = (element: FormDefinitionElement) => {
   return props;
 };
 
-export const fieldComponentMapper = (name: string, formDefinition: FormDefinition): StudioComponentChild => {
+const fieldComponentMapper = (name: string, formDefinition: FormDefinition): StudioComponentChild => {
   // will accept a field matrix from a defnition and map
   const fieldChildren = formDefinition.elementMatrix.map<StudioComponentChild>((row: string[], rowIdx: number) => {
     return {
@@ -88,7 +84,7 @@ export const fieldComponentMapper = (name: string, formDefinition: FormDefinitio
   return parentGrid(`${name}Grid`, formDefinition.form.layoutStyle, fieldChildren);
 };
 
-export const ctaButtonConfig = (): StudioComponentChild => {
+const ctaButtonConfig = (): StudioComponentChild => {
   return {
     name: 'CTAFlex',
     componentType: 'Flex',

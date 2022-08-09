@@ -21,4 +21,3 @@ export {
   getFieldConfigFromModelField,
 } from './helpers';
 export { generateFormDefinition } from './generate-form-definition';
-export { mapFormDefinitionToComponent } from './form-to-component';
