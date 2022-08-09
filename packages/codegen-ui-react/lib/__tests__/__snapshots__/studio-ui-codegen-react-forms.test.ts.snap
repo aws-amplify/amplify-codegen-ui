@@ -8,7 +8,15 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  Radio,
+  RadioGroupField,
+  SelectField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
 export default function customDataForm(props) {
   const {
     onSubmit: customDataFormOnSubmit,
@@ -19,6 +27,10 @@ export default function customDataForm(props) {
   } = props;
   const [nameFieldError, setNameFieldError] = useStateMutationAction({});
   const [emailFieldError, setEmailFieldError] = useStateMutationAction({});
+  const [cityFieldError, setCityFieldError] = useStateMutationAction({});
+  const [categoryFieldError, setCategoryFieldError] = useStateMutationAction(
+    {}
+  );
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
   return (
@@ -82,6 +94,88 @@ export default function customDataForm(props) {
             hasError={emailFieldError.hasError}
             {...getOverrideProps(overrides, \\"email\\")}
           ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid2\\")}
+        >
+          <SelectField
+            label=\\"Label\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              const isValidResult = onValidate?.[\\"city\\"]
+                ? await onValidate[\\"city\\"](value)
+                : validateField(value, []);
+              setCityFieldError({ ...cityFieldError, ...isValidResult });
+              setFormValid(!cityFieldError.hasError);
+              setModelFields({ ...modelFields, city: value });
+            }}
+            errorMessage={cityFieldError.errorMessage}
+            hasError={cityFieldError.hasError}
+            {...getOverrideProps(overrides, \\"city\\")}
+          >
+            <option
+              children=\\"Los Angeles\\"
+              value=\\"Los Angeles\\"
+              {...getOverrideProps(overrides, \\"cityoption0\\")}
+            ></option>
+            <option
+              children=\\"Houston\\"
+              value=\\"Houston\\"
+              {...getOverrideProps(overrides, \\"cityoption1\\")}
+            ></option>
+            <option
+              children=\\"New York\\"
+              value=\\"New York\\"
+              selected={true}
+              {...getOverrideProps(overrides, \\"cityoption2\\")}
+            ></option>
+          </SelectField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid3\\")}
+        >
+          <RadioGroupField
+            label=\\"Label\\"
+            name=\\"fieldName\\"
+            defaultValue=\\"Hobbies\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              const isValidResult = onValidate?.[\\"category\\"]
+                ? await onValidate[\\"category\\"](value)
+                : validateField(value, []);
+              setCategoryFieldError({
+                ...categoryFieldError,
+                ...isValidResult,
+              });
+              setFormValid(!categoryFieldError.hasError);
+              setModelFields({ ...modelFields, category: value });
+            }}
+            errorMessage={categoryFieldError.errorMessage}
+            hasError={categoryFieldError.hasError}
+            {...getOverrideProps(overrides, \\"category\\")}
+          >
+            <Radio
+              children=\\"Hobbies\\"
+              value=\\"Hobbies\\"
+              {...getOverrideProps(overrides, \\"categoryRadio0\\")}
+            ></Radio>
+            <Radio
+              children=\\"Travel\\"
+              value=\\"Travel\\"
+              {...getOverrideProps(overrides, \\"categoryRadio1\\")}
+            ></Radio>
+            <Radio
+              children=\\"Health\\"
+              value=\\"Health\\"
+              {...getOverrideProps(overrides, \\"categoryRadio2\\")}
+            ></Radio>
+          </RadioGroupField>
         </Grid>
       </Grid>
       <Flex

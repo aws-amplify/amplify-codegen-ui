@@ -22,6 +22,7 @@ import {
   StudioComponentProperties,
   StudioFormStyle,
 } from '../../types';
+import { mapElementChildren } from './helpers/map-element-children';
 
 const getStyleResolvedValue = (config?: FormStyleConfig): string | undefined => {
   return config?.value ?? config?.tokenReference;
@@ -77,6 +78,7 @@ const fieldComponentMapper = (name: string, formDefinition: FormDefinition): Stu
           name: column,
           componentType: element.componentType,
           properties: mapFieldElementProps(element),
+          children: mapElementChildren(column, element).children,
         };
       }),
     };
