@@ -15,11 +15,11 @@
  */
 import {
   ColumnInfo,
-  DataStoreModelField,
+  GenericDataSchema,
   StudioView,
+  ViewConfiguration,
   ViewDataTypeConfig,
   ViewStyle,
-  TableConfiguration,
 } from '../../types';
 import { generateTableDefinition } from '../../generate-view-definition/generate-table-definition';
 
@@ -34,6 +34,7 @@ describe('generateTableDefinition', () => {
       sourceId: 'source',
       dataSource: {
         type: 'DataStore',
+        model: 'TestModel',
       },
       style: {
         alignment: {
@@ -58,21 +59,27 @@ describe('generateTableDefinition', () => {
       },
     };
 
-    const fields: DataStoreModelField[] = (() => {
-      const f: DataStoreModelField[] = [];
-      for (let i = 1; i <= 5; i += 1) {
-        f.push({
-          name: `header${i}`,
-          isArray: false,
-          isReadOnly: false,
-          isRequired: false,
-          type: 'String',
-        });
-      }
-      return f;
-    })();
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        TestModel: {
+          fields: {},
+        },
+      },
+    };
 
-    const definition = generateTableDefinition(view, fields);
+    for (let i = 1; i <= 5; i += 1) {
+      dataSchema.models.TestModel.fields[`header${i}`] = {
+        dataType: 'String',
+        isArray: false,
+        readOnly: false,
+        required: false,
+      };
+    }
+
+    const definition = generateTableDefinition(view, dataSchema);
 
     const expectedStyle: ViewStyle = {
       alignment: {
@@ -89,7 +96,7 @@ describe('generateTableDefinition', () => {
       },
     };
 
-    const expectedConfig: TableConfiguration = {
+    const expectedConfig: ViewConfiguration = {
       type: 'Table',
       disableHeaders: false,
       highlightOnHover: false,
@@ -98,6 +105,7 @@ describe('generateTableDefinition', () => {
 
     const expectedSource: ViewDataTypeConfig = {
       type: 'DataStore',
+      model: 'TestModel',
     };
 
     const expectedColumns: ColumnInfo[] = [

@@ -13,12 +13,4 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-
-export * from './position';
-export * from './style';
-export * from './table';
-export * from './value';
-export * from './view';
-export * from './table-definition';
-export * from './defaults';
-export * from './view-metadata';
+export { generateTableDefinition } from './generate-table-definition';

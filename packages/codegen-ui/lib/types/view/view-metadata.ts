@@ -14,11 +14,8 @@
   limitations under the License.
  */
 
-export * from './position';
-export * from './style';
-export * from './table';
-export * from './value';
-export * from './view';
-export * from './table-definition';
-export * from './defaults';
-export * from './view-metadata';
+export type ViewMetadata = {
+  id?: string;
+  name: string;
+  // Add extra metadata here
+};

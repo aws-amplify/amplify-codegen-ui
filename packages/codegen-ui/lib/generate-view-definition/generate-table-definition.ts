@@ -22,6 +22,7 @@ import {
   DEFAULT_TABLE_DEFINITION,
   DEFAULT_TABLE_STYLE,
   DEFAULT_TABLE_SOURCE,
+  GenericDataSchema,
 } from '../types';
 import { orderAndFilterVisibleColumns } from './helpers';
 
@@ -32,7 +33,7 @@ import { orderAndFilterVisibleColumns } from './helpers';
  * @param fields (Optional) holds type information about the DataStore model fields being represented.
  * @returns a definition that translates to rendered JSX elements.
  */
-export function generateTableDefinition(table: StudioView, fields: DataStoreModelField[]): TableDefinition {
+export function generateTableDefinition(table: StudioView, dataSchema?: GenericDataSchema): TableDefinition {
   const definition = DEFAULT_TABLE_DEFINITION;
 
   definition.tableStyle = {
@@ -51,6 +52,19 @@ export function generateTableDefinition(table: StudioView, fields: DataStoreMode
     ...DEFAULT_TABLE_SOURCE,
     ...table.dataSource,
   };
+
+  let fields: DataStoreModelField[] = [];
+
+  if (table.dataSource.model) {
+    const dataModel = dataSchema?.models[table.dataSource.model]?.fields ?? {};
+    fields = Object.entries(dataModel).map(([key, value]) => ({
+      name: key,
+      type: value.dataType,
+      isReadOnly: value.readOnly,
+      isArray: value.isArray,
+      isRequired: value.required,
+    }));
+  }
 
   definition.columns = orderAndFilterVisibleColumns(table.viewConfiguration.columns ?? {}, fields);
 
