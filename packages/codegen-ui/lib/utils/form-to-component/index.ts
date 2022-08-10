@@ -13,11 +13,4 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export {
-  FIELD_TYPE_MAP,
-  getFormDefinitionInputElement,
-  getFormDefinitionSectionalElement,
-  getFieldTypeMapKey,
-  getFieldConfigFromModelField,
-} from './helpers';
-export { generateFormDefinition } from './generate-form-definition';
+export { mapFormDefinitionToComponent } from './map-form-definition-to-component';

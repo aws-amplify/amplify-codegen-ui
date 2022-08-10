@@ -16,9 +16,9 @@
 
 import { ViewStyle } from './style';
 import { ColumnConfig } from './table';
-import { ViewConfiguration, ViewDataTypeConfig } from './view';
+import { TableConfiguration, ViewDataTypeConfig } from './view';
 
-export type OverallTableConfig = Omit<ViewConfiguration, 'columns'>;
+export type OverallTableConfig = Omit<TableConfiguration, 'columns'>;
 
 export type ColumnInfo = ColumnConfig & { header: string };
 

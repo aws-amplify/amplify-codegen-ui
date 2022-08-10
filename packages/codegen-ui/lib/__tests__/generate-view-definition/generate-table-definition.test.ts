@@ -13,12 +13,19 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ColumnInfo, DataStoreModelField, View, ViewConfiguration, ViewDataTypeConfig, ViewStyle } from '../../types';
+import {
+  ColumnInfo,
+  GenericDataSchema,
+  StudioView,
+  ViewConfiguration,
+  ViewDataTypeConfig,
+  ViewStyle,
+} from '../../types';
 import { generateTableDefinition } from '../../generate-view-definition/generate-table-definition';
 
 describe('generateTableDefinition', () => {
   test('can generate table definition', () => {
-    const view: View = {
+    const view: StudioView = {
       appId: 'appId',
       environmentName: 'staging',
       id: 'viewId',
@@ -27,6 +34,7 @@ describe('generateTableDefinition', () => {
       sourceId: 'source',
       dataSource: {
         type: 'DataStore',
+        model: 'TestModel',
       },
       style: {
         alignment: {
@@ -51,21 +59,27 @@ describe('generateTableDefinition', () => {
       },
     };
 
-    const fields: DataStoreModelField[] = (() => {
-      const f: DataStoreModelField[] = [];
-      for (let i = 1; i <= 5; i += 1) {
-        f.push({
-          name: `header${i}`,
-          isArray: false,
-          isReadOnly: false,
-          isRequired: false,
-          type: 'String',
-        });
-      }
-      return f;
-    })();
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        TestModel: {
+          fields: {},
+        },
+      },
+    };
 
-    const definition = generateTableDefinition(view, fields);
+    for (let i = 1; i <= 5; i += 1) {
+      dataSchema.models.TestModel.fields[`header${i}`] = {
+        dataType: 'String',
+        isArray: false,
+        readOnly: false,
+        required: false,
+      };
+    }
+
+    const definition = generateTableDefinition(view, dataSchema);
 
     const expectedStyle: ViewStyle = {
       alignment: {
@@ -86,10 +100,12 @@ describe('generateTableDefinition', () => {
       type: 'Table',
       disableHeaders: false,
       highlightOnHover: false,
+      enableOnRowClick: false,
     };
 
     const expectedSource: ViewDataTypeConfig = {
       type: 'DataStore',
+      model: 'TestModel',
     };
 
     const expectedColumns: ColumnInfo[] = [

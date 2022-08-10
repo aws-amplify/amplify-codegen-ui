@@ -21,3 +21,4 @@ export * from './value';
 export * from './view';
 export * from './table-definition';
 export * from './defaults';
+export * from './view-metadata';

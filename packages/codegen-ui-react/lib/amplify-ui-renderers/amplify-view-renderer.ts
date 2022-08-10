@@ -13,11 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export {
-  FIELD_TYPE_MAP,
-  getFormDefinitionInputElement,
-  getFormDefinitionSectionalElement,
-  getFieldTypeMapKey,
-  getFieldConfigFromModelField,
-} from './helpers';
-export { generateFormDefinition } from './generate-form-definition';
+import { StudioNode } from '@aws-amplify/codegen-ui/lib/studio-node';
+import { StudioView } from '@aws-amplify/codegen-ui/lib/types';
+import { JsxElement, JsxFragment, JsxSelfClosingElement } from 'typescript';
+import { ReactViewTemplateRenderer } from '../views/react-view-renderer';
+
+export class AmplifyViewRenderer extends ReactViewTemplateRenderer {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  renderJsx(view: StudioView, parent?: StudioNode | undefined): JsxElement | JsxFragment | JsxSelfClosingElement {
+    throw new Error('Method not implemented.');
+  }
+}

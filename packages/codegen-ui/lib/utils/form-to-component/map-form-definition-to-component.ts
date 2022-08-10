@@ -21,14 +21,14 @@ import {
   FormStyleConfig,
   StudioComponentProperties,
   StudioFormStyle,
-} from '../types';
-import { FORM_DEFINITION_DEFAULTS } from './helpers/defaults';
+} from '../../types';
+import { FORM_DEFINITION_DEFAULTS } from '../../generate-form-definition/helpers/defaults';
 
 const getStyleResolvedValue = (config?: FormStyleConfig): string | undefined => {
   return config?.value ?? config?.tokenReference;
 };
 
-export const resolveStyles = (
+const resolveStyles = (
   style: StudioFormStyle,
 ): Record<keyof Omit<StudioFormStyle, 'alignment'>, string | undefined> => {
   return {
@@ -38,11 +38,7 @@ export const resolveStyles = (
   };
 };
 
-export const parentGrid = (
-  name: string,
-  style: StudioFormStyle,
-  children: StudioComponentChild[],
-): StudioComponentChild => {
+const parentGrid = (name: string, style: StudioFormStyle, children: StudioComponentChild[]): StudioComponentChild => {
   const { verticalGap, horizontalGap } = resolveStyles(style);
   return {
     name,
@@ -63,7 +59,7 @@ const mapFieldElementProps = (element: FormDefinitionElement) => {
   return props;
 };
 
-export const fieldComponentMapper = (name: string, formDefinition: FormDefinition): StudioComponentChild => {
+const fieldComponentMapper = (name: string, formDefinition: FormDefinition): StudioComponentChild => {
   // will accept a field matrix from a defnition and map
   const fieldChildren = formDefinition.elementMatrix.map<StudioComponentChild>((row: string[], rowIdx: number) => {
     return {
@@ -99,7 +95,7 @@ const resolveCtaLabels = (
   return { cancelLabel, clearLabel, submitLabel };
 };
 
-export const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponentChild => {
+const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponentChild => {
   const { cancelLabel, clearLabel, submitLabel } = resolveCtaLabels(formDefinition);
 
   return {
