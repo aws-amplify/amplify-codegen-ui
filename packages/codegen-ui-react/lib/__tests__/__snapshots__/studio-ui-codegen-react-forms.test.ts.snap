@@ -121,8 +121,16 @@ export default function customDataForm(props) {
 exports[`amplify form renderer tests custom form tests should render a custom backed form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type customDataFormOverridesProps = {
+    customDataFormGrid: GridProps;
+    RowGrid0: GridProps;
+    name: TextFieldProps;
+    RowGrid1: GridProps;
+    email: TextFieldProps;
+} & EscapeHatchProps;
 export declare type customDataFormProps = React.PropsWithChildren<{
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: customDataFormOverridesProps | undefined | null;
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
@@ -334,8 +342,20 @@ export default function myPostForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type myPostFormOverridesProps = {
+    myPostFormGrid: GridProps;
+    RowGrid0: GridProps;
+    caption: TextFieldProps;
+    RowGrid1: GridProps;
+    username: TextFieldProps;
+    RowGrid2: GridProps;
+    post_url: TextFieldProps;
+    RowGrid3: GridProps;
+    profile_url: TextFieldProps;
+} & EscapeHatchProps;
 export declare type myPostFormProps = React.PropsWithChildren<{
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: myPostFormOverridesProps | undefined | null;
 } & {
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
     onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
@@ -590,8 +610,22 @@ export default function myPostForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a update form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type myPostFormOverridesProps = {
+    myPostFormGrid: GridProps;
+    RowGrid0: GridProps;
+    TextAreaFieldbbd63464: TextAreaFieldProps;
+    RowGrid1: GridProps;
+    caption: TextFieldProps;
+    RowGrid2: GridProps;
+    username: TextFieldProps;
+    RowGrid3: GridProps;
+    profile_url: TextFieldProps;
+    RowGrid4: GridProps;
+    post_url: TextFieldProps;
+} & EscapeHatchProps;
 export declare type myPostFormProps = React.PropsWithChildren<{
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: myPostFormOverridesProps | undefined | null;
 } & {
     id: string;
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
