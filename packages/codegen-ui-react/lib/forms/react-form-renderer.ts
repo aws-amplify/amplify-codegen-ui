@@ -58,7 +58,12 @@ import {
   transpile,
 } from '../react-studio-template-renderer-helper';
 import { RequiredKeys } from '../utils/type-utils';
-import { buildFormPropNode, buildMutationBindings, buildStateMutationStatement } from './form-renderer-helper';
+import {
+  buildFormPropNode,
+  buildMutationBindings,
+  buildOverrideTypesBindings,
+  buildStateMutationStatement,
+} from './form-renderer-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -158,8 +163,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     componentText += EOL;
 
-    const propsPrinted = printer.printNode(EmitHint.Unspecified, propsDeclaration, file);
-    componentText += propsPrinted;
+    propsDeclaration.forEach((typeNode) => {
+      const propsPrinted = printer.printNode(EmitHint.Unspecified, typeNode, file);
+      componentText += propsPrinted;
+    });
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
@@ -233,14 +240,19 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
   abstract renderJsx(component: StudioComponent, parent?: StudioNode): JsxElement | JsxFragment | JsxSelfClosingElement;
 
-  private renderBindingPropsType(): TypeAliasDeclaration {
+  private renderBindingPropsType(): TypeAliasDeclaration[] {
+    const overrideTypeAliasDeclaration = buildOverrideTypesBindings(
+      this.formComponent,
+      this.formDefinition,
+      this.importCollection,
+    );
     const escapeHatchTypeNode = factory.createTypeLiteralNode([
       factory.createPropertySignature(
         undefined,
         factory.createIdentifier('overrides'),
         factory.createToken(SyntaxKind.QuestionToken),
         factory.createUnionTypeNode([
-          factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+          factory.createTypeReferenceNode(`${this.formComponent.name}OverridesProps`, undefined),
           factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
           factory.createLiteralTypeNode(factory.createNull()),
         ]),
@@ -250,15 +262,18 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
 
-    return factory.createTypeAliasDeclaration(
-      undefined,
-      [factory.createModifier(SyntaxKind.ExportKeyword)],
-      factory.createIdentifier(formPropType),
-      undefined,
-      factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
-        factory.createIntersectionTypeNode([escapeHatchTypeNode, buildFormPropNode(this.component)]),
-      ]),
-    );
+    return [
+      overrideTypeAliasDeclaration,
+      factory.createTypeAliasDeclaration(
+        undefined,
+        [factory.createModifier(SyntaxKind.ExportKeyword)],
+        factory.createIdentifier(formPropType),
+        undefined,
+        factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
+          factory.createIntersectionTypeNode([escapeHatchTypeNode, buildFormPropNode(this.component)]),
+        ]),
+      ),
+    ];
   }
 
   /**
