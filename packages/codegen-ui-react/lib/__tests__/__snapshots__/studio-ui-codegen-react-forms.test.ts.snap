@@ -12,6 +12,7 @@ import {
   Button,
   Flex,
   Grid,
+  Radio,
   RadioGroupField,
   SelectField,
   TextField,
@@ -115,6 +116,24 @@ export default function customDataForm(props) {
             hasError={cityFieldError.hasError}
             {...getOverrideProps(overrides, \\"city\\")}
           ></SelectField>
+          >
+            <option
+              children=\\"Los Angeles\\"
+              value=\\"Los Angeles\\"
+              {...getOverrideProps(overrides, \\"cityoption0\\")}
+            ></option>
+            <option
+              children=\\"Houston\\"
+              value=\\"Houston\\"
+              {...getOverrideProps(overrides, \\"cityoption1\\")}
+            ></option>
+            <option
+              children=\\"New York\\"
+              value=\\"New York\\"
+              selected={true}
+              {...getOverrideProps(overrides, \\"cityoption2\\")}
+            ></option>
+          </SelectField>
         </Grid>
         <Grid
           columnGap=\\"inherit\\"
@@ -142,6 +161,22 @@ export default function customDataForm(props) {
             hasError={categoryFieldError.hasError}
             {...getOverrideProps(overrides, \\"category\\")}
           ></RadioGroupField>
+            <Radio
+              children=\\"Hobbies\\"
+              value=\\"Hobbies\\"
+              {...getOverrideProps(overrides, \\"categoryRadio0\\")}
+            ></Radio>
+            <Radio
+              children=\\"Travel\\"
+              value=\\"Travel\\"
+              {...getOverrideProps(overrides, \\"categoryRadio1\\")}
+            ></Radio>
+            <Radio
+              children=\\"Health\\"
+              value=\\"Health\\"
+              {...getOverrideProps(overrides, \\"categoryRadio2\\")}
+            ></Radio>
+          </RadioGroupField>
         </Grid>
       </Grid>
       <Flex
