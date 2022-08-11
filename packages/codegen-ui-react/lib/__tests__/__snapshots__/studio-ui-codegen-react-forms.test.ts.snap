@@ -215,13 +215,17 @@ export default function customDataForm(props) {
 exports[`amplify form renderer tests custom form tests should render a custom backed form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, RadioGroupFieldProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type customDataFormOverridesProps = {
     customDataFormGrid: GridProps;
     RowGrid0: GridProps;
     name: TextFieldProps;
     RowGrid1: GridProps;
     email: TextFieldProps;
+    RowGrid2: GridProps;
+    city: SelectFieldProps;
+    RowGrid3: GridProps;
+    category: RadioGroupFieldProps;
 } & EscapeHatchProps;
 export declare type customDataFormProps = React.PropsWithChildren<{
     overrides?: customDataFormOverridesProps | undefined | null;
