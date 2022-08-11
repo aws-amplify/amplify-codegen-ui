@@ -8,7 +8,15 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  Radio,
+  RadioGroupField,
+  SelectField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
 export default function customDataForm(props) {
   const {
     onSubmit: customDataFormOnSubmit,
@@ -19,6 +27,10 @@ export default function customDataForm(props) {
   } = props;
   const [nameFieldError, setNameFieldError] = useStateMutationAction({});
   const [emailFieldError, setEmailFieldError] = useStateMutationAction({});
+  const [cityFieldError, setCityFieldError] = useStateMutationAction({});
+  const [categoryFieldError, setCategoryFieldError] = useStateMutationAction(
+    {}
+  );
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
   return (
@@ -83,6 +95,88 @@ export default function customDataForm(props) {
             {...getOverrideProps(overrides, \\"email\\")}
           ></TextField>
         </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid2\\")}
+        >
+          <SelectField
+            label=\\"Label\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              const isValidResult = onValidate?.[\\"city\\"]
+                ? await onValidate[\\"city\\"](value)
+                : validateField(value, []);
+              setCityFieldError({ ...cityFieldError, ...isValidResult });
+              setFormValid(!cityFieldError.hasError);
+              setModelFields({ ...modelFields, city: value });
+            }}
+            errorMessage={cityFieldError.errorMessage}
+            hasError={cityFieldError.hasError}
+            {...getOverrideProps(overrides, \\"city\\")}
+          >
+            <option
+              children=\\"Los Angeles\\"
+              value=\\"Los Angeles\\"
+              {...getOverrideProps(overrides, \\"cityoption0\\")}
+            ></option>
+            <option
+              children=\\"Houston\\"
+              value=\\"Houston\\"
+              {...getOverrideProps(overrides, \\"cityoption1\\")}
+            ></option>
+            <option
+              children=\\"New York\\"
+              value=\\"New York\\"
+              selected={true}
+              {...getOverrideProps(overrides, \\"cityoption2\\")}
+            ></option>
+          </SelectField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid3\\")}
+        >
+          <RadioGroupField
+            label=\\"Label\\"
+            name=\\"fieldName\\"
+            defaultValue=\\"Hobbies\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              const isValidResult = onValidate?.[\\"category\\"]
+                ? await onValidate[\\"category\\"](value)
+                : validateField(value, []);
+              setCategoryFieldError({
+                ...categoryFieldError,
+                ...isValidResult,
+              });
+              setFormValid(!categoryFieldError.hasError);
+              setModelFields({ ...modelFields, category: value });
+            }}
+            errorMessage={categoryFieldError.errorMessage}
+            hasError={categoryFieldError.hasError}
+            {...getOverrideProps(overrides, \\"category\\")}
+          >
+            <Radio
+              children=\\"Hobbies\\"
+              value=\\"Hobbies\\"
+              {...getOverrideProps(overrides, \\"categoryRadio0\\")}
+            ></Radio>
+            <Radio
+              children=\\"Travel\\"
+              value=\\"Travel\\"
+              {...getOverrideProps(overrides, \\"categoryRadio1\\")}
+            ></Radio>
+            <Radio
+              children=\\"Health\\"
+              value=\\"Health\\"
+              {...getOverrideProps(overrides, \\"categoryRadio2\\")}
+            ></Radio>
+          </RadioGroupField>
+        </Grid>
       </Grid>
       <Flex
         justifyContent=\\"space-between\\"
@@ -121,8 +215,16 @@ export default function customDataForm(props) {
 exports[`amplify form renderer tests custom form tests should render a custom backed form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type customDataFormOverridesProps = {
+    customDataFormGrid: GridProps;
+    RowGrid0: GridProps;
+    name: TextFieldProps;
+    RowGrid1: GridProps;
+    email: TextFieldProps;
+} & EscapeHatchProps;
 export declare type customDataFormProps = React.PropsWithChildren<{
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: customDataFormOverridesProps | undefined | null;
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
@@ -334,8 +436,20 @@ export default function myPostForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type myPostFormOverridesProps = {
+    myPostFormGrid: GridProps;
+    RowGrid0: GridProps;
+    caption: TextFieldProps;
+    RowGrid1: GridProps;
+    username: TextFieldProps;
+    RowGrid2: GridProps;
+    post_url: TextFieldProps;
+    RowGrid3: GridProps;
+    profile_url: TextFieldProps;
+} & EscapeHatchProps;
 export declare type myPostFormProps = React.PropsWithChildren<{
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: myPostFormOverridesProps | undefined | null;
 } & {
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
     onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
@@ -590,8 +704,22 @@ export default function myPostForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a update form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type myPostFormOverridesProps = {
+    myPostFormGrid: GridProps;
+    RowGrid0: GridProps;
+    TextAreaFieldbbd63464: TextAreaFieldProps;
+    RowGrid1: GridProps;
+    caption: TextFieldProps;
+    RowGrid2: GridProps;
+    username: TextFieldProps;
+    RowGrid3: GridProps;
+    profile_url: TextFieldProps;
+    RowGrid4: GridProps;
+    post_url: TextFieldProps;
+} & EscapeHatchProps;
 export declare type myPostFormProps = React.PropsWithChildren<{
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: myPostFormOverridesProps | undefined | null;
 } & {
     id: string;
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;

@@ -17,6 +17,7 @@
 import {
   ComponentMetadata,
   FieldValidationConfiguration,
+  FormDefinition,
   StateStudioComponentProperty,
   StudioComponent,
   StudioComponentChild,
@@ -33,7 +34,7 @@ import {
   ObjectLiteralElementLike,
   ObjectLiteralExpression,
 } from 'typescript';
-import { ImportCollection, ImportValue } from '../imports';
+import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getStateName, getSetStateName } from '../react-component-render-helper';
 import { getActionIdentifier } from '../workflow';
 
@@ -619,4 +620,55 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
       ),
     ),
   ];
+};
+
+export const buildOverrideTypesBindings = (
+  formComponent: StudioComponent,
+  formDefinition: FormDefinition,
+  importCollection: ImportCollection,
+) => {
+  importCollection.addImport(ImportSource.UI_REACT, 'GridProps');
+
+  const typeNodes = [
+    factory.createPropertySignature(
+      undefined,
+      factory.createIdentifier(`${formComponent.name}Grid`),
+      undefined,
+      factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+    ),
+  ];
+
+  formDefinition.elementMatrix.forEach((row, index) => {
+    typeNodes.push(
+      factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier(`RowGrid${index}`),
+        undefined,
+        factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+      ),
+    );
+    row.forEach((field) => {
+      const componentTypePropName = `${formDefinition.elements[field].componentType}Props`;
+      typeNodes.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier(field),
+          undefined,
+          factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName), undefined),
+        ),
+      );
+      importCollection.addImport(ImportSource.UI_REACT, componentTypePropName);
+    });
+  });
+
+  return factory.createTypeAliasDeclaration(
+    undefined,
+    [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
+    factory.createIdentifier(`${formComponent.name}OverridesProps`),
+    undefined,
+    factory.createIntersectionTypeNode([
+      factory.createTypeLiteralNode(typeNodes),
+      factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+    ]),
+  );
 };
