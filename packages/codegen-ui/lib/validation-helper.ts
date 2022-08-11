@@ -194,6 +194,23 @@ const studioFormSchema = yup.object({
 });
 
 /**
+ * View Schema Definition
+ */
+const studioViewSchema = yup.object({
+  name: alphaNumString().required(),
+  id: yup.string().nullable(),
+  dataSource: yup.object({
+    identifiers: yup.array().nullable(),
+    model: yup.string().nullable(),
+    predicate: yup.object().nullable(),
+    sort: yup.array().nullable(),
+    type: yup.string().matches(new RegExp('(DataStore|Custom)')),
+  }),
+  style: yup.object().nullable(),
+  viewConfiguration: yup.object().nullable(),
+});
+
+/**
  * Studio Schema Validation Functions and Helpers.
  */
 const validateSchema = (validator: yup.AnySchema, studioSchema: StudioSchema) => {
@@ -210,3 +227,4 @@ const validateSchema = (validator: yup.AnySchema, studioSchema: StudioSchema) =>
 export const validateComponentSchema = (schema: any) => validateSchema(studioComponentSchema, schema);
 export const validateThemeSchema = (schema: any) => validateSchema(studioThemeSchema, schema);
 export const validateFormSchema = (schema: any) => validateSchema(studioFormSchema, schema);
+export const validateViewSchema = (schema: any) => validateSchema(studioViewSchema, schema);
