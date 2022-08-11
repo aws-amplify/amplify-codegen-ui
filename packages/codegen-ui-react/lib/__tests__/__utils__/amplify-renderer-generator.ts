@@ -20,11 +20,15 @@ import {
   getGenericFromDataStore,
   Schema,
   StudioForm,
+  StudioView,
 } from '@aws-amplify/codegen-ui';
+import { createPrinter, createSourceFile, EmitHint } from 'typescript';
 import { AmplifyFormRenderer } from '../../amplify-ui-renderers/amplify-form-renderer';
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
+import { AmplifyViewRenderer } from '../../amplify-ui-renderers/amplify-view-renderer';
 import { ModuleKind, ReactRenderConfig, ScriptKind, ScriptTarget } from '../../react-render-config';
 import { loadSchemaFromJSONFile } from './example-schema';
+import { transpile } from '../../react-studio-template-renderer-helper';
 
 export const defaultCLIRenderConfig: ReactRenderConfig = {
   module: ModuleKind.ES2020,
@@ -64,4 +68,21 @@ export const generateWithAmplifyFormRenderer = (
 
   const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile<StudioForm>(formJsonFile));
   return renderer.renderComponent();
+};
+
+export const renderTableJsxElement = (
+  tableFilePath: string,
+  dataSchemaFilePath: string,
+  snapshotFileName: string,
+  renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
+): string => {
+  const table = loadSchemaFromJSONFile<StudioView>(tableFilePath);
+  const dataSchema = loadSchemaFromJSONFile<GenericDataSchema>(dataSchemaFilePath);
+  const tableJsx = new AmplifyViewRenderer(table, dataSchema, renderConfig).renderJsx();
+
+  const file = createSourceFile(snapshotFileName, '', ScriptTarget.ES2015, true, ScriptKind.TS);
+  const printer = createPrinter();
+  const tableNode = printer.printNode(EmitHint.Unspecified, tableJsx, file);
+
+  return transpile(tableNode, {}).componentText;
 };

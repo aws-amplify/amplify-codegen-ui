@@ -13,14 +13,24 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioNode } from '@aws-amplify/codegen-ui/lib/studio-node';
-import { StudioView } from '@aws-amplify/codegen-ui/lib/types';
-import { JsxElement, JsxFragment, JsxSelfClosingElement } from 'typescript';
+
+import { JsxElement, factory, JsxFragment } from 'typescript';
 import { ReactViewTemplateRenderer } from '../views/react-view-renderer';
+import { Primitive } from '../primitive';
+import { ReactTableRenderer } from '../react-table-renderer';
 
 export class AmplifyViewRenderer extends ReactViewTemplateRenderer {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  renderJsx(view: StudioView, parent?: StudioNode | undefined): JsxElement | JsxFragment | JsxSelfClosingElement {
-    throw new Error('Method not implemented.');
+  renderJsx(): JsxElement | JsxFragment {
+    switch (this.viewComponent.viewConfiguration.type) {
+      case Primitive.Table:
+        return new ReactTableRenderer(
+          this.viewComponent,
+          this.viewDefinition!,
+          this.viewMetadata,
+          this.importCollection,
+        ).renderElement();
+      default:
+        return factory.createJsxFragment(factory.createJsxOpeningFragment(), [], factory.createJsxJsxClosingFragment());
+    }
   }
 }

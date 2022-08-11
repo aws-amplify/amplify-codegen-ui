@@ -87,6 +87,6 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   validateSchema(component: StudioView): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 }
