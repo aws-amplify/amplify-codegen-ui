@@ -1,0 +1,48 @@
+{
+    "dataSourceType": "DataStore",
+    "models": {
+        "Person": {
+        "fields": {
+            "id": {
+            "dataType": "ID",
+            "required": true,
+            "readOnly": false,
+            "isArray": false
+            },
+            "name": {
+            "dataType": "String",
+            "required": false,
+            "readOnly": false,
+            "isArray": false
+            },
+            "hireDate": {
+            "dataType": "AWSDateTime",
+            "required": false,
+            "readOnly": false,
+            "isArray": false
+            },
+            "comments": {
+            "dataType": "String",
+            "required": false,
+            "readOnly": false,
+            "isArray": false
+            },
+            "createdAt": {
+            "dataType": "AWSDateTime",
+            "required": false,
+            "readOnly": true,
+            "isArray": false
+            },
+            "updatedAt": {
+            "dataType": "AWSDateTime",
+            "required": false,
+            "readOnly": true,
+            "isArray": false
+            }
+        }
+        }
+    },
+    "enums": {},
+    "nonModels": {},
+    "version": "000000"
+}

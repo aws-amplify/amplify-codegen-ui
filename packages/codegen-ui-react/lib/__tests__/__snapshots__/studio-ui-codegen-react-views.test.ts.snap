@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`amplify view renderer tests should generate a table element 1`] = `
+"<Table>
+  {!disableHeaders && (
+    <TableHead>
+      <TableRow>
+        <TableCell as=\\"th\\">hireDate</TableCell>
+        <TableCell as=\\"th\\">comments</TableCell>
+        <TableCell as=\\"th\\">createdAt</TableCell>
+        <TableCell as=\\"th\\">updatedAt</TableCell>
+      </TableRow>
+    </TableHead>
+  )}
+  <TableBody>
+    {items.map((item, index) => (
+      <TableRow
+        onClick={
+          highlightOnHover && onRowClick ? () => onRowClick(item, index) : null
+        }
+      >
+        <TableCell>
+          {format[\\"hireDate\\"]
+            ? format[\\"hireDate\\"](item.hireDate)
+            : item.hireDate}
+        </TableCell>
+        <TableCell>
+          {format[\\"comments\\"]
+            ? format[\\"comments\\"](item.comments)
+            : item.comments}
+        </TableCell>
+        <TableCell>
+          {format[\\"createdAt\\"]
+            ? format[\\"createdAt\\"](item.createdAt)
+            : item.createdAt}
+        </TableCell>
+        <TableCell>
+          {format[\\"updatedAt\\"]
+            ? format[\\"updatedAt\\"](item.updatedAt)
+            : item.updatedAt}
+        </TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>;
+"
+`;
