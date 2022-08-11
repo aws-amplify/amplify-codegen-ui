@@ -18,9 +18,9 @@ import { ViewStyle } from './style';
 import { ColumnsMap } from './table';
 
 export interface StudioView {
-  appId: string;
+  appId?: string;
   dataSource: ViewDataTypeConfig;
-  environmentName: string;
+  environmentName?: string;
   id: string;
   name: ViewName;
   schemaVersion: string;
