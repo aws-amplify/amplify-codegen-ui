@@ -14,30 +14,34 @@ exports[`amplify view renderer tests should generate a table element 1`] = `
   )}
   <TableBody>
     {items.map((item, index) => (
-      <TableRow
-        onClick={
-          highlightOnHover && onRowClick ? () => onRowClick(item, index) : null
-        }
-      >
+      <TableRow onClick={onRowClick ? () => onRowClick(item, index) : null}>
         <TableCell>
-          {format[\\"hireDate\\"]
-            ? format[\\"hireDate\\"](item.hireDate)
-            : item.hireDate}
+          {format?.hireDate
+            ? format.hireDate(item?.hireDate)
+            : formatter(item?.hireDate, {
+                type: \\"DateTimeFormat\\",
+                format: {
+                  dateTimeFormat: {
+                    dateFormat: \\"locale\\",
+                    timeFormat: \\"hours24\\",
+                  },
+                },
+              })}
         </TableCell>
         <TableCell>
-          {format[\\"comments\\"]
-            ? format[\\"comments\\"](item.comments)
-            : item.comments}
+          {format?.comments
+            ? format.comments(item?.comments)
+            : formatter(item?.comments, undefined)}
         </TableCell>
         <TableCell>
-          {format[\\"createdAt\\"]
-            ? format[\\"createdAt\\"](item.createdAt)
-            : item.createdAt}
+          {format?.createdAt
+            ? format.createdAt(item?.createdAt)
+            : formatter(item?.createdAt, undefined)}
         </TableCell>
         <TableCell>
-          {format[\\"updatedAt\\"]
-            ? format[\\"updatedAt\\"](item.updatedAt)
-            : item.updatedAt}
+          {format?.updatedAt
+            ? format.updatedAt(item?.updatedAt)
+            : formatter(item?.updatedAt, undefined)}
         </TableCell>
       </TableRow>
     ))}

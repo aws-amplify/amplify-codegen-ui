@@ -13,19 +13,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ColumnInfo, StudioView, TableDefinition, ViewMetadata } from '@aws-amplify/codegen-ui';
+import { ColumnInfo, StringFormat, StudioView, TableDefinition, ViewMetadata } from '@aws-amplify/codegen-ui';
 import {
   factory,
+  Identifier,
   JsxAttribute,
   JsxAttributes,
   JsxChild,
   JsxElement,
   JsxExpression,
   JsxOpeningElement,
+  ObjectLiteralExpression,
   SyntaxKind,
 } from 'typescript';
 import { ImportCollection, ImportSource } from './imports';
 import { Primitive } from './primitive';
+import { objectToExpression, stringFormatToType } from './react-table-renderer-helper';
 
 export class ReactTableRenderer {
   private requiredUIReactImports = [
@@ -47,6 +50,13 @@ export class ReactTableRenderer {
     this.viewComponent = view;
     this.viewDefinition = definition;
     this.viewMetadata = metadata;
+    this.viewMetadata.tableFieldFormatting = {};
+
+    this.viewDefinition.columns.forEach((column) => {
+      if (column.valueFormatting) {
+        this.viewMetadata.tableFieldFormatting![column.header] = { ...column.valueFormatting };
+      }
+    });
 
     this.requiredUIReactImports.forEach((importName) => {
       imports.addImport(ImportSource.UI_REACT, importName);
@@ -128,11 +138,7 @@ export class ReactTableRenderer {
         factory.createJsxExpression(
           undefined,
           factory.createConditionalExpression(
-            factory.createBinaryExpression(
-              factory.createIdentifier('highlightOnHover'),
-              factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-              factory.createIdentifier('onRowClick'),
-            ),
+            factory.createIdentifier('onRowClick'),
             factory.createToken(SyntaxKind.QuestionToken),
             factory.createArrowFunction(
               undefined,
@@ -153,6 +159,49 @@ export class ReactTableRenderer {
     ]);
   }
 
+  generateFormatLiteralExpression(field: string): ObjectLiteralExpression | Identifier {
+    const formatting = this.viewMetadata.tableFieldFormatting;
+
+    if (formatting?.[field]) {
+      return objectToExpression(formatting[field].stringFormat);
+    }
+    return factory.createIdentifier('undefined');
+  }
+
+  /*  Expected arg shape examples:
+      For dateTime:
+      {
+        type: 'DateTimeFormat'
+        format: {
+          dateFormat: 'locale',
+          timeFormat: 'hours24',
+        }
+      }
+      For date:
+      {
+        type: 'DateFormat'
+        format: {
+          dateFormat: 'Mmm, DD YYYY',
+        }
+      }
+  */
+  createFormatArg(field: string) {
+    const format = this.viewMetadata.tableFieldFormatting?.[field];
+
+    const type: StringFormat['type'] | undefined = stringFormatToType(format);
+
+    if (format && type) {
+      return factory.createObjectLiteralExpression([
+        factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(type)),
+        factory.createPropertyAssignment(
+          factory.createIdentifier('format'),
+          this.generateFormatLiteralExpression(field),
+        ),
+      ]);
+    }
+    return factory.createIdentifier('undefined');
+  }
+
   createTableBodyCellFromColumn(column: ColumnInfo): JsxElement {
     const columnId = column.header;
 
@@ -166,29 +215,35 @@ export class ReactTableRenderer {
         factory.createJsxExpression(
           undefined,
           factory.createConditionalExpression(
-            factory.createElementAccessExpression(
+            factory.createPropertyAccessChain(
               factory.createIdentifier('format'),
-              factory.createStringLiteral(columnId),
+              factory.createToken(SyntaxKind.QuestionDotToken),
+              factory.createIdentifier(columnId),
             ),
             factory.createToken(SyntaxKind.QuestionToken),
             factory.createCallExpression(
-              factory.createElementAccessExpression(
+              factory.createPropertyAccessExpression(
                 factory.createIdentifier('format'),
-                factory.createStringLiteral(columnId),
+                factory.createIdentifier(columnId),
               ),
               undefined,
               [
-                factory.createPropertyAccessExpression(
+                factory.createPropertyAccessChain(
                   factory.createIdentifier('item'),
+                  factory.createToken(SyntaxKind.QuestionDotToken),
                   factory.createIdentifier(columnId),
                 ),
               ],
             ),
             factory.createToken(SyntaxKind.ColonToken),
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('item'),
-              factory.createIdentifier(columnId),
-            ),
+            factory.createCallExpression(factory.createIdentifier('formatter'), undefined, [
+              factory.createPropertyAccessChain(
+                factory.createIdentifier('item'),
+                factory.createToken(SyntaxKind.QuestionDotToken),
+                factory.createIdentifier(columnId),
+              ),
+              this.createFormatArg(columnId),
+            ]),
           ),
         ),
       ],
