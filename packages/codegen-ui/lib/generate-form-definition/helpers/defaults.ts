@@ -41,19 +41,22 @@ export const FORM_DEFINITION_DEFAULTS = {
     text: 'text',
   },
 
-  ctaConfig: {
+  cta: {
     position: 'bottom',
     cancel: {
       visible: true,
-      children: 'Cancel',
+      label: 'Cancel',
+      variants: [],
     },
     clear: {
       visible: true,
-      children: 'Clear',
+      label: 'Clear',
+      variants: [],
     },
     submit: {
       visible: true,
-      children: 'Submit',
+      label: 'Submit',
+      variants: [],
     },
   },
 };

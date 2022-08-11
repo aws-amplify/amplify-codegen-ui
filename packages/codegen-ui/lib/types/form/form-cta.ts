@@ -15,26 +15,38 @@
  */
 import { StudioFieldPosition } from './position';
 
-type StudioFormButton = {
+type StudioFormCTAButton = {
   visible: boolean;
 
   children?: string;
 
   position?: StudioFieldPosition;
+
+  variants?: Array<string>;
+};
+
+export type FormDefinitionButton = {
+  visible: boolean;
+
+  label: string;
+
+  position?: StudioFieldPosition;
+
+  variants?: Array<string>;
 };
 
 /**
  * Configuration for each of the specified CTA's
  */
-export type StudioFormCTAConfig = {
+export type StudioFormCTA = {
   /**
    * The position of the CTA's in the form when rendered
    */
   position?: string;
 
-  clear?: StudioFormButton;
+  clear?: StudioFormCTAButton;
 
-  cancel?: StudioFormButton;
+  cancel?: StudioFormCTAButton;
 
-  submit?: StudioFormButton;
+  submit?: StudioFormCTAButton;
 };

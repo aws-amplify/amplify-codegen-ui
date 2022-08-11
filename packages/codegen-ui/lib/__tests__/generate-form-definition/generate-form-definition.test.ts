@@ -26,7 +26,7 @@ describe('generateFormDefinition', () => {
         fields: {},
         sectionalElements: {},
         style: {},
-        ctaConfig: {},
+        cta: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -55,7 +55,7 @@ describe('generateFormDefinition', () => {
           fields: {},
           sectionalElements: {},
           style: {},
-          ctaConfig: {},
+          cta: {},
         },
       }),
     ).toThrow();
@@ -71,7 +71,7 @@ describe('generateFormDefinition', () => {
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: {},
         style: {},
-        ctaConfig: {},
+        cta: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -98,7 +98,7 @@ describe('generateFormDefinition', () => {
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: {},
         style: {},
-        ctaConfig: {},
+        cta: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -121,7 +121,7 @@ describe('generateFormDefinition', () => {
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: {},
         style: {},
-        ctaConfig: {},
+        cta: {},
       },
       dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
     });
@@ -140,7 +140,7 @@ describe('generateFormDefinition', () => {
         fields: { weight: { inputType: { type: 'SliderField', minValue: 1, maxValue: 100, step: 2 } } },
         sectionalElements: {},
         style: {},
-        ctaConfig: {},
+        cta: {},
       },
       dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
     });
@@ -159,7 +159,7 @@ describe('generateFormDefinition', () => {
           Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
         },
         style: {},
-        ctaConfig: {},
+        cta: {},
       },
     });
     expect(formDefinition.elements.Heading123).toStrictEqual({
@@ -183,7 +183,7 @@ describe('generateFormDefinition', () => {
         fields: {},
         sectionalElements: {},
         style,
-        ctaConfig: {},
+        cta: {},
       },
     });
     expect(formDefinition.form.layoutStyle).toStrictEqual(style);
@@ -206,7 +206,7 @@ describe('generateFormDefinition', () => {
         },
 
         style: {},
-        ctaConfig: {},
+        cta: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -243,7 +243,7 @@ describe('generateFormDefinition', () => {
         },
 
         style: {},
-        ctaConfig: {},
+        cta: {},
       },
       dataSchema: {
         dataSourceType: 'DataStore',
@@ -282,7 +282,7 @@ it('should requeue if related element is not yet found', () => {
       },
 
       style: {},
-      ctaConfig: {},
+      cta: {},
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color']]);
@@ -307,7 +307,7 @@ it('should handle fields without position', () => {
       },
 
       style: {},
-      ctaConfig: {},
+      cta: {},
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color'], ['bark']]);
@@ -324,7 +324,7 @@ it('should fill out styles using defaults', () => {
       sectionalElements: {},
 
       style: {},
-      ctaConfig: {},
+      cta: {},
     },
   });
 
@@ -345,7 +345,7 @@ it('should skip read-only fields without overrides', () => {
       fields: {},
       sectionalElements: {},
       style: {},
-      ctaConfig: {},
+      cta: {},
     },
     dataSchema: {
       dataSourceType: 'DataStore',
@@ -374,7 +374,7 @@ it('should add read-only fields if it has overrides', () => {
       fields: { name: { inputType: { type: 'TextField' } } },
       sectionalElements: {},
       style: {},
-      ctaConfig: {},
+      cta: {},
     },
     dataSchema: {
       dataSourceType: 'DataStore',
@@ -409,7 +409,7 @@ it('should skip adding id field if it has no overrides', () => {
       fields: {},
       sectionalElements: {},
       style: {},
-      ctaConfig: {},
+      cta: {},
     },
     dataSchema: {
       dataSourceType: 'DataStore',

@@ -76,7 +76,7 @@ export function generateFormDefinition({
 
   formDefinition.form.layoutStyle = mapStyles(form.style);
 
-  formDefinition.buttons = mapButtons(form.ctaConfig);
+  formDefinition.buttons = mapButtons(form.cta);
 
   return formDefinition;
 }

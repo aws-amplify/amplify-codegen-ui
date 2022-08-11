@@ -37,7 +37,7 @@ describe('form-render utils', () => {
       fields: {},
       sectionalElements: {},
       style: {},
-      ctaConfig: {},
+      cta: {},
     };
 
     const propSignatures = buildFormPropNode(form);
@@ -54,7 +54,7 @@ describe('form-render utils', () => {
       fields: {},
       sectionalElements: {},
       style: {},
-      ctaConfig: {},
+      cta: {},
     };
     const propSignatures = buildFormPropNode(form);
     const node = printNode(propSignatures);

@@ -22,7 +22,6 @@ import {
   StudioComponentProperties,
   StudioFormStyle,
 } from '../../types';
-import { FORM_DEFINITION_DEFAULTS } from '../../generate-form-definition/helpers/defaults';
 
 const getStyleResolvedValue = (config?: FormStyleConfig): string | undefined => {
   return config?.value ?? config?.tokenReference;
@@ -88,14 +87,14 @@ const fieldComponentMapper = (name: string, formDefinition: FormDefinition): Stu
 const resolveCtaLabels = (
   formDefinition: FormDefinition,
 ): { cancelLabel: string; clearLabel: string; submitLabel: string } => {
-  const cancelLabel = formDefinition.buttons.cancel?.children || FORM_DEFINITION_DEFAULTS.ctaConfig.cancel.children;
-  const clearLabel = formDefinition.buttons.clear?.children || FORM_DEFINITION_DEFAULTS.ctaConfig.clear.children;
-  const submitLabel = formDefinition.buttons.submit?.children || FORM_DEFINITION_DEFAULTS.ctaConfig.submit.children;
+  const cancelLabel = formDefinition.buttons.cancel.label;
+  const clearLabel = formDefinition.buttons.clear.label;
+  const submitLabel = formDefinition.buttons.submit.label;
 
   return { cancelLabel, clearLabel, submitLabel };
 };
 
-const ctaButtonConfig = (formDefinition: FormDefinition): StudioComponentChild => {
+const ctaButtonMapper = (formDefinition: FormDefinition): StudioComponentChild => {
   const { cancelLabel, clearLabel, submitLabel } = resolveCtaLabels(formDefinition);
 
   return {
@@ -169,7 +168,7 @@ export const mapFormDefinitionToComponent = (name: string, formDefinition: FormD
       onCancel: { type: 'Event' },
     },
     events: {},
-    children: [fieldComponentMapper(name, formDefinition), ctaButtonConfig(formDefinition)],
+    children: [fieldComponentMapper(name, formDefinition), ctaButtonMapper(formDefinition)],
   };
   return component;
 };

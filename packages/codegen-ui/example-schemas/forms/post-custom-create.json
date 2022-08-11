@@ -27,7 +27,7 @@
   },
   "sectionalElements": {},
   "style": {},
-  "ctaConfig": {
+  "cta": {
     "clear": {
       "visible": true,
       "children": "empty"

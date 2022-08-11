@@ -14,23 +14,26 @@
   limitations under the License.
  */
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
-import { StudioFormCTAConfig } from '../../types';
+import { StudioFormCTA } from '../../types';
 
-export function mapButtons(buttons: StudioFormCTAConfig): StudioFormCTAConfig {
-  const defaults = FORM_DEFINITION_DEFAULTS.ctaConfig;
+export function mapButtons(buttons: StudioFormCTA): {} {
+  const defaults = FORM_DEFINITION_DEFAULTS.cta;
   return {
     position: buttons.position ? buttons.position : defaults.position,
     clear: {
       visible: typeof buttons.clear?.visible === 'boolean' ? buttons.clear?.visible : defaults.clear.visible,
-      children: buttons.clear?.children ? buttons.clear.children : defaults.clear.children,
+      label: buttons.clear?.children ? buttons.clear.children : defaults.clear.label,
+      variants: buttons.clear?.variants ? buttons.clear.variants : defaults.clear.variants,
     },
     cancel: {
       visible: typeof buttons.cancel?.visible === 'boolean' ? buttons.cancel.visible : defaults.cancel.visible,
-      children: buttons.cancel?.children ? buttons.cancel.children : defaults.cancel.children,
+      label: buttons.cancel?.children ? buttons.cancel.children : defaults.cancel.label,
+      variants: buttons.cancel?.variants ? buttons.cancel.variants : defaults.cancel.variants,
     },
     submit: {
       visible: typeof buttons.submit?.visible === 'boolean' ? buttons.submit.visible : defaults.submit.visible,
-      children: buttons.submit?.children ? buttons.submit.children : defaults.submit.children,
+      label: buttons.submit?.children ? buttons.submit.children : defaults.submit.label,
+      variants: buttons.submit?.variants ? buttons.submit.variants : defaults.submit.variants,
     },
   };
 }

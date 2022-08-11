@@ -54,7 +54,7 @@ describe('mapElements', () => {
       fields: { name: { inputType: { type: 'TextField' } } },
       sectionalElements: { myText: sectionalConfig },
       style: {},
-      ctaConfig: {},
+      cta: {},
     };
 
     mapElements({ formDefinition, modelFieldsConfigs, form });
@@ -89,7 +89,7 @@ describe('mapElements', () => {
       fields: {},
       sectionalElements: {},
       style: {},
-      ctaConfig: {},
+      cta: {},
     };
 
     expect(() => mapElements({ formDefinition, modelFieldsConfigs, form })).toThrow();

@@ -21,7 +21,7 @@ import { FormDefinition, ModelFieldsConfigs, FieldTypeMapKeys } from './form-def
 import { StudioFieldInputConfig, StudioFormValueMappings } from './input-config';
 import { StudioFieldPosition } from './position';
 import { FormMetadata } from './form-metadata';
-import { StudioFormCTAConfig } from './form-cta';
+import { StudioFormCTA } from './form-cta';
 
 /**
  * Data type definition for StudioForm
@@ -54,7 +54,7 @@ export type StudioForm = {
 
   style: StudioFormStyle;
 
-  ctaConfig: StudioFormCTAConfig;
+  cta: StudioFormCTA;
 };
 
 export type FormInputType =
