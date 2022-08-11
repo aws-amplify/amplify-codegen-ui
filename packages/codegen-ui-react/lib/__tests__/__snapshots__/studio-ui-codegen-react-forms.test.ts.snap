@@ -115,7 +115,6 @@ export default function customDataForm(props) {
             errorMessage={cityFieldError.errorMessage}
             hasError={cityFieldError.hasError}
             {...getOverrideProps(overrides, \\"city\\")}
-          ></SelectField>
           >
             <option
               children=\\"Los Angeles\\"
@@ -160,7 +159,7 @@ export default function customDataForm(props) {
             errorMessage={categoryFieldError.errorMessage}
             hasError={categoryFieldError.hasError}
             {...getOverrideProps(overrides, \\"category\\")}
-          ></RadioGroupField>
+          >
             <Radio
               children=\\"Hobbies\\"
               value=\\"Hobbies\\"
