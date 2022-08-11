@@ -65,6 +65,7 @@ import {
   VisuallyHiddenProps,
   TextProps,
 } from '@aws-amplify/ui-react';
+import { HTMLProps } from 'react';
 import { Primitive } from '../primitive';
 import CustomComponentRenderer from './customComponent';
 import FormRenderer from './form';
@@ -134,6 +135,14 @@ export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
           formComponent,
           // this component is the current form
           this.component,
+          this.componentMetadata,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case 'option':
+        return new ReactComponentRenderer<HTMLProps<HTMLOptionElement>>(
+          formComponent,
           this.componentMetadata,
           this.importCollection,
           parent,

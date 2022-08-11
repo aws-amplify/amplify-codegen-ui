@@ -23,6 +23,26 @@
         "defaultValue": "johndoe@amplify.com"
       },
       "label": "E-mail"
+    },
+    "city": {
+      "inputType": {
+        "type": "SelectField",
+        "defaultValue": "New York",
+        "valueMappings": {
+          "bindingProperties": {},
+          "values": [{"value": {"value": "Los Angeles"}}, {"value": {"value": "Houston"}}, {"value": {"value": "New York"}}]
+        }
+      }
+    },
+    "category": {
+      "inputType": {
+        "type": "RadioGroupField",
+        "defaultValue": "Hobbies",
+        "valueMappings": {
+          "bindingProperties": {},
+          "values": [{"value": {"value": "Hobbies"}}, {"value": {"value": "Travel"}}, {"value": {"value": "Health"}}]
+        }
+      }
     }
   },
   "sectionalElements": {},
