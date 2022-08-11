@@ -15,14 +15,17 @@
  */
 
 export type DateFormat = {
+  type?: 'DateFormat';
   dateFormat: 'locale' | 'MM/DD/YYYY' | 'DD.MM.YYYY' | 'YYYY.MM.DD' | 'Mmm DD, YYYY';
 };
 
 export type TimeFormat = {
+  type?: 'TimeFormat';
   timeFormat: 'locale' | 'hours12' | 'hours24';
 };
 
 export type DateTimeFormat = {
+  type?: 'DateTimeFormat';
   dateTimeFormat:
     | 'locale'
     | {
