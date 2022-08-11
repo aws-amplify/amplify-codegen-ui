@@ -12,7 +12,6 @@ import {
   Button,
   Flex,
   Grid,
-  Radio,
   RadioGroupField,
   SelectField,
   TextField,
@@ -115,24 +114,7 @@ export default function customDataForm(props) {
             errorMessage={cityFieldError.errorMessage}
             hasError={cityFieldError.hasError}
             {...getOverrideProps(overrides, \\"city\\")}
-          >
-            <option
-              children=\\"Los Angeles\\"
-              value=\\"Los Angeles\\"
-              {...getOverrideProps(overrides, \\"cityoption0\\")}
-            ></option>
-            <option
-              children=\\"Houston\\"
-              value=\\"Houston\\"
-              {...getOverrideProps(overrides, \\"cityoption1\\")}
-            ></option>
-            <option
-              children=\\"New York\\"
-              value=\\"New York\\"
-              selected={true}
-              {...getOverrideProps(overrides, \\"cityoption2\\")}
-            ></option>
-          </SelectField>
+          ></SelectField>
         </Grid>
         <Grid
           columnGap=\\"inherit\\"
@@ -159,23 +141,7 @@ export default function customDataForm(props) {
             errorMessage={categoryFieldError.errorMessage}
             hasError={categoryFieldError.hasError}
             {...getOverrideProps(overrides, \\"category\\")}
-          >
-            <Radio
-              children=\\"Hobbies\\"
-              value=\\"Hobbies\\"
-              {...getOverrideProps(overrides, \\"categoryRadio0\\")}
-            ></Radio>
-            <Radio
-              children=\\"Travel\\"
-              value=\\"Travel\\"
-              {...getOverrideProps(overrides, \\"categoryRadio1\\")}
-            ></Radio>
-            <Radio
-              children=\\"Health\\"
-              value=\\"Health\\"
-              {...getOverrideProps(overrides, \\"categoryRadio2\\")}
-            ></Radio>
-          </RadioGroupField>
+          ></RadioGroupField>
         </Grid>
       </Grid>
       <Flex
@@ -215,13 +181,17 @@ export default function customDataForm(props) {
 exports[`amplify form renderer tests custom form tests should render a custom backed form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, RadioGroupFieldProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type customDataFormOverridesProps = {
     customDataFormGrid: GridProps;
     RowGrid0: GridProps;
     name: TextFieldProps;
     RowGrid1: GridProps;
     email: TextFieldProps;
+    RowGrid2: GridProps;
+    city: SelectFieldProps;
+    RowGrid3: GridProps;
+    category: RadioGroupFieldProps;
 } & EscapeHatchProps;
 export declare type customDataFormProps = React.PropsWithChildren<{
     overrides?: customDataFormOverridesProps | undefined | null;
