@@ -17,7 +17,12 @@ import { renderTableJsxElement } from './__utils__';
 
 describe('amplify view renderer tests', () => {
   test('should generate a table element', () => {
-    const tableElement = renderTableJsxElement('views/datastore-table', 'datastore/person', 'test-table.ts');
+    const tableElement = renderTableJsxElement('views/table-from-datastore', 'datastore/person', 'test-table.ts');
+    expect(tableElement).toMatchSnapshot();
+  });
+
+  test('should generate a non-datastore table element', () => {
+    const tableElement = renderTableJsxElement('views/table-from-custom-json', undefined, 'test-custom-table.ts');
     expect(tableElement).toMatchSnapshot();
   });
 });

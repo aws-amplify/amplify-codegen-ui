@@ -72,12 +72,12 @@ export const generateWithAmplifyFormRenderer = (
 
 export const renderTableJsxElement = (
   tableFilePath: string,
-  dataSchemaFilePath: string,
+  dataSchemaFilePath: string | undefined,
   snapshotFileName: string,
   renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
 ): string => {
   const table = loadSchemaFromJSONFile<StudioView>(tableFilePath);
-  const dataSchema = loadSchemaFromJSONFile<GenericDataSchema>(dataSchemaFilePath);
+  const dataSchema = dataSchemaFilePath ? loadSchemaFromJSONFile<GenericDataSchema>(dataSchemaFilePath) : undefined;
   const tableJsx = new AmplifyViewRenderer(table, dataSchema, renderConfig).renderJsx();
 
   const file = createSourceFile(snapshotFileName, '', ScriptTarget.ES2015, true, ScriptKind.TS);
