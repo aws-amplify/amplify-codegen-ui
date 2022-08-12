@@ -16,24 +16,14 @@ exports[`amplify view renderer tests should generate a non-datastore table eleme
     {items.map((item, index) => (
       <TableRow onClick={onRowClick ? () => onRowClick(item, index) : null}>
         <TableCell>
-          {format?.name
-            ? format.name(item?.name)
-            : formatter(item?.name, undefined)}
+          {format?.name ? format.name(item?.name) : item?.name}
+        </TableCell>
+        <TableCell>{format?.age ? format.age(item?.age) : item?.age}</TableCell>
+        <TableCell>
+          {format?.address ? format.address(item?.address) : item?.address}
         </TableCell>
         <TableCell>
-          {format?.age
-            ? format.age(item?.age)
-            : formatter(item?.age, undefined)}
-        </TableCell>
-        <TableCell>
-          {format?.address
-            ? format.address(item?.address)
-            : formatter(item?.address, undefined)}
-        </TableCell>
-        <TableCell>
-          {format?.birthday
-            ? format.birthday(item?.birthday)
-            : formatter(item?.birthday, undefined)}
+          {format?.birthday ? format.birthday(item?.birthday) : item?.birthday}
         </TableCell>
       </TableRow>
     ))}
@@ -71,19 +61,17 @@ exports[`amplify view renderer tests should generate a table element 1`] = `
               })}
         </TableCell>
         <TableCell>
-          {format?.comments
-            ? format.comments(item?.comments)
-            : formatter(item?.comments, undefined)}
+          {format?.comments ? format.comments(item?.comments) : item?.comments}
         </TableCell>
         <TableCell>
           {format?.createdAt
             ? format.createdAt(item?.createdAt)
-            : formatter(item?.createdAt, undefined)}
+            : item?.createdAt}
         </TableCell>
         <TableCell>
           {format?.updatedAt
             ? format.updatedAt(item?.updatedAt)
-            : formatter(item?.updatedAt, undefined)}
+            : item?.updatedAt}
         </TableCell>
       </TableRow>
     ))}

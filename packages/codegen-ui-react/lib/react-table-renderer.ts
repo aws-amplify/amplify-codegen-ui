@@ -202,6 +202,24 @@ export class ReactTableRenderer {
     return factory.createIdentifier('undefined');
   }
 
+  createFormatCallOrPropAccess(field: string) {
+    const format = this.viewMetadata.tableFieldFormatting?.[field];
+    return format
+      ? factory.createCallExpression(factory.createIdentifier('formatter'), undefined, [
+          factory.createPropertyAccessChain(
+            factory.createIdentifier('item'),
+            factory.createToken(SyntaxKind.QuestionDotToken),
+            factory.createIdentifier(field),
+          ),
+          this.createFormatArg(field),
+        ])
+      : factory.createPropertyAccessChain(
+          factory.createIdentifier('item'),
+          factory.createToken(SyntaxKind.QuestionDotToken),
+          factory.createIdentifier(field),
+        );
+  }
+
   createTableBodyCellFromColumn(column: ColumnInfo): JsxElement {
     const columnId = column.header;
 
@@ -236,14 +254,7 @@ export class ReactTableRenderer {
               ],
             ),
             factory.createToken(SyntaxKind.ColonToken),
-            factory.createCallExpression(factory.createIdentifier('formatter'), undefined, [
-              factory.createPropertyAccessChain(
-                factory.createIdentifier('item'),
-                factory.createToken(SyntaxKind.QuestionDotToken),
-                factory.createIdentifier(columnId),
-              ),
-              this.createFormatArg(columnId),
-            ]),
+            this.createFormatCallOrPropAccess(columnId),
           ),
         ),
       ],
