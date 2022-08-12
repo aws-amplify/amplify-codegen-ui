@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { ValidationTypes } from '@aws-amplify/codegen-ui/lib/types/form/form-validation';
-import { validateField } from '../../utils/forms/validation';
+import { validateField } from '../../../utils/forms/validation';
 
 describe('validateField tests', () => {
   it('should validate REQUIRED type', () => {

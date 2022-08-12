@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-
 export enum DATE {
   LOCALE = 'locale',
   MDY = 'MM/DD/YYYY',
@@ -28,22 +27,3 @@ export enum TIME {
   HOURS_12 = 'hours12',
   HOURS_24 = 'hours24',
 }
-
-export type DateFormat = {
-  dateFormat: 'locale' | 'MM/DD/YYYY' | 'DD.MM.YYYY' | 'YYYY.MM.DD' | 'Mmm DD, YYYY';
-};
-
-export type TimeFormat = {
-  timeFormat: 'locale' | 'hours12' | 'hours24';
-};
-
-export type DateTimeFormat = {
-  dateTimeFormat:
-    | 'locale'
-    | {
-        dateFormat: DateFormat['dateFormat'];
-        timeFormat: TimeFormat['timeFormat'];
-      };
-};
-
-export type StringFormat = DateFormat | TimeFormat | DateTimeFormat;

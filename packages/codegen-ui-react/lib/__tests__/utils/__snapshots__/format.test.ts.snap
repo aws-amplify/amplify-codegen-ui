@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`string-formatter tests Date and/or time formatting generateFormatUtil 1`] = `
+"import { DateFormat, DateTimeFormat, TimeFormat } from \\"@aws-amplify/codegen-ui\\";
+const monthToShortMon: {
+    [mon: string]: string;
+} = {
+    \\"1\\": \\"Jan\\",
+    \\"2\\": \\"Feb\\",
+    \\"3\\": \\"Mar\\",
+    \\"4\\": \\"Apr\\",
+    \\"5\\": \\"May\\",
+    \\"6\\": \\"Jun\\",
+    \\"7\\": \\"Jul\\",
+    \\"8\\": \\"Aug\\",
+    \\"9\\": \\"Sep\\",
+    \\"10\\": \\"Oct\\",
+    \\"11\\": \\"Nov\\",
+    \\"12\\": \\"Dec\\"
+};
+const invalidDateStr = \\"Invalid Date\\";
+type DateFormatType = {
+    type: \\"DateFormat\\";
+    format: DateFormat[\\"dateFormat\\"];
+};
+type DateTimeFormatType = {
+    type: \\"DateTimeFormat\\";
+    format: DateTimeFormat[\\"dateTimeFormat\\"];
+};
+type TimeFormatType = {
+    type: \\"TimeFormat\\";
+    format: TimeFormat[\\"timeFormat\\"];
+};
+type FormatInputType = DateFormatType | DateTimeFormatType | TimeFormatType;
+export function formatDate(date: string, format: DateFormat[\\"dateFormat\\"]): string {
+    if (date === undefined || date === null) {
+        return date;
+    }
+    const validDate = new Date(Date.parse(date));
+    if (validDate.toString() === invalidDateStr) {
+        return date;
+    }
+    const splitDate = date.split(/-|+|Z/);
+    const year = splitDate[0];
+    const month = splitDate[1];
+    const day = splitDate[2];
+    const truncatedMonth = month.replace(/^0+/, \\"\\");
+    switch (format) {
+        case \\"locale\\": return validDate.toLocaleDateString();
+        case \\"YYYY.MM.DD\\": return \`\${year}.\${month}.\${day}\`;
+        case \\"DD.MM.YYYY\\": return \`\${day}.\${month}.\${year}\`;
+        case \\"MM/DD/YYYY\\": return \`\${month}/\${day}/\${year}\`;
+        case \\"Mmm DD, YYYY\\": return \`\${monthToShortMon[truncatedMonth]} \${day}, \${year}\`;
+        default: return date;
+    }
+}
+export function formatTime(time: string, format: TimeFormat[\\"timeFormat\\"]): string {
+    if (time === undefined || time === null) {
+        return time;
+    }
+    const splitTime = time.split(/:|Z/);
+    if (splitTime.length < 3) {
+        return time;
+    }
+    const validTime = new Date();
+    validTime.setHours(Number.parseInt(splitTime[0], 10));
+    validTime.setMinutes(Number.parseInt(splitTime[1], 10));
+    const splitSeconds = splitTime[2].split(\\".\\");
+    validTime.setSeconds(Number.parseInt(splitSeconds[0], 10), Number.parseInt(splitSeconds[1], 10));
+    if (validTime.toString() === invalidDateStr) {
+        return time;
+    }
+    switch (format) {
+        case \\"locale\\": return validTime.toLocaleTimeString();
+        case \\"hours24\\": return validTime.toLocaleTimeString(\\"en-gb\\");
+        case \\"hours12\\": return validTime.toLocaleTimeString(\\"en-us\\");
+        default: return time;
+    }
+}
+export function formatDateTime(dateTimeStr: string, format: DateTimeFormat[\\"dateTimeFormat\\"]): string {
+    if (dateTimeStr === undefined || dateTimeStr === null) {
+        return dateTimeStr;
+    }
+    const dateTime = /^d+$/.test(dateTimeStr) ? new Date(Number.parseInt(dateTimeStr, 10)) : new Date(Date.parse(dateTimeStr));
+    if (dateTime.toString() === invalidDateStr) {
+        return dateTimeStr;
+    }
+    if (format === \\"locale\\") {
+        return dateTime.toLocaleString();
+    }
+    const dateAndTime = dateTime.toISOString().split(\\"T\\");
+    const date = formatDate(dateAndTime[0], format.dateFormat);
+    const time = formatTime(dateAndTime[1], format.timeFormat);
+    return \`\${date} - \${time}\`;
+}
+export function format(value: string, formatterInput: FormatInputType) {
+    switch (formatterInput.type) {
+        case \\"DateFormat\\": return formatDate(value, formatterInput.format);
+        case \\"DateTimeFormat\\": return formatDateTime(value, formatterInput.format);
+        case \\"TimeFormat\\": return formatTime(value, formatterInput.format);
+    }
+}"
+`;

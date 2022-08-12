@@ -20,6 +20,7 @@ import { StudioView } from './view';
 
 export * from './actions';
 export * from './components';
+export * from './date-time';
 export * from './bindings';
 export * from './events';
 export * from './figma';
@@ -28,8 +29,8 @@ export * from './theme';
 export * from './relational-operator';
 export * from './studio-schema';
 export * from './form';
+export * from './format';
 export * from './view';
 export * from './data';
-export * from './string-format';
 
 export type StudioSchema = StudioComponent | StudioForm | StudioView | StudioTheme;
