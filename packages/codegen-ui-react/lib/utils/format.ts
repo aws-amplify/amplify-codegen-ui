@@ -146,7 +146,8 @@ export function formatDateTime(dateTimeStr: string, dateTimeFormat: DateTimeForm
   return `${date} - ${time}`;
 }
 
-export function format(value: string, formatterInput: FormatInputType) {
+// TODO: change this function name before launch
+export function formatter(value: string, formatterInput: FormatInputType) {
   switch (formatterInput.type) {
     case 'DateFormat':
       return formatDate(value, formatterInput.format);
@@ -1052,7 +1053,7 @@ export const generateFormatUtil = () => [
     undefined,
     [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
     undefined,
-    factory.createIdentifier('format'),
+    factory.createIdentifier('formatter'),
     undefined,
     [
       factory.createParameterDeclaration(

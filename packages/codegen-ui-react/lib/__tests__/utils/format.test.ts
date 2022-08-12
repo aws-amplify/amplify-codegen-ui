@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { DateTimeFormat, DATE, TIME } from '@aws-amplify/codegen-ui';
-import { format, generateFormatUtil } from '../../utils/format';
+import { formatter, generateFormatUtil } from '../../utils/format';
 import { assertASTMatchesSnapshot } from '../__utils__';
 
 describe('string-formatter tests', () => {
@@ -22,19 +22,19 @@ describe('string-formatter tests', () => {
     test('Date formats', () => {
       const awsDate = '2020-02-29';
 
-      expect(format(awsDate, { type: 'DateFormat', format: 'locale' })).toBe(
+      expect(formatter(awsDate, { type: 'DateFormat', format: 'locale' })).toBe(
         new Date('2020-02-29').toLocaleDateString(),
       );
-      expect(format(awsDate, { type: 'DateFormat', format: 'YYYY.MM.DD' })).toBe('2020.02.29');
-      expect(format(awsDate, { type: 'DateFormat', format: 'DD.MM.YYYY' })).toBe('29.02.2020');
-      expect(format(awsDate, { type: 'DateFormat', format: 'MM/DD/YYYY' })).toBe('02/29/2020');
-      expect(format(awsDate, { type: 'DateFormat', format: 'Mmm DD, YYYY' })).toBe('Feb 29, 2020');
+      expect(formatter(awsDate, { type: 'DateFormat', format: 'YYYY.MM.DD' })).toBe('2020.02.29');
+      expect(formatter(awsDate, { type: 'DateFormat', format: 'DD.MM.YYYY' })).toBe('29.02.2020');
+      expect(formatter(awsDate, { type: 'DateFormat', format: 'MM/DD/YYYY' })).toBe('02/29/2020');
+      expect(formatter(awsDate, { type: 'DateFormat', format: 'Mmm DD, YYYY' })).toBe('Feb 29, 2020');
 
       const invalidDate = 'Not a date';
-      expect(format(invalidDate, { type: 'DateFormat', format: 'Mmm DD, YYYY' })).toBe(invalidDate);
+      expect(formatter(invalidDate, { type: 'DateFormat', format: 'Mmm DD, YYYY' })).toBe(invalidDate);
 
       const nullish = undefined;
-      expect(format(nullish as any, { type: 'DateFormat', format: DATE.DMY })).toBe(nullish);
+      expect(formatter(nullish as any, { type: 'DateFormat', format: DATE.DMY })).toBe(nullish);
     });
 
     test('Time formats', () => {
@@ -45,15 +45,15 @@ describe('string-formatter tests', () => {
       date.setMinutes(45);
       date.setSeconds(23, 222);
 
-      expect(format(awsTime, { type: 'TimeFormat', format: 'locale' })).toBe(date.toLocaleTimeString());
-      expect(format(awsTime, { type: 'TimeFormat', format: 'hours12' })).toBe('3:45:23 PM');
-      expect(format(awsTime, { type: 'TimeFormat', format: 'hours24' })).toBe('15:45:23');
+      expect(formatter(awsTime, { type: 'TimeFormat', format: 'locale' })).toBe(date.toLocaleTimeString());
+      expect(formatter(awsTime, { type: 'TimeFormat', format: 'hours12' })).toBe('3:45:23 PM');
+      expect(formatter(awsTime, { type: 'TimeFormat', format: 'hours24' })).toBe('15:45:23');
 
       const invalidTime = 'Not:time:';
-      expect(format(invalidTime, { type: 'TimeFormat', format: 'locale' })).toBe(invalidTime);
+      expect(formatter(invalidTime, { type: 'TimeFormat', format: 'locale' })).toBe(invalidTime);
 
       const nullish = undefined;
-      expect(format(nullish as any, { type: 'TimeFormat', format: TIME.HOURS_24 })).toBe(nullish);
+      expect(formatter(nullish as any, { type: 'TimeFormat', format: TIME.HOURS_24 })).toBe(nullish);
     });
 
     test('Datetime formats', () => {
@@ -68,21 +68,23 @@ describe('string-formatter tests', () => {
         },
       };
 
-      expect(format(awsDateTime, { type: 'DateTimeFormat', format: 'locale' })).toBe(localDateStr.toLocaleString());
-      expect(format(awsDateTime, { type: 'DateTimeFormat', format: mixedFormatting.dateTimeFormat })).toBe(
+      expect(formatter(awsDateTime, { type: 'DateTimeFormat', format: 'locale' })).toBe(localDateStr.toLocaleString());
+      expect(formatter(awsDateTime, { type: 'DateTimeFormat', format: mixedFormatting.dateTimeFormat })).toBe(
         '29.02.2020 - 3:45:23 PM',
       );
 
       const invalidDateTime = 'Not a valid datetime';
-      expect(format(invalidDateTime, { type: 'DateTimeFormat', format: 'locale' })).toBe(invalidDateTime);
+      expect(formatter(invalidDateTime, { type: 'DateTimeFormat', format: 'locale' })).toBe(invalidDateTime);
 
       const awsTimeStamp = '1582991123222';
-      expect(format(awsTimeStamp, { type: 'DateTimeFormat', format: mixedFormatting.dateTimeFormat })).toBe(
+      expect(formatter(awsTimeStamp, { type: 'DateTimeFormat', format: mixedFormatting.dateTimeFormat })).toBe(
         '29.02.2020 - 3:45:23 PM',
       );
 
       const nullish = undefined;
-      expect(format(nullish as any, { type: 'DateTimeFormat', format: mixedFormatting.dateTimeFormat })).toBe(nullish);
+      expect(formatter(nullish as any, { type: 'DateTimeFormat', format: mixedFormatting.dateTimeFormat })).toBe(
+        nullish,
+      );
     });
 
     test('format returns undefined', () => {
@@ -93,7 +95,7 @@ describe('string-formatter tests', () => {
           timeFormat: TIME.HOURS_12,
         },
       };
-      expect(format(awsDateTime, { type: 'UnknownFormat' as any, format: mixedFormatting.dateTimeFormat })).toBe(
+      expect(formatter(awsDateTime, { type: 'UnknownFormat' as any, format: mixedFormatting.dateTimeFormat })).toBe(
         awsDateTime,
       );
     });

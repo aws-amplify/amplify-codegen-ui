@@ -93,7 +93,7 @@ export function formatDateTime(dateTimeStr: string, dateTimeFormat: DateTimeForm
     const time = formatTime(dateAndTime[1], dateTimeFormat.timeFormat);
     return \`\${date} - \${time}\`;
 }
-export function format(value: string, formatterInput: FormatInputType) {
+export function formatter(value: string, formatterInput: FormatInputType) {
     switch (formatterInput.type) {
         case \\"DateFormat\\": return formatDate(value, formatterInput.format);
         case \\"DateTimeFormat\\": return formatDateTime(value, formatterInput.format);
