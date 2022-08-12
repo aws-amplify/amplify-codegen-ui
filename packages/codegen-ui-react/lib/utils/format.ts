@@ -155,7 +155,7 @@ export function format(value: string, formatterInput: FormatInputType) {
     case 'TimeFormat':
       return formatTime(value, formatterInput.format);
     default:
-      return undefined;
+      return value;
   }
 }
 
@@ -335,7 +335,7 @@ export const generateFormatUtil = () => [
         undefined,
         undefined,
         undefined,
-        factory.createIdentifier('format'),
+        factory.createIdentifier('dateFormat'),
         undefined,
         factory.createIndexedAccessTypeNode(
           factory.createTypeReferenceNode(factory.createIdentifier('DateFormat'), undefined),
@@ -497,7 +497,7 @@ export const generateFormatUtil = () => [
           ),
         ),
         factory.createSwitchStatement(
-          factory.createIdentifier('format'),
+          factory.createIdentifier('dateFormat'),
           factory.createCaseBlock([
             factory.createCaseClause(factory.createStringLiteral('locale'), [
               factory.createReturnStatement(
@@ -580,7 +580,7 @@ export const generateFormatUtil = () => [
         undefined,
         undefined,
         undefined,
-        factory.createIdentifier('format'),
+        factory.createIdentifier('timeFormat'),
         undefined,
         factory.createIndexedAccessTypeNode(
           factory.createTypeReferenceNode(factory.createIdentifier('TimeFormat'), undefined),
@@ -786,7 +786,7 @@ export const generateFormatUtil = () => [
           undefined,
         ),
         factory.createSwitchStatement(
-          factory.createIdentifier('format'),
+          factory.createIdentifier('timeFormat'),
           factory.createCaseBlock([
             factory.createCaseClause(factory.createStringLiteral('locale'), [
               factory.createReturnStatement(
@@ -851,7 +851,7 @@ export const generateFormatUtil = () => [
         undefined,
         undefined,
         undefined,
-        factory.createIdentifier('format'),
+        factory.createIdentifier('dateTimeFormat'),
         undefined,
         factory.createIndexedAccessTypeNode(
           factory.createTypeReferenceNode(factory.createIdentifier('DateTimeFormat'), undefined),
@@ -943,7 +943,7 @@ export const generateFormatUtil = () => [
         ),
         factory.createIfStatement(
           factory.createBinaryExpression(
-            factory.createIdentifier('format'),
+            factory.createIdentifier('dateTimeFormat'),
             factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
             factory.createStringLiteral('locale'),
           ),
@@ -1006,7 +1006,7 @@ export const generateFormatUtil = () => [
                     factory.createNumericLiteral('0'),
                   ),
                   factory.createPropertyAccessExpression(
-                    factory.createIdentifier('format'),
+                    factory.createIdentifier('dateTimeFormat'),
                     factory.createIdentifier('dateFormat'),
                   ),
                 ]),
@@ -1029,7 +1029,7 @@ export const generateFormatUtil = () => [
                     factory.createNumericLiteral('1'),
                   ),
                   factory.createPropertyAccessExpression(
-                    factory.createIdentifier('format'),
+                    factory.createIdentifier('dateTimeFormat'),
                     factory.createIdentifier('timeFormat'),
                   ),
                 ]),
@@ -1116,6 +1116,7 @@ export const generateFormatUtil = () => [
                 ]),
               ),
             ]),
+            factory.createDefaultClause([factory.createReturnStatement(factory.createIdentifier('value'))]),
           ]),
         ),
       ],

@@ -93,9 +93,9 @@ describe('string-formatter tests', () => {
           timeFormat: TIME.HOURS_12,
         },
       };
-      expect(
-        format(awsDateTime, { type: 'UnknownFormat' as any, format: mixedFormatting.dateTimeFormat }),
-      ).toBeUndefined();
+      expect(format(awsDateTime, { type: 'UnknownFormat' as any, format: mixedFormatting.dateTimeFormat })).toBe(
+        awsDateTime,
+      );
     });
 
     test('generateFormatUtil', () => {

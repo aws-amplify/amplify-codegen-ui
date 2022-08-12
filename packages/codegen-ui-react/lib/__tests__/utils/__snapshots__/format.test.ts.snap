@@ -32,7 +32,7 @@ type TimeFormatType = {
     format: TimeFormat[\\"timeFormat\\"];
 };
 type FormatInputType = DateFormatType | DateTimeFormatType | TimeFormatType;
-export function formatDate(date: string, format: DateFormat[\\"dateFormat\\"]): string {
+export function formatDate(date: string, dateFormat: DateFormat[\\"dateFormat\\"]): string {
     if (date === undefined || date === null) {
         return date;
     }
@@ -45,7 +45,7 @@ export function formatDate(date: string, format: DateFormat[\\"dateFormat\\"]): 
     const month = splitDate[1];
     const day = splitDate[2];
     const truncatedMonth = month.replace(/^0+/, \\"\\");
-    switch (format) {
+    switch (dateFormat) {
         case \\"locale\\": return validDate.toLocaleDateString();
         case \\"YYYY.MM.DD\\": return \`\${year}.\${month}.\${day}\`;
         case \\"DD.MM.YYYY\\": return \`\${day}.\${month}.\${year}\`;
@@ -54,7 +54,7 @@ export function formatDate(date: string, format: DateFormat[\\"dateFormat\\"]): 
         default: return date;
     }
 }
-export function formatTime(time: string, format: TimeFormat[\\"timeFormat\\"]): string {
+export function formatTime(time: string, timeFormat: TimeFormat[\\"timeFormat\\"]): string {
     if (time === undefined || time === null) {
         return time;
     }
@@ -70,14 +70,14 @@ export function formatTime(time: string, format: TimeFormat[\\"timeFormat\\"]): 
     if (validTime.toString() === invalidDateStr) {
         return time;
     }
-    switch (format) {
+    switch (timeFormat) {
         case \\"locale\\": return validTime.toLocaleTimeString();
         case \\"hours24\\": return validTime.toLocaleTimeString(\\"en-gb\\");
         case \\"hours12\\": return validTime.toLocaleTimeString(\\"en-us\\");
         default: return time;
     }
 }
-export function formatDateTime(dateTimeStr: string, format: DateTimeFormat[\\"dateTimeFormat\\"]): string {
+export function formatDateTime(dateTimeStr: string, dateTimeFormat: DateTimeFormat[\\"dateTimeFormat\\"]): string {
     if (dateTimeStr === undefined || dateTimeStr === null) {
         return dateTimeStr;
     }
@@ -85,12 +85,12 @@ export function formatDateTime(dateTimeStr: string, format: DateTimeFormat[\\"da
     if (dateTime.toString() === invalidDateStr) {
         return dateTimeStr;
     }
-    if (format === \\"locale\\") {
+    if (dateTimeFormat === \\"locale\\") {
         return dateTime.toLocaleString();
     }
     const dateAndTime = dateTime.toISOString().split(\\"T\\");
-    const date = formatDate(dateAndTime[0], format.dateFormat);
-    const time = formatTime(dateAndTime[1], format.timeFormat);
+    const date = formatDate(dateAndTime[0], dateTimeFormat.dateFormat);
+    const time = formatTime(dateAndTime[1], dateTimeFormat.timeFormat);
     return \`\${date} - \${time}\`;
 }
 export function format(value: string, formatterInput: FormatInputType) {
@@ -98,6 +98,7 @@ export function format(value: string, formatterInput: FormatInputType) {
         case \\"DateFormat\\": return formatDate(value, formatterInput.format);
         case \\"DateTimeFormat\\": return formatDateTime(value, formatterInput.format);
         case \\"TimeFormat\\": return formatTime(value, formatterInput.format);
+        default: return value;
     }
 }"
 `;
