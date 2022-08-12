@@ -5,7 +5,7 @@ type ValidationResponse = { hasError: boolean; errorMessage?: string };
 
 export const validateField = (
   value: any,
-  validations: { type: string; strValues?: string[]; numValues?: number[]; validationMessage: string }[],
+  validations: { type: string; strValues?: string[]; numValues?: number[]; validationMessage?: string }[],
 ): ValidationResponse => {
   for (const validation of validations) {
     if (validation.numValues?.length) {
@@ -201,7 +201,7 @@ export const generateValidationFunction = () => {
                       factory.createPropertySignature(
                         undefined,
                         factory.createIdentifier('validationMessage'),
-                        undefined,
+                        factory.createToken(ts.SyntaxKind.QuestionToken),
                         factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
                       ),
                     ]),
