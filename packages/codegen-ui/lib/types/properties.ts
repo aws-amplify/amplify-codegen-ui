@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { RelationalOperator } from './relational-operator';
-import { StringFormat } from './string-format';
+import { StringFormat } from './format';
 
 /**
  * This is a dictionary of properties. Each key represents

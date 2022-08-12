@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { StringFormat } from '../string-format';
+import { StringFormat } from '../format';
 
 export interface ViewValueFormatting {
   stringFormat: StringFormat;
