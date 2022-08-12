@@ -1,5 +1,47 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`amplify view renderer tests should generate a non-datastore table element 1`] = `
+"<Table>
+  {!disableHeaders && (
+    <TableHead>
+      <TableRow>
+        <TableCell as=\\"th\\">name</TableCell>
+        <TableCell as=\\"th\\">age</TableCell>
+        <TableCell as=\\"th\\">address</TableCell>
+        <TableCell as=\\"th\\">birthday</TableCell>
+      </TableRow>
+    </TableHead>
+  )}
+  <TableBody>
+    {items.map((item, index) => (
+      <TableRow onClick={onRowClick ? () => onRowClick(item, index) : null}>
+        <TableCell>
+          {format?.name
+            ? format.name(item?.name)
+            : formatter(item?.name, undefined)}
+        </TableCell>
+        <TableCell>
+          {format?.age
+            ? format.age(item?.age)
+            : formatter(item?.age, undefined)}
+        </TableCell>
+        <TableCell>
+          {format?.address
+            ? format.address(item?.address)
+            : formatter(item?.address, undefined)}
+        </TableCell>
+        <TableCell>
+          {format?.birthday
+            ? format.birthday(item?.birthday)
+            : formatter(item?.birthday, undefined)}
+        </TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>;
+"
+`;
+
 exports[`amplify view renderer tests should generate a table element 1`] = `
 "<Table>
   {!disableHeaders && (

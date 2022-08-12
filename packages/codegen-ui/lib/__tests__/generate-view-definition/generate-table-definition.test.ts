@@ -131,4 +131,42 @@ describe('generateTableDefinition', () => {
     expect(definition.tableDataSource).toStrictEqual(expectedSource);
     expect(definition.columns).toStrictEqual(expectedColumns);
   });
+
+  test('can generate table definition with custom data model', () => {
+    const view: StudioView = {
+      appId: 'appId',
+      environmentName: 'staging',
+      id: 'viewId',
+      name: 'CusomTable',
+      schemaVersion: '1.0',
+      sourceId: 'source',
+      dataSource: {
+        type: 'Custom',
+        model: '{"name":"bob","age":25,"address":"123 street","birthday":"5/5/99"}',
+      },
+      style: {},
+      viewConfiguration: {
+        type: 'Table',
+      },
+    };
+
+    const definition = generateTableDefinition(view);
+
+    const expectedColumns: ColumnInfo[] = [
+      {
+        header: 'name',
+      },
+      {
+        header: 'age',
+      },
+      {
+        header: 'address',
+      },
+      {
+        header: 'birthday',
+      },
+    ];
+
+    expect(definition.columns).toStrictEqual(expectedColumns);
+  });
 });
