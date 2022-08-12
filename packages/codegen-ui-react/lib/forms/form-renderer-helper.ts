@@ -193,7 +193,7 @@ export const buildFormPropNode = (form: StudioForm) => {
                   undefined,
                   'saveSuccessful',
                   undefined,
-                  factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+                  factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
                 ),
                 factory.createPropertySignature(
                   undefined,
@@ -244,6 +244,47 @@ export const buildFormPropNode = (form: StudioForm) => {
       'onCancel',
       factory.createToken(SyntaxKind.QuestionToken),
       factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
+    ),
+  );
+  // onValidate?: (value: any) => Promise<{ hasError: boolean; errorMessage?: string }>>
+  propSignatures.push(
+    factory.createPropertySignature(
+      undefined,
+      factory.createIdentifier('onValidate'),
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
+        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+        factory.createFunctionTypeNode(
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('value'),
+              undefined,
+              factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+              undefined,
+            ),
+          ],
+          factory.createTypeReferenceNode(factory.createIdentifier('Promise'), [
+            factory.createTypeLiteralNode([
+              factory.createPropertySignature(
+                undefined,
+                factory.createIdentifier('hasError'),
+                undefined,
+                factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
+              ),
+              factory.createPropertySignature(
+                undefined,
+                factory.createIdentifier('errorMessage'),
+                factory.createToken(SyntaxKind.QuestionToken),
+                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+              ),
+            ]),
+          ]),
+        ),
+      ]),
     ),
   );
   return factory.createTypeLiteralNode(propSignatures);

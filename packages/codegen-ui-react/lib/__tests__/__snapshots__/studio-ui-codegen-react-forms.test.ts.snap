@@ -25,12 +25,22 @@ export default function customDataForm(props) {
     overrides,
     ...rest
   } = props;
-  const [nameFieldError, setNameFieldError] = useStateMutationAction({});
-  const [emailFieldError, setEmailFieldError] = useStateMutationAction({});
-  const [cityFieldError, setCityFieldError] = useStateMutationAction({});
-  const [categoryFieldError, setCategoryFieldError] = useStateMutationAction(
-    {}
-  );
+  const [nameFieldError, setNameFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
+  const [emailFieldError, setEmailFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
+  const [cityFieldError, setCityFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
+  const [categoryFieldError, setCategoryFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
   return (
@@ -232,6 +242,10 @@ export declare type customDataFormProps = React.PropsWithChildren<{
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
+    onValidate?: Record<string, (value: any) => Promise<{
+        hasError: boolean;
+        errorMessage?: string;
+    }>>;
 }>;
 export default function customDataForm(props: customDataFormProps): React.ReactElement;
 "
@@ -257,15 +271,20 @@ export default function myPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({});
-  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction(
-    {}
-  );
-  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction(
-    {}
-  );
+  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
+  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
+  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
   const [profile_urlFieldError, setProfile_urlFieldError] =
-    useStateMutationAction({});
+    useStateMutationAction({ hasError: false, errorMessage: \\"\\" });
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
   return (
@@ -457,10 +476,14 @@ export declare type myPostFormProps = React.PropsWithChildren<{
 } & {
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
     onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
-        saveSuccessful: string;
+        saveSuccessful: boolean;
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
+    onValidate?: Record<string, (value: any) => Promise<{
+        hasError: boolean;
+        errorMessage?: string;
+    }>>;
 }>;
 export default function myPostForm(props: myPostFormProps): React.ReactElement;
 "
@@ -494,16 +517,21 @@ export default function myPostForm(props) {
     ...rest
   } = props;
   const [TextAreaFieldbbd63464FieldError, setTextAreaFieldbbd63464FieldError] =
-    useStateMutationAction({});
-  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({});
-  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction(
-    {}
-  );
+    useStateMutationAction({ hasError: false, errorMessage: \\"\\" });
+  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
+  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
   const [profile_urlFieldError, setProfile_urlFieldError] =
-    useStateMutationAction({});
-  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction(
-    {}
-  );
+    useStateMutationAction({ hasError: false, errorMessage: \\"\\" });
+  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
   return (
@@ -728,10 +756,14 @@ export declare type myPostFormProps = React.PropsWithChildren<{
     id: string;
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
     onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
-        saveSuccessful: string;
+        saveSuccessful: boolean;
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
+    onValidate?: Record<string, (value: any) => Promise<{
+        hasError: boolean;
+        errorMessage?: string;
+    }>>;
 }>;
 export default function myPostForm(props: myPostFormProps): React.ReactElement;
 "

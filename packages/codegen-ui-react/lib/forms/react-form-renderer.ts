@@ -328,7 +328,21 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     );
     if (this.componentMetadata.formMetadata?.onChangeFields.length) {
       this.componentMetadata.formMetadata?.onChangeFields.forEach((field) => {
-        statements.push(buildStateMutationStatement(`${field}FieldError`, factory.createObjectLiteralExpression()));
+        statements.push(
+          buildStateMutationStatement(
+            `${field}FieldError`,
+            factory.createObjectLiteralExpression(
+              [
+                factory.createPropertyAssignment(factory.createIdentifier('hasError'), factory.createFalse()),
+                factory.createPropertyAssignment(
+                  factory.createIdentifier('errorMessage'),
+                  factory.createStringLiteral(''),
+                ),
+              ],
+              false,
+            ),
+          ),
+        );
       });
       this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     }
