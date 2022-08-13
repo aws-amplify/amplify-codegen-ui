@@ -13,10 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-
-import { DateFormat, DateTimeFormat, TimeFormat } from '../types';
-
-const invalidDateStr = 'Invalid Date';
+import { DateFormat, DateTimeFormat, TimeFormat } from '../types/string-format';
 
 const monthToShortMon: { [mon: string]: string } = {
   '1': 'Jan',
@@ -33,7 +30,26 @@ const monthToShortMon: { [mon: string]: string } = {
   '12': 'Dec',
 };
 
-export function formatDate(date: string, format: DateFormat['dateFormat']): string {
+const invalidDateStr = 'Invalid Date';
+
+type DateFormatType = {
+  type: 'DateFormat';
+  format: DateFormat['dateFormat'];
+};
+
+type DateTimeFormatType = {
+  type: 'DateTimeFormat';
+  format: DateTimeFormat['dateTimeFormat'];
+};
+
+type TimeFormatType = {
+  type: 'TimeFormat';
+  format: TimeFormat['timeFormat'];
+};
+
+type FormatInputType = DateFormatType | DateTimeFormatType | TimeFormatType;
+
+export function formatDate(date: string, dateFormat: DateFormat['dateFormat']): string {
   if (date === undefined || date === null) {
     return date;
   }
@@ -53,7 +69,7 @@ export function formatDate(date: string, format: DateFormat['dateFormat']): stri
   // Remove leading zeroes
   const truncatedMonth = month.replace(/^0+/, '');
 
-  switch (format) {
+  switch (dateFormat) {
     case 'locale':
       return validDate.toLocaleDateString();
     case 'YYYY.MM.DD':
@@ -69,7 +85,7 @@ export function formatDate(date: string, format: DateFormat['dateFormat']): stri
   }
 }
 
-export function formatTime(time: string, format: TimeFormat['timeFormat']): string {
+export function formatTime(time: string, timeFormat: TimeFormat['timeFormat']): string {
   if (time === undefined || time === null) {
     return time;
   }
@@ -92,7 +108,7 @@ export function formatTime(time: string, format: TimeFormat['timeFormat']): stri
     return time;
   }
 
-  switch (format) {
+  switch (timeFormat) {
     case 'locale':
       return validTime.toLocaleTimeString();
     case 'hours24':
@@ -104,7 +120,7 @@ export function formatTime(time: string, format: TimeFormat['timeFormat']): stri
   }
 }
 
-export function formatDateTime(dateTimeStr: string, format: DateTimeFormat['dateTimeFormat']): string {
+export function formatDateTime(dateTimeStr: string, dateTimeFormat: DateTimeFormat['dateTimeFormat']): string {
   if (dateTimeStr === undefined || dateTimeStr === null) {
     return dateTimeStr;
   }
@@ -119,12 +135,25 @@ export function formatDateTime(dateTimeStr: string, format: DateTimeFormat['date
     return dateTimeStr;
   }
 
-  if (format === 'locale') {
+  if (dateTimeFormat === 'locale') {
     return dateTime.toLocaleString();
   }
   const dateAndTime = dateTime.toISOString().split('T');
-  const date = formatDate(dateAndTime[0], format.dateFormat);
-  const time = formatTime(dateAndTime[1], format.timeFormat);
+  const date = formatDate(dateAndTime[0], dateTimeFormat.dateFormat);
+  const time = formatTime(dateAndTime[1], dateTimeFormat.timeFormat);
 
   return `${date} - ${time}`;
+}
+
+export function formatter(value: string, formatterInput: FormatInputType) {
+  switch (formatterInput.type) {
+    case 'DateFormat':
+      return formatDate(value, formatterInput.format);
+    case 'DateTimeFormat':
+      return formatDateTime(value, formatterInput.format);
+    case 'TimeFormat':
+      return formatTime(value, formatterInput.format);
+    default:
+      return value;
+  }
 }

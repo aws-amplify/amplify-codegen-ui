@@ -22,6 +22,9 @@ import { ReactOutputManager } from './react-output-manager';
 import { RequiredKeys } from './utils/type-utils';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 import { generateValidationFunction } from './utils/forms/validation';
+import { generateFormatUtil } from './utils/string-formatter';
+
+export type Util = string;
 
 export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -41,9 +44,9 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   /*
    * list of util functions to generate
    */
-  utils: string[];
+  utils: Util[];
 
-  constructor(utils: string[], renderConfig: ReactRenderConfig) {
+  constructor(utils: Util[], renderConfig: ReactRenderConfig) {
     super(utils, new ReactOutputManager(), renderConfig);
     this.utils = utils;
     this.renderConfig = {
@@ -56,11 +59,13 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
 
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
-    const utilsStatements: (ts.TypeAliasDeclaration | ts.VariableStatement)[] = [];
+    const utilsStatements: (ts.VariableStatement | ts.TypeAliasDeclaration | ts.FunctionDeclaration)[] = [];
 
     this.utils.forEach((util) => {
       if (util === 'validation') {
         utilsStatements.push(...generateValidationFunction());
+      } else if (util === 'formatter') {
+        utilsStatements.push(...generateFormatUtil());
       }
     });
 
