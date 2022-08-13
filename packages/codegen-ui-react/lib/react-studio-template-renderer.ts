@@ -165,7 +165,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
     // do not produce declaration becuase it is not used
-    const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
+    // also do not format because we don't care what the component looks like in Studio UI
+    const { componentText: compText } = transpile(
+      result,
+      { ...this.renderConfig, renderTypeDeclarations: false },
+      false,
+    );
 
     return { compText, importsText, requiredDataModels: this.componentMetadata.requiredDataModels };
   }
