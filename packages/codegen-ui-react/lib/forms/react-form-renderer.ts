@@ -289,6 +289,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   private buildVariableStatements() {
     const statements: Statement[] = [];
     const elements: BindingElement[] = [];
+    const { formMetadata } = this.componentMetadata;
 
     // add in hooks for before/complete with ds and basic onSubmit with props
     elements.push(...buildMutationBindings(this.component));
@@ -326,8 +327,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         ),
       ),
     );
-    if (this.componentMetadata.formMetadata?.onChangeFields.length) {
-      this.componentMetadata.formMetadata?.onChangeFields.forEach((field) => {
+    if (formMetadata && Object.keys(formMetadata.fieldConfigs).length) {
+      Object.keys(formMetadata.fieldConfigs).forEach((field) => {
         statements.push(
           buildStateMutationStatement(
             `${field}FieldError`,

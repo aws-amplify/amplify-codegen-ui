@@ -13,39 +13,32 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FormDefinition, FormMetadata, StudioForm } from '../types';
-import { FieldValidationConfiguration } from '../types/form/form-validation';
+import { FormDefinition, FormMetadata, FieldConfigMetadata, StudioForm, FieldValidationConfiguration } from '../types';
 
 export const getFormFieldStateName = (formName: string) => {
   return [formName.charAt(0).toLowerCase() + formName.slice(1), 'Fields'].join('');
 };
 
 export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition): FormMetadata => {
+  const elementEntries = Object.entries(formDefinition.elements);
   return {
     id: form.id,
     name: form.name,
-    fieldState: getFormFieldStateName(form.name),
-    onChangeFields: Object.entries(formDefinition.elements).reduce<string[]>((fields, [key, value]) => {
-      if ('props' in value && 'label' in value.props) {
-        fields.push(key);
-      }
-      return fields;
-    }, []),
-    onValidationFields: Object.entries(formDefinition.elements).reduce<{
-      [field: string]: FieldValidationConfiguration[];
-    }>((validationFields, [elementName, elementConfig]) => {
-      const updatedValidationFields = validationFields;
-
-      if ('validations' in elementConfig && elementConfig.validations) {
-        updatedValidationFields[elementName] = elementConfig.validations.map((validation) => {
+    fieldConfigs: elementEntries.reduce<Record<string, FieldConfigMetadata>>((configs, [name, config]) => {
+      const updatedConfigs = configs;
+      const metadata: FieldConfigMetadata = { hasChange: true, validationRules: [] };
+      if ('validations' in config && config.validations) {
+        metadata.validationRules = config.validations.map<FieldValidationConfiguration>((validation) => {
           const updatedValidation = validation;
           delete updatedValidation.immutable;
           return updatedValidation;
         });
       }
-
-      return updatedValidationFields;
+      if ('dataType' in config && config.dataType) {
+        metadata.dataType = config.dataType;
+      }
+      updatedConfigs[name] = metadata;
+      return updatedConfigs;
     }, {}),
-    errorStateFields: [],
   };
 };

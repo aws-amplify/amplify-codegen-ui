@@ -13,15 +13,19 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { DataFieldDataType } from '../data';
 import { FieldValidationConfiguration } from './form-validation';
+
+export type FieldConfigMetadata = {
+  hasChange: boolean;
+  // ex. name field has a string validation type where the rule is char length > 5
+  validationRules: FieldValidationConfiguration[];
+  // component field is of type AWSTimestamp will need to map this to date then get time from date
+  dataType?: DataFieldDataType;
+};
 
 export type FormMetadata = {
   id?: string;
   name: string;
-  fieldState: string;
-  onChangeFields: string[];
-  errorStateFields: string[];
-  // indicates the validation rule for that field
-  // ex. name field has a string validation type where the rule is char length > 5
-  onValidationFields?: { [field: string]: FieldValidationConfiguration[] };
+  fieldConfigs: Record<string, FieldConfigMetadata>;
 };

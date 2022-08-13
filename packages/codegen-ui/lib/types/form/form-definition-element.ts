@@ -14,10 +14,12 @@
   limitations under the License.
  */
 
+import { DataFieldDataType } from '../data';
 import { FieldValidationConfiguration } from './form-validation';
 import { StudioFormValueMappings } from './input-config';
 
 type FormDefinitionInputElementCommon = {
+  dataType?: DataFieldDataType;
   validations?: (FieldValidationConfiguration & { immutable?: true })[];
 };
 

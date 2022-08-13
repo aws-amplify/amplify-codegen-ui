@@ -36,6 +36,16 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
+
+    it('should render a form with multiple date types', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/input-gallery-create',
+        'datastore/input-gallery',
+      );
+      expect(componentText).toContain('DataStore.save');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
   });
 
   describe('custom form tests', () => {
