@@ -44,6 +44,7 @@ describe('mapModelFieldsConfigs', () => {
     expect(formDefinition.elementMatrix).toStrictEqual([['name']]);
     expect(modelFieldsConfigs.name).toStrictEqual({
       label: 'Name',
+      dataType: 'String',
       inputType: { type: 'TextField', required: false, readOnly: false, name: 'name', value: 'true' },
     });
   });
@@ -156,6 +157,7 @@ describe('mapModelFieldsConfigs', () => {
     expect(formDefinition.elementMatrix).toStrictEqual([]);
     expect(modelFieldsConfigs).toStrictEqual({
       id: {
+        dataType: 'ID',
         inputType: {
           name: 'id',
           readOnly: false,
@@ -194,6 +196,7 @@ describe('mapModelFieldsConfigs', () => {
     expect(formDefinition.elementMatrix).toStrictEqual([]);
     expect(modelFieldsConfigs).toStrictEqual({
       name: {
+        dataType: 'String',
         inputType: {
           name: 'name',
           readOnly: true,
@@ -233,6 +236,9 @@ describe('mapModelFieldsConfigs', () => {
 
     expect(modelFieldsConfigs).toStrictEqual({
       city: {
+        dataType: {
+          enum: 'City',
+        },
         inputType: {
           name: 'city',
           readOnly: false,

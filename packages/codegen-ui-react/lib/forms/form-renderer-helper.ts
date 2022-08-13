@@ -16,6 +16,7 @@
 
 import {
   ComponentMetadata,
+  DataFieldDataType,
   FieldValidationConfiguration,
   FormDefinition,
   StateStudioComponentProperty,
@@ -37,6 +38,7 @@ import {
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getStateName, getSetStateName } from '../react-component-render-helper';
 import { getActionIdentifier } from '../workflow';
+import { buildTargetVariable } from './event-targets';
 
 export const FormTypeDataStoreMap: Record<StudioFormActionType, string> = {
   create: 'Amplify.DataStoreCreateItemAction',
@@ -315,7 +317,146 @@ export const buildStateMutationStatement = (name: string, defaultValue: Expressi
   );
 };
 
-export const buildOnChangeStatement = (fieldName: string, validationRules?: FieldValidationConfiguration[]) => {
+export const createValidationExpression = (validationRules: FieldValidationConfiguration[] = []): Expression => {
+  const validateExpressions = validationRules.map<ObjectLiteralExpression>((rule) => {
+    const elements: ObjectLiteralElementLike[] = [
+      factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(rule.type)),
+    ];
+    if ('strValues' in rule) {
+      elements.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier('strValues'),
+          factory.createArrayLiteralExpression(
+            rule.strValues.map((value) => factory.createStringLiteral(value)),
+            false,
+          ),
+        ),
+      );
+    }
+    if ('numValues' in rule) {
+      elements.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier('numValues'),
+          factory.createArrayLiteralExpression(
+            rule.numValues.map((value) => factory.createNumericLiteral(value)),
+            false,
+          ),
+        ),
+      );
+    }
+    if (rule.validationMessage) {
+      elements.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier('validationMessage'),
+          factory.createStringLiteral(rule.validationMessage),
+        ),
+      );
+    }
+    return factory.createObjectLiteralExpression(elements, false);
+  });
+
+  return factory.createArrayLiteralExpression(validateExpressions, true);
+};
+
+export const addFormAttributes = (
+  component: StudioComponent | StudioComponentChild,
+  componentMetadata: ComponentMetadata,
+) => {
+  const attributes = [];
+  const { formMetadata } = componentMetadata;
+
+  // do some sort of mapping of the componetName from the dataschema fields
+  // then map this with the componentType
+
+  /*
+    boolean => RadioGroupField
+    const value = e.target.value.toLowerCase() === 'yes';
+    boolean => selectfield
+    const value = ....
+
+
+    componentType => SelectField && boolean
+    const value = Boolean(e.target.checked)
+
+  */
+  if (component.componentType.includes('Field')) {
+    if (formMetadata && component.name in formMetadata?.fieldConfigs) {
+      const { validationRules, dataType } = formMetadata.fieldConfigs[component.name];
+      attributes.push(buildOnChangeStatement(component.name, component.componentType, validationRules, dataType));
+    }
+    attributes.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('errorMessage'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(`${component.name}FieldError`),
+            factory.createIdentifier('errorMessage'),
+          ),
+        ),
+      ),
+      factory.createJsxAttribute(
+        factory.createIdentifier('hasError'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(`${component.name}FieldError`),
+            factory.createIdentifier('hasError'),
+          ),
+        ),
+      ),
+    );
+  }
+
+  if (component.name === 'SubmitButton') {
+    attributes.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('isDisabled'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier('formValid')),
+        ),
+      ),
+    );
+  }
+  if (component.name === 'CancelButton') {
+    attributes.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('onClick'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createExpressionStatement(
+                  factory.createBinaryExpression(
+                    factory.createIdentifier('onCancel'),
+                    factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                    factory.createCallExpression(factory.createIdentifier('onCancel'), undefined, []),
+                  ),
+                ),
+              ],
+              false,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  return attributes;
+};
+
+export const buildOnChangeStatement = (
+  fieldName: string,
+  fieldType: string,
+  validationRules: FieldValidationConfiguration[],
+  dataType?: DataFieldDataType,
+) => {
   return factory.createJsxAttribute(
     factory.createIdentifier('onChange'),
     factory.createJsxExpression(
@@ -338,25 +479,7 @@ export const buildOnChangeStatement = (fieldName: string, validationRules?: Fiel
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createBlock(
           [
-            factory.createVariableStatement(
-              undefined,
-              factory.createVariableDeclarationList(
-                [
-                  factory.createVariableDeclaration(
-                    factory.createObjectBindingPattern([
-                      factory.createBindingElement(undefined, undefined, factory.createIdentifier('value'), undefined),
-                    ]),
-                    undefined,
-                    undefined,
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('e'),
-                      factory.createIdentifier('target'),
-                    ),
-                  ),
-                ],
-                NodeFlags.Const,
-              ),
-            ),
+            buildTargetVariable(fieldType, dataType),
             factory.createVariableStatement(
               undefined,
               factory.createVariableDeclarationList(
@@ -439,125 +562,6 @@ export const buildOnChangeStatement = (fieldName: string, validationRules?: Fiel
       ),
     ),
   );
-};
-
-export const createValidationExpression = (validationRules: FieldValidationConfiguration[] = []): Expression => {
-  const validateExpressions = validationRules.map<ObjectLiteralExpression>((rule) => {
-    const elements: ObjectLiteralElementLike[] = [
-      factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(rule.type)),
-    ];
-    if ('strValues' in rule) {
-      elements.push(
-        factory.createPropertyAssignment(
-          factory.createIdentifier('strValues'),
-          factory.createArrayLiteralExpression(
-            rule.strValues.map((value) => factory.createStringLiteral(value)),
-            false,
-          ),
-        ),
-      );
-    }
-    if ('numValues' in rule) {
-      elements.push(
-        factory.createPropertyAssignment(
-          factory.createIdentifier('numValues'),
-          factory.createArrayLiteralExpression(
-            rule.numValues.map((value) => factory.createNumericLiteral(value)),
-            false,
-          ),
-        ),
-      );
-    }
-    if (rule.validationMessage) {
-      elements.push(
-        factory.createPropertyAssignment(
-          factory.createIdentifier('validationMessage'),
-          factory.createStringLiteral(rule.validationMessage),
-        ),
-      );
-    }
-    return factory.createObjectLiteralExpression(elements, false);
-  });
-
-  return factory.createArrayLiteralExpression(validateExpressions, true);
-};
-
-export const addFormAttributes = (
-  component: StudioComponent | StudioComponentChild,
-  componentMetadata: ComponentMetadata,
-) => {
-  const attributes = [];
-  const { formMetadata } = componentMetadata;
-  if (component.componentType.includes('Field')) {
-    if (formMetadata?.onChangeFields.includes(component.name)) {
-      const validationRules = formMetadata.onValidationFields?.[component.name];
-      attributes.push(buildOnChangeStatement(component.name, validationRules));
-    }
-    attributes.push(
-      factory.createJsxAttribute(
-        factory.createIdentifier('errorMessage'),
-        factory.createJsxExpression(
-          undefined,
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier(`${component.name}FieldError`),
-            factory.createIdentifier('errorMessage'),
-          ),
-        ),
-      ),
-      factory.createJsxAttribute(
-        factory.createIdentifier('hasError'),
-        factory.createJsxExpression(
-          undefined,
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier(`${component.name}FieldError`),
-            factory.createIdentifier('hasError'),
-          ),
-        ),
-      ),
-    );
-  }
-
-  if (component.name === 'SubmitButton') {
-    attributes.push(
-      factory.createJsxAttribute(
-        factory.createIdentifier('isDisabled'),
-        factory.createJsxExpression(
-          undefined,
-          factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier('formValid')),
-        ),
-      ),
-    );
-  }
-  if (component.name === 'CancelButton') {
-    attributes.push(
-      factory.createJsxAttribute(
-        factory.createIdentifier('onClick'),
-        factory.createJsxExpression(
-          undefined,
-          factory.createArrowFunction(
-            undefined,
-            undefined,
-            [],
-            undefined,
-            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-            factory.createBlock(
-              [
-                factory.createExpressionStatement(
-                  factory.createBinaryExpression(
-                    factory.createIdentifier('onCancel'),
-                    factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-                    factory.createCallExpression(factory.createIdentifier('onCancel'), undefined, []),
-                  ),
-                ),
-              ],
-              false,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-  return attributes;
 };
 
 export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', modelName: string) => {
