@@ -64,6 +64,7 @@ const supportedTranspilationTargets = [
 export function transpile(
   code: string,
   renderConfig: ReactRenderConfig,
+  shouldFormatCode = true,
 ): { componentText: string; declaration?: string } {
   const { target, module, script, renderTypeDeclarations, inlineSourceMap } = renderConfig;
   if (script === ScriptKind.JS || script === ScriptKind.JSX) {
@@ -78,7 +79,7 @@ export function transpile(
       },
     }).outputText;
 
-    const componentText = formatCode(transpiledCode);
+    const componentText = shouldFormatCode ? formatCode(transpiledCode) : transpiledCode;
 
     /*
      * createProgram is less performant than traspileModule and should only be used when necessary.
