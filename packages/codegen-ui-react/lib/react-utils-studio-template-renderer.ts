@@ -24,11 +24,11 @@ import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-tem
 import { generateValidationFunction } from './utils/forms/validation';
 import { generateFormatUtil } from './utils/string-formatter';
 
-export type Util = string;
+export type UtilTemplateType = 'validation' | 'formatter';
 
 export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
-  string[],
+  UtilTemplateType[],
   ReactOutputManager,
   {
     componentText: string;
@@ -44,9 +44,9 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   /*
    * list of util functions to generate
    */
-  utils: Util[];
+  utils: UtilTemplateType[];
 
-  constructor(utils: Util[], renderConfig: ReactRenderConfig) {
+  constructor(utils: UtilTemplateType[], renderConfig: ReactRenderConfig) {
     super(utils, new ReactOutputManager(), renderConfig);
     this.utils = utils;
     this.renderConfig = {

@@ -46,6 +46,7 @@ export enum ImportValue {
   USE_EFFECT = 'useEffect',
   VALIDATE_FIELD = 'validateField',
   VALIDATE_FIELD_CODEGEN = 'validateField',
+  FORMATTER = 'formatter',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
@@ -68,6 +69,7 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.USE_AUTH_SIGN_OUT_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_STATE_MUTATION_ACTION]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_EFFECT]: ImportSource.REACT,
+  [ImportValue.FORMATTER]: ImportSource.UTILS,
   [ImportValue.VALIDATE_FIELD]: ImportSource.UTILS,
   [ImportValue.VALIDATE_FIELD_CODEGEN]: ImportSource.CODEGEN_UI_REACT,
 };
