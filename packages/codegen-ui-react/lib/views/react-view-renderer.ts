@@ -24,6 +24,7 @@ import {
   ViewMetadata,
   handleCodegenErrors,
   validateViewSchema,
+  StudioComponentPredicate,
 } from '@aws-amplify/codegen-ui';
 import {
   addSyntheticLeadingComment,
@@ -36,6 +37,7 @@ import {
   JsxSelfClosingElement,
   Modifier,
   NodeFlags,
+  ObjectLiteralExpression,
   ScriptKind,
   Statement,
   SyntaxKind,
@@ -45,6 +47,7 @@ import { EOL } from 'os';
 import {
   buildBaseCollectionVariableStatement,
   buildPrinter,
+  buildSortFunction,
   defaultRenderConfig,
   getDeclarationFilename,
   transpile,
@@ -55,6 +58,13 @@ import { getComponentPropName } from '../react-component-render-helper';
 import { ReactOutputManager } from '../react-output-manager';
 import { ReactRenderConfig, scriptKindToFileExtension } from '../react-render-config';
 import { RequiredKeys } from '../utils/type-utils';
+import {
+  buildDataStoreCollectionCall,
+  getFilterName,
+  getPaginationName,
+  getPredicateName,
+  needsFormatter,
+} from '../react-table-renderer-helper';
 
 export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -69,7 +79,7 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
 
   protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
 
-  protected viewDefinition: TableDefinition | undefined;
+  protected viewDefinition: TableDefinition;
 
   protected viewComponent: StudioView;
 
@@ -93,14 +103,20 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
         this.viewDefinition = generateTableDefinition(component, dataSchema);
         break;
       default:
-        this.viewDefinition = undefined;
+        throw new Error(`Type: ${component.viewConfiguration.type} is not supported.`);
     }
 
     this.viewComponent = component;
 
+    // find if formatter is required
+    if (needsFormatter(component.viewConfiguration)) {
+      this.importCollection.addMappedImport(ImportValue.FORMATTER);
+    }
+
     this.viewMetadata = {
       id: component.id,
       name: component.name,
+      fieldFormatting: {},
     };
   }
 
@@ -235,11 +251,28 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
   buildVariableStatements() {
     const statements: Statement[] = [];
     const elements: BindingElement[] = [];
+    const { type, model, predicate, sort } = this.viewComponent.dataSource;
+    const isDataStoreEnabled = type === 'DataStore' && model;
+    if (isDataStoreEnabled) {
+      this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataSource.type);
+      this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
+      elements.push(
+        factory.createBindingElement(
+          undefined,
+          factory.createIdentifier('items'),
+          factory.createIdentifier('itemsProps'),
+          undefined,
+        ),
+        factory.createBindingElement(undefined, undefined, factory.createIdentifier('predicateOverride'), undefined),
+      );
+    } else {
+      elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('items'), undefined));
+    }
+
+    // add base Props
 
     // props
     const props = [
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('items'), undefined),
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('predicateOverride'), undefined),
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('formatOverride'), undefined),
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('highlightOnHover'), undefined),
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onRowClick'), undefined),
@@ -275,81 +308,138 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
       ),
     );
 
-    // add model import for datastore type
-    if (this.component.dataSource.type === 'DataStore') {
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataSource.type);
-    }
-
-    /*
-    if datastore enabled
-    const myViewDataStore = useDataStoreBinding({
-      model: Model,
-      type: 'Collection'
-    }).items;
-    const items = itemsProp !== undefined ? itemsProp : myViewDataStore;
-
-    if custom enabled
-    const myViewDataStore = [];
-    const items = itemsProp !== undefined ? itemsProp : myViewDataStore;
-    */
-    statements.push(
-      this.buildCollectionBindingCall(),
-      factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createIdentifier('items'),
-              undefined,
-              undefined,
-              factory.createConditionalExpression(
-                factory.createBinaryExpression(
-                  factory.createIdentifier('itemsProp'),
-                  factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
-                  factory.createIdentifier('undefined'),
+    if (isDataStoreEnabled) {
+      /**
+       * builds predicate variable
+       */
+      if (predicate) {
+        this.importCollection.addMappedImport(ImportValue.CREATE_DATA_STORE_PREDICATE);
+        statements.push(
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  getFilterName(model),
+                  undefined,
+                  undefined,
+                  this.predicateToObjectLiteralExpression(predicate),
                 ),
-                factory.createToken(SyntaxKind.QuestionToken),
-                factory.createIdentifier('itemsProp'),
-                factory.createToken(SyntaxKind.ColonToken),
-                factory.createIdentifier('itemsDataStore'),
-              ),
+              ],
+              NodeFlags.Const,
             ),
-          ],
-          NodeFlags.Const,
+          ),
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  getPredicateName(model),
+                  undefined,
+                  undefined,
+                  factory.createCallExpression(
+                    factory.createIdentifier('createDataStorePredicate'),
+                    [factory.createTypeReferenceNode(factory.createIdentifier(model), undefined)],
+                    [factory.createIdentifier(getFilterName(model))],
+                  ),
+                ),
+              ],
+              NodeFlags.Const,
+            ),
+          ),
+        );
+      }
+      /**
+       * builds sort function
+       */
+      if (sort) {
+        this.importCollection.addMappedImport(ImportValue.SORT_DIRECTION);
+        this.importCollection.addMappedImport(ImportValue.SORT_PREDICATE);
+        statements.push(
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  getPaginationName(model),
+                  undefined,
+                  undefined,
+                  factory.createObjectLiteralExpression([
+                    factory.createPropertyAssignment(factory.createIdentifier('sort'), buildSortFunction(model, sort)),
+                  ]),
+                ),
+              ],
+              NodeFlags.Const,
+            ),
+          ),
+        );
+      }
+      /*
+      if datastore enabled
+      const myViewDataStore = useDataStoreBinding({
+        model: Model,
+        type: 'Collection'
+      }).items;
+      const items = itemsProp !== undefined ? itemsProp : myViewDataStore;
+
+      if custom enabled
+      uses regular items array for formatting
+      */
+      const dsItemsName = factory.createIdentifier(`${this.viewComponent.name}DataStore`);
+      statements.push(
+        buildBaseCollectionVariableStatement(
+          dsItemsName,
+          buildDataStoreCollectionCall(
+            model,
+            predicate ? getPredicateName(model) : undefined,
+            sort ? getPaginationName(model) : undefined,
+          ),
         ),
-      ),
-    );
+        // checks to see if an override was passed
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier('items'),
+                undefined,
+                undefined,
+                factory.createConditionalExpression(
+                  factory.createBinaryExpression(
+                    factory.createIdentifier('itemsProp'),
+                    factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                    factory.createIdentifier('undefined'),
+                  ),
+                  factory.createToken(SyntaxKind.QuestionToken),
+                  factory.createIdentifier('itemsProp'),
+                  factory.createToken(SyntaxKind.ColonToken),
+                  dsItemsName,
+                ),
+              ),
+            ],
+            NodeFlags.Const,
+          ),
+        ),
+      );
+    }
     return statements;
   }
 
-  private buildCollectionBindingCall() {
-    const { type, model } = this.viewComponent.dataSource;
-    const itemsName = `${this.viewComponent.name}DataStore`;
-    if (type === 'DataStore' && model) {
-      this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
-      const objectProperties = [
-        factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral('collection')),
-        factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(model)),
-      ];
-
-      const callExp = factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
-        factory.createObjectLiteralExpression(objectProperties, true),
-      ]);
-      return buildBaseCollectionVariableStatement(factory.createIdentifier(itemsName), callExp);
-    }
-    return factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createIdentifier(itemsName),
-            undefined,
-            undefined,
-            factory.createArrayLiteralExpression([], false),
-          ),
-        ],
-        NodeFlags.Const,
-      ),
+  private predicateToObjectLiteralExpression(predicate: StudioComponentPredicate): ObjectLiteralExpression {
+    return factory.createObjectLiteralExpression(
+      Object.entries(predicate).map(([key, value]) => {
+        return factory.createPropertyAssignment(
+          factory.createIdentifier(key),
+          key === 'and' || key === 'or'
+            ? factory.createArrayLiteralExpression(
+                (value as StudioComponentPredicate[]).map(
+                  (pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred),
+                  false,
+                ),
+              )
+            : factory.createStringLiteral(value as string),
+        );
+      }, false),
     );
   }
 

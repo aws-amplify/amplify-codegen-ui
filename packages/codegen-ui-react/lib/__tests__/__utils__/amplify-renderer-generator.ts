@@ -70,6 +70,24 @@ export const generateWithAmplifyFormRenderer = (
   return renderer.renderComponent();
 };
 
+export const renderWithAmplifyViewRenderer = (
+  viewJsonFile: string,
+  dataSchemaJsonFile: string | undefined,
+  renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
+): { componentText: string; declaration?: string } => {
+  let dataSchema: GenericDataSchema | undefined;
+  if (dataSchemaJsonFile) {
+    const dataStoreSchema = loadSchemaFromJSONFile<Schema>(dataSchemaJsonFile);
+    dataSchema = getGenericFromDataStore(dataStoreSchema);
+  }
+  const rendererFactory = new StudioTemplateRendererFactory(
+    (view: StudioView) => new AmplifyViewRenderer(view, dataSchema, renderConfig),
+  );
+
+  const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile<StudioView>(viewJsonFile));
+  return renderer.renderComponent();
+};
+
 export const renderTableJsxElement = (
   tableFilePath: string,
   dataSchemaFilePath: string | undefined,

@@ -20,5 +20,5 @@ export type ViewMetadata = {
   id?: string;
   name: string;
   // Stores the configured formatting for each field (table column)
-  tableFieldFormatting?: { [fieldName: string]: ViewValueFormatting };
+  fieldFormatting: { [fieldName: string]: ViewValueFormatting };
 };

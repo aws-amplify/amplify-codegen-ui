@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`amplify view renderer tests should generate a non-datastore table element 1`] = `
+exports[`amplify table renderer tests should generate a non-datastore table element 1`] = `
 "<Table>
   {!disableHeaders && (
     <TableHead>
@@ -32,7 +32,7 @@ exports[`amplify view renderer tests should generate a non-datastore table eleme
 "
 `;
 
-exports[`amplify view renderer tests should generate a table element 1`] = `
+exports[`amplify table renderer tests should generate a table element 1`] = `
 "<Table>
   {!disableHeaders && (
     <TableHead>
@@ -77,5 +77,301 @@ exports[`amplify view renderer tests should generate a table element 1`] = `
     ))}
   </TableBody>
 </Table>;
+"
+`;
+
+exports[`amplify view renderer tests should call util file if rendered 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { formatter } from \\"./utils\\";
+import {
+  createDataStorePredicate,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { SortDirection } from \\"@aws-amplify/datastore\\";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from \\"@aws-amplify/ui-react\\";
+export default function MyPostTable(props) {
+  const {
+    items: itemsProps,
+    predicateOverride,
+    formatOverride,
+    highlightOnHover,
+    onRowClick,
+    disableHeaders,
+    ...rest
+  } = props;
+  const postFilter = {
+    and: [
+      { field: \\"username\\", operand: \\"Guy\\", operator: \\"notContains\\" },
+      { field: \\"createdAt\\", operand: \\"25\\", operator: \\"contains\\" },
+    ],
+  };
+  const postPredicate = createDataStorePredicate(postFilter);
+  const postPagination = { sort: (s) => s.username(SortDirection.ASCENDING) };
+  const MyPostTableDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Post,
+    criteria: predicateOverride || postPredicate,
+    pagination: postPagination,
+  }).items;
+  const items = itemsProp !== undefined ? itemsProp : MyPostTableDataStore;
+  return (
+    <Table>
+      {!disableHeaders && (
+        <TableHead>
+          <TableRow>
+            <TableCell as=\\"th\\">id</TableCell>
+            <TableCell as=\\"th\\">caption</TableCell>
+            <TableCell as=\\"th\\">username</TableCell>
+            <TableCell as=\\"th\\">post_url</TableCell>
+            <TableCell as=\\"th\\">profile_url</TableCell>
+            <TableCell as=\\"th\\">status</TableCell>
+            <TableCell as=\\"th\\">createdAt</TableCell>
+            <TableCell as=\\"th\\">updatedAt</TableCell>
+          </TableRow>
+        </TableHead>
+      )}
+      <TableBody>
+        {items.map((item, index) => (
+          <TableRow onClick={onRowClick ? () => onRowClick(item, index) : null}>
+            <TableCell>{format?.id ? format.id(item?.id) : item?.id}</TableCell>
+            <TableCell>
+              {format?.caption ? format.caption(item?.caption) : item?.caption}
+            </TableCell>
+            <TableCell>
+              {format?.username
+                ? format.username(item?.username)
+                : item?.username}
+            </TableCell>
+            <TableCell>
+              {format?.post_url
+                ? format.post_url(item?.post_url)
+                : item?.post_url}
+            </TableCell>
+            <TableCell>
+              {format?.profile_url
+                ? format.profile_url(item?.profile_url)
+                : item?.profile_url}
+            </TableCell>
+            <TableCell>
+              {format?.status ? format.status(item?.status) : item?.status}
+            </TableCell>
+            <TableCell>
+              {format?.createdAt
+                ? format.createdAt(item?.createdAt)
+                : formatter(item?.createdAt, {
+                    type: \\"DateTimeFormat\\",
+                    format: {
+                      dateTimeFormat: {
+                        dateFormat: \\"MM/DD/YYYY\\",
+                        timeFormat: \\"locale\\",
+                      },
+                    },
+                  })}
+            </TableCell>
+            <TableCell>
+              {format?.updatedAt
+                ? format.updatedAt(item?.updatedAt)
+                : item?.updatedAt}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+"
+`;
+
+exports[`amplify view renderer tests should call util file if rendered 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type MyPostTableProps = React.PropsWithChildren<{
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function MyPostTable(props: MyPostTableProps): React.ReactElement;
+"
+`;
+
+exports[`amplify view renderer tests should render view with custom datastore 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from \\"@aws-amplify/ui-react\\";
+export default function CustomTable(props) {
+  const {
+    items,
+    formatOverride,
+    highlightOnHover,
+    onRowClick,
+    disableHeaders,
+    ...rest
+  } = props;
+  return (
+    <Table>
+      {!disableHeaders && (
+        <TableHead>
+          <TableRow>
+            <TableCell as=\\"th\\">name</TableCell>
+            <TableCell as=\\"th\\">age</TableCell>
+            <TableCell as=\\"th\\">address</TableCell>
+            <TableCell as=\\"th\\">birthday</TableCell>
+          </TableRow>
+        </TableHead>
+      )}
+      <TableBody>
+        {items.map((item, index) => (
+          <TableRow onClick={onRowClick ? () => onRowClick(item, index) : null}>
+            <TableCell>
+              {format?.name ? format.name(item?.name) : item?.name}
+            </TableCell>
+            <TableCell>
+              {format?.age ? format.age(item?.age) : item?.age}
+            </TableCell>
+            <TableCell>
+              {format?.address ? format.address(item?.address) : item?.address}
+            </TableCell>
+            <TableCell>
+              {format?.birthday
+                ? format.birthday(item?.birthday)
+                : item?.birthday}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+"
+`;
+
+exports[`amplify view renderer tests should render view with custom datastore 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type CustomTableProps = React.PropsWithChildren<{
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomTable(props: CustomTableProps): React.ReactElement;
+"
+`;
+
+exports[`amplify view renderer tests should render view with passed in predicate and sort 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  createDataStorePredicate,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { SortDirection } from \\"@aws-amplify/datastore\\";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from \\"@aws-amplify/ui-react\\";
+export default function MyPostTable(props) {
+  const {
+    items: itemsProps,
+    predicateOverride,
+    formatOverride,
+    highlightOnHover,
+    onRowClick,
+    disableHeaders,
+    ...rest
+  } = props;
+  const postFilter = {
+    and: [
+      { field: \\"username\\", operand: \\"username0\\", operator: \\"notContains\\" },
+      { field: \\"createdAt\\", operand: \\"2022\\", operator: \\"contains\\" },
+    ],
+  };
+  const postPredicate = createDataStorePredicate(postFilter);
+  const postPagination = { sort: (s) => s.username(SortDirection.ASCENDING) };
+  const MyPostTableDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Post,
+    criteria: predicateOverride || postPredicate,
+    pagination: postPagination,
+  }).items;
+  const items = itemsProp !== undefined ? itemsProp : MyPostTableDataStore;
+  return (
+    <Table>
+      {!disableHeaders && (
+        <TableHead>
+          <TableRow>
+            <TableCell as=\\"th\\">id</TableCell>
+            <TableCell as=\\"th\\">caption</TableCell>
+            <TableCell as=\\"th\\">username</TableCell>
+            <TableCell as=\\"th\\">post_url</TableCell>
+            <TableCell as=\\"th\\">profile_url</TableCell>
+            <TableCell as=\\"th\\">status</TableCell>
+            <TableCell as=\\"th\\">createdAt</TableCell>
+            <TableCell as=\\"th\\">updatedAt</TableCell>
+          </TableRow>
+        </TableHead>
+      )}
+      <TableBody>
+        {items.map((item, index) => (
+          <TableRow onClick={onRowClick ? () => onRowClick(item, index) : null}>
+            <TableCell>{format?.id ? format.id(item?.id) : item?.id}</TableCell>
+            <TableCell>
+              {format?.caption ? format.caption(item?.caption) : item?.caption}
+            </TableCell>
+            <TableCell>
+              {format?.username
+                ? format.username(item?.username)
+                : item?.username}
+            </TableCell>
+            <TableCell>
+              {format?.post_url
+                ? format.post_url(item?.post_url)
+                : item?.post_url}
+            </TableCell>
+            <TableCell>
+              {format?.profile_url
+                ? format.profile_url(item?.profile_url)
+                : item?.profile_url}
+            </TableCell>
+            <TableCell>
+              {format?.status ? format.status(item?.status) : item?.status}
+            </TableCell>
+            <TableCell>
+              {format?.createdAt
+                ? format.createdAt(item?.createdAt)
+                : item?.createdAt}
+            </TableCell>
+            <TableCell>
+              {format?.updatedAt
+                ? format.updatedAt(item?.updatedAt)
+                : item?.updatedAt}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+"
+`;
+
+exports[`amplify view renderer tests should render view with passed in predicate and sort 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type MyPostTableProps = React.PropsWithChildren<{
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function MyPostTable(props: MyPostTableProps): React.ReactElement;
 "
 `;

@@ -50,11 +50,11 @@ export class ReactTableRenderer {
     this.viewComponent = view;
     this.viewDefinition = definition;
     this.viewMetadata = metadata;
-    this.viewMetadata.tableFieldFormatting = {};
+    this.viewMetadata.fieldFormatting = {};
 
     this.viewDefinition.columns.forEach((column) => {
       if (column.valueFormatting) {
-        this.viewMetadata.tableFieldFormatting![column.header] = { ...column.valueFormatting };
+        this.viewMetadata.fieldFormatting[column.header] = { ...column.valueFormatting };
       }
     });
 
@@ -160,7 +160,7 @@ export class ReactTableRenderer {
   }
 
   generateFormatLiteralExpression(field: string): ObjectLiteralExpression | Identifier {
-    const formatting = this.viewMetadata.tableFieldFormatting;
+    const formatting = this.viewMetadata.fieldFormatting;
 
     if (formatting?.[field]) {
       return objectToExpression(formatting[field].stringFormat);
@@ -186,7 +186,7 @@ export class ReactTableRenderer {
       }
   */
   createFormatArg(field: string) {
-    const format = this.viewMetadata.tableFieldFormatting?.[field];
+    const format = this.viewMetadata.fieldFormatting?.[field];
 
     const type: StringFormat['type'] | undefined = stringFormatToType(format);
 
@@ -203,7 +203,7 @@ export class ReactTableRenderer {
   }
 
   createFormatCallOrPropAccess(field: string) {
-    const format = this.viewMetadata.tableFieldFormatting?.[field];
+    const format = this.viewMetadata.fieldFormatting?.[field];
     return format
       ? factory.createCallExpression(factory.createIdentifier('formatter'), undefined, [
           factory.createPropertyAccessChain(

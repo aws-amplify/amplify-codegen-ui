@@ -25,7 +25,7 @@ export class AmplifyViewRenderer extends ReactViewTemplateRenderer {
       case Primitive.Table:
         return new ReactTableRenderer(
           this.viewComponent,
-          this.viewDefinition!,
+          this.viewDefinition,
           this.viewMetadata,
           this.importCollection,
         ).renderElement();
