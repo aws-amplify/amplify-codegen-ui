@@ -39,14 +39,17 @@ export type TimeFormat = {
   timeFormat: 'locale' | 'hours12' | 'hours24';
 };
 
-export type DateTimeFormat = {
-  type?: 'DateTimeFormat';
-  dateTimeFormat:
-    | 'locale'
-    | {
-        dateFormat: DateFormat['dateFormat'];
-        timeFormat: TimeFormat['timeFormat'];
-      };
+export type NonLocaleDateTimeFormat = {
+  type?: 'NonLocaleDateTimeFormat';
+  nonLocaleDateTimeFormat: {
+    dateFormat: DateFormat['dateFormat'];
+    timeFormat: TimeFormat['timeFormat'];
+  };
 };
 
-export type StringFormat = DateFormat | TimeFormat | DateTimeFormat;
+export type LocaleDateTimeFormat = {
+  type?: 'LocaleDateTimeFormat';
+  localeDateTimeFormat: 'locale';
+};
+
+export type StringFormat = DateFormat | TimeFormat | NonLocaleDateTimeFormat | LocaleDateTimeFormat;

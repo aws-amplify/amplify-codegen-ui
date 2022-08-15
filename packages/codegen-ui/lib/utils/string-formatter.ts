@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { DateFormat, DateTimeFormat, TimeFormat } from '../types/string-format';
+import { DateFormat, NonLocaleDateTimeFormat, LocaleDateTimeFormat, TimeFormat } from '../types/string-format';
 
 const monthToShortMon: { [mon: string]: string } = {
   '1': 'Jan',
@@ -32,22 +32,27 @@ const monthToShortMon: { [mon: string]: string } = {
 
 const invalidDateStr = 'Invalid Date';
 
-type DateFormatType = {
+type DateFormatInput = {
   type: 'DateFormat';
-  format: DateFormat['dateFormat'];
+  format: DateFormat;
 };
 
-type DateTimeFormatType = {
-  type: 'DateTimeFormat';
-  format: DateTimeFormat['dateTimeFormat'];
+type LocaleDateTimeFormatInput = {
+  type: 'LocaleDateTimeFormat';
+  format: LocaleDateTimeFormat;
 };
 
-type TimeFormatType = {
+type NonLocaleDateTimeFormatInput = {
+  type: 'NonLocaleDateTimeFormat';
+  format: NonLocaleDateTimeFormat;
+};
+
+type TimeFormatInput = {
   type: 'TimeFormat';
-  format: TimeFormat['timeFormat'];
+  format: TimeFormat;
 };
 
-type FormatInputType = DateFormatType | DateTimeFormatType | TimeFormatType;
+type FormatInput = DateFormatInput | TimeFormatInput | NonLocaleDateTimeFormatInput | LocaleDateTimeFormatInput;
 
 export function formatDate(date: string, dateFormat: DateFormat['dateFormat']): string {
   if (date === undefined || date === null) {
@@ -120,7 +125,10 @@ export function formatTime(time: string, timeFormat: TimeFormat['timeFormat']): 
   }
 }
 
-export function formatDateTime(dateTimeStr: string, dateTimeFormat: DateTimeFormat['dateTimeFormat']): string {
+export function formatDateTime(
+  dateTimeStr: string,
+  dateTimeFormat: NonLocaleDateTimeFormat['nonLocaleDateTimeFormat'] | LocaleDateTimeFormat['localeDateTimeFormat'],
+): string {
   if (dateTimeStr === undefined || dateTimeStr === null) {
     return dateTimeStr;
   }
@@ -145,14 +153,16 @@ export function formatDateTime(dateTimeStr: string, dateTimeFormat: DateTimeForm
   return `${date} - ${time}`;
 }
 
-export function formatter(value: string, formatterInput: FormatInputType) {
+export function formatter(value: string, formatterInput: FormatInput) {
   switch (formatterInput.type) {
     case 'DateFormat':
-      return formatDate(value, formatterInput.format);
-    case 'DateTimeFormat':
-      return formatDateTime(value, formatterInput.format);
+      return formatDate(value, formatterInput.format.dateFormat);
     case 'TimeFormat':
-      return formatTime(value, formatterInput.format);
+      return formatTime(value, formatterInput.format.timeFormat);
+    case 'LocaleDateTimeFormat':
+      return formatDateTime(value, formatterInput.format.localeDateTimeFormat);
+    case 'NonLocaleDateTimeFormat':
+      return formatDateTime(value, formatterInput.format.nonLocaleDateTimeFormat);
     default:
       return value;
   }

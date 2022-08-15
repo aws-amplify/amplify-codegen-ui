@@ -66,7 +66,7 @@ export class ReactTableRenderer {
   createOpeningTableElement(): JsxOpeningElement {
     const tableAttributes: JsxAttribute[] = [];
 
-    if (this.viewDefinition.tableConfig.highlightOnHover) {
+    if (this.viewDefinition.tableConfig.table.highlightOnHover) {
       tableAttributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('highlightOnHover'),
@@ -159,22 +159,15 @@ export class ReactTableRenderer {
     ]);
   }
 
-  generateFormatLiteralExpression(field: string): ObjectLiteralExpression | Identifier {
-    const formatting = this.viewMetadata.fieldFormatting;
-
-    if (formatting?.[field]) {
-      return objectToExpression(formatting[field].stringFormat);
-    }
-    return factory.createIdentifier('undefined');
-  }
-
   /*  Expected arg shape examples:
       For dateTime:
       {
-        type: 'DateTimeFormat'
+        type: 'NonLocaleDateTimeFormat'
         format: {
-          dateFormat: 'locale',
-          timeFormat: 'hours24',
+          nonLocaleDateTimeFormat: {
+            dateFormat: 'locale',
+            timeFormat: 'hours24',
+          }
         }
       }
       For date:
@@ -185,6 +178,23 @@ export class ReactTableRenderer {
         }
       }
   */
+  generateFormatLiteralExpression(field: string): ObjectLiteralExpression | Identifier {
+    const formatting = this.viewMetadata.fieldFormatting;
+
+    if (formatting?.[field]) {
+      return objectToExpression(formatting[field].stringFormat);
+    }
+    return factory.createIdentifier('undefined');
+  }
+
+  createFieldAccessExpression(identifier: string, field: string) {
+    return factory.createPropertyAccessChain(
+      factory.createIdentifier(identifier),
+      factory.createToken(SyntaxKind.QuestionDotToken),
+      factory.createIdentifier(field),
+    );
+  }
+
   createFormatArg(field: string) {
     const format = this.viewMetadata.fieldFormatting?.[field];
 
@@ -199,25 +209,18 @@ export class ReactTableRenderer {
         ),
       ]);
     }
-    return factory.createIdentifier('undefined');
+
+    return undefined;
   }
 
   createFormatCallOrPropAccess(field: string) {
-    const format = this.viewMetadata.fieldFormatting?.[field];
-    return format
+    const formatterArg = this.createFormatArg(field);
+    return formatterArg
       ? factory.createCallExpression(factory.createIdentifier('formatter'), undefined, [
-          factory.createPropertyAccessChain(
-            factory.createIdentifier('item'),
-            factory.createToken(SyntaxKind.QuestionDotToken),
-            factory.createIdentifier(field),
-          ),
-          this.createFormatArg(field),
+          this.createFieldAccessExpression('item', field),
+          formatterArg,
         ])
-      : factory.createPropertyAccessChain(
-          factory.createIdentifier('item'),
-          factory.createToken(SyntaxKind.QuestionDotToken),
-          factory.createIdentifier(field),
-        );
+      : this.createFieldAccessExpression('item', field);
   }
 
   createTableBodyCellFromColumn(column: ColumnInfo): JsxElement {
@@ -233,11 +236,7 @@ export class ReactTableRenderer {
         factory.createJsxExpression(
           undefined,
           factory.createConditionalExpression(
-            factory.createPropertyAccessChain(
-              factory.createIdentifier('format'),
-              factory.createToken(SyntaxKind.QuestionDotToken),
-              factory.createIdentifier(columnId),
-            ),
+            this.createFieldAccessExpression('format', columnId),
             factory.createToken(SyntaxKind.QuestionToken),
             factory.createCallExpression(
               factory.createPropertyAccessExpression(
@@ -245,13 +244,7 @@ export class ReactTableRenderer {
                 factory.createIdentifier(columnId),
               ),
               undefined,
-              [
-                factory.createPropertyAccessChain(
-                  factory.createIdentifier('item'),
-                  factory.createToken(SyntaxKind.QuestionDotToken),
-                  factory.createIdentifier(columnId),
-                ),
-              ],
+              [this.createFieldAccessExpression('item', columnId)],
             ),
             factory.createToken(SyntaxKind.ColonToken),
             this.createFormatCallOrPropAccess(columnId),

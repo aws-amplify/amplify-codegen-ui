@@ -22,15 +22,17 @@
       }
     },
     "viewConfiguration" : {
-        "disableHeaders": true,
-        "columns" : {
-          "name" : {
-            "excluded" : true
-          },
-          "id" : {
-            "excluded" : true
+        "type" : "Table",
+        "table": {
+          "disableHeaders": true,
+          "columns" : {
+            "name" : {
+              "excluded" : true
+            },
+            "id" : {
+              "excluded" : true
+            }
           }
-        },
-        "type" : "Table"
+        }
     }
   }

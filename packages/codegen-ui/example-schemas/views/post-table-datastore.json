@@ -27,5 +27,5 @@
   "name": "MyPostTable",
   "schemaVersion": "1.0.0",
   "style": {},
-  "viewConfiguration": { "type": "Table" }
+  "viewConfiguration": { "type": "Table", "table": {} }
 }

@@ -28,18 +28,17 @@
   "schemaVersion": "1.0.0",
   "style": {},
   "viewConfiguration": {
-    "columns": {
-        "createdAt": {
-            "valueFormatting": {
-                "stringFormat": {
-                    "dateTimeFormat": {
-                        "dateFormat": "MM/DD/YYYY",
-                        "timeFormat": "locale"
+    "type": "Table",
+    "table": {
+        "columns": {
+            "createdAt": {
+                "valueFormatting": {
+                    "stringFormat": {
+                        "localeDateTimeFormat": "locale"
                     }
                 }
             }
         }
-    },
-      "type": "Table"
+    }
   }
 }

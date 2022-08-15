@@ -22,24 +22,40 @@
     }
   },
   "viewConfiguration" : {
-      "columns" : {
-          "name" : {
-            "excluded" : true
-          },
-          "id" : {
-            "excluded" : true
-          },
-          "hireDate" : {
-            "valueFormatting": {
-              "stringFormat": {
-                "dateTimeFormat": {
-                  "dateFormat": "locale",
+      "type" : "Table",
+      "table": {
+        "columns" : {
+            "name" : {
+              "excluded" : true
+            },
+            "id" : {
+              "excluded" : true
+            },
+            "hireDate" : {
+              "valueFormatting": {
+                "stringFormat": {
+                  "nonLocaleDateTimeFormat": {
+                    "dateFormat": "locale",
+                    "timeFormat": "hours24"
+                  }
+                }
+              }
+            },
+            "createdAt" : {
+              "valueFormatting": {
+                "stringFormat": {
                   "timeFormat": "hours24"
                 }
               }
+            },
+            "updatedAt" : {
+              "valueFormatting": {
+                "stringFormat": {
+                  "dateFormat": "Mmm, DD YYYY"
+                }
+              }
             }
-          }
-      },
-      "type" : "Table"
+        }
+      }
   }
 }

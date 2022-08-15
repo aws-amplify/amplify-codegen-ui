@@ -23,9 +23,9 @@ export const getPaginationName = (model: string) => `${model.toLowerCase()}Pagin
 /*
 checks table to see if there is a formatter for stringFormat
 */
-export const needsFormatter = (table: TableConfiguration): boolean => {
-  if (table.columns) {
-    return Object.values(table.columns).some((column) => column.valueFormatting?.stringFormat !== undefined);
+export const needsFormatter = (config: TableConfiguration): boolean => {
+  if (config.table.columns) {
+    return Object.values(config.table.columns).some((column) => column.valueFormatting?.stringFormat !== undefined);
   }
   return false;
 };
@@ -116,17 +116,18 @@ export const stringFormatToType = (viewFormat: ViewValueFormatting | undefined):
     return viewFormat.stringFormat.type;
   }
 
-  const format = viewFormat.stringFormat;
-  if ('dateTimeFormat' in format) {
-    return 'DateTimeFormat';
+  const { type, ...format } = viewFormat.stringFormat;
+  switch (Object.keys(format)[0]) {
+    case 'nonLocaleDateTimeFormat':
+      return 'NonLocaleDateTimeFormat';
+    case 'localeDateTimeFormat':
+      return 'LocaleDateTimeFormat';
+    case 'timeFormat':
+      return 'TimeFormat';
+    case 'dateFormat':
+      return 'DateFormat';
+    default:
+      // Unsupported formatting
+      return undefined;
   }
-  if ('timeFormat' in format) {
-    return 'TimeFormat';
-  }
-  if ('dateFormat' in format) {
-    return 'DateFormat';
-  }
-
-  // Unsupported formatting
-  return undefined;
 };

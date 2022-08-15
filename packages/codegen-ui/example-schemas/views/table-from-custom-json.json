@@ -16,6 +16,7 @@
         }
     },
     "viewConfiguration" : {
-        "type" : "Table"
+        "type" : "Table",
+        "table": {}
     }
 }
