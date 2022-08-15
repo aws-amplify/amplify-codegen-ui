@@ -51,9 +51,9 @@ exports[`amplify table renderer tests should generate a table element 1`] = `
           {format?.hireDate
             ? format.hireDate(item?.hireDate)
             : formatter(item?.hireDate, {
-                type: \\"DateTimeFormat\\",
+                type: \\"NonLocaleDateTimeFormat\\",
                 format: {
-                  dateTimeFormat: {
+                  nonLocaleDateTimeFormat: {
                     dateFormat: \\"locale\\",
                     timeFormat: \\"hours24\\",
                   },
@@ -66,12 +66,18 @@ exports[`amplify table renderer tests should generate a table element 1`] = `
         <TableCell>
           {format?.createdAt
             ? format.createdAt(item?.createdAt)
-            : item?.createdAt}
+            : formatter(item?.createdAt, {
+                type: \\"TimeFormat\\",
+                format: { timeFormat: \\"hours24\\" },
+              })}
         </TableCell>
         <TableCell>
           {format?.updatedAt
             ? format.updatedAt(item?.updatedAt)
-            : item?.updatedAt}
+            : formatter(item?.updatedAt, {
+                type: \\"DateFormat\\",
+                format: { dateFormat: \\"Mmm, DD YYYY\\" },
+              })}
         </TableCell>
       </TableRow>
     ))}
@@ -166,13 +172,8 @@ export default function MyPostTable(props) {
               {format?.createdAt
                 ? format.createdAt(item?.createdAt)
                 : formatter(item?.createdAt, {
-                    type: \\"DateTimeFormat\\",
-                    format: {
-                      dateTimeFormat: {
-                        dateFormat: \\"MM/DD/YYYY\\",
-                        timeFormat: \\"locale\\",
-                      },
-                    },
+                    type: \\"LocaleDateTimeFormat\\",
+                    format: { localeDateTimeFormat: \\"locale\\" },
                   })}
             </TableCell>
             <TableCell>

@@ -31,9 +31,11 @@ export const DEFAULT_COLUMN_CONFIG: ColumnConfig = {
 
 export const DEFAULT_TABLE_CONFIG: OverallTableConfig = {
   type: 'Table',
-  disableHeaders: false,
-  highlightOnHover: false,
-  enableOnRowClick: false,
+  table: {
+    disableHeaders: false,
+    highlightOnHover: false,
+    enableOnRowClick: false,
+  },
 };
 
 export const DEFAULT_TABLE_STYLE: ViewStyle = {

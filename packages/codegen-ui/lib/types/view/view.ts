@@ -35,10 +35,12 @@ export interface BaseViewConfiguration {
 
 export interface TableConfiguration extends BaseViewConfiguration {
   type: 'Table';
-  columns?: ColumnsMap;
-  disableHeaders?: boolean;
-  highlightOnHover?: boolean;
-  enableOnRowClick?: boolean;
+  table: {
+    columns?: ColumnsMap;
+    disableHeaders?: boolean;
+    highlightOnHover?: boolean;
+    enableOnRowClick?: boolean;
+  };
 }
 
 // Append other configuration types here

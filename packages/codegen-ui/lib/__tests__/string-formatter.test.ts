@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { DateTimeFormat, DATE, TIME } from '../types/string-format';
+import { NonLocaleDateTimeFormat, DATE, TIME } from '../types/string-format';
 import { formatter } from '../utils/string-formatter';
 
 describe('string-formatter tests', () => {
@@ -21,19 +21,19 @@ describe('string-formatter tests', () => {
     test('Date formats', () => {
       const awsDate = '2020-02-29';
 
-      expect(formatter(awsDate, { type: 'DateFormat', format: 'locale' })).toBe(
+      expect(formatter(awsDate, { type: 'DateFormat', format: { dateFormat: 'locale' } })).toBe(
         new Date('2020-02-29').toLocaleDateString(),
       );
-      expect(formatter(awsDate, { type: 'DateFormat', format: 'YYYY.MM.DD' })).toBe('2020.02.29');
-      expect(formatter(awsDate, { type: 'DateFormat', format: 'DD.MM.YYYY' })).toBe('29.02.2020');
-      expect(formatter(awsDate, { type: 'DateFormat', format: 'MM/DD/YYYY' })).toBe('02/29/2020');
-      expect(formatter(awsDate, { type: 'DateFormat', format: 'Mmm DD, YYYY' })).toBe('Feb 29, 2020');
+      expect(formatter(awsDate, { type: 'DateFormat', format: { dateFormat: 'YYYY.MM.DD' } })).toBe('2020.02.29');
+      expect(formatter(awsDate, { type: 'DateFormat', format: { dateFormat: 'DD.MM.YYYY' } })).toBe('29.02.2020');
+      expect(formatter(awsDate, { type: 'DateFormat', format: { dateFormat: 'MM/DD/YYYY' } })).toBe('02/29/2020');
+      expect(formatter(awsDate, { type: 'DateFormat', format: { dateFormat: 'Mmm DD, YYYY' } })).toBe('Feb 29, 2020');
 
       const invalidDate = 'Not a date';
-      expect(formatter(invalidDate, { type: 'DateFormat', format: 'Mmm DD, YYYY' })).toBe(invalidDate);
+      expect(formatter(invalidDate, { type: 'DateFormat', format: { dateFormat: 'Mmm DD, YYYY' } })).toBe(invalidDate);
 
       const nullish = undefined;
-      expect(formatter(nullish as any, { type: 'DateFormat', format: DATE.DMY })).toBe(nullish);
+      expect(formatter(nullish as any, { type: 'DateFormat', format: { dateFormat: DATE.DMY } })).toBe(nullish);
     });
 
     test('Time formats', () => {
@@ -44,15 +44,17 @@ describe('string-formatter tests', () => {
       date.setMinutes(45);
       date.setSeconds(23, 222);
 
-      expect(formatter(awsTime, { type: 'TimeFormat', format: 'locale' })).toBe(date.toLocaleTimeString());
-      expect(formatter(awsTime, { type: 'TimeFormat', format: 'hours12' })).toBe('3:45:23 PM');
-      expect(formatter(awsTime, { type: 'TimeFormat', format: 'hours24' })).toBe('15:45:23');
+      expect(formatter(awsTime, { type: 'TimeFormat', format: { timeFormat: 'locale' } })).toBe(
+        date.toLocaleTimeString(),
+      );
+      expect(formatter(awsTime, { type: 'TimeFormat', format: { timeFormat: 'hours12' } })).toBe('3:45:23 PM');
+      expect(formatter(awsTime, { type: 'TimeFormat', format: { timeFormat: 'hours24' } })).toBe('15:45:23');
 
       const invalidTime = 'Not:time:';
-      expect(formatter(invalidTime, { type: 'TimeFormat', format: 'locale' })).toBe(invalidTime);
+      expect(formatter(invalidTime, { type: 'TimeFormat', format: { timeFormat: 'locale' } })).toBe(invalidTime);
 
       const nullish = undefined;
-      expect(formatter(nullish as any, { type: 'TimeFormat', format: TIME.HOURS_24 })).toBe(nullish);
+      expect(formatter(nullish as any, { type: 'TimeFormat', format: { timeFormat: TIME.HOURS_24 } })).toBe(nullish);
     });
 
     test('Datetime formats', () => {
@@ -60,43 +62,56 @@ describe('string-formatter tests', () => {
 
       const localDateStr = new Date(Date.parse(awsDateTime));
 
-      const mixedFormatting: DateTimeFormat = {
-        dateTimeFormat: {
+      const mixedFormatting: NonLocaleDateTimeFormat = {
+        nonLocaleDateTimeFormat: {
           dateFormat: DATE.DMY,
           timeFormat: TIME.HOURS_12,
         },
       };
 
-      expect(formatter(awsDateTime, { type: 'DateTimeFormat', format: 'locale' })).toBe(localDateStr.toLocaleString());
-      expect(formatter(awsDateTime, { type: 'DateTimeFormat', format: mixedFormatting.dateTimeFormat })).toBe(
-        '29.02.2020 - 3:45:23 PM',
+      expect(formatter(awsDateTime, { type: 'LocaleDateTimeFormat', format: { localeDateTimeFormat: 'locale' } })).toBe(
+        localDateStr.toLocaleString(),
       );
+      expect(
+        formatter(awsDateTime, {
+          type: 'NonLocaleDateTimeFormat',
+          format: { nonLocaleDateTimeFormat: mixedFormatting.nonLocaleDateTimeFormat },
+        }),
+      ).toBe('29.02.2020 - 3:45:23 PM');
 
       const invalidDateTime = 'Not a valid datetime';
-      expect(formatter(invalidDateTime, { type: 'DateTimeFormat', format: 'locale' })).toBe(invalidDateTime);
+      expect(
+        formatter(invalidDateTime, { type: 'LocaleDateTimeFormat', format: { localeDateTimeFormat: 'locale' } }),
+      ).toBe(invalidDateTime);
 
       const awsTimeStamp = '1582991123222';
-      expect(formatter(awsTimeStamp, { type: 'DateTimeFormat', format: mixedFormatting.dateTimeFormat })).toBe(
-        '29.02.2020 - 3:45:23 PM',
-      );
+      expect(
+        formatter(awsTimeStamp, {
+          type: 'NonLocaleDateTimeFormat',
+          format: { nonLocaleDateTimeFormat: mixedFormatting.nonLocaleDateTimeFormat },
+        }),
+      ).toBe('29.02.2020 - 3:45:23 PM');
 
       const nullish = undefined;
-      expect(formatter(nullish as any, { type: 'DateTimeFormat', format: mixedFormatting.dateTimeFormat })).toBe(
-        nullish,
-      );
+      expect(
+        formatter(nullish as any, {
+          type: 'NonLocaleDateTimeFormat',
+          format: { nonLocaleDateTimeFormat: mixedFormatting.nonLocaleDateTimeFormat },
+        }),
+      ).toBe(nullish);
     });
 
     test('format returns undefined', () => {
       const awsDateTime = '2020-02-29T15:45:23.222Z';
-      const mixedFormatting: DateTimeFormat = {
-        dateTimeFormat: {
+      const mixedFormatting: NonLocaleDateTimeFormat = {
+        nonLocaleDateTimeFormat: {
           dateFormat: DATE.DMY,
           timeFormat: TIME.HOURS_12,
         },
       };
-      expect(formatter(awsDateTime, { type: 'UnknownFormat' as any, format: mixedFormatting.dateTimeFormat })).toBe(
-        awsDateTime,
-      );
+      expect(
+        formatter(awsDateTime, { type: 'UnknownFormat' as any, format: mixedFormatting.nonLocaleDateTimeFormat }),
+      ).toBe(awsDateTime);
     });
   });
 });

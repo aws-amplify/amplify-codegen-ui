@@ -45,17 +45,19 @@ describe('generateTableDefinition', () => {
         },
       },
       viewConfiguration: {
-        columns: {
-          header1: {
-            position: {
-              rightOf: 'header4',
+        type: 'Table',
+        table: {
+          columns: {
+            header1: {
+              position: {
+                rightOf: 'header4',
+              },
+            },
+            header4: {
+              excluded: true,
             },
           },
-          header4: {
-            excluded: true,
-          },
         },
-        type: 'Table',
       },
     };
 
@@ -98,9 +100,11 @@ describe('generateTableDefinition', () => {
 
     const expectedConfig: ViewConfiguration = {
       type: 'Table',
-      disableHeaders: false,
-      highlightOnHover: false,
-      enableOnRowClick: false,
+      table: {
+        disableHeaders: false,
+        highlightOnHover: false,
+        enableOnRowClick: false,
+      },
     };
 
     const expectedSource: ViewDataTypeConfig = {
@@ -147,6 +151,7 @@ describe('generateTableDefinition', () => {
       style: {},
       viewConfiguration: {
         type: 'Table',
+        table: {},
       },
     };
 

@@ -41,7 +41,7 @@ export function generateTableDefinition(table: StudioView, dataSchema?: GenericD
     ...table.style,
   };
 
-  const { columns, ...otherThanColumns } = table.viewConfiguration;
+  const { columns, ...otherThanColumns } = table.viewConfiguration.table;
 
   definition.tableConfig = {
     ...DEFAULT_TABLE_CONFIG,
@@ -77,7 +77,7 @@ export function generateTableDefinition(table: StudioView, dataSchema?: GenericD
     }
   }
 
-  definition.columns = orderAndFilterVisibleColumns(table.viewConfiguration.columns ?? {}, fields);
+  definition.columns = orderAndFilterVisibleColumns(table.viewConfiguration.table.columns ?? {}, fields);
 
   return definition;
 }
