@@ -20,7 +20,7 @@ import { StudioFieldPosition } from './position';
  */
 
 export type SectionalElement = {
-  position: StudioFieldPosition;
+  position?: StudioFieldPosition;
   type: string;
 
   level?: number;
