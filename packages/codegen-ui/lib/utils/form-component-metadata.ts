@@ -13,18 +13,30 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FormDefinition, FormMetadata, FieldConfigMetadata, StudioForm, FieldValidationConfiguration } from '../types';
+import {
+  FormDefinition,
+  FormMetadata,
+  FieldConfigMetadata,
+  StudioForm,
+  FieldValidationConfiguration,
+  FormDefinitionElement,
+  FormDefinitionInputElement,
+} from '../types';
 
 export const getFormFieldStateName = (formName: string) => {
   return [formName.charAt(0).toLowerCase() + formName.slice(1), 'Fields'].join('');
 };
 
+function elementIsInput(element: FormDefinitionElement): element is FormDefinitionInputElement {
+  return element.componentType !== 'Text' && element.componentType !== 'Divider' && element.componentType !== 'Heading';
+}
+
 export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition): FormMetadata => {
-  const elementEntries = Object.entries(formDefinition.elements);
+  const inputElementEntries = Object.entries(formDefinition.elements).filter(([, element]) => elementIsInput(element));
   return {
     id: form.id,
     name: form.name,
-    fieldConfigs: elementEntries.reduce<Record<string, FieldConfigMetadata>>((configs, [name, config]) => {
+    fieldConfigs: inputElementEntries.reduce<Record<string, FieldConfigMetadata>>((configs, [name, config]) => {
       const updatedConfigs = configs;
       const metadata: FieldConfigMetadata = { hasChange: true, validationRules: [] };
       if ('validations' in config && config.validations) {

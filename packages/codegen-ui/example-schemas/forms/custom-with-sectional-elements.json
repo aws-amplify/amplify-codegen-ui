@@ -1,0 +1,39 @@
+{
+    "name": "CustomWithSectionalElements",
+    "formActionType": "create",
+    "dataType": {
+      "dataSourceType": "Custom",
+      "dataTypeName": "Post"
+    },
+    "fields": {
+      "name": {
+        "inputType": {
+          "type": "TextField"
+        }
+      }
+    },
+    "sectionalElements": {
+        "myHeading": {
+            "position": {
+                "fixed": "first"
+            },
+            "type": "Heading",
+            "level": 2,
+            "text": "Create a Post"
+        },
+        "myText": {
+            "position": {
+                "below": "name"
+            },
+            "type": "Text",
+            "text": "Did you put your name above?"
+        },
+        "myDivider": {
+            "position": {
+                "below": "myText"
+            },
+            "type": "Divider"
+        }
+    },
+    "style": {}
+  }

@@ -251,6 +251,171 @@ export default function customDataForm(props: customDataFormProps): React.ReactE
 "
 `;
 
+exports[`amplify form renderer tests custom form tests should render sectional elements 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
+import {
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Heading,
+  Text,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+export default function CustomWithSectionalElements(props) {
+  const {
+    onSubmit: customWithSectionalElementsOnSubmit,
+    onCancel,
+    onValidate,
+    overrides,
+    ...rest
+  } = props;
+  const [nameFieldError, setNameFieldError] = useStateMutationAction({
+    hasError: false,
+    errorMessage: \\"\\",
+  });
+  const [modelFields, setModelFields] = useStateMutationAction({});
+  const [formValid, setFormValid] = useStateMutationAction(true);
+  return (
+    <form
+      onSubmit={async (event) => {
+        event.preventDefault();
+        await customWithSectionalElementsOnSubmit(modelFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"CustomWithSectionalElements\\")}
+    >
+      <Grid
+        columnGap=\\"15px\\"
+        rowGap=\\"15px\\"
+        {...getOverrideProps(overrides, \\"CustomWithSectionalElementsGrid\\")}
+      >
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid0\\")}
+        >
+          <Heading
+            level={2}
+            children=\\"Create a Post\\"
+            {...getOverrideProps(overrides, \\"myHeading\\")}
+          ></Heading>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid1\\")}
+        >
+          <TextField
+            label=\\"Label\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              const isValidResult = onValidate?.[\\"name\\"]
+                ? await onValidate[\\"name\\"](value)
+                : validateField(value, []);
+              setNameFieldError({ ...nameFieldError, ...isValidResult });
+              setFormValid(!nameFieldError.hasError);
+              setModelFields({ ...modelFields, name: value });
+            }}
+            errorMessage={nameFieldError.errorMessage}
+            hasError={nameFieldError.hasError}
+            {...getOverrideProps(overrides, \\"name\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid2\\")}
+        >
+          <Text
+            children=\\"Did you put your name above?\\"
+            {...getOverrideProps(overrides, \\"myText\\")}
+          ></Text>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid3\\")}
+        >
+          <Divider
+            orientation=\\"horizontal\\"
+            {...getOverrideProps(overrides, \\"myDivider\\")}
+          ></Divider>
+        </Grid>
+      </Grid>
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Cancel\\"
+          type=\\"button\\"
+          onClick={() => {
+            onCancel && onCancel();
+          }}
+          {...getOverrideProps(overrides, \\"CancelButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Clear\\"
+            type=\\"reset\\"
+            {...getOverrideProps(overrides, \\"ClearButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={!formValid}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </form>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render sectional elements 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { DividerProps, GridProps, HeadingProps, TextFieldProps, TextProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomWithSectionalElementsOverridesProps = {
+    CustomWithSectionalElementsGrid: GridProps;
+    RowGrid0: GridProps;
+    myHeading: HeadingProps;
+    RowGrid1: GridProps;
+    name: TextFieldProps;
+    RowGrid2: GridProps;
+    myText: TextProps;
+    RowGrid3: GridProps;
+    myDivider: DividerProps;
+} & EscapeHatchProps;
+export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
+    overrides?: CustomWithSectionalElementsOverridesProps | undefined | null;
+} & {
+    onSubmit: (fields: Record<string, string>) => void;
+    onCancel?: () => void;
+    onValidate?: Record<string, (value: any) => Promise<{
+        hasError: boolean;
+        errorMessage?: string;
+    }>>;
+}>;
+export default function CustomWithSectionalElements(props: CustomWithSectionalElementsProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
