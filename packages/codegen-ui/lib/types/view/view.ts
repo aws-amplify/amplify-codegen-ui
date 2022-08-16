@@ -18,9 +18,9 @@ import { ViewStyle } from './style';
 import { ColumnsMap } from './table';
 
 export interface StudioView {
-  appId: string;
+  appId?: string;
   dataSource: ViewDataTypeConfig;
-  environmentName: string;
+  environmentName?: string;
   id: string;
   name: ViewName;
   schemaVersion: string;
@@ -35,10 +35,12 @@ export interface BaseViewConfiguration {
 
 export interface TableConfiguration extends BaseViewConfiguration {
   type: 'Table';
-  columns?: ColumnsMap;
-  disableHeaders?: boolean;
-  highlightOnHover?: boolean;
-  enableOnRowClick?: boolean;
+  table: {
+    columns?: ColumnsMap;
+    disableHeaders?: boolean;
+    highlightOnHover?: boolean;
+    enableOnRowClick?: boolean;
+  };
 }
 
 // Append other configuration types here

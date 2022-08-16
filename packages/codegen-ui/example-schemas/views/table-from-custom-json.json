@@ -1,0 +1,22 @@
+{
+    "hasCustomDataSource": true,
+    "dataSource" : {
+        "model" : "{\"name\":\"bob\",\"age\":25,\"address\":\"123 street\",\"birthday\":\"5/5/99\"}",
+        "type" : "Custom"
+    },
+    "id" : "v-3ziKr6s40vGzLDFAJL",
+    "name" : "CustomTable",
+    "schemaVersion" : "1.0.0",
+    "style" : {
+        "alignment" : {
+        "value" : "center"
+        },
+        "outerPadding" : {
+        "value" : "3px"
+        }
+    },
+    "viewConfiguration" : {
+        "type" : "Table",
+        "table": {}
+    }
+}

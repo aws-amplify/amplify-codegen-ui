@@ -13,19 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { DataFieldDataType } from '../data';
-import { FieldValidationConfiguration } from './form-validation';
+import { generateFormatUtil } from '../../utils/string-formatter';
+import { assertASTMatchesSnapshot } from '../__utils__';
 
-export type FieldConfigMetadata = {
-  hasChange: boolean;
-  // ex. name field has a string validation type where the rule is char length > 5
-  validationRules: FieldValidationConfiguration[];
-  // component field is of type AWSTimestamp will need to map this to date then get time from date
-  dataType?: DataFieldDataType;
-};
-
-export type FormMetadata = {
-  id?: string;
-  name: string;
-  fieldConfigs: Record<string, FieldConfigMetadata>;
-};
+describe('string formatter', () => {
+  test('generateFormatUtil', () => {
+    assertASTMatchesSnapshot(generateFormatUtil());
+  });
+});

@@ -28,6 +28,7 @@ import {
   ReactIndexStudioTemplateRenderer,
   ReactUtilsStudioTemplateRenderer,
   AmplifyFormRenderer,
+  UtilTemplateType,
 } from '@aws-amplify/codegen-ui-react';
 import schema from '../models/schema';
 import { TestGenerator } from './TestGenerator';
@@ -51,7 +52,7 @@ export class BrowserTestGenerator extends TestGenerator {
     return new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig).renderComponent();
   }
 
-  renderUtilsFile(utils: string[]) {
+  renderUtilsFile(utils: UtilTemplateType[]) {
     return new ReactUtilsStudioTemplateRenderer(utils, this.renderConfig).renderComponent();
   }
 

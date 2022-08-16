@@ -13,19 +13,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ColumnInfo, StudioView, TableDefinition, ViewMetadata } from '@aws-amplify/codegen-ui';
+import { ColumnInfo, StringFormat, StudioView, TableDefinition, ViewMetadata } from '@aws-amplify/codegen-ui';
 import {
   factory,
+  Identifier,
   JsxAttribute,
   JsxAttributes,
   JsxChild,
   JsxElement,
   JsxExpression,
   JsxOpeningElement,
+  ObjectLiteralExpression,
   SyntaxKind,
 } from 'typescript';
 import { ImportCollection, ImportSource } from './imports';
 import { Primitive } from './primitive';
+import { objectToExpression, stringFormatToType } from './react-table-renderer-helper';
 
 export class ReactTableRenderer {
   private requiredUIReactImports = [
@@ -47,6 +50,13 @@ export class ReactTableRenderer {
     this.viewComponent = view;
     this.viewDefinition = definition;
     this.viewMetadata = metadata;
+    this.viewMetadata.fieldFormatting = {};
+
+    this.viewDefinition.columns.forEach((column) => {
+      if (column.valueFormatting) {
+        this.viewMetadata.fieldFormatting[column.header] = { ...column.valueFormatting };
+      }
+    });
 
     this.requiredUIReactImports.forEach((importName) => {
       imports.addImport(ImportSource.UI_REACT, importName);
@@ -56,7 +66,7 @@ export class ReactTableRenderer {
   createOpeningTableElement(): JsxOpeningElement {
     const tableAttributes: JsxAttribute[] = [];
 
-    if (this.viewDefinition.tableConfig.highlightOnHover) {
+    if (this.viewDefinition.tableConfig.table.highlightOnHover) {
       tableAttributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('highlightOnHover'),
@@ -128,11 +138,7 @@ export class ReactTableRenderer {
         factory.createJsxExpression(
           undefined,
           factory.createConditionalExpression(
-            factory.createBinaryExpression(
-              factory.createIdentifier('highlightOnHover'),
-              factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-              factory.createIdentifier('onRowClick'),
-            ),
+            factory.createIdentifier('onRowClick'),
             factory.createToken(SyntaxKind.QuestionToken),
             factory.createArrowFunction(
               undefined,
@@ -153,6 +159,70 @@ export class ReactTableRenderer {
     ]);
   }
 
+  /*  Expected arg shape examples:
+      For dateTime:
+      {
+        type: 'NonLocaleDateTimeFormat'
+        format: {
+          nonLocaleDateTimeFormat: {
+            dateFormat: 'locale',
+            timeFormat: 'hours24',
+          }
+        }
+      }
+      For date:
+      {
+        type: 'DateFormat'
+        format: {
+          dateFormat: 'Mmm, DD YYYY',
+        }
+      }
+  */
+  generateFormatLiteralExpression(field: string): ObjectLiteralExpression | Identifier {
+    const formatting = this.viewMetadata.fieldFormatting;
+
+    if (formatting?.[field]) {
+      return objectToExpression(formatting[field].stringFormat);
+    }
+    return factory.createIdentifier('undefined');
+  }
+
+  createFieldAccessExpression(identifier: string, field: string) {
+    return factory.createPropertyAccessChain(
+      factory.createIdentifier(identifier),
+      factory.createToken(SyntaxKind.QuestionDotToken),
+      factory.createIdentifier(field),
+    );
+  }
+
+  createFormatArg(field: string) {
+    const format = this.viewMetadata.fieldFormatting?.[field];
+
+    const type: StringFormat['type'] | undefined = stringFormatToType(format);
+
+    if (format && type) {
+      return factory.createObjectLiteralExpression([
+        factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(type)),
+        factory.createPropertyAssignment(
+          factory.createIdentifier('format'),
+          this.generateFormatLiteralExpression(field),
+        ),
+      ]);
+    }
+
+    return undefined;
+  }
+
+  createFormatCallOrPropAccess(field: string) {
+    const formatterArg = this.createFormatArg(field);
+    return formatterArg
+      ? factory.createCallExpression(factory.createIdentifier('formatter'), undefined, [
+          this.createFieldAccessExpression('item', field),
+          formatterArg,
+        ])
+      : this.createFieldAccessExpression('item', field);
+  }
+
   createTableBodyCellFromColumn(column: ColumnInfo): JsxElement {
     const columnId = column.header;
 
@@ -166,29 +236,18 @@ export class ReactTableRenderer {
         factory.createJsxExpression(
           undefined,
           factory.createConditionalExpression(
-            factory.createElementAccessExpression(
-              factory.createIdentifier('format'),
-              factory.createStringLiteral(columnId),
-            ),
+            this.createFieldAccessExpression('format', columnId),
             factory.createToken(SyntaxKind.QuestionToken),
             factory.createCallExpression(
-              factory.createElementAccessExpression(
+              factory.createPropertyAccessExpression(
                 factory.createIdentifier('format'),
-                factory.createStringLiteral(columnId),
+                factory.createIdentifier(columnId),
               ),
               undefined,
-              [
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('item'),
-                  factory.createIdentifier(columnId),
-                ),
-              ],
+              [this.createFieldAccessExpression('item', columnId)],
             ),
             factory.createToken(SyntaxKind.ColonToken),
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('item'),
-              factory.createIdentifier(columnId),
-            ),
+            this.createFormatCallOrPropAccess(columnId),
           ),
         ),
       ],

@@ -119,7 +119,7 @@ export abstract class TestGenerator {
       try {
         if (this.params.writeToDisk) {
           const res = this.writeFormToDisk(schema as StudioForm);
-          if (res.formMetadata?.onValidationFields && Object.keys(res.formMetadata.onValidationFields).length) {
+          if (res.formMetadata?.fieldConfigs && Object.keys(res.formMetadata.fieldConfigs).length) {
             utilsFunctions.add('validation');
           }
         }

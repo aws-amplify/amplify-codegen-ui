@@ -4,10 +4,14 @@ exports[`form-render utils should generate before & complete types if datastore 
 "{
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
     onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
-        saveSuccessful: string;
+        saveSuccessful: boolean;
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
+    onValidate?: Record<string, (value: any) => Promise<{
+        hasError: boolean;
+        errorMessage?: string;
+    }>>;
 }"
 `;
 
@@ -15,5 +19,9 @@ exports[`form-render utils should generate regular onsubmit if dataSourceType is
 "{
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
+    onValidate?: Record<string, (value: any) => Promise<{
+        hasError: boolean;
+        errorMessage?: string;
+    }>>;
 }"
 `;

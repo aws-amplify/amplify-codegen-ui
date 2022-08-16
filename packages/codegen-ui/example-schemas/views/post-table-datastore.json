@@ -1,0 +1,31 @@
+{
+  "dataSource": {
+      "model": "Post",
+      "predicate": {
+          "and": [
+              {
+                  "field": "username",
+                  "operand": "username0",
+                  "operator": "notContains"
+              },
+              {
+                  "field": "createdAt",
+                  "operand": "2022",
+                  "operator": "contains"
+              }
+          ]
+      },
+      "sort": [
+          {
+              "direction": "ASC",
+              "field": "username"
+          }
+      ],
+      "type": "DataStore"
+  },
+  "id": "v-0001",
+  "name": "MyPostTable",
+  "schemaVersion": "1.0.0",
+  "style": {},
+  "viewConfiguration": { "type": "Table", "table": {} }
+}

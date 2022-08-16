@@ -23,6 +23,7 @@ export * from './react-render-config';
 export * from './react-output-manager';
 export * from './amplify-ui-renderers/amplify-renderer';
 export * from './amplify-ui-renderers/amplify-form-renderer';
+export * from './amplify-ui-renderers/amplify-view-renderer';
 export * from './primitive';
 export * from './react-index-studio-template-renderer';
 export * from './react-utils-studio-template-renderer';

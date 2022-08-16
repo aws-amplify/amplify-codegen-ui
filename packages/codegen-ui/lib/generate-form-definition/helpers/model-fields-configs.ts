@@ -58,6 +58,7 @@ export function getFieldConfigFromModelField({
 
   const config: StudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
     label: sentenceCase(fieldName),
+    dataType: field.dataType,
     inputType: {
       type: defaultComponent,
       required: field.required,

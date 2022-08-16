@@ -1,0 +1,41 @@
+{
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "InputGallery"
+  },
+  "fields": {
+    "maybe": {
+      "inputType": {
+        "required": "false",
+        "type": "RadioGroupField",
+        "valueMappings": {
+          "bindingProperties": {},
+          "values": [
+            {
+              "value": {
+                "value": "Pick?"
+              }
+            }
+          ]
+        }
+      },
+      "label": "Maybe"
+    },
+    "maybeSlide": {
+      "inputType": {
+        "type": "ToggleButton"
+      }
+    },
+    "maybeCheck": {
+      "inputType": {
+        "type": "CheckboxField"
+      }
+    }
+  },
+  "formActionType": "create",
+  "name": "InputGalleryCreateForm",
+  "schemaVersion": "1.0",
+  "sectionalElements": {},
+  "style": {},
+  "id": "00001"
+}

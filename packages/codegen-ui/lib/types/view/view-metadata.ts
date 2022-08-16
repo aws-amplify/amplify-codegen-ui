@@ -14,8 +14,11 @@
   limitations under the License.
  */
 
+import { ViewValueFormatting } from './value';
+
 export type ViewMetadata = {
   id?: string;
   name: string;
-  // Add extra metadata here
+  // Stores the configured formatting for each field (table column)
+  fieldFormatting: { [fieldName: string]: ViewValueFormatting };
 };

@@ -41,7 +41,7 @@ export function generateTableDefinition(table: StudioView, dataSchema?: GenericD
     ...table.style,
   };
 
-  const { columns, ...otherThanColumns } = table.viewConfiguration;
+  const { columns, ...otherThanColumns } = table.viewConfiguration.table;
 
   definition.tableConfig = {
     ...DEFAULT_TABLE_CONFIG,
@@ -56,17 +56,28 @@ export function generateTableDefinition(table: StudioView, dataSchema?: GenericD
   let fields: DataStoreModelField[] = [];
 
   if (table.dataSource.model) {
-    const dataModel = dataSchema?.models[table.dataSource.model]?.fields ?? {};
-    fields = Object.entries(dataModel).map(([key, value]) => ({
-      name: key,
-      type: value.dataType,
-      isReadOnly: value.readOnly,
-      isArray: value.isArray,
-      isRequired: value.required,
-    }));
+    if (table.dataSource.type === 'DataStore') {
+      const dataModel = dataSchema?.models[table.dataSource.model]?.fields ?? {};
+      fields = Object.entries(dataModel).map(([key, value]) => ({
+        name: key,
+        type: value.dataType,
+        isReadOnly: value.readOnly,
+        isArray: value.isArray,
+        isRequired: value.required,
+      }));
+    } else {
+      const customModel = JSON.parse(table.dataSource.model);
+      fields = Object.keys(customModel).map((key) => ({
+        name: key,
+        type: 'String',
+        isReadOnly: false,
+        isArray: false,
+        isRequired: false,
+      }));
+    }
   }
 
-  definition.columns = orderAndFilterVisibleColumns(table.viewConfiguration.columns ?? {}, fields);
+  definition.columns = orderAndFilterVisibleColumns(table.viewConfiguration.table.columns ?? {}, fields);
 
   return definition;
 }

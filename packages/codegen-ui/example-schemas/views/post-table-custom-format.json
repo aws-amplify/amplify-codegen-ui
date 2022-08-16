@@ -1,0 +1,44 @@
+{
+  "dataSource": {
+      "model": "Post",
+      "predicate": {
+          "and": [
+              {
+                  "field": "username",
+                  "operand": "Guy",
+                  "operator": "notContains"
+              },
+              {
+                  "field": "createdAt",
+                  "operand": "25",
+                  "operator": "contains"
+              }
+          ]
+      },
+      "sort": [
+          {
+              "direction": "ASC",
+              "field": "username"
+          }
+      ],
+      "type": "DataStore"
+  },
+  "id": "v000001",
+  "name": "MyPostTable",
+  "schemaVersion": "1.0.0",
+  "style": {},
+  "viewConfiguration": {
+    "type": "Table",
+    "table": {
+        "columns": {
+            "createdAt": {
+                "valueFormatting": {
+                    "stringFormat": {
+                        "localeDateTimeFormat": "locale"
+                    }
+                }
+            }
+        }
+    }
+  }
+}

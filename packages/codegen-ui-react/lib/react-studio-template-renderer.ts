@@ -52,8 +52,6 @@ import ts, {
   Modifier,
   ObjectLiteralExpression,
   CallExpression,
-  Identifier,
-  ArrowFunction,
   LiteralExpression,
   BooleanLiteral,
   addSyntheticLeadingComment,
@@ -77,6 +75,7 @@ import {
   buildPropAssignmentWithFilter,
   buildCollectionWithItemMap,
   createHookStatement,
+  buildSortFunction,
 } from './react-studio-template-renderer-helper';
 import { Primitive, isPrimitive, PrimitiveTypeParameter, PrimitiveChildrenPropMapping } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
@@ -1056,12 +1055,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createObjectLiteralExpression(
               ([] as ts.PropertyAssignment[]).concat(
                 sort
-                  ? [
-                      factory.createPropertyAssignment(
-                        factory.createIdentifier('sort'),
-                        this.buildSortFunction(model, sort),
-                      ),
-                    ]
+                  ? [factory.createPropertyAssignment(factory.createIdentifier('sort'), buildSortFunction(model, sort))]
                   : [],
               ),
             ),
@@ -1069,50 +1063,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         ],
         ts.NodeFlags.Const,
       ),
-    );
-  }
-
-  /**
-   * (s: SortPredicate<User>) => s.firstName('ASCENDING').lastName('DESCENDING')
-   */
-  private buildSortFunction(model: string, sort: StudioComponentSort[]): ArrowFunction {
-    const ascendingSortDirection = factory.createPropertyAccessExpression(
-      factory.createIdentifier('SortDirection'),
-      factory.createIdentifier('ASCENDING'),
-    );
-    const descendingSortDirection = factory.createPropertyAccessExpression(
-      factory.createIdentifier('SortDirection'),
-      factory.createIdentifier('DESCENDING'),
-    );
-
-    let expr: Identifier | CallExpression = factory.createIdentifier('s');
-    sort.forEach((sortPredicate) => {
-      expr = factory.createCallExpression(
-        factory.createPropertyAccessExpression(expr, factory.createIdentifier(sortPredicate.field)),
-        undefined,
-        [sortPredicate.direction === 'ASC' ? ascendingSortDirection : descendingSortDirection],
-      );
-    });
-
-    return factory.createArrowFunction(
-      undefined,
-      undefined,
-      [
-        factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          undefined,
-          factory.createIdentifier('s'),
-          undefined,
-          factory.createTypeReferenceNode(factory.createIdentifier('SortPredicate'), [
-            factory.createTypeReferenceNode(factory.createIdentifier(model), undefined),
-          ]),
-          undefined,
-        ),
-      ],
-      undefined,
-      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-      expr,
     );
   }
 

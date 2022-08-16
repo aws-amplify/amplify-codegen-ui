@@ -13,11 +13,44 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { renderTableJsxElement } from './__utils__';
+import { renderTableJsxElement, renderWithAmplifyViewRenderer } from './__utils__';
+
+describe('amplify table renderer tests', () => {
+  test('should generate a table element', () => {
+    const tableElement = renderTableJsxElement('views/table-from-datastore', 'datastore/person', 'test-table.ts');
+    expect(tableElement).toMatchSnapshot();
+  });
+
+  test('should generate a non-datastore table element', () => {
+    const tableElement = renderTableJsxElement('views/table-from-custom-json', undefined, 'test-custom-table.ts');
+    expect(tableElement).toMatchSnapshot();
+  });
+});
 
 describe('amplify view renderer tests', () => {
-  test('should generate a table element', () => {
-    const tableElement = renderTableJsxElement('views/datastore-table', 'datastore/person', 'test-table.ts');
-    expect(tableElement).toMatchSnapshot();
+  test('should render view with passed in predicate and sort', () => {
+    const { componentText, declaration } = renderWithAmplifyViewRenderer(
+      'views/post-table-datastore',
+      'datastore/post-ds',
+    );
+    expect(componentText).toContain('useDataStoreBinding');
+    expect(componentText).toMatchSnapshot();
+    expect(declaration).toMatchSnapshot();
+  });
+  test('should render view with custom datastore', () => {
+    const { componentText, declaration } = renderWithAmplifyViewRenderer('views/table-from-custom-json', undefined);
+    expect(componentText).not.toContain('useDataStoreBinding');
+    expect(componentText).toMatchSnapshot();
+    expect(declaration).toMatchSnapshot();
+  });
+
+  test('should call util file if rendered', () => {
+    const { componentText, declaration } = renderWithAmplifyViewRenderer(
+      'views/post-table-custom-format',
+      'datastore/post-ds',
+    );
+    expect(componentText.replace(/\\/g, '')).toContain(`import { formatter } from "./utils"`);
+    expect(componentText).toMatchSnapshot();
+    expect(declaration).toMatchSnapshot();
   });
 });

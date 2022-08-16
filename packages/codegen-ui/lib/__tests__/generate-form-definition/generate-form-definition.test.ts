@@ -38,6 +38,7 @@ describe('generateFormDefinition', () => {
     expect(formDefinition.elements).toStrictEqual({
       name: {
         componentType: 'TextField',
+        dataType: 'String',
         props: { label: 'Name', isRequired: true, isReadOnly: false },
         studioFormComponentType: 'TextField',
       },
@@ -83,6 +84,7 @@ describe('generateFormDefinition', () => {
     expect(formDefinition.elements).toStrictEqual({
       weight: {
         componentType: 'SliderField',
+        dataType: 'Float',
         props: { label: 'Weight', min: 1, max: 100, step: 2, isDisabled: false, isRequired: true },
       },
     });
@@ -392,6 +394,7 @@ it('should add read-only fields if it has overrides', () => {
   expect(formDefinition.elements).toStrictEqual({
     name: {
       componentType: 'TextField',
+      dataType: 'String',
       props: { label: 'Name', isRequired: true, isReadOnly: true },
       studioFormComponentType: 'TextField',
     },
