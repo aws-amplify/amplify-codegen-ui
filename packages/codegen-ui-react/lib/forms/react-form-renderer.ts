@@ -63,6 +63,8 @@ import {
   buildMutationBindings,
   buildOverrideTypesBindings,
   buildStateMutationStatement,
+  buildValidations,
+  runValidationTasksFunction,
 } from './form-renderer-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
@@ -282,7 +284,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
    * -  useState
    *  - form fields
    *  - valid state for form
-   *  - error object { hasErrror: boolean, errorMessage: string }
+   *  - error object { hasError: boolean, errorMessage: string }
    * - datastore operation (conditional if form is backed by datastore)
    *  - this is the datastore mutation function which will be used by the helpers
    */
@@ -327,31 +329,21 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         ),
       ),
     );
-    if (formMetadata && Object.keys(formMetadata.fieldConfigs).length) {
-      Object.keys(formMetadata.fieldConfigs).forEach((field) => {
-        statements.push(
-          buildStateMutationStatement(
-            `${field}FieldError`,
-            factory.createObjectLiteralExpression(
-              [
-                factory.createPropertyAssignment(factory.createIdentifier('hasError'), factory.createFalse()),
-                factory.createPropertyAssignment(
-                  factory.createIdentifier('errorMessage'),
-                  factory.createStringLiteral(''),
-                ),
-              ],
-              false,
-            ),
-          ),
-        );
-      });
-      this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
-    }
 
     this.importCollection.addMappedImport(ImportValue.USE_STATE_MUTATION_ACTION);
 
     statements.push(buildStateMutationStatement('modelFields', factory.createObjectLiteralExpression()));
     statements.push(buildStateMutationStatement('formValid', factory.createTrue()));
+
+    statements.push(buildStateMutationStatement('errors', factory.createObjectLiteralExpression()));
+
+    if (formMetadata) {
+      this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
+
+      statements.push(buildValidations(formMetadata.fieldConfigs));
+      statements.push(runValidationTasksFunction);
+    }
+
     // add model import for datastore type
     if (this.component.dataType.dataSourceType === 'DataStore') {
       this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataType.dataTypeName);
