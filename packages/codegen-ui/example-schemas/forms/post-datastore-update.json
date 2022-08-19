@@ -38,5 +38,10 @@
   },
   "sectionalElements": {},
   "style": {},
-  "cta": {}
+  "cta": {
+    "position": "topAndBottom",
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  }
 }

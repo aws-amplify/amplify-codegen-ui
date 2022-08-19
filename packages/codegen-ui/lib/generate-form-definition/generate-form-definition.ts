@@ -35,7 +35,11 @@ export function generateFormDefinition({
   const formDefinition: FormDefinition = {
     form: { layoutStyle: {} },
     elements: {},
-    buttons: {},
+    buttons: {
+      buttonConfigs: {},
+      position: '',
+      buttonMatrix: [],
+    },
     elementMatrix: [],
   };
 

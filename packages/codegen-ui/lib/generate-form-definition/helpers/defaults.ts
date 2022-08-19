@@ -43,20 +43,21 @@ export const FORM_DEFINITION_DEFAULTS = {
 
   cta: {
     position: 'bottom',
+    buttonMatrix: [['clear'], ['cancel', 'submit']],
     cancel: {
       visible: true,
       label: 'Cancel',
-      variants: [],
+      variant: [],
     },
     clear: {
       visible: true,
       label: 'Clear',
-      variants: [],
+      variant: [],
     },
     submit: {
       visible: true,
       label: 'Submit',
-      variants: [],
+      variant: [],
     },
   },
 };

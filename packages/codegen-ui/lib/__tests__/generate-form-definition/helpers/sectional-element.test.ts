@@ -22,7 +22,11 @@ describe('mapSectionalElement', () => {
     const formDefinition: FormDefinition = {
       form: { layoutStyle: {} },
       elements: { Heading123: { componentType: 'Heading', props: {} } },
-      buttons: {},
+      buttons: {
+        buttonConfigs: {},
+        position: '',
+        buttonMatrix: [[]],
+      },
       elementMatrix: [],
     };
 
@@ -38,7 +42,11 @@ describe('mapSectionalElement', () => {
     const formDefinition: FormDefinition = {
       form: { layoutStyle: {} },
       elements: {},
-      buttons: {},
+      buttons: {
+        buttonConfigs: {},
+        position: '',
+        buttonMatrix: [[]],
+      },
       elementMatrix: [],
     };
 

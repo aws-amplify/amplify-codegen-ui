@@ -14,26 +14,43 @@
   limitations under the License.
  */
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
-import { StudioFormCTA } from '../../types';
+import { StudioFormCTA, ButtonConfig } from '../../types';
 
-export function mapButtons(buttons: StudioFormCTA): {} {
+export function mapButtons(buttons: StudioFormCTA): ButtonConfig {
   const defaults = FORM_DEFINITION_DEFAULTS.cta;
-  return {
+
+  const buttonMapping: ButtonConfig = {
     position: buttons.position ? buttons.position : defaults.position,
-    clear: {
-      visible: typeof buttons.clear?.visible === 'boolean' ? buttons.clear?.visible : defaults.clear.visible,
-      label: buttons.clear?.children ? buttons.clear.children : defaults.clear.label,
-      variants: buttons.clear?.variants ? buttons.clear.variants : defaults.clear.variants,
-    },
-    cancel: {
-      visible: typeof buttons.cancel?.visible === 'boolean' ? buttons.cancel.visible : defaults.cancel.visible,
-      label: buttons.cancel?.children ? buttons.cancel.children : defaults.cancel.label,
-      variants: buttons.cancel?.variants ? buttons.cancel.variants : defaults.cancel.variants,
-    },
-    submit: {
-      visible: typeof buttons.submit?.visible === 'boolean' ? buttons.submit.visible : defaults.submit.visible,
-      label: buttons.submit?.children ? buttons.submit.children : defaults.submit.label,
-      variants: buttons.submit?.variants ? buttons.submit.variants : defaults.submit.variants,
-    },
+    buttonMatrix: defaults.buttonMatrix,
+    buttonConfigs: {},
   };
+
+  if (buttons.clear) {
+    buttonMapping.buttonConfigs.clear = {
+      componentType: 'Button',
+      props: {
+        children: buttons.clear?.children ? buttons.clear.children : defaults.clear.label,
+      },
+    };
+  }
+
+  if (buttons.cancel) {
+    buttonMapping.buttonConfigs.cancel = {
+      componentType: 'Button',
+      props: {
+        children: buttons.cancel?.children ? buttons.cancel.children : defaults.cancel.label,
+      },
+    };
+  }
+
+  if (buttons.submit) {
+    buttonMapping.buttonConfigs.submit = {
+      componentType: 'Button',
+      props: {
+        children: buttons.submit?.children ? buttons.submit.children : defaults.submit.label,
+      },
+    };
+  }
+
+  return buttonMapping;
 }

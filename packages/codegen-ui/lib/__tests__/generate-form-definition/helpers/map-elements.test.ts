@@ -27,7 +27,11 @@ describe('mapElements', () => {
     const formDefinition: FormDefinition = {
       form: { layoutStyle: {} },
       elements: {},
-      buttons: {},
+      buttons: {
+        buttonConfigs: {},
+        position: '',
+        buttonMatrix: [[]],
+      },
       elementMatrix: [['myText', 'name'], ['price']],
     };
 
@@ -75,7 +79,11 @@ describe('mapElements', () => {
     const formDefinition: FormDefinition = {
       form: { layoutStyle: {} },
       elements: {},
-      buttons: {},
+      buttons: {
+        buttonConfigs: {},
+        position: '',
+        buttonMatrix: [[]],
+      },
       elementMatrix: [['myText']],
     };
 

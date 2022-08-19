@@ -8,5 +8,10 @@
   "fields": {},
   "sectionalElements": {},
   "style": {},
-  "cta": {}
+  "cta": {
+    "position": "top",
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  }
 }

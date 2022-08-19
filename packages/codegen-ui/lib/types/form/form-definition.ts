@@ -16,7 +16,7 @@
 import { StudioFormStyle } from './style';
 import { FormDefinitionElement } from './form-definition-element';
 import { StudioGenericFieldConfig } from './fields';
-import { FormDefinitionButton } from './form-cta';
+import { ButtonConfig } from './form-cta';
 
 export type ModelFieldsConfigs = { [key: string]: StudioGenericFieldConfig };
 
@@ -25,7 +25,7 @@ export type FormDefinition = {
     layoutStyle: StudioFormStyle;
   };
   elements: { [element: string]: FormDefinitionElement };
-  buttons: { [button: string]: FormDefinitionButton };
+  buttons: ButtonConfig;
   elementMatrix: string[][];
   inputFields?: string[];
 };

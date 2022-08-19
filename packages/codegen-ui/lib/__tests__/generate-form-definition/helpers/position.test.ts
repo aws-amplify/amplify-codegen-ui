@@ -36,7 +36,11 @@ describe('removeFromMatrix', () => {
     const formDefinition = {
       form: { layoutStyle: {} },
       elements: {},
-      buttons: {},
+      buttons: {
+        buttonConfigs: {},
+        position: '',
+        buttonMatrix: [[]],
+      },
       elementMatrix: matrix,
     };
 
@@ -53,7 +57,11 @@ describe('removeAndReturnItemOnward', () => {
     const formDefinition = {
       form: { layoutStyle: {} },
       elements: {},
-      buttons: {},
+      buttons: {
+        buttonConfigs: {},
+        position: '',
+        buttonMatrix: [[]],
+      },
       elementMatrix: matrix,
     };
 

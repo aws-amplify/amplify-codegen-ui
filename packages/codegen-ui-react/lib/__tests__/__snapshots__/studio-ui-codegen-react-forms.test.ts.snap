@@ -311,6 +311,34 @@ export default function myPostForm(props) {
       {...rest}
       {...getOverrideProps(overrides, \\"myPostForm\\")}
     >
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Cancel\\"
+          type=\\"button\\"
+          onClick={() => {
+            onCancel && onCancel();
+          }}
+          {...getOverrideProps(overrides, \\"CancelButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Clear\\"
+            type=\\"reset\\"
+            {...getOverrideProps(overrides, \\"ClearButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={!formValid}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
@@ -422,34 +450,6 @@ export default function myPostForm(props) {
           ></TextField>
         </Grid>
       </Grid>
-      <Flex
-        justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
-        {...getOverrideProps(overrides, \\"CTAFlex\\")}
-      >
-        <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            onCancel && onCancel();
-          }}
-          {...getOverrideProps(overrides, \\"CancelButton\\")}
-        ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
-          <Button
-            children=\\"Clear\\"
-            type=\\"reset\\"
-            {...getOverrideProps(overrides, \\"ClearButton\\")}
-          ></Button>
-          <Button
-            children=\\"Submit\\"
-            type=\\"submit\\"
-            variation=\\"primary\\"
-            isDisabled={!formValid}
-            {...getOverrideProps(overrides, \\"SubmitButton\\")}
-          ></Button>
-        </Flex>
-      </Flex>
     </form>
   );
 }
@@ -563,6 +563,34 @@ export default function myPostForm(props) {
       {...rest}
       {...getOverrideProps(overrides, \\"myPostForm\\")}
     >
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Cancel\\"
+          type=\\"button\\"
+          onClick={() => {
+            onCancel && onCancel();
+          }}
+          {...getOverrideProps(overrides, \\"CancelButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Clear\\"
+            type=\\"reset\\"
+            {...getOverrideProps(overrides, \\"ClearButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={!formValid}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
@@ -779,7 +807,6 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { InputGallery } from \\"../models\\";
 import {
-  Button,
   CheckboxField,
   Flex,
   Grid,
@@ -1069,28 +1096,7 @@ export default function InputGalleryCreateForm(props) {
         marginTop=\\"1rem\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
-        <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            onCancel && onCancel();
-          }}
-          {...getOverrideProps(overrides, \\"CancelButton\\")}
-        ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
-          <Button
-            children=\\"Clear\\"
-            type=\\"reset\\"
-            {...getOverrideProps(overrides, \\"ClearButton\\")}
-          ></Button>
-          <Button
-            children=\\"Submit\\"
-            type=\\"submit\\"
-            variation=\\"primary\\"
-            isDisabled={!formValid}
-            {...getOverrideProps(overrides, \\"SubmitButton\\")}
-          ></Button>
-        </Flex>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}></Flex>
       </Flex>
     </form>
   );
