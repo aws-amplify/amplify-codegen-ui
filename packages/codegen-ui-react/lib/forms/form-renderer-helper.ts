@@ -25,6 +25,7 @@ import {
   StudioForm,
   StudioFormActionType,
 } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
 import {
   BindingElement,
   Expression,
@@ -120,11 +121,11 @@ export const buildMutationBindings = (form: StudioForm) => {
 };
 
 /*
-  generate params in typed props
-  - datastore (onSubmitBefore(fields) & onSubmitComplete({saveSuccessful, errorMessage}))
-   - if update include id
-  - custom (onSubmit(fields))
- */
+    generate params in typed props
+    - datastore (onSubmitBefore(fields) & onSubmitComplete({saveSuccessful, errorMessage}))
+     - if update include id
+    - custom (onSubmit(fields))
+   */
 export const buildFormPropNode = (form: StudioForm) => {
   const {
     dataType: { dataSourceType },
@@ -369,28 +370,30 @@ export const addFormAttributes = (
   // then map this with the componentType
 
   /*
-    boolean => RadioGroupField
-    const value = e.target.value.toLowerCase() === 'yes';
-    boolean => selectfield
-    const value = ....
-
-
-    componentType => SelectField && boolean
-    const value = Boolean(e.target.checked)
-
-  */
-  if (component.componentType.includes('Field')) {
-    if (formMetadata && component.name in formMetadata?.fieldConfigs) {
-      const { validationRules, dataType } = formMetadata.fieldConfigs[component.name];
-      attributes.push(buildOnChangeStatement(component.name, component.componentType, validationRules, dataType));
-    }
+      boolean => RadioGroupField
+      const value = e.target.value.toLowerCase() === 'yes';
+      boolean => selectfield
+      const value = ....
+  
+  
+      componentType => SelectField && boolean
+      const value = Boolean(e.target.checked)
+  
+    */
+  if (formMetadata && component.name in formMetadata?.fieldConfigs) {
+    const { dataType } = formMetadata.fieldConfigs[component.name];
+    attributes.push(buildOnChangeStatement(component.name, component.componentType, dataType));
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('errorMessage'),
         factory.createJsxExpression(
           undefined,
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier(`${component.name}FieldError`),
+          factory.createPropertyAccessChain(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('errors'),
+              factory.createIdentifier(component.name),
+            ),
+            factory.createToken(SyntaxKind.QuestionDotToken),
             factory.createIdentifier('errorMessage'),
           ),
         ),
@@ -399,8 +402,12 @@ export const addFormAttributes = (
         factory.createIdentifier('hasError'),
         factory.createJsxExpression(
           undefined,
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier(`${component.name}FieldError`),
+          factory.createPropertyAccessChain(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('errors'),
+              factory.createIdentifier(component.name),
+            ),
+            factory.createToken(SyntaxKind.QuestionDotToken),
             factory.createIdentifier('hasError'),
           ),
         ),
@@ -414,7 +421,43 @@ export const addFormAttributes = (
         factory.createIdentifier('isDisabled'),
         factory.createJsxExpression(
           undefined,
-          factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier('formValid')),
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('Object'),
+                  factory.createIdentifier('values'),
+                ),
+                undefined,
+                [factory.createIdentifier('errors')],
+              ),
+              factory.createIdentifier('some'),
+            ),
+            undefined,
+            [
+              factory.createArrowFunction(
+                undefined,
+                undefined,
+                [
+                  factory.createParameterDeclaration(
+                    undefined,
+                    undefined,
+                    undefined,
+                    factory.createIdentifier('e'),
+                    undefined,
+                    undefined,
+                    undefined,
+                  ),
+                ],
+                undefined,
+                factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('e'),
+                  factory.createIdentifier('hasError'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -451,12 +494,7 @@ export const addFormAttributes = (
   return attributes;
 };
 
-export const buildOnChangeStatement = (
-  fieldName: string,
-  fieldType: string,
-  validationRules: FieldValidationConfiguration[],
-  dataType?: DataFieldDataType,
-) => {
+export const buildOnChangeStatement = (fieldName: string, fieldType: string, dataType?: DataFieldDataType) => {
   return factory.createJsxAttribute(
     factory.createIdentifier('onChange'),
     factory.createJsxExpression(
@@ -480,67 +518,13 @@ export const buildOnChangeStatement = (
         factory.createBlock(
           [
             buildTargetVariable(fieldType, dataType),
-            factory.createVariableStatement(
-              undefined,
-              factory.createVariableDeclarationList(
-                [
-                  factory.createVariableDeclaration(
-                    factory.createIdentifier('isValidResult'),
-                    undefined,
-                    undefined,
-                    factory.createConditionalExpression(
-                      factory.createElementAccessChain(
-                        factory.createIdentifier('onValidate'),
-                        factory.createToken(SyntaxKind.QuestionDotToken),
-                        factory.createStringLiteral(fieldName),
-                      ),
-                      factory.createToken(SyntaxKind.QuestionToken),
-                      factory.createAwaitExpression(
-                        factory.createCallExpression(
-                          factory.createElementAccessExpression(
-                            factory.createIdentifier('onValidate'),
-                            factory.createStringLiteral(fieldName),
-                          ),
-                          undefined,
-                          [factory.createIdentifier('value')],
-                        ),
-                      ),
-                      factory.createToken(SyntaxKind.ColonToken),
-                      factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
-                        factory.createIdentifier('value'),
-                        createValidationExpression(validationRules),
-                      ]),
-                    ),
-                  ),
-                ],
-                NodeFlags.Const,
-              ),
-            ),
             factory.createExpressionStatement(
-              factory.createCallExpression(
-                factory.createIdentifier(`set${capitalizeFirstLetter(fieldName)}FieldError`),
-                undefined,
-                [
-                  factory.createObjectLiteralExpression(
-                    [
-                      factory.createSpreadAssignment(factory.createIdentifier(`${fieldName}FieldError`)),
-                      factory.createSpreadAssignment(factory.createIdentifier('isValidResult')),
-                    ],
-                    false,
-                  ),
-                ],
+              factory.createAwaitExpression(
+                factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+                  factory.createStringLiteral(fieldName),
+                  factory.createIdentifier('value'),
+                ]),
               ),
-            ),
-            factory.createExpressionStatement(
-              factory.createCallExpression(factory.createIdentifier('setFormValid'), undefined, [
-                factory.createPrefixUnaryExpression(
-                  SyntaxKind.ExclamationToken,
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier(`${fieldName}FieldError`),
-                    factory.createIdentifier('hasError'),
-                  ),
-                ),
-              ]),
             ),
             factory.createExpressionStatement(
               factory.createCallExpression(factory.createIdentifier('setModelFields'), undefined, [
@@ -717,3 +701,158 @@ export const buildOverrideTypesBindings = (
     ]),
   );
 };
+
+export function buildValidations(fieldConfigs: Record<string, FieldConfigMetadata>) {
+  const validationsForField = Object.entries(fieldConfigs).map(([fieldName, fieldConfig]) =>
+    factory.createPropertyAssignment(
+      factory.createIdentifier(fieldName),
+      createValidationExpression(fieldConfig.validationRules),
+    ),
+  );
+
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('validations'),
+          undefined,
+          undefined,
+          factory.createObjectLiteralExpression(validationsForField, true),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
+}
+
+/**
+      const runValidationTasks = async (fieldName, value) => {
+        const validationResponse = { 
+          ...validateField(value, validations[fieldName]), 
+          ...await onValidate?.[fieldName]?.(value) 
+          };
+        setErrors(errors => ({ ...errors, [fieldName]: validationResponse }));
+        return validationResponse;
+      }
+   */
+
+export const runValidationTasksFunction = factory.createVariableStatement(
+  undefined,
+  factory.createVariableDeclarationList(
+    [
+      factory.createVariableDeclaration(
+        factory.createIdentifier('runValidationTasks'),
+        undefined,
+        undefined,
+        factory.createArrowFunction(
+          [factory.createModifier(SyntaxKind.AsyncKeyword)],
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('fieldName'),
+              undefined,
+              undefined,
+              undefined,
+            ),
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('value'),
+              undefined,
+              undefined,
+              undefined,
+            ),
+          ],
+          undefined,
+          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+          factory.createBlock(
+            [
+              factory.createVariableStatement(
+                undefined,
+                factory.createVariableDeclarationList(
+                  [
+                    factory.createVariableDeclaration(
+                      factory.createIdentifier('validationResponse'),
+                      undefined,
+                      undefined,
+                      factory.createObjectLiteralExpression(
+                        [
+                          factory.createSpreadAssignment(
+                            factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
+                              factory.createIdentifier('value'),
+                              factory.createElementAccessExpression(
+                                factory.createIdentifier('validations'),
+                                factory.createIdentifier('fieldName'),
+                              ),
+                            ]),
+                          ),
+                          factory.createSpreadAssignment(
+                            factory.createAwaitExpression(
+                              factory.createCallChain(
+                                factory.createElementAccessChain(
+                                  factory.createIdentifier('onValidate'),
+                                  factory.createToken(SyntaxKind.QuestionDotToken),
+                                  factory.createIdentifier('fieldName'),
+                                ),
+                                factory.createToken(SyntaxKind.QuestionDotToken),
+                                undefined,
+                                [factory.createIdentifier('value')],
+                              ),
+                            ),
+                          ),
+                        ],
+                        true,
+                      ),
+                    ),
+                  ],
+                  NodeFlags.Const,
+                ),
+              ),
+              factory.createExpressionStatement(
+                factory.createCallExpression(factory.createIdentifier('setErrors'), undefined, [
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier('errors'),
+                        undefined,
+                        undefined,
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createParenthesizedExpression(
+                      factory.createObjectLiteralExpression(
+                        [
+                          factory.createSpreadAssignment(factory.createIdentifier('errors')),
+                          factory.createPropertyAssignment(
+                            factory.createComputedPropertyName(factory.createIdentifier('fieldName')),
+                            factory.createIdentifier('validationResponse'),
+                          ),
+                        ],
+                        false,
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+              factory.createReturnStatement(factory.createIdentifier('validationResponse')),
+            ],
+            true,
+          ),
+        ),
+      ),
+    ],
+    NodeFlags.Const,
+  ),
+);
