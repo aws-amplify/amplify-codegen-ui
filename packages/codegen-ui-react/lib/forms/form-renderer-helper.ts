@@ -249,7 +249,17 @@ export const buildFormPropNode = (form: StudioForm) => {
       factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
     ),
   );
-  // onValidate?: (value: any) => Promise<{ hasError: boolean; errorMessage?: string }>>
+  /**
+    onValidate?: Record<
+    string,
+    (
+    value: any
+    ) =>
+      | { hasError: boolean, errorMessage?: string }
+      | Promise<{ hasError: boolean, errorMessage?: string }>
+    >
+   */
+
   propSignatures.push(
     factory.createPropertySignature(
       undefined,
@@ -270,7 +280,7 @@ export const buildFormPropNode = (form: StudioForm) => {
               undefined,
             ),
           ],
-          factory.createTypeReferenceNode(factory.createIdentifier('Promise'), [
+          factory.createUnionTypeNode([
             factory.createTypeLiteralNode([
               factory.createPropertySignature(
                 undefined,
@@ -284,6 +294,22 @@ export const buildFormPropNode = (form: StudioForm) => {
                 factory.createToken(SyntaxKind.QuestionToken),
                 factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
               ),
+            ]),
+            factory.createTypeReferenceNode(factory.createIdentifier('Promise'), [
+              factory.createTypeLiteralNode([
+                factory.createPropertySignature(
+                  undefined,
+                  factory.createIdentifier('hasError'),
+                  undefined,
+                  factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
+                ),
+                factory.createPropertySignature(
+                  undefined,
+                  factory.createIdentifier('errorMessage'),
+                  factory.createToken(SyntaxKind.QuestionToken),
+                  factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+                ),
+              ]),
             ]),
           ]),
         ),
@@ -727,15 +753,15 @@ export function buildValidations(fieldConfigs: Record<string, FieldConfigMetadat
 }
 
 /**
-      const runValidationTasks = async (fieldName, value) => {
-        const validationResponse = { 
-          ...validateField(value, validations[fieldName]), 
-          ...await onValidate?.[fieldName]?.(value) 
-          };
-        setErrors(errors => ({ ...errors, [fieldName]: validationResponse }));
-        return validationResponse;
-      }
-   */
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    if(!validationResponse.hasError) {
+      validationResponse = await onValidate?.[fieldName]?.(value) ?? {};
+    }
+    setErrors(errors => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  }
+ */
 
 export const runValidationTasksFunction = factory.createVariableStatement(
   undefined,
@@ -780,38 +806,54 @@ export const runValidationTasksFunction = factory.createVariableStatement(
                       factory.createIdentifier('validationResponse'),
                       undefined,
                       undefined,
-                      factory.createObjectLiteralExpression(
-                        [
-                          factory.createSpreadAssignment(
-                            factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
-                              factory.createIdentifier('value'),
-                              factory.createElementAccessExpression(
-                                factory.createIdentifier('validations'),
+                      factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
+                        factory.createIdentifier('value'),
+                        factory.createElementAccessExpression(
+                          factory.createIdentifier('validations'),
+                          factory.createIdentifier('fieldName'),
+                        ),
+                      ]),
+                    ),
+                  ],
+                  NodeFlags.Let,
+                ),
+              ),
+              factory.createIfStatement(
+                factory.createPrefixUnaryExpression(
+                  SyntaxKind.ExclamationToken,
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('validationResponse'),
+                    factory.createIdentifier('hasError'),
+                  ),
+                ),
+                factory.createBlock(
+                  [
+                    factory.createExpressionStatement(
+                      factory.createBinaryExpression(
+                        factory.createIdentifier('validationResponse'),
+                        factory.createToken(SyntaxKind.EqualsToken),
+                        factory.createBinaryExpression(
+                          factory.createAwaitExpression(
+                            factory.createCallChain(
+                              factory.createElementAccessChain(
+                                factory.createIdentifier('onValidate'),
+                                factory.createToken(SyntaxKind.QuestionDotToken),
                                 factory.createIdentifier('fieldName'),
                               ),
-                            ]),
-                          ),
-                          factory.createSpreadAssignment(
-                            factory.createAwaitExpression(
-                              factory.createCallChain(
-                                factory.createElementAccessChain(
-                                  factory.createIdentifier('onValidate'),
-                                  factory.createToken(SyntaxKind.QuestionDotToken),
-                                  factory.createIdentifier('fieldName'),
-                                ),
-                                factory.createToken(SyntaxKind.QuestionDotToken),
-                                undefined,
-                                [factory.createIdentifier('value')],
-                              ),
+                              factory.createToken(SyntaxKind.QuestionDotToken),
+                              undefined,
+                              [factory.createIdentifier('value')],
                             ),
                           ),
-                        ],
-                        true,
+                          factory.createToken(SyntaxKind.QuestionQuestionToken),
+                          factory.createObjectLiteralExpression([], false),
+                        ),
                       ),
                     ),
                   ],
-                  NodeFlags.Const,
+                  true,
                 ),
+                undefined,
               ),
               factory.createExpressionStatement(
                 factory.createCallExpression(factory.createIdentifier('setErrors'), undefined, [
@@ -856,3 +898,113 @@ export const runValidationTasksFunction = factory.createVariableStatement(
     NodeFlags.Const,
   ),
 );
+
+/**
+  const validationResponses = await Promise.all(
+    Object.keys(validations).map((fieldName) =>
+      runValidationTasks(fieldName, modelFields[fieldName])
+    )
+  );
+
+  if (validationResponses.some((r) => r.hasError)) {
+    return;
+  }
+ */
+
+export const onSubmitValidationRun = [
+  factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('validationResponses'),
+          undefined,
+          undefined,
+          factory.createAwaitExpression(
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('Promise'),
+                factory.createIdentifier('all'),
+              ),
+              undefined,
+              [
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('Object'),
+                        factory.createIdentifier('keys'),
+                      ),
+                      undefined,
+                      [factory.createIdentifier('validations')],
+                    ),
+                    factory.createIdentifier('map'),
+                  ),
+                  undefined,
+                  [
+                    factory.createArrowFunction(
+                      undefined,
+                      undefined,
+                      [
+                        factory.createParameterDeclaration(
+                          undefined,
+                          undefined,
+                          undefined,
+                          factory.createIdentifier('fieldName'),
+                          undefined,
+                          undefined,
+                          undefined,
+                        ),
+                      ],
+                      undefined,
+                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                      factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+                        factory.createIdentifier('fieldName'),
+                        factory.createElementAccessExpression(
+                          factory.createIdentifier('modelFields'),
+                          factory.createIdentifier('fieldName'),
+                        ),
+                      ]),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  ),
+  factory.createIfStatement(
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(
+        factory.createIdentifier('validationResponses'),
+        factory.createIdentifier('some'),
+      ),
+      undefined,
+      [
+        factory.createArrowFunction(
+          undefined,
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('r'),
+              undefined,
+              undefined,
+              undefined,
+            ),
+          ],
+          undefined,
+          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+          factory.createPropertyAccessExpression(factory.createIdentifier('r'), factory.createIdentifier('hasError')),
+        ),
+      ],
+    ),
+    factory.createBlock([factory.createReturnStatement(undefined)], true),
+    undefined,
+  ),
+];

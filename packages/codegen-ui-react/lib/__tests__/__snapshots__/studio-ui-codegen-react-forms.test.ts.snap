@@ -35,10 +35,10 @@ export default function customDataForm(props) {
     category: [],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (!validationResponse.hasError) {
+      validationResponse = (await onValidate?.[fieldName]?.(value)) ?? {};
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -46,6 +46,14 @@ export default function customDataForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         await customDataFormOnSubmit(modelFields);
       }}
       {...rest}
@@ -222,7 +230,10 @@ export declare type customDataFormProps = React.PropsWithChildren<{
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
+    onValidate?: Record<string, (value: any) => {
+        hasError: boolean;
+        errorMessage?: string;
+    } | Promise<{
         hasError: boolean;
         errorMessage?: string;
     }>>;
@@ -263,10 +274,10 @@ export default function CustomWithSectionalElements(props) {
     name: [],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (!validationResponse.hasError) {
+      validationResponse = (await onValidate?.[fieldName]?.(value)) ?? {};
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -274,6 +285,14 @@ export default function CustomWithSectionalElements(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         await customWithSectionalElementsOnSubmit(modelFields);
       }}
       {...rest}
@@ -391,7 +410,10 @@ export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
+    onValidate?: Record<string, (value: any) => {
+        hasError: boolean;
+        errorMessage?: string;
+    } | Promise<{
         hasError: boolean;
         errorMessage?: string;
     }>>;
@@ -430,10 +452,10 @@ export default function myPostForm(props) {
     profile_url: [{ type: \\"URL\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (!validationResponse.hasError) {
+      validationResponse = (await onValidate?.[fieldName]?.(value)) ?? {};
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -441,6 +463,14 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         if (onSubmitBefore) {
           setModelFields(onSubmitBefore({ fields: modelFields }));
         }
@@ -605,7 +635,10 @@ export declare type myPostFormProps = React.PropsWithChildren<{
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
+    onValidate?: Record<string, (value: any) => {
+        hasError: boolean;
+        errorMessage?: string;
+    } | Promise<{
         hasError: boolean;
         errorMessage?: string;
     }>>;
@@ -652,10 +685,10 @@ export default function myPostForm(props) {
     post_url: [{ type: \\"URL\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (!validationResponse.hasError) {
+      validationResponse = (await onValidate?.[fieldName]?.(value)) ?? {};
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -663,6 +696,14 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         if (onSubmitBefore) {
           setModelFields(onSubmitBefore({ fields: modelFields }));
         }
@@ -853,7 +894,10 @@ export declare type myPostFormProps = React.PropsWithChildren<{
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
+    onValidate?: Record<string, (value: any) => {
+        hasError: boolean;
+        errorMessage?: string;
+    } | Promise<{
         hasError: boolean;
         errorMessage?: string;
     }>>;
@@ -905,10 +949,10 @@ export default function InputGalleryCreateForm(props) {
     timeisnow: [],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (!validationResponse.hasError) {
+      validationResponse = (await onValidate?.[fieldName]?.(value)) ?? {};
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -916,6 +960,14 @@ export default function InputGalleryCreateForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         if (onSubmitBefore) {
           setModelFields(onSubmitBefore({ fields: modelFields }));
         }
@@ -1181,7 +1233,10 @@ export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
+    onValidate?: Record<string, (value: any) => {
+        hasError: boolean;
+        errorMessage?: string;
+    } | Promise<{
         hasError: boolean;
         errorMessage?: string;
     }>>;
