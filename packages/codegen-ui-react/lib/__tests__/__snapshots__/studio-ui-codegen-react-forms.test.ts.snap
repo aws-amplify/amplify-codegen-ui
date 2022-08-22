@@ -343,18 +343,18 @@ export default function CustomWithSectionalElements(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            onCancel && onCancel();
-          }}
-          {...getOverrideProps(overrides, \\"CancelButton\\")}
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
           <Button
-            children=\\"Clear\\"
-            type=\\"reset\\"
-            {...getOverrideProps(overrides, \\"ClearButton\\")}
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
           ></Button>
           <Button
             children=\\"Submit\\"
@@ -484,7 +484,7 @@ export default function myPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={!formValid}
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -575,34 +575,6 @@ export default function myPostForm(props) {
           ></TextField>
         </Grid>
       </Grid>
-      <Flex
-        justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
-        {...getOverrideProps(overrides, \\"CTAFlex\\")}
-      >
-        <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            onCancel && onCancel();
-          }}
-          {...getOverrideProps(overrides, \\"CancelButton\\")}
-        ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
-          <Button
-            children=\\"Clear\\"
-            type=\\"reset\\"
-            {...getOverrideProps(overrides, \\"ClearButton\\")}
-          ></Button>
-          <Button
-            children=\\"Submit\\"
-            type=\\"submit\\"
-            variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e.hasError)}
-            {...getOverrideProps(overrides, \\"SubmitButton\\")}
-          ></Button>
-        </Flex>
-      </Flex>
     </form>
   );
 }
@@ -739,7 +711,7 @@ export default function myPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={!formValid}
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -928,6 +900,7 @@ import {
 import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import { InputGallery } from \\"../models\\";
 import {
+  Button,
   CheckboxField,
   Flex,
   Grid,
@@ -1175,7 +1148,28 @@ export default function InputGalleryCreateForm(props) {
         marginTop=\\"1rem\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}></Flex>
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
       </Flex>
     </form>
   );

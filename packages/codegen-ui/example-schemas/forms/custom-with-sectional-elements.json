@@ -35,5 +35,10 @@
             "type": "Divider"
         }
     },
-    "style": {}
+    "style": {},
+    "cta": {
+      "clear": {},
+      "cancel": {},
+      "submit": {}
+    }
   }
