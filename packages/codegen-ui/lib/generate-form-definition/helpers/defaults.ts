@@ -45,19 +45,13 @@ export const FORM_DEFINITION_DEFAULTS = {
     position: 'bottom',
     buttonMatrix: [['clear'], ['cancel', 'submit']],
     cancel: {
-      visible: true,
       label: 'Cancel',
-      variant: [],
     },
     clear: {
-      visible: true,
       label: 'Clear',
-      variant: [],
     },
     submit: {
-      visible: true,
       label: 'Submit',
-      variant: [],
     },
   },
 };

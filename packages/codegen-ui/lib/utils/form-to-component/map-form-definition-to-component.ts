@@ -23,6 +23,7 @@ import {
   StudioFormStyle,
 } from '../../types';
 import { mapElementChildren } from './helpers/map-element-children';
+import { ctaButtonMapper, addCTAPosition } from './helpers/map-cta-buttons';
 
 const getStyleResolvedValue = (config?: FormStyleConfig): string | undefined => {
   return config?.value ?? config?.tokenReference;
@@ -86,98 +87,6 @@ const fieldComponentMapper = (name: string, formDefinition: FormDefinition): Stu
   return parentGrid(`${name}Grid`, formDefinition.form.layoutStyle, fieldChildren);
 };
 
-const ctaButtonMapper = (formDefinition: FormDefinition): StudioComponentChild => {
-  const CTAComponent: StudioComponentChild = {
-    name: 'CTAFlex',
-    componentType: 'Flex',
-    properties: {
-      justifyContent: {
-        value: 'space-between',
-      },
-      marginTop: {
-        value: '1rem',
-      },
-    },
-    children: [],
-  };
-
-  if (formDefinition.buttons.buttonConfigs.cancel) {
-    CTAComponent.children?.push({
-      componentType: 'Button',
-      name: 'CancelButton',
-      properties: {
-        children: {
-          value: formDefinition.buttons.buttonConfigs.cancel.props.children,
-        },
-        type: {
-          value: 'button',
-        },
-      },
-    });
-  }
-
-  const rightAlignCTA: StudioComponentChild = {
-    componentType: 'Flex',
-    name: 'SubmitAndResetFlex',
-    properties: {},
-    children: [],
-  };
-
-  if (formDefinition.buttons.buttonConfigs.clear && rightAlignCTA.children) {
-    rightAlignCTA.children.push({
-      componentType: 'Button',
-      name: 'ClearButton',
-      properties: {
-        children: {
-          value: formDefinition.buttons.buttonConfigs.clear.props.children,
-        },
-        type: {
-          value: 'reset',
-        },
-      },
-    });
-  }
-
-  if (formDefinition.buttons.buttonConfigs.submit) {
-    rightAlignCTA.children?.push({
-      componentType: 'Button',
-      name: 'SubmitButton',
-      properties: {
-        children: {
-          value: formDefinition.buttons.buttonConfigs.submit.props.children,
-        },
-        type: {
-          value: 'submit',
-        },
-        variation: {
-          value: 'primary',
-        },
-      },
-    });
-  }
-
-  CTAComponent.children?.push(rightAlignCTA);
-
-  return CTAComponent;
-};
-
-const renderChildren = (name: string, formDefinition: FormDefinition) => {
-  switch (formDefinition.buttons.position) {
-    case 'top':
-      return [ctaButtonMapper(formDefinition), fieldComponentMapper(name, formDefinition)];
-    case 'bottom':
-      return [fieldComponentMapper(name, formDefinition), ctaButtonMapper(formDefinition)];
-    case 'topAndBottom':
-      return [
-        ctaButtonMapper(formDefinition),
-        fieldComponentMapper(name, formDefinition),
-        ctaButtonMapper(formDefinition),
-      ];
-    default:
-      return [fieldComponentMapper(name, formDefinition), ctaButtonMapper(formDefinition)];
-  }
-};
-
 export const mapFormDefinitionToComponent = (name: string, formDefinition: FormDefinition) => {
   const component: StudioComponent = {
     name,
@@ -187,7 +96,15 @@ export const mapFormDefinitionToComponent = (name: string, formDefinition: FormD
       onCancel: { type: 'Event' },
     },
     events: {},
-    children: renderChildren(name, formDefinition),
+    children: [fieldComponentMapper(name, formDefinition)],
   };
+
+  const ctaComponent = ctaButtonMapper(formDefinition);
+  component.children = addCTAPosition(
+    component.children ? component.children : [],
+    formDefinition.buttons.position,
+    ctaComponent,
+  );
+
   return component;
 };

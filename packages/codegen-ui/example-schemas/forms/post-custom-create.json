@@ -49,15 +49,12 @@
   "style": {},
   "cta": {
     "clear": {
-      "visible": true,
       "children": "empty"
     },
     "cancel": {
-      "visible": true,
       "children": "go back"
     },
     "submit": {
-      "visible": true,
       "children": "create"
     }
   }

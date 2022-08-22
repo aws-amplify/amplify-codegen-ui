@@ -22,8 +22,6 @@ type StudioFormCTAButton = {
   children?: string;
 
   position?: StudioFieldPosition;
-
-  variant?: string;
 };
 
 /**

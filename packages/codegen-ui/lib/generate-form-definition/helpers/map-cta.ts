@@ -27,27 +27,34 @@ export function mapButtons(buttons: StudioFormCTA): ButtonConfig {
 
   if (buttons.clear) {
     buttonMapping.buttonConfigs.clear = {
+      name: 'ClearButton',
       componentType: 'Button',
       props: {
         children: buttons.clear?.children ? buttons.clear.children : defaults.clear.label,
+        type: 'reset',
       },
     };
   }
 
   if (buttons.cancel) {
     buttonMapping.buttonConfigs.cancel = {
+      name: 'CancelButton',
       componentType: 'Button',
       props: {
         children: buttons.cancel?.children ? buttons.cancel.children : defaults.cancel.label,
+        type: 'button',
       },
     };
   }
 
   if (buttons.submit) {
     buttonMapping.buttonConfigs.submit = {
+      name: 'SubmitButton',
       componentType: 'Button',
       props: {
         children: buttons.submit?.children ? buttons.submit.children : defaults.submit.label,
+        type: 'submit',
+        variation: 'primary',
       },
     };
   }

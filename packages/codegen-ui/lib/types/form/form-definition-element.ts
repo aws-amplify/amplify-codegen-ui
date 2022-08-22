@@ -155,11 +155,12 @@ export type FormDefinitionPasswordFieldElement = {
 };
 
 export type FormDefinitionButtonElement = {
+  name: string;
   componentType: 'Button';
   props: {
-    visible?: boolean;
-    variant?: string;
+    variation?: string;
     children: string;
+    type?: string;
   };
 };
 
