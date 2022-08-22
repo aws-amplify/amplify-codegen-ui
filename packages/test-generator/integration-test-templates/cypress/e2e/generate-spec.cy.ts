@@ -28,6 +28,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'BasicComponentImage',
   'BasicComponentText',
   'BasicComponentCustomRating',
+  'ListingExpanderWithComponentSlot',
   'CustomFormCreateDog',
   'ComponentWithDataBindingWithPredicate',
   'ComponentWithDataBindingWithoutPredicate',

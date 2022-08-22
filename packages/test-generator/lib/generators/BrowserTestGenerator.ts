@@ -21,6 +21,7 @@ import {
   StudioComponent,
   StudioForm,
   StudioTheme,
+  StudioView,
 } from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
@@ -29,6 +30,7 @@ import {
   ReactUtilsStudioTemplateRenderer,
   AmplifyFormRenderer,
   UtilTemplateType,
+  AmplifyViewRenderer,
 } from '@aws-amplify/codegen-ui-react';
 import schema from '../models/schema';
 import { TestGenerator } from './TestGenerator';
@@ -41,6 +43,8 @@ export class BrowserTestGenerator extends TestGenerator {
   writeFormToDisk() {
     return { formMetadata: {} as FormMetadata };
   } // no-op
+
+  writeViewToDisk() {} // no-op
 
   writeIndexFileToDisk() {} // no-op
 
@@ -62,6 +66,10 @@ export class BrowserTestGenerator extends TestGenerator {
 
   renderForm(form: StudioForm) {
     return new AmplifyFormRenderer(form, getGenericFromDataStore(schema), this.renderConfig).renderComponentOnly();
+  }
+
+  renderView(view: StudioView) {
+    return new AmplifyViewRenderer(view, getGenericFromDataStore(schema), this.renderConfig).renderComponentOnly();
   }
 
   renderTheme(theme: StudioTheme) {

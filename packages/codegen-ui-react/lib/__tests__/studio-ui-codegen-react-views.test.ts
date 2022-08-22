@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { renderTableJsxElement, renderWithAmplifyViewRenderer } from './__utils__';
+import { renderExpanderJsxElement, renderTableJsxElement, renderWithAmplifyViewRenderer } from './__utils__';
 
 describe('amplify table renderer tests', () => {
   test('should generate a table element', () => {
@@ -24,6 +24,26 @@ describe('amplify table renderer tests', () => {
   test('should generate a non-datastore table element', () => {
     const tableElement = renderTableJsxElement('views/table-from-custom-json', undefined, 'test-custom-table.ts');
     expect(tableElement).toMatchSnapshot();
+  });
+});
+
+describe('amplify expander renderer tests', () => {
+  test('should generate expander with an expander item that has a component as a child', () => {
+    const expander = renderExpanderJsxElement(
+      'views/expander-with-component-slot',
+      undefined,
+      'test-expander-component-slot.ts',
+    );
+    expect(expander).toMatchSnapshot();
+  });
+
+  test('should generate expander with an expander item that has a data binding as a child', () => {
+    const expander = renderExpanderJsxElement(
+      'views/expander-with-binding-prop',
+      undefined,
+      'test-expander-binding-prop.ts',
+    );
+    expect(expander).toMatchSnapshot();
   });
 });
 

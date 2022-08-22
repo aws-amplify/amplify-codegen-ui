@@ -25,6 +25,7 @@ import {
   handleCodegenErrors,
   validateViewSchema,
   StudioComponentPredicate,
+  DEFAULT_TABLE_DEFINITION,
 } from '@aws-amplify/codegen-ui';
 import {
   addSyntheticLeadingComment,
@@ -60,6 +61,7 @@ import { ReactRenderConfig, scriptKindToFileExtension } from '../react-render-co
 import { RequiredKeys } from '../utils/type-utils';
 import {
   buildDataStoreCollectionCall,
+  getDataStoreName,
   getFilterName,
   getPaginationName,
   getPredicateName,
@@ -79,7 +81,7 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
 
   protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
 
-  protected viewDefinition: TableDefinition;
+  protected viewDefinition: TableDefinition = DEFAULT_TABLE_DEFINITION;
 
   protected viewComponent: StudioView;
 
@@ -101,17 +103,19 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
     switch (component.viewConfiguration.type) {
       case 'Table':
         this.viewDefinition = generateTableDefinition(component, dataSchema);
+        // find if formatter is required
+        if (needsFormatter(component.viewConfiguration)) {
+          this.importCollection.addMappedImport(ImportValue.FORMATTER);
+        }
+        break;
+      case 'Collection':
+        // 'Collection' type doesn't need a viewDefinition
         break;
       default:
-        throw new Error(`Type: ${component.viewConfiguration.type} is not supported.`);
+        throw new Error(`Encountered a viewConfiguration type that is not supported.`);
     }
 
     this.viewComponent = component;
-
-    // find if formatter is required
-    if (needsFormatter(component.viewConfiguration)) {
-      this.importCollection.addMappedImport(ImportValue.FORMATTER);
-    }
 
     this.viewMetadata = {
       id: component.id,
@@ -252,15 +256,16 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
     const statements: Statement[] = [];
     const elements: BindingElement[] = [];
     const { type, model, predicate, sort } = this.viewComponent.dataSource;
+    const itemsProp = 'itemsProp';
     const isDataStoreEnabled = type === 'DataStore' && model;
     if (isDataStoreEnabled) {
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataSource.type);
+      this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
       this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
       elements.push(
         factory.createBindingElement(
           undefined,
           factory.createIdentifier('items'),
-          factory.createIdentifier('itemsProps'),
+          factory.createIdentifier(itemsProp),
           undefined,
         ),
         factory.createBindingElement(undefined, undefined, factory.createIdentifier('predicateOverride'), undefined),
@@ -272,13 +277,15 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
     // add base Props
 
     // props
-    const props = [
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('formatOverride'), undefined),
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('highlightOnHover'), undefined),
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onRowClick'), undefined),
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('disableHeaders'), undefined),
-    ];
-    elements.push(...props);
+    if (this.viewComponent.viewConfiguration.type === 'Table') {
+      const props = [
+        factory.createBindingElement(undefined, undefined, factory.createIdentifier('formatOverride'), undefined),
+        factory.createBindingElement(undefined, undefined, factory.createIdentifier('highlightOnHover'), undefined),
+        factory.createBindingElement(undefined, undefined, factory.createIdentifier('onRowClick'), undefined),
+        factory.createBindingElement(undefined, undefined, factory.createIdentifier('disableHeaders'), undefined),
+      ];
+      elements.push(...props);
+    }
 
     // get rest of props to pass to top level component
     elements.push(
@@ -385,7 +392,7 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
       if custom enabled
       uses regular items array for formatting
       */
-      const dsItemsName = factory.createIdentifier(`${this.viewComponent.name}DataStore`);
+      const dsItemsName = factory.createIdentifier(getDataStoreName(model));
       statements.push(
         buildBaseCollectionVariableStatement(
           dsItemsName,
@@ -406,12 +413,12 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
                 undefined,
                 factory.createConditionalExpression(
                   factory.createBinaryExpression(
-                    factory.createIdentifier('itemsProp'),
+                    factory.createIdentifier(itemsProp),
                     factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
                     factory.createIdentifier('undefined'),
                   ),
                   factory.createToken(SyntaxKind.QuestionToken),
-                  factory.createIdentifier('itemsProp'),
+                  factory.createIdentifier(itemsProp),
                   factory.createToken(SyntaxKind.ColonToken),
                   dsItemsName,
                 ),
@@ -455,10 +462,23 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
           factory.createLiteralTypeNode(factory.createNull()),
         ]),
       ),
+      factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier('predicateOverride'),
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createUnionTypeNode([
+          factory.createTypeReferenceNode(factory.createIdentifier('ReturnType'), [
+            factory.createTypeQueryNode(factory.createIdentifier('createDataStorePredicate')),
+          ]),
+          factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
+          factory.createLiteralTypeNode(factory.createNull()),
+        ]),
+      ),
     ]);
     const formPropType = getComponentPropName(this.component.name);
 
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
+    this.importCollection.addMappedImport(ImportValue.CREATE_DATA_STORE_PREDICATE);
 
     return [
       factory.createTypeAliasDeclaration(

@@ -1,5 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`amplify expander renderer tests should generate expander with an expander item that has a component as a child 1`] = `
+"<Expander type=\\"multiple\\">
+  {items.map((item) => (
+    <ExpanderItem title={item.questionTitle} value={item.id} key={item.id}>
+      <Ampligram
+        title={item.answerTitle}
+        description={item.answerDescription}
+      />
+    </ExpanderItem>
+  ))}
+</Expander>;
+"
+`;
+
+exports[`amplify expander renderer tests should generate expander with an expander item that has a data binding as a child 1`] = `
+"<Expander type=\\"multiple\\">
+  {items.map((item) => (
+    <ExpanderItem title={item.questionTitle} value={item.id} key={item.id}>
+      {item.questionAnswer}
+    </ExpanderItem>
+  ))}
+</Expander>;
+"
+`;
+
 exports[`amplify table renderer tests should generate a non-datastore table element 1`] = `
 "<Table>
   {!disableHeaders && (
@@ -90,6 +115,7 @@ exports[`amplify view renderer tests should call util file if rendered 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { formatter } from \\"./utils\\";
+import { Post } from \\"../models\\";
 import {
   createDataStorePredicate,
   useDataStoreBinding,
@@ -104,7 +130,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 export default function MyPostTable(props) {
   const {
-    items: itemsProps,
+    items: itemsProp,
     predicateOverride,
     formatOverride,
     highlightOnHover,
@@ -120,13 +146,13 @@ export default function MyPostTable(props) {
   };
   const postPredicate = createDataStorePredicate(postFilter);
   const postPagination = { sort: (s) => s.username(SortDirection.ASCENDING) };
-  const MyPostTableDataStore = useDataStoreBinding({
+  const postDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: Post,
     criteria: predicateOverride || postPredicate,
     pagination: postPagination,
   }).items;
-  const items = itemsProp !== undefined ? itemsProp : MyPostTableDataStore;
+  const items = itemsProp !== undefined ? itemsProp : postDataStore;
   return (
     <Table>
       {!disableHeaders && (
@@ -192,9 +218,10 @@ export default function MyPostTable(props) {
 
 exports[`amplify view renderer tests should call util file if rendered 2`] = `
 "import * as React from \\"react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps, createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
 export declare type MyPostTableProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
+    predicateOverride?: ReturnType<typeof createDataStorePredicate> | undefined | null;
 }>;
 export default function MyPostTable(props: MyPostTableProps): React.ReactElement;
 "
@@ -259,9 +286,10 @@ export default function CustomTable(props) {
 
 exports[`amplify view renderer tests should render view with custom datastore 2`] = `
 "import * as React from \\"react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps, createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
 export declare type CustomTableProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
+    predicateOverride?: ReturnType<typeof createDataStorePredicate> | undefined | null;
 }>;
 export default function CustomTable(props: CustomTableProps): React.ReactElement;
 "
@@ -270,6 +298,7 @@ export default function CustomTable(props: CustomTableProps): React.ReactElement
 exports[`amplify view renderer tests should render view with passed in predicate and sort 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
+import { Post } from \\"../models\\";
 import {
   createDataStorePredicate,
   useDataStoreBinding,
@@ -284,7 +313,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 export default function MyPostTable(props) {
   const {
-    items: itemsProps,
+    items: itemsProp,
     predicateOverride,
     formatOverride,
     highlightOnHover,
@@ -300,13 +329,13 @@ export default function MyPostTable(props) {
   };
   const postPredicate = createDataStorePredicate(postFilter);
   const postPagination = { sort: (s) => s.username(SortDirection.ASCENDING) };
-  const MyPostTableDataStore = useDataStoreBinding({
+  const postDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: Post,
     criteria: predicateOverride || postPredicate,
     pagination: postPagination,
   }).items;
-  const items = itemsProp !== undefined ? itemsProp : MyPostTableDataStore;
+  const items = itemsProp !== undefined ? itemsProp : postDataStore;
   return (
     <Table>
       {!disableHeaders && (
@@ -369,9 +398,10 @@ export default function MyPostTable(props) {
 
 exports[`amplify view renderer tests should render view with passed in predicate and sort 2`] = `
 "import * as React from \\"react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { EscapeHatchProps, createDataStorePredicate } from \\"@aws-amplify/ui-react/internal\\";
 export declare type MyPostTableProps = React.PropsWithChildren<{
     overrides?: EscapeHatchProps | undefined | null;
+    predicateOverride?: ReturnType<typeof createDataStorePredicate> | undefined | null;
 }>;
 export default function MyPostTable(props: MyPostTableProps): React.ReactElement;
 "

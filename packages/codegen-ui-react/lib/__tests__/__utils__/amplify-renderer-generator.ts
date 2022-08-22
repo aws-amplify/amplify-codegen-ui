@@ -104,3 +104,20 @@ export const renderTableJsxElement = (
 
   return transpile(tableNode, {}).componentText;
 };
+
+export const renderExpanderJsxElement = (
+  filePath: string,
+  dataSchemaFilePath: string | undefined,
+  snapshotFileName: string,
+  renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
+): string => {
+  const expander = loadSchemaFromJSONFile<StudioView>(filePath);
+  const dataSchema = dataSchemaFilePath ? loadSchemaFromJSONFile<GenericDataSchema>(dataSchemaFilePath) : undefined;
+  const expanderJsx = new AmplifyViewRenderer(expander, dataSchema, renderConfig).renderJsx();
+
+  const file = createSourceFile(snapshotFileName, '', ScriptTarget.ES2015, true, ScriptKind.TS);
+  const printer = createPrinter();
+  const expanderNode = printer.printNode(EmitHint.Unspecified, expanderJsx, file);
+
+  return transpile(expanderNode, {}).componentText;
+};

@@ -34,6 +34,9 @@ import { orderAndFilterVisibleColumns } from './helpers';
  * @returns a definition that translates to rendered JSX elements.
  */
 export function generateTableDefinition(table: StudioView, dataSchema?: GenericDataSchema): TableDefinition {
+  if (table.viewConfiguration.type !== 'Table') {
+    throw new Error(`Cannot generate a Table definition for viewConfiguration type ${table.viewConfiguration.type}`);
+  }
   const definition = DEFAULT_TABLE_DEFINITION;
 
   definition.tableStyle = {
