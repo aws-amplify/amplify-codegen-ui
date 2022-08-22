@@ -52,7 +52,7 @@ const parentGrid = (name: string, style: StudioFormStyle, children: StudioCompon
   };
 };
 
-const mapFieldElementProps = (element: FormDefinitionElement) => {
+const mapFormElementProps = (element: FormDefinitionElement) => {
   const props: StudioComponentProperties = {};
   Object.entries(element.props).forEach(([key, value]) => {
     props[key] = { value: `${value}`, type: `${typeof value}` };
@@ -78,7 +78,7 @@ const fieldComponentMapper = (name: string, formDefinition: FormDefinition): Stu
         return {
           name: column,
           componentType: element.componentType,
-          properties: mapFieldElementProps(element),
+          properties: mapFormElementProps(element),
           children: mapElementChildren(column, element).children,
         };
       }),

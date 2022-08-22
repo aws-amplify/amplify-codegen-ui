@@ -3,11 +3,11 @@
 exports[`amplify form renderer tests custom form tests should render a custom backed form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   Button,
   Flex,
@@ -25,24 +25,23 @@ export default function customDataForm(props) {
     overrides,
     ...rest
   } = props;
-  const [nameFieldError, setNameFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [emailFieldError, setEmailFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [cityFieldError, setCityFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [categoryFieldError, setCategoryFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
+  const [errors, setErrors] = useStateMutationAction({});
+  const validations = {
+    name: [],
+    email: [],
+    city: [],
+    category: [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    const validationResponse = {
+      ...validateField(value, validations[fieldName]),
+      ...(await onValidate?.[fieldName]?.(value)),
+    };
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
   return (
     <form
       onSubmit={async (event) => {
@@ -69,15 +68,11 @@ export default function customDataForm(props) {
             defaultValue=\\"John Doe\\"
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"name\\"]
-                ? await onValidate[\\"name\\"](value)
-                : validateField(value, []);
-              setNameFieldError({ ...nameFieldError, ...isValidResult });
-              setFormValid(!nameFieldError.hasError);
+              await runValidationTasks(\\"name\\", value);
               setModelFields({ ...modelFields, name: value });
             }}
-            errorMessage={nameFieldError.errorMessage}
-            hasError={nameFieldError.hasError}
+            errorMessage={errors.name?.errorMessage}
+            hasError={errors.name?.hasError}
             {...getOverrideProps(overrides, \\"name\\")}
           ></TextField>
         </Grid>
@@ -93,15 +88,11 @@ export default function customDataForm(props) {
             defaultValue=\\"johndoe@amplify.com\\"
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"email\\"]
-                ? await onValidate[\\"email\\"](value)
-                : validateField(value, []);
-              setEmailFieldError({ ...emailFieldError, ...isValidResult });
-              setFormValid(!emailFieldError.hasError);
+              await runValidationTasks(\\"email\\", value);
               setModelFields({ ...modelFields, email: value });
             }}
-            errorMessage={emailFieldError.errorMessage}
-            hasError={emailFieldError.hasError}
+            errorMessage={errors.email?.errorMessage}
+            hasError={errors.email?.hasError}
             {...getOverrideProps(overrides, \\"email\\")}
           ></TextField>
         </Grid>
@@ -115,15 +106,11 @@ export default function customDataForm(props) {
             label=\\"Label\\"
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"city\\"]
-                ? await onValidate[\\"city\\"](value)
-                : validateField(value, []);
-              setCityFieldError({ ...cityFieldError, ...isValidResult });
-              setFormValid(!cityFieldError.hasError);
+              await runValidationTasks(\\"city\\", value);
               setModelFields({ ...modelFields, city: value });
             }}
-            errorMessage={cityFieldError.errorMessage}
-            hasError={cityFieldError.hasError}
+            errorMessage={errors.city?.errorMessage}
+            hasError={errors.city?.hasError}
             {...getOverrideProps(overrides, \\"city\\")}
           >
             <option
@@ -156,18 +143,11 @@ export default function customDataForm(props) {
             defaultValue=\\"Hobbies\\"
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"category\\"]
-                ? await onValidate[\\"category\\"](value)
-                : validateField(value, []);
-              setCategoryFieldError({
-                ...categoryFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!categoryFieldError.hasError);
+              await runValidationTasks(\\"category\\", value);
               setModelFields({ ...modelFields, category: value });
             }}
-            errorMessage={categoryFieldError.errorMessage}
-            hasError={categoryFieldError.hasError}
+            errorMessage={errors.category?.errorMessage}
+            hasError={errors.category?.hasError}
             {...getOverrideProps(overrides, \\"category\\")}
           >
             <Radio
@@ -211,7 +191,7 @@ export default function customDataForm(props) {
             children=\\"create\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={!formValid}
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -251,14 +231,183 @@ export default function customDataForm(props: customDataFormProps): React.ReactE
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
+exports[`amplify form renderer tests custom form tests should render sectional elements 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
+import {
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Heading,
+  Text,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+export default function CustomWithSectionalElements(props) {
+  const {
+    onSubmit: customWithSectionalElementsOnSubmit,
+    onCancel,
+    onValidate,
+    overrides,
+    ...rest
+  } = props;
+  const [modelFields, setModelFields] = useStateMutationAction({});
+  const [formValid, setFormValid] = useStateMutationAction(true);
+  const [errors, setErrors] = useStateMutationAction({});
+  const validations = {
+    name: [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    const validationResponse = {
+      ...validateField(value, validations[fieldName]),
+      ...(await onValidate?.[fieldName]?.(value)),
+    };
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <form
+      onSubmit={async (event) => {
+        event.preventDefault();
+        await customWithSectionalElementsOnSubmit(modelFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"CustomWithSectionalElements\\")}
+    >
+      <Grid
+        columnGap=\\"15px\\"
+        rowGap=\\"15px\\"
+        {...getOverrideProps(overrides, \\"CustomWithSectionalElementsGrid\\")}
+      >
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid0\\")}
+        >
+          <Heading
+            level={2}
+            children=\\"Create a Post\\"
+            {...getOverrideProps(overrides, \\"myHeading\\")}
+          ></Heading>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid1\\")}
+        >
+          <TextField
+            label=\\"Label\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              await runValidationTasks(\\"name\\", value);
+              setModelFields({ ...modelFields, name: value });
+            }}
+            errorMessage={errors.name?.errorMessage}
+            hasError={errors.name?.hasError}
+            {...getOverrideProps(overrides, \\"name\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid2\\")}
+        >
+          <Text
+            children=\\"Did you put your name above?\\"
+            {...getOverrideProps(overrides, \\"myText\\")}
+          ></Text>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid3\\")}
+        >
+          <Divider
+            orientation=\\"horizontal\\"
+            {...getOverrideProps(overrides, \\"myDivider\\")}
+          ></Divider>
+        </Grid>
+      </Grid>
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Cancel\\"
+          type=\\"button\\"
+          onClick={() => {
+            onCancel && onCancel();
+          }}
+          {...getOverrideProps(overrides, \\"CancelButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Clear\\"
+            type=\\"reset\\"
+            {...getOverrideProps(overrides, \\"ClearButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </form>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render sectional elements 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { DividerProps, GridProps, HeadingProps, TextFieldProps, TextProps } from \\"@aws-amplify/ui-react\\";
+export declare type CustomWithSectionalElementsOverridesProps = {
+    CustomWithSectionalElementsGrid: GridProps;
+    RowGrid0: GridProps;
+    myHeading: HeadingProps;
+    RowGrid1: GridProps;
+    name: TextFieldProps;
+    RowGrid2: GridProps;
+    myText: TextProps;
+    RowGrid3: GridProps;
+    myDivider: DividerProps;
+} & EscapeHatchProps;
+export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
+    overrides?: CustomWithSectionalElementsOverridesProps | undefined | null;
+} & {
+    onSubmit: (fields: Record<string, string>) => void;
+    onCancel?: () => void;
+    onValidate?: Record<string, (value: any) => Promise<{
+        hasError: boolean;
+        errorMessage?: string;
+    }>>;
+}>;
+export default function CustomWithSectionalElements(props: CustomWithSectionalElementsProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import { Post } from \\"../models\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
@@ -271,22 +420,23 @@ export default function myPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [profile_urlFieldError, setProfile_urlFieldError] =
-    useStateMutationAction({ hasError: false, errorMessage: \\"\\" });
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
+  const [errors, setErrors] = useStateMutationAction({});
+  const validations = {
+    caption: [],
+    username: [],
+    post_url: [{ type: \\"URL\\" }],
+    profile_url: [{ type: \\"URL\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    const validationResponse = {
+      ...validateField(value, validations[fieldName]),
+      ...(await onValidate?.[fieldName]?.(value)),
+    };
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
   return (
     <form
       onSubmit={async (event) => {
@@ -356,15 +506,11 @@ export default function myPostForm(props) {
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"caption\\"]
-                ? await onValidate[\\"caption\\"](value)
-                : validateField(value, []);
-              setCaptionFieldError({ ...captionFieldError, ...isValidResult });
-              setFormValid(!captionFieldError.hasError);
+              await runValidationTasks(\\"caption\\", value);
               setModelFields({ ...modelFields, caption: value });
             }}
-            errorMessage={captionFieldError.errorMessage}
-            hasError={captionFieldError.hasError}
+            errorMessage={errors.caption?.errorMessage}
+            hasError={errors.caption?.hasError}
             {...getOverrideProps(overrides, \\"caption\\")}
           ></TextField>
         </Grid>
@@ -380,18 +526,11 @@ export default function myPostForm(props) {
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"username\\"]
-                ? await onValidate[\\"username\\"](value)
-                : validateField(value, []);
-              setUsernameFieldError({
-                ...usernameFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!usernameFieldError.hasError);
+              await runValidationTasks(\\"username\\", value);
               setModelFields({ ...modelFields, username: value });
             }}
-            errorMessage={usernameFieldError.errorMessage}
-            hasError={usernameFieldError.hasError}
+            errorMessage={errors.username?.errorMessage}
+            hasError={errors.username?.hasError}
             {...getOverrideProps(overrides, \\"username\\")}
           ></TextField>
         </Grid>
@@ -407,18 +546,11 @@ export default function myPostForm(props) {
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"post_url\\"]
-                ? await onValidate[\\"post_url\\"](value)
-                : validateField(value, [{ type: \\"URL\\" }]);
-              setPost_urlFieldError({
-                ...post_urlFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!post_urlFieldError.hasError);
+              await runValidationTasks(\\"post_url\\", value);
               setModelFields({ ...modelFields, post_url: value });
             }}
-            errorMessage={post_urlFieldError.errorMessage}
-            hasError={post_urlFieldError.hasError}
+            errorMessage={errors.post_url?.errorMessage}
+            hasError={errors.post_url?.hasError}
             {...getOverrideProps(overrides, \\"post_url\\")}
           ></TextField>
         </Grid>
@@ -434,22 +566,43 @@ export default function myPostForm(props) {
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"profile_url\\"]
-                ? await onValidate[\\"profile_url\\"](value)
-                : validateField(value, [{ type: \\"URL\\" }]);
-              setProfile_urlFieldError({
-                ...profile_urlFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!profile_urlFieldError.hasError);
+              await runValidationTasks(\\"profile_url\\", value);
               setModelFields({ ...modelFields, profile_url: value });
             }}
-            errorMessage={profile_urlFieldError.errorMessage}
-            hasError={profile_urlFieldError.hasError}
+            errorMessage={errors.profile_url?.errorMessage}
+            hasError={errors.profile_url?.hasError}
             {...getOverrideProps(overrides, \\"profile_url\\")}
           ></TextField>
         </Grid>
       </Grid>
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Cancel\\"
+          type=\\"button\\"
+          onClick={() => {
+            onCancel && onCancel();
+          }}
+          {...getOverrideProps(overrides, \\"CancelButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Clear\\"
+            type=\\"reset\\"
+            {...getOverrideProps(overrides, \\"ClearButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
     </form>
   );
 }
@@ -492,11 +645,11 @@ export default function myPostForm(props: myPostFormProps): React.ReactElement;
 exports[`amplify form renderer tests datastore form tests should generate a update form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import { Post } from \\"../models\\";
 import {
   Button,
@@ -516,24 +669,24 @@ export default function myPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [TextAreaFieldbbd63464FieldError, setTextAreaFieldbbd63464FieldError] =
-    useStateMutationAction({ hasError: false, errorMessage: \\"\\" });
-  const [captionFieldError, setCaptionFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [usernameFieldError, setUsernameFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [profile_urlFieldError, setProfile_urlFieldError] =
-    useStateMutationAction({ hasError: false, errorMessage: \\"\\" });
-  const [post_urlFieldError, setPost_urlFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
+  const [errors, setErrors] = useStateMutationAction({});
+  const validations = {
+    TextAreaFieldbbd63464: [],
+    caption: [],
+    username: [],
+    profile_url: [{ type: \\"URL\\" }],
+    post_url: [{ type: \\"URL\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    const validationResponse = {
+      ...validateField(value, validations[fieldName]),
+      ...(await onValidate?.[fieldName]?.(value)),
+    };
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
   return (
     <form
       onSubmit={async (event) => {
@@ -606,18 +759,11 @@ export default function myPostForm(props) {
             label=\\"Label\\"
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"TextAreaFieldbbd63464\\"]
-                ? await onValidate[\\"TextAreaFieldbbd63464\\"](value)
-                : validateField(value, []);
-              setTextAreaFieldbbd63464FieldError({
-                ...TextAreaFieldbbd63464FieldError,
-                ...isValidResult,
-              });
-              setFormValid(!TextAreaFieldbbd63464FieldError.hasError);
+              await runValidationTasks(\\"TextAreaFieldbbd63464\\", value);
               setModelFields({ ...modelFields, TextAreaFieldbbd63464: value });
             }}
-            errorMessage={TextAreaFieldbbd63464FieldError.errorMessage}
-            hasError={TextAreaFieldbbd63464FieldError.hasError}
+            errorMessage={errors.TextAreaFieldbbd63464?.errorMessage}
+            hasError={errors.TextAreaFieldbbd63464?.hasError}
             {...getOverrideProps(overrides, \\"TextAreaFieldbbd63464\\")}
           ></TextAreaField>
         </Grid>
@@ -633,15 +779,11 @@ export default function myPostForm(props) {
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"caption\\"]
-                ? await onValidate[\\"caption\\"](value)
-                : validateField(value, []);
-              setCaptionFieldError({ ...captionFieldError, ...isValidResult });
-              setFormValid(!captionFieldError.hasError);
+              await runValidationTasks(\\"caption\\", value);
               setModelFields({ ...modelFields, caption: value });
             }}
-            errorMessage={captionFieldError.errorMessage}
-            hasError={captionFieldError.hasError}
+            errorMessage={errors.caption?.errorMessage}
+            hasError={errors.caption?.hasError}
             {...getOverrideProps(overrides, \\"caption\\")}
           ></TextField>
         </Grid>
@@ -657,18 +799,11 @@ export default function myPostForm(props) {
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"username\\"]
-                ? await onValidate[\\"username\\"](value)
-                : validateField(value, []);
-              setUsernameFieldError({
-                ...usernameFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!usernameFieldError.hasError);
+              await runValidationTasks(\\"username\\", value);
               setModelFields({ ...modelFields, username: value });
             }}
-            errorMessage={usernameFieldError.errorMessage}
-            hasError={usernameFieldError.hasError}
+            errorMessage={errors.username?.errorMessage}
+            hasError={errors.username?.hasError}
             {...getOverrideProps(overrides, \\"username\\")}
           ></TextField>
         </Grid>
@@ -684,18 +819,11 @@ export default function myPostForm(props) {
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"profile_url\\"]
-                ? await onValidate[\\"profile_url\\"](value)
-                : validateField(value, [{ type: \\"URL\\" }]);
-              setProfile_urlFieldError({
-                ...profile_urlFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!profile_urlFieldError.hasError);
+              await runValidationTasks(\\"profile_url\\", value);
               setModelFields({ ...modelFields, profile_url: value });
             }}
-            errorMessage={profile_urlFieldError.errorMessage}
-            hasError={profile_urlFieldError.hasError}
+            errorMessage={errors.profile_url?.errorMessage}
+            hasError={errors.profile_url?.hasError}
             {...getOverrideProps(overrides, \\"profile_url\\")}
           ></TextField>
         </Grid>
@@ -711,18 +839,11 @@ export default function myPostForm(props) {
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"post_url\\"]
-                ? await onValidate[\\"post_url\\"](value)
-                : validateField(value, [{ type: \\"URL\\" }]);
-              setPost_urlFieldError({
-                ...post_urlFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!post_urlFieldError.hasError);
+              await runValidationTasks(\\"post_url\\", value);
               setModelFields({ ...modelFields, post_url: value });
             }}
-            errorMessage={post_urlFieldError.errorMessage}
-            hasError={post_urlFieldError.hasError}
+            errorMessage={errors.post_url?.errorMessage}
+            hasError={errors.post_url?.hasError}
             {...getOverrideProps(overrides, \\"post_url\\")}
           ></TextField>
         </Grid>
@@ -750,7 +871,7 @@ export default function myPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={!formValid}
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -800,11 +921,11 @@ export default function myPostForm(props: myPostFormProps): React.ReactElement;
 exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import { InputGallery } from \\"../models\\";
 import {
   CheckboxField,
@@ -825,36 +946,27 @@ export default function InputGalleryCreateForm(props) {
     overrides,
     ...rest
   } = props;
-  const [numFieldError, setNumFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [rootbeerFieldError, setRootbeerFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [maybeFieldError, setMaybeFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [maybeSlideFieldError, setMaybeSlideFieldError] =
-    useStateMutationAction({ hasError: false, errorMessage: \\"\\" });
-  const [maybeCheckFieldError, setMaybeCheckFieldError] =
-    useStateMutationAction({ hasError: false, errorMessage: \\"\\" });
-  const [timestampFieldError, setTimestampFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [ippyFieldError, setIppyFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
-  const [timeisnowFieldError, setTimeisnowFieldError] = useStateMutationAction({
-    hasError: false,
-    errorMessage: \\"\\",
-  });
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [formValid, setFormValid] = useStateMutationAction(true);
+  const [errors, setErrors] = useStateMutationAction({});
+  const validations = {
+    num: [],
+    rootbeer: [],
+    maybe: [],
+    maybeSlide: [],
+    maybeCheck: [],
+    timestamp: [],
+    ippy: [{ type: \\"IpAddress\\" }],
+    timeisnow: [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    const validationResponse = {
+      ...validateField(value, validations[fieldName]),
+      ...(await onValidate?.[fieldName]?.(value)),
+    };
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
   return (
     <form
       onSubmit={async (event) => {
@@ -897,15 +1009,11 @@ export default function InputGalleryCreateForm(props) {
             type=\\"number\\"
             onChange={async (e) => {
               const value = parseInt(e.target.value);
-              const isValidResult = onValidate?.[\\"num\\"]
-                ? await onValidate[\\"num\\"](value)
-                : validateField(value, []);
-              setNumFieldError({ ...numFieldError, ...isValidResult });
-              setFormValid(!numFieldError.hasError);
+              await runValidationTasks(\\"num\\", value);
               setModelFields({ ...modelFields, num: value });
             }}
-            errorMessage={numFieldError.errorMessage}
-            hasError={numFieldError.hasError}
+            errorMessage={errors.num?.errorMessage}
+            hasError={errors.num?.hasError}
             {...getOverrideProps(overrides, \\"num\\")}
           ></TextField>
         </Grid>
@@ -922,18 +1030,11 @@ export default function InputGalleryCreateForm(props) {
             type=\\"number\\"
             onChange={async (e) => {
               const value = Number(e.target.value);
-              const isValidResult = onValidate?.[\\"rootbeer\\"]
-                ? await onValidate[\\"rootbeer\\"](value)
-                : validateField(value, []);
-              setRootbeerFieldError({
-                ...rootbeerFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!rootbeerFieldError.hasError);
+              await runValidationTasks(\\"rootbeer\\", value);
               setModelFields({ ...modelFields, rootbeer: value });
             }}
-            errorMessage={rootbeerFieldError.errorMessage}
-            hasError={rootbeerFieldError.hasError}
+            errorMessage={errors.rootbeer?.errorMessage}
+            hasError={errors.rootbeer?.hasError}
             {...getOverrideProps(overrides, \\"rootbeer\\")}
           ></TextField>
         </Grid>
@@ -950,15 +1051,11 @@ export default function InputGalleryCreateForm(props) {
             isRequired=\\"false\\"
             onChange={async (e) => {
               const value = e.target.value === \\"Yes\\";
-              const isValidResult = onValidate?.[\\"maybe\\"]
-                ? await onValidate[\\"maybe\\"](value)
-                : validateField(value, []);
-              setMaybeFieldError({ ...maybeFieldError, ...isValidResult });
-              setFormValid(!maybeFieldError.hasError);
+              await runValidationTasks(\\"maybe\\", value);
               setModelFields({ ...modelFields, maybe: value });
             }}
-            errorMessage={maybeFieldError.errorMessage}
-            hasError={maybeFieldError.hasError}
+            errorMessage={errors.maybe?.errorMessage}
+            hasError={errors.maybe?.hasError}
             {...getOverrideProps(overrides, \\"maybe\\")}
           >
             <Radio
@@ -978,6 +1075,13 @@ export default function InputGalleryCreateForm(props) {
             children=\\"Maybe slide\\"
             isDisabled={false}
             defaultPressed={false}
+            onChange={async (e) => {
+              const value = e.target.checked;
+              await runValidationTasks(\\"maybeSlide\\", value);
+              setModelFields({ ...modelFields, maybeSlide: value });
+            }}
+            errorMessage={errors.maybeSlide?.errorMessage}
+            hasError={errors.maybeSlide?.hasError}
             {...getOverrideProps(overrides, \\"maybeSlide\\")}
           ></ToggleButton>
         </Grid>
@@ -995,18 +1099,11 @@ export default function InputGalleryCreateForm(props) {
             defaultChecked={false}
             onChange={async (e) => {
               const value = e.target.checked;
-              const isValidResult = onValidate?.[\\"maybeCheck\\"]
-                ? await onValidate[\\"maybeCheck\\"](value)
-                : validateField(value, []);
-              setMaybeCheckFieldError({
-                ...maybeCheckFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!maybeCheckFieldError.hasError);
+              await runValidationTasks(\\"maybeCheck\\", value);
               setModelFields({ ...modelFields, maybeCheck: value });
             }}
-            errorMessage={maybeCheckFieldError.errorMessage}
-            hasError={maybeCheckFieldError.hasError}
+            errorMessage={errors.maybeCheck?.errorMessage}
+            hasError={errors.maybeCheck?.hasError}
             {...getOverrideProps(overrides, \\"maybeCheck\\")}
           ></CheckboxField>
         </Grid>
@@ -1023,18 +1120,11 @@ export default function InputGalleryCreateForm(props) {
             type=\\"datetime-local\\"
             onChange={async (e) => {
               const value = Number(new Date(e.target.value));
-              const isValidResult = onValidate?.[\\"timestamp\\"]
-                ? await onValidate[\\"timestamp\\"](value)
-                : validateField(value, []);
-              setTimestampFieldError({
-                ...timestampFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!timestampFieldError.hasError);
+              await runValidationTasks(\\"timestamp\\", value);
               setModelFields({ ...modelFields, timestamp: value });
             }}
-            errorMessage={timestampFieldError.errorMessage}
-            hasError={timestampFieldError.hasError}
+            errorMessage={errors.timestamp?.errorMessage}
+            hasError={errors.timestamp?.hasError}
             {...getOverrideProps(overrides, \\"timestamp\\")}
           ></TextField>
         </Grid>
@@ -1050,15 +1140,11 @@ export default function InputGalleryCreateForm(props) {
             isReadOnly={false}
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"ippy\\"]
-                ? await onValidate[\\"ippy\\"](value)
-                : validateField(value, [{ type: \\"IpAddress\\" }]);
-              setIppyFieldError({ ...ippyFieldError, ...isValidResult });
-              setFormValid(!ippyFieldError.hasError);
+              await runValidationTasks(\\"ippy\\", value);
               setModelFields({ ...modelFields, ippy: value });
             }}
-            errorMessage={ippyFieldError.errorMessage}
-            hasError={ippyFieldError.hasError}
+            errorMessage={errors.ippy?.errorMessage}
+            hasError={errors.ippy?.hasError}
             {...getOverrideProps(overrides, \\"ippy\\")}
           ></TextField>
         </Grid>
@@ -1075,18 +1161,11 @@ export default function InputGalleryCreateForm(props) {
             type=\\"time\\"
             onChange={async (e) => {
               const { value } = e.target;
-              const isValidResult = onValidate?.[\\"timeisnow\\"]
-                ? await onValidate[\\"timeisnow\\"](value)
-                : validateField(value, []);
-              setTimeisnowFieldError({
-                ...timeisnowFieldError,
-                ...isValidResult,
-              });
-              setFormValid(!timeisnowFieldError.hasError);
+              await runValidationTasks(\\"timeisnow\\", value);
               setModelFields({ ...modelFields, timeisnow: value });
             }}
-            errorMessage={timeisnowFieldError.errorMessage}
-            hasError={timeisnowFieldError.hasError}
+            errorMessage={errors.timeisnow?.errorMessage}
+            hasError={errors.timeisnow?.hasError}
             {...getOverrideProps(overrides, \\"timeisnow\\")}
           ></TextField>
         </Grid>

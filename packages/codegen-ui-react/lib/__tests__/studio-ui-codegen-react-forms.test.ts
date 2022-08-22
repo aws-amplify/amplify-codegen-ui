@@ -55,5 +55,14 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
+
+    it('should render sectional elements', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/custom-with-sectional-elements',
+        undefined,
+      );
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
   });
 });
