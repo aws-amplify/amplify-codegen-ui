@@ -26,7 +26,6 @@ export default function customDataForm(props) {
     ...rest
   } = props;
   const [modelFields, setModelFields] = useStateMutationAction({});
-  const [formValid, setFormValid] = useStateMutationAction(true);
   const [errors, setErrors] = useStateMutationAction({});
   const validations = {
     name: [],
@@ -35,10 +34,13 @@ export default function customDataForm(props) {
     category: [],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (onValidate?.[fieldName]) {
+      validationResponse = await onValidate[fieldName](
+        value,
+        validationResponse
+      );
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -46,6 +48,14 @@ export default function customDataForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         await customDataFormOnSubmit(modelFields);
       }}
       {...rest}
@@ -206,6 +216,16 @@ exports[`amplify form renderer tests custom form tests should render a custom ba
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { GridProps, RadioGroupFieldProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type customDataFormInputValues = {
+    name: string;
+    email: string;
+    city: string;
+    category: string;
+};
 export declare type customDataFormOverridesProps = {
     customDataFormGrid: GridProps;
     RowGrid0: GridProps;
@@ -222,10 +242,9 @@ export declare type customDataFormProps = React.PropsWithChildren<{
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
-        hasError: boolean;
-        errorMessage?: string;
-    }>>;
+    onValidate?: {
+        [field in keyof customDataFormInputValues]?: (value: customDataFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+    };
 }>;
 export default function customDataForm(props: customDataFormProps): React.ReactElement;
 "
@@ -257,16 +276,18 @@ export default function CustomWithSectionalElements(props) {
     ...rest
   } = props;
   const [modelFields, setModelFields] = useStateMutationAction({});
-  const [formValid, setFormValid] = useStateMutationAction(true);
   const [errors, setErrors] = useStateMutationAction({});
   const validations = {
     name: [],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (onValidate?.[fieldName]) {
+      validationResponse = await onValidate[fieldName](
+        value,
+        validationResponse
+      );
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -274,6 +295,14 @@ export default function CustomWithSectionalElements(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         await customWithSectionalElementsOnSubmit(modelFields);
       }}
       {...rest}
@@ -375,6 +404,13 @@ exports[`amplify form renderer tests custom form tests should render sectional e
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { DividerProps, GridProps, HeadingProps, TextFieldProps, TextProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type CustomWithSectionalElementsInputValues = {
+    name: string;
+};
 export declare type CustomWithSectionalElementsOverridesProps = {
     CustomWithSectionalElementsGrid: GridProps;
     RowGrid0: GridProps;
@@ -391,10 +427,9 @@ export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
-        hasError: boolean;
-        errorMessage?: string;
-    }>>;
+    onValidate?: {
+        [field in keyof CustomWithSectionalElementsInputValues]?: (value: CustomWithSectionalElementsInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+    };
 }>;
 export default function CustomWithSectionalElements(props: CustomWithSectionalElementsProps): React.ReactElement;
 "
@@ -421,7 +456,6 @@ export default function myPostForm(props) {
     ...rest
   } = props;
   const [modelFields, setModelFields] = useStateMutationAction({});
-  const [formValid, setFormValid] = useStateMutationAction(true);
   const [errors, setErrors] = useStateMutationAction({});
   const validations = {
     caption: [],
@@ -430,10 +464,13 @@ export default function myPostForm(props) {
     profile_url: [{ type: \\"URL\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (onValidate?.[fieldName]) {
+      validationResponse = await onValidate[fieldName](
+        value,
+        validationResponse
+      );
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -441,6 +478,14 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         if (onSubmitBefore) {
           setModelFields(onSubmitBefore({ fields: modelFields }));
         }
@@ -585,6 +630,16 @@ exports[`amplify form renderer tests datastore form tests should generate a crea
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type myPostFormInputValues = {
+    caption: string;
+    username: string;
+    post_url: string;
+    profile_url: string;
+};
 export declare type myPostFormOverridesProps = {
     myPostFormGrid: GridProps;
     RowGrid0: GridProps;
@@ -605,10 +660,9 @@ export declare type myPostFormProps = React.PropsWithChildren<{
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
-        hasError: boolean;
-        errorMessage?: string;
-    }>>;
+    onValidate?: {
+        [field in keyof myPostFormInputValues]?: (value: myPostFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+    };
 }>;
 export default function myPostForm(props: myPostFormProps): React.ReactElement;
 "
@@ -642,7 +696,6 @@ export default function myPostForm(props) {
     ...rest
   } = props;
   const [modelFields, setModelFields] = useStateMutationAction({});
-  const [formValid, setFormValid] = useStateMutationAction(true);
   const [errors, setErrors] = useStateMutationAction({});
   const validations = {
     TextAreaFieldbbd63464: [],
@@ -652,10 +705,13 @@ export default function myPostForm(props) {
     post_url: [{ type: \\"URL\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (onValidate?.[fieldName]) {
+      validationResponse = await onValidate[fieldName](
+        value,
+        validationResponse
+      );
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -663,6 +719,14 @@ export default function myPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         if (onSubmitBefore) {
           setModelFields(onSubmitBefore({ fields: modelFields }));
         }
@@ -830,6 +894,17 @@ exports[`amplify form renderer tests datastore form tests should generate a upda
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type myPostFormInputValues = {
+    TextAreaFieldbbd63464: string;
+    caption: string;
+    username: string;
+    profile_url: string;
+    post_url: string;
+};
 export declare type myPostFormOverridesProps = {
     myPostFormGrid: GridProps;
     RowGrid0: GridProps;
@@ -853,10 +928,9 @@ export declare type myPostFormProps = React.PropsWithChildren<{
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
-        hasError: boolean;
-        errorMessage?: string;
-    }>>;
+    onValidate?: {
+        [field in keyof myPostFormInputValues]?: (value: myPostFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+    };
 }>;
 export default function myPostForm(props: myPostFormProps): React.ReactElement;
 "
@@ -892,7 +966,6 @@ export default function InputGalleryCreateForm(props) {
     ...rest
   } = props;
   const [modelFields, setModelFields] = useStateMutationAction({});
-  const [formValid, setFormValid] = useStateMutationAction(true);
   const [errors, setErrors] = useStateMutationAction({});
   const validations = {
     num: [],
@@ -905,10 +978,13 @@ export default function InputGalleryCreateForm(props) {
     timeisnow: [],
   };
   const runValidationTasks = async (fieldName, value) => {
-    const validationResponse = {
-      ...validateField(value, validations[fieldName]),
-      ...(await onValidate?.[fieldName]?.(value)),
-    };
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (onValidate?.[fieldName]) {
+      validationResponse = await onValidate[fieldName](
+        value,
+        validationResponse
+      );
+    }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
@@ -916,6 +992,14 @@ export default function InputGalleryCreateForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
         if (onSubmitBefore) {
           setModelFields(onSubmitBefore({ fields: modelFields }));
         }
@@ -1153,6 +1237,20 @@ exports[`amplify form renderer tests datastore form tests should render a form w
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { CheckboxFieldProps, GridProps, RadioGroupFieldProps, TextFieldProps, ToggleButtonProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type InputGalleryCreateFormInputValues = {
+    num: number;
+    rootbeer: number;
+    maybe: boolean;
+    maybeSlide: boolean;
+    maybeCheck: boolean;
+    timestamp: number;
+    ippy: string;
+    timeisnow: string;
+};
 export declare type InputGalleryCreateFormOverridesProps = {
     InputGalleryCreateFormGrid: GridProps;
     RowGrid0: GridProps;
@@ -1181,10 +1279,9 @@ export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
-    onValidate?: Record<string, (value: any) => Promise<{
-        hasError: boolean;
-        errorMessage?: string;
-    }>>;
+    onValidate?: {
+        [field in keyof InputGalleryCreateFormInputValues]?: (value: InputGalleryCreateFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+    };
 }>;
 export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
 "

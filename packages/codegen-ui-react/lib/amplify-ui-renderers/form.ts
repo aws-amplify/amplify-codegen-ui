@@ -27,6 +27,7 @@ import { buildOpeningElementProperties } from '../react-component-render-helper'
 import { ImportCollection } from '../imports';
 import { getActionIdentifier } from '../workflow';
 import { buildDataStoreExpression } from '../forms';
+import { onSubmitValidationRun } from '../forms/form-renderer-helper';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -229,6 +230,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                   [],
                 ),
               ),
+              ...onSubmitValidationRun,
               ...this.getOnSubmitDSCall(),
             ],
             false,
