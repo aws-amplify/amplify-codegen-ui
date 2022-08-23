@@ -103,7 +103,7 @@ export const addCTAPosition = (
     case 'bottom':
       updatedFormChildren.splice(formChildren.length, 0, buttons);
       break;
-    case 'topAndBottom':
+    case 'top_and_bottom':
       updatedFormChildren.splice(0, 0, buttons);
       updatedFormChildren.splice(formChildren.length, 0, buttons);
       break;

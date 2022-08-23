@@ -39,7 +39,7 @@
   "sectionalElements": {},
   "style": {},
   "cta": {
-    "position": "topAndBottom",
+    "position": "top_and_bottom",
     "clear": {},
     "cancel": {},
     "submit": {}
