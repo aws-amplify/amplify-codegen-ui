@@ -154,6 +154,16 @@ export type FormDefinitionPasswordFieldElement = {
   };
 };
 
+export type FormDefinitionButtonElement = {
+  name: string;
+  componentType: 'Button';
+  props: {
+    variation?: string;
+    children: string;
+    type?: string;
+  };
+};
+
 export type FormDefinitionInputElement = (
   | FormDefinitionTextFieldElement
   | FormDefinitionSwitchFieldElement
@@ -166,6 +176,7 @@ export type FormDefinitionInputElement = (
   | FormDefinitionCheckboxFieldElement
   | FormDefinitionRadioGroupFieldElement
   | FormDefinitionPasswordFieldElement
+  | FormDefinitionButtonElement
 ) &
   FormDefinitionInputElementCommon;
 

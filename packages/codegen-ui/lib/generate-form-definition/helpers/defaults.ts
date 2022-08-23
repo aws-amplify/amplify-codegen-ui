@@ -40,4 +40,18 @@ export const FORM_DEFINITION_DEFAULTS = {
   sectionalElement: {
     text: 'text',
   },
+
+  cta: {
+    position: 'bottom',
+    buttonMatrix: [['clear'], ['cancel', 'submit']],
+    cancel: {
+      label: 'Cancel',
+    },
+    clear: {
+      label: 'Clear',
+    },
+    submit: {
+      label: 'Submit',
+    },
+  },
 };

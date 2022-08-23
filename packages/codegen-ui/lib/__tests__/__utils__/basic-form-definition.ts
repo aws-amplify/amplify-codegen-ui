@@ -20,6 +20,10 @@ export const getBasicFormDefinition = (): FormDefinition => ({
     layoutStyle: {},
   },
   elements: {},
-  buttons: {},
   elementMatrix: [[]],
+  buttons: {
+    buttonConfigs: {},
+    position: 'bottom',
+    buttonMatrix: [['clear'], ['cancel', 'submit']],
+  },
 });

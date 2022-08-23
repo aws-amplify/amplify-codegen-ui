@@ -27,7 +27,11 @@ describe('mapElements', () => {
     const formDefinition: FormDefinition = {
       form: { layoutStyle: {} },
       elements: {},
-      buttons: {},
+      buttons: {
+        buttonConfigs: {},
+        position: '',
+        buttonMatrix: [[]],
+      },
       elementMatrix: [['myText', 'name'], ['price']],
     };
 
@@ -54,6 +58,7 @@ describe('mapElements', () => {
       fields: { name: { inputType: { type: 'TextField' } } },
       sectionalElements: { myText: sectionalConfig },
       style: {},
+      cta: {},
     };
 
     mapElements({ formDefinition, modelFieldsConfigs, form });
@@ -74,7 +79,11 @@ describe('mapElements', () => {
     const formDefinition: FormDefinition = {
       form: { layoutStyle: {} },
       elements: {},
-      buttons: {},
+      buttons: {
+        buttonConfigs: {},
+        position: '',
+        buttonMatrix: [[]],
+      },
       elementMatrix: [['myText']],
     };
 
@@ -88,6 +97,7 @@ describe('mapElements', () => {
       fields: {},
       sectionalElements: {},
       style: {},
+      cta: {},
     };
 
     expect(() => mapElements({ formDefinition, modelFieldsConfigs, form })).toThrow();

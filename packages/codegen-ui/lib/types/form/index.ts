@@ -20,6 +20,7 @@ import { SectionalElement } from './sectional-element';
 import { FormDefinition, ModelFieldsConfigs, FieldTypeMapKeys } from './form-definition';
 import { StudioFieldInputConfig, StudioFormValueMappings } from './input-config';
 import { StudioFieldPosition } from './position';
+import { StudioFormCTA } from './form-cta';
 import { FormMetadata, FieldConfigMetadata } from './form-metadata';
 
 /**
@@ -52,6 +53,8 @@ export type StudioForm = {
   sectionalElements: { [elementName: string]: SectionalElement };
 
   style: StudioFormStyle;
+
+  cta: StudioFormCTA;
 };
 
 export type FormInputType =
@@ -79,6 +82,7 @@ export type FormInputType =
 export * from './form-definition-element';
 export * from './style';
 export * from './form-validation';
+export * from './form-cta';
 
 export type {
   SectionalElement,

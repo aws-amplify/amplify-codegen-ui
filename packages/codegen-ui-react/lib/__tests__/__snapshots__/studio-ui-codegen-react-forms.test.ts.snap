@@ -174,21 +174,21 @@ export default function customDataForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            onCancel && onCancel();
-          }}
-          {...getOverrideProps(overrides, \\"CancelButton\\")}
+          children=\\"empty\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
           <Button
-            children=\\"Clear\\"
-            type=\\"reset\\"
-            {...getOverrideProps(overrides, \\"ClearButton\\")}
+            children=\\"go back\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
           ></Button>
           <Button
-            children=\\"Submit\\"
+            children=\\"create\\"
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={Object.values(errors).some((e) => e.hasError)}
@@ -343,18 +343,18 @@ export default function CustomWithSectionalElements(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            onCancel && onCancel();
-          }}
-          {...getOverrideProps(overrides, \\"CancelButton\\")}
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
           <Button
-            children=\\"Clear\\"
-            type=\\"reset\\"
-            {...getOverrideProps(overrides, \\"ClearButton\\")}
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
           ></Button>
           <Button
             children=\\"Submit\\"
@@ -461,6 +461,34 @@ export default function myPostForm(props) {
       {...rest}
       {...getOverrideProps(overrides, \\"myPostForm\\")}
     >
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
@@ -547,34 +575,6 @@ export default function myPostForm(props) {
           ></TextField>
         </Grid>
       </Grid>
-      <Flex
-        justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
-        {...getOverrideProps(overrides, \\"CTAFlex\\")}
-      >
-        <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            onCancel && onCancel();
-          }}
-          {...getOverrideProps(overrides, \\"CancelButton\\")}
-        ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
-          <Button
-            children=\\"Clear\\"
-            type=\\"reset\\"
-            {...getOverrideProps(overrides, \\"ClearButton\\")}
-          ></Button>
-          <Button
-            children=\\"Submit\\"
-            type=\\"submit\\"
-            variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e.hasError)}
-            {...getOverrideProps(overrides, \\"SubmitButton\\")}
-          ></Button>
-        </Flex>
-      </Flex>
     </form>
   );
 }
@@ -688,6 +688,34 @@ export default function myPostForm(props) {
       {...rest}
       {...getOverrideProps(overrides, \\"myPostForm\\")}
     >
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
@@ -798,18 +826,18 @@ export default function myPostForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            onCancel && onCancel();
-          }}
-          {...getOverrideProps(overrides, \\"CancelButton\\")}
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
           <Button
-            children=\\"Clear\\"
-            type=\\"reset\\"
-            {...getOverrideProps(overrides, \\"ClearButton\\")}
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
           ></Button>
           <Button
             children=\\"Submit\\"
@@ -1121,18 +1149,18 @@ export default function InputGalleryCreateForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            onCancel && onCancel();
-          }}
-          {...getOverrideProps(overrides, \\"CancelButton\\")}
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
           <Button
-            children=\\"Clear\\"
-            type=\\"reset\\"
-            {...getOverrideProps(overrides, \\"ClearButton\\")}
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
           ></Button>
           <Button
             children=\\"Submit\\"

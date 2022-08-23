@@ -37,5 +37,10 @@
   "schemaVersion": "1.0",
   "sectionalElements": {},
   "style": {},
+  "cta": {
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  },
   "id": "00001"
 }

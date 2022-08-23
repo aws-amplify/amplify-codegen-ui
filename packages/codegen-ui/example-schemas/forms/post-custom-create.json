@@ -46,5 +46,16 @@
     }
   },
   "sectionalElements": {},
-  "style": {}
+  "style": {},
+  "cta": {
+    "clear": {
+      "children": "empty"
+    },
+    "cancel": {
+      "children": "go back"
+    },
+    "submit": {
+      "children": "create"
+    }
+  }
 }
