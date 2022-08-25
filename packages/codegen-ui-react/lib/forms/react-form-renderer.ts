@@ -60,11 +60,13 @@ import {
 import { RequiredKeys } from '../utils/type-utils';
 import {
   buildFormPropNode,
+  buildInputValuesTypeAliasDeclaration,
   buildMutationBindings,
   buildOverrideTypesBindings,
   buildStateMutationStatement,
   buildValidations,
   runValidationTasksFunction,
+  validationResponseTypeAliasDeclaration,
 } from './form-renderer-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
@@ -265,6 +267,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
 
     return [
+      validationResponseTypeAliasDeclaration,
+      buildInputValuesTypeAliasDeclaration(this.formComponent.name, this.componentMetadata.formMetadata?.fieldConfigs),
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
         undefined,
@@ -333,7 +337,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.importCollection.addMappedImport(ImportValue.USE_STATE_MUTATION_ACTION);
 
     statements.push(buildStateMutationStatement('modelFields', factory.createObjectLiteralExpression()));
-    statements.push(buildStateMutationStatement('formValid', factory.createTrue()));
 
     statements.push(buildStateMutationStatement('errors', factory.createObjectLiteralExpression()));
 

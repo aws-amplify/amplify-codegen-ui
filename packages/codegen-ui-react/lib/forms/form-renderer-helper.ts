@@ -40,6 +40,7 @@ import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getStateName, getSetStateName } from '../react-component-render-helper';
 import { getActionIdentifier } from '../workflow';
 import { buildTargetVariable } from './event-targets';
+import { DATA_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
 export const FormTypeDataStoreMap: Record<StudioFormActionType, string> = {
   create: 'Amplify.DataStoreCreateItemAction',
@@ -119,6 +120,71 @@ export const buildMutationBindings = (form: StudioForm) => {
   elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onCancel'), undefined));
   return elements;
 };
+
+function getInputValuesTypeName(formName: string): string {
+  return `${formName}InputValues`;
+}
+
+/**
+  onValidate?: {
+      [field in keyof CustomFormCreateDogInputValues]?: (
+        value: CustomFormCreateDogInputValues[field],
+        validationResponse: ValidationResponse
+      ) => ValidationResponse | Promise<ValidationResponse>;
+  };
+ */
+function buildOnValidateType(formName: string) {
+  return factory.createPropertySignature(
+    undefined,
+    factory.createIdentifier('onValidate'),
+    factory.createToken(SyntaxKind.QuestionToken),
+    factory.createMappedTypeNode(
+      undefined,
+      factory.createTypeParameterDeclaration(
+        factory.createIdentifier('field'),
+        factory.createTypeOperatorNode(
+          SyntaxKind.KeyOfKeyword,
+          factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+        ),
+        undefined,
+      ),
+      undefined,
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createFunctionTypeNode(
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('value'),
+            undefined,
+            factory.createIndexedAccessTypeNode(
+              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+              factory.createTypeReferenceNode(factory.createIdentifier('field'), undefined),
+            ),
+            undefined,
+          ),
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('validationResponse'),
+            undefined,
+            factory.createTypeReferenceNode(factory.createIdentifier('ValidationResponse'), undefined),
+            undefined,
+          ),
+        ],
+        factory.createUnionTypeNode([
+          factory.createTypeReferenceNode(factory.createIdentifier('ValidationResponse'), undefined),
+          factory.createTypeReferenceNode(factory.createIdentifier('Promise'), [
+            factory.createTypeReferenceNode(factory.createIdentifier('ValidationResponse'), undefined),
+          ]),
+        ]),
+      ),
+    ),
+  );
+}
 
 /*
     generate params in typed props
@@ -249,47 +315,7 @@ export const buildFormPropNode = (form: StudioForm) => {
       factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
     ),
   );
-  // onValidate?: (value: any) => Promise<{ hasError: boolean; errorMessage?: string }>>
-  propSignatures.push(
-    factory.createPropertySignature(
-      undefined,
-      factory.createIdentifier('onValidate'),
-      factory.createToken(SyntaxKind.QuestionToken),
-      factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
-        factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-        factory.createFunctionTypeNode(
-          undefined,
-          [
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              factory.createIdentifier('value'),
-              undefined,
-              factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
-              undefined,
-            ),
-          ],
-          factory.createTypeReferenceNode(factory.createIdentifier('Promise'), [
-            factory.createTypeLiteralNode([
-              factory.createPropertySignature(
-                undefined,
-                factory.createIdentifier('hasError'),
-                undefined,
-                factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-              ),
-              factory.createPropertySignature(
-                undefined,
-                factory.createIdentifier('errorMessage'),
-                factory.createToken(SyntaxKind.QuestionToken),
-                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-              ),
-            ]),
-          ]),
-        ),
-      ]),
-    ),
-  );
+  propSignatures.push(buildOnValidateType(form.name));
   return factory.createTypeLiteralNode(propSignatures);
 };
 
@@ -702,6 +728,67 @@ export const buildOverrideTypesBindings = (
   );
 };
 
+// declare type ValidationResponse = {hasError: boolean, errorMessage?: string}
+export const validationResponseTypeAliasDeclaration = factory.createTypeAliasDeclaration(
+  undefined,
+  [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
+  factory.createIdentifier('ValidationResponse'),
+  undefined,
+  factory.createTypeLiteralNode([
+    factory.createPropertySignature(
+      undefined,
+      factory.createIdentifier('hasError'),
+      undefined,
+      factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
+    ),
+    factory.createPropertySignature(
+      undefined,
+      factory.createIdentifier('errorMessage'),
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+    ),
+  ]),
+);
+
+/**
+  example:
+  declare type MyFormInputValues = {
+    name: string;
+    age: number;
+    email: string;
+  }
+ */
+
+export function buildInputValuesTypeAliasDeclaration(
+  formName: string,
+  fieldConfigs?: Record<string, FieldConfigMetadata>,
+) {
+  const properties = fieldConfigs
+    ? Object.entries(fieldConfigs).map(([fieldName, fieldConfig]) => {
+        const { dataType } = fieldConfig;
+        const typescriptType =
+          dataType && typeof dataType === 'string' && dataType in DATA_TYPE_TO_TYPESCRIPT_MAP
+            ? DATA_TYPE_TO_TYPESCRIPT_MAP[dataType]
+            : SyntaxKind.StringKeyword;
+
+        return factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier(fieldName),
+          undefined,
+          factory.createKeywordTypeNode(typescriptType),
+        );
+      })
+    : [];
+
+  return factory.createTypeAliasDeclaration(
+    undefined,
+    [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
+    factory.createIdentifier(getInputValuesTypeName(formName)),
+    undefined,
+    factory.createTypeLiteralNode(properties),
+  );
+}
+
 export function buildValidations(fieldConfigs: Record<string, FieldConfigMetadata>) {
   const validationsForField = Object.entries(fieldConfigs).map(([fieldName, fieldConfig]) =>
     factory.createPropertyAssignment(
@@ -727,15 +814,15 @@ export function buildValidations(fieldConfigs: Record<string, FieldConfigMetadat
 }
 
 /**
-      const runValidationTasks = async (fieldName, value) => {
-        const validationResponse = { 
-          ...validateField(value, validations[fieldName]), 
-          ...await onValidate?.[fieldName]?.(value) 
-          };
-        setErrors(errors => ({ ...errors, [fieldName]: validationResponse }));
-        return validationResponse;
-      }
-   */
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (onValidate?.[fieldName]) {
+      validationResponse = await onValidate[fieldName](value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+ */
 
 export const runValidationTasksFunction = factory.createVariableStatement(
   undefined,
@@ -780,38 +867,46 @@ export const runValidationTasksFunction = factory.createVariableStatement(
                       factory.createIdentifier('validationResponse'),
                       undefined,
                       undefined,
-                      factory.createObjectLiteralExpression(
-                        [
-                          factory.createSpreadAssignment(
-                            factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
-                              factory.createIdentifier('value'),
-                              factory.createElementAccessExpression(
-                                factory.createIdentifier('validations'),
-                                factory.createIdentifier('fieldName'),
-                              ),
-                            ]),
-                          ),
-                          factory.createSpreadAssignment(
-                            factory.createAwaitExpression(
-                              factory.createCallChain(
-                                factory.createElementAccessChain(
-                                  factory.createIdentifier('onValidate'),
-                                  factory.createToken(SyntaxKind.QuestionDotToken),
-                                  factory.createIdentifier('fieldName'),
-                                ),
-                                factory.createToken(SyntaxKind.QuestionDotToken),
-                                undefined,
-                                [factory.createIdentifier('value')],
-                              ),
+                      factory.createCallExpression(factory.createIdentifier('validateField'), undefined, [
+                        factory.createIdentifier('value'),
+                        factory.createElementAccessExpression(
+                          factory.createIdentifier('validations'),
+                          factory.createIdentifier('fieldName'),
+                        ),
+                      ]),
+                    ),
+                  ],
+                  NodeFlags.Let,
+                ),
+              ),
+              factory.createIfStatement(
+                factory.createElementAccessChain(
+                  factory.createIdentifier('onValidate'),
+                  factory.createToken(SyntaxKind.QuestionDotToken),
+                  factory.createIdentifier('fieldName'),
+                ),
+                factory.createBlock(
+                  [
+                    factory.createExpressionStatement(
+                      factory.createBinaryExpression(
+                        factory.createIdentifier('validationResponse'),
+                        factory.createToken(SyntaxKind.EqualsToken),
+                        factory.createAwaitExpression(
+                          factory.createCallExpression(
+                            factory.createElementAccessExpression(
+                              factory.createIdentifier('onValidate'),
+                              factory.createIdentifier('fieldName'),
                             ),
+                            undefined,
+                            [factory.createIdentifier('value'), factory.createIdentifier('validationResponse')],
                           ),
-                        ],
-                        true,
+                        ),
                       ),
                     ),
                   ],
-                  NodeFlags.Const,
+                  true,
                 ),
+                undefined,
               ),
               factory.createExpressionStatement(
                 factory.createCallExpression(factory.createIdentifier('setErrors'), undefined, [
@@ -856,3 +951,113 @@ export const runValidationTasksFunction = factory.createVariableStatement(
     NodeFlags.Const,
   ),
 );
+
+/**
+  const validationResponses = await Promise.all(
+    Object.keys(validations).map((fieldName) =>
+      runValidationTasks(fieldName, modelFields[fieldName])
+    )
+  );
+
+  if (validationResponses.some((r) => r.hasError)) {
+    return;
+  }
+ */
+
+export const onSubmitValidationRun = [
+  factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('validationResponses'),
+          undefined,
+          undefined,
+          factory.createAwaitExpression(
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('Promise'),
+                factory.createIdentifier('all'),
+              ),
+              undefined,
+              [
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('Object'),
+                        factory.createIdentifier('keys'),
+                      ),
+                      undefined,
+                      [factory.createIdentifier('validations')],
+                    ),
+                    factory.createIdentifier('map'),
+                  ),
+                  undefined,
+                  [
+                    factory.createArrowFunction(
+                      undefined,
+                      undefined,
+                      [
+                        factory.createParameterDeclaration(
+                          undefined,
+                          undefined,
+                          undefined,
+                          factory.createIdentifier('fieldName'),
+                          undefined,
+                          undefined,
+                          undefined,
+                        ),
+                      ],
+                      undefined,
+                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                      factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+                        factory.createIdentifier('fieldName'),
+                        factory.createElementAccessExpression(
+                          factory.createIdentifier('modelFields'),
+                          factory.createIdentifier('fieldName'),
+                        ),
+                      ]),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  ),
+  factory.createIfStatement(
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(
+        factory.createIdentifier('validationResponses'),
+        factory.createIdentifier('some'),
+      ),
+      undefined,
+      [
+        factory.createArrowFunction(
+          undefined,
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('r'),
+              undefined,
+              undefined,
+              undefined,
+            ),
+          ],
+          undefined,
+          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+          factory.createPropertyAccessExpression(factory.createIdentifier('r'), factory.createIdentifier('hasError')),
+        ),
+      ],
+    ),
+    factory.createBlock([factory.createReturnStatement(undefined)], true),
+    undefined,
+  ),
+];

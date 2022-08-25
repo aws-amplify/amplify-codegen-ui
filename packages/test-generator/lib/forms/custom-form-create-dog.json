@@ -1,0 +1,41 @@
+{
+    "id": "123",
+    "name": "CustomFormCreateDog",
+    "formActionType": "create",
+    "dataType": {
+      "dataSourceType": "Custom",
+      "dataTypeName": "Dog"
+    },
+    "fields": {
+        "name": {
+            "label": "Name",
+            "inputType": {
+                "type": "TextField"
+            },
+            "validations": [{"type": "Required", "validationMessage": "Name is required"}]
+        },
+        "age": {
+            "label": "Age",
+            "inputType": {
+                "type": "NumberField"
+            },
+            "validations": [{"type": "GreaterThanNum","numValues": ["0"], "validationMessage": "Age must be greater than 0"}]
+        },
+        "email": {
+            "label": "Email",
+            "inputType": {
+                "type": "EmailField"
+            },
+            "validations": [{"type": "Required", "validationMessage": "Email is required"}]
+        }
+    },
+    "sectionalElements": {
+        "formHeading": {
+            "type": "Heading",
+            "position": {"fixed": "first"},
+            "text": "Register your dog"
+        }
+    },
+    "style": {},
+    "schemaVersion": "1.0"
+  }

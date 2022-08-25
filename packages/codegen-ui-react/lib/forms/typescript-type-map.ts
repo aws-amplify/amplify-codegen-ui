@@ -13,9 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { KeywordTypeSyntaxKind, SyntaxKind } from 'typescript';
 
-export { default as FormCreate } from './form-create.json';
-export { default as FormUpdate } from './form-update.json';
-export { default as FormCustomCreate } from './form-custom-create.json';
-export { default as FormCustomUpdate } from './form-custom-update.json';
-export { default as CustomFormCreateDog } from './custom-form-create-dog.json';
+export const DATA_TYPE_TO_TYPESCRIPT_MAP: { [key: string]: KeywordTypeSyntaxKind } = {
+  Int: SyntaxKind.NumberKeyword,
+  Float: SyntaxKind.NumberKeyword,
+  Boolean: SyntaxKind.BooleanKeyword,
+  AWSTimestamp: SyntaxKind.NumberKeyword,
+};

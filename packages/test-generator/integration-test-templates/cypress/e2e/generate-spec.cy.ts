@@ -32,6 +32,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'FormUpdate',
   'FormCustomCreate',
   'FormCustomUpdate',
+  'CustomFormCreateDog',
   'ComponentWithDataBindingWithPredicate',
   'ComponentWithDataBindingWithoutPredicate',
   'ComponentWithSimplePropertyBinding',
