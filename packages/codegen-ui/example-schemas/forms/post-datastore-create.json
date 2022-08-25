@@ -1,5 +1,5 @@
 {
-  "name": "myPostForm",
+  "name": "MyPostForm",
   "formActionType": "create",
   "dataType": {
     "dataSourceType": "DataStore",

@@ -1,6 +1,6 @@
 {
   "id": "123",
-  "name": "myPostForm",
+  "name": "MyPostForm",
   "formActionType": "update",
   "dataType": {
     "dataSourceType": "DataStore",
