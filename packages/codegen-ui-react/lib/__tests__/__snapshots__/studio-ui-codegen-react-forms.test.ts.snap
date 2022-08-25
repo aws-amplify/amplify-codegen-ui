@@ -17,7 +17,7 @@ import {
   SelectField,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
-export default function customDataForm(props) {
+export default function CustomDataForm(props) {
   const {
     onSubmit: customDataFormOnSubmit,
     onCancel,
@@ -59,12 +59,12 @@ export default function customDataForm(props) {
         await customDataFormOnSubmit(modelFields);
       }}
       {...rest}
-      {...getOverrideProps(overrides, \\"customDataForm\\")}
+      {...getOverrideProps(overrides, \\"CustomDataForm\\")}
     >
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
-        {...getOverrideProps(overrides, \\"customDataFormGrid\\")}
+        {...getOverrideProps(overrides, \\"CustomDataFormGrid\\")}
       >
         <Grid
           columnGap=\\"inherit\\"
@@ -220,14 +220,14 @@ export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
-export declare type customDataFormInputValues = {
+export declare type CustomDataFormInputValues = {
     name: string;
     email: string;
     city: string;
     category: string;
 };
-export declare type customDataFormOverridesProps = {
-    customDataFormGrid: GridProps;
+export declare type CustomDataFormOverridesProps = {
+    CustomDataFormGrid: GridProps;
     RowGrid0: GridProps;
     name: TextFieldProps;
     RowGrid1: GridProps;
@@ -237,16 +237,16 @@ export declare type customDataFormOverridesProps = {
     RowGrid3: GridProps;
     category: RadioGroupFieldProps;
 } & EscapeHatchProps;
-export declare type customDataFormProps = React.PropsWithChildren<{
-    overrides?: customDataFormOverridesProps | undefined | null;
+export declare type CustomDataFormProps = React.PropsWithChildren<{
+    overrides?: CustomDataFormOverridesProps | undefined | null;
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
     onValidate?: {
-        [field in keyof customDataFormInputValues]?: (value: customDataFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+        [field in keyof CustomDataFormInputValues]?: (value: CustomDataFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
     };
 }>;
-export default function customDataForm(props: customDataFormProps): React.ReactElement;
+export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
 "
 `;
 
@@ -446,7 +446,7 @@ import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import { Post } from \\"../models\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
-export default function myPostForm(props) {
+export default function MyPostForm(props) {
   const {
     onSubmitBefore,
     onSubmitComplete,
@@ -504,7 +504,7 @@ export default function myPostForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, \\"myPostForm\\")}
+      {...getOverrideProps(overrides, \\"MyPostForm\\")}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -537,7 +537,7 @@ export default function myPostForm(props) {
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
-        {...getOverrideProps(overrides, \\"myPostFormGrid\\")}
+        {...getOverrideProps(overrides, \\"MyPostFormGrid\\")}
       >
         <Grid
           columnGap=\\"inherit\\"
@@ -634,14 +634,14 @@ export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
-export declare type myPostFormInputValues = {
+export declare type MyPostFormInputValues = {
     caption: string;
     username: string;
     post_url: string;
     profile_url: string;
 };
-export declare type myPostFormOverridesProps = {
-    myPostFormGrid: GridProps;
+export declare type MyPostFormOverridesProps = {
+    MyPostFormGrid: GridProps;
     RowGrid0: GridProps;
     caption: TextFieldProps;
     RowGrid1: GridProps;
@@ -651,8 +651,8 @@ export declare type myPostFormOverridesProps = {
     RowGrid3: GridProps;
     profile_url: TextFieldProps;
 } & EscapeHatchProps;
-export declare type myPostFormProps = React.PropsWithChildren<{
-    overrides?: myPostFormOverridesProps | undefined | null;
+export declare type MyPostFormProps = React.PropsWithChildren<{
+    overrides?: MyPostFormOverridesProps | undefined | null;
 } & {
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
     onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
@@ -661,10 +661,10 @@ export declare type myPostFormProps = React.PropsWithChildren<{
     }) => void;
     onCancel?: () => void;
     onValidate?: {
-        [field in keyof myPostFormInputValues]?: (value: myPostFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+        [field in keyof MyPostFormInputValues]?: (value: MyPostFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
     };
 }>;
-export default function myPostForm(props: myPostFormProps): React.ReactElement;
+export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 
@@ -685,7 +685,7 @@ import {
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
-export default function myPostForm(props) {
+export default function MyPostForm(props) {
   const {
     id,
     onSubmitBefore,
@@ -750,7 +750,7 @@ export default function myPostForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, \\"myPostForm\\")}
+      {...getOverrideProps(overrides, \\"MyPostForm\\")}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -783,7 +783,7 @@ export default function myPostForm(props) {
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
-        {...getOverrideProps(overrides, \\"myPostFormGrid\\")}
+        {...getOverrideProps(overrides, \\"MyPostFormGrid\\")}
       >
         <Grid
           columnGap=\\"inherit\\"
@@ -926,15 +926,15 @@ export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
-export declare type myPostFormInputValues = {
+export declare type MyPostFormInputValues = {
     TextAreaFieldbbd63464: string;
     caption: string;
     username: string;
     profile_url: string;
     post_url: string;
 };
-export declare type myPostFormOverridesProps = {
-    myPostFormGrid: GridProps;
+export declare type MyPostFormOverridesProps = {
+    MyPostFormGrid: GridProps;
     RowGrid0: GridProps;
     TextAreaFieldbbd63464: TextAreaFieldProps;
     RowGrid1: GridProps;
@@ -946,8 +946,8 @@ export declare type myPostFormOverridesProps = {
     RowGrid4: GridProps;
     post_url: TextFieldProps;
 } & EscapeHatchProps;
-export declare type myPostFormProps = React.PropsWithChildren<{
-    overrides?: myPostFormOverridesProps | undefined | null;
+export declare type MyPostFormProps = React.PropsWithChildren<{
+    overrides?: MyPostFormOverridesProps | undefined | null;
 } & {
     id: string;
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
@@ -957,10 +957,10 @@ export declare type myPostFormProps = React.PropsWithChildren<{
     }) => void;
     onCancel?: () => void;
     onValidate?: {
-        [field in keyof myPostFormInputValues]?: (value: myPostFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+        [field in keyof MyPostFormInputValues]?: (value: MyPostFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
     };
 }>;
-export default function myPostForm(props: myPostFormProps): React.ReactElement;
+export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 

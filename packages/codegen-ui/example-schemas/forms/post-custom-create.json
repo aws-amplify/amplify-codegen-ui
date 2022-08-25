@@ -1,5 +1,5 @@
 {
-  "name": "customDataForm",
+  "name": "CustomDataForm",
   "formActionType": "create",
   "dataType": {
     "dataSourceType": "Custom",

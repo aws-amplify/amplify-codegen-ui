@@ -17,8 +17,10 @@ import * as yup from 'yup';
 import { InvalidInputError } from './errors';
 import { StudioGenericEvent, StudioSchema } from './types';
 
-const alphaNumString = () => {
-  return yup.string().matches(/^[a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string' });
+const pascalCaseAlphaNumString = () => {
+  return yup
+    .string()
+    .matches(/^[A-Z][a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string with capital first letter' });
 };
 
 const alphaNumNoLeadingNumberString = () => {
@@ -96,7 +98,7 @@ const studioComponentChildSchema: any = yup.object({
 
 const studioComponentSchema = yup
   .object({
-    name: alphaNumString().required(),
+    name: pascalCaseAlphaNumString().required(),
     id: yup.string().nullable(),
     sourceId: yup.string().nullable(),
     schemaVersion: yup.lazy(() => schemaVersionSchema().nullable()),
@@ -171,7 +173,7 @@ const studioThemeValuesSchema: any = yup.object({
 });
 
 const studioThemeSchema = yup.object({
-  name: alphaNumString().required(),
+  name: pascalCaseAlphaNumString().required(),
   id: yup.string().nullable(),
   values: yup.array(studioThemeValuesSchema).required(),
   overrides: yup.array(studioThemeValuesSchema).nullable(),
@@ -181,7 +183,7 @@ const studioThemeSchema = yup.object({
  * Form Schema Definitions
  */
 const studioFormSchema = yup.object({
-  name: alphaNumString().required(),
+  name: pascalCaseAlphaNumString().required(),
   id: yup.string().nullable(),
   formActionType: yup.string().matches(new RegExp('(create|update)')),
   dataType: yup.object({
@@ -197,7 +199,7 @@ const studioFormSchema = yup.object({
  * View Schema Definition
  */
 const studioViewSchema = yup.object({
-  name: alphaNumString().required(),
+  name: pascalCaseAlphaNumString().required(),
   id: yup.string().nullable(),
   dataSource: yup.object({
     identifiers: yup.array().nullable(),
