@@ -14,7 +14,49 @@
   limitations under the License.
  */
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
-import { StudioFormCTA, ButtonConfig } from '../../types';
+import { StudioFormCTA, ButtonConfig, StudioFormCTAButton, FormDefinitionButtonElement } from '../../types';
+
+function getButtonElement(
+  key: 'cancel' | 'clear' | 'submit',
+  override?: StudioFormCTAButton,
+): FormDefinitionButtonElement | undefined {
+  if (override && 'excluded' in override) {
+    return undefined;
+  }
+
+  const ButtonMap = {
+    cancel: {
+      name: 'CancelButton',
+      type: 'button',
+    },
+    clear: {
+      name: 'ClearButton',
+      type: 'reset',
+    },
+    submit: {
+      name: 'SubmitButton',
+      type: 'submit',
+      variation: 'primary',
+    },
+  };
+
+  const { cta: defaults } = FORM_DEFINITION_DEFAULTS;
+
+  const element: FormDefinitionButtonElement = {
+    name: ButtonMap[key].name,
+    componentType: 'Button',
+    props: {
+      children: override?.children ?? defaults[key].label,
+      type: ButtonMap[key].type,
+    },
+  };
+
+  if (key === 'submit') {
+    element.props.variation = ButtonMap[key].variation;
+  }
+
+  return element;
+}
 
 export function mapButtons(buttons: StudioFormCTA): ButtonConfig {
   const defaults = FORM_DEFINITION_DEFAULTS.cta;
@@ -25,39 +67,11 @@ export function mapButtons(buttons: StudioFormCTA): ButtonConfig {
     buttonConfigs: {},
   };
 
-  if (buttons.clear?.visible !== false) {
-    buttonMapping.buttonConfigs.clear = {
-      name: 'ClearButton',
-      componentType: 'Button',
-      props: {
-        children: buttons.clear?.children ? buttons.clear.children : defaults.clear.label,
-        type: 'reset',
-      },
-    };
-  }
+  const keys: (keyof ButtonConfig['buttonConfigs'])[] = ['submit', 'cancel', 'clear'];
 
-  if (buttons.cancel?.visible !== false) {
-    buttonMapping.buttonConfigs.cancel = {
-      name: 'CancelButton',
-      componentType: 'Button',
-      props: {
-        children: buttons.cancel?.children ? buttons.cancel.children : defaults.cancel.label,
-        type: 'button',
-      },
-    };
-  }
-
-  if (buttons.submit?.visible !== false) {
-    buttonMapping.buttonConfigs.submit = {
-      name: 'SubmitButton',
-      componentType: 'Button',
-      props: {
-        children: buttons.submit?.children ? buttons.submit.children : defaults.submit.label,
-        type: 'submit',
-        variation: 'primary',
-      },
-    };
-  }
+  keys.forEach((key) => {
+    buttonMapping.buttonConfigs[key] = getButtonElement(key, buttons[key]);
+  });
 
   return buttonMapping;
 }

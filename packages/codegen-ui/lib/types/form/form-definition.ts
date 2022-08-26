@@ -14,11 +14,20 @@
   limitations under the License.
  */
 import { StudioFormStyle } from './style';
-import { FormDefinitionElement } from './form-definition-element';
+import { FormDefinitionElement, FormDefinitionButtonElement } from './form-definition-element';
 import { StudioGenericFieldConfig } from './fields';
-import { ButtonConfig } from './form-cta';
 
 export type ModelFieldsConfigs = { [key: string]: StudioGenericFieldConfig };
+
+export type ButtonConfig = {
+  buttonConfigs: {
+    submit?: FormDefinitionButtonElement;
+    cancel?: FormDefinitionButtonElement;
+    clear?: FormDefinitionButtonElement;
+  };
+  position: string;
+  buttonMatrix: string[][];
+};
 
 export type FormDefinition = {
   form: {
