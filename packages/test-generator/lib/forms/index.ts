@@ -14,8 +14,4 @@
   limitations under the License.
  */
 
-export { default as FormCreate } from './form-create.json';
-export { default as FormUpdate } from './form-update.json';
-export { default as FormCustomCreate } from './form-custom-create.json';
-export { default as FormCustomUpdate } from './form-custom-update.json';
 export { default as CustomFormCreateDog } from './custom-form-create-dog.json';
