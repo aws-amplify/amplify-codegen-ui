@@ -25,7 +25,7 @@ export function mapButtons(buttons: StudioFormCTA): ButtonConfig {
     buttonConfigs: {},
   };
 
-  if (buttons.clear) {
+  if (buttons.clear?.visible !== false) {
     buttonMapping.buttonConfigs.clear = {
       name: 'ClearButton',
       componentType: 'Button',
@@ -36,7 +36,7 @@ export function mapButtons(buttons: StudioFormCTA): ButtonConfig {
     };
   }
 
-  if (buttons.cancel) {
+  if (buttons.cancel?.visible !== false) {
     buttonMapping.buttonConfigs.cancel = {
       name: 'CancelButton',
       componentType: 'Button',
@@ -47,7 +47,7 @@ export function mapButtons(buttons: StudioFormCTA): ButtonConfig {
     };
   }
 
-  if (buttons.submit) {
+  if (buttons.submit?.visible !== false) {
     buttonMapping.buttonConfigs.submit = {
       name: 'SubmitButton',
       componentType: 'Button',
