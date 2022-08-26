@@ -14,15 +14,12 @@
   limitations under the License.
  */
 import { StudioFieldPosition } from './position';
-import { FormDefinitionButtonElement } from './form-definition-element';
 
-type StudioFormCTAButton = {
-  visible?: boolean;
-
-  children?: string;
-
-  position?: StudioFieldPosition;
-};
+export type StudioFormCTAButton =
+  | {
+      excluded: true;
+    }
+  | { children?: string; position?: StudioFieldPosition };
 
 /**
  * Configuration for each of the specified CTA's
@@ -38,14 +35,4 @@ export type StudioFormCTA = {
   cancel?: StudioFormCTAButton;
 
   submit?: StudioFormCTAButton;
-};
-
-export type ButtonConfig = {
-  buttonConfigs: {
-    submit?: FormDefinitionButtonElement;
-    cancel?: FormDefinitionButtonElement;
-    clear?: FormDefinitionButtonElement;
-  };
-  position: string;
-  buttonMatrix: string[][];
 };
