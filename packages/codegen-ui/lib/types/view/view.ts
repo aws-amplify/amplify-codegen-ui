@@ -18,14 +18,16 @@ import { ViewStyle } from './style';
 import { ColumnsMap } from './table';
 
 export interface StudioView {
-  appId?: string;
-  dataSource: ViewDataTypeConfig;
-  environmentName?: string;
-  id: string;
+  id?: string;
+
+  schemaVersion?: string;
+
   name: ViewName;
-  schemaVersion: string;
-  sourceId?: string;
+
+  dataSource: ViewDataTypeConfig;
+
   style: ViewStyle;
+
   viewConfiguration: ViewConfiguration;
 }
 

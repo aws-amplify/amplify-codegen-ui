@@ -42,6 +42,8 @@ type StudioFormActionType = 'create' | 'update';
 export type StudioForm = {
   id?: string;
 
+  schemaVersion?: string;
+
   name: string;
 
   formActionType: StudioFormActionType;
