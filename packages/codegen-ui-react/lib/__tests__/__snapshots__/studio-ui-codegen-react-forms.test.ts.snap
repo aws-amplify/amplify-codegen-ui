@@ -7,7 +7,7 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
+import { validateField } from \\"./utils\\";
 import {
   Button,
   Flex,
@@ -257,7 +257,7 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
+import { validateField } from \\"./utils\\";
 import {
   Button,
   Divider,
@@ -443,7 +443,7 @@ import {
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
+import { validateField } from \\"./utils\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
@@ -676,7 +676,7 @@ import {
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
+import { validateField } from \\"./utils\\";
 import {
   Button,
   Flex,
@@ -982,7 +982,7 @@ import {
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { InputGallery } from \\"../models\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
+import { validateField } from \\"./utils\\";
 import {
   Button,
   CheckboxField,

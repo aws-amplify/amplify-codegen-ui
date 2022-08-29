@@ -16,7 +16,6 @@
 export enum ImportSource {
   REACT = 'react',
   UI_REACT = '@aws-amplify/ui-react',
-  CODEGEN_UI_REACT = '@aws-amplify/codegen-ui-react',
   UI_REACT_INTERNAL = '@aws-amplify/ui-react/internal',
   AMPLIFY_DATASTORE = '@aws-amplify/datastore',
   LOCAL_MODELS = '../models',
@@ -71,5 +70,4 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.USE_EFFECT]: ImportSource.REACT,
   [ImportValue.FORMATTER]: ImportSource.UTILS,
   [ImportValue.VALIDATE_FIELD]: ImportSource.UTILS,
-  [ImportValue.VALIDATE_FIELD_CODEGEN]: ImportSource.CODEGEN_UI_REACT,
 };

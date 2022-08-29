@@ -37,10 +37,6 @@ export class ImportCollection {
     }
   }
 
-  hasMappedImport(source: ImportSource) {
-    return this.#collection.has(source);
-  }
-
   removeImportSource(packageImport: ImportSource) {
     this.#collection.delete(packageImport);
   }
