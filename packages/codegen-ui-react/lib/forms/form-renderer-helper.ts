@@ -36,6 +36,7 @@ import {
   ObjectLiteralElementLike,
   ObjectLiteralExpression,
 } from 'typescript';
+import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getStateName, getSetStateName } from '../react-component-render-helper';
 import { getActionIdentifier } from '../workflow';
@@ -101,7 +102,15 @@ export const buildMutationBindings = (form: StudioForm) => {
   const elements: BindingElement[] = [];
   if (dataSourceType === 'DataStore') {
     if (formActionType === 'update') {
-      elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('id'), undefined));
+      elements.push(
+        factory.createBindingElement(undefined, undefined, factory.createIdentifier('id'), undefined),
+        factory.createBindingElement(
+          undefined,
+          undefined,
+          factory.createIdentifier(lowerCaseFirst(form.dataType.dataTypeName)),
+          undefined,
+        ),
+      );
     }
     elements.push(
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmitBefore'), undefined),
@@ -204,8 +213,14 @@ export const buildFormPropNode = (form: StudioForm) => {
         factory.createPropertySignature(
           undefined,
           factory.createIdentifier('id'),
-          undefined,
+          factory.createToken(SyntaxKind.QuestionToken),
           factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+        ),
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier(lowerCaseFirst(form.dataType.dataTypeName)),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode(factory.createIdentifier(form.dataType.dataTypeName), undefined),
         ),
       );
     }
@@ -577,29 +592,6 @@ export const buildOnChangeStatement = (fieldName: string, fieldType: string, dat
 export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', modelName: string) => {
   if (dataStoreActionType === 'update') {
     return [
-      factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createIdentifier('original'),
-              undefined,
-              undefined,
-              factory.createAwaitExpression(
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier('DataStore'),
-                    factory.createIdentifier('query'),
-                  ),
-                  undefined,
-                  [factory.createIdentifier(modelName), factory.createIdentifier('id')],
-                ),
-              ),
-            ),
-          ],
-          NodeFlags.Const,
-        ),
-      ),
       factory.createExpressionStatement(
         factory.createAwaitExpression(
           factory.createCallExpression(
@@ -616,7 +608,7 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
                 ),
                 undefined,
                 [
-                  factory.createIdentifier('original'),
+                  factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
                   factory.createArrowFunction(
                     undefined,
                     undefined,
@@ -627,7 +619,7 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
                         undefined,
                         factory.createIdentifier('updated'),
                         undefined,
-                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                        undefined,
                         undefined,
                       ),
                     ],
@@ -1061,3 +1053,70 @@ export const onSubmitValidationRun = [
     undefined,
   ),
 ];
+
+export const buildUpdateDatastoreQuery = (dataTypeName: string) => {
+  return [
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('queryData'),
+            undefined,
+            undefined,
+            factory.createArrowFunction(
+              [factory.createModifier(SyntaxKind.AsyncKeyword)],
+              undefined,
+              [],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
+                [
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('record'),
+                          undefined,
+                          undefined,
+                          factory.createConditionalExpression(
+                            factory.createIdentifier('id'),
+                            factory.createToken(SyntaxKind.QuestionToken),
+                            factory.createAwaitExpression(
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('DataStore'),
+                                  factory.createIdentifier('query'),
+                                ),
+                                undefined,
+                                [factory.createIdentifier(dataTypeName), factory.createIdentifier('id')],
+                              ),
+                            ),
+                            factory.createToken(SyntaxKind.ColonToken),
+                            factory.createIdentifier(lowerCaseFirst(dataTypeName)),
+                          ),
+                        ),
+                      ],
+                      NodeFlags.Const,
+                    ),
+                  ),
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(factory.createIdentifier(`set${dataTypeName}Record`), undefined, [
+                      factory.createIdentifier('record'),
+                    ]),
+                  ),
+                ],
+                true,
+              ),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
+    factory.createExpressionStatement(
+      factory.createCallExpression(factory.createIdentifier('queryData'), undefined, []),
+    ),
+  ];
+};

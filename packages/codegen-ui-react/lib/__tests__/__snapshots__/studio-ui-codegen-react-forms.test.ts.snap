@@ -442,8 +442,8 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import { Post } from \\"../models\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
@@ -675,8 +675,8 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import { Post } from \\"../models\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   Button,
   Flex,
@@ -688,6 +688,7 @@ import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
   const {
     id,
+    post,
     onSubmitBefore,
     onSubmitComplete,
     onCancel,
@@ -697,6 +698,14 @@ export default function MyPostForm(props) {
   } = props;
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [errors, setErrors] = useStateMutationAction({});
+  const [postRecord, setPostRecord] = useStateMutationAction(post);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = id ? await DataStore.query(Post, id) : post;
+      setPostRecord(record);
+    };
+    queryData();
+  }, [id, post]);
   const validations = {
     TextAreaFieldbbd63464: [],
     caption: [],
@@ -731,9 +740,8 @@ export default function MyPostForm(props) {
           setModelFields(onSubmitBefore({ fields: modelFields }));
         }
         try {
-          const original = await DataStore.query(Post, id);
           await DataStore.save(
-            Post.copyOf(original, (updated) => {
+            Post.copyOf(postRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -921,6 +929,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a update form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Post } from \\"../models\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -949,7 +958,8 @@ export declare type MyPostFormOverridesProps = {
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
 } & {
-    id: string;
+    id?: string;
+    post?: Post;
     onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
     onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
         saveSuccessful: boolean;
@@ -971,8 +981,8 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import { InputGallery } from \\"../models\\";
+import { validateField } from \\"@aws-amplify/codegen-ui-react\\";
 import {
   Button,
   CheckboxField,

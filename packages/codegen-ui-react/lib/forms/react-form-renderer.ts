@@ -46,6 +46,7 @@ import {
   SyntaxKind,
   TypeAliasDeclaration,
 } from 'typescript';
+import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { PrimitiveTypeParameter, Primitive } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
@@ -57,6 +58,7 @@ import {
   getDeclarationFilename,
   transpile,
 } from '../react-studio-template-renderer-helper';
+import { addUseEffectWrapper } from '../utils/generate-react-hooks';
 import { RequiredKeys } from '../utils/type-utils';
 import {
   buildFormPropNode,
@@ -64,6 +66,7 @@ import {
   buildMutationBindings,
   buildOverrideTypesBindings,
   buildStateMutationStatement,
+  buildUpdateDatastoreQuery,
   buildValidations,
   runValidationTasksFunction,
   validationResponseTypeAliasDeclaration,
@@ -265,6 +268,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const formPropType = getComponentPropName(this.component.name);
 
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
+    if (this.component.formActionType === 'update') {
+      this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataType.dataTypeName);
+    }
 
     return [
       validationResponseTypeAliasDeclaration,
@@ -296,6 +302,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const statements: Statement[] = [];
     const elements: BindingElement[] = [];
     const { formMetadata } = this.componentMetadata;
+    const { dataTypeName } = this.component.dataType;
+    const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
 
     // add in hooks for before/complete with ds and basic onSubmit with props
     elements.push(...buildMutationBindings(this.component));
@@ -340,17 +348,26 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     statements.push(buildStateMutationStatement('errors', factory.createObjectLiteralExpression()));
 
+    // add model import for datastore type
+    if (this.component.dataType.dataSourceType === 'DataStore') {
+      this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataType.dataTypeName);
+      if (this.component.formActionType === 'update') {
+        statements.push(
+          buildStateMutationStatement(
+            `${lowerCaseDataTypeName}Record`,
+            factory.createIdentifier(lowerCaseDataTypeName),
+          ),
+        );
+        statements.push(addUseEffectWrapper(buildUpdateDatastoreQuery(dataTypeName), ['id', lowerCaseDataTypeName]));
+      }
+    }
+
     if (formMetadata) {
       this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
-
       statements.push(buildValidations(formMetadata.fieldConfigs));
       statements.push(runValidationTasksFunction);
     }
 
-    // add model import for datastore type
-    if (this.component.dataType.dataSourceType === 'DataStore') {
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataType.dataTypeName);
-    }
     return statements;
   }
 
