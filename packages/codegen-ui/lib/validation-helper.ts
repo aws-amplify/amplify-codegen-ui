@@ -17,6 +17,10 @@ import * as yup from 'yup';
 import { InvalidInputError } from './errors';
 import { StudioGenericEvent, StudioSchema } from './types';
 
+const alphaNumString = () => {
+  return yup.string().matches(/^[a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string' });
+};
+
 const pascalCaseAlphaNumString = () => {
   return yup
     .string()
@@ -173,7 +177,7 @@ const studioThemeValuesSchema: any = yup.object({
 });
 
 const studioThemeSchema = yup.object({
-  name: pascalCaseAlphaNumString().required(),
+  name: alphaNumString().required(),
   id: yup.string().nullable(),
   values: yup.array(studioThemeValuesSchema).required(),
   overrides: yup.array(studioThemeValuesSchema).nullable(),
