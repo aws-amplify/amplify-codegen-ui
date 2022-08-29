@@ -119,12 +119,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
-    // remove the utils import as the component will need to import it from codegen-ui-react directly
-    if (this.importCollection.hasMappedImport(ImportSource.UTILS)) {
-      this.importCollection.removeImportSource(ImportSource.UTILS);
-      this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD_CODEGEN);
-    }
-
     const imports = this.importCollection.buildImportStatements();
 
     let importsText = '';
