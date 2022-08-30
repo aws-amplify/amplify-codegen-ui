@@ -35,6 +35,7 @@ export const FORM_DEFINITION_DEFAULTS = {
       name: 'fieldName',
       valueMappings: { values: [{ value: { value: 'Option' } }] },
     },
+    radioGroupFieldBooleanDisplayValue: { true: 'Yes', false: 'No' },
   },
 
   sectionalElement: {

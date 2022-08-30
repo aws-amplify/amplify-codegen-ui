@@ -57,6 +57,40 @@ export function mergeValueMappings(
   };
 }
 
+function getRadioGroupFieldValueMappings(
+  config: StudioGenericFieldConfig,
+  baseConfig?: StudioGenericFieldConfig,
+): StudioFormValueMappings {
+  const valueMappings: StudioFormValueMappings =
+    baseConfig?.inputType?.valueMappings?.values.length || config?.inputType?.valueMappings?.values.length
+      ? mergeValueMappings(baseConfig?.inputType?.valueMappings, config.inputType?.valueMappings)
+      : FORM_DEFINITION_DEFAULTS.field.inputType.valueMappings;
+
+  const dataType = config.dataType ?? baseConfig?.dataType;
+  if (dataType === 'Boolean') {
+    const trueOverride = valueMappings.values.find(
+      ({ value }) => 'value' in value && value.value === 'true',
+    )?.displayValue;
+    const falseOverride = valueMappings.values.find(
+      ({ value }) => 'value' in value && value.value === 'false',
+    )?.displayValue;
+
+    const {
+      field: {
+        radioGroupFieldBooleanDisplayValue: { true: trueDefault, false: falseDefault },
+      },
+    } = FORM_DEFINITION_DEFAULTS;
+    return {
+      values: [
+        { value: { value: 'true' }, displayValue: trueOverride ?? { value: trueDefault } },
+        { value: { value: 'false' }, displayValue: falseOverride ?? { value: falseDefault } },
+      ],
+    };
+  }
+
+  return valueMappings;
+}
+
 // pure function that merges in validations in param with defaults
 function getMergedValidations(
   componentType: string,
@@ -119,7 +153,6 @@ export function getFormDefinitionInputElement(
     case 'EmailField':
       formDefinitionElement = {
         componentType: 'TextField',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
@@ -135,7 +168,6 @@ export function getFormDefinitionInputElement(
     case 'SwitchField':
       formDefinitionElement = {
         componentType: 'SwitchField',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           defaultChecked:
@@ -149,7 +181,6 @@ export function getFormDefinitionInputElement(
     case 'PhoneNumberField':
       formDefinitionElement = {
         componentType: 'PhoneNumberField',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           defaultCountryCode:
@@ -168,7 +199,6 @@ export function getFormDefinitionInputElement(
     case 'SelectField':
       formDefinitionElement = {
         componentType: 'SelectField',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
@@ -185,7 +215,6 @@ export function getFormDefinitionInputElement(
     case 'JSONField':
       formDefinitionElement = {
         componentType: 'TextAreaField',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
@@ -201,7 +230,6 @@ export function getFormDefinitionInputElement(
     case 'SliderField':
       formDefinitionElement = {
         componentType: 'SliderField',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           min: getFirstDefinedValue([config.inputType?.minValue, baseConfig?.inputType?.minValue]),
@@ -218,7 +246,6 @@ export function getFormDefinitionInputElement(
     case 'StepperField':
       formDefinitionElement = {
         componentType: 'StepperField',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           min: getFirstDefinedValue([config.inputType?.minValue, baseConfig?.inputType?.minValue]),
@@ -236,7 +263,6 @@ export function getFormDefinitionInputElement(
     case 'ToggleButton':
       formDefinitionElement = {
         componentType: 'ToggleButton',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           children: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
@@ -249,7 +275,6 @@ export function getFormDefinitionInputElement(
     case 'CheckboxField':
       formDefinitionElement = {
         componentType: 'CheckboxField',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           name: config.inputType?.name || baseConfig?.inputType?.name || FORM_DEFINITION_DEFAULTS.field.inputType.name,
@@ -265,7 +290,6 @@ export function getFormDefinitionInputElement(
     case 'RadioGroupField':
       formDefinitionElement = {
         componentType: 'RadioGroupField',
-        dataType: config?.dataType || baseConfig?.dataType,
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           name: config.inputType?.name || baseConfig?.inputType?.name || FORM_DEFINITION_DEFAULTS.field.inputType.name,
@@ -274,10 +298,7 @@ export function getFormDefinitionInputElement(
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
           isRequired: getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]),
         },
-        valueMappings:
-          baseConfig?.inputType?.valueMappings?.values.length || config?.inputType?.valueMappings?.values.length
-            ? mergeValueMappings(baseConfig?.inputType?.valueMappings, config.inputType?.valueMappings)
-            : FORM_DEFINITION_DEFAULTS.field.inputType.valueMappings,
+        valueMappings: getRadioGroupFieldValueMappings(config, baseConfig),
       };
       break;
 
@@ -302,6 +323,7 @@ export function getFormDefinitionInputElement(
   const mergedValidations = getMergedValidations(componentType, [baseConfig?.validations, config?.validations]);
 
   formDefinitionElement.validations = mergedValidations;
+  formDefinitionElement.dataType = config?.dataType || baseConfig?.dataType;
 
   deleteUndefined(formDefinitionElement);
   deleteUndefined(formDefinitionElement.props);

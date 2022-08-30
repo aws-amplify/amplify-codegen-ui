@@ -24,8 +24,8 @@
               "isRequired": false,
               "attributes": []
           },
-          "maybe": {
-              "name": "maybe",
+          "attend": {
+              "name": "attend",
               "isArray": false,
               "type": "Boolean",
               "isRequired": false,
