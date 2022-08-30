@@ -259,7 +259,7 @@ export const generateFormatUtil = () => [
                     factory.createIdentifier('split'),
                   ),
                   undefined,
-                  [factory.createRegularExpressionLiteral('/-|+|Z/')],
+                  [factory.createRegularExpressionLiteral(`/-|\\+|Z/`)],
                 ),
               ),
             ],
