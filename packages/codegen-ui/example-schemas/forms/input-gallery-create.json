@@ -4,22 +4,11 @@
     "dataTypeName": "InputGallery"
   },
   "fields": {
-    "maybe": {
+    "attend": {
       "inputType": {
         "required": "false",
-        "type": "RadioGroupField",
-        "valueMappings": {
-          "bindingProperties": {},
-          "values": [
-            {
-              "value": {
-                "value": "Pick?"
-              }
-            }
-          ]
-        }
-      },
-      "label": "Maybe"
+        "type": "RadioGroupField"
+      }
     },
     "maybeSlide": {
       "inputType": {

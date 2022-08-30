@@ -50,12 +50,12 @@ export const buildTargetVariable = (name: string, dataType?: DataFieldDataType):
       break;
     case 'Boolean':
       if (name === 'RadioGroupField') {
-        // const value = e.target.value === 'Yes'
+        // const value = e.target.value === 'true'
         // this works around only two set Radio for boolean
         expression = factory.createBinaryExpression(
           factory.createPropertyAccessExpression(expression, factory.createIdentifier('value')),
           factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-          factory.createStringLiteral('Yes'),
+          factory.createStringLiteral('true'),
         );
       } else {
         // SwitchField & CheckboxField

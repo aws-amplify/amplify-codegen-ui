@@ -504,6 +504,34 @@ describe('getFormDefinitionInputElement', () => {
     });
   });
 
+  it('should handle valueMappings for RadioGroupField of Boolean type', () => {
+    const config: StudioFormFieldConfig = {
+      dataType: 'Boolean',
+      inputType: {
+        type: 'RadioGroupField',
+        name: 'MyFieldName',
+        valueMappings: {
+          values: [
+            { displayValue: { value: 'Yup' }, value: { value: 'true' } },
+            { displayValue: { value: 'Should not be mapped' }, value: { value: 'should not be mapped' } },
+          ],
+        },
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      dataType: 'Boolean',
+      componentType: 'RadioGroupField',
+      props: { label: 'Label', name: 'MyFieldName' },
+      valueMappings: {
+        values: [
+          { value: { value: 'true' }, displayValue: { value: 'Yup' } },
+          { value: { value: 'false' }, displayValue: { value: 'No' } },
+        ],
+      },
+    });
+  });
+
   it('should throw if the inputType type is not valid', () => {
     const config = {
       inputType: {
