@@ -30,6 +30,7 @@ export enum ValidationTypes {
   JSON = 'JSON',
   IP_ADDRESS = 'IpAddress',
   URL = 'URL',
+  PHONE = 'Phone',
 }
 
 export const ValidationTypeMapping: Record<'StringType' | 'NumberType', ValidationTypes[]> = {
@@ -88,7 +89,8 @@ export type GenericValidationType = {
     | ValidationTypes.EMAIL
     | ValidationTypes.JSON
     | ValidationTypes.IP_ADDRESS
-    | ValidationTypes.URL;
+    | ValidationTypes.URL
+    | ValidationTypes.PHONE;
 } & BaseValidation;
 
 export type FieldValidationConfiguration =

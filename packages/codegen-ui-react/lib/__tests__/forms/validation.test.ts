@@ -20,7 +20,6 @@ describe('validateField tests', () => {
   it('should validate REQUIRED type', () => {
     expect(validateField('123', [{ type: ValidationTypes.REQUIRED, validationMessage: '' }])).toEqual({
       hasError: false,
-      errorMessage: 'The value is required',
     });
     expect(validateField('', [{ type: ValidationTypes.REQUIRED, validationMessage: '' }])).toEqual({
       hasError: true,
@@ -28,7 +27,6 @@ describe('validateField tests', () => {
     });
     expect(validateField(0, [{ type: ValidationTypes.REQUIRED, validationMessage: 'test' }])).toEqual({
       hasError: false,
-      errorMessage: 'test',
     });
   });
   it('should validate START_WITH type', () => {
@@ -91,19 +89,22 @@ describe('validateField tests', () => {
       validateField('123', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [4], validationMessage: '' }]),
     ).toEqual({ hasError: false, errorMessage: 'The value must be shorter than 4' });
     expect(
-      validateField('', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [0], validationMessage: '' }]),
-    ).toEqual({ hasError: true, errorMessage: 'The value must be shorter than 0' });
+      validateField('', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [3], validationMessage: '' }]),
+    ).toEqual({ hasError: false });
+    expect(
+      validateField('23445', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [3], validationMessage: '' }]),
+    ).toEqual({ hasError: true, errorMessage: 'The value must be shorter than 3' });
   });
   it('should validate GREATER_THAN_CHAR_LENGTH type', () => {
     expect(
       validateField('123', [{ type: ValidationTypes.GREATER_THAN_CHAR_LENGTH, numValues: [0], validationMessage: '' }]),
     ).toEqual({ hasError: false, errorMessage: 'The value must be longer than 0' });
     expect(
-      validateField('', [{ type: ValidationTypes.GREATER_THAN_CHAR_LENGTH, numValues: [0], validationMessage: '' }]),
-    ).toEqual({ hasError: true, errorMessage: 'The value must be longer than 0' });
+      validateField('', [{ type: ValidationTypes.GREATER_THAN_CHAR_LENGTH, numValues: [3], validationMessage: '' }]),
+    ).toEqual({ hasError: false });
     expect(
-      validateField('', [
-        { type: ValidationTypes.GREATER_THAN_CHAR_LENGTH, numValues: [1], validationMessage: 'test' },
+      validateField('df', [
+        { type: ValidationTypes.GREATER_THAN_CHAR_LENGTH, numValues: [3], validationMessage: 'test' },
       ]),
     ).toEqual({ hasError: true, errorMessage: 'test' });
   });
@@ -251,13 +252,12 @@ describe('validateField tests', () => {
       hasError: false,
       errorMessage: 'The value must be in a correct JSON format',
     });
-    expect(validateField('\\\\', [{ type: ValidationTypes.JSON, validationMessage: '' }])).toEqual({
-      hasError: true,
-      errorMessage: 'The value must be in a correct JSON format',
-    });
-    expect(validateField('', [{ type: ValidationTypes.JSON, validationMessage: 'test' }])).toEqual({
+    expect(validateField('\\\\', [{ type: ValidationTypes.JSON, validationMessage: 'test' }])).toEqual({
       hasError: true,
       errorMessage: 'test',
+    });
+    expect(validateField('', [{ type: ValidationTypes.JSON, validationMessage: 'test' }])).toEqual({
+      hasError: false,
     });
   });
   it('should validate IP_ADDRESS type', () => {
@@ -270,13 +270,12 @@ describe('validateField tests', () => {
         { type: ValidationTypes.IP_ADDRESS, validationMessage: '' },
       ]),
     ).toEqual({ hasError: false, errorMessage: 'The value must be an IPv4 or IPv6 address' });
-    expect(validateField('1.1', [{ type: ValidationTypes.IP_ADDRESS, validationMessage: '' }])).toEqual({
-      hasError: true,
-      errorMessage: 'The value must be an IPv4 or IPv6 address',
-    });
-    expect(validateField('', [{ type: ValidationTypes.IP_ADDRESS, validationMessage: 'test' }])).toEqual({
+    expect(validateField('1.1', [{ type: ValidationTypes.IP_ADDRESS, validationMessage: 'test' }])).toEqual({
       hasError: true,
       errorMessage: 'test',
+    });
+    expect(validateField('', [{ type: ValidationTypes.IP_ADDRESS, validationMessage: 'test' }])).toEqual({
+      hasError: false,
     });
   });
   it('should validate URL type', () => {
@@ -294,6 +293,33 @@ describe('validateField tests', () => {
     });
     expect(validateField('/aws.com', [{ type: ValidationTypes.URL, validationMessage: 'test' }])).toEqual({
       hasError: true,
+      errorMessage: 'test',
+    });
+  });
+
+  it('should validate Phone type', () => {
+    expect(validateField('kdj34324', [{ type: ValidationTypes.PHONE }])).toEqual({
+      hasError: true,
+      errorMessage: 'The value must be a valid phone number',
+    });
+
+    expect(validateField('2938493029', [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
+      hasError: false,
+      errorMessage: 'test',
+    });
+
+    expect(validateField('293 849 3029', [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
+      hasError: false,
+      errorMessage: 'test',
+    });
+
+    expect(validateField('293-849-3029', [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
+      hasError: false,
+      errorMessage: 'test',
+    });
+
+    expect(validateField('293 849-3029', [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
+      hasError: false,
       errorMessage: 'test',
     });
   });

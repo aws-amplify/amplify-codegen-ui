@@ -12,7 +12,7 @@
             "inputType": {
                 "type": "TextField"
             },
-            "validations": [{"type": "Required", "validationMessage": "Name is required"}]
+            "validations": [{"type": "GreaterThanChar", "numValues": ["1"], "validationMessage": "Name must be longer than 1 character"}]
         },
         "age": {
             "label": "Age",
@@ -25,8 +25,14 @@
             "label": "Email",
             "inputType": {
                 "type": "EmailField"
-            },
-            "validations": [{"type": "Required", "validationMessage": "Email is required"}]
+            }
+        },
+        "ip": {
+            "label": "IP Address",
+            "inputType": {
+                "type": "IPAddressField",
+                "required": true
+            }
         }
     },
     "sectionalElements": {

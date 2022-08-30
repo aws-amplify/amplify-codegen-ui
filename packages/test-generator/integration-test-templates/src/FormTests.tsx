@@ -28,7 +28,6 @@ export default function FormTests() {
           onSubmit={(r) => setCustomFormCreateDogSubmitResults(r)}
           onValidate={{
             email: (value, validationResponse) => {
-              console.log(value, validationResponse);
               if (validationResponse.hasError) {
                 return validationResponse;
               }
@@ -39,10 +38,12 @@ export default function FormTests() {
             },
           }}
         />
+        <View>{`submitted: ${!!Object.keys(customFormCreateDogSubmitResults).length}`}</View>
         <View>{`name: ${customFormCreateDogSubmitResults.name}`}</View>
         <Text>{`name: ${customFormCreateDogSubmitResults.name}`}</Text>
         <Text>{`age: ${customFormCreateDogSubmitResults.age}`}</Text>
         <Text>{`email: ${customFormCreateDogSubmitResults.email}`}</Text>
+        <Text>{`ip: ${customFormCreateDogSubmitResults.ip}`}</Text>
       </View>
       <Divider />
     </AmplifyProvider>

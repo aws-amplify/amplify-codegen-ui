@@ -39,7 +39,6 @@ describe('mapFormFieldConfig', () => {
           maxValue: 100,
           step: 1,
           readOnly: true,
-          required: true,
         },
       },
     };
@@ -70,7 +69,7 @@ describe('mapFormFieldConfig', () => {
 
     expect(formDefinition.elements.price).toStrictEqual({
       componentType: 'SliderField',
-      props: { label: 'Price', isDisabled: true, min: 0, max: 100, step: 1, isRequired: true },
+      props: { label: 'Price', isDisabled: true, min: 0, max: 100, step: 1, isRequired: false },
     });
   });
 
@@ -251,6 +250,28 @@ describe('getFormDefinitionInputElement', () => {
     });
   });
 
+  it('should add validation if field is required', () => {
+    const config = {
+      inputType: {
+        type: 'EmailField',
+        required: true,
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'Label',
+        isRequired: true,
+      },
+      studioFormComponentType: 'EmailField',
+      validations: [
+        { type: ValidationTypes.REQUIRED, immutable: true },
+        { type: ValidationTypes.EMAIL, immutable: true },
+      ],
+    });
+  });
+
   it('should get SwitchField', () => {
     const config = {
       inputType: {
@@ -276,6 +297,7 @@ describe('getFormDefinitionInputElement', () => {
     expect(getFormDefinitionInputElement(config)).toStrictEqual({
       componentType: 'PhoneNumberField',
       props: { label: 'Label', defaultCountryCode: '+11' },
+      validations: [{ type: ValidationTypes.PHONE, immutable: true }],
     });
   });
 

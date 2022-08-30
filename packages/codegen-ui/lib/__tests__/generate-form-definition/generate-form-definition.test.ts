@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import { generateFormDefinition } from '../../generate-form-definition';
+import { ValidationTypes } from '../../types';
 
 describe('generateFormDefinition', () => {
   it('should map DataStore model fields', () => {
@@ -41,6 +42,7 @@ describe('generateFormDefinition', () => {
         dataType: 'String',
         props: { label: 'Name', isRequired: true, isReadOnly: false },
         studioFormComponentType: 'TextField',
+        validations: [{ type: ValidationTypes.REQUIRED, immutable: true }],
       },
     });
   });
@@ -86,6 +88,7 @@ describe('generateFormDefinition', () => {
         componentType: 'SliderField',
         dataType: 'Float',
         props: { label: 'Weight', min: 1, max: 100, step: 2, isDisabled: false, isRequired: true },
+        validations: [{ type: ValidationTypes.REQUIRED, immutable: true }],
       },
     });
   });
@@ -397,6 +400,7 @@ it('should add read-only fields if it has overrides', () => {
       dataType: 'String',
       props: { label: 'Name', isRequired: true, isReadOnly: true },
       studioFormComponentType: 'TextField',
+      validations: [{ type: ValidationTypes.REQUIRED, immutable: true }],
     },
   });
   expect(formDefinition.elementMatrix).toStrictEqual([['name']]);

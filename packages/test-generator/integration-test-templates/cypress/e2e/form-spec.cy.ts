@@ -20,31 +20,37 @@ describe('Forms', () => {
 
   it('CustomFormCreateDog', () => {
     const ErrorMessageMap = {
-      name: 'Name is required',
+      name: 'Name must be longer than 1 character',
       age: 'Age must be greater than 0',
       validEmail: 'The value must be a valid email address',
       customValidation: 'All dog emails are yahoo emails',
+      ip: 'The value must be an IPv4 or IPv6 address',
     };
     cy.get('#customFormCreateDog').within(() => {
       const blurField = () => cy.contains('Register your dog').click();
 
-      // should validate on submit
+      // should not submit if required field empty
       cy.contains('Submit').click();
-      cy.contains(ErrorMessageMap.name);
-      cy.contains(ErrorMessageMap.age);
+      cy.contains('submitted: false');
+
+      // validates email
+      cy.get('input').eq(2).type('fdfdsfd');
       cy.contains(ErrorMessageMap.validEmail);
+      cy.contains('Clear').click();
 
       // validates on change & extends with onValidate prop
-      cy.get('input').eq(0).type('Spot');
+      cy.get('input').eq(0).type('S');
       blurField();
-      cy.get('input').eq(1).type('3');
+      cy.get('input').eq(1).type('-1');
       blurField();
       cy.get('input').eq(2).type('spot@gmail.com');
       blurField();
-      cy.contains(ErrorMessageMap.name).should('not.exist');
-      cy.contains(ErrorMessageMap.age).should('not.exist');
+      cy.get('input').eq(3).type('invalid ip');
+      cy.contains(ErrorMessageMap.name);
+      cy.contains(ErrorMessageMap.age);
       cy.contains(ErrorMessageMap.validEmail).should('not.exist');
       cy.contains(ErrorMessageMap.customValidation);
+      cy.contains(ErrorMessageMap.ip);
 
       // clears and submits
       cy.contains('Clear').click();
@@ -54,10 +60,14 @@ describe('Forms', () => {
       blurField();
       cy.get('input').eq(2).type('spot@yahoo.com');
       blurField();
+      cy.get('input').eq(3).type('192.0.2.146');
+      blurField();
       cy.contains('Submit').click();
+      cy.contains('submitted: true');
       cy.contains('name: Spot');
       cy.contains('age: 3');
       cy.contains('email: spot@yahoo.com');
+      cy.contains('ip: 192.0.2.146');
     });
   });
 });
