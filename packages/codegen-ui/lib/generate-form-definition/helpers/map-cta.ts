@@ -58,11 +58,11 @@ function getButtonElement(
   return element;
 }
 
-export function mapButtons(buttons: StudioFormCTA): ButtonConfig {
+export function mapButtons(buttons?: StudioFormCTA): ButtonConfig {
   const defaults = FORM_DEFINITION_DEFAULTS.cta;
 
   const buttonMapping: ButtonConfig = {
-    position: buttons.position ? buttons.position : defaults.position,
+    position: buttons?.position ?? defaults.position,
     buttonMatrix: defaults.buttonMatrix,
     buttonConfigs: {},
   };
@@ -70,7 +70,7 @@ export function mapButtons(buttons: StudioFormCTA): ButtonConfig {
   const keys: (keyof ButtonConfig['buttonConfigs'])[] = ['submit', 'cancel', 'clear'];
 
   keys.forEach((key) => {
-    buttonMapping.buttonConfigs[key] = getButtonElement(key, buttons[key]);
+    buttonMapping.buttonConfigs[key] = getButtonElement(key, buttons?.[key]);
   });
 
   return buttonMapping;
