@@ -78,7 +78,8 @@ export type FormInputType =
   | 'IPAddressField'
   | 'URLField'
   | 'EmailField'
-  | 'JSONField';
+  | 'JSONField'
+  | 'ArrayField';
 
 export * from './form-definition-element';
 export * from './style';
