@@ -66,6 +66,7 @@ export type FormInputType =
   | 'StepperField'
   | 'SwitchField'
   | 'ToggleButton'
+  | 'Button'
   | 'CheckboxField'
   | 'RadioGroupField'
   | 'PhoneNumberField'

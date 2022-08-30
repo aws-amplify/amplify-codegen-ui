@@ -176,7 +176,6 @@ export type FormDefinitionInputElement = (
   | FormDefinitionCheckboxFieldElement
   | FormDefinitionRadioGroupFieldElement
   | FormDefinitionPasswordFieldElement
-  | FormDefinitionButtonElement
 ) &
   FormDefinitionInputElementCommon;
 
@@ -200,4 +199,7 @@ export type FormDefinitionSectionalElement =
   | FormDefinitionTextElement
   | FormDefinitionDividerElement;
 
-export type FormDefinitionElement = FormDefinitionInputElement | FormDefinitionSectionalElement;
+export type FormDefinitionElement =
+  | FormDefinitionInputElement
+  | FormDefinitionSectionalElement
+  | FormDefinitionButtonElement;
