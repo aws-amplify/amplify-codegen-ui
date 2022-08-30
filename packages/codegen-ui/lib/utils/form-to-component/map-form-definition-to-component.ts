@@ -40,13 +40,14 @@ const resolveStyles = (
 };
 
 const parentGrid = (name: string, style: StudioFormStyle, children: StudioComponentChild[]): StudioComponentChild => {
-  const { verticalGap, horizontalGap } = resolveStyles(style);
+  const { verticalGap, horizontalGap, outerPadding } = resolveStyles(style);
   return {
     name,
     componentType: 'Grid',
     properties: {
       ...(horizontalGap && { columnGap: { value: horizontalGap } }),
       ...(verticalGap && { rowGap: { value: verticalGap } }),
+      ...(outerPadding && { padding: { value: outerPadding } }),
     },
     children,
   };
