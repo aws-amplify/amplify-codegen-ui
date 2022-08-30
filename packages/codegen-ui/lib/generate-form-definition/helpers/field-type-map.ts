@@ -77,6 +77,10 @@ export const FIELD_TYPE_MAP: {
     defaultComponent: 'JSONField',
     supportedComponents: new Set(['TextField', 'JSONField']),
   },
+  Array: {
+    defaultComponent: 'ArrayField',
+    supportedComponents: new Set(['ArrayField']),
+  },
   AWSPhone: {
     defaultComponent: 'PhoneNumberField',
     supportedComponents: new Set(['PhoneNumberField']),

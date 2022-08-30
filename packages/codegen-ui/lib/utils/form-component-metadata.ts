@@ -38,7 +38,11 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
     name: form.name,
     fieldConfigs: inputElementEntries.reduce<Record<string, FieldConfigMetadata>>((configs, [name, config]) => {
       const updatedConfigs = configs;
-      const metadata: FieldConfigMetadata = { hasChange: true, validationRules: [] };
+      const metadata: FieldConfigMetadata = {
+        hasChange: true,
+        validationRules: [],
+        isArray: config.componentType === 'ArrayField',
+      };
       if ('validations' in config && config.validations) {
         metadata.validationRules = config.validations.map<FieldValidationConfiguration>((validation) => {
           const updatedValidation = validation;
