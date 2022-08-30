@@ -29,6 +29,10 @@ import {
 import { FIELD_TYPE_MAP } from './field-type-map';
 
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
+  if (field.isArray) {
+    return 'Array';
+  }
+
   if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
     return 'Enum';
   }
@@ -106,10 +110,6 @@ export function mapModelFieldsConfigs({
   }
 
   Object.entries(model.fields).forEach(([fieldName, field]) => {
-    if (field.isArray) {
-      throw new InvalidInputError('Array types are not yet supported');
-    }
-
     const isAutoExcludedField = field.readOnly || (fieldName === 'id' && field.dataType === 'ID' && field.required);
 
     if (!isAutoExcludedField) {
