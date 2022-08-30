@@ -107,15 +107,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
               factory.createExpressionStatement(
                 factory.createCallExpression(factory.createIdentifier('setModelFields'), undefined, [
                   factory.createCallExpression(factory.createIdentifier('onSubmitBefore'), undefined, [
-                    factory.createObjectLiteralExpression(
-                      [
-                        factory.createPropertyAssignment(
-                          factory.createIdentifier('fields'),
-                          factory.createIdentifier('modelFields'),
-                        ),
-                      ],
-                      false,
-                    ),
+                    factory.createIdentifier('modelFields'),
                   ]),
                 ]),
               ),

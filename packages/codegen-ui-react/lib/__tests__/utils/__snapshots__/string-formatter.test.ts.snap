@@ -39,7 +39,7 @@ export function formatDate(date: string, dateFormat: DateFormat[\\"dateFormat\\"
     if (validDate.toString() === invalidDateStr) {
         return date;
     }
-    const splitDate = date.split(/-|+|Z/);
+    const splitDate = date.split(/-|\\\\+|Z/);
     const year = splitDate[0];
     const month = splitDate[1];
     const day = splitDate[2];
