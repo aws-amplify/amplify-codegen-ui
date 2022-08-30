@@ -119,34 +119,6 @@ describe('mapModelFieldsConfigs', () => {
     expect(() => mapModelFieldsConfigs({ dataTypeName: 'Cat', formDefinition, dataSchema })).toThrow();
   });
 
-  it('should throw if field is an array', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
-      elementMatrix: [],
-    };
-
-    const dataSchema: GenericDataSchema = {
-      dataSourceType: 'DataStore',
-      enums: {},
-      nonModels: {},
-      models: {
-        Dog: {
-          fields: {
-            names: { dataType: 'String', readOnly: false, required: false, isArray: true },
-          },
-        },
-      },
-    };
-
-    expect(() => mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema })).toThrow();
-  });
-
   it('should generate config from id field but not add it to matrix', () => {
     const formDefinition: FormDefinition = {
       form: { layoutStyle: {} },
@@ -347,5 +319,16 @@ describe('getFieldTypeMapKey', () => {
         isArray: false,
       }),
     ).toBe('NonModel');
+  });
+
+  it('should return `Array` if isArray is true', () => {
+    expect(
+      getFieldTypeMapKey({
+        dataType: { nonModel: 'Misc' },
+        readOnly: false,
+        required: false,
+        isArray: true,
+      }),
+    ).toBe('Array');
   });
 });
