@@ -33,7 +33,7 @@ export function generateFormDefinition({
   dataSchema?: GenericDataSchema;
 }): FormDefinition {
   const formDefinition: FormDefinition = {
-    form: { layoutStyle: {} },
+    form: { layoutStyle: mapStyles(form.style) },
     elements: {},
     buttons: {
       buttonConfigs: {},
@@ -77,8 +77,6 @@ export function generateFormDefinition({
   mapElementMatrix({ elementQueue, formDefinition });
 
   mapElements({ form, formDefinition, modelFieldsConfigs });
-
-  formDefinition.form.layoutStyle = mapStyles(form.style);
 
   formDefinition.buttons = mapButtons(form.cta);
 

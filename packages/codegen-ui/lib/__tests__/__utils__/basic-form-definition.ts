@@ -17,10 +17,14 @@ import { FormDefinition } from '../../types';
 
 export const getBasicFormDefinition = (): FormDefinition => ({
   form: {
-    layoutStyle: {},
+    layoutStyle: {
+      horizontalGap: { value: '15px' },
+      verticalGap: { value: '15px' },
+      outerPadding: { value: '20px' },
+    },
   },
   elements: {},
-  elementMatrix: [[]],
+  elementMatrix: [],
   buttons: {
     buttonConfigs: {},
     position: 'bottom',

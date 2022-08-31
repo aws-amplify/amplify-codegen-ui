@@ -31,7 +31,7 @@ export const FORM_DEFINITION_DEFAULTS = {
     inputType: {
       label: 'Label',
       defaultCountryCode: '+1',
-      value: 'true',
+      value: 'fieldName',
       name: 'fieldName',
       valueMappings: { values: [{ value: { value: 'Option' } }] },
     },

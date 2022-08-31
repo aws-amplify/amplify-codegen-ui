@@ -15,6 +15,7 @@
  */
 
 import { findIndices, removeAndReturnItemOnward, removeFromMatrix } from '../../../generate-form-definition/helpers';
+import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('findIndices', () => {
   it('should find the indices of a string in a two-dimensional array', () => {
@@ -34,13 +35,7 @@ describe('removeFromMatrix', () => {
     const matrix = [['one', 'two', 'three', 'four'], ['five'], ['six', 'seven', 'eight']];
 
     const formDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
+      ...getBasicFormDefinition(),
       elementMatrix: matrix,
     };
 
@@ -55,13 +50,7 @@ describe('removeAndReturnItemOnward', () => {
     const matrix = [['one', 'two', 'three', 'four'], ['five'], ['six', 'seven', 'eight']];
 
     const formDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
+      ...getBasicFormDefinition(),
       elementMatrix: matrix,
     };
 

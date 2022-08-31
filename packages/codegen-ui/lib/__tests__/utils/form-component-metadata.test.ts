@@ -68,6 +68,7 @@ describe('mapFormMetaData', () => {
         },
       },
       style: {},
+      cta: {},
     };
 
     const { fieldConfigs } = mapFormMetadata(form, formDefinition);

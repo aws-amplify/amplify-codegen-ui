@@ -64,6 +64,7 @@ export default function CustomDataForm(props) {
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
+        padding=\\"20px\\"
         {...getOverrideProps(overrides, \\"CustomDataFormGrid\\")}
       >
         <Grid
@@ -311,6 +312,7 @@ export default function CustomWithSectionalElements(props) {
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
+        padding=\\"20px\\"
         {...getOverrideProps(overrides, \\"CustomWithSectionalElementsGrid\\")}
       >
         <Grid
@@ -537,6 +539,7 @@ export default function MyPostForm(props) {
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
+        padding=\\"20px\\"
         {...getOverrideProps(overrides, \\"MyPostFormGrid\\")}
       >
         <Grid
@@ -791,6 +794,7 @@ export default function MyPostForm(props) {
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
+        padding=\\"20px\\"
         {...getOverrideProps(overrides, \\"MyPostFormGrid\\")}
       >
         <Grid
@@ -1061,6 +1065,7 @@ export default function InputGalleryCreateForm(props) {
       <Grid
         columnGap=\\"15px\\"
         rowGap=\\"15px\\"
+        padding=\\"20px\\"
         {...getOverrideProps(overrides, \\"InputGalleryCreateFormGrid\\")}
       >
         <Grid
@@ -1166,7 +1171,7 @@ export default function InputGalleryCreateForm(props) {
           <CheckboxField
             label=\\"Maybe check\\"
             name=\\"maybeCheck\\"
-            value=\\"true\\"
+            value=\\"maybeCheck\\"
             isDisabled={false}
             defaultChecked={false}
             onChange={async (e) => {

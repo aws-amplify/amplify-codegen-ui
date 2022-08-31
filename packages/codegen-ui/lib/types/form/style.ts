@@ -21,13 +21,8 @@ export type FormStyleConfig = {
   value?: string;
 } & FormStyleConfigCommon;
 
-export type FormAlignmentConfig = {
-  value?: 'left' | 'center' | 'right';
-} & FormStyleConfigCommon;
-
 export type StudioFormStyle = {
   horizontalGap?: FormStyleConfig;
   verticalGap?: FormStyleConfig;
   outerPadding?: FormStyleConfig;
-  alignment?: FormAlignmentConfig;
 };
