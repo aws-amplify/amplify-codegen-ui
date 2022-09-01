@@ -21,6 +21,7 @@ export enum ImportSource {
   LOCAL_MODELS = '../models',
   LOCAL_SCHEMA = '../models/schema',
   UTILS = './utils',
+  UI_REACT_CSS = '@aws-amplify/ui-react/styles.css',
 }
 
 export enum ImportValue {
@@ -46,6 +47,8 @@ export enum ImportValue {
   VALIDATE_FIELD = 'validateField',
   VALIDATE_FIELD_CODEGEN = 'validateField',
   FORMATTER = 'formatter',
+  ARRAY_FIELD = 'ArrayField',
+  UI_REACT_STYLES = 'uiReactStyles',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
@@ -70,4 +73,6 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.USE_EFFECT]: ImportSource.REACT,
   [ImportValue.FORMATTER]: ImportSource.UTILS,
   [ImportValue.VALIDATE_FIELD]: ImportSource.UTILS,
+  [ImportValue.ARRAY_FIELD]: ImportSource.UTILS,
+  [ImportValue.UI_REACT_STYLES]: ImportSource.UI_REACT_CSS,
 };

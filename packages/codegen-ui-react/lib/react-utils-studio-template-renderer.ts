@@ -16,15 +16,16 @@
 import { EOL } from 'os';
 import ts, { EmitHint } from 'typescript';
 import { StudioTemplateRenderer } from '@aws-amplify/codegen-ui';
-import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
-import { ImportCollection } from './imports';
+import { ReactRenderConfig, scriptKindToFileExtension, scriptKindToFileExtensionNonReact } from './react-render-config';
+import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { RequiredKeys } from './utils/type-utils';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 import { generateValidationFunction } from './utils/forms/validation';
 import { generateFormatUtil } from './utils/string-formatter';
+import { generateArrayFieldComponent } from './utils/forms/array-field-component';
 
-export type UtilTemplateType = 'validation' | 'formatter';
+export type UtilTemplateType = 'validation' | 'formatter' | 'arrayField';
 
 export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -60,24 +61,46 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
     const utilsStatements: (ts.VariableStatement | ts.TypeAliasDeclaration | ts.FunctionDeclaration)[] = [];
+    let skipReactImport = true;
 
     this.utils.forEach((util) => {
       if (util === 'validation') {
         utilsStatements.push(...generateValidationFunction());
       } else if (util === 'formatter') {
         utilsStatements.push(...generateFormatUtil());
+      } else if (util === 'arrayField') {
+        skipReactImport = false;
+        this.fileName = `utils.${scriptKindToFileExtension(this.renderConfig.script)}`;
+        this.importCollection.addMappedImport(ImportValue.UI_REACT_STYLES);
+        ['Grid', 'TextField', 'Badge', 'ScrollView', 'Icon', 'Divider', 'Flex', 'Button'].forEach((component) => {
+          this.importCollection.addImport(ImportSource.UI_REACT, component);
+        });
+        utilsStatements.push(generateArrayFieldComponent());
       }
     });
+    utilsStatements.push(...generateFormatUtil());
 
-    const { componentText } = transpile(
-      utilsStatements.map((util) => printer.printNode(EmitHint.Unspecified, util, file)).join(EOL),
-      this.renderConfig,
-    );
+    let componentText = `/* eslint-disable */${EOL}`;
+    const imports = this.importCollection.buildImportStatements(skipReactImport);
+    imports.forEach((importStatement) => {
+      const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
+      componentText += result + EOL;
+    });
+    componentText += EOL;
+
+    utilsStatements.forEach((util) => {
+      const result = printer.printNode(EmitHint.Unspecified, util, file);
+      componentText += result + EOL;
+    });
+
+    componentText += EOL;
+
+    const { componentText: transpliedText } = transpile(componentText, this.renderConfig);
 
     return {
-      componentText,
+      componentText: transpliedText,
       renderComponentToFilesystem: async (outputPath: string) => {
-        await this.renderComponentToFilesystem(componentText)(this.fileName)(outputPath);
+        await this.renderComponentToFilesystem(transpliedText)(this.fileName)(outputPath);
       },
     };
   }

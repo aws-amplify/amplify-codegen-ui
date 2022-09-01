@@ -49,9 +49,19 @@ export default function CustomDataForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -296,9 +306,19 @@ export default function CustomWithSectionalElements(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -479,9 +499,19 @@ export default function MyPostForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -729,9 +759,19 @@ export default function MyPostForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -974,7 +1014,7 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 1`] = `
+exports[`amplify form renderer tests datastore form tests should render a form with Array field 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
@@ -982,7 +1022,7 @@ import {
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { InputGallery } from \\"../models\\";
-import { validateField } from \\"./utils\\";
+import { ArrayField, validateField } from \\"./utils\\";
 import {
   Button,
   CheckboxField,
@@ -1011,6 +1051,7 @@ export default function InputGalleryCreateForm(props) {
     attend: [{ type: \\"Required\\" }],
     maybeSlide: [],
     maybeCheck: [],
+    arrayTypeField: [{ type: \\"Required\\" }],
     timestamp: [],
     ippy: [{ type: \\"IpAddress\\" }],
     timeisnow: [],
@@ -1031,9 +1072,19 @@ export default function InputGalleryCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -1185,6 +1236,25 @@ export default function InputGalleryCreateForm(props) {
           templateColumns=\\"repeat(1, auto)\\"
           {...getOverrideProps(overrides, \\"RowGrid5\\")}
         >
+          <ArrayField
+            label=\\"Array type field\\"
+            onChange={async (items) => {
+              setModelFields({ ...modelFields, arrayTypeField: items });
+            }}
+            validateItem={async (item) => {
+              return runValidationTasks(\\"arrayTypeField\\", item);
+            }}
+            errorMessage={errors.arrayTypeField?.errorMessage}
+            hasError={errors.arrayTypeField?.hasError}
+            {...getOverrideProps(overrides, \\"arrayTypeField\\")}
+          ></ArrayField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid6\\")}
+        >
           <TextField
             label=\\"Timestamp\\"
             isRequired={false}
@@ -1204,7 +1274,7 @@ export default function InputGalleryCreateForm(props) {
           columnGap=\\"inherit\\"
           rowGap=\\"inherit\\"
           templateColumns=\\"repeat(1, auto)\\"
-          {...getOverrideProps(overrides, \\"RowGrid6\\")}
+          {...getOverrideProps(overrides, \\"RowGrid7\\")}
         >
           <TextField
             label=\\"Ippy\\"
@@ -1224,7 +1294,404 @@ export default function InputGalleryCreateForm(props) {
           columnGap=\\"inherit\\"
           rowGap=\\"inherit\\"
           templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid8\\")}
+        >
+          <TextField
+            label=\\"Timeisnow\\"
+            isRequired={false}
+            isReadOnly={false}
+            type=\\"time\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              await runValidationTasks(\\"timeisnow\\", value);
+              setModelFields({ ...modelFields, timeisnow: value });
+            }}
+            errorMessage={errors.timeisnow?.errorMessage}
+            hasError={errors.timeisnow?.hasError}
+            {...getOverrideProps(overrides, \\"timeisnow\\")}
+          ></TextField>
+        </Grid>
+      </Grid>
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </form>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a form with Array field 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CheckboxFieldProps, GridProps, RadioGroupFieldProps, TextFieldProps, ToggleButtonProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type InputGalleryCreateFormInputValues = {
+    num: number;
+    rootbeer: number;
+    attend: boolean;
+    maybeSlide: boolean;
+    maybeCheck: boolean;
+    arrayTypeField: string;
+    timestamp: number;
+    ippy: string;
+    timeisnow: string;
+};
+export declare type ArrayFieldProps = {
+    label: string;
+    defaultValues?: any[];
+    onChange?: (items: any) => Promise<void>;
+    validateItem?: (value: any) => Promise<ValidationResponse>;
+    hasError?: boolean;
+    errorMessage?: string;
+};
+export declare type InputGalleryCreateFormOverridesProps = {
+    InputGalleryCreateFormGrid: GridProps;
+    RowGrid0: GridProps;
+    num: TextFieldProps;
+    RowGrid1: GridProps;
+    rootbeer: TextFieldProps;
+    RowGrid2: GridProps;
+    attend: RadioGroupFieldProps;
+    RowGrid3: GridProps;
+    maybeSlide: ToggleButtonProps;
+    RowGrid4: GridProps;
+    maybeCheck: CheckboxFieldProps;
+    RowGrid5: GridProps;
+    arrayTypeField: ArrayFieldProps;
+    RowGrid6: GridProps;
+    timestamp: TextFieldProps;
+    RowGrid7: GridProps;
+    ippy: TextFieldProps;
+    RowGrid8: GridProps;
+    timeisnow: TextFieldProps;
+} & EscapeHatchProps;
+export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
+    overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
+} & {
+    onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
+    onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
+        saveSuccessful: boolean;
+        errorMessage?: string;
+    }) => void;
+    onCancel?: () => void;
+    onValidate?: {
+        [field in keyof InputGalleryCreateFormInputValues]?: (value: InputGalleryCreateFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+    };
+}>;
+export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  getOverrideProps,
+  useStateMutationAction,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { InputGallery } from \\"../models\\";
+import { ArrayField, validateField } from \\"./utils\\";
+import {
+  Button,
+  CheckboxField,
+  Flex,
+  Grid,
+  Radio,
+  RadioGroupField,
+  TextField,
+  ToggleButton,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+export default function InputGalleryCreateForm(props) {
+  const {
+    onSubmitBefore,
+    onSubmitComplete,
+    onCancel,
+    onValidate,
+    overrides,
+    ...rest
+  } = props;
+  const [modelFields, setModelFields] = useStateMutationAction({});
+  const [errors, setErrors] = useStateMutationAction({});
+  const validations = {
+    num: [],
+    rootbeer: [],
+    attend: [{ type: \\"Required\\" }],
+    maybeSlide: [],
+    maybeCheck: [],
+    arrayTypeField: [{ type: \\"Required\\" }],
+    timestamp: [],
+    ippy: [{ type: \\"IpAddress\\" }],
+    timeisnow: [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    if (onValidate?.[fieldName]) {
+      validationResponse = await onValidate[fieldName](
+        value,
+        validationResponse
+      );
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <form
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmitBefore) {
+          setModelFields(onSubmitBefore(modelFields));
+        }
+        try {
+          await DataStore.save(new InputGallery(modelFields));
+          if (onSubmitComplete) {
+            onSubmitComplete({ saveSuccessful: true });
+          }
+        } catch (err) {
+          if (onSubmitComplete) {
+            onSubmitComplete({
+              saveSuccessful: false,
+              errorMessage: err.message,
+            });
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"InputGalleryCreateForm\\")}
+    >
+      <Grid
+        columnGap=\\"15px\\"
+        rowGap=\\"15px\\"
+        {...getOverrideProps(overrides, \\"InputGalleryCreateFormGrid\\")}
+      >
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid0\\")}
+        >
+          <TextField
+            label=\\"Num\\"
+            isRequired={false}
+            isReadOnly={false}
+            type=\\"number\\"
+            onChange={async (e) => {
+              const value = parseInt(e.target.value);
+              await runValidationTasks(\\"num\\", value);
+              setModelFields({ ...modelFields, num: value });
+            }}
+            errorMessage={errors.num?.errorMessage}
+            hasError={errors.num?.hasError}
+            {...getOverrideProps(overrides, \\"num\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid1\\")}
+        >
+          <TextField
+            label=\\"Rootbeer\\"
+            isRequired={false}
+            isReadOnly={false}
+            type=\\"number\\"
+            onChange={async (e) => {
+              const value = Number(e.target.value);
+              await runValidationTasks(\\"rootbeer\\", value);
+              setModelFields({ ...modelFields, rootbeer: value });
+            }}
+            errorMessage={errors.rootbeer?.errorMessage}
+            hasError={errors.rootbeer?.hasError}
+            {...getOverrideProps(overrides, \\"rootbeer\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid2\\")}
+        >
+          <RadioGroupField
+            label=\\"Attend\\"
+            name=\\"attend\\"
+            isReadOnly={false}
+            isRequired=\\"false\\"
+            onChange={async (e) => {
+              const value = e.target.value === \\"true\\";
+              await runValidationTasks(\\"attend\\", value);
+              setModelFields({ ...modelFields, attend: value });
+            }}
+            errorMessage={errors.attend?.errorMessage}
+            hasError={errors.attend?.hasError}
+            {...getOverrideProps(overrides, \\"attend\\")}
+          >
+            <Radio
+              children=\\"Yes\\"
+              value=\\"true\\"
+              {...getOverrideProps(overrides, \\"attendRadio0\\")}
+            ></Radio>
+            <Radio
+              children=\\"No\\"
+              value=\\"false\\"
+              {...getOverrideProps(overrides, \\"attendRadio1\\")}
+            ></Radio>
+          </RadioGroupField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid3\\")}
+        >
+          <ToggleButton
+            children=\\"Maybe slide\\"
+            isDisabled={false}
+            defaultPressed={false}
+            onChange={async (e) => {
+              const value = e.target.checked;
+              await runValidationTasks(\\"maybeSlide\\", value);
+              setModelFields({ ...modelFields, maybeSlide: value });
+            }}
+            errorMessage={errors.maybeSlide?.errorMessage}
+            hasError={errors.maybeSlide?.hasError}
+            {...getOverrideProps(overrides, \\"maybeSlide\\")}
+          ></ToggleButton>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid4\\")}
+        >
+          <CheckboxField
+            label=\\"Maybe check\\"
+            name=\\"maybeCheck\\"
+            value=\\"true\\"
+            isDisabled={false}
+            defaultChecked={false}
+            onChange={async (e) => {
+              const value = e.target.checked;
+              await runValidationTasks(\\"maybeCheck\\", value);
+              setModelFields({ ...modelFields, maybeCheck: value });
+            }}
+            errorMessage={errors.maybeCheck?.errorMessage}
+            hasError={errors.maybeCheck?.hasError}
+            {...getOverrideProps(overrides, \\"maybeCheck\\")}
+          ></CheckboxField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid5\\")}
+        >
+          <ArrayField
+            label=\\"Array type field\\"
+            onChange={async (items) => {
+              setModelFields({ ...modelFields, arrayTypeField: items });
+            }}
+            validateItem={async (item) => {
+              return runValidationTasks(\\"arrayTypeField\\", item);
+            }}
+            errorMessage={errors.arrayTypeField?.errorMessage}
+            hasError={errors.arrayTypeField?.hasError}
+            {...getOverrideProps(overrides, \\"arrayTypeField\\")}
+          ></ArrayField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid6\\")}
+        >
+          <TextField
+            label=\\"Timestamp\\"
+            isRequired={false}
+            isReadOnly={false}
+            type=\\"datetime-local\\"
+            onChange={async (e) => {
+              const value = Number(new Date(e.target.value));
+              await runValidationTasks(\\"timestamp\\", value);
+              setModelFields({ ...modelFields, timestamp: value });
+            }}
+            errorMessage={errors.timestamp?.errorMessage}
+            hasError={errors.timestamp?.hasError}
+            {...getOverrideProps(overrides, \\"timestamp\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
           {...getOverrideProps(overrides, \\"RowGrid7\\")}
+        >
+          <TextField
+            label=\\"Ippy\\"
+            isRequired={false}
+            isReadOnly={false}
+            onChange={async (e) => {
+              const { value } = e.target;
+              await runValidationTasks(\\"ippy\\", value);
+              setModelFields({ ...modelFields, ippy: value });
+            }}
+            errorMessage={errors.ippy?.errorMessage}
+            hasError={errors.ippy?.hasError}
+            {...getOverrideProps(overrides, \\"ippy\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid8\\")}
         >
           <TextField
             label=\\"Timeisnow\\"
@@ -1290,9 +1757,18 @@ export declare type InputGalleryCreateFormInputValues = {
     attend: boolean;
     maybeSlide: boolean;
     maybeCheck: boolean;
+    arrayTypeField: string;
     timestamp: number;
     ippy: string;
     timeisnow: string;
+};
+export declare type ArrayFieldProps = {
+    label: string;
+    defaultValues?: any[];
+    onChange?: (items: any) => Promise<void>;
+    validateItem?: (value: any) => Promise<ValidationResponse>;
+    hasError?: boolean;
+    errorMessage?: string;
 };
 export declare type InputGalleryCreateFormOverridesProps = {
     InputGalleryCreateFormGrid: GridProps;
@@ -1307,10 +1783,12 @@ export declare type InputGalleryCreateFormOverridesProps = {
     RowGrid4: GridProps;
     maybeCheck: CheckboxFieldProps;
     RowGrid5: GridProps;
-    timestamp: TextFieldProps;
+    arrayTypeField: ArrayFieldProps;
     RowGrid6: GridProps;
-    ippy: TextFieldProps;
+    timestamp: TextFieldProps;
     RowGrid7: GridProps;
+    ippy: TextFieldProps;
+    RowGrid8: GridProps;
     timeisnow: TextFieldProps;
 } & EscapeHatchProps;
 export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{

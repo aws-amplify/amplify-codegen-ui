@@ -46,6 +46,16 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
+
+    it('should render a form with Array field', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/input-gallery-create',
+        'datastore/input-gallery',
+      );
+      expect(componentText).toContain('ArrayField');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
   });
 
   describe('custom form tests', () => {

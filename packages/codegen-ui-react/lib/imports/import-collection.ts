@@ -87,6 +87,16 @@ export class ImportCollection {
       .concat(
         Array.from(this.#collection).map(([moduleName, imports]) => {
           const namedImports = [...imports].filter((namedImport) => namedImport !== 'default').sort();
+
+          if (moduleName === ImportSource.UI_REACT_CSS) {
+            return factory.createImportDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createStringLiteral('@aws-amplify/ui-react/styles.css'),
+            );
+          }
+
           return factory.createImportDeclaration(
             undefined,
             undefined,

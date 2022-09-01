@@ -58,6 +58,7 @@ import {
   getDeclarationFilename,
   transpile,
 } from '../react-studio-template-renderer-helper';
+import { generateArrayFieldType } from '../utils/forms/array-field-component';
 import { addUseEffectWrapper } from '../utils/generate-react-hooks';
 import { RequiredKeys } from '../utils/type-utils';
 import {
@@ -265,10 +266,19 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     if (this.component.formActionType === 'update') {
       this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataType.dataTypeName);
     }
-
-    return [
+    const typeAliasDeclarations = [
       validationResponseTypeAliasDeclaration,
       buildInputValuesTypeAliasDeclaration(this.formComponent.name, this.componentMetadata.formMetadata?.fieldConfigs),
+    ];
+
+    if (
+      this.componentMetadata.formMetadata?.fieldConfigs &&
+      Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)
+    ) {
+      typeAliasDeclarations.push(generateArrayFieldType());
+    }
+
+    typeAliasDeclarations.push(
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
         undefined,
@@ -279,7 +289,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           factory.createIntersectionTypeNode([escapeHatchTypeNode, buildFormPropNode(this.component)]),
         ]),
       ),
-    ];
+    );
+    return typeAliasDeclarations;
   }
 
   /**

@@ -3,112 +3,119 @@
     "InputGallery": {
       "name": "InputGallery",
       "fields": {
-          "id": {
-              "name": "id",
-              "isArray": false,
-              "type": "ID",
-              "isRequired": true,
-              "attributes": []
-          },
-          "num": {
-              "name": "num",
-              "isArray": false,
-              "type": "Int",
-              "isRequired": false,
-              "attributes": []
-          },
-          "rootbeer": {
-              "name": "rootbeer",
-              "isArray": false,
-              "type": "Float",
-              "isRequired": false,
-              "attributes": []
-          },
-          "attend": {
-              "name": "attend",
-              "isArray": false,
-              "type": "Boolean",
-              "isRequired": false,
-              "attributes": []
-          },
-          "maybeSlide": {
-              "name": "maybeSlide",
-              "isArray": false,
-              "type": "Boolean",
-              "isRequired": false,
-              "attributes": []
-          },
-          "maybeCheck": {
-              "name": "maybeCheck",
-              "isArray": false,
-              "type": "Boolean",
-              "isRequired": false,
-              "attributes": []
-          },
-          "timestamp": {
-              "name": "timestamp",
-              "isArray": false,
-              "type": "AWSTimestamp",
-              "isRequired": false,
-              "attributes": []
-          },
-          "ippy": {
-              "name": "ippy",
-              "isArray": false,
-              "type": "AWSIPAddress",
-              "isRequired": false,
-              "attributes": []
-          },
-          "timeisnow": {
-              "name": "timeisnow",
-              "isArray": false,
-              "type": "AWSTime",
-              "isRequired": false,
-              "attributes": []
-          },
-          "createdAt": {
-              "name": "createdAt",
-              "isArray": false,
-              "type": "AWSDateTime",
-              "isRequired": false,
-              "attributes": [],
-              "isReadOnly": true
-          },
-          "updatedAt": {
-              "name": "updatedAt",
-              "isArray": false,
-              "type": "AWSDateTime",
-              "isRequired": false,
-              "attributes": [],
-              "isReadOnly": true
-          }
+        "id": {
+          "name": "id",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": true,
+          "attributes": []
+        },
+        "num": {
+          "name": "num",
+          "isArray": false,
+          "type": "Int",
+          "isRequired": false,
+          "attributes": []
+        },
+        "rootbeer": {
+          "name": "rootbeer",
+          "isArray": false,
+          "type": "Float",
+          "isRequired": false,
+          "attributes": []
+        },
+        "attend": {
+          "name": "attend",
+          "isArray": false,
+          "type": "Boolean",
+          "isRequired": false,
+          "attributes": []
+        },
+        "maybeSlide": {
+          "name": "maybeSlide",
+          "isArray": false,
+          "type": "Boolean",
+          "isRequired": false,
+          "attributes": []
+        },
+        "maybeCheck": {
+          "name": "maybeCheck",
+          "isArray": false,
+          "type": "Boolean",
+          "isRequired": false,
+          "attributes": []
+        },
+        "arrayTypeField": {
+          "name": "arrayTypeField",
+          "isArray": true,
+          "type": "string",
+          "isRequired": true,
+          "attributes": []
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "isArray": false,
+          "type": "AWSTimestamp",
+          "isRequired": false,
+          "attributes": []
+        },
+        "ippy": {
+          "name": "ippy",
+          "isArray": false,
+          "type": "AWSIPAddress",
+          "isRequired": false,
+          "attributes": []
+        },
+        "timeisnow": {
+          "name": "timeisnow",
+          "isArray": false,
+          "type": "AWSTime",
+          "isRequired": false,
+          "attributes": []
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        }
       },
       "syncable": true,
       "pluralName": "InputGalleries",
       "attributes": [
-          {
-              "type": "model",
-              "properties": {}
-          },
-          {
-              "type": "auth",
-              "properties": {
-                  "rules": [
-                      {
-                          "allow": "private",
-                          "provider": "iam",
-                          "operations": [
-                              "create",
-                              "update",
-                              "delete",
-                              "read"
-                          ]
-                      }
-                  ]
+        {
+          "type": "model",
+          "properties": {}
+        },
+        {
+          "type": "auth",
+          "properties": {
+            "rules": [
+              {
+                "allow": "private",
+                "provider": "iam",
+                "operations": [
+                  "create",
+                  "update",
+                  "delete",
+                  "read"
+                ]
               }
+            ]
           }
+        }
       ]
-  }
+    }
   },
   "enums": {},
   "nonModels": {},

@@ -1,5 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ImportCollection addImport add react ui css import 1`] = `
+"import * as React from \\"react\\";
+import \\"@aws-amplify/ui-react/styles.css\\";"
+`;
+
 exports[`ImportCollection addImport multiple identical imports 1`] = `
 "import * as React from \\"react\\";
 import { Text } from \\"@aws-amplify/ui-react\\";"

@@ -71,6 +71,9 @@ import CustomComponentRenderer from './customComponent';
 import FormRenderer from './form';
 import { ReactComponentRenderer } from '../react-component-renderer';
 import { ReactFormTemplateRenderer } from '../forms';
+import { renderArrayFieldComponent } from '../utils/forms/array-field-component';
+import { ImportValue } from '../imports';
+import { isFixedPropertyWithValue } from '../react-component-render-helper';
 
 export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
   renderJsx(
@@ -89,6 +92,17 @@ export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
           this.importCollection,
           parent,
         ).renderElement(renderChildren);
+
+      case 'ArrayField':
+        this.importCollection.addMappedImport(ImportValue.ARRAY_FIELD);
+        return renderArrayFieldComponent(
+          formComponent.name,
+          `${
+            isFixedPropertyWithValue(formComponent.properties.label)
+              ? formComponent.properties.label.value
+              : formComponent.name
+          }`,
+        );
 
       case Primitive.Badge:
         return new ReactComponentRenderer<BadgeProps>(

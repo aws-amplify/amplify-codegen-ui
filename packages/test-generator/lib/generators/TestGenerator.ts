@@ -20,6 +20,7 @@ import {
   ScriptKind,
   ReactRenderConfig,
   ReactOutputConfig,
+  UtilTemplateType,
 } from '@aws-amplify/codegen-ui-react';
 import log from 'loglevel';
 import * as ComponentSchemas from '../components';
@@ -67,7 +68,7 @@ export abstract class TestGenerator {
 
   generate = (testCases: TestCase[]) => {
     const renderErrors: { [key: string]: any } = {};
-    const utilsFunctions = new Set<string>();
+    const utilsFunctions = new Set<UtilTemplateType>();
 
     const generateComponent = (testCase: TestCase) => {
       const { name, schema } = testCase;
@@ -119,8 +120,16 @@ export abstract class TestGenerator {
       try {
         if (this.params.writeToDisk) {
           const res = this.writeFormToDisk(schema as StudioForm);
-          if (res.formMetadata?.fieldConfigs && Object.keys(res.formMetadata.fieldConfigs).length) {
-            utilsFunctions.add('validation');
+          if (res.formMetadata?.fieldConfigs) {
+            const fieldConfigs = Object.values(res.formMetadata.fieldConfigs);
+            if (fieldConfigs.length) {
+              utilsFunctions.add('validation');
+              fieldConfigs.forEach(({ isArray }) => {
+                if (isArray) {
+                  utilsFunctions.add('arrayField');
+                }
+              });
+            }
           }
         }
 
@@ -160,7 +169,7 @@ export abstract class TestGenerator {
       }
     };
 
-    const generateUtilsFile = (utils: string[]) => {
+    const generateUtilsFile = (utils: UtilTemplateType[]) => {
       try {
         if (this.params.writeToDisk) {
           this.writeUtilsFileToDisk(utils);

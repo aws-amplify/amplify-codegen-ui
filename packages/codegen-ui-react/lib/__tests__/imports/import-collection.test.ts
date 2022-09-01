@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ImportCollection } from '../../imports';
+import { ImportCollection, ImportValue } from '../../imports';
 import { assertASTMatchesSnapshot } from '../__utils__';
 
 function assertImportCollectionMatchesSnapshot(importCollection: ImportCollection) {
@@ -67,6 +67,12 @@ describe('ImportCollection', () => {
       const importCollection = new ImportCollection();
       importCollection.addImport('@aws-amplify/ui-react', 'Text');
       importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
+      assertImportCollectionMatchesSnapshot(importCollection);
+    });
+
+    test('add react ui css import', () => {
+      const importCollection = new ImportCollection();
+      importCollection.addMappedImport(ImportValue.UI_REACT_STYLES);
       assertImportCollectionMatchesSnapshot(importCollection);
     });
   });
