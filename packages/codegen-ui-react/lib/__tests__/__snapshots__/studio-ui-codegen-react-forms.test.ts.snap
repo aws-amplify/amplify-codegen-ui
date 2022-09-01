@@ -49,9 +49,20 @@ export default function CustomDataForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -202,7 +213,7 @@ export default function CustomDataForm(props) {
             children=\\"create\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -297,9 +308,20 @@ export default function CustomWithSectionalElements(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -391,7 +413,7 @@ export default function CustomWithSectionalElements(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -481,9 +503,20 @@ export default function MyPostForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -531,7 +564,7 @@ export default function MyPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -732,9 +765,20 @@ export default function MyPostForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -786,7 +830,7 @@ export default function MyPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -919,7 +963,7 @@ export default function MyPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -1015,6 +1059,7 @@ export default function InputGalleryCreateForm(props) {
     attend: [{ type: \\"Required\\" }],
     maybeSlide: [],
     maybeCheck: [],
+    arrayTypeField: [],
     timestamp: [],
     ippy: [{ type: \\"IpAddress\\" }],
     timeisnow: [],
@@ -1035,9 +1080,20 @@ export default function InputGalleryCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -1191,6 +1247,26 @@ export default function InputGalleryCreateForm(props) {
           {...getOverrideProps(overrides, \\"RowGrid5\\")}
         >
           <TextField
+            label=\\"Array type field\\"
+            isRequired={false}
+            isReadOnly={false}
+            onChange={async (e) => {
+              const { value } = e.target;
+              await runValidationTasks(\\"arrayTypeField\\", value);
+              setModelFields({ ...modelFields, arrayTypeField: value });
+            }}
+            errorMessage={errors.arrayTypeField?.errorMessage}
+            hasError={errors.arrayTypeField?.hasError}
+            {...getOverrideProps(overrides, \\"arrayTypeField\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid6\\")}
+        >
+          <TextField
             label=\\"Timestamp\\"
             isRequired={false}
             isReadOnly={false}
@@ -1209,7 +1285,7 @@ export default function InputGalleryCreateForm(props) {
           columnGap=\\"inherit\\"
           rowGap=\\"inherit\\"
           templateColumns=\\"repeat(1, auto)\\"
-          {...getOverrideProps(overrides, \\"RowGrid6\\")}
+          {...getOverrideProps(overrides, \\"RowGrid7\\")}
         >
           <TextField
             label=\\"Ippy\\"
@@ -1229,7 +1305,7 @@ export default function InputGalleryCreateForm(props) {
           columnGap=\\"inherit\\"
           rowGap=\\"inherit\\"
           templateColumns=\\"repeat(1, auto)\\"
-          {...getOverrideProps(overrides, \\"RowGrid7\\")}
+          {...getOverrideProps(overrides, \\"RowGrid8\\")}
         >
           <TextField
             label=\\"Timeisnow\\"
@@ -1270,7 +1346,7 @@ export default function InputGalleryCreateForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -1295,6 +1371,7 @@ export declare type InputGalleryCreateFormInputValues = {
     attend: boolean;
     maybeSlide: boolean;
     maybeCheck: boolean;
+    arrayTypeField: string;
     timestamp: number;
     ippy: string;
     timeisnow: string;
@@ -1312,10 +1389,12 @@ export declare type InputGalleryCreateFormOverridesProps = {
     RowGrid4?: GridProps;
     maybeCheck?: CheckboxFieldProps;
     RowGrid5?: GridProps;
-    timestamp?: TextFieldProps;
+    arrayTypeField?: TextFieldProps;
     RowGrid6?: GridProps;
-    ippy?: TextFieldProps;
+    timestamp?: TextFieldProps;
     RowGrid7?: GridProps;
+    ippy?: TextFieldProps;
+    RowGrid8?: GridProps;
     timeisnow?: TextFieldProps;
 } & EscapeHatchProps;
 export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{

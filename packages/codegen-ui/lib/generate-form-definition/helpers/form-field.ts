@@ -327,20 +327,6 @@ export function getFormDefinitionInputElement(
         },
       };
       break;
-    case 'ArrayField':
-      formDefinitionElement = {
-        componentType: 'ArrayField',
-        props: {
-          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
-          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
-          isRequired: isRequiredValue,
-          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
-          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
-          defaultValues: defaultStringValue ? [defaultStringValue] : undefined,
-        },
-      };
-      break;
-
     default:
       throw new InvalidInputError(`componentType ${componentType} could not be mapped`);
   }

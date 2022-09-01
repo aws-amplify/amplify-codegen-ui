@@ -16,7 +16,6 @@
 
 import {
   ComponentMetadata,
-  DataFieldDataType,
   FieldValidationConfiguration,
   FormDefinition,
   StateStudioComponentProperty,
@@ -53,7 +52,7 @@ export const FieldStateVariable = (componentName: string): StateStudioComponentP
   property: 'fields',
 });
 
-function capitalizeFirstLetter(val: string) {
+export function capitalizeFirstLetter(val: string) {
   return val.charAt(0).toUpperCase() + val.slice(1);
 }
 
@@ -422,8 +421,7 @@ export const addFormAttributes = (
   
     */
   if (formMetadata && component.name in formMetadata?.fieldConfigs) {
-    const { dataType } = formMetadata.fieldConfigs[component.name];
-    attributes.push(buildOnChangeStatement(component.name, component.componentType, dataType));
+    attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs[component.name]));
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('errorMessage'),
@@ -454,6 +452,17 @@ export const addFormAttributes = (
         ),
       ),
     );
+    if (formMetadata.fieldConfigs[component.name].isArray) {
+      attributes.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('value'),
+          factory.createJsxExpression(
+            undefined,
+            factory.createIdentifier(`current${capitalizeFirstLetter(component.name)}Value`),
+          ),
+        ),
+      );
+    }
   }
 
   if (component.name === 'SubmitButton') {
@@ -492,8 +501,9 @@ export const addFormAttributes = (
                 ],
                 undefined,
                 factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                factory.createPropertyAccessExpression(
+                factory.createPropertyAccessChain(
                   factory.createIdentifier('e'),
+                  factory.createToken(SyntaxKind.QuestionDotToken),
                   factory.createIdentifier('hasError'),
                 ),
               ),
@@ -535,7 +545,58 @@ export const addFormAttributes = (
   return attributes;
 };
 
-export const buildOnChangeStatement = (fieldName: string, fieldType: string, dataType?: DataFieldDataType) => {
+export const buildOnChangeStatement = (
+  component: StudioComponent | StudioComponentChild,
+  fieldConfig: FieldConfigMetadata,
+) => {
+  const { name: fieldName, componentType: fieldType } = component;
+  const { dataType, isArray } = fieldConfig;
+  if (isArray) {
+    return factory.createJsxAttribute(
+      factory.createIdentifier('onChange'),
+      factory.createJsxExpression(
+        undefined,
+        factory.createArrowFunction(
+          [factory.createModifier(SyntaxKind.AsyncKeyword)],
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('e'),
+              undefined,
+              undefined,
+              undefined,
+            ),
+          ],
+          undefined,
+          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+          factory.createBlock(
+            [
+              buildTargetVariable(fieldType, dataType),
+              factory.createExpressionStatement(
+                factory.createAwaitExpression(
+                  factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+                    factory.createStringLiteral(fieldName),
+                    factory.createIdentifier('value'),
+                  ]),
+                ),
+              ),
+              factory.createExpressionStatement(
+                factory.createCallExpression(
+                  factory.createIdentifier(`setCurrent${capitalizeFirstLetter(fieldName)}Value`),
+                  undefined,
+                  [factory.createIdentifier('value')],
+                ),
+              ),
+            ],
+            true,
+          ),
+        ),
+      ),
+    );
+  }
   return factory.createJsxAttribute(
     factory.createIdentifier('onChange'),
     factory.createJsxExpression(
@@ -946,9 +1007,13 @@ export const runValidationTasksFunction = factory.createVariableStatement(
 
 /**
   const validationResponses = await Promise.all(
-    Object.keys(validations).map((fieldName) =>
-      runValidationTasks(fieldName, modelFields[fieldName])
-    )
+    Object.keys(validations).reduce((promises, fieldName) => {
+        if (Array.isArray(modelFields[fieldName])) {
+            promises.push(...modelFields[fieldName].map(item => runValidationTasks(fieldName, item)));
+        }
+        promises.push(runValidationTasks(fieldName, modelFields[fieldName]))
+        return promises
+    }, [])
   );
 
   if (validationResponses.some((r) => r.hasError)) {
@@ -983,7 +1048,7 @@ export const onSubmitValidationRun = [
                       undefined,
                       [factory.createIdentifier('validations')],
                     ),
-                    factory.createIdentifier('map'),
+                    factory.createIdentifier('reduce'),
                   ),
                   undefined,
                   [
@@ -995,22 +1060,122 @@ export const onSubmitValidationRun = [
                           undefined,
                           undefined,
                           undefined,
-                          factory.createIdentifier('fieldName'),
+                          factory.createIdentifier('promises'),
                           undefined,
+                          undefined,
+                        ),
+                        factory.createParameterDeclaration(
+                          undefined,
+                          undefined,
+                          undefined,
+                          factory.createIdentifier('fieldName'),
                           undefined,
                           undefined,
                         ),
                       ],
                       undefined,
                       factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                      factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
-                        factory.createIdentifier('fieldName'),
-                        factory.createElementAccessExpression(
-                          factory.createIdentifier('modelFields'),
-                          factory.createIdentifier('fieldName'),
-                        ),
-                      ]),
+                      factory.createBlock(
+                        [
+                          factory.createIfStatement(
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('Array'),
+                                factory.createIdentifier('isArray'),
+                              ),
+                              undefined,
+                              [
+                                factory.createElementAccessExpression(
+                                  factory.createIdentifier('modelFields'),
+                                  factory.createIdentifier('fieldName'),
+                                ),
+                              ],
+                            ),
+                            factory.createBlock(
+                              [
+                                factory.createExpressionStatement(
+                                  factory.createCallExpression(
+                                    factory.createPropertyAccessExpression(
+                                      factory.createIdentifier('promises'),
+                                      factory.createIdentifier('push'),
+                                    ),
+                                    undefined,
+                                    [
+                                      factory.createSpreadElement(
+                                        factory.createCallExpression(
+                                          factory.createPropertyAccessExpression(
+                                            factory.createElementAccessExpression(
+                                              factory.createIdentifier('modelFields'),
+                                              factory.createIdentifier('fieldName'),
+                                            ),
+                                            factory.createIdentifier('map'),
+                                          ),
+                                          undefined,
+                                          [
+                                            factory.createArrowFunction(
+                                              undefined,
+                                              undefined,
+                                              [
+                                                factory.createParameterDeclaration(
+                                                  undefined,
+                                                  undefined,
+                                                  undefined,
+                                                  factory.createIdentifier('item'),
+                                                  undefined,
+                                                  undefined,
+                                                ),
+                                              ],
+                                              undefined,
+                                              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                              factory.createCallExpression(
+                                                factory.createIdentifier('runValidationTasks'),
+                                                undefined,
+                                                [
+                                                  factory.createIdentifier('fieldName'),
+                                                  factory.createIdentifier('item'),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                factory.createReturnStatement(factory.createIdentifier('promises')),
+                              ],
+                              true,
+                            ),
+                            undefined,
+                          ),
+                          factory.createExpressionStatement(
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('promises'),
+                                factory.createIdentifier('push'),
+                              ),
+                              undefined,
+                              [
+                                factory.createCallExpression(
+                                  factory.createIdentifier('runValidationTasks'),
+                                  undefined,
+                                  [
+                                    factory.createIdentifier('fieldName'),
+                                    factory.createElementAccessExpression(
+                                      factory.createIdentifier('modelFields'),
+                                      factory.createIdentifier('fieldName'),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          factory.createReturnStatement(factory.createIdentifier('promises')),
+                        ],
+                        true,
+                      ),
                     ),
+                    factory.createArrayLiteralExpression([], false),
                   ],
                 ),
               ],

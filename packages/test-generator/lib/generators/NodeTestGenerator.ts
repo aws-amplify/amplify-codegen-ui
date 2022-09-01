@@ -141,11 +141,11 @@ export class NodeTestGenerator extends TestGenerator {
     return indexRenderer.renderComponent();
   }
 
-  writeUtilsFileToDisk(utils: string[]) {
+  writeUtilsFileToDisk(utils: UtilTemplateType[]) {
     this.utilsRendererManager.renderSchemaToTemplate(utils);
   }
 
-  renderUtilsFile(utils: string[]) {
+  renderUtilsFile(utils: UtilTemplateType[]) {
     const utilsRenderer = this.utilsRendererFactory.buildRenderer(utils);
     return utilsRenderer.renderComponent();
   }

@@ -58,6 +58,7 @@ import {
   getDeclarationFilename,
   transpile,
 } from '../react-studio-template-renderer-helper';
+import { generateArrayFieldComponent } from '../utils/forms/array-field-component';
 import { addUseEffectWrapper } from '../utils/generate-react-hooks';
 import { RequiredKeys } from '../utils/type-utils';
 import {
@@ -68,6 +69,7 @@ import {
   buildStateMutationStatement,
   buildUpdateDatastoreQuery,
   buildValidations,
+  capitalizeFirstLetter,
   runValidationTasksFunction,
   validationResponseTypeAliasDeclaration,
 } from './form-renderer-helper';
@@ -128,6 +130,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       importsText += result + EOL;
     });
 
+    if (this.componentMetadata.formMetadata) {
+      if (Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)) {
+        printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+      }
+    }
+
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, false);
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
@@ -168,6 +176,13 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       const propsPrinted = printer.printNode(EmitHint.Unspecified, typeNode, file);
       componentText += propsPrinted;
     });
+
+    if (this.componentMetadata.formMetadata) {
+      if (Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)) {
+        const arrayFieldComponent = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+        componentText += arrayFieldComponent;
+      }
+    }
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
@@ -265,10 +280,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     if (this.component.formActionType === 'update') {
       this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataType.dataTypeName);
     }
-
-    return [
+    const typeAliasDeclarations = [
       validationResponseTypeAliasDeclaration,
       buildInputValuesTypeAliasDeclaration(this.formComponent.name, this.componentMetadata.formMetadata?.fieldConfigs),
+    ];
+
+    typeAliasDeclarations.push(
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
         undefined,
@@ -279,7 +296,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           factory.createIntersectionTypeNode([escapeHatchTypeNode, buildFormPropNode(this.component)]),
         ]),
       ),
-    ];
+    );
+    return typeAliasDeclarations;
   }
 
   /**
@@ -360,6 +378,37 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
       statements.push(buildValidations(formMetadata.fieldConfigs));
       statements.push(runValidationTasksFunction);
+
+      Object.entries(formMetadata.fieldConfigs).forEach(([field, config]) => {
+        if (config.isArray) {
+          statements.push(
+            buildStateMutationStatement(`current${capitalizeFirstLetter(field)}Value`, factory.createStringLiteral('')),
+          );
+          statements.push(
+            factory.createVariableStatement(
+              undefined,
+              factory.createVariableDeclarationList(
+                [
+                  factory.createVariableDeclaration(
+                    factory.createIdentifier(`${field}FieldRef`),
+                    undefined,
+                    undefined,
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('React'),
+                        factory.createIdentifier('createRef'),
+                      ),
+                      undefined,
+                      [],
+                    ),
+                  ),
+                ],
+                NodeFlags.Const,
+              ),
+            ),
+          );
+        }
+      });
     }
 
     return statements;
