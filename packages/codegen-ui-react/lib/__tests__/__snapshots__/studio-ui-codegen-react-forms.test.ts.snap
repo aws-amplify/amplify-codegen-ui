@@ -28,8 +28,8 @@ export default function CustomDataForm(props) {
   const [modelFields, setModelFields] = useStateMutationAction({});
   const [errors, setErrors] = useStateMutationAction({});
   const validations = {
-    name: [],
-    email: [],
+    name: [{ type: \\"Required\\" }],
+    email: [{ type: \\"Required\\" }],
     city: [],
     category: [],
   };
@@ -1008,7 +1008,7 @@ export default function InputGalleryCreateForm(props) {
   const validations = {
     num: [],
     rootbeer: [],
-    attend: [],
+    attend: [{ type: \\"Required\\" }],
     maybeSlide: [],
     maybeCheck: [],
     timestamp: [],

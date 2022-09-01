@@ -95,7 +95,14 @@ function getRadioGroupFieldValueMappings(
 function getMergedValidations(
   componentType: string,
   validations: (FieldValidationConfiguration[] | undefined)[],
+  isRequired?: boolean,
 ): (FieldValidationConfiguration & { immutable?: true })[] | undefined {
+  const mergedValidations: (FieldValidationConfiguration & { immutable?: true })[] = [];
+
+  if (isRequired) {
+    mergedValidations.push({ type: ValidationTypes.REQUIRED, immutable: true });
+  }
+
   const ComponentTypeToDefaultValidations: {
     [componentType: string]: (FieldValidationConfiguration & { immutable: true })[];
   } = {
@@ -103,10 +110,14 @@ function getMergedValidations(
     URLField: [{ type: ValidationTypes.URL, immutable: true }],
     EmailField: [{ type: ValidationTypes.EMAIL, immutable: true }],
     JSONField: [{ type: ValidationTypes.JSON, immutable: true }],
+    PhoneNumberField: [{ type: ValidationTypes.PHONE, immutable: true }],
   };
 
-  const mergedValidations: (FieldValidationConfiguration & { immutable?: true })[] =
-    ComponentTypeToDefaultValidations[componentType] ?? [];
+  const defaultValidation = ComponentTypeToDefaultValidations[componentType];
+
+  if (defaultValidation) {
+    mergedValidations.push(...defaultValidation);
+  }
 
   validations.forEach((validationArray) => {
     if (validationArray) {
@@ -334,7 +345,11 @@ export function getFormDefinitionInputElement(
       throw new InvalidInputError(`componentType ${componentType} could not be mapped`);
   }
 
-  const mergedValidations = getMergedValidations(componentType, [baseConfig?.validations, config?.validations]);
+  const mergedValidations = getMergedValidations(
+    componentType,
+    [baseConfig?.validations, config?.validations],
+    isRequiredValue,
+  );
 
   formDefinitionElement.validations = mergedValidations;
   formDefinitionElement.dataType = config?.dataType || baseConfig?.dataType;

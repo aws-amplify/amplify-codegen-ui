@@ -8,6 +8,19 @@ export const validateField = (
   validations: { type: string; strValues?: string[]; numValues?: number[]; validationMessage?: string }[],
 ): ValidationResponse => {
   for (const validation of validations) {
+    if (value === undefined || value === '') {
+      if (validation.type === 'Required') {
+        return {
+          hasError: true,
+          errorMessage: validation.validationMessage || 'The value is required',
+        };
+      } else {
+        return {
+          hasError: false,
+        };
+      }
+    }
+
     if (validation.numValues?.length) {
       switch (validation.type) {
         case 'LessThanChar':
@@ -79,11 +92,6 @@ export const validateField = (
       }
     }
     switch (validation.type) {
-      case 'Required':
-        return {
-          hasError: value === undefined || value === '',
-          errorMessage: validation.validationMessage || 'The value is required',
-        };
       case 'Email':
         const EMAIL_ADDRESS_REGEX =
           /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
@@ -123,10 +131,25 @@ export const validateField = (
             validation.validationMessage ||
             'The value must be a valid URL that begins with a schema (i.e. http:// or mailto:)',
         };
+      case 'Phone':
+        const PHONE = /^\+?\d[\d\s-]+$/;
+        return {
+          hasError: !PHONE.test(value),
+          errorMessage: validation.validationMessage || 'The value must be a valid phone number',
+        };
       default:
     }
   }
   return { hasError: false };
+};
+
+// AST-viewer does not escape backslashes, so it generates the wrong regex
+const EscapedRegexLiterals = {
+  emailAddress:
+    "/^[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~](\\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\\.?[a-zA-Z0-9])*\\.[a-zA-Z](-?[a-zA-Z0-9])+$/",
+  ipv4: '/^(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}$/',
+  ipv6: '/^(?:(?:[a-fA-F\\d]{1,4}:){7}(?:[a-fA-F\\d]{1,4}|:)|(?:[a-fA-F\\d]{1,4}:){6}(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}|:[a-fA-F\\d]{1,4}|:)|(?:[a-fA-F\\d]{1,4}:){5}(?::(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}|(?::[a-fA-F\\d]{1,4}){1,2}|:)|(?:[a-fA-F\\d]{1,4}:){4}(?:(?::[a-fA-F\\d]{1,4}){0,1}:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}|(?::[a-fA-F\\d]{1,4}){1,3}|:)|(?:[a-fA-F\\d]{1,4}:){3}(?:(?::[a-fA-F\\d]{1,4}){0,2}:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}|(?::[a-fA-F\\d]{1,4}){1,4}|:)|(?:[a-fA-F\\d]{1,4}:){2}(?:(?::[a-fA-F\\d]{1,4}){0,3}:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}|(?::[a-fA-F\\d]{1,4}){1,5}|:)|(?:[a-fA-F\\d]{1,4}:){1}(?:(?::[a-fA-F\\d]{1,4}){0,4}:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}|(?::[a-fA-F\\d]{1,4}){1,6}|:)|(?::(?:(?::[a-fA-F\\d]{1,4}){0,5}:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}|(?::[a-fA-F\\d]{1,4}){1,7}|:)))(?:%[0-9a-zA-Z]{1,})?$/',
+  phone: '/^\\+?\\d[\\d\\s-]+$/',
 };
 
 export const generateValidationFunction = () => {
@@ -229,6 +252,80 @@ export const generateValidationFunction = () => {
                     factory.createIdentifier('validations'),
                     factory.createBlock(
                       [
+                        factory.createIfStatement(
+                          factory.createBinaryExpression(
+                            factory.createBinaryExpression(
+                              factory.createIdentifier('value'),
+                              factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+                              factory.createIdentifier('undefined'),
+                            ),
+                            factory.createToken(ts.SyntaxKind.BarBarToken),
+                            factory.createBinaryExpression(
+                              factory.createIdentifier('value'),
+                              factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+                              factory.createStringLiteral(''),
+                            ),
+                          ),
+                          factory.createBlock(
+                            [
+                              factory.createIfStatement(
+                                factory.createBinaryExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('validation'),
+                                    factory.createIdentifier('type'),
+                                  ),
+                                  factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+                                  factory.createStringLiteral('Required'),
+                                ),
+                                factory.createBlock(
+                                  [
+                                    factory.createReturnStatement(
+                                      factory.createObjectLiteralExpression(
+                                        [
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('hasError'),
+                                            factory.createTrue(),
+                                          ),
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('errorMessage'),
+                                            factory.createBinaryExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createIdentifier('validation'),
+                                                factory.createIdentifier('validationMessage'),
+                                              ),
+                                              factory.createToken(ts.SyntaxKind.BarBarToken),
+                                              factory.createStringLiteral('The value is required'),
+                                            ),
+                                          ),
+                                        ],
+                                        true,
+                                      ),
+                                    ),
+                                  ],
+                                  true,
+                                ),
+                                factory.createBlock(
+                                  [
+                                    factory.createReturnStatement(
+                                      factory.createObjectLiteralExpression(
+                                        [
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier('hasError'),
+                                            factory.createFalse(),
+                                          ),
+                                        ],
+                                        true,
+                                      ),
+                                    ),
+                                  ],
+                                  true,
+                                ),
+                              ),
+                            ],
+                            true,
+                          ),
+                          undefined,
+                        ),
                         factory.createIfStatement(
                           factory.createPropertyAccessChain(
                             factory.createPropertyAccessExpression(
@@ -1167,42 +1264,6 @@ export const generateValidationFunction = () => {
                             factory.createIdentifier('type'),
                           ),
                           factory.createCaseBlock([
-                            factory.createCaseClause(factory.createStringLiteral('Required'), [
-                              factory.createReturnStatement(
-                                factory.createObjectLiteralExpression(
-                                  [
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('hasError'),
-                                      factory.createBinaryExpression(
-                                        factory.createBinaryExpression(
-                                          factory.createIdentifier('value'),
-                                          factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
-                                          factory.createIdentifier('undefined'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createBinaryExpression(
-                                          factory.createIdentifier('value'),
-                                          factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
-                                          factory.createStringLiteral(''),
-                                        ),
-                                      ),
-                                    ),
-                                    factory.createPropertyAssignment(
-                                      factory.createIdentifier('errorMessage'),
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('validation'),
-                                          factory.createIdentifier('validationMessage'),
-                                        ),
-                                        factory.createToken(ts.SyntaxKind.BarBarToken),
-                                        factory.createStringLiteral('The value is required'),
-                                      ),
-                                    ),
-                                  ],
-                                  true,
-                                ),
-                              ),
-                            ]),
                             factory.createCaseClause(factory.createStringLiteral('Email'), [
                               factory.createVariableStatement(
                                 undefined,
@@ -1212,9 +1273,7 @@ export const generateValidationFunction = () => {
                                       factory.createIdentifier('EMAIL_ADDRESS_REGEX'),
                                       undefined,
                                       undefined,
-                                      factory.createRegularExpressionLiteral(
-                                        "/^[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~](.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*.?[a-zA-Z0-9])*.[a-zA-Z](-?[a-zA-Z0-9])+$/",
-                                      ),
+                                      factory.createRegularExpressionLiteral(EscapedRegexLiterals.emailAddress),
                                     ),
                                   ],
                                   ts.NodeFlags.Const,
@@ -1338,9 +1397,7 @@ export const generateValidationFunction = () => {
                                       factory.createIdentifier('IPV_4'),
                                       undefined,
                                       undefined,
-                                      factory.createRegularExpressionLiteral(
-                                        '/^(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)(?:.(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)){3}$/',
-                                      ),
+                                      factory.createRegularExpressionLiteral(EscapedRegexLiterals.ipv4),
                                     ),
                                   ],
                                   ts.NodeFlags.Const,
@@ -1354,9 +1411,7 @@ export const generateValidationFunction = () => {
                                       factory.createIdentifier('IPV_6'),
                                       undefined,
                                       undefined,
-                                      factory.createRegularExpressionLiteral(
-                                        '/^(?:(?:[a-fA-Fd]{1,4}:){7}(?:[a-fA-Fd]{1,4}|:)|(?:[a-fA-Fd]{1,4}:){6}(?:(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)(?:\\.(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)){3}|:[a-fA-Fd]{1,4}|:)|(?:[a-fA-Fd]{1,4}:){5}(?::(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)(?:\\.(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)){3}|(?::[a-fA-Fd]{1,4}){1,2}|:)|(?:[a-fA-Fd]{1,4}:){4}(?:(?::[a-fA-Fd]{1,4}){0,1}:(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)(?:\\.(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)){3}|(?::[a-fA-Fd]{1,4}){1,3}|:)|(?:[a-fA-Fd]{1,4}:){3}(?:(?::[a-fA-Fd]{1,4}){0,2}:(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)(?:\\.(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)){3}|(?::[a-fA-Fd]{1,4}){1,4}|:)|(?:[a-fA-Fd]{1,4}:){2}(?:(?::[a-fA-Fd]{1,4}){0,3}:(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)(?:\\.(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)){3}|(?::[a-fA-Fd]{1,4}){1,5}|:)|(?:[a-fA-Fd]{1,4}:){1}(?:(?::[a-fA-Fd]{1,4}){0,4}:(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)(?:\\.(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)){3}|(?::[a-fA-Fd]{1,4}){1,6}|:)|(?::(?:(?::[a-fA-Fd]{1,4}){0,5}:(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)(?:\\.(?:25[0-5]|2[0-4]d|1dd|[1-9]d|d)){3}|(?::[a-fA-Fd]{1,4}){1,7}|:)))(?:%[0-9a-zA-Z]{1,})?$/',
-                                      ),
+                                      factory.createRegularExpressionLiteral(EscapedRegexLiterals.ipv6),
                                     ),
                                   ],
                                   ts.NodeFlags.Const,
@@ -1474,6 +1529,56 @@ export const generateValidationFunction = () => {
                                         factory.createStringLiteral(
                                           'The value must be a valid URL that begins with a schema (i.e. http:// or mailto:)',
                                         ),
+                                      ),
+                                    ),
+                                  ],
+                                  true,
+                                ),
+                              ),
+                            ]),
+                            factory.createCaseClause(factory.createStringLiteral('Phone'), [
+                              factory.createVariableStatement(
+                                undefined,
+                                factory.createVariableDeclarationList(
+                                  [
+                                    factory.createVariableDeclaration(
+                                      factory.createIdentifier('PHONE'),
+                                      undefined,
+                                      undefined,
+                                      factory.createRegularExpressionLiteral(EscapedRegexLiterals.phone),
+                                    ),
+                                  ],
+                                  ts.NodeFlags.Const,
+                                ),
+                              ),
+                              factory.createReturnStatement(
+                                factory.createObjectLiteralExpression(
+                                  [
+                                    factory.createPropertyAssignment(
+                                      factory.createIdentifier('hasError'),
+                                      factory.createPrefixUnaryExpression(
+                                        ts.SyntaxKind.ExclamationToken,
+                                        factory.createParenthesizedExpression(
+                                          factory.createCallExpression(
+                                            factory.createPropertyAccessExpression(
+                                              factory.createIdentifier('PHONE'),
+                                              factory.createIdentifier('test'),
+                                            ),
+                                            undefined,
+                                            [factory.createIdentifier('value')],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    factory.createPropertyAssignment(
+                                      factory.createIdentifier('errorMessage'),
+                                      factory.createBinaryExpression(
+                                        factory.createPropertyAccessExpression(
+                                          factory.createIdentifier('validation'),
+                                          factory.createIdentifier('validationMessage'),
+                                        ),
+                                        factory.createToken(ts.SyntaxKind.BarBarToken),
+                                        factory.createStringLiteral('The value must be a valid phone number'),
                                       ),
                                     ),
                                   ],
