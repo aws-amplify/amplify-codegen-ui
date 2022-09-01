@@ -14,7 +14,12 @@
   limitations under the License.
  */
 
-import { findIndices, removeAndReturnItemOnward, removeFromMatrix } from '../../../generate-form-definition/helpers';
+import {
+  findIndices,
+  mapElementMatrix,
+  removeAndReturnItemOnward,
+  removeFromMatrix,
+} from '../../../generate-form-definition/helpers';
 import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('findIndices', () => {
@@ -57,5 +62,64 @@ describe('removeAndReturnItemOnward', () => {
     expect(removeAndReturnItemOnward([0, 1], formDefinition)).toStrictEqual(['two', 'three', 'four']);
 
     expect(formDefinition.elementMatrix).toStrictEqual([['one'], ['five'], ['six', 'seven', 'eight']]);
+  });
+});
+
+describe('mapElementMatrix', () => {
+  it('vertical - should throw if element is positioned relative to non-existing name', () => {
+    const elementQueue = [
+      { name: 'a', position: { below: 'b' } },
+      { name: 'b', position: { below: 'c' } },
+      { name: 'c', position: { below: 'd' } },
+    ];
+    expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+  });
+
+  it('horizontal - should throw if element is positioned relative to non-existing name', () => {
+    const elementQueue = [
+      { name: 'a', position: { rightOf: 'b' } },
+      { name: 'b', position: { rightOf: 'c' } },
+      { name: 'c', position: { rightOf: 'd' } },
+    ];
+    expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+  });
+
+  it('vertical - should throw if there is a circular dependency', () => {
+    const elementQueue = [
+      { name: 'a', position: { below: 'b' } },
+      { name: 'b', position: { below: 'c' } },
+      { name: 'c', position: { below: 'a' } },
+    ];
+    expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+  });
+
+  it('horizontal - should throw if there is a circular dependency', () => {
+    const elementQueue = [
+      { name: 'a', position: { rightOf: 'b' } },
+      { name: 'b', position: { rightOf: 'c' } },
+      { name: 'c', position: { rightOf: 'a' } },
+    ];
+    expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+  });
+
+  it('should map positions', () => {
+    const elementQueue = [
+      { name: 'g', position: { rightOf: 'f' } },
+      { name: 'f', position: { below: 'd' } },
+      { name: 'e', position: { rightOf: 'd' } },
+      { name: 'd', position: { below: 'a' } },
+      { name: 'c', position: { rightOf: 'b' } },
+      { name: 'b', position: { rightOf: 'a' } },
+      { name: 'a' },
+    ];
+    const formDefinition = getBasicFormDefinition();
+
+    mapElementMatrix({ elementQueue, formDefinition });
+
+    expect(formDefinition.elementMatrix).toStrictEqual([
+      ['a', 'b', 'c'],
+      ['d', 'e'],
+      ['f', 'g'],
+    ]);
   });
 });
