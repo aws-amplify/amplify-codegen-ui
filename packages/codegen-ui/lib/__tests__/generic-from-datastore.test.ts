@@ -15,7 +15,12 @@
  */
 import { getGenericFromDataStore } from '../generic-from-datastore';
 import { HasManyRelationshipType } from '../types';
-import { schemaWithEnums, schemaWithNonModels, schemaWithRelationships } from './__utils__/mock-schemas';
+import {
+  schemaWithEnums,
+  schemaWithNonModels,
+  schemaWithRelationships,
+  schemaWithAssumptions,
+} from './__utils__/mock-schemas';
 
 describe('getGenericFromDataStore', () => {
   it('should map fields', () => {
@@ -116,6 +121,23 @@ describe('getGenericFromDataStore', () => {
         },
       },
       Misc: { fields: { quotes: { dataType: 'String', required: false, readOnly: false, isArray: true } } },
+    });
+  });
+
+  it('should handle schema with assumed associated fields and modldkjld', () => {
+    const genericSchema = getGenericFromDataStore(schemaWithAssumptions);
+    const userFields = genericSchema.models.User.fields;
+
+    expect(userFields.friends.relationship).toStrictEqual({
+      type: 'HAS_MANY',
+      relatedModelName: 'Friend',
+      relatedModelField: 'friendId',
+    });
+
+    expect(userFields.posts.relationship).toStrictEqual({
+      type: 'HAS_MANY',
+      relatedModelName: 'Post',
+      relatedModelField: 'userPostsId',
     });
   });
 });
