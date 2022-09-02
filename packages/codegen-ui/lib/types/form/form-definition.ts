@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioFormStyle } from './style';
+import { FormStyleConfig } from './style';
 import { FormDefinitionElement, FormDefinitionButtonElement } from './form-definition-element';
 import { StudioGenericFieldConfig } from './fields';
 
@@ -31,7 +31,7 @@ export type ButtonConfig = {
 
 export type FormDefinition = {
   form: {
-    layoutStyle: StudioFormStyle;
+    layoutStyle: { horizontalGap: FormStyleConfig; verticalGap: FormStyleConfig; outerPadding: FormStyleConfig };
   };
   elements: { [element: string]: FormDefinitionElement };
   buttons: ButtonConfig;

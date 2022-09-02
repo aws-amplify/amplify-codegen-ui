@@ -25,6 +25,7 @@ import {
   StudioGenericFieldConfig,
   ValidationTypes,
 } from '../../../types';
+import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('mapFormFieldConfig', () => {
   it('should map fields', () => {
@@ -44,13 +45,7 @@ describe('mapFormFieldConfig', () => {
     };
 
     const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
+      ...getBasicFormDefinition(),
       elementMatrix: [['price']],
     };
 
@@ -80,13 +75,7 @@ describe('mapFormFieldConfig', () => {
     };
 
     const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
+      ...getBasicFormDefinition(),
       elementMatrix: [['price']],
     };
 
@@ -485,7 +474,7 @@ describe('getFormDefinitionInputElement', () => {
 
     expect(getFormDefinitionInputElement(config)).toStrictEqual({
       componentType: 'CheckboxField',
-      props: { label: 'Label', name: 'fieldName', value: 'true', defaultChecked: true },
+      props: { label: 'Label', name: 'fieldName', value: 'fieldName', defaultChecked: true },
     });
   });
 

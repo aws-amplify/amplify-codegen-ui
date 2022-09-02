@@ -15,6 +15,7 @@
  */
 import { mapElements } from '../../../generate-form-definition/helpers';
 import { FormDefinition, SectionalElement, ModelFieldsConfigs, StudioForm } from '../../../types';
+import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('mapElements', () => {
   it('should map sectional elements & input elements with and without overrides', () => {
@@ -25,13 +26,7 @@ describe('mapElements', () => {
     };
 
     const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
+      ...getBasicFormDefinition(),
       elementMatrix: [['myText', 'name'], ['price']],
     };
 
@@ -77,13 +72,7 @@ describe('mapElements', () => {
 
   it('should throw if config for element not found', () => {
     const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
+      ...getBasicFormDefinition(),
       elementMatrix: [['myText']],
     };
 

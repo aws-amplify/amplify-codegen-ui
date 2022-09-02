@@ -13,14 +13,16 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioFormStyle } from '../../types';
+import { StudioFormStyle, FormDefinition } from '../../types';
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
 
-function hasValue(config: { tokenReference?: string; value?: string } | undefined): boolean {
+function hasValue(
+  config: { tokenReference?: string; value?: string } | undefined,
+): config is { tokenReference: string } | { value: string } {
   return !!(config && (config.tokenReference || config.value));
 }
 
-export function mapStyles(styles: StudioFormStyle): StudioFormStyle {
+export function mapStyles(styles: StudioFormStyle): FormDefinition['form']['layoutStyle'] {
   const defaults = FORM_DEFINITION_DEFAULTS.styles;
   return {
     horizontalGap: hasValue(styles.horizontalGap) ? styles.horizontalGap : defaults.horizontalGap,

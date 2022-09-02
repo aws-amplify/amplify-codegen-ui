@@ -24,14 +24,17 @@ import {
 } from '../../types';
 import { mapElementChildren } from './helpers/map-element-children';
 import { ctaButtonMapper, addCTAPosition } from './helpers/map-cta-buttons';
+import { InternalError } from '../../errors';
 
-const getStyleResolvedValue = (config?: FormStyleConfig): string | undefined => {
-  return config?.value ?? config?.tokenReference;
+const getStyleResolvedValue = (config: FormStyleConfig): string => {
+  const value = config.value ?? config.tokenReference;
+  if (!value) {
+    throw new InternalError('Form layout style not found');
+  }
+  return value;
 };
 
-const resolveStyles = (
-  style: StudioFormStyle,
-): Record<keyof Omit<StudioFormStyle, 'alignment'>, string | undefined> => {
+const resolveStyles = (style: FormDefinition['form']['layoutStyle']): Record<keyof StudioFormStyle, string> => {
   return {
     verticalGap: getStyleResolvedValue(style.verticalGap),
     horizontalGap: getStyleResolvedValue(style.horizontalGap),
@@ -39,14 +42,19 @@ const resolveStyles = (
   };
 };
 
-const parentGrid = (name: string, style: StudioFormStyle, children: StudioComponentChild[]): StudioComponentChild => {
-  const { verticalGap, horizontalGap } = resolveStyles(style);
+const parentGrid = (
+  name: string,
+  style: FormDefinition['form']['layoutStyle'],
+  children: StudioComponentChild[],
+): StudioComponentChild => {
+  const { verticalGap, horizontalGap, outerPadding } = resolveStyles(style);
   return {
     name,
     componentType: 'Grid',
     properties: {
-      ...(horizontalGap && { columnGap: { value: horizontalGap } }),
-      ...(verticalGap && { rowGap: { value: verticalGap } }),
+      columnGap: { value: horizontalGap },
+      rowGap: { value: verticalGap },
+      padding: { value: outerPadding },
     },
     children,
   };

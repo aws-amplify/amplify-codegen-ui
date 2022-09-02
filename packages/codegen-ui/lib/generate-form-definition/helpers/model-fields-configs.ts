@@ -68,7 +68,7 @@ export function getFieldConfigFromModelField({
       required: field.required,
       readOnly: field.readOnly,
       name: fieldName,
-      value: 'true',
+      value: fieldName,
     },
   };
 
@@ -110,7 +110,8 @@ export function mapModelFieldsConfigs({
   }
 
   Object.entries(model.fields).forEach(([fieldName, field]) => {
-    const isAutoExcludedField = field.readOnly || (fieldName === 'id' && field.dataType === 'ID' && field.required);
+    const isAutoExcludedField =
+      field.readOnly || (fieldName === 'id' && field.dataType === 'ID' && field.required) || field.relationship;
 
     if (!isAutoExcludedField) {
       formDefinition.elementMatrix.push([fieldName]);

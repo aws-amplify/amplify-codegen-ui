@@ -16,19 +16,11 @@
 
 import { mapModelFieldsConfigs, getFieldTypeMapKey } from '../../../generate-form-definition/helpers';
 import { FormDefinition, GenericDataSchema } from '../../../types';
+import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('mapModelFieldsConfigs', () => {
   it('should map to elementMatrix and add to modelFieldsConfigs', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
-      elementMatrix: [],
-    };
+    const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
@@ -49,21 +41,12 @@ describe('mapModelFieldsConfigs', () => {
     expect(modelFieldsConfigs.name).toStrictEqual({
       label: 'Name',
       dataType: 'String',
-      inputType: { type: 'TextField', required: false, readOnly: false, name: 'name', value: 'true' },
+      inputType: { type: 'TextField', required: false, readOnly: false, name: 'name', value: 'name' },
     });
   });
 
   it('should properly map different field names casings to sentence case', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
-      elementMatrix: [],
-    };
+    const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
@@ -92,16 +75,7 @@ describe('mapModelFieldsConfigs', () => {
   });
 
   it('should throw if specified model is not found', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
-      elementMatrix: [],
-    };
+    const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
@@ -120,16 +94,7 @@ describe('mapModelFieldsConfigs', () => {
   });
 
   it('should generate config from id field but not add it to matrix', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
-      elementMatrix: [],
-    };
+    const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
@@ -155,7 +120,7 @@ describe('mapModelFieldsConfigs', () => {
           readOnly: false,
           required: true,
           type: 'TextField',
-          value: 'true',
+          value: 'id',
         },
         label: 'Id',
       },
@@ -163,16 +128,7 @@ describe('mapModelFieldsConfigs', () => {
   });
 
   it('should add read-only fields to configs but not to matrix', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
-      elementMatrix: [],
-    };
+    const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
@@ -198,24 +154,55 @@ describe('mapModelFieldsConfigs', () => {
           readOnly: true,
           required: false,
           type: 'TextField',
-          value: 'true',
+          value: 'name',
         },
         label: 'Name',
       },
     });
   });
 
-  it('should add value mappings from enums', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
+  it('should add relationship fields to configs but not to matrix', () => {
+    const formDefinition: FormDefinition = getBasicFormDefinition();
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Dog: {
+          fields: {
+            ownerId: {
+              dataType: 'ID',
+              readOnly: true,
+              required: false,
+              isArray: false,
+              relationship: { type: 'HAS_ONE', relatedModelName: 'Owner' },
+            },
+          },
+        },
       },
-      elementMatrix: [],
     };
+
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
+
+    expect(formDefinition.elementMatrix).toStrictEqual([]);
+    expect(modelFieldsConfigs).toStrictEqual({
+      ownerId: {
+        dataType: 'ID',
+        inputType: {
+          name: 'ownerId',
+          readOnly: true,
+          required: false,
+          type: 'SelectField',
+          value: 'ownerId',
+        },
+        label: 'Owner id',
+      },
+    });
+  });
+
+  it('should add value mappings from enums', () => {
+    const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const nonEnglishAlphabetTest = 'ㅎ🌱يَّة';
 
@@ -244,7 +231,7 @@ describe('mapModelFieldsConfigs', () => {
           readOnly: false,
           required: false,
           type: 'SelectField',
-          value: 'true',
+          value: 'city',
           valueMappings: {
             values: [
               { value: { value: 'NEW_YORK' }, displayValue: { value: 'New york' } },
@@ -260,16 +247,7 @@ describe('mapModelFieldsConfigs', () => {
   });
 
   it('should throw if type is enum but no matching enum provided', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {
-        buttonConfigs: {},
-        position: '',
-        buttonMatrix: [[]],
-      },
-      elementMatrix: [],
-    };
+    const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
