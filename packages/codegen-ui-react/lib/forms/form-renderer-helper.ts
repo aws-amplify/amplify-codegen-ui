@@ -680,7 +680,7 @@ export const buildOverrideTypesBindings = (
     factory.createPropertySignature(
       undefined,
       factory.createIdentifier(`${formComponent.name}Grid`),
-      undefined,
+      factory.createToken(SyntaxKind.QuestionToken),
       factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
     ),
   ];
@@ -690,7 +690,7 @@ export const buildOverrideTypesBindings = (
       factory.createPropertySignature(
         undefined,
         factory.createIdentifier(`RowGrid${index}`),
-        undefined,
+        factory.createToken(SyntaxKind.QuestionToken),
         factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
       ),
     );
@@ -700,7 +700,7 @@ export const buildOverrideTypesBindings = (
         factory.createPropertySignature(
           undefined,
           factory.createIdentifier(field),
-          undefined,
+          factory.createToken(SyntaxKind.QuestionToken),
           factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName), undefined),
         ),
       );
