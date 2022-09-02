@@ -228,15 +228,15 @@ export declare type CustomDataFormInputValues = {
     category: string;
 };
 export declare type CustomDataFormOverridesProps = {
-    CustomDataFormGrid: GridProps;
-    RowGrid0: GridProps;
-    name: TextFieldProps;
-    RowGrid1: GridProps;
-    email: TextFieldProps;
-    RowGrid2: GridProps;
-    city: SelectFieldProps;
-    RowGrid3: GridProps;
-    category: RadioGroupFieldProps;
+    CustomDataFormGrid?: GridProps;
+    RowGrid0?: GridProps;
+    name?: TextFieldProps;
+    RowGrid1?: GridProps;
+    email?: TextFieldProps;
+    RowGrid2?: GridProps;
+    city?: SelectFieldProps;
+    RowGrid3?: GridProps;
+    category?: RadioGroupFieldProps;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
@@ -414,15 +414,15 @@ export declare type CustomWithSectionalElementsInputValues = {
     name: string;
 };
 export declare type CustomWithSectionalElementsOverridesProps = {
-    CustomWithSectionalElementsGrid: GridProps;
-    RowGrid0: GridProps;
-    myHeading: HeadingProps;
-    RowGrid1: GridProps;
-    name: TextFieldProps;
-    RowGrid2: GridProps;
-    myText: TextProps;
-    RowGrid3: GridProps;
-    myDivider: DividerProps;
+    CustomWithSectionalElementsGrid?: GridProps;
+    RowGrid0?: GridProps;
+    myHeading?: HeadingProps;
+    RowGrid1?: GridProps;
+    name?: TextFieldProps;
+    RowGrid2?: GridProps;
+    myText?: TextProps;
+    RowGrid3?: GridProps;
+    myDivider?: DividerProps;
 } & EscapeHatchProps;
 export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
     overrides?: CustomWithSectionalElementsOverridesProps | undefined | null;
@@ -644,15 +644,15 @@ export declare type MyPostFormInputValues = {
     profile_url: string;
 };
 export declare type MyPostFormOverridesProps = {
-    MyPostFormGrid: GridProps;
-    RowGrid0: GridProps;
-    caption: TextFieldProps;
-    RowGrid1: GridProps;
-    username: TextFieldProps;
-    RowGrid2: GridProps;
-    post_url: TextFieldProps;
-    RowGrid3: GridProps;
-    profile_url: TextFieldProps;
+    MyPostFormGrid?: GridProps;
+    RowGrid0?: GridProps;
+    caption?: TextFieldProps;
+    RowGrid1?: GridProps;
+    username?: TextFieldProps;
+    RowGrid2?: GridProps;
+    post_url?: TextFieldProps;
+    RowGrid3?: GridProps;
+    profile_url?: TextFieldProps;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -947,17 +947,17 @@ export declare type MyPostFormInputValues = {
     post_url: string;
 };
 export declare type MyPostFormOverridesProps = {
-    MyPostFormGrid: GridProps;
-    RowGrid0: GridProps;
-    TextAreaFieldbbd63464: TextAreaFieldProps;
-    RowGrid1: GridProps;
-    caption: TextFieldProps;
-    RowGrid2: GridProps;
-    username: TextFieldProps;
-    RowGrid3: GridProps;
-    profile_url: TextFieldProps;
-    RowGrid4: GridProps;
-    post_url: TextFieldProps;
+    MyPostFormGrid?: GridProps;
+    RowGrid0?: GridProps;
+    TextAreaFieldbbd63464?: TextAreaFieldProps;
+    RowGrid1?: GridProps;
+    caption?: TextFieldProps;
+    RowGrid2?: GridProps;
+    username?: TextFieldProps;
+    RowGrid3?: GridProps;
+    profile_url?: TextFieldProps;
+    RowGrid4?: GridProps;
+    post_url?: TextFieldProps;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -1300,23 +1300,23 @@ export declare type InputGalleryCreateFormInputValues = {
     timeisnow: string;
 };
 export declare type InputGalleryCreateFormOverridesProps = {
-    InputGalleryCreateFormGrid: GridProps;
-    RowGrid0: GridProps;
-    num: TextFieldProps;
-    RowGrid1: GridProps;
-    rootbeer: TextFieldProps;
-    RowGrid2: GridProps;
-    attend: RadioGroupFieldProps;
-    RowGrid3: GridProps;
-    maybeSlide: ToggleButtonProps;
-    RowGrid4: GridProps;
-    maybeCheck: CheckboxFieldProps;
-    RowGrid5: GridProps;
-    timestamp: TextFieldProps;
-    RowGrid6: GridProps;
-    ippy: TextFieldProps;
-    RowGrid7: GridProps;
-    timeisnow: TextFieldProps;
+    InputGalleryCreateFormGrid?: GridProps;
+    RowGrid0?: GridProps;
+    num?: TextFieldProps;
+    RowGrid1?: GridProps;
+    rootbeer?: TextFieldProps;
+    RowGrid2?: GridProps;
+    attend?: RadioGroupFieldProps;
+    RowGrid3?: GridProps;
+    maybeSlide?: ToggleButtonProps;
+    RowGrid4?: GridProps;
+    maybeCheck?: CheckboxFieldProps;
+    RowGrid5?: GridProps;
+    timestamp?: TextFieldProps;
+    RowGrid6?: GridProps;
+    ippy?: TextFieldProps;
+    RowGrid7?: GridProps;
+    timeisnow?: TextFieldProps;
 } & EscapeHatchProps;
 export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
     overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
