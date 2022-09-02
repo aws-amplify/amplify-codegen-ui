@@ -22,15 +22,15 @@ import {
   StudioForm,
   StudioView,
 } from '@aws-amplify/codegen-ui';
-import { createPrinter, createSourceFile, EmitHint } from 'typescript';
+import { createPrinter, createSourceFile, EmitHint, NewLineKind, Node } from 'typescript';
 import { AmplifyFormRenderer } from '../../amplify-ui-renderers/amplify-form-renderer';
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
 import { AmplifyViewRenderer } from '../../amplify-ui-renderers/amplify-view-renderer';
 import { ModuleKind, ReactRenderConfig, ScriptKind, ScriptTarget } from '../../react-render-config';
 import { loadSchemaFromJSONFile } from './example-schema';
-import { transpile } from '../../react-studio-template-renderer-helper';
+import { defaultRenderConfig, transpile } from '../../react-studio-template-renderer-helper';
 
-export const defaultCLIRenderConfig: ReactRenderConfig = {
+export const defaultCLIRenderConfig = {
   module: ModuleKind.ES2020,
   target: ScriptTarget.ES2020,
   script: ScriptKind.JSX,
@@ -103,4 +103,18 @@ export const renderTableJsxElement = (
   const tableNode = printer.printNode(EmitHint.Unspecified, tableJsx, file);
 
   return transpile(tableNode, {}).componentText;
+};
+
+export const genericPrinter = (node: Node): string => {
+  const file = createSourceFile(
+    'sampleFileName.js',
+    '',
+    defaultCLIRenderConfig.target,
+    false,
+    defaultRenderConfig.script,
+  );
+  const printer = createPrinter({
+    newLine: NewLineKind.LineFeed,
+  });
+  return printer.printNode(EmitHint.Unspecified, node, file);
 };

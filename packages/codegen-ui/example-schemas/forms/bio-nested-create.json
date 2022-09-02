@@ -1,0 +1,59 @@
+{
+  "cta" : { },
+  "dataType" : {
+    "dataSourceType" : "Custom",
+    "dataTypeName" : "JSON"
+  },
+  "fields" : {
+    "firstName" : {
+      "inputType" : {
+        "type" : "TextField"
+      },
+      "label" : "firstName",
+      "position" : {
+        "fixed" : "first"
+      }
+    },
+    "lastName" : {
+      "inputType" : {
+        "type" : "TextField"
+      },
+      "label" : "lastName",
+      "position" : {
+        "below" : "firstName"
+      }
+    },
+    "bio.favoriteQuote" : {
+      "inputType" : {
+        "type" : "TextField"
+      },
+      "label" : "favoriteQuote",
+      "position" : {
+        "below" : "bio"
+      }
+    },
+    "bio.favoriteAnimal" : {
+      "inputType" : {
+        "type" : "TextField"
+      },
+      "label" : "favoriteAnimal",
+      "position" : {
+        "below" : "bio.favoriteQuote"
+      }
+    }
+  },
+  "formActionType" : "create",
+  "name" : "NestedJson",
+  "sectionalElements" : {
+    "bio" : {
+      "level" : 3,
+      "position" : {
+        "below" : "lastName"
+      },
+      "text" : "bio",
+      "type" : "Heading"
+    }
+  },
+  "style" : { },
+  "id" : "f-BD6Fl4FX8B6XL7Il9a"
+}
