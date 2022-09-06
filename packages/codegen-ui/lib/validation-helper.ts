@@ -197,6 +197,7 @@ const studioFormSchema = yup.object({
   fields: yup.object().nullable(),
   sectionalElements: yup.object().nullable(),
   style: yup.object().nullable(),
+  cta: yup.object().nullable(),
 });
 
 /**
