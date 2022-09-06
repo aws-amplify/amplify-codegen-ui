@@ -3,11 +3,8 @@
 exports[`amplify form renderer tests custom form tests should render a custom backed form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  getOverrideProps,
-  useStateMutationAction,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { validateField } from \\"./utils\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Button,
   Flex,
@@ -25,8 +22,11 @@ export default function CustomDataForm(props) {
     overrides,
     ...rest
   } = props;
-  const [modelFields, setModelFields] = useStateMutationAction({});
-  const [errors, setErrors] = useStateMutationAction({});
+  const [name, setName] = React.useState(undefined);
+  const [email, setEmail] = React.useState(undefined);
+  const [city, setCity] = React.useState(undefined);
+  const [category, setCategory] = React.useState(undefined);
+  const [errors, setErrors] = React.useState({});
   const validations = {
     name: [{ type: \\"Required\\" }],
     email: [{ type: \\"Required\\" }],
@@ -35,11 +35,9 @@ export default function CustomDataForm(props) {
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
-    if (onValidate?.[fieldName]) {
-      validationResponse = await onValidate[fieldName](
-        value,
-        validationResponse
-      );
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
@@ -48,6 +46,12 @@ export default function CustomDataForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const modelFields = {
+          name,
+          email,
+          city,
+          category,
+        };
         const validationResponses = await Promise.all(
           Object.keys(validations).map((fieldName) =>
             runValidationTasks(fieldName, modelFields[fieldName])
@@ -80,7 +84,7 @@ export default function CustomDataForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"name\\", value);
-              setModelFields({ ...modelFields, name: value });
+              setName(value);
             }}
             errorMessage={errors.name?.errorMessage}
             hasError={errors.name?.hasError}
@@ -100,7 +104,7 @@ export default function CustomDataForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"email\\", value);
-              setModelFields({ ...modelFields, email: value });
+              setEmail(value);
             }}
             errorMessage={errors.email?.errorMessage}
             hasError={errors.email?.hasError}
@@ -118,7 +122,7 @@ export default function CustomDataForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"city\\", value);
-              setModelFields({ ...modelFields, city: value });
+              setCity(value);
             }}
             errorMessage={errors.city?.errorMessage}
             hasError={errors.city?.hasError}
@@ -155,7 +159,7 @@ export default function CustomDataForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"category\\", value);
-              setModelFields({ ...modelFields, category: value });
+              setCategory(value);
             }}
             errorMessage={errors.category?.errorMessage}
             hasError={errors.category?.hasError}
@@ -221,11 +225,12 @@ export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type CustomDataFormInputValues = {
-    name: string;
-    email: string;
-    city: string;
-    category: string;
+    name?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
+    category?: ValidationFunction<string>;
 };
 export declare type CustomDataFormOverridesProps = {
     CustomDataFormGrid?: GridProps;
@@ -243,22 +248,238 @@ export declare type CustomDataFormProps = React.PropsWithChildren<{
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
-    onValidate?: {
-        [field in keyof CustomDataFormInputValues]?: (value: CustomDataFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-    };
+    onValidate?: CustomDataFormInputValues;
 }>;
 export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render nested json fields 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, Grid, Heading, TextField } from \\"@aws-amplify/ui-react\\";
+export default function NestedJson(props) {
+  const {
+    onSubmit: nestedJsonOnSubmit,
+    onCancel,
+    onValidate,
+    overrides,
+    ...rest
+  } = props;
+  const [firstName, setFirstName] = React.useState(undefined);
+  const [lastName, setLastName] = React.useState(undefined);
+  const [bio, setBio] = React.useState({});
+  const [errors, setErrors] = React.useState({});
+  const validations = {
+    firstName: [],
+    lastName: [],
+    \\"bio.favoriteQuote\\": [],
+    \\"bio.favoriteAnimal\\": [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <form
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const modelFields = {
+          firstName,
+          lastName,
+          bio,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).map((fieldName) =>
+            runValidationTasks(fieldName, modelFields[fieldName])
+          )
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        await nestedJsonOnSubmit(modelFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"NestedJson\\")}
+    >
+      <Grid
+        columnGap=\\"15px\\"
+        rowGap=\\"15px\\"
+        padding=\\"20px\\"
+        {...getOverrideProps(overrides, \\"NestedJsonGrid\\")}
+      >
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid0\\")}
+        >
+          <TextField
+            label=\\"firstName\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              await runValidationTasks(\\"firstName\\", value);
+              setFirstName(value);
+            }}
+            errorMessage={errors.firstName?.errorMessage}
+            hasError={errors.firstName?.hasError}
+            {...getOverrideProps(overrides, \\"firstName\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid1\\")}
+        >
+          <TextField
+            label=\\"lastName\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              await runValidationTasks(\\"lastName\\", value);
+              setLastName(value);
+            }}
+            errorMessage={errors.lastName?.errorMessage}
+            hasError={errors.lastName?.hasError}
+            {...getOverrideProps(overrides, \\"lastName\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid2\\")}
+        >
+          <Heading
+            level={3}
+            children=\\"bio\\"
+            {...getOverrideProps(overrides, \\"bio\\")}
+          ></Heading>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid3\\")}
+        >
+          <TextField
+            label=\\"favoriteQuote\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              await runValidationTasks(\\"bio.favoriteQuote\\", value);
+              setBio({ ...bio, favoriteQuote: value });
+            }}
+            errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
+            hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
+            {...getOverrideProps(overrides, \\"bio.favoriteQuote\\")}
+          ></TextField>
+        </Grid>
+        <Grid
+          columnGap=\\"inherit\\"
+          rowGap=\\"inherit\\"
+          templateColumns=\\"repeat(1, auto)\\"
+          {...getOverrideProps(overrides, \\"RowGrid4\\")}
+        >
+          <TextField
+            label=\\"favoriteAnimal\\"
+            onChange={async (e) => {
+              const { value } = e.target;
+              await runValidationTasks(\\"bio.favoriteAnimal\\", value);
+              setBio({ ...bio, favoriteAnimal: value });
+            }}
+            errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
+            hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
+            {...getOverrideProps(overrides, \\"bio.favoriteAnimal\\")}
+          ></TextField>
+        </Grid>
+      </Grid>
+      <Flex
+        justifyContent=\\"space-between\\"
+        marginTop=\\"1rem\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </form>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render nested json fields 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, HeadingProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type NestedJsonInputValues = {
+    firstName?: ValidationFunction<string>;
+    lastName?: ValidationFunction<string>;
+    bio?: {
+        favoriteQuote?: ValidationFunction<string>;
+        favoriteAnimal?: ValidationFunction<string>;
+    };
+};
+export declare type NestedJsonOverridesProps = {
+    NestedJsonGrid?: GridProps;
+    RowGrid0?: GridProps;
+    firstName?: TextFieldProps;
+    RowGrid1?: GridProps;
+    lastName?: TextFieldProps;
+    RowGrid2?: GridProps;
+    bio?: HeadingProps;
+    RowGrid3?: GridProps;
+    \\"bio.favoriteQuote\\"?: TextFieldProps;
+    RowGrid4?: GridProps;
+    \\"bio.favoriteAnimal\\"?: TextFieldProps;
+} & EscapeHatchProps;
+export declare type NestedJsonProps = React.PropsWithChildren<{
+    overrides?: NestedJsonOverridesProps | undefined | null;
+} & {
+    onSubmit: (fields: Record<string, string>) => void;
+    onCancel?: () => void;
+    onValidate?: NestedJsonInputValues;
+}>;
+export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
 `;
 
 exports[`amplify form renderer tests custom form tests should render sectional elements 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  getOverrideProps,
-  useStateMutationAction,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { validateField } from \\"./utils\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Button,
   Divider,
@@ -276,18 +497,16 @@ export default function CustomWithSectionalElements(props) {
     overrides,
     ...rest
   } = props;
-  const [modelFields, setModelFields] = useStateMutationAction({});
-  const [errors, setErrors] = useStateMutationAction({});
+  const [name, setName] = React.useState(undefined);
+  const [errors, setErrors] = React.useState({});
   const validations = {
     name: [],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
-    if (onValidate?.[fieldName]) {
-      validationResponse = await onValidate[fieldName](
-        value,
-        validationResponse
-      );
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
@@ -296,6 +515,9 @@ export default function CustomWithSectionalElements(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const modelFields = {
+          name,
+        };
         const validationResponses = await Promise.all(
           Object.keys(validations).map((fieldName) =>
             runValidationTasks(fieldName, modelFields[fieldName])
@@ -338,7 +560,7 @@ export default function CustomWithSectionalElements(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"name\\", value);
-              setModelFields({ ...modelFields, name: value });
+              setName(value);
             }}
             errorMessage={errors.name?.errorMessage}
             hasError={errors.name?.hasError}
@@ -410,8 +632,9 @@ export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type CustomWithSectionalElementsInputValues = {
-    name: string;
+    name?: ValidationFunction<string>;
 };
 export declare type CustomWithSectionalElementsOverridesProps = {
     CustomWithSectionalElementsGrid?: GridProps;
@@ -429,9 +652,7 @@ export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
 } & {
     onSubmit: (fields: Record<string, string>) => void;
     onCancel?: () => void;
-    onValidate?: {
-        [field in keyof CustomWithSectionalElementsInputValues]?: (value: CustomWithSectionalElementsInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-    };
+    onValidate?: CustomWithSectionalElementsInputValues;
 }>;
 export default function CustomWithSectionalElements(props: CustomWithSectionalElementsProps): React.ReactElement;
 "
@@ -440,12 +661,9 @@ export default function CustomWithSectionalElements(props: CustomWithSectionalEl
 exports[`amplify form renderer tests datastore form tests should generate a create form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  getOverrideProps,
-  useStateMutationAction,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
 import { Post } from \\"../models\\";
-import { validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
@@ -457,8 +675,11 @@ export default function MyPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [modelFields, setModelFields] = useStateMutationAction({});
-  const [errors, setErrors] = useStateMutationAction({});
+  const [caption, setCaption] = React.useState(undefined);
+  const [username, setUsername] = React.useState(undefined);
+  const [post_url, setPost_url] = React.useState(undefined);
+  const [profile_url, setProfile_url] = React.useState(undefined);
+  const [errors, setErrors] = React.useState({});
   const validations = {
     caption: [],
     username: [],
@@ -467,11 +688,9 @@ export default function MyPostForm(props) {
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
-    if (onValidate?.[fieldName]) {
-      validationResponse = await onValidate[fieldName](
-        value,
-        validationResponse
-      );
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
@@ -480,6 +699,12 @@ export default function MyPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const modelFields = {
+          caption,
+          username,
+          post_url,
+          profile_url,
+        };
         const validationResponses = await Promise.all(
           Object.keys(validations).map((fieldName) =>
             runValidationTasks(fieldName, modelFields[fieldName])
@@ -555,7 +780,7 @@ export default function MyPostForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"caption\\", value);
-              setModelFields({ ...modelFields, caption: value });
+              setCaption(value);
             }}
             errorMessage={errors.caption?.errorMessage}
             hasError={errors.caption?.hasError}
@@ -575,7 +800,7 @@ export default function MyPostForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"username\\", value);
-              setModelFields({ ...modelFields, username: value });
+              setUsername(value);
             }}
             errorMessage={errors.username?.errorMessage}
             hasError={errors.username?.hasError}
@@ -595,7 +820,7 @@ export default function MyPostForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"post_url\\", value);
-              setModelFields({ ...modelFields, post_url: value });
+              setPost_url(value);
             }}
             errorMessage={errors.post_url?.errorMessage}
             hasError={errors.post_url?.hasError}
@@ -615,7 +840,7 @@ export default function MyPostForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"profile_url\\", value);
-              setModelFields({ ...modelFields, profile_url: value });
+              setProfile_url(value);
             }}
             errorMessage={errors.profile_url?.errorMessage}
             hasError={errors.profile_url?.hasError}
@@ -637,11 +862,12 @@ export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type MyPostFormInputValues = {
-    caption: string;
-    username: string;
-    post_url: string;
-    profile_url: string;
+    caption?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
 };
 export declare type MyPostFormOverridesProps = {
     MyPostFormGrid?: GridProps;
@@ -663,9 +889,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
-    onValidate?: {
-        [field in keyof MyPostFormInputValues]?: (value: MyPostFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-    };
+    onValidate?: MyPostFormInputValues;
 }>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
@@ -674,12 +898,9 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 exports[`amplify form renderer tests datastore form tests should generate a update form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  getOverrideProps,
-  useStateMutationAction,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
 import { Post } from \\"../models\\";
-import { validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Button,
   Flex,
@@ -699,9 +920,14 @@ export default function MyPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [modelFields, setModelFields] = useStateMutationAction({});
-  const [errors, setErrors] = useStateMutationAction({});
-  const [postRecord, setPostRecord] = useStateMutationAction(post);
+  const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] =
+    React.useState(undefined);
+  const [caption, setCaption] = React.useState(undefined);
+  const [username, setUsername] = React.useState(undefined);
+  const [profile_url, setProfile_url] = React.useState(undefined);
+  const [post_url, setPost_url] = React.useState(undefined);
+  const [errors, setErrors] = React.useState({});
+  const [postRecord, setPostRecord] = React.useState(post);
   React.useEffect(() => {
     const queryData = async () => {
       const record = id ? await DataStore.query(Post, id) : post;
@@ -718,11 +944,9 @@ export default function MyPostForm(props) {
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
-    if (onValidate?.[fieldName]) {
-      validationResponse = await onValidate[fieldName](
-        value,
-        validationResponse
-      );
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
@@ -731,6 +955,13 @@ export default function MyPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const modelFields = {
+          TextAreaFieldbbd63464,
+          caption,
+          username,
+          profile_url,
+          post_url,
+        };
         const validationResponses = await Promise.all(
           Object.keys(validations).map((fieldName) =>
             runValidationTasks(fieldName, modelFields[fieldName])
@@ -808,7 +1039,7 @@ export default function MyPostForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"TextAreaFieldbbd63464\\", value);
-              setModelFields({ ...modelFields, TextAreaFieldbbd63464: value });
+              setTextAreaFieldbbd63464(value);
             }}
             errorMessage={errors.TextAreaFieldbbd63464?.errorMessage}
             hasError={errors.TextAreaFieldbbd63464?.hasError}
@@ -828,7 +1059,7 @@ export default function MyPostForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"caption\\", value);
-              setModelFields({ ...modelFields, caption: value });
+              setCaption(value);
             }}
             errorMessage={errors.caption?.errorMessage}
             hasError={errors.caption?.hasError}
@@ -848,7 +1079,7 @@ export default function MyPostForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"username\\", value);
-              setModelFields({ ...modelFields, username: value });
+              setUsername(value);
             }}
             errorMessage={errors.username?.errorMessage}
             hasError={errors.username?.hasError}
@@ -868,7 +1099,7 @@ export default function MyPostForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"profile_url\\", value);
-              setModelFields({ ...modelFields, profile_url: value });
+              setProfile_url(value);
             }}
             errorMessage={errors.profile_url?.errorMessage}
             hasError={errors.profile_url?.hasError}
@@ -888,7 +1119,7 @@ export default function MyPostForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"post_url\\", value);
-              setModelFields({ ...modelFields, post_url: value });
+              setPost_url(value);
             }}
             errorMessage={errors.post_url?.errorMessage}
             hasError={errors.post_url?.hasError}
@@ -932,19 +1163,20 @@ export default function MyPostForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should generate a update form 2`] = `
 "import * as React from \\"react\\";
-import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type MyPostFormInputValues = {
-    TextAreaFieldbbd63464: string;
-    caption: string;
-    username: string;
-    profile_url: string;
-    post_url: string;
+    TextAreaFieldbbd63464?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
 };
 export declare type MyPostFormOverridesProps = {
     MyPostFormGrid?: GridProps;
@@ -970,9 +1202,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
-    onValidate?: {
-        [field in keyof MyPostFormInputValues]?: (value: MyPostFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-    };
+    onValidate?: MyPostFormInputValues;
 }>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
@@ -981,12 +1211,9 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import {
-  getOverrideProps,
-  useStateMutationAction,
-} from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
 import { InputGallery } from \\"../models\\";
-import { validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Button,
   CheckboxField,
@@ -1007,8 +1234,15 @@ export default function InputGalleryCreateForm(props) {
     overrides,
     ...rest
   } = props;
-  const [modelFields, setModelFields] = useStateMutationAction({});
-  const [errors, setErrors] = useStateMutationAction({});
+  const [num, setNum] = React.useState(undefined);
+  const [rootbeer, setRootbeer] = React.useState(undefined);
+  const [attend, setAttend] = React.useState(undefined);
+  const [maybeSlide, setMaybeSlide] = React.useState(undefined);
+  const [maybeCheck, setMaybeCheck] = React.useState(undefined);
+  const [timestamp, setTimestamp] = React.useState(undefined);
+  const [ippy, setIppy] = React.useState(undefined);
+  const [timeisnow, setTimeisnow] = React.useState(undefined);
+  const [errors, setErrors] = React.useState({});
   const validations = {
     num: [],
     rootbeer: [],
@@ -1021,11 +1255,9 @@ export default function InputGalleryCreateForm(props) {
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
-    if (onValidate?.[fieldName]) {
-      validationResponse = await onValidate[fieldName](
-        value,
-        validationResponse
-      );
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
@@ -1034,6 +1266,16 @@ export default function InputGalleryCreateForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
+        const modelFields = {
+          num,
+          rootbeer,
+          attend,
+          maybeSlide,
+          maybeCheck,
+          timestamp,
+          ippy,
+          timeisnow,
+        };
         const validationResponses = await Promise.all(
           Object.keys(validations).map((fieldName) =>
             runValidationTasks(fieldName, modelFields[fieldName])
@@ -1082,7 +1324,7 @@ export default function InputGalleryCreateForm(props) {
             onChange={async (e) => {
               const value = parseInt(e.target.value);
               await runValidationTasks(\\"num\\", value);
-              setModelFields({ ...modelFields, num: value });
+              setNum(value);
             }}
             errorMessage={errors.num?.errorMessage}
             hasError={errors.num?.hasError}
@@ -1103,7 +1345,7 @@ export default function InputGalleryCreateForm(props) {
             onChange={async (e) => {
               const value = Number(e.target.value);
               await runValidationTasks(\\"rootbeer\\", value);
-              setModelFields({ ...modelFields, rootbeer: value });
+              setRootbeer(value);
             }}
             errorMessage={errors.rootbeer?.errorMessage}
             hasError={errors.rootbeer?.hasError}
@@ -1124,7 +1366,7 @@ export default function InputGalleryCreateForm(props) {
             onChange={async (e) => {
               const value = e.target.value === \\"true\\";
               await runValidationTasks(\\"attend\\", value);
-              setModelFields({ ...modelFields, attend: value });
+              setAttend(value);
             }}
             errorMessage={errors.attend?.errorMessage}
             hasError={errors.attend?.hasError}
@@ -1155,7 +1397,7 @@ export default function InputGalleryCreateForm(props) {
             onChange={async (e) => {
               const value = e.target.checked;
               await runValidationTasks(\\"maybeSlide\\", value);
-              setModelFields({ ...modelFields, maybeSlide: value });
+              setMaybeSlide(value);
             }}
             errorMessage={errors.maybeSlide?.errorMessage}
             hasError={errors.maybeSlide?.hasError}
@@ -1177,7 +1419,7 @@ export default function InputGalleryCreateForm(props) {
             onChange={async (e) => {
               const value = e.target.checked;
               await runValidationTasks(\\"maybeCheck\\", value);
-              setModelFields({ ...modelFields, maybeCheck: value });
+              setMaybeCheck(value);
             }}
             errorMessage={errors.maybeCheck?.errorMessage}
             hasError={errors.maybeCheck?.hasError}
@@ -1198,7 +1440,7 @@ export default function InputGalleryCreateForm(props) {
             onChange={async (e) => {
               const value = Number(new Date(e.target.value));
               await runValidationTasks(\\"timestamp\\", value);
-              setModelFields({ ...modelFields, timestamp: value });
+              setTimestamp(value);
             }}
             errorMessage={errors.timestamp?.errorMessage}
             hasError={errors.timestamp?.hasError}
@@ -1218,7 +1460,7 @@ export default function InputGalleryCreateForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"ippy\\", value);
-              setModelFields({ ...modelFields, ippy: value });
+              setIppy(value);
             }}
             errorMessage={errors.ippy?.errorMessage}
             hasError={errors.ippy?.hasError}
@@ -1239,7 +1481,7 @@ export default function InputGalleryCreateForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"timeisnow\\", value);
-              setModelFields({ ...modelFields, timeisnow: value });
+              setTimeisnow(value);
             }}
             errorMessage={errors.timeisnow?.errorMessage}
             hasError={errors.timeisnow?.hasError}
@@ -1289,15 +1531,16 @@ export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type InputGalleryCreateFormInputValues = {
-    num: number;
-    rootbeer: number;
-    attend: boolean;
-    maybeSlide: boolean;
-    maybeCheck: boolean;
-    timestamp: number;
-    ippy: string;
-    timeisnow: string;
+    num?: ValidationFunction<number>;
+    rootbeer?: ValidationFunction<number>;
+    attend?: ValidationFunction<boolean>;
+    maybeSlide?: ValidationFunction<boolean>;
+    maybeCheck?: ValidationFunction<boolean>;
+    timestamp?: ValidationFunction<number>;
+    ippy?: ValidationFunction<string>;
+    timeisnow?: ValidationFunction<string>;
 };
 export declare type InputGalleryCreateFormOverridesProps = {
     InputGalleryCreateFormGrid?: GridProps;
@@ -1327,9 +1570,7 @@ export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
         errorMessage?: string;
     }) => void;
     onCancel?: () => void;
-    onValidate?: {
-        [field in keyof InputGalleryCreateFormInputValues]?: (value: InputGalleryCreateFormInputValues[field], validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-    };
+    onValidate?: InputGalleryCreateFormInputValues;
 }>;
 export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
 "

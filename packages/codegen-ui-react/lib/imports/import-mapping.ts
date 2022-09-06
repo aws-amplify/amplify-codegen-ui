@@ -46,6 +46,7 @@ export enum ImportValue {
   VALIDATE_FIELD = 'validateField',
   VALIDATE_FIELD_CODEGEN = 'validateField',
   FORMATTER = 'formatter',
+  FETCH_BY_PATH = 'fetchByPath',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
@@ -70,4 +71,5 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.USE_EFFECT]: ImportSource.REACT,
   [ImportValue.FORMATTER]: ImportSource.UTILS,
   [ImportValue.VALIDATE_FIELD]: ImportSource.UTILS,
+  [ImportValue.FETCH_BY_PATH]: ImportSource.UTILS,
 };

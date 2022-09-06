@@ -62,15 +62,14 @@ import { addUseEffectWrapper } from '../utils/generate-react-hooks';
 import { RequiredKeys } from '../utils/type-utils';
 import {
   buildFormPropNode,
-  buildInputValuesTypeAliasDeclaration,
   buildMutationBindings,
   buildOverrideTypesBindings,
-  buildStateMutationStatement,
   buildUpdateDatastoreQuery,
   buildValidations,
   runValidationTasksFunction,
-  validationResponseTypeAliasDeclaration,
 } from './form-renderer-helper';
+import { buildUseStateExpression, getUseStateHooks } from './form-state';
+import { generateOnValidationType, validationFunctionType, validationResponseType } from './type-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -242,6 +241,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   abstract renderJsx(component: StudioComponent, parent?: StudioNode): JsxElement | JsxFragment | JsxSelfClosingElement;
 
   private renderBindingPropsType(): TypeAliasDeclaration[] {
+    const {
+      name: formName,
+      formActionType,
+      dataType: { dataSourceType, dataTypeName },
+    } = this.component;
+    const fieldConfigs = this.componentMetadata.formMetadata?.fieldConfigs ?? {};
     const overrideTypeAliasDeclaration = buildOverrideTypesBindings(
       this.formComponent,
       this.formDefinition,
@@ -253,22 +258,23 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         factory.createIdentifier('overrides'),
         factory.createToken(SyntaxKind.QuestionToken),
         factory.createUnionTypeNode([
-          factory.createTypeReferenceNode(`${this.formComponent.name}OverridesProps`, undefined),
+          factory.createTypeReferenceNode(`${formName}OverridesProps`, undefined),
           factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
           factory.createLiteralTypeNode(factory.createNull()),
         ]),
       ),
     ]);
-    const formPropType = getComponentPropName(this.component.name);
+    const formPropType = getComponentPropName(formName);
 
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
-    if (this.component.formActionType === 'update') {
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataType.dataTypeName);
+    if (dataSourceType === 'DataStore' && formActionType === 'update') {
+      this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
     }
 
     return [
-      validationResponseTypeAliasDeclaration,
-      buildInputValuesTypeAliasDeclaration(this.formComponent.name, this.componentMetadata.formMetadata?.fieldConfigs),
+      validationResponseType,
+      validationFunctionType,
+      generateOnValidationType(formName, fieldConfigs),
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
         undefined,
@@ -296,8 +302,15 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const statements: Statement[] = [];
     const elements: BindingElement[] = [];
     const { formMetadata } = this.componentMetadata;
-    const { dataTypeName } = this.component.dataType;
+    const {
+      dataType: { dataTypeName, dataSourceType },
+      formActionType,
+    } = this.component;
     const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
+
+    if (!formMetadata) {
+      throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
+    }
 
     // add in hooks for before/complete with ds and basic onSubmit with props
     elements.push(...buildMutationBindings(this.component));
@@ -336,31 +349,26 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       ),
     );
 
-    this.importCollection.addMappedImport(ImportValue.USE_STATE_MUTATION_ACTION);
+    statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
 
-    statements.push(buildStateMutationStatement('modelFields', factory.createObjectLiteralExpression()));
+    statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
-    statements.push(buildStateMutationStatement('errors', factory.createObjectLiteralExpression()));
+    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
+    this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
 
     // add model import for datastore type
-    if (this.component.dataType.dataSourceType === 'DataStore') {
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, this.component.dataType.dataTypeName);
-      if (this.component.formActionType === 'update') {
+    if (dataSourceType === 'DataStore') {
+      this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      if (formActionType === 'update') {
         statements.push(
-          buildStateMutationStatement(
-            `${lowerCaseDataTypeName}Record`,
-            factory.createIdentifier(lowerCaseDataTypeName),
-          ),
+          buildUseStateExpression(`${lowerCaseDataTypeName}Record`, factory.createIdentifier(lowerCaseDataTypeName)),
         );
         statements.push(addUseEffectWrapper(buildUpdateDatastoreQuery(dataTypeName), ['id', lowerCaseDataTypeName]));
       }
     }
 
-    if (formMetadata) {
-      this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
-      statements.push(buildValidations(formMetadata.fieldConfigs));
-      statements.push(runValidationTasksFunction);
-    }
+    statements.push(buildValidations(formMetadata.fieldConfigs));
+    statements.push(runValidationTasksFunction);
 
     return statements;
   }

@@ -22,9 +22,10 @@ import { ReactOutputManager } from './react-output-manager';
 import { RequiredKeys } from './utils/type-utils';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 import { generateValidationFunction } from './utils/forms/validation';
+import { getFetchByPathNodeFunction } from './utils/json-path-fetch';
 import { generateFormatUtil } from './utils/string-formatter';
 
-export type UtilTemplateType = 'validation' | 'formatter';
+export type UtilTemplateType = 'validation' | 'formatter' | 'fetchByPath';
 
 export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -66,6 +67,8 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
         utilsStatements.push(...generateValidationFunction());
       } else if (util === 'formatter') {
         utilsStatements.push(...generateFormatUtil());
+      } else if (util === 'fetchByPath') {
+        utilsStatements.push(getFetchByPathNodeFunction());
       }
     });
 
