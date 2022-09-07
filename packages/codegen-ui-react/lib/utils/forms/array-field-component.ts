@@ -14,7 +14,8 @@
   limitations under the License.
  */
 import { factory, JsxChild, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
-import { capitalizeFirstLetter } from '../../forms/form-renderer-helper';
+import { capitalizeFirstLetter } from '../../forms/form-state';
+import { lowerCaseFirst } from '../../helpers';
 
 export const generateArrayFieldComponent = () => {
   const iconPath = 'M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z';
@@ -545,7 +546,7 @@ export const generateArrayFieldComponent = () => {
                                                           factory.createToken(SyntaxKind.QuestionToken),
                                                           factory.createStringLiteral('#B8CEF9'),
                                                           factory.createToken(SyntaxKind.ColonToken),
-                                                          factory.createStringLiteral('#EFFf0F0'),
+                                                          factory.createStringLiteral(''),
                                                         ),
                                                       ),
                                                     ],
@@ -789,6 +790,7 @@ export const generateArrayFieldComponent = () => {
     currentBreedsValue = { currentBreedsValue }
     hasError = { errors.breeds?.hasError }
     setFieldValue = { setCurrentBreedsValue }
+    inputFieldRef={ breedsRef }
     >
     <ExampleInputField />
   </ArrayField>
@@ -823,18 +825,11 @@ export const renderArrayFieldComponent = (fieldName: string, label: string, inpu
               factory.createBlock(
                 [
                   factory.createExpressionStatement(
-                    factory.createCallExpression(factory.createIdentifier('setModelFields'), undefined, [
-                      factory.createObjectLiteralExpression(
-                        [
-                          factory.createSpreadAssignment(factory.createIdentifier('modelFields')),
-                          factory.createPropertyAssignment(
-                            factory.createIdentifier(fieldName),
-                            factory.createIdentifier('items'),
-                          ),
-                        ],
-                        false,
-                      ),
-                    ]),
+                    factory.createCallExpression(
+                      factory.createIdentifier(`set${capitalizeFirstLetter(fieldName)}`),
+                      undefined,
+                      [factory.createIdentifier('items')],
+                    ),
                   ),
                   factory.createExpressionStatement(
                     factory.createCallExpression(
@@ -876,6 +871,10 @@ export const renderArrayFieldComponent = (fieldName: string, label: string, inpu
             undefined,
             factory.createIdentifier(`setCurrent${capitalizeFirstLetter(fieldName)}Value`),
           ),
+        ),
+        factory.createJsxAttribute(
+          factory.createIdentifier('inputFieldRef'),
+          factory.createJsxExpression(undefined, factory.createIdentifier(`${lowerCaseFirst(fieldName)}Ref`)),
         ),
       ]),
     ),

@@ -39,8 +39,8 @@ import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
 import { getActionIdentifier } from '../workflow';
 import { buildTargetVariable } from './event-targets';
-import { capitalizeFirstLetter, setFieldState } from './form-state';
 import { buildOnValidateType } from './type-helper';
+import { capitalizeFirstLetter, setFieldState } from './form-state';
 
 export const buildMutationBindings = (form: StudioForm) => {
   const {
@@ -322,6 +322,10 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
             undefined,
             factory.createIdentifier(`current${capitalizeFirstLetter(component.name)}Value`),
           ),
+        ),
+        factory.createJsxAttribute(
+          factory.createIdentifier('ref'),
+          factory.createJsxExpression(undefined, factory.createIdentifier(`${lowerCaseFirst(component.name)}Ref`)),
         ),
       );
     }

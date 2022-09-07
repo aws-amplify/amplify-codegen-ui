@@ -67,10 +67,9 @@ import {
   buildOverrideTypesBindings,
   buildUpdateDatastoreQuery,
   buildValidations,
-  capitalizeFirstLetter,
   runValidationTasksFunction,
 } from './form-renderer-helper';
-import { buildUseStateExpression, getUseStateHooks } from './form-state';
+import { buildUseStateExpression, capitalizeFirstLetter, getUseStateHooks } from './form-state';
 import { generateOnValidationType, validationFunctionType, validationResponseType } from './type-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
@@ -384,9 +383,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     if (formMetadata) {
       this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
-      statements.push(buildValidations(formMetadata.fieldConfigs));
-      statements.push(runValidationTasksFunction);
-
       Object.entries(formMetadata.fieldConfigs).forEach(([field, config]) => {
         if (config.isArray) {
           statements.push(
@@ -396,7 +392,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
               factory.createVariableDeclarationList(
                 [
                   factory.createVariableDeclaration(
-                    factory.createIdentifier(`${field}FieldRef`),
+                    factory.createIdentifier(`${field}Ref`),
                     undefined,
                     undefined,
                     factory.createCallExpression(
@@ -416,6 +412,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         }
       });
     }
+    statements.push(buildValidations(formMetadata.fieldConfigs));
+    statements.push(runValidationTasksFunction);
 
     return statements;
   }

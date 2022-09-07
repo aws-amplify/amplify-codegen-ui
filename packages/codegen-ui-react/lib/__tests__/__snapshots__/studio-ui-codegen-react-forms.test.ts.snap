@@ -308,9 +308,20 @@ export default function NestedJson(props) {
           bio,
         };
         const validationResponses = await Promise.all(
-          Object.keys(validations).map((fieldName) =>
-            runValidationTasks(fieldName, modelFields[fieldName])
-          )
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -434,7 +445,7 @@ export default function NestedJson(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e.hasError)}
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -1283,6 +1294,7 @@ export default function InputGalleryCreateForm(props) {
   const [attend, setAttend] = React.useState(undefined);
   const [maybeSlide, setMaybeSlide] = React.useState(undefined);
   const [maybeCheck, setMaybeCheck] = React.useState(undefined);
+  const [arrayTypeField, setArrayTypeField] = React.useState(undefined);
   const [timestamp, setTimestamp] = React.useState(undefined);
   const [ippy, setIppy] = React.useState(undefined);
   const [timeisnow, setTimeisnow] = React.useState(undefined);
@@ -1317,6 +1329,7 @@ export default function InputGalleryCreateForm(props) {
           attend,
           maybeSlide,
           maybeCheck,
+          arrayTypeField,
           timestamp,
           ippy,
           timeisnow,
@@ -1495,7 +1508,7 @@ export default function InputGalleryCreateForm(props) {
             onChange={async (e) => {
               const { value } = e.target;
               await runValidationTasks(\\"arrayTypeField\\", value);
-              setModelFields({ ...modelFields, arrayTypeField: value });
+              setArrayTypeField(value);
             }}
             errorMessage={errors.arrayTypeField?.errorMessage}
             hasError={errors.arrayTypeField?.hasError}
@@ -1614,6 +1627,7 @@ export declare type InputGalleryCreateFormInputValues = {
     attend?: ValidationFunction<boolean>;
     maybeSlide?: ValidationFunction<boolean>;
     maybeCheck?: ValidationFunction<boolean>;
+    arrayTypeField?: ValidationFunction<string>;
     timestamp?: ValidationFunction<number>;
     ippy?: ValidationFunction<string>;
     timeisnow?: ValidationFunction<string>;
