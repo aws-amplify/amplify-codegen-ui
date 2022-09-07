@@ -1,48 +1,48 @@
 {
-    "id": "123",
-    "name": "CustomFormCreateDog",
-    "formActionType": "create",
-    "dataType": {
-      "dataSourceType": "Custom",
-      "dataTypeName": "Dog"
-    },
-    "fields": {
-        "name": {
-            "label": "Name",
-            "inputType": {
-                "type": "TextField"
-            },
-            "validations": [{"type": "GreaterThanChar", "numValues": ["1"], "validationMessage": "Name must be longer than 1 character"}]
-        },
-        "age": {
-            "label": "Age",
-            "inputType": {
-                "type": "NumberField"
-            },
-            "validations": [{"type": "GreaterThanNum","numValues": ["0"], "validationMessage": "Age must be greater than 0"}]
-        },
-        "email": {
-            "label": "Email",
-            "inputType": {
-                "type": "EmailField"
-            }
-        },
-        "ip": {
-            "label": "IP Address",
-            "inputType": {
-                "type": "IPAddressField",
-                "required": true
-            }
-        }
-    },
-    "sectionalElements": {
-        "formHeading": {
-            "type": "Heading",
-            "position": {"fixed": "first"},
-            "text": "Register your dog"
-        }
-    },
-    "style": {},
-    "cta": {},
-    "schemaVersion": "1.0"
-  }
+  "id": "123",
+  "name": "CustomFormCreateDog",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "Custom",
+    "dataTypeName": "Dog"
+  },
+  "fields": {
+      "name": {
+          "label": "Name",
+          "inputType": {
+              "type": "TextField"
+          },
+          "validations": [{"type": "GreaterThanChar", "numValues": ["1"], "validationMessage": "Name must be longer than 1 character"}]
+      },
+      "age": {
+          "label": "Age",
+          "inputType": {
+              "type": "NumberField"
+          },
+          "validations": [{"type": "GreaterThanNum","numValues": ["0"], "validationMessage": "Age must be greater than 0"}]
+      },
+      "email": {
+          "label": "Email",
+          "inputType": {
+              "type": "EmailField"
+          }
+      },
+      "ip": {
+          "label": "IP Address",
+          "inputType": {
+              "type": "IPAddressField",
+              "required": true
+          }
+      }
+  },
+  "sectionalElements": {
+      "formHeading": {
+          "type": "Heading",
+          "position": {"fixed": "first"},
+          "text": "Register your dog"
+      }
+  },
+  "style": {},
+  "cta": {},
+  "schemaVersion": "1.0"
+}

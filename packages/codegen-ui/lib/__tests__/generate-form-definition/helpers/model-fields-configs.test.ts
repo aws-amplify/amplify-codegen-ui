@@ -29,7 +29,7 @@ describe('mapModelFieldsConfigs', () => {
       models: {
         Dog: {
           fields: {
-            name: { dataType: 'String', readOnly: false, required: false, isArray: false },
+            name: { dataType: 'String', readOnly: false, required: false, isArray: true },
           },
         },
       },
@@ -41,7 +41,7 @@ describe('mapModelFieldsConfigs', () => {
     expect(modelFieldsConfigs.name).toStrictEqual({
       label: 'Name',
       dataType: 'String',
-      inputType: { type: 'TextField', required: false, readOnly: false, name: 'name', value: 'name' },
+      inputType: { type: 'TextField', isArray: true, required: false, readOnly: false, name: 'name', value: 'name' },
     });
   });
 
@@ -121,6 +121,7 @@ describe('mapModelFieldsConfigs', () => {
           required: true,
           type: 'TextField',
           value: 'id',
+          isArray: false,
         },
         label: 'Id',
       },
@@ -155,6 +156,7 @@ describe('mapModelFieldsConfigs', () => {
           required: false,
           type: 'TextField',
           value: 'name',
+          isArray: false,
         },
         label: 'Name',
       },
@@ -195,6 +197,7 @@ describe('mapModelFieldsConfigs', () => {
           required: false,
           type: 'SelectField',
           value: 'ownerId',
+          isArray: false,
         },
         label: 'Owner id',
       },
@@ -240,6 +243,7 @@ describe('mapModelFieldsConfigs', () => {
               { value: { value: nonEnglishAlphabetTest }, displayValue: { value: nonEnglishAlphabetTest } },
             ],
           },
+          isArray: false,
         },
         label: 'City',
       },
@@ -297,16 +301,5 @@ describe('getFieldTypeMapKey', () => {
         isArray: false,
       }),
     ).toBe('NonModel');
-  });
-
-  it('should return `Array` if isArray is true', () => {
-    expect(
-      getFieldTypeMapKey({
-        dataType: { nonModel: 'Misc' },
-        readOnly: false,
-        required: false,
-        isArray: true,
-      }),
-    ).toBe('Array');
   });
 });

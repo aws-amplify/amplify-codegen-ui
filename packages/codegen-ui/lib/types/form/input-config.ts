@@ -63,4 +63,6 @@ export type StudioFieldInputConfig = {
   step?: number;
 
   value?: string;
+
+  isArray?: boolean;
 };

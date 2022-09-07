@@ -58,6 +58,7 @@ import {
   getDeclarationFilename,
   transpile,
 } from '../react-studio-template-renderer-helper';
+import { generateArrayFieldComponent } from '../utils/forms/array-field-component';
 import { addUseEffectWrapper } from '../utils/generate-react-hooks';
 import { RequiredKeys } from '../utils/type-utils';
 import {
@@ -68,7 +69,7 @@ import {
   buildValidations,
   runValidationTasksFunction,
 } from './form-renderer-helper';
-import { buildUseStateExpression, getUseStateHooks } from './form-state';
+import { buildUseStateExpression, capitalizeFirstLetter, getUseStateHooks } from './form-state';
 import { generateOnValidationType, validationFunctionType, validationResponseType } from './type-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
@@ -127,6 +128,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       importsText += result + EOL;
     });
 
+    if (this.componentMetadata.formMetadata) {
+      if (Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)) {
+        printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+      }
+    }
+
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, false);
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
@@ -167,6 +174,13 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       const propsPrinted = printer.printNode(EmitHint.Unspecified, typeNode, file);
       componentText += propsPrinted;
     });
+
+    if (this.componentMetadata.formMetadata) {
+      if (Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)) {
+        const arrayFieldComponent = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+        componentText += arrayFieldComponent;
+      }
+    }
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
@@ -367,6 +381,36 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       }
     }
 
+    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
+    // Add value state and ref array type fields in ArrayField wrapper
+    Object.entries(formMetadata.fieldConfigs).forEach(([field, config]) => {
+      if (config.isArray) {
+        statements.push(
+          buildUseStateExpression(`current${capitalizeFirstLetter(field)}Value`, factory.createStringLiteral('')),
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createIdentifier(`${field}Ref`),
+                  undefined,
+                  undefined,
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('React'),
+                      factory.createIdentifier('createRef'),
+                    ),
+                    undefined,
+                    [],
+                  ),
+                ),
+              ],
+              NodeFlags.Const,
+            ),
+          ),
+        );
+      }
+    });
     statements.push(buildValidations(formMetadata.fieldConfigs));
     statements.push(runValidationTasksFunction);
 
