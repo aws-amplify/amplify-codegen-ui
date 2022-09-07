@@ -70,7 +70,12 @@ import {
   runValidationTasksFunction,
 } from './form-renderer-helper';
 import { buildUseStateExpression, capitalizeFirstLetter, getUseStateHooks } from './form-state';
-import { generateOnValidationType, validationFunctionType, validationResponseType } from './type-helper';
+import {
+  formOverrideProp,
+  generateOnValidationType,
+  validationFunctionType,
+  validationResponseType,
+} from './type-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -289,6 +294,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       validationResponseType,
       validationFunctionType,
       generateOnValidationType(formName, fieldConfigs),
+      formOverrideProp,
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
         undefined,

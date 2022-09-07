@@ -160,6 +160,28 @@ export const validationResponseType = factory.createTypeAliasDeclaration(
 );
 
 /**
+ * export declare type ValidationResponse = {
+ *  hasError: boolean;
+ *  errorMessage?: string;
+ * };
+ */
+export const formOverrideProp = factory.createTypeAliasDeclaration(
+  undefined,
+  [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
+  factory.createIdentifier('FormProps'),
+  [factory.createTypeParameterDeclaration(factory.createIdentifier('T'), undefined, undefined)],
+  factory.createIntersectionTypeNode([
+    factory.createTypeReferenceNode(factory.createIdentifier('Partial'), [
+      factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined),
+    ]),
+    factory.createTypeReferenceNode(
+      factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('DOMAttributes')),
+      [factory.createTypeReferenceNode(factory.createIdentifier('HTMLDivElement'), undefined)],
+    ),
+  ]),
+);
+
+/**
  * onValidate?: {formTypeName}
  *
  * @param formName
