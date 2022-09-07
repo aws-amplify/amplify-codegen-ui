@@ -55,6 +55,5 @@ export type FieldTypeMapKeys =
   | 'AWSJSON'
   | 'AWSPhone'
   | 'Enum'
-  | 'Array'
   | 'Relationship'
   | 'NonModel';

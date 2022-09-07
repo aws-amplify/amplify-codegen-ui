@@ -29,10 +29,6 @@ import {
 import { FIELD_TYPE_MAP } from './field-type-map';
 
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
-  if (field.isArray) {
-    return 'Array';
-  }
-
   if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
     return 'Enum';
   }
@@ -69,6 +65,7 @@ export function getFieldConfigFromModelField({
       readOnly: field.readOnly,
       name: fieldName,
       value: fieldName,
+      isArray: field.isArray,
     },
   };
 

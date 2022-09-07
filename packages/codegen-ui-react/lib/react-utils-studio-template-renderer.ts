@@ -61,6 +61,7 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
     const utilsStatements: (ts.VariableStatement | ts.TypeAliasDeclaration | ts.FunctionDeclaration)[] = [];
+    const skipReactImport = true;
 
     this.utils.forEach((util) => {
       if (util === 'validation') {
@@ -71,16 +72,29 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
         utilsStatements.push(getFetchByPathNodeFunction());
       }
     });
+    utilsStatements.push(...generateFormatUtil());
 
-    const { componentText } = transpile(
-      utilsStatements.map((util) => printer.printNode(EmitHint.Unspecified, util, file)).join(EOL),
-      this.renderConfig,
-    );
+    let componentText = `/* eslint-disable */${EOL}`;
+    const imports = this.importCollection.buildImportStatements(skipReactImport);
+    imports.forEach((importStatement) => {
+      const result = printer.printNode(EmitHint.Unspecified, importStatement, file);
+      componentText += result + EOL;
+    });
+    componentText += EOL;
+
+    utilsStatements.forEach((util) => {
+      const result = printer.printNode(EmitHint.Unspecified, util, file);
+      componentText += result + EOL;
+    });
+
+    componentText += EOL;
+
+    const { componentText: transpliedText } = transpile(componentText, this.renderConfig);
 
     return {
-      componentText,
+      componentText: transpliedText,
       renderComponentToFilesystem: async (outputPath: string) => {
-        await this.renderComponentToFilesystem(componentText)(this.fileName)(outputPath);
+        await this.renderComponentToFilesystem(transpliedText)(this.fileName)(outputPath);
       },
     };
   }

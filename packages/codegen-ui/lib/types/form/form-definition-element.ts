@@ -154,18 +154,6 @@ export type FormDefinitionPasswordFieldElement = {
   };
 };
 
-export type FormDefinitionArrayFieldElement = {
-  componentType: 'ArrayField';
-  props: {
-    label: string;
-    descriptiveText?: string;
-    isRequired?: boolean;
-    isReadOnly?: boolean;
-    placeholder?: string;
-    defaultValues?: string[];
-  };
-};
-
 export type FormDefinitionButtonElement = {
   name: string;
   componentType: 'Button';
@@ -188,7 +176,6 @@ export type FormDefinitionInputElement = (
   | FormDefinitionCheckboxFieldElement
   | FormDefinitionRadioGroupFieldElement
   | FormDefinitionPasswordFieldElement
-  | FormDefinitionArrayFieldElement
 ) &
   FormDefinitionInputElementCommon;
 

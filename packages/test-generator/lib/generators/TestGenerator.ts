@@ -162,7 +162,7 @@ export abstract class TestGenerator {
       }
     };
 
-    const generateUtilsFile = (utils: string[]) => {
+    const generateUtilsFile = (utils: UtilTemplateType[]) => {
       try {
         if (this.params.writeToDisk) {
           this.writeUtilsFileToDisk(utils);

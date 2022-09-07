@@ -21,6 +21,7 @@ import {
   FieldValidationConfiguration,
   FormDefinitionElement,
   FormDefinitionInputElement,
+  StudioFieldInputConfig,
 } from '../types';
 
 export const getFormFieldStateName = (formName: string) => {
@@ -40,7 +41,6 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
       const updatedConfigs = configs;
       const metadata: FieldConfigMetadata = {
         validationRules: [],
-        isArray: config.componentType === 'ArrayField',
       };
       if ('validations' in config && config.validations) {
         metadata.validationRules = config.validations.map<FieldValidationConfiguration>((validation) => {
@@ -51,6 +51,12 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
       }
       if ('dataType' in config && config.dataType) {
         metadata.dataType = config.dataType;
+      }
+      if (form.fields[name] && 'inputType' in form.fields[name]) {
+        const { inputType } = form.fields[name] as { inputType: StudioFieldInputConfig };
+        if (inputType.isArray) {
+          metadata.isArray = inputType.isArray;
+        }
       }
       updatedConfigs[name] = metadata;
       return updatedConfigs;
