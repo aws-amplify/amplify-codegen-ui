@@ -381,37 +381,36 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       }
     }
 
-    if (formMetadata) {
-      this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
-      Object.entries(formMetadata.fieldConfigs).forEach(([field, config]) => {
-        if (config.isArray) {
-          statements.push(
-            buildUseStateExpression(`current${capitalizeFirstLetter(field)}Value`, factory.createStringLiteral('')),
-            factory.createVariableStatement(
-              undefined,
-              factory.createVariableDeclarationList(
-                [
-                  factory.createVariableDeclaration(
-                    factory.createIdentifier(`${field}Ref`),
-                    undefined,
-                    undefined,
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('React'),
-                        factory.createIdentifier('createRef'),
-                      ),
-                      undefined,
-                      [],
+    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
+    // Add value state and ref array type fields in ArrayField wrapper
+    Object.entries(formMetadata.fieldConfigs).forEach(([field, config]) => {
+      if (config.isArray) {
+        statements.push(
+          buildUseStateExpression(`current${capitalizeFirstLetter(field)}Value`, factory.createStringLiteral('')),
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createIdentifier(`${field}Ref`),
+                  undefined,
+                  undefined,
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('React'),
+                      factory.createIdentifier('createRef'),
                     ),
+                    undefined,
+                    [],
                   ),
-                ],
-                NodeFlags.Const,
-              ),
+                ),
+              ],
+              NodeFlags.Const,
             ),
-          );
-        }
-      });
-    }
+          ),
+        );
+      }
+    });
     statements.push(buildValidations(formMetadata.fieldConfigs));
     statements.push(runValidationTasksFunction);
 

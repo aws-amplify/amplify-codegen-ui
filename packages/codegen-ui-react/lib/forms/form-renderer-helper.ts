@@ -271,6 +271,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       const value = Boolean(e.target.checked)
 
     */
+
   if (component.name in formMetadata.fieldConfigs) {
     const fieldConfig = formMetadata.fieldConfigs[component.name];
     /*
