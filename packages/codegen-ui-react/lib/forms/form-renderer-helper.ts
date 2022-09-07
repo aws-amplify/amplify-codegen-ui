@@ -531,7 +531,9 @@ export const buildOverrideTypesBindings = (
       undefined,
       factory.createIdentifier(`${formComponent.name}Grid`),
       factory.createToken(SyntaxKind.QuestionToken),
-      factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+      factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+        factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+      ]),
     ),
   ];
 
@@ -541,7 +543,9 @@ export const buildOverrideTypesBindings = (
         undefined,
         factory.createIdentifier(`RowGrid${index}`),
         factory.createToken(SyntaxKind.QuestionToken),
-        factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+        factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+          factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+        ]),
       ),
     );
     row.forEach((field) => {
@@ -553,7 +557,9 @@ export const buildOverrideTypesBindings = (
           undefined,
           propKey,
           factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName), undefined),
+          factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+            factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName), undefined),
+          ]),
         ),
       );
       importCollection.addImport(ImportSource.UI_REACT, componentTypePropName);
