@@ -105,11 +105,13 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
           factory.createBlock(
             [
               factory.createExpressionStatement(
-                factory.createCallExpression(factory.createIdentifier('setModelFields'), undefined, [
+                factory.createBinaryExpression(
+                  factory.createIdentifier('modelFields'),
+                  factory.createToken(SyntaxKind.EqualsToken),
                   factory.createCallExpression(factory.createIdentifier('onSubmitBefore'), undefined, [
                     factory.createIdentifier('modelFields'),
                   ]),
-                ]),
+                ),
               ),
             ],
             true,
@@ -190,6 +192,9 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
   }
 
   private getFormOnSubmitAttribute(): JsxAttribute {
+    const {
+      dataType: { dataSourceType },
+    } = this.form;
     const { formMetadata } = this.componentMetadata;
     return factory.createJsxAttribute(
       factory.createIdentifier('onSubmit'),
@@ -223,7 +228,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                   [],
                 ),
               ),
-              buildModelFieldObject(formMetadata?.fieldConfigs),
+              buildModelFieldObject(dataSourceType, formMetadata?.fieldConfigs),
               ...onSubmitValidationRun,
               ...this.getOnSubmitDSCall(),
             ],

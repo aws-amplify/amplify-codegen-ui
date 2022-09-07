@@ -22,6 +22,7 @@ import {
   StudioForm,
   FieldConfigMetadata,
   FormMetadata,
+  StudioDataSourceType,
 } from '@aws-amplify/codegen-ui';
 import {
   BindingElement,
@@ -830,7 +831,10 @@ export const runValidationTasksFunction = factory.createVariableStatement(
  * @param fieldConfigs
  * @returns
  */
-export const buildModelFieldObject = (fieldConfigs: Record<string, FieldConfigMetadata> = {}) => {
+export const buildModelFieldObject = (
+  dataSourceType: StudioDataSourceType,
+  fieldConfigs: Record<string, FieldConfigMetadata> = {},
+) => {
   const fieldSet = new Set<string>();
   const fields = Object.keys(fieldConfigs).reduce<ShorthandPropertyAssignment[]>((acc, value) => {
     const fieldName = value.split('.')[0];
@@ -852,7 +856,7 @@ export const buildModelFieldObject = (fieldConfigs: Record<string, FieldConfigMe
           factory.createObjectLiteralExpression(fields, true),
         ),
       ],
-      NodeFlags.Const,
+      dataSourceType === 'DataStore' ? NodeFlags.Let : NodeFlags.Const,
     ),
   );
 };

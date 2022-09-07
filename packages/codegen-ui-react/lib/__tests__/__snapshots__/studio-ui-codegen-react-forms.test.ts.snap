@@ -732,7 +732,7 @@ export default function MyPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        const modelFields = {
+        let modelFields = {
           caption,
           username,
           post_url,
@@ -758,7 +758,7 @@ export default function MyPostForm(props) {
           return;
         }
         if (onSubmitBefore) {
-          setModelFields(onSubmitBefore(modelFields));
+          modelFields = onSubmitBefore(modelFields);
         }
         try {
           await DataStore.save(new Post(modelFields));
@@ -999,7 +999,7 @@ export default function MyPostForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        const modelFields = {
+        let modelFields = {
           TextAreaFieldbbd63464,
           caption,
           username,
@@ -1026,7 +1026,7 @@ export default function MyPostForm(props) {
           return;
         }
         if (onSubmitBefore) {
-          setModelFields(onSubmitBefore(modelFields));
+          modelFields = onSubmitBefore(modelFields);
         }
         try {
           await DataStore.save(
@@ -1323,7 +1323,7 @@ export default function InputGalleryCreateForm(props) {
     <form
       onSubmit={async (event) => {
         event.preventDefault();
-        const modelFields = {
+        let modelFields = {
           num,
           rootbeer,
           attend,
@@ -1354,7 +1354,7 @@ export default function InputGalleryCreateForm(props) {
           return;
         }
         if (onSubmitBefore) {
-          setModelFields(onSubmitBefore(modelFields));
+          modelFields = onSubmitBefore(modelFields);
         }
         try {
           await DataStore.save(new InputGallery(modelFields));
