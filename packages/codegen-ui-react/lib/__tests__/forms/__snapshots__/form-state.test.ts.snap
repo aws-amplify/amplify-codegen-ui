@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`nested state should generate state structure for nested keyPath 1`] = `"{ ...bio, favoriteAnimal: { ...bio?.favoriteAnimal, animalMeta: { ...bio?.favoriteAnimal?.animalMeta, family: { ...bio?.favoriteAnimal?.animalMeta?.family, genus: value } } } }"`;
+
+exports[`nested state should generate value for 2nd level deep object 1`] = `"{ ...bio, firstName: \\"John C\\" }"`;
+
+exports[`set field state should generate state call for nested object 1`] = `"setBio({ ...bio, favoriteAnimal: { ...bio?.favoriteAnimal, animalMeta: { ...bio?.favoriteAnimal?.animalMeta, family: { ...bio?.favoriteAnimal?.animalMeta?.family, genus: \\"hello World\\" } } } })"`;
+
+exports[`set field state should generate state call for non-nested objects 1`] = `"setFirstName(\\"john c\\")"`;

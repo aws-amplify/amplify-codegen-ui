@@ -15,16 +15,14 @@
  */
 
 import {
-  ComponentMetadata,
   FieldValidationConfiguration,
   FormDefinition,
-  StateStudioComponentProperty,
   StudioComponent,
   StudioComponentChild,
   StudioForm,
-  StudioFormActionType,
+  FieldConfigMetadata,
+  FormMetadata,
 } from '@aws-amplify/codegen-ui';
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
 import {
   BindingElement,
   Expression,
@@ -34,68 +32,19 @@ import {
   SyntaxKind,
   ObjectLiteralElementLike,
   ObjectLiteralExpression,
+  ShorthandPropertyAssignment,
+  JsxAttribute,
 } from 'typescript';
 import { lowerCaseFirst } from '../helpers';
-import { ImportCollection, ImportSource, ImportValue } from '../imports';
-import { getStateName, getSetStateName } from '../react-component-render-helper';
+import { ImportCollection, ImportSource } from '../imports';
 import { getActionIdentifier } from '../workflow';
 import { buildTargetVariable } from './event-targets';
-import { DATA_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
-
-export const FormTypeDataStoreMap: Record<StudioFormActionType, string> = {
-  create: 'Amplify.DataStoreCreateItemAction',
-  update: 'Amplify.DataStoreUpdateItemAction',
-};
-
-export const FieldStateVariable = (componentName: string): StateStudioComponentProperty => ({
-  componentName,
-  property: 'fields',
-});
-
-export function capitalizeFirstLetter(val: string) {
-  return val.charAt(0).toUpperCase() + val.slice(1);
-}
-
-/**
- * - formFields
- */
-export const buildFieldStateStatements = (formName: string, importCollection: ImportCollection) => {
-  importCollection.addMappedImport(ImportValue.USE_STATE_MUTATION_ACTION);
-
-  return factory.createVariableStatement(
-    undefined,
-    factory.createVariableDeclarationList(
-      [
-        factory.createVariableDeclaration(
-          factory.createArrayBindingPattern([
-            factory.createBindingElement(
-              undefined,
-              undefined,
-              factory.createIdentifier(getStateName(FieldStateVariable(formName))),
-              undefined,
-            ),
-            factory.createBindingElement(
-              undefined,
-              undefined,
-              factory.createIdentifier(getSetStateName(FieldStateVariable(formName))),
-              undefined,
-            ),
-          ]),
-          undefined,
-          undefined,
-          factory.createCallExpression(factory.createIdentifier('useStateMutationAction'), undefined, [
-            factory.createObjectLiteralExpression(),
-          ]),
-        ),
-      ],
-      NodeFlags.Const,
-    ),
-  );
-};
+import { capitalizeFirstLetter, setFieldState } from './form-state';
+import { buildOnValidateType } from './type-helper';
 
 export const buildMutationBindings = (form: StudioForm) => {
   const {
-    dataType: { dataSourceType },
+    dataType: { dataSourceType, dataTypeName },
     formActionType,
   } = form;
   const elements: BindingElement[] = [];
@@ -106,7 +55,7 @@ export const buildMutationBindings = (form: StudioForm) => {
         factory.createBindingElement(
           undefined,
           undefined,
-          factory.createIdentifier(lowerCaseFirst(form.dataType.dataTypeName)),
+          factory.createIdentifier(lowerCaseFirst(dataTypeName)),
           undefined,
         ),
       );
@@ -128,71 +77,6 @@ export const buildMutationBindings = (form: StudioForm) => {
   elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onCancel'), undefined));
   return elements;
 };
-
-function getInputValuesTypeName(formName: string): string {
-  return `${formName}InputValues`;
-}
-
-/**
-  onValidate?: {
-      [field in keyof CustomFormCreateDogInputValues]?: (
-        value: CustomFormCreateDogInputValues[field],
-        validationResponse: ValidationResponse
-      ) => ValidationResponse | Promise<ValidationResponse>;
-  };
- */
-function buildOnValidateType(formName: string) {
-  return factory.createPropertySignature(
-    undefined,
-    factory.createIdentifier('onValidate'),
-    factory.createToken(SyntaxKind.QuestionToken),
-    factory.createMappedTypeNode(
-      undefined,
-      factory.createTypeParameterDeclaration(
-        factory.createIdentifier('field'),
-        factory.createTypeOperatorNode(
-          SyntaxKind.KeyOfKeyword,
-          factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
-        ),
-        undefined,
-      ),
-      undefined,
-      factory.createToken(SyntaxKind.QuestionToken),
-      factory.createFunctionTypeNode(
-        undefined,
-        [
-          factory.createParameterDeclaration(
-            undefined,
-            undefined,
-            undefined,
-            factory.createIdentifier('value'),
-            undefined,
-            factory.createIndexedAccessTypeNode(
-              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
-              factory.createTypeReferenceNode(factory.createIdentifier('field'), undefined),
-            ),
-            undefined,
-          ),
-          factory.createParameterDeclaration(
-            undefined,
-            undefined,
-            undefined,
-            factory.createIdentifier('validationResponse'),
-            undefined,
-            factory.createTypeReferenceNode(factory.createIdentifier('ValidationResponse'), undefined),
-            undefined,
-          ),
-        ],
-        factory.createUnionTypeNode([
-          factory.createTypeReferenceNode(factory.createIdentifier('ValidationResponse'), undefined),
-          factory.createTypeReferenceNode(factory.createIdentifier('Promise'), [
-            factory.createTypeReferenceNode(factory.createIdentifier('ValidationResponse'), undefined),
-          ]),
-        ]),
-      ),
-    ),
-  );
-}
 
 /*
     generate params in typed props
@@ -333,31 +217,6 @@ export const buildFormPropNode = (form: StudioForm) => {
   return factory.createTypeLiteralNode(propSignatures);
 };
 
-export const buildStateMutationStatement = (name: string, defaultValue: Expression) => {
-  return factory.createVariableStatement(
-    undefined,
-    factory.createVariableDeclarationList(
-      [
-        factory.createVariableDeclaration(
-          factory.createArrayBindingPattern([
-            factory.createBindingElement(undefined, undefined, factory.createIdentifier(name), undefined),
-            factory.createBindingElement(
-              undefined,
-              undefined,
-              factory.createIdentifier(`set${capitalizeFirstLetter(name)}`),
-              undefined,
-            ),
-          ]),
-          undefined,
-          undefined,
-          factory.createCallExpression(factory.createIdentifier('useStateMutationAction'), undefined, [defaultValue]),
-        ),
-      ],
-      NodeFlags.Const,
-    ),
-  );
-};
-
 export const createValidationExpression = (validationRules: FieldValidationConfiguration[] = []): Expression => {
   const validateExpressions = validationRules.map<ObjectLiteralExpression>((rule) => {
     const elements: ObjectLiteralElementLike[] = [
@@ -399,16 +258,8 @@ export const createValidationExpression = (validationRules: FieldValidationConfi
   return factory.createArrayLiteralExpression(validateExpressions, true);
 };
 
-export const addFormAttributes = (
-  component: StudioComponent | StudioComponentChild,
-  componentMetadata: ComponentMetadata,
-) => {
-  const attributes = [];
-  const { formMetadata } = componentMetadata;
-
-  // do some sort of mapping of the componetName from the dataschema fields
-  // then map this with the componentType
-
+export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
+  const attributes: JsxAttribute[] = [];
   /*
       boolean => RadioGroupField
       const value = e.target.value.toLowerCase() === 'yes';
@@ -418,20 +269,34 @@ export const addFormAttributes = (
   
       componentType => SelectField && boolean
       const value = Boolean(e.target.checked)
-  
+
     */
-  if (formMetadata && component.name in formMetadata?.fieldConfigs) {
-    attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs[component.name]));
+  if (component.name in formMetadata.fieldConfigs) {
+    const fieldConfig = formMetadata.fieldConfigs[component.name];
+    /*
+    if the componetName is a dotPath we need to change the access expression to the following
+     - bio.user.favorites.Quote => errors['bio.user.favorites.Quote']?.errorMessage
+    if it's a regular componetName it will use the following expression
+     - bio => errors.bio?.errorMessage
+    */
+    const errorKey =
+      component.name.split('.').length > 1
+        ? factory.createElementAccessExpression(
+            factory.createIdentifier('errors'),
+            factory.createStringLiteral(component.name),
+          )
+        : factory.createPropertyAccessExpression(
+            factory.createIdentifier('errors'),
+            factory.createIdentifier(component.name),
+          );
+    attributes.push(buildOnChangeStatement(component, fieldConfig));
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('errorMessage'),
         factory.createJsxExpression(
           undefined,
           factory.createPropertyAccessChain(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('errors'),
-              factory.createIdentifier(component.name),
-            ),
+            errorKey,
             factory.createToken(SyntaxKind.QuestionDotToken),
             factory.createIdentifier('errorMessage'),
           ),
@@ -442,17 +307,14 @@ export const addFormAttributes = (
         factory.createJsxExpression(
           undefined,
           factory.createPropertyAccessChain(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('errors'),
-              factory.createIdentifier(component.name),
-            ),
+            errorKey,
             factory.createToken(SyntaxKind.QuestionDotToken),
             factory.createIdentifier('hasError'),
           ),
         ),
       ),
     );
-    if (formMetadata.fieldConfigs[component.name].isArray) {
+    if (fieldConfig.isArray) {
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('value'),
@@ -619,7 +481,7 @@ export const buildOnChangeStatement = (
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createBlock(
           [
-            buildTargetVariable(fieldType, dataType),
+            buildTargetVariable(fieldType, fieldConfig.dataType),
             factory.createExpressionStatement(
               factory.createAwaitExpression(
                 factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
@@ -628,20 +490,7 @@ export const buildOnChangeStatement = (
                 ]),
               ),
             ),
-            factory.createExpressionStatement(
-              factory.createCallExpression(factory.createIdentifier('setModelFields'), undefined, [
-                factory.createObjectLiteralExpression(
-                  [
-                    factory.createSpreadAssignment(factory.createIdentifier('modelFields')),
-                    factory.createPropertyAssignment(
-                      factory.createIdentifier(fieldName),
-                      factory.createIdentifier('value'),
-                    ),
-                  ],
-                  false,
-                ),
-              ]),
-            ),
+            factory.createExpressionStatement(setFieldState(fieldName, factory.createIdentifier('value'))),
           ],
           true,
         ),
@@ -756,11 +605,13 @@ export const buildOverrideTypesBindings = (
       ),
     );
     row.forEach((field) => {
+      const propKey =
+        field.split('.').length > 1 ? factory.createStringLiteral(field) : factory.createIdentifier(field);
       const componentTypePropName = `${formDefinition.elements[field].componentType}Props`;
       typeNodes.push(
         factory.createPropertySignature(
           undefined,
-          factory.createIdentifier(field),
+          propKey,
           factory.createToken(SyntaxKind.QuestionToken),
           factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName), undefined),
         ),
@@ -781,74 +632,22 @@ export const buildOverrideTypesBindings = (
   );
 };
 
-// declare type ValidationResponse = {hasError: boolean, errorMessage?: string}
-export const validationResponseTypeAliasDeclaration = factory.createTypeAliasDeclaration(
-  undefined,
-  [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
-  factory.createIdentifier('ValidationResponse'),
-  undefined,
-  factory.createTypeLiteralNode([
-    factory.createPropertySignature(
-      undefined,
-      factory.createIdentifier('hasError'),
-      undefined,
-      factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-    ),
-    factory.createPropertySignature(
-      undefined,
-      factory.createIdentifier('errorMessage'),
-      factory.createToken(SyntaxKind.QuestionToken),
-      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-    ),
-  ]),
-);
-
 /**
-  example:
-  declare type MyFormInputValues = {
-    name: string;
-    age: number;
-    email: string;
-  }
+ * builds validation variable
+ * for nested values it will mention the full path as that corresponds to the fields
+ * this will also link to error messages
+ *
+ * const validations = { post_url: [{ type: "URL" }], 'user.status': [] };
+ *
+ * @param fieldConfigs
+ * @returns
  */
-
-export function buildInputValuesTypeAliasDeclaration(
-  formName: string,
-  fieldConfigs?: Record<string, FieldConfigMetadata>,
-) {
-  const properties = fieldConfigs
-    ? Object.entries(fieldConfigs).map(([fieldName, fieldConfig]) => {
-        const { dataType } = fieldConfig;
-        const typescriptType =
-          dataType && typeof dataType === 'string' && dataType in DATA_TYPE_TO_TYPESCRIPT_MAP
-            ? DATA_TYPE_TO_TYPESCRIPT_MAP[dataType]
-            : SyntaxKind.StringKeyword;
-
-        return factory.createPropertySignature(
-          undefined,
-          factory.createIdentifier(fieldName),
-          undefined,
-          factory.createKeywordTypeNode(typescriptType),
-        );
-      })
-    : [];
-
-  return factory.createTypeAliasDeclaration(
-    undefined,
-    [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
-    factory.createIdentifier(getInputValuesTypeName(formName)),
-    undefined,
-    factory.createTypeLiteralNode(properties),
-  );
-}
-
 export function buildValidations(fieldConfigs: Record<string, FieldConfigMetadata>) {
-  const validationsForField = Object.entries(fieldConfigs).map(([fieldName, fieldConfig]) =>
-    factory.createPropertyAssignment(
-      factory.createIdentifier(fieldName),
-      createValidationExpression(fieldConfig.validationRules),
-    ),
-  );
+  const validationsForField = Object.entries(fieldConfigs).map(([fieldName, { validationRules }]) => {
+    const propKey =
+      fieldName.split('.').length > 1 ? factory.createStringLiteral(fieldName) : factory.createIdentifier(fieldName);
+    return factory.createPropertyAssignment(propKey, createValidationExpression(validationRules));
+  });
 
   return factory.createVariableStatement(
     undefined,
@@ -932,12 +731,25 @@ export const runValidationTasksFunction = factory.createVariableStatement(
                   NodeFlags.Let,
                 ),
               ),
-              factory.createIfStatement(
-                factory.createElementAccessChain(
-                  factory.createIdentifier('onValidate'),
-                  factory.createToken(SyntaxKind.QuestionDotToken),
-                  factory.createIdentifier('fieldName'),
+              factory.createVariableStatement(
+                undefined,
+                factory.createVariableDeclarationList(
+                  [
+                    factory.createVariableDeclaration(
+                      factory.createIdentifier('customValidator'),
+                      undefined,
+                      undefined,
+                      factory.createCallExpression(factory.createIdentifier('fetchByPath'), undefined, [
+                        factory.createIdentifier('onValidate'),
+                        factory.createIdentifier('fieldName'),
+                      ]),
+                    ),
+                  ],
+                  NodeFlags.Const,
                 ),
+              ),
+              factory.createIfStatement(
+                factory.createIdentifier('customValidator'),
                 factory.createBlock(
                   [
                     factory.createExpressionStatement(
@@ -945,14 +757,10 @@ export const runValidationTasksFunction = factory.createVariableStatement(
                         factory.createIdentifier('validationResponse'),
                         factory.createToken(SyntaxKind.EqualsToken),
                         factory.createAwaitExpression(
-                          factory.createCallExpression(
-                            factory.createElementAccessExpression(
-                              factory.createIdentifier('onValidate'),
-                              factory.createIdentifier('fieldName'),
-                            ),
-                            undefined,
-                            [factory.createIdentifier('value'), factory.createIdentifier('validationResponse')],
-                          ),
+                          factory.createCallExpression(factory.createIdentifier('customValidator'), undefined, [
+                            factory.createIdentifier('value'),
+                            factory.createIdentifier('validationResponse'),
+                          ]),
                         ),
                       ),
                     ),
@@ -1004,6 +812,45 @@ export const runValidationTasksFunction = factory.createVariableStatement(
     NodeFlags.Const,
   ),
 );
+/**
+ * builds modelFields object which is used to validate, onSubmit, onSuccess/onError
+ *
+ * ex.  [name, content, updatedAt]
+ *
+ * const modelFields = {
+ *   name,
+ *   content,
+ *   updatedAt
+ * };
+ * @param fieldConfigs
+ * @returns
+ */
+export const buildModelFieldObject = (fieldConfigs: Record<string, FieldConfigMetadata> = {}) => {
+  const fieldSet = new Set<string>();
+  const fields = Object.keys(fieldConfigs).reduce<ShorthandPropertyAssignment[]>((acc, value) => {
+    const fieldName = value.split('.')[0];
+    if (!fieldSet.has(fieldName)) {
+      acc.push(factory.createShorthandPropertyAssignment(factory.createIdentifier(fieldName), undefined));
+      fieldSet.add(fieldName);
+    }
+    return acc;
+  }, []);
+
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('modelFields'),
+          undefined,
+          undefined,
+          factory.createObjectLiteralExpression(fields, true),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
+};
 
 /**
   const validationResponses = await Promise.all(

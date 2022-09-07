@@ -40,7 +40,6 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
     fieldConfigs: inputElementEntries.reduce<Record<string, FieldConfigMetadata>>((configs, [name, config]) => {
       const updatedConfigs = configs;
       const metadata: FieldConfigMetadata = {
-        hasChange: true,
         validationRules: [],
       };
       if ('validations' in config && config.validations) {

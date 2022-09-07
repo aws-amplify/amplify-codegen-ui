@@ -148,7 +148,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     ];
 
     if (this.componentMetadata.formMetadata) {
-      attributes.push(...addFormAttributes(this.component, this.componentMetadata));
+      attributes.push(...addFormAttributes(this.component, this.componentMetadata.formMetadata));
     }
 
     this.addPropsSpreadAttributes(attributes);

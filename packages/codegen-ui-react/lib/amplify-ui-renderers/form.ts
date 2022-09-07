@@ -27,7 +27,7 @@ import { buildOpeningElementProperties } from '../react-component-render-helper'
 import { ImportCollection } from '../imports';
 import { getActionIdentifier } from '../workflow';
 import { buildDataStoreExpression } from '../forms';
-import { onSubmitValidationRun } from '../forms/form-renderer-helper';
+import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -190,6 +190,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
   }
 
   private getFormOnSubmitAttribute(): JsxAttribute {
+    const { formMetadata } = this.componentMetadata;
     return factory.createJsxAttribute(
       factory.createIdentifier('onSubmit'),
       factory.createJsxExpression(
@@ -222,6 +223,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                   [],
                 ),
               ),
+              buildModelFieldObject(formMetadata?.fieldConfigs),
               ...onSubmitValidationRun,
               ...this.getOnSubmitDSCall(),
             ],
