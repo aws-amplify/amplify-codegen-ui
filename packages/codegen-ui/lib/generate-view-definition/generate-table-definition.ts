@@ -41,12 +41,14 @@ export function generateTableDefinition(table: StudioView, dataSchema?: GenericD
     ...table.style,
   };
 
-  const { columns, ...otherThanColumns } = table.viewConfiguration.table;
+  const { columns, ...rest } = table.viewConfiguration.table ?? {};
 
-  definition.tableConfig = {
-    ...DEFAULT_TABLE_CONFIG,
-    ...otherThanColumns,
-  };
+  if (rest) {
+    definition.tableConfig = {
+      ...DEFAULT_TABLE_CONFIG,
+      ...rest,
+    };
+  }
 
   definition.tableDataSource = {
     ...DEFAULT_TABLE_SOURCE,
@@ -77,7 +79,7 @@ export function generateTableDefinition(table: StudioView, dataSchema?: GenericD
     }
   }
 
-  definition.columns = orderAndFilterVisibleColumns(table.viewConfiguration.table.columns ?? {}, fields);
+  definition.columns = orderAndFilterVisibleColumns(columns ?? {}, fields);
 
   return definition;
 }
