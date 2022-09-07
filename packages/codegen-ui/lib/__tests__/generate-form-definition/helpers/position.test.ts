@@ -66,60 +66,66 @@ describe('removeAndReturnItemOnward', () => {
 });
 
 describe('mapElementMatrix', () => {
-  it('vertical - should throw if element is positioned relative to non-existing name', () => {
-    const elementQueue = [
-      { name: 'a', position: { below: 'b' } },
-      { name: 'b', position: { below: 'c' } },
-      { name: 'c', position: { below: 'd' } },
-    ];
-    expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+  describe('vertical positioning', () => {
+    it('should throw if element is positioned relative to non-existing name', () => {
+      const elementQueue = [
+        { name: 'a', position: { below: 'b' } },
+        { name: 'b', position: { below: 'c' } },
+        { name: 'c', position: { below: 'd' } },
+      ];
+      expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+    });
+
+    it('should throw if there is a circular dependency', () => {
+      const elementQueue = [
+        { name: 'a', position: { below: 'b' } },
+        { name: 'b', position: { below: 'c' } },
+        { name: 'c', position: { below: 'a' } },
+      ];
+      expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+    });
   });
 
-  it('horizontal - should throw if element is positioned relative to non-existing name', () => {
-    const elementQueue = [
-      { name: 'a', position: { rightOf: 'b' } },
-      { name: 'b', position: { rightOf: 'c' } },
-      { name: 'c', position: { rightOf: 'd' } },
-    ];
-    expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+  describe('horizontal positioning', () => {
+    it('should throw if element is positioned relative to non-existing name', () => {
+      const elementQueue = [
+        { name: 'a', position: { rightOf: 'b' } },
+        { name: 'b', position: { rightOf: 'c' } },
+        { name: 'c', position: { rightOf: 'd' } },
+      ];
+      expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+    });
+
+    it('should throw if there is a circular dependency', () => {
+      const elementQueue = [
+        { name: 'a', position: { rightOf: 'b' } },
+        { name: 'b', position: { rightOf: 'c' } },
+        { name: 'c', position: { rightOf: 'a' } },
+      ];
+      expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
+    });
   });
 
-  it('vertical - should throw if there is a circular dependency', () => {
-    const elementQueue = [
-      { name: 'a', position: { below: 'b' } },
-      { name: 'b', position: { below: 'c' } },
-      { name: 'c', position: { below: 'a' } },
-    ];
-    expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
-  });
+  describe('two-dimensional layout', () => {
+    it('should map positions', () => {
+      const elementQueue = [
+        { name: 'g', position: { rightOf: 'f' } },
+        { name: 'f', position: { below: 'd' } },
+        { name: 'e', position: { rightOf: 'd' } },
+        { name: 'd', position: { below: 'a' } },
+        { name: 'c', position: { rightOf: 'b' } },
+        { name: 'b', position: { rightOf: 'a' } },
+        { name: 'a' },
+      ];
+      const formDefinition = getBasicFormDefinition();
 
-  it('horizontal - should throw if there is a circular dependency', () => {
-    const elementQueue = [
-      { name: 'a', position: { rightOf: 'b' } },
-      { name: 'b', position: { rightOf: 'c' } },
-      { name: 'c', position: { rightOf: 'a' } },
-    ];
-    expect(() => mapElementMatrix({ elementQueue, formDefinition: getBasicFormDefinition() })).toThrow();
-  });
+      mapElementMatrix({ elementQueue, formDefinition });
 
-  it('should map positions', () => {
-    const elementQueue = [
-      { name: 'g', position: { rightOf: 'f' } },
-      { name: 'f', position: { below: 'd' } },
-      { name: 'e', position: { rightOf: 'd' } },
-      { name: 'd', position: { below: 'a' } },
-      { name: 'c', position: { rightOf: 'b' } },
-      { name: 'b', position: { rightOf: 'a' } },
-      { name: 'a' },
-    ];
-    const formDefinition = getBasicFormDefinition();
-
-    mapElementMatrix({ elementQueue, formDefinition });
-
-    expect(formDefinition.elementMatrix).toStrictEqual([
-      ['a', 'b', 'c'],
-      ['d', 'e'],
-      ['f', 'g'],
-    ]);
+      expect(formDefinition.elementMatrix).toStrictEqual([
+        ['a', 'b', 'c'],
+        ['d', 'e'],
+        ['f', 'g'],
+      ]);
+    });
   });
 });
