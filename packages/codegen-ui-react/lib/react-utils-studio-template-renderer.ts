@@ -63,16 +63,19 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
     const utilsStatements: (ts.VariableStatement | ts.TypeAliasDeclaration | ts.FunctionDeclaration)[] = [];
     const skipReactImport = true;
 
-    this.utils.forEach((util) => {
-      if (util === 'validation') {
-        utilsStatements.push(...generateValidationFunction());
-      } else if (util === 'formatter') {
-        utilsStatements.push(...generateFormatUtil());
-      } else if (util === 'fetchByPath') {
-        utilsStatements.push(getFetchByPathNodeFunction());
-      }
-    });
-    utilsStatements.push(...generateFormatUtil());
+    const utilsSet = new Set(this.utils);
+
+    if (utilsSet.has('validation')) {
+      utilsStatements.push(...generateValidationFunction());
+    }
+
+    if (utilsSet.has('formatter')) {
+      utilsStatements.push(...generateFormatUtil());
+    }
+
+    if (utilsSet.has('fetchByPath')) {
+      utilsStatements.push(getFetchByPathNodeFunction());
+    }
 
     let componentText = `/* eslint-disable */${EOL}`;
     const imports = this.importCollection.buildImportStatements(skipReactImport);
