@@ -23,11 +23,13 @@ import { StudioFieldPosition } from './position';
 import { StudioFormCTA } from './form-cta';
 import { FormMetadata, FieldConfigMetadata } from './form-metadata';
 
+export type StudioDataSourceType = 'DataStore' | 'Custom';
+
 /**
  * Data type definition for StudioForm
  */
-type StudioFormDataType = {
-  dataSourceType: 'DataStore' | 'Custom';
+export type StudioFormDataType = {
+  dataSourceType: StudioDataSourceType;
 
   dataTypeName: string;
 };
