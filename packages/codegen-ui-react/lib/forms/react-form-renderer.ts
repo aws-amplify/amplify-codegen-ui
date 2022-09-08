@@ -383,7 +383,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         statements.push(
           buildUseStateExpression(`${lowerCaseDataTypeName}Record`, factory.createIdentifier(lowerCaseDataTypeName)),
         );
-        statements.push(addUseEffectWrapper(buildUpdateDatastoreQuery(dataTypeName), ['id', lowerCaseDataTypeName]));
+        statements.push(
+          addUseEffectWrapper(
+            buildUpdateDatastoreQuery(dataTypeName, this.componentMetadata.formMetadata?.fieldConfigs),
+            ['id', lowerCaseDataTypeName],
+          ),
+        );
       }
     }
 

@@ -980,6 +980,11 @@ export default function MyPostForm(props) {
     const queryData = async () => {
       const record = id ? await DataStore.query(Post, id) : post;
       setPostRecord(record);
+      setTextAreaFieldbbd63464(record.TextAreaFieldbbd63464);
+      setCaption(record.caption);
+      setUsername(record.username);
+      setProfile_url(record.profile_url);
+      setPost_url(record.post_url);
     };
     queryData();
   }, [id, post]);
@@ -1102,6 +1107,7 @@ export default function MyPostForm(props) {
             }}
             errorMessage={errors.TextAreaFieldbbd63464?.errorMessage}
             hasError={errors.TextAreaFieldbbd63464?.hasError}
+            defaultValue={TextAreaFieldbbd63464}
             {...getOverrideProps(overrides, \\"TextAreaFieldbbd63464\\")}
           ></TextAreaField>
         </Grid>
@@ -1122,6 +1128,7 @@ export default function MyPostForm(props) {
             }}
             errorMessage={errors.caption?.errorMessage}
             hasError={errors.caption?.hasError}
+            defaultValue={caption}
             {...getOverrideProps(overrides, \\"caption\\")}
           ></TextField>
         </Grid>
@@ -1142,6 +1149,7 @@ export default function MyPostForm(props) {
             }}
             errorMessage={errors.username?.errorMessage}
             hasError={errors.username?.hasError}
+            defaultValue={username}
             {...getOverrideProps(overrides, \\"username\\")}
           ></TextField>
         </Grid>
@@ -1162,6 +1170,7 @@ export default function MyPostForm(props) {
             }}
             errorMessage={errors.profile_url?.errorMessage}
             hasError={errors.profile_url?.hasError}
+            defaultValue={profile_url}
             {...getOverrideProps(overrides, \\"profile_url\\")}
           ></TextField>
         </Grid>
@@ -1182,6 +1191,7 @@ export default function MyPostForm(props) {
             }}
             errorMessage={errors.post_url?.errorMessage}
             hasError={errors.post_url?.hasError}
+            defaultValue={post_url}
             {...getOverrideProps(overrides, \\"post_url\\")}
           ></TextField>
         </Grid>

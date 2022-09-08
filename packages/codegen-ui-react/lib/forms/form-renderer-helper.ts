@@ -316,6 +316,14 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
         ),
       ),
     );
+    if (formMetadata.formActionType === 'update') {
+      attributes.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('defaultValue'),
+          factory.createJsxExpression(undefined, factory.createIdentifier(component.name)),
+        ),
+      );
+    }
     if (fieldConfig.isArray) {
       attributes.push(
         factory.createJsxAttribute(
@@ -1081,7 +1089,10 @@ export const onSubmitValidationRun = [
   ),
 ];
 
-export const buildUpdateDatastoreQuery = (dataTypeName: string) => {
+export const buildUpdateDatastoreQuery = (
+  dataTypeName: string,
+  fieldConfigs: Record<string, FieldConfigMetadata> | undefined,
+) => {
   return [
     factory.createVariableStatement(
       undefined,
@@ -1133,6 +1144,22 @@ export const buildUpdateDatastoreQuery = (dataTypeName: string) => {
                       factory.createIdentifier('record'),
                     ]),
                   ),
+                  ...(fieldConfigs
+                    ? Object.keys(fieldConfigs).map((field) =>
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(
+                            factory.createIdentifier(`set${capitalizeFirstLetter(field)}`),
+                            undefined,
+                            [
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('record'),
+                                factory.createIdentifier(field),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : []),
                 ],
                 true,
               ),

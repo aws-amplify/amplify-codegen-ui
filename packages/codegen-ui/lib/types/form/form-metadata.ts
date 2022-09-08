@@ -16,6 +16,11 @@
 import { DataFieldDataType } from '../data';
 import { FieldValidationConfiguration } from './form-validation';
 
+/**
+ * Form Action type definition
+ */
+export type StudioFormActionType = 'create' | 'update';
+
 export type FieldConfigMetadata = {
   // ex. name field has a string validation type where the rule is char length > 5
   validationRules: FieldValidationConfiguration[];
@@ -27,6 +32,7 @@ export type FieldConfigMetadata = {
 
 export type FormMetadata = {
   id?: string;
+  formActionType: StudioFormActionType;
   name: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
 };

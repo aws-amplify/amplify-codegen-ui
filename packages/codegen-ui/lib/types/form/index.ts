@@ -21,7 +21,7 @@ import { FormDefinition, ModelFieldsConfigs, FieldTypeMapKeys, ButtonConfig } fr
 import { StudioFieldInputConfig, StudioFormValueMappings } from './input-config';
 import { StudioFieldPosition } from './position';
 import { StudioFormCTA } from './form-cta';
-import { FormMetadata, FieldConfigMetadata } from './form-metadata';
+import { FormMetadata, FieldConfigMetadata, StudioFormActionType } from './form-metadata';
 
 export type StudioDataSourceType = 'DataStore' | 'Custom';
 
@@ -33,10 +33,6 @@ export type StudioFormDataType = {
 
   dataTypeName: string;
 };
-/**
- * Form Action type definition
- */
-type StudioFormActionType = 'create' | 'update';
 
 /**
  * This is the base type for all StudioForms
