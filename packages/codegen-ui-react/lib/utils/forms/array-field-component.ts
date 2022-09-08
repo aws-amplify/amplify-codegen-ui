@@ -782,7 +782,6 @@ export const generateArrayFieldComponent = () => {
 };
 /*
   <ArrayField
-    label="Breeds"
     onChange = { async(items) => {
       setModelFields({ ...modelFields, breeds: items });
       setCurrentBreedsValue('');
@@ -802,7 +801,6 @@ export const renderArrayFieldComponent = (fieldName: string, label: string, inpu
       factory.createIdentifier('ArrayField'),
       undefined,
       factory.createJsxAttributes([
-        factory.createJsxAttribute(factory.createIdentifier('label'), factory.createStringLiteral(label)),
         factory.createJsxAttribute(
           factory.createIdentifier('onChange'),
           factory.createJsxExpression(
