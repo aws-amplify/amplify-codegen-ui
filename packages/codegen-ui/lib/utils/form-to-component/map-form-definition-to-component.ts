@@ -68,20 +68,33 @@ const mapFormElementProps = (element: FormDefinitionElement) => {
   return props;
 };
 
-const fieldComponentMapper = (name: string, formDefinition: FormDefinition): StudioComponentChild => {
-  // will accept a field matrix from a defnition and map
-  const fieldChildren = formDefinition.elementMatrix.map<StudioComponentChild>((row: string[], rowIdx: number) => {
-    return {
-      name: `RowGrid${rowIdx}`,
+/**
+ * will wrap the studio component children in a row grid
+ */
+export const wrapInRowGrid = (
+  idx: number,
+  rowLength: number,
+  children: StudioComponentChild[],
+): StudioComponentChild[] => {
+  return [
+    {
+      name: `RowGrid${idx}`,
       componentType: 'Grid',
       properties: {
         columnGap: { value: 'inherit' },
         rowGap: { value: 'inherit' },
-        ...(row.length > 0 && {
-          templateColumns: { value: `repeat(${row.length}, auto)` },
-        }),
+        templateColumms: { value: `repeat(${rowLength}, auto)` },
       },
-      children: row.map<StudioComponentChild>((column) => {
+      children,
+    },
+  ];
+};
+
+const fieldComponentMapper = (name: string, formDefinition: FormDefinition): StudioComponentChild => {
+  // will accept a field matrix from a defnition and map
+  const fieldChildren = formDefinition.elementMatrix.reduce<StudioComponentChild[]>(
+    (acc: StudioComponentChild[], row: string[], rowIdx: number) => {
+      const children = row.map<StudioComponentChild>((column) => {
         const element: FormDefinitionElement = formDefinition.elements[column];
         return {
           name: column,
@@ -89,9 +102,13 @@ const fieldComponentMapper = (name: string, formDefinition: FormDefinition): Stu
           properties: mapFormElementProps(element),
           children: mapElementChildren(column, element).children,
         };
-      }),
-    };
-  });
+      });
+      // if we have more than one element in a row we create a rowGrid to display the columns for those children
+      acc.push(...(row.length > 1 ? wrapInRowGrid(rowIdx, row.length, children) : children));
+      return acc;
+    },
+    [],
+  );
   return parentGrid(`${name}Grid`, formDefinition.form.layoutStyle, fieldChildren);
 };
 
