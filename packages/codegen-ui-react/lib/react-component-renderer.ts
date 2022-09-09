@@ -36,7 +36,6 @@ import {
   getStateName,
   getSetStateName,
   hasChildrenProp,
-  isFixedPropertyWithValue,
 } from './react-component-render-helper';
 import {
   buildOpeningElementControlEvents,
@@ -81,15 +80,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       this.importCollection.addImport(ImportSource.UI_REACT, 'Badge');
       this.importCollection.addImport(ImportSource.UI_REACT, 'ScrollView');
       this.importCollection.addImport(ImportSource.UI_REACT, 'Divider');
-      return renderArrayFieldComponent(
-        this.component.name,
-        `${
-          isFixedPropertyWithValue(this.component.properties.label)
-            ? this.component.properties.label.value
-            : this.component.name
-        }`,
-        element,
-      );
+      return renderArrayFieldComponent(this.component.name, element);
     }
 
     return element;

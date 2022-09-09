@@ -1285,16 +1285,119 @@ import { fetchByPath, validateField } from \\"./utils\\";
 import { InputGallery } from \\"../models\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
+  Badge,
   Button,
   CheckboxField,
+  Divider,
   Flex,
   Grid,
+  Icon,
   Radio,
   RadioGroupField,
+  ScrollView,
   TextField,
   ToggleButton,
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  defaultValues = [],
+  onChange,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+}) {
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [items, setItems] = React.useState(defaultValues);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+    setItems(newItems);
+  };
+  const addItem = async () => {
+    if (currentFieldValue.length && !hasError) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setItems(newItems);
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+        setItems(newItems);
+      }
+      await onChange(newItems);
+    }
+  };
+  return (
+    <React.Fragment>
+      {children}
+      <Flex justifyContent=\\"flex-end\\">
+        <Button
+          children=\\"Cancel\\"
+          type=\\"button\\"
+          onClick={() => {
+            setFieldValue(\\"\\");
+          }}
+        ></Button>
+        <Button
+          children=\\"Save\\"
+          variation=\\"primary\\"
+          isDisabled={hasError}
+          onClick={addItem}
+        ></Button>
+      </Flex>
+      {!!items.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  inputFieldRef?.current?.focus();
+                }}
+              >
+                {value}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
 export default function InputGalleryCreateForm(props) {
   const {
     onSubmitBefore,
@@ -1314,6 +1417,9 @@ export default function InputGalleryCreateForm(props) {
   const [ippy, setIppy] = React.useState(undefined);
   const [timeisnow, setTimeisnow] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
+  const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
+    React.useState(\\"\\");
+  const arrayTypeFieldRef = React.createRef();
   const validations = {
     num: [],
     rootbeer: [],
@@ -1516,19 +1622,32 @@ export default function InputGalleryCreateForm(props) {
           templateColumns=\\"repeat(1, auto)\\"
           {...getOverrideProps(overrides, \\"RowGrid5\\")}
         >
-          <TextField
-            label=\\"Array type field\\"
-            isRequired={false}
-            isReadOnly={false}
-            onChange={async (e) => {
-              const { value } = e.target;
-              await runValidationTasks(\\"arrayTypeField\\", value);
-              setArrayTypeField(value);
+          <ArrayField
+            onChange={async (items) => {
+              setArrayTypeField(items);
+              setCurrentArrayTypeFieldValue(\\"\\");
             }}
-            errorMessage={errors.arrayTypeField?.errorMessage}
+            currentFieldValue={currentArrayTypeFieldValue}
             hasError={errors.arrayTypeField?.hasError}
-            {...getOverrideProps(overrides, \\"arrayTypeField\\")}
-          ></TextField>
+            setFieldValue={setCurrentArrayTypeFieldValue}
+            inputFieldRef={arrayTypeFieldRef}
+          >
+            <TextField
+              label=\\"Array type field\\"
+              isRequired={false}
+              isReadOnly={false}
+              onChange={async (e) => {
+                const { value } = e.target;
+                await runValidationTasks(\\"arrayTypeField\\", value);
+                setCurrentArrayTypeFieldValue(value);
+              }}
+              errorMessage={errors.arrayTypeField?.errorMessage}
+              hasError={errors.arrayTypeField?.hasError}
+              value={currentArrayTypeFieldValue}
+              ref={arrayTypeFieldRef}
+              {...getOverrideProps(overrides, \\"arrayTypeField\\")}
+            ></TextField>
+          </ArrayField>
         </Grid>
         <Grid
           columnGap=\\"inherit\\"

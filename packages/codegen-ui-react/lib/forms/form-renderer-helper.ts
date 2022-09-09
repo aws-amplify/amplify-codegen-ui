@@ -316,7 +316,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
         ),
       ),
     );
-    if (formMetadata.formActionType === 'update') {
+    if (formMetadata.formActionType === 'update' && !fieldConfig.isArray) {
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('defaultValue'),

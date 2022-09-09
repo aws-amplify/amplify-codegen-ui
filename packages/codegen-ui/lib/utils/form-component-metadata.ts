@@ -22,6 +22,7 @@ import {
   FormDefinitionElement,
   FormDefinitionInputElement,
   StudioFieldInputConfig,
+  GenericDataSchema,
 } from '../types';
 
 export const getFormFieldStateName = (formName: string) => {
@@ -32,7 +33,11 @@ function elementIsInput(element: FormDefinitionElement): element is FormDefiniti
   return element.componentType !== 'Text' && element.componentType !== 'Divider' && element.componentType !== 'Heading';
 }
 
-export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition): FormMetadata => {
+export const mapFormMetadata = (
+  form: StudioForm,
+  formDefinition: FormDefinition,
+  dataSchema?: GenericDataSchema | undefined,
+): FormMetadata => {
   const inputElementEntries = Object.entries(formDefinition.elements).filter(([, element]) => elementIsInput(element));
   return {
     id: form.id,
@@ -52,6 +57,10 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
       }
       if ('dataType' in config && config.dataType) {
         metadata.dataType = config.dataType;
+      }
+      if (form.dataType.dataSourceType === 'DataStore' && dataSchema) {
+        const modelFields = dataSchema.models[form.dataType.dataTypeName].fields;
+        metadata.isArray = modelFields[name]?.isArray;
       }
       if (form.fields[name] && 'inputType' in form.fields[name]) {
         const { inputType } = form.fields[name] as { inputType: StudioFieldInputConfig };
