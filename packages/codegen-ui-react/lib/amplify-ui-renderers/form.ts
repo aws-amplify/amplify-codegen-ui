@@ -123,20 +123,12 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
             [
               ...buildDataStoreExpression(formActionType, dataTypeName),
               factory.createIfStatement(
-                factory.createIdentifier('onSubmitComplete'),
+                factory.createIdentifier('onSuccess'),
                 factory.createBlock(
                   [
                     factory.createExpressionStatement(
-                      factory.createCallExpression(factory.createIdentifier('onSubmitComplete'), undefined, [
-                        factory.createObjectLiteralExpression(
-                          [
-                            factory.createPropertyAssignment(
-                              factory.createIdentifier('saveSuccessful'),
-                              factory.createTrue(),
-                            ),
-                          ],
-                          false,
-                        ),
+                      factory.createCallExpression(factory.createIdentifier('onSuccess'), undefined, [
+                        factory.createIdentifier('modelFields'),
                       ]),
                     ),
                   ],
@@ -152,26 +144,15 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
             factory.createBlock(
               [
                 factory.createIfStatement(
-                  factory.createIdentifier('onSubmitComplete'),
+                  factory.createIdentifier('onError'),
                   factory.createBlock(
                     [
                       factory.createExpressionStatement(
-                        factory.createCallExpression(factory.createIdentifier('onSubmitComplete'), undefined, [
-                          factory.createObjectLiteralExpression(
-                            [
-                              factory.createPropertyAssignment(
-                                factory.createIdentifier('saveSuccessful'),
-                                factory.createFalse(),
-                              ),
-                              factory.createPropertyAssignment(
-                                factory.createIdentifier('errorMessage'),
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('err'),
-                                  factory.createIdentifier('message'),
-                                ),
-                              ),
-                            ],
-                            false,
+                        factory.createCallExpression(factory.createIdentifier('onError'), undefined, [
+                          factory.createIdentifier('modelFields'),
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('err'),
+                            factory.createIdentifier('message'),
                           ),
                         ]),
                       ),

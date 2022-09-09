@@ -600,8 +600,9 @@ import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
   const {
-    onSubmitBefore,
-    onSubmitComplete,
+    onSubmit,
+    onSuccess,
+    onError,
     onCancel,
     onValidate,
     overrides,
@@ -661,15 +662,12 @@ export default function MyPostForm(props) {
         }
         try {
           await DataStore.save(new Post(modelFields));
-          if (onSubmitComplete) {
-            onSubmitComplete({ saveSuccessful: true });
+          if (onSuccess) {
+            onSuccess(modelFields);
           }
         } catch (err) {
-          if (onSubmitComplete) {
-            onSubmitComplete({
-              saveSuccessful: false,
-              errorMessage: err.message,
-            });
+          if (onError) {
+            onError(modelFields, err.message);
           }
         }
       }}
@@ -795,11 +793,9 @@ export declare type MyPostFormOverridesProps = {
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
 } & {
-    onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
-    onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
-        saveSuccessful: boolean;
-        errorMessage?: string;
-    }) => void;
+    onSubmit?: (fields: Record<string, unknown>) => Record<string, unknown>;
+    onSuccess?: (fields: Record<string, unknown>) => void;
+    onError?: (fields: Record<string, unknown>, errorMessage: string) => void;
     onCancel?: () => void;
     onValidate?: MyPostFormInputValues;
 }>;
@@ -825,8 +821,9 @@ export default function MyPostForm(props) {
   const {
     id,
     post,
-    onSubmitBefore,
-    onSubmitComplete,
+    onSubmit,
+    onSuccess,
+    onError,
     onCancel,
     onValidate,
     overrides,
@@ -907,15 +904,12 @@ export default function MyPostForm(props) {
               Object.assign(updated, modelFields);
             })
           );
-          if (onSubmitComplete) {
-            onSubmitComplete({ saveSuccessful: true });
+          if (onSuccess) {
+            onSuccess(modelFields);
           }
         } catch (err) {
-          if (onSubmitComplete) {
-            onSubmitComplete({
-              saveSuccessful: false,
-              errorMessage: err.message,
-            });
+          if (onError) {
+            onError(modelFields, err.message);
           }
         }
       }}
@@ -1090,11 +1084,9 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
 } & {
     id?: string;
     post?: Post;
-    onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
-    onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
-        saveSuccessful: boolean;
-        errorMessage?: string;
-    }) => void;
+    onSubmit?: (fields: Record<string, unknown>) => Record<string, unknown>;
+    onSuccess?: (fields: Record<string, unknown>) => void;
+    onError?: (fields: Record<string, unknown>, errorMessage: string) => void;
     onCancel?: () => void;
     onValidate?: MyPostFormInputValues;
 }>;
@@ -1121,8 +1113,9 @@ import {
 import { DataStore } from \\"aws-amplify\\";
 export default function InputGalleryCreateForm(props) {
   const {
-    onSubmitBefore,
-    onSubmitComplete,
+    onSubmit,
+    onSuccess,
+    onError,
     onCancel,
     onValidate,
     overrides,
@@ -1197,15 +1190,12 @@ export default function InputGalleryCreateForm(props) {
         }
         try {
           await DataStore.save(new InputGallery(modelFields));
-          if (onSubmitComplete) {
-            onSubmitComplete({ saveSuccessful: true });
+          if (onSuccess) {
+            onSuccess(modelFields);
           }
         } catch (err) {
-          if (onSubmitComplete) {
-            onSubmitComplete({
-              saveSuccessful: false,
-              errorMessage: err.message,
-            });
+          if (onError) {
+            onError(modelFields, err.message);
           }
         }
       }}
@@ -1424,11 +1414,9 @@ export declare type InputGalleryCreateFormOverridesProps = {
 export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
     overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
 } & {
-    onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
-    onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
-        saveSuccessful: boolean;
-        errorMessage?: string;
-    }) => void;
+    onSubmit?: (fields: Record<string, unknown>) => Record<string, unknown>;
+    onSuccess?: (fields: Record<string, unknown>) => void;
+    onError?: (fields: Record<string, unknown>, errorMessage: string) => void;
     onCancel?: () => void;
     onValidate?: InputGalleryCreateFormInputValues;
 }>;

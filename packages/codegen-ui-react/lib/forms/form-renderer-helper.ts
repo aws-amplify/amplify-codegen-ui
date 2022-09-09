@@ -62,8 +62,9 @@ export const buildMutationBindings = (form: StudioForm) => {
       );
     }
     elements.push(
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmitBefore'), undefined),
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmitComplete'), undefined),
+      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmit'), undefined),
+      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSuccess'), undefined),
+      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onError'), undefined),
     );
   } else {
     elements.push(
@@ -80,10 +81,11 @@ export const buildMutationBindings = (form: StudioForm) => {
 };
 
 /*
-    generate params in typed props
-    - datastore (onSubmitBefore(fields) & onSubmitComplete({saveSuccessful, errorMessage}))
-     - if update include id
-    - custom (onSubmit(fields))
+    both datastore & custom datasource has onSubmit with the fields
+    - onSubmit(fields)
+    datastore includes additional hooks
+    - onSuccess(fields)
+    - onError(fields, errorMessage)
    */
 export const buildFormPropNode = (form: StudioForm) => {
   const {
@@ -111,7 +113,7 @@ export const buildFormPropNode = (form: StudioForm) => {
     propSignatures.push(
       factory.createPropertySignature(
         undefined,
-        'onSubmitBefore',
+        'onSubmit',
         factory.createToken(SyntaxKind.QuestionToken),
         factory.createFunctionTypeNode(
           undefined,
@@ -124,20 +126,20 @@ export const buildFormPropNode = (form: StudioForm) => {
               undefined,
               factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
                 factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
               ]),
               undefined,
             ),
           ],
           factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
             factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-            factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+            factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
           ]),
         ),
       ),
       factory.createPropertySignature(
         undefined,
-        'onSubmitComplete',
+        'onSuccess',
         factory.createToken(SyntaxKind.QuestionToken),
         factory.createFunctionTypeNode(
           undefined,
@@ -146,30 +148,44 @@ export const buildFormPropNode = (form: StudioForm) => {
               undefined,
               undefined,
               undefined,
-              factory.createObjectBindingPattern([
-                factory.createBindingElement(
-                  undefined,
-                  undefined,
-                  factory.createIdentifier('saveSuccessful'),
-                  undefined,
-                ),
-                factory.createBindingElement(undefined, undefined, factory.createIdentifier('errorMessage'), undefined),
+              factory.createIdentifier('fields'),
+              undefined,
+              factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
+                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
               ]),
               undefined,
-              factory.createTypeLiteralNode([
-                factory.createPropertySignature(
-                  undefined,
-                  'saveSuccessful',
-                  undefined,
-                  factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-                ),
-                factory.createPropertySignature(
-                  undefined,
-                  'errorMessage',
-                  factory.createToken(SyntaxKind.QuestionToken),
-                  factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-                ),
+            ),
+          ],
+          factory.createKeywordTypeNode(SyntaxKind.VoidKeyword),
+        ),
+      ),
+      factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier('onError'),
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createFunctionTypeNode(
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('fields'),
+              undefined,
+              factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
+                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
               ]),
+              undefined,
+            ),
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('errorMessage'),
+              undefined,
+              factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
               undefined,
             ),
           ],
