@@ -612,16 +612,18 @@ export const buildOverrideTypesBindings = (
   ];
 
   formDefinition.elementMatrix.forEach((row, index) => {
-    typeNodes.push(
-      factory.createPropertySignature(
-        undefined,
-        factory.createIdentifier(`RowGrid${index}`),
-        factory.createToken(SyntaxKind.QuestionToken),
-        factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
-          factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
-        ]),
-      ),
-    );
+    if (row.length > 1) {
+      typeNodes.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier(`RowGrid${index}`),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+            factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+          ]),
+        ),
+      );
+    }
     row.forEach((field) => {
       const propKey =
         field.split('.').length > 1 ? factory.createStringLiteral(field) : factory.createIdentifier(field);
