@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ValidationTypes } from '@aws-amplify/codegen-ui/lib/types/form/form-validation';
+import { FieldValidationConfiguration, ValidationTypes } from '@aws-amplify/codegen-ui/lib/types/form/form-validation';
 import { validateField } from '../../utils/forms/validation';
 
 describe('validateField tests', () => {
@@ -41,14 +41,13 @@ describe('validateField tests', () => {
     });
     expect(
       validateField('aardvark', [{ type: ValidationTypes.START_WITH, strValues: ['a', 'b'], validationMessage: '' }]),
-    ).toEqual({ hasError: false, errorMessage: 'The value must start with a, b' });
+    ).toEqual({ hasError: false });
   });
   it('should validate END_WITH type', () => {
     expect(
       validateField('abc', [{ type: ValidationTypes.END_WITH, strValues: ['c'], validationMessage: 'test' }]),
     ).toEqual({
       hasError: false,
-      errorMessage: 'test',
     });
     expect(
       validateField('abc', [{ type: ValidationTypes.END_WITH, strValues: ['e', 'f'], validationMessage: '' }]),
@@ -61,12 +60,11 @@ describe('validateField tests', () => {
     expect(validateField('abc', [{ type: ValidationTypes.CONTAINS, strValues: ['a'], validationMessage: '' }])).toEqual(
       {
         hasError: false,
-        errorMessage: 'The value must contain a',
       },
     );
     expect(
       validateField('abcd', [{ type: ValidationTypes.CONTAINS, strValues: ['a', 'e'], validationMessage: '' }]),
-    ).toEqual({ hasError: false, errorMessage: 'The value must contain a, e' });
+    ).toEqual({ hasError: false });
     expect(
       validateField('abc', [{ type: ValidationTypes.CONTAINS, strValues: ['d'], validationMessage: 'test' }]),
     ).toEqual({ hasError: true, errorMessage: 'test' });
@@ -74,7 +72,7 @@ describe('validateField tests', () => {
   it('should validate NOT_CONTAINS type', () => {
     expect(
       validateField('abc', [{ type: ValidationTypes.NOT_CONTAINS, strValues: ['4'], validationMessage: '' }]),
-    ).toEqual({ hasError: false, errorMessage: 'The value must not contain 4' });
+    ).toEqual({ hasError: false });
     expect(
       validateField('abc', [{ type: ValidationTypes.NOT_CONTAINS, strValues: ['d', 'a'], validationMessage: '' }]),
     ).toEqual({ hasError: true, errorMessage: 'The value must not contain d, a' });
@@ -87,7 +85,7 @@ describe('validateField tests', () => {
   it('should validate LESS_THAN_CHAR_LENGTH type', () => {
     expect(
       validateField('123', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [4], validationMessage: '' }]),
-    ).toEqual({ hasError: false, errorMessage: 'The value must be shorter than 4' });
+    ).toEqual({ hasError: false });
     expect(
       validateField('', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [3], validationMessage: '' }]),
     ).toEqual({ hasError: false });
@@ -98,7 +96,7 @@ describe('validateField tests', () => {
   it('should validate GREATER_THAN_CHAR_LENGTH type', () => {
     expect(
       validateField('123', [{ type: ValidationTypes.GREATER_THAN_CHAR_LENGTH, numValues: [0], validationMessage: '' }]),
-    ).toEqual({ hasError: false, errorMessage: 'The value must be longer than 0' });
+    ).toEqual({ hasError: false });
     expect(
       validateField('', [{ type: ValidationTypes.GREATER_THAN_CHAR_LENGTH, numValues: [3], validationMessage: '' }]),
     ).toEqual({ hasError: false });
@@ -112,7 +110,6 @@ describe('validateField tests', () => {
     expect(validateField(1, [{ type: ValidationTypes.LESS_THAN_NUM, numValues: [10], validationMessage: '' }])).toEqual(
       {
         hasError: false,
-        errorMessage: 'The value must be less than 10',
       },
     );
     expect(validateField(2, [{ type: ValidationTypes.LESS_THAN_NUM, numValues: [1], validationMessage: '' }])).toEqual({
@@ -131,7 +128,6 @@ describe('validateField tests', () => {
       validateField(1, [{ type: ValidationTypes.GREATER_THAN_NUM, numValues: [0], validationMessage: '' }]),
     ).toEqual({
       hasError: false,
-      errorMessage: 'The value must be greater than 0',
     });
     expect(
       validateField(2, [{ type: ValidationTypes.GREATER_THAN_NUM, numValues: [3], validationMessage: '' }]),
@@ -148,7 +144,6 @@ describe('validateField tests', () => {
       validateField(1, [{ type: ValidationTypes.EQUAL_TO_NUM, numValues: [1, 2], validationMessage: '' }]),
     ).toEqual({
       hasError: false,
-      errorMessage: 'The value must be equal to 1 or 2',
     });
     expect(validateField(2, [{ type: ValidationTypes.EQUAL_TO_NUM, numValues: [3], validationMessage: '' }])).toEqual({
       hasError: true,
@@ -164,7 +159,7 @@ describe('validateField tests', () => {
     const endDate2 = new Date('3000-01-09').toDateString();
     expect(
       validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [endDate1], validationMessage: '' }]),
-    ).toEqual({ hasError: false, errorMessage: `The value must be after ${endDate1}` });
+    ).toEqual({ hasError: false });
     expect(
       validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [endDate2], validationMessage: '' }]),
     ).toEqual({ hasError: true, errorMessage: `The value must be after ${endDate2}` });
@@ -178,7 +173,7 @@ describe('validateField tests', () => {
       validateField(startTime, [
         { type: ValidationTypes.BE_AFTER, strValues: [endTime1.toString()], validationMessage: '' },
       ]),
-    ).toEqual({ hasError: false, errorMessage: `The value must be after ${endTime1}` });
+    ).toEqual({ hasError: false });
     expect(
       validateField(endTime1, [
         { type: ValidationTypes.BE_AFTER, strValues: [startTime.toString()], validationMessage: '' },
@@ -199,7 +194,7 @@ describe('validateField tests', () => {
       validateField(startDate, [
         { type: ValidationTypes.BE_BEFORE, strValues: [endDate1.toString()], validationMessage: '' },
       ]),
-    ).toEqual({ hasError: false, errorMessage: `The value must be before ${endDate1}` });
+    ).toEqual({ hasError: false });
     expect(
       validateField(startDate, [
         { type: ValidationTypes.BE_BEFORE, strValues: [endDate2.toString()], validationMessage: '' },
@@ -217,7 +212,7 @@ describe('validateField tests', () => {
       validateField(startTime, [
         { type: ValidationTypes.BE_BEFORE, strValues: [endTime1.toString()], validationMessage: '' },
       ]),
-    ).toEqual({ hasError: false, errorMessage: `The value must be before ${endTime1}` });
+    ).toEqual({ hasError: false });
     expect(
       validateField(endTime1, [
         { type: ValidationTypes.BE_BEFORE, strValues: [startTime.toString()], validationMessage: '' },
@@ -232,7 +227,6 @@ describe('validateField tests', () => {
   it('should validate EMAIL type', () => {
     expect(validateField('ab-cd@amazon.com', [{ type: ValidationTypes.EMAIL, validationMessage: '' }])).toEqual({
       hasError: false,
-      errorMessage: 'The value must be a valid email address',
     });
     expect(validateField('@amazon.com', [{ type: ValidationTypes.EMAIL, validationMessage: '' }])).toEqual({
       hasError: true,
@@ -246,11 +240,9 @@ describe('validateField tests', () => {
   it('should validate JSON type', () => {
     expect(validateField('{}', [{ type: ValidationTypes.JSON, validationMessage: '' }])).toEqual({
       hasError: false,
-      errorMessage: 'The value must be in a correct JSON format',
     });
     expect(validateField('{"name": "test"}', [{ type: ValidationTypes.JSON, validationMessage: '' }])).toEqual({
       hasError: false,
-      errorMessage: 'The value must be in a correct JSON format',
     });
     expect(validateField('\\\\', [{ type: ValidationTypes.JSON, validationMessage: 'test' }])).toEqual({
       hasError: true,
@@ -263,13 +255,12 @@ describe('validateField tests', () => {
   it('should validate IP_ADDRESS type', () => {
     expect(validateField('192.168.1.1', [{ type: ValidationTypes.IP_ADDRESS, validationMessage: '' }])).toEqual({
       hasError: false,
-      errorMessage: 'The value must be an IPv4 or IPv6 address',
     });
     expect(
       validateField('2001:0db8:85a3:0000:0000:8a2e:0370:7334', [
         { type: ValidationTypes.IP_ADDRESS, validationMessage: '' },
       ]),
-    ).toEqual({ hasError: false, errorMessage: 'The value must be an IPv4 or IPv6 address' });
+    ).toEqual({ hasError: false });
     expect(validateField('1.1', [{ type: ValidationTypes.IP_ADDRESS, validationMessage: 'test' }])).toEqual({
       hasError: true,
       errorMessage: 'test',
@@ -281,11 +272,9 @@ describe('validateField tests', () => {
   it('should validate URL type', () => {
     expect(validateField('http://amazon.com', [{ type: ValidationTypes.URL, validationMessage: '' }])).toEqual({
       hasError: false,
-      errorMessage: 'The value must be a valid URL that begins with a schema (i.e. http:// or mailto:)',
     });
     expect(validateField('mailto:amazon.com', [{ type: ValidationTypes.URL, validationMessage: '' }])).toEqual({
       hasError: false,
-      errorMessage: 'The value must be a valid URL that begins with a schema (i.e. http:// or mailto:)',
     });
     expect(validateField('.amazon.com', [{ type: ValidationTypes.URL, validationMessage: '' }])).toEqual({
       hasError: true,
@@ -305,22 +294,37 @@ describe('validateField tests', () => {
 
     expect(validateField('2938493029', [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
       hasError: false,
-      errorMessage: 'test',
     });
 
     expect(validateField('293 849 3029', [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
       hasError: false,
-      errorMessage: 'test',
     });
 
     expect(validateField('293-849-3029', [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
       hasError: false,
-      errorMessage: 'test',
     });
 
     expect(validateField('293 849-3029', [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
       hasError: false,
-      errorMessage: 'test',
+    });
+  });
+
+  it('should test value against all configured validations', () => {
+    const validationList: FieldValidationConfiguration[] = [
+      { type: ValidationTypes.START_WITH, strValues: ['he'], validationMessage: 'startFailed' },
+      { type: ValidationTypes.END_WITH, strValues: ['o'], validationMessage: 'endFailed' },
+    ];
+
+    expect(validateField('hello', validationList)).toEqual({
+      hasError: false,
+    });
+    expect(validateField('hey', validationList)).toEqual({
+      hasError: true,
+      errorMessage: 'endFailed',
+    });
+    expect(validateField('yes', validationList)).toEqual({
+      hasError: true,
+      errorMessage: 'startFailed',
     });
   });
 });
