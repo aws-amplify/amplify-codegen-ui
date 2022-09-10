@@ -88,9 +88,12 @@ export default function CustomDataForm(props) {
           defaultValue=\\"John Doe\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"name\\", value);
+            if (errors.name?.hasError) {
+              await runValidationTasks(\\"name\\", value);
+            }
             setName(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"name\\", name)}
           errorMessage={errors.name?.errorMessage}
           hasError={errors.name?.hasError}
           {...getOverrideProps(overrides, \\"name\\")}
@@ -101,9 +104,12 @@ export default function CustomDataForm(props) {
           defaultValue=\\"johndoe@amplify.com\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"email\\", value);
+            if (errors.email?.hasError) {
+              await runValidationTasks(\\"email\\", value);
+            }
             setEmail(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"email\\", email)}
           errorMessage={errors.email?.errorMessage}
           hasError={errors.email?.hasError}
           {...getOverrideProps(overrides, \\"email\\")}
@@ -112,9 +118,12 @@ export default function CustomDataForm(props) {
           label=\\"Label\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"city\\", value);
+            if (errors.city?.hasError) {
+              await runValidationTasks(\\"city\\", value);
+            }
             setCity(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"city\\", city)}
           errorMessage={errors.city?.errorMessage}
           hasError={errors.city?.hasError}
           {...getOverrideProps(overrides, \\"city\\")}
@@ -142,9 +151,12 @@ export default function CustomDataForm(props) {
           defaultValue=\\"Hobbies\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"category\\", value);
+            if (errors.category?.hasError) {
+              await runValidationTasks(\\"category\\", value);
+            }
             setCategory(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"category\\", category)}
           errorMessage={errors.category?.errorMessage}
           hasError={errors.category?.hasError}
           {...getOverrideProps(overrides, \\"category\\")}
@@ -310,9 +322,12 @@ export default function NestedJson(props) {
           label=\\"firstName\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"firstName\\", value);
+            if (errors.firstName?.hasError) {
+              await runValidationTasks(\\"firstName\\", value);
+            }
             setFirstName(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"firstName\\", firstName)}
           errorMessage={errors.firstName?.errorMessage}
           hasError={errors.firstName?.hasError}
           {...getOverrideProps(overrides, \\"firstName\\")}
@@ -321,9 +336,12 @@ export default function NestedJson(props) {
           label=\\"lastName\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"lastName\\", value);
+            if (errors.lastName?.hasError) {
+              await runValidationTasks(\\"lastName\\", value);
+            }
             setLastName(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"lastName\\", lastName)}
           errorMessage={errors.lastName?.errorMessage}
           hasError={errors.lastName?.hasError}
           {...getOverrideProps(overrides, \\"lastName\\")}
@@ -337,9 +355,14 @@ export default function NestedJson(props) {
           label=\\"favoriteQuote\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"bio.favoriteQuote\\", value);
+            if (errors.bio.favoriteQuote?.hasError) {
+              await runValidationTasks(\\"bio.favoriteQuote\\", value);
+            }
             setBio({ ...bio, favoriteQuote: value });
           }}
+          onBlur={async () =>
+            await runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
+          }
           errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
           hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
           {...getOverrideProps(overrides, \\"bio.favoriteQuote\\")}
@@ -348,9 +371,14 @@ export default function NestedJson(props) {
           label=\\"favoriteAnimal\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"bio.favoriteAnimal\\", value);
+            if (errors.bio.favoriteAnimal?.hasError) {
+              await runValidationTasks(\\"bio.favoriteAnimal\\", value);
+            }
             setBio({ ...bio, favoriteAnimal: value });
           }}
+          onBlur={async () =>
+            await runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
+          }
           errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
           hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
           {...getOverrideProps(overrides, \\"bio.favoriteAnimal\\")}
@@ -509,9 +537,12 @@ export default function CustomWithSectionalElements(props) {
           label=\\"Label\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"name\\", value);
+            if (errors.name?.hasError) {
+              await runValidationTasks(\\"name\\", value);
+            }
             setName(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"name\\", name)}
           errorMessage={errors.name?.errorMessage}
           hasError={errors.name?.hasError}
           {...getOverrideProps(overrides, \\"name\\")}
@@ -716,9 +747,12 @@ export default function MyPostForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"caption\\", value);
+            if (errors.caption?.hasError) {
+              await runValidationTasks(\\"caption\\", value);
+            }
             setCaption(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"caption\\", caption)}
           errorMessage={errors.caption?.errorMessage}
           hasError={errors.caption?.hasError}
           {...getOverrideProps(overrides, \\"caption\\")}
@@ -729,9 +763,12 @@ export default function MyPostForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"username\\", value);
+            if (errors.username?.hasError) {
+              await runValidationTasks(\\"username\\", value);
+            }
             setUsername(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"username\\", username)}
           errorMessage={errors.username?.errorMessage}
           hasError={errors.username?.hasError}
           {...getOverrideProps(overrides, \\"username\\")}
@@ -742,9 +779,12 @@ export default function MyPostForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"post_url\\", value);
+            if (errors.post_url?.hasError) {
+              await runValidationTasks(\\"post_url\\", value);
+            }
             setPost_url(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"post_url\\", post_url)}
           errorMessage={errors.post_url?.errorMessage}
           hasError={errors.post_url?.hasError}
           {...getOverrideProps(overrides, \\"post_url\\")}
@@ -755,9 +795,14 @@ export default function MyPostForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"profile_url\\", value);
+            if (errors.profile_url?.hasError) {
+              await runValidationTasks(\\"profile_url\\", value);
+            }
             setProfile_url(value);
           }}
+          onBlur={async () =>
+            await runValidationTasks(\\"profile_url\\", profile_url)
+          }
           errorMessage={errors.profile_url?.errorMessage}
           hasError={errors.profile_url?.hasError}
           {...getOverrideProps(overrides, \\"profile_url\\")}
@@ -960,9 +1005,17 @@ export default function MyPostForm(props) {
           label=\\"Label\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"TextAreaFieldbbd63464\\", value);
+            if (errors.TextAreaFieldbbd63464?.hasError) {
+              await runValidationTasks(\\"TextAreaFieldbbd63464\\", value);
+            }
             setTextAreaFieldbbd63464(value);
           }}
+          onBlur={async () =>
+            await runValidationTasks(
+              \\"TextAreaFieldbbd63464\\",
+              TextAreaFieldbbd63464
+            )
+          }
           errorMessage={errors.TextAreaFieldbbd63464?.errorMessage}
           hasError={errors.TextAreaFieldbbd63464?.hasError}
           defaultValue={TextAreaFieldbbd63464}
@@ -974,9 +1027,12 @@ export default function MyPostForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"caption\\", value);
+            if (errors.caption?.hasError) {
+              await runValidationTasks(\\"caption\\", value);
+            }
             setCaption(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"caption\\", caption)}
           errorMessage={errors.caption?.errorMessage}
           hasError={errors.caption?.hasError}
           defaultValue={caption}
@@ -988,9 +1044,12 @@ export default function MyPostForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"username\\", value);
+            if (errors.username?.hasError) {
+              await runValidationTasks(\\"username\\", value);
+            }
             setUsername(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"username\\", username)}
           errorMessage={errors.username?.errorMessage}
           hasError={errors.username?.hasError}
           defaultValue={username}
@@ -1002,9 +1061,14 @@ export default function MyPostForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"profile_url\\", value);
+            if (errors.profile_url?.hasError) {
+              await runValidationTasks(\\"profile_url\\", value);
+            }
             setProfile_url(value);
           }}
+          onBlur={async () =>
+            await runValidationTasks(\\"profile_url\\", profile_url)
+          }
           errorMessage={errors.profile_url?.errorMessage}
           hasError={errors.profile_url?.hasError}
           defaultValue={profile_url}
@@ -1016,9 +1080,12 @@ export default function MyPostForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"post_url\\", value);
+            if (errors.post_url?.hasError) {
+              await runValidationTasks(\\"post_url\\", value);
+            }
             setPost_url(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"post_url\\", post_url)}
           errorMessage={errors.post_url?.errorMessage}
           hasError={errors.post_url?.hasError}
           defaultValue={post_url}
@@ -1225,9 +1292,12 @@ export default function InputGalleryCreateForm(props) {
           type=\\"number\\"
           onChange={async (e) => {
             const value = parseInt(e.target.value);
-            await runValidationTasks(\\"num\\", value);
+            if (errors.num?.hasError) {
+              await runValidationTasks(\\"num\\", value);
+            }
             setNum(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"num\\", num)}
           errorMessage={errors.num?.errorMessage}
           hasError={errors.num?.hasError}
           {...getOverrideProps(overrides, \\"num\\")}
@@ -1239,9 +1309,12 @@ export default function InputGalleryCreateForm(props) {
           type=\\"number\\"
           onChange={async (e) => {
             const value = Number(e.target.value);
-            await runValidationTasks(\\"rootbeer\\", value);
+            if (errors.rootbeer?.hasError) {
+              await runValidationTasks(\\"rootbeer\\", value);
+            }
             setRootbeer(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"rootbeer\\", rootbeer)}
           errorMessage={errors.rootbeer?.errorMessage}
           hasError={errors.rootbeer?.hasError}
           {...getOverrideProps(overrides, \\"rootbeer\\")}
@@ -1253,9 +1326,12 @@ export default function InputGalleryCreateForm(props) {
           isRequired=\\"false\\"
           onChange={async (e) => {
             const value = e.target.value === \\"true\\";
-            await runValidationTasks(\\"attend\\", value);
+            if (errors.attend?.hasError) {
+              await runValidationTasks(\\"attend\\", value);
+            }
             setAttend(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"attend\\", attend)}
           errorMessage={errors.attend?.errorMessage}
           hasError={errors.attend?.hasError}
           {...getOverrideProps(overrides, \\"attend\\")}
@@ -1277,9 +1353,14 @@ export default function InputGalleryCreateForm(props) {
           defaultPressed={false}
           onChange={async (e) => {
             const value = e.target.checked;
-            await runValidationTasks(\\"maybeSlide\\", value);
+            if (errors.maybeSlide?.hasError) {
+              await runValidationTasks(\\"maybeSlide\\", value);
+            }
             setMaybeSlide(value);
           }}
+          onBlur={async () =>
+            await runValidationTasks(\\"maybeSlide\\", maybeSlide)
+          }
           errorMessage={errors.maybeSlide?.errorMessage}
           hasError={errors.maybeSlide?.hasError}
           {...getOverrideProps(overrides, \\"maybeSlide\\")}
@@ -1292,9 +1373,14 @@ export default function InputGalleryCreateForm(props) {
           defaultChecked={false}
           onChange={async (e) => {
             const value = e.target.checked;
-            await runValidationTasks(\\"maybeCheck\\", value);
+            if (errors.maybeCheck?.hasError) {
+              await runValidationTasks(\\"maybeCheck\\", value);
+            }
             setMaybeCheck(value);
           }}
+          onBlur={async () =>
+            await runValidationTasks(\\"maybeCheck\\", maybeCheck)
+          }
           errorMessage={errors.maybeCheck?.errorMessage}
           hasError={errors.maybeCheck?.hasError}
           {...getOverrideProps(overrides, \\"maybeCheck\\")}
@@ -1305,9 +1391,14 @@ export default function InputGalleryCreateForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"arrayTypeField\\", value);
+            if (errors.arrayTypeField?.hasError) {
+              await runValidationTasks(\\"arrayTypeField\\", value);
+            }
             setArrayTypeField(value);
           }}
+          onBlur={async () =>
+            await runValidationTasks(\\"arrayTypeField\\", arrayTypeField)
+          }
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
           {...getOverrideProps(overrides, \\"arrayTypeField\\")}
@@ -1319,9 +1410,12 @@ export default function InputGalleryCreateForm(props) {
           type=\\"datetime-local\\"
           onChange={async (e) => {
             const value = Number(new Date(e.target.value));
-            await runValidationTasks(\\"timestamp\\", value);
+            if (errors.timestamp?.hasError) {
+              await runValidationTasks(\\"timestamp\\", value);
+            }
             setTimestamp(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"timestamp\\", timestamp)}
           errorMessage={errors.timestamp?.errorMessage}
           hasError={errors.timestamp?.hasError}
           {...getOverrideProps(overrides, \\"timestamp\\")}
@@ -1332,9 +1426,12 @@ export default function InputGalleryCreateForm(props) {
           isReadOnly={false}
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"ippy\\", value);
+            if (errors.ippy?.hasError) {
+              await runValidationTasks(\\"ippy\\", value);
+            }
             setIppy(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"ippy\\", ippy)}
           errorMessage={errors.ippy?.errorMessage}
           hasError={errors.ippy?.hasError}
           {...getOverrideProps(overrides, \\"ippy\\")}
@@ -1346,9 +1443,12 @@ export default function InputGalleryCreateForm(props) {
           type=\\"time\\"
           onChange={async (e) => {
             const { value } = e.target;
-            await runValidationTasks(\\"timeisnow\\", value);
+            if (errors.timeisnow?.hasError) {
+              await runValidationTasks(\\"timeisnow\\", value);
+            }
             setTimeisnow(value);
           }}
+          onBlur={async () => await runValidationTasks(\\"timeisnow\\", timeisnow)}
           errorMessage={errors.timeisnow?.errorMessage}
           hasError={errors.timeisnow?.hasError}
           {...getOverrideProps(overrides, \\"timeisnow\\")}

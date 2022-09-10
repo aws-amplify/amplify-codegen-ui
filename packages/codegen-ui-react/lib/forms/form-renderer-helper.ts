@@ -292,6 +292,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
             factory.createIdentifier(component.name),
           );
     attributes.push(buildOnChangeStatement(component, fieldConfig));
+    attributes.push(buildOnBlurStatement(component.name));
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('errorMessage'),
@@ -421,6 +422,57 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
   return attributes;
 };
 
+/**
+  if (errors.name?.hasError) {
+    await runValidationTasks("name", value);
+  }
+ */
+function getOnChangeValidationBlock(fieldName: string) {
+  return factory.createIfStatement(
+    factory.createPropertyAccessChain(
+      factory.createPropertyAccessExpression(factory.createIdentifier('errors'), factory.createIdentifier(fieldName)),
+      factory.createToken(SyntaxKind.QuestionDotToken),
+      factory.createIdentifier('hasError'),
+    ),
+    factory.createBlock(
+      [
+        factory.createExpressionStatement(
+          factory.createAwaitExpression(
+            factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+              factory.createStringLiteral(fieldName),
+              factory.createIdentifier('value'),
+            ]),
+          ),
+        ),
+      ],
+      true,
+    ),
+    undefined,
+  );
+}
+
+export function buildOnBlurStatement(fieldName: string) {
+  return factory.createJsxAttribute(
+    factory.createIdentifier('onBlur'),
+    factory.createJsxExpression(
+      undefined,
+      factory.createArrowFunction(
+        [factory.createModifier(SyntaxKind.AsyncKeyword)],
+        undefined,
+        [],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createAwaitExpression(
+          factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+            factory.createStringLiteral(fieldName),
+            factory.createIdentifier(fieldName),
+          ]),
+        ),
+      ),
+    ),
+  );
+}
+
 export const buildOnChangeStatement = (
   component: StudioComponent | StudioComponentChild,
   fieldConfig: FieldConfigMetadata,
@@ -451,14 +503,7 @@ export const buildOnChangeStatement = (
           factory.createBlock(
             [
               buildTargetVariable(fieldType, dataType),
-              factory.createExpressionStatement(
-                factory.createAwaitExpression(
-                  factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
-                    factory.createStringLiteral(fieldName),
-                    factory.createIdentifier('value'),
-                  ]),
-                ),
-              ),
+              getOnChangeValidationBlock(fieldName),
               factory.createExpressionStatement(
                 factory.createCallExpression(
                   factory.createIdentifier(`setCurrent${capitalizeFirstLetter(fieldName)}Value`),
@@ -496,14 +541,7 @@ export const buildOnChangeStatement = (
         factory.createBlock(
           [
             buildTargetVariable(fieldType, fieldConfig.dataType),
-            factory.createExpressionStatement(
-              factory.createAwaitExpression(
-                factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
-                  factory.createStringLiteral(fieldName),
-                  factory.createIdentifier('value'),
-                ]),
-              ),
-            ),
+            getOnChangeValidationBlock(fieldName),
             factory.createExpressionStatement(setFieldState(fieldName, factory.createIdentifier('value'))),
           ],
           true,
