@@ -12,7 +12,7 @@ exports[`form-render utils should generate before & complete types if datastore 
 
 exports[`form-render utils should generate regular onsubmit if dataSourceType is custom 1`] = `
 "{
-    onSubmit: (fields: Record<string, string>) => void;
+    onSubmit: (fields: Record<string, unknown>) => void;
     onCancel?: () => void;
     onValidate?: myCustomFormInputValues;
 }"

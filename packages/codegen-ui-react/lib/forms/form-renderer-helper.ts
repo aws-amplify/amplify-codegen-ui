@@ -38,7 +38,6 @@ import {
 } from 'typescript';
 import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
-import { getActionIdentifier } from '../workflow';
 import { buildTargetVariable } from './event-targets';
 import { buildOnValidateType } from './type-helper';
 import { capitalizeFirstLetter, setFieldState } from './form-state';
@@ -52,6 +51,7 @@ export const buildMutationBindings = (form: StudioForm) => {
   if (dataSourceType === 'DataStore') {
     if (formActionType === 'update') {
       elements.push(
+        // TODO: change once cpk is supported in datastore
         factory.createBindingElement(undefined, undefined, factory.createIdentifier('id'), undefined),
         factory.createBindingElement(
           undefined,
@@ -62,20 +62,11 @@ export const buildMutationBindings = (form: StudioForm) => {
       );
     }
     elements.push(
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmit'), undefined),
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSuccess'), undefined),
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onError'), undefined),
     );
-  } else {
-    elements.push(
-      factory.createBindingElement(
-        undefined,
-        factory.createIdentifier('onSubmit'),
-        getActionIdentifier(form.name, 'onSubmit'), // custom onsubmit function with the name of the form
-        undefined,
-      ),
-    );
   }
+  elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmit'), undefined));
   elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onCancel'), undefined));
   return elements;
 };
@@ -211,7 +202,7 @@ export const buildFormPropNode = (form: StudioForm) => {
               undefined,
               factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
                 factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
               ]),
               undefined,
             ),
