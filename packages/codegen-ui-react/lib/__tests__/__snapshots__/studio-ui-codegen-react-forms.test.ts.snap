@@ -15,13 +15,7 @@ import {
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 export default function CustomDataForm(props) {
-  const {
-    onSubmit: customDataFormOnSubmit,
-    onCancel,
-    onValidate,
-    overrides,
-    ...rest
-  } = props;
+  const { onSubmit, onCancel, onValidate, overrides, ...rest } = props;
   const [name, setName] = React.useState(undefined);
   const [email, setEmail] = React.useState(undefined);
   const [city, setCity] = React.useState(undefined);
@@ -75,7 +69,7 @@ export default function CustomDataForm(props) {
         if (validationResponses.some((r) => r.hasError)) {
           return;
         }
-        await customDataFormOnSubmit(modelFields);
+        await onSubmit(modelFields);
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"CustomDataForm\\")}
@@ -235,7 +229,7 @@ export declare type CustomDataFormOverridesProps = {
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
 } & {
-    onSubmit: (fields: Record<string, string>) => void;
+    onSubmit: (fields: Record<string, unknown>) => void;
     onCancel?: () => void;
     onValidate?: CustomDataFormInputValues;
 }>;
@@ -250,13 +244,7 @@ import { fetchByPath, validateField } from \\"./utils\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, Flex, Grid, Heading, TextField } from \\"@aws-amplify/ui-react\\";
 export default function NestedJson(props) {
-  const {
-    onSubmit: nestedJsonOnSubmit,
-    onCancel,
-    onValidate,
-    overrides,
-    ...rest
-  } = props;
+  const { onSubmit, onCancel, onValidate, overrides, ...rest } = props;
   const [firstName, setFirstName] = React.useState(undefined);
   const [lastName, setLastName] = React.useState(undefined);
   const [bio, setBio] = React.useState({});
@@ -308,7 +296,7 @@ export default function NestedJson(props) {
         if (validationResponses.some((r) => r.hasError)) {
           return;
         }
-        await nestedJsonOnSubmit(modelFields);
+        await onSubmit(modelFields);
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"NestedJson\\")}
@@ -441,7 +429,7 @@ export declare type NestedJsonOverridesProps = {
 export declare type NestedJsonProps = React.PropsWithChildren<{
     overrides?: NestedJsonOverridesProps | undefined | null;
 } & {
-    onSubmit: (fields: Record<string, string>) => void;
+    onSubmit: (fields: Record<string, unknown>) => void;
     onCancel?: () => void;
     onValidate?: NestedJsonInputValues;
 }>;
@@ -464,13 +452,7 @@ import {
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 export default function CustomWithSectionalElements(props) {
-  const {
-    onSubmit: customWithSectionalElementsOnSubmit,
-    onCancel,
-    onValidate,
-    overrides,
-    ...rest
-  } = props;
+  const { onSubmit, onCancel, onValidate, overrides, ...rest } = props;
   const [name, setName] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
   const validations = {
@@ -515,7 +497,7 @@ export default function CustomWithSectionalElements(props) {
         if (validationResponses.some((r) => r.hasError)) {
           return;
         }
-        await customWithSectionalElementsOnSubmit(modelFields);
+        await onSubmit(modelFields);
       }}
       {...rest}
       {...getOverrideProps(overrides, \\"CustomWithSectionalElements\\")}
@@ -604,7 +586,7 @@ export declare type CustomWithSectionalElementsOverridesProps = {
 export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
     overrides?: CustomWithSectionalElementsOverridesProps | undefined | null;
 } & {
-    onSubmit: (fields: Record<string, string>) => void;
+    onSubmit: (fields: Record<string, unknown>) => void;
     onCancel?: () => void;
     onValidate?: CustomWithSectionalElementsInputValues;
 }>;
@@ -622,9 +604,9 @@ import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
   const {
-    onSubmit,
     onSuccess,
     onError,
+    onSubmit,
     onCancel,
     onValidate,
     overrides,
@@ -683,8 +665,8 @@ export default function MyPostForm(props) {
         if (validationResponses.some((r) => r.hasError)) {
           return;
         }
-        if (onSubmitBefore) {
-          modelFields = onSubmitBefore(modelFields);
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
         }
         try {
           await DataStore.save(new Post(modelFields));
@@ -854,9 +836,9 @@ export default function MyPostForm(props) {
   const {
     id,
     post,
-    onSubmit,
     onSuccess,
     onError,
+    onSubmit,
     onCancel,
     onValidate,
     overrides,
@@ -932,8 +914,8 @@ export default function MyPostForm(props) {
         if (validationResponses.some((r) => r.hasError)) {
           return;
         }
-        if (onSubmitBefore) {
-          modelFields = onSubmitBefore(modelFields);
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
         }
         try {
           await DataStore.save(
@@ -1268,9 +1250,9 @@ function ArrayField({
 }
 export default function InputGalleryCreateForm(props) {
   const {
-    onSubmit,
     onSuccess,
     onError,
+    onSubmit,
     onCancel,
     onValidate,
     overrides,
@@ -1347,8 +1329,8 @@ export default function InputGalleryCreateForm(props) {
         if (validationResponses.some((r) => r.hasError)) {
           return;
         }
-        if (onSubmitBefore) {
-          modelFields = onSubmitBefore(modelFields);
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
         }
         try {
           await DataStore.save(new InputGallery(modelFields));

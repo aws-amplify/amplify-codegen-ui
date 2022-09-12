@@ -25,7 +25,6 @@ import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, Stateme
 import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildOpeningElementProperties } from '../react-component-render-helper';
 import { ImportCollection } from '../imports';
-import { getActionIdentifier } from '../workflow';
 import { buildDataStoreExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 
@@ -85,15 +84,13 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       formActionType,
     } = this.form;
 
+    const onSubmitIdentifier = factory.createIdentifier('onSubmit');
+
     if (dataSourceType === 'Custom') {
       return [
         factory.createExpressionStatement(
           factory.createAwaitExpression(
-            factory.createCallExpression(
-              factory.createIdentifier(getActionIdentifier(this.form.name, 'onSubmit')),
-              undefined,
-              [factory.createIdentifier('modelFields')],
-            ),
+            factory.createCallExpression(onSubmitIdentifier, undefined, [factory.createIdentifier('modelFields')]),
           ),
         ),
       ];
@@ -101,14 +98,14 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     if (dataSourceType === 'DataStore') {
       return [
         factory.createIfStatement(
-          factory.createIdentifier('onSubmitBefore'),
+          onSubmitIdentifier,
           factory.createBlock(
             [
               factory.createExpressionStatement(
                 factory.createBinaryExpression(
                   factory.createIdentifier('modelFields'),
                   factory.createToken(SyntaxKind.EqualsToken),
-                  factory.createCallExpression(factory.createIdentifier('onSubmitBefore'), undefined, [
+                  factory.createCallExpression(onSubmitIdentifier, undefined, [
                     factory.createIdentifier('modelFields'),
                   ]),
                 ),
