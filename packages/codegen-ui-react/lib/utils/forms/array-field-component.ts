@@ -783,7 +783,7 @@ export const generateArrayFieldComponent = () => {
 /*
   <ArrayField
     onChange = { async(items) => {
-      setModelFields({ ...modelFields, breeds: items });
+      setBreeds(items);
       setCurrentBreedsValue('');
     }}
     currentBreedsValue = { currentBreedsValue }
@@ -795,7 +795,7 @@ export const generateArrayFieldComponent = () => {
   </ArrayField>
  */
 
-export const renderArrayFieldComponent = (fieldName: string, label: string, inputField: JsxChild) =>
+export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChild) =>
   factory.createJsxElement(
     factory.createJsxOpeningElement(
       factory.createIdentifier('ArrayField'),
