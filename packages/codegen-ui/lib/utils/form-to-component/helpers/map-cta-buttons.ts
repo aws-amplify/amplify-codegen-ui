@@ -50,9 +50,6 @@ export const ctaButtonMapper = (formDefinition: FormDefinition): StudioComponent
       justifyContent: {
         value: 'space-between',
       },
-      marginTop: {
-        value: '1rem',
-      },
     },
     children: [],
   };
