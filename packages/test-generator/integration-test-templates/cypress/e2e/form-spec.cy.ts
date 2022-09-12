@@ -35,10 +35,18 @@ describe('Forms', () => {
 
       // validates email
       cy.get('input').eq(2).type('fdfdsfd');
+      // does not validate onChange if no error
+      cy.contains(ErrorMessageMap.validEmail).should('not.exist');
+      // validates on blur
+      blurField();
       cy.contains(ErrorMessageMap.validEmail);
+      // validates onChange if error
+      cy.get('input').eq(2).type('jd@yahoo.com');
+      cy.contains(ErrorMessageMap.validEmail).should('not.exist');
+
       cy.contains('Clear').click();
 
-      // validates on change & extends with onValidate prop
+      // validates on blur & extends with onValidate prop
       cy.get('input').eq(0).type('S');
       blurField();
       cy.get('input').eq(1).type('-1');
@@ -46,6 +54,7 @@ describe('Forms', () => {
       cy.get('input').eq(2).type('spot@gmail.com');
       blurField();
       cy.get('input').eq(3).type('invalid ip');
+      blurField();
       cy.contains(ErrorMessageMap.name);
       cy.contains(ErrorMessageMap.age);
       cy.contains(ErrorMessageMap.validEmail).should('not.exist');

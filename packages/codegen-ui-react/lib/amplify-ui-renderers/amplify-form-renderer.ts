@@ -181,6 +181,16 @@ export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.Grid:
+        if (!parent) {
+          return new FormRenderer(
+            formComponent,
+            // this component is the current form
+            this.component,
+            this.componentMetadata,
+            this.importCollection,
+            parent,
+          ).renderElement(renderChildren);
+        }
         return new ReactComponentRenderer<GridProps>(
           formComponent,
           this.componentMetadata,
