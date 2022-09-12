@@ -171,7 +171,6 @@ export default function CustomDataForm(props) {
       </RadioGroupField>
       <Flex
         justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
@@ -368,7 +367,6 @@ export default function NestedJson(props) {
       ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
@@ -531,7 +529,6 @@ export default function CustomWithSectionalElements(props) {
       ></Divider>
       <Flex
         justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
@@ -684,7 +681,6 @@ export default function MyPostForm(props) {
     >
       <Flex
         justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
@@ -937,7 +933,6 @@ export default function MyPostForm(props) {
     >
       <Flex
         justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
@@ -1055,7 +1050,6 @@ export default function MyPostForm(props) {
       ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
@@ -1525,7 +1519,6 @@ export default function InputGalleryCreateForm(props) {
       ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
-        marginTop=\\"1rem\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
