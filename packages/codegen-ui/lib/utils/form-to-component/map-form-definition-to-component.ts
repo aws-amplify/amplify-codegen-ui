@@ -42,24 +42,6 @@ const resolveStyles = (style: FormDefinition['form']['layoutStyle']): Record<key
   };
 };
 
-const parentGrid = (
-  name: string,
-  style: FormDefinition['form']['layoutStyle'],
-  children: StudioComponentChild[],
-): StudioComponentChild => {
-  const { verticalGap, horizontalGap, outerPadding } = resolveStyles(style);
-  return {
-    name,
-    componentType: 'Grid',
-    properties: {
-      columnGap: { value: horizontalGap },
-      rowGap: { value: verticalGap },
-      padding: { value: outerPadding },
-    },
-    children,
-  };
-};
-
 const mapFormElementProps = (element: FormDefinitionElement) => {
   const props: StudioComponentProperties = {};
   Object.entries(element.props).forEach(([key, value]) => {
@@ -90,9 +72,8 @@ export const wrapInRowGrid = (
   ];
 };
 
-const fieldComponentMapper = (name: string, formDefinition: FormDefinition): StudioComponentChild => {
-  // will accept a field matrix from a defnition and map
-  const fieldChildren = formDefinition.elementMatrix.reduce<StudioComponentChild[]>(
+const getFormElementChildren = (formDefinition: FormDefinition): StudioComponentChild[] =>
+  formDefinition.elementMatrix.reduce<StudioComponentChild[]>(
     (acc: StudioComponentChild[], row: string[], rowIdx: number) => {
       const children = row.map<StudioComponentChild>((column) => {
         const element: FormDefinitionElement = formDefinition.elements[column];
@@ -109,27 +90,33 @@ const fieldComponentMapper = (name: string, formDefinition: FormDefinition): Stu
     },
     [],
   );
-  return parentGrid(`${name}Grid`, formDefinition.form.layoutStyle, fieldChildren);
-};
 
 export const mapFormDefinitionToComponent = (name: string, formDefinition: FormDefinition) => {
+  const ctaComponent = ctaButtonMapper(formDefinition);
+
+  const formChildren = addCTAPosition(
+    getFormElementChildren(formDefinition),
+    formDefinition.buttons.position,
+    ctaComponent,
+  );
+
+  const { verticalGap, horizontalGap, outerPadding } = resolveStyles(formDefinition.form.layoutStyle);
+
   const component: StudioComponent = {
     name,
-    componentType: 'form',
-    properties: {},
+    componentType: 'Grid',
+    properties: {
+      columnGap: { value: horizontalGap },
+      rowGap: { value: verticalGap },
+      padding: { value: outerPadding },
+      as: { value: 'form' },
+    },
     bindingProperties: {
       onCancel: { type: 'Event' },
     },
     events: {},
-    children: [fieldComponentMapper(name, formDefinition)],
+    children: formChildren,
   };
-
-  const ctaComponent = ctaButtonMapper(formDefinition);
-  component.children = addCTAPosition(
-    component.children ? component.children : [],
-    formDefinition.buttons.position,
-    ctaComponent,
-  );
 
   return component;
 };

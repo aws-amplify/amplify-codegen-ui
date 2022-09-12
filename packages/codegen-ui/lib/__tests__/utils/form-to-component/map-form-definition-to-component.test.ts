@@ -37,7 +37,7 @@ describe('mapFormDefinitionToComponent', () => {
       elementMatrix: [['city']],
     };
 
-    const radioGroupField = mapFormDefinitionToComponent('CreateDog', formDefinition).children?.[0].children?.[0];
+    const radioGroupField = mapFormDefinitionToComponent('CreateDog', formDefinition).children?.[0];
 
     expect(radioGroupField?.children).toStrictEqual([
       {
@@ -73,7 +73,7 @@ describe('mapFormDefinitionToComponent', () => {
       elementMatrix: [['city']],
     };
 
-    const selectField = mapFormDefinitionToComponent('CreateDog', formDefinition).children?.[0].children?.[0];
+    const selectField = mapFormDefinitionToComponent('CreateDog', formDefinition).children?.[0];
 
     expect(selectField?.children).toStrictEqual([
       {
