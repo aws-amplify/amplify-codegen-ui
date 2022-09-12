@@ -2,11 +2,9 @@
 
 exports[`form-render utils should generate before & complete types if datastore config is set 1`] = `
 "{
-    onSubmitBefore?: (fields: Record<string, string>) => Record<string, string>;
-    onSubmitComplete?: ({ saveSuccessful, errorMessage }: {
-        saveSuccessful: boolean;
-        errorMessage?: string;
-    }) => void;
+    onSubmit?: (fields: Record<string, unknown>) => Record<string, unknown>;
+    onSuccess?: (fields: Record<string, unknown>) => void;
+    onError?: (fields: Record<string, unknown>, errorMessage: string) => void;
     onCancel?: () => void;
     onValidate?: mySampleFormInputValues;
 }"
