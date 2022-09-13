@@ -851,12 +851,14 @@ export default function MyPostForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = id ? await DataStore.query(Post, id) : post;
-      setPostRecord(record);
-      setTextAreaFieldbbd63464(record.TextAreaFieldbbd63464);
-      setCaption(record.caption);
-      setUsername(record.username);
-      setProfile_url(record.profile_url);
-      setPost_url(record.post_url);
+      if (record) {
+        setPostRecord(record);
+        setTextAreaFieldbbd63464(record.TextAreaFieldbbd63464);
+        setCaption(record.caption);
+        setUsername(record.username);
+        setProfile_url(record.profile_url);
+        setPost_url(record.post_url);
+      }
     };
     queryData();
   }, [id, post]);

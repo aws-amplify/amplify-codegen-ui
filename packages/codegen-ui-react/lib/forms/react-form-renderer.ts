@@ -385,7 +385,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         );
         statements.push(
           addUseEffectWrapper(
-            buildUpdateDatastoreQuery(dataTypeName, this.componentMetadata.formMetadata?.fieldConfigs),
+            buildUpdateDatastoreQuery(dataTypeName, formMetadata.fieldConfigs),
+            // TODO: change once cpk is supported in datastore
             ['id', lowerCaseDataTypeName],
           ),
         );

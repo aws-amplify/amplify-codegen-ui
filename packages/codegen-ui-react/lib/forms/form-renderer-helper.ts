@@ -1136,10 +1136,36 @@ export const onSubmitValidationRun = [
   ),
 ];
 
-export const buildUpdateDatastoreQuery = (
-  dataTypeName: string,
-  fieldConfigs: Record<string, FieldConfigMetadata> | undefined,
-) => {
+export const ifRecordDefinedExpression = (dataTypeName: string, fieldConfigs: Record<string, FieldConfigMetadata>) => {
+  return factory.createIfStatement(
+    factory.createIdentifier('record'),
+    factory.createBlock(
+      [
+        factory.createExpressionStatement(
+          factory.createCallExpression(factory.createIdentifier(`set${dataTypeName}Record`), undefined, [
+            factory.createIdentifier('record'),
+          ]),
+        ),
+        ...Object.keys(fieldConfigs).map((field) =>
+          factory.createExpressionStatement(
+            factory.createCallExpression(factory.createIdentifier(`set${capitalizeFirstLetter(field)}`), undefined, [
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('record'),
+                factory.createIdentifier(field),
+              ),
+            ]),
+          ),
+        ),
+      ],
+      true,
+    ),
+    undefined,
+  );
+};
+
+export const buildUpdateDatastoreQuery = (dataTypeName: string, fieldConfigs: Record<string, FieldConfigMetadata>) => {
+  // TODO: update this once cpk is supported in datastore
+  const pkQueryIdentifier = factory.createIdentifier('id');
   return [
     factory.createVariableStatement(
       undefined,
@@ -1166,7 +1192,7 @@ export const buildUpdateDatastoreQuery = (
                           undefined,
                           undefined,
                           factory.createConditionalExpression(
-                            factory.createIdentifier('id'),
+                            pkQueryIdentifier,
                             factory.createToken(SyntaxKind.QuestionToken),
                             factory.createAwaitExpression(
                               factory.createCallExpression(
@@ -1175,7 +1201,7 @@ export const buildUpdateDatastoreQuery = (
                                   factory.createIdentifier('query'),
                                 ),
                                 undefined,
-                                [factory.createIdentifier(dataTypeName), factory.createIdentifier('id')],
+                                [factory.createIdentifier(dataTypeName), pkQueryIdentifier],
                               ),
                             ),
                             factory.createToken(SyntaxKind.ColonToken),
@@ -1186,27 +1212,7 @@ export const buildUpdateDatastoreQuery = (
                       NodeFlags.Const,
                     ),
                   ),
-                  factory.createExpressionStatement(
-                    factory.createCallExpression(factory.createIdentifier(`set${dataTypeName}Record`), undefined, [
-                      factory.createIdentifier('record'),
-                    ]),
-                  ),
-                  ...(fieldConfigs
-                    ? Object.keys(fieldConfigs).map((field) =>
-                        factory.createExpressionStatement(
-                          factory.createCallExpression(
-                            factory.createIdentifier(`set${capitalizeFirstLetter(field)}`),
-                            undefined,
-                            [
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('record'),
-                                factory.createIdentifier(field),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : []),
+                  ifRecordDefinedExpression(dataTypeName, fieldConfigs),
                 ],
                 true,
               ),
