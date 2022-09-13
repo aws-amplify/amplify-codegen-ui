@@ -73,7 +73,7 @@ export const buildTargetVariable = (name: string, dataType?: DataFieldDataType):
     undefined,
     factory.createVariableDeclarationList(
       [factory.createVariableDeclaration(defaultIdentifier, undefined, undefined, expression)],
-      NodeFlags.Const,
+      NodeFlags.Let,
     ),
   );
 };
