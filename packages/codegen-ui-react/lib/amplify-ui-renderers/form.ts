@@ -206,7 +206,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                   [],
                 ),
               ),
-              buildModelFieldObject(dataSourceType, formMetadata?.fieldConfigs),
+              buildModelFieldObject(dataSourceType !== 'DataStore', formMetadata?.fieldConfigs),
               ...onSubmitValidationRun,
               ...this.getOnSubmitDSCall(),
             ],

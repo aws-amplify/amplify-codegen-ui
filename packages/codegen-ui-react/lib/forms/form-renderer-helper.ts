@@ -22,7 +22,6 @@ import {
   StudioForm,
   FieldConfigMetadata,
   FormMetadata,
-  StudioDataSourceType,
 } from '@aws-amplify/codegen-ui';
 import {
   BindingElement,
@@ -35,12 +34,13 @@ import {
   ObjectLiteralExpression,
   ShorthandPropertyAssignment,
   JsxAttribute,
+  IfStatement,
 } from 'typescript';
 import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
 import { buildTargetVariable } from './event-targets';
 import { buildOnValidateType } from './type-helper';
-import { capitalizeFirstLetter, setFieldState } from './form-state';
+import { buildAccessChain, capitalizeFirstLetter, setFieldState } from './form-state';
 
 export const buildMutationBindings = (form: StudioForm) => {
   const {
@@ -67,7 +67,6 @@ export const buildMutationBindings = (form: StudioForm) => {
     );
   }
   elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmit'), undefined));
-  elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onCancel'), undefined));
   return elements;
 };
 
@@ -212,16 +211,43 @@ export const buildFormPropNode = (form: StudioForm) => {
       ),
     );
   }
-  // onCancel?: () => void
   propSignatures.push(
+    // onCancel?: () => void
     factory.createPropertySignature(
       undefined,
       'onCancel',
       factory.createToken(SyntaxKind.QuestionToken),
       factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
     ),
+    // onChange?: (fields: Record<string, unknown>) => Record<string, unknown>
+    factory.createPropertySignature(
+      undefined,
+      'onChange',
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createFunctionTypeNode(
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('fields'),
+            undefined,
+            factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
+              factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+              factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+            ]),
+            undefined,
+          ),
+        ],
+        factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
+          factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+          factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+        ]),
+      ),
+    ),
+    buildOnValidateType(form.name),
   );
-  propSignatures.push(buildOnValidateType(form.name));
   return factory.createTypeLiteralNode(propSignatures);
 };
 
@@ -298,7 +324,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
             factory.createIdentifier('errors'),
             factory.createIdentifier(component.name),
           );
-    attributes.push(buildOnChangeStatement(component, fieldConfig));
+    attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs));
     attributes.push(buildOnBlurStatement(component.name));
     attributes.push(
       factory.createJsxAttribute(
@@ -480,12 +506,67 @@ export function buildOnBlurStatement(fieldName: string) {
   );
 }
 
+/**
+ * if the onChange variable is defined it will send the current state of the fields into the function
+ * the function expects all fields in return
+ * the value for that fields onChange will be used from the return object for validation and updating the new state
+ *
+ *
+ * ex. if the field is email
+ * const returnObject = onChange({ email, ...otherFieldsForForm });
+ * const value = returnObject.email;
+ *
+ * this value is now used in email validation and setting the state
+ */
+export const buildOverrideOnChangeStatement = (
+  fieldName: string,
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+): IfStatement => {
+  return factory.createIfStatement(
+    factory.createIdentifier('onChange'),
+    factory.createBlock(
+      [
+        buildModelFieldObject(true, fieldConfigs),
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier('result'),
+                undefined,
+                undefined,
+                factory.createCallExpression(factory.createIdentifier('onChange'), undefined, [
+                  factory.createIdentifier('modelFields'),
+                ]),
+              ),
+            ],
+            NodeFlags.Const,
+          ),
+        ),
+        factory.createExpressionStatement(
+          factory.createBinaryExpression(
+            factory.createIdentifier('value'),
+            factory.createToken(SyntaxKind.EqualsToken),
+            factory.createBinaryExpression(
+              buildAccessChain(['result', ...fieldName.split('.')]),
+              factory.createToken(SyntaxKind.QuestionQuestionToken),
+              factory.createIdentifier('value'),
+            ),
+          ),
+        ),
+      ],
+      true,
+    ),
+    undefined,
+  );
+};
+
 export const buildOnChangeStatement = (
   component: StudioComponent | StudioComponentChild,
-  fieldConfig: FieldConfigMetadata,
+  fieldConfigs: Record<string, FieldConfigMetadata>,
 ) => {
   const { name: fieldName, componentType: fieldType } = component;
-  const { dataType, isArray } = fieldConfig;
+  const { dataType, isArray } = fieldConfigs[fieldName];
   if (isArray) {
     return factory.createJsxAttribute(
       factory.createIdentifier('onChange'),
@@ -510,6 +591,7 @@ export const buildOnChangeStatement = (
           factory.createBlock(
             [
               buildTargetVariable(fieldType, dataType),
+              buildOverrideOnChangeStatement(fieldName, fieldConfigs),
               getOnChangeValidationBlock(fieldName),
               factory.createExpressionStatement(
                 factory.createCallExpression(
@@ -547,7 +629,8 @@ export const buildOnChangeStatement = (
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createBlock(
           [
-            buildTargetVariable(fieldType, fieldConfig.dataType),
+            buildTargetVariable(fieldType, dataType),
+            buildOverrideOnChangeStatement(fieldName, fieldConfigs),
             getOnChangeValidationBlock(fieldName),
             factory.createExpressionStatement(setFieldState(fieldName, factory.createIdentifier('value'))),
           ],
@@ -893,7 +976,7 @@ export const runValidationTasksFunction = factory.createVariableStatement(
  * @returns
  */
 export const buildModelFieldObject = (
-  dataSourceType: StudioDataSourceType,
+  shouldBeConst: boolean,
   fieldConfigs: Record<string, FieldConfigMetadata> = {},
 ) => {
   const fieldSet = new Set<string>();
@@ -917,7 +1000,7 @@ export const buildModelFieldObject = (
           factory.createObjectLiteralExpression(fields, true),
         ),
       ],
-      dataSourceType === 'DataStore' ? NodeFlags.Let : NodeFlags.Const,
+      shouldBeConst ? NodeFlags.Const : NodeFlags.Let,
     ),
   );
 };

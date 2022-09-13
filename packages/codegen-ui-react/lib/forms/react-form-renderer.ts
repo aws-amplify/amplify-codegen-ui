@@ -320,7 +320,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
    */
   private buildVariableStatements() {
     const statements: Statement[] = [];
-    const elements: BindingElement[] = [];
     const { formMetadata } = this.componentMetadata;
     const {
       dataType: { dataTypeName, dataSourceType },
@@ -332,24 +331,25 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
     }
 
-    // add in hooks for before/complete with ds and basic onSubmit with props
-    elements.push(...buildMutationBindings(this.component));
-    // add onValidate prop
-    elements.push(
+    const elements: BindingElement[] = [
+      // add in hooks for before/complete with ds and basic onSubmit with props
+      ...buildMutationBindings(this.component),
+      // onCancel prop
+      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onCancel'), undefined),
+      // onValidate prop
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onValidate'), undefined),
-    );
-    // overrides
-    elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('overrides'), undefined));
-
-    // get rest of props to pass to top level component
-    elements.push(
+      // onChange prop
+      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onChange'), undefined),
+      // overrides
+      factory.createBindingElement(undefined, undefined, factory.createIdentifier('overrides'), undefined),
+      // get rest of props to pass to top level component
       factory.createBindingElement(
         factory.createToken(SyntaxKind.DotDotDotToken),
         undefined,
         factory.createIdentifier('rest'),
         undefined,
       ),
-    );
+    ];
 
     // add binding elments to statements
     statements.push(
