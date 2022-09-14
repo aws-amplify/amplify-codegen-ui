@@ -15,7 +15,7 @@
  */
 
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
-import { generateOnValidationType } from '../../forms/type-helper';
+import { generateInputTypes } from '../../forms/type-helper';
 import { genericPrinter } from '../__utils__';
 
 describe('should generate nested object', () => {
@@ -38,7 +38,7 @@ describe('should generate nested object', () => {
         validationRules: [],
       },
     };
-    const types = generateOnValidationType('myCreateForm', fieldConfigs);
+    const types = generateInputTypes('myCreateForm', fieldConfigs);
     const response = genericPrinter(types);
     expect(response).toMatchSnapshot();
   });
@@ -54,7 +54,7 @@ describe('should generate nested object', () => {
         validationRules: [],
       },
     };
-    const types = generateOnValidationType('myCreateForm', fieldConfigs);
+    const types = generateInputTypes('myCreateForm', fieldConfigs);
     const response = genericPrinter(types);
     expect(response).toMatchSnapshot();
   });

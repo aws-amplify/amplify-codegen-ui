@@ -71,8 +71,9 @@ import {
 } from './form-renderer-helper';
 import { buildUseStateExpression, capitalizeFirstLetter, getUseStateHooks } from './form-state';
 import {
+  baseValidationConditionalType,
   formOverrideProp,
-  generateOnValidationType,
+  generateInputTypes,
   validationFunctionType,
   validationResponseType,
 } from './type-helper';
@@ -293,7 +294,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     return [
       validationResponseType,
       validationFunctionType,
-      generateOnValidationType(formName, fieldConfigs),
+      baseValidationConditionalType,
+      generateInputTypes(formName, fieldConfigs),
       formOverrideProp,
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(

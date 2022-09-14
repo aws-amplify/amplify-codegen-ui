@@ -39,7 +39,7 @@ import {
 import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
 import { buildTargetVariable } from './event-targets';
-import { buildOnValidateType } from './type-helper';
+import { buildOnValidateType, getInputValuesTypeName } from './type-helper';
 import { buildAccessChain, capitalizeFirstLetter, setFieldState } from './form-state';
 
 export const buildMutationBindings = (form: StudioForm) => {
@@ -79,6 +79,7 @@ export const buildMutationBindings = (form: StudioForm) => {
    */
 export const buildFormPropNode = (form: StudioForm) => {
   const {
+    name: formName,
     dataType: { dataSourceType },
     formActionType,
   } = form;
@@ -114,17 +115,11 @@ export const buildFormPropNode = (form: StudioForm) => {
               undefined,
               'fields',
               undefined,
-              factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
-                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-              ]),
+              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
               undefined,
             ),
           ],
-          factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
-            factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-            factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-          ]),
+          factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
         ),
       ),
       factory.createPropertySignature(
@@ -140,10 +135,7 @@ export const buildFormPropNode = (form: StudioForm) => {
               undefined,
               factory.createIdentifier('fields'),
               undefined,
-              factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
-                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-              ]),
+              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
               undefined,
             ),
           ],
@@ -163,10 +155,7 @@ export const buildFormPropNode = (form: StudioForm) => {
               undefined,
               factory.createIdentifier('fields'),
               undefined,
-              factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
-                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-              ]),
+              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
               undefined,
             ),
             factory.createParameterDeclaration(
@@ -199,10 +188,7 @@ export const buildFormPropNode = (form: StudioForm) => {
               undefined,
               'fields',
               undefined,
-              factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
-                factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-                factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-              ]),
+              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
               undefined,
             ),
           ],
@@ -233,17 +219,11 @@ export const buildFormPropNode = (form: StudioForm) => {
             undefined,
             factory.createIdentifier('fields'),
             undefined,
-            factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
-              factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-              factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-            ]),
+            factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
             undefined,
           ),
         ],
-        factory.createTypeReferenceNode(factory.createIdentifier('Record'), [
-          factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-          factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-        ]),
+        factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
       ),
     ),
     buildOnValidateType(form.name),
