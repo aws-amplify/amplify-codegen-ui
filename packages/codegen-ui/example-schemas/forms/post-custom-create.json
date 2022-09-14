@@ -43,6 +43,11 @@
           "values": [{"value": {"value": "Hobbies"}}, {"value": {"value": "Travel"}}, {"value": {"value": "Health"}}]
         }
       }
+    },
+    "pages": {
+      "inputType": {
+        "type": "StepperField"
+      }
     }
   },
   "sectionalElements": {},

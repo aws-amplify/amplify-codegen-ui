@@ -17,57 +17,104 @@ import { DataFieldDataType } from '@aws-amplify/codegen-ui';
 import { factory, NodeFlags, VariableStatement, Expression, BindingName, SyntaxKind } from 'typescript';
 
 /*
-Builds the event target variable which is called value
-default case
-const { value } =  e.target;
+Builds the event target variable. Example:
+let { value } =  e.target;
 */
-export const buildTargetVariable = (name: string, dataType?: DataFieldDataType): VariableStatement => {
-  let expression: Expression = factory.createPropertyAccessExpression(
-    factory.createIdentifier('e'),
-    factory.createIdentifier('target'),
-  );
-  let defaultIdentifier: string | BindingName = factory.createIdentifier('value');
+
+const expressionMap = {
+  // e
+  e: factory.createIdentifier('e'),
+  // value
+  value: factory.createIdentifier('value'),
+  // e.target.checked
+  eTargetChecked: factory.createPropertyAccessExpression(
+    factory.createPropertyAccessExpression(factory.createIdentifier('e'), factory.createIdentifier('target')),
+    factory.createIdentifier('checked'),
+  ),
+  // e.target
+  eTarget: factory.createPropertyAccessExpression(factory.createIdentifier('e'), factory.createIdentifier('target')),
+  // {value}
+  destructuredValue: factory.createObjectBindingPattern([
+    factory.createBindingElement(undefined, undefined, factory.createIdentifier('value'), undefined),
+  ]),
+  // e.target.value
+  eTargetValue: factory.createPropertyAccessExpression(
+    factory.createPropertyAccessExpression(factory.createIdentifier('e'), factory.createIdentifier('target')),
+    factory.createIdentifier('value'),
+  ),
+};
+
+export const buildTargetVariable = (
+  fieldType: string,
+  fieldName: string,
+  dataType?: DataFieldDataType,
+): VariableStatement => {
+  const fieldTypeToExpressionMap: {
+    [fieldType: string]: { expression: Expression; identifier: string | BindingName };
+  } = {
+    SliderField: {
+      expression: expressionMap.e,
+      identifier: expressionMap.value,
+    },
+    StepperField: {
+      expression: expressionMap.e,
+      identifier: expressionMap.value,
+    },
+    SwitchField: {
+      expression: expressionMap.eTargetChecked,
+      identifier: expressionMap.value,
+    },
+    CheckboxField: {
+      expression: expressionMap.eTargetChecked,
+      identifier: expressionMap.value,
+    },
+    ToggleButton: {
+      expression: factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier(fieldName)),
+      identifier: expressionMap.value,
+    },
+  };
+
+  let expression: Expression = fieldTypeToExpressionMap[fieldType]?.expression ?? expressionMap.eTarget;
+  let defaultIdentifier: string | BindingName =
+    fieldTypeToExpressionMap[fieldType]?.identifier ?? expressionMap.destructuredValue;
   switch (dataType) {
-    // const value = Number(new Date(e.target.value));
     case 'AWSTimestamp':
+      // value = Number(new Date(e.target.value));
+      defaultIdentifier = expressionMap.value;
       expression = factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
-        factory.createNewExpression(factory.createIdentifier('Date'), undefined, [
-          factory.createPropertyAccessExpression(expression, factory.createIdentifier('value')),
-        ]),
+        factory.createNewExpression(factory.createIdentifier('Date'), undefined, [expressionMap.eTargetValue]),
       ]);
       break;
     case 'Float':
-      // const value = Number(e.target.value);
-      expression = factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
-        factory.createPropertyAccessExpression(expression, factory.createIdentifier('value')),
-      ]);
+      if (fieldType === 'TextField') {
+        // value = Number(e.target.value);
+        defaultIdentifier = expressionMap.value;
+        expression = factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
+          expressionMap.eTargetValue,
+        ]);
+      }
       break;
     case 'Int':
-      // const value = parseInt(e.target.value);
-      expression = factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [
-        factory.createPropertyAccessExpression(expression, factory.createIdentifier('value')),
-      ]);
+      if (fieldType === 'TextField') {
+        // value = parseInt(e.target.value);
+        defaultIdentifier = expressionMap.value;
+        expression = factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [
+          expressionMap.eTargetValue,
+        ]);
+      }
       break;
     case 'Boolean':
-      if (name === 'RadioGroupField') {
-        // const value = e.target.value === 'true'
-        // this works around only two set Radio for boolean
+      if (fieldType === 'RadioGroupField') {
+        // value = e.target.value === 'true'
+        defaultIdentifier = expressionMap.value;
         expression = factory.createBinaryExpression(
-          factory.createPropertyAccessExpression(expression, factory.createIdentifier('value')),
+          expressionMap.eTargetValue,
           factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
           factory.createStringLiteral('true'),
         );
-      } else {
-        // SwitchField & CheckboxField
-        // const value = e.target.checked;
-        expression = factory.createPropertyAccessExpression(expression, factory.createIdentifier('checked'));
       }
       break;
     default:
-      defaultIdentifier = factory.createObjectBindingPattern([
-        factory.createBindingElement(undefined, undefined, factory.createIdentifier('value'), undefined),
-      ]);
-      break;
   }
   return factory.createVariableStatement(
     undefined,

@@ -304,6 +304,9 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
             factory.createIdentifier('errors'),
             factory.createIdentifier(component.name),
           );
+    attributes.push(
+      ...buildComponentSpecificAttributes({ componentType: component.componentType, componentName: component.name }),
+    );
     attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs));
     attributes.push(buildOnBlurStatement(component.name));
     attributes.push(
@@ -541,6 +544,33 @@ export const buildOverrideOnChangeStatement = (
   );
 };
 
+function getOnValueChangeProp(fieldType: string): string {
+  const map: { [key: string]: string } = {
+    StepperField: 'onStepChange',
+  };
+
+  return map[fieldType] ?? 'onChange';
+}
+
+export const buildComponentSpecificAttributes = ({
+  componentType,
+  componentName,
+}: {
+  componentType: string;
+  componentName: string;
+}) => {
+  const componentToAttributesMap: { [key: string]: JsxAttribute[] } = {
+    ToggleButton: [
+      factory.createJsxAttribute(
+        factory.createIdentifier('isPressed'),
+        factory.createJsxExpression(undefined, factory.createIdentifier(componentName)),
+      ),
+    ],
+  };
+
+  return componentToAttributesMap[componentType] ?? [];
+};
+
 export const buildOnChangeStatement = (
   component: StudioComponent | StudioComponentChild,
   fieldConfigs: Record<string, FieldConfigMetadata>,
@@ -549,7 +579,7 @@ export const buildOnChangeStatement = (
   const { dataType, isArray } = fieldConfigs[fieldName];
   if (isArray) {
     return factory.createJsxAttribute(
-      factory.createIdentifier('onChange'),
+      factory.createIdentifier(getOnValueChangeProp(fieldType)),
       factory.createJsxExpression(
         undefined,
         factory.createArrowFunction(
@@ -570,7 +600,7 @@ export const buildOnChangeStatement = (
           factory.createToken(SyntaxKind.EqualsGreaterThanToken),
           factory.createBlock(
             [
-              buildTargetVariable(fieldType, dataType),
+              buildTargetVariable(fieldType, fieldName, dataType),
               buildOverrideOnChangeStatement(fieldName, fieldConfigs),
               getOnChangeValidationBlock(fieldName),
               factory.createExpressionStatement(
@@ -588,7 +618,7 @@ export const buildOnChangeStatement = (
     );
   }
   return factory.createJsxAttribute(
-    factory.createIdentifier('onChange'),
+    factory.createIdentifier(getOnValueChangeProp(fieldType)),
     factory.createJsxExpression(
       undefined,
       factory.createArrowFunction(
@@ -609,7 +639,7 @@ export const buildOnChangeStatement = (
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createBlock(
           [
-            buildTargetVariable(fieldType, dataType),
+            buildTargetVariable(fieldType, fieldName, dataType),
             buildOverrideOnChangeStatement(fieldName, fieldConfigs),
             getOnChangeValidationBlock(fieldName),
             factory.createExpressionStatement(setFieldState(fieldName, factory.createIdentifier('value'))),

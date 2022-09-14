@@ -15,25 +15,30 @@
  */
 import { FieldConfigMetadata, DataFieldDataType } from '@aws-amplify/codegen-ui';
 import { factory, SyntaxKind, KeywordTypeSyntaxKind, TypeElement, PropertySignature, TypeNode } from 'typescript';
-import { DATA_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
+import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
 type Node<T> = {
   [n: string]: T | Node<T>;
 };
+
+type GetTypeNodeParam = { componentType: string; dataType?: DataFieldDataType };
 /**
  * based on the provided dataType (appsync scalar)
  * converst to the correct typescript type
  * default assumption is string type
- *
- * @param dataType
- * @returns
  */
-const getSyntaxKindType = (dataType?: DataFieldDataType) => {
-  let typescriptType = SyntaxKind.StringKeyword;
+const getTypeNode = ({ componentType, dataType }: GetTypeNodeParam) => {
+  let typescriptType: KeywordTypeSyntaxKind = SyntaxKind.StringKeyword;
+  if (componentType in FIELD_TYPE_TO_TYPESCRIPT_MAP) {
+    typescriptType = FIELD_TYPE_TO_TYPESCRIPT_MAP[componentType];
+  }
+
   if (dataType && typeof dataType === 'string' && dataType in DATA_TYPE_TO_TYPESCRIPT_MAP) {
     typescriptType = DATA_TYPE_TO_TYPESCRIPT_MAP[dataType];
   }
-  return typescriptType;
+
+  // e.g. string
+  return factory.createKeywordTypeNode(typescriptType);
 };
 
 export const getInputValuesTypeName = (formName: string): string => {
@@ -49,12 +54,12 @@ export const getInputValuesTypeName = (formName: string): string => {
  */
 export const generateObjectFromPaths = (
   object: Node<KeywordTypeSyntaxKind>,
-  [key, value]: [fieldName: string, dataType?: DataFieldDataType],
+  [key, value]: [fieldName: string, getTypeNodeParam: GetTypeNodeParam],
 ) => {
   const keys = key.split('.');
   const last = keys.pop() ?? '';
   // eslint-disable-next-line no-return-assign, no-param-reassign
-  keys.reduce((o: any, k: string) => (o[k] ??= {}), object)[last] = getSyntaxKindType(value);
+  keys.reduce((o: any, k: string) => (o[k] ??= {}), object)[last] = getTypeNode(value);
   return object;
 };
 
@@ -62,11 +67,11 @@ export const generateTypeNodeFromObject = (obj: Node<KeywordTypeSyntaxKind>): Pr
   return Object.keys(obj).map<PropertySignature>((key) => {
     const child = obj[key];
     const value: TypeNode =
-      typeof child === 'object' && Object.keys(obj[key]).length
+      typeof child === 'object' && Object.getPrototypeOf(child) === Object.prototype
         ? factory.createTypeLiteralNode(generateTypeNodeFromObject(child))
         : factory.createTypeReferenceNode(factory.createIdentifier('UseBaseOrValidationType'), [
             factory.createTypeReferenceNode(factory.createIdentifier('useBase'), undefined),
-            factory.createKeywordTypeNode(child as KeywordTypeSyntaxKind),
+            child as unknown as TypeNode,
           ]);
     return factory.createPropertySignature(
       undefined,
@@ -103,12 +108,13 @@ export const generateTypeNodeFromObject = (obj: Node<KeywordTypeSyntaxKind>): Pr
  * @returns
  */
 export const generateInputTypes = (formName: string, fieldConfigs: Record<string, FieldConfigMetadata>) => {
-  const nestedPaths: [fieldName: string, dataType?: DataFieldDataType][] = [];
+  const nestedPaths: [fieldName: string, getTypeNodeParam: GetTypeNodeParam][] = [];
   const typeNodes: TypeElement[] = [];
-  Object.entries(fieldConfigs).forEach(([fieldName, { dataType }]) => {
+  Object.entries(fieldConfigs).forEach(([fieldName, { dataType, componentType }]) => {
+    const getTypeNodeParam = { dataType, componentType };
     const hasNestedFieldPath = fieldName.split('.').length > 1;
     if (hasNestedFieldPath) {
-      nestedPaths.push([fieldName, dataType]);
+      nestedPaths.push([fieldName, getTypeNodeParam]);
     } else {
       typeNodes.push(
         factory.createPropertySignature(
@@ -117,7 +123,7 @@ export const generateInputTypes = (formName: string, fieldConfigs: Record<string
           factory.createToken(SyntaxKind.QuestionToken),
           factory.createTypeReferenceNode(factory.createIdentifier('UseBaseOrValidationType'), [
             factory.createTypeReferenceNode(factory.createIdentifier('useBase'), undefined),
-            factory.createKeywordTypeNode(getSyntaxKindType(dataType)),
+            getTypeNode(getTypeNodeParam),
           ]),
         ),
       );

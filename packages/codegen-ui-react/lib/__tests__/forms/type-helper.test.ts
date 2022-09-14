@@ -24,18 +24,22 @@ describe('should generate nested object', () => {
       'bio.favoriteAnimal.animalMeta.family.genus': {
         dataType: 'String',
         validationRules: [],
+        componentType: 'TextField',
       },
       'bio.favoriteAnimal.animalMeta.earliestRecord': {
         dataType: 'AWSTimestamp',
         validationRules: [],
+        componentType: 'TextField',
       },
       firstName: {
         dataType: 'String',
         validationRules: [],
+        componentType: 'TextField',
       },
       isExplorer: {
         dataType: 'Boolean',
         validationRules: [],
+        componentType: 'CheckboxField',
       },
     };
     const types = generateInputTypes('myCreateForm', fieldConfigs);
@@ -48,10 +52,17 @@ describe('should generate nested object', () => {
       firstName: {
         dataType: 'String',
         validationRules: [],
+        componentType: 'TextField',
       },
       isExplorer: {
         dataType: 'Boolean',
         validationRules: [],
+        componentType: 'RadioGroupField',
+      },
+      tags: {
+        validationRules: [],
+        componentType: 'TextField',
+        isArray: true,
       },
     };
     const types = generateInputTypes('myCreateForm', fieldConfigs);

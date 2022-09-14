@@ -47,6 +47,7 @@ export const mapFormMetadata = (
       const updatedConfigs = configs;
       const metadata: FieldConfigMetadata = {
         validationRules: [],
+        componentType: config.componentType,
       };
       if ('validations' in config && config.validations) {
         metadata.validationRules = config.validations.map<FieldValidationConfiguration>((validation) => {
