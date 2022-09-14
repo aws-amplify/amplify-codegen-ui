@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should generate nested object should generate type for nested object 1`] = `
-"export declare type myCreateFormInputValues = {
-    firstName?: ValidationFunction<string>;
-    isExplorer?: ValidationFunction<boolean>;
+"export declare type myCreateFormInputValues<useBase extends boolean = true> = {
+    firstName?: UseBaseOrValidationType<useBase, string>;
+    isExplorer?: UseBaseOrValidationType<useBase, boolean>;
     bio?: {
         favoriteAnimal?: {
             animalMeta?: {
                 family?: {
-                    genus?: ValidationFunction<string>;
+                    genus?: UseBaseOrValidationType<useBase, string>;
                 };
-                earliestRecord?: ValidationFunction<number>;
+                earliestRecord?: UseBaseOrValidationType<useBase, number>;
             };
         };
     };
@@ -18,8 +18,8 @@ exports[`should generate nested object should generate type for nested object 1`
 `;
 
 exports[`should generate nested object should generate type for non nested object 1`] = `
-"export declare type myCreateFormInputValues = {
-    firstName?: ValidationFunction<string>;
-    isExplorer?: ValidationFunction<boolean>;
+"export declare type myCreateFormInputValues<useBase extends boolean = true> = {
+    firstName?: UseBaseOrValidationType<useBase, string>;
+    isExplorer?: UseBaseOrValidationType<useBase, boolean>;
 };"
 `;
