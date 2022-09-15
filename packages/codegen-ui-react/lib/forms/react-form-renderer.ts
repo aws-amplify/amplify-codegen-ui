@@ -134,16 +134,15 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       importsText += result + EOL;
     });
 
+    const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, false);
+    let result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
+
     if (this.componentMetadata.formMetadata) {
       if (Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)) {
-        printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+        const arrayFieldText = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+        result = arrayFieldText + EOL + result;
       }
     }
-
-    const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, false);
-
-    const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
-
     // do not produce declaration becuase it is not used
     const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
 
@@ -190,7 +189,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
     componentText += result;
-
     const { componentText: transpiledComponentText, declaration } = transpile(componentText, this.renderConfig);
 
     return {
