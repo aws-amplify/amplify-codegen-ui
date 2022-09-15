@@ -12,6 +12,7 @@ import {
   Radio,
   RadioGroupField,
   SelectField,
+  StepperField,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 export default function CustomDataForm(props) {
@@ -21,12 +22,14 @@ export default function CustomDataForm(props) {
   const [email, setEmail] = React.useState(undefined);
   const [city, setCity] = React.useState(undefined);
   const [category, setCategory] = React.useState(undefined);
+  const [pages, setPages] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
   const validations = {
     name: [{ type: \\"Required\\" }],
     email: [{ type: \\"Required\\" }],
     city: [],
     category: [],
+    pages: [],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -50,6 +53,7 @@ export default function CustomDataForm(props) {
           email,
           city,
           category,
+          pages,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -87,6 +91,7 @@ export default function CustomDataForm(props) {
               email,
               city,
               category,
+              pages,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -113,6 +118,7 @@ export default function CustomDataForm(props) {
               email,
               city,
               category,
+              pages,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -137,6 +143,7 @@ export default function CustomDataForm(props) {
               email,
               city,
               category,
+              pages,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -180,6 +187,7 @@ export default function CustomDataForm(props) {
               email,
               city,
               category,
+              pages,
             };
             const result = onChange(modelFields);
             value = result?.category ?? value;
@@ -210,6 +218,31 @@ export default function CustomDataForm(props) {
           {...getOverrideProps(overrides, \\"categoryRadio2\\")}
         ></Radio>
       </RadioGroupField>
+      <StepperField
+        label=\\"Label\\"
+        onStepChange={async (e) => {
+          let value = e;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.pages ?? value;
+          }
+          if (errors.pages?.hasError) {
+            await runValidationTasks(\\"pages\\", value);
+          }
+          setPages(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"pages\\", pages)}
+        errorMessage={errors.pages?.errorMessage}
+        hasError={errors.pages?.hasError}
+        {...getOverrideProps(overrides, \\"pages\\")}
+      ></StepperField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -246,7 +279,7 @@ export default function CustomDataForm(props) {
 exports[`amplify form renderer tests custom form tests should render a custom backed form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, RadioGroupFieldProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -258,6 +291,7 @@ export declare type CustomDataFormInputValues<useBase extends boolean = true> = 
     email?: UseBaseOrValidationType<useBase, string>;
     city?: UseBaseOrValidationType<useBase, string>;
     category?: UseBaseOrValidationType<useBase, string>;
+    pages?: UseBaseOrValidationType<useBase, number>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
@@ -266,6 +300,7 @@ export declare type CustomDataFormOverridesProps = {
     email?: FormProps<TextFieldProps>;
     city?: FormProps<SelectFieldProps>;
     category?: FormProps<RadioGroupFieldProps>;
+    pages?: FormProps<StepperFieldProps>;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
@@ -1451,7 +1486,7 @@ export default function InputGalleryCreateForm(props) {
   const [num, setNum] = React.useState(undefined);
   const [rootbeer, setRootbeer] = React.useState(undefined);
   const [attend, setAttend] = React.useState(undefined);
-  const [maybeSlide, setMaybeSlide] = React.useState(undefined);
+  const [maybeSlide, setMaybeSlide] = React.useState(false);
   const [maybeCheck, setMaybeCheck] = React.useState(undefined);
   const [arrayTypeField, setArrayTypeField] = React.useState(undefined);
   const [timestamp, setTimestamp] = React.useState(undefined);
@@ -1647,8 +1682,9 @@ export default function InputGalleryCreateForm(props) {
         children=\\"Maybe slide\\"
         isDisabled={false}
         defaultPressed={false}
+        isPressed={maybeSlide}
         onChange={async (e) => {
-          let value = e.target.checked;
+          let value = !maybeSlide;
           if (onChange) {
             const modelFields = {
               num,

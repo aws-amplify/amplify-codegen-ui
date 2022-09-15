@@ -21,3 +21,11 @@ export const DATA_TYPE_TO_TYPESCRIPT_MAP: { [key: string]: KeywordTypeSyntaxKind
   Boolean: SyntaxKind.BooleanKeyword,
   AWSTimestamp: SyntaxKind.NumberKeyword,
 };
+
+export const FIELD_TYPE_TO_TYPESCRIPT_MAP: { [key: string]: KeywordTypeSyntaxKind } = {
+  SliderField: SyntaxKind.NumberKeyword,
+  StepperField: SyntaxKind.NumberKeyword,
+  SwitchField: SyntaxKind.BooleanKeyword,
+  CheckboxField: SyntaxKind.BooleanKeyword,
+  ToggleButton: SyntaxKind.BooleanKeyword,
+};

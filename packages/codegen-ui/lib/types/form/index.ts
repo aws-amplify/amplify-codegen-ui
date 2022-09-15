@@ -61,7 +61,6 @@ export type FormInputType =
   | 'PasswordField'
   | 'SliderField'
   | 'StepperField'
-  | 'StepperField'
   | 'SwitchField'
   | 'ToggleButton'
   | 'CheckboxField'

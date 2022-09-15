@@ -34,7 +34,15 @@ export const getSetNameIdentifier = (value: string): Identifier => {
   return factory.createIdentifier(`set${capitalizeFirstLetter(value)}`);
 };
 
-export const getDefaultValueExpression = (name: string, dataType?: DataFieldDataType): Expression => {
+export const getDefaultValueExpression = (
+  name: string,
+  componentType: string,
+  dataType?: DataFieldDataType,
+): Expression => {
+  const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
+    ToggleButton: factory.createFalse(),
+  };
+
   // it's a nonModel or relationship object
   if (dataType && typeof dataType === 'object' && !('enum' in dataType)) {
     return factory.createObjectLiteralExpression();
@@ -42,6 +50,10 @@ export const getDefaultValueExpression = (name: string, dataType?: DataFieldData
   // the name itself is a nested json object
   if (name.split('.').length > 1) {
     return factory.createObjectLiteralExpression();
+  }
+
+  if (componentType in componentTypeToDefaultValueMap) {
+    return componentTypeToDefaultValueMap[componentType];
   }
   return factory.createIdentifier('undefined');
 };
@@ -55,10 +67,10 @@ export const getDefaultValueExpression = (name: string, dataType?: DataFieldData
  */
 export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
   const stateNames = new Set<string>();
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { dataType }]) => {
+  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { dataType, componentType }]) => {
     const stateName = name.split('.')[0];
     if (!stateNames.has(stateName)) {
-      acc.push(buildUseStateExpression(stateName, getDefaultValueExpression(name, dataType)));
+      acc.push(buildUseStateExpression(stateName, getDefaultValueExpression(name, componentType, dataType)));
       stateNames.add(stateName);
     }
     return acc;

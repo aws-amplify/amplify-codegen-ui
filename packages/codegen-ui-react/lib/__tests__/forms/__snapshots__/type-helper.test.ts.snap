@@ -21,5 +21,6 @@ exports[`should generate nested object should generate type for non nested objec
 "export declare type myCreateFormInputValues<useBase extends boolean = true> = {
     firstName?: UseBaseOrValidationType<useBase, string>;
     isExplorer?: UseBaseOrValidationType<useBase, boolean>;
+    tags?: UseBaseOrValidationType<useBase, string>;
 };"
 `;

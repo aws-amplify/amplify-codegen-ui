@@ -28,6 +28,7 @@ export type FieldConfigMetadata = {
   dataType?: DataFieldDataType;
 
   isArray?: boolean;
+  componentType: string;
 };
 
 export type FormMetadata = {
