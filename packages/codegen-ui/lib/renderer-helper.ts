@@ -25,6 +25,7 @@ import {
   StudioComponentProperty,
   StudioComponentSlotBinding,
 } from './types';
+import { breakpointSizes, BreakpointSizeType } from './utils/breakpoint-utils';
 
 export function isStudioComponentWithBinding(
   component: StudioComponent | StudioComponentChild,
@@ -56,9 +57,9 @@ export function isStudioComponentWithBreakpoints(
   component: StudioComponent | StudioComponentChild,
 ): component is StudioComponent & Required<Pick<StudioComponent, 'variants'>> {
   if (isStudioComponentWithVariants(component)) {
-    return Object.keys(component.variants)
-      .map((i) => component.variants[Number(i)].variantValues.breakpoint !== undefined)
-      .includes(true);
+    return component.variants.some((variant) =>
+      breakpointSizes.includes(variant?.variantValues?.breakpoint as BreakpointSizeType),
+    );
   }
   return false;
 }

@@ -241,10 +241,14 @@ describe('amplify render tests', () => {
     });
 
     it('should have breakpoint specific generation', () => {
-      const generatedCode = generateWithAmplifyRenderer('componentWithBreakpoint');
-      expect(generatedCode.componentText.includes('restProp')).toBe(true);
-      expect(generatedCode.componentText.includes('breakpointHook')).toBe(true);
-      expect(generatedCode.componentText.includes('breakpoint: breakpointHook')).toBe(true);
+      const { componentText } = generateWithAmplifyRenderer('componentWithBreakpoint');
+      expect(componentText).toContain('restProp');
+      expect(componentText).toContain('breakpointHook');
+      expect(componentText).toContain('breakpoint: breakpointHook');
+      expect(componentText).toContain('base: "small",');
+      expect(componentText).toContain('small: "small",');
+      expect(componentText).toContain('medium: "medium",');
+      expect(componentText).not.toContain('large: "large"');
     });
   });
 

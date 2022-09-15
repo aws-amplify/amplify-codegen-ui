@@ -34,6 +34,7 @@ import {
   validateComponentSchema,
   isSlotBinding,
   GenericDataSchema,
+  getBreakpoints,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -57,6 +58,7 @@ import ts, {
   addSyntheticLeadingComment,
   JsxSelfClosingElement,
   PropertyAssignment,
+  ObjectLiteralElementLike,
 } from 'typescript';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
@@ -626,7 +628,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       this.importCollection.addMappedImport(ImportValue.MERGE_VARIANTS_OVERRIDES);
       statements.push(this.buildVariantDeclaration(component.variants));
       if (hasBreakpoint) {
-        statements.push(this.buildDefaultBreakpointMap());
+        statements.push(this.buildDefaultBreakpointMap(component));
         statements.push(this.buildRestWithStyle());
       }
       statements.push(this.buildOverridesFromVariantsAndProp(hasBreakpoint));
@@ -740,23 +742,24 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    *        xxl: 'xxl',
    *     });
    */
-  private buildDefaultBreakpointMap() {
+  private buildDefaultBreakpointMap(component: StudioComponent & Required<Pick<StudioComponent, 'variants'>>) {
+    const breakpoints = getBreakpoints(component);
+    const element: ObjectLiteralElementLike[] = [];
+    // if the first element is not base then we sent it anyway as the smallest size should default to base
+    if (breakpoints[0] !== 'base') {
+      element.push(
+        factory.createPropertyAssignment(factory.createIdentifier('base'), factory.createStringLiteral(breakpoints[0])),
+      );
+    }
+    breakpoints.forEach((bp) => {
+      element.push(factory.createPropertyAssignment(factory.createIdentifier(bp), factory.createStringLiteral(bp)));
+    });
     this.importCollection.addMappedImport(ImportValue.USE_BREAKPOINT_VALUE);
 
     return createHookStatement(
       'breakpointHook',
       'useBreakpointValue',
-      factory.createObjectLiteralExpression(
-        [
-          factory.createPropertyAssignment(factory.createIdentifier('base'), factory.createStringLiteral('base')),
-          factory.createPropertyAssignment(factory.createIdentifier('large'), factory.createStringLiteral('large')),
-          factory.createPropertyAssignment(factory.createIdentifier('medium'), factory.createStringLiteral('medium')),
-          factory.createPropertyAssignment(factory.createIdentifier('small'), factory.createStringLiteral('small')),
-          factory.createPropertyAssignment(factory.createIdentifier('xl'), factory.createStringLiteral('xl')),
-          factory.createPropertyAssignment(factory.createIdentifier('xxl'), factory.createStringLiteral('xxl')),
-        ],
-        true,
-      ),
+      factory.createObjectLiteralExpression(element, true),
     );
   }
 
