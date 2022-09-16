@@ -559,11 +559,30 @@ export const buildComponentSpecificAttributes = ({
   componentType: string;
   componentName: string;
 }) => {
+  const stateName = componentName.split('.')[0];
   const componentToAttributesMap: { [key: string]: JsxAttribute[] } = {
     ToggleButton: [
       factory.createJsxAttribute(
         factory.createIdentifier('isPressed'),
-        factory.createJsxExpression(undefined, factory.createIdentifier(componentName)),
+        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
+      ),
+    ],
+    SliderField: [
+      factory.createJsxAttribute(
+        factory.createIdentifier('value'),
+        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
+      ),
+    ],
+    SelectField: [
+      factory.createJsxAttribute(
+        factory.createIdentifier('value'),
+        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
+      ),
+    ],
+    StepperField: [
+      factory.createJsxAttribute(
+        factory.createIdentifier('value'),
+        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
       ),
     ],
   };

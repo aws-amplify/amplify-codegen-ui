@@ -214,7 +214,7 @@ export function getFormDefinitionInputElement(
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
-          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder || 'Please select an option',
           isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
         },
 

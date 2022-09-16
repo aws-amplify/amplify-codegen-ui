@@ -41,6 +41,8 @@ export const getDefaultValueExpression = (
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
     ToggleButton: factory.createFalse(),
+    StepperField: factory.createNumericLiteral(0),
+    SliderField: factory.createNumericLiteral(0),
   };
 
   // it's a nonModel or relationship object
