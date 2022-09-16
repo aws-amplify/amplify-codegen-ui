@@ -26,6 +26,19 @@ import {
   CallExpression,
 } from 'typescript';
 
+export const getCurrentValueName = (fieldName: string) => `current${capitalizeFirstLetter(fieldName)}Value`;
+
+export const getCurrentValueIdentifier = (fieldName: string) =>
+  factory.createIdentifier(getCurrentValueName(fieldName));
+
+export const resetValuesName = factory.createIdentifier('resetStateValues');
+
+export const setStateExpression = (fieldName: string, value: Expression) => {
+  return factory.createExpressionStatement(
+    factory.createCallExpression(getSetNameIdentifier(fieldName), undefined, [value]),
+  );
+};
+
 export const capitalizeFirstLetter = (val: string) => {
   return val.charAt(0).toUpperCase() + val.slice(1);
 };
@@ -77,6 +90,63 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
     }
     return acc;
   }, []);
+};
+
+/**
+ * function used by the onClear/onReset button cta
+ * it's a reset type but we also need to clear the state of the input fields as well
+ *
+ * ex.
+ * const resetStateValues = () => {
+ *  setName('')
+ *  setLastName('')
+ *   ....
+ * };
+ */
+export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>) => {
+  const stateNames = new Set<string>();
+  const setStateExpressions = Object.entries(fieldConfigs).reduce<Statement[]>(
+    (acc, [name, { dataType, componentType, isArray }]) => {
+      const stateName = name.split('.')[0];
+      if (!stateNames.has(stateName)) {
+        acc.push(setStateExpression(stateName, getDefaultValueExpression(name, componentType, dataType)));
+        if (isArray) {
+          acc.push(
+            setStateExpression(
+              getCurrentValueName(stateName),
+              getDefaultValueExpression(name, componentType, dataType),
+            ),
+          );
+        }
+        stateNames.add(stateName);
+      }
+      return acc;
+    },
+    [],
+  );
+  // also reset the state of the errors
+  setStateExpressions.push(setStateExpression('errors', factory.createObjectLiteralExpression()));
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          resetValuesName,
+          undefined,
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(setStateExpressions, true),
+          ),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
 };
 
 /**

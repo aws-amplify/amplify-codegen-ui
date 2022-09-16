@@ -69,7 +69,7 @@ import {
   buildValidations,
   runValidationTasksFunction,
 } from './form-renderer-helper';
-import { buildUseStateExpression, capitalizeFirstLetter, getUseStateHooks } from './form-state';
+import { buildUseStateExpression, getCurrentValueName, getUseStateHooks, resetStateFunction } from './form-state';
 import {
   buildFormPropNode,
   baseValidationConditionalType,
@@ -374,6 +374,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
+    statements.push(resetStateFunction(formMetadata.fieldConfigs));
+
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
 
@@ -402,7 +404,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     Object.entries(formMetadata.fieldConfigs).forEach(([field, config]) => {
       if (config.isArray) {
         statements.push(
-          buildUseStateExpression(`current${capitalizeFirstLetter(field)}Value`, factory.createStringLiteral('')),
+          buildUseStateExpression(getCurrentValueName(field), factory.createStringLiteral('')),
           factory.createVariableStatement(
             undefined,
             factory.createVariableDeclarationList(
