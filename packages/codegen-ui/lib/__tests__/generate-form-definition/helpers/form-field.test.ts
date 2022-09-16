@@ -302,7 +302,7 @@ describe('getFormDefinitionInputElement', () => {
 
     expect(getFormDefinitionInputElement(config)).toStrictEqual({
       componentType: 'SelectField',
-      props: { label: 'Label', isDisabled: true },
+      props: { label: 'Label', isDisabled: true, placeholder: 'Please select an option' },
       valueMappings: {
         values: [{ value: { value: 'value1' }, displayvalue: { value: 'displayValue1' } }],
         bindingProperties: {},

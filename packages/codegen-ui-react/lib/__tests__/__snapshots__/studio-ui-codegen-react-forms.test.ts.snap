@@ -22,7 +22,7 @@ export default function CustomDataForm(props) {
   const [email, setEmail] = React.useState(undefined);
   const [city, setCity] = React.useState(undefined);
   const [category, setCategory] = React.useState(undefined);
-  const [pages, setPages] = React.useState(undefined);
+  const [pages, setPages] = React.useState(0);
   const [errors, setErrors] = React.useState({});
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -135,6 +135,8 @@ export default function CustomDataForm(props) {
       ></TextField>
       <SelectField
         label=\\"Label\\"
+        placeholder=\\"Please select an option\\"
+        value={city}
         onChange={async (e) => {
           let { value } = e.target;
           if (onChange) {
@@ -220,6 +222,7 @@ export default function CustomDataForm(props) {
       </RadioGroupField>
       <StepperField
         label=\\"Label\\"
+        value={pages}
         onStepChange={async (e) => {
           let value = e;
           if (onChange) {
