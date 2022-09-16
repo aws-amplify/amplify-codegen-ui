@@ -109,7 +109,7 @@ export default function CustomDataForm(props) {
           }
           setName(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"name\\", name)}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
         errorMessage={errors.name?.errorMessage}
         hasError={errors.name?.hasError}
         {...getOverrideProps(overrides, \\"name\\")}
@@ -136,7 +136,7 @@ export default function CustomDataForm(props) {
           }
           setEmail(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"email\\", email)}
+        onBlur={() => runValidationTasks(\\"email\\", email)}
         errorMessage={errors.email?.errorMessage}
         hasError={errors.email?.hasError}
         {...getOverrideProps(overrides, \\"email\\")}
@@ -163,7 +163,7 @@ export default function CustomDataForm(props) {
           }
           setCity(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"city\\", city)}
+        onBlur={() => runValidationTasks(\\"city\\", city)}
         errorMessage={errors.city?.errorMessage}
         hasError={errors.city?.hasError}
         {...getOverrideProps(overrides, \\"city\\")}
@@ -207,7 +207,7 @@ export default function CustomDataForm(props) {
           }
           setCategory(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"category\\", category)}
+        onBlur={() => runValidationTasks(\\"category\\", category)}
         errorMessage={errors.category?.errorMessage}
         hasError={errors.category?.hasError}
         {...getOverrideProps(overrides, \\"category\\")}
@@ -249,7 +249,7 @@ export default function CustomDataForm(props) {
           }
           setPages(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"pages\\", pages)}
+        onBlur={() => runValidationTasks(\\"pages\\", pages)}
         errorMessage={errors.pages?.errorMessage}
         hasError={errors.pages?.hasError}
         {...getOverrideProps(overrides, \\"pages\\")}
@@ -261,9 +261,7 @@ export default function CustomDataForm(props) {
         <Button
           children=\\"empty\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -447,7 +445,7 @@ export default function CustomDataForm(props) {
           }
           setName(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"name\\", name)}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
         errorMessage={errors.name?.errorMessage}
         hasError={errors.name?.hasError}
         {...getOverrideProps(overrides, \\"name\\")}
@@ -475,7 +473,7 @@ export default function CustomDataForm(props) {
           }
           setEmail(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"email\\", email)}
+        onBlur={() => runValidationTasks(\\"email\\", email)}
         errorMessage={errors.email?.errorMessage}
         hasError={errors.email?.hasError}
         {...getOverrideProps(overrides, \\"email\\")}
@@ -502,7 +500,7 @@ export default function CustomDataForm(props) {
           }
           setCity(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"city\\", city)}
+        onBlur={() => runValidationTasks(\\"city\\", city)}
         errorMessage={errors.city?.errorMessage}
         hasError={errors.city?.hasError}
         {...getOverrideProps(overrides, \\"city\\")}
@@ -547,7 +545,7 @@ export default function CustomDataForm(props) {
           }
           setCategory(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"category\\", category)}
+        onBlur={() => runValidationTasks(\\"category\\", category)}
         errorMessage={errors.category?.errorMessage}
         hasError={errors.category?.hasError}
         {...getOverrideProps(overrides, \\"category\\")}
@@ -589,7 +587,7 @@ export default function CustomDataForm(props) {
           }
           setPages(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"pages\\", pages)}
+        onBlur={() => runValidationTasks(\\"pages\\", pages)}
         errorMessage={errors.pages?.errorMessage}
         hasError={errors.pages?.hasError}
         {...getOverrideProps(overrides, \\"pages\\")}
@@ -601,9 +599,7 @@ export default function CustomDataForm(props) {
         <Button
           children=\\"empty\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -758,7 +754,7 @@ export default function NestedJson(props) {
           }
           setFirstName(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"firstName\\", firstName)}
+        onBlur={() => runValidationTasks(\\"firstName\\", firstName)}
         errorMessage={errors.firstName?.errorMessage}
         hasError={errors.firstName?.hasError}
         {...getOverrideProps(overrides, \\"firstName\\")}
@@ -781,7 +777,7 @@ export default function NestedJson(props) {
           }
           setLastName(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"lastName\\", lastName)}
+        onBlur={() => runValidationTasks(\\"lastName\\", lastName)}
         errorMessage={errors.lastName?.errorMessage}
         hasError={errors.lastName?.hasError}
         {...getOverrideProps(overrides, \\"lastName\\")}
@@ -809,8 +805,8 @@ export default function NestedJson(props) {
           }
           setBio({ ...bio, favoriteQuote: value });
         }}
-        onBlur={async () =>
-          await runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
+        onBlur={() =>
+          runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
         }
         errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
         hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
@@ -834,8 +830,8 @@ export default function NestedJson(props) {
           }
           setBio({ ...bio, favoriteAnimal: value });
         }}
-        onBlur={async () =>
-          await runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
+        onBlur={() =>
+          runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
         }
         errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
         hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
@@ -848,9 +844,7 @@ export default function NestedJson(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -1013,7 +1007,7 @@ export default function NestedJson(props) {
           }
           setFirstName(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"firstName\\", firstName)}
+        onBlur={() => runValidationTasks(\\"firstName\\", firstName)}
         errorMessage={errors.firstName?.errorMessage}
         hasError={errors.firstName?.hasError}
         {...getOverrideProps(overrides, \\"firstName\\")}
@@ -1037,7 +1031,7 @@ export default function NestedJson(props) {
           }
           setLastName(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"lastName\\", lastName)}
+        onBlur={() => runValidationTasks(\\"lastName\\", lastName)}
         errorMessage={errors.lastName?.errorMessage}
         hasError={errors.lastName?.hasError}
         {...getOverrideProps(overrides, \\"lastName\\")}
@@ -1066,8 +1060,8 @@ export default function NestedJson(props) {
           }
           setBio({ ...bio, favoriteQuote: value });
         }}
-        onBlur={async () =>
-          await runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
+        onBlur={() =>
+          runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
         }
         errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
         hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
@@ -1092,8 +1086,8 @@ export default function NestedJson(props) {
           }
           setBio({ ...bio, favoriteAnimal: value });
         }}
-        onBlur={async () =>
-          await runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
+        onBlur={() =>
+          runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
         }
         errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
         hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
@@ -1106,9 +1100,7 @@ export default function NestedJson(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -1266,7 +1258,7 @@ export default function CustomWithSectionalElements(props) {
           }
           setName(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"name\\", name)}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
         errorMessage={errors.name?.errorMessage}
         hasError={errors.name?.hasError}
         {...getOverrideProps(overrides, \\"name\\")}
@@ -1286,9 +1278,7 @@ export default function CustomWithSectionalElements(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -1451,9 +1441,7 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -1495,7 +1483,7 @@ export default function MyPostForm(props) {
           }
           setCaption(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"caption\\", caption)}
+        onBlur={() => runValidationTasks(\\"caption\\", caption)}
         errorMessage={errors.caption?.errorMessage}
         hasError={errors.caption?.hasError}
         {...getOverrideProps(overrides, \\"caption\\")}
@@ -1521,7 +1509,7 @@ export default function MyPostForm(props) {
           }
           setUsername(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"username\\", username)}
+        onBlur={() => runValidationTasks(\\"username\\", username)}
         errorMessage={errors.username?.errorMessage}
         hasError={errors.username?.hasError}
         {...getOverrideProps(overrides, \\"username\\")}
@@ -1547,7 +1535,7 @@ export default function MyPostForm(props) {
           }
           setPost_url(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"post_url\\", post_url)}
+        onBlur={() => runValidationTasks(\\"post_url\\", post_url)}
         errorMessage={errors.post_url?.errorMessage}
         hasError={errors.post_url?.hasError}
         {...getOverrideProps(overrides, \\"post_url\\")}
@@ -1573,9 +1561,7 @@ export default function MyPostForm(props) {
           }
           setProfile_url(value);
         }}
-        onBlur={async () =>
-          await runValidationTasks(\\"profile_url\\", profile_url)
-        }
+        onBlur={() => runValidationTasks(\\"profile_url\\", profile_url)}
         errorMessage={errors.profile_url?.errorMessage}
         hasError={errors.profile_url?.hasError}
         {...getOverrideProps(overrides, \\"profile_url\\")}
@@ -1759,9 +1745,7 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -1803,11 +1787,8 @@ export default function MyPostForm(props) {
           }
           setTextAreaFieldbbd63464(value);
         }}
-        onBlur={async () =>
-          await runValidationTasks(
-            \\"TextAreaFieldbbd63464\\",
-            TextAreaFieldbbd63464
-          )
+        onBlur={() =>
+          runValidationTasks(\\"TextAreaFieldbbd63464\\", TextAreaFieldbbd63464)
         }
         errorMessage={errors.TextAreaFieldbbd63464?.errorMessage}
         hasError={errors.TextAreaFieldbbd63464?.hasError}
@@ -1836,7 +1817,7 @@ export default function MyPostForm(props) {
           }
           setCaption(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"caption\\", caption)}
+        onBlur={() => runValidationTasks(\\"caption\\", caption)}
         errorMessage={errors.caption?.errorMessage}
         hasError={errors.caption?.hasError}
         {...getOverrideProps(overrides, \\"caption\\")}
@@ -1864,7 +1845,7 @@ export default function MyPostForm(props) {
           }
           setUsername(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"username\\", username)}
+        onBlur={() => runValidationTasks(\\"username\\", username)}
         errorMessage={errors.username?.errorMessage}
         hasError={errors.username?.hasError}
         {...getOverrideProps(overrides, \\"username\\")}
@@ -1892,9 +1873,7 @@ export default function MyPostForm(props) {
           }
           setProfile_url(value);
         }}
-        onBlur={async () =>
-          await runValidationTasks(\\"profile_url\\", profile_url)
-        }
+        onBlur={() => runValidationTasks(\\"profile_url\\", profile_url)}
         errorMessage={errors.profile_url?.errorMessage}
         hasError={errors.profile_url?.hasError}
         {...getOverrideProps(overrides, \\"profile_url\\")}
@@ -1922,7 +1901,7 @@ export default function MyPostForm(props) {
           }
           setPost_url(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"post_url\\", post_url)}
+        onBlur={() => runValidationTasks(\\"post_url\\", post_url)}
         errorMessage={errors.post_url?.errorMessage}
         hasError={errors.post_url?.hasError}
         {...getOverrideProps(overrides, \\"post_url\\")}
@@ -1934,9 +1913,7 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -2261,7 +2238,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setNum(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"num\\", num)}
+        onBlur={() => runValidationTasks(\\"num\\", num)}
         errorMessage={errors.num?.errorMessage}
         hasError={errors.num?.hasError}
         {...getOverrideProps(overrides, \\"num\\")}
@@ -2293,7 +2270,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setRootbeer(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"rootbeer\\", rootbeer)}
+        onBlur={() => runValidationTasks(\\"rootbeer\\", rootbeer)}
         errorMessage={errors.rootbeer?.errorMessage}
         hasError={errors.rootbeer?.hasError}
         {...getOverrideProps(overrides, \\"rootbeer\\")}
@@ -2325,7 +2302,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setAttend(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"attend\\", attend)}
+        onBlur={() => runValidationTasks(\\"attend\\", attend)}
         errorMessage={errors.attend?.errorMessage}
         hasError={errors.attend?.hasError}
         {...getOverrideProps(overrides, \\"attend\\")}
@@ -2368,7 +2345,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setMaybeSlide(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"maybeSlide\\", maybeSlide)}
+        onBlur={() => runValidationTasks(\\"maybeSlide\\", maybeSlide)}
         errorMessage={errors.maybeSlide?.errorMessage}
         hasError={errors.maybeSlide?.hasError}
         {...getOverrideProps(overrides, \\"maybeSlide\\")}
@@ -2401,7 +2378,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setMaybeCheck(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"maybeCheck\\", maybeCheck)}
+        onBlur={() => runValidationTasks(\\"maybeCheck\\", maybeCheck)}
         errorMessage={errors.maybeCheck?.errorMessage}
         hasError={errors.maybeCheck?.hasError}
         {...getOverrideProps(overrides, \\"maybeCheck\\")}
@@ -2443,11 +2420,8 @@ export default function InputGalleryCreateForm(props) {
             }
             setCurrentArrayTypeFieldValue(value);
           }}
-          onBlur={async () =>
-            await runValidationTasks(
-              \\"arrayTypeField\\",
-              currentArrayTypeFieldValue
-            )
+          onBlur={() =>
+            runValidationTasks(\\"arrayTypeField\\", currentArrayTypeFieldValue)
           }
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
@@ -2483,7 +2457,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setTimestamp(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"timestamp\\", timestamp)}
+        onBlur={() => runValidationTasks(\\"timestamp\\", timestamp)}
         errorMessage={errors.timestamp?.errorMessage}
         hasError={errors.timestamp?.hasError}
         {...getOverrideProps(overrides, \\"timestamp\\")}
@@ -2514,7 +2488,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setIppy(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"ippy\\", ippy)}
+        onBlur={() => runValidationTasks(\\"ippy\\", ippy)}
         errorMessage={errors.ippy?.errorMessage}
         hasError={errors.ippy?.hasError}
         {...getOverrideProps(overrides, \\"ippy\\")}
@@ -2546,7 +2520,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setTimeisnow(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"timeisnow\\", timeisnow)}
+        onBlur={() => runValidationTasks(\\"timeisnow\\", timeisnow)}
         errorMessage={errors.timeisnow?.errorMessage}
         hasError={errors.timeisnow?.hasError}
         {...getOverrideProps(overrides, \\"timeisnow\\")}
@@ -2558,9 +2532,7 @@ export default function InputGalleryCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -2919,7 +2891,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setNum(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"num\\", num)}
+        onBlur={() => runValidationTasks(\\"num\\", num)}
         errorMessage={errors.num?.errorMessage}
         hasError={errors.num?.hasError}
         {...getOverrideProps(overrides, \\"num\\")}
@@ -2952,7 +2924,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setRootbeer(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"rootbeer\\", rootbeer)}
+        onBlur={() => runValidationTasks(\\"rootbeer\\", rootbeer)}
         errorMessage={errors.rootbeer?.errorMessage}
         hasError={errors.rootbeer?.hasError}
         {...getOverrideProps(overrides, \\"rootbeer\\")}
@@ -2985,7 +2957,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setAttend(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"attend\\", attend)}
+        onBlur={() => runValidationTasks(\\"attend\\", attend)}
         errorMessage={errors.attend?.errorMessage}
         hasError={errors.attend?.hasError}
         {...getOverrideProps(overrides, \\"attend\\")}
@@ -3029,7 +3001,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setMaybeSlide(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"maybeSlide\\", maybeSlide)}
+        onBlur={() => runValidationTasks(\\"maybeSlide\\", maybeSlide)}
         errorMessage={errors.maybeSlide?.errorMessage}
         hasError={errors.maybeSlide?.hasError}
         {...getOverrideProps(overrides, \\"maybeSlide\\")}
@@ -3063,7 +3035,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setMaybeCheck(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"maybeCheck\\", maybeCheck)}
+        onBlur={() => runValidationTasks(\\"maybeCheck\\", maybeCheck)}
         errorMessage={errors.maybeCheck?.errorMessage}
         hasError={errors.maybeCheck?.hasError}
         {...getOverrideProps(overrides, \\"maybeCheck\\")}
@@ -3105,11 +3077,8 @@ export default function InputGalleryCreateForm(props) {
             }
             setCurrentArrayTypeFieldValue(value);
           }}
-          onBlur={async () =>
-            await runValidationTasks(
-              \\"arrayTypeField\\",
-              currentArrayTypeFieldValue
-            )
+          onBlur={() =>
+            runValidationTasks(\\"arrayTypeField\\", currentArrayTypeFieldValue)
           }
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
@@ -3146,7 +3115,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setTimestamp(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"timestamp\\", timestamp)}
+        onBlur={() => runValidationTasks(\\"timestamp\\", timestamp)}
         errorMessage={errors.timestamp?.errorMessage}
         hasError={errors.timestamp?.hasError}
         {...getOverrideProps(overrides, \\"timestamp\\")}
@@ -3178,7 +3147,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setIppy(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"ippy\\", ippy)}
+        onBlur={() => runValidationTasks(\\"ippy\\", ippy)}
         errorMessage={errors.ippy?.errorMessage}
         hasError={errors.ippy?.hasError}
         {...getOverrideProps(overrides, \\"ippy\\")}
@@ -3211,7 +3180,7 @@ export default function InputGalleryCreateForm(props) {
           }
           setTimeisnow(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"timeisnow\\", timeisnow)}
+        onBlur={() => runValidationTasks(\\"timeisnow\\", timeisnow)}
         errorMessage={errors.timeisnow?.errorMessage}
         hasError={errors.timeisnow?.hasError}
         {...getOverrideProps(overrides, \\"timeisnow\\")}
@@ -3223,9 +3192,7 @@ export default function InputGalleryCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -3444,7 +3411,7 @@ export default function PostCreateFormRow(props) {
             }
             setUsername(value);
           }}
-          onBlur={async () => await runValidationTasks(\\"username\\", username)}
+          onBlur={() => runValidationTasks(\\"username\\", username)}
           errorMessage={errors.username?.errorMessage}
           hasError={errors.username?.hasError}
           {...getOverrideProps(overrides, \\"username\\")}
@@ -3472,7 +3439,7 @@ export default function PostCreateFormRow(props) {
             }
             setCaption(value);
           }}
-          onBlur={async () => await runValidationTasks(\\"caption\\", caption)}
+          onBlur={() => runValidationTasks(\\"caption\\", caption)}
           errorMessage={errors.caption?.errorMessage}
           hasError={errors.caption?.hasError}
           {...getOverrideProps(overrides, \\"caption\\")}
@@ -3501,7 +3468,7 @@ export default function PostCreateFormRow(props) {
           }
           setPost_url(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"post_url\\", post_url)}
+        onBlur={() => runValidationTasks(\\"post_url\\", post_url)}
         errorMessage={errors.post_url?.errorMessage}
         hasError={errors.post_url?.hasError}
         {...getOverrideProps(overrides, \\"post_url\\")}
@@ -3529,9 +3496,7 @@ export default function PostCreateFormRow(props) {
           }
           setProfile_url(value);
         }}
-        onBlur={async () =>
-          await runValidationTasks(\\"profile_url\\", profile_url)
-        }
+        onBlur={() => runValidationTasks(\\"profile_url\\", profile_url)}
         errorMessage={errors.profile_url?.errorMessage}
         hasError={errors.profile_url?.hasError}
         {...getOverrideProps(overrides, \\"profile_url\\")}
@@ -3558,7 +3523,7 @@ export default function PostCreateFormRow(props) {
           }
           setStatus(value);
         }}
-        onBlur={async () => await runValidationTasks(\\"status\\", status)}
+        onBlur={() => runValidationTasks(\\"status\\", status)}
         errorMessage={errors.status?.errorMessage}
         hasError={errors.status?.hasError}
         {...getOverrideProps(overrides, \\"status\\")}
@@ -3570,9 +3535,7 @@ export default function PostCreateFormRow(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={() => {
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>

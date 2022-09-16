@@ -193,24 +193,21 @@ export const buildUseStateExpression = (name: string, defaultValue: Expression):
  * @param values
  * @returns
  */
-export const buildAccessChain = (values: string[]): Expression => {
-  if (values.length < 0) {
+export const buildAccessChain = (values: string[], isOptional = true): Expression => {
+  if (values.length <= 0) {
     throw new Error('Need at least one value in the values array');
   }
+  const optional = isOptional ? factory.createToken(SyntaxKind.QuestionDotToken) : undefined;
   if (values.length > 1) {
     const [parent, child, ...rest] = values;
     let propChain = factory.createPropertyAccessChain(
       factory.createIdentifier(parent),
-      factory.createToken(SyntaxKind.QuestionDotToken),
+      optional,
       factory.createIdentifier(child),
     );
     if (rest.length) {
       rest.forEach((value) => {
-        propChain = factory.createPropertyAccessChain(
-          propChain,
-          factory.createToken(SyntaxKind.QuestionDotToken),
-          factory.createIdentifier(value),
-        );
+        propChain = factory.createPropertyAccessChain(propChain, optional, factory.createIdentifier(value));
       });
     }
     return propChain;

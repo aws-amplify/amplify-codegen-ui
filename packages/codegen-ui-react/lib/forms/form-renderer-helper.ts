@@ -207,20 +207,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('onClick'),
-        factory.createJsxExpression(
-          undefined,
-          factory.createArrowFunction(
-            undefined,
-            undefined,
-            [],
-            undefined,
-            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-            factory.createBlock(
-              [factory.createExpressionStatement(factory.createCallExpression(resetValuesName, undefined, []))],
-              false,
-            ),
-          ),
-        ),
+        factory.createJsxExpression(undefined, resetValuesName),
       ),
     );
   }
@@ -339,17 +326,15 @@ export function buildOnBlurStatement(fieldName: string, isArray: boolean | undef
     factory.createJsxExpression(
       undefined,
       factory.createArrowFunction(
-        [factory.createModifier(SyntaxKind.AsyncKeyword)],
+        undefined,
         undefined,
         [],
         undefined,
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-        factory.createAwaitExpression(
-          factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
-            factory.createStringLiteral(fieldName),
-            isArray ? getCurrentValueIdentifier(fieldName) : factory.createIdentifier(fieldName),
-          ]),
-        ),
+        factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+          factory.createStringLiteral(fieldName),
+          isArray ? getCurrentValueIdentifier(fieldName) : factory.createIdentifier(fieldName),
+        ]),
       ),
     ),
   );
