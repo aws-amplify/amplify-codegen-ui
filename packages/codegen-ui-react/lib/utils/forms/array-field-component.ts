@@ -34,7 +34,7 @@ export const generateArrayFieldComponent = () => {
           factory.createBindingElement(
             undefined,
             undefined,
-            factory.createIdentifier('defaultValues'),
+            factory.createIdentifier('items'),
             factory.createArrayLiteralExpression([], false),
           ),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('onChange'), undefined),
@@ -80,30 +80,6 @@ export const generateArrayFieldComponent = () => {
                   ),
                   undefined,
                   [],
-                ),
-              ),
-            ],
-            NodeFlags.Const,
-          ),
-        ),
-        factory.createVariableStatement(
-          undefined,
-          factory.createVariableDeclarationList(
-            [
-              factory.createVariableDeclaration(
-                factory.createArrayBindingPattern([
-                  factory.createBindingElement(undefined, undefined, factory.createIdentifier('items'), undefined),
-                  factory.createBindingElement(undefined, undefined, factory.createIdentifier('setItems'), undefined),
-                ]),
-                undefined,
-                undefined,
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier('React'),
-                    factory.createIdentifier('useState'),
-                  ),
-                  undefined,
-                  [factory.createIdentifier('defaultValues')],
                 ),
               ),
             ],
@@ -198,11 +174,6 @@ export const generateArrayFieldComponent = () => {
                           factory.createIdentifier('undefined'),
                         ]),
                       ),
-                      factory.createExpressionStatement(
-                        factory.createCallExpression(factory.createIdentifier('setItems'), undefined, [
-                          factory.createIdentifier('newItems'),
-                        ]),
-                      ),
                     ],
                     true,
                   ),
@@ -278,11 +249,6 @@ export const generateArrayFieldComponent = () => {
                                     ),
                                   ),
                                   factory.createExpressionStatement(
-                                    factory.createCallExpression(factory.createIdentifier('setItems'), undefined, [
-                                      factory.createIdentifier('newItems'),
-                                    ]),
-                                  ),
-                                  factory.createExpressionStatement(
                                     factory.createCallExpression(
                                       factory.createIdentifier('setSelectedBadgeIndex'),
                                       undefined,
@@ -303,11 +269,6 @@ export const generateArrayFieldComponent = () => {
                                       undefined,
                                       [factory.createIdentifier('currentFieldValue')],
                                     ),
-                                  ),
-                                  factory.createExpressionStatement(
-                                    factory.createCallExpression(factory.createIdentifier('setItems'), undefined, [
-                                      factory.createIdentifier('newItems'),
-                                    ]),
                                   ),
                                 ],
                                 true,
@@ -848,6 +809,10 @@ export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChil
             undefined,
             factory.createIdentifier(`current${capitalizeFirstLetter(fieldName)}Value`),
           ),
+        ),
+        factory.createJsxAttribute(
+          factory.createIdentifier('items'),
+          factory.createJsxExpression(undefined, factory.createIdentifier(fieldName)),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('hasError'),

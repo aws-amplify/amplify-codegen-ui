@@ -1957,7 +1957,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
-  defaultValues = [],
+  items = [],
   onChange,
   inputFieldRef,
   children,
@@ -1966,23 +1966,19 @@ function ArrayField({
   currentFieldValue,
 }) {
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
-  const [items, setItems] = React.useState(defaultValues);
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
     setSelectedBadgeIndex(undefined);
-    setItems(newItems);
   };
   const addItem = async () => {
     if (currentFieldValue.length && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
-        setItems(newItems);
         setSelectedBadgeIndex(undefined);
       } else {
         newItems.push(currentFieldValue);
-        setItems(newItems);
       }
       await onChange(newItems);
     }
@@ -2332,6 +2328,7 @@ export default function InputGalleryCreateForm(props) {
           setCurrentArrayTypeFieldValue(\\"\\");
         }}
         currentFieldValue={currentArrayTypeFieldValue}
+        items={arrayTypeField}
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
@@ -2363,7 +2360,10 @@ export default function InputGalleryCreateForm(props) {
             setCurrentArrayTypeFieldValue(value);
           }}
           onBlur={async () =>
-            await runValidationTasks(\\"arrayTypeField\\", arrayTypeField)
+            await runValidationTasks(
+              \\"arrayTypeField\\",
+              currentArrayTypeFieldValue
+            )
           }
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
@@ -2570,7 +2570,7 @@ import {
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
-  defaultValues = [],
+  items = [],
   onChange,
   inputFieldRef,
   children,
@@ -2579,23 +2579,19 @@ function ArrayField({
   currentFieldValue,
 }) {
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
-  const [items, setItems] = React.useState(defaultValues);
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
     setSelectedBadgeIndex(undefined);
-    setItems(newItems);
   };
   const addItem = async () => {
     if (currentFieldValue.length && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
-        setItems(newItems);
         setSelectedBadgeIndex(undefined);
       } else {
         newItems.push(currentFieldValue);
-        setItems(newItems);
       }
       await onChange(newItems);
     }
@@ -2978,6 +2974,7 @@ export default function InputGalleryCreateForm(props) {
           setCurrentArrayTypeFieldValue(\\"\\");
         }}
         currentFieldValue={currentArrayTypeFieldValue}
+        items={arrayTypeField}
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
@@ -3009,7 +3006,10 @@ export default function InputGalleryCreateForm(props) {
             setCurrentArrayTypeFieldValue(value);
           }}
           onBlur={async () =>
-            await runValidationTasks(\\"arrayTypeField\\", arrayTypeField)
+            await runValidationTasks(
+              \\"arrayTypeField\\",
+              currentArrayTypeFieldValue
+            )
           }
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
