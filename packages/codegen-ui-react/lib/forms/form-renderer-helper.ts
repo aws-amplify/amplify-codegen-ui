@@ -156,7 +156,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       );
     }
     attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs));
-    attributes.push(buildOnBlurStatement(componentName));
+    attributes.push(buildOnBlurStatement(componentName, fieldConfig.isArray));
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('errorMessage'),
@@ -307,7 +307,7 @@ function getOnChangeValidationBlock(fieldName: string) {
   );
 }
 
-export function buildOnBlurStatement(fieldName: string) {
+export function buildOnBlurStatement(fieldName: string, isArray: boolean | undefined) {
   return factory.createJsxAttribute(
     factory.createIdentifier('onBlur'),
     factory.createJsxExpression(
@@ -321,7 +321,7 @@ export function buildOnBlurStatement(fieldName: string) {
         factory.createAwaitExpression(
           factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
             factory.createStringLiteral(fieldName),
-            factory.createIdentifier(fieldName),
+            factory.createIdentifier(isArray ? `current${capitalizeFirstLetter(fieldName)}Value` : fieldName),
           ]),
         ),
       ),
