@@ -62,15 +62,16 @@ import { generateArrayFieldComponent } from '../utils/forms/array-field-componen
 import { addUseEffectWrapper } from '../utils/generate-react-hooks';
 import { RequiredKeys } from '../utils/type-utils';
 import {
-  buildFormPropNode,
   buildMutationBindings,
   buildOverrideTypesBindings,
+  buildSetStateFunction,
   buildUpdateDatastoreQuery,
   buildValidations,
   runValidationTasksFunction,
 } from './form-renderer-helper';
 import { buildUseStateExpression, capitalizeFirstLetter, getUseStateHooks } from './form-state';
 import {
+  buildFormPropNode,
   baseValidationConditionalType,
   formOverrideProp,
   generateInputTypes,
@@ -391,6 +392,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           ),
         );
       }
+    }
+    if (dataSourceType === 'Custom' && formActionType === 'update') {
+      statements.push(addUseEffectWrapper([buildSetStateFunction(formMetadata.fieldConfigs)], []));
     }
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
