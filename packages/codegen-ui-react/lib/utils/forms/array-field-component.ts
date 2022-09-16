@@ -14,7 +14,12 @@
   limitations under the License.
  */
 import { factory, JsxChild, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
-import { capitalizeFirstLetter } from '../../forms/form-state';
+import {
+  capitalizeFirstLetter,
+  getCurrentValueIdentifier,
+  getCurrentValueName,
+  getSetNameIdentifier,
+} from '../../forms/form-state';
 import { lowerCaseFirst } from '../../helpers';
 
 export const generateArrayFieldComponent = () => {
@@ -756,8 +761,10 @@ export const generateArrayFieldComponent = () => {
   </ArrayField>
  */
 
-export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChild) =>
-  factory.createJsxElement(
+export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChild) => {
+  const stateName = getCurrentValueIdentifier(fieldName);
+  const setStateName = getSetNameIdentifier(getCurrentValueName(fieldName));
+  return factory.createJsxElement(
     factory.createJsxOpeningElement(
       factory.createIdentifier('ArrayField'),
       undefined,
@@ -791,11 +798,7 @@ export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChil
                     ),
                   ),
                   factory.createExpressionStatement(
-                    factory.createCallExpression(
-                      factory.createIdentifier(`setCurrent${capitalizeFirstLetter(fieldName)}Value`),
-                      undefined,
-                      [factory.createStringLiteral('')],
-                    ),
+                    factory.createCallExpression(setStateName, undefined, [factory.createStringLiteral('')]),
                   ),
                 ],
                 true,
@@ -805,10 +808,7 @@ export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChil
         ),
         factory.createJsxAttribute(
           factory.createIdentifier(`currentFieldValue`),
-          factory.createJsxExpression(
-            undefined,
-            factory.createIdentifier(`current${capitalizeFirstLetter(fieldName)}Value`),
-          ),
+          factory.createJsxExpression(undefined, stateName),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('items'),
@@ -830,10 +830,7 @@ export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChil
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('setFieldValue'),
-          factory.createJsxExpression(
-            undefined,
-            factory.createIdentifier(`setCurrent${capitalizeFirstLetter(fieldName)}Value`),
-          ),
+          factory.createJsxExpression(undefined, setStateName),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('inputFieldRef'),
@@ -844,3 +841,4 @@ export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChil
     [inputField],
     factory.createJsxClosingElement(factory.createIdentifier('ArrayField')),
   );
+};

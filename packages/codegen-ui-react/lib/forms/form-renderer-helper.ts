@@ -39,7 +39,16 @@ import {
 import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
 import { buildTargetVariable } from './event-targets';
-import { buildAccessChain, buildNestedStateSet, capitalizeFirstLetter, setFieldState } from './form-state';
+import {
+  buildAccessChain,
+  buildNestedStateSet,
+  capitalizeFirstLetter,
+  getCurrentValueIdentifier,
+  getCurrentValueName,
+  resetValuesName,
+  setFieldState,
+  setStateExpression,
+} from './form-state';
 
 export const buildMutationBindings = (form: StudioForm) => {
   const {
@@ -185,10 +194,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('value'),
-          factory.createJsxExpression(
-            undefined,
-            factory.createIdentifier(`current${capitalizeFirstLetter(componentName)}Value`),
-          ),
+          factory.createJsxExpression(undefined, getCurrentValueIdentifier(componentName)),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('ref'),
@@ -197,7 +203,27 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       );
     }
   }
-
+  if (componentName === 'ClearButton') {
+    attributes.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('onClick'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [factory.createExpressionStatement(factory.createCallExpression(resetValuesName, undefined, []))],
+              false,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
   if (componentName === 'SubmitButton') {
     attributes.push(
       factory.createJsxAttribute(
@@ -321,7 +347,7 @@ export function buildOnBlurStatement(fieldName: string, isArray: boolean | undef
         factory.createAwaitExpression(
           factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
             factory.createStringLiteral(fieldName),
-            factory.createIdentifier(isArray ? `current${capitalizeFirstLetter(fieldName)}Value` : fieldName),
+            isArray ? getCurrentValueIdentifier(fieldName) : factory.createIdentifier(fieldName),
           ]),
         ),
       ),
@@ -476,13 +502,7 @@ export const buildOnChangeStatement = (
               buildTargetVariable(fieldType, fieldName, dataType),
               buildOverrideOnChangeStatement(fieldName, fieldConfigs),
               getOnChangeValidationBlock(fieldName),
-              factory.createExpressionStatement(
-                factory.createCallExpression(
-                  factory.createIdentifier(`setCurrent${capitalizeFirstLetter(fieldName)}Value`),
-                  undefined,
-                  [factory.createIdentifier('value')],
-                ),
-              ),
+              setStateExpression(getCurrentValueName(fieldName), factory.createIdentifier('value')),
             ],
             true,
           ),

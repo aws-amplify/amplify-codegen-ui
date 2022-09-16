@@ -24,6 +24,14 @@ export default function CustomDataForm(props) {
   const [category, setCategory] = React.useState(undefined);
   const [pages, setPages] = React.useState(0);
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(undefined);
+    setEmail(undefined);
+    setCity(undefined);
+    setCategory(undefined);
+    setPages(0);
+    setErrors({});
+  };
   const validations = {
     name: [{ type: \\"Required\\" }],
     email: [{ type: \\"Required\\" }],
@@ -253,6 +261,9 @@ export default function CustomDataForm(props) {
         <Button
           children=\\"empty\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -341,6 +352,14 @@ export default function CustomDataForm(props) {
   const [category, setCategory] = React.useState(undefined);
   const [pages, setPages] = React.useState(0);
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(undefined);
+    setEmail(undefined);
+    setCity(undefined);
+    setCategory(undefined);
+    setPages(0);
+    setErrors({});
+  };
   React.useEffect(() => {
     if (initialData) {
       setName(initialData.name);
@@ -582,6 +601,9 @@ export default function CustomDataForm(props) {
         <Button
           children=\\"empty\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -660,6 +682,12 @@ export default function NestedJson(props) {
   const [lastName, setLastName] = React.useState(undefined);
   const [bio, setBio] = React.useState({});
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setFirstName(undefined);
+    setLastName(undefined);
+    setBio({});
+    setErrors({});
+  };
   const validations = {
     firstName: [],
     lastName: [],
@@ -820,6 +848,9 @@ export default function NestedJson(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -898,6 +929,12 @@ export default function NestedJson(props) {
   const [lastName, setLastName] = React.useState(undefined);
   const [bio, setBio] = React.useState({});
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setFirstName(undefined);
+    setLastName(undefined);
+    setBio({});
+    setErrors({});
+  };
   React.useEffect(() => {
     if (initialData) {
       setFirstName(initialData.firstName);
@@ -1069,6 +1106,9 @@ export default function NestedJson(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -1154,6 +1194,10 @@ export default function CustomWithSectionalElements(props) {
     props;
   const [name, setName] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(undefined);
+    setErrors({});
+  };
   const validations = {
     name: [],
   };
@@ -1242,6 +1286,9 @@ export default function CustomWithSectionalElements(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -1325,6 +1372,13 @@ export default function MyPostForm(props) {
   const [post_url, setPost_url] = React.useState(undefined);
   const [profile_url, setProfile_url] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setCaption(undefined);
+    setUsername(undefined);
+    setPost_url(undefined);
+    setProfile_url(undefined);
+    setErrors({});
+  };
   const validations = {
     caption: [],
     username: [],
@@ -1397,6 +1451,9 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -1601,6 +1658,14 @@ export default function MyPostForm(props) {
   const [profile_url, setProfile_url] = React.useState(undefined);
   const [post_url, setPost_url] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setTextAreaFieldbbd63464(undefined);
+    setCaption(undefined);
+    setUsername(undefined);
+    setProfile_url(undefined);
+    setPost_url(undefined);
+    setErrors({});
+  };
   const [postRecord, setPostRecord] = React.useState(post);
   React.useEffect(() => {
     const queryData = async () => {
@@ -1694,6 +1759,9 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -1866,6 +1934,9 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -2072,6 +2143,19 @@ export default function InputGalleryCreateForm(props) {
   const [ippy, setIppy] = React.useState(undefined);
   const [timeisnow, setTimeisnow] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setNum(undefined);
+    setRootbeer(undefined);
+    setAttend(undefined);
+    setMaybeSlide(false);
+    setMaybeCheck(undefined);
+    setArrayTypeField(undefined);
+    setCurrentArrayTypeFieldValue(undefined);
+    setTimestamp(undefined);
+    setIppy(undefined);
+    setTimeisnow(undefined);
+    setErrors({});
+  };
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
     React.useState(\\"\\");
   const arrayTypeFieldRef = React.createRef();
@@ -2474,6 +2558,9 @@ export default function InputGalleryCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -2687,6 +2774,19 @@ export default function InputGalleryCreateForm(props) {
   const [ippy, setIppy] = React.useState(undefined);
   const [timeisnow, setTimeisnow] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setNum(undefined);
+    setRootbeer(undefined);
+    setAttend(undefined);
+    setMaybeSlide(false);
+    setMaybeCheck(undefined);
+    setArrayTypeField(undefined);
+    setCurrentArrayTypeFieldValue(undefined);
+    setTimestamp(undefined);
+    setIppy(undefined);
+    setTimeisnow(undefined);
+    setErrors({});
+  };
   const [inputGalleryRecord, setInputGalleryRecord] =
     React.useState(inputGallery);
   React.useEffect(() => {
@@ -3123,6 +3223,9 @@ export default function InputGalleryCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -3231,6 +3334,14 @@ export default function PostCreateFormRow(props) {
   const [profile_url, setProfile_url] = React.useState(undefined);
   const [status, setStatus] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setUsername(undefined);
+    setCaption(undefined);
+    setPost_url(undefined);
+    setProfile_url(undefined);
+    setStatus(undefined);
+    setErrors({});
+  };
   const validations = {
     username: [
       {
@@ -3459,6 +3570,9 @@ export default function PostCreateFormRow(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
+          onClick={() => {
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
