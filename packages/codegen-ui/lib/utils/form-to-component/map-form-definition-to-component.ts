@@ -65,7 +65,7 @@ export const wrapInRowGrid = (
       properties: {
         columnGap: { value: 'inherit' },
         rowGap: { value: 'inherit' },
-        templateColumms: { value: `repeat(${rowLength}, auto)` },
+        templateColumns: { value: `repeat(${rowLength}, auto)` },
       },
       children,
     },

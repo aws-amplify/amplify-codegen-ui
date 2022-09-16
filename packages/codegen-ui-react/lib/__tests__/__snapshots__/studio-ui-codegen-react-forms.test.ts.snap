@@ -3199,3 +3199,329 @@ export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
 export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
 "
 `;
+
+exports[`amplify form renderer tests datastore form tests should render form with a two inputs in row 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Post } from \\"../models\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  SelectField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+export default function PostCreateFormRow(props) {
+  const {
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const [username, setUsername] = React.useState(undefined);
+  const [caption, setCaption] = React.useState(undefined);
+  const [post_url, setPost_url] = React.useState(undefined);
+  const [profile_url, setProfile_url] = React.useState(undefined);
+  const [status, setStatus] = React.useState(undefined);
+  const [errors, setErrors] = React.useState({});
+  const validations = {
+    username: [
+      {
+        type: \\"GreaterThanChar\\",
+        numValues: [2],
+        validationMessage: \\"needs to be of length 2\\",
+      },
+    ],
+    caption: [],
+    post_url: [{ type: \\"URL\\" }],
+    profile_url: [{ type: \\"URL\\" }],
+    status: [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      columnGap=\\"15px\\"
+      rowGap=\\"15px\\"
+      padding=\\"20px\\"
+      as=\\"form\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          username,
+          caption,
+          post_url,
+          profile_url,
+          status,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(new Post(modelFields));
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"PostCreateFormRow\\")}
+    >
+      <Grid
+        columnGap=\\"inherit\\"
+        rowGap=\\"inherit\\"
+        templateColumns=\\"repeat(2, auto)\\"
+        {...getOverrideProps(overrides, \\"RowGrid0\\")}
+      >
+        <TextField
+          label=\\"Username\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"john\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username: value,
+                caption,
+                post_url,
+                profile_url,
+                status,
+              };
+              const result = onChange(modelFields);
+              value = result?.username ?? value;
+            }
+            if (errors.username?.hasError) {
+              await runValidationTasks(\\"username\\", value);
+            }
+            setUsername(value);
+          }}
+          onBlur={async () => await runValidationTasks(\\"username\\", username)}
+          errorMessage={errors.username?.errorMessage}
+          hasError={errors.username?.hasError}
+          {...getOverrideProps(overrides, \\"username\\")}
+        ></TextField>
+        <TextField
+          label=\\"Caption\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"i love code\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username,
+                caption: value,
+                post_url,
+                profile_url,
+                status,
+              };
+              const result = onChange(modelFields);
+              value = result?.caption ?? value;
+            }
+            if (errors.caption?.hasError) {
+              await runValidationTasks(\\"caption\\", value);
+            }
+            setCaption(value);
+          }}
+          onBlur={async () => await runValidationTasks(\\"caption\\", caption)}
+          errorMessage={errors.caption?.errorMessage}
+          hasError={errors.caption?.hasError}
+          {...getOverrideProps(overrides, \\"caption\\")}
+        ></TextField>
+      </Grid>
+      <TextField
+        label=\\"Post url\\"
+        descriptiveText=\\"post url to use for the component\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              post_url: value,
+              profile_url,
+              status,
+            };
+            const result = onChange(modelFields);
+            value = result?.post_url ?? value;
+          }
+          if (errors.post_url?.hasError) {
+            await runValidationTasks(\\"post_url\\", value);
+          }
+          setPost_url(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"post_url\\", post_url)}
+        errorMessage={errors.post_url?.errorMessage}
+        hasError={errors.post_url?.hasError}
+        {...getOverrideProps(overrides, \\"post_url\\")}
+      ></TextField>
+      <TextField
+        label=\\"Profile url\\"
+        descriptiveText=\\"profile image url\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              post_url,
+              profile_url: value,
+              status,
+            };
+            const result = onChange(modelFields);
+            value = result?.profile_url ?? value;
+          }
+          if (errors.profile_url?.hasError) {
+            await runValidationTasks(\\"profile_url\\", value);
+          }
+          setProfile_url(value);
+        }}
+        onBlur={async () =>
+          await runValidationTasks(\\"profile_url\\", profile_url)
+        }
+        errorMessage={errors.profile_url?.errorMessage}
+        hasError={errors.profile_url?.hasError}
+        {...getOverrideProps(overrides, \\"profile_url\\")}
+      ></TextField>
+      <SelectField
+        label=\\"Label\\"
+        placeholder=\\"Please select an option\\"
+        value={status}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              post_url,
+              profile_url,
+              status: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.status ?? value;
+          }
+          if (errors.status?.hasError) {
+            await runValidationTasks(\\"status\\", value);
+          }
+          setStatus(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"status\\", status)}
+        errorMessage={errors.status?.errorMessage}
+        hasError={errors.status?.hasError}
+        {...getOverrideProps(overrides, \\"status\\")}
+      ></SelectField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render form with a two inputs in row 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
+export declare type PostCreateFormRowInputValues<useBase extends boolean = true> = {
+    username?: UseBaseOrValidationType<useBase, string>;
+    caption?: UseBaseOrValidationType<useBase, string>;
+    post_url?: UseBaseOrValidationType<useBase, string>;
+    profile_url?: UseBaseOrValidationType<useBase, string>;
+    status?: UseBaseOrValidationType<useBase, string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PostCreateFormRowOverridesProps = {
+    PostCreateFormRowGrid?: FormProps<GridProps>;
+    RowGrid0?: FormProps<GridProps>;
+    username?: FormProps<TextFieldProps>;
+    caption?: FormProps<TextFieldProps>;
+    post_url?: FormProps<TextFieldProps>;
+    profile_url?: FormProps<TextFieldProps>;
+    status?: FormProps<SelectFieldProps>;
+} & EscapeHatchProps;
+export declare type PostCreateFormRowProps = React.PropsWithChildren<{
+    overrides?: PostCreateFormRowOverridesProps | undefined | null;
+} & {
+    onSubmit?: (fields: PostCreateFormRowInputValues) => PostCreateFormRowInputValues;
+    onSuccess?: (fields: PostCreateFormRowInputValues) => void;
+    onError?: (fields: PostCreateFormRowInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: PostCreateFormRowInputValues) => PostCreateFormRowInputValues;
+    onValidate?: PostCreateFormRowInputValues<false>;
+}>;
+export default function PostCreateFormRow(props: PostCreateFormRowProps): React.ReactElement;
+"
+`;

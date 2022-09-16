@@ -27,6 +27,16 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should render form with a two inputs in row', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-create-row',
+        'datastore/post',
+      );
+      expect(componentText).toContain('DataStore.save');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should generate a update form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-update',
