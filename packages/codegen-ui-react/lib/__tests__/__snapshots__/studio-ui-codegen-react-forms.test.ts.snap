@@ -87,7 +87,7 @@ export default function CustomDataForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
+              name: value,
               email,
               city,
               category,
@@ -115,7 +115,7 @@ export default function CustomDataForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              email,
+              email: value,
               city,
               category,
               pages,
@@ -143,7 +143,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
-              city,
+              city: value,
               category,
               pages,
             };
@@ -188,7 +188,7 @@ export default function CustomDataForm(props) {
               name,
               email,
               city,
-              category,
+              category: value,
               pages,
             };
             const result = onChange(modelFields);
@@ -231,7 +231,7 @@ export default function CustomDataForm(props) {
               email,
               city,
               category,
-              pages,
+              pages: value,
             };
             const result = onChange(modelFields);
             value = result?.pages ?? value;
@@ -317,6 +317,336 @@ export default function CustomDataForm(props: CustomDataFormProps): React.ReactE
 "
 `;
 
+exports[`amplify form renderer tests custom form tests should render a custom backed form 3`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  Radio,
+  RadioGroupField,
+  SelectField,
+  StepperField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+export default function CustomDataForm(props) {
+  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
+    props;
+  const [name, setName] = React.useState(undefined);
+  const [email, setEmail] = React.useState(undefined);
+  const [city, setCity] = React.useState(undefined);
+  const [category, setCategory] = React.useState(undefined);
+  const [pages, setPages] = React.useState(0);
+  const [errors, setErrors] = React.useState({});
+  React.useEffect(() => {
+    if (initialData) {
+      setName(initialData.name);
+      setEmail(initialData.email);
+      setCity(initialData.city);
+      setCategory(initialData.category);
+      setPages(initialData.pages);
+    }
+  }, []);
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    email: [{ type: \\"Required\\" }],
+    city: [],
+    category: [],
+    pages: [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      columnGap=\\"15px\\"
+      rowGap=\\"15px\\"
+      padding=\\"20px\\"
+      as=\\"form\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const modelFields = {
+          name,
+          email,
+          city,
+          category,
+          pages,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        await onSubmit(modelFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+    >
+      <TextField
+        label=\\"name\\"
+        isRequired={true}
+        defaultValue=\\"John Doe\\"
+        defaultValue={name}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              email,
+              city,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            await runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <TextField
+        label=\\"E-mail\\"
+        isRequired={true}
+        defaultValue=\\"johndoe@amplify.com\\"
+        defaultValue={email}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email: value,
+              city,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.email ?? value;
+          }
+          if (errors.email?.hasError) {
+            await runValidationTasks(\\"email\\", value);
+          }
+          setEmail(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"email\\", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, \\"email\\")}
+      ></TextField>
+      <SelectField
+        label=\\"Label\\"
+        placeholder=\\"Please select an option\\"
+        value={city}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city: value,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.city ?? value;
+          }
+          if (errors.city?.hasError) {
+            await runValidationTasks(\\"city\\", value);
+          }
+          setCity(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"city\\", city)}
+        errorMessage={errors.city?.errorMessage}
+        hasError={errors.city?.hasError}
+        {...getOverrideProps(overrides, \\"city\\")}
+      >
+        <option
+          children=\\"Los Angeles\\"
+          value=\\"Los Angeles\\"
+          {...getOverrideProps(overrides, \\"cityoption0\\")}
+        ></option>
+        <option
+          children=\\"Houston\\"
+          value=\\"Houston\\"
+          {...getOverrideProps(overrides, \\"cityoption1\\")}
+        ></option>
+        <option
+          children=\\"New York\\"
+          value=\\"New York\\"
+          selected={true}
+          {...getOverrideProps(overrides, \\"cityoption2\\")}
+        ></option>
+      </SelectField>
+      <RadioGroupField
+        label=\\"Label\\"
+        name=\\"fieldName\\"
+        defaultValue=\\"Hobbies\\"
+        defaultValue={category}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city,
+              category: value,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.category ?? value;
+          }
+          if (errors.category?.hasError) {
+            await runValidationTasks(\\"category\\", value);
+          }
+          setCategory(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"category\\", category)}
+        errorMessage={errors.category?.errorMessage}
+        hasError={errors.category?.hasError}
+        {...getOverrideProps(overrides, \\"category\\")}
+      >
+        <Radio
+          children=\\"Hobbies\\"
+          value=\\"Hobbies\\"
+          {...getOverrideProps(overrides, \\"categoryRadio0\\")}
+        ></Radio>
+        <Radio
+          children=\\"Travel\\"
+          value=\\"Travel\\"
+          {...getOverrideProps(overrides, \\"categoryRadio1\\")}
+        ></Radio>
+        <Radio
+          children=\\"Health\\"
+          value=\\"Health\\"
+          {...getOverrideProps(overrides, \\"categoryRadio2\\")}
+        ></Radio>
+      </RadioGroupField>
+      <StepperField
+        label=\\"Label\\"
+        value={pages}
+        onStepChange={async (e) => {
+          let value = e;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city,
+              category,
+              pages: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.pages ?? value;
+          }
+          if (errors.pages?.hasError) {
+            await runValidationTasks(\\"pages\\", value);
+          }
+          setPages(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"pages\\", pages)}
+        errorMessage={errors.pages?.errorMessage}
+        hasError={errors.pages?.hasError}
+        {...getOverrideProps(overrides, \\"pages\\")}
+      ></StepperField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"empty\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"go back\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"create\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a custom backed form 4`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
+export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
+    name?: UseBaseOrValidationType<useBase, string>;
+    email?: UseBaseOrValidationType<useBase, string>;
+    city?: UseBaseOrValidationType<useBase, string>;
+    category?: UseBaseOrValidationType<useBase, string>;
+    pages?: UseBaseOrValidationType<useBase, number>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomDataFormOverridesProps = {
+    CustomDataFormGrid?: FormProps<GridProps>;
+    name?: FormProps<TextFieldProps>;
+    email?: FormProps<TextFieldProps>;
+    city?: FormProps<SelectFieldProps>;
+    category?: FormProps<RadioGroupFieldProps>;
+    pages?: FormProps<StepperFieldProps>;
+} & EscapeHatchProps;
+export declare type CustomDataFormProps = React.PropsWithChildren<{
+    overrides?: CustomDataFormOverridesProps | undefined | null;
+} & {
+    initialData?: CustomDataFormInputValues;
+    onSubmit: (fields: CustomDataFormInputValues) => void;
+    onCancel?: () => void;
+    onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
+    onValidate?: CustomDataFormInputValues<false>;
+}>;
+export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests custom form tests should render nested json fields 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -388,7 +718,7 @@ export default function NestedJson(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstName,
+              firstName: value,
               lastName,
               bio,
             };
@@ -412,7 +742,7 @@ export default function NestedJson(props) {
           if (onChange) {
             const modelFields = {
               firstName,
-              lastName,
+              lastName: value,
               bio,
             };
             const result = onChange(modelFields);
@@ -441,7 +771,7 @@ export default function NestedJson(props) {
             const modelFields = {
               firstName,
               lastName,
-              bio,
+              bio: { ...bio, favoriteQuote: value },
             };
             const result = onChange(modelFields);
             value = result?.bio?.favoriteQuote ?? value;
@@ -466,7 +796,7 @@ export default function NestedJson(props) {
             const modelFields = {
               firstName,
               lastName,
-              bio,
+              bio: { ...bio, favoriteAnimal: value },
             };
             const result = onChange(modelFields);
             value = result?.bio?.favoriteAnimal ?? value;
@@ -555,6 +885,256 @@ export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
 `;
 
+exports[`amplify form renderer tests custom form tests should render nested json fields 3`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Button, Flex, Grid, Heading, TextField } from \\"@aws-amplify/ui-react\\";
+export default function NestedJson(props) {
+  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
+    props;
+  const [firstName, setFirstName] = React.useState(undefined);
+  const [lastName, setLastName] = React.useState(undefined);
+  const [bio, setBio] = React.useState({});
+  const [errors, setErrors] = React.useState({});
+  React.useEffect(() => {
+    if (initialData) {
+      setFirstName(initialData.firstName);
+      setLastName(initialData.lastName);
+      setBio(initialData.bio);
+    }
+  }, []);
+  const validations = {
+    firstName: [],
+    lastName: [],
+    \\"bio.favoriteQuote\\": [],
+    \\"bio.favoriteAnimal\\": [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      columnGap=\\"15px\\"
+      rowGap=\\"15px\\"
+      padding=\\"20px\\"
+      as=\\"form\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const modelFields = {
+          firstName,
+          lastName,
+          bio,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        await onSubmit(modelFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"NestedJson\\")}
+    >
+      <TextField
+        label=\\"firstName\\"
+        defaultValue={firstName}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName: value,
+              lastName,
+              bio,
+            };
+            const result = onChange(modelFields);
+            value = result?.firstName ?? value;
+          }
+          if (errors.firstName?.hasError) {
+            await runValidationTasks(\\"firstName\\", value);
+          }
+          setFirstName(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"firstName\\", firstName)}
+        errorMessage={errors.firstName?.errorMessage}
+        hasError={errors.firstName?.hasError}
+        {...getOverrideProps(overrides, \\"firstName\\")}
+      ></TextField>
+      <TextField
+        label=\\"lastName\\"
+        defaultValue={lastName}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName: value,
+              bio,
+            };
+            const result = onChange(modelFields);
+            value = result?.lastName ?? value;
+          }
+          if (errors.lastName?.hasError) {
+            await runValidationTasks(\\"lastName\\", value);
+          }
+          setLastName(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"lastName\\", lastName)}
+        errorMessage={errors.lastName?.errorMessage}
+        hasError={errors.lastName?.hasError}
+        {...getOverrideProps(overrides, \\"lastName\\")}
+      ></TextField>
+      <Heading
+        level={3}
+        children=\\"bio\\"
+        {...getOverrideProps(overrides, \\"bio\\")}
+      ></Heading>
+      <TextField
+        label=\\"favoriteQuote\\"
+        defaultValue={bio.favoriteQuote}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              bio: { ...bio, favoriteQuote: value },
+            };
+            const result = onChange(modelFields);
+            value = result?.bio?.favoriteQuote ?? value;
+          }
+          if (errors.bio.favoriteQuote?.hasError) {
+            await runValidationTasks(\\"bio.favoriteQuote\\", value);
+          }
+          setBio({ ...bio, favoriteQuote: value });
+        }}
+        onBlur={async () =>
+          await runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
+        }
+        errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
+        hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"bio.favoriteQuote\\")}
+      ></TextField>
+      <TextField
+        label=\\"favoriteAnimal\\"
+        defaultValue={bio.favoriteAnimal}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              bio: { ...bio, favoriteAnimal: value },
+            };
+            const result = onChange(modelFields);
+            value = result?.bio?.favoriteAnimal ?? value;
+          }
+          if (errors.bio.favoriteAnimal?.hasError) {
+            await runValidationTasks(\\"bio.favoriteAnimal\\", value);
+          }
+          setBio({ ...bio, favoriteAnimal: value });
+        }}
+        onBlur={async () =>
+          await runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
+        }
+        errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
+        hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"bio.favoriteAnimal\\")}
+      ></TextField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render nested json fields 4`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, HeadingProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
+export declare type NestedJsonInputValues<useBase extends boolean = true> = {
+    firstName?: UseBaseOrValidationType<useBase, string>;
+    lastName?: UseBaseOrValidationType<useBase, string>;
+    bio?: {
+        favoriteQuote?: UseBaseOrValidationType<useBase, string>;
+        favoriteAnimal?: UseBaseOrValidationType<useBase, string>;
+    };
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type NestedJsonOverridesProps = {
+    NestedJsonGrid?: FormProps<GridProps>;
+    firstName?: FormProps<TextFieldProps>;
+    lastName?: FormProps<TextFieldProps>;
+    bio?: FormProps<HeadingProps>;
+    \\"bio.favoriteQuote\\"?: FormProps<TextFieldProps>;
+    \\"bio.favoriteAnimal\\"?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type NestedJsonProps = React.PropsWithChildren<{
+    overrides?: NestedJsonOverridesProps | undefined | null;
+} & {
+    initialData?: NestedJsonInputValues;
+    onSubmit: (fields: NestedJsonInputValues) => void;
+    onCancel?: () => void;
+    onChange?: (fields: NestedJsonInputValues) => NestedJsonInputValues;
+    onValidate?: NestedJsonInputValues<false>;
+}>;
+export default function NestedJson(props: NestedJsonProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests custom form tests should render sectional elements 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -632,7 +1212,7 @@ export default function CustomWithSectionalElements(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
+              name: value,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -845,7 +1425,7 @@ export default function MyPostForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              caption,
+              caption: value,
               username,
               post_url,
               profile_url,
@@ -872,7 +1452,7 @@ export default function MyPostForm(props) {
           if (onChange) {
             const modelFields = {
               caption,
-              username,
+              username: value,
               post_url,
               profile_url,
             };
@@ -899,7 +1479,7 @@ export default function MyPostForm(props) {
             const modelFields = {
               caption,
               username,
-              post_url,
+              post_url: value,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -926,7 +1506,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               post_url,
-              profile_url,
+              profile_url: value,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -1136,11 +1716,12 @@ export default function MyPostForm(props) {
       </Flex>
       <TextAreaField
         label=\\"Label\\"
+        defaultValue={TextAreaFieldbbd63464}
         onChange={async (e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              TextAreaFieldbbd63464,
+              TextAreaFieldbbd63464: value,
               caption,
               username,
               profile_url,
@@ -1162,19 +1743,19 @@ export default function MyPostForm(props) {
         }
         errorMessage={errors.TextAreaFieldbbd63464?.errorMessage}
         hasError={errors.TextAreaFieldbbd63464?.hasError}
-        defaultValue={TextAreaFieldbbd63464}
         {...getOverrideProps(overrides, \\"TextAreaFieldbbd63464\\")}
       ></TextAreaField>
       <TextField
         label=\\"Caption\\"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={caption}
         onChange={async (e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               TextAreaFieldbbd63464,
-              caption,
+              caption: value,
               username,
               profile_url,
               post_url,
@@ -1190,20 +1771,20 @@ export default function MyPostForm(props) {
         onBlur={async () => await runValidationTasks(\\"caption\\", caption)}
         errorMessage={errors.caption?.errorMessage}
         hasError={errors.caption?.hasError}
-        defaultValue={caption}
         {...getOverrideProps(overrides, \\"caption\\")}
       ></TextField>
       <TextField
         label=\\"Username\\"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={username}
         onChange={async (e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               TextAreaFieldbbd63464,
               caption,
-              username,
+              username: value,
               profile_url,
               post_url,
             };
@@ -1218,13 +1799,13 @@ export default function MyPostForm(props) {
         onBlur={async () => await runValidationTasks(\\"username\\", username)}
         errorMessage={errors.username?.errorMessage}
         hasError={errors.username?.hasError}
-        defaultValue={username}
         {...getOverrideProps(overrides, \\"username\\")}
       ></TextField>
       <TextField
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={profile_url}
         onChange={async (e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1232,7 +1813,7 @@ export default function MyPostForm(props) {
               TextAreaFieldbbd63464,
               caption,
               username,
-              profile_url,
+              profile_url: value,
               post_url,
             };
             const result = onChange(modelFields);
@@ -1248,13 +1829,13 @@ export default function MyPostForm(props) {
         }
         errorMessage={errors.profile_url?.errorMessage}
         hasError={errors.profile_url?.hasError}
-        defaultValue={profile_url}
         {...getOverrideProps(overrides, \\"profile_url\\")}
       ></TextField>
       <TextField
         label=\\"Post url\\"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={post_url}
         onChange={async (e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1263,7 +1844,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               profile_url,
-              post_url,
+              post_url: value,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -1276,7 +1857,6 @@ export default function MyPostForm(props) {
         onBlur={async () => await runValidationTasks(\\"post_url\\", post_url)}
         errorMessage={errors.post_url?.errorMessage}
         hasError={errors.post_url?.hasError}
-        defaultValue={post_url}
         {...getOverrideProps(overrides, \\"post_url\\")}
       ></TextField>
       <Flex
@@ -1583,7 +2163,7 @@ export default function InputGalleryCreateForm(props) {
           let value = parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
-              num,
+              num: value,
               rootbeer,
               attend,
               maybeSlide,
@@ -1616,7 +2196,7 @@ export default function InputGalleryCreateForm(props) {
           if (onChange) {
             const modelFields = {
               num,
-              rootbeer,
+              rootbeer: value,
               attend,
               maybeSlide,
               maybeCheck,
@@ -1649,7 +2229,7 @@ export default function InputGalleryCreateForm(props) {
             const modelFields = {
               num,
               rootbeer,
-              attend,
+              attend: value,
               maybeSlide,
               maybeCheck,
               arrayTypeField,
@@ -1693,7 +2273,7 @@ export default function InputGalleryCreateForm(props) {
               num,
               rootbeer,
               attend,
-              maybeSlide,
+              maybeSlide: value,
               maybeCheck,
               arrayTypeField,
               timestamp,
@@ -1727,7 +2307,7 @@ export default function InputGalleryCreateForm(props) {
               rootbeer,
               attend,
               maybeSlide,
-              maybeCheck,
+              maybeCheck: value,
               arrayTypeField,
               timestamp,
               ippy,
@@ -1769,7 +2349,7 @@ export default function InputGalleryCreateForm(props) {
                 attend,
                 maybeSlide,
                 maybeCheck,
-                arrayTypeField,
+                arrayTypeField: value,
                 timestamp,
                 ippy,
                 timeisnow,
@@ -1807,7 +2387,7 @@ export default function InputGalleryCreateForm(props) {
               maybeSlide,
               maybeCheck,
               arrayTypeField,
-              timestamp,
+              timestamp: value,
               ippy,
               timeisnow,
             };
@@ -1839,7 +2419,7 @@ export default function InputGalleryCreateForm(props) {
               maybeCheck,
               arrayTypeField,
               timestamp,
-              ippy,
+              ippy: value,
               timeisnow,
             };
             const result = onChange(modelFields);
@@ -1872,7 +2452,7 @@ export default function InputGalleryCreateForm(props) {
               arrayTypeField,
               timestamp,
               ippy,
-              timeisnow,
+              timeisnow: value,
             };
             const result = onChange(modelFields);
             value = result?.timeisnow ?? value;
@@ -1957,6 +2537,658 @@ export declare type InputGalleryCreateFormOverridesProps = {
 export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
     overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
 } & {
+    onSubmit?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
+    onSuccess?: (fields: InputGalleryCreateFormInputValues) => void;
+    onError?: (fields: InputGalleryCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
+    onValidate?: InputGalleryCreateFormInputValues<false>;
+}>;
+export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 3`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { InputGallery } from \\"../models\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Badge,
+  Button,
+  CheckboxField,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  Radio,
+  RadioGroupField,
+  ScrollView,
+  TextField,
+  ToggleButton,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  defaultValues = [],
+  onChange,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+}) {
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [items, setItems] = React.useState(defaultValues);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+    setItems(newItems);
+  };
+  const addItem = async () => {
+    if (currentFieldValue.length && !hasError) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setItems(newItems);
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+        setItems(newItems);
+      }
+      await onChange(newItems);
+    }
+  };
+  return (
+    <React.Fragment>
+      {children}
+      <Flex justifyContent=\\"flex-end\\">
+        <Button
+          children=\\"Cancel\\"
+          type=\\"button\\"
+          onClick={() => {
+            setFieldValue(\\"\\");
+          }}
+        ></Button>
+        <Button
+          children=\\"Save\\"
+          variation=\\"primary\\"
+          isDisabled={hasError}
+          onClick={addItem}
+        ></Button>
+      </Flex>
+      {!!items.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  inputFieldRef?.current?.focus();
+                }}
+              >
+                {value}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
+export default function InputGalleryCreateForm(props) {
+  const {
+    id,
+    inputGallery,
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const [num, setNum] = React.useState(undefined);
+  const [rootbeer, setRootbeer] = React.useState(undefined);
+  const [attend, setAttend] = React.useState(undefined);
+  const [maybeSlide, setMaybeSlide] = React.useState(false);
+  const [maybeCheck, setMaybeCheck] = React.useState(undefined);
+  const [arrayTypeField, setArrayTypeField] = React.useState(undefined);
+  const [timestamp, setTimestamp] = React.useState(undefined);
+  const [ippy, setIppy] = React.useState(undefined);
+  const [timeisnow, setTimeisnow] = React.useState(undefined);
+  const [errors, setErrors] = React.useState({});
+  const [inputGalleryRecord, setInputGalleryRecord] =
+    React.useState(inputGallery);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = id
+        ? await DataStore.query(InputGallery, id)
+        : inputGallery;
+      if (record) {
+        setInputGalleryRecord(record);
+        setNum(record.num);
+        setRootbeer(record.rootbeer);
+        setAttend(record.attend);
+        setMaybeSlide(record.maybeSlide);
+        setMaybeCheck(record.maybeCheck);
+        setArrayTypeField(record.arrayTypeField);
+        setTimestamp(record.timestamp);
+        setIppy(record.ippy);
+        setTimeisnow(record.timeisnow);
+      }
+    };
+    queryData();
+  }, [id, inputGallery]);
+  const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
+    React.useState(\\"\\");
+  const arrayTypeFieldRef = React.createRef();
+  const validations = {
+    num: [],
+    rootbeer: [],
+    attend: [{ type: \\"Required\\" }],
+    maybeSlide: [],
+    maybeCheck: [],
+    arrayTypeField: [],
+    timestamp: [],
+    ippy: [{ type: \\"IpAddress\\" }],
+    timeisnow: [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      columnGap=\\"15px\\"
+      rowGap=\\"15px\\"
+      padding=\\"20px\\"
+      as=\\"form\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          num,
+          rootbeer,
+          attend,
+          maybeSlide,
+          maybeCheck,
+          arrayTypeField,
+          timestamp,
+          ippy,
+          timeisnow,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(
+            InputGallery.copyOf(inputGalleryRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"InputGalleryCreateForm\\")}
+    >
+      <TextField
+        label=\\"Num\\"
+        isRequired={false}
+        isReadOnly={false}
+        type=\\"number\\"
+        defaultValue={num}
+        onChange={async (e) => {
+          let value = parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              num: value,
+              rootbeer,
+              attend,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField,
+              timestamp,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            value = result?.num ?? value;
+          }
+          if (errors.num?.hasError) {
+            await runValidationTasks(\\"num\\", value);
+          }
+          setNum(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"num\\", num)}
+        errorMessage={errors.num?.errorMessage}
+        hasError={errors.num?.hasError}
+        {...getOverrideProps(overrides, \\"num\\")}
+      ></TextField>
+      <TextField
+        label=\\"Rootbeer\\"
+        isRequired={false}
+        isReadOnly={false}
+        type=\\"number\\"
+        defaultValue={rootbeer}
+        onChange={async (e) => {
+          let value = Number(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer: value,
+              attend,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField,
+              timestamp,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            value = result?.rootbeer ?? value;
+          }
+          if (errors.rootbeer?.hasError) {
+            await runValidationTasks(\\"rootbeer\\", value);
+          }
+          setRootbeer(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"rootbeer\\", rootbeer)}
+        errorMessage={errors.rootbeer?.errorMessage}
+        hasError={errors.rootbeer?.hasError}
+        {...getOverrideProps(overrides, \\"rootbeer\\")}
+      ></TextField>
+      <RadioGroupField
+        label=\\"Attend\\"
+        name=\\"attend\\"
+        isReadOnly={false}
+        isRequired=\\"false\\"
+        defaultValue={attend}
+        onChange={async (e) => {
+          let value = e.target.value === \\"true\\";
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend: value,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField,
+              timestamp,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            value = result?.attend ?? value;
+          }
+          if (errors.attend?.hasError) {
+            await runValidationTasks(\\"attend\\", value);
+          }
+          setAttend(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"attend\\", attend)}
+        errorMessage={errors.attend?.errorMessage}
+        hasError={errors.attend?.hasError}
+        {...getOverrideProps(overrides, \\"attend\\")}
+      >
+        <Radio
+          children=\\"Yes\\"
+          value=\\"true\\"
+          {...getOverrideProps(overrides, \\"attendRadio0\\")}
+        ></Radio>
+        <Radio
+          children=\\"No\\"
+          value=\\"false\\"
+          {...getOverrideProps(overrides, \\"attendRadio1\\")}
+        ></Radio>
+      </RadioGroupField>
+      <ToggleButton
+        children=\\"Maybe slide\\"
+        isDisabled={false}
+        defaultPressed={false}
+        isPressed={maybeSlide}
+        defaultValue={maybeSlide}
+        onChange={async (e) => {
+          let value = !maybeSlide;
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend,
+              maybeSlide: value,
+              maybeCheck,
+              arrayTypeField,
+              timestamp,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            value = result?.maybeSlide ?? value;
+          }
+          if (errors.maybeSlide?.hasError) {
+            await runValidationTasks(\\"maybeSlide\\", value);
+          }
+          setMaybeSlide(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"maybeSlide\\", maybeSlide)}
+        errorMessage={errors.maybeSlide?.errorMessage}
+        hasError={errors.maybeSlide?.hasError}
+        {...getOverrideProps(overrides, \\"maybeSlide\\")}
+      ></ToggleButton>
+      <CheckboxField
+        label=\\"Maybe check\\"
+        name=\\"maybeCheck\\"
+        value=\\"maybeCheck\\"
+        isDisabled={false}
+        defaultChecked={false}
+        defaultValue={maybeCheck}
+        onChange={async (e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend,
+              maybeSlide,
+              maybeCheck: value,
+              arrayTypeField,
+              timestamp,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            value = result?.maybeCheck ?? value;
+          }
+          if (errors.maybeCheck?.hasError) {
+            await runValidationTasks(\\"maybeCheck\\", value);
+          }
+          setMaybeCheck(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"maybeCheck\\", maybeCheck)}
+        errorMessage={errors.maybeCheck?.errorMessage}
+        hasError={errors.maybeCheck?.hasError}
+        {...getOverrideProps(overrides, \\"maybeCheck\\")}
+      ></CheckboxField>
+      <ArrayField
+        onChange={async (items) => {
+          setArrayTypeField(items);
+          setCurrentArrayTypeFieldValue(\\"\\");
+        }}
+        currentFieldValue={currentArrayTypeFieldValue}
+        hasError={errors.arrayTypeField?.hasError}
+        setFieldValue={setCurrentArrayTypeFieldValue}
+        inputFieldRef={arrayTypeFieldRef}
+      >
+        <TextField
+          label=\\"Array type field\\"
+          isRequired={false}
+          isReadOnly={false}
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                num,
+                rootbeer,
+                attend,
+                maybeSlide,
+                maybeCheck,
+                arrayTypeField: value,
+                timestamp,
+                ippy,
+                timeisnow,
+              };
+              const result = onChange(modelFields);
+              value = result?.arrayTypeField ?? value;
+            }
+            if (errors.arrayTypeField?.hasError) {
+              await runValidationTasks(\\"arrayTypeField\\", value);
+            }
+            setCurrentArrayTypeFieldValue(value);
+          }}
+          onBlur={async () =>
+            await runValidationTasks(\\"arrayTypeField\\", arrayTypeField)
+          }
+          errorMessage={errors.arrayTypeField?.errorMessage}
+          hasError={errors.arrayTypeField?.hasError}
+          value={currentArrayTypeFieldValue}
+          ref={arrayTypeFieldRef}
+          {...getOverrideProps(overrides, \\"arrayTypeField\\")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label=\\"Timestamp\\"
+        isRequired={false}
+        isReadOnly={false}
+        type=\\"datetime-local\\"
+        defaultValue={timestamp}
+        onChange={async (e) => {
+          let value = Number(new Date(e.target.value));
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField,
+              timestamp: value,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            value = result?.timestamp ?? value;
+          }
+          if (errors.timestamp?.hasError) {
+            await runValidationTasks(\\"timestamp\\", value);
+          }
+          setTimestamp(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"timestamp\\", timestamp)}
+        errorMessage={errors.timestamp?.errorMessage}
+        hasError={errors.timestamp?.hasError}
+        {...getOverrideProps(overrides, \\"timestamp\\")}
+      ></TextField>
+      <TextField
+        label=\\"Ippy\\"
+        isRequired={false}
+        isReadOnly={false}
+        defaultValue={ippy}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField,
+              timestamp,
+              ippy: value,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            value = result?.ippy ?? value;
+          }
+          if (errors.ippy?.hasError) {
+            await runValidationTasks(\\"ippy\\", value);
+          }
+          setIppy(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"ippy\\", ippy)}
+        errorMessage={errors.ippy?.errorMessage}
+        hasError={errors.ippy?.hasError}
+        {...getOverrideProps(overrides, \\"ippy\\")}
+      ></TextField>
+      <TextField
+        label=\\"Timeisnow\\"
+        isRequired={false}
+        isReadOnly={false}
+        type=\\"time\\"
+        defaultValue={timeisnow}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField,
+              timestamp,
+              ippy,
+              timeisnow: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.timeisnow ?? value;
+          }
+          if (errors.timeisnow?.hasError) {
+            await runValidationTasks(\\"timeisnow\\", value);
+          }
+          setTimeisnow(value);
+        }}
+        onBlur={async () => await runValidationTasks(\\"timeisnow\\", timeisnow)}
+        errorMessage={errors.timeisnow?.errorMessage}
+        hasError={errors.timeisnow?.hasError}
+        {...getOverrideProps(overrides, \\"timeisnow\\")}
+      ></TextField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 4`] = `
+"import * as React from \\"react\\";
+import { InputGallery } from \\"../models\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CheckboxFieldProps, GridProps, RadioGroupFieldProps, TextFieldProps, ToggleButtonProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
+export declare type InputGalleryCreateFormInputValues<useBase extends boolean = true> = {
+    num?: UseBaseOrValidationType<useBase, number>;
+    rootbeer?: UseBaseOrValidationType<useBase, number>;
+    attend?: UseBaseOrValidationType<useBase, boolean>;
+    maybeSlide?: UseBaseOrValidationType<useBase, boolean>;
+    maybeCheck?: UseBaseOrValidationType<useBase, boolean>;
+    arrayTypeField?: UseBaseOrValidationType<useBase, string>;
+    timestamp?: UseBaseOrValidationType<useBase, number>;
+    ippy?: UseBaseOrValidationType<useBase, string>;
+    timeisnow?: UseBaseOrValidationType<useBase, string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type InputGalleryCreateFormOverridesProps = {
+    InputGalleryCreateFormGrid?: FormProps<GridProps>;
+    num?: FormProps<TextFieldProps>;
+    rootbeer?: FormProps<TextFieldProps>;
+    attend?: FormProps<RadioGroupFieldProps>;
+    maybeSlide?: FormProps<ToggleButtonProps>;
+    maybeCheck?: FormProps<CheckboxFieldProps>;
+    arrayTypeField?: FormProps<TextFieldProps>;
+    timestamp?: FormProps<TextFieldProps>;
+    ippy?: FormProps<TextFieldProps>;
+    timeisnow?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
+    overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    inputGallery?: InputGallery;
     onSubmit?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
     onSuccess?: (fields: InputGalleryCreateFormInputValues) => void;
     onError?: (fields: InputGalleryCreateFormInputValues, errorMessage: string) => void;

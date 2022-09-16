@@ -15,3 +15,4 @@
  */
 export * from './form-renderer-helper';
 export * from './react-form-renderer';
+export * from './type-helper';

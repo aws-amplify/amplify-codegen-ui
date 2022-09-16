@@ -1,0 +1,35 @@
+{
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "InputGallery"
+  },
+  "fields": {
+    "attend": {
+      "inputType": {
+        "required": "false",
+        "type": "RadioGroupField"
+      }
+    },
+    "maybeSlide": {
+      "inputType": {
+        "type": "ToggleButton"
+      }
+    },
+    "maybeCheck": {
+      "inputType": {
+        "type": "CheckboxField"
+      }
+    }
+  },
+  "formActionType": "update",
+  "name": "InputGalleryCreateForm",
+  "schemaVersion": "1.0",
+  "sectionalElements": {},
+  "style": {},
+  "cta": {
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  },
+  "id": "00001"
+}
