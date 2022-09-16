@@ -13,8 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, DataFieldDataType } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, DataFieldDataType, StudioForm } from '@aws-amplify/codegen-ui';
 import { factory, SyntaxKind, KeywordTypeSyntaxKind, TypeElement, PropertySignature, TypeNode } from 'typescript';
+import { lowerCaseFirst } from '../helpers';
 import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
 type Node<T> = {
@@ -278,3 +279,174 @@ export const validationFunctionType = factory.createTypeAliasDeclaration(
     ]),
   ),
 );
+
+/*
+    both datastore & custom datasource has onSubmit with the fields
+    - onSubmit(fields)
+    datastore includes additional hooks
+    - onSuccess(fields)
+    - onError(fields, errorMessage)
+   */
+export const buildFormPropNode = (form: StudioForm) => {
+  const {
+    name: formName,
+    dataType: { dataSourceType, dataTypeName },
+    formActionType,
+  } = form;
+  const propSignatures: PropertySignature[] = [];
+  if (dataSourceType === 'DataStore') {
+    if (formActionType === 'update') {
+      propSignatures.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier('id'),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+        ),
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier(lowerCaseFirst(dataTypeName)),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode(factory.createIdentifier(dataTypeName), undefined),
+        ),
+      );
+    }
+    propSignatures.push(
+      factory.createPropertySignature(
+        undefined,
+        'onSubmit',
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createFunctionTypeNode(
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              'fields',
+              undefined,
+              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+              undefined,
+            ),
+          ],
+          factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+        ),
+      ),
+      factory.createPropertySignature(
+        undefined,
+        'onSuccess',
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createFunctionTypeNode(
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('fields'),
+              undefined,
+              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+              undefined,
+            ),
+          ],
+          factory.createKeywordTypeNode(SyntaxKind.VoidKeyword),
+        ),
+      ),
+      factory.createPropertySignature(
+        undefined,
+        factory.createIdentifier('onError'),
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createFunctionTypeNode(
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('fields'),
+              undefined,
+              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+              undefined,
+            ),
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('errorMessage'),
+              undefined,
+              factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+              undefined,
+            ),
+          ],
+          factory.createKeywordTypeNode(SyntaxKind.VoidKeyword),
+        ),
+      ),
+    );
+  }
+  if (dataSourceType === 'Custom') {
+    if (formActionType === 'update') {
+      propSignatures.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier('initialData'),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode(getInputValuesTypeName(formName), undefined),
+        ),
+      );
+    }
+    propSignatures.push(
+      factory.createPropertySignature(
+        undefined,
+        'onSubmit',
+        undefined,
+        factory.createFunctionTypeNode(
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              'fields',
+              undefined,
+              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+              undefined,
+            ),
+          ],
+          factory.createKeywordTypeNode(SyntaxKind.VoidKeyword),
+        ),
+      ),
+    );
+  }
+  propSignatures.push(
+    // onCancel?: () => void
+    factory.createPropertySignature(
+      undefined,
+      'onCancel',
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
+    ),
+    // onChange?: (fields: Record<string, unknown>) => Record<string, unknown>
+    factory.createPropertySignature(
+      undefined,
+      'onChange',
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createFunctionTypeNode(
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('fields'),
+            undefined,
+            factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+            undefined,
+          ),
+        ],
+        factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
+      ),
+    ),
+    buildOnValidateType(form.name),
+  );
+  return factory.createTypeLiteralNode(propSignatures);
+};

@@ -46,11 +46,28 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
+
+    it('should render a form with multiple date types', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/input-gallery-update',
+        'datastore/input-gallery',
+      );
+      expect(componentText).toContain('DataStore.save');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
   });
 
   describe('custom form tests', () => {
     it('should render a custom backed form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-create', undefined);
+      expect(componentText.replace(/\s/g, '')).toContain('onSubmit');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render a custom backed form', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-update', undefined);
       expect(componentText.replace(/\s/g, '')).toContain('onSubmit');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -67,6 +84,12 @@ describe('amplify form renderer tests', () => {
 
     it('should render nested json fields', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-create', undefined);
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render nested json fields', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-update', undefined);
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });

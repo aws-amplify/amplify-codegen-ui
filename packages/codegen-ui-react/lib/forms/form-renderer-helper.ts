@@ -22,25 +22,24 @@ import {
   StudioForm,
   FieldConfigMetadata,
   FormMetadata,
+  isControlledComponent,
 } from '@aws-amplify/codegen-ui';
 import {
   BindingElement,
   Expression,
   factory,
   NodeFlags,
-  PropertySignature,
   SyntaxKind,
   ObjectLiteralElementLike,
   ObjectLiteralExpression,
-  ShorthandPropertyAssignment,
   JsxAttribute,
   IfStatement,
+  ExpressionStatement,
 } from 'typescript';
 import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
 import { buildTargetVariable } from './event-targets';
-import { buildOnValidateType, getInputValuesTypeName } from './type-helper';
-import { buildAccessChain, capitalizeFirstLetter, setFieldState } from './form-state';
+import { buildAccessChain, buildNestedStateSet, capitalizeFirstLetter, setFieldState } from './form-state';
 
 export const buildMutationBindings = (form: StudioForm) => {
   const {
@@ -66,169 +65,11 @@ export const buildMutationBindings = (form: StudioForm) => {
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onError'), undefined),
     );
   }
+  if (dataSourceType === 'Custom' && formActionType === 'update') {
+    factory.createBindingElement(undefined, undefined, factory.createIdentifier('initialData'), undefined);
+  }
   elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmit'), undefined));
   return elements;
-};
-
-/*
-    both datastore & custom datasource has onSubmit with the fields
-    - onSubmit(fields)
-    datastore includes additional hooks
-    - onSuccess(fields)
-    - onError(fields, errorMessage)
-   */
-export const buildFormPropNode = (form: StudioForm) => {
-  const {
-    name: formName,
-    dataType: { dataSourceType },
-    formActionType,
-  } = form;
-  const propSignatures: PropertySignature[] = [];
-  if (dataSourceType === 'DataStore') {
-    if (formActionType === 'update') {
-      propSignatures.push(
-        factory.createPropertySignature(
-          undefined,
-          factory.createIdentifier('id'),
-          factory.createToken(SyntaxKind.QuestionToken),
-          factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-        ),
-        factory.createPropertySignature(
-          undefined,
-          factory.createIdentifier(lowerCaseFirst(form.dataType.dataTypeName)),
-          factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(factory.createIdentifier(form.dataType.dataTypeName), undefined),
-        ),
-      );
-    }
-    propSignatures.push(
-      factory.createPropertySignature(
-        undefined,
-        'onSubmit',
-        factory.createToken(SyntaxKind.QuestionToken),
-        factory.createFunctionTypeNode(
-          undefined,
-          [
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              'fields',
-              undefined,
-              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
-              undefined,
-            ),
-          ],
-          factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
-        ),
-      ),
-      factory.createPropertySignature(
-        undefined,
-        'onSuccess',
-        factory.createToken(SyntaxKind.QuestionToken),
-        factory.createFunctionTypeNode(
-          undefined,
-          [
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              factory.createIdentifier('fields'),
-              undefined,
-              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
-              undefined,
-            ),
-          ],
-          factory.createKeywordTypeNode(SyntaxKind.VoidKeyword),
-        ),
-      ),
-      factory.createPropertySignature(
-        undefined,
-        factory.createIdentifier('onError'),
-        factory.createToken(SyntaxKind.QuestionToken),
-        factory.createFunctionTypeNode(
-          undefined,
-          [
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              factory.createIdentifier('fields'),
-              undefined,
-              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
-              undefined,
-            ),
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              factory.createIdentifier('errorMessage'),
-              undefined,
-              factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-              undefined,
-            ),
-          ],
-          factory.createKeywordTypeNode(SyntaxKind.VoidKeyword),
-        ),
-      ),
-    );
-  }
-  if (dataSourceType === 'Custom') {
-    propSignatures.push(
-      factory.createPropertySignature(
-        undefined,
-        'onSubmit',
-        undefined,
-        factory.createFunctionTypeNode(
-          undefined,
-          [
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              'fields',
-              undefined,
-              factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
-              undefined,
-            ),
-          ],
-          factory.createKeywordTypeNode(SyntaxKind.VoidKeyword),
-        ),
-      ),
-    );
-  }
-  propSignatures.push(
-    // onCancel?: () => void
-    factory.createPropertySignature(
-      undefined,
-      'onCancel',
-      factory.createToken(SyntaxKind.QuestionToken),
-      factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
-    ),
-    // onChange?: (fields: Record<string, unknown>) => Record<string, unknown>
-    factory.createPropertySignature(
-      undefined,
-      'onChange',
-      factory.createToken(SyntaxKind.QuestionToken),
-      factory.createFunctionTypeNode(
-        undefined,
-        [
-          factory.createParameterDeclaration(
-            undefined,
-            undefined,
-            undefined,
-            factory.createIdentifier('fields'),
-            undefined,
-            factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
-            undefined,
-          ),
-        ],
-        factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
-      ),
-    ),
-    buildOnValidateType(form.name),
-  );
-  return factory.createTypeLiteralNode(propSignatures);
 };
 
 export const createValidationExpression = (validationRules: FieldValidationConfiguration[] = []): Expression => {
@@ -273,6 +114,7 @@ export const createValidationExpression = (validationRules: FieldValidationConfi
 };
 
 export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
+  const { name: componentName, componentType } = component;
   const attributes: JsxAttribute[] = [];
   /*
       boolean => RadioGroupField
@@ -286,8 +128,8 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
 
     */
 
-  if (component.name in formMetadata.fieldConfigs) {
-    const fieldConfig = formMetadata.fieldConfigs[component.name];
+  if (componentName in formMetadata.fieldConfigs) {
+    const fieldConfig = formMetadata.fieldConfigs[componentName];
     /*
     if the componetName is a dotPath we need to change the access expression to the following
      - bio.user.favorites.Quote => errors['bio.user.favorites.Quote']?.errorMessage
@@ -295,20 +137,26 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
      - bio => errors.bio?.errorMessage
     */
     const errorKey =
-      component.name.split('.').length > 1
+      componentName.split('.').length > 1
         ? factory.createElementAccessExpression(
             factory.createIdentifier('errors'),
-            factory.createStringLiteral(component.name),
+            factory.createStringLiteral(componentName),
           )
         : factory.createPropertyAccessExpression(
             factory.createIdentifier('errors'),
-            factory.createIdentifier(component.name),
+            factory.createIdentifier(componentName),
           );
-    attributes.push(
-      ...buildComponentSpecificAttributes({ componentType: component.componentType, componentName: component.name }),
-    );
+    attributes.push(...buildComponentSpecificAttributes({ componentType, componentName }));
+    if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
+      attributes.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('defaultValue'),
+          factory.createJsxExpression(undefined, factory.createIdentifier(componentName)),
+        ),
+      );
+    }
     attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs));
-    attributes.push(buildOnBlurStatement(component.name));
+    attributes.push(buildOnBlurStatement(componentName));
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('errorMessage'),
@@ -333,32 +181,24 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
         ),
       ),
     );
-    if (formMetadata.formActionType === 'update' && !fieldConfig.isArray) {
-      attributes.push(
-        factory.createJsxAttribute(
-          factory.createIdentifier('defaultValue'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(component.name)),
-        ),
-      );
-    }
     if (fieldConfig.isArray) {
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('value'),
           factory.createJsxExpression(
             undefined,
-            factory.createIdentifier(`current${capitalizeFirstLetter(component.name)}Value`),
+            factory.createIdentifier(`current${capitalizeFirstLetter(componentName)}Value`),
           ),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('ref'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(`${lowerCaseFirst(component.name)}Ref`)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(`${lowerCaseFirst(componentName)}Ref`)),
         ),
       );
     }
   }
 
-  if (component.name === 'SubmitButton') {
+  if (componentName === 'SubmitButton') {
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('isDisabled'),
@@ -406,7 +246,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       ),
     );
   }
-  if (component.name === 'CancelButton') {
+  if (componentName === 'CancelButton') {
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('onClick'),
@@ -505,11 +345,25 @@ export const buildOverrideOnChangeStatement = (
   fieldName: string,
   fieldConfigs: Record<string, FieldConfigMetadata>,
 ): IfStatement => {
+  const keyPath = fieldName.split('.');
+  const keyName = keyPath[0];
+  let keyValueExpression = factory.createPropertyAssignment(
+    factory.createIdentifier(keyName),
+    factory.createIdentifier('value'),
+  );
+  if (keyPath.length > 1) {
+    keyValueExpression = factory.createPropertyAssignment(
+      factory.createIdentifier(keyName),
+      buildNestedStateSet(keyPath, [keyName], factory.createIdentifier('value')),
+    );
+  }
   return factory.createIfStatement(
     factory.createIdentifier('onChange'),
     factory.createBlock(
       [
-        buildModelFieldObject(true, fieldConfigs),
+        buildModelFieldObject(true, fieldConfigs, {
+          [keyName]: keyValueExpression,
+        }),
         factory.createVariableStatement(
           undefined,
           factory.createVariableDeclarationList(
@@ -993,6 +847,7 @@ export const runValidationTasksFunction = factory.createVariableStatement(
 );
 /**
  * builds modelFields object which is used to validate, onSubmit, onSuccess/onError
+ * the nameOverrides will swap in a different expression instead of the name of the state when building the object
  *
  * ex.  [name, content, updatedAt]
  *
@@ -1007,12 +862,16 @@ export const runValidationTasksFunction = factory.createVariableStatement(
 export const buildModelFieldObject = (
   shouldBeConst: boolean,
   fieldConfigs: Record<string, FieldConfigMetadata> = {},
+  nameOverrides: Record<string, ObjectLiteralElementLike> = {},
 ) => {
   const fieldSet = new Set<string>();
-  const fields = Object.keys(fieldConfigs).reduce<ShorthandPropertyAssignment[]>((acc, value) => {
+  const fields = Object.keys(fieldConfigs).reduce<ObjectLiteralElementLike[]>((acc, value) => {
     const fieldName = value.split('.')[0];
     if (!fieldSet.has(fieldName)) {
-      acc.push(factory.createShorthandPropertyAssignment(factory.createIdentifier(fieldName), undefined));
+      const assignment = nameOverrides[fieldName]
+        ? nameOverrides[fieldName]
+        : factory.createShorthandPropertyAssignment(factory.createIdentifier(fieldName), undefined);
+      acc.push(assignment);
       fieldSet.add(fieldName);
     }
     return acc;
@@ -1273,6 +1132,28 @@ export const ifRecordDefinedExpression = (dataTypeName: string, fieldConfigs: Re
     ),
     undefined,
   );
+};
+
+export const buildSetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>) => {
+  const fieldSet = new Set<string>();
+  const expression = Object.keys(fieldConfigs).reduce<ExpressionStatement[]>((acc, field) => {
+    const fieldName = field.split('.')[0];
+    if (!fieldSet.has(fieldName)) {
+      acc.push(
+        factory.createExpressionStatement(
+          factory.createCallExpression(factory.createIdentifier(`set${capitalizeFirstLetter(fieldName)}`), undefined, [
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('initialData'),
+              factory.createIdentifier(fieldName),
+            ),
+          ]),
+        ),
+      );
+      fieldSet.add(fieldName);
+    }
+    return acc;
+  }, []);
+  return factory.createIfStatement(factory.createIdentifier('initialData'), factory.createBlock(expression, true));
 };
 
 export const buildUpdateDatastoreQuery = (dataTypeName: string, fieldConfigs: Record<string, FieldConfigMetadata>) => {
