@@ -18,29 +18,10 @@ import {
   StudioComponentChild,
   FormDefinition,
   FormDefinitionElement,
-  FormStyleConfig,
   StudioComponentProperties,
-  StudioFormStyle,
 } from '../../types';
 import { mapElementChildren } from './helpers/map-element-children';
 import { ctaButtonMapper, addCTAPosition } from './helpers/map-cta-buttons';
-import { InternalError } from '../../errors';
-
-const getStyleResolvedValue = (config: FormStyleConfig): string => {
-  const value = config.value ?? config.tokenReference;
-  if (!value) {
-    throw new InternalError('Form layout style not found');
-  }
-  return value;
-};
-
-const resolveStyles = (style: FormDefinition['form']['layoutStyle']): Record<keyof StudioFormStyle, string> => {
-  return {
-    verticalGap: getStyleResolvedValue(style.verticalGap),
-    horizontalGap: getStyleResolvedValue(style.horizontalGap),
-    outerPadding: getStyleResolvedValue(style.outerPadding),
-  };
-};
 
 const mapFormElementProps = (element: FormDefinitionElement) => {
   const props: StudioComponentProperties = {};
@@ -100,15 +81,10 @@ export const mapFormDefinitionToComponent = (name: string, formDefinition: FormD
     ctaComponent,
   );
 
-  const { verticalGap, horizontalGap, outerPadding } = resolveStyles(formDefinition.form.layoutStyle);
-
   const component: StudioComponent = {
     name,
     componentType: 'Grid',
     properties: {
-      columnGap: { value: horizontalGap },
-      rowGap: { value: verticalGap },
-      padding: { value: outerPadding },
       as: { value: 'form' },
     },
     bindingProperties: {

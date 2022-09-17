@@ -15,6 +15,7 @@
  */
 import { DataFieldDataType } from '../data';
 import { FieldValidationConfiguration } from './form-validation';
+import { FormStyleConfig, StudioFormStyle } from './style';
 
 /**
  * Form Action type definition
@@ -36,4 +37,5 @@ export type FormMetadata = {
   formActionType: StudioFormActionType;
   name: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
+  layoutConfigs: Record<keyof StudioFormStyle, FormStyleConfig>;
 };

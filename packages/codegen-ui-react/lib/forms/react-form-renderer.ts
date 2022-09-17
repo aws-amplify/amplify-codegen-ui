@@ -59,6 +59,7 @@ import {
   transpile,
 } from '../react-studio-template-renderer-helper';
 import { generateArrayFieldComponent } from '../utils/forms/array-field-component';
+import { hasTokenReference } from '../utils/forms/layout-helpers';
 import { addUseEffectWrapper } from '../utils/generate-react-hooks';
 import { RequiredKeys } from '../utils/type-utils';
 import {
@@ -369,6 +370,27 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         ),
       ),
     );
+
+    if (hasTokenReference(this.componentMetadata)) {
+      statements.push(
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createObjectBindingPattern([
+                  factory.createBindingElement(undefined, undefined, factory.createIdentifier('tokens'), undefined),
+                ]),
+                undefined,
+                undefined,
+                factory.createCallExpression(factory.createIdentifier('useTheme'), undefined, []),
+              ),
+            ],
+            NodeFlags.Const,
+          ),
+        ),
+      );
+    }
 
     statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
 

@@ -23,10 +23,11 @@ import {
 } from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, Statement, SyntaxKind } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
-import { buildOpeningElementProperties } from '../react-component-render-helper';
-import { ImportCollection } from '../imports';
+import { buildLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
+import { ImportCollection, ImportSource } from '../imports';
 import { buildDataStoreExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
+import { hasTokenReference } from '../utils/forms/layout-helpers';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -53,6 +54,10 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       this.importCollection.addImport('aws-amplify', 'DataStore');
     }
 
+    if (hasTokenReference(this.componentMetadata)) {
+      this.importCollection.addImport(ImportSource.UI_REACT, 'useTheme');
+    }
+
     return element;
   }
 
@@ -60,6 +65,8 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
       buildOpeningElementProperties(this.componentMetadata, value, key),
     );
+
+    propsArray.push(...buildLayoutProperties(this.componentMetadata.formMetadata));
 
     const submitAttribute = this.getFormOnSubmitAttribute();
     propsArray.push(submitAttribute);
