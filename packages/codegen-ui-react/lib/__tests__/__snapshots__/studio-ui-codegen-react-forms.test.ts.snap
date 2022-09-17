@@ -50,10 +50,10 @@ export default function CustomDataForm(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         const modelFields = {
@@ -387,10 +387,10 @@ export default function CustomDataForm(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         const modelFields = {
@@ -674,10 +674,18 @@ exports[`amplify form renderer tests custom form tests should render nested json
 import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, Grid, Heading, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  Heading,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
 export default function NestedJson(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
+  const { tokens } = useTheme();
   const [firstName, setFirstName] = React.useState(undefined);
   const [lastName, setLastName] = React.useState(undefined);
   const [bio, setBio] = React.useState({});
@@ -705,10 +713,10 @@ export default function NestedJson(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap={tokens?.space?.large.value}
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         const modelFields = {
@@ -959,10 +967,10 @@ export default function NestedJson(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         const modelFields = {
@@ -1212,10 +1220,10 @@ export default function CustomWithSectionalElements(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         const modelFields = {
@@ -1396,10 +1404,10 @@ export default function MyPostForm(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
@@ -1699,10 +1707,10 @@ export default function MyPostForm(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
@@ -2181,10 +2189,10 @@ export default function InputGalleryCreateForm(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
@@ -2834,10 +2842,10 @@ export default function InputGalleryCreateForm(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
@@ -3366,10 +3374,10 @@ export default function PostCreateFormRow(props) {
   };
   return (
     <Grid
-      columnGap=\\"15px\\"
-      rowGap=\\"15px\\"
-      padding=\\"20px\\"
       as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {

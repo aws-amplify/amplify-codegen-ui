@@ -43,6 +43,9 @@ export const mapFormMetadata = (
     id: form.id,
     name: form.name,
     formActionType: form.formActionType,
+    layoutConfigs: {
+      ...formDefinition.form.layoutStyle,
+    },
     fieldConfigs: inputElementEntries.reduce<Record<string, FieldConfigMetadata>>((configs, [name, config]) => {
       const updatedConfigs = configs;
       const metadata: FieldConfigMetadata = {
