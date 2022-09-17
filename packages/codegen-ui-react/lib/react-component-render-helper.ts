@@ -626,7 +626,7 @@ export function buildLayoutProperties(componentMetadata: FormMetadata | undefine
           factory.createIdentifier(mappedProp),
           factory.createJsxExpression(
             undefined,
-            factory.createPropertyAccessExpression(buildAccessChain(tokenReference), 'value'),
+            factory.createPropertyAccessExpression(buildAccessChain(tokenReference, false), 'value'),
           ),
         ),
       );

@@ -710,7 +710,7 @@ export default function NestedJson(props) {
   return (
     <Grid
       as=\\"form\\"
-      rowGap={tokens?.space?.large.value}
+      rowGap={tokens.space.large.value}
       columnGap=\\"15px\\"
       padding=\\"20px\\"
       onSubmit={async (event) => {
