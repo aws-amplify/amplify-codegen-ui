@@ -783,3 +783,92 @@ export const schemaWithNonModels: Schema = {
   },
   version: '38a1a46479c6cd75d21439d7f3122c1d',
 };
+
+export const schemaWithAssumptions: Schema = {
+  models: {
+    User: {
+      name: 'User',
+      fields: {
+        friends: {
+          name: 'friends',
+          isArray: true,
+          type: {
+            model: 'Friend',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: 'friendId',
+          },
+        },
+        posts: {
+          name: 'posts',
+          isArray: true,
+          type: {
+            model: 'Post',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: 'userPostsId',
+          },
+        },
+        badges: {
+          name: 'badges',
+          isArray: true,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Users',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['id'],
+          },
+        },
+      ],
+    },
+    Event: {
+      name: 'Post',
+      fields: {
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'Posts',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['id'],
+          },
+        },
+      ],
+    },
+  },
+  enums: {},
+  nonModels: {},
+  version: 'version',
+};

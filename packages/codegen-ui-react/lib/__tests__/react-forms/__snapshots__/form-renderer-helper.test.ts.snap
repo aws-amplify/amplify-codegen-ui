@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`form-render utils should generate before & complete types if datastore config is set 1`] = `
+"{
+    onSubmit?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
+    onSuccess?: (fields: mySampleFormInputValues) => void;
+    onError?: (fields: mySampleFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
+    onValidate?: mySampleFormInputValues<false>;
+}"
+`;
+
+exports[`form-render utils should generate regular onsubmit if dataSourceType is custom 1`] = `
+"{
+    onSubmit: (fields: myCustomFormInputValues) => void;
+    onCancel?: () => void;
+    onChange?: (fields: myCustomFormInputValues) => myCustomFormInputValues;
+    onValidate?: myCustomFormInputValues<false>;
+}"
+`;

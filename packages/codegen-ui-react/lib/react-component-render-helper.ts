@@ -52,11 +52,13 @@ import {
   ArrayLiteralExpression,
 } from 'typescript';
 
+import { FormMetadata } from '@aws-amplify/codegen-ui/lib/types';
 import { ImportCollection, ImportSource } from './imports';
 import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 import { getChildPropMappingForComponentName } from './workflow/utils';
 import nameReplacements from './name-replacements';
 import keywords from './keywords';
+import { buildAccessChain } from './forms/form-state';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);
@@ -598,6 +600,40 @@ export function buildOpeningElementProperties(
     return buildStateAttr(componentMetadata, prop, name);
   }
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
+}
+
+export function buildLayoutProperties(componentMetadata: FormMetadata | undefined): JsxAttribute[] {
+  const propMap: Record<string, string> = {
+    horizontalGap: 'rowGap',
+    verticalGap: 'columnGap',
+    outerPadding: 'padding',
+  };
+
+  return Object.entries(componentMetadata?.layoutConfigs ?? {}).reduce<JsxAttribute[]>((acc, value) => {
+    const mappedProp = propMap[value[0]];
+
+    if (!mappedProp) {
+      return acc;
+    }
+
+    if (value[1].value) {
+      acc.push(buildFixedAttr({ value: value[1].value }, mappedProp));
+    } else if (value[1].tokenReference) {
+      const tokenReference = ['tokens', ...value[1].tokenReference.split('.')];
+
+      acc.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier(mappedProp),
+          factory.createJsxExpression(
+            undefined,
+            factory.createPropertyAccessExpression(buildAccessChain(tokenReference, false), 'value'),
+          ),
+        ),
+      );
+    }
+
+    return acc;
+  }, []);
 }
 
 export function addBindingPropertiesImports(

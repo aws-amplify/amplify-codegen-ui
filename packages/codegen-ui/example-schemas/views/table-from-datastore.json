@@ -1,0 +1,61 @@
+{
+  "dataSource" : {
+    "model" : "Person",
+    "sort" : [ {
+      "direction" : "ASC",
+      "field" : "comments"
+    }, {
+      "direction" : "ASC",
+      "field" : "name"
+    } ],
+    "type" : "DataStore"
+  },
+  "id" : "v-3ziKr6s40vGzLDFAJL",
+  "name" : "PersonTable",
+  "schemaVersion" : "1.0.0",
+  "style" : {
+    "alignment" : {
+      "value" : "center"
+    },
+    "outerPadding" : {
+      "value" : "3px"
+    }
+  },
+  "viewConfiguration" : {
+      "type" : "Table",
+      "table": {
+        "columns" : {
+            "name" : {
+              "excluded" : true
+            },
+            "id" : {
+              "excluded" : true
+            },
+            "hireDate" : {
+              "valueFormatting": {
+                "stringFormat": {
+                  "nonLocaleDateTimeFormat": {
+                    "dateFormat": "locale",
+                    "timeFormat": "hours24"
+                  }
+                }
+              }
+            },
+            "createdAt" : {
+              "valueFormatting": {
+                "stringFormat": {
+                  "timeFormat": "hours24"
+                }
+              }
+            },
+            "updatedAt" : {
+              "valueFormatting": {
+                "stringFormat": {
+                  "dateFormat": "Mmm, DD YYYY"
+                }
+              }
+            }
+        }
+      }
+  }
+}

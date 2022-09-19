@@ -16,14 +16,13 @@
 
 import { mapSectionalElement, getFormDefinitionSectionalElement } from '../../../generate-form-definition/helpers';
 import { FormDefinition, SectionalElement } from '../../../types';
+import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('mapSectionalElement', () => {
   it('should throw if there is already an element with the same name', () => {
     const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
+      ...getBasicFormDefinition(),
       elements: { Heading123: { componentType: 'Heading', props: {} } },
-      buttons: {},
-      elementMatrix: [],
     };
 
     const element: { name: string; config: SectionalElement } = {
@@ -35,12 +34,7 @@ describe('mapSectionalElement', () => {
   });
 
   it('should map configurations', () => {
-    const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {},
-      elementMatrix: [],
-    };
+    const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const element: { name: string; config: SectionalElement } = {
       name: 'Heading123',

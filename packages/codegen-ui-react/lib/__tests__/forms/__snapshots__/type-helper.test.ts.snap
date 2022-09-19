@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should generate nested object should generate type for nested object 1`] = `
+"export declare type myCreateFormInputValues<useBase extends boolean = true> = {
+    firstName?: UseBaseOrValidationType<useBase, string>;
+    isExplorer?: UseBaseOrValidationType<useBase, boolean>;
+    bio?: {
+        favoriteAnimal?: {
+            animalMeta?: {
+                family?: {
+                    genus?: UseBaseOrValidationType<useBase, string>;
+                };
+                earliestRecord?: UseBaseOrValidationType<useBase, number>;
+            };
+        };
+    };
+};"
+`;
+
+exports[`should generate nested object should generate type for non nested object 1`] = `
+"export declare type myCreateFormInputValues<useBase extends boolean = true> = {
+    firstName?: UseBaseOrValidationType<useBase, string>;
+    isExplorer?: UseBaseOrValidationType<useBase, boolean>;
+    tags?: UseBaseOrValidationType<useBase, string>;
+};"
+`;

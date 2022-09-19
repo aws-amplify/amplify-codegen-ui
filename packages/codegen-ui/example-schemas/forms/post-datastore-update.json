@@ -1,0 +1,47 @@
+{
+  "id": "123",
+  "name": "MyPostForm",
+  "formActionType": "update",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "Post"
+  },
+  "fields": {
+    "TextAreaFieldbbd63464": {
+      "inputType": {
+        "type": "TextAreaField"
+      },
+      "position": {
+        "fixed": "first"
+      }
+    },
+    "caption": {
+      "position": {
+        "below": "TextAreaFieldbbd63464"
+      }
+    },
+    "username": {
+      "position": {
+        "below": "caption"
+      }
+    },
+    "post_url": {
+      "position": {
+        "below": "username"
+      }
+    },
+    "profile_url": {
+      "position": {
+        "below": "username"
+      }
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": {
+    "position": "top_and_bottom",
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  }
+}

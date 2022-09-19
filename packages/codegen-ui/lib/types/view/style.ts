@@ -17,7 +17,7 @@
 export declare type ViewAlignment = 'left' | 'right' | 'center';
 
 export interface ViewAlignmentConfig {
-  tokenReference?: String;
+  tokenReference?: string;
   value?: ViewAlignment;
 }
 
@@ -29,6 +29,6 @@ export interface ViewStyle {
 }
 
 export interface ViewStyleConfig {
-  tokenReference?: String;
-  value?: String;
+  tokenReference?: string;
+  value?: string;
 }

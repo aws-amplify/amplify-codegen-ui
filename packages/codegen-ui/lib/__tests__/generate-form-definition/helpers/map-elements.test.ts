@@ -15,6 +15,7 @@
  */
 import { mapElements } from '../../../generate-form-definition/helpers';
 import { FormDefinition, SectionalElement, ModelFieldsConfigs, StudioForm } from '../../../types';
+import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('mapElements', () => {
   it('should map sectional elements & input elements with and without overrides', () => {
@@ -25,9 +26,7 @@ describe('mapElements', () => {
     };
 
     const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {},
+      ...getBasicFormDefinition(),
       elementMatrix: [['myText', 'name'], ['price']],
     };
 
@@ -47,21 +46,24 @@ describe('mapElements', () => {
     };
 
     const form: StudioForm = {
+      id: '123',
       name: 'sampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
       fields: { name: { inputType: { type: 'TextField' } } },
       sectionalElements: { myText: sectionalConfig },
       style: {},
+      cta: {},
     };
 
     mapElements({ formDefinition, modelFieldsConfigs, form });
     expect(formDefinition.elements).toStrictEqual({
       myText: { componentType: 'Text', props: { children: 'MyText' } },
-      name: { componentType: 'TextField', props: { label: 'Label' } },
+      name: { componentType: 'TextField', props: { label: 'Label' }, studioFormComponentType: 'TextField' },
       price: {
         componentType: 'TextField',
         props: { label: 'price', isRequired: false, isReadOnly: false },
+        studioFormComponentType: 'TextField',
       },
     });
 
@@ -70,21 +72,21 @@ describe('mapElements', () => {
 
   it('should throw if config for element not found', () => {
     const formDefinition: FormDefinition = {
-      form: { layoutStyle: {} },
-      elements: {},
-      buttons: {},
+      ...getBasicFormDefinition(),
       elementMatrix: [['myText']],
     };
 
     const modelFieldsConfigs: ModelFieldsConfigs = {};
 
     const form: StudioForm = {
+      id: '123',
       name: 'sampleForm',
       formActionType: 'create',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
       fields: {},
       sectionalElements: {},
       style: {},
+      cta: {},
     };
 
     expect(() => mapElements({ formDefinition, modelFieldsConfigs, form })).toThrow();

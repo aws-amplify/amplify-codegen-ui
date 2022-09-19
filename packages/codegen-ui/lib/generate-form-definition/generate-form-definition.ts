@@ -14,8 +14,9 @@
   limitations under the License.
  */
 
-import { addDataStoreModelField, mapElementMatrix, mapStyles, mapElements } from './helpers';
-import { StudioForm, DataStoreModelField, FormDefinition, ModelFieldsConfigs, StudioFieldPosition } from '../types';
+import { mapModelFieldsConfigs, mapElementMatrix, mapStyles, mapElements, mapButtons } from './helpers';
+import { StudioForm, FormDefinition, ModelFieldsConfigs, StudioFieldPosition, GenericDataSchema } from '../types';
+import { InvalidInputError } from '../errors';
 
 /**
  * Helper that turns the StudioForm model into definition that can be used to render
@@ -26,22 +27,34 @@ import { StudioForm, DataStoreModelField, FormDefinition, ModelFieldsConfigs, St
  */
 export function generateFormDefinition({
   form,
-  modelInfo,
+  dataSchema,
 }: {
   form: StudioForm;
-  modelInfo?: { fields: DataStoreModelField[] };
+  dataSchema?: GenericDataSchema;
 }): FormDefinition {
   const formDefinition: FormDefinition = {
-    form: { layoutStyle: {} },
+    form: { layoutStyle: mapStyles(form.style) },
     elements: {},
-    buttons: {},
+    buttons: {
+      buttonConfigs: {},
+      position: '',
+      buttonMatrix: [],
+    },
     elementMatrix: [],
   };
 
-  const modelFieldsConfigs: ModelFieldsConfigs = {};
-  if (modelInfo) {
-    modelInfo.fields.forEach((field) => {
-      addDataStoreModelField(formDefinition, modelFieldsConfigs, field);
+  let modelFieldsConfigs: ModelFieldsConfigs = {};
+
+  if (form.dataType.dataSourceType !== 'Custom') {
+    if (!dataSchema) {
+      throw new InvalidInputError(
+        `Data schema is missing for form of data source type ${form.dataType.dataSourceType}`,
+      );
+    }
+    modelFieldsConfigs = mapModelFieldsConfigs({
+      dataSchema,
+      formDefinition,
+      dataTypeName: form.dataType.dataTypeName,
     });
   }
 
@@ -65,7 +78,7 @@ export function generateFormDefinition({
 
   mapElements({ form, formDefinition, modelFieldsConfigs });
 
-  formDefinition.form.layoutStyle = mapStyles(form.style);
+  formDefinition.buttons = mapButtons(form.cta);
 
   return formDefinition;
 }

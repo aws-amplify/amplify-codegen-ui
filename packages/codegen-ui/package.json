@@ -19,6 +19,7 @@
     "build:watch": "npm run build -- --watch"
   },
   "dependencies": {
+    "change-case": "^4.1.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {

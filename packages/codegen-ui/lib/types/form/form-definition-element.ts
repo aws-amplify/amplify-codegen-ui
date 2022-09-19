@@ -13,6 +13,16 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+
+import { DataFieldDataType } from '../data';
+import { FieldValidationConfiguration } from './form-validation';
+import { StudioFormValueMappings } from './input-config';
+
+type FormDefinitionInputElementCommon = {
+  dataType?: DataFieldDataType;
+  validations?: (FieldValidationConfiguration & { immutable?: true })[];
+};
+
 export type FormDefinitionTextFieldElement = {
   componentType: 'TextField';
   props: {
@@ -22,12 +32,22 @@ export type FormDefinitionTextFieldElement = {
     isReadOnly?: boolean;
     placeholder?: string;
     defaultValue?: string;
+    type?: string;
   };
+  studioFormComponentType:
+    | 'TextField'
+    | 'NumberField'
+    | 'DateField'
+    | 'TimeField'
+    | 'DateTimeField'
+    | 'IPAddressField'
+    | 'URLField'
+    | 'EmailField';
 };
 
 export type FormDefinitionSwitchFieldElement = {
   componentType: 'SwitchField';
-  props: { label: string; defaultChecked?: boolean; isRequired?: boolean; isReadOnly?: boolean };
+  props: { label: string; defaultChecked?: boolean; isDisabled?: boolean };
 };
 
 export type FormDefinitionPhoneNumberFieldElement = {
@@ -47,7 +67,7 @@ export type FormDefinitionSelectFieldElement = {
   componentType: 'SelectField';
   props: { label: string; descriptiveText?: string; placeholder?: string; isDisabled?: boolean };
   // needs to be mapped as children of 'option' JSX elements
-  options: { value: string; children: string }[];
+  valueMappings: StudioFormValueMappings;
   // 'selected' attr needs to be mapped onto the 'option' itself, not the SelectField
   defaultValue?: string;
 };
@@ -62,6 +82,7 @@ export type FormDefinitionTextAreaFieldElement = {
     placeholder?: string;
     defaultValue?: string;
   };
+  studioFormComponentType: 'JSONField' | 'TextAreaField';
 };
 
 export type FormDefinitionSliderFieldElement = {
@@ -117,8 +138,8 @@ export type FormDefinitionRadioGroupFieldElement = {
     descriptiveText?: string;
     isRequired?: boolean;
   };
-  // needs to be mapped as children of 'Radio' components
-  radios: { value: string; children: string }[];
+  // needs to be mapped as children of 'Radio' JSX elements
+  valueMappings: StudioFormValueMappings;
 };
 
 export type FormDefinitionPasswordFieldElement = {
@@ -133,7 +154,17 @@ export type FormDefinitionPasswordFieldElement = {
   };
 };
 
-export type FormDefinitionInputElement =
+export type FormDefinitionButtonElement = {
+  name: string;
+  componentType: 'Button';
+  props: {
+    variation?: string;
+    children: string;
+    type?: string;
+  };
+};
+
+export type FormDefinitionInputElement = (
   | FormDefinitionTextFieldElement
   | FormDefinitionSwitchFieldElement
   | FormDefinitionPhoneNumberFieldElement
@@ -144,7 +175,9 @@ export type FormDefinitionInputElement =
   | FormDefinitionToggleButtonElement
   | FormDefinitionCheckboxFieldElement
   | FormDefinitionRadioGroupFieldElement
-  | FormDefinitionPasswordFieldElement;
+  | FormDefinitionPasswordFieldElement
+) &
+  FormDefinitionInputElementCommon;
 
 export type FormDefinitionHeadingElement = {
   componentType: 'Heading';
@@ -166,4 +199,7 @@ export type FormDefinitionSectionalElement =
   | FormDefinitionTextElement
   | FormDefinitionDividerElement;
 
-export type FormDefinitionElement = FormDefinitionInputElement | FormDefinitionSectionalElement;
+export type FormDefinitionElement =
+  | FormDefinitionInputElement
+  | FormDefinitionSectionalElement
+  | FormDefinitionButtonElement;

@@ -21,6 +21,7 @@ import {
   InternalError,
   InvalidInputError,
   StudioComponentSlotBinding,
+  StudioComponentSort,
 } from '@aws-amplify/codegen-ui';
 import ts, {
   createPrinter,
@@ -38,6 +39,9 @@ import ts, {
   BindingName,
   Expression,
   PropertyAssignment,
+  ArrowFunction,
+  CallExpression,
+  Identifier,
 } from 'typescript';
 import { createDefaultMapFromNodeModules, createSystem, createVirtualCompilerHost } from '@typescript/vfs';
 import path from 'path';
@@ -145,6 +149,50 @@ export function buildPrinter(fileName: string, renderConfig: ReactRenderConfig) 
   });
   return { printer, file };
 }
+
+/**
+ * (s: SortPredicate<User>) => s.firstName('ASCENDING').lastName('DESCENDING')
+ */
+export const buildSortFunction = (model: string, sort: StudioComponentSort[]): ArrowFunction => {
+  const ascendingSortDirection = factory.createPropertyAccessExpression(
+    factory.createIdentifier('SortDirection'),
+    factory.createIdentifier('ASCENDING'),
+  );
+  const descendingSortDirection = factory.createPropertyAccessExpression(
+    factory.createIdentifier('SortDirection'),
+    factory.createIdentifier('DESCENDING'),
+  );
+
+  let expr: Identifier | CallExpression = factory.createIdentifier('s');
+  sort.forEach((sortPredicate) => {
+    expr = factory.createCallExpression(
+      factory.createPropertyAccessExpression(expr, factory.createIdentifier(sortPredicate.field)),
+      undefined,
+      [sortPredicate.direction === 'ASC' ? ascendingSortDirection : descendingSortDirection],
+    );
+  });
+
+  return factory.createArrowFunction(
+    undefined,
+    undefined,
+    [
+      factory.createParameterDeclaration(
+        undefined,
+        undefined,
+        undefined,
+        factory.createIdentifier('s'),
+        undefined,
+        factory.createTypeReferenceNode(factory.createIdentifier('SortPredicate'), [
+          factory.createTypeReferenceNode(factory.createIdentifier(model), undefined),
+        ]),
+        undefined,
+      ),
+    ],
+    undefined,
+    factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+    expr,
+  );
+};
 
 export function getDeclarationFilename(filename: string): string {
   return `${path.basename(filename, filename.includes('.tsx') ? '.tsx' : '.jsx')}.d.ts`;

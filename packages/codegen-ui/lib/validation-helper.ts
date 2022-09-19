@@ -15,10 +15,16 @@
  */
 import * as yup from 'yup';
 import { InvalidInputError } from './errors';
-import { StudioGenericEvent } from './types';
+import { StudioGenericEvent, StudioSchema } from './types';
 
 const alphaNumString = () => {
   return yup.string().matches(/^[a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string' });
+};
+
+const pascalCaseAlphaNumString = () => {
+  return yup
+    .string()
+    .matches(/^[A-Z][a-zA-Z0-9]*$/, { message: 'Expected an alphanumeric string with capital first letter' });
 };
 
 const alphaNumNoLeadingNumberString = () => {
@@ -96,7 +102,7 @@ const studioComponentChildSchema: any = yup.object({
 
 const studioComponentSchema = yup
   .object({
-    name: alphaNumString().required(),
+    name: pascalCaseAlphaNumString().required(),
     id: yup.string().nullable(),
     sourceId: yup.string().nullable(),
     schemaVersion: yup.lazy(() => schemaVersionSchema().nullable()),
@@ -178,9 +184,43 @@ const studioThemeSchema = yup.object({
 });
 
 /**
+ * Form Schema Definitions
+ */
+const studioFormSchema = yup.object({
+  name: pascalCaseAlphaNumString().required(),
+  id: yup.string().nullable(),
+  formActionType: yup.string().matches(new RegExp('(create|update)')),
+  dataType: yup.object({
+    dataSourceType: yup.string().matches(new RegExp('(DataStore|Custom)')),
+    dataTypeName: yup.string().required(),
+  }),
+  fields: yup.object().nullable(),
+  sectionalElements: yup.object().nullable(),
+  style: yup.object().nullable(),
+  cta: yup.object().nullable(),
+});
+
+/**
+ * View Schema Definition
+ */
+const studioViewSchema = yup.object({
+  name: pascalCaseAlphaNumString().required(),
+  id: yup.string().nullable(),
+  dataSource: yup.object({
+    identifiers: yup.array().nullable(),
+    model: yup.string().nullable(),
+    predicate: yup.object().nullable(),
+    sort: yup.array().nullable(),
+    type: yup.string().matches(new RegExp('(DataStore|Custom)')),
+  }),
+  style: yup.object().nullable(),
+  viewConfiguration: yup.object().nullable(),
+});
+
+/**
  * Studio Schema Validation Functions and Helpers.
  */
-const validateSchema = (validator: yup.AnySchema, studioSchema: any) => {
+const validateSchema = (validator: yup.AnySchema, studioSchema: StudioSchema) => {
   try {
     validator.validateSync(studioSchema, { strict: true, abortEarly: false });
   } catch (e) {
@@ -193,3 +233,5 @@ const validateSchema = (validator: yup.AnySchema, studioSchema: any) => {
 
 export const validateComponentSchema = (schema: any) => validateSchema(studioComponentSchema, schema);
 export const validateThemeSchema = (schema: any) => validateSchema(studioThemeSchema, schema);
+export const validateFormSchema = (schema: any) => validateSchema(studioFormSchema, schema);
+export const validateViewSchema = (schema: any) => validateSchema(studioViewSchema, schema);

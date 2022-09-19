@@ -13,10 +13,29 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioTemplateRendererFactory, GenericDataSchema, StudioComponent } from '@aws-amplify/codegen-ui';
+import {
+  StudioTemplateRendererFactory,
+  GenericDataSchema,
+  StudioComponent,
+  getGenericFromDataStore,
+  Schema,
+  StudioForm,
+  StudioView,
+} from '@aws-amplify/codegen-ui';
+import { createPrinter, createSourceFile, EmitHint, NewLineKind, Node } from 'typescript';
+import { AmplifyFormRenderer } from '../../amplify-ui-renderers/amplify-form-renderer';
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
-import { ReactRenderConfig } from '../../react-render-config';
+import { AmplifyViewRenderer } from '../../amplify-ui-renderers/amplify-view-renderer';
+import { ModuleKind, ReactRenderConfig, ScriptKind, ScriptTarget } from '../../react-render-config';
 import { loadSchemaFromJSONFile } from './example-schema';
+import { defaultRenderConfig, transpile } from '../../react-studio-template-renderer-helper';
+
+export const defaultCLIRenderConfig = {
+  module: ModuleKind.ES2020,
+  target: ScriptTarget.ES2020,
+  script: ScriptKind.JSX,
+  renderTypeDeclarations: true,
+};
 
 export const generateWithAmplifyRenderer = (
   jsonSchemaFile: string,
@@ -31,4 +50,71 @@ export const generateWithAmplifyRenderer = (
   return isSampleCodeSnippet
     ? { componentText: renderer.renderSampleCodeSnippet().compText }
     : renderer.renderComponent();
+};
+
+export const generateWithAmplifyFormRenderer = (
+  formJsonFile: string,
+  dataSchemaJsonFile: string | undefined,
+  renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
+): { componentText: string; declaration?: string } => {
+  let dataSchema: GenericDataSchema | undefined;
+  if (dataSchemaJsonFile) {
+    const dataStoreSchema = loadSchemaFromJSONFile<Schema>(dataSchemaJsonFile);
+    dataSchema = getGenericFromDataStore(dataStoreSchema);
+  }
+  const rendererFactory = new StudioTemplateRendererFactory(
+    (component: StudioForm) => new AmplifyFormRenderer(component, dataSchema, renderConfig),
+  );
+
+  const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile<StudioForm>(formJsonFile));
+  return renderer.renderComponent();
+};
+
+export const renderWithAmplifyViewRenderer = (
+  viewJsonFile: string,
+  dataSchemaJsonFile: string | undefined,
+  renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
+): { componentText: string; declaration?: string } => {
+  let dataSchema: GenericDataSchema | undefined;
+  if (dataSchemaJsonFile) {
+    const dataStoreSchema = loadSchemaFromJSONFile<Schema>(dataSchemaJsonFile);
+    dataSchema = getGenericFromDataStore(dataStoreSchema);
+  }
+  const rendererFactory = new StudioTemplateRendererFactory(
+    (view: StudioView) => new AmplifyViewRenderer(view, dataSchema, renderConfig),
+  );
+
+  const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile<StudioView>(viewJsonFile));
+  return renderer.renderComponent();
+};
+
+export const renderTableJsxElement = (
+  tableFilePath: string,
+  dataSchemaFilePath: string | undefined,
+  snapshotFileName: string,
+  renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
+): string => {
+  const table = loadSchemaFromJSONFile<StudioView>(tableFilePath);
+  const dataSchema = dataSchemaFilePath ? loadSchemaFromJSONFile<GenericDataSchema>(dataSchemaFilePath) : undefined;
+  const tableJsx = new AmplifyViewRenderer(table, dataSchema, renderConfig).renderJsx();
+
+  const file = createSourceFile(snapshotFileName, '', ScriptTarget.ES2015, true, ScriptKind.TS);
+  const printer = createPrinter();
+  const tableNode = printer.printNode(EmitHint.Unspecified, tableJsx, file);
+
+  return transpile(tableNode, {}).componentText;
+};
+
+export const genericPrinter = (node: Node): string => {
+  const file = createSourceFile(
+    'sampleFileName.js',
+    '',
+    defaultCLIRenderConfig.target,
+    false,
+    defaultRenderConfig.script,
+  );
+  const printer = createPrinter({
+    newLine: NewLineKind.LineFeed,
+  });
+  return printer.printNode(EmitHint.Unspecified, node, file);
 };

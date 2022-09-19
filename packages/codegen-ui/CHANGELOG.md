@@ -5,38 +5,23 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.3.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.3.2) (2022-07-22)
 
-
 ### Bug Fixes
 
-* limit workers during testing in ci ([#531](https://github.com/aws-amplify/amplify-codegen-ui/issues/531)) ([be36527](https://github.com/aws-amplify/amplify-codegen-ui/commit/be36527e86e76360e3368daa62ece4f9616bd69d))
-
-
-
-
+- limit workers during testing in ci ([#531](https://github.com/aws-amplify/amplify-codegen-ui/issues/531)) ([be36527](https://github.com/aws-amplify/amplify-codegen-ui/commit/be36527e86e76360e3368daa62ece4f9616bd69d))
 
 ## [2.3.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.0...v2.3.1) (2022-07-15)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui
 
-
-
-
-
 # [2.3.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.2.1...v2.3.0) (2022-07-14)
-
 
 ### Bug Fixes
 
-* handle auth prop in concat ([f7d645e](https://github.com/aws-amplify/amplify-codegen-ui/commit/f7d645e07e91848465e92f450e81d6ed92604057))
-
+- handle auth prop in concat ([f7d645e](https://github.com/aws-amplify/amplify-codegen-ui/commit/f7d645e07e91848465e92f450e81d6ed92604057))
 
 ### Features
 
-* adding breakpoint functionality in theme generation ([#515](https://github.com/aws-amplify/amplify-codegen-ui/issues/515)) ([28f97aa](https://github.com/aws-amplify/amplify-codegen-ui/commit/28f97aa7a290e3fd25efc6f0d51a39403d79b947))
-
-
-
-
+- adding breakpoint functionality in theme generation ([#515](https://github.com/aws-amplify/amplify-codegen-ui/issues/515)) ([28f97aa](https://github.com/aws-amplify/amplify-codegen-ui/commit/28f97aa7a290e3fd25efc6f0d51a39403d79b947))
 
 ## [2.2.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.2.0...v2.2.1) (2022-06-15)
 

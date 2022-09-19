@@ -17,27 +17,29 @@
 import { StudioFormStyle } from './style';
 import { StudioFormFields, StudioFormFieldConfig, StudioGenericFieldConfig } from './fields';
 import { SectionalElement } from './sectional-element';
-import { FormDefinition, ModelFieldsConfigs } from './form-definition';
-import { StudioFieldInputConfig } from './input-config';
+import { FormDefinition, ModelFieldsConfigs, FieldTypeMapKeys, ButtonConfig } from './form-definition';
+import { StudioFieldInputConfig, StudioFormValueMappings } from './input-config';
 import { StudioFieldPosition } from './position';
+import { StudioFormCTA } from './form-cta';
+import { FormMetadata, FieldConfigMetadata, StudioFormActionType } from './form-metadata';
+
+export type StudioDataSourceType = 'DataStore' | 'Custom';
 
 /**
  * Data type definition for StudioForm
  */
-type StudioFormDataType = {
-  dataSourceType: 'DataStore' | 'Custom';
+export type StudioFormDataType = {
+  dataSourceType: StudioDataSourceType;
 
   dataTypeName: string;
 };
-/**
- * Form Action type definition
- */
-type StudioFormActionType = 'create' | 'update';
 
 /**
  * This is the base type for all StudioForms
  */
 export type StudioForm = {
+  id?: string;
+
   name: string;
 
   formActionType: StudioFormActionType;
@@ -49,18 +51,50 @@ export type StudioForm = {
   sectionalElements: { [elementName: string]: SectionalElement };
 
   style: StudioFormStyle;
+
+  cta: StudioFormCTA;
 };
 
+export type FormInputType =
+  | 'TextField'
+  | 'TextAreaField'
+  | 'PasswordField'
+  | 'SliderField'
+  | 'StepperField'
+  | 'SwitchField'
+  | 'ToggleButton'
+  | 'CheckboxField'
+  | 'RadioGroupField'
+  | 'PhoneNumberField'
+  | 'SelectField'
+  | 'NumberField'
+  | 'DateField'
+  | 'TimeField'
+  | 'DateTimeField'
+  | 'IPAddressField'
+  | 'URLField'
+  | 'EmailField'
+  | 'JSONField'
+  | 'ArrayField';
+
 export * from './form-definition-element';
+export * from './style';
+export * from './form-validation';
+export * from './form-cta';
 
 export type {
-  StudioFormStyle,
   SectionalElement,
   StudioFormFieldConfig,
+  StudioFormActionType,
   FormDefinition,
+  FormMetadata,
+  FieldConfigMetadata,
   StudioFieldInputConfig,
   StudioGenericFieldConfig,
   StudioFormFields,
   ModelFieldsConfigs,
   StudioFieldPosition,
+  FieldTypeMapKeys,
+  StudioFormValueMappings,
+  ButtonConfig,
 };

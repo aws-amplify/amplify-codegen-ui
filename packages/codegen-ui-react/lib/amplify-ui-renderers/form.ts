@@ -21,11 +21,13 @@ import {
   StudioForm,
   StudioNode,
 } from '@aws-amplify/codegen-ui';
-import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, SyntaxKind } from 'typescript';
+import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, Statement, SyntaxKind } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
-import { buildOpeningElementProperties } from '../react-component-render-helper';
-import { ImportCollection } from '../imports';
-import { getActionIdentifier } from '../workflow';
+import { buildLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
+import { ImportCollection, ImportSource } from '../imports';
+import { buildDataStoreExpression } from '../forms';
+import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
+import { hasTokenReference } from '../utils/forms/layout-helpers';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -48,6 +50,13 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+    if (this.form.dataType.dataSourceType === 'DataStore') {
+      this.importCollection.addImport('aws-amplify', 'DataStore');
+    }
+
+    if (hasTokenReference(this.componentMetadata)) {
+      this.importCollection.addImport(ImportSource.UI_REACT, 'useTheme');
+    }
 
     return element;
   }
@@ -56,6 +65,8 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
       buildOpeningElementProperties(this.componentMetadata, value, key),
     );
+
+    propsArray.push(...buildLayoutProperties(this.componentMetadata.formMetadata));
 
     const submitAttribute = this.getFormOnSubmitAttribute();
     propsArray.push(submitAttribute);
@@ -69,13 +80,113 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     );
   }
 
+  /**
+   * generates the necessary function call if using
+   * - datastore
+   * - custom
+   */
+  private getOnSubmitDSCall(): Statement[] {
+    const {
+      dataType: { dataSourceType, dataTypeName },
+      formActionType,
+    } = this.form;
+
+    const onSubmitIdentifier = factory.createIdentifier('onSubmit');
+
+    if (dataSourceType === 'Custom') {
+      return [
+        factory.createExpressionStatement(
+          factory.createAwaitExpression(
+            factory.createCallExpression(onSubmitIdentifier, undefined, [factory.createIdentifier('modelFields')]),
+          ),
+        ),
+      ];
+    }
+    if (dataSourceType === 'DataStore') {
+      return [
+        factory.createIfStatement(
+          onSubmitIdentifier,
+          factory.createBlock(
+            [
+              factory.createExpressionStatement(
+                factory.createBinaryExpression(
+                  factory.createIdentifier('modelFields'),
+                  factory.createToken(SyntaxKind.EqualsToken),
+                  factory.createCallExpression(onSubmitIdentifier, undefined, [
+                    factory.createIdentifier('modelFields'),
+                  ]),
+                ),
+              ),
+            ],
+            true,
+          ),
+          undefined,
+        ),
+        factory.createTryStatement(
+          factory.createBlock(
+            [
+              ...buildDataStoreExpression(formActionType, dataTypeName),
+              factory.createIfStatement(
+                factory.createIdentifier('onSuccess'),
+                factory.createBlock(
+                  [
+                    factory.createExpressionStatement(
+                      factory.createCallExpression(factory.createIdentifier('onSuccess'), undefined, [
+                        factory.createIdentifier('modelFields'),
+                      ]),
+                    ),
+                  ],
+                  true,
+                ),
+                undefined,
+              ),
+            ],
+            true,
+          ),
+          factory.createCatchClause(
+            factory.createVariableDeclaration(factory.createIdentifier('err'), undefined, undefined, undefined),
+            factory.createBlock(
+              [
+                factory.createIfStatement(
+                  factory.createIdentifier('onError'),
+                  factory.createBlock(
+                    [
+                      factory.createExpressionStatement(
+                        factory.createCallExpression(factory.createIdentifier('onError'), undefined, [
+                          factory.createIdentifier('modelFields'),
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('err'),
+                            factory.createIdentifier('message'),
+                          ),
+                        ]),
+                      ),
+                    ],
+                    true,
+                  ),
+                  undefined,
+                ),
+              ],
+              true,
+            ),
+          ),
+          undefined,
+        ),
+      ];
+    }
+    throw new Error(`${dataSourceType} is not supported in form:onSubmit`);
+  }
+
   private getFormOnSubmitAttribute(): JsxAttribute {
+    const {
+      dataType: { dataSourceType },
+    } = this.form;
+    const { formMetadata } = this.componentMetadata;
     return factory.createJsxAttribute(
       factory.createIdentifier('onSubmit'),
       factory.createJsxExpression(
         undefined,
         factory.createArrowFunction(
-          undefined,
+          [factory.createModifier(SyntaxKind.AsyncKeyword)],
           undefined,
           [
             factory.createParameterDeclaration(
@@ -102,18 +213,9 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                   [],
                 ),
               ),
-              factory.createExpressionStatement(
-                /**
-                 * TODO: pass in props from functional argument
-                 * for datastore it will be onSubmitBefore & onSubmitComplete
-                 * for byod it will only be onSubmit override function
-                 */
-                factory.createCallExpression(
-                  factory.createIdentifier(getActionIdentifier(this.form.name, 'onSubmit')),
-                  undefined,
-                  [],
-                ),
-              ),
+              buildModelFieldObject(dataSourceType !== 'DataStore', formMetadata?.fieldConfigs),
+              ...onSubmitValidationRun,
+              ...this.getOnSubmitDSCall(),
             ],
             false,
           ),

@@ -43,6 +43,8 @@ import {
   filterStateReferencesForComponent,
 } from './workflow';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
+import { addFormAttributes } from './forms';
+import { renderArrayFieldComponent } from './utils/forms/array-field-component';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   TPropIn,
@@ -71,6 +73,15 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     );
 
     this.importCollection.addImport(ImportSource.UI_REACT, this.component.componentType);
+
+    // Add ArrayField wrapper to element if Array type
+    if (this.componentMetadata.formMetadata?.fieldConfigs[this.component.name]?.isArray) {
+      this.importCollection.addImport(ImportSource.UI_REACT, 'Icon');
+      this.importCollection.addImport(ImportSource.UI_REACT, 'Badge');
+      this.importCollection.addImport(ImportSource.UI_REACT, 'ScrollView');
+      this.importCollection.addImport(ImportSource.UI_REACT, 'Divider');
+      return renderArrayFieldComponent(this.component.name, element);
+    }
 
     return element;
   }
@@ -126,6 +137,10 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       ...eventAttributes,
       ...controlEventAttributes,
     ];
+
+    if (this.componentMetadata.formMetadata) {
+      attributes.push(...addFormAttributes(this.component, this.componentMetadata.formMetadata));
+    }
 
     this.addPropsSpreadAttributes(attributes);
 

@@ -1,0 +1,17 @@
+{
+  "name": "MyPostForm",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "Post"
+  },
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {
+    "position": "top",
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  }
+}

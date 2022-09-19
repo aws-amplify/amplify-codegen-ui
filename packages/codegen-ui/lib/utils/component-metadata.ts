@@ -21,6 +21,7 @@ import {
   StudioComponentProperty,
   StudioComponentPropertyBinding,
   StateReference,
+  FormMetadata,
 } from '../types';
 import { StateReferenceMetadata, computeStateReferenceMetadata } from './state-reference-metadata';
 
@@ -29,6 +30,7 @@ export type ComponentMetadata = {
   requiredDataModels: string[];
   stateReferences: StateReferenceMetadata[];
   componentNameToTypeMap: Record<string, string>;
+  formMetadata?: FormMetadata;
 };
 
 /**

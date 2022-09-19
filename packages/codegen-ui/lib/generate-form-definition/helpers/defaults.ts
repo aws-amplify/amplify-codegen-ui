@@ -31,13 +31,28 @@ export const FORM_DEFINITION_DEFAULTS = {
     inputType: {
       label: 'Label',
       defaultCountryCode: '+1',
-      value: 'true',
+      value: 'fieldName',
       name: 'fieldName',
-      valueMappings: [{ value: 'value', displayValue: 'Label' }],
+      valueMappings: { values: [{ value: { value: 'Option' } }] },
     },
+    radioGroupFieldBooleanDisplayValue: { true: 'Yes', false: 'No' },
   },
 
   sectionalElement: {
     text: 'text',
+  },
+
+  cta: {
+    position: 'bottom',
+    buttonMatrix: [['clear'], ['cancel', 'submit']],
+    cancel: {
+      label: 'Cancel',
+    },
+    clear: {
+      label: 'Clear',
+    },
+    submit: {
+      label: 'Submit',
+    },
   },
 };

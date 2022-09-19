@@ -16,6 +16,7 @@
 import { StudioFieldPosition } from './position';
 import { StudioFieldInputConfig } from './input-config';
 import { FieldValidationConfiguration } from './form-validation';
+import { DataFieldDataType } from '../data';
 
 /**
  * Field configurations for StudioForm
@@ -39,6 +40,7 @@ export type StudioGenericFieldConfig = {
    * The configuration for what type of input is used.
    */
   inputType?: StudioFieldInputConfig;
+  dataType?: DataFieldDataType;
 } & StudioFieldConfig;
 
 export type StudioFormFieldConfig = StudioGenericFieldConfig | ExcludedStudioFieldConfig;

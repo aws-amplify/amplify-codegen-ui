@@ -21,6 +21,7 @@ import {
   isEventPropertyBinding,
   isStudioComponentWithCollectionProperties,
   isStudioComponentWithVariants,
+  isStudioComponentWithBreakpoints,
   StudioComponent,
   StudioComponentChild,
   StudioComponentPredicate,
@@ -33,6 +34,7 @@ import {
   validateComponentSchema,
   isSlotBinding,
   GenericDataSchema,
+  getBreakpoints,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -51,13 +53,12 @@ import ts, {
   Modifier,
   ObjectLiteralExpression,
   CallExpression,
-  Identifier,
-  ArrowFunction,
   LiteralExpression,
   BooleanLiteral,
   addSyntheticLeadingComment,
   JsxSelfClosingElement,
   PropertyAssignment,
+  ObjectLiteralElementLike,
 } from 'typescript';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
@@ -76,6 +77,7 @@ import {
   buildPropAssignmentWithFilter,
   buildCollectionWithItemMap,
   createHookStatement,
+  buildSortFunction,
 } from './react-studio-template-renderer-helper';
 import { Primitive, isPrimitive, PrimitiveTypeParameter, PrimitiveChildrenPropMapping } from './primitive';
 import { RequiredKeys } from './utils/type-utils';
@@ -543,7 +545,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return factory.createTypeLiteralNode(propSignatures);
   }
 
-  private buildVariableStatements(component: StudioComponent): Statement[] {
+  protected buildVariableStatements(component: StudioComponent): Statement[] {
     const statements: Statement[] = [];
     const elements: BindingElement[] = [];
     if (isStudioComponentWithBinding(component)) {
@@ -586,6 +588,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     // remove overrides from rest of props
     const hasVariant = isStudioComponentWithVariants(component);
+    const hasBreakpoint = isStudioComponentWithBreakpoints(component);
     elements.push(
       factory.createBindingElement(
         undefined,
@@ -600,7 +603,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       factory.createBindingElement(
         factory.createToken(ts.SyntaxKind.DotDotDotToken),
         undefined,
-        factory.createIdentifier(hasVariant ? 'restProp' : 'rest'),
+        factory.createIdentifier(hasBreakpoint ? 'restProp' : 'rest'),
         undefined,
       ),
     );
@@ -624,9 +627,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithVariants(component)) {
       this.importCollection.addMappedImport(ImportValue.MERGE_VARIANTS_OVERRIDES);
       statements.push(this.buildVariantDeclaration(component.variants));
-      statements.push(this.buildDefaultBreakpointMap());
-      statements.push(this.buildRestWithStyle());
-      statements.push(this.buildOverridesFromVariantsAndProp());
+      if (hasBreakpoint) {
+        statements.push(this.buildDefaultBreakpointMap(component));
+        statements.push(this.buildRestWithStyle());
+      }
+      statements.push(this.buildOverridesFromVariantsAndProp(hasBreakpoint));
     }
 
     const authStatement = this.buildUseAuthenticatedUserStatement();
@@ -737,23 +742,24 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    *        xxl: 'xxl',
    *     });
    */
-  private buildDefaultBreakpointMap() {
+  private buildDefaultBreakpointMap(component: StudioComponent & Required<Pick<StudioComponent, 'variants'>>) {
+    const breakpoints = getBreakpoints(component);
+    const element: ObjectLiteralElementLike[] = [];
+    // if the first element is not base then we sent it anyway as the smallest size should default to base
+    if (breakpoints[0] !== 'base') {
+      element.push(
+        factory.createPropertyAssignment(factory.createIdentifier('base'), factory.createStringLiteral(breakpoints[0])),
+      );
+    }
+    breakpoints.forEach((bp) => {
+      element.push(factory.createPropertyAssignment(factory.createIdentifier(bp), factory.createStringLiteral(bp)));
+    });
     this.importCollection.addMappedImport(ImportValue.USE_BREAKPOINT_VALUE);
 
     return createHookStatement(
       'breakpointHook',
       'useBreakpointValue',
-      factory.createObjectLiteralExpression(
-        [
-          factory.createPropertyAssignment(factory.createIdentifier('base'), factory.createStringLiteral('base')),
-          factory.createPropertyAssignment(factory.createIdentifier('large'), factory.createStringLiteral('large')),
-          factory.createPropertyAssignment(factory.createIdentifier('medium'), factory.createStringLiteral('medium')),
-          factory.createPropertyAssignment(factory.createIdentifier('small'), factory.createStringLiteral('small')),
-          factory.createPropertyAssignment(factory.createIdentifier('xl'), factory.createStringLiteral('xl')),
-          factory.createPropertyAssignment(factory.createIdentifier('xxl'), factory.createStringLiteral('xxl')),
-        ],
-        true,
-      ),
+      factory.createObjectLiteralExpression(element, true),
     );
   }
 
@@ -795,6 +801,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   /**
+   * If component hasBreakpoint:
+   *
    * const overrides = mergeVariantsAndOverrides(
    *  getOverridesFromVariants(variants, {
    *   breakpoint: breakpointHook,
@@ -802,8 +810,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    *  }),
    *  overridesProp || {}
    * );
+   *
+   * Else:
+   *
+   * const overrides = mergeVariantsAndOverrides(
+   *  getOverridesFromVariants(variants, props),
+   *  overridesProp || {}
+   * );
    */
-  private buildOverridesFromVariantsAndProp() {
+  private buildOverridesFromVariantsAndProp(hasBreakpoint: boolean) {
     this.importCollection.addMappedImport(ImportValue.GET_OVERRIDES_FROM_VARIANTS);
     this.importCollection.addMappedImport(ImportValue.VARIANT);
 
@@ -818,16 +833,18 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createCallExpression(factory.createIdentifier('mergeVariantsAndOverrides'), undefined, [
               factory.createCallExpression(factory.createIdentifier('getOverridesFromVariants'), undefined, [
                 factory.createIdentifier('variants'),
-                factory.createObjectLiteralExpression(
-                  [
-                    factory.createPropertyAssignment(
-                      factory.createIdentifier('breakpoint'),
-                      factory.createIdentifier('breakpointHook'),
-                    ),
-                    factory.createSpreadAssignment(factory.createIdentifier('props')),
-                  ],
-                  false,
-                ),
+                hasBreakpoint
+                  ? factory.createObjectLiteralExpression(
+                      [
+                        factory.createPropertyAssignment(
+                          factory.createIdentifier('breakpoint'),
+                          factory.createIdentifier('breakpointHook'),
+                        ),
+                        factory.createSpreadAssignment(factory.createIdentifier('props')),
+                      ],
+                      false,
+                    )
+                  : factory.createIdentifier('props'),
               ]),
               factory.createBinaryExpression(
                 factory.createIdentifier('overridesProp'),
@@ -1046,12 +1063,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createObjectLiteralExpression(
               ([] as ts.PropertyAssignment[]).concat(
                 sort
-                  ? [
-                      factory.createPropertyAssignment(
-                        factory.createIdentifier('sort'),
-                        this.buildSortFunction(model, sort),
-                      ),
-                    ]
+                  ? [factory.createPropertyAssignment(factory.createIdentifier('sort'), buildSortFunction(model, sort))]
                   : [],
               ),
             ),
@@ -1059,50 +1071,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         ],
         ts.NodeFlags.Const,
       ),
-    );
-  }
-
-  /**
-   * (s: SortPredicate<User>) => s.firstName('ASCENDING').lastName('DESCENDING')
-   */
-  private buildSortFunction(model: string, sort: StudioComponentSort[]): ArrowFunction {
-    const ascendingSortDirection = factory.createPropertyAccessExpression(
-      factory.createIdentifier('SortDirection'),
-      factory.createIdentifier('ASCENDING'),
-    );
-    const descendingSortDirection = factory.createPropertyAccessExpression(
-      factory.createIdentifier('SortDirection'),
-      factory.createIdentifier('DESCENDING'),
-    );
-
-    let expr: Identifier | CallExpression = factory.createIdentifier('s');
-    sort.forEach((sortPredicate) => {
-      expr = factory.createCallExpression(
-        factory.createPropertyAccessExpression(expr, factory.createIdentifier(sortPredicate.field)),
-        undefined,
-        [sortPredicate.direction === 'ASC' ? ascendingSortDirection : descendingSortDirection],
-      );
-    });
-
-    return factory.createArrowFunction(
-      undefined,
-      undefined,
-      [
-        factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          undefined,
-          factory.createIdentifier('s'),
-          undefined,
-          factory.createTypeReferenceNode(factory.createIdentifier('SortPredicate'), [
-            factory.createTypeReferenceNode(factory.createIdentifier(model), undefined),
-          ]),
-          undefined,
-        ),
-      ],
-      undefined,
-      factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
-      expr,
     );
   }
 

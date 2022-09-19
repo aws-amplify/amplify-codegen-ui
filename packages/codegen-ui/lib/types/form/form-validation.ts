@@ -30,7 +30,34 @@ export enum ValidationTypes {
   JSON = 'JSON',
   IP_ADDRESS = 'IpAddress',
   URL = 'URL',
+  PHONE = 'Phone',
 }
+
+export const ValidationTypeMapping: Record<'StringType' | 'NumberType', ValidationTypes[]> = {
+  StringType: [
+    ValidationTypes.CONTAINS,
+    ValidationTypes.NOT_CONTAINS,
+    ValidationTypes.END_WITH,
+    ValidationTypes.START_WITH,
+    ValidationTypes.BE_BEFORE,
+    ValidationTypes.BE_AFTER,
+  ],
+  NumberType: [
+    ValidationTypes.LESS_THAN_CHAR_LENGTH,
+    ValidationTypes.GREATER_THAN_CHAR_LENGTH,
+    ValidationTypes.LESS_THAN_NUM,
+    ValidationTypes.GREATER_THAN_NUM,
+    ValidationTypes.EQUAL_TO_NUM,
+  ],
+};
+
+export const IsStringTypeValidator = (validator: ValidationTypes): boolean => {
+  return ValidationTypeMapping.StringType.includes(validator);
+};
+
+export const IsNumberTypeValidator = (validator: ValidationTypes): boolean => {
+  return ValidationTypeMapping.NumberType.includes(validator);
+};
 
 export type BaseValidation = {
   validationMessage?: string;
@@ -38,22 +65,22 @@ export type BaseValidation = {
 
 export type StringValidationType = {
   type: ValidationTypes.CONTAINS | ValidationTypes.NOT_CONTAINS | ValidationTypes.END_WITH | ValidationTypes.START_WITH;
-  values: string[];
-} & BaseValidation;
-
-export type StringLengthValidationType = {
-  type: ValidationTypes.LESS_THAN_CHAR_LENGTH | ValidationTypes.GREATER_THAN_CHAR_LENGTH;
-  values: number;
-} & BaseValidation;
-
-export type NumberValidationType = {
-  type: ValidationTypes.LESS_THAN_NUM | ValidationTypes.GREATER_THAN_NUM | ValidationTypes.EQUAL_TO_NUM;
-  values: number[] | number;
+  strValues: string[];
 } & BaseValidation;
 
 export type DateValidationType = {
   type: ValidationTypes.BE_BEFORE | ValidationTypes.BE_AFTER;
-  values: string | number;
+  strValues: string[];
+} & BaseValidation;
+
+export type StringLengthValidationType = {
+  type: ValidationTypes.LESS_THAN_CHAR_LENGTH | ValidationTypes.GREATER_THAN_CHAR_LENGTH;
+  numValues: number[];
+} & BaseValidation;
+
+export type NumberValidationType = {
+  type: ValidationTypes.LESS_THAN_NUM | ValidationTypes.GREATER_THAN_NUM | ValidationTypes.EQUAL_TO_NUM;
+  numValues: number[];
 } & BaseValidation;
 
 export type GenericValidationType = {
@@ -62,14 +89,15 @@ export type GenericValidationType = {
     | ValidationTypes.EMAIL
     | ValidationTypes.JSON
     | ValidationTypes.IP_ADDRESS
-    | ValidationTypes.URL;
+    | ValidationTypes.URL
+    | ValidationTypes.PHONE;
 } & BaseValidation;
 
 export type FieldValidationConfiguration =
   | StringValidationType
+  | DateValidationType
   | StringLengthValidationType
   | NumberValidationType
-  | DateValidationType
   | GenericValidationType;
 
 export type ValidationResponse = { hasError: boolean; errorMessage?: string };

@@ -13,12 +13,48 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { DateFormat, NonLocaleDateTimeFormat, LocaleDateTimeFormat, TimeFormat } from '../types/string-format';
 
-import { DateFormat, DateTimeFormat, TimeFormat } from '../types';
+const monthToShortMon: { [mon: string]: string } = {
+  '1': 'Jan',
+  '2': 'Feb',
+  '3': 'Mar',
+  '4': 'Apr',
+  '5': 'May',
+  '6': 'Jun',
+  '7': 'Jul',
+  '8': 'Aug',
+  '9': 'Sep',
+  '10': 'Oct',
+  '11': 'Nov',
+  '12': 'Dec',
+};
 
 const invalidDateStr = 'Invalid Date';
 
-export function formatDate(date: string, format: DateFormat['dateFormat']): string {
+type DateFormatInput = {
+  type: 'DateFormat';
+  format: DateFormat;
+};
+
+type LocaleDateTimeFormatInput = {
+  type: 'LocaleDateTimeFormat';
+  format: LocaleDateTimeFormat;
+};
+
+type NonLocaleDateTimeFormatInput = {
+  type: 'NonLocaleDateTimeFormat';
+  format: NonLocaleDateTimeFormat;
+};
+
+type TimeFormatInput = {
+  type: 'TimeFormat';
+  format: TimeFormat;
+};
+
+type FormatInput = DateFormatInput | TimeFormatInput | NonLocaleDateTimeFormatInput | LocaleDateTimeFormatInput;
+
+export function formatDate(date: string, dateFormat: DateFormat['dateFormat']): string {
   if (date === undefined || date === null) {
     return date;
   }
@@ -33,9 +69,12 @@ export function formatDate(date: string, format: DateFormat['dateFormat']): stri
 
   const year = splitDate[0];
   const month = splitDate[1];
-  const day = validDate.toLocaleString('en-us', { day: '2-digit' });
+  const day = splitDate[2];
 
-  switch (format) {
+  // Remove leading zeroes
+  const truncatedMonth = month.replace(/^0+/, '');
+
+  switch (dateFormat) {
     case 'locale':
       return validDate.toLocaleDateString();
     case 'YYYY.MM.DD':
@@ -45,13 +84,13 @@ export function formatDate(date: string, format: DateFormat['dateFormat']): stri
     case 'MM/DD/YYYY':
       return `${month}/${day}/${year}`;
     case 'Mmm DD, YYYY':
-      return `${validDate.toLocaleString('en-us', { month: 'short' })} ${day}, ${year}`;
+      return `${monthToShortMon[truncatedMonth]} ${day}, ${year}`;
     default:
       return date;
   }
 }
 
-export function formatTime(time: string, format: TimeFormat['timeFormat']): string {
+export function formatTime(time: string, timeFormat: TimeFormat['timeFormat']): string {
   if (time === undefined || time === null) {
     return time;
   }
@@ -74,7 +113,7 @@ export function formatTime(time: string, format: TimeFormat['timeFormat']): stri
     return time;
   }
 
-  switch (format) {
+  switch (timeFormat) {
     case 'locale':
       return validTime.toLocaleTimeString();
     case 'hours24':
@@ -86,7 +125,10 @@ export function formatTime(time: string, format: TimeFormat['timeFormat']): stri
   }
 }
 
-export function formatDateTime(dateTimeStr: string, format: DateTimeFormat['dateTimeFormat']): string {
+export function formatDateTime(
+  dateTimeStr: string,
+  dateTimeFormat: NonLocaleDateTimeFormat['nonLocaleDateTimeFormat'] | LocaleDateTimeFormat['localeDateTimeFormat'],
+): string {
   if (dateTimeStr === undefined || dateTimeStr === null) {
     return dateTimeStr;
   }
@@ -101,12 +143,27 @@ export function formatDateTime(dateTimeStr: string, format: DateTimeFormat['date
     return dateTimeStr;
   }
 
-  if (format === 'locale') {
+  if (dateTimeFormat === 'locale') {
     return dateTime.toLocaleString();
   }
   const dateAndTime = dateTime.toISOString().split('T');
-  const date = formatDate(dateAndTime[0], format.dateFormat);
-  const time = formatTime(dateAndTime[1], format.timeFormat);
+  const date = formatDate(dateAndTime[0], dateTimeFormat.dateFormat);
+  const time = formatTime(dateAndTime[1], dateTimeFormat.timeFormat);
 
   return `${date} - ${time}`;
+}
+
+export function formatter(value: string, formatterInput: FormatInput) {
+  switch (formatterInput.type) {
+    case 'DateFormat':
+      return formatDate(value, formatterInput.format.dateFormat);
+    case 'TimeFormat':
+      return formatTime(value, formatterInput.format.timeFormat);
+    case 'LocaleDateTimeFormat':
+      return formatDateTime(value, formatterInput.format.localeDateTimeFormat);
+    case 'NonLocaleDateTimeFormat':
+      return formatDateTime(value, formatterInput.format.nonLocaleDateTimeFormat);
+    default:
+      return value;
+  }
 }

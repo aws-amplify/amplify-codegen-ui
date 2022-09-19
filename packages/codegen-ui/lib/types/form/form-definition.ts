@@ -13,17 +13,47 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioFormStyle } from './style';
-import { FormDefinitionElement } from './form-definition-element';
+import { FormStyleConfig } from './style';
+import { FormDefinitionElement, FormDefinitionButtonElement } from './form-definition-element';
 import { StudioGenericFieldConfig } from './fields';
 
 export type ModelFieldsConfigs = { [key: string]: StudioGenericFieldConfig };
 
+export type ButtonConfig = {
+  buttonConfigs: {
+    submit?: FormDefinitionButtonElement;
+    cancel?: FormDefinitionButtonElement;
+    clear?: FormDefinitionButtonElement;
+  };
+  position: string;
+  buttonMatrix: string[][];
+};
+
 export type FormDefinition = {
   form: {
-    layoutStyle: StudioFormStyle;
+    layoutStyle: { horizontalGap: FormStyleConfig; verticalGap: FormStyleConfig; outerPadding: FormStyleConfig };
   };
   elements: { [element: string]: FormDefinitionElement };
-  buttons: { [key: string]: string };
+  buttons: ButtonConfig;
   elementMatrix: string[][];
+  inputFields?: string[];
 };
+
+export type FieldTypeMapKeys =
+  | 'ID'
+  | 'String'
+  | 'Int'
+  | 'Float'
+  | 'AWSDate'
+  | 'AWSTime'
+  | 'AWSDateTime'
+  | 'AWSTimestamp'
+  | 'AWSEmail'
+  | 'AWSURL'
+  | 'AWSIPAddress'
+  | 'Boolean'
+  | 'AWSJSON'
+  | 'AWSPhone'
+  | 'Enum'
+  | 'Relationship'
+  | 'NonModel';

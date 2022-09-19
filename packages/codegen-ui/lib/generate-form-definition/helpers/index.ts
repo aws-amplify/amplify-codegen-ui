@@ -13,10 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './datastore-model';
+export * from './model-fields-configs';
 export * from './position';
 export * from './form-field';
 export * from './sectional-element';
 export * from './field-type-map';
 export * from './map-element';
 export * from './map-styles';
+export * from './map-cta';
