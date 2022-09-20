@@ -8,6 +8,7 @@
   "homepage": "https://docs.amplify.aws/",
   "scripts": {
     "test": "lerna run test --stream",
+    "test:watch": "lerna run test:watch --stream",
     "test:ci": "lerna run test:ci --stream",
     "test:update": "lerna run test:update --stream",
     "build": "lerna run build --stream",
