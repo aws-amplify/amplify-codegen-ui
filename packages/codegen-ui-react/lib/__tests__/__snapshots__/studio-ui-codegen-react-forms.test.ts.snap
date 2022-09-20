@@ -2078,7 +2078,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
-      {!!items.length && (
+      {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
             return (
@@ -2724,7 +2724,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
-      {!!items.length && (
+      {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
             return (
