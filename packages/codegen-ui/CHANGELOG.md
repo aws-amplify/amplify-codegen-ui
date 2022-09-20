@@ -3,16 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.4.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.4.0) (2022-09-19)
-
+## [2.4.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.4.1) (2022-09-20)
 
 ### Bug Fixes
 
-* limit workers during testing in ci ([#531](https://github.com/aws-amplify/amplify-codegen-ui/issues/531)) ([be36527](https://github.com/aws-amplify/amplify-codegen-ui/commit/be36527e86e76360e3368daa62ece4f9616bd69d))
+- remove invalid breakpoints ([#531](https://github.com/aws-amplify/amplify-codegen-ui/pull/661)) ([047dbd6](https://github.com/aws-amplify/amplify-codegen-ui/commit/047dbd60683b259dcae14f95b1fe99df97efe4a6))
 
+# [2.4.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.4.0) (2022-09-19)
 
+### Bug Fixes
 
-
+- limit workers during testing in ci ([#531](https://github.com/aws-amplify/amplify-codegen-ui/issues/531)) ([be36527](https://github.com/aws-amplify/amplify-codegen-ui/commit/be36527e86e76360e3368daa62ece4f9616bd69d))
 
 ## [2.3.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.3.2) (2022-07-22)
 
