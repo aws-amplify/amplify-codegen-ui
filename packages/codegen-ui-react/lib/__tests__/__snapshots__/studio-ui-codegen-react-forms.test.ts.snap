@@ -2008,13 +2008,16 @@ import {
   Radio,
   RadioGroupField,
   ScrollView,
+  Text,
   TextField,
   ToggleButton,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
   onChange,
+  label,
   inputFieldRef,
   children,
   hasError,
@@ -2030,7 +2033,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (currentFieldValue.length && !hasError) {
+    if (!!currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -2046,13 +2049,16 @@ function ArrayField({
     <React.Fragment>
       {isEditing && children}
       {!isEditing ? (
-        <Button
-          onClick={() => {
-            setIsEditing(true);
-          }}
-        >
-          Add item
-        </Button>
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
           {(currentFieldValue || isEditing) && (
@@ -2419,6 +2425,7 @@ export default function InputGalleryCreateForm(props) {
           setCurrentArrayTypeFieldValue(\\"\\");
         }}
         currentFieldValue={currentArrayTypeFieldValue}
+        label={\\"Array type field\\"}
         items={arrayTypeField}
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
@@ -2654,13 +2661,16 @@ import {
   Radio,
   RadioGroupField,
   ScrollView,
+  Text,
   TextField,
   ToggleButton,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
   onChange,
+  label,
   inputFieldRef,
   children,
   hasError,
@@ -2676,7 +2686,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (currentFieldValue.length && !hasError) {
+    if (!!currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -2692,13 +2702,16 @@ function ArrayField({
     <React.Fragment>
       {isEditing && children}
       {!isEditing ? (
-        <Button
-          onClick={() => {
-            setIsEditing(true);
-          }}
-        >
-          Add item
-        </Button>
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
           {(currentFieldValue || isEditing) && (
@@ -3098,6 +3111,7 @@ export default function InputGalleryCreateForm(props) {
           setCurrentArrayTypeFieldValue(\\"\\");
         }}
         currentFieldValue={currentArrayTypeFieldValue}
+        label={\\"Array type field\\"}
         items={arrayTypeField}
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}

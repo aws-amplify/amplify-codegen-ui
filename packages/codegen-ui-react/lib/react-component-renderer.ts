@@ -80,7 +80,15 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       this.importCollection.addImport(ImportSource.UI_REACT, 'Badge');
       this.importCollection.addImport(ImportSource.UI_REACT, 'ScrollView');
       this.importCollection.addImport(ImportSource.UI_REACT, 'Divider');
-      return renderArrayFieldComponent(this.component.name, element);
+      this.importCollection.addImport(ImportSource.UI_REACT, 'Text');
+      this.importCollection.addImport(ImportSource.UI_REACT, 'useTheme');
+
+      let label = '';
+      if ('value' in this.component.properties.label) {
+        label = this.component.properties.label.value.toString() ?? '';
+      }
+
+      return renderArrayFieldComponent(this.component.name, label, element);
     }
 
     return element;

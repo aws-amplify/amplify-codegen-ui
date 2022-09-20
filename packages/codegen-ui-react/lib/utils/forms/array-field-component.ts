@@ -216,9 +216,12 @@ export const generateArrayFieldComponent = () => {
                 [
                   factory.createIfStatement(
                     factory.createBinaryExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('currentFieldValue'),
-                        factory.createIdentifier('length'),
+                      factory.createPrefixUnaryExpression(
+                        SyntaxKind.ExclamationToken,
+                        factory.createPrefixUnaryExpression(
+                          SyntaxKind.ExclamationToken,
+                          factory.createIdentifier('currentFieldValue'),
+                        ),
                       ),
                       factory.createToken(SyntaxKind.AmpersandAmpersandToken),
                       factory.createPrefixUnaryExpression(
@@ -341,38 +344,56 @@ export const generateArrayFieldComponent = () => {
                 factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier('isEditing')),
                 factory.createToken(SyntaxKind.QuestionToken),
                 factory.createParenthesizedExpression(
-                  factory.createJsxElement(
-                    factory.createJsxOpeningElement(
-                      factory.createIdentifier('Button'),
-                      undefined,
-                      factory.createJsxAttributes([
-                        factory.createJsxAttribute(
-                          factory.createIdentifier('onClick'),
-                          factory.createJsxExpression(
-                            undefined,
-                            factory.createArrowFunction(
-                              undefined,
-                              undefined,
-                              [],
-                              undefined,
-                              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                              factory.createBlock(
-                                [
-                                  factory.createExpressionStatement(
-                                    factory.createCallExpression(factory.createIdentifier('setIsEditing'), undefined, [
-                                      factory.createTrue(),
-                                    ]),
+                  factory.createJsxFragment(
+                    factory.createJsxOpeningFragment(),
+                    [
+                      factory.createJsxElement(
+                        factory.createJsxOpeningElement(
+                          factory.createIdentifier('Text'),
+                          undefined,
+                          factory.createJsxAttributes([]),
+                        ),
+                        [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
+                        factory.createJsxClosingElement(factory.createIdentifier('Text')),
+                      ),
+
+                      factory.createJsxElement(
+                        factory.createJsxOpeningElement(
+                          factory.createIdentifier('Button'),
+                          undefined,
+                          factory.createJsxAttributes([
+                            factory.createJsxAttribute(
+                              factory.createIdentifier('onClick'),
+                              factory.createJsxExpression(
+                                undefined,
+                                factory.createArrowFunction(
+                                  undefined,
+                                  undefined,
+                                  [],
+                                  undefined,
+                                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                  factory.createBlock(
+                                    [
+                                      factory.createExpressionStatement(
+                                        factory.createCallExpression(
+                                          factory.createIdentifier('setIsEditing'),
+                                          undefined,
+                                          [factory.createTrue()],
+                                        ),
+                                      ),
+                                    ],
+                                    true,
                                   ),
-                                ],
-                                true,
+                                ),
                               ),
                             ),
-                          ),
+                          ]),
                         ),
-                      ]),
-                    ),
-                    [factory.createJsxText(`Add item`, false)],
-                    factory.createJsxClosingElement(factory.createIdentifier('Button')),
+                        [factory.createJsxText('Add item', false)],
+                        factory.createJsxClosingElement(factory.createIdentifier('Button')),
+                      ),
+                    ],
+                    factory.createJsxJsxClosingFragment(),
                   ),
                 ),
                 factory.createToken(SyntaxKind.ColonToken),
@@ -901,6 +922,7 @@ export const generateArrayFieldComponent = () => {
             factory.createArrayLiteralExpression([], false),
           ),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('onChange'), undefined),
+          factory.createBindingElement(undefined, undefined, factory.createIdentifier('label'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('inputFieldRef'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('children'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('hasError'), undefined),
@@ -931,7 +953,7 @@ export const generateArrayFieldComponent = () => {
   </ArrayField>
  */
 
-export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChild) => {
+export const renderArrayFieldComponent = (fieldName: string, fieldLabel: string, inputField: JsxChild) => {
   const stateName = getCurrentValueIdentifier(fieldName);
   const setStateName = getSetNameIdentifier(getCurrentValueName(fieldName));
 
@@ -980,6 +1002,10 @@ export const renderArrayFieldComponent = (fieldName: string, inputField: JsxChil
         factory.createJsxAttribute(
           factory.createIdentifier(`currentFieldValue`),
           factory.createJsxExpression(undefined, stateName),
+        ),
+        factory.createJsxAttribute(
+          factory.createIdentifier(`label`),
+          factory.createJsxExpression(undefined, factory.createStringLiteral(fieldLabel)),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('items'),
