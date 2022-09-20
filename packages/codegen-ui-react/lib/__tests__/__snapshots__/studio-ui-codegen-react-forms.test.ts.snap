@@ -2021,7 +2021,9 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
 }) {
+  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
@@ -2037,26 +2039,45 @@ function ArrayField({
         newItems.push(currentFieldValue);
       }
       await onChange(newItems);
+      setIsEditing(false);
     }
   };
   return (
     <React.Fragment>
-      {children}
-      <Flex justifyContent=\\"flex-end\\">
+      {isEditing && children}
+      {!isEditing ? (
         <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
           onClick={() => {
-            setFieldValue(\\"\\");
+            setIsEditing(true);
           }}
-        ></Button>
-        <Button
-          children=\\"Save\\"
-          variation=\\"primary\\"
-          isDisabled={hasError}
-          onClick={addItem}
-        ></Button>
-      </Flex>
+        >
+          Add item
+        </Button>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(\\"\\");
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
       {!!items.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -2074,6 +2095,7 @@ function ArrayField({
                 onClick={() => {
                   setSelectedBadgeIndex(index);
                   setFieldValue(items[index]);
+                  setIsEditing(true);
                   inputFieldRef?.current?.focus();
                 }}
               >
@@ -2645,7 +2667,9 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
 }) {
+  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
@@ -2661,26 +2685,45 @@ function ArrayField({
         newItems.push(currentFieldValue);
       }
       await onChange(newItems);
+      setIsEditing(false);
     }
   };
   return (
     <React.Fragment>
-      {children}
-      <Flex justifyContent=\\"flex-end\\">
+      {isEditing && children}
+      {!isEditing ? (
         <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
           onClick={() => {
-            setFieldValue(\\"\\");
+            setIsEditing(true);
           }}
-        ></Button>
-        <Button
-          children=\\"Save\\"
-          variation=\\"primary\\"
-          isDisabled={hasError}
-          onClick={addItem}
-        ></Button>
-      </Flex>
+        >
+          Add item
+        </Button>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(\\"\\");
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
       {!!items.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -2698,6 +2741,7 @@ function ArrayField({
                 onClick={() => {
                   setSelectedBadgeIndex(index);
                   setFieldValue(items[index]);
+                  setIsEditing(true);
                   inputFieldRef?.current?.focus();
                 }}
               >
