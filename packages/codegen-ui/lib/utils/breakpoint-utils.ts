@@ -40,8 +40,9 @@ export const sortBreakpoints = (bs: BreakpointSizeType[]): BreakpointSizeType[] 
 
 export const getBreakpoints = (component: StudioComponent & Required<Pick<StudioComponent, 'variants'>>) => {
   const breakpoints = component.variants.reduce<BreakpointSizeType[]>((acc, variant) => {
-    if (variant.variantValues?.breakpoint) {
-      acc.push(variant.variantValues.breakpoint as BreakpointSizeType);
+    const breakpoint = variant.variantValues?.breakpoint as BreakpointSizeType | undefined;
+    if (breakpoint && breakpointSizes.includes(breakpoint)) {
+      acc.push(breakpoint);
     }
     return acc;
   }, []);
