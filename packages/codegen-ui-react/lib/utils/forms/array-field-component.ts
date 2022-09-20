@@ -537,8 +537,9 @@ export const generateArrayFieldComponent = () => {
                   SyntaxKind.ExclamationToken,
                   factory.createPrefixUnaryExpression(
                     SyntaxKind.ExclamationToken,
-                    factory.createPropertyAccessExpression(
+                    factory.createPropertyAccessChain(
                       factory.createIdentifier('items'),
+                      factory.createToken(SyntaxKind.QuestionDotToken),
                       factory.createIdentifier('length'),
                     ),
                   ),
