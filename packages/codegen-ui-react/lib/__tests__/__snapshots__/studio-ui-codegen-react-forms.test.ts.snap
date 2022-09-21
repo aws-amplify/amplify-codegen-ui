@@ -342,13 +342,27 @@ import {
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 export default function CustomDataForm(props) {
-  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
-    props;
-  const [name, setName] = React.useState(undefined);
-  const [email, setEmail] = React.useState(undefined);
-  const [city, setCity] = React.useState(undefined);
-  const [category, setCategory] = React.useState(undefined);
-  const [pages, setPages] = React.useState(0);
+  const {
+    initialData,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: undefined,
+    email: undefined,
+    city: undefined,
+    category: undefined,
+    pages: 0,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [city, setCity] = React.useState(initialValues.city);
+  const [category, setCategory] = React.useState(initialValues.category);
+  const [pages, setPages] = React.useState(initialValues.pages);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(undefined);
@@ -600,6 +614,673 @@ export default function CustomDataForm(props) {
           children=\\"empty\\"
           type=\\"reset\\"
           onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+          <Button
+            children=\\"go back\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"create\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a custom backed form 4`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
+export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
+    name?: UseBaseOrValidationType<useBase, string>;
+    email?: UseBaseOrValidationType<useBase, string>;
+    city?: UseBaseOrValidationType<useBase, string>;
+    category?: UseBaseOrValidationType<useBase, string>;
+    pages?: UseBaseOrValidationType<useBase, number>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomDataFormOverridesProps = {
+    CustomDataFormGrid?: FormProps<GridProps>;
+    name?: FormProps<TextFieldProps>;
+    email?: FormProps<TextFieldProps>;
+    city?: FormProps<SelectFieldProps>;
+    category?: FormProps<RadioGroupFieldProps>;
+    pages?: FormProps<StepperFieldProps>;
+} & EscapeHatchProps;
+export declare type CustomDataFormProps = React.PropsWithChildren<{
+    overrides?: CustomDataFormOverridesProps | undefined | null;
+} & {
+    initialData?: CustomDataFormInputValues;
+    onSubmit: (fields: CustomDataFormInputValues) => void;
+    onCancel?: () => void;
+    onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
+    onValidate?: CustomDataFormInputValues<false>;
+}>;
+export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a custom backed form with an array field 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (!!currentFieldValue && !hasError) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(\\"\\");
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
+export default function CustomDataForm(props) {
+  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
+    props;
+  const initialValues = {
+    name: undefined,
+    email: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(initialValues.name);
+    setEmail(initialValues.email);
+    setCurrentEmailValue(\\"\\");
+    setErrors({});
+  };
+  const [currentEmailValue, setCurrentEmailValue] = React.useState(undefined);
+  const emailRef = React.createRef();
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    email: [{ type: \\"Required\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const modelFields = {
+          name,
+          email,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        await onSubmit(modelFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+    >
+      <TextField
+        label=\\"name\\"
+        isRequired={true}
+        defaultValue=\\"John Doe\\"
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              email,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            await runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          setEmail(items);
+          setCurrentEmailValue(\\"\\");
+        }}
+        currentFieldValue={currentEmailValue}
+        label={\\"E-mail\\"}
+        items={email}
+        hasError={errors.email?.hasError}
+        setFieldValue={setCurrentEmailValue}
+        inputFieldRef={emailRef}
+      >
+        <TextField
+          label=\\"E-mail\\"
+          isRequired={true}
+          defaultValue=\\"johndoe@amplify.com\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                name,
+                email: value,
+              };
+              const result = onChange(modelFields);
+              value = result?.email ?? value;
+            }
+            if (errors.email?.hasError) {
+              await runValidationTasks(\\"email\\", value);
+            }
+            setCurrentEmailValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"email\\", currentEmailValue)}
+          errorMessage={errors.email?.errorMessage}
+          hasError={errors.email?.hasError}
+          value={currentEmailValue}
+          ref={emailRef}
+          {...getOverrideProps(overrides, \\"email\\")}
+        ></TextField>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"empty\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+          <Button
+            children=\\"go back\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"create\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a custom backed form with an array field 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
+export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
+    name?: UseBaseOrValidationType<useBase, string>;
+    email?: UseBaseOrValidationType<useBase, string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomDataFormOverridesProps = {
+    CustomDataFormGrid?: FormProps<GridProps>;
+    name?: FormProps<TextFieldProps>;
+    email?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type CustomDataFormProps = React.PropsWithChildren<{
+    overrides?: CustomDataFormOverridesProps | undefined | null;
+} & {
+    onSubmit: (fields: CustomDataFormInputValues) => void;
+    onCancel?: () => void;
+    onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
+    onValidate?: CustomDataFormInputValues<false>;
+}>;
+export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a datastore backed form with a custom array field 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Post } from \\"../models\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (!!currentFieldValue && !hasError) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(\\"\\");
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
+export default function MyPostForm(props) {
+  const {
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    username: undefined,
+    caption: undefined,
+    Customtags: undefined,
+    post_url: undefined,
+    profile_url: undefined,
+  };
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [Customtags, setCustomtags] = React.useState(initialValues.Customtags);
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setUsername(initialValues.username);
+    setCaption(initialValues.caption);
+    setCustomtags(initialValues.Customtags);
+    setCurrentCustomtagsValue(\\"\\");
+    setPost_url(initialValues.post_url);
+    setProfile_url(initialValues.profile_url);
+    setErrors({});
+  };
+  const [currentCustomtagsValue, setCurrentCustomtagsValue] =
+    React.useState(undefined);
+  const CustomtagsRef = React.createRef();
+  const validations = {
+    username: [
+      {
+        type: \\"GreaterThanChar\\",
+        numValues: [2],
+        validationMessage: \\"needs to be of length 2\\",
+      },
+    ],
+    caption: [],
+    Customtags: [],
+    post_url: [{ type: \\"URL\\" }],
+    profile_url: [{ type: \\"URL\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          username,
+          caption,
+          Customtags,
+          post_url,
+          profile_url,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(new Post(modelFields));
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (errors.pages?.hasError) {
+            await runValidationTasks(\\"pages\\", value);
+          }
+          setPages(value);
+        }}
+        onBlur={() => runValidationTasks(\\"pages\\", pages)}
+        errorMessage={errors.pages?.errorMessage}
+        hasError={errors.pages?.hasError}
+        {...getOverrideProps(overrides, \\"pages\\")}
+      ></StepperField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"empty\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
@@ -671,32 +1352,191 @@ import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
   Heading,
+  Icon,
+  ScrollView,
+  Text,
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (!!currentFieldValue && !hasError) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(\\"\\");
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
 export default function NestedJson(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const { tokens } = useTheme();
-  const [firstName, setFirstName] = React.useState(undefined);
-  const [lastName, setLastName] = React.useState(undefined);
-  const [bio, setBio] = React.useState({});
+  const initialValues = {
+    \\"first-Name\\": undefined,
+    lastName: undefined,
+    bio: {},
+    Nicknames1: undefined,
+    \\"nick-names2\\": undefined,
+    \\"first Name\\": undefined,
+  };
+  const [firstName, setFirstName] = React.useState(initialValues[\\"first-Name\\"]);
+  const [lastName, setLastName] = React.useState(initialValues.lastName);
+  const [bio, setBio] = React.useState(initialValues.bio);
+  const [Nicknames1, setNicknames1] = React.useState(initialValues.Nicknames1);
+  const [nicknames, setNicknames] = React.useState(
+    initialValues[\\"nick-names2\\"]
+  );
+  const [firstName1, setFirstName1] = React.useState(
+    initialValues[\\"first Name\\"]
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setFirstName(undefined);
-    setLastName(undefined);
-    setBio({});
+    setFirstName(initialValues[\\"first-Name\\"]);
+    setLastName(initialValues.lastName);
+    setBio(initialValues.bio);
+    setNicknames1(initialValues.Nicknames1);
+    setCurrentNicknames1Value(\\"\\");
+    setNicknames(initialValues[\\"nick-names2\\"]);
+    setCurrentNicknamesValue(\\"\\");
+    setFirstName1(initialValues[\\"first Name\\"]);
     setErrors({});
   };
+  const [currentNicknames1Value, setCurrentNicknames1Value] =
+    React.useState(undefined);
+  const Nicknames1Ref = React.createRef();
+  const [currentNicknamesValue, setCurrentNicknamesValue] =
+    React.useState(undefined);
+  const nicknamesRef = React.createRef();
   const validations = {
-    firstName: [],
+    \\"first-Name\\": [],
     lastName: [],
-    \\"bio.favoriteQuote\\": [],
-    \\"bio.favoriteAnimal\\": [],
+    \\"bio.favorite Quote\\": [],
+    \\"bio.favorite-Animal\\": [],
+    Nicknames1: [],
+    \\"nick-names2\\": [],
+    \\"first Name\\": [],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -716,9 +1556,12 @@ export default function NestedJson(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const modelFields = {
-          firstName,
+          \\"first-Name\\": firstName,
           lastName,
           bio,
+          Nicknames1,
+          \\"nick-names2\\": nicknames,
+          \\"first Name\\": firstName1,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -750,22 +1593,25 @@ export default function NestedJson(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstName: value,
+              \\"first-Name\\": firstName,
               lastName,
               bio,
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
-            value = result?.firstName ?? value;
+            value = result?.[\\"first-Name\\"] ?? value;
           }
-          if (errors.firstName?.hasError) {
-            await runValidationTasks(\\"firstName\\", value);
+          if (errors[\\"first-Name\\"]?.hasError) {
+            await runValidationTasks(\\"first-Name\\", value);
           }
           setFirstName(value);
         }}
-        onBlur={() => runValidationTasks(\\"firstName\\", firstName)}
-        errorMessage={errors.firstName?.errorMessage}
-        hasError={errors.firstName?.hasError}
-        {...getOverrideProps(overrides, \\"firstName\\")}
+        onBlur={() => runValidationTasks(\\"first-Name\\", firstName)}
+        errorMessage={errors[\\"first-Name\\"]?.errorMessage}
+        hasError={errors[\\"first-Name\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"first-Name\\")}
       ></TextField>
       <TextField
         label=\\"lastName\\"
@@ -773,9 +1619,12 @@ export default function NestedJson(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstName,
+              \\"first-Name\\": firstName,
               lastName: value,
               bio,
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
             value = result?.lastName ?? value;
@@ -801,24 +1650,27 @@ export default function NestedJson(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstName,
+              \\"first-Name\\": firstName,
               lastName,
-              bio: { ...bio, favoriteQuote: value },
+              bio: { ...bio, [\\"favorite Quote\\"]: value },
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
-            value = result?.bio?.favoriteQuote ?? value;
+            value = result?.bio?.[\\"favorite Quote\\"] ?? value;
           }
-          if (errors.bio.favoriteQuote?.hasError) {
-            await runValidationTasks(\\"bio.favoriteQuote\\", value);
+          if (errors[\\"bio.favorite Quote\\"]?.hasError) {
+            await runValidationTasks(\\"bio.favorite Quote\\", value);
           }
-          setBio({ ...bio, favoriteQuote: value });
+          setBio({ ...bio, [\\"favorite Quote\\"]: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
+          runValidationTasks(\\"bio.favorite Quote\\", bio[\\"favorite Quote\\"])
         }
-        errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
-        hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
-        {...getOverrideProps(overrides, \\"bio.favoriteQuote\\")}
+        errorMessage={errors[\\"bio.favorite Quote\\"]?.errorMessage}
+        hasError={errors[\\"bio.favorite Quote\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"bio.favorite Quote\\")}
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
@@ -826,24 +1678,139 @@ export default function NestedJson(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstName,
+              \\"first-Name\\": firstName,
               lastName,
-              bio: { ...bio, favoriteAnimal: value },
+              bio: { ...bio, [\\"favorite-Animal\\"]: value },
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
-            value = result?.bio?.favoriteAnimal ?? value;
+            value = result?.bio?.[\\"favorite-Animal\\"] ?? value;
           }
-          if (errors.bio.favoriteAnimal?.hasError) {
-            await runValidationTasks(\\"bio.favoriteAnimal\\", value);
+          if (errors[\\"bio.favorite-Animal\\"]?.hasError) {
+            await runValidationTasks(\\"bio.favorite-Animal\\", value);
           }
-          setBio({ ...bio, favoriteAnimal: value });
+          setBio({ ...bio, [\\"favorite-Animal\\"]: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
+          runValidationTasks(\\"bio.favorite-Animal\\", bio[\\"favorite-Animal\\"])
         }
-        errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
-        hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
-        {...getOverrideProps(overrides, \\"bio.favoriteAnimal\\")}
+        errorMessage={errors[\\"bio.favorite-Animal\\"]?.errorMessage}
+        hasError={errors[\\"bio.favorite-Animal\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"bio.favorite-Animal\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          setNicknames1(items);
+          setCurrentNicknames1Value(\\"\\");
+        }}
+        currentFieldValue={currentNicknames1Value}
+        label={\\"Nick Names1\\"}
+        items={Nicknames1}
+        hasError={errors.Nicknames1?.hasError}
+        setFieldValue={setCurrentNicknames1Value}
+        inputFieldRef={Nicknames1Ref}
+      >
+        <TextField
+          label=\\"Nick Names1\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                \\"first-Name\\": firstName,
+                lastName,
+                bio,
+                Nicknames1: value,
+                \\"nick-names2\\": nicknames,
+                \\"first Name\\": firstName1,
+              };
+              const result = onChange(modelFields);
+              value = result?.Nicknames1 ?? value;
+            }
+            if (errors.Nicknames1?.hasError) {
+              await runValidationTasks(\\"Nicknames1\\", value);
+            }
+            setCurrentNicknames1Value(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"Nicknames1\\", currentNicknames1Value)
+          }
+          errorMessage={errors.Nicknames1?.errorMessage}
+          hasError={errors.Nicknames1?.hasError}
+          value={currentNicknames1Value}
+          ref={Nicknames1Ref}
+          {...getOverrideProps(overrides, \\"Nicknames1\\")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          setNicknames(items);
+          setCurrentNicknamesValue(\\"\\");
+        }}
+        currentFieldValue={currentNicknamesValue}
+        label={\\"nick-Names2\\"}
+        items={nicknames}
+        hasError={errors?.[\\"nick-names2\\"]?.hasError}
+        setFieldValue={setCurrentNicknamesValue}
+        inputFieldRef={nicknamesRef}
+      >
+        <TextField
+          label=\\"nick-Names2\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                \\"first-Name\\": firstName,
+                lastName,
+                bio,
+                Nicknames1,
+                \\"nick-names2\\": nicknames,
+                \\"first Name\\": firstName1,
+              };
+              const result = onChange(modelFields);
+              value = result?.[\\"nick-names2\\"] ?? value;
+            }
+            if (errors[\\"nick-names2\\"]?.hasError) {
+              await runValidationTasks(\\"nick-names2\\", value);
+            }
+            setCurrentNicknamesValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"nick-names2\\", currentNicknamesValue)
+          }
+          errorMessage={errors[\\"nick-names2\\"]?.errorMessage}
+          hasError={errors[\\"nick-names2\\"]?.hasError}
+          value={currentNicknamesValue}
+          ref={nicknamesRef}
+          {...getOverrideProps(overrides, \\"nick-names2\\")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label=\\"first Name1\\"
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              \\"first-Name\\": firstName,
+              lastName,
+              bio,
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
+            };
+            const result = onChange(modelFields);
+            value = result?.[\\"first Name\\"] ?? value;
+          }
+          if (errors[\\"first Name\\"]?.hasError) {
+            await runValidationTasks(\\"first Name\\", value);
+          }
+          setFirstName1(value);
+        }}
+        onBlur={() => runValidationTasks(\\"first Name\\", firstName1)}
+        errorMessage={errors[\\"first Name\\"]?.errorMessage}
+        hasError={errors[\\"first Name\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"first Name\\")}
       ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
@@ -890,21 +1857,27 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
 export declare type NestedJsonInputValues<useBase extends boolean = true> = {
-    firstName?: UseBaseOrValidationType<useBase, string>;
+    \\"first-Name\\"?: UseBaseOrValidationType<useBase, string>;
     lastName?: UseBaseOrValidationType<useBase, string>;
+    Nicknames1?: UseBaseOrValidationType<useBase, string>;
+    \\"nick-names2\\"?: UseBaseOrValidationType<useBase, string>;
+    \\"first Name\\"?: UseBaseOrValidationType<useBase, string>;
     bio?: {
-        favoriteQuote?: UseBaseOrValidationType<useBase, string>;
-        favoriteAnimal?: UseBaseOrValidationType<useBase, string>;
+        \\"favorite Quote\\"?: UseBaseOrValidationType<useBase, string>;
+        \\"favorite-Animal\\"?: UseBaseOrValidationType<useBase, string>;
     };
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NestedJsonOverridesProps = {
     NestedJsonGrid?: FormProps<GridProps>;
-    firstName?: FormProps<TextFieldProps>;
+    \\"first-Name\\"?: FormProps<TextFieldProps>;
     lastName?: FormProps<TextFieldProps>;
     bio?: FormProps<HeadingProps>;
-    \\"bio.favoriteQuote\\"?: FormProps<TextFieldProps>;
-    \\"bio.favoriteAnimal\\"?: FormProps<TextFieldProps>;
+    \\"bio.favorite Quote\\"?: FormProps<TextFieldProps>;
+    \\"bio.favorite-Animal\\"?: FormProps<TextFieldProps>;
+    Nicknames1?: FormProps<TextFieldProps>;
+    \\"nick-names2\\"?: FormProps<TextFieldProps>;
+    \\"first Name\\"?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type NestedJsonProps = React.PropsWithChildren<{
     overrides?: NestedJsonOverridesProps | undefined | null;
@@ -923,29 +1896,188 @@ exports[`amplify form renderer tests custom form tests should render nested json
 import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, Grid, Heading, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Heading,
+  Icon,
+  ScrollView,
+  SelectField,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (!!currentFieldValue && !hasError) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(\\"\\");
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
 export default function NestedJson(props) {
-  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
-    props;
-  const [firstName, setFirstName] = React.useState(undefined);
-  const [lastName, setLastName] = React.useState(undefined);
-  const [bio, setBio] = React.useState({});
+  const {
+    initialData,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    firstName: undefined,
+    \\"last-Name\\": undefined,
+    lastName: undefined,
+    bio: {},
+  };
+  const [firstName, setFirstName] = React.useState(initialValues.firstName);
+  const [lastName, setLastName] = React.useState(initialValues[\\"last-Name\\"]);
+  const [lastName1, setLastName1] = React.useState(initialValues.lastName);
+  const [bio, setBio] = React.useState(initialValues.bio);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setFirstName(undefined);
-    setLastName(undefined);
-    setBio({});
+    setFirstName(initialValues.firstName);
+    setLastName(initialValues[\\"last-Name\\"]);
+    setLastName1(initialValues.lastName);
+    setCurrentLastName1Value(\\"\\");
+    setBio(initialValues.bio);
     setErrors({});
   };
   React.useEffect(() => {
     if (initialData) {
       setFirstName(initialData.firstName);
-      setLastName(initialData.lastName);
+      setLastName(initialData[\\"last-Name\\"]);
+      setLastName1(initialData.lastName);
       setBio(initialData.bio);
     }
   }, []);
+  const [currentLastName1Value, setCurrentLastName1Value] =
+    React.useState(undefined);
+  const lastName1Ref = React.createRef();
   const validations = {
     firstName: [],
+    \\"last-Name\\": [],
     lastName: [],
     \\"bio.favoriteQuote\\": [],
     \\"bio.favoriteAnimal\\": [],
@@ -969,7 +2101,8 @@ export default function NestedJson(props) {
         event.preventDefault();
         const modelFields = {
           firstName,
-          lastName,
+          \\"last-Name\\": lastName,
+          lastName: lastName1,
           bio,
         };
         const validationResponses = await Promise.all(
@@ -1004,7 +2137,8 @@ export default function NestedJson(props) {
           if (onChange) {
             const modelFields = {
               firstName: value,
-              lastName,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
               bio,
             };
             const result = onChange(modelFields);
@@ -1020,30 +2154,71 @@ export default function NestedJson(props) {
         hasError={errors.firstName?.hasError}
         {...getOverrideProps(overrides, \\"firstName\\")}
       ></TextField>
-      <TextField
-        label=\\"lastName\\"
-        defaultValue={lastName}
+      <SelectField
+        label=\\"last-Name\\"
+        placeholder=\\"Please select an option\\"
+        value={lastName}
         onChange={async (e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               firstName,
-              lastName: value,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
               bio,
             };
             const result = onChange(modelFields);
-            value = result?.lastName ?? value;
+            value = result?.[\\"last-Name\\"] ?? value;
           }
-          if (errors.lastName?.hasError) {
-            await runValidationTasks(\\"lastName\\", value);
+          if (errors[\\"last-Name\\"]?.hasError) {
+            await runValidationTasks(\\"last-Name\\", value);
           }
           setLastName(value);
         }}
-        onBlur={() => runValidationTasks(\\"lastName\\", lastName)}
-        errorMessage={errors.lastName?.errorMessage}
+        onBlur={() => runValidationTasks(\\"last-Name\\", lastName)}
+        errorMessage={errors[\\"last-Name\\"]?.errorMessage}
+        hasError={errors[\\"last-Name\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"last-Name\\")}
+      ></SelectField>
+      <ArrayField
+        onChange={async (items) => {
+          setLastName1(items);
+          setCurrentLastName1Value(\\"\\");
+        }}
+        currentFieldValue={currentLastName1Value}
+        label={\\"lastName\\"}
+        items={lastName1}
         hasError={errors.lastName?.hasError}
-        {...getOverrideProps(overrides, \\"lastName\\")}
-      ></TextField>
+        setFieldValue={setCurrentLastName1Value}
+        inputFieldRef={lastName1Ref}
+      >
+        <TextField
+          label=\\"lastName\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                firstName,
+                \\"last-Name\\": lastName,
+                lastName: lastName1,
+                bio,
+              };
+              const result = onChange(modelFields);
+              value = result?.lastName ?? value;
+            }
+            if (errors.lastName?.hasError) {
+              await runValidationTasks(\\"lastName\\", value);
+            }
+            setCurrentLastName1Value(value);
+          }}
+          onBlur={() => runValidationTasks(\\"lastName\\", currentLastName1Value)}
+          errorMessage={errors.lastName?.errorMessage}
+          hasError={errors.lastName?.hasError}
+          value={currentLastName1Value}
+          ref={lastName1Ref}
+          {...getOverrideProps(overrides, \\"lastName\\")}
+        ></TextField>
+      </ArrayField>
       <Heading
         level={3}
         children=\\"bio\\"
@@ -1057,19 +2232,20 @@ export default function NestedJson(props) {
           if (onChange) {
             const modelFields = {
               firstName,
-              lastName,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
               bio: { ...bio, favoriteQuote: value },
             };
             const result = onChange(modelFields);
             value = result?.bio?.favoriteQuote ?? value;
           }
-          if (errors.bio.favoriteQuote?.hasError) {
+          if (errors[\\"bio.favoriteQuote\\"]?.hasError) {
             await runValidationTasks(\\"bio.favoriteQuote\\", value);
           }
           setBio({ ...bio, favoriteQuote: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
+          runValidationTasks(\\"bio.favoriteQuote\\", bio[\\"favoriteQuote\\"])
         }
         errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
         hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
@@ -1083,19 +2259,20 @@ export default function NestedJson(props) {
           if (onChange) {
             const modelFields = {
               firstName,
-              lastName,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
               bio: { ...bio, favoriteAnimal: value },
             };
             const result = onChange(modelFields);
             value = result?.bio?.favoriteAnimal ?? value;
           }
-          if (errors.bio.favoriteAnimal?.hasError) {
+          if (errors[\\"bio.favoriteAnimal\\"]?.hasError) {
             await runValidationTasks(\\"bio.favoriteAnimal\\", value);
           }
           setBio({ ...bio, favoriteAnimal: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
+          runValidationTasks(\\"bio.favoriteAnimal\\", bio[\\"favoriteAnimal\\"])
         }
         errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
         hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
@@ -1138,7 +2315,7 @@ export default function NestedJson(props) {
 exports[`amplify form renderer tests custom form tests should render nested json fields 4`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, HeadingProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, HeadingProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -1147,6 +2324,7 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
 export declare type NestedJsonInputValues<useBase extends boolean = true> = {
     firstName?: UseBaseOrValidationType<useBase, string>;
+    \\"last-Name\\"?: UseBaseOrValidationType<useBase, string>;
     lastName?: UseBaseOrValidationType<useBase, string>;
     bio?: {
         favoriteQuote?: UseBaseOrValidationType<useBase, string>;
@@ -1157,6 +2335,7 @@ export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivEleme
 export declare type NestedJsonOverridesProps = {
     NestedJsonGrid?: FormProps<GridProps>;
     firstName?: FormProps<TextFieldProps>;
+    \\"last-Name\\"?: FormProps<SelectFieldProps>;
     lastName?: FormProps<TextFieldProps>;
     bio?: FormProps<HeadingProps>;
     \\"bio.favoriteQuote\\"?: FormProps<TextFieldProps>;
@@ -1367,14 +2546,14 @@ export default function MyPostForm(props) {
   } = props;
   const [caption, setCaption] = React.useState(undefined);
   const [username, setUsername] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
+  const [posturl, setPosturl] = React.useState(undefined);
+  const [profileurl, setProfileurl] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setCaption(undefined);
     setUsername(undefined);
-    setPost_url(undefined);
-    setProfile_url(undefined);
+    setPosturl(undefined);
+    setProfileurl(undefined);
     setErrors({});
   };
   const validations = {
@@ -1645,19 +2824,18 @@ export default function MyPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] =
-    React.useState(undefined);
+  const [TextAreaFieldbbd, setTextAreaFieldbbd] = React.useState(undefined);
   const [caption, setCaption] = React.useState(undefined);
   const [username, setUsername] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
+  const [profileurl, setProfileurl] = React.useState(undefined);
+  const [posturl, setPosturl] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setTextAreaFieldbbd63464(undefined);
+    setTextAreaFieldbbd(undefined);
     setCaption(undefined);
     setUsername(undefined);
-    setProfile_url(undefined);
-    setPost_url(undefined);
+    setProfileurl(undefined);
+    setPosturl(undefined);
     setErrors({});
   };
   const [postRecord, setPostRecord] = React.useState(post);
@@ -2162,7 +3340,6 @@ export default function InputGalleryCreateForm(props) {
     setAttend(undefined);
     setMaybeSlide(false);
     setMaybeCheck(undefined);
-    setArrayTypeField(undefined);
     setCurrentArrayTypeFieldValue(undefined);
     setTimestamp(undefined);
     setIppy(undefined);
@@ -2170,7 +3347,7 @@ export default function InputGalleryCreateForm(props) {
     setErrors({});
   };
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const arrayTypeFieldRef = React.createRef();
   const validations = {
     num: [],
@@ -2817,7 +3994,6 @@ export default function InputGalleryCreateForm(props) {
     setAttend(undefined);
     setMaybeSlide(false);
     setMaybeCheck(undefined);
-    setArrayTypeField(undefined);
     setCurrentArrayTypeFieldValue(undefined);
     setTimestamp(undefined);
     setIppy(undefined);
@@ -2847,7 +4023,7 @@ export default function InputGalleryCreateForm(props) {
     queryData();
   }, [id, inputGallery]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const arrayTypeFieldRef = React.createRef();
   const validations = {
     num: [],
@@ -3363,15 +4539,15 @@ export default function PostCreateFormRow(props) {
   } = props;
   const [username, setUsername] = React.useState(undefined);
   const [caption, setCaption] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
+  const [posturl, setPosturl] = React.useState(undefined);
+  const [profileurl, setProfileurl] = React.useState(undefined);
   const [status, setStatus] = React.useState(undefined);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setUsername(undefined);
     setCaption(undefined);
-    setPost_url(undefined);
-    setProfile_url(undefined);
+    setPosturl(undefined);
+    setProfileurl(undefined);
     setStatus(undefined);
     setErrors({});
   };

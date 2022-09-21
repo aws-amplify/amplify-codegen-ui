@@ -92,7 +92,7 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
-    it('should render nested json fields', () => {
+    it.only('should render nested json fields', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-create', undefined);
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();

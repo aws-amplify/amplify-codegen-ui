@@ -27,7 +27,8 @@ export type FieldConfigMetadata = {
   validationRules: FieldValidationConfiguration[];
   // component field is of type AWSTimestamp will need to map this to date then get time from date
   dataType?: DataFieldDataType;
-
+  // for JSON type with invalid variable field name ie. { "1first-Name": "John" } => "firstName"
+  sanitizedFieldName?: string;
   isArray?: boolean;
   componentType: string;
 };

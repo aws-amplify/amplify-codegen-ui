@@ -87,8 +87,12 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       if ('value' in this.component.properties.label) {
         label = this.component.properties.label.value.toString() ?? '';
       }
-
-      return renderArrayFieldComponent(this.component.name, label, element);
+      return renderArrayFieldComponent(
+        this.component.name,
+        label,
+        this.componentMetadata.formMetadata?.fieldConfigs[this.component.name],
+        element,
+      );
     }
 
     return element;

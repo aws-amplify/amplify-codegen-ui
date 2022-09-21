@@ -70,7 +70,13 @@ import {
   buildValidations,
   runValidationTasksFunction,
 } from './form-renderer-helper';
-import { buildUseStateExpression, getCurrentValueName, getUseStateHooks, resetStateFunction } from './form-state';
+import {
+  buildUseStateExpression,
+  getCurrentValueName,
+  getDefaultValueExpression,
+  getUseStateHooks,
+  resetStateFunction,
+} from './form-state';
 import {
   buildFormPropNode,
   baseValidationConditionalType,
@@ -117,6 +123,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.componentMetadata = computeComponentMetadata(this.formComponent);
     this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition, dataSchema);
+    console.log(this.componentMetadata.formMetadata);
   }
 
   @handleCodegenErrors
@@ -423,34 +430,40 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
-    Object.entries(formMetadata.fieldConfigs).forEach(([field, config]) => {
-      if (config.isArray) {
-        statements.push(
-          buildUseStateExpression(getCurrentValueName(field), factory.createStringLiteral('')),
-          factory.createVariableStatement(
-            undefined,
-            factory.createVariableDeclarationList(
-              [
-                factory.createVariableDeclaration(
-                  factory.createIdentifier(`${field}Ref`),
-                  undefined,
-                  undefined,
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('React'),
-                      factory.createIdentifier('createRef'),
-                    ),
-                    undefined,
-                    [],
-                  ),
-                ),
-              ],
-              NodeFlags.Const,
+    Object.entries(formMetadata.fieldConfigs).forEach(
+      ([field, { isArray, componentType, dataType, sanitizedFieldName }]) => {
+        if (isArray) {
+          const renderedName = sanitizedFieldName || field;
+          statements.push(
+            buildUseStateExpression(
+              getCurrentValueName(renderedName),
+              getDefaultValueExpression(field, componentType, dataType),
             ),
-          ),
-        );
-      }
-    });
+            factory.createVariableStatement(
+              undefined,
+              factory.createVariableDeclarationList(
+                [
+                  factory.createVariableDeclaration(
+                    factory.createIdentifier(`${renderedName}Ref`),
+                    undefined,
+                    undefined,
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('React'),
+                        factory.createIdentifier('createRef'),
+                      ),
+                      undefined,
+                      [],
+                    ),
+                  ),
+                ],
+                NodeFlags.Const,
+              ),
+            ),
+          );
+        }
+      },
+    );
     statements.push(buildValidations(formMetadata.fieldConfigs));
     statements.push(runValidationTasksFunction);
 

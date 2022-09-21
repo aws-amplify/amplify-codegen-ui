@@ -1,59 +1,69 @@
 {
-  "cta" : { },
-  "dataType" : {
-    "dataSourceType" : "Custom",
-    "dataTypeName" : "JSON"
+  "cta": {},
+  "dataType": {
+    "dataSourceType": "Custom",
+    "dataTypeName": "JSON"
   },
-  "fields" : {
-    "firstName" : {
-      "inputType" : {
-        "type" : "TextField"
+  "fields": {
+    "firstName": {
+      "inputType": {
+        "type": "TextField"
       },
-      "label" : "firstName",
-      "position" : {
-        "fixed" : "first"
+      "label": "firstName",
+      "position": {
+        "fixed": "first"
       }
     },
-    "lastName" : {
-      "inputType" : {
-        "type" : "TextField"
+    "lastName": {
+      "inputType": {
+        "type": "TextField",
+        "isArray": true
       },
-      "label" : "lastName",
-      "position" : {
-        "below" : "firstName"
+      "label": "lastName",
+      "position": {
+        "below": "firstName"
       }
     },
-    "bio.favoriteQuote" : {
-      "inputType" : {
-        "type" : "TextField"
+    "last-Name": {
+      "inputType": {
+        "type": "SelectField"
       },
-      "label" : "favoriteQuote",
-      "position" : {
-        "below" : "bio"
+      "label": "last-Name",
+      "position": {
+        "below": "firstName"
       }
     },
-    "bio.favoriteAnimal" : {
-      "inputType" : {
-        "type" : "TextField"
+    "bio.favoriteQuote": {
+      "inputType": {
+        "type": "TextField"
       },
-      "label" : "favoriteAnimal",
-      "position" : {
-        "below" : "bio.favoriteQuote"
+      "label": "favoriteQuote",
+      "position": {
+        "below": "bio"
+      }
+    },
+    "bio.favoriteAnimal": {
+      "inputType": {
+        "type": "TextField"
+      },
+      "label": "favoriteAnimal",
+      "position": {
+        "below": "bio.favoriteQuote"
       }
     }
   },
-  "formActionType" : "update",
-  "name" : "NestedJson",
-  "sectionalElements" : {
-    "bio" : {
-      "level" : 3,
-      "position" : {
-        "below" : "lastName"
+  "formActionType": "update",
+  "name": "NestedJson",
+  "sectionalElements": {
+    "bio": {
+      "level": 3,
+      "position": {
+        "below": "lastName"
       },
-      "text" : "bio",
-      "type" : "Heading"
+      "text": "bio",
+      "type": "Heading"
     }
   },
-  "style" : { },
-  "id" : "f-BD6Fl4FX8B6XL7Il9a"
+  "style": {},
+  "id": "f-BD6Fl4FX8B6XL7Il9a"
 }

@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, DataFieldDataType, StudioForm } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, DataFieldDataType, StudioForm, isValidVariableName } from '@aws-amplify/codegen-ui';
 import { factory, SyntaxKind, KeywordTypeSyntaxKind, TypeElement, PropertySignature, TypeNode } from 'typescript';
 import { lowerCaseFirst } from '../helpers';
 import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
@@ -74,9 +74,10 @@ export const generateTypeNodeFromObject = (obj: Node<KeywordTypeSyntaxKind>): Pr
             factory.createTypeReferenceNode(factory.createIdentifier('useBase'), undefined),
             child as unknown as TypeNode,
           ]);
+    const propertyName = !isValidVariableName(key) ? factory.createStringLiteral(key) : factory.createIdentifier(key);
     return factory.createPropertySignature(
       undefined,
-      factory.createIdentifier(key),
+      propertyName,
       factory.createToken(SyntaxKind.QuestionToken),
       value,
     );
@@ -117,10 +118,13 @@ export const generateInputTypes = (formName: string, fieldConfigs: Record<string
     if (hasNestedFieldPath) {
       nestedPaths.push([fieldName, getTypeNodeParam]);
     } else {
+      const propertyName = !isValidVariableName(fieldName)
+        ? factory.createStringLiteral(fieldName)
+        : factory.createIdentifier(fieldName);
       typeNodes.push(
         factory.createPropertySignature(
           undefined,
-          factory.createIdentifier(fieldName),
+          propertyName,
           factory.createToken(SyntaxKind.QuestionToken),
           factory.createTypeReferenceNode(factory.createIdentifier('UseBaseOrValidationType'), [
             factory.createTypeReferenceNode(factory.createIdentifier('useBase'), undefined),
