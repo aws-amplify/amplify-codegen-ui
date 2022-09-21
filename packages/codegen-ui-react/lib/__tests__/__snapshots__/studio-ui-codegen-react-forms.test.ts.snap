@@ -695,6 +695,11 @@ function ArrayField({
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
@@ -770,7 +775,6 @@ function ArrayField({
                   setSelectedBadgeIndex(index);
                   setFieldValue(items[index]);
                   setIsEditing(true);
-                  inputFieldRef?.current?.focus();
                 }}
               >
                 {value}
@@ -1027,6 +1031,11 @@ function ArrayField({
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
@@ -1102,7 +1111,6 @@ function ArrayField({
                   setSelectedBadgeIndex(index);
                   setFieldValue(items[index]);
                   setIsEditing(true);
-                  inputFieldRef?.current?.focus();
                 }}
               >
                 {value}
@@ -2834,6 +2842,11 @@ function ArrayField({
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
@@ -2909,7 +2922,6 @@ function ArrayField({
                   setSelectedBadgeIndex(index);
                   setFieldValue(items[index]);
                   setIsEditing(true);
-                  inputFieldRef?.current?.focus();
                 }}
               >
                 {value}
@@ -3487,6 +3499,11 @@ function ArrayField({
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
@@ -3562,7 +3579,6 @@ function ArrayField({
                   setSelectedBadgeIndex(index);
                   setFieldValue(items[index]);
                   setIsEditing(true);
-                  inputFieldRef?.current?.focus();
                 }}
               >
                 {value}
