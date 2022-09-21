@@ -21,7 +21,6 @@ import {
   getCurrentValueName,
   getSetNameIdentifier,
 } from '../../forms/form-state';
-import { lowerCaseFirst } from '../../helpers';
 
 export const generateArrayFieldComponent = () => {
   const iconPath = 'M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z';
@@ -1031,7 +1030,7 @@ export const renderArrayFieldComponent = (fieldName: string, fieldLabel: string,
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('inputFieldRef'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(`${lowerCaseFirst(fieldName)}Ref`)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(`${fieldName}Ref`)),
         ),
       ]),
     ),

@@ -116,7 +116,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.formComponent = mapFormDefinitionToComponent(this.component.name, this.formDefinition);
 
     this.componentMetadata = computeComponentMetadata(this.formComponent);
-    this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition, dataSchema);
+    this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition);
   }
 
   @handleCodegenErrors

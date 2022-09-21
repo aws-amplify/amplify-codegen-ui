@@ -33,16 +33,75 @@ describe('generateFormDefinition', () => {
         dataSourceType: 'DataStore',
         enums: {},
         nonModels: {},
-        models: { Dog: { fields: { name: { dataType: 'String', readOnly: false, required: true, isArray: false } } } },
+        models: {
+          Dog: {
+            fields: {
+              name: { dataType: 'String', readOnly: false, required: true, isArray: false },
+              tricks: { dataType: 'String', readOnly: false, required: false, isArray: true },
+            },
+          },
+        },
       },
     });
     expect(formDefinition.elements).toStrictEqual({
       name: {
         componentType: 'TextField',
         dataType: 'String',
+        isArray: false,
         props: { label: 'Name', isRequired: true, isReadOnly: false },
         studioFormComponentType: 'TextField',
         validations: [{ type: ValidationTypes.REQUIRED, immutable: true }],
+      },
+      tricks: {
+        componentType: 'TextField',
+        dataType: 'String',
+        isArray: true,
+        props: { label: 'Tricks', isRequired: false, isReadOnly: false },
+        studioFormComponentType: 'TextField',
+      },
+    });
+  });
+
+  it('should use isArray setting from DataStore if available', () => {
+    const formDefinition = generateFormDefinition({
+      form: {
+        id: '123',
+        name: 'sampleForm',
+        formActionType: 'create',
+        dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
+        fields: {
+          tricks: {
+            dataType: 'String',
+            inputType: {
+              isArray: true,
+              type: 'TextField',
+            },
+          },
+        },
+        sectionalElements: {},
+        style: {},
+        cta: {},
+      },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: {
+          Dog: {
+            fields: {
+              tricks: { dataType: 'String', readOnly: false, required: false, isArray: false },
+            },
+          },
+        },
+      },
+    });
+    expect(formDefinition.elements).toStrictEqual({
+      tricks: {
+        componentType: 'TextField',
+        dataType: 'String',
+        isArray: false,
+        props: { label: 'Tricks', isRequired: false, isReadOnly: false },
+        studioFormComponentType: 'TextField',
       },
     });
   });
@@ -87,6 +146,7 @@ describe('generateFormDefinition', () => {
       weight: {
         componentType: 'SliderField',
         dataType: 'Float',
+        isArray: false,
         props: { label: 'Weight', min: 1, max: 100, step: 2, isDisabled: false, isRequired: true },
         validations: [{ type: ValidationTypes.REQUIRED, immutable: true }],
       },
@@ -398,6 +458,7 @@ it('should add read-only fields if it has overrides', () => {
     name: {
       componentType: 'TextField',
       dataType: 'String',
+      isArray: false,
       props: { label: 'Name', isRequired: true, isReadOnly: true },
       studioFormComponentType: 'TextField',
       validations: [{ type: ValidationTypes.REQUIRED, immutable: true }],
