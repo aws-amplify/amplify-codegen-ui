@@ -198,7 +198,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('ref'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(`${lowerCaseFirst(componentName)}Ref`)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(`${componentName}Ref`)),
         ),
       );
     }

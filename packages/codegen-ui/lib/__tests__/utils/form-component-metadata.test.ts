@@ -95,7 +95,7 @@ describe('mapFormMetaData', () => {
       cta: {},
     };
 
-    const { fieldConfigs } = mapFormMetadata(form, generateFormDefinition({ form, dataSchema }), dataSchema);
+    const { fieldConfigs } = mapFormMetadata(form, generateFormDefinition({ form, dataSchema }));
 
     expect('badges' in fieldConfigs).toBe(true);
     expect(fieldConfigs.badges.isArray).toBe(true);

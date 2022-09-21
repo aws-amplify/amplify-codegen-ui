@@ -339,6 +339,7 @@ export function getFormDefinitionInputElement(
 
   formDefinitionElement.validations = mergedValidations;
   formDefinitionElement.dataType = config?.dataType || baseConfig?.dataType;
+  formDefinitionElement.isArray = baseConfig ? baseConfig.inputType?.isArray : config.inputType?.isArray;
 
   deleteUndefined(formDefinitionElement);
   deleteUndefined(formDefinitionElement.props);

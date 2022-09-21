@@ -665,6 +665,813 @@ export default function CustomDataForm(props: CustomDataFormProps): React.ReactE
 "
 `;
 
+exports[`amplify form renderer tests custom form tests should render a custom backed form with an array field 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (!!currentFieldValue && !hasError) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(\\"\\");
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                  inputFieldRef?.current?.focus();
+                }}
+              >
+                {value}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
+export default function CustomDataForm(props) {
+  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
+    props;
+  const [name, setName] = React.useState(undefined);
+  const [email, setEmail] = React.useState(undefined);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(undefined);
+    setEmail(undefined);
+    setCurrentEmailValue(undefined);
+    setErrors({});
+  };
+  const [currentEmailValue, setCurrentEmailValue] = React.useState(\\"\\");
+  const emailRef = React.createRef();
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    email: [{ type: \\"Required\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const modelFields = {
+          name,
+          email,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        await onSubmit(modelFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+    >
+      <TextField
+        label=\\"name\\"
+        isRequired={true}
+        defaultValue=\\"John Doe\\"
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              email,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            await runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          setEmail(items);
+          setCurrentEmailValue(\\"\\");
+        }}
+        currentFieldValue={currentEmailValue}
+        label={\\"E-mail\\"}
+        items={email}
+        hasError={errors.email?.hasError}
+        setFieldValue={setCurrentEmailValue}
+        inputFieldRef={emailRef}
+      >
+        <TextField
+          label=\\"E-mail\\"
+          isRequired={true}
+          defaultValue=\\"johndoe@amplify.com\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                name,
+                email: value,
+              };
+              const result = onChange(modelFields);
+              value = result?.email ?? value;
+            }
+            if (errors.email?.hasError) {
+              await runValidationTasks(\\"email\\", value);
+            }
+            setCurrentEmailValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"email\\", currentEmailValue)}
+          errorMessage={errors.email?.errorMessage}
+          hasError={errors.email?.hasError}
+          value={currentEmailValue}
+          ref={emailRef}
+          {...getOverrideProps(overrides, \\"email\\")}
+        ></TextField>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"empty\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"go back\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"create\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a custom backed form with an array field 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
+export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
+    name?: UseBaseOrValidationType<useBase, string>;
+    email?: UseBaseOrValidationType<useBase, string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomDataFormOverridesProps = {
+    CustomDataFormGrid?: FormProps<GridProps>;
+    name?: FormProps<TextFieldProps>;
+    email?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type CustomDataFormProps = React.PropsWithChildren<{
+    overrides?: CustomDataFormOverridesProps | undefined | null;
+} & {
+    onSubmit: (fields: CustomDataFormInputValues) => void;
+    onCancel?: () => void;
+    onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
+    onValidate?: CustomDataFormInputValues<false>;
+}>;
+export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a datastore backed form with a custom array field 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Post } from \\"../models\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (!!currentFieldValue && !hasError) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(\\"\\");
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                  inputFieldRef?.current?.focus();
+                }}
+              >
+                {value}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
+export default function MyPostForm(props) {
+  const {
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const [username, setUsername] = React.useState(undefined);
+  const [caption, setCaption] = React.useState(undefined);
+  const [Customtags, setCustomtags] = React.useState(undefined);
+  const [post_url, setPost_url] = React.useState(undefined);
+  const [profile_url, setProfile_url] = React.useState(undefined);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setUsername(undefined);
+    setCaption(undefined);
+    setCustomtags(undefined);
+    setCurrentCustomtagsValue(undefined);
+    setPost_url(undefined);
+    setProfile_url(undefined);
+    setErrors({});
+  };
+  const [currentCustomtagsValue, setCurrentCustomtagsValue] =
+    React.useState(\\"\\");
+  const CustomtagsRef = React.createRef();
+  const validations = {
+    username: [
+      {
+        type: \\"GreaterThanChar\\",
+        numValues: [2],
+        validationMessage: \\"needs to be of length 2\\",
+      },
+    ],
+    caption: [],
+    Customtags: [],
+    post_url: [{ type: \\"URL\\" }],
+    profile_url: [{ type: \\"URL\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          username,
+          caption,
+          Customtags,
+          post_url,
+          profile_url,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(new Post(modelFields));
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"MyPostForm\\")}
+    >
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+      <Grid
+        columnGap=\\"inherit\\"
+        rowGap=\\"inherit\\"
+        templateColumns=\\"repeat(2, auto)\\"
+        {...getOverrideProps(overrides, \\"RowGrid0\\")}
+      >
+        <TextField
+          label=\\"Username\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"john\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username: value,
+                caption,
+                Customtags,
+                post_url,
+                profile_url,
+              };
+              const result = onChange(modelFields);
+              value = result?.username ?? value;
+            }
+            if (errors.username?.hasError) {
+              await runValidationTasks(\\"username\\", value);
+            }
+            setUsername(value);
+          }}
+          onBlur={() => runValidationTasks(\\"username\\", username)}
+          errorMessage={errors.username?.errorMessage}
+          hasError={errors.username?.hasError}
+          {...getOverrideProps(overrides, \\"username\\")}
+        ></TextField>
+        <TextField
+          label=\\"Caption\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"i love code\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username,
+                caption: value,
+                Customtags,
+                post_url,
+                profile_url,
+              };
+              const result = onChange(modelFields);
+              value = result?.caption ?? value;
+            }
+            if (errors.caption?.hasError) {
+              await runValidationTasks(\\"caption\\", value);
+            }
+            setCaption(value);
+          }}
+          onBlur={() => runValidationTasks(\\"caption\\", caption)}
+          errorMessage={errors.caption?.errorMessage}
+          hasError={errors.caption?.hasError}
+          {...getOverrideProps(overrides, \\"caption\\")}
+        ></TextField>
+      </Grid>
+      <ArrayField
+        onChange={async (items) => {
+          setCustomtags(items);
+          setCurrentCustomtagsValue(\\"\\");
+        }}
+        currentFieldValue={currentCustomtagsValue}
+        label={\\"Tags\\"}
+        items={Customtags}
+        hasError={errors.Customtags?.hasError}
+        setFieldValue={setCurrentCustomtagsValue}
+        inputFieldRef={CustomtagsRef}
+      >
+        <TextField
+          label=\\"Tags\\"
+          placeholder=\\"goals\\"
+          onChange={async (e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username,
+                caption,
+                Customtags: value,
+                post_url,
+                profile_url,
+              };
+              const result = onChange(modelFields);
+              value = result?.Customtags ?? value;
+            }
+            if (errors.Customtags?.hasError) {
+              await runValidationTasks(\\"Customtags\\", value);
+            }
+            setCurrentCustomtagsValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"Customtags\\", currentCustomtagsValue)
+          }
+          errorMessage={errors.Customtags?.errorMessage}
+          hasError={errors.Customtags?.hasError}
+          value={currentCustomtagsValue}
+          ref={CustomtagsRef}
+          {...getOverrideProps(overrides, \\"Customtags\\")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label=\\"Post url\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              post_url: value,
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            value = result?.post_url ?? value;
+          }
+          if (errors.post_url?.hasError) {
+            await runValidationTasks(\\"post_url\\", value);
+          }
+          setPost_url(value);
+        }}
+        onBlur={() => runValidationTasks(\\"post_url\\", post_url)}
+        errorMessage={errors.post_url?.errorMessage}
+        hasError={errors.post_url?.hasError}
+        {...getOverrideProps(overrides, \\"post_url\\")}
+      ></TextField>
+      <TextField
+        label=\\"Profile url\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={async (e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              post_url,
+              profile_url: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.profile_url ?? value;
+          }
+          if (errors.profile_url?.hasError) {
+            await runValidationTasks(\\"profile_url\\", value);
+          }
+          setProfile_url(value);
+        }}
+        onBlur={() => runValidationTasks(\\"profile_url\\", profile_url)}
+        errorMessage={errors.profile_url?.errorMessage}
+        hasError={errors.profile_url?.hasError}
+        {...getOverrideProps(overrides, \\"profile_url\\")}
+      ></TextField>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a datastore backed form with a custom array field 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
+export declare type MyPostFormInputValues<useBase extends boolean = true> = {
+    username?: UseBaseOrValidationType<useBase, string>;
+    caption?: UseBaseOrValidationType<useBase, string>;
+    Customtags?: UseBaseOrValidationType<useBase, string>;
+    post_url?: UseBaseOrValidationType<useBase, string>;
+    profile_url?: UseBaseOrValidationType<useBase, string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type MyPostFormOverridesProps = {
+    MyPostFormGrid?: FormProps<GridProps>;
+    RowGrid0?: FormProps<GridProps>;
+    username?: FormProps<TextFieldProps>;
+    caption?: FormProps<TextFieldProps>;
+    Customtags?: FormProps<TextFieldProps>;
+    post_url?: FormProps<TextFieldProps>;
+    profile_url?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type MyPostFormProps = React.PropsWithChildren<{
+    overrides?: MyPostFormOverridesProps | undefined | null;
+} & {
+    onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onValidate?: MyPostFormInputValues<false>;
+}>;
+export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests custom form tests should render nested json fields 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
