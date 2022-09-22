@@ -45,6 +45,7 @@ import {
   capitalizeFirstLetter,
   getCurrentValueIdentifier,
   getCurrentValueName,
+  getSetNameIdentifier,
   resetValuesName,
   setFieldState,
   setStateExpression,
@@ -203,7 +204,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       );
     }
   }
-  if (componentName === 'ClearButton') {
+  if (componentName === 'ClearButton' || componentName === 'ResetButton') {
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('onClick'),
@@ -1112,33 +1113,6 @@ export const onSubmitValidationRun = [
   ),
 ];
 
-export const ifRecordDefinedExpression = (dataTypeName: string, fieldConfigs: Record<string, FieldConfigMetadata>) => {
-  return factory.createIfStatement(
-    factory.createIdentifier('record'),
-    factory.createBlock(
-      [
-        factory.createExpressionStatement(
-          factory.createCallExpression(factory.createIdentifier(`set${dataTypeName}Record`), undefined, [
-            factory.createIdentifier('record'),
-          ]),
-        ),
-        ...Object.keys(fieldConfigs).map((field) =>
-          factory.createExpressionStatement(
-            factory.createCallExpression(factory.createIdentifier(`set${capitalizeFirstLetter(field)}`), undefined, [
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier('record'),
-                factory.createIdentifier(field),
-              ),
-            ]),
-          ),
-        ),
-      ],
-      true,
-    ),
-    undefined,
-  );
-};
-
 export const buildSetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>) => {
   const fieldSet = new Set<string>();
   const expression = Object.keys(fieldConfigs).reduce<ExpressionStatement[]>((acc, field) => {
@@ -1161,7 +1135,18 @@ export const buildSetStateFunction = (fieldConfigs: Record<string, FieldConfigMe
   return factory.createIfStatement(factory.createIdentifier('initialData'), factory.createBlock(expression, true));
 };
 
-export const buildUpdateDatastoreQuery = (dataTypeName: string, fieldConfigs: Record<string, FieldConfigMetadata>) => {
+// ex. React.useEffect(resetStateValues, [bookRecord])
+export const buildResetValuesOnRecordUpdate = (recordName: string) => {
+  return factory.createExpressionStatement(
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('React'), factory.createIdentifier('useEffect')),
+      undefined,
+      [resetValuesName, factory.createArrayLiteralExpression([factory.createIdentifier(recordName)], false)],
+    ),
+  );
+};
+
+export const buildUpdateDatastoreQuery = (dataTypeName: string, recordName: string) => {
   // TODO: update this once cpk is supported in datastore
   const pkQueryIdentifier = factory.createIdentifier('id');
   return [
@@ -1210,7 +1195,11 @@ export const buildUpdateDatastoreQuery = (dataTypeName: string, fieldConfigs: Re
                       NodeFlags.Const,
                     ),
                   ),
-                  ifRecordDefinedExpression(dataTypeName, fieldConfigs),
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(getSetNameIdentifier(recordName), undefined, [
+                      factory.createIdentifier('record'),
+                    ]),
+                  ),
                 ],
                 true,
               ),

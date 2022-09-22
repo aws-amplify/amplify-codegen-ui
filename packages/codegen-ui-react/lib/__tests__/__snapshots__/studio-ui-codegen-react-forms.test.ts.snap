@@ -18,18 +18,25 @@ import {
 export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
-  const [name, setName] = React.useState(undefined);
-  const [email, setEmail] = React.useState(undefined);
-  const [city, setCity] = React.useState(undefined);
-  const [category, setCategory] = React.useState(undefined);
-  const [pages, setPages] = React.useState(0);
+  const initialValues = {
+    name: undefined,
+    email: undefined,
+    city: undefined,
+    category: undefined,
+    pages: 0,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [city, setCity] = React.useState(initialValues.city);
+  const [category, setCategory] = React.useState(initialValues.category);
+  const [pages, setPages] = React.useState(initialValues.pages);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(undefined);
-    setEmail(undefined);
-    setCity(undefined);
-    setCategory(undefined);
-    setPages(0);
+    setName(initialValues.name);
+    setEmail(initialValues.email);
+    setCity(initialValues.city);
+    setCategory(initialValues.category);
+    setPages(initialValues.pages);
     setErrors({});
   };
   const validations = {
@@ -264,7 +271,7 @@ export default function CustomDataForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"go back\\"
             type=\\"button\\"
@@ -344,18 +351,25 @@ import {
 export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
-  const [name, setName] = React.useState(undefined);
-  const [email, setEmail] = React.useState(undefined);
-  const [city, setCity] = React.useState(undefined);
-  const [category, setCategory] = React.useState(undefined);
-  const [pages, setPages] = React.useState(0);
+  const initialValues = {
+    name: undefined,
+    email: undefined,
+    city: undefined,
+    category: undefined,
+    pages: 0,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [city, setCity] = React.useState(initialValues.city);
+  const [category, setCategory] = React.useState(initialValues.category);
+  const [pages, setPages] = React.useState(initialValues.pages);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(undefined);
-    setEmail(undefined);
-    setCity(undefined);
-    setCategory(undefined);
-    setPages(0);
+    setName(initialValues.name);
+    setEmail(initialValues.email);
+    setCity(initialValues.city);
+    setCategory(initialValues.category);
+    setPages(initialValues.pages);
     setErrors({});
   };
   React.useEffect(() => {
@@ -600,9 +614,9 @@ export default function CustomDataForm(props) {
           children=\\"empty\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"go back\\"
             type=\\"button\\"
@@ -810,13 +824,17 @@ function ArrayField({
 export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
-  const [name, setName] = React.useState(undefined);
-  const [email, setEmail] = React.useState(undefined);
+  const initialValues = {
+    name: undefined,
+    email: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(undefined);
-    setEmail(undefined);
-    setCurrentEmailValue(undefined);
+    setName(initialValues.name);
+    setEmail(initialValues.email);
+    setCurrentEmailValue(\\"\\");
     setErrors({});
   };
   const [currentEmailValue, setCurrentEmailValue] = React.useState(\\"\\");
@@ -943,7 +961,7 @@ export default function CustomDataForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"go back\\"
             type=\\"button\\"
@@ -1154,19 +1172,28 @@ export default function MyPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [username, setUsername] = React.useState(undefined);
-  const [caption, setCaption] = React.useState(undefined);
-  const [Customtags, setCustomtags] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
+  const initialValues = {
+    username: undefined,
+    caption: undefined,
+    Customtags: undefined,
+    post_url: undefined,
+    profile_url: undefined,
+  };
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [Customtags, setCustomtags] = React.useState(initialValues.Customtags);
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setUsername(undefined);
-    setCaption(undefined);
-    setCustomtags(undefined);
-    setCurrentCustomtagsValue(undefined);
-    setPost_url(undefined);
-    setProfile_url(undefined);
+    setUsername(initialValues.username);
+    setCaption(initialValues.caption);
+    setCustomtags(initialValues.Customtags);
+    setCurrentCustomtagsValue(\\"\\");
+    setPost_url(initialValues.post_url);
+    setProfile_url(initialValues.profile_url);
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
@@ -1255,7 +1282,7 @@ export default function MyPostForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -1497,14 +1524,19 @@ export default function NestedJson(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const { tokens } = useTheme();
-  const [firstName, setFirstName] = React.useState(undefined);
-  const [lastName, setLastName] = React.useState(undefined);
-  const [bio, setBio] = React.useState({});
+  const initialValues = {
+    firstName: undefined,
+    lastName: undefined,
+    bio: {},
+  };
+  const [firstName, setFirstName] = React.useState(initialValues.firstName);
+  const [lastName, setLastName] = React.useState(initialValues.lastName);
+  const [bio, setBio] = React.useState(initialValues.bio);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setFirstName(undefined);
-    setLastName(undefined);
-    setBio({});
+    setFirstName(initialValues.firstName);
+    setLastName(initialValues.lastName);
+    setBio(initialValues.bio);
     setErrors({});
   };
   const validations = {
@@ -1670,7 +1702,7 @@ export default function NestedJson(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -1742,14 +1774,19 @@ import { Button, Flex, Grid, Heading, TextField } from \\"@aws-amplify/ui-react\
 export default function NestedJson(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
-  const [firstName, setFirstName] = React.useState(undefined);
-  const [lastName, setLastName] = React.useState(undefined);
-  const [bio, setBio] = React.useState({});
+  const initialValues = {
+    firstName: undefined,
+    lastName: undefined,
+    bio: {},
+  };
+  const [firstName, setFirstName] = React.useState(initialValues.firstName);
+  const [lastName, setLastName] = React.useState(initialValues.lastName);
+  const [bio, setBio] = React.useState(initialValues.bio);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setFirstName(undefined);
-    setLastName(undefined);
-    setBio({});
+    setFirstName(initialValues.firstName);
+    setLastName(initialValues.lastName);
+    setBio(initialValues.bio);
     setErrors({});
   };
   React.useEffect(() => {
@@ -1921,12 +1958,12 @@ export default function NestedJson(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -2007,10 +2044,13 @@ import {
 export default function CustomWithSectionalElements(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
-  const [name, setName] = React.useState(undefined);
+  const initialValues = {
+    name: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(undefined);
+    setName(initialValues.name);
     setErrors({});
   };
   const validations = {
@@ -2104,7 +2144,7 @@ export default function CustomWithSectionalElements(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -2180,16 +2220,24 @@ export default function MyPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [caption, setCaption] = React.useState(undefined);
-  const [username, setUsername] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
+  const initialValues = {
+    caption: undefined,
+    username: undefined,
+    post_url: undefined,
+    profile_url: undefined,
+  };
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setCaption(undefined);
-    setUsername(undefined);
-    setPost_url(undefined);
-    setProfile_url(undefined);
+    setCaption(initialValues.caption);
+    setUsername(initialValues.username);
+    setPost_url(initialValues.post_url);
+    setProfile_url(initialValues.profile_url);
     setErrors({});
   };
   const validations = {
@@ -2267,7 +2315,7 @@ export default function MyPostForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -2460,36 +2508,41 @@ export default function MyPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] =
-    React.useState(undefined);
-  const [caption, setCaption] = React.useState(undefined);
-  const [username, setUsername] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
+  const initialValues = {
+    TextAreaFieldbbd63464: undefined,
+    caption: undefined,
+    username: undefined,
+    profile_url: undefined,
+    post_url: undefined,
+  };
+  const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
+    initialValues.TextAreaFieldbbd63464
+  );
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setTextAreaFieldbbd63464(undefined);
-    setCaption(undefined);
-    setUsername(undefined);
-    setProfile_url(undefined);
-    setPost_url(undefined);
+    const cleanValues = { ...initialValues, ...postRecord };
+    setTextAreaFieldbbd63464(cleanValues.TextAreaFieldbbd63464);
+    setCaption(cleanValues.caption);
+    setUsername(cleanValues.username);
+    setProfile_url(cleanValues.profile_url);
+    setPost_url(cleanValues.post_url);
     setErrors({});
   };
   const [postRecord, setPostRecord] = React.useState(post);
   React.useEffect(() => {
     const queryData = async () => {
       const record = id ? await DataStore.query(Post, id) : post;
-      if (record) {
-        setPostRecord(record);
-        setTextAreaFieldbbd63464(record.TextAreaFieldbbd63464);
-        setCaption(record.caption);
-        setUsername(record.username);
-        setProfile_url(record.profile_url);
-        setPost_url(record.post_url);
-      }
+      setPostRecord(record);
     };
     queryData();
   }, [id, post]);
+  React.useEffect(resetStateValues, [postRecord]);
   const validations = {
     TextAreaFieldbbd63464: [],
     caption: [],
@@ -2566,12 +2619,12 @@ export default function MyPostForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -2734,12 +2787,12 @@ export default function MyPostForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -2965,27 +3018,40 @@ export default function InputGalleryCreateForm(props) {
     overrides,
     ...rest
   } = props;
-  const [num, setNum] = React.useState(undefined);
-  const [rootbeer, setRootbeer] = React.useState(undefined);
-  const [attend, setAttend] = React.useState(undefined);
-  const [maybeSlide, setMaybeSlide] = React.useState(false);
-  const [maybeCheck, setMaybeCheck] = React.useState(undefined);
-  const [arrayTypeField, setArrayTypeField] = React.useState(undefined);
-  const [timestamp, setTimestamp] = React.useState(undefined);
-  const [ippy, setIppy] = React.useState(undefined);
-  const [timeisnow, setTimeisnow] = React.useState(undefined);
+  const initialValues = {
+    num: undefined,
+    rootbeer: undefined,
+    attend: undefined,
+    maybeSlide: false,
+    maybeCheck: undefined,
+    arrayTypeField: undefined,
+    timestamp: undefined,
+    ippy: undefined,
+    timeisnow: undefined,
+  };
+  const [num, setNum] = React.useState(initialValues.num);
+  const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
+  const [attend, setAttend] = React.useState(initialValues.attend);
+  const [maybeSlide, setMaybeSlide] = React.useState(initialValues.maybeSlide);
+  const [maybeCheck, setMaybeCheck] = React.useState(initialValues.maybeCheck);
+  const [arrayTypeField, setArrayTypeField] = React.useState(
+    initialValues.arrayTypeField
+  );
+  const [timestamp, setTimestamp] = React.useState(initialValues.timestamp);
+  const [ippy, setIppy] = React.useState(initialValues.ippy);
+  const [timeisnow, setTimeisnow] = React.useState(initialValues.timeisnow);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setNum(undefined);
-    setRootbeer(undefined);
-    setAttend(undefined);
-    setMaybeSlide(false);
-    setMaybeCheck(undefined);
-    setArrayTypeField(undefined);
-    setCurrentArrayTypeFieldValue(undefined);
-    setTimestamp(undefined);
-    setIppy(undefined);
-    setTimeisnow(undefined);
+    setNum(initialValues.num);
+    setRootbeer(initialValues.rootbeer);
+    setAttend(initialValues.attend);
+    setMaybeSlide(initialValues.maybeSlide);
+    setMaybeCheck(initialValues.maybeCheck);
+    setArrayTypeField(initialValues.arrayTypeField);
+    setCurrentArrayTypeFieldValue(\\"\\");
+    setTimestamp(initialValues.timestamp);
+    setIppy(initialValues.ippy);
+    setTimeisnow(initialValues.timeisnow);
     setErrors({});
   };
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
@@ -3391,7 +3457,7 @@ export default function InputGalleryCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -3624,27 +3690,41 @@ export default function InputGalleryCreateForm(props) {
     overrides,
     ...rest
   } = props;
-  const [num, setNum] = React.useState(undefined);
-  const [rootbeer, setRootbeer] = React.useState(undefined);
-  const [attend, setAttend] = React.useState(undefined);
-  const [maybeSlide, setMaybeSlide] = React.useState(false);
-  const [maybeCheck, setMaybeCheck] = React.useState(undefined);
-  const [arrayTypeField, setArrayTypeField] = React.useState(undefined);
-  const [timestamp, setTimestamp] = React.useState(undefined);
-  const [ippy, setIppy] = React.useState(undefined);
-  const [timeisnow, setTimeisnow] = React.useState(undefined);
+  const initialValues = {
+    num: undefined,
+    rootbeer: undefined,
+    attend: undefined,
+    maybeSlide: false,
+    maybeCheck: undefined,
+    arrayTypeField: undefined,
+    timestamp: undefined,
+    ippy: undefined,
+    timeisnow: undefined,
+  };
+  const [num, setNum] = React.useState(initialValues.num);
+  const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
+  const [attend, setAttend] = React.useState(initialValues.attend);
+  const [maybeSlide, setMaybeSlide] = React.useState(initialValues.maybeSlide);
+  const [maybeCheck, setMaybeCheck] = React.useState(initialValues.maybeCheck);
+  const [arrayTypeField, setArrayTypeField] = React.useState(
+    initialValues.arrayTypeField
+  );
+  const [timestamp, setTimestamp] = React.useState(initialValues.timestamp);
+  const [ippy, setIppy] = React.useState(initialValues.ippy);
+  const [timeisnow, setTimeisnow] = React.useState(initialValues.timeisnow);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setNum(undefined);
-    setRootbeer(undefined);
-    setAttend(undefined);
-    setMaybeSlide(false);
-    setMaybeCheck(undefined);
-    setArrayTypeField(undefined);
-    setCurrentArrayTypeFieldValue(undefined);
-    setTimestamp(undefined);
-    setIppy(undefined);
-    setTimeisnow(undefined);
+    const cleanValues = { ...initialValues, ...inputGalleryRecord };
+    setNum(cleanValues.num);
+    setRootbeer(cleanValues.rootbeer);
+    setAttend(cleanValues.attend);
+    setMaybeSlide(cleanValues.maybeSlide);
+    setMaybeCheck(cleanValues.maybeCheck);
+    setArrayTypeField(cleanValues.arrayTypeField);
+    setCurrentArrayTypeFieldValue(\\"\\");
+    setTimestamp(cleanValues.timestamp);
+    setIppy(cleanValues.ippy);
+    setTimeisnow(cleanValues.timeisnow);
     setErrors({});
   };
   const [inputGalleryRecord, setInputGalleryRecord] =
@@ -3654,21 +3734,11 @@ export default function InputGalleryCreateForm(props) {
       const record = id
         ? await DataStore.query(InputGallery, id)
         : inputGallery;
-      if (record) {
-        setInputGalleryRecord(record);
-        setNum(record.num);
-        setRootbeer(record.rootbeer);
-        setAttend(record.attend);
-        setMaybeSlide(record.maybeSlide);
-        setMaybeCheck(record.maybeCheck);
-        setArrayTypeField(record.arrayTypeField);
-        setTimestamp(record.timestamp);
-        setIppy(record.ippy);
-        setTimeisnow(record.timeisnow);
-      }
+      setInputGalleryRecord(record);
     };
     queryData();
   }, [id, inputGallery]);
+  React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
     React.useState(\\"\\");
   const arrayTypeFieldRef = React.createRef();
@@ -4079,12 +4149,12 @@ export default function InputGalleryCreateForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -4184,18 +4254,27 @@ export default function PostCreateFormRow(props) {
     overrides,
     ...rest
   } = props;
-  const [username, setUsername] = React.useState(undefined);
-  const [caption, setCaption] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
-  const [status, setStatus] = React.useState(undefined);
+  const initialValues = {
+    username: undefined,
+    caption: undefined,
+    post_url: undefined,
+    profile_url: undefined,
+    status: undefined,
+  };
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
+  const [status, setStatus] = React.useState(initialValues.status);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setUsername(undefined);
-    setCaption(undefined);
-    setPost_url(undefined);
-    setProfile_url(undefined);
-    setStatus(undefined);
+    setUsername(initialValues.username);
+    setCaption(initialValues.caption);
+    setPost_url(initialValues.post_url);
+    setProfile_url(initialValues.profile_url);
+    setStatus(initialValues.status);
     setErrors({});
   };
   const validations = {
@@ -4427,7 +4506,7 @@ export default function PostCreateFormRow(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"

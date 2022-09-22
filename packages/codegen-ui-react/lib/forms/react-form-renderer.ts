@@ -65,12 +65,19 @@ import { RequiredKeys } from '../utils/type-utils';
 import {
   buildMutationBindings,
   buildOverrideTypesBindings,
+  buildResetValuesOnRecordUpdate,
   buildSetStateFunction,
   buildUpdateDatastoreQuery,
   buildValidations,
   runValidationTasksFunction,
 } from './form-renderer-helper';
-import { buildUseStateExpression, getCurrentValueName, getUseStateHooks, resetStateFunction } from './form-state';
+import {
+  buildUseStateExpression,
+  getCurrentValueName,
+  getInitialValues,
+  getUseStateHooks,
+  resetStateFunction,
+} from './form-state';
 import {
   buildFormPropNode,
   baseValidationConditionalType,
@@ -328,6 +335,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       formActionType,
     } = this.component;
     const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
+    const lowerCaseDataTypeNameRecord = `${lowerCaseDataTypeName}Record`;
+    const isDataStoreUpdateForm = dataSourceType === 'DataStore' && formActionType === 'update';
 
     if (!formMetadata) {
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
@@ -392,11 +401,29 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       );
     }
 
-    statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
+    statements.push(getInitialValues(formMetadata.fieldConfigs));
 
+    statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
-    statements.push(resetStateFunction(formMetadata.fieldConfigs));
+    statements.push(
+      resetStateFunction(formMetadata.fieldConfigs, isDataStoreUpdateForm ? lowerCaseDataTypeNameRecord : undefined),
+    );
+
+    if (isDataStoreUpdateForm) {
+      statements.push(
+        buildUseStateExpression(lowerCaseDataTypeNameRecord, factory.createIdentifier(lowerCaseDataTypeName)),
+      );
+      statements.push(
+        addUseEffectWrapper(
+          buildUpdateDatastoreQuery(dataTypeName, lowerCaseDataTypeNameRecord),
+          // TODO: change once cpk is supported in datastore
+          ['id', lowerCaseDataTypeName],
+        ),
+      );
+
+      statements.push(buildResetValuesOnRecordUpdate(lowerCaseDataTypeNameRecord));
+    }
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
@@ -404,19 +431,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
       this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
-      if (formActionType === 'update') {
-        statements.push(
-          buildUseStateExpression(`${lowerCaseDataTypeName}Record`, factory.createIdentifier(lowerCaseDataTypeName)),
-        );
-        statements.push(
-          addUseEffectWrapper(
-            buildUpdateDatastoreQuery(dataTypeName, formMetadata.fieldConfigs),
-            // TODO: change once cpk is supported in datastore
-            ['id', lowerCaseDataTypeName],
-          ),
-        );
-      }
     }
+
     if (dataSourceType === 'Custom' && formActionType === 'update') {
       statements.push(addUseEffectWrapper([buildSetStateFunction(formMetadata.fieldConfigs)], []));
     }

@@ -13,32 +13,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { mapButtons } from '../../../generate-form-definition/helpers/map-cta';
 
-export const FORM_DEFINITION_DEFAULTS = {
-  styles: {
-    horizontalGap: {
-      value: '15px',
-    },
-    verticalGap: {
-      value: '15px',
-    },
-    outerPadding: {
-      value: '20px',
-    },
-  },
+describe('mapButtons', () => {
+  it('correctly excludes from matrix but returns all configs', () => {
+    const buttonConfigs = mapButtons('create', { submit: { excluded: true } });
 
-  field: {
-    inputType: {
-      label: 'Label',
-      defaultCountryCode: '+1',
-      value: 'fieldName',
-      name: 'fieldName',
-      valueMappings: { values: [{ value: { value: 'Option' } }] },
-    },
-    radioGroupFieldBooleanDisplayValue: { true: 'Yes', false: 'No' },
-  },
-
-  sectionalElement: {
-    text: 'text',
-  },
-};
+    expect(buttonConfigs.buttonMatrix).toStrictEqual([['clear'], ['cancel']]);
+    expect(buttonConfigs.buttonConfigs.submit).toBeDefined();
+    expect(buttonConfigs.buttonConfigs.cancel).toBeDefined();
+    expect(buttonConfigs.buttonConfigs.clear).toBeDefined();
+  });
+});
