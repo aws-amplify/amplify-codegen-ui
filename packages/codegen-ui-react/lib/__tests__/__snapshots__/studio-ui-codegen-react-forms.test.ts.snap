@@ -98,7 +98,7 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -112,7 +112,7 @@ export default function CustomDataForm(props) {
             value = result?.name ?? value;
           }
           if (errors.name?.hasError) {
-            await runValidationTasks(\\"name\\", value);
+            runValidationTasks(\\"name\\", value);
           }
           setName(value);
         }}
@@ -125,7 +125,7 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -139,7 +139,7 @@ export default function CustomDataForm(props) {
             value = result?.email ?? value;
           }
           if (errors.email?.hasError) {
-            await runValidationTasks(\\"email\\", value);
+            runValidationTasks(\\"email\\", value);
           }
           setEmail(value);
         }}
@@ -152,7 +152,7 @@ export default function CustomDataForm(props) {
         label=\\"Label\\"
         placeholder=\\"Please select an option\\"
         value={city}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -166,7 +166,7 @@ export default function CustomDataForm(props) {
             value = result?.city ?? value;
           }
           if (errors.city?.hasError) {
-            await runValidationTasks(\\"city\\", value);
+            runValidationTasks(\\"city\\", value);
           }
           setCity(value);
         }}
@@ -196,7 +196,7 @@ export default function CustomDataForm(props) {
         label=\\"Label\\"
         name=\\"fieldName\\"
         defaultValue=\\"Hobbies\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -210,7 +210,7 @@ export default function CustomDataForm(props) {
             value = result?.category ?? value;
           }
           if (errors.category?.hasError) {
-            await runValidationTasks(\\"category\\", value);
+            runValidationTasks(\\"category\\", value);
           }
           setCategory(value);
         }}
@@ -238,7 +238,7 @@ export default function CustomDataForm(props) {
       <StepperField
         label=\\"Label\\"
         value={pages}
-        onStepChange={async (e) => {
+        onStepChange={(e) => {
           let value = e;
           if (onChange) {
             const modelFields = {
@@ -252,7 +252,7 @@ export default function CustomDataForm(props) {
             value = result?.pages ?? value;
           }
           if (errors.pages?.hasError) {
-            await runValidationTasks(\\"pages\\", value);
+            runValidationTasks(\\"pages\\", value);
           }
           setPages(value);
         }}
@@ -441,7 +441,7 @@ export default function CustomDataForm(props) {
         isRequired={true}
         defaultValue=\\"John Doe\\"
         defaultValue={name}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -455,7 +455,7 @@ export default function CustomDataForm(props) {
             value = result?.name ?? value;
           }
           if (errors.name?.hasError) {
-            await runValidationTasks(\\"name\\", value);
+            runValidationTasks(\\"name\\", value);
           }
           setName(value);
         }}
@@ -469,7 +469,7 @@ export default function CustomDataForm(props) {
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
         defaultValue={email}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -483,7 +483,7 @@ export default function CustomDataForm(props) {
             value = result?.email ?? value;
           }
           if (errors.email?.hasError) {
-            await runValidationTasks(\\"email\\", value);
+            runValidationTasks(\\"email\\", value);
           }
           setEmail(value);
         }}
@@ -496,7 +496,7 @@ export default function CustomDataForm(props) {
         label=\\"Label\\"
         placeholder=\\"Please select an option\\"
         value={city}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -510,7 +510,7 @@ export default function CustomDataForm(props) {
             value = result?.city ?? value;
           }
           if (errors.city?.hasError) {
-            await runValidationTasks(\\"city\\", value);
+            runValidationTasks(\\"city\\", value);
           }
           setCity(value);
         }}
@@ -541,7 +541,7 @@ export default function CustomDataForm(props) {
         name=\\"fieldName\\"
         defaultValue=\\"Hobbies\\"
         defaultValue={category}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -555,7 +555,7 @@ export default function CustomDataForm(props) {
             value = result?.category ?? value;
           }
           if (errors.category?.hasError) {
-            await runValidationTasks(\\"category\\", value);
+            runValidationTasks(\\"category\\", value);
           }
           setCategory(value);
         }}
@@ -583,7 +583,7 @@ export default function CustomDataForm(props) {
       <StepperField
         label=\\"Label\\"
         value={pages}
-        onStepChange={async (e) => {
+        onStepChange={(e) => {
           let value = e;
           if (onChange) {
             const modelFields = {
@@ -597,7 +597,7 @@ export default function CustomDataForm(props) {
             value = result?.pages ?? value;
           }
           if (errors.pages?.hasError) {
-            await runValidationTasks(\\"pages\\", value);
+            runValidationTasks(\\"pages\\", value);
           }
           setPages(value);
         }}
@@ -892,7 +892,7 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -903,7 +903,7 @@ export default function CustomDataForm(props) {
             value = result?.name ?? value;
           }
           if (errors.name?.hasError) {
-            await runValidationTasks(\\"name\\", value);
+            runValidationTasks(\\"name\\", value);
           }
           setName(value);
         }}
@@ -928,7 +928,7 @@ export default function CustomDataForm(props) {
           label=\\"E-mail\\"
           isRequired={true}
           defaultValue=\\"johndoe@amplify.com\\"
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -939,7 +939,7 @@ export default function CustomDataForm(props) {
               value = result?.email ?? value;
             }
             if (errors.email?.hasError) {
-              await runValidationTasks(\\"email\\", value);
+              runValidationTasks(\\"email\\", value);
             }
             setCurrentEmailValue(value);
           }}
@@ -1311,7 +1311,7 @@ export default function MyPostForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -1325,7 +1325,7 @@ export default function MyPostForm(props) {
               value = result?.username ?? value;
             }
             if (errors.username?.hasError) {
-              await runValidationTasks(\\"username\\", value);
+              runValidationTasks(\\"username\\", value);
             }
             setUsername(value);
           }}
@@ -1339,7 +1339,7 @@ export default function MyPostForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -1353,7 +1353,7 @@ export default function MyPostForm(props) {
               value = result?.caption ?? value;
             }
             if (errors.caption?.hasError) {
-              await runValidationTasks(\\"caption\\", value);
+              runValidationTasks(\\"caption\\", value);
             }
             setCaption(value);
           }}
@@ -1378,7 +1378,7 @@ export default function MyPostForm(props) {
         <TextField
           label=\\"Tags\\"
           placeholder=\\"goals\\"
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -1392,7 +1392,7 @@ export default function MyPostForm(props) {
               value = result?.Customtags ?? value;
             }
             if (errors.Customtags?.hasError) {
-              await runValidationTasks(\\"Customtags\\", value);
+              runValidationTasks(\\"Customtags\\", value);
             }
             setCurrentCustomtagsValue(value);
           }}
@@ -1410,7 +1410,7 @@ export default function MyPostForm(props) {
         label=\\"Post url\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1424,7 +1424,7 @@ export default function MyPostForm(props) {
             value = result?.post_url ?? value;
           }
           if (errors.post_url?.hasError) {
-            await runValidationTasks(\\"post_url\\", value);
+            runValidationTasks(\\"post_url\\", value);
           }
           setPost_url(value);
         }}
@@ -1437,7 +1437,7 @@ export default function MyPostForm(props) {
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1451,7 +1451,7 @@ export default function MyPostForm(props) {
             value = result?.profile_url ?? value;
           }
           if (errors.profile_url?.hasError) {
-            await runValidationTasks(\\"profile_url\\", value);
+            runValidationTasks(\\"profile_url\\", value);
           }
           setProfile_url(value);
         }}
@@ -1593,7 +1593,7 @@ export default function NestedJson(props) {
     >
       <TextField
         label=\\"firstName\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1605,7 +1605,7 @@ export default function NestedJson(props) {
             value = result?.firstName ?? value;
           }
           if (errors.firstName?.hasError) {
-            await runValidationTasks(\\"firstName\\", value);
+            runValidationTasks(\\"firstName\\", value);
           }
           setFirstName(value);
         }}
@@ -1616,7 +1616,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"lastName\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1628,7 +1628,7 @@ export default function NestedJson(props) {
             value = result?.lastName ?? value;
           }
           if (errors.lastName?.hasError) {
-            await runValidationTasks(\\"lastName\\", value);
+            runValidationTasks(\\"lastName\\", value);
           }
           setLastName(value);
         }}
@@ -1644,7 +1644,7 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1656,7 +1656,7 @@ export default function NestedJson(props) {
             value = result?.bio?.favoriteQuote ?? value;
           }
           if (errors.bio.favoriteQuote?.hasError) {
-            await runValidationTasks(\\"bio.favoriteQuote\\", value);
+            runValidationTasks(\\"bio.favoriteQuote\\", value);
           }
           setBio({ ...bio, favoriteQuote: value });
         }}
@@ -1669,7 +1669,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1681,7 +1681,7 @@ export default function NestedJson(props) {
             value = result?.bio?.favoriteAnimal ?? value;
           }
           if (errors.bio.favoriteAnimal?.hasError) {
-            await runValidationTasks(\\"bio.favoriteAnimal\\", value);
+            runValidationTasks(\\"bio.favoriteAnimal\\", value);
           }
           setBio({ ...bio, favoriteAnimal: value });
         }}
@@ -1851,7 +1851,7 @@ export default function NestedJson(props) {
       <TextField
         label=\\"firstName\\"
         defaultValue={firstName}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1863,7 +1863,7 @@ export default function NestedJson(props) {
             value = result?.firstName ?? value;
           }
           if (errors.firstName?.hasError) {
-            await runValidationTasks(\\"firstName\\", value);
+            runValidationTasks(\\"firstName\\", value);
           }
           setFirstName(value);
         }}
@@ -1875,7 +1875,7 @@ export default function NestedJson(props) {
       <TextField
         label=\\"lastName\\"
         defaultValue={lastName}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1887,7 +1887,7 @@ export default function NestedJson(props) {
             value = result?.lastName ?? value;
           }
           if (errors.lastName?.hasError) {
-            await runValidationTasks(\\"lastName\\", value);
+            runValidationTasks(\\"lastName\\", value);
           }
           setLastName(value);
         }}
@@ -1904,7 +1904,7 @@ export default function NestedJson(props) {
       <TextField
         label=\\"favoriteQuote\\"
         defaultValue={bio.favoriteQuote}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1916,7 +1916,7 @@ export default function NestedJson(props) {
             value = result?.bio?.favoriteQuote ?? value;
           }
           if (errors.bio.favoriteQuote?.hasError) {
-            await runValidationTasks(\\"bio.favoriteQuote\\", value);
+            runValidationTasks(\\"bio.favoriteQuote\\", value);
           }
           setBio({ ...bio, favoriteQuote: value });
         }}
@@ -1930,7 +1930,7 @@ export default function NestedJson(props) {
       <TextField
         label=\\"favoriteAnimal\\"
         defaultValue={bio.favoriteAnimal}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1942,7 +1942,7 @@ export default function NestedJson(props) {
             value = result?.bio?.favoriteAnimal ?? value;
           }
           if (errors.bio.favoriteAnimal?.hasError) {
-            await runValidationTasks(\\"bio.favoriteAnimal\\", value);
+            runValidationTasks(\\"bio.favoriteAnimal\\", value);
           }
           setBio({ ...bio, favoriteAnimal: value });
         }}
@@ -2107,7 +2107,7 @@ export default function CustomWithSectionalElements(props) {
       ></Heading>
       <TextField
         label=\\"Label\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2117,7 +2117,7 @@ export default function CustomWithSectionalElements(props) {
             value = result?.name ?? value;
           }
           if (errors.name?.hasError) {
-            await runValidationTasks(\\"name\\", value);
+            runValidationTasks(\\"name\\", value);
           }
           setName(value);
         }}
@@ -2337,7 +2337,7 @@ export default function MyPostForm(props) {
         label=\\"Caption\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2350,7 +2350,7 @@ export default function MyPostForm(props) {
             value = result?.caption ?? value;
           }
           if (errors.caption?.hasError) {
-            await runValidationTasks(\\"caption\\", value);
+            runValidationTasks(\\"caption\\", value);
           }
           setCaption(value);
         }}
@@ -2363,7 +2363,7 @@ export default function MyPostForm(props) {
         label=\\"Username\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2376,7 +2376,7 @@ export default function MyPostForm(props) {
             value = result?.username ?? value;
           }
           if (errors.username?.hasError) {
-            await runValidationTasks(\\"username\\", value);
+            runValidationTasks(\\"username\\", value);
           }
           setUsername(value);
         }}
@@ -2389,7 +2389,7 @@ export default function MyPostForm(props) {
         label=\\"Post url\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2402,7 +2402,7 @@ export default function MyPostForm(props) {
             value = result?.post_url ?? value;
           }
           if (errors.post_url?.hasError) {
-            await runValidationTasks(\\"post_url\\", value);
+            runValidationTasks(\\"post_url\\", value);
           }
           setPost_url(value);
         }}
@@ -2415,7 +2415,7 @@ export default function MyPostForm(props) {
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2428,7 +2428,7 @@ export default function MyPostForm(props) {
             value = result?.profile_url ?? value;
           }
           if (errors.profile_url?.hasError) {
-            await runValidationTasks(\\"profile_url\\", value);
+            runValidationTasks(\\"profile_url\\", value);
           }
           setProfile_url(value);
         }}
@@ -2645,7 +2645,7 @@ export default function MyPostForm(props) {
       <TextAreaField
         label=\\"Label\\"
         defaultValue={TextAreaFieldbbd63464}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2659,7 +2659,7 @@ export default function MyPostForm(props) {
             value = result?.TextAreaFieldbbd63464 ?? value;
           }
           if (errors.TextAreaFieldbbd63464?.hasError) {
-            await runValidationTasks(\\"TextAreaFieldbbd63464\\", value);
+            runValidationTasks(\\"TextAreaFieldbbd63464\\", value);
           }
           setTextAreaFieldbbd63464(value);
         }}
@@ -2675,7 +2675,7 @@ export default function MyPostForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={caption}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2689,7 +2689,7 @@ export default function MyPostForm(props) {
             value = result?.caption ?? value;
           }
           if (errors.caption?.hasError) {
-            await runValidationTasks(\\"caption\\", value);
+            runValidationTasks(\\"caption\\", value);
           }
           setCaption(value);
         }}
@@ -2703,7 +2703,7 @@ export default function MyPostForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={username}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2717,7 +2717,7 @@ export default function MyPostForm(props) {
             value = result?.username ?? value;
           }
           if (errors.username?.hasError) {
-            await runValidationTasks(\\"username\\", value);
+            runValidationTasks(\\"username\\", value);
           }
           setUsername(value);
         }}
@@ -2731,7 +2731,7 @@ export default function MyPostForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={profile_url}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2745,7 +2745,7 @@ export default function MyPostForm(props) {
             value = result?.profile_url ?? value;
           }
           if (errors.profile_url?.hasError) {
-            await runValidationTasks(\\"profile_url\\", value);
+            runValidationTasks(\\"profile_url\\", value);
           }
           setProfile_url(value);
         }}
@@ -2759,7 +2759,7 @@ export default function MyPostForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={post_url}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2773,7 +2773,7 @@ export default function MyPostForm(props) {
             value = result?.post_url ?? value;
           }
           if (errors.post_url?.hasError) {
-            await runValidationTasks(\\"post_url\\", value);
+            runValidationTasks(\\"post_url\\", value);
           }
           setPost_url(value);
         }}
@@ -3137,7 +3137,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
@@ -3155,7 +3155,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.num ?? value;
           }
           if (errors.num?.hasError) {
-            await runValidationTasks(\\"num\\", value);
+            runValidationTasks(\\"num\\", value);
           }
           setNum(value);
         }}
@@ -3169,7 +3169,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = Number(e.target.value);
           if (onChange) {
             const modelFields = {
@@ -3187,7 +3187,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.rootbeer ?? value;
           }
           if (errors.rootbeer?.hasError) {
-            await runValidationTasks(\\"rootbeer\\", value);
+            runValidationTasks(\\"rootbeer\\", value);
           }
           setRootbeer(value);
         }}
@@ -3201,7 +3201,7 @@ export default function InputGalleryCreateForm(props) {
         name=\\"attend\\"
         isReadOnly={false}
         isRequired=\\"false\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = e.target.value === \\"true\\";
           if (onChange) {
             const modelFields = {
@@ -3219,7 +3219,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.attend ?? value;
           }
           if (errors.attend?.hasError) {
-            await runValidationTasks(\\"attend\\", value);
+            runValidationTasks(\\"attend\\", value);
           }
           setAttend(value);
         }}
@@ -3244,7 +3244,7 @@ export default function InputGalleryCreateForm(props) {
         isDisabled={false}
         defaultPressed={false}
         isPressed={maybeSlide}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = !maybeSlide;
           if (onChange) {
             const modelFields = {
@@ -3262,7 +3262,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.maybeSlide ?? value;
           }
           if (errors.maybeSlide?.hasError) {
-            await runValidationTasks(\\"maybeSlide\\", value);
+            runValidationTasks(\\"maybeSlide\\", value);
           }
           setMaybeSlide(value);
         }}
@@ -3277,7 +3277,7 @@ export default function InputGalleryCreateForm(props) {
         value=\\"maybeCheck\\"
         isDisabled={false}
         defaultChecked={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
             const modelFields = {
@@ -3295,7 +3295,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.maybeCheck ?? value;
           }
           if (errors.maybeCheck?.hasError) {
-            await runValidationTasks(\\"maybeCheck\\", value);
+            runValidationTasks(\\"maybeCheck\\", value);
           }
           setMaybeCheck(value);
         }}
@@ -3320,7 +3320,7 @@ export default function InputGalleryCreateForm(props) {
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -3338,7 +3338,7 @@ export default function InputGalleryCreateForm(props) {
               value = result?.arrayTypeField ?? value;
             }
             if (errors.arrayTypeField?.hasError) {
-              await runValidationTasks(\\"arrayTypeField\\", value);
+              runValidationTasks(\\"arrayTypeField\\", value);
             }
             setCurrentArrayTypeFieldValue(value);
           }}
@@ -3357,7 +3357,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"datetime-local\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = Number(new Date(e.target.value));
           if (onChange) {
             const modelFields = {
@@ -3375,7 +3375,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.timestamp ?? value;
           }
           if (errors.timestamp?.hasError) {
-            await runValidationTasks(\\"timestamp\\", value);
+            runValidationTasks(\\"timestamp\\", value);
           }
           setTimestamp(value);
         }}
@@ -3388,7 +3388,7 @@ export default function InputGalleryCreateForm(props) {
         label=\\"Ippy\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -3406,7 +3406,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.ippy ?? value;
           }
           if (errors.ippy?.hasError) {
-            await runValidationTasks(\\"ippy\\", value);
+            runValidationTasks(\\"ippy\\", value);
           }
           setIppy(value);
         }}
@@ -3420,7 +3420,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"time\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -3438,7 +3438,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.timeisnow ?? value;
           }
           if (errors.timeisnow?.hasError) {
-            await runValidationTasks(\\"timeisnow\\", value);
+            runValidationTasks(\\"timeisnow\\", value);
           }
           setTimeisnow(value);
         }}
@@ -3827,7 +3827,7 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"number\\"
         defaultValue={num}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
@@ -3845,7 +3845,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.num ?? value;
           }
           if (errors.num?.hasError) {
-            await runValidationTasks(\\"num\\", value);
+            runValidationTasks(\\"num\\", value);
           }
           setNum(value);
         }}
@@ -3860,7 +3860,7 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"number\\"
         defaultValue={rootbeer}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = Number(e.target.value);
           if (onChange) {
             const modelFields = {
@@ -3878,7 +3878,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.rootbeer ?? value;
           }
           if (errors.rootbeer?.hasError) {
-            await runValidationTasks(\\"rootbeer\\", value);
+            runValidationTasks(\\"rootbeer\\", value);
           }
           setRootbeer(value);
         }}
@@ -3893,7 +3893,7 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         isRequired=\\"false\\"
         defaultValue={attend}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = e.target.value === \\"true\\";
           if (onChange) {
             const modelFields = {
@@ -3911,7 +3911,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.attend ?? value;
           }
           if (errors.attend?.hasError) {
-            await runValidationTasks(\\"attend\\", value);
+            runValidationTasks(\\"attend\\", value);
           }
           setAttend(value);
         }}
@@ -3937,7 +3937,7 @@ export default function InputGalleryCreateForm(props) {
         defaultPressed={false}
         isPressed={maybeSlide}
         defaultValue={maybeSlide}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = !maybeSlide;
           if (onChange) {
             const modelFields = {
@@ -3955,7 +3955,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.maybeSlide ?? value;
           }
           if (errors.maybeSlide?.hasError) {
-            await runValidationTasks(\\"maybeSlide\\", value);
+            runValidationTasks(\\"maybeSlide\\", value);
           }
           setMaybeSlide(value);
         }}
@@ -3971,7 +3971,7 @@ export default function InputGalleryCreateForm(props) {
         isDisabled={false}
         defaultChecked={false}
         defaultValue={maybeCheck}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
             const modelFields = {
@@ -3989,7 +3989,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.maybeCheck ?? value;
           }
           if (errors.maybeCheck?.hasError) {
-            await runValidationTasks(\\"maybeCheck\\", value);
+            runValidationTasks(\\"maybeCheck\\", value);
           }
           setMaybeCheck(value);
         }}
@@ -4014,7 +4014,7 @@ export default function InputGalleryCreateForm(props) {
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -4032,7 +4032,7 @@ export default function InputGalleryCreateForm(props) {
               value = result?.arrayTypeField ?? value;
             }
             if (errors.arrayTypeField?.hasError) {
-              await runValidationTasks(\\"arrayTypeField\\", value);
+              runValidationTasks(\\"arrayTypeField\\", value);
             }
             setCurrentArrayTypeFieldValue(value);
           }}
@@ -4052,7 +4052,7 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"datetime-local\\"
         defaultValue={timestamp}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = Number(new Date(e.target.value));
           if (onChange) {
             const modelFields = {
@@ -4070,7 +4070,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.timestamp ?? value;
           }
           if (errors.timestamp?.hasError) {
-            await runValidationTasks(\\"timestamp\\", value);
+            runValidationTasks(\\"timestamp\\", value);
           }
           setTimestamp(value);
         }}
@@ -4084,7 +4084,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={ippy}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -4102,7 +4102,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.ippy ?? value;
           }
           if (errors.ippy?.hasError) {
-            await runValidationTasks(\\"ippy\\", value);
+            runValidationTasks(\\"ippy\\", value);
           }
           setIppy(value);
         }}
@@ -4117,7 +4117,7 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"time\\"
         defaultValue={timeisnow}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -4135,7 +4135,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.timeisnow ?? value;
           }
           if (errors.timeisnow?.hasError) {
-            await runValidationTasks(\\"timeisnow\\", value);
+            runValidationTasks(\\"timeisnow\\", value);
           }
           setTimeisnow(value);
         }}
@@ -4361,7 +4361,7 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -4375,7 +4375,7 @@ export default function PostCreateFormRow(props) {
               value = result?.username ?? value;
             }
             if (errors.username?.hasError) {
-              await runValidationTasks(\\"username\\", value);
+              runValidationTasks(\\"username\\", value);
             }
             setUsername(value);
           }}
@@ -4389,7 +4389,7 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -4403,7 +4403,7 @@ export default function PostCreateFormRow(props) {
               value = result?.caption ?? value;
             }
             if (errors.caption?.hasError) {
-              await runValidationTasks(\\"caption\\", value);
+              runValidationTasks(\\"caption\\", value);
             }
             setCaption(value);
           }}
@@ -4418,7 +4418,7 @@ export default function PostCreateFormRow(props) {
         descriptiveText=\\"post url to use for the component\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -4432,7 +4432,7 @@ export default function PostCreateFormRow(props) {
             value = result?.post_url ?? value;
           }
           if (errors.post_url?.hasError) {
-            await runValidationTasks(\\"post_url\\", value);
+            runValidationTasks(\\"post_url\\", value);
           }
           setPost_url(value);
         }}
@@ -4446,7 +4446,7 @@ export default function PostCreateFormRow(props) {
         descriptiveText=\\"profile image url\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -4460,7 +4460,7 @@ export default function PostCreateFormRow(props) {
             value = result?.profile_url ?? value;
           }
           if (errors.profile_url?.hasError) {
-            await runValidationTasks(\\"profile_url\\", value);
+            runValidationTasks(\\"profile_url\\", value);
           }
           setProfile_url(value);
         }}
@@ -4473,7 +4473,7 @@ export default function PostCreateFormRow(props) {
         label=\\"Label\\"
         placeholder=\\"Please select an option\\"
         value={status}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -4487,7 +4487,7 @@ export default function PostCreateFormRow(props) {
             value = result?.status ?? value;
           }
           if (errors.status?.hasError) {
-            await runValidationTasks(\\"status\\", value);
+            runValidationTasks(\\"status\\", value);
           }
           setStatus(value);
         }}
