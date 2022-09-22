@@ -294,7 +294,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
 
 /**
   if (errors.name?.hasError) {
-    await runValidationTasks("name", value);
+    runValidationTasks("name", value);
   }
  */
 function getOnChangeValidationBlock(fieldName: string) {
@@ -307,12 +307,10 @@ function getOnChangeValidationBlock(fieldName: string) {
     factory.createBlock(
       [
         factory.createExpressionStatement(
-          factory.createAwaitExpression(
-            factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
-              factory.createStringLiteral(fieldName),
-              factory.createIdentifier('value'),
-            ]),
-          ),
+          factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+            factory.createStringLiteral(fieldName),
+            factory.createIdentifier('value'),
+          ]),
         ),
       ],
       true,
@@ -468,7 +466,7 @@ export const buildOnChangeStatement = (
       factory.createJsxExpression(
         undefined,
         factory.createArrowFunction(
-          [factory.createModifier(SyntaxKind.AsyncKeyword)],
+          undefined,
           undefined,
           [
             factory.createParameterDeclaration(
@@ -501,7 +499,7 @@ export const buildOnChangeStatement = (
     factory.createJsxExpression(
       undefined,
       factory.createArrowFunction(
-        [factory.createModifier(SyntaxKind.AsyncKeyword)],
+        undefined,
         undefined,
         [
           factory.createParameterDeclaration(
