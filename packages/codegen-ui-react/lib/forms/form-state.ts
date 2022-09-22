@@ -24,6 +24,7 @@ import {
   SyntaxKind,
   ObjectLiteralExpression,
   CallExpression,
+  PropertyAssignment,
 } from 'typescript';
 
 export const getCurrentValueName = (fieldName: string) => `current${capitalizeFirstLetter(fieldName)}Value`;
@@ -72,20 +73,65 @@ export const getDefaultValueExpression = (
   }
   return factory.createIdentifier('undefined');
 };
+/* ex. const initialValues = {
+  name: undefined,
+  isChecked: false
+}
+*/
+export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement => {
+  const stateNames = new Set<string>();
+  const propertyAssignments = Object.entries(fieldConfigs).reduce<PropertyAssignment[]>(
+    (acc, [name, { dataType, componentType }]) => {
+      const stateName = name.split('.')[0];
+      if (!stateNames.has(stateName)) {
+        acc.push(
+          factory.createPropertyAssignment(
+            factory.createIdentifier(stateName),
+            getDefaultValueExpression(name, componentType, dataType),
+          ),
+        );
+        stateNames.add(stateName);
+      }
+      return acc;
+    },
+    [],
+  );
+
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('initialValues'),
+          undefined,
+          undefined,
+          factory.createObjectLiteralExpression(propertyAssignments, true),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
+};
 
 /**
  * iterates field configs to create useState hooks for each field
- * populates the default values as undefined if it as a nested object, relationship model or nonModel
- * the default is an empty object
  * @param fieldConfigs
  * @returns
  */
 export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
   const stateNames = new Set<string>();
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { dataType, componentType }]) => {
+  return Object.keys(fieldConfigs).reduce<Statement[]>((acc, name) => {
     const stateName = name.split('.')[0];
     if (!stateNames.has(stateName)) {
-      acc.push(buildUseStateExpression(stateName, getDefaultValueExpression(name, componentType, dataType)));
+      acc.push(
+        buildUseStateExpression(
+          stateName,
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('initialValues'),
+            factory.createIdentifier(stateName),
+          ),
+        ),
+      );
       stateNames.add(stateName);
     }
     return acc;
@@ -93,39 +139,68 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
 };
 
 /**
- * function used by the onClear/onReset button cta
+ * function used by the Clear/ Reset button
  * it's a reset type but we also need to clear the state of the input fields as well
  *
  * ex.
  * const resetStateValues = () => {
- *  setName('')
- *  setLastName('')
+ *  setName(initialValues.name)
+ *  setLastName(initialValues.lastName)
  *   ....
  * };
  */
-export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>) => {
+export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>, recordName?: string) => {
+  const cleanValues = recordName ? 'cleanValues' : 'initialValues';
+
   const stateNames = new Set<string>();
-  const setStateExpressions = Object.entries(fieldConfigs).reduce<Statement[]>(
-    (acc, [name, { dataType, componentType, isArray }]) => {
-      const stateName = name.split('.')[0];
-      if (!stateNames.has(stateName)) {
-        acc.push(setStateExpression(stateName, getDefaultValueExpression(name, componentType, dataType)));
-        if (isArray) {
-          acc.push(
-            setStateExpression(
-              getCurrentValueName(stateName),
-              getDefaultValueExpression(name, componentType, dataType),
-            ),
-          );
-        }
-        stateNames.add(stateName);
+  const expressions = Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { isArray }]) => {
+    const stateName = name.split('.')[0];
+    if (!stateNames.has(stateName)) {
+      acc.push(
+        setStateExpression(
+          stateName,
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(cleanValues),
+            factory.createIdentifier(stateName),
+          ),
+        ),
+      );
+      if (isArray) {
+        acc.push(setStateExpression(getCurrentValueName(stateName), factory.createStringLiteral('')));
       }
-      return acc;
-    },
-    [],
-  );
+      stateNames.add(stateName);
+    }
+    return acc;
+  }, []);
+
+  // ex. const cleanValues = {...initialValues, ...bookRecord}
+  if (recordName) {
+    expressions.unshift(
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('cleanValues'),
+              undefined,
+              undefined,
+              factory.createObjectLiteralExpression(
+                [
+                  factory.createSpreadAssignment(factory.createIdentifier('initialValues')),
+                  factory.createSpreadAssignment(factory.createIdentifier(recordName)),
+                ],
+                false,
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
+    );
+  }
+
   // also reset the state of the errors
-  setStateExpressions.push(setStateExpression('errors', factory.createObjectLiteralExpression()));
+  expressions.push(setStateExpression('errors', factory.createObjectLiteralExpression()));
   return factory.createVariableStatement(
     undefined,
     factory.createVariableDeclarationList(
@@ -140,7 +215,7 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
             [],
             undefined,
             factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-            factory.createBlock(setStateExpressions, true),
+            factory.createBlock(expressions, true),
           ),
         ),
       ],

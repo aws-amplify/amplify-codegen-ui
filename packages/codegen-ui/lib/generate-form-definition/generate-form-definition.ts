@@ -78,7 +78,7 @@ export function generateFormDefinition({
 
   mapElements({ form, formDefinition, modelFieldsConfigs });
 
-  formDefinition.buttons = mapButtons(form.cta);
+  formDefinition.buttons = mapButtons(form.formActionType, form.cta);
 
   return formDefinition;
 }

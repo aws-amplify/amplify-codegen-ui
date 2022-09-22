@@ -13,34 +13,27 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponentChild, FormDefinition, ButtonConfig } from '../../../types';
+import { StudioComponentChild, FormDefinition } from '../../../types';
 import { FormDefinitionButtonElement } from '../../../types/form/form-definition-element';
 
-const mapButtonPosition = (buttonElement: FormDefinitionButtonElement): StudioComponentChild => {
-  return {
-    componentType: buttonElement.componentType,
-    name: buttonElement.name,
-    properties: {
-      children: {
-        value: buttonElement.props.children,
-      },
-      type: {
-        value: buttonElement.props.type ? buttonElement.props.type : 'button',
-      },
-      ...(buttonElement.props.variation && { variation: { value: buttonElement.props.variation } }),
-    },
-  };
-};
-
-const mapButtonNameToConfig = (name: string, config: ButtonConfig) => {
-  if (name === 'clear') {
-    return config.buttonConfigs.clear;
+function getButtonChild(
+  key: string,
+  buttonConfigs: { [key: string]: FormDefinitionButtonElement },
+): StudioComponentChild | undefined {
+  const buttonElement = buttonConfigs[key];
+  if (buttonElement) {
+    return {
+      name: buttonElement.name,
+      componentType: buttonElement.componentType,
+      properties: Object.fromEntries(
+        Object.entries(buttonElement.props).map(([propKey, value]) => {
+          return [propKey, { value }];
+        }),
+      ),
+    };
   }
-  if (name === 'cancel') {
-    return config.buttonConfigs.cancel;
-  }
-  return config.buttonConfigs.submit;
-};
+  return undefined;
+}
 
 export const ctaButtonMapper = (formDefinition: FormDefinition): StudioComponentChild => {
   const CTAComponent: StudioComponentChild = {
@@ -54,30 +47,26 @@ export const ctaButtonMapper = (formDefinition: FormDefinition): StudioComponent
     children: [],
   };
 
-  formDefinition.buttons.buttonMatrix[0].forEach((button) => {
-    if (Object.keys(formDefinition.buttons.buttonConfigs).includes(button)) {
-      const config = mapButtonNameToConfig(button, formDefinition.buttons);
-      if (config) {
-        const buttonDefinition = mapButtonPosition(config);
-        CTAComponent.children?.push(buttonDefinition);
-      }
+  formDefinition.buttons.buttonMatrix[0].forEach((buttonKey) => {
+    const buttonChild = getButtonChild(buttonKey, formDefinition.buttons.buttonConfigs);
+
+    if (buttonChild) {
+      CTAComponent.children?.push(buttonChild);
     }
   });
 
   const rightAlignCTA: StudioComponentChild = {
     componentType: 'Flex',
-    name: 'SubmitAndResetFlex',
+    name: 'RightAlignCTASubFlex',
     properties: {},
     children: [],
   };
 
-  formDefinition.buttons.buttonMatrix[1].forEach((button) => {
-    if (Object.keys(formDefinition.buttons.buttonConfigs).includes(button)) {
-      const config = mapButtonNameToConfig(button, formDefinition.buttons);
-      if (config) {
-        const buttonDefinition = mapButtonPosition(config);
-        rightAlignCTA.children?.push(buttonDefinition);
-      }
+  formDefinition.buttons.buttonMatrix[1].forEach((buttonKey) => {
+    const buttonChild = getButtonChild(buttonKey, formDefinition.buttons.buttonConfigs);
+
+    if (buttonChild) {
+      rightAlignCTA.children?.push(buttonChild);
     }
   });
 
