@@ -119,8 +119,6 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
 
 /**
  * iterates field configs to create useState hooks for each field
- * populates the default values as undefined if it as a nested object, relationship model or nonModel
- * the default is an empty object
  * @param fieldConfigs
  * @returns
  */
@@ -151,13 +149,13 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
 };
 
 /**
- * function used by the onClear/onReset button cta
+ * function used by the Clear/ Reset button
  * it's a reset type but we also need to clear the state of the input fields as well
  *
  * ex.
  * const resetStateValues = () => {
- *  setName('')
- *  setLastName('')
+ *  setName(initialValues.name)
+ *  setLastName(initialValues.lastName)
  *   ....
  * };
  */

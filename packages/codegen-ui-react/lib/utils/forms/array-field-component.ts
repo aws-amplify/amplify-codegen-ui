@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
-import { isValidVariableName } from '@aws-amplify/codegen-ui/lib/utils';
+import { isValidVariableName } from '@aws-amplify/codegen-ui';
 import { factory, JsxChild, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
 import {
   capitalizeFirstLetter,
@@ -22,6 +22,7 @@ import {
   getCurrentValueName,
   getSetNameIdentifier,
 } from '../../forms/form-state';
+import { addUseEffectWrapper } from '../generate-react-hooks';
 
 export const generateArrayFieldComponent = () => {
   const iconPath = 'M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z';
@@ -101,6 +102,38 @@ export const generateArrayFieldComponent = () => {
         NodeFlags.Const,
       ),
     ),
+
+    addUseEffectWrapper(
+      [
+        factory.createIfStatement(
+          factory.createIdentifier('isEditing'),
+          factory.createBlock(
+            [
+              factory.createExpressionStatement(
+                factory.createCallChain(
+                  factory.createPropertyAccessChain(
+                    factory.createPropertyAccessChain(
+                      factory.createIdentifier('inputFieldRef'),
+                      factory.createToken(SyntaxKind.QuestionDotToken),
+                      factory.createIdentifier('current'),
+                    ),
+                    factory.createToken(SyntaxKind.QuestionDotToken),
+                    factory.createIdentifier('focus'),
+                  ),
+                  undefined,
+                  undefined,
+                  [],
+                ),
+              ),
+            ],
+            true,
+          ),
+          undefined,
+        ),
+      ],
+      ['isEditing'],
+    ),
+
     factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -708,21 +741,6 @@ export const generateArrayFieldComponent = () => {
                                                         factory.createIdentifier('setIsEditing'),
                                                         undefined,
                                                         [factory.createTrue()],
-                                                      ),
-                                                    ),
-                                                    factory.createExpressionStatement(
-                                                      factory.createCallExpression(
-                                                        factory.createPropertyAccessChain(
-                                                          factory.createPropertyAccessChain(
-                                                            factory.createIdentifier('inputFieldRef'),
-                                                            factory.createToken(SyntaxKind.QuestionDotToken),
-                                                            factory.createIdentifier('current'),
-                                                          ),
-                                                          factory.createToken(SyntaxKind.QuestionDotToken),
-                                                          factory.createIdentifier('focus'),
-                                                        ),
-                                                        undefined,
-                                                        [],
                                                       ),
                                                     ),
                                                   ],

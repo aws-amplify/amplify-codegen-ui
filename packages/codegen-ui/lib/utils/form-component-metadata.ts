@@ -69,6 +69,7 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
       const metadata: FieldConfigMetadata = {
         validationRules: [],
         componentType: config.componentType,
+        isArray: 'isArray' in config && config.isArray,
       };
       if ('validations' in config && config.validations) {
         metadata.validationRules = config.validations.map<FieldValidationConfiguration>((validation) => {

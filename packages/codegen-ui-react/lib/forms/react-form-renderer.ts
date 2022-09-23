@@ -65,6 +65,7 @@ import { RequiredKeys } from '../utils/type-utils';
 import {
   buildMutationBindings,
   buildOverrideTypesBindings,
+  buildResetValuesOnRecordUpdate,
   buildSetStateFunction,
   buildUpdateDatastoreQuery,
   buildValidations,
@@ -73,7 +74,7 @@ import {
 import {
   buildUseStateExpression,
   getCurrentValueName,
-  getDefaultValueExpression,
+  getInitialValues,
   getUseStateHooks,
   resetStateFunction,
 } from './form-state';
@@ -122,8 +123,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.formComponent = mapFormDefinitionToComponent(this.component.name, this.formDefinition);
 
     this.componentMetadata = computeComponentMetadata(this.formComponent);
-    this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition, dataSchema);
-    console.log(this.componentMetadata.formMetadata);
+    this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition);
   }
 
   @handleCodegenErrors
@@ -335,6 +335,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       formActionType,
     } = this.component;
     const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
+    const lowerCaseDataTypeNameRecord = `${lowerCaseDataTypeName}Record`;
+    const isDataStoreUpdateForm = dataSourceType === 'DataStore' && formActionType === 'update';
 
     if (!formMetadata) {
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
@@ -399,11 +401,29 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       );
     }
 
-    statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
+    statements.push(getInitialValues(formMetadata.fieldConfigs));
 
+    statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
-    statements.push(resetStateFunction(formMetadata.fieldConfigs));
+    statements.push(
+      resetStateFunction(formMetadata.fieldConfigs, isDataStoreUpdateForm ? lowerCaseDataTypeNameRecord : undefined),
+    );
+
+    if (isDataStoreUpdateForm) {
+      statements.push(
+        buildUseStateExpression(lowerCaseDataTypeNameRecord, factory.createIdentifier(lowerCaseDataTypeName)),
+      );
+      statements.push(
+        addUseEffectWrapper(
+          buildUpdateDatastoreQuery(dataTypeName, lowerCaseDataTypeNameRecord),
+          // TODO: change once cpk is supported in datastore
+          ['id', lowerCaseDataTypeName],
+        ),
+      );
+
+      statements.push(buildResetValuesOnRecordUpdate(lowerCaseDataTypeNameRecord));
+    }
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
@@ -411,59 +431,43 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
       this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
-      if (formActionType === 'update') {
-        statements.push(
-          buildUseStateExpression(`${lowerCaseDataTypeName}Record`, factory.createIdentifier(lowerCaseDataTypeName)),
-        );
-        statements.push(
-          addUseEffectWrapper(
-            buildUpdateDatastoreQuery(dataTypeName, formMetadata.fieldConfigs),
-            // TODO: change once cpk is supported in datastore
-            ['id', lowerCaseDataTypeName],
-          ),
-        );
-      }
     }
+
     if (dataSourceType === 'Custom' && formActionType === 'update') {
       statements.push(addUseEffectWrapper([buildSetStateFunction(formMetadata.fieldConfigs)], []));
     }
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
-    Object.entries(formMetadata.fieldConfigs).forEach(
-      ([field, { isArray, componentType, dataType, sanitizedFieldName }]) => {
-        if (isArray) {
-          const renderedName = sanitizedFieldName || field;
-          statements.push(
-            buildUseStateExpression(
-              getCurrentValueName(renderedName),
-              getDefaultValueExpression(field, componentType, dataType),
-            ),
-            factory.createVariableStatement(
-              undefined,
-              factory.createVariableDeclarationList(
-                [
-                  factory.createVariableDeclaration(
-                    factory.createIdentifier(`${renderedName}Ref`),
-                    undefined,
-                    undefined,
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('React'),
-                        factory.createIdentifier('createRef'),
-                      ),
-                      undefined,
-                      [],
+    Object.entries(formMetadata.fieldConfigs).forEach(([field, { isArray, sanitizedFieldName }]) => {
+      if (isArray) {
+        const renderedName = sanitizedFieldName || field;
+        statements.push(
+          buildUseStateExpression(getCurrentValueName(renderedName), factory.createStringLiteral('')),
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createIdentifier(`${renderedName}Ref`),
+                  undefined,
+                  undefined,
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('React'),
+                      factory.createIdentifier('createRef'),
                     ),
+                    undefined,
+                    [],
                   ),
-                ],
-                NodeFlags.Const,
-              ),
+                ),
+              ],
+              NodeFlags.Const,
             ),
-          );
-        }
-      },
-    );
+          ),
+        );
+      }
+    });
     statements.push(buildValidations(formMetadata.fieldConfigs));
     statements.push(runValidationTasksFunction);
 

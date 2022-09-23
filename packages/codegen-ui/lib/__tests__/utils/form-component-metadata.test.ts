@@ -108,7 +108,7 @@ describe('mapFormMetaData', () => {
     });
     it('should not add sanitizedFieldName if name is unique and valid', () => {
       const sanitizedFieldName = generateUniqueFieldName('test_FieldName', usedFieldNames);
-      expect(sanitizedFieldName).toBeUndefined();
+      expect(sanitizedFieldName).toBeFalsy();
       expect(usedFieldNames.has('test_FieldName'.toLowerCase())).toBeTruthy();
     });
     it('should add sanitizedFieldName if name is invalid', () => {
@@ -147,9 +147,9 @@ describe('mapFormMetaData', () => {
           return generateUniqueFieldName(fieldName, usedFieldNames);
         },
       );
-      expect(mappedFieldNames[0]).toEqual(undefined);
-      expect(mappedFieldNames[1]).toEqual(undefined);
-      expect(mappedFieldNames[2]).toEqual(undefined);
+      expect(mappedFieldNames[0]).toBeFalsy();
+      expect(mappedFieldNames[1]).toBeFalsy();
+      expect(mappedFieldNames[2]).toBeFalsy();
       expect(usedFieldNames.has('bio')).toBeTruthy();
       expect(usedFieldNames.has('bio1')).toBeFalsy();
       expect(usedFieldNames.has('favoriteQuote'.toLowerCase())).toBeFalsy();
