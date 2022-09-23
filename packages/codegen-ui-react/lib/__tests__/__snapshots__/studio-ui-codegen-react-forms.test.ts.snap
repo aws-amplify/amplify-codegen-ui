@@ -3632,6 +3632,13 @@ export default function InputGalleryCreateForm(props) {
         type=\\"number\\"
         onChange={(e) => {
           let value = parseInt(e.target.value);
+          if (NaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              num: \\"Value must be a valid number\\",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               num: value,
@@ -3664,6 +3671,13 @@ export default function InputGalleryCreateForm(props) {
         type=\\"number\\"
         onChange={(e) => {
           let value = Number(e.target.value);
+          if (NaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              rootbeer: \\"Value must be a valid number\\",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               num,
@@ -3851,7 +3865,15 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"datetime-local\\"
         onChange={(e) => {
-          let value = Number(new Date(e.target.value));
+          const date = new Date(e.target.value);
+          if (!(date instanceof Date && !isNaN(date))) {
+            setErrors((errors) => ({
+              ...errors,
+              timestamp: \\"The value must be a valid date\\",
+            }));
+            return;
+          }
+          let value = Number(date);
           if (onChange) {
             const modelFields = {
               num,
@@ -4322,6 +4344,13 @@ export default function InputGalleryCreateForm(props) {
         defaultValue={num}
         onChange={(e) => {
           let value = parseInt(e.target.value);
+          if (NaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              num: \\"Value must be a valid number\\",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               num: value,
@@ -4355,6 +4384,13 @@ export default function InputGalleryCreateForm(props) {
         defaultValue={rootbeer}
         onChange={(e) => {
           let value = Number(e.target.value);
+          if (NaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              rootbeer: \\"Value must be a valid number\\",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               num,
@@ -4546,7 +4582,15 @@ export default function InputGalleryCreateForm(props) {
         type=\\"datetime-local\\"
         defaultValue={timestamp}
         onChange={(e) => {
-          let value = Number(new Date(e.target.value));
+          const date = new Date(e.target.value);
+          if (!(date instanceof Date && !isNaN(date))) {
+            setErrors((errors) => ({
+              ...errors,
+              timestamp: \\"The value must be a valid date\\",
+            }));
+            return;
+          }
+          let value = Number(date);
           if (onChange) {
             const modelFields = {
               num,
