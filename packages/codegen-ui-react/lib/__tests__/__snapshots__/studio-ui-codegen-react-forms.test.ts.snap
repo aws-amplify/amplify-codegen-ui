@@ -3352,6 +3352,290 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 
+exports[`amplify form renderer tests datastore form tests should render a form with a resvered word as the field 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Blog } from \\"../models\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+export default function BlogCreateForm(props) {
+  const {
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    title: undefined,
+    content: undefined,
+    switch: undefined,
+    authorName: undefined,
+  };
+  const [title, setTitle] = React.useState(initialValues.title);
+  const [content, setContent] = React.useState(initialValues.content);
+  const [switch1, setSwitch1] = React.useState(initialValues.switch);
+  const [authorName, setAuthorName] = React.useState(initialValues.authorName);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setTitle(initialValues.title);
+    setContent(initialValues.content);
+    setSwitch1(initialValues.switch);
+    setAuthorName(initialValues.authorName);
+    setErrors({});
+  };
+  const validations = {
+    title: [],
+    content: [],
+    switch: [],
+    authorName: [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          title,
+          content,
+          switch: switch1,
+          authorName,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(new Blog(modelFields));
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"BlogCreateForm\\")}
+    >
+      <TextField
+        label=\\"Title\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title: value,
+              content,
+              switch: switch1,
+              authorName,
+            };
+            const result = onChange(modelFields);
+            value = result?.title ?? value;
+          }
+          if (errors.title?.hasError) {
+            runValidationTasks(\\"title\\", value);
+          }
+          setTitle(value);
+        }}
+        onBlur={() => runValidationTasks(\\"title\\", title)}
+        errorMessage={errors.title?.errorMessage}
+        hasError={errors.title?.hasError}
+        {...getOverrideProps(overrides, \\"title\\")}
+      ></TextField>
+      <TextField
+        label=\\"Content\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title,
+              content: value,
+              switch: switch1,
+              authorName,
+            };
+            const result = onChange(modelFields);
+            value = result?.content ?? value;
+          }
+          if (errors.content?.hasError) {
+            runValidationTasks(\\"content\\", value);
+          }
+          setContent(value);
+        }}
+        onBlur={() => runValidationTasks(\\"content\\", content)}
+        errorMessage={errors.content?.errorMessage}
+        hasError={errors.content?.hasError}
+        {...getOverrideProps(overrides, \\"content\\")}
+      ></TextField>
+      <SwitchField
+        label=\\"Switch\\"
+        defaultChecked={false}
+        isDisabled={false}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              title,
+              content,
+              switch: switch1,
+              authorName,
+            };
+            const result = onChange(modelFields);
+            value = result?.switch ?? value;
+          }
+          if (errors.switch?.hasError) {
+            runValidationTasks(\\"switch\\", value);
+          }
+          setSwitch1(value);
+        }}
+        onBlur={() => runValidationTasks(\\"switch\\", switch1)}
+        errorMessage={errors.switch?.errorMessage}
+        hasError={errors.switch?.hasError}
+        {...getOverrideProps(overrides, \\"switch\\")}
+      ></SwitchField>
+      <TextField
+        label=\\"Author name\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title,
+              content,
+              switch: switch1,
+              authorName: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.authorName ?? value;
+          }
+          if (errors.authorName?.hasError) {
+            runValidationTasks(\\"authorName\\", value);
+          }
+          setAuthorName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"authorName\\", authorName)}
+        errorMessage={errors.authorName?.errorMessage}
+        hasError={errors.authorName?.hasError}
+        {...getOverrideProps(overrides, \\"authorName\\")}
+      ></TextField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a form with a resvered word as the field 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
+export declare type BlogCreateFormInputValues<useBase extends boolean = true> = {
+    title?: UseBaseOrValidationType<useBase, string>;
+    content?: UseBaseOrValidationType<useBase, string>;
+    switch?: UseBaseOrValidationType<useBase, boolean>;
+    authorName?: UseBaseOrValidationType<useBase, string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type BlogCreateFormOverridesProps = {
+    BlogCreateFormGrid?: FormProps<GridProps>;
+    title?: FormProps<TextFieldProps>;
+    content?: FormProps<TextFieldProps>;
+    switch?: FormProps<SwitchFieldProps>;
+    authorName?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type BlogCreateFormProps = React.PropsWithChildren<{
+    overrides?: BlogCreateFormOverridesProps | undefined | null;
+} & {
+    onSubmit?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
+    onSuccess?: (fields: BlogCreateFormInputValues) => void;
+    onError?: (fields: BlogCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
+    onValidate?: BlogCreateFormInputValues<false>;
+}>;
+export default function BlogCreateForm(props: BlogCreateFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
