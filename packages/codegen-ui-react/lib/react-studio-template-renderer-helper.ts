@@ -82,7 +82,6 @@ export function transpile(
         inlineSources: inlineSourceMap,
       },
     }).outputText;
-
     const componentText = shouldFormatCode ? formatCode(transpiledCode) : transpiledCode;
 
     /*

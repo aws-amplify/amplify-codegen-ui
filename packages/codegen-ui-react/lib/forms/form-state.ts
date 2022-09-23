@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { FieldConfigMetadata, DataFieldDataType } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, DataFieldDataType, isValidVariableName } from '@aws-amplify/codegen-ui';
 import {
   factory,
   Statement,
@@ -24,6 +24,8 @@ import {
   SyntaxKind,
   ObjectLiteralExpression,
   CallExpression,
+  ElementAccessChain,
+  PropertyAccessChain,
   PropertyAssignment,
 } from 'typescript';
 
@@ -86,7 +88,9 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
       if (!stateNames.has(stateName)) {
         acc.push(
           factory.createPropertyAssignment(
-            factory.createIdentifier(stateName),
+            isValidVariableName(stateName)
+              ? factory.createIdentifier(stateName)
+              : factory.createStringLiteral(stateName),
             getDefaultValueExpression(name, componentType, dataType),
           ),
         );
@@ -119,20 +123,26 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
  * @returns
  */
 export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
-  const stateNames = new Set<string>();
-  return Object.keys(fieldConfigs).reduce<Statement[]>((acc, name) => {
-    const stateName = name.split('.')[0];
-    if (!stateNames.has(stateName)) {
+  const stateNames = new Set();
+  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName }]) => {
+    const fieldName = name.split('.')[0];
+    const renderedFieldName = sanitizedFieldName || fieldName;
+    if (!stateNames.has(renderedFieldName)) {
       acc.push(
         buildUseStateExpression(
-          stateName,
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier('initialValues'),
-            factory.createIdentifier(stateName),
-          ),
+          renderedFieldName,
+          isValidVariableName(fieldName)
+            ? factory.createPropertyAccessExpression(
+                factory.createIdentifier('initialValues'),
+                factory.createIdentifier(fieldName),
+              )
+            : factory.createElementAccessExpression(
+                factory.createIdentifier('initialValues'),
+                factory.createStringLiteral(fieldName),
+              ),
         ),
       );
-      stateNames.add(stateName);
+      stateNames.add(renderedFieldName);
     }
     return acc;
   }, []);
@@ -153,25 +163,34 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
   const cleanValues = recordName ? 'cleanValues' : 'initialValues';
 
   const stateNames = new Set<string>();
-  const expressions = Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { isArray }]) => {
-    const stateName = name.split('.')[0];
-    if (!stateNames.has(stateName)) {
-      acc.push(
-        setStateExpression(
-          stateName,
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier(cleanValues),
-            factory.createIdentifier(stateName),
+  const expressions = Object.entries(fieldConfigs).reduce<Statement[]>(
+    (acc, [name, { isArray, sanitizedFieldName }]) => {
+      const stateName = name.split('.')[0];
+      const renderedName = sanitizedFieldName || stateName;
+      if (!stateNames.has(stateName)) {
+        acc.push(
+          setStateExpression(
+            renderedName,
+            isValidVariableName(stateName)
+              ? factory.createPropertyAccessExpression(
+                  factory.createIdentifier(cleanValues),
+                  factory.createIdentifier(stateName),
+                )
+              : factory.createElementAccessExpression(
+                  factory.createIdentifier(cleanValues),
+                  factory.createStringLiteral(stateName),
+                ),
           ),
-        ),
-      );
-      if (isArray) {
-        acc.push(setStateExpression(getCurrentValueName(stateName), factory.createStringLiteral('')));
+        );
+        if (isArray) {
+          acc.push(setStateExpression(getCurrentValueName(renderedName), factory.createStringLiteral('')));
+        }
+        stateNames.add(stateName);
       }
-      stateNames.add(stateName);
-    }
-    return acc;
-  }, []);
+      return acc;
+    },
+    [],
+  );
 
   // ex. const cleanValues = {...initialValues, ...bookRecord}
   if (recordName) {
@@ -275,14 +294,25 @@ export const buildAccessChain = (values: string[], isOptional = true): Expressio
   const optional = isOptional ? factory.createToken(SyntaxKind.QuestionDotToken) : undefined;
   if (values.length > 1) {
     const [parent, child, ...rest] = values;
-    let propChain = factory.createPropertyAccessChain(
+    let propChain: PropertyAccessChain | ElementAccessChain = factory.createPropertyAccessChain(
       factory.createIdentifier(parent),
       optional,
       factory.createIdentifier(child),
     );
+    if (!isValidVariableName(child)) {
+      propChain = factory.createElementAccessChain(
+        factory.createIdentifier(parent),
+        optional,
+        factory.createStringLiteral(child),
+      );
+    }
     if (rest.length) {
       rest.forEach((value) => {
-        propChain = factory.createPropertyAccessChain(propChain, optional, factory.createIdentifier(value));
+        if (isValidVariableName(value)) {
+          propChain = factory.createPropertyAccessChain(propChain, optional, factory.createIdentifier(value));
+        } else {
+          propChain = factory.createElementAccessChain(propChain, optional, factory.createStringLiteral(value));
+        }
       });
     }
     return propChain;
@@ -304,7 +334,12 @@ export const buildNestedStateSet = (
   if (keyPath.length - 1 === index) {
     return factory.createObjectLiteralExpression([
       factory.createSpreadAssignment(buildAccessChain(currentKeyPath)),
-      factory.createPropertyAssignment(factory.createIdentifier(currentKey), value),
+      factory.createPropertyAssignment(
+        isValidVariableName(currentKey)
+          ? factory.createIdentifier(currentKey)
+          : factory.createComputedPropertyName(factory.createStringLiteral(currentKey)),
+        value,
+      ),
     ]);
   }
   const currentSpreadAssignment = buildAccessChain(currentKeyPath);

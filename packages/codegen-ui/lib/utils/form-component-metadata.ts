@@ -27,12 +27,36 @@ export const getFormFieldStateName = (formName: string) => {
   return [formName.charAt(0).toLowerCase() + formName.slice(1), 'Fields'].join('');
 };
 
+/**
+ * @returns true if string contains special characters except for "." , "_" and 0-9
+ */
+export const isValidVariableName = (input: string): boolean => /^[a-zA-Z_$][a-zA-Z_$0-9]*$/g.test(input);
+
+export const filterFieldName = (input: string): string => input.split('.')[0].replaceAll(/[^a-zA-Z_$]/g, '');
+
 function elementIsInput(element: FormDefinitionElement): element is FormDefinitionInputElement {
   return element.componentType !== 'Text' && element.componentType !== 'Divider' && element.componentType !== 'Heading';
 }
 
+// create mapping for field name collisions
+export function generateUniqueFieldName(name: string, sanitizedFieldNames: Set<string>) {
+  let sanitizedFieldName = isValidVariableName(name) ? name : filterFieldName(name);
+  let count = 1;
+  if (sanitizedFieldNames.has(sanitizedFieldName.toLowerCase()) && !name.includes('.')) {
+    let prospectiveNewName = sanitizedFieldName + count;
+    while (sanitizedFieldNames.has(prospectiveNewName.toLowerCase())) {
+      count += 1;
+      prospectiveNewName = sanitizedFieldName + count;
+    }
+    sanitizedFieldName = prospectiveNewName;
+  }
+  sanitizedFieldNames.add(sanitizedFieldName.toLowerCase());
+  return sanitizedFieldName !== name.split('.')[0] && sanitizedFieldName;
+}
+
 export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition): FormMetadata => {
   const inputElementEntries = Object.entries(formDefinition.elements).filter(([, element]) => elementIsInput(element));
+  const sanitizedFieldNames = new Set<string>();
   return {
     id: form.id,
     name: form.name,
@@ -57,6 +81,12 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
       if ('dataType' in config && config.dataType) {
         metadata.dataType = config.dataType;
       }
+
+      const sanitizedFieldName = generateUniqueFieldName(name, sanitizedFieldNames);
+      if (sanitizedFieldName) {
+        metadata.sanitizedFieldName = sanitizedFieldName;
+      }
+
       updatedConfigs[name] = metadata;
       return updatedConfigs;
     }, {}),

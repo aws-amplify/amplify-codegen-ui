@@ -13,7 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-
+import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
+import { isValidVariableName } from '@aws-amplify/codegen-ui';
 import { factory, JsxChild, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
 import {
   capitalizeFirstLetter,
@@ -970,10 +971,15 @@ export const generateArrayFieldComponent = () => {
   </ArrayField>
  */
 
-export const renderArrayFieldComponent = (fieldName: string, fieldLabel: string, inputField: JsxChild) => {
-  const stateName = getCurrentValueIdentifier(fieldName);
-  const setStateName = getSetNameIdentifier(getCurrentValueName(fieldName));
-
+export const renderArrayFieldComponent = (
+  fieldName: string,
+  fieldLabel: string,
+  fieldConfig: FieldConfigMetadata,
+  inputField: JsxChild,
+) => {
+  const renderedFieldName = fieldConfig.sanitizedFieldName || fieldName;
+  const stateName = getCurrentValueIdentifier(renderedFieldName);
+  const setStateName = getSetNameIdentifier(getCurrentValueName(renderedFieldName));
   return factory.createJsxElement(
     factory.createJsxOpeningElement(
       factory.createIdentifier('ArrayField'),
@@ -1002,7 +1008,7 @@ export const renderArrayFieldComponent = (fieldName: string, fieldLabel: string,
                 [
                   factory.createExpressionStatement(
                     factory.createCallExpression(
-                      factory.createIdentifier(`set${capitalizeFirstLetter(fieldName)}`),
+                      factory.createIdentifier(`set${capitalizeFirstLetter(renderedFieldName)}`),
                       undefined,
                       [factory.createIdentifier('items')],
                     ),
@@ -1026,17 +1032,23 @@ export const renderArrayFieldComponent = (fieldName: string, fieldLabel: string,
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('items'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(fieldName)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(renderedFieldName)),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('hasError'),
           factory.createJsxExpression(
             undefined,
             factory.createPropertyAccessChain(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier('errors'),
-                factory.createIdentifier(fieldName),
-              ),
+              isValidVariableName(fieldName)
+                ? factory.createPropertyAccessExpression(
+                    factory.createIdentifier('errors'),
+                    factory.createIdentifier(fieldName),
+                  )
+                : factory.createElementAccessChain(
+                    factory.createIdentifier('errors'),
+                    factory.createToken(SyntaxKind.QuestionDotToken),
+                    factory.createStringLiteral(fieldName),
+                  ),
               factory.createToken(SyntaxKind.QuestionDotToken),
               factory.createIdentifier('hasError'),
             ),
@@ -1048,7 +1060,7 @@ export const renderArrayFieldComponent = (fieldName: string, fieldLabel: string,
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('inputFieldRef'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(`${fieldName}Ref`)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedFieldName}Ref`)),
         ),
       ]),
     ),

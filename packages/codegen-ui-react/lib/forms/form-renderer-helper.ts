@@ -23,6 +23,7 @@ import {
   FieldConfigMetadata,
   FormMetadata,
   isControlledComponent,
+  isValidVariableName,
 } from '@aws-amplify/codegen-ui';
 import {
   BindingElement,
@@ -35,6 +36,9 @@ import {
   JsxAttribute,
   IfStatement,
   ExpressionStatement,
+  Identifier,
+  StringLiteral,
+  ElementAccessExpression,
 } from 'typescript';
 import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
@@ -76,7 +80,9 @@ export const buildMutationBindings = (form: StudioForm) => {
     );
   }
   if (dataSourceType === 'Custom' && formActionType === 'update') {
-    factory.createBindingElement(undefined, undefined, factory.createIdentifier('initialData'), undefined);
+    elements.push(
+      factory.createBindingElement(undefined, undefined, factory.createIdentifier('initialData'), undefined),
+    );
   }
   elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmit'), undefined));
   return elements;
@@ -125,6 +131,7 @@ export const createValidationExpression = (validationRules: FieldValidationConfi
 
 export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
   const { name: componentName, componentType } = component;
+
   const attributes: JsxAttribute[] = [];
   /*
       boolean => RadioGroupField
@@ -140,6 +147,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
 
   if (componentName in formMetadata.fieldConfigs) {
     const fieldConfig = formMetadata.fieldConfigs[componentName];
+    const renderedVariableName = fieldConfig.sanitizedFieldName || componentName;
     /*
     if the componetName is a dotPath we need to change the access expression to the following
      - bio.user.favorites.Quote => errors['bio.user.favorites.Quote']?.errorMessage
@@ -147,7 +155,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
      - bio => errors.bio?.errorMessage
     */
     const errorKey =
-      componentName.split('.').length > 1
+      componentName.split('.').length > 1 || !isValidVariableName(componentName)
         ? factory.createElementAccessExpression(
             factory.createIdentifier('errors'),
             factory.createStringLiteral(componentName),
@@ -156,17 +164,17 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
             factory.createIdentifier('errors'),
             factory.createIdentifier(componentName),
           );
-    attributes.push(...buildComponentSpecificAttributes({ componentType, componentName }));
+    attributes.push(...buildComponentSpecificAttributes({ componentType, componentName: renderedVariableName }));
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('defaultValue'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(componentName)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(renderedVariableName)),
         ),
       );
     }
     attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs));
-    attributes.push(buildOnBlurStatement(componentName, fieldConfig.isArray));
+    attributes.push(buildOnBlurStatement(componentName, fieldConfig));
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('errorMessage'),
@@ -195,11 +203,11 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('value'),
-          factory.createJsxExpression(undefined, getCurrentValueIdentifier(componentName)),
+          factory.createJsxExpression(undefined, getCurrentValueIdentifier(renderedVariableName)),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('ref'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(`${componentName}Ref`)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedVariableName}Ref`)),
         ),
       );
     }
@@ -300,7 +308,15 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
 function getOnChangeValidationBlock(fieldName: string) {
   return factory.createIfStatement(
     factory.createPropertyAccessChain(
-      factory.createPropertyAccessExpression(factory.createIdentifier('errors'), factory.createIdentifier(fieldName)),
+      isValidVariableName(fieldName)
+        ? factory.createPropertyAccessExpression(
+            factory.createIdentifier('errors'),
+            factory.createIdentifier(fieldName),
+          )
+        : factory.createElementAccessExpression(
+            factory.createIdentifier('errors'),
+            factory.createStringLiteral(fieldName),
+          ),
       factory.createToken(SyntaxKind.QuestionDotToken),
       factory.createIdentifier('hasError'),
     ),
@@ -319,7 +335,17 @@ function getOnChangeValidationBlock(fieldName: string) {
   );
 }
 
-export function buildOnBlurStatement(fieldName: string, isArray: boolean | undefined) {
+export function buildOnBlurStatement(fieldName: string, fieldConfig: FieldConfigMetadata) {
+  const renderedFieldName = fieldConfig.sanitizedFieldName || fieldName;
+  let fieldNameIdentifier: Identifier | ElementAccessExpression = factory.createIdentifier(renderedFieldName);
+  if (fieldName.includes('.')) {
+    const [parent, child] = fieldName.split('.');
+    fieldNameIdentifier = factory.createElementAccessExpression(
+      factory.createIdentifier(parent),
+      factory.createStringLiteral(child),
+    );
+  }
+
   return factory.createJsxAttribute(
     factory.createIdentifier('onBlur'),
     factory.createJsxExpression(
@@ -332,7 +358,7 @@ export function buildOnBlurStatement(fieldName: string, isArray: boolean | undef
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
           factory.createStringLiteral(fieldName),
-          isArray ? getCurrentValueIdentifier(fieldName) : factory.createIdentifier(fieldName),
+          fieldConfig.isArray ? getCurrentValueIdentifier(renderedFieldName) : fieldNameIdentifier,
         ]),
       ),
     ),
@@ -358,7 +384,9 @@ export const buildOverrideOnChangeStatement = (
   const keyPath = fieldName.split('.');
   const keyName = keyPath[0];
   let keyValueExpression = factory.createPropertyAssignment(
-    factory.createIdentifier(keyName),
+    isValidVariableName(keyName)
+      ? factory.createIdentifier(keyName)
+      : factory.createComputedPropertyName(factory.createStringLiteral(keyName)),
     factory.createIdentifier('value'),
   );
   if (keyPath.length > 1) {
@@ -459,7 +487,8 @@ export const buildOnChangeStatement = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
 ) => {
   const { name: fieldName, componentType: fieldType } = component;
-  const { dataType, isArray } = fieldConfigs[fieldName];
+  const { dataType, isArray, sanitizedFieldName } = fieldConfigs[fieldName];
+  const renderedFieldName = sanitizedFieldName || fieldName;
   if (isArray) {
     return factory.createJsxAttribute(
       factory.createIdentifier(getOnValueChangeProp(fieldType)),
@@ -486,7 +515,7 @@ export const buildOnChangeStatement = (
               buildTargetVariable(fieldType, fieldName, dataType),
               buildOverrideOnChangeStatement(fieldName, fieldConfigs),
               getOnChangeValidationBlock(fieldName),
-              setStateExpression(getCurrentValueName(fieldName), factory.createIdentifier('value')),
+              setStateExpression(getCurrentValueName(renderedFieldName), factory.createIdentifier('value')),
             ],
             true,
           ),
@@ -519,7 +548,7 @@ export const buildOnChangeStatement = (
             buildTargetVariable(fieldType, fieldName, dataType),
             buildOverrideOnChangeStatement(fieldName, fieldConfigs),
             getOnChangeValidationBlock(fieldName),
-            factory.createExpressionStatement(setFieldState(fieldName, factory.createIdentifier('value'))),
+            factory.createExpressionStatement(setFieldState(renderedFieldName, factory.createIdentifier('value'))),
           ],
           true,
         ),
@@ -640,8 +669,10 @@ export const buildOverrideTypesBindings = (
       );
     }
     row.forEach((field) => {
-      const propKey =
-        field.split('.').length > 1 ? factory.createStringLiteral(field) : factory.createIdentifier(field);
+      let propKey: Identifier | StringLiteral = factory.createIdentifier(field);
+      if (field.split('.').length > 1 || !isValidVariableName(field)) {
+        propKey = factory.createStringLiteral(field);
+      }
       const componentTypePropName = `${formDefinition.elements[field].componentType}Props`;
       typeNodes.push(
         factory.createPropertySignature(
@@ -682,7 +713,9 @@ export const buildOverrideTypesBindings = (
 export function buildValidations(fieldConfigs: Record<string, FieldConfigMetadata>) {
   const validationsForField = Object.entries(fieldConfigs).map(([fieldName, { validationRules }]) => {
     const propKey =
-      fieldName.split('.').length > 1 ? factory.createStringLiteral(fieldName) : factory.createIdentifier(fieldName);
+      fieldName.split('.').length > 1 || !isValidVariableName(fieldName)
+        ? factory.createStringLiteral(fieldName)
+        : factory.createIdentifier(fieldName);
     return factory.createPropertyAssignment(propKey, createValidationExpression(validationRules));
   });
 
@@ -871,12 +904,20 @@ export const buildModelFieldObject = (
   const fieldSet = new Set<string>();
   const fields = Object.keys(fieldConfigs).reduce<ObjectLiteralElementLike[]>((acc, value) => {
     const fieldName = value.split('.')[0];
-    if (!fieldSet.has(fieldName)) {
-      const assignment = nameOverrides[fieldName]
+    const { sanitizedFieldName } = fieldConfigs[value];
+    const renderedFieldName = sanitizedFieldName || fieldName;
+    if (!fieldSet.has(renderedFieldName)) {
+      let assignment = nameOverrides[fieldName]
         ? nameOverrides[fieldName]
         : factory.createShorthandPropertyAssignment(factory.createIdentifier(fieldName), undefined);
+      if (sanitizedFieldName) {
+        assignment = factory.createPropertyAssignment(
+          factory.createStringLiteral(fieldName),
+          factory.createIdentifier(sanitizedFieldName),
+        );
+      }
       acc.push(assignment);
-      fieldSet.add(fieldName);
+      fieldSet.add(renderedFieldName);
     }
     return acc;
   }, []);
@@ -1115,18 +1156,28 @@ export const buildSetStateFunction = (fieldConfigs: Record<string, FieldConfigMe
   const fieldSet = new Set<string>();
   const expression = Object.keys(fieldConfigs).reduce<ExpressionStatement[]>((acc, field) => {
     const fieldName = field.split('.')[0];
-    if (!fieldSet.has(fieldName)) {
+    const renderedFieldName = fieldConfigs[field].sanitizedFieldName || fieldName;
+    if (!fieldSet.has(renderedFieldName)) {
       acc.push(
         factory.createExpressionStatement(
-          factory.createCallExpression(factory.createIdentifier(`set${capitalizeFirstLetter(fieldName)}`), undefined, [
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('initialData'),
-              factory.createIdentifier(fieldName),
-            ),
-          ]),
+          factory.createCallExpression(
+            factory.createIdentifier(`set${capitalizeFirstLetter(renderedFieldName)}`),
+            undefined,
+            [
+              isValidVariableName(fieldName)
+                ? factory.createPropertyAccessExpression(
+                    factory.createIdentifier('initialData'),
+                    factory.createIdentifier(fieldName),
+                  )
+                : factory.createElementAccessExpression(
+                    factory.createIdentifier('initialData'),
+                    factory.createStringLiteral(fieldName),
+                  ),
+            ],
+          ),
         ),
       );
-      fieldSet.add(fieldName);
+      fieldSet.add(renderedFieldName);
     }
     return acc;
   }, []);

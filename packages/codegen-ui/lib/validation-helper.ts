@@ -138,7 +138,7 @@ type ComponentNameMetadata = {
 };
 
 const findCollidingNames = (value: any): ComponentNameMetadata => {
-  const names = value.name ? new Set([value.name]) : new Set();
+  const names: Set<string> = value.name ? new Set([value.name]) : new Set();
   const componentNameMetadata: ComponentNameMetadata = { names, duplicateNames: new Set() };
   if (!value.children) {
     return componentNameMetadata;

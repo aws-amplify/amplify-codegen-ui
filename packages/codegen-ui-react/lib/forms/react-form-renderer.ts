@@ -439,16 +439,17 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
-    Object.entries(formMetadata.fieldConfigs).forEach(([field, config]) => {
-      if (config.isArray) {
+    Object.entries(formMetadata.fieldConfigs).forEach(([field, { isArray, sanitizedFieldName }]) => {
+      if (isArray) {
+        const renderedName = sanitizedFieldName || field;
         statements.push(
-          buildUseStateExpression(getCurrentValueName(field), factory.createStringLiteral('')),
+          buildUseStateExpression(getCurrentValueName(renderedName), factory.createStringLiteral('')),
           factory.createVariableStatement(
             undefined,
             factory.createVariableDeclarationList(
               [
                 factory.createVariableDeclaration(
-                  factory.createIdentifier(`${field}Ref`),
+                  factory.createIdentifier(`${renderedName}Ref`),
                   undefined,
                   undefined,
                   factory.createCallExpression(
