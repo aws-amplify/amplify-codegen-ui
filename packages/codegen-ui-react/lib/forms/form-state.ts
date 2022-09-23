@@ -25,6 +25,7 @@ import {
   ObjectLiteralExpression,
   CallExpression,
   PropertyAssignment,
+  PropertyName,
 } from 'typescript';
 
 export const getCurrentValueName = (fieldName: string) => `current${capitalizeFirstLetter(fieldName)}Value`;
@@ -46,6 +47,47 @@ export const capitalizeFirstLetter = (val: string) => {
 
 export const getSetNameIdentifier = (value: string): Identifier => {
   return factory.createIdentifier(`set${capitalizeFirstLetter(value)}`);
+};
+
+/**
+ * setErrors((errors) => ({ ...errors, [key]: value }));
+ *
+ * shorthand function to set error key/value
+ * @param key ts expression to use as key ex. string literal or ts identifier
+ * @param value ts expression to resolve to the value could be a prop access chain or identifier
+ * @returns expression statement
+ */
+export const setErrorState = (key: string | PropertyName, value: Expression) => {
+  return factory.createExpressionStatement(
+    factory.createCallExpression(factory.createIdentifier('setErrors'), undefined, [
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('errors'),
+            undefined,
+            undefined,
+            undefined,
+          ),
+        ],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createParenthesizedExpression(
+          factory.createObjectLiteralExpression(
+            [
+              factory.createSpreadAssignment(factory.createIdentifier('errors')),
+              factory.createPropertyAssignment(key, value),
+            ],
+            false,
+          ),
+        ),
+      ),
+    ]),
+  );
 };
 
 export const getDefaultValueExpression = (

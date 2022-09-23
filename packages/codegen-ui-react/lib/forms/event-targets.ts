@@ -14,11 +14,12 @@
   limitations under the License.
  */
 import { DataFieldDataType } from '@aws-amplify/codegen-ui';
-import { factory, NodeFlags, VariableStatement, Expression, BindingName, SyntaxKind } from 'typescript';
+import { factory, NodeFlags, Expression, SyntaxKind, Identifier, VariableStatement } from 'typescript';
+import { buildAccessChain, setErrorState } from './form-state';
 
 /*
 Builds the event target variable. Example:
-let { value } =  e.target;
+let { value } = e.target;
 */
 
 const expressionMap = {
@@ -44,13 +45,123 @@ const expressionMap = {
   ),
 };
 
-export const buildTargetVariable = (
-  fieldType: string,
-  fieldName: string,
-  dataType?: DataFieldDataType,
-): VariableStatement => {
+// default variable statement
+const setVariableStatement = (lhs: Identifier, assignment: Expression) =>
+  factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [factory.createVariableDeclaration(lhs, undefined, undefined, assignment)],
+      NodeFlags.Let,
+    ),
+  );
+
+const numberVariableStatement = (fieldName: string, variable: VariableStatement) => {
+  return [
+    variable,
+    factory.createIfStatement(
+      factory.createCallExpression(factory.createIdentifier('NaN'), undefined, [factory.createIdentifier('value')]),
+      factory.createBlock(
+        [
+          setErrorState(
+            factory.createIdentifier(fieldName),
+            factory.createStringLiteral('Value must be a valid number'),
+          ),
+          factory.createReturnStatement(undefined),
+        ],
+        true,
+      ),
+      undefined,
+    ),
+  ];
+};
+
+/**
+ * const date = new Date(e.target.value);
+ *
+ * if(!(date instanceof Date && !isNaN(date))) {
+ *
+ * setErrors((errors) => ({ ...errors, [key]: 'The value must be a valid date' }));
+ *
+ * return
+ *
+ * }
+ *
+ * let value = Number(value);
+ *
+ * @param fieldName name of field used to set error if date is invalid
+ * @returns return expression block {example above}
+ */
+const timestampVariableStatement = (fieldName: string) => {
+  return [
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('date'),
+            undefined,
+            undefined,
+            factory.createNewExpression(factory.createIdentifier('Date'), undefined, [
+              buildAccessChain(['e', 'target', 'value'], false),
+            ]),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
+    factory.createIfStatement(
+      factory.createPrefixUnaryExpression(
+        SyntaxKind.ExclamationToken,
+        factory.createParenthesizedExpression(
+          factory.createBinaryExpression(
+            factory.createBinaryExpression(
+              factory.createIdentifier('date'),
+              factory.createToken(SyntaxKind.InstanceOfKeyword),
+              factory.createIdentifier('Date'),
+            ),
+            factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+            factory.createPrefixUnaryExpression(
+              SyntaxKind.ExclamationToken,
+              factory.createCallExpression(factory.createIdentifier('isNaN'), undefined, [
+                factory.createIdentifier('date'),
+              ]),
+            ),
+          ),
+        ),
+      ),
+      factory.createBlock(
+        [
+          setErrorState(
+            factory.createIdentifier(fieldName),
+            factory.createStringLiteral('The value must be a valid date'),
+          ),
+          factory.createReturnStatement(undefined),
+        ],
+        false,
+      ),
+    ),
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            expressionMap.value,
+            undefined,
+            undefined,
+            factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
+              factory.createIdentifier('date'),
+            ]),
+          ),
+        ],
+        NodeFlags.Let,
+      ),
+    ),
+  ];
+};
+
+export const buildTargetVariable = (fieldType: string, fieldName: string, dataType?: DataFieldDataType) => {
   const fieldTypeToExpressionMap: {
-    [fieldType: string]: { expression: Expression; identifier: string | BindingName };
+    [fieldType: string]: { expression: Expression; identifier: Identifier };
   } = {
     SliderField: {
       expression: expressionMap.e,
@@ -75,16 +186,12 @@ export const buildTargetVariable = (
   };
 
   let expression: Expression = fieldTypeToExpressionMap[fieldType]?.expression ?? expressionMap.eTarget;
-  let defaultIdentifier: string | BindingName =
+  let defaultIdentifier: Identifier =
     fieldTypeToExpressionMap[fieldType]?.identifier ?? expressionMap.destructuredValue;
   switch (dataType) {
     case 'AWSTimestamp':
-      // value = Number(new Date(e.target.value));
-      defaultIdentifier = expressionMap.value;
-      expression = factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
-        factory.createNewExpression(factory.createIdentifier('Date'), undefined, [expressionMap.eTargetValue]),
-      ]);
-      break;
+      // validate date first then cast to number
+      return timestampVariableStatement(fieldName);
     case 'Float':
       if (fieldType === 'TextField') {
         // value = Number(e.target.value);
@@ -93,6 +200,7 @@ export const buildTargetVariable = (
           expressionMap.eTargetValue,
         ]);
       }
+      return numberVariableStatement(fieldName, setVariableStatement(defaultIdentifier, expression));
       break;
     case 'Int':
       if (fieldType === 'TextField') {
@@ -102,7 +210,7 @@ export const buildTargetVariable = (
           expressionMap.eTargetValue,
         ]);
       }
-      break;
+      return numberVariableStatement(fieldName, setVariableStatement(defaultIdentifier, expression));
     case 'Boolean':
       if (fieldType === 'RadioGroupField') {
         // value = e.target.value === 'true'
@@ -113,14 +221,8 @@ export const buildTargetVariable = (
           factory.createStringLiteral('true'),
         );
       }
-      break;
+      return [setVariableStatement(defaultIdentifier, expression)];
     default:
+      return [setVariableStatement(defaultIdentifier, expression)];
   }
-  return factory.createVariableStatement(
-    undefined,
-    factory.createVariableDeclarationList(
-      [factory.createVariableDeclaration(defaultIdentifier, undefined, undefined, expression)],
-      NodeFlags.Let,
-    ),
-  );
 };

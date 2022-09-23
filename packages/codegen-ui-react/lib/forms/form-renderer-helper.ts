@@ -483,7 +483,7 @@ export const buildOnChangeStatement = (
           factory.createToken(SyntaxKind.EqualsGreaterThanToken),
           factory.createBlock(
             [
-              buildTargetVariable(fieldType, fieldName, dataType),
+              ...buildTargetVariable(fieldType, fieldName, dataType),
               buildOverrideOnChangeStatement(fieldName, fieldConfigs),
               getOnChangeValidationBlock(fieldName),
               setStateExpression(getCurrentValueName(fieldName), factory.createIdentifier('value')),
@@ -516,7 +516,7 @@ export const buildOnChangeStatement = (
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createBlock(
           [
-            buildTargetVariable(fieldType, fieldName, dataType),
+            ...buildTargetVariable(fieldType, fieldName, dataType),
             buildOverrideOnChangeStatement(fieldName, fieldConfigs),
             getOnChangeValidationBlock(fieldName),
             factory.createExpressionStatement(setFieldState(fieldName, factory.createIdentifier('value'))),
