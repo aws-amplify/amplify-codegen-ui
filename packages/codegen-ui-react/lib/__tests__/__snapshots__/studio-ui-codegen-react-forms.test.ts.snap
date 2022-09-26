@@ -3396,25 +3396,25 @@ export default function BlogCreateForm(props) {
     title: undefined,
     content: undefined,
     switch: false,
-    authorName: undefined,
+    published: undefined,
   };
   const [title, setTitle] = React.useState(initialValues.title);
   const [content, setContent] = React.useState(initialValues.content);
   const [switch1, setSwitch1] = React.useState(initialValues.switch);
-  const [authorName, setAuthorName] = React.useState(initialValues.authorName);
+  const [published, setPublished] = React.useState(initialValues.published);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setTitle(initialValues.title);
     setContent(initialValues.content);
     setSwitch1(initialValues.switch);
-    setAuthorName(initialValues.authorName);
+    setPublished(initialValues.published);
     setErrors({});
   };
   const validations = {
     title: [],
     content: [],
     switch: [],
-    authorName: [],
+    published: [],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -3437,7 +3437,7 @@ export default function BlogCreateForm(props) {
           title,
           content,
           switch: switch1,
-          authorName,
+          published,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3486,7 +3486,7 @@ export default function BlogCreateForm(props) {
               title: value,
               content,
               switch: switch1,
-              authorName,
+              published,
             };
             const result = onChange(modelFields);
             value = result?.title ?? value;
@@ -3512,7 +3512,7 @@ export default function BlogCreateForm(props) {
               title,
               content: value,
               switch: switch1,
-              authorName,
+              published,
             };
             const result = onChange(modelFields);
             value = result?.content ?? value;
@@ -3531,6 +3531,7 @@ export default function BlogCreateForm(props) {
         label=\\"Switch\\"
         defaultChecked={false}
         isDisabled={false}
+        value={switch1}
         onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
@@ -3538,7 +3539,7 @@ export default function BlogCreateForm(props) {
               title,
               content,
               switch: switch1,
-              authorName,
+              published,
             };
             const result = onChange(modelFields);
             value = result?.switch ?? value;
@@ -3554,9 +3555,10 @@ export default function BlogCreateForm(props) {
         {...getOverrideProps(overrides, \\"switch\\")}
       ></SwitchField>
       <TextField
-        label=\\"Author name\\"
+        label=\\"Published\\"
         isRequired={false}
         isReadOnly={false}
+        type=\\"datetime-local\\"
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3564,20 +3566,20 @@ export default function BlogCreateForm(props) {
               title,
               content,
               switch: switch1,
-              authorName: value,
+              published: value,
             };
             const result = onChange(modelFields);
-            value = result?.authorName ?? value;
+            value = result?.published ?? value;
           }
-          if (errors.authorName?.hasError) {
-            runValidationTasks(\\"authorName\\", value);
+          if (errors.published?.hasError) {
+            runValidationTasks(\\"published\\", value);
           }
-          setAuthorName(value);
+          setPublished(new Date(value).toISOString());
         }}
-        onBlur={() => runValidationTasks(\\"authorName\\", authorName)}
-        errorMessage={errors.authorName?.errorMessage}
-        hasError={errors.authorName?.hasError}
-        {...getOverrideProps(overrides, \\"authorName\\")}
+        onBlur={() => runValidationTasks(\\"published\\", published)}
+        errorMessage={errors.published?.errorMessage}
+        hasError={errors.published?.hasError}
+        {...getOverrideProps(overrides, \\"published\\")}
       ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
@@ -3627,7 +3629,7 @@ export declare type BlogCreateFormInputValues<useBase extends boolean = true> = 
     title?: UseBaseOrValidationType<useBase, string>;
     content?: UseBaseOrValidationType<useBase, string>;
     switch?: UseBaseOrValidationType<useBase, boolean>;
-    authorName?: UseBaseOrValidationType<useBase, string>;
+    published?: UseBaseOrValidationType<useBase, string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BlogCreateFormOverridesProps = {
@@ -3635,7 +3637,7 @@ export declare type BlogCreateFormOverridesProps = {
     title?: FormProps<TextFieldProps>;
     content?: FormProps<TextFieldProps>;
     switch?: FormProps<SwitchFieldProps>;
-    authorName?: FormProps<TextFieldProps>;
+    published?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type BlogCreateFormProps = React.PropsWithChildren<{
     overrides?: BlogCreateFormOverridesProps | undefined | null;
@@ -4494,7 +4496,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function InputGalleryCreateForm(props) {
+export default function InputGalleryUpdateForm(props) {
   const {
     id,
     inputGallery,
@@ -4579,6 +4581,34 @@ export default function InputGalleryCreateForm(props) {
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
+  const convertTimeStampToDate = (ts) => {
+    if (Math.abs(Date.now() - ts) < Math.abs(Date.now() - ts * 1000)) {
+      return new Date(ts);
+    }
+    return new Date(ts * 1000);
+  };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat(\\"default\\", {
+      year: \\"numeric\\",
+      month: \\"2-digit\\",
+      day: \\"2-digit\\",
+      hour: \\"2-digit\\",
+      minute: \\"2-digit\\",
+      second: \\"2-digit\\",
+      fractionalSecondDigits: 3,
+      calendar: \\"iso8601\\",
+      numberingSystem: \\"latn\\",
+      hour12: false,
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return (
+      \`\${parts.year}-\${parts.month}-\${parts.day}\` +
+      \`T\${parts.hour}:\${parts.minute}:\${parts.second}.\${parts.fractionalSecond}\`
+    );
+  };
   return (
     <Grid
       as=\\"form\\"
@@ -4636,7 +4666,7 @@ export default function InputGalleryCreateForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, \\"InputGalleryCreateForm\\")}
+      {...getOverrideProps(overrides, \\"InputGalleryUpdateForm\\")}
     >
       <TextField
         label=\\"Num\\"
@@ -4767,7 +4797,6 @@ export default function InputGalleryCreateForm(props) {
         isDisabled={false}
         defaultPressed={false}
         isPressed={maybeSlide}
-        defaultValue={maybeSlide}
         onChange={(e) => {
           let value = !maybeSlide;
           if (onChange) {
@@ -4883,7 +4912,9 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"datetime-local\\"
-        defaultValue={timestamp}
+        defaultValue={
+          timestamp && convertToLocal(convertTimeStampToDate(timestamp))
+        }
         onChange={(e) => {
           const date = new Date(e.target.value);
           if (!(date instanceof Date && !isNaN(date))) {
@@ -5029,7 +5060,7 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type InputGalleryCreateFormInputValues<useBase extends boolean = true> = {
+export declare type InputGalleryUpdateFormInputValues<useBase extends boolean = true> = {
     num?: UseBaseOrValidationType<useBase, number>;
     rootbeer?: UseBaseOrValidationType<useBase, number>;
     attend?: UseBaseOrValidationType<useBase, boolean>;
@@ -5041,8 +5072,8 @@ export declare type InputGalleryCreateFormInputValues<useBase extends boolean = 
     timeisnow?: UseBaseOrValidationType<useBase, string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type InputGalleryCreateFormOverridesProps = {
-    InputGalleryCreateFormGrid?: FormProps<GridProps>;
+export declare type InputGalleryUpdateFormOverridesProps = {
+    InputGalleryUpdateFormGrid?: FormProps<GridProps>;
     num?: FormProps<TextFieldProps>;
     rootbeer?: FormProps<TextFieldProps>;
     attend?: FormProps<RadioGroupFieldProps>;
@@ -5053,19 +5084,19 @@ export declare type InputGalleryCreateFormOverridesProps = {
     ippy?: FormProps<TextFieldProps>;
     timeisnow?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
-    overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
+export declare type InputGalleryUpdateFormProps = React.PropsWithChildren<{
+    overrides?: InputGalleryUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
     inputGallery?: InputGallery;
-    onSubmit?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
-    onSuccess?: (fields: InputGalleryCreateFormInputValues) => void;
-    onError?: (fields: InputGalleryCreateFormInputValues, errorMessage: string) => void;
+    onSubmit?: (fields: InputGalleryUpdateFormInputValues) => InputGalleryUpdateFormInputValues;
+    onSuccess?: (fields: InputGalleryUpdateFormInputValues) => void;
+    onError?: (fields: InputGalleryUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
-    onValidate?: InputGalleryCreateFormInputValues<false>;
+    onChange?: (fields: InputGalleryUpdateFormInputValues) => InputGalleryUpdateFormInputValues;
+    onValidate?: InputGalleryUpdateFormInputValues<false>;
 }>;
-export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
+export default function InputGalleryUpdateForm(props: InputGalleryUpdateFormProps): React.ReactElement;
 "
 `;
 

@@ -226,3 +226,19 @@ export const buildTargetVariable = (fieldType: string, fieldName: string, dataTy
       return [setVariableStatement(defaultIdentifier, expression)];
   }
 };
+
+export const getFormattedValueExpression = (dataType?: DataFieldDataType): Expression => {
+  // setStateExpression(getCurrentValueName(renderedFieldName), factory.createIdentifier('value')),
+  let setExpression: Expression = factory.createIdentifier('value');
+  if (dataType === 'AWSDateTime') {
+    setExpression = factory.createCallExpression(
+      factory.createPropertyAccessExpression(
+        factory.createNewExpression(factory.createIdentifier('Date'), undefined, [factory.createIdentifier('value')]),
+        factory.createIdentifier('toISOString'),
+      ),
+      undefined,
+      [],
+    );
+  }
+  return setExpression;
+};

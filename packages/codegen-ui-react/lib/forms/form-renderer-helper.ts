@@ -22,7 +22,6 @@ import {
   StudioForm,
   FieldConfigMetadata,
   FormMetadata,
-  isControlledComponent,
   isValidVariableName,
 } from '@aws-amplify/codegen-ui';
 import {
@@ -40,9 +39,10 @@ import {
   StringLiteral,
   ElementAccessExpression,
 } from 'typescript';
+import { isControlledComponent, renderDefaultValueAttribute } from './component-helper';
 import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
-import { buildTargetVariable } from './event-targets';
+import { buildTargetVariable, getFormattedValueExpression } from './event-targets';
 import {
   buildAccessChain,
   buildNestedStateSet,
@@ -166,12 +166,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
           );
     attributes.push(...buildComponentSpecificAttributes({ componentType, componentName: renderedVariableName }));
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
-      attributes.push(
-        factory.createJsxAttribute(
-          factory.createIdentifier('defaultValue'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(renderedVariableName)),
-        ),
-      );
+      attributes.push(renderDefaultValueAttribute(renderedVariableName, fieldConfig));
     }
     attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs));
     attributes.push(buildOnBlurStatement(componentName, fieldConfig));
@@ -477,6 +472,12 @@ export const buildComponentSpecificAttributes = ({
         factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
       ),
     ],
+    SwitchField: [
+      factory.createJsxAttribute(
+        factory.createIdentifier('value'),
+        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
+      ),
+    ],
   };
 
   return componentToAttributesMap[componentType] ?? [];
@@ -515,7 +516,7 @@ export const buildOnChangeStatement = (
               ...buildTargetVariable(fieldType, fieldName, dataType),
               buildOverrideOnChangeStatement(fieldName, fieldConfigs),
               getOnChangeValidationBlock(fieldName),
-              setStateExpression(getCurrentValueName(renderedFieldName), factory.createIdentifier('value')),
+              setStateExpression(getCurrentValueName(renderedFieldName), getFormattedValueExpression(dataType)),
             ],
             true,
           ),
@@ -548,7 +549,7 @@ export const buildOnChangeStatement = (
             ...buildTargetVariable(fieldType, fieldName, dataType),
             buildOverrideOnChangeStatement(fieldName, fieldConfigs),
             getOnChangeValidationBlock(fieldName),
-            factory.createExpressionStatement(setFieldState(renderedFieldName, factory.createIdentifier('value'))),
+            factory.createExpressionStatement(setFieldState(renderedFieldName, getFormattedValueExpression(dataType))),
           ],
           true,
         ),
