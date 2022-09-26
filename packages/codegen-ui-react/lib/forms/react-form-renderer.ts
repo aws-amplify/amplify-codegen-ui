@@ -17,6 +17,7 @@
 import {
   ComponentMetadata,
   computeComponentMetadata,
+  DataFieldDataType,
   FormDefinition,
   generateFormDefinition,
   GenericDataSchema,
@@ -60,6 +61,7 @@ import {
 } from '../react-studio-template-renderer-helper';
 import { generateArrayFieldComponent } from '../utils/forms/array-field-component';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
+import { convertTimeStampToDateAST, convertToLocalAST } from '../utils/forms/value-mappers';
 import { addUseEffectWrapper } from '../utils/generate-react-hooks';
 import { RequiredKeys } from '../utils/type-utils';
 import {
@@ -476,6 +478,23 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     );
     statements.push(buildValidations(formMetadata.fieldConfigs));
     statements.push(runValidationTasksFunction);
+
+    if (formActionType === 'update') {
+      // list of defined dataTypes
+      const dataTypes = Object.values(formMetadata.fieldConfigs).reduce<DataFieldDataType[]>((acc, config) => {
+        if (config.dataType) acc.push(config.dataType);
+        return acc;
+      }, []);
+      // timestamp type takes precendence over datetime as it includes formatter for datetime
+      // we include both the timestamp conversion and local date formatter
+      if (dataTypes.includes('AWSTimestamp')) {
+        statements.push(convertTimeStampToDateAST, convertToLocalAST);
+      }
+      // if we only have date time then we only need the local conversion
+      else if (dataTypes.includes('AWSDateTime')) {
+        statements.push(convertToLocalAST);
+      }
+    }
 
     return statements;
   }

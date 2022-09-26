@@ -31,10 +31,10 @@
           "isRequired": false,
           "attributes": []
         },
-        "authorName": {
-          "name": "authorName",
+        "published": {
+          "name": "published",
           "isArray": false,
-          "type": "String",
+          "type": "AWSDateTime",
           "isRequired": false,
           "attributes": []
         },

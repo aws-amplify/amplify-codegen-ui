@@ -22,7 +22,7 @@
     }
   },
   "formActionType": "update",
-  "name": "InputGalleryCreateForm",
+  "name": "InputGalleryUpdateForm",
   "schemaVersion": "1.0",
   "sectionalElements": {},
   "style": {},

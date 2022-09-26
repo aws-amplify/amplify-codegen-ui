@@ -20,11 +20,3 @@ export * from './string-formatter';
 export * from './form-component-metadata';
 export * from './form-to-component';
 export * from './breakpoint-utils';
-export const ControlledComponents = ['StepperField', 'SliderField', 'SelectField'];
-/**
- * given the component returns true if the component is a controlled component
- *
- * @param componentType
- * @returns
- */
-export const isControlledComponent = (componentType: string): boolean => ControlledComponents.includes(componentType);
