@@ -74,6 +74,7 @@ import {
 import {
   buildUseStateExpression,
   getCurrentValueName,
+  getDefaultValueExpression,
   getInitialValues,
   getUseStateHooks,
   resetStateFunction,
@@ -439,35 +440,40 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
-    Object.entries(formMetadata.fieldConfigs).forEach(([field, { isArray, sanitizedFieldName }]) => {
-      if (isArray) {
-        const renderedName = sanitizedFieldName || field;
-        statements.push(
-          buildUseStateExpression(getCurrentValueName(renderedName), factory.createStringLiteral('')),
-          factory.createVariableStatement(
-            undefined,
-            factory.createVariableDeclarationList(
-              [
-                factory.createVariableDeclaration(
-                  factory.createIdentifier(`${renderedName}Ref`),
-                  undefined,
-                  undefined,
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('React'),
-                      factory.createIdentifier('createRef'),
-                    ),
-                    undefined,
-                    [],
-                  ),
-                ),
-              ],
-              NodeFlags.Const,
+    Object.entries(formMetadata.fieldConfigs).forEach(
+      ([field, { isArray, sanitizedFieldName, componentType, dataType }]) => {
+        if (isArray) {
+          const renderedName = sanitizedFieldName || field;
+          statements.push(
+            buildUseStateExpression(
+              getCurrentValueName(renderedName),
+              getDefaultValueExpression(formMetadata.name, componentType, dataType),
             ),
-          ),
-        );
-      }
-    });
+            factory.createVariableStatement(
+              undefined,
+              factory.createVariableDeclarationList(
+                [
+                  factory.createVariableDeclaration(
+                    factory.createIdentifier(`${renderedName}Ref`),
+                    undefined,
+                    undefined,
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('React'),
+                        factory.createIdentifier('createRef'),
+                      ),
+                      undefined,
+                      [],
+                    ),
+                  ),
+                ],
+                NodeFlags.Const,
+              ),
+            ),
+          );
+        }
+      },
+    );
     statements.push(buildValidations(formMetadata.fieldConfigs));
     statements.push(runValidationTasksFunction);
 
