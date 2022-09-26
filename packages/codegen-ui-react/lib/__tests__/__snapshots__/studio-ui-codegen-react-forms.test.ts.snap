@@ -712,6 +712,7 @@ function ArrayField({
   hasError,
   setFieldValue,
   currentFieldValue,
+  defaultFieldValue,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -727,7 +728,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (!!currentFieldValue && !hasError) {
+    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -761,7 +762,7 @@ function ArrayField({
               type=\\"button\\"
               size=\\"small\\"
               onClick={() => {
-                setFieldValue(\\"\\");
+                setFieldValue(defaultFieldValue);
                 setIsEditing(false);
                 setSelectedBadgeIndex(undefined);
               }}
@@ -798,7 +799,7 @@ function ArrayField({
                   setIsEditing(true);
                 }}
               >
-                {value}
+                {value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -833,7 +834,7 @@ export default function CustomDataForm(props) {
     props;
   const initialValues = {
     name: undefined,
-    email: undefined,
+    email: [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -841,10 +842,10 @@ export default function CustomDataForm(props) {
   const resetStateValues = () => {
     setName(initialValues.name);
     setEmail(initialValues.email);
-    setCurrentEmailValue(\\"\\");
+    setCurrentEmailValue(undefined);
     setErrors({});
   };
-  const [currentEmailValue, setCurrentEmailValue] = React.useState(\\"\\");
+  const [currentEmailValue, setCurrentEmailValue] = React.useState(undefined);
   const emailRef = React.createRef();
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -922,7 +923,7 @@ export default function CustomDataForm(props) {
       <ArrayField
         onChange={async (items) => {
           setEmail(items);
-          setCurrentEmailValue(\\"\\");
+          setCurrentEmailValue(undefined);
         }}
         currentFieldValue={currentEmailValue}
         label={\\"E-mail\\"}
@@ -930,6 +931,7 @@ export default function CustomDataForm(props) {
         hasError={errors.email?.hasError}
         setFieldValue={setCurrentEmailValue}
         inputFieldRef={emailRef}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"E-mail\\"
@@ -1052,6 +1054,7 @@ function ArrayField({
   hasError,
   setFieldValue,
   currentFieldValue,
+  defaultFieldValue,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -1067,7 +1070,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (!!currentFieldValue && !hasError) {
+    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -1101,7 +1104,7 @@ function ArrayField({
               type=\\"button\\"
               size=\\"small\\"
               onClick={() => {
-                setFieldValue(\\"\\");
+                setFieldValue(defaultFieldValue);
                 setIsEditing(false);
                 setSelectedBadgeIndex(undefined);
               }}
@@ -1138,7 +1141,7 @@ function ArrayField({
                   setIsEditing(true);
                 }}
               >
-                {value}
+                {value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -1182,7 +1185,7 @@ export default function MyPostForm(props) {
   const initialValues = {
     username: undefined,
     caption: undefined,
-    Customtags: undefined,
+    Customtags: [],
     post_url: undefined,
     profile_url: undefined,
   };
@@ -1198,13 +1201,13 @@ export default function MyPostForm(props) {
     setUsername(initialValues.username);
     setCaption(initialValues.caption);
     setCustomtags(initialValues.Customtags);
-    setCurrentCustomtagsValue(\\"\\");
+    setCurrentCustomtagsValue(undefined);
     setPost_url(initialValues.post_url);
     setProfile_url(initialValues.profile_url);
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const CustomtagsRef = React.createRef();
   const validations = {
     username: [
@@ -1373,7 +1376,7 @@ export default function MyPostForm(props) {
       <ArrayField
         onChange={async (items) => {
           setCustomtags(items);
-          setCurrentCustomtagsValue(\\"\\");
+          setCurrentCustomtagsValue(undefined);
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -1381,6 +1384,7 @@ export default function MyPostForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Tags\\"
@@ -1541,6 +1545,7 @@ function ArrayField({
   hasError,
   setFieldValue,
   currentFieldValue,
+  defaultFieldValue,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -1556,7 +1561,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (!!currentFieldValue && !hasError) {
+    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -1590,7 +1595,7 @@ function ArrayField({
               type=\\"button\\"
               size=\\"small\\"
               onClick={() => {
-                setFieldValue(\\"\\");
+                setFieldValue(defaultFieldValue);
                 setIsEditing(false);
                 setSelectedBadgeIndex(undefined);
               }}
@@ -1627,7 +1632,7 @@ function ArrayField({
                   setIsEditing(true);
                 }}
               >
-                {value}
+                {value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -1665,8 +1670,8 @@ export default function NestedJson(props) {
     \\"first-Name\\": undefined,
     lastName: undefined,
     bio: {},
-    Nicknames1: undefined,
-    \\"nick-names2\\": undefined,
+    Nicknames1: [],
+    \\"nick-names2\\": [],
     \\"first Name\\": undefined,
   };
   const [firstName, setFirstName] = React.useState(initialValues[\\"first-Name\\"]);
@@ -1685,16 +1690,17 @@ export default function NestedJson(props) {
     setLastName(initialValues.lastName);
     setBio(initialValues.bio);
     setNicknames1(initialValues.Nicknames1);
-    setCurrentNicknames1Value(\\"\\");
+    setCurrentNicknames1Value(undefined);
     setNicknames(initialValues[\\"nick-names2\\"]);
-    setCurrentNicknamesValue(\\"\\");
+    setCurrentNicknamesValue(undefined);
     setFirstName1(initialValues[\\"first Name\\"]);
     setErrors({});
   };
   const [currentNicknames1Value, setCurrentNicknames1Value] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const Nicknames1Ref = React.createRef();
-  const [currentNicknamesValue, setCurrentNicknamesValue] = React.useState(\\"\\");
+  const [currentNicknamesValue, setCurrentNicknamesValue] =
+    React.useState(undefined);
   const nicknamesRef = React.createRef();
   const validations = {
     \\"first-Name\\": [],
@@ -1870,7 +1876,7 @@ export default function NestedJson(props) {
       <ArrayField
         onChange={async (items) => {
           setNicknames1(items);
-          setCurrentNicknames1Value(\\"\\");
+          setCurrentNicknames1Value(undefined);
         }}
         currentFieldValue={currentNicknames1Value}
         label={\\"Nick Names1\\"}
@@ -1878,6 +1884,7 @@ export default function NestedJson(props) {
         hasError={errors.Nicknames1?.hasError}
         setFieldValue={setCurrentNicknames1Value}
         inputFieldRef={Nicknames1Ref}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Nick Names1\\"
@@ -1913,7 +1920,7 @@ export default function NestedJson(props) {
       <ArrayField
         onChange={async (items) => {
           setNicknames(items);
-          setCurrentNicknamesValue(\\"\\");
+          setCurrentNicknamesValue(undefined);
         }}
         currentFieldValue={currentNicknamesValue}
         label={\\"nick-Names2\\"}
@@ -1921,6 +1928,7 @@ export default function NestedJson(props) {
         hasError={errors?.[\\"nick-names2\\"]?.hasError}
         setFieldValue={setCurrentNicknamesValue}
         inputFieldRef={nicknamesRef}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"nick-Names2\\"
@@ -2086,6 +2094,7 @@ function ArrayField({
   hasError,
   setFieldValue,
   currentFieldValue,
+  defaultFieldValue,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -2101,7 +2110,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (!!currentFieldValue && !hasError) {
+    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -2135,7 +2144,7 @@ function ArrayField({
               type=\\"button\\"
               size=\\"small\\"
               onClick={() => {
-                setFieldValue(\\"\\");
+                setFieldValue(defaultFieldValue);
                 setIsEditing(false);
                 setSelectedBadgeIndex(undefined);
               }}
@@ -2172,7 +2181,7 @@ function ArrayField({
                   setIsEditing(true);
                 }}
               >
-                {value}
+                {value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -2215,7 +2224,7 @@ export default function NestedJson(props) {
   const initialValues = {
     firstName: undefined,
     \\"last-Name\\": undefined,
-    lastName: undefined,
+    lastName: [],
     bio: {},
   };
   const [firstName, setFirstName] = React.useState(initialValues.firstName);
@@ -2227,7 +2236,7 @@ export default function NestedJson(props) {
     setFirstName(initialValues.firstName);
     setLastName(initialValues[\\"last-Name\\"]);
     setLastName1(initialValues.lastName);
-    setCurrentLastName1Value(\\"\\");
+    setCurrentLastName1Value(undefined);
     setBio(initialValues.bio);
     setErrors({});
   };
@@ -2239,7 +2248,8 @@ export default function NestedJson(props) {
       setBio(initialData.bio);
     }
   }, []);
-  const [currentLastName1Value, setCurrentLastName1Value] = React.useState(\\"\\");
+  const [currentLastName1Value, setCurrentLastName1Value] =
+    React.useState(undefined);
   const lastName1Ref = React.createRef();
   const validations = {
     firstName: [],
@@ -2349,7 +2359,7 @@ export default function NestedJson(props) {
       <ArrayField
         onChange={async (items) => {
           setLastName1(items);
-          setCurrentLastName1Value(\\"\\");
+          setCurrentLastName1Value(undefined);
         }}
         currentFieldValue={currentLastName1Value}
         label={\\"lastName\\"}
@@ -2357,6 +2367,7 @@ export default function NestedJson(props) {
         hasError={errors.lastName?.hasError}
         setFieldValue={setCurrentLastName1Value}
         inputFieldRef={lastName1Ref}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"lastName\\"
@@ -3380,7 +3391,7 @@ export default function BlogCreateForm(props) {
   const initialValues = {
     title: undefined,
     content: undefined,
-    switch: undefined,
+    switch: false,
     authorName: undefined,
   };
   const [title, setTitle] = React.useState(initialValues.title);
@@ -3668,6 +3679,7 @@ function ArrayField({
   hasError,
   setFieldValue,
   currentFieldValue,
+  defaultFieldValue,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -3683,7 +3695,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (!!currentFieldValue && !hasError) {
+    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -3717,7 +3729,7 @@ function ArrayField({
               type=\\"button\\"
               size=\\"small\\"
               onClick={() => {
-                setFieldValue(\\"\\");
+                setFieldValue(defaultFieldValue);
                 setIsEditing(false);
                 setSelectedBadgeIndex(undefined);
               }}
@@ -3754,7 +3766,7 @@ function ArrayField({
                   setIsEditing(true);
                 }}
               >
-                {value}
+                {value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -3801,7 +3813,7 @@ export default function InputGalleryCreateForm(props) {
     attend: undefined,
     maybeSlide: false,
     maybeCheck: undefined,
-    arrayTypeField: undefined,
+    arrayTypeField: [],
     timestamp: undefined,
     ippy: undefined,
     timeisnow: undefined,
@@ -3825,14 +3837,14 @@ export default function InputGalleryCreateForm(props) {
     setMaybeSlide(initialValues.maybeSlide);
     setMaybeCheck(initialValues.maybeCheck);
     setArrayTypeField(initialValues.arrayTypeField);
-    setCurrentArrayTypeFieldValue(\\"\\");
+    setCurrentArrayTypeFieldValue(undefined);
     setTimestamp(initialValues.timestamp);
     setIppy(initialValues.ippy);
     setTimeisnow(initialValues.timeisnow);
     setErrors({});
   };
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const arrayTypeFieldRef = React.createRef();
   const validations = {
     num: [],
@@ -4098,7 +4110,7 @@ export default function InputGalleryCreateForm(props) {
       <ArrayField
         onChange={async (items) => {
           setArrayTypeField(items);
-          setCurrentArrayTypeFieldValue(\\"\\");
+          setCurrentArrayTypeFieldValue(undefined);
         }}
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
@@ -4106,6 +4118,7 @@ export default function InputGalleryCreateForm(props) {
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Array type field\\"
@@ -4360,6 +4373,7 @@ function ArrayField({
   hasError,
   setFieldValue,
   currentFieldValue,
+  defaultFieldValue,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -4375,7 +4389,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (!!currentFieldValue && !hasError) {
+    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -4409,7 +4423,7 @@ function ArrayField({
               type=\\"button\\"
               size=\\"small\\"
               onClick={() => {
-                setFieldValue(\\"\\");
+                setFieldValue(defaultFieldValue);
                 setIsEditing(false);
                 setSelectedBadgeIndex(undefined);
               }}
@@ -4446,7 +4460,7 @@ function ArrayField({
                   setIsEditing(true);
                 }}
               >
-                {value}
+                {value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -4495,7 +4509,7 @@ export default function InputGalleryCreateForm(props) {
     attend: undefined,
     maybeSlide: false,
     maybeCheck: undefined,
-    arrayTypeField: undefined,
+    arrayTypeField: [],
     timestamp: undefined,
     ippy: undefined,
     timeisnow: undefined,
@@ -4520,7 +4534,7 @@ export default function InputGalleryCreateForm(props) {
     setMaybeSlide(cleanValues.maybeSlide);
     setMaybeCheck(cleanValues.maybeCheck);
     setArrayTypeField(cleanValues.arrayTypeField);
-    setCurrentArrayTypeFieldValue(\\"\\");
+    setCurrentArrayTypeFieldValue(undefined);
     setTimestamp(cleanValues.timestamp);
     setIppy(cleanValues.ippy);
     setTimeisnow(cleanValues.timeisnow);
@@ -4539,7 +4553,7 @@ export default function InputGalleryCreateForm(props) {
   }, [id, inputGallery]);
   React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const arrayTypeFieldRef = React.createRef();
   const validations = {
     num: [],
@@ -4814,7 +4828,7 @@ export default function InputGalleryCreateForm(props) {
       <ArrayField
         onChange={async (items) => {
           setArrayTypeField(items);
-          setCurrentArrayTypeFieldValue(\\"\\");
+          setCurrentArrayTypeFieldValue(undefined);
         }}
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
@@ -4822,6 +4836,7 @@ export default function InputGalleryCreateForm(props) {
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Array type field\\"

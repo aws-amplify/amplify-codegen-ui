@@ -92,6 +92,10 @@ export const setErrorState = (key: string | PropertyName, value: Expression) => 
   );
 };
 
+/**
+ * Note this is not for handling arrays.
+ * If you need a default array value (e.g. []). Pass in an empty array at a higher level.
+ */
 export const getDefaultValueExpression = (
   name: string,
   componentType: string,
@@ -99,6 +103,7 @@ export const getDefaultValueExpression = (
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
     ToggleButton: factory.createFalse(),
+    SwitchField: factory.createFalse(),
     StepperField: factory.createNumericLiteral(0),
     SliderField: factory.createNumericLiteral(0),
   };
@@ -125,7 +130,7 @@ export const getDefaultValueExpression = (
 export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement => {
   const stateNames = new Set<string>();
   const propertyAssignments = Object.entries(fieldConfigs).reduce<PropertyAssignment[]>(
-    (acc, [name, { dataType, componentType }]) => {
+    (acc, [name, { dataType, componentType, isArray }]) => {
       const stateName = name.split('.')[0];
       if (!stateNames.has(stateName)) {
         acc.push(
@@ -133,7 +138,9 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
             isValidVariableName(stateName)
               ? factory.createIdentifier(stateName)
               : factory.createStringLiteral(stateName),
-            getDefaultValueExpression(name, componentType, dataType),
+            isArray
+              ? factory.createArrayLiteralExpression([], false)
+              : getDefaultValueExpression(name, componentType, dataType),
           ),
         );
         stateNames.add(stateName);
@@ -206,7 +213,7 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
 
   const stateNames = new Set<string>();
   const expressions = Object.entries(fieldConfigs).reduce<Statement[]>(
-    (acc, [name, { isArray, sanitizedFieldName }]) => {
+    (acc, [name, { isArray, sanitizedFieldName, componentType, dataType }]) => {
       const stateName = name.split('.')[0];
       const renderedName = sanitizedFieldName || stateName;
       if (!stateNames.has(stateName)) {
@@ -225,7 +232,12 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
           ),
         );
         if (isArray) {
-          acc.push(setStateExpression(getCurrentValueName(renderedName), factory.createStringLiteral('')));
+          acc.push(
+            setStateExpression(
+              getCurrentValueName(renderedName),
+              getDefaultValueExpression(name, componentType, dataType),
+            ),
+          );
         }
         stateNames.add(stateName);
       }

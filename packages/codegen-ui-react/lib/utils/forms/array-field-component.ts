@@ -20,6 +20,7 @@ import {
   capitalizeFirstLetter,
   getCurrentValueIdentifier,
   getCurrentValueName,
+  getDefaultValueExpression,
   getSetNameIdentifier,
 } from '../../forms/form-state';
 import { addUseEffectWrapper } from '../generate-react-hooks';
@@ -249,11 +250,21 @@ export const generateArrayFieldComponent = () => {
                 [
                   factory.createIfStatement(
                     factory.createBinaryExpression(
-                      factory.createPrefixUnaryExpression(
-                        SyntaxKind.ExclamationToken,
-                        factory.createPrefixUnaryExpression(
-                          SyntaxKind.ExclamationToken,
-                          factory.createIdentifier('currentFieldValue'),
+                      factory.createParenthesizedExpression(
+                        factory.createBinaryExpression(
+                          factory.createPrefixUnaryExpression(
+                            SyntaxKind.ExclamationToken,
+                            factory.createPrefixUnaryExpression(
+                              SyntaxKind.ExclamationToken,
+                              factory.createIdentifier('currentFieldValue'),
+                            ),
+                          ),
+                          factory.createToken(SyntaxKind.BarBarToken),
+                          factory.createBinaryExpression(
+                            factory.createIdentifier('currentFieldValue'),
+                            factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                            factory.createFalse(),
+                          ),
                         ),
                       ),
                       factory.createToken(SyntaxKind.AmpersandAmpersandToken),
@@ -487,7 +498,7 @@ export const generateArrayFieldComponent = () => {
                                             factory.createCallExpression(
                                               factory.createIdentifier('setFieldValue'),
                                               undefined,
-                                              [factory.createStringLiteral('')],
+                                              [factory.createIdentifier('defaultFieldValue')],
                                             ),
                                           ),
                                           factory.createExpressionStatement(
@@ -752,7 +763,17 @@ export const generateArrayFieldComponent = () => {
                                         ]),
                                       ),
                                       [
-                                        factory.createJsxExpression(undefined, factory.createIdentifier('value')),
+                                        factory.createJsxExpression(
+                                          undefined,
+                                          factory.createCallExpression(
+                                            factory.createPropertyAccessExpression(
+                                              factory.createIdentifier('value'),
+                                              factory.createIdentifier('toString'),
+                                            ),
+                                            undefined,
+                                            [],
+                                          ),
+                                        ),
                                         factory.createJsxSelfClosingElement(
                                           factory.createIdentifier('Icon'),
                                           undefined,
@@ -946,6 +967,7 @@ export const generateArrayFieldComponent = () => {
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('hasError'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('setFieldValue'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('currentFieldValue'), undefined),
+          factory.createBindingElement(undefined, undefined, factory.createIdentifier('defaultFieldValue'), undefined),
         ]),
         undefined,
         undefined,
@@ -1014,7 +1036,9 @@ export const renderArrayFieldComponent = (
                     ),
                   ),
                   factory.createExpressionStatement(
-                    factory.createCallExpression(setStateName, undefined, [factory.createStringLiteral('')]),
+                    factory.createCallExpression(setStateName, undefined, [
+                      getDefaultValueExpression(fieldName, fieldConfig.componentType, fieldConfig.dataType),
+                    ]),
                   ),
                 ],
                 true,
@@ -1061,6 +1085,13 @@ export const renderArrayFieldComponent = (
         factory.createJsxAttribute(
           factory.createIdentifier('inputFieldRef'),
           factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedFieldName}Ref`)),
+        ),
+        factory.createJsxAttribute(
+          factory.createIdentifier('defaultFieldValue'),
+          factory.createJsxExpression(
+            undefined,
+            getDefaultValueExpression(fieldName, fieldConfig.componentType, fieldConfig.dataType),
+          ),
         ),
       ]),
     ),
