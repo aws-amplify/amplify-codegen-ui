@@ -47,7 +47,7 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
-    it('should render a form with a resvered word as the field', () => {
+    it('should render a form with a javascript reserved word as the field name', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/blog-datastore-create',
         'datastore/blog',

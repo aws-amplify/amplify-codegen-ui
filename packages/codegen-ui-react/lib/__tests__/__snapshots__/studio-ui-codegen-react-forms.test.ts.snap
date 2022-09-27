@@ -3367,7 +3367,7 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests should render a form with a resvered word as the field 1`] = `
+exports[`amplify form renderer tests datastore form tests should render a form with a javascript reserved word as the field name 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
@@ -3613,7 +3613,7 @@ export default function BlogCreateForm(props) {
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests should render a form with a resvered word as the field 2`] = `
+exports[`amplify form renderer tests datastore form tests should render a form with a javascript reserved word as the field name 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { GridProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
@@ -3932,7 +3932,7 @@ export default function InputGalleryCreateForm(props) {
         type=\\"number\\"
         onChange={(e) => {
           let value = parseInt(e.target.value);
-          if (NaN(value)) {
+          if (isNaN(value)) {
             setErrors((errors) => ({
               ...errors,
               num: \\"Value must be a valid number\\",
@@ -3971,7 +3971,7 @@ export default function InputGalleryCreateForm(props) {
         type=\\"number\\"
         onChange={(e) => {
           let value = Number(e.target.value);
-          if (NaN(value)) {
+          if (isNaN(value)) {
             setErrors((errors) => ({
               ...errors,
               rootbeer: \\"Value must be a valid number\\",
@@ -4646,7 +4646,7 @@ export default function InputGalleryCreateForm(props) {
         defaultValue={num}
         onChange={(e) => {
           let value = parseInt(e.target.value);
-          if (NaN(value)) {
+          if (isNaN(value)) {
             setErrors((errors) => ({
               ...errors,
               num: \\"Value must be a valid number\\",
@@ -4686,7 +4686,7 @@ export default function InputGalleryCreateForm(props) {
         defaultValue={rootbeer}
         onChange={(e) => {
           let value = Number(e.target.value);
-          if (NaN(value)) {
+          if (isNaN(value)) {
             setErrors((errors) => ({
               ...errors,
               rootbeer: \\"Value must be a valid number\\",

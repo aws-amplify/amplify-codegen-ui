@@ -59,7 +59,7 @@ const numberVariableStatement = (fieldName: string, variable: VariableStatement)
   return [
     variable,
     factory.createIfStatement(
-      factory.createCallExpression(factory.createIdentifier('NaN'), undefined, [factory.createIdentifier('value')]),
+      factory.createCallExpression(factory.createIdentifier('isNaN'), undefined, [factory.createIdentifier('value')]),
       factory.createBlock(
         [
           setErrorState(
