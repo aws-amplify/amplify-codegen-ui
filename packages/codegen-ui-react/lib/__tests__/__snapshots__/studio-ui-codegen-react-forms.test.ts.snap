@@ -730,7 +730,12 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -1072,7 +1077,12 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -1563,7 +1573,12 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -2112,7 +2127,12 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -3701,7 +3721,12 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -4395,7 +4420,12 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if ((!!currentFieldValue || currentFieldValue === false) && !hasError) {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
