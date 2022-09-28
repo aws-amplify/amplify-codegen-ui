@@ -87,6 +87,7 @@ export type GenericDataField = {
 
 export type GenericDataModel = {
   fields: { [fieldName: string]: GenericDataField };
+  isJoinTable?: boolean;
 };
 
 export type GenericDataSchema = {
