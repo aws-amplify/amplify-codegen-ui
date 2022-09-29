@@ -8,7 +8,7 @@ exports[`form-render utils should generate before & complete types if datastore 
     onError?: (fields: mySampleFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
-    onValidate?: mySampleFormInputValues<false>;
+    onValidate?: mySampleFormValidationValues;
 }"
 `;
 
@@ -17,6 +17,6 @@ exports[`form-render utils should generate regular onsubmit if dataSourceType is
     onSubmit: (fields: myCustomFormInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: myCustomFormInputValues) => myCustomFormInputValues;
-    onValidate?: myCustomFormInputValues<false>;
+    onValidate?: myCustomFormValidationValues;
 }"
 `;

@@ -15,10 +15,10 @@
  */
 
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
-import { generateInputTypes } from '../../forms/type-helper';
+import { generateFieldTypes } from '../../forms/type-helper';
 import { genericPrinter } from '../__utils__';
 
-describe('should generate nested object', () => {
+describe('should generate nested object types', () => {
   it('should generate type for nested object', () => {
     const fieldConfigs: Record<string, FieldConfigMetadata> = {
       'bio.favoriteAnimal.animalMeta.family.genus': {
@@ -42,7 +42,7 @@ describe('should generate nested object', () => {
         componentType: 'CheckboxField',
       },
     };
-    const types = generateInputTypes('myCreateForm', fieldConfigs);
+    const types = generateFieldTypes('myCreateForm', 'input', fieldConfigs);
     const response = genericPrinter(types);
     expect(response).toMatchSnapshot();
   });
@@ -65,8 +65,57 @@ describe('should generate nested object', () => {
         isArray: true,
       },
     };
-    const types = generateInputTypes('myCreateForm', fieldConfigs);
+    const types = generateFieldTypes('myCreateForm', 'input', fieldConfigs);
     const response = genericPrinter(types);
+    expect(response).toMatchSnapshot();
+  });
+});
+
+describe('should generate types accordingly for array fields', () => {
+  it('should generate array for input type', () => {
+    const fieldConfigs: Record<string, FieldConfigMetadata> = {
+      firstName: {
+        dataType: 'String',
+        validationRules: [],
+        componentType: 'TextField',
+      },
+      isExplorer: {
+        dataType: 'Boolean',
+        validationRules: [],
+        componentType: 'RadioGroupField',
+      },
+      tags: {
+        validationRules: [],
+        componentType: 'TextField',
+        isArray: true,
+      },
+    };
+    const types = generateFieldTypes('myCreateForm', 'input', fieldConfigs);
+    const response = genericPrinter(types);
+    expect(response).toContain('tags?: string[];');
+    expect(response).toMatchSnapshot();
+  });
+  it('should remove array type for the validation type', () => {
+    const fieldConfigs: Record<string, FieldConfigMetadata> = {
+      firstName: {
+        dataType: 'String',
+        validationRules: [],
+        componentType: 'TextField',
+      },
+      isExplorer: {
+        dataType: 'Boolean',
+        validationRules: [],
+        componentType: 'RadioGroupField',
+      },
+      tags: {
+        validationRules: [],
+        componentType: 'TextField',
+        isArray: true,
+      },
+    };
+    const types = generateFieldTypes('myCreateForm', 'validation', fieldConfigs);
+    const response = genericPrinter(types);
+    expect(response).toContain('tags?: ValidationFunction<string>;');
     expect(response).toMatchSnapshot();
   });
 });

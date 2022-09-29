@@ -23,6 +23,7 @@ import {
   getDefaultValueExpression,
   getSetNameIdentifier,
 } from '../../forms/form-state';
+import { buildOverrideOnChangeStatement } from '../../forms/form-renderer-helper';
 import { addUseEffectWrapper } from '../generate-react-hooks';
 
 export const generateArrayFieldComponent = () => {
@@ -997,17 +998,22 @@ export const generateArrayFieldComponent = () => {
     >
     <ExampleInputField />
   </ArrayField>
+
+  wraps input field component with array field component
  */
 
 export const renderArrayFieldComponent = (
   fieldName: string,
   fieldLabel: string,
-  fieldConfig: FieldConfigMetadata,
+  fieldConfigs: Record<string, FieldConfigMetadata>,
   inputField: JsxChild,
 ) => {
-  const renderedFieldName = fieldConfig.sanitizedFieldName || fieldName;
+  const { sanitizedFieldName, dataType, componentType } = fieldConfigs[fieldName];
+  const renderedFieldName = sanitizedFieldName || fieldName;
   const stateName = getCurrentValueIdentifier(renderedFieldName);
   const setStateName = getSetNameIdentifier(getCurrentValueName(renderedFieldName));
+  const valuesListName = factory.createIdentifier('values');
+  const onChangeArgName = factory.createIdentifier('items');
   return factory.createJsxElement(
     factory.createJsxOpeningElement(
       factory.createIdentifier('ArrayField'),
@@ -1025,7 +1031,7 @@ export const renderArrayFieldComponent = (
                   undefined,
                   undefined,
                   undefined,
-                  factory.createIdentifier('items'),
+                  onChangeArgName,
                   undefined,
                   undefined,
                 ),
@@ -1034,16 +1040,24 @@ export const renderArrayFieldComponent = (
               factory.createToken(SyntaxKind.EqualsGreaterThanToken),
               factory.createBlock(
                 [
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [factory.createVariableDeclaration(valuesListName, undefined, undefined, onChangeArgName)],
+                      NodeFlags.Let,
+                    ),
+                  ),
+                  buildOverrideOnChangeStatement(fieldName, fieldConfigs, valuesListName),
                   factory.createExpressionStatement(
                     factory.createCallExpression(
                       factory.createIdentifier(`set${capitalizeFirstLetter(renderedFieldName)}`),
                       undefined,
-                      [factory.createIdentifier('items')],
+                      [valuesListName],
                     ),
                   ),
                   factory.createExpressionStatement(
                     factory.createCallExpression(setStateName, undefined, [
-                      getDefaultValueExpression(fieldName, fieldConfig.componentType, fieldConfig.dataType),
+                      getDefaultValueExpression(fieldName, componentType, dataType),
                     ]),
                   ),
                 ],
@@ -1094,10 +1108,7 @@ export const renderArrayFieldComponent = (
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('defaultFieldValue'),
-          factory.createJsxExpression(
-            undefined,
-            getDefaultValueExpression(fieldName, fieldConfig.componentType, fieldConfig.dataType),
-          ),
+          factory.createJsxExpression(undefined, getDefaultValueExpression(fieldName, componentType, dataType)),
         ),
       ]),
     ),

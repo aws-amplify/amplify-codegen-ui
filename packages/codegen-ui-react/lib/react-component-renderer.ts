@@ -90,7 +90,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       return renderArrayFieldComponent(
         this.component.name,
         label,
-        this.componentMetadata.formMetadata?.fieldConfigs[this.component.name],
+        this.componentMetadata.formMetadata?.fieldConfigs,
         element,
       );
     }
