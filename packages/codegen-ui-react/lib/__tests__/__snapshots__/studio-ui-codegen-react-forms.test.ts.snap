@@ -343,14 +343,21 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
-    name?: UseBaseOrValidationType<useBase, string>;
-    email?: UseBaseOrValidationType<useBase, string>;
-    city?: UseBaseOrValidationType<useBase, string>;
-    category?: UseBaseOrValidationType<useBase, string>;
-    pages?: UseBaseOrValidationType<useBase, number>;
-    phone?: UseBaseOrValidationType<useBase, string>;
+export declare type CustomDataFormInputValues = {
+    name?: string;
+    email?: string;
+    city?: string;
+    category?: string;
+    pages?: number;
+    phone?: string;
+};
+export declare type CustomDataFormValidationValues = {
+    name?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
+    category?: ValidationFunction<string>;
+    pages?: ValidationFunction<number>;
+    phone?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
@@ -368,7 +375,7 @@ export declare type CustomDataFormProps = React.PropsWithChildren<{
     onSubmit: (fields: CustomDataFormInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
-    onValidate?: CustomDataFormInputValues<false>;
+    onValidate?: CustomDataFormValidationValues;
 }>;
 export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
 "
@@ -699,13 +706,19 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
-    name?: UseBaseOrValidationType<useBase, string>;
-    email?: UseBaseOrValidationType<useBase, string>;
-    city?: UseBaseOrValidationType<useBase, string>;
-    category?: UseBaseOrValidationType<useBase, string>;
-    pages?: UseBaseOrValidationType<useBase, number>;
+export declare type CustomDataFormInputValues = {
+    name?: string;
+    email?: string;
+    city?: string;
+    category?: string;
+    pages?: number;
+};
+export declare type CustomDataFormValidationValues = {
+    name?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
+    category?: ValidationFunction<string>;
+    pages?: ValidationFunction<number>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
@@ -723,7 +736,7 @@ export declare type CustomDataFormProps = React.PropsWithChildren<{
     onSubmit: (fields: CustomDataFormInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
-    onValidate?: CustomDataFormInputValues<false>;
+    onValidate?: CustomDataFormValidationValues;
 }>;
 export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
 "
@@ -979,7 +992,17 @@ export default function CustomDataForm(props) {
       ></TextField>
       <ArrayField
         onChange={async (items) => {
-          setEmail(items);
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email: values,
+              phone,
+            };
+            const result = onChange(modelFields);
+            values = result?.email ?? values;
+          }
+          setEmail(values);
           setCurrentEmailValue(undefined);
         }}
         currentFieldValue={currentEmailValue}
@@ -996,15 +1019,6 @@ export default function CustomDataForm(props) {
           defaultValue=\\"johndoe@amplify.com\\"
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                name,
-                email: value,
-                phone,
-              };
-              const result = onChange(modelFields);
-              value = result?.email ?? value;
-            }
             if (errors.email?.hasError) {
               runValidationTasks(\\"email\\", value);
             }
@@ -1019,7 +1033,17 @@ export default function CustomDataForm(props) {
       </ArrayField>
       <ArrayField
         onChange={async (items) => {
-          setPhone(items);
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              phone: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.phone ?? values;
+          }
+          setPhone(values);
           setCurrentPhoneValue(undefined);
         }}
         currentFieldValue={currentPhoneValue}
@@ -1037,15 +1061,6 @@ export default function CustomDataForm(props) {
           type=\\"tel\\"
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                name,
-                email,
-                phone: value,
-              };
-              const result = onChange(modelFields);
-              value = result?.phone ?? value;
-            }
             if (errors.phone?.hasError) {
               runValidationTasks(\\"phone\\", value);
             }
@@ -1101,11 +1116,15 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
-    name?: UseBaseOrValidationType<useBase, string>;
-    email?: UseBaseOrValidationType<useBase, string>;
-    phone?: UseBaseOrValidationType<useBase, string>;
+export declare type CustomDataFormInputValues = {
+    name?: string;
+    email?: string[];
+    phone?: string[];
+};
+export declare type CustomDataFormValidationValues = {
+    name?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    phone?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
@@ -1120,7 +1139,7 @@ export declare type CustomDataFormProps = React.PropsWithChildren<{
     onSubmit: (fields: CustomDataFormInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
-    onValidate?: CustomDataFormInputValues<false>;
+    onValidate?: CustomDataFormValidationValues;
 }>;
 export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
 "
@@ -1484,7 +1503,19 @@ export default function MyPostForm(props) {
       </Grid>
       <ArrayField
         onChange={async (items) => {
-          setCustomtags(items);
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags: values,
+              post_url,
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            values = result?.Customtags ?? values;
+          }
+          setCustomtags(values);
           setCurrentCustomtagsValue(undefined);
         }}
         currentFieldValue={currentCustomtagsValue}
@@ -1500,17 +1531,6 @@ export default function MyPostForm(props) {
           placeholder=\\"goals\\"
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                username,
-                caption,
-                Customtags: value,
-                post_url,
-                profile_url,
-              };
-              const result = onChange(modelFields);
-              value = result?.Customtags ?? value;
-            }
             if (errors.Customtags?.hasError) {
               runValidationTasks(\\"Customtags\\", value);
             }
@@ -1594,13 +1614,19 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type MyPostFormInputValues<useBase extends boolean = true> = {
-    username?: UseBaseOrValidationType<useBase, string>;
-    caption?: UseBaseOrValidationType<useBase, string>;
-    Customtags?: UseBaseOrValidationType<useBase, string>;
-    post_url?: UseBaseOrValidationType<useBase, string>;
-    profile_url?: UseBaseOrValidationType<useBase, string>;
+export declare type MyPostFormInputValues = {
+    username?: string;
+    caption?: string;
+    Customtags?: string[];
+    post_url?: string;
+    profile_url?: string;
+};
+export declare type MyPostFormValidationValues = {
+    username?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    Customtags?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
@@ -1621,7 +1647,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onValidate?: MyPostFormInputValues<false>;
+    onValidate?: MyPostFormValidationValues;
 }>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
@@ -1989,7 +2015,20 @@ export default function NestedJson(props) {
       ></TextField>
       <ArrayField
         onChange={async (items) => {
-          setNicknames1(items);
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              \\"first-Name\\": firstName,
+              lastName,
+              bio,
+              Nicknames1: values,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
+            };
+            const result = onChange(modelFields);
+            values = result?.Nicknames1 ?? values;
+          }
+          setNicknames1(values);
           setCurrentNicknames1Value(undefined);
         }}
         currentFieldValue={currentNicknames1Value}
@@ -2004,18 +2043,6 @@ export default function NestedJson(props) {
           label=\\"Nick Names1\\"
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                \\"first-Name\\": firstName,
-                lastName,
-                bio,
-                Nicknames1: value,
-                \\"nick-names2\\": nicknames,
-                \\"first Name\\": firstName1,
-              };
-              const result = onChange(modelFields);
-              value = result?.Nicknames1 ?? value;
-            }
             if (errors.Nicknames1?.hasError) {
               runValidationTasks(\\"Nicknames1\\", value);
             }
@@ -2032,7 +2059,20 @@ export default function NestedJson(props) {
       </ArrayField>
       <ArrayField
         onChange={async (items) => {
-          setNicknames(items);
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              \\"first-Name\\": firstName,
+              lastName,
+              bio,
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
+            };
+            const result = onChange(modelFields);
+            values = result?.[\\"nick-names2\\"] ?? values;
+          }
+          setNicknames(values);
           setCurrentNicknamesValue(undefined);
         }}
         currentFieldValue={currentNicknamesValue}
@@ -2047,18 +2087,6 @@ export default function NestedJson(props) {
           label=\\"nick-Names2\\"
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                \\"first-Name\\": firstName,
-                lastName,
-                bio,
-                Nicknames1,
-                \\"nick-names2\\": nicknames,
-                \\"first Name\\": firstName1,
-              };
-              const result = onChange(modelFields);
-              value = result?.[\\"nick-names2\\"] ?? value;
-            }
             if (errors[\\"nick-names2\\"]?.hasError) {
               runValidationTasks(\\"nick-names2\\", value);
             }
@@ -2142,16 +2170,26 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type NestedJsonInputValues<useBase extends boolean = true> = {
-    \\"first-Name\\"?: UseBaseOrValidationType<useBase, string>;
-    lastName?: UseBaseOrValidationType<useBase, string>;
-    Nicknames1?: UseBaseOrValidationType<useBase, string>;
-    \\"nick-names2\\"?: UseBaseOrValidationType<useBase, string>;
-    \\"first Name\\"?: UseBaseOrValidationType<useBase, string>;
+export declare type NestedJsonInputValues = {
+    \\"first-Name\\"?: string;
+    lastName?: string;
+    Nicknames1?: string[];
+    \\"nick-names2\\"?: string[];
+    \\"first Name\\"?: string;
     bio?: {
-        \\"favorite Quote\\"?: UseBaseOrValidationType<useBase, string>;
-        \\"favorite-Animal\\"?: UseBaseOrValidationType<useBase, string>;
+        \\"favorite Quote\\"?: string;
+        \\"favorite-Animal\\"?: string;
+    };
+};
+export declare type NestedJsonValidationValues = {
+    \\"first-Name\\"?: ValidationFunction<string>;
+    lastName?: ValidationFunction<string>;
+    Nicknames1?: ValidationFunction<string>;
+    \\"nick-names2\\"?: ValidationFunction<string>;
+    \\"first Name\\"?: ValidationFunction<string>;
+    bio?: {
+        \\"favorite Quote\\"?: ValidationFunction<string>;
+        \\"favorite-Animal\\"?: ValidationFunction<string>;
     };
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -2172,7 +2210,7 @@ export declare type NestedJsonProps = React.PropsWithChildren<{
     onSubmit: (fields: NestedJsonInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: NestedJsonInputValues) => NestedJsonInputValues;
-    onValidate?: NestedJsonInputValues<false>;
+    onValidate?: NestedJsonValidationValues;
 }>;
 export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
@@ -2477,7 +2515,18 @@ export default function NestedJson(props) {
       ></SelectField>
       <ArrayField
         onChange={async (items) => {
-          setLastName1(items);
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
+              bio,
+            };
+            const result = onChange(modelFields);
+            values = result?.lastName ?? values;
+          }
+          setLastName1(values);
           setCurrentLastName1Value(undefined);
         }}
         currentFieldValue={currentLastName1Value}
@@ -2492,16 +2541,6 @@ export default function NestedJson(props) {
           label=\\"lastName\\"
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                firstName,
-                \\"last-Name\\": lastName,
-                lastName: lastName1,
-                bio,
-              };
-              const result = onChange(modelFields);
-              value = result?.lastName ?? value;
-            }
             if (errors.lastName?.hasError) {
               runValidationTasks(\\"lastName\\", value);
             }
@@ -2616,14 +2655,22 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type NestedJsonInputValues<useBase extends boolean = true> = {
-    firstName?: UseBaseOrValidationType<useBase, string>;
-    \\"last-Name\\"?: UseBaseOrValidationType<useBase, string>;
-    lastName?: UseBaseOrValidationType<useBase, string>;
+export declare type NestedJsonInputValues = {
+    firstName?: string;
+    \\"last-Name\\"?: string;
+    lastName?: string[];
     bio?: {
-        favoriteQuote?: UseBaseOrValidationType<useBase, string>;
-        favoriteAnimal?: UseBaseOrValidationType<useBase, string>;
+        favoriteQuote?: string;
+        favoriteAnimal?: string;
+    };
+};
+export declare type NestedJsonValidationValues = {
+    firstName?: ValidationFunction<string>;
+    \\"last-Name\\"?: ValidationFunction<string>;
+    lastName?: ValidationFunction<string>;
+    bio?: {
+        favoriteQuote?: ValidationFunction<string>;
+        favoriteAnimal?: ValidationFunction<string>;
     };
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -2643,7 +2690,7 @@ export declare type NestedJsonProps = React.PropsWithChildren<{
     onSubmit: (fields: NestedJsonInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: NestedJsonInputValues) => NestedJsonInputValues;
-    onValidate?: NestedJsonInputValues<false>;
+    onValidate?: NestedJsonValidationValues;
 }>;
 export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
@@ -2799,9 +2846,11 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type CustomWithSectionalElementsInputValues<useBase extends boolean = true> = {
-    name?: UseBaseOrValidationType<useBase, string>;
+export declare type CustomWithSectionalElementsInputValues = {
+    name?: string;
+};
+export declare type CustomWithSectionalElementsValidationValues = {
+    name?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomWithSectionalElementsOverridesProps = {
@@ -2817,7 +2866,7 @@ export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
     onSubmit: (fields: CustomWithSectionalElementsInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: CustomWithSectionalElementsInputValues) => CustomWithSectionalElementsInputValues;
-    onValidate?: CustomWithSectionalElementsInputValues<false>;
+    onValidate?: CustomWithSectionalElementsValidationValues;
 }>;
 export default function CustomWithSectionalElements(props: CustomWithSectionalElementsProps): React.ReactElement;
 "
@@ -3078,12 +3127,17 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type MyPostFormInputValues<useBase extends boolean = true> = {
-    caption?: UseBaseOrValidationType<useBase, string>;
-    username?: UseBaseOrValidationType<useBase, string>;
-    post_url?: UseBaseOrValidationType<useBase, string>;
-    profile_url?: UseBaseOrValidationType<useBase, string>;
+export declare type MyPostFormInputValues = {
+    caption?: string;
+    username?: string;
+    post_url?: string;
+    profile_url?: string;
+};
+export declare type MyPostFormValidationValues = {
+    caption?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
@@ -3102,7 +3156,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onValidate?: MyPostFormInputValues<false>;
+    onValidate?: MyPostFormValidationValues;
 }>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
@@ -3453,13 +3507,19 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type MyPostFormInputValues<useBase extends boolean = true> = {
-    TextAreaFieldbbd63464?: UseBaseOrValidationType<useBase, string>;
-    caption?: UseBaseOrValidationType<useBase, string>;
-    username?: UseBaseOrValidationType<useBase, string>;
-    profile_url?: UseBaseOrValidationType<useBase, string>;
-    post_url?: UseBaseOrValidationType<useBase, string>;
+export declare type MyPostFormInputValues = {
+    TextAreaFieldbbd63464?: string;
+    caption?: string;
+    username?: string;
+    profile_url?: string;
+    post_url?: string;
+};
+export declare type MyPostFormValidationValues = {
+    TextAreaFieldbbd63464?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
@@ -3480,7 +3540,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onValidate?: MyPostFormInputValues<false>;
+    onValidate?: MyPostFormValidationValues;
 }>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
@@ -3747,12 +3807,17 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type BlogCreateFormInputValues<useBase extends boolean = true> = {
-    title?: UseBaseOrValidationType<useBase, string>;
-    content?: UseBaseOrValidationType<useBase, string>;
-    switch?: UseBaseOrValidationType<useBase, boolean>;
-    published?: UseBaseOrValidationType<useBase, string>;
+export declare type BlogCreateFormInputValues = {
+    title?: string;
+    content?: string;
+    switch?: boolean;
+    published?: string;
+};
+export declare type BlogCreateFormValidationValues = {
+    title?: ValidationFunction<string>;
+    content?: ValidationFunction<string>;
+    switch?: ValidationFunction<boolean>;
+    published?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BlogCreateFormOverridesProps = {
@@ -3771,7 +3836,7 @@ export declare type BlogCreateFormProps = React.PropsWithChildren<{
     onError?: (fields: BlogCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
-    onValidate?: BlogCreateFormInputValues<false>;
+    onValidate?: BlogCreateFormValidationValues;
 }>;
 export default function BlogCreateForm(props: BlogCreateFormProps): React.ReactElement;
 "
@@ -4248,7 +4313,23 @@ export default function InputGalleryCreateForm(props) {
       ></CheckboxField>
       <ArrayField
         onChange={async (items) => {
-          setArrayTypeField(items);
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField: values,
+              timestamp,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            values = result?.arrayTypeField ?? values;
+          }
+          setArrayTypeField(values);
           setCurrentArrayTypeFieldValue(undefined);
         }}
         currentFieldValue={currentArrayTypeFieldValue}
@@ -4265,21 +4346,6 @@ export default function InputGalleryCreateForm(props) {
           isReadOnly={false}
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                num,
-                rootbeer,
-                attend,
-                maybeSlide,
-                maybeCheck,
-                arrayTypeField: value,
-                timestamp,
-                ippy,
-                timeisnow,
-              };
-              const result = onChange(modelFields);
-              value = result?.arrayTypeField ?? value;
-            }
             if (errors.arrayTypeField?.hasError) {
               runValidationTasks(\\"arrayTypeField\\", value);
             }
@@ -4440,17 +4506,27 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type InputGalleryCreateFormInputValues<useBase extends boolean = true> = {
-    num?: UseBaseOrValidationType<useBase, number>;
-    rootbeer?: UseBaseOrValidationType<useBase, number>;
-    attend?: UseBaseOrValidationType<useBase, boolean>;
-    maybeSlide?: UseBaseOrValidationType<useBase, boolean>;
-    maybeCheck?: UseBaseOrValidationType<useBase, boolean>;
-    arrayTypeField?: UseBaseOrValidationType<useBase, string>;
-    timestamp?: UseBaseOrValidationType<useBase, number>;
-    ippy?: UseBaseOrValidationType<useBase, string>;
-    timeisnow?: UseBaseOrValidationType<useBase, string>;
+export declare type InputGalleryCreateFormInputValues = {
+    num?: number;
+    rootbeer?: number;
+    attend?: boolean;
+    maybeSlide?: boolean;
+    maybeCheck?: boolean;
+    arrayTypeField?: string[];
+    timestamp?: number;
+    ippy?: string;
+    timeisnow?: string;
+};
+export declare type InputGalleryCreateFormValidationValues = {
+    num?: ValidationFunction<number>;
+    rootbeer?: ValidationFunction<number>;
+    attend?: ValidationFunction<boolean>;
+    maybeSlide?: ValidationFunction<boolean>;
+    maybeCheck?: ValidationFunction<boolean>;
+    arrayTypeField?: ValidationFunction<string>;
+    timestamp?: ValidationFunction<number>;
+    ippy?: ValidationFunction<string>;
+    timeisnow?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type InputGalleryCreateFormOverridesProps = {
@@ -4474,7 +4550,7 @@ export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
     onError?: (fields: InputGalleryCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
-    onValidate?: InputGalleryCreateFormInputValues<false>;
+    onValidate?: InputGalleryCreateFormValidationValues;
 }>;
 export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
 "
@@ -4998,7 +5074,23 @@ export default function InputGalleryUpdateForm(props) {
       ></CheckboxField>
       <ArrayField
         onChange={async (items) => {
-          setArrayTypeField(items);
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField: values,
+              timestamp,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            values = result?.arrayTypeField ?? values;
+          }
+          setArrayTypeField(values);
           setCurrentArrayTypeFieldValue(undefined);
         }}
         currentFieldValue={currentArrayTypeFieldValue}
@@ -5015,21 +5107,6 @@ export default function InputGalleryUpdateForm(props) {
           isReadOnly={false}
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                num,
-                rootbeer,
-                attend,
-                maybeSlide,
-                maybeCheck,
-                arrayTypeField: value,
-                timestamp,
-                ippy,
-                timeisnow,
-              };
-              const result = onChange(modelFields);
-              value = result?.arrayTypeField ?? value;
-            }
             if (errors.arrayTypeField?.hasError) {
               runValidationTasks(\\"arrayTypeField\\", value);
             }
@@ -5196,17 +5273,27 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type InputGalleryUpdateFormInputValues<useBase extends boolean = true> = {
-    num?: UseBaseOrValidationType<useBase, number>;
-    rootbeer?: UseBaseOrValidationType<useBase, number>;
-    attend?: UseBaseOrValidationType<useBase, boolean>;
-    maybeSlide?: UseBaseOrValidationType<useBase, boolean>;
-    maybeCheck?: UseBaseOrValidationType<useBase, boolean>;
-    arrayTypeField?: UseBaseOrValidationType<useBase, string>;
-    timestamp?: UseBaseOrValidationType<useBase, number>;
-    ippy?: UseBaseOrValidationType<useBase, string>;
-    timeisnow?: UseBaseOrValidationType<useBase, string>;
+export declare type InputGalleryUpdateFormInputValues = {
+    num?: number;
+    rootbeer?: number;
+    attend?: boolean;
+    maybeSlide?: boolean;
+    maybeCheck?: boolean;
+    arrayTypeField?: string[];
+    timestamp?: number;
+    ippy?: string;
+    timeisnow?: string;
+};
+export declare type InputGalleryUpdateFormValidationValues = {
+    num?: ValidationFunction<number>;
+    rootbeer?: ValidationFunction<number>;
+    attend?: ValidationFunction<boolean>;
+    maybeSlide?: ValidationFunction<boolean>;
+    maybeCheck?: ValidationFunction<boolean>;
+    arrayTypeField?: ValidationFunction<string>;
+    timestamp?: ValidationFunction<number>;
+    ippy?: ValidationFunction<string>;
+    timeisnow?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type InputGalleryUpdateFormOverridesProps = {
@@ -5231,7 +5318,7 @@ export declare type InputGalleryUpdateFormProps = React.PropsWithChildren<{
     onError?: (fields: InputGalleryUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: InputGalleryUpdateFormInputValues) => InputGalleryUpdateFormInputValues;
-    onValidate?: InputGalleryUpdateFormInputValues<false>;
+    onValidate?: InputGalleryUpdateFormValidationValues;
 }>;
 export default function InputGalleryUpdateForm(props: InputGalleryUpdateFormProps): React.ReactElement;
 "
@@ -5551,13 +5638,19 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type PostCreateFormRowInputValues<useBase extends boolean = true> = {
-    username?: UseBaseOrValidationType<useBase, string>;
-    caption?: UseBaseOrValidationType<useBase, string>;
-    post_url?: UseBaseOrValidationType<useBase, string>;
-    profile_url?: UseBaseOrValidationType<useBase, string>;
-    status?: UseBaseOrValidationType<useBase, string>;
+export declare type PostCreateFormRowInputValues = {
+    username?: string;
+    caption?: string;
+    post_url?: string;
+    profile_url?: string;
+    status?: string;
+};
+export declare type PostCreateFormRowValidationValues = {
+    username?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+    status?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PostCreateFormRowOverridesProps = {
@@ -5578,7 +5671,7 @@ export declare type PostCreateFormRowProps = React.PropsWithChildren<{
     onError?: (fields: PostCreateFormRowInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: PostCreateFormRowInputValues) => PostCreateFormRowInputValues;
-    onValidate?: PostCreateFormRowInputValues<false>;
+    onValidate?: PostCreateFormRowValidationValues;
 }>;
 export default function PostCreateFormRow(props: PostCreateFormRowProps): React.ReactElement;
 "

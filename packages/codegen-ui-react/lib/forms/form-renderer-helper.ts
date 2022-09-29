@@ -377,6 +377,9 @@ export function buildOnBlurStatement(fieldName: string, fieldConfig: FieldConfig
  * the function expects all fields in return
  * the value for that fields onChange will be used from the return object for validation and updating the new state
  *
+ * if a valueName override is provided it will use the provided name
+ * this the name of the variable to update if onChange override function is provided
+ *
  *
  * ex. if the field is email
  * const returnObject = onChange({ email, ...otherFieldsForForm });
@@ -387,19 +390,21 @@ export function buildOnBlurStatement(fieldName: string, fieldConfig: FieldConfig
 export const buildOverrideOnChangeStatement = (
   fieldName: string,
   fieldConfigs: Record<string, FieldConfigMetadata>,
+  valueNameOverride?: Identifier,
 ): IfStatement => {
   const keyPath = fieldName.split('.');
   const keyName = keyPath[0];
+  const valueName = valueNameOverride ?? factory.createIdentifier('value');
   let keyValueExpression = factory.createPropertyAssignment(
     isValidVariableName(keyName)
       ? factory.createIdentifier(keyName)
       : factory.createComputedPropertyName(factory.createStringLiteral(keyName)),
-    factory.createIdentifier('value'),
+    valueName,
   );
   if (keyPath.length > 1) {
     keyValueExpression = factory.createPropertyAssignment(
       factory.createIdentifier(keyName),
-      buildNestedStateSet(keyPath, [keyName], factory.createIdentifier('value')),
+      buildNestedStateSet(keyPath, [keyName], valueName),
     );
   }
   return factory.createIfStatement(
@@ -427,12 +432,12 @@ export const buildOverrideOnChangeStatement = (
         ),
         factory.createExpressionStatement(
           factory.createBinaryExpression(
-            factory.createIdentifier('value'),
+            valueName,
             factory.createToken(SyntaxKind.EqualsToken),
             factory.createBinaryExpression(
               buildAccessChain(['result', ...fieldName.split('.')]),
               factory.createToken(SyntaxKind.QuestionQuestionToken),
-              factory.createIdentifier('value'),
+              valueName,
             ),
           ),
         ),
@@ -529,7 +534,6 @@ export const buildOnChangeStatement = (
           factory.createBlock(
             [
               ...buildTargetVariable(fieldType, fieldName, dataType),
-              buildOverrideOnChangeStatement(fieldName, fieldConfigs),
               getOnChangeValidationBlock(fieldName),
               setStateExpression(getCurrentValueName(renderedFieldName), getFormattedValueExpression(dataType)),
             ],

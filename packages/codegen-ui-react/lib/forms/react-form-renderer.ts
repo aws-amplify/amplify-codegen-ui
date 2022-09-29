@@ -83,9 +83,8 @@ import {
 } from './form-state';
 import {
   buildFormPropNode,
-  baseValidationConditionalType,
   formOverrideProp,
-  generateInputTypes,
+  generateFieldTypes,
   validationFunctionType,
   validationResponseType,
 } from './type-helper';
@@ -304,8 +303,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     return [
       validationResponseType,
       validationFunctionType,
-      baseValidationConditionalType,
-      generateInputTypes(formName, fieldConfigs),
+      generateFieldTypes(formName, 'input', fieldConfigs),
+      generateFieldTypes(formName, 'validation', fieldConfigs),
       formOverrideProp,
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
