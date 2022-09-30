@@ -1185,6 +1185,7 @@ function ArrayField({
 }
 export default function MyPostForm(props) {
   const {
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -1284,6 +1285,9 @@ export default function MyPostForm(props) {
           await DataStore.save(new Post(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -1519,6 +1523,7 @@ export declare type MyPostFormOverridesProps = {
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
 } & {
+    clearOnSuccess?: boolean;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
     onSuccess?: (fields: MyPostFormInputValues) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
@@ -2739,6 +2744,7 @@ import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
   const {
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -2823,6 +2829,9 @@ export default function MyPostForm(props) {
           await DataStore.save(new Post(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -2998,6 +3007,7 @@ export declare type MyPostFormOverridesProps = {
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
 } & {
+    clearOnSuccess?: boolean;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
     onSuccess?: (fields: MyPostFormInputValues) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
@@ -3403,6 +3413,7 @@ import {
 import { DataStore } from \\"aws-amplify\\";
 export default function BlogCreateForm(props) {
   const {
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -3485,6 +3496,9 @@ export default function BlogCreateForm(props) {
           await DataStore.save(new Blog(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -3662,6 +3676,7 @@ export declare type BlogCreateFormOverridesProps = {
 export declare type BlogCreateFormProps = React.PropsWithChildren<{
     overrides?: BlogCreateFormOverridesProps | undefined | null;
 } & {
+    clearOnSuccess?: boolean;
     onSubmit?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
     onSuccess?: (fields: BlogCreateFormInputValues) => void;
     onError?: (fields: BlogCreateFormInputValues, errorMessage: string) => void;
@@ -3829,6 +3844,7 @@ function ArrayField({
 }
 export default function InputGalleryCreateForm(props) {
   const {
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -3942,6 +3958,9 @@ export default function InputGalleryCreateForm(props) {
           await DataStore.save(new InputGallery(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -4361,6 +4380,7 @@ export declare type InputGalleryCreateFormOverridesProps = {
 export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
     overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
 } & {
+    clearOnSuccess?: boolean;
     onSubmit?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
     onSuccess?: (fields: InputGalleryCreateFormInputValues) => void;
     onError?: (fields: InputGalleryCreateFormInputValues, errorMessage: string) => void;
@@ -5146,6 +5166,7 @@ import {
 import { DataStore } from \\"aws-amplify\\";
 export default function PostCreateFormRow(props) {
   const {
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -5241,6 +5262,9 @@ export default function PostCreateFormRow(props) {
           await DataStore.save(new Post(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -5461,6 +5485,7 @@ export declare type PostCreateFormRowOverridesProps = {
 export declare type PostCreateFormRowProps = React.PropsWithChildren<{
     overrides?: PostCreateFormRowOverridesProps | undefined | null;
 } & {
+    clearOnSuccess?: boolean;
     onSubmit?: (fields: PostCreateFormRowInputValues) => PostCreateFormRowInputValues;
     onSuccess?: (fields: PostCreateFormRowInputValues) => void;
     onError?: (fields: PostCreateFormRowInputValues, errorMessage: string) => void;
