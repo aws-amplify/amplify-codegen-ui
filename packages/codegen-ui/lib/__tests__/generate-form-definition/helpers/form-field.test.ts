@@ -284,8 +284,9 @@ describe('getFormDefinitionInputElement', () => {
     };
 
     expect(getFormDefinitionInputElement(config)).toStrictEqual({
-      componentType: 'PhoneNumberField',
-      props: { label: 'Label', defaultCountryCode: '+11' },
+      componentType: 'TextField',
+      props: { label: 'Label', type: 'tel' },
+      studioFormComponentType: 'PhoneNumberField',
       validations: [{ type: ValidationTypes.PHONE, immutable: true }],
     });
   });

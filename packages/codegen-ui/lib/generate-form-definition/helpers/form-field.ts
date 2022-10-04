@@ -134,6 +134,7 @@ function getTextFieldType(componentType: string): string | undefined {
     DateField: 'date',
     TimeField: 'time',
     DateTimeField: 'datetime-local',
+    PhoneNumberField: 'tel',
   };
   return ComponentToTypeMap[componentType];
 }
@@ -163,6 +164,7 @@ export function getFormDefinitionInputElement(
     case 'IPAddressField':
     case 'URLField':
     case 'EmailField':
+    case 'PhoneNumberField':
       formDefinitionElement = {
         componentType: 'TextField',
         props: {
@@ -189,24 +191,11 @@ export function getFormDefinitionInputElement(
       };
 
       break;
-
-    case 'PhoneNumberField':
-      formDefinitionElement = {
-        componentType: 'PhoneNumberField',
-        props: {
-          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
-          defaultCountryCode:
-            config.inputType?.defaultCountryCode ||
-            baseConfig?.inputType?.defaultCountryCode ||
-            FORM_DEFINITION_DEFAULTS.field.inputType.defaultCountryCode,
-          isRequired: isRequiredValue,
-          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
-          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
-          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
-          defaultValue: defaultStringValue,
-        },
-      };
-      break;
+    /**
+     * TODO: Implement PhoneNumberField after UI Library supports
+     * a controlled PhoneNumberField component
+     * https://github.com/aws-amplify/amplify-ui/issues/2671
+     */
 
     case 'SelectField':
       formDefinitionElement = {
