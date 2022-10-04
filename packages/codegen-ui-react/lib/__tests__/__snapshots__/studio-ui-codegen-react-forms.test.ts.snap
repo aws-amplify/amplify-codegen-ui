@@ -24,12 +24,14 @@ export default function CustomDataForm(props) {
     city: undefined,
     category: undefined,
     pages: 0,
+    phone: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
   const [city, setCity] = React.useState(initialValues.city);
   const [category, setCategory] = React.useState(initialValues.category);
   const [pages, setPages] = React.useState(initialValues.pages);
+  const [phone, setPhone] = React.useState(initialValues.phone);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -37,6 +39,7 @@ export default function CustomDataForm(props) {
     setCity(initialValues.city);
     setCategory(initialValues.category);
     setPages(initialValues.pages);
+    setPhone(initialValues.phone);
     setErrors({});
   };
   const validations = {
@@ -45,6 +48,7 @@ export default function CustomDataForm(props) {
     city: [],
     category: [],
     pages: [],
+    phone: [{ type: \\"Required\\" }, { type: \\"Phone\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -69,6 +73,7 @@ export default function CustomDataForm(props) {
           city,
           category,
           pages,
+          phone,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -107,6 +112,7 @@ export default function CustomDataForm(props) {
               city,
               category,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -134,6 +140,7 @@ export default function CustomDataForm(props) {
               city,
               category,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -161,6 +168,7 @@ export default function CustomDataForm(props) {
               city: value,
               category,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -205,6 +213,7 @@ export default function CustomDataForm(props) {
               city,
               category: value,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.category ?? value;
@@ -247,6 +256,7 @@ export default function CustomDataForm(props) {
               city,
               category,
               pages: value,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.pages ?? value;
@@ -261,6 +271,35 @@ export default function CustomDataForm(props) {
         hasError={errors.pages?.hasError}
         {...getOverrideProps(overrides, \\"pages\\")}
       ></StepperField>
+      <TextField
+        label=\\"Phone Number\\"
+        isRequired={true}
+        defaultValue=\\"+1-401-152-6995\\"
+        type=\\"tel\\"
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city,
+              category,
+              pages,
+              phone: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks(\\"phone\\", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks(\\"phone\\", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, \\"phone\\")}
+      ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -311,6 +350,7 @@ export declare type CustomDataFormInputValues<useBase extends boolean = true> = 
     city?: UseBaseOrValidationType<useBase, string>;
     category?: UseBaseOrValidationType<useBase, string>;
     pages?: UseBaseOrValidationType<useBase, number>;
+    phone?: UseBaseOrValidationType<useBase, string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
@@ -320,6 +360,7 @@ export declare type CustomDataFormOverridesProps = {
     city?: FormProps<SelectFieldProps>;
     category?: FormProps<RadioGroupFieldProps>;
     pages?: FormProps<StepperFieldProps>;
+    phone?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
@@ -842,21 +883,28 @@ export default function CustomDataForm(props) {
   const initialValues = {
     name: undefined,
     email: [],
+    phone: [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
+  const [phone, setPhone] = React.useState(initialValues.phone);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setEmail(initialValues.email);
     setCurrentEmailValue(undefined);
+    setPhone(initialValues.phone);
+    setCurrentPhoneValue(undefined);
     setErrors({});
   };
   const [currentEmailValue, setCurrentEmailValue] = React.useState(undefined);
   const emailRef = React.createRef();
+  const [currentPhoneValue, setCurrentPhoneValue] = React.useState(undefined);
+  const phoneRef = React.createRef();
   const validations = {
     name: [{ type: \\"Required\\" }],
     email: [{ type: \\"Required\\" }],
+    phone: [{ type: \\"Required\\" }, { type: \\"Phone\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -878,6 +926,7 @@ export default function CustomDataForm(props) {
         const modelFields = {
           name,
           email,
+          phone,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -913,6 +962,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name: value,
               email,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -950,6 +1000,7 @@ export default function CustomDataForm(props) {
               const modelFields = {
                 name,
                 email: value,
+                phone,
               };
               const result = onChange(modelFields);
               value = result?.email ?? value;
@@ -965,6 +1016,48 @@ export default function CustomDataForm(props) {
           value={currentEmailValue}
           ref={emailRef}
           {...getOverrideProps(overrides, \\"email\\")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          setPhone(items);
+          setCurrentPhoneValue(undefined);
+        }}
+        currentFieldValue={currentPhoneValue}
+        label={\\"phone\\"}
+        items={phone}
+        hasError={errors.phone?.hasError}
+        setFieldValue={setCurrentPhoneValue}
+        inputFieldRef={phoneRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"phone\\"
+          isRequired={true}
+          defaultValue=\\"+1-401-152-6995\\"
+          type=\\"tel\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                name,
+                email,
+                phone: value,
+              };
+              const result = onChange(modelFields);
+              value = result?.phone ?? value;
+            }
+            if (errors.phone?.hasError) {
+              runValidationTasks(\\"phone\\", value);
+            }
+            setCurrentPhoneValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"phone\\", currentPhoneValue)}
+          errorMessage={errors.phone?.errorMessage}
+          hasError={errors.phone?.hasError}
+          value={currentPhoneValue}
+          ref={phoneRef}
+          {...getOverrideProps(overrides, \\"phone\\")}
         ></TextField>
       </ArrayField>
       <Flex
@@ -1014,12 +1107,14 @@ export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : V
 export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
     name?: UseBaseOrValidationType<useBase, string>;
     email?: UseBaseOrValidationType<useBase, string>;
+    phone?: UseBaseOrValidationType<useBase, string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
     CustomDataFormGrid?: FormProps<GridProps>;
     name?: FormProps<TextFieldProps>;
     email?: FormProps<TextFieldProps>;
+    phone?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;

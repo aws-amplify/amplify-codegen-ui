@@ -43,7 +43,8 @@ export type FormDefinitionTextFieldElement = {
     | 'DateTimeField'
     | 'IPAddressField'
     | 'URLField'
-    | 'EmailField';
+    | 'EmailField'
+    | 'PhoneNumberField';
 };
 
 export type FormDefinitionSwitchFieldElement = {
