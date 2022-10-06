@@ -315,6 +315,17 @@ export const buildFormPropNode = (form: StudioForm) => {
         ),
       );
     }
+    if (formActionType === 'create') {
+      propSignatures.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier('clearOnSuccess'),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
+        ),
+      );
+    }
+
     propSignatures.push(
       factory.createPropertySignature(
         undefined,

@@ -14,8 +14,9 @@
   limitations under the License.
  */
 
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
 import { BinaryExpression, factory, SyntaxKind } from 'typescript';
+import { resetValuesName } from './form-state';
 
 export const ControlledComponents = ['StepperField', 'SliderField', 'SelectField', 'ToggleButton', 'SwitchField'];
 
@@ -62,4 +63,32 @@ export const renderDefaultValueAttribute = (stateName: string, { dataType }: Fie
   }
 
   return factory.createJsxAttribute(factory.createIdentifier('defaultValue'), expression);
+};
+
+/**
+ * returns resetFunctionCheck Expression if a create form is datastore enabled
+ *
+ * @param studioForm {StudioForm}
+ * @returns
+ */
+export const resetFunctionCheck = ({
+  dataSourceType,
+  formActionType,
+}: {
+  dataSourceType: StudioDataSourceType;
+  formActionType: StudioFormActionType;
+}) => {
+  if (dataSourceType === 'DataStore' && formActionType === 'create') {
+    return [
+      factory.createIfStatement(
+        factory.createIdentifier('clearOnSuccess'),
+        factory.createBlock(
+          [factory.createExpressionStatement(factory.createCallExpression(resetValuesName, undefined, []))],
+          true,
+        ),
+        undefined,
+      ),
+    ];
+  }
+  return [];
 };

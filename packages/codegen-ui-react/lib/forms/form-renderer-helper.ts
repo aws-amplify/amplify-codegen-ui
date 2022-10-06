@@ -74,6 +74,16 @@ export const buildMutationBindings = (form: StudioForm) => {
         ),
       );
     }
+    if (formActionType === 'create') {
+      elements.push(
+        factory.createBindingElement(
+          undefined,
+          undefined,
+          factory.createIdentifier('clearOnSuccess'),
+          factory.createTrue(),
+        ),
+      );
+    }
     elements.push(
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSuccess'), undefined),
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onError'), undefined),
