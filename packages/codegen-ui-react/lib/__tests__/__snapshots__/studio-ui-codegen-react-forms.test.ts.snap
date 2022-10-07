@@ -1013,7 +1013,6 @@ export default function CustomDataForm(props) {
           onBlur={() => runValidationTasks(\\"email\\", currentEmailValue)}
           errorMessage={errors.email?.errorMessage}
           hasError={errors.email?.hasError}
-          value={currentEmailValue}
           ref={emailRef}
           {...getOverrideProps(overrides, \\"email\\")}
         ></TextField>
@@ -1055,7 +1054,6 @@ export default function CustomDataForm(props) {
           onBlur={() => runValidationTasks(\\"phone\\", currentPhoneValue)}
           errorMessage={errors.phone?.errorMessage}
           hasError={errors.phone?.hasError}
-          value={currentPhoneValue}
           ref={phoneRef}
           {...getOverrideProps(overrides, \\"phone\\")}
         ></TextField>
@@ -1523,7 +1521,6 @@ export default function MyPostForm(props) {
           }
           errorMessage={errors.Customtags?.errorMessage}
           hasError={errors.Customtags?.hasError}
-          value={currentCustomtagsValue}
           ref={CustomtagsRef}
           {...getOverrideProps(overrides, \\"Customtags\\")}
         ></TextField>
@@ -2029,7 +2026,6 @@ export default function NestedJson(props) {
           }
           errorMessage={errors.Nicknames1?.errorMessage}
           hasError={errors.Nicknames1?.hasError}
-          value={currentNicknames1Value}
           ref={Nicknames1Ref}
           {...getOverrideProps(overrides, \\"Nicknames1\\")}
         ></TextField>
@@ -2073,7 +2069,6 @@ export default function NestedJson(props) {
           }
           errorMessage={errors[\\"nick-names2\\"]?.errorMessage}
           hasError={errors[\\"nick-names2\\"]?.hasError}
-          value={currentNicknamesValue}
           ref={nicknamesRef}
           {...getOverrideProps(overrides, \\"nick-names2\\")}
         ></TextField>
@@ -2515,7 +2510,6 @@ export default function NestedJson(props) {
           onBlur={() => runValidationTasks(\\"lastName\\", currentLastName1Value)}
           errorMessage={errors.lastName?.errorMessage}
           hasError={errors.lastName?.hasError}
-          value={currentLastName1Value}
           ref={lastName1Ref}
           {...getOverrideProps(overrides, \\"lastName\\")}
         ></TextField>
@@ -3660,7 +3654,7 @@ export default function BlogCreateForm(props) {
         label=\\"Switch\\"
         defaultChecked={false}
         isDisabled={false}
-        value={switch1}
+        isChecked={switch1}
         onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
@@ -4296,7 +4290,6 @@ export default function InputGalleryCreateForm(props) {
           }
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
-          value={currentArrayTypeFieldValue}
           ref={arrayTypeFieldRef}
           {...getOverrideProps(overrides, \\"arrayTypeField\\")}
         ></TextField>
@@ -5047,7 +5040,6 @@ export default function InputGalleryUpdateForm(props) {
           }
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
-          value={currentArrayTypeFieldValue}
           ref={arrayTypeFieldRef}
           {...getOverrideProps(overrides, \\"arrayTypeField\\")}
         ></TextField>
