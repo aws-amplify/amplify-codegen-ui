@@ -174,7 +174,13 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
             factory.createIdentifier('errors'),
             factory.createIdentifier(componentName),
           );
-    attributes.push(...buildComponentSpecificAttributes({ componentType, componentName: renderedVariableName }));
+    attributes.push(
+      ...buildComponentSpecificAttributes({
+        componentType,
+        componentName: renderedVariableName,
+        currentValueIdentifier: fieldConfig.isArray ? getCurrentValueIdentifier(renderedVariableName) : undefined,
+      }),
+    );
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
       attributes.push(renderDefaultValueAttribute(renderedVariableName, fieldConfig));
     }
@@ -206,10 +212,6 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
     );
     if (fieldConfig.isArray) {
       attributes.push(
-        factory.createJsxAttribute(
-          factory.createIdentifier('value'),
-          factory.createJsxExpression(undefined, getCurrentValueIdentifier(renderedVariableName)),
-        ),
         factory.createJsxAttribute(
           factory.createIdentifier('ref'),
           factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedVariableName}Ref`)),
@@ -452,40 +454,43 @@ function getOnValueChangeProp(fieldType: string): string {
 export const buildComponentSpecificAttributes = ({
   componentType,
   componentName,
+  currentValueIdentifier,
 }: {
   componentType: string;
   componentName: string;
+  currentValueIdentifier?: Identifier;
 }) => {
-  const stateName = componentName.split('.')[0];
+  const valueIdentifier = currentValueIdentifier || factory.createIdentifier(componentName.split('.')[0]);
+
   const componentToAttributesMap: { [key: string]: JsxAttribute[] } = {
     ToggleButton: [
       factory.createJsxAttribute(
         factory.createIdentifier('isPressed'),
-        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
+        factory.createJsxExpression(undefined, valueIdentifier),
       ),
     ],
     SliderField: [
       factory.createJsxAttribute(
         factory.createIdentifier('value'),
-        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
+        factory.createJsxExpression(undefined, valueIdentifier),
       ),
     ],
     SelectField: [
       factory.createJsxAttribute(
         factory.createIdentifier('value'),
-        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
+        factory.createJsxExpression(undefined, valueIdentifier),
       ),
     ],
     StepperField: [
       factory.createJsxAttribute(
         factory.createIdentifier('value'),
-        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
+        factory.createJsxExpression(undefined, valueIdentifier),
       ),
     ],
     SwitchField: [
       factory.createJsxAttribute(
-        factory.createIdentifier('value'),
-        factory.createJsxExpression(undefined, factory.createIdentifier(stateName)),
+        factory.createIdentifier('isChecked'),
+        factory.createJsxExpression(undefined, valueIdentifier),
       ),
     ],
   };
