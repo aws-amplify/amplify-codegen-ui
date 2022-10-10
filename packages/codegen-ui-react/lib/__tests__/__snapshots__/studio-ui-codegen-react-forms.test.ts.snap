@@ -1160,6 +1160,7 @@ import {
   Icon,
   ScrollView,
   Text,
+  TextAreaField,
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
@@ -1312,12 +1313,16 @@ export default function MyPostForm(props) {
     caption: undefined,
     Customtags: [],
     post_url: undefined,
+    metadata: undefined,
     profile_url: undefined,
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [Customtags, setCustomtags] = React.useState(initialValues.Customtags);
   const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [metadata, setMetadata] = React.useState(
+    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
+  );
   const [profile_url, setProfile_url] = React.useState(
     initialValues.profile_url
   );
@@ -1328,6 +1333,7 @@ export default function MyPostForm(props) {
     setCustomtags(initialValues.Customtags);
     setCurrentCustomtagsValue(undefined);
     setPost_url(initialValues.post_url);
+    setMetadata(initialValues.metadata);
     setProfile_url(initialValues.profile_url);
     setErrors({});
   };
@@ -1345,6 +1351,7 @@ export default function MyPostForm(props) {
     caption: [],
     Customtags: [],
     post_url: [{ type: \\"URL\\" }],
+    metadata: [{ type: \\"JSON\\" }],
     profile_url: [{ type: \\"URL\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
@@ -1369,6 +1376,7 @@ export default function MyPostForm(props) {
           caption,
           Customtags,
           post_url,
+          metadata,
           profile_url,
         };
         const validationResponses = await Promise.all(
@@ -1457,6 +1465,7 @@ export default function MyPostForm(props) {
                 caption,
                 Customtags,
                 post_url,
+                metadata,
                 profile_url,
               };
               const result = onChange(modelFields);
@@ -1485,6 +1494,7 @@ export default function MyPostForm(props) {
                 caption: value,
                 Customtags,
                 post_url,
+                metadata,
                 profile_url,
               };
               const result = onChange(modelFields);
@@ -1510,6 +1520,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags: values,
               post_url,
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -1557,6 +1568,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags,
               post_url: value,
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -1572,6 +1584,34 @@ export default function MyPostForm(props) {
         hasError={errors.post_url?.hasError}
         {...getOverrideProps(overrides, \\"post_url\\")}
       ></TextField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              post_url,
+              metadata: value,
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks(\\"metadata\\", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata\\", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, \\"metadata\\")}
+      ></TextAreaField>
       <TextField
         label=\\"Profile url\\"
         isRequired={false}
@@ -1584,6 +1624,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags,
               post_url,
+              metadata,
               profile_url: value,
             };
             const result = onChange(modelFields);
@@ -1608,7 +1649,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests custom form tests should render a datastore backed form with a custom array field 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -1619,6 +1660,7 @@ export declare type MyPostFormInputValues = {
     caption?: string;
     Customtags?: string[];
     post_url?: string;
+    metadata?: string;
     profile_url?: string;
 };
 export declare type MyPostFormValidationValues = {
@@ -1626,6 +1668,7 @@ export declare type MyPostFormValidationValues = {
     caption?: ValidationFunction<string>;
     Customtags?: ValidationFunction<string>;
     post_url?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -1636,6 +1679,7 @@ export declare type MyPostFormOverridesProps = {
     caption?: FormProps<TextFieldProps>;
     Customtags?: FormProps<TextFieldProps>;
     post_url?: FormProps<TextFieldProps>;
+    metadata?: FormProps<TextAreaFieldProps>;
     profile_url?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
@@ -2878,7 +2922,13 @@ import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { Post } from \\"../models\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextAreaField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
   const {
@@ -2896,11 +2946,15 @@ export default function MyPostForm(props) {
     caption: undefined,
     username: undefined,
     post_url: undefined,
+    metadata: undefined,
     profile_url: undefined,
   };
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [username, setUsername] = React.useState(initialValues.username);
   const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [metadata, setMetadata] = React.useState(
+    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
+  );
   const [profile_url, setProfile_url] = React.useState(
     initialValues.profile_url
   );
@@ -2909,6 +2963,7 @@ export default function MyPostForm(props) {
     setCaption(initialValues.caption);
     setUsername(initialValues.username);
     setPost_url(initialValues.post_url);
+    setMetadata(initialValues.metadata);
     setProfile_url(initialValues.profile_url);
     setErrors({});
   };
@@ -2916,6 +2971,7 @@ export default function MyPostForm(props) {
     caption: [],
     username: [],
     post_url: [{ type: \\"URL\\" }],
+    metadata: [{ type: \\"JSON\\" }],
     profile_url: [{ type: \\"URL\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
@@ -2939,6 +2995,7 @@ export default function MyPostForm(props) {
           caption,
           username,
           post_url,
+          metadata,
           profile_url,
         };
         const validationResponses = await Promise.all(
@@ -3019,6 +3076,7 @@ export default function MyPostForm(props) {
               caption: value,
               username,
               post_url,
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3045,6 +3103,7 @@ export default function MyPostForm(props) {
               caption,
               username: value,
               post_url,
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3071,6 +3130,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               post_url: value,
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3086,6 +3146,33 @@ export default function MyPostForm(props) {
         hasError={errors.post_url?.hasError}
         {...getOverrideProps(overrides, \\"post_url\\")}
       ></TextField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              caption,
+              username,
+              post_url,
+              metadata: value,
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks(\\"metadata\\", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata\\", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, \\"metadata\\")}
+      ></TextAreaField>
       <TextField
         label=\\"Profile url\\"
         isRequired={false}
@@ -3097,6 +3184,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               post_url,
+              metadata,
               profile_url: value,
             };
             const result = onChange(modelFields);
@@ -3121,7 +3209,7 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -3131,12 +3219,14 @@ export declare type MyPostFormInputValues = {
     caption?: string;
     username?: string;
     post_url?: string;
+    metadata?: string;
     profile_url?: string;
 };
 export declare type MyPostFormValidationValues = {
     caption?: ValidationFunction<string>;
     username?: ValidationFunction<string>;
     post_url?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -3145,6 +3235,7 @@ export declare type MyPostFormOverridesProps = {
     caption?: FormProps<TextFieldProps>;
     username?: FormProps<TextFieldProps>;
     post_url?: FormProps<TextFieldProps>;
+    metadata?: FormProps<TextAreaFieldProps>;
     profile_url?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
@@ -3195,6 +3286,7 @@ export default function MyPostForm(props) {
     username: undefined,
     profile_url: undefined,
     post_url: undefined,
+    metadata: undefined,
   };
   const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
     initialValues.TextAreaFieldbbd63464
@@ -3205,6 +3297,9 @@ export default function MyPostForm(props) {
     initialValues.profile_url
   );
   const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [metadata, setMetadata] = React.useState(
+    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = { ...initialValues, ...postRecord };
@@ -3213,6 +3308,7 @@ export default function MyPostForm(props) {
     setUsername(cleanValues.username);
     setProfile_url(cleanValues.profile_url);
     setPost_url(cleanValues.post_url);
+    setMetadata(cleanValues.metadata);
     setErrors({});
   };
   const [postRecord, setPostRecord] = React.useState(post);
@@ -3230,6 +3326,7 @@ export default function MyPostForm(props) {
     username: [],
     profile_url: [{ type: \\"URL\\" }],
     post_url: [{ type: \\"URL\\" }],
+    metadata: [{ type: \\"JSON\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -3254,6 +3351,7 @@ export default function MyPostForm(props) {
           username,
           profile_url,
           post_url,
+          metadata,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3335,6 +3433,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.TextAreaFieldbbd63464 ?? value;
@@ -3365,6 +3464,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.caption ?? value;
@@ -3393,6 +3493,7 @@ export default function MyPostForm(props) {
               username: value,
               profile_url,
               post_url,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -3421,6 +3522,7 @@ export default function MyPostForm(props) {
               username,
               profile_url: value,
               post_url,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -3449,6 +3551,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url: value,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -3463,6 +3566,35 @@ export default function MyPostForm(props) {
         hasError={errors.post_url?.hasError}
         {...getOverrideProps(overrides, \\"post_url\\")}
       ></TextField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={false}
+        isReadOnly={false}
+        defaultValue={metadata}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              TextAreaFieldbbd63464,
+              caption,
+              username,
+              profile_url,
+              post_url,
+              metadata: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks(\\"metadata\\", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata\\", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, \\"metadata\\")}
+      ></TextAreaField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -3513,6 +3645,7 @@ export declare type MyPostFormInputValues = {
     username?: string;
     profile_url?: string;
     post_url?: string;
+    metadata?: string;
 };
 export declare type MyPostFormValidationValues = {
     TextAreaFieldbbd63464?: ValidationFunction<string>;
@@ -3520,6 +3653,7 @@ export declare type MyPostFormValidationValues = {
     username?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
     post_url?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
@@ -3529,6 +3663,7 @@ export declare type MyPostFormOverridesProps = {
     username?: FormProps<TextFieldProps>;
     profile_url?: FormProps<TextFieldProps>;
     post_url?: FormProps<TextFieldProps>;
+    metadata?: FormProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -5335,6 +5470,7 @@ import {
   Flex,
   Grid,
   SelectField,
+  TextAreaField,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
@@ -5356,6 +5492,7 @@ export default function PostCreateFormRow(props) {
     post_url: undefined,
     profile_url: undefined,
     status: undefined,
+    metadata: undefined,
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -5364,6 +5501,9 @@ export default function PostCreateFormRow(props) {
     initialValues.profile_url
   );
   const [status, setStatus] = React.useState(initialValues.status);
+  const [metadata, setMetadata] = React.useState(
+    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setUsername(initialValues.username);
@@ -5371,6 +5511,7 @@ export default function PostCreateFormRow(props) {
     setPost_url(initialValues.post_url);
     setProfile_url(initialValues.profile_url);
     setStatus(initialValues.status);
+    setMetadata(initialValues.metadata);
     setErrors({});
   };
   const validations = {
@@ -5385,6 +5526,7 @@ export default function PostCreateFormRow(props) {
     post_url: [{ type: \\"URL\\" }],
     profile_url: [{ type: \\"URL\\" }],
     status: [],
+    metadata: [{ type: \\"JSON\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -5409,6 +5551,7 @@ export default function PostCreateFormRow(props) {
           post_url,
           profile_url,
           status,
+          metadata,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -5469,6 +5612,7 @@ export default function PostCreateFormRow(props) {
                 post_url,
                 profile_url,
                 status,
+                metadata,
               };
               const result = onChange(modelFields);
               value = result?.username ?? value;
@@ -5497,6 +5641,7 @@ export default function PostCreateFormRow(props) {
                 post_url,
                 profile_url,
                 status,
+                metadata,
               };
               const result = onChange(modelFields);
               value = result?.caption ?? value;
@@ -5526,6 +5671,7 @@ export default function PostCreateFormRow(props) {
               post_url: value,
               profile_url,
               status,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -5554,6 +5700,7 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url: value,
               status,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -5581,6 +5728,7 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url,
               status: value,
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.status ?? value;
@@ -5595,6 +5743,34 @@ export default function PostCreateFormRow(props) {
         hasError={errors.status?.hasError}
         {...getOverrideProps(overrides, \\"status\\")}
       ></SelectField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              post_url,
+              profile_url,
+              status,
+              metadata: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks(\\"metadata\\", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata\\", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, \\"metadata\\")}
+      ></TextAreaField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -5632,7 +5808,7 @@ export default function PostCreateFormRow(props) {
 exports[`amplify form renderer tests datastore form tests should render form with a two inputs in row 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, SelectFieldProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -5644,6 +5820,7 @@ export declare type PostCreateFormRowInputValues = {
     post_url?: string;
     profile_url?: string;
     status?: string;
+    metadata?: string;
 };
 export declare type PostCreateFormRowValidationValues = {
     username?: ValidationFunction<string>;
@@ -5651,6 +5828,7 @@ export declare type PostCreateFormRowValidationValues = {
     post_url?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
     status?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PostCreateFormRowOverridesProps = {
@@ -5661,6 +5839,7 @@ export declare type PostCreateFormRowOverridesProps = {
     post_url?: FormProps<TextFieldProps>;
     profile_url?: FormProps<TextFieldProps>;
     status?: FormProps<SelectFieldProps>;
+    metadata?: FormProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type PostCreateFormRowProps = React.PropsWithChildren<{
     overrides?: PostCreateFormRowOverridesProps | undefined | null;

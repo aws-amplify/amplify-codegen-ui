@@ -31,6 +31,13 @@
           "isRequired": false,
           "attributes": []
         },
+        "metadata": {
+          "name": "metadata",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "attributes": []
+        },
         "profile_url": {
           "name": "profile_url",
           "isArray": false,
