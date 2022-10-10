@@ -173,24 +173,45 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
  */
 export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
   const stateNames = new Set();
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName }]) => {
+  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, dataType }]) => {
     const fieldName = name.split('.')[0];
     const renderedFieldName = sanitizedFieldName || fieldName;
+
+    function determinePropertyName() {
+      return isValidVariableName(fieldName)
+        ? factory.createPropertyAccessExpression(
+            factory.createIdentifier('initialValues'),
+            factory.createIdentifier(fieldName),
+          )
+        : factory.createElementAccessExpression(
+            factory.createIdentifier('initialValues'),
+            factory.createStringLiteral(fieldName),
+          );
+    }
+
+    function renderCorrectUseStateValue() {
+      if (dataType === 'AWSJSON') {
+        return factory.createConditionalExpression(
+          determinePropertyName(),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('JSON'),
+              factory.createIdentifier('stringify'),
+            ),
+            undefined,
+            [determinePropertyName()],
+          ),
+          factory.createToken(SyntaxKind.ColonToken),
+          factory.createIdentifier('undefined'),
+        );
+      }
+
+      return determinePropertyName();
+    }
+
     if (!stateNames.has(renderedFieldName)) {
-      acc.push(
-        buildUseStateExpression(
-          renderedFieldName,
-          isValidVariableName(fieldName)
-            ? factory.createPropertyAccessExpression(
-                factory.createIdentifier('initialValues'),
-                factory.createIdentifier(fieldName),
-              )
-            : factory.createElementAccessExpression(
-                factory.createIdentifier('initialValues'),
-                factory.createStringLiteral(fieldName),
-              ),
-        ),
-      );
+      acc.push(buildUseStateExpression(renderedFieldName, renderCorrectUseStateValue()));
       stateNames.add(renderedFieldName);
     }
     return acc;
