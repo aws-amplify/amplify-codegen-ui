@@ -3161,7 +3161,6 @@ export default function MyPostForm(props) {
     setPost_url(cleanValues.post_url);
     setErrors({});
   };
-  React.useEffect(resetStateValues, [postRecord]);
   const [postRecord, setPostRecord] = React.useState(post);
   React.useEffect(() => {
     const queryData = async () => {
@@ -3170,6 +3169,7 @@ export default function MyPostForm(props) {
     };
     queryData();
   }, [id, post]);
+  React.useEffect(resetStateValues, [postRecord]);
   const validations = {
     TextAreaFieldbbd63464: [],
     caption: [],
@@ -4684,7 +4684,6 @@ export default function InputGalleryUpdateForm(props) {
     setTimeisnow(cleanValues.timeisnow);
     setErrors({});
   };
-  React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [inputGalleryRecord, setInputGalleryRecord] =
     React.useState(inputGallery);
   React.useEffect(() => {
@@ -4696,6 +4695,7 @@ export default function InputGalleryUpdateForm(props) {
     };
     queryData();
   }, [id, inputGallery]);
+  React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
     React.useState(undefined);
   const arrayTypeFieldRef = React.createRef();

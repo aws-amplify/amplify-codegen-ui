@@ -420,10 +420,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName));
 
-    if (defaultValueVariableName) {
-      statements.push(buildResetValuesOnRecordUpdate(defaultValueVariableName));
-    }
-
     if (isDataStoreUpdateForm) {
       statements.push(
         buildUseStateExpression(lowerCaseDataTypeNameRecord, factory.createIdentifier(lowerCaseDataTypeName)),
@@ -435,6 +431,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           ['id', lowerCaseDataTypeName],
         ),
       );
+    }
+
+    if (defaultValueVariableName) {
+      statements.push(buildResetValuesOnRecordUpdate(defaultValueVariableName));
     }
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
