@@ -17,7 +17,6 @@
 // exporting types and scalar functions from aws-amplify
 // as these will be used when loading in dataschema for form generation
 export type { SchemaModel, ModelFields, ModelField, SchemaNonModels, Schema } from '@aws-amplify/datastore';
-export { isGraphQLScalarType } from '@aws-amplify/datastore';
 
 export type SchemaEnums = Record<string, SchemaEnum>;
 export type SchemaEnum = {
