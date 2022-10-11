@@ -394,6 +394,7 @@ import {
   RadioGroupField,
   SelectField,
   StepperField,
+  TextAreaField,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 export default function CustomDataForm(props) {
@@ -409,12 +410,16 @@ export default function CustomDataForm(props) {
   const initialValues = {
     name: undefined,
     email: undefined,
+    \\"metadata-field\\": undefined,
     city: undefined,
     category: undefined,
     pages: 0,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
+  const [metadatafield, setMetadatafield] = React.useState(
+    initialValues[\\"metadata-field\\"]
+  );
   const [city, setCity] = React.useState(initialValues.city);
   const [category, setCategory] = React.useState(initialValues.category);
   const [pages, setPages] = React.useState(initialValues.pages);
@@ -423,6 +428,7 @@ export default function CustomDataForm(props) {
     const cleanValues = { ...initialValues, ...initialData };
     setName(cleanValues.name);
     setEmail(cleanValues.email);
+    setMetadatafield(cleanValues[\\"metadata-field\\"]);
     setCity(cleanValues.city);
     setCategory(cleanValues.category);
     setPages(cleanValues.pages);
@@ -433,6 +439,7 @@ export default function CustomDataForm(props) {
     if (initialData) {
       setName(initialData.name);
       setEmail(initialData.email);
+      setMetadatafield(initialData[\\"metadata-field\\"]);
       setCity(initialData.city);
       setCategory(initialData.category);
       setPages(initialData.pages);
@@ -441,6 +448,7 @@ export default function CustomDataForm(props) {
   const validations = {
     name: [{ type: \\"Required\\" }],
     email: [{ type: \\"Required\\" }],
+    \\"metadata-field\\": [{ type: \\"Required\\" }, { type: \\"JSON\\" }],
     city: [],
     category: [],
     pages: [],
@@ -465,6 +473,7 @@ export default function CustomDataForm(props) {
         const modelFields = {
           name,
           email,
+          \\"metadata-field\\": metadatafield,
           city,
           category,
           pages,
@@ -504,6 +513,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name: value,
               email,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages,
@@ -532,6 +542,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email: value,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages,
@@ -549,6 +560,34 @@ export default function CustomDataForm(props) {
         hasError={errors.email?.hasError}
         {...getOverrideProps(overrides, \\"email\\")}
       ></TextField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={true}
+        defaultValue={metadatafield}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              \\"metadata-field\\": metadatafield,
+              city,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.[\\"metadata-field\\"] ?? value;
+          }
+          if (errors[\\"metadata-field\\"]?.hasError) {
+            runValidationTasks(\\"metadata-field\\", value);
+          }
+          setMetadatafield(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata-field\\", metadatafield)}
+        errorMessage={errors[\\"metadata-field\\"]?.errorMessage}
+        hasError={errors[\\"metadata-field\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"metadata-field\\")}
+      ></TextAreaField>
       <SelectField
         label=\\"Label\\"
         placeholder=\\"Please select an option\\"
@@ -559,6 +598,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
+              \\"metadata-field\\": metadatafield,
               city: value,
               category,
               pages,
@@ -604,6 +644,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
+              \\"metadata-field\\": metadatafield,
               city,
               category: value,
               pages,
@@ -646,6 +687,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages: value,
@@ -700,7 +742,7 @@ export default function CustomDataForm(props) {
 exports[`amplify form renderer tests custom form tests should render a custom backed form 4`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -709,6 +751,7 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type CustomDataFormInputValues = {
     name?: string;
     email?: string;
+    \\"metadata-field\\"?: string;
     city?: string;
     category?: string;
     pages?: number;
@@ -716,6 +759,7 @@ export declare type CustomDataFormInputValues = {
 export declare type CustomDataFormValidationValues = {
     name?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
+    \\"metadata-field\\"?: ValidationFunction<string>;
     city?: ValidationFunction<string>;
     category?: ValidationFunction<string>;
     pages?: ValidationFunction<number>;
@@ -725,6 +769,7 @@ export declare type CustomDataFormOverridesProps = {
     CustomDataFormGrid?: FormProps<GridProps>;
     name?: FormProps<TextFieldProps>;
     email?: FormProps<TextFieldProps>;
+    \\"metadata-field\\"?: FormProps<TextAreaFieldProps>;
     city?: FormProps<SelectFieldProps>;
     category?: FormProps<RadioGroupFieldProps>;
     pages?: FormProps<StepperFieldProps>;
@@ -1376,7 +1421,7 @@ export default function MyPostForm(props) {
           caption,
           Customtags,
           post_url,
-          metadata,
+          metadata: JSON.parse(metadata),
           profile_url,
         };
         const validationResponses = await Promise.all(
@@ -1465,7 +1510,7 @@ export default function MyPostForm(props) {
                 caption,
                 Customtags,
                 post_url,
-                metadata,
+                metadata: JSON.parse(metadata),
                 profile_url,
               };
               const result = onChange(modelFields);
@@ -1494,7 +1539,7 @@ export default function MyPostForm(props) {
                 caption: value,
                 Customtags,
                 post_url,
-                metadata,
+                metadata: JSON.parse(metadata),
                 profile_url,
               };
               const result = onChange(modelFields);
@@ -1520,7 +1565,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags: values,
               post_url,
-              metadata,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
@@ -1568,7 +1613,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags,
               post_url: value,
-              metadata,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
@@ -1596,7 +1641,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags,
               post_url,
-              metadata: value,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
@@ -1624,7 +1669,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags,
               post_url,
-              metadata,
+              metadata: JSON.parse(metadata),
               profile_url: value,
             };
             const result = onChange(modelFields);
@@ -2995,7 +3040,7 @@ export default function MyPostForm(props) {
           caption,
           username,
           post_url,
-          metadata,
+          metadata: JSON.parse(metadata),
           profile_url,
         };
         const validationResponses = await Promise.all(
@@ -3076,7 +3121,7 @@ export default function MyPostForm(props) {
               caption: value,
               username,
               post_url,
-              metadata,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3103,7 +3148,7 @@ export default function MyPostForm(props) {
               caption,
               username: value,
               post_url,
-              metadata,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3130,7 +3175,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               post_url: value,
-              metadata,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3157,7 +3202,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               post_url,
-              metadata: value,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3184,7 +3229,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               post_url,
-              metadata,
+              metadata: JSON.parse(metadata),
               profile_url: value,
             };
             const result = onChange(modelFields);
@@ -3351,7 +3396,7 @@ export default function MyPostForm(props) {
           username,
           profile_url,
           post_url,
-          metadata,
+          metadata: JSON.parse(metadata),
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3433,7 +3478,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
-              metadata,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.TextAreaFieldbbd63464 ?? value;
@@ -3464,7 +3509,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
-              metadata,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.caption ?? value;
@@ -3493,7 +3538,7 @@ export default function MyPostForm(props) {
               username: value,
               profile_url,
               post_url,
-              metadata,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -3522,7 +3567,7 @@ export default function MyPostForm(props) {
               username,
               profile_url: value,
               post_url,
-              metadata,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -3551,7 +3596,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url: value,
-              metadata,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -3580,7 +3625,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
-              metadata: value,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;
@@ -5551,7 +5596,7 @@ export default function PostCreateFormRow(props) {
           post_url,
           profile_url,
           status,
-          metadata,
+          metadata: JSON.parse(metadata),
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -5612,7 +5657,7 @@ export default function PostCreateFormRow(props) {
                 post_url,
                 profile_url,
                 status,
-                metadata,
+                metadata: JSON.parse(metadata),
               };
               const result = onChange(modelFields);
               value = result?.username ?? value;
@@ -5641,7 +5686,7 @@ export default function PostCreateFormRow(props) {
                 post_url,
                 profile_url,
                 status,
-                metadata,
+                metadata: JSON.parse(metadata),
               };
               const result = onChange(modelFields);
               value = result?.caption ?? value;
@@ -5671,7 +5716,7 @@ export default function PostCreateFormRow(props) {
               post_url: value,
               profile_url,
               status,
-              metadata,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -5700,7 +5745,7 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url: value,
               status,
-              metadata,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -5728,7 +5773,7 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url,
               status: value,
-              metadata,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.status ?? value;
@@ -5756,7 +5801,7 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url,
               status,
-              metadata: value,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;
