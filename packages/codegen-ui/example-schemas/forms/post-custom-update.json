@@ -24,13 +24,37 @@
       },
       "label": "E-mail"
     },
+    "metadata-field": {
+      "inputType": {
+        "required": true,
+        "type": "JSONField",
+        "name": "metadata-field"
+      },
+      "label": "Metadata"
+    },
     "city": {
       "inputType": {
         "type": "SelectField",
         "defaultValue": "New York",
         "valueMappings": {
           "bindingProperties": {},
-          "values": [{"value": {"value": "Los Angeles"}}, {"value": {"value": "Houston"}}, {"value": {"value": "New York"}}]
+          "values": [
+            {
+              "value": {
+                "value": "Los Angeles"
+              }
+            },
+            {
+              "value": {
+                "value": "Houston"
+              }
+            },
+            {
+              "value": {
+                "value": "New York"
+              }
+            }
+          ]
         }
       }
     },
@@ -40,7 +64,23 @@
         "defaultValue": "Hobbies",
         "valueMappings": {
           "bindingProperties": {},
-          "values": [{"value": {"value": "Hobbies"}}, {"value": {"value": "Travel"}}, {"value": {"value": "Health"}}]
+          "values": [
+            {
+              "value": {
+                "value": "Hobbies"
+              }
+            },
+            {
+              "value": {
+                "value": "Travel"
+              }
+            },
+            {
+              "value": {
+                "value": "Health"
+              }
+            }
+          ]
         }
       }
     },
