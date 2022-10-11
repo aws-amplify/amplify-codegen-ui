@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { Schema } from '@aws-amplify/codegen-ui';
+import { Schema } from '@aws-amplify/datastore';
 
 export default {
   models: {
