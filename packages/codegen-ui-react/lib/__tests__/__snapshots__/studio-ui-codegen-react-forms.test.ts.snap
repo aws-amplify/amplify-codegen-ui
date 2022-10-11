@@ -2435,7 +2435,7 @@ export default function NestedJson(props) {
     const cleanValues = { ...initialValues, ...initialData };
     setFirstName(cleanValues.firstName);
     setLastName(cleanValues[\\"last-Name\\"]);
-    setLastName1(cleanValues.lastName);
+    setLastName1(cleanValues.lastName ?? []);
     setCurrentLastName1Value(undefined);
     setBio(cleanValues.bio);
     setErrors({});
@@ -4888,7 +4888,7 @@ export default function InputGalleryUpdateForm(props) {
     setAttend(cleanValues.attend);
     setMaybeSlide(cleanValues.maybeSlide);
     setMaybeCheck(cleanValues.maybeCheck);
-    setArrayTypeField(cleanValues.arrayTypeField);
+    setArrayTypeField(cleanValues.arrayTypeField ?? []);
     setCurrentArrayTypeFieldValue(undefined);
     setTimestamp(cleanValues.timestamp);
     setIppy(cleanValues.ippy);

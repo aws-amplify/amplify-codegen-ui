@@ -230,7 +230,7 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
  * };
  */
 export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>, recordName?: string) => {
-  const cleanValues = recordName ? 'cleanValues' : 'initialValues';
+  const recordOrInitialValues = recordName ? 'cleanValues' : 'initialValues';
 
   const stateNames = new Set<string>();
   const expressions = Object.entries(fieldConfigs).reduce<Statement[]>(
@@ -238,18 +238,26 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
       const stateName = name.split('.')[0];
       const renderedName = sanitizedFieldName || stateName;
       if (!stateNames.has(stateName)) {
+        const accessExpression = isValidVariableName(stateName)
+          ? factory.createPropertyAccessExpression(
+              factory.createIdentifier(recordOrInitialValues),
+              factory.createIdentifier(stateName),
+            )
+          : factory.createElementAccessExpression(
+              factory.createIdentifier(recordOrInitialValues),
+              factory.createStringLiteral(stateName),
+            );
+
         acc.push(
           setStateExpression(
             renderedName,
-            isValidVariableName(stateName)
-              ? factory.createPropertyAccessExpression(
-                  factory.createIdentifier(cleanValues),
-                  factory.createIdentifier(stateName),
+            isArray && recordOrInitialValues === 'cleanValues'
+              ? factory.createBinaryExpression(
+                  accessExpression,
+                  factory.createToken(SyntaxKind.QuestionQuestionToken),
+                  factory.createArrayLiteralExpression([], false),
                 )
-              : factory.createElementAccessExpression(
-                  factory.createIdentifier(cleanValues),
-                  factory.createStringLiteral(stateName),
-                ),
+              : accessExpression,
           ),
         );
         if (isArray) {

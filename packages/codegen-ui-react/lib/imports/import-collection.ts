@@ -92,7 +92,7 @@ export class ImportCollection {
             undefined,
             factory.createImportClause(
               false,
-              // use module name as defualt import name
+              // use module name as default import name
               [...imports].indexOf('default') >= 0 ? factory.createIdentifier(path.basename(moduleName)) : undefined,
               factory.createNamedImports(
                 namedImports.map((item) => {
