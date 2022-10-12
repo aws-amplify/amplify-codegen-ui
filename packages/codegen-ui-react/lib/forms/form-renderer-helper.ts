@@ -175,7 +175,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
           );
     attributes.push(
       ...buildComponentSpecificAttributes({
-        componentType,
+        componentType: fieldConfig.studioFormComponentType ?? fieldConfig.componentType,
         componentName: renderedVariableName,
         currentValueIdentifier: fieldConfig.isArray ? getCurrentValueIdentifier(renderedVariableName) : undefined,
       }),
@@ -497,6 +497,7 @@ export const buildComponentSpecificAttributes = ({
         factory.createJsxExpression(undefined, valueIdentifier),
       ),
     ],
+    NumberField: [factory.createJsxAttribute(factory.createIdentifier('step'), factory.createStringLiteral('any'))],
   };
 
   return componentToAttributesMap[componentType] ?? [];

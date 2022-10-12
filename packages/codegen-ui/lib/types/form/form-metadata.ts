@@ -31,6 +31,7 @@ export type FieldConfigMetadata = {
   sanitizedFieldName?: string;
   isArray?: boolean;
   componentType: string;
+  studioFormComponentType?: string;
 };
 
 export type FormMetadata = {
