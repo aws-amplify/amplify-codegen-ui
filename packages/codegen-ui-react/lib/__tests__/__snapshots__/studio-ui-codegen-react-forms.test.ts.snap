@@ -4988,8 +4988,6 @@ export default function InputGalleryUpdateForm(props) {
       day: \\"2-digit\\",
       hour: \\"2-digit\\",
       minute: \\"2-digit\\",
-      second: \\"2-digit\\",
-      fractionalSecondDigits: 3,
       calendar: \\"iso8601\\",
       numberingSystem: \\"latn\\",
       hour12: false,
@@ -4998,10 +4996,7 @@ export default function InputGalleryUpdateForm(props) {
       acc[part.type] = part.value;
       return acc;
     }, {});
-    return (
-      \`\${parts.year}-\${parts.month}-\${parts.day}\` +
-      \`T\${parts.hour}:\${parts.minute}:\${parts.second}.\${parts.fractionalSecond}\`
-    );
+    return \`\${parts.year}-\${parts.month}-\${parts.day}T\${parts.hour}:\${parts.minute}\`;
   };
   return (
     <Grid
