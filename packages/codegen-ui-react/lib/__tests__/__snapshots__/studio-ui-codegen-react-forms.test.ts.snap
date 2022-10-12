@@ -4310,6 +4310,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
+        step=\\"any\\"
         onChange={(e) => {
           let value = parseInt(e.target.value);
           if (isNaN(value)) {
@@ -4349,6 +4350,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
+        step=\\"any\\"
         onChange={(e) => {
           let value = Number(e.target.value);
           if (isNaN(value)) {
@@ -5062,6 +5064,7 @@ export default function InputGalleryUpdateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
+        step=\\"any\\"
         defaultValue={num}
         onChange={(e) => {
           let value = parseInt(e.target.value);
@@ -5102,6 +5105,7 @@ export default function InputGalleryUpdateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
+        step=\\"any\\"
         defaultValue={rootbeer}
         onChange={(e) => {
           let value = Number(e.target.value);
