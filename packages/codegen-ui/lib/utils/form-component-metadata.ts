@@ -72,6 +72,7 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
       const metadata: FieldConfigMetadata = {
         validationRules: [],
         componentType: config.componentType,
+        studioFormComponentType: 'studioFormComponentType' in config ? config.studioFormComponentType : undefined,
         isArray: 'isArray' in config && config.isArray,
       };
       if ('validations' in config && config.validations) {
