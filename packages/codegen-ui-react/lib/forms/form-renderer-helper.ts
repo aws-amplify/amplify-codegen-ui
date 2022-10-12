@@ -141,7 +141,6 @@ export const createValidationExpression = (validationRules: FieldValidationConfi
 
 export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
   const { name: componentName, componentType } = component;
-
   const attributes: JsxAttribute[] = [];
   /*
       boolean => RadioGroupField
