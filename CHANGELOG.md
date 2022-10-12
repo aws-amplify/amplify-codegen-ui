@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.1...v2.4.2) (2022-10-11)
+
+### Bug Fixes
+
+- fix dependency ([95979eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/95979eb3baa672ab98acbd8cf7fcdb12184b8f98))
+- move commit message into env variable ([#683](https://github.com/aws-amplify/amplify-codegen-ui/issues/683)) ([7451bb8](https://github.com/aws-amplify/amplify-codegen-ui/commit/7451bb848f094235ee56e15c80ade19c83d33f9f))
+
+## [2.4.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.4.1) (2022-09-20)
+
+### Bug Fixes
+
+- remove invalid breakpoints ([#661](https://github.com/aws-amplify/amplify-codegen-ui/issues/661)) ([047dbd6](https://github.com/aws-amplify/amplify-codegen-ui/commit/047dbd60683b259dcae14f95b1fe99df97efe4a6))
+
+# [2.4.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.4.0) (2022-09-19)
+
+### Bug Fixes
+
+- fix release yml ([#571](https://github.com/aws-amplify/amplify-codegen-ui/issues/571)) ([aafaccb](https://github.com/aws-amplify/amplify-codegen-ui/commit/aafaccbc88d0d813ce03508e105e14ca50cb7298))
+- limit workers during testing in ci ([#531](https://github.com/aws-amplify/amplify-codegen-ui/issues/531)) ([be36527](https://github.com/aws-amplify/amplify-codegen-ui/commit/be36527e86e76360e3368daa62ece4f9616bd69d))
+
+### Features
+
+- allow conditional formatting of outputs ([16bba8c](https://github.com/aws-amplify/amplify-codegen-ui/commit/16bba8ccf19a1cde73f5962657e067f4dad57b5e))
+
 ## [2.3.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.3.2) (2022-07-22)
 
 ### Bug Fixes
