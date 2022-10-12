@@ -43,8 +43,6 @@ export const convertToLocal = (date: Date) => {
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
-    fractionalSecondDigits: 3,
     calendar: 'iso8601',
     numberingSystem: 'latn',
     hour12: false,
@@ -53,10 +51,7 @@ export const convertToLocal = (date: Date) => {
     acc[part.type] = part.value;
     return acc;
   }, {});
-  return (
-    `${parts.year}-${parts.month}-${parts.day}` +
-    `T${parts.hour}:${parts.minute}:${parts.second}.${parts.fractionalSecond}`
-  );
+  return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
 };
 
 /**
@@ -238,14 +233,6 @@ export const convertToLocalAST = factory.createVariableStatement(
                                 factory.createStringLiteral('2-digit'),
                               ),
                               factory.createPropertyAssignment(
-                                factory.createIdentifier('second'),
-                                factory.createStringLiteral('2-digit'),
-                              ),
-                              factory.createPropertyAssignment(
-                                factory.createIdentifier('fractionalSecondDigits'),
-                                factory.createNumericLiteral('3'),
-                              ),
-                              factory.createPropertyAssignment(
                                 factory.createIdentifier('calendar'),
                                 factory.createStringLiteral('iso8601'),
                               ),
@@ -351,64 +338,43 @@ export const convertToLocalAST = factory.createVariableStatement(
                 ),
               ),
               factory.createReturnStatement(
-                factory.createParenthesizedExpression(
-                  factory.createBinaryExpression(
-                    factory.createTemplateExpression(factory.createTemplateHead('', ''), [
-                      factory.createTemplateSpan(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('parts'),
-                          factory.createIdentifier('year'),
-                        ),
-                        factory.createTemplateMiddle('-', '-'),
-                      ),
-                      factory.createTemplateSpan(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('parts'),
-                          factory.createIdentifier('month'),
-                        ),
-                        factory.createTemplateMiddle('-', '-'),
-                      ),
-                      factory.createTemplateSpan(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('parts'),
-                          factory.createIdentifier('day'),
-                        ),
-                        factory.createTemplateTail('', ''),
-                      ),
-                    ]),
-                    factory.createToken(SyntaxKind.PlusToken),
-                    factory.createTemplateExpression(factory.createTemplateHead('T', 'T'), [
-                      factory.createTemplateSpan(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('parts'),
-                          factory.createIdentifier('hour'),
-                        ),
-                        factory.createTemplateMiddle(':', ':'),
-                      ),
-                      factory.createTemplateSpan(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('parts'),
-                          factory.createIdentifier('minute'),
-                        ),
-                        factory.createTemplateMiddle(':', ':'),
-                      ),
-                      factory.createTemplateSpan(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('parts'),
-                          factory.createIdentifier('second'),
-                        ),
-                        factory.createTemplateMiddle('.', '.'),
-                      ),
-                      factory.createTemplateSpan(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('parts'),
-                          factory.createIdentifier('fractionalSecond'),
-                        ),
-                        factory.createTemplateTail('', ''),
-                      ),
-                    ]),
+                factory.createTemplateExpression(factory.createTemplateHead('', ''), [
+                  factory.createTemplateSpan(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('parts'),
+                      factory.createIdentifier('year'),
+                    ),
+                    factory.createTemplateMiddle('-', '-'),
                   ),
-                ),
+                  factory.createTemplateSpan(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('parts'),
+                      factory.createIdentifier('month'),
+                    ),
+                    factory.createTemplateMiddle('-', '-'),
+                  ),
+                  factory.createTemplateSpan(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('parts'),
+                      factory.createIdentifier('day'),
+                    ),
+                    factory.createTemplateMiddle('T', 'T'),
+                  ),
+                  factory.createTemplateSpan(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('parts'),
+                      factory.createIdentifier('hour'),
+                    ),
+                    factory.createTemplateMiddle(':', ':'),
+                  ),
+                  factory.createTemplateSpan(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('parts'),
+                      factory.createIdentifier('minute'),
+                    ),
+                    factory.createTemplateTail('', ''),
+                  ),
+                ]),
               ),
             ],
             true,
