@@ -1421,7 +1421,7 @@ export default function MyPostForm(props) {
           caption,
           Customtags,
           post_url,
-          metadata: JSON.parse(metadata),
+          metadata,
           profile_url,
         };
         const validationResponses = await Promise.all(
@@ -1510,7 +1510,7 @@ export default function MyPostForm(props) {
                 caption,
                 Customtags,
                 post_url,
-                metadata: JSON.parse(metadata),
+                metadata,
                 profile_url,
               };
               const result = onChange(modelFields);
@@ -1539,7 +1539,7 @@ export default function MyPostForm(props) {
                 caption: value,
                 Customtags,
                 post_url,
-                metadata: JSON.parse(metadata),
+                metadata,
                 profile_url,
               };
               const result = onChange(modelFields);
@@ -1565,7 +1565,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags: values,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -1613,7 +1613,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags,
               post_url: value,
-              metadata: JSON.parse(metadata),
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -1641,7 +1641,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata: value,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -1669,7 +1669,7 @@ export default function MyPostForm(props) {
               caption,
               Customtags,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata,
               profile_url: value,
             };
             const result = onChange(modelFields);
@@ -3040,7 +3040,7 @@ export default function MyPostForm(props) {
           caption,
           username,
           post_url,
-          metadata: JSON.parse(metadata),
+          metadata,
           profile_url,
         };
         const validationResponses = await Promise.all(
@@ -3121,7 +3121,7 @@ export default function MyPostForm(props) {
               caption: value,
               username,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3148,7 +3148,7 @@ export default function MyPostForm(props) {
               caption,
               username: value,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3175,7 +3175,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               post_url: value,
-              metadata: JSON.parse(metadata),
+              metadata,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3202,7 +3202,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata: value,
               profile_url,
             };
             const result = onChange(modelFields);
@@ -3229,7 +3229,7 @@ export default function MyPostForm(props) {
               caption,
               username,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata,
               profile_url: value,
             };
             const result = onChange(modelFields);
@@ -3396,7 +3396,7 @@ export default function MyPostForm(props) {
           username,
           profile_url,
           post_url,
-          metadata: JSON.parse(metadata),
+          metadata,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3478,7 +3478,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.TextAreaFieldbbd63464 ?? value;
@@ -3509,7 +3509,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.caption ?? value;
@@ -3538,7 +3538,7 @@ export default function MyPostForm(props) {
               username: value,
               profile_url,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -3567,7 +3567,7 @@ export default function MyPostForm(props) {
               username,
               profile_url: value,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -3596,7 +3596,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url: value,
-              metadata: JSON.parse(metadata),
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -3625,7 +3625,7 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
-              metadata: JSON.parse(metadata),
+              metadata: value,
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;
@@ -5595,7 +5595,7 @@ export default function PostCreateFormRow(props) {
           post_url,
           profile_url,
           status,
-          metadata: JSON.parse(metadata),
+          metadata,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -5656,7 +5656,7 @@ export default function PostCreateFormRow(props) {
                 post_url,
                 profile_url,
                 status,
-                metadata: JSON.parse(metadata),
+                metadata,
               };
               const result = onChange(modelFields);
               value = result?.username ?? value;
@@ -5685,7 +5685,7 @@ export default function PostCreateFormRow(props) {
                 post_url,
                 profile_url,
                 status,
-                metadata: JSON.parse(metadata),
+                metadata,
               };
               const result = onChange(modelFields);
               value = result?.caption ?? value;
@@ -5715,7 +5715,7 @@ export default function PostCreateFormRow(props) {
               post_url: value,
               profile_url,
               status,
-              metadata: JSON.parse(metadata),
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -5744,7 +5744,7 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url: value,
               status,
-              metadata: JSON.parse(metadata),
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -5772,7 +5772,7 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url,
               status: value,
-              metadata: JSON.parse(metadata),
+              metadata,
             };
             const result = onChange(modelFields);
             value = result?.status ?? value;
@@ -5800,7 +5800,7 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url,
               status,
-              metadata: JSON.parse(metadata),
+              metadata: value,
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;

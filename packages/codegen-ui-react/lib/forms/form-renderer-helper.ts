@@ -924,23 +924,13 @@ export const buildModelFieldObject = (
   const fieldSet = new Set<string>();
   const fields = Object.keys(fieldConfigs).reduce<ObjectLiteralElementLike[]>((acc, value) => {
     const fieldName = value.split('.')[0];
-    const { sanitizedFieldName, dataType } = fieldConfigs[value];
+    const { sanitizedFieldName } = fieldConfigs[value];
     const renderedFieldName = sanitizedFieldName || fieldName;
     if (!fieldSet.has(renderedFieldName)) {
       let assignment = nameOverrides[fieldName]
         ? nameOverrides[fieldName]
         : factory.createShorthandPropertyAssignment(factory.createIdentifier(fieldName), undefined);
-
-      if (dataType === 'AWSJSON') {
-        assignment = factory.createPropertyAssignment(
-          factory.createStringLiteral(fieldName),
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(factory.createIdentifier('JSON'), factory.createIdentifier('parse')),
-            undefined,
-            [factory.createIdentifier(sanitizedFieldName ?? fieldName)],
-          ),
-        );
-      } else if (sanitizedFieldName) {
+      if (sanitizedFieldName) {
         assignment = factory.createPropertyAssignment(
           factory.createStringLiteral(fieldName),
           factory.createIdentifier(sanitizedFieldName),
