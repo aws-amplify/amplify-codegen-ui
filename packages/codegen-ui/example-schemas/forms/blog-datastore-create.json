@@ -1,0 +1,12 @@
+{
+  "name": "BlogCreateForm",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "Blog"
+  },
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {}
+}

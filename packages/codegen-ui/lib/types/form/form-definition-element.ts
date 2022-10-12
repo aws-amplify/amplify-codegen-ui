@@ -21,6 +21,7 @@ import { StudioFormValueMappings } from './input-config';
 type FormDefinitionInputElementCommon = {
   dataType?: DataFieldDataType;
   validations?: (FieldValidationConfiguration & { immutable?: true })[];
+  isArray?: boolean;
 };
 
 export type FormDefinitionTextFieldElement = {
@@ -42,7 +43,8 @@ export type FormDefinitionTextFieldElement = {
     | 'DateTimeField'
     | 'IPAddressField'
     | 'URLField'
-    | 'EmailField';
+    | 'EmailField'
+    | 'PhoneNumberField';
 };
 
 export type FormDefinitionSwitchFieldElement = {

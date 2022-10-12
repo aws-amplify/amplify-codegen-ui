@@ -124,7 +124,7 @@ describe('getGenericFromDataStore', () => {
     });
   });
 
-  it('should handle schema with assumed associated fields and modldkjld', () => {
+  it('should handle schema with assumed associated fields and models', () => {
     const genericSchema = getGenericFromDataStore(schemaWithAssumptions);
     const userFields = genericSchema.models.User.fields;
 
@@ -139,5 +139,14 @@ describe('getGenericFromDataStore', () => {
       relatedModelName: 'Post',
       relatedModelField: 'userPostsId',
     });
+  });
+
+  it('should correctly identify join tables', () => {
+    const genericSchema = getGenericFromDataStore(schemaWithRelationships);
+    const joinTables = Object.entries(genericSchema.models)
+      .filter(([, model]) => model.isJoinTable)
+      .map(([name]) => name);
+    expect(joinTables).toHaveLength(1);
+    expect(joinTables).toStrictEqual(['StudentTeacher']);
   });
 });

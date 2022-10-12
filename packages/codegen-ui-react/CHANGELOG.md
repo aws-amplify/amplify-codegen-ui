@@ -5,14 +5,25 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.4.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.1...v2.4.2) (2022-10-11)
 
+### Bug Fixes
+
+- limit workers during testing in ci ([#531](https://github.com/aws-amplify/amplify-codegen-ui/issues/531)) ([be36527](https://github.com/aws-amplify/amplify-codegen-ui/commit/be36527e86e76360e3368daa62ece4f9616bd69d))
+
+## [2.4.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.4.1) (2022-09-20)
+
+**Note:** Version bump only for package @aws-amplify/codegen-ui-react
+
+# [2.4.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.4.0) (2022-09-19)
 
 ### Bug Fixes
 
-* fix dependency ([95979eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/95979eb3baa672ab98acbd8cf7fcdb12184b8f98))
+- limit workers during testing in ci ([#531](https://github.com/aws-amplify/amplify-codegen-ui/issues/531)) ([be36527](https://github.com/aws-amplify/amplify-codegen-ui/commit/be36527e86e76360e3368daa62ece4f9616bd69d))
 
+## [2.3.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.3.2) (2022-07-22)
 
+### Bug Fixes
 
-
+- limit workers during testing in ci ([#531](https://github.com/aws-amplify/amplify-codegen-ui/issues/531)) ([be36527](https://github.com/aws-amplify/amplify-codegen-ui/commit/be36527e86e76360e3368daa62ece4f9616bd69d))
 
 ## [2.4.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.4.1) (2022-09-20)
 

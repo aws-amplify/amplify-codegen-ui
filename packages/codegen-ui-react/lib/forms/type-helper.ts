@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, DataFieldDataType, StudioForm } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, DataFieldDataType, StudioForm, isValidVariableName } from '@aws-amplify/codegen-ui';
 import { factory, SyntaxKind, KeywordTypeSyntaxKind, TypeElement, PropertySignature, TypeNode } from 'typescript';
 import { lowerCaseFirst } from '../helpers';
 import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
@@ -22,13 +22,18 @@ type Node<T> = {
   [n: string]: T | Node<T>;
 };
 
-type GetTypeNodeParam = { componentType: string; dataType?: DataFieldDataType };
+type GetTypeNodeParam = {
+  componentType: string;
+  dataType?: DataFieldDataType;
+  isArray: boolean;
+  isValidation: boolean;
+};
 /**
  * based on the provided dataType (appsync scalar)
  * converst to the correct typescript type
  * default assumption is string type
  */
-const getTypeNode = ({ componentType, dataType }: GetTypeNodeParam) => {
+const getTypeNode = ({ componentType, dataType, isArray, isValidation }: GetTypeNodeParam) => {
   let typescriptType: KeywordTypeSyntaxKind = SyntaxKind.StringKeyword;
   if (componentType in FIELD_TYPE_TO_TYPESCRIPT_MAP) {
     typescriptType = FIELD_TYPE_TO_TYPESCRIPT_MAP[componentType];
@@ -39,11 +44,24 @@ const getTypeNode = ({ componentType, dataType }: GetTypeNodeParam) => {
   }
 
   // e.g. string
-  return factory.createKeywordTypeNode(typescriptType);
+  const typeNode = factory.createKeywordTypeNode(typescriptType);
+
+  if (isValidation) {
+    return factory.createTypeReferenceNode(factory.createIdentifier('ValidationFunction'), [typeNode]);
+  }
+
+  if (isArray) {
+    return factory.createArrayTypeNode(typeNode);
+  }
+  return typeNode;
 };
 
 export const getInputValuesTypeName = (formName: string): string => {
   return `${formName}InputValues`;
+};
+
+export const getValidationTypeName = (formName: string): string => {
+  return `${formName}ValidationValues`;
 };
 
 /**
@@ -51,7 +69,8 @@ export const getInputValuesTypeName = (formName: string): string => {
  * where the leafs are the types ex. string | number | boolean
  * src: https://stackoverflow.com/questions/70218560/creating-a-nested-object-from-entries
  *
- * @param nestedPaths
+ * @param object
+ * @param [key, value] entry/tuple object shape created from key and value is set at the leaf
  */
 export const generateObjectFromPaths = (
   object: Node<KeywordTypeSyntaxKind>,
@@ -70,13 +89,11 @@ export const generateTypeNodeFromObject = (obj: Node<KeywordTypeSyntaxKind>): Pr
     const value: TypeNode =
       typeof child === 'object' && Object.getPrototypeOf(child) === Object.prototype
         ? factory.createTypeLiteralNode(generateTypeNodeFromObject(child))
-        : factory.createTypeReferenceNode(factory.createIdentifier('UseBaseOrValidationType'), [
-            factory.createTypeReferenceNode(factory.createIdentifier('useBase'), undefined),
-            child as unknown as TypeNode,
-          ]);
+        : (child as unknown as TypeNode);
+    const propertyName = !isValidVariableName(key) ? factory.createStringLiteral(key) : factory.createIdentifier(key);
     return factory.createPropertySignature(
       undefined,
-      factory.createIdentifier(key),
+      propertyName,
       factory.createToken(SyntaxKind.QuestionToken),
       value,
     );
@@ -88,44 +105,49 @@ export const generateTypeNodeFromObject = (obj: Node<KeywordTypeSyntaxKind>): Pr
  * onValidate is the one case where it passes true to get the ValidationType
  * instead of the base type
  * 
- * export declare type MyPostCreateFormInputValues<useBase extends boolean = true> = {
-    caption: UseBaseOrValidationType<useBase, string>;
-    phoneNumber: UseBaseOrValidationType<useBase, number>;
-    username: UseBaseOrValidationType<useBase, string>;
-    post_url: UseBaseOrValidationType<useBase, string>;
-    profile_url: UseBaseOrValidationType<useBase, string>;
-    status: UseBaseOrValidationType<useBase, string>;
-    bio: {
-        favoriteQuote: UseBaseOrValidationType<useBase, string>;
-        favoiteAnimal: {
-            genus: UseBaseOrValidationType<useBase, string>;
-          }
-      };
- *  };
- *
+ * validation type is selected 
+ * export declare type NestedJsonValidationValues = {
+    "first-Name"?: ValidationFunction<string>;
+    lastName?: ValidationFunction<string>;
+    Nicknames1?: ValidationFunction<string>;
+    "nick-names2"?: ValidationFunction<string>;
+    "first Name"?: ValidationFunction<string>;
+    bio?: {
+        "favorite Quote"?: ValidationFunction<string>;
+        "favorite-Animal"?: ValidationFunction<string>;
+    };
+ * };
+ * if its regular validation then it will be using the main types of the object array types are allowed in this case
  *
  * @param formName
+ * @param {('input' | 'validation')}
  * @param fieldConfigs
  * @returns
  */
-export const generateInputTypes = (formName: string, fieldConfigs: Record<string, FieldConfigMetadata>) => {
+export const generateFieldTypes = (
+  formName: string,
+  type: 'input' | 'validation',
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+) => {
   const nestedPaths: [fieldName: string, getTypeNodeParam: GetTypeNodeParam][] = [];
   const typeNodes: TypeElement[] = [];
-  Object.entries(fieldConfigs).forEach(([fieldName, { dataType, componentType }]) => {
-    const getTypeNodeParam = { dataType, componentType };
+  const isValidation = type === 'validation';
+  const typeName = isValidation ? getValidationTypeName(formName) : getInputValuesTypeName(formName);
+  Object.entries(fieldConfigs).forEach(([fieldName, { dataType, componentType, isArray }]) => {
+    const getTypeNodeParam = { dataType, componentType, isArray: !!isArray, isValidation };
     const hasNestedFieldPath = fieldName.split('.').length > 1;
     if (hasNestedFieldPath) {
       nestedPaths.push([fieldName, getTypeNodeParam]);
     } else {
+      const propertyName = !isValidVariableName(fieldName)
+        ? factory.createStringLiteral(fieldName)
+        : factory.createIdentifier(fieldName);
       typeNodes.push(
         factory.createPropertySignature(
           undefined,
-          factory.createIdentifier(fieldName),
+          propertyName,
           factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(factory.createIdentifier('UseBaseOrValidationType'), [
-            factory.createTypeReferenceNode(factory.createIdentifier('useBase'), undefined),
-            getTypeNode(getTypeNodeParam),
-          ]),
+          getTypeNode(getTypeNodeParam),
         ),
       );
     }
@@ -139,40 +161,11 @@ export const generateInputTypes = (formName: string, fieldConfigs: Record<string
   return factory.createTypeAliasDeclaration(
     undefined,
     [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
-    factory.createIdentifier(getInputValuesTypeName(formName)),
-    [
-      factory.createTypeParameterDeclaration(
-        factory.createIdentifier('useBase'),
-        factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-        factory.createLiteralTypeNode(factory.createTrue()),
-      ),
-    ],
+    factory.createIdentifier(typeName),
+    undefined,
     factory.createTypeLiteralNode(typeNodes),
   );
 };
-
-/**
- * used to validate if value should be using the base type or ValdiationFunction using base type
- *
- * export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
- */
-export const baseValidationConditionalType = factory.createTypeAliasDeclaration(
-  undefined,
-  [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
-  factory.createIdentifier('UseBaseOrValidationType'),
-  [
-    factory.createTypeParameterDeclaration(factory.createIdentifier('Flag'), undefined, undefined),
-    factory.createTypeParameterDeclaration(factory.createIdentifier('T'), undefined, undefined),
-  ],
-  factory.createConditionalTypeNode(
-    factory.createTypeReferenceNode(factory.createIdentifier('Flag'), undefined),
-    factory.createLiteralTypeNode(factory.createTrue()),
-    factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined),
-    factory.createTypeReferenceNode(factory.createIdentifier('ValidationFunction'), [
-      factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined),
-    ]),
-  ),
-);
 
 /**
  * export declare type ValidationResponse = {
@@ -222,23 +215,6 @@ export const formOverrideProp = factory.createTypeAliasDeclaration(
     ),
   ]),
 );
-
-/**
- * onValidate?: {formTypeName}
- *
- * @param formName
- * @returns
- */
-export const buildOnValidateType = (formName: string) => {
-  return factory.createPropertySignature(
-    undefined,
-    factory.createIdentifier('onValidate'),
-    factory.createToken(SyntaxKind.QuestionToken),
-    factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), [
-      factory.createLiteralTypeNode(factory.createFalse()),
-    ]),
-  );
-};
 
 /**
  * export declare type ValidationFunction<T> =
@@ -311,6 +287,17 @@ export const buildFormPropNode = (form: StudioForm) => {
         ),
       );
     }
+    if (formActionType === 'create') {
+      propSignatures.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier('clearOnSuccess'),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
+        ),
+      );
+    }
+
     propSignatures.push(
       factory.createPropertySignature(
         undefined,
@@ -446,7 +433,13 @@ export const buildFormPropNode = (form: StudioForm) => {
         factory.createTypeReferenceNode(factory.createIdentifier(getInputValuesTypeName(formName)), undefined),
       ),
     ),
-    buildOnValidateType(form.name),
+    // onValidate?: {formName}ValidationValues
+    factory.createPropertySignature(
+      undefined,
+      factory.createIdentifier('onValidate'),
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createTypeReferenceNode(factory.createIdentifier(getValidationTypeName(formName)), undefined),
+    ),
   );
   return factory.createTypeLiteralNode(propSignatures);
 };

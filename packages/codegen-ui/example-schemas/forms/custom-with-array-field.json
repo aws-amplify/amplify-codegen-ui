@@ -1,0 +1,52 @@
+{
+  "name": "CustomDataForm",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "Custom",
+    "dataTypeName": "Post"
+  },
+  "fields": {
+    "name": {
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "name",
+        "defaultValue": "John Doe"
+      },
+      "label": "name"
+    },
+    "email": {
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "email",
+        "defaultValue": "johndoe@amplify.com",
+        "isArray": true
+      },
+      "label": "E-mail"
+    },
+    "phone": {
+      "inputType": {
+        "required": true,
+        "type": "PhoneNumberField",
+        "name": "phone",
+        "defaultValue": "+1-401-152-6995",
+        "isArray": true
+      },
+      "label": "phone"
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": {
+    "clear": {
+      "children": "empty"
+    },
+    "cancel": {
+      "children": "go back"
+    },
+    "submit": {
+      "children": "create"
+    }
+  }
+}

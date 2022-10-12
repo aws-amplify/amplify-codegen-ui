@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { FieldConfigMetadata, DataFieldDataType } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, DataFieldDataType, isValidVariableName } from '@aws-amplify/codegen-ui';
 import {
   factory,
   Statement,
@@ -24,6 +24,10 @@ import {
   SyntaxKind,
   ObjectLiteralExpression,
   CallExpression,
+  ElementAccessChain,
+  PropertyAccessChain,
+  PropertyAssignment,
+  PropertyName,
 } from 'typescript';
 
 export const getCurrentValueName = (fieldName: string) => `current${capitalizeFirstLetter(fieldName)}Value`;
@@ -47,6 +51,51 @@ export const getSetNameIdentifier = (value: string): Identifier => {
   return factory.createIdentifier(`set${capitalizeFirstLetter(value)}`);
 };
 
+/**
+ * setErrors((errors) => ({ ...errors, [key]: value }));
+ *
+ * shorthand function to set error key/value
+ * @param key ts expression to use as key ex. string literal or ts identifier
+ * @param value ts expression to resolve to the value could be a prop access chain or identifier
+ * @returns expression statement
+ */
+export const setErrorState = (key: string | PropertyName, value: Expression) => {
+  return factory.createExpressionStatement(
+    factory.createCallExpression(factory.createIdentifier('setErrors'), undefined, [
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('errors'),
+            undefined,
+            undefined,
+            undefined,
+          ),
+        ],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createParenthesizedExpression(
+          factory.createObjectLiteralExpression(
+            [
+              factory.createSpreadAssignment(factory.createIdentifier('errors')),
+              factory.createPropertyAssignment(key, value),
+            ],
+            false,
+          ),
+        ),
+      ),
+    ]),
+  );
+};
+
+/**
+ * Note this is not for handling arrays.
+ * If you need a default array value (e.g. []). Pass in an empty array at a higher level.
+ */
 export const getDefaultValueExpression = (
   name: string,
   componentType: string,
@@ -54,6 +103,7 @@ export const getDefaultValueExpression = (
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
     ToggleButton: factory.createFalse(),
+    SwitchField: factory.createFalse(),
     StepperField: factory.createNumericLiteral(0),
     SliderField: factory.createNumericLiteral(0),
   };
@@ -72,48 +122,148 @@ export const getDefaultValueExpression = (
   }
   return factory.createIdentifier('undefined');
 };
+/* ex. const initialValues = {
+  name: undefined,
+  isChecked: false
+}
+*/
+export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement => {
+  const stateNames = new Set<string>();
+  const propertyAssignments = Object.entries(fieldConfigs).reduce<PropertyAssignment[]>(
+    (acc, [name, { dataType, componentType, isArray }]) => {
+      const stateName = name.split('.')[0];
+      if (!stateNames.has(stateName)) {
+        acc.push(
+          factory.createPropertyAssignment(
+            isValidVariableName(stateName)
+              ? factory.createIdentifier(stateName)
+              : factory.createStringLiteral(stateName),
+            isArray
+              ? factory.createArrayLiteralExpression([], false)
+              : getDefaultValueExpression(name, componentType, dataType),
+          ),
+        );
+        stateNames.add(stateName);
+      }
+      return acc;
+    },
+    [],
+  );
+
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('initialValues'),
+          undefined,
+          undefined,
+          factory.createObjectLiteralExpression(propertyAssignments, true),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
+};
 
 /**
  * iterates field configs to create useState hooks for each field
- * populates the default values as undefined if it as a nested object, relationship model or nonModel
- * the default is an empty object
  * @param fieldConfigs
  * @returns
  */
 export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
-  const stateNames = new Set<string>();
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { dataType, componentType }]) => {
-    const stateName = name.split('.')[0];
-    if (!stateNames.has(stateName)) {
-      acc.push(buildUseStateExpression(stateName, getDefaultValueExpression(name, componentType, dataType)));
-      stateNames.add(stateName);
+  const stateNames = new Set();
+  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, dataType }]) => {
+    const fieldName = name.split('.')[0];
+    const renderedFieldName = sanitizedFieldName || fieldName;
+
+    function determinePropertyName() {
+      return isValidVariableName(fieldName)
+        ? factory.createPropertyAccessExpression(
+            factory.createIdentifier('initialValues'),
+            factory.createIdentifier(fieldName),
+          )
+        : factory.createElementAccessExpression(
+            factory.createIdentifier('initialValues'),
+            factory.createStringLiteral(fieldName),
+          );
+    }
+
+    function renderCorrectUseStateValue() {
+      if (dataType === 'AWSJSON') {
+        return factory.createConditionalExpression(
+          determinePropertyName(),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('JSON'),
+              factory.createIdentifier('stringify'),
+            ),
+            undefined,
+            [determinePropertyName()],
+          ),
+          factory.createToken(SyntaxKind.ColonToken),
+          factory.createIdentifier('undefined'),
+        );
+      }
+
+      return determinePropertyName();
+    }
+
+    if (!stateNames.has(renderedFieldName)) {
+      acc.push(buildUseStateExpression(renderedFieldName, renderCorrectUseStateValue()));
+      stateNames.add(renderedFieldName);
     }
     return acc;
   }, []);
 };
 
 /**
- * function used by the onClear/onReset button cta
+ * function used by the Clear/ Reset button
  * it's a reset type but we also need to clear the state of the input fields as well
  *
  * ex.
  * const resetStateValues = () => {
- *  setName('')
- *  setLastName('')
+ *  setName(initialValues.name)
+ *  setLastName(initialValues.lastName)
  *   ....
  * };
  */
-export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>) => {
+export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>, recordName?: string) => {
+  const recordOrInitialValues = recordName ? 'cleanValues' : 'initialValues';
+
   const stateNames = new Set<string>();
-  const setStateExpressions = Object.entries(fieldConfigs).reduce<Statement[]>(
-    (acc, [name, { dataType, componentType, isArray }]) => {
+  const expressions = Object.entries(fieldConfigs).reduce<Statement[]>(
+    (acc, [name, { isArray, sanitizedFieldName, componentType, dataType }]) => {
       const stateName = name.split('.')[0];
+      const renderedName = sanitizedFieldName || stateName;
       if (!stateNames.has(stateName)) {
-        acc.push(setStateExpression(stateName, getDefaultValueExpression(name, componentType, dataType)));
+        const accessExpression = isValidVariableName(stateName)
+          ? factory.createPropertyAccessExpression(
+              factory.createIdentifier(recordOrInitialValues),
+              factory.createIdentifier(stateName),
+            )
+          : factory.createElementAccessExpression(
+              factory.createIdentifier(recordOrInitialValues),
+              factory.createStringLiteral(stateName),
+            );
+
+        acc.push(
+          setStateExpression(
+            renderedName,
+            isArray && recordOrInitialValues === 'cleanValues'
+              ? factory.createBinaryExpression(
+                  accessExpression,
+                  factory.createToken(SyntaxKind.QuestionQuestionToken),
+                  factory.createArrayLiteralExpression([], false),
+                )
+              : accessExpression,
+          ),
+        );
         if (isArray) {
           acc.push(
             setStateExpression(
-              getCurrentValueName(stateName),
+              getCurrentValueName(renderedName),
               getDefaultValueExpression(name, componentType, dataType),
             ),
           );
@@ -124,8 +274,35 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
     },
     [],
   );
+
+  // ex. const cleanValues = {...initialValues, ...bookRecord}
+  if (recordName) {
+    expressions.unshift(
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('cleanValues'),
+              undefined,
+              undefined,
+              factory.createObjectLiteralExpression(
+                [
+                  factory.createSpreadAssignment(factory.createIdentifier('initialValues')),
+                  factory.createSpreadAssignment(factory.createIdentifier(recordName)),
+                ],
+                false,
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
+    );
+  }
+
   // also reset the state of the errors
-  setStateExpressions.push(setStateExpression('errors', factory.createObjectLiteralExpression()));
+  expressions.push(setStateExpression('errors', factory.createObjectLiteralExpression()));
   return factory.createVariableStatement(
     undefined,
     factory.createVariableDeclarationList(
@@ -140,7 +317,7 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
             [],
             undefined,
             factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-            factory.createBlock(setStateExpressions, true),
+            factory.createBlock(expressions, true),
           ),
         ),
       ],
@@ -200,14 +377,25 @@ export const buildAccessChain = (values: string[], isOptional = true): Expressio
   const optional = isOptional ? factory.createToken(SyntaxKind.QuestionDotToken) : undefined;
   if (values.length > 1) {
     const [parent, child, ...rest] = values;
-    let propChain = factory.createPropertyAccessChain(
+    let propChain: PropertyAccessChain | ElementAccessChain = factory.createPropertyAccessChain(
       factory.createIdentifier(parent),
       optional,
       factory.createIdentifier(child),
     );
+    if (!isValidVariableName(child)) {
+      propChain = factory.createElementAccessChain(
+        factory.createIdentifier(parent),
+        optional,
+        factory.createStringLiteral(child),
+      );
+    }
     if (rest.length) {
       rest.forEach((value) => {
-        propChain = factory.createPropertyAccessChain(propChain, optional, factory.createIdentifier(value));
+        if (isValidVariableName(value)) {
+          propChain = factory.createPropertyAccessChain(propChain, optional, factory.createIdentifier(value));
+        } else {
+          propChain = factory.createElementAccessChain(propChain, optional, factory.createStringLiteral(value));
+        }
       });
     }
     return propChain;
@@ -229,7 +417,12 @@ export const buildNestedStateSet = (
   if (keyPath.length - 1 === index) {
     return factory.createObjectLiteralExpression([
       factory.createSpreadAssignment(buildAccessChain(currentKeyPath)),
-      factory.createPropertyAssignment(factory.createIdentifier(currentKey), value),
+      factory.createPropertyAssignment(
+        isValidVariableName(currentKey)
+          ? factory.createIdentifier(currentKey)
+          : factory.createComputedPropertyName(factory.createStringLiteral(currentKey)),
+        value,
+      ),
     ]);
   }
   const currentSpreadAssignment = buildAccessChain(currentKeyPath);

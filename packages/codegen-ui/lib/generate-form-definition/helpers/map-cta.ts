@@ -13,64 +13,92 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FORM_DEFINITION_DEFAULTS } from './defaults';
-import { StudioFormCTA, ButtonConfig, StudioFormCTAButton, FormDefinitionButtonElement } from '../../types';
+import {
+  StudioFormCTA,
+  ButtonConfig,
+  StudioFormCTAButton,
+  FormDefinitionButtonElement,
+  StudioFormActionType,
+} from '../../types';
 
 function getButtonElement(
   key: 'cancel' | 'clear' | 'submit',
+  formActionType: StudioFormActionType,
   override?: StudioFormCTAButton,
 ): FormDefinitionButtonElement | undefined {
-  if (override && 'excluded' in override) {
-    return undefined;
-  }
+  const resetLabel = formActionType === 'create' ? 'Clear' : 'Reset';
 
-  const ButtonMap = {
+  const buttonMap = {
     cancel: {
       name: 'CancelButton',
       type: 'button',
+      label: 'Cancel',
     },
     clear: {
-      name: 'ClearButton',
+      name: `${resetLabel}Button`,
       type: 'reset',
+      label: resetLabel,
     },
     submit: {
       name: 'SubmitButton',
       type: 'submit',
       variation: 'primary',
+      label: 'Submit',
     },
   };
-
-  const { cta: defaults } = FORM_DEFINITION_DEFAULTS;
 
   const element: FormDefinitionButtonElement = {
-    name: ButtonMap[key].name,
+    name: buttonMap[key].name,
     componentType: 'Button',
     props: {
-      children: override?.children ?? defaults[key].label,
-      type: ButtonMap[key].type,
+      children: buttonMap[key].label,
+      type: buttonMap[key].type,
     },
   };
 
+  if (override && 'children' in override && override.children) {
+    element.props.children = override.children;
+  }
+
   if (key === 'submit') {
-    element.props.variation = ButtonMap[key].variation;
+    element.props.variation = buttonMap[key].variation;
   }
 
   return element;
 }
 
-export function mapButtons(buttons?: StudioFormCTA): ButtonConfig {
-  const defaults = FORM_DEFINITION_DEFAULTS.cta;
+// TODO: temporary logic. it should take reordering into consideration
+function mapMatrix(buttons?: StudioFormCTA): string[][] {
+  const matrix: ('clear' | 'cancel' | 'submit')[][] = [['clear'], ['cancel', 'submit']];
+  if (!buttons) {
+    return matrix;
+  }
 
+  return matrix.map((subArray) => {
+    return subArray.filter((element) => {
+      if (
+        buttons[element] &&
+        'excluded' in (buttons[element] as StudioFormCTAButton) &&
+        (buttons[element] as { excluded: boolean }).excluded
+      ) {
+        return false;
+      }
+      return true;
+    });
+  });
+}
+
+export function mapButtons(formActionType: StudioFormActionType, buttons?: StudioFormCTA): ButtonConfig {
   const buttonMapping: ButtonConfig = {
-    position: buttons?.position ?? defaults.position,
-    buttonMatrix: defaults.buttonMatrix,
+    position: buttons?.position ?? 'bottom',
+    buttonMatrix: mapMatrix(buttons),
     buttonConfigs: {},
   };
 
   const keys: (keyof ButtonConfig['buttonConfigs'])[] = ['submit', 'cancel', 'clear'];
 
   keys.forEach((key) => {
-    buttonMapping.buttonConfigs[key] = getButtonElement(key, buttons?.[key]);
+    buttonMapping.buttonConfigs[key] = getButtonElement(key, formActionType, buttons?.[key]);
   });
 
   return buttonMapping;

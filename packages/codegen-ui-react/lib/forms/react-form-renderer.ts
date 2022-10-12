@@ -17,6 +17,7 @@
 import {
   ComponentMetadata,
   computeComponentMetadata,
+  DataFieldDataType,
   FormDefinition,
   generateFormDefinition,
   GenericDataSchema,
@@ -60,22 +61,30 @@ import {
 } from '../react-studio-template-renderer-helper';
 import { generateArrayFieldComponent } from '../utils/forms/array-field-component';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
+import { convertTimeStampToDateAST, convertToLocalAST } from '../utils/forms/value-mappers';
 import { addUseEffectWrapper } from '../utils/generate-react-hooks';
 import { RequiredKeys } from '../utils/type-utils';
 import {
   buildMutationBindings,
   buildOverrideTypesBindings,
+  buildResetValuesOnRecordUpdate,
   buildSetStateFunction,
   buildUpdateDatastoreQuery,
   buildValidations,
   runValidationTasksFunction,
 } from './form-renderer-helper';
-import { buildUseStateExpression, getCurrentValueName, getUseStateHooks, resetStateFunction } from './form-state';
+import {
+  buildUseStateExpression,
+  getCurrentValueName,
+  getDefaultValueExpression,
+  getInitialValues,
+  getUseStateHooks,
+  resetStateFunction,
+} from './form-state';
 import {
   buildFormPropNode,
-  baseValidationConditionalType,
   formOverrideProp,
-  generateInputTypes,
+  generateFieldTypes,
   validationFunctionType,
   validationResponseType,
 } from './type-helper';
@@ -116,7 +125,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.formComponent = mapFormDefinitionToComponent(this.component.name, this.formDefinition);
 
     this.componentMetadata = computeComponentMetadata(this.formComponent);
-    this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition, dataSchema);
+    this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition);
   }
 
   @handleCodegenErrors
@@ -294,8 +303,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     return [
       validationResponseType,
       validationFunctionType,
-      baseValidationConditionalType,
-      generateInputTypes(formName, fieldConfigs),
+      generateFieldTypes(formName, 'input', fieldConfigs),
+      generateFieldTypes(formName, 'validation', fieldConfigs),
       formOverrideProp,
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
@@ -328,6 +337,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       formActionType,
     } = this.component;
     const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
+    const lowerCaseDataTypeNameRecord = `${lowerCaseDataTypeName}Record`;
+    const isDataStoreUpdateForm = dataSourceType === 'DataStore' && formActionType === 'update';
 
     if (!formMetadata) {
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
@@ -392,11 +403,38 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       );
     }
 
-    statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
+    statements.push(getInitialValues(formMetadata.fieldConfigs));
 
+    statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
-    statements.push(resetStateFunction(formMetadata.fieldConfigs));
+    let defaultValueVariableName: undefined | string;
+    if (formActionType === 'update') {
+      if (isDataStoreUpdateForm) {
+        defaultValueVariableName = lowerCaseDataTypeNameRecord;
+      } else {
+        defaultValueVariableName = 'initialData';
+      }
+    }
+
+    statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName));
+
+    if (isDataStoreUpdateForm) {
+      statements.push(
+        buildUseStateExpression(lowerCaseDataTypeNameRecord, factory.createIdentifier(lowerCaseDataTypeName)),
+      );
+      statements.push(
+        addUseEffectWrapper(
+          buildUpdateDatastoreQuery(dataTypeName, lowerCaseDataTypeNameRecord),
+          // TODO: change once cpk is supported in datastore
+          ['id', lowerCaseDataTypeName],
+        ),
+      );
+    }
+
+    if (defaultValueVariableName) {
+      statements.push(buildResetValuesOnRecordUpdate(defaultValueVariableName));
+    }
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
@@ -404,55 +442,67 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
       this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
-      if (formActionType === 'update') {
-        statements.push(
-          buildUseStateExpression(`${lowerCaseDataTypeName}Record`, factory.createIdentifier(lowerCaseDataTypeName)),
-        );
-        statements.push(
-          addUseEffectWrapper(
-            buildUpdateDatastoreQuery(dataTypeName, formMetadata.fieldConfigs),
-            // TODO: change once cpk is supported in datastore
-            ['id', lowerCaseDataTypeName],
-          ),
-        );
-      }
     }
+
     if (dataSourceType === 'Custom' && formActionType === 'update') {
       statements.push(addUseEffectWrapper([buildSetStateFunction(formMetadata.fieldConfigs)], []));
     }
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
-    Object.entries(formMetadata.fieldConfigs).forEach(([field, config]) => {
-      if (config.isArray) {
-        statements.push(
-          buildUseStateExpression(getCurrentValueName(field), factory.createStringLiteral('')),
-          factory.createVariableStatement(
-            undefined,
-            factory.createVariableDeclarationList(
-              [
-                factory.createVariableDeclaration(
-                  factory.createIdentifier(`${field}Ref`),
-                  undefined,
-                  undefined,
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('React'),
-                      factory.createIdentifier('createRef'),
-                    ),
-                    undefined,
-                    [],
-                  ),
-                ),
-              ],
-              NodeFlags.Const,
+    Object.entries(formMetadata.fieldConfigs).forEach(
+      ([field, { isArray, sanitizedFieldName, componentType, dataType }]) => {
+        if (isArray) {
+          const renderedName = sanitizedFieldName || field;
+          statements.push(
+            buildUseStateExpression(
+              getCurrentValueName(renderedName),
+              getDefaultValueExpression(formMetadata.name, componentType, dataType),
             ),
-          ),
-        );
-      }
-    });
+            factory.createVariableStatement(
+              undefined,
+              factory.createVariableDeclarationList(
+                [
+                  factory.createVariableDeclaration(
+                    factory.createIdentifier(`${renderedName}Ref`),
+                    undefined,
+                    undefined,
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('React'),
+                        factory.createIdentifier('createRef'),
+                      ),
+                      undefined,
+                      [],
+                    ),
+                  ),
+                ],
+                NodeFlags.Const,
+              ),
+            ),
+          );
+        }
+      },
+    );
     statements.push(buildValidations(formMetadata.fieldConfigs));
     statements.push(runValidationTasksFunction);
+
+    if (formActionType === 'update') {
+      // list of defined dataTypes
+      const dataTypes = Object.values(formMetadata.fieldConfigs).reduce<DataFieldDataType[]>((acc, config) => {
+        if (config.dataType) acc.push(config.dataType);
+        return acc;
+      }, []);
+      // timestamp type takes precendence over datetime as it includes formatter for datetime
+      // we include both the timestamp conversion and local date formatter
+      if (dataTypes.includes('AWSTimestamp')) {
+        statements.push(convertTimeStampToDateAST, convertToLocalAST);
+      }
+      // if we only have date time then we only need the local conversion
+      else if (dataTypes.includes('AWSDateTime')) {
+        statements.push(convertToLocalAST);
+      }
+    }
 
     return statements;
   }

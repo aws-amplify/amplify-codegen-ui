@@ -5,14 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.4.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.1...v2.4.2) (2022-10-11)
 
-
 ### Bug Fixes
 
-* fix dependency ([95979eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/95979eb3baa672ab98acbd8cf7fcdb12184b8f98))
-
-
-
-
+- fix dependency ([95979eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/95979eb3baa672ab98acbd8cf7fcdb12184b8f98))
 
 ## [2.4.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.3.1...v2.4.1) (2022-09-20)
 

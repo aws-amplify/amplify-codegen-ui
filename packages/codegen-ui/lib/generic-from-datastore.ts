@@ -59,6 +59,8 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
     [modelName: string]: { [fieldName: string]: GenericDataField['relationship'] };
   } = {};
 
+  const joinTableNames: string[] = [];
+
   Object.values(dataStoreSchema.models).forEach((model) => {
     const genericFields: { [fieldName: string]: GenericDataField } = {};
 
@@ -85,6 +87,8 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
               'model' in associatedField.type &&
               associatedField.type.model === model.name
             ) {
+              joinTableNames.push(associatedModel.name);
+
               const relatedJoinField = Object.values(associatedModel.fields).find(
                 (joinField) =>
                   joinField.name !== associatedFieldName &&
@@ -134,6 +138,13 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
         field.relationship = relationship;
       }
     });
+  });
+
+  joinTableNames.forEach((joinTableName) => {
+    const model = genericSchema.models[joinTableName];
+    if (model) {
+      model.isJoinTable = true;
+    }
   });
 
   genericSchema.enums = dataStoreSchema.enums;

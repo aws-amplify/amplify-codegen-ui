@@ -175,7 +175,7 @@ describe('mapModelFieldsConfigs', () => {
           fields: {
             ownerId: {
               dataType: 'ID',
-              readOnly: true,
+              readOnly: false,
               required: false,
               isArray: false,
               relationship: { type: 'HAS_ONE', relatedModelName: 'Owner' },
@@ -193,7 +193,7 @@ describe('mapModelFieldsConfigs', () => {
         dataType: 'ID',
         inputType: {
           name: 'ownerId',
-          readOnly: true,
+          readOnly: false,
           required: false,
           type: 'SelectField',
           value: 'ownerId',
@@ -202,6 +202,32 @@ describe('mapModelFieldsConfigs', () => {
         label: 'Owner id',
       },
     });
+  });
+
+  it('should not add nonModel field to matrix', () => {
+    const formDefinition: FormDefinition = getBasicFormDefinition();
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: { Interaction: { fields: {} } },
+      models: {
+        Dog: {
+          fields: {
+            ownerId: {
+              dataType: { nonModel: 'Interaction' },
+              readOnly: false,
+              required: false,
+              isArray: false,
+            },
+          },
+        },
+      },
+    };
+
+    mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
+
+    expect(formDefinition.elementMatrix).toStrictEqual([]);
   });
 
   it('should add value mappings from enums', () => {

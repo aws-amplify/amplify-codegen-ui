@@ -1,7 +1,7 @@
 {
   "models": {
-    "Post": {
-      "name": "Post",
+    "Blog": {
+      "name": "Blog",
       "fields": {
         "id": {
           "name": "id",
@@ -10,38 +10,31 @@
           "isRequired": true,
           "attributes": []
         },
-        "caption": {
-          "name": "caption",
+        "title": {
+          "name": "title",
           "isArray": false,
           "type": "String",
           "isRequired": false,
           "attributes": []
         },
-        "username": {
-          "name": "username",
+        "content": {
+          "name": "content",
           "isArray": false,
           "type": "String",
           "isRequired": false,
           "attributes": []
         },
-        "post_url": {
-          "name": "post_url",
+        "switch": {
+          "name": "switch",
           "isArray": false,
-          "type": "AWSURL",
+          "type": "Boolean",
           "isRequired": false,
           "attributes": []
         },
-        "metadata": {
-          "name": "metadata",
+        "published": {
+          "name": "published",
           "isArray": false,
-          "type": "AWSJSON",
-          "isRequired": false,
-          "attributes": []
-        },
-        "profile_url": {
-          "name": "profile_url",
-          "isArray": false,
-          "type": "AWSURL",
+          "type": "AWSDateTime",
           "isRequired": false,
           "attributes": []
         },
@@ -63,7 +56,7 @@
         }
       },
       "syncable": true,
-      "pluralName": "Posts",
+      "pluralName": "Blogs",
       "attributes": [
         {
           "type": "model",
@@ -82,6 +75,16 @@
                   "delete",
                   "read"
                 ]
+              },
+              {
+                "allow": "public",
+                "provider": "apiKey",
+                "operations": [
+                  "create",
+                  "update",
+                  "delete",
+                  "read"
+                ]
               }
             ]
           }
@@ -89,8 +92,6 @@
       ]
     }
   },
-  "enums": {
-  },
   "nonModels": {},
-  "version": "000000"
+  "version": "0000"
 }

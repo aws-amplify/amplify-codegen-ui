@@ -15,6 +15,7 @@
  */
 
 import { sentenceCase } from 'change-case';
+import { checkIsSupportedAsFormField } from '../../check-support';
 
 import { InvalidInputError } from '../../errors';
 import {
@@ -108,7 +109,9 @@ export function mapModelFieldsConfigs({
 
   Object.entries(model.fields).forEach(([fieldName, field]) => {
     const isAutoExcludedField =
-      field.readOnly || (fieldName === 'id' && field.dataType === 'ID' && field.required) || field.relationship;
+      field.readOnly ||
+      (fieldName === 'id' && field.dataType === 'ID' && field.required) ||
+      !checkIsSupportedAsFormField(field);
 
     if (!isAutoExcludedField) {
       formDefinition.elementMatrix.push([fieldName]);

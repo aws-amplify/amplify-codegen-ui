@@ -23,6 +23,7 @@ export * from './lib/template-renderer-factory';
 export * from './lib/generate-form-definition';
 export * from './lib/generate-view-definition';
 export * from './lib/generic-from-datastore';
+export * from './lib/check-support';
 
 export * from './lib/renderer-helper';
 export * from './lib/validation-helper';

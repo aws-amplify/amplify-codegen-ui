@@ -47,6 +47,16 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should render a form with a javascript reserved word as the field name', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/blog-datastore-create',
+        'datastore/blog',
+      );
+      expect(componentText).toContain('DataStore.save');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should render a form with multiple date types', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/input-gallery-create',
@@ -102,6 +112,35 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-update', undefined);
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render a custom backed form with an array field', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/custom-with-array-field',
+        undefined,
+      );
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should render a datastore backed form with a custom array field', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-create-with-custom-array',
+        'datastore/post',
+      );
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should use matching case for ref when array field is capitalized', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-create-with-custom-array',
+        'datastore/post',
+      );
+
+      expect(componentText).toContain('const CustomtagsRef');
+      expect(componentText).toContain('inputFieldRef={CustomtagsRef}');
+      expect(componentText).toContain('ref={CustomtagsRef}');
     });
   });
 });

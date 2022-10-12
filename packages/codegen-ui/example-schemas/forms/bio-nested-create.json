@@ -5,7 +5,7 @@
     "dataTypeName": "JSON"
   },
   "fields": {
-    "firstName": {
+    "first-Name": {
       "inputType": {
         "type": "TextField"
       },
@@ -14,16 +14,45 @@
         "fixed": "first"
       }
     },
+    "first Name": {
+      "inputType": {
+        "type": "TextField"
+      },
+      "label": "first Name1",
+      "position": {
+        "below": "first-Name"
+      }
+    },
     "lastName": {
       "inputType": {
         "type": "TextField"
       },
       "label": "lastName",
       "position": {
-        "below": "firstName"
+        "below": "first-Name"
       }
     },
-    "bio.favoriteQuote": {
+    "Nicknames1": {
+      "inputType": {
+        "type": "TextField",
+        "isArray": true
+      },
+      "label": "Nick Names1",
+      "position": {
+        "below": "lastName"
+      }
+    },
+    "nick-names2": {
+      "inputType": {
+        "type": "TextField",
+        "isArray": true
+      },
+      "label": "nick-Names2",
+      "position": {
+        "below": "Nicknames1"
+      }
+    },
+    "bio.favorite Quote": {
       "inputType": {
         "type": "TextField"
       },
@@ -32,13 +61,13 @@
         "below": "bio"
       }
     },
-    "bio.favoriteAnimal": {
+    "bio.favorite-Animal": {
       "inputType": {
         "type": "TextField"
       },
       "label": "favoriteAnimal",
       "position": {
-        "below": "bio.favoriteQuote"
+        "below": "bio.favorite Quote"
       }
     }
   },

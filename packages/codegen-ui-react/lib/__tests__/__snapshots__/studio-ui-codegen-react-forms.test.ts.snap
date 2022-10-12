@@ -18,18 +18,28 @@ import {
 export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
-  const [name, setName] = React.useState(undefined);
-  const [email, setEmail] = React.useState(undefined);
-  const [city, setCity] = React.useState(undefined);
-  const [category, setCategory] = React.useState(undefined);
-  const [pages, setPages] = React.useState(0);
+  const initialValues = {
+    name: undefined,
+    email: undefined,
+    city: undefined,
+    category: undefined,
+    pages: 0,
+    phone: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [city, setCity] = React.useState(initialValues.city);
+  const [category, setCategory] = React.useState(initialValues.category);
+  const [pages, setPages] = React.useState(initialValues.pages);
+  const [phone, setPhone] = React.useState(initialValues.phone);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(undefined);
-    setEmail(undefined);
-    setCity(undefined);
-    setCategory(undefined);
-    setPages(0);
+    setName(initialValues.name);
+    setEmail(initialValues.email);
+    setCity(initialValues.city);
+    setCategory(initialValues.category);
+    setPages(initialValues.pages);
+    setPhone(initialValues.phone);
     setErrors({});
   };
   const validations = {
@@ -38,6 +48,7 @@ export default function CustomDataForm(props) {
     city: [],
     category: [],
     pages: [],
+    phone: [{ type: \\"Required\\" }, { type: \\"Phone\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -62,6 +73,7 @@ export default function CustomDataForm(props) {
           city,
           category,
           pages,
+          phone,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -91,7 +103,7 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -100,12 +112,13 @@ export default function CustomDataForm(props) {
               city,
               category,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
           }
           if (errors.name?.hasError) {
-            await runValidationTasks(\\"name\\", value);
+            runValidationTasks(\\"name\\", value);
           }
           setName(value);
         }}
@@ -118,7 +131,7 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -127,12 +140,13 @@ export default function CustomDataForm(props) {
               city,
               category,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
           }
           if (errors.email?.hasError) {
-            await runValidationTasks(\\"email\\", value);
+            runValidationTasks(\\"email\\", value);
           }
           setEmail(value);
         }}
@@ -145,7 +159,7 @@ export default function CustomDataForm(props) {
         label=\\"Label\\"
         placeholder=\\"Please select an option\\"
         value={city}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -154,12 +168,13 @@ export default function CustomDataForm(props) {
               city: value,
               category,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
           }
           if (errors.city?.hasError) {
-            await runValidationTasks(\\"city\\", value);
+            runValidationTasks(\\"city\\", value);
           }
           setCity(value);
         }}
@@ -189,7 +204,7 @@ export default function CustomDataForm(props) {
         label=\\"Label\\"
         name=\\"fieldName\\"
         defaultValue=\\"Hobbies\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -198,12 +213,13 @@ export default function CustomDataForm(props) {
               city,
               category: value,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.category ?? value;
           }
           if (errors.category?.hasError) {
-            await runValidationTasks(\\"category\\", value);
+            runValidationTasks(\\"category\\", value);
           }
           setCategory(value);
         }}
@@ -231,7 +247,7 @@ export default function CustomDataForm(props) {
       <StepperField
         label=\\"Label\\"
         value={pages}
-        onStepChange={async (e) => {
+        onStepChange={(e) => {
           let value = e;
           if (onChange) {
             const modelFields = {
@@ -240,12 +256,13 @@ export default function CustomDataForm(props) {
               city,
               category,
               pages: value,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.pages ?? value;
           }
           if (errors.pages?.hasError) {
-            await runValidationTasks(\\"pages\\", value);
+            runValidationTasks(\\"pages\\", value);
           }
           setPages(value);
         }}
@@ -254,6 +271,35 @@ export default function CustomDataForm(props) {
         hasError={errors.pages?.hasError}
         {...getOverrideProps(overrides, \\"pages\\")}
       ></StepperField>
+      <TextField
+        label=\\"Phone Number\\"
+        isRequired={true}
+        defaultValue=\\"+1-401-152-6995\\"
+        type=\\"tel\\"
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city,
+              category,
+              pages,
+              phone: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks(\\"phone\\", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks(\\"phone\\", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, \\"phone\\")}
+      ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -264,7 +310,7 @@ export default function CustomDataForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"go back\\"
             type=\\"button\\"
@@ -297,13 +343,21 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
-    name?: UseBaseOrValidationType<useBase, string>;
-    email?: UseBaseOrValidationType<useBase, string>;
-    city?: UseBaseOrValidationType<useBase, string>;
-    category?: UseBaseOrValidationType<useBase, string>;
-    pages?: UseBaseOrValidationType<useBase, number>;
+export declare type CustomDataFormInputValues = {
+    name?: string;
+    email?: string;
+    city?: string;
+    category?: string;
+    pages?: number;
+    phone?: string;
+};
+export declare type CustomDataFormValidationValues = {
+    name?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
+    category?: ValidationFunction<string>;
+    pages?: ValidationFunction<number>;
+    phone?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
@@ -313,6 +367,7 @@ export declare type CustomDataFormOverridesProps = {
     city?: FormProps<SelectFieldProps>;
     category?: FormProps<RadioGroupFieldProps>;
     pages?: FormProps<StepperFieldProps>;
+    phone?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
@@ -320,7 +375,7 @@ export declare type CustomDataFormProps = React.PropsWithChildren<{
     onSubmit: (fields: CustomDataFormInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
-    onValidate?: CustomDataFormInputValues<false>;
+    onValidate?: CustomDataFormValidationValues;
 }>;
 export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
 "
@@ -339,29 +394,52 @@ import {
   RadioGroupField,
   SelectField,
   StepperField,
+  TextAreaField,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 export default function CustomDataForm(props) {
-  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
-    props;
-  const [name, setName] = React.useState(undefined);
-  const [email, setEmail] = React.useState(undefined);
-  const [city, setCity] = React.useState(undefined);
-  const [category, setCategory] = React.useState(undefined);
-  const [pages, setPages] = React.useState(0);
+  const {
+    initialData,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: undefined,
+    email: undefined,
+    \\"metadata-field\\": undefined,
+    city: undefined,
+    category: undefined,
+    pages: 0,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [metadatafield, setMetadatafield] = React.useState(
+    initialValues[\\"metadata-field\\"]
+  );
+  const [city, setCity] = React.useState(initialValues.city);
+  const [category, setCategory] = React.useState(initialValues.category);
+  const [pages, setPages] = React.useState(initialValues.pages);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(undefined);
-    setEmail(undefined);
-    setCity(undefined);
-    setCategory(undefined);
-    setPages(0);
+    const cleanValues = { ...initialValues, ...initialData };
+    setName(cleanValues.name);
+    setEmail(cleanValues.email);
+    setMetadatafield(cleanValues[\\"metadata-field\\"]);
+    setCity(cleanValues.city);
+    setCategory(cleanValues.category);
+    setPages(cleanValues.pages);
     setErrors({});
   };
+  React.useEffect(resetStateValues, [initialData]);
   React.useEffect(() => {
     if (initialData) {
       setName(initialData.name);
       setEmail(initialData.email);
+      setMetadatafield(initialData[\\"metadata-field\\"]);
       setCity(initialData.city);
       setCategory(initialData.category);
       setPages(initialData.pages);
@@ -370,6 +448,7 @@ export default function CustomDataForm(props) {
   const validations = {
     name: [{ type: \\"Required\\" }],
     email: [{ type: \\"Required\\" }],
+    \\"metadata-field\\": [{ type: \\"Required\\" }, { type: \\"JSON\\" }],
     city: [],
     category: [],
     pages: [],
@@ -394,6 +473,7 @@ export default function CustomDataForm(props) {
         const modelFields = {
           name,
           email,
+          \\"metadata-field\\": metadatafield,
           city,
           category,
           pages,
@@ -427,12 +507,13 @@ export default function CustomDataForm(props) {
         isRequired={true}
         defaultValue=\\"John Doe\\"
         defaultValue={name}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name: value,
               email,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages,
@@ -441,7 +522,7 @@ export default function CustomDataForm(props) {
             value = result?.name ?? value;
           }
           if (errors.name?.hasError) {
-            await runValidationTasks(\\"name\\", value);
+            runValidationTasks(\\"name\\", value);
           }
           setName(value);
         }}
@@ -455,12 +536,13 @@ export default function CustomDataForm(props) {
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
         defaultValue={email}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,
               email: value,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages,
@@ -469,7 +551,7 @@ export default function CustomDataForm(props) {
             value = result?.email ?? value;
           }
           if (errors.email?.hasError) {
-            await runValidationTasks(\\"email\\", value);
+            runValidationTasks(\\"email\\", value);
           }
           setEmail(value);
         }}
@@ -478,16 +560,45 @@ export default function CustomDataForm(props) {
         hasError={errors.email?.hasError}
         {...getOverrideProps(overrides, \\"email\\")}
       ></TextField>
-      <SelectField
-        label=\\"Label\\"
-        placeholder=\\"Please select an option\\"
-        value={city}
-        onChange={async (e) => {
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={true}
+        defaultValue={metadatafield}
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,
               email,
+              \\"metadata-field\\": metadatafield,
+              city,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.[\\"metadata-field\\"] ?? value;
+          }
+          if (errors[\\"metadata-field\\"]?.hasError) {
+            runValidationTasks(\\"metadata-field\\", value);
+          }
+          setMetadatafield(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata-field\\", metadatafield)}
+        errorMessage={errors[\\"metadata-field\\"]?.errorMessage}
+        hasError={errors[\\"metadata-field\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"metadata-field\\")}
+      ></TextAreaField>
+      <SelectField
+        label=\\"Label\\"
+        placeholder=\\"Please select an option\\"
+        value={city}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              \\"metadata-field\\": metadatafield,
               city: value,
               category,
               pages,
@@ -496,7 +607,7 @@ export default function CustomDataForm(props) {
             value = result?.city ?? value;
           }
           if (errors.city?.hasError) {
-            await runValidationTasks(\\"city\\", value);
+            runValidationTasks(\\"city\\", value);
           }
           setCity(value);
         }}
@@ -527,12 +638,13 @@ export default function CustomDataForm(props) {
         name=\\"fieldName\\"
         defaultValue=\\"Hobbies\\"
         defaultValue={category}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,
               email,
+              \\"metadata-field\\": metadatafield,
               city,
               category: value,
               pages,
@@ -541,7 +653,7 @@ export default function CustomDataForm(props) {
             value = result?.category ?? value;
           }
           if (errors.category?.hasError) {
-            await runValidationTasks(\\"category\\", value);
+            runValidationTasks(\\"category\\", value);
           }
           setCategory(value);
         }}
@@ -569,12 +681,13 @@ export default function CustomDataForm(props) {
       <StepperField
         label=\\"Label\\"
         value={pages}
-        onStepChange={async (e) => {
+        onStepChange={(e) => {
           let value = e;
           if (onChange) {
             const modelFields = {
               name,
               email,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages: value,
@@ -583,7 +696,7 @@ export default function CustomDataForm(props) {
             value = result?.pages ?? value;
           }
           if (errors.pages?.hasError) {
-            await runValidationTasks(\\"pages\\", value);
+            runValidationTasks(\\"pages\\", value);
           }
           setPages(value);
         }}
@@ -600,9 +713,9 @@ export default function CustomDataForm(props) {
           children=\\"empty\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"go back\\"
             type=\\"button\\"
@@ -629,25 +742,34 @@ export default function CustomDataForm(props) {
 exports[`amplify form renderer tests custom form tests should render a custom backed form 4`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type CustomDataFormInputValues<useBase extends boolean = true> = {
-    name?: UseBaseOrValidationType<useBase, string>;
-    email?: UseBaseOrValidationType<useBase, string>;
-    city?: UseBaseOrValidationType<useBase, string>;
-    category?: UseBaseOrValidationType<useBase, string>;
-    pages?: UseBaseOrValidationType<useBase, number>;
+export declare type CustomDataFormInputValues = {
+    name?: string;
+    email?: string;
+    \\"metadata-field\\"?: string;
+    city?: string;
+    category?: string;
+    pages?: number;
+};
+export declare type CustomDataFormValidationValues = {
+    name?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    \\"metadata-field\\"?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
+    category?: ValidationFunction<string>;
+    pages?: ValidationFunction<number>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
     CustomDataFormGrid?: FormProps<GridProps>;
     name?: FormProps<TextFieldProps>;
     email?: FormProps<TextFieldProps>;
+    \\"metadata-field\\"?: FormProps<TextAreaFieldProps>;
     city?: FormProps<SelectFieldProps>;
     category?: FormProps<RadioGroupFieldProps>;
     pages?: FormProps<StepperFieldProps>;
@@ -659,9 +781,964 @@ export declare type CustomDataFormProps = React.PropsWithChildren<{
     onSubmit: (fields: CustomDataFormInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
-    onValidate?: CustomDataFormInputValues<false>;
+    onValidate?: CustomDataFormValidationValues;
 }>;
 export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a custom backed form with an array field 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
+export default function CustomDataForm(props) {
+  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
+    props;
+  const initialValues = {
+    name: undefined,
+    email: [],
+    phone: [],
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [phone, setPhone] = React.useState(initialValues.phone);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(initialValues.name);
+    setEmail(initialValues.email);
+    setCurrentEmailValue(undefined);
+    setPhone(initialValues.phone);
+    setCurrentPhoneValue(undefined);
+    setErrors({});
+  };
+  const [currentEmailValue, setCurrentEmailValue] = React.useState(undefined);
+  const emailRef = React.createRef();
+  const [currentPhoneValue, setCurrentPhoneValue] = React.useState(undefined);
+  const phoneRef = React.createRef();
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    email: [{ type: \\"Required\\" }],
+    phone: [{ type: \\"Required\\" }, { type: \\"Phone\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const modelFields = {
+          name,
+          email,
+          phone,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        await onSubmit(modelFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+    >
+      <TextField
+        label=\\"name\\"
+        isRequired={true}
+        defaultValue=\\"John Doe\\"
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              email,
+              phone,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email: values,
+              phone,
+            };
+            const result = onChange(modelFields);
+            values = result?.email ?? values;
+          }
+          setEmail(values);
+          setCurrentEmailValue(undefined);
+        }}
+        currentFieldValue={currentEmailValue}
+        label={\\"E-mail\\"}
+        items={email}
+        hasError={errors.email?.hasError}
+        setFieldValue={setCurrentEmailValue}
+        inputFieldRef={emailRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"E-mail\\"
+          isRequired={true}
+          defaultValue=\\"johndoe@amplify.com\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.email?.hasError) {
+              runValidationTasks(\\"email\\", value);
+            }
+            setCurrentEmailValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"email\\", currentEmailValue)}
+          errorMessage={errors.email?.errorMessage}
+          hasError={errors.email?.hasError}
+          ref={emailRef}
+          {...getOverrideProps(overrides, \\"email\\")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              phone: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.phone ?? values;
+          }
+          setPhone(values);
+          setCurrentPhoneValue(undefined);
+        }}
+        currentFieldValue={currentPhoneValue}
+        label={\\"phone\\"}
+        items={phone}
+        hasError={errors.phone?.hasError}
+        setFieldValue={setCurrentPhoneValue}
+        inputFieldRef={phoneRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"phone\\"
+          isRequired={true}
+          defaultValue=\\"+1-401-152-6995\\"
+          type=\\"tel\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.phone?.hasError) {
+              runValidationTasks(\\"phone\\", value);
+            }
+            setCurrentPhoneValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"phone\\", currentPhoneValue)}
+          errorMessage={errors.phone?.errorMessage}
+          hasError={errors.phone?.hasError}
+          ref={phoneRef}
+          {...getOverrideProps(overrides, \\"phone\\")}
+        ></TextField>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"empty\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+          <Button
+            children=\\"go back\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"create\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a custom backed form with an array field 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CustomDataFormInputValues = {
+    name?: string;
+    email?: string[];
+    phone?: string[];
+};
+export declare type CustomDataFormValidationValues = {
+    name?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    phone?: ValidationFunction<string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomDataFormOverridesProps = {
+    CustomDataFormGrid?: FormProps<GridProps>;
+    name?: FormProps<TextFieldProps>;
+    email?: FormProps<TextFieldProps>;
+    phone?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type CustomDataFormProps = React.PropsWithChildren<{
+    overrides?: CustomDataFormOverridesProps | undefined | null;
+} & {
+    onSubmit: (fields: CustomDataFormInputValues) => void;
+    onCancel?: () => void;
+    onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
+    onValidate?: CustomDataFormValidationValues;
+}>;
+export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a datastore backed form with a custom array field 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Post } from \\"../models\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextAreaField,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
+export default function MyPostForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    username: undefined,
+    caption: undefined,
+    Customtags: [],
+    post_url: undefined,
+    metadata: undefined,
+    profile_url: undefined,
+  };
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [Customtags, setCustomtags] = React.useState(initialValues.Customtags);
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [metadata, setMetadata] = React.useState(
+    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
+  );
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setUsername(initialValues.username);
+    setCaption(initialValues.caption);
+    setCustomtags(initialValues.Customtags);
+    setCurrentCustomtagsValue(undefined);
+    setPost_url(initialValues.post_url);
+    setMetadata(initialValues.metadata);
+    setProfile_url(initialValues.profile_url);
+    setErrors({});
+  };
+  const [currentCustomtagsValue, setCurrentCustomtagsValue] =
+    React.useState(undefined);
+  const CustomtagsRef = React.createRef();
+  const validations = {
+    username: [
+      {
+        type: \\"GreaterThanChar\\",
+        numValues: [2],
+        validationMessage: \\"needs to be of length 2\\",
+      },
+    ],
+    caption: [],
+    Customtags: [],
+    post_url: [{ type: \\"URL\\" }],
+    metadata: [{ type: \\"JSON\\" }],
+    profile_url: [{ type: \\"URL\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          username,
+          caption,
+          Customtags,
+          post_url,
+          metadata: JSON.parse(metadata),
+          profile_url,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(new Post(modelFields));
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"MyPostForm\\")}
+    >
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+      <Grid
+        columnGap=\\"inherit\\"
+        rowGap=\\"inherit\\"
+        templateColumns=\\"repeat(2, auto)\\"
+        {...getOverrideProps(overrides, \\"RowGrid0\\")}
+      >
+        <TextField
+          label=\\"Username\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"john\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username: value,
+                caption,
+                Customtags,
+                post_url,
+                metadata: JSON.parse(metadata),
+                profile_url,
+              };
+              const result = onChange(modelFields);
+              value = result?.username ?? value;
+            }
+            if (errors.username?.hasError) {
+              runValidationTasks(\\"username\\", value);
+            }
+            setUsername(value);
+          }}
+          onBlur={() => runValidationTasks(\\"username\\", username)}
+          errorMessage={errors.username?.errorMessage}
+          hasError={errors.username?.hasError}
+          {...getOverrideProps(overrides, \\"username\\")}
+        ></TextField>
+        <TextField
+          label=\\"Caption\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"i love code\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username,
+                caption: value,
+                Customtags,
+                post_url,
+                metadata: JSON.parse(metadata),
+                profile_url,
+              };
+              const result = onChange(modelFields);
+              value = result?.caption ?? value;
+            }
+            if (errors.caption?.hasError) {
+              runValidationTasks(\\"caption\\", value);
+            }
+            setCaption(value);
+          }}
+          onBlur={() => runValidationTasks(\\"caption\\", caption)}
+          errorMessage={errors.caption?.errorMessage}
+          hasError={errors.caption?.hasError}
+          {...getOverrideProps(overrides, \\"caption\\")}
+        ></TextField>
+      </Grid>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags: values,
+              post_url,
+              metadata: JSON.parse(metadata),
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            values = result?.Customtags ?? values;
+          }
+          setCustomtags(values);
+          setCurrentCustomtagsValue(undefined);
+        }}
+        currentFieldValue={currentCustomtagsValue}
+        label={\\"Tags\\"}
+        items={Customtags}
+        hasError={errors.Customtags?.hasError}
+        setFieldValue={setCurrentCustomtagsValue}
+        inputFieldRef={CustomtagsRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"Tags\\"
+          placeholder=\\"goals\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Customtags?.hasError) {
+              runValidationTasks(\\"Customtags\\", value);
+            }
+            setCurrentCustomtagsValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"Customtags\\", currentCustomtagsValue)
+          }
+          errorMessage={errors.Customtags?.errorMessage}
+          hasError={errors.Customtags?.hasError}
+          ref={CustomtagsRef}
+          {...getOverrideProps(overrides, \\"Customtags\\")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label=\\"Post url\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              post_url: value,
+              metadata: JSON.parse(metadata),
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            value = result?.post_url ?? value;
+          }
+          if (errors.post_url?.hasError) {
+            runValidationTasks(\\"post_url\\", value);
+          }
+          setPost_url(value);
+        }}
+        onBlur={() => runValidationTasks(\\"post_url\\", post_url)}
+        errorMessage={errors.post_url?.errorMessage}
+        hasError={errors.post_url?.hasError}
+        {...getOverrideProps(overrides, \\"post_url\\")}
+      ></TextField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              post_url,
+              metadata: JSON.parse(metadata),
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks(\\"metadata\\", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata\\", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, \\"metadata\\")}
+      ></TextAreaField>
+      <TextField
+        label=\\"Profile url\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              post_url,
+              metadata: JSON.parse(metadata),
+              profile_url: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.profile_url ?? value;
+          }
+          if (errors.profile_url?.hasError) {
+            runValidationTasks(\\"profile_url\\", value);
+          }
+          setProfile_url(value);
+        }}
+        onBlur={() => runValidationTasks(\\"profile_url\\", profile_url)}
+        errorMessage={errors.profile_url?.errorMessage}
+        hasError={errors.profile_url?.hasError}
+        {...getOverrideProps(overrides, \\"profile_url\\")}
+      ></TextField>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests custom form tests should render a datastore backed form with a custom array field 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type MyPostFormInputValues = {
+    username?: string;
+    caption?: string;
+    Customtags?: string[];
+    post_url?: string;
+    metadata?: string;
+    profile_url?: string;
+};
+export declare type MyPostFormValidationValues = {
+    username?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    Customtags?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type MyPostFormOverridesProps = {
+    MyPostFormGrid?: FormProps<GridProps>;
+    RowGrid0?: FormProps<GridProps>;
+    username?: FormProps<TextFieldProps>;
+    caption?: FormProps<TextFieldProps>;
+    Customtags?: FormProps<TextFieldProps>;
+    post_url?: FormProps<TextFieldProps>;
+    metadata?: FormProps<TextAreaFieldProps>;
+    profile_url?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type MyPostFormProps = React.PropsWithChildren<{
+    overrides?: MyPostFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onValidate?: MyPostFormValidationValues;
+}>;
+export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 
@@ -671,32 +1748,197 @@ import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
   Heading,
+  Icon,
+  ScrollView,
+  Text,
   TextField,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
 export default function NestedJson(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const { tokens } = useTheme();
-  const [firstName, setFirstName] = React.useState(undefined);
-  const [lastName, setLastName] = React.useState(undefined);
-  const [bio, setBio] = React.useState({});
+  const initialValues = {
+    \\"first-Name\\": undefined,
+    lastName: undefined,
+    bio: {},
+    Nicknames1: [],
+    \\"nick-names2\\": [],
+    \\"first Name\\": undefined,
+  };
+  const [firstName, setFirstName] = React.useState(initialValues[\\"first-Name\\"]);
+  const [lastName, setLastName] = React.useState(initialValues.lastName);
+  const [bio, setBio] = React.useState(initialValues.bio);
+  const [Nicknames1, setNicknames1] = React.useState(initialValues.Nicknames1);
+  const [nicknames, setNicknames] = React.useState(
+    initialValues[\\"nick-names2\\"]
+  );
+  const [firstName1, setFirstName1] = React.useState(
+    initialValues[\\"first Name\\"]
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setFirstName(undefined);
-    setLastName(undefined);
-    setBio({});
+    setFirstName(initialValues[\\"first-Name\\"]);
+    setLastName(initialValues.lastName);
+    setBio(initialValues.bio);
+    setNicknames1(initialValues.Nicknames1);
+    setCurrentNicknames1Value(undefined);
+    setNicknames(initialValues[\\"nick-names2\\"]);
+    setCurrentNicknamesValue(undefined);
+    setFirstName1(initialValues[\\"first Name\\"]);
     setErrors({});
   };
+  const [currentNicknames1Value, setCurrentNicknames1Value] =
+    React.useState(undefined);
+  const Nicknames1Ref = React.createRef();
+  const [currentNicknamesValue, setCurrentNicknamesValue] =
+    React.useState(undefined);
+  const nicknamesRef = React.createRef();
   const validations = {
-    firstName: [],
+    \\"first-Name\\": [],
     lastName: [],
-    \\"bio.favoriteQuote\\": [],
-    \\"bio.favoriteAnimal\\": [],
+    \\"bio.favorite Quote\\": [],
+    \\"bio.favorite-Animal\\": [],
+    Nicknames1: [],
+    \\"nick-names2\\": [],
+    \\"first Name\\": [],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -716,9 +1958,12 @@ export default function NestedJson(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         const modelFields = {
-          firstName,
+          \\"first-Name\\": firstName,
           lastName,
           bio,
+          Nicknames1,
+          \\"nick-names2\\": nicknames,
+          \\"first Name\\": firstName1,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -746,42 +1991,48 @@ export default function NestedJson(props) {
     >
       <TextField
         label=\\"firstName\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstName: value,
+              \\"first-Name\\": firstName,
               lastName,
               bio,
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
-            value = result?.firstName ?? value;
+            value = result?.[\\"first-Name\\"] ?? value;
           }
-          if (errors.firstName?.hasError) {
-            await runValidationTasks(\\"firstName\\", value);
+          if (errors[\\"first-Name\\"]?.hasError) {
+            runValidationTasks(\\"first-Name\\", value);
           }
           setFirstName(value);
         }}
-        onBlur={() => runValidationTasks(\\"firstName\\", firstName)}
-        errorMessage={errors.firstName?.errorMessage}
-        hasError={errors.firstName?.hasError}
-        {...getOverrideProps(overrides, \\"firstName\\")}
+        onBlur={() => runValidationTasks(\\"first-Name\\", firstName)}
+        errorMessage={errors[\\"first-Name\\"]?.errorMessage}
+        hasError={errors[\\"first-Name\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"first-Name\\")}
       ></TextField>
       <TextField
         label=\\"lastName\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstName,
+              \\"first-Name\\": firstName,
               lastName: value,
               bio,
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
             value = result?.lastName ?? value;
           }
           if (errors.lastName?.hasError) {
-            await runValidationTasks(\\"lastName\\", value);
+            runValidationTasks(\\"lastName\\", value);
           }
           setLastName(value);
         }}
@@ -797,53 +2048,173 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstName,
+              \\"first-Name\\": firstName,
               lastName,
-              bio: { ...bio, favoriteQuote: value },
+              bio: { ...bio, [\\"favorite Quote\\"]: value },
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
-            value = result?.bio?.favoriteQuote ?? value;
+            value = result?.bio?.[\\"favorite Quote\\"] ?? value;
           }
-          if (errors.bio.favoriteQuote?.hasError) {
-            await runValidationTasks(\\"bio.favoriteQuote\\", value);
+          if (errors[\\"bio.favorite Quote\\"]?.hasError) {
+            runValidationTasks(\\"bio.favorite Quote\\", value);
           }
-          setBio({ ...bio, favoriteQuote: value });
+          setBio({ ...bio, [\\"favorite Quote\\"]: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
+          runValidationTasks(\\"bio.favorite Quote\\", bio[\\"favorite Quote\\"])
         }
-        errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
-        hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
-        {...getOverrideProps(overrides, \\"bio.favoriteQuote\\")}
+        errorMessage={errors[\\"bio.favorite Quote\\"]?.errorMessage}
+        hasError={errors[\\"bio.favorite Quote\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"bio.favorite Quote\\")}
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              firstName,
+              \\"first-Name\\": firstName,
               lastName,
-              bio: { ...bio, favoriteAnimal: value },
+              bio: { ...bio, [\\"favorite-Animal\\"]: value },
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
-            value = result?.bio?.favoriteAnimal ?? value;
+            value = result?.bio?.[\\"favorite-Animal\\"] ?? value;
           }
-          if (errors.bio.favoriteAnimal?.hasError) {
-            await runValidationTasks(\\"bio.favoriteAnimal\\", value);
+          if (errors[\\"bio.favorite-Animal\\"]?.hasError) {
+            runValidationTasks(\\"bio.favorite-Animal\\", value);
           }
-          setBio({ ...bio, favoriteAnimal: value });
+          setBio({ ...bio, [\\"favorite-Animal\\"]: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
+          runValidationTasks(\\"bio.favorite-Animal\\", bio[\\"favorite-Animal\\"])
         }
-        errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
-        hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
-        {...getOverrideProps(overrides, \\"bio.favoriteAnimal\\")}
+        errorMessage={errors[\\"bio.favorite-Animal\\"]?.errorMessage}
+        hasError={errors[\\"bio.favorite-Animal\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"bio.favorite-Animal\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              \\"first-Name\\": firstName,
+              lastName,
+              bio,
+              Nicknames1: values,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
+            };
+            const result = onChange(modelFields);
+            values = result?.Nicknames1 ?? values;
+          }
+          setNicknames1(values);
+          setCurrentNicknames1Value(undefined);
+        }}
+        currentFieldValue={currentNicknames1Value}
+        label={\\"Nick Names1\\"}
+        items={Nicknames1}
+        hasError={errors.Nicknames1?.hasError}
+        setFieldValue={setCurrentNicknames1Value}
+        inputFieldRef={Nicknames1Ref}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"Nick Names1\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Nicknames1?.hasError) {
+              runValidationTasks(\\"Nicknames1\\", value);
+            }
+            setCurrentNicknames1Value(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"Nicknames1\\", currentNicknames1Value)
+          }
+          errorMessage={errors.Nicknames1?.errorMessage}
+          hasError={errors.Nicknames1?.hasError}
+          ref={Nicknames1Ref}
+          {...getOverrideProps(overrides, \\"Nicknames1\\")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              \\"first-Name\\": firstName,
+              lastName,
+              bio,
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
+            };
+            const result = onChange(modelFields);
+            values = result?.[\\"nick-names2\\"] ?? values;
+          }
+          setNicknames(values);
+          setCurrentNicknamesValue(undefined);
+        }}
+        currentFieldValue={currentNicknamesValue}
+        label={\\"nick-Names2\\"}
+        items={nicknames}
+        hasError={errors?.[\\"nick-names2\\"]?.hasError}
+        setFieldValue={setCurrentNicknamesValue}
+        inputFieldRef={nicknamesRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"nick-Names2\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors[\\"nick-names2\\"]?.hasError) {
+              runValidationTasks(\\"nick-names2\\", value);
+            }
+            setCurrentNicknamesValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"nick-names2\\", currentNicknamesValue)
+          }
+          errorMessage={errors[\\"nick-names2\\"]?.errorMessage}
+          hasError={errors[\\"nick-names2\\"]?.hasError}
+          ref={nicknamesRef}
+          {...getOverrideProps(overrides, \\"nick-names2\\")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label=\\"first Name1\\"
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              \\"first-Name\\": firstName,
+              lastName,
+              bio,
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
+            };
+            const result = onChange(modelFields);
+            value = result?.[\\"first Name\\"] ?? value;
+          }
+          if (errors[\\"first Name\\"]?.hasError) {
+            runValidationTasks(\\"first Name\\", value);
+          }
+          setFirstName1(value);
+        }}
+        onBlur={() => runValidationTasks(\\"first Name\\", firstName1)}
+        errorMessage={errors[\\"first Name\\"]?.errorMessage}
+        hasError={errors[\\"first Name\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"first Name\\")}
       ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
@@ -855,7 +2226,7 @@ export default function NestedJson(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -888,23 +2259,39 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type NestedJsonInputValues<useBase extends boolean = true> = {
-    firstName?: UseBaseOrValidationType<useBase, string>;
-    lastName?: UseBaseOrValidationType<useBase, string>;
+export declare type NestedJsonInputValues = {
+    \\"first-Name\\"?: string;
+    lastName?: string;
+    Nicknames1?: string[];
+    \\"nick-names2\\"?: string[];
+    \\"first Name\\"?: string;
     bio?: {
-        favoriteQuote?: UseBaseOrValidationType<useBase, string>;
-        favoriteAnimal?: UseBaseOrValidationType<useBase, string>;
+        \\"favorite Quote\\"?: string;
+        \\"favorite-Animal\\"?: string;
+    };
+};
+export declare type NestedJsonValidationValues = {
+    \\"first-Name\\"?: ValidationFunction<string>;
+    lastName?: ValidationFunction<string>;
+    Nicknames1?: ValidationFunction<string>;
+    \\"nick-names2\\"?: ValidationFunction<string>;
+    \\"first Name\\"?: ValidationFunction<string>;
+    bio?: {
+        \\"favorite Quote\\"?: ValidationFunction<string>;
+        \\"favorite-Animal\\"?: ValidationFunction<string>;
     };
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NestedJsonOverridesProps = {
     NestedJsonGrid?: FormProps<GridProps>;
-    firstName?: FormProps<TextFieldProps>;
+    \\"first-Name\\"?: FormProps<TextFieldProps>;
     lastName?: FormProps<TextFieldProps>;
     bio?: FormProps<HeadingProps>;
-    \\"bio.favoriteQuote\\"?: FormProps<TextFieldProps>;
-    \\"bio.favoriteAnimal\\"?: FormProps<TextFieldProps>;
+    \\"bio.favorite Quote\\"?: FormProps<TextFieldProps>;
+    \\"bio.favorite-Animal\\"?: FormProps<TextFieldProps>;
+    Nicknames1?: FormProps<TextFieldProps>;
+    \\"nick-names2\\"?: FormProps<TextFieldProps>;
+    \\"first Name\\"?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type NestedJsonProps = React.PropsWithChildren<{
     overrides?: NestedJsonOverridesProps | undefined | null;
@@ -912,7 +2299,7 @@ export declare type NestedJsonProps = React.PropsWithChildren<{
     onSubmit: (fields: NestedJsonInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: NestedJsonInputValues) => NestedJsonInputValues;
-    onValidate?: NestedJsonInputValues<false>;
+    onValidate?: NestedJsonValidationValues;
 }>;
 export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
@@ -923,29 +2310,196 @@ exports[`amplify form renderer tests custom form tests should render nested json
 import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, Grid, Heading, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Heading,
+  Icon,
+  ScrollView,
+  SelectField,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
 export default function NestedJson(props) {
-  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
-    props;
-  const [firstName, setFirstName] = React.useState(undefined);
-  const [lastName, setLastName] = React.useState(undefined);
-  const [bio, setBio] = React.useState({});
+  const {
+    initialData,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    firstName: undefined,
+    \\"last-Name\\": undefined,
+    lastName: [],
+    bio: {},
+  };
+  const [firstName, setFirstName] = React.useState(initialValues.firstName);
+  const [lastName, setLastName] = React.useState(initialValues[\\"last-Name\\"]);
+  const [lastName1, setLastName1] = React.useState(initialValues.lastName);
+  const [bio, setBio] = React.useState(initialValues.bio);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setFirstName(undefined);
-    setLastName(undefined);
-    setBio({});
+    const cleanValues = { ...initialValues, ...initialData };
+    setFirstName(cleanValues.firstName);
+    setLastName(cleanValues[\\"last-Name\\"]);
+    setLastName1(cleanValues.lastName ?? []);
+    setCurrentLastName1Value(undefined);
+    setBio(cleanValues.bio);
     setErrors({});
   };
+  React.useEffect(resetStateValues, [initialData]);
   React.useEffect(() => {
     if (initialData) {
       setFirstName(initialData.firstName);
-      setLastName(initialData.lastName);
+      setLastName(initialData[\\"last-Name\\"]);
+      setLastName1(initialData.lastName);
       setBio(initialData.bio);
     }
   }, []);
+  const [currentLastName1Value, setCurrentLastName1Value] =
+    React.useState(undefined);
+  const lastName1Ref = React.createRef();
   const validations = {
     firstName: [],
+    \\"last-Name\\": [],
     lastName: [],
     \\"bio.favoriteQuote\\": [],
     \\"bio.favoriteAnimal\\": [],
@@ -969,7 +2523,8 @@ export default function NestedJson(props) {
         event.preventDefault();
         const modelFields = {
           firstName,
-          lastName,
+          \\"last-Name\\": lastName,
+          lastName: lastName1,
           bio,
         };
         const validationResponses = await Promise.all(
@@ -999,19 +2554,20 @@ export default function NestedJson(props) {
       <TextField
         label=\\"firstName\\"
         defaultValue={firstName}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               firstName: value,
-              lastName,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
               bio,
             };
             const result = onChange(modelFields);
             value = result?.firstName ?? value;
           }
           if (errors.firstName?.hasError) {
-            await runValidationTasks(\\"firstName\\", value);
+            runValidationTasks(\\"firstName\\", value);
           }
           setFirstName(value);
         }}
@@ -1020,30 +2576,72 @@ export default function NestedJson(props) {
         hasError={errors.firstName?.hasError}
         {...getOverrideProps(overrides, \\"firstName\\")}
       ></TextField>
-      <TextField
-        label=\\"lastName\\"
-        defaultValue={lastName}
-        onChange={async (e) => {
+      <SelectField
+        label=\\"last-Name\\"
+        placeholder=\\"Please select an option\\"
+        value={lastName}
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               firstName,
-              lastName: value,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
               bio,
             };
             const result = onChange(modelFields);
-            value = result?.lastName ?? value;
+            value = result?.[\\"last-Name\\"] ?? value;
           }
-          if (errors.lastName?.hasError) {
-            await runValidationTasks(\\"lastName\\", value);
+          if (errors[\\"last-Name\\"]?.hasError) {
+            runValidationTasks(\\"last-Name\\", value);
           }
           setLastName(value);
         }}
-        onBlur={() => runValidationTasks(\\"lastName\\", lastName)}
-        errorMessage={errors.lastName?.errorMessage}
+        onBlur={() => runValidationTasks(\\"last-Name\\", lastName)}
+        errorMessage={errors[\\"last-Name\\"]?.errorMessage}
+        hasError={errors[\\"last-Name\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"last-Name\\")}
+      ></SelectField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
+              bio,
+            };
+            const result = onChange(modelFields);
+            values = result?.lastName ?? values;
+          }
+          setLastName1(values);
+          setCurrentLastName1Value(undefined);
+        }}
+        currentFieldValue={currentLastName1Value}
+        label={\\"lastName\\"}
+        items={lastName1}
         hasError={errors.lastName?.hasError}
-        {...getOverrideProps(overrides, \\"lastName\\")}
-      ></TextField>
+        setFieldValue={setCurrentLastName1Value}
+        inputFieldRef={lastName1Ref}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"lastName\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.lastName?.hasError) {
+              runValidationTasks(\\"lastName\\", value);
+            }
+            setCurrentLastName1Value(value);
+          }}
+          onBlur={() => runValidationTasks(\\"lastName\\", currentLastName1Value)}
+          errorMessage={errors.lastName?.errorMessage}
+          hasError={errors.lastName?.hasError}
+          ref={lastName1Ref}
+          {...getOverrideProps(overrides, \\"lastName\\")}
+        ></TextField>
+      </ArrayField>
       <Heading
         level={3}
         children=\\"bio\\"
@@ -1052,24 +2650,25 @@ export default function NestedJson(props) {
       <TextField
         label=\\"favoriteQuote\\"
         defaultValue={bio.favoriteQuote}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               firstName,
-              lastName,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
               bio: { ...bio, favoriteQuote: value },
             };
             const result = onChange(modelFields);
             value = result?.bio?.favoriteQuote ?? value;
           }
-          if (errors.bio.favoriteQuote?.hasError) {
-            await runValidationTasks(\\"bio.favoriteQuote\\", value);
+          if (errors[\\"bio.favoriteQuote\\"]?.hasError) {
+            runValidationTasks(\\"bio.favoriteQuote\\", value);
           }
           setBio({ ...bio, favoriteQuote: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favoriteQuote\\", bio.favoriteQuote)
+          runValidationTasks(\\"bio.favoriteQuote\\", bio[\\"favoriteQuote\\"])
         }
         errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
         hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
@@ -1078,24 +2677,25 @@ export default function NestedJson(props) {
       <TextField
         label=\\"favoriteAnimal\\"
         defaultValue={bio.favoriteAnimal}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               firstName,
-              lastName,
+              \\"last-Name\\": lastName,
+              lastName: lastName1,
               bio: { ...bio, favoriteAnimal: value },
             };
             const result = onChange(modelFields);
             value = result?.bio?.favoriteAnimal ?? value;
           }
-          if (errors.bio.favoriteAnimal?.hasError) {
-            await runValidationTasks(\\"bio.favoriteAnimal\\", value);
+          if (errors[\\"bio.favoriteAnimal\\"]?.hasError) {
+            runValidationTasks(\\"bio.favoriteAnimal\\", value);
           }
           setBio({ ...bio, favoriteAnimal: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favoriteAnimal\\", bio.favoriteAnimal)
+          runValidationTasks(\\"bio.favoriteAnimal\\", bio[\\"favoriteAnimal\\"])
         }
         errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
         hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
@@ -1106,12 +2706,12 @@ export default function NestedJson(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -1138,25 +2738,35 @@ export default function NestedJson(props) {
 exports[`amplify form renderer tests custom form tests should render nested json fields 4`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, HeadingProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, HeadingProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type NestedJsonInputValues<useBase extends boolean = true> = {
-    firstName?: UseBaseOrValidationType<useBase, string>;
-    lastName?: UseBaseOrValidationType<useBase, string>;
+export declare type NestedJsonInputValues = {
+    firstName?: string;
+    \\"last-Name\\"?: string;
+    lastName?: string[];
     bio?: {
-        favoriteQuote?: UseBaseOrValidationType<useBase, string>;
-        favoriteAnimal?: UseBaseOrValidationType<useBase, string>;
+        favoriteQuote?: string;
+        favoriteAnimal?: string;
+    };
+};
+export declare type NestedJsonValidationValues = {
+    firstName?: ValidationFunction<string>;
+    \\"last-Name\\"?: ValidationFunction<string>;
+    lastName?: ValidationFunction<string>;
+    bio?: {
+        favoriteQuote?: ValidationFunction<string>;
+        favoriteAnimal?: ValidationFunction<string>;
     };
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NestedJsonOverridesProps = {
     NestedJsonGrid?: FormProps<GridProps>;
     firstName?: FormProps<TextFieldProps>;
+    \\"last-Name\\"?: FormProps<SelectFieldProps>;
     lastName?: FormProps<TextFieldProps>;
     bio?: FormProps<HeadingProps>;
     \\"bio.favoriteQuote\\"?: FormProps<TextFieldProps>;
@@ -1169,7 +2779,7 @@ export declare type NestedJsonProps = React.PropsWithChildren<{
     onSubmit: (fields: NestedJsonInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: NestedJsonInputValues) => NestedJsonInputValues;
-    onValidate?: NestedJsonInputValues<false>;
+    onValidate?: NestedJsonValidationValues;
 }>;
 export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
@@ -1192,10 +2802,13 @@ import {
 export default function CustomWithSectionalElements(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
-  const [name, setName] = React.useState(undefined);
+  const initialValues = {
+    name: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(undefined);
+    setName(initialValues.name);
     setErrors({});
   };
   const validations = {
@@ -1252,7 +2865,7 @@ export default function CustomWithSectionalElements(props) {
       ></Heading>
       <TextField
         label=\\"Label\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1262,7 +2875,7 @@ export default function CustomWithSectionalElements(props) {
             value = result?.name ?? value;
           }
           if (errors.name?.hasError) {
-            await runValidationTasks(\\"name\\", value);
+            runValidationTasks(\\"name\\", value);
           }
           setName(value);
         }}
@@ -1289,7 +2902,7 @@ export default function CustomWithSectionalElements(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -1322,9 +2935,11 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type CustomWithSectionalElementsInputValues<useBase extends boolean = true> = {
-    name?: UseBaseOrValidationType<useBase, string>;
+export declare type CustomWithSectionalElementsInputValues = {
+    name?: string;
+};
+export declare type CustomWithSectionalElementsValidationValues = {
+    name?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomWithSectionalElementsOverridesProps = {
@@ -1340,7 +2955,7 @@ export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
     onSubmit: (fields: CustomWithSectionalElementsInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: CustomWithSectionalElementsInputValues) => CustomWithSectionalElementsInputValues;
-    onValidate?: CustomWithSectionalElementsInputValues<false>;
+    onValidate?: CustomWithSectionalElementsValidationValues;
 }>;
 export default function CustomWithSectionalElements(props: CustomWithSectionalElementsProps): React.ReactElement;
 "
@@ -1352,10 +2967,17 @@ import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { Post } from \\"../models\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  TextAreaField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
   const {
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -1365,22 +2987,36 @@ export default function MyPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [caption, setCaption] = React.useState(undefined);
-  const [username, setUsername] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
+  const initialValues = {
+    caption: undefined,
+    username: undefined,
+    post_url: undefined,
+    metadata: undefined,
+    profile_url: undefined,
+  };
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [metadata, setMetadata] = React.useState(
+    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
+  );
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setCaption(undefined);
-    setUsername(undefined);
-    setPost_url(undefined);
-    setProfile_url(undefined);
+    setCaption(initialValues.caption);
+    setUsername(initialValues.username);
+    setPost_url(initialValues.post_url);
+    setMetadata(initialValues.metadata);
+    setProfile_url(initialValues.profile_url);
     setErrors({});
   };
   const validations = {
     caption: [],
     username: [],
     post_url: [{ type: \\"URL\\" }],
+    metadata: [{ type: \\"JSON\\" }],
     profile_url: [{ type: \\"URL\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
@@ -1404,6 +3040,7 @@ export default function MyPostForm(props) {
           caption,
           username,
           post_url,
+          metadata: JSON.parse(metadata),
           profile_url,
         };
         const validationResponses = await Promise.all(
@@ -1433,6 +3070,9 @@ export default function MyPostForm(props) {
           if (onSuccess) {
             onSuccess(modelFields);
           }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
         } catch (err) {
           if (onError) {
             onError(modelFields, err.message);
@@ -1452,7 +3092,7 @@ export default function MyPostForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -1474,20 +3114,21 @@ export default function MyPostForm(props) {
         label=\\"Caption\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               caption: value,
               username,
               post_url,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
             value = result?.caption ?? value;
           }
           if (errors.caption?.hasError) {
-            await runValidationTasks(\\"caption\\", value);
+            runValidationTasks(\\"caption\\", value);
           }
           setCaption(value);
         }}
@@ -1500,20 +3141,21 @@ export default function MyPostForm(props) {
         label=\\"Username\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               caption,
               username: value,
               post_url,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
           }
           if (errors.username?.hasError) {
-            await runValidationTasks(\\"username\\", value);
+            runValidationTasks(\\"username\\", value);
           }
           setUsername(value);
         }}
@@ -1526,20 +3168,21 @@ export default function MyPostForm(props) {
         label=\\"Post url\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               caption,
               username,
               post_url: value,
+              metadata: JSON.parse(metadata),
               profile_url,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
           }
           if (errors.post_url?.hasError) {
-            await runValidationTasks(\\"post_url\\", value);
+            runValidationTasks(\\"post_url\\", value);
           }
           setPost_url(value);
         }}
@@ -1548,24 +3191,52 @@ export default function MyPostForm(props) {
         hasError={errors.post_url?.hasError}
         {...getOverrideProps(overrides, \\"post_url\\")}
       ></TextField>
-      <TextField
-        label=\\"Profile url\\"
+      <TextAreaField
+        label=\\"Metadata\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               caption,
               username,
               post_url,
+              metadata: JSON.parse(metadata),
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks(\\"metadata\\", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata\\", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, \\"metadata\\")}
+      ></TextAreaField>
+      <TextField
+        label=\\"Profile url\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              caption,
+              username,
+              post_url,
+              metadata: JSON.parse(metadata),
               profile_url: value,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
           }
           if (errors.profile_url?.hasError) {
-            await runValidationTasks(\\"profile_url\\", value);
+            runValidationTasks(\\"profile_url\\", value);
           }
           setProfile_url(value);
         }}
@@ -1583,18 +3254,25 @@ export default function MyPostForm(props) {
 exports[`amplify form renderer tests datastore form tests should generate a create form 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type MyPostFormInputValues<useBase extends boolean = true> = {
-    caption?: UseBaseOrValidationType<useBase, string>;
-    username?: UseBaseOrValidationType<useBase, string>;
-    post_url?: UseBaseOrValidationType<useBase, string>;
-    profile_url?: UseBaseOrValidationType<useBase, string>;
+export declare type MyPostFormInputValues = {
+    caption?: string;
+    username?: string;
+    post_url?: string;
+    metadata?: string;
+    profile_url?: string;
+};
+export declare type MyPostFormValidationValues = {
+    caption?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
@@ -1602,17 +3280,19 @@ export declare type MyPostFormOverridesProps = {
     caption?: FormProps<TextFieldProps>;
     username?: FormProps<TextFieldProps>;
     post_url?: FormProps<TextFieldProps>;
+    metadata?: FormProps<TextAreaFieldProps>;
     profile_url?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
 } & {
+    clearOnSuccess?: boolean;
     onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
     onSuccess?: (fields: MyPostFormInputValues) => void;
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onValidate?: MyPostFormInputValues<false>;
+    onValidate?: MyPostFormValidationValues;
 }>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
@@ -1645,42 +3325,53 @@ export default function MyPostForm(props) {
     overrides,
     ...rest
   } = props;
-  const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] =
-    React.useState(undefined);
-  const [caption, setCaption] = React.useState(undefined);
-  const [username, setUsername] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
+  const initialValues = {
+    TextAreaFieldbbd63464: undefined,
+    caption: undefined,
+    username: undefined,
+    profile_url: undefined,
+    post_url: undefined,
+    metadata: undefined,
+  };
+  const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
+    initialValues.TextAreaFieldbbd63464
+  );
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [metadata, setMetadata] = React.useState(
+    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setTextAreaFieldbbd63464(undefined);
-    setCaption(undefined);
-    setUsername(undefined);
-    setProfile_url(undefined);
-    setPost_url(undefined);
+    const cleanValues = { ...initialValues, ...postRecord };
+    setTextAreaFieldbbd63464(cleanValues.TextAreaFieldbbd63464);
+    setCaption(cleanValues.caption);
+    setUsername(cleanValues.username);
+    setProfile_url(cleanValues.profile_url);
+    setPost_url(cleanValues.post_url);
+    setMetadata(cleanValues.metadata);
     setErrors({});
   };
   const [postRecord, setPostRecord] = React.useState(post);
   React.useEffect(() => {
     const queryData = async () => {
       const record = id ? await DataStore.query(Post, id) : post;
-      if (record) {
-        setPostRecord(record);
-        setTextAreaFieldbbd63464(record.TextAreaFieldbbd63464);
-        setCaption(record.caption);
-        setUsername(record.username);
-        setProfile_url(record.profile_url);
-        setPost_url(record.post_url);
-      }
+      setPostRecord(record);
     };
     queryData();
   }, [id, post]);
+  React.useEffect(resetStateValues, [postRecord]);
   const validations = {
     TextAreaFieldbbd63464: [],
     caption: [],
     username: [],
     profile_url: [{ type: \\"URL\\" }],
     post_url: [{ type: \\"URL\\" }],
+    metadata: [{ type: \\"JSON\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -1705,6 +3396,7 @@ export default function MyPostForm(props) {
           username,
           profile_url,
           post_url,
+          metadata: JSON.parse(metadata),
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -1751,12 +3443,12 @@ export default function MyPostForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -1777,7 +3469,7 @@ export default function MyPostForm(props) {
       <TextAreaField
         label=\\"Label\\"
         defaultValue={TextAreaFieldbbd63464}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1786,12 +3478,13 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.TextAreaFieldbbd63464 ?? value;
           }
           if (errors.TextAreaFieldbbd63464?.hasError) {
-            await runValidationTasks(\\"TextAreaFieldbbd63464\\", value);
+            runValidationTasks(\\"TextAreaFieldbbd63464\\", value);
           }
           setTextAreaFieldbbd63464(value);
         }}
@@ -1807,7 +3500,7 @@ export default function MyPostForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={caption}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1816,12 +3509,13 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.caption ?? value;
           }
           if (errors.caption?.hasError) {
-            await runValidationTasks(\\"caption\\", value);
+            runValidationTasks(\\"caption\\", value);
           }
           setCaption(value);
         }}
@@ -1835,7 +3529,7 @@ export default function MyPostForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={username}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1844,12 +3538,13 @@ export default function MyPostForm(props) {
               username: value,
               profile_url,
               post_url,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
           }
           if (errors.username?.hasError) {
-            await runValidationTasks(\\"username\\", value);
+            runValidationTasks(\\"username\\", value);
           }
           setUsername(value);
         }}
@@ -1863,7 +3558,7 @@ export default function MyPostForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={profile_url}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1872,12 +3567,13 @@ export default function MyPostForm(props) {
               username,
               profile_url: value,
               post_url,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
           }
           if (errors.profile_url?.hasError) {
-            await runValidationTasks(\\"profile_url\\", value);
+            runValidationTasks(\\"profile_url\\", value);
           }
           setProfile_url(value);
         }}
@@ -1891,7 +3587,7 @@ export default function MyPostForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={post_url}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -1900,12 +3596,13 @@ export default function MyPostForm(props) {
               username,
               profile_url,
               post_url: value,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
           }
           if (errors.post_url?.hasError) {
-            await runValidationTasks(\\"post_url\\", value);
+            runValidationTasks(\\"post_url\\", value);
           }
           setPost_url(value);
         }}
@@ -1914,17 +3611,46 @@ export default function MyPostForm(props) {
         hasError={errors.post_url?.hasError}
         {...getOverrideProps(overrides, \\"post_url\\")}
       ></TextField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={false}
+        isReadOnly={false}
+        defaultValue={metadata}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              TextAreaFieldbbd63464,
+              caption,
+              username,
+              profile_url,
+              post_url,
+              metadata: JSON.parse(metadata),
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks(\\"metadata\\", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata\\", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, \\"metadata\\")}
+      ></TextAreaField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -1958,13 +3684,21 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type MyPostFormInputValues<useBase extends boolean = true> = {
-    TextAreaFieldbbd63464?: UseBaseOrValidationType<useBase, string>;
-    caption?: UseBaseOrValidationType<useBase, string>;
-    username?: UseBaseOrValidationType<useBase, string>;
-    profile_url?: UseBaseOrValidationType<useBase, string>;
-    post_url?: UseBaseOrValidationType<useBase, string>;
+export declare type MyPostFormInputValues = {
+    TextAreaFieldbbd63464?: string;
+    caption?: string;
+    username?: string;
+    profile_url?: string;
+    post_url?: string;
+    metadata?: string;
+};
+export declare type MyPostFormValidationValues = {
+    TextAreaFieldbbd63464?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
@@ -1974,6 +3708,7 @@ export declare type MyPostFormOverridesProps = {
     username?: FormProps<TextFieldProps>;
     profile_url?: FormProps<TextFieldProps>;
     post_url?: FormProps<TextFieldProps>;
+    metadata?: FormProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -1985,9 +3720,305 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onValidate?: MyPostFormInputValues<false>;
+    onValidate?: MyPostFormValidationValues;
 }>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a form with a javascript reserved word as the field name 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Blog } from \\"../models\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+export default function BlogCreateForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    title: undefined,
+    content: undefined,
+    switch: false,
+    published: undefined,
+  };
+  const [title, setTitle] = React.useState(initialValues.title);
+  const [content, setContent] = React.useState(initialValues.content);
+  const [switch1, setSwitch1] = React.useState(initialValues.switch);
+  const [published, setPublished] = React.useState(initialValues.published);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setTitle(initialValues.title);
+    setContent(initialValues.content);
+    setSwitch1(initialValues.switch);
+    setPublished(initialValues.published);
+    setErrors({});
+  };
+  const validations = {
+    title: [],
+    content: [],
+    switch: [],
+    published: [],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          title,
+          content,
+          switch: switch1,
+          published,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(new Blog(modelFields));
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"BlogCreateForm\\")}
+    >
+      <TextField
+        label=\\"Title\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title: value,
+              content,
+              switch: switch1,
+              published,
+            };
+            const result = onChange(modelFields);
+            value = result?.title ?? value;
+          }
+          if (errors.title?.hasError) {
+            runValidationTasks(\\"title\\", value);
+          }
+          setTitle(value);
+        }}
+        onBlur={() => runValidationTasks(\\"title\\", title)}
+        errorMessage={errors.title?.errorMessage}
+        hasError={errors.title?.hasError}
+        {...getOverrideProps(overrides, \\"title\\")}
+      ></TextField>
+      <TextField
+        label=\\"Content\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title,
+              content: value,
+              switch: switch1,
+              published,
+            };
+            const result = onChange(modelFields);
+            value = result?.content ?? value;
+          }
+          if (errors.content?.hasError) {
+            runValidationTasks(\\"content\\", value);
+          }
+          setContent(value);
+        }}
+        onBlur={() => runValidationTasks(\\"content\\", content)}
+        errorMessage={errors.content?.errorMessage}
+        hasError={errors.content?.hasError}
+        {...getOverrideProps(overrides, \\"content\\")}
+      ></TextField>
+      <SwitchField
+        label=\\"Switch\\"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={switch1}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              title,
+              content,
+              switch: switch1,
+              published,
+            };
+            const result = onChange(modelFields);
+            value = result?.switch ?? value;
+          }
+          if (errors.switch?.hasError) {
+            runValidationTasks(\\"switch\\", value);
+          }
+          setSwitch1(value);
+        }}
+        onBlur={() => runValidationTasks(\\"switch\\", switch1)}
+        errorMessage={errors.switch?.errorMessage}
+        hasError={errors.switch?.hasError}
+        {...getOverrideProps(overrides, \\"switch\\")}
+      ></SwitchField>
+      <TextField
+        label=\\"Published\\"
+        isRequired={false}
+        isReadOnly={false}
+        type=\\"datetime-local\\"
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              title,
+              content,
+              switch: switch1,
+              published: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.published ?? value;
+          }
+          if (errors.published?.hasError) {
+            runValidationTasks(\\"published\\", value);
+          }
+          setPublished(new Date(value).toISOString());
+        }}
+        onBlur={() => runValidationTasks(\\"published\\", published)}
+        errorMessage={errors.published?.errorMessage}
+        hasError={errors.published?.hasError}
+        {...getOverrideProps(overrides, \\"published\\")}
+      ></TextField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a form with a javascript reserved word as the field name 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type BlogCreateFormInputValues = {
+    title?: string;
+    content?: string;
+    switch?: boolean;
+    published?: string;
+};
+export declare type BlogCreateFormValidationValues = {
+    title?: ValidationFunction<string>;
+    content?: ValidationFunction<string>;
+    switch?: ValidationFunction<boolean>;
+    published?: ValidationFunction<string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type BlogCreateFormOverridesProps = {
+    BlogCreateFormGrid?: FormProps<GridProps>;
+    title?: FormProps<TextFieldProps>;
+    content?: FormProps<TextFieldProps>;
+    switch?: FormProps<SwitchFieldProps>;
+    published?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type BlogCreateFormProps = React.PropsWithChildren<{
+    overrides?: BlogCreateFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
+    onSuccess?: (fields: BlogCreateFormInputValues) => void;
+    onError?: (fields: BlogCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
+    onValidate?: BlogCreateFormValidationValues;
+}>;
+export default function BlogCreateForm(props: BlogCreateFormProps): React.ReactElement;
 "
 `;
 
@@ -2008,27 +4039,43 @@ import {
   Radio,
   RadioGroupField,
   ScrollView,
+  Text,
   TextField,
   ToggleButton,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
   onChange,
+  label,
   inputFieldRef,
   children,
   hasError,
   setFieldValue,
   currentFieldValue,
+  defaultFieldValue,
 }) {
+  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (currentFieldValue.length && !hasError) {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -2037,27 +4084,49 @@ function ArrayField({
         newItems.push(currentFieldValue);
       }
       await onChange(newItems);
+      setIsEditing(false);
     }
   };
   return (
     <React.Fragment>
-      {children}
-      <Flex justifyContent=\\"flex-end\\">
-        <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            setFieldValue(\\"\\");
-          }}
-        ></Button>
-        <Button
-          children=\\"Save\\"
-          variation=\\"primary\\"
-          isDisabled={hasError}
-          onClick={addItem}
-        ></Button>
-      </Flex>
-      {!!items.length && (
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
             return (
@@ -2074,10 +4143,10 @@ function ArrayField({
                 onClick={() => {
                   setSelectedBadgeIndex(index);
                   setFieldValue(items[index]);
-                  inputFieldRef?.current?.focus();
+                  setIsEditing(true);
                 }}
               >
-                {value}
+                {value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -2109,6 +4178,7 @@ function ArrayField({
 }
 export default function InputGalleryCreateForm(props) {
   const {
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -2118,31 +4188,44 @@ export default function InputGalleryCreateForm(props) {
     overrides,
     ...rest
   } = props;
-  const [num, setNum] = React.useState(undefined);
-  const [rootbeer, setRootbeer] = React.useState(undefined);
-  const [attend, setAttend] = React.useState(undefined);
-  const [maybeSlide, setMaybeSlide] = React.useState(false);
-  const [maybeCheck, setMaybeCheck] = React.useState(undefined);
-  const [arrayTypeField, setArrayTypeField] = React.useState(undefined);
-  const [timestamp, setTimestamp] = React.useState(undefined);
-  const [ippy, setIppy] = React.useState(undefined);
-  const [timeisnow, setTimeisnow] = React.useState(undefined);
+  const initialValues = {
+    num: undefined,
+    rootbeer: undefined,
+    attend: undefined,
+    maybeSlide: false,
+    maybeCheck: undefined,
+    arrayTypeField: [],
+    timestamp: undefined,
+    ippy: undefined,
+    timeisnow: undefined,
+  };
+  const [num, setNum] = React.useState(initialValues.num);
+  const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
+  const [attend, setAttend] = React.useState(initialValues.attend);
+  const [maybeSlide, setMaybeSlide] = React.useState(initialValues.maybeSlide);
+  const [maybeCheck, setMaybeCheck] = React.useState(initialValues.maybeCheck);
+  const [arrayTypeField, setArrayTypeField] = React.useState(
+    initialValues.arrayTypeField
+  );
+  const [timestamp, setTimestamp] = React.useState(initialValues.timestamp);
+  const [ippy, setIppy] = React.useState(initialValues.ippy);
+  const [timeisnow, setTimeisnow] = React.useState(initialValues.timeisnow);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setNum(undefined);
-    setRootbeer(undefined);
-    setAttend(undefined);
-    setMaybeSlide(false);
-    setMaybeCheck(undefined);
-    setArrayTypeField(undefined);
+    setNum(initialValues.num);
+    setRootbeer(initialValues.rootbeer);
+    setAttend(initialValues.attend);
+    setMaybeSlide(initialValues.maybeSlide);
+    setMaybeCheck(initialValues.maybeCheck);
+    setArrayTypeField(initialValues.arrayTypeField);
     setCurrentArrayTypeFieldValue(undefined);
-    setTimestamp(undefined);
-    setIppy(undefined);
-    setTimeisnow(undefined);
+    setTimestamp(initialValues.timestamp);
+    setIppy(initialValues.ippy);
+    setTimeisnow(initialValues.timeisnow);
     setErrors({});
   };
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const arrayTypeFieldRef = React.createRef();
   const validations = {
     num: [],
@@ -2210,6 +4293,9 @@ export default function InputGalleryCreateForm(props) {
           if (onSuccess) {
             onSuccess(modelFields);
           }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
         } catch (err) {
           if (onError) {
             onError(modelFields, err.message);
@@ -2224,8 +4310,15 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = parseInt(e.target.value);
+          if (isNaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              num: \\"Value must be a valid number\\",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               num: value,
@@ -2242,7 +4335,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.num ?? value;
           }
           if (errors.num?.hasError) {
-            await runValidationTasks(\\"num\\", value);
+            runValidationTasks(\\"num\\", value);
           }
           setNum(value);
         }}
@@ -2256,8 +4349,15 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = Number(e.target.value);
+          if (isNaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              rootbeer: \\"Value must be a valid number\\",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               num,
@@ -2274,7 +4374,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.rootbeer ?? value;
           }
           if (errors.rootbeer?.hasError) {
-            await runValidationTasks(\\"rootbeer\\", value);
+            runValidationTasks(\\"rootbeer\\", value);
           }
           setRootbeer(value);
         }}
@@ -2288,7 +4388,7 @@ export default function InputGalleryCreateForm(props) {
         name=\\"attend\\"
         isReadOnly={false}
         isRequired=\\"false\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = e.target.value === \\"true\\";
           if (onChange) {
             const modelFields = {
@@ -2306,7 +4406,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.attend ?? value;
           }
           if (errors.attend?.hasError) {
-            await runValidationTasks(\\"attend\\", value);
+            runValidationTasks(\\"attend\\", value);
           }
           setAttend(value);
         }}
@@ -2331,7 +4431,7 @@ export default function InputGalleryCreateForm(props) {
         isDisabled={false}
         defaultPressed={false}
         isPressed={maybeSlide}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = !maybeSlide;
           if (onChange) {
             const modelFields = {
@@ -2349,7 +4449,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.maybeSlide ?? value;
           }
           if (errors.maybeSlide?.hasError) {
-            await runValidationTasks(\\"maybeSlide\\", value);
+            runValidationTasks(\\"maybeSlide\\", value);
           }
           setMaybeSlide(value);
         }}
@@ -2364,7 +4464,7 @@ export default function InputGalleryCreateForm(props) {
         value=\\"maybeCheck\\"
         isDisabled={false}
         defaultChecked={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
             const modelFields = {
@@ -2382,7 +4482,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.maybeCheck ?? value;
           }
           if (errors.maybeCheck?.hasError) {
-            await runValidationTasks(\\"maybeCheck\\", value);
+            runValidationTasks(\\"maybeCheck\\", value);
           }
           setMaybeCheck(value);
         }}
@@ -2393,38 +4493,41 @@ export default function InputGalleryCreateForm(props) {
       ></CheckboxField>
       <ArrayField
         onChange={async (items) => {
-          setArrayTypeField(items);
-          setCurrentArrayTypeFieldValue(\\"\\");
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField: values,
+              timestamp,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            values = result?.arrayTypeField ?? values;
+          }
+          setArrayTypeField(values);
+          setCurrentArrayTypeFieldValue(undefined);
         }}
         currentFieldValue={currentArrayTypeFieldValue}
+        label={\\"Array type field\\"}
         items={arrayTypeField}
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                num,
-                rootbeer,
-                attend,
-                maybeSlide,
-                maybeCheck,
-                arrayTypeField: value,
-                timestamp,
-                ippy,
-                timeisnow,
-              };
-              const result = onChange(modelFields);
-              value = result?.arrayTypeField ?? value;
-            }
             if (errors.arrayTypeField?.hasError) {
-              await runValidationTasks(\\"arrayTypeField\\", value);
+              runValidationTasks(\\"arrayTypeField\\", value);
             }
             setCurrentArrayTypeFieldValue(value);
           }}
@@ -2433,7 +4536,6 @@ export default function InputGalleryCreateForm(props) {
           }
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
-          value={currentArrayTypeFieldValue}
           ref={arrayTypeFieldRef}
           {...getOverrideProps(overrides, \\"arrayTypeField\\")}
         ></TextField>
@@ -2443,8 +4545,16 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"datetime-local\\"
-        onChange={async (e) => {
-          let value = Number(new Date(e.target.value));
+        onChange={(e) => {
+          const date = new Date(e.target.value);
+          if (!(date instanceof Date && !isNaN(date))) {
+            setErrors((errors) => ({
+              ...errors,
+              timestamp: \\"The value must be a valid date\\",
+            }));
+            return;
+          }
+          let value = Number(date);
           if (onChange) {
             const modelFields = {
               num,
@@ -2461,7 +4571,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.timestamp ?? value;
           }
           if (errors.timestamp?.hasError) {
-            await runValidationTasks(\\"timestamp\\", value);
+            runValidationTasks(\\"timestamp\\", value);
           }
           setTimestamp(value);
         }}
@@ -2474,7 +4584,7 @@ export default function InputGalleryCreateForm(props) {
         label=\\"Ippy\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2492,7 +4602,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.ippy ?? value;
           }
           if (errors.ippy?.hasError) {
-            await runValidationTasks(\\"ippy\\", value);
+            runValidationTasks(\\"ippy\\", value);
           }
           setIppy(value);
         }}
@@ -2506,7 +4616,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"time\\"
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -2524,7 +4634,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.timeisnow ?? value;
           }
           if (errors.timeisnow?.hasError) {
-            await runValidationTasks(\\"timeisnow\\", value);
+            runValidationTasks(\\"timeisnow\\", value);
           }
           setTimeisnow(value);
         }}
@@ -2543,7 +4653,7 @@ export default function InputGalleryCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -2576,17 +4686,27 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type InputGalleryCreateFormInputValues<useBase extends boolean = true> = {
-    num?: UseBaseOrValidationType<useBase, number>;
-    rootbeer?: UseBaseOrValidationType<useBase, number>;
-    attend?: UseBaseOrValidationType<useBase, boolean>;
-    maybeSlide?: UseBaseOrValidationType<useBase, boolean>;
-    maybeCheck?: UseBaseOrValidationType<useBase, boolean>;
-    arrayTypeField?: UseBaseOrValidationType<useBase, string>;
-    timestamp?: UseBaseOrValidationType<useBase, number>;
-    ippy?: UseBaseOrValidationType<useBase, string>;
-    timeisnow?: UseBaseOrValidationType<useBase, string>;
+export declare type InputGalleryCreateFormInputValues = {
+    num?: number;
+    rootbeer?: number;
+    attend?: boolean;
+    maybeSlide?: boolean;
+    maybeCheck?: boolean;
+    arrayTypeField?: string[];
+    timestamp?: number;
+    ippy?: string;
+    timeisnow?: string;
+};
+export declare type InputGalleryCreateFormValidationValues = {
+    num?: ValidationFunction<number>;
+    rootbeer?: ValidationFunction<number>;
+    attend?: ValidationFunction<boolean>;
+    maybeSlide?: ValidationFunction<boolean>;
+    maybeCheck?: ValidationFunction<boolean>;
+    arrayTypeField?: ValidationFunction<string>;
+    timestamp?: ValidationFunction<number>;
+    ippy?: ValidationFunction<string>;
+    timeisnow?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type InputGalleryCreateFormOverridesProps = {
@@ -2604,12 +4724,13 @@ export declare type InputGalleryCreateFormOverridesProps = {
 export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
     overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
 } & {
+    clearOnSuccess?: boolean;
     onSubmit?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
     onSuccess?: (fields: InputGalleryCreateFormInputValues) => void;
     onError?: (fields: InputGalleryCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
-    onValidate?: InputGalleryCreateFormInputValues<false>;
+    onValidate?: InputGalleryCreateFormValidationValues;
 }>;
 export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
 "
@@ -2632,27 +4753,43 @@ import {
   Radio,
   RadioGroupField,
   ScrollView,
+  Text,
   TextField,
   ToggleButton,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
   items = [],
   onChange,
+  label,
   inputFieldRef,
   children,
   hasError,
   setFieldValue,
   currentFieldValue,
+  defaultFieldValue,
 }) {
+  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
   const removeItem = async (removeIndex) => {
     const newItems = items.filter((value, index) => index !== removeIndex);
     await onChange(newItems);
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (currentFieldValue.length && !hasError) {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -2661,27 +4798,49 @@ function ArrayField({
         newItems.push(currentFieldValue);
       }
       await onChange(newItems);
+      setIsEditing(false);
     }
   };
   return (
     <React.Fragment>
-      {children}
-      <Flex justifyContent=\\"flex-end\\">
-        <Button
-          children=\\"Cancel\\"
-          type=\\"button\\"
-          onClick={() => {
-            setFieldValue(\\"\\");
-          }}
-        ></Button>
-        <Button
-          children=\\"Save\\"
-          variation=\\"primary\\"
-          isDisabled={hasError}
-          onClick={addItem}
-        ></Button>
-      </Flex>
-      {!!items.length && (
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
             return (
@@ -2698,10 +4857,10 @@ function ArrayField({
                 onClick={() => {
                   setSelectedBadgeIndex(index);
                   setFieldValue(items[index]);
-                  inputFieldRef?.current?.focus();
+                  setIsEditing(true);
                 }}
               >
-                {value}
+                {value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -2731,7 +4890,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function InputGalleryCreateForm(props) {
+export default function InputGalleryUpdateForm(props) {
   const {
     id,
     inputGallery,
@@ -2744,27 +4903,41 @@ export default function InputGalleryCreateForm(props) {
     overrides,
     ...rest
   } = props;
-  const [num, setNum] = React.useState(undefined);
-  const [rootbeer, setRootbeer] = React.useState(undefined);
-  const [attend, setAttend] = React.useState(undefined);
-  const [maybeSlide, setMaybeSlide] = React.useState(false);
-  const [maybeCheck, setMaybeCheck] = React.useState(undefined);
-  const [arrayTypeField, setArrayTypeField] = React.useState(undefined);
-  const [timestamp, setTimestamp] = React.useState(undefined);
-  const [ippy, setIppy] = React.useState(undefined);
-  const [timeisnow, setTimeisnow] = React.useState(undefined);
+  const initialValues = {
+    num: undefined,
+    rootbeer: undefined,
+    attend: undefined,
+    maybeSlide: false,
+    maybeCheck: undefined,
+    arrayTypeField: [],
+    timestamp: undefined,
+    ippy: undefined,
+    timeisnow: undefined,
+  };
+  const [num, setNum] = React.useState(initialValues.num);
+  const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
+  const [attend, setAttend] = React.useState(initialValues.attend);
+  const [maybeSlide, setMaybeSlide] = React.useState(initialValues.maybeSlide);
+  const [maybeCheck, setMaybeCheck] = React.useState(initialValues.maybeCheck);
+  const [arrayTypeField, setArrayTypeField] = React.useState(
+    initialValues.arrayTypeField
+  );
+  const [timestamp, setTimestamp] = React.useState(initialValues.timestamp);
+  const [ippy, setIppy] = React.useState(initialValues.ippy);
+  const [timeisnow, setTimeisnow] = React.useState(initialValues.timeisnow);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setNum(undefined);
-    setRootbeer(undefined);
-    setAttend(undefined);
-    setMaybeSlide(false);
-    setMaybeCheck(undefined);
-    setArrayTypeField(undefined);
+    const cleanValues = { ...initialValues, ...inputGalleryRecord };
+    setNum(cleanValues.num);
+    setRootbeer(cleanValues.rootbeer);
+    setAttend(cleanValues.attend);
+    setMaybeSlide(cleanValues.maybeSlide);
+    setMaybeCheck(cleanValues.maybeCheck);
+    setArrayTypeField(cleanValues.arrayTypeField ?? []);
     setCurrentArrayTypeFieldValue(undefined);
-    setTimestamp(undefined);
-    setIppy(undefined);
-    setTimeisnow(undefined);
+    setTimestamp(cleanValues.timestamp);
+    setIppy(cleanValues.ippy);
+    setTimeisnow(cleanValues.timeisnow);
     setErrors({});
   };
   const [inputGalleryRecord, setInputGalleryRecord] =
@@ -2774,23 +4947,13 @@ export default function InputGalleryCreateForm(props) {
       const record = id
         ? await DataStore.query(InputGallery, id)
         : inputGallery;
-      if (record) {
-        setInputGalleryRecord(record);
-        setNum(record.num);
-        setRootbeer(record.rootbeer);
-        setAttend(record.attend);
-        setMaybeSlide(record.maybeSlide);
-        setMaybeCheck(record.maybeCheck);
-        setArrayTypeField(record.arrayTypeField);
-        setTimestamp(record.timestamp);
-        setIppy(record.ippy);
-        setTimeisnow(record.timeisnow);
-      }
+      setInputGalleryRecord(record);
     };
     queryData();
   }, [id, inputGallery]);
+  React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const arrayTypeFieldRef = React.createRef();
   const validations = {
     num: [],
@@ -2811,6 +4974,29 @@ export default function InputGalleryCreateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const convertTimeStampToDate = (ts) => {
+    if (Math.abs(Date.now() - ts) < Math.abs(Date.now() - ts * 1000)) {
+      return new Date(ts);
+    }
+    return new Date(ts * 1000);
+  };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat(\\"default\\", {
+      year: \\"numeric\\",
+      month: \\"2-digit\\",
+      day: \\"2-digit\\",
+      hour: \\"2-digit\\",
+      minute: \\"2-digit\\",
+      calendar: \\"iso8601\\",
+      numberingSystem: \\"latn\\",
+      hour12: false,
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return \`\${parts.year}-\${parts.month}-\${parts.day}T\${parts.hour}:\${parts.minute}\`;
   };
   return (
     <Grid
@@ -2869,7 +5055,7 @@ export default function InputGalleryCreateForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, \\"InputGalleryCreateForm\\")}
+      {...getOverrideProps(overrides, \\"InputGalleryUpdateForm\\")}
     >
       <TextField
         label=\\"Num\\"
@@ -2877,8 +5063,15 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"number\\"
         defaultValue={num}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = parseInt(e.target.value);
+          if (isNaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              num: \\"Value must be a valid number\\",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               num: value,
@@ -2895,7 +5088,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.num ?? value;
           }
           if (errors.num?.hasError) {
-            await runValidationTasks(\\"num\\", value);
+            runValidationTasks(\\"num\\", value);
           }
           setNum(value);
         }}
@@ -2910,8 +5103,15 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"number\\"
         defaultValue={rootbeer}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = Number(e.target.value);
+          if (isNaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              rootbeer: \\"Value must be a valid number\\",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               num,
@@ -2928,7 +5128,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.rootbeer ?? value;
           }
           if (errors.rootbeer?.hasError) {
-            await runValidationTasks(\\"rootbeer\\", value);
+            runValidationTasks(\\"rootbeer\\", value);
           }
           setRootbeer(value);
         }}
@@ -2943,7 +5143,7 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         isRequired=\\"false\\"
         defaultValue={attend}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = e.target.value === \\"true\\";
           if (onChange) {
             const modelFields = {
@@ -2961,7 +5161,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.attend ?? value;
           }
           if (errors.attend?.hasError) {
-            await runValidationTasks(\\"attend\\", value);
+            runValidationTasks(\\"attend\\", value);
           }
           setAttend(value);
         }}
@@ -2986,8 +5186,7 @@ export default function InputGalleryCreateForm(props) {
         isDisabled={false}
         defaultPressed={false}
         isPressed={maybeSlide}
-        defaultValue={maybeSlide}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = !maybeSlide;
           if (onChange) {
             const modelFields = {
@@ -3005,7 +5204,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.maybeSlide ?? value;
           }
           if (errors.maybeSlide?.hasError) {
-            await runValidationTasks(\\"maybeSlide\\", value);
+            runValidationTasks(\\"maybeSlide\\", value);
           }
           setMaybeSlide(value);
         }}
@@ -3021,7 +5220,7 @@ export default function InputGalleryCreateForm(props) {
         isDisabled={false}
         defaultChecked={false}
         defaultValue={maybeCheck}
-        onChange={async (e) => {
+        onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
             const modelFields = {
@@ -3039,7 +5238,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.maybeCheck ?? value;
           }
           if (errors.maybeCheck?.hasError) {
-            await runValidationTasks(\\"maybeCheck\\", value);
+            runValidationTasks(\\"maybeCheck\\", value);
           }
           setMaybeCheck(value);
         }}
@@ -3050,38 +5249,41 @@ export default function InputGalleryCreateForm(props) {
       ></CheckboxField>
       <ArrayField
         onChange={async (items) => {
-          setArrayTypeField(items);
-          setCurrentArrayTypeFieldValue(\\"\\");
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              num,
+              rootbeer,
+              attend,
+              maybeSlide,
+              maybeCheck,
+              arrayTypeField: values,
+              timestamp,
+              ippy,
+              timeisnow,
+            };
+            const result = onChange(modelFields);
+            values = result?.arrayTypeField ?? values;
+          }
+          setArrayTypeField(values);
+          setCurrentArrayTypeFieldValue(undefined);
         }}
         currentFieldValue={currentArrayTypeFieldValue}
+        label={\\"Array type field\\"}
         items={arrayTypeField}
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                num,
-                rootbeer,
-                attend,
-                maybeSlide,
-                maybeCheck,
-                arrayTypeField: value,
-                timestamp,
-                ippy,
-                timeisnow,
-              };
-              const result = onChange(modelFields);
-              value = result?.arrayTypeField ?? value;
-            }
             if (errors.arrayTypeField?.hasError) {
-              await runValidationTasks(\\"arrayTypeField\\", value);
+              runValidationTasks(\\"arrayTypeField\\", value);
             }
             setCurrentArrayTypeFieldValue(value);
           }}
@@ -3090,7 +5292,6 @@ export default function InputGalleryCreateForm(props) {
           }
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
-          value={currentArrayTypeFieldValue}
           ref={arrayTypeFieldRef}
           {...getOverrideProps(overrides, \\"arrayTypeField\\")}
         ></TextField>
@@ -3100,9 +5301,19 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"datetime-local\\"
-        defaultValue={timestamp}
-        onChange={async (e) => {
-          let value = Number(new Date(e.target.value));
+        defaultValue={
+          timestamp && convertToLocal(convertTimeStampToDate(timestamp))
+        }
+        onChange={(e) => {
+          const date = new Date(e.target.value);
+          if (!(date instanceof Date && !isNaN(date))) {
+            setErrors((errors) => ({
+              ...errors,
+              timestamp: \\"The value must be a valid date\\",
+            }));
+            return;
+          }
+          let value = Number(date);
           if (onChange) {
             const modelFields = {
               num,
@@ -3119,7 +5330,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.timestamp ?? value;
           }
           if (errors.timestamp?.hasError) {
-            await runValidationTasks(\\"timestamp\\", value);
+            runValidationTasks(\\"timestamp\\", value);
           }
           setTimestamp(value);
         }}
@@ -3133,7 +5344,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         defaultValue={ippy}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -3151,7 +5362,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.ippy ?? value;
           }
           if (errors.ippy?.hasError) {
-            await runValidationTasks(\\"ippy\\", value);
+            runValidationTasks(\\"ippy\\", value);
           }
           setIppy(value);
         }}
@@ -3166,7 +5377,7 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"time\\"
         defaultValue={timeisnow}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -3184,7 +5395,7 @@ export default function InputGalleryCreateForm(props) {
             value = result?.timeisnow ?? value;
           }
           if (errors.timeisnow?.hasError) {
-            await runValidationTasks(\\"timeisnow\\", value);
+            runValidationTasks(\\"timeisnow\\", value);
           }
           setTimeisnow(value);
         }}
@@ -3198,12 +5409,12 @@ export default function InputGalleryCreateForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -3237,21 +5448,31 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type InputGalleryCreateFormInputValues<useBase extends boolean = true> = {
-    num?: UseBaseOrValidationType<useBase, number>;
-    rootbeer?: UseBaseOrValidationType<useBase, number>;
-    attend?: UseBaseOrValidationType<useBase, boolean>;
-    maybeSlide?: UseBaseOrValidationType<useBase, boolean>;
-    maybeCheck?: UseBaseOrValidationType<useBase, boolean>;
-    arrayTypeField?: UseBaseOrValidationType<useBase, string>;
-    timestamp?: UseBaseOrValidationType<useBase, number>;
-    ippy?: UseBaseOrValidationType<useBase, string>;
-    timeisnow?: UseBaseOrValidationType<useBase, string>;
+export declare type InputGalleryUpdateFormInputValues = {
+    num?: number;
+    rootbeer?: number;
+    attend?: boolean;
+    maybeSlide?: boolean;
+    maybeCheck?: boolean;
+    arrayTypeField?: string[];
+    timestamp?: number;
+    ippy?: string;
+    timeisnow?: string;
+};
+export declare type InputGalleryUpdateFormValidationValues = {
+    num?: ValidationFunction<number>;
+    rootbeer?: ValidationFunction<number>;
+    attend?: ValidationFunction<boolean>;
+    maybeSlide?: ValidationFunction<boolean>;
+    maybeCheck?: ValidationFunction<boolean>;
+    arrayTypeField?: ValidationFunction<string>;
+    timestamp?: ValidationFunction<number>;
+    ippy?: ValidationFunction<string>;
+    timeisnow?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type InputGalleryCreateFormOverridesProps = {
-    InputGalleryCreateFormGrid?: FormProps<GridProps>;
+export declare type InputGalleryUpdateFormOverridesProps = {
+    InputGalleryUpdateFormGrid?: FormProps<GridProps>;
     num?: FormProps<TextFieldProps>;
     rootbeer?: FormProps<TextFieldProps>;
     attend?: FormProps<RadioGroupFieldProps>;
@@ -3262,19 +5483,19 @@ export declare type InputGalleryCreateFormOverridesProps = {
     ippy?: FormProps<TextFieldProps>;
     timeisnow?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
-    overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
+export declare type InputGalleryUpdateFormProps = React.PropsWithChildren<{
+    overrides?: InputGalleryUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
     inputGallery?: InputGallery;
-    onSubmit?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
-    onSuccess?: (fields: InputGalleryCreateFormInputValues) => void;
-    onError?: (fields: InputGalleryCreateFormInputValues, errorMessage: string) => void;
+    onSubmit?: (fields: InputGalleryUpdateFormInputValues) => InputGalleryUpdateFormInputValues;
+    onSuccess?: (fields: InputGalleryUpdateFormInputValues) => void;
+    onError?: (fields: InputGalleryUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
-    onValidate?: InputGalleryCreateFormInputValues<false>;
+    onChange?: (fields: InputGalleryUpdateFormInputValues) => InputGalleryUpdateFormInputValues;
+    onValidate?: InputGalleryUpdateFormValidationValues;
 }>;
-export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
+export default function InputGalleryUpdateForm(props: InputGalleryUpdateFormProps): React.ReactElement;
 "
 `;
 
@@ -3289,11 +5510,13 @@ import {
   Flex,
   Grid,
   SelectField,
+  TextAreaField,
   TextField,
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function PostCreateFormRow(props) {
   const {
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -3303,18 +5526,32 @@ export default function PostCreateFormRow(props) {
     overrides,
     ...rest
   } = props;
-  const [username, setUsername] = React.useState(undefined);
-  const [caption, setCaption] = React.useState(undefined);
-  const [post_url, setPost_url] = React.useState(undefined);
-  const [profile_url, setProfile_url] = React.useState(undefined);
-  const [status, setStatus] = React.useState(undefined);
+  const initialValues = {
+    username: undefined,
+    caption: undefined,
+    post_url: undefined,
+    profile_url: undefined,
+    status: undefined,
+    metadata: undefined,
+  };
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
+  const [status, setStatus] = React.useState(initialValues.status);
+  const [metadata, setMetadata] = React.useState(
+    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setUsername(undefined);
-    setCaption(undefined);
-    setPost_url(undefined);
-    setProfile_url(undefined);
-    setStatus(undefined);
+    setUsername(initialValues.username);
+    setCaption(initialValues.caption);
+    setPost_url(initialValues.post_url);
+    setProfile_url(initialValues.profile_url);
+    setStatus(initialValues.status);
+    setMetadata(initialValues.metadata);
     setErrors({});
   };
   const validations = {
@@ -3329,6 +5566,7 @@ export default function PostCreateFormRow(props) {
     post_url: [{ type: \\"URL\\" }],
     profile_url: [{ type: \\"URL\\" }],
     status: [],
+    metadata: [{ type: \\"JSON\\" }],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -3353,6 +5591,7 @@ export default function PostCreateFormRow(props) {
           post_url,
           profile_url,
           status,
+          metadata: JSON.parse(metadata),
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3381,6 +5620,9 @@ export default function PostCreateFormRow(props) {
           if (onSuccess) {
             onSuccess(modelFields);
           }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
         } catch (err) {
           if (onError) {
             onError(modelFields, err.message);
@@ -3401,7 +5643,7 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -3410,12 +5652,13 @@ export default function PostCreateFormRow(props) {
                 post_url,
                 profile_url,
                 status,
+                metadata: JSON.parse(metadata),
               };
               const result = onChange(modelFields);
               value = result?.username ?? value;
             }
             if (errors.username?.hasError) {
-              await runValidationTasks(\\"username\\", value);
+              runValidationTasks(\\"username\\", value);
             }
             setUsername(value);
           }}
@@ -3429,7 +5672,7 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-          onChange={async (e) => {
+          onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
               const modelFields = {
@@ -3438,12 +5681,13 @@ export default function PostCreateFormRow(props) {
                 post_url,
                 profile_url,
                 status,
+                metadata: JSON.parse(metadata),
               };
               const result = onChange(modelFields);
               value = result?.caption ?? value;
             }
             if (errors.caption?.hasError) {
-              await runValidationTasks(\\"caption\\", value);
+              runValidationTasks(\\"caption\\", value);
             }
             setCaption(value);
           }}
@@ -3458,7 +5702,7 @@ export default function PostCreateFormRow(props) {
         descriptiveText=\\"post url to use for the component\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -3467,12 +5711,13 @@ export default function PostCreateFormRow(props) {
               post_url: value,
               profile_url,
               status,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
           }
           if (errors.post_url?.hasError) {
-            await runValidationTasks(\\"post_url\\", value);
+            runValidationTasks(\\"post_url\\", value);
           }
           setPost_url(value);
         }}
@@ -3486,7 +5731,7 @@ export default function PostCreateFormRow(props) {
         descriptiveText=\\"profile image url\\"
         isRequired={false}
         isReadOnly={false}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -3495,12 +5740,13 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url: value,
               status,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
           }
           if (errors.profile_url?.hasError) {
-            await runValidationTasks(\\"profile_url\\", value);
+            runValidationTasks(\\"profile_url\\", value);
           }
           setProfile_url(value);
         }}
@@ -3513,7 +5759,7 @@ export default function PostCreateFormRow(props) {
         label=\\"Label\\"
         placeholder=\\"Please select an option\\"
         value={status}
-        onChange={async (e) => {
+        onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
@@ -3522,12 +5768,13 @@ export default function PostCreateFormRow(props) {
               post_url,
               profile_url,
               status: value,
+              metadata: JSON.parse(metadata),
             };
             const result = onChange(modelFields);
             value = result?.status ?? value;
           }
           if (errors.status?.hasError) {
-            await runValidationTasks(\\"status\\", value);
+            runValidationTasks(\\"status\\", value);
           }
           setStatus(value);
         }}
@@ -3536,6 +5783,34 @@ export default function PostCreateFormRow(props) {
         hasError={errors.status?.hasError}
         {...getOverrideProps(overrides, \\"status\\")}
       ></SelectField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              post_url,
+              profile_url,
+              status,
+              metadata: JSON.parse(metadata),
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks(\\"metadata\\", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata\\", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, \\"metadata\\")}
+      ></TextAreaField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -3546,7 +5821,7 @@ export default function PostCreateFormRow(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"SubmitAndResetFlex\\")}>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -3573,19 +5848,27 @@ export default function PostCreateFormRow(props) {
 exports[`amplify form renderer tests datastore form tests should render form with a two inputs in row 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, SelectFieldProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UseBaseOrValidationType<Flag, T> = Flag extends true ? T : ValidationFunction<T>;
-export declare type PostCreateFormRowInputValues<useBase extends boolean = true> = {
-    username?: UseBaseOrValidationType<useBase, string>;
-    caption?: UseBaseOrValidationType<useBase, string>;
-    post_url?: UseBaseOrValidationType<useBase, string>;
-    profile_url?: UseBaseOrValidationType<useBase, string>;
-    status?: UseBaseOrValidationType<useBase, string>;
+export declare type PostCreateFormRowInputValues = {
+    username?: string;
+    caption?: string;
+    post_url?: string;
+    profile_url?: string;
+    status?: string;
+    metadata?: string;
+};
+export declare type PostCreateFormRowValidationValues = {
+    username?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+    status?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PostCreateFormRowOverridesProps = {
@@ -3596,16 +5879,18 @@ export declare type PostCreateFormRowOverridesProps = {
     post_url?: FormProps<TextFieldProps>;
     profile_url?: FormProps<TextFieldProps>;
     status?: FormProps<SelectFieldProps>;
+    metadata?: FormProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type PostCreateFormRowProps = React.PropsWithChildren<{
     overrides?: PostCreateFormRowOverridesProps | undefined | null;
 } & {
+    clearOnSuccess?: boolean;
     onSubmit?: (fields: PostCreateFormRowInputValues) => PostCreateFormRowInputValues;
     onSuccess?: (fields: PostCreateFormRowInputValues) => void;
     onError?: (fields: PostCreateFormRowInputValues, errorMessage: string) => void;
     onCancel?: () => void;
     onChange?: (fields: PostCreateFormRowInputValues) => PostCreateFormRowInputValues;
-    onValidate?: PostCreateFormRowInputValues<false>;
+    onValidate?: PostCreateFormRowValidationValues;
 }>;
 export default function PostCreateFormRow(props: PostCreateFormRowProps): React.ReactElement;
 "

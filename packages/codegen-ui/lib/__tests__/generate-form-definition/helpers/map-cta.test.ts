@@ -13,10 +13,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './component-metadata';
-export * from './component-tree';
-export * from './state-reference-metadata';
-export * from './string-formatter';
-export * from './form-component-metadata';
-export * from './form-to-component';
-export * from './breakpoint-utils';
+import { mapButtons } from '../../../generate-form-definition/helpers/map-cta';
+
+describe('mapButtons', () => {
+  it('correctly excludes from matrix but returns all configs', () => {
+    const buttonConfigs = mapButtons('create', { submit: { excluded: true } });
+
+    expect(buttonConfigs.buttonMatrix).toStrictEqual([['clear'], ['cancel']]);
+    expect(buttonConfigs.buttonConfigs.submit).toBeDefined();
+    expect(buttonConfigs.buttonConfigs.cancel).toBeDefined();
+    expect(buttonConfigs.buttonConfigs.clear).toBeDefined();
+  });
+});

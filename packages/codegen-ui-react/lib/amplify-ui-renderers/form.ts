@@ -28,6 +28,7 @@ import { ImportCollection, ImportSource } from '../imports';
 import { buildDataStoreExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
+import { resetFunctionCheck } from '../forms/component-helper';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -126,6 +127,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
           factory.createBlock(
             [
               ...buildDataStoreExpression(formActionType, dataTypeName),
+              // call onSuccess hook if it exists
               factory.createIfStatement(
                 factory.createIdentifier('onSuccess'),
                 factory.createBlock(
@@ -140,6 +142,8 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 ),
                 undefined,
               ),
+              // call the reset function if clearOnSuccess is true
+              ...resetFunctionCheck({ formActionType, dataSourceType }),
             ],
             true,
           ),

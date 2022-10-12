@@ -48,6 +48,15 @@
       "inputType": {
         "type": "StepperField"
       }
+    },
+    "phone": {
+      "inputType": {
+        "required": true,
+        "type": "PhoneNumberField",
+        "name": "phoneNumber",
+        "defaultValue": "+1-401-152-6995"
+      },
+      "label": "Phone Number"
     }
   },
   "sectionalElements": {},

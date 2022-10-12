@@ -1,0 +1,56 @@
+{
+  "name": "MyPostForm",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "Post"
+  },
+  "fields": {
+    "caption" : {
+      "inputType" : {
+        "placeholder" : "i love code",
+        "required" : false,
+        "type" : "TextField"
+      },
+      "label" : "Caption",
+      "position" : {
+        "rightOf" : "username"
+      }
+    },
+    "username" : {
+      "inputType" : {
+        "placeholder" : "john",
+        "required" : false,
+        "type" : "TextField"
+      },
+      "label" : "Username",
+      "position" : {
+        "fixed" : "first"
+      },
+      "validations" : [ {
+        "numValues" : [ 2 ],
+        "type" : "GreaterThanChar",
+        "validationMessage" : "needs to be of length 2"
+      } ]
+    },
+    "Customtags": {
+      "inputType": {
+        "placeholder": "goals",
+        "type": "TextField",
+        "isArray": true
+      },
+      "label": "Tags",
+      "position": {
+        "below": "username"
+      }
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": {
+    "position": "top",
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  }
+}
