@@ -35,7 +35,7 @@ describe('convert date object to datetime local format', () => {
   it('should convert date object to datetime format', () => {
     const dateString = convertToLocal(convertTimeStampToDate(1664221323190));
     expect(dateString).toBeDefined();
-    // the format we expect is yyyy-mm-ddThh:mm:ss.SSS
-    expect(dateString).toMatch(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})/);
+    // the format we expect is yyyy-mm-ddThh:mm
+    expect(dateString).toMatch(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
   });
 });
