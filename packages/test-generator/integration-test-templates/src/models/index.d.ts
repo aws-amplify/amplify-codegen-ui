@@ -16,6 +16,19 @@
 /* eslint-disable max-classes-per-file */
 import { ModelInit, MutableModel } from '@aws-amplify/datastore';
 
+export enum City {
+  SAN_FRANCISCO = 'SAN_FRANCISCO',
+  NEW_YORK = 'NEW_YORK',
+  HOUSTON = 'HOUSTON',
+  AUSTIN = 'AUSTIN',
+  LOS_ANGELES = 'LOS_ANGELES',
+  CHICAGO = 'CHICAGO',
+  SAN_DIEGO = 'SAN_DIEGO',
+  NEW_HAVEN = 'NEW_HAVEN',
+  PORTLAND = 'PORTLAND',
+  SEATTLE = 'SEATTLE',
+}
+
 type UserPreferenceMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
@@ -33,6 +46,10 @@ type ComplexModelMetaData = {
 };
 
 type ClassMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type AllSupportedFormFieldsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
 
@@ -142,4 +159,48 @@ export declare class Class {
     source: Class,
     mutator: (draft: MutableModel<Class, ClassMetaData>) => MutableModel<Class, ClassMetaData> | void,
   ): Class;
+}
+export declare class AllSupportedFormFields {
+  readonly id: string;
+
+  readonly string?: string | null;
+
+  readonly stringArray?: string[] | null;
+
+  readonly int?: number | null;
+
+  readonly float?: number | null;
+
+  readonly awsDate?: string | null;
+
+  readonly awsTime?: string | null;
+
+  readonly awsDateTime?: string | null;
+
+  readonly awsTimestamp?: number | null;
+
+  readonly awsEmail?: string | null;
+
+  readonly awsUrl?: string | null;
+
+  readonly awsIPAddress?: string | null;
+
+  readonly boolean?: boolean | null;
+
+  readonly awsJson?: string | null;
+
+  readonly awsPhone?: string | null;
+
+  readonly enum?: City | keyof typeof City | null;
+
+  readonly createdAt?: string | null;
+
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<AllSupportedFormFields, AllSupportedFormFieldsMetaData>);
+  static copyOf(
+    source: AllSupportedFormFields,
+    mutator: (
+      draft: MutableModel<AllSupportedFormFields, AllSupportedFormFieldsMetaData>,
+    ) => MutableModel<AllSupportedFormFields, AllSupportedFormFieldsMetaData> | void,
+  ): AllSupportedFormFields;
 }

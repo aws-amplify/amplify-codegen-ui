@@ -1,0 +1,14 @@
+{
+    "id": "123-ds-create-class",
+    "name": "DataStoreFormCreateAllSupportedFormFields",
+    "formActionType": "create",
+    "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "AllSupportedFormFields"
+    },
+    "fields": {},
+    "sectionalElements": { },
+    "style": {},
+    "cta": {},
+    "schemaVersion": "1.0"
+  }

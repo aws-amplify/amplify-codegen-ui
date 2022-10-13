@@ -29,6 +29,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'BasicComponentText',
   'BasicComponentCustomRating',
   'CustomFormCreateDog',
+  'DataStoreFormCreateAllSupportedFormFields',
   'ComponentWithDataBindingWithPredicate',
   'ComponentWithDataBindingWithoutPredicate',
   'ComponentWithSimplePropertyBinding',
