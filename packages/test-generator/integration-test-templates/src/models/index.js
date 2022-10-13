@@ -17,6 +17,19 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
-const { UserPreference, User, Listing, ComplexModel, Class } = initSchema(schema);
+const City = {
+  SAN_FRANCISCO: 'SAN_FRANCISCO',
+  NEW_YORK: 'NEW_YORK',
+  HOUSTON: 'HOUSTON',
+  AUSTIN: 'AUSTIN',
+  LOS_ANGELES: 'LOS_ANGELES',
+  CHICAGO: 'CHICAGO',
+  SAN_DIEGO: 'SAN_DIEGO',
+  NEW_HAVEN: 'NEW_HAVEN',
+  PORTLAND: 'PORTLAND',
+  SEATTLE: 'SEATTLE',
+};
 
-export { UserPreference, User, Listing, ComplexModel, Class };
+const { UserPreference, User, Listing, ComplexModel, Class, AllSupportedFormFields } = initSchema(schema);
+
+export { UserPreference, User, Listing, ComplexModel, Class, AllSupportedFormFields, City };
