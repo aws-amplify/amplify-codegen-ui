@@ -120,7 +120,7 @@ commands:
     steps:
       - run:
           name: Combine package-lock.json files to single file
-          command: npx lerna la -a | awk -F packages '{gsub("   \\(PRIVATE\\)", "");printf "\"packages%s/package-lock.json\" ", $2}' | xargs cat > << parameters.filename >>
+          command: npx lerna la -a | awk -F packages '{gsub("\\(PRIVATE\\)", "");gsub(" ", "");printf "\"packages%s/package-lock.json\" ", $2}' | xargs cat > << parameters.filename >>
 
   restore_node_modules:
     description: 'Restore node_modules cache using concatenated package-lock.'
