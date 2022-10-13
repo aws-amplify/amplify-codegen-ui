@@ -15,11 +15,38 @@
  */
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider, Text } from '@aws-amplify/ui-react';
-import { useState } from 'react';
-import { CustomFormCreateDog } from './ui-components'; // eslint-disable-line import/extensions
+import { useState, useEffect, useRef } from 'react';
+import { DataStore } from '@aws-amplify/datastore';
+import { CustomFormCreateDog, DataStoreFormCreateAllSupportedFormFields } from './ui-components'; // eslint-disable-line import/extensions, max-len
+import { AllSupportedFormFields } from './models';
 
 export default function FormTests() {
   const [customFormCreateDogSubmitResults, setCustomFormCreateDogSubmitResults] = useState<any>({});
+
+  const [isInitialized, setInitialized] = useState(false);
+  const [dataStoreFormCreateAllSupportedFormFieldsRecord, setDataStoreFormCreateAllSupportedFormFieldsRecord] =
+    useState('');
+  const initializeStarted = useRef(false);
+
+  useEffect(() => {
+    const initializeTestState = async () => {
+      if (initializeStarted.current) {
+        return;
+      }
+      // DataStore.clear() doesn't appear to reliably work in this scenario.
+      indexedDB.deleteDatabase('amplify-datastore').onsuccess = async function () {
+        setInitialized(true);
+      };
+    };
+
+    initializeTestState();
+    initializeStarted.current = true;
+  }, []);
+
+  if (!isInitialized) {
+    return null;
+  }
+
   return (
     <AmplifyProvider>
       <Heading>Custom Form - CreateDog</Heading>
@@ -46,6 +73,16 @@ export default function FormTests() {
         <Text>{`ip: ${customFormCreateDogSubmitResults.ip}`}</Text>
       </View>
       <Divider />
+      <Heading>DataStore Form - CreateAllSupportedFormFields</Heading>
+      <View id="dataStoreFormCreateAllSupportedFormFields">
+        <DataStoreFormCreateAllSupportedFormFields
+          onSuccess={async () => {
+            const records = await DataStore.query(AllSupportedFormFields);
+            setDataStoreFormCreateAllSupportedFormFieldsRecord(JSON.stringify(records[0]));
+          }}
+        />
+        <Text>{dataStoreFormCreateAllSupportedFormFieldsRecord}</Text>
+      </View>
     </AmplifyProvider>
   );
 }
