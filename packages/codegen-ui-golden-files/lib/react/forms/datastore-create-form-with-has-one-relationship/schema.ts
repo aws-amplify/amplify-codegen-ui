@@ -15,3 +15,8 @@
  */
 
 // TODO: implement StudioForm and DataStore schema
+import { StudioForm } from '@aws-amplify/codegen-ui';
+
+const shape: StudioForm | undefined = undefined;
+
+export { shape };
