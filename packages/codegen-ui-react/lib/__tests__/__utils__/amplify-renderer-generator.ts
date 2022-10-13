@@ -18,10 +18,10 @@ import {
   GenericDataSchema,
   StudioComponent,
   getGenericFromDataStore,
-  Schema,
   StudioForm,
   StudioView,
 } from '@aws-amplify/codegen-ui';
+import { Schema } from '@aws-amplify/datastore';
 import { createPrinter, createSourceFile, EmitHint, NewLineKind, Node } from 'typescript';
 import { AmplifyFormRenderer } from '../../amplify-ui-renderers/amplify-form-renderer';
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
