@@ -20,6 +20,7 @@ describe('e2e-tests', () => {
   });
 
   it('renders datastore collection', () => {
+    console.log('test')
     cy.get('#blogPosts').contains('Working on E2E Tests');
   });
 });
