@@ -15,7 +15,7 @@
  */
 
 import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
-import { BinaryExpression, factory, SyntaxKind } from 'typescript';
+import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind } from 'typescript';
 import { resetValuesName } from './form-state';
 
 export const ControlledComponents = ['StepperField', 'SliderField', 'SelectField', 'ToggleButton', 'SwitchField'];
@@ -28,23 +28,21 @@ export const ControlledComponents = ['StepperField', 'SliderField', 'SelectField
  */
 export const isControlledComponent = (componentType: string): boolean => ControlledComponents.includes(componentType);
 
-export const defaultValueAttributeMap: Record<string, (stateName: string) => BinaryExpression> = {
-  AWSTimestamp: (stateName: string) =>
+export const convertedValueAttributeMap: Record<string, (valueIdentifier: Identifier) => BinaryExpression> = {
+  AWSTimestamp: (valueIdentifier: Identifier) =>
     factory.createBinaryExpression(
-      factory.createIdentifier(stateName),
+      valueIdentifier,
       factory.createToken(SyntaxKind.AmpersandAmpersandToken),
       factory.createCallExpression(factory.createIdentifier('convertToLocal'), undefined, [
-        factory.createCallExpression(factory.createIdentifier('convertTimeStampToDate'), undefined, [
-          factory.createIdentifier(stateName),
-        ]),
+        factory.createCallExpression(factory.createIdentifier('convertTimeStampToDate'), undefined, [valueIdentifier]),
       ]),
     ),
-  AWSDateTime: (stateName: string) =>
+  AWSDateTime: (valueIdentifier: Identifier) =>
     factory.createBinaryExpression(
-      factory.createIdentifier(stateName),
+      valueIdentifier,
       factory.createToken(SyntaxKind.AmpersandAmpersandToken),
       factory.createCallExpression(factory.createIdentifier('convertToLocal'), undefined, [
-        factory.createNewExpression(factory.createIdentifier('Date'), undefined, [factory.createIdentifier(stateName)]),
+        factory.createNewExpression(factory.createIdentifier('Date'), undefined, [valueIdentifier]),
       ]),
     ),
 };
@@ -56,13 +54,71 @@ export const defaultValueAttributeMap: Record<string, (stateName: string) => Bin
  * @returns
  */
 export const renderDefaultValueAttribute = (stateName: string, { dataType }: FieldConfigMetadata) => {
-  let expression = factory.createJsxExpression(undefined, factory.createIdentifier(stateName));
+  const identifier = factory.createIdentifier(stateName);
+  let expression = factory.createJsxExpression(undefined, identifier);
 
-  if (dataType && typeof dataType !== 'object' && defaultValueAttributeMap[dataType]) {
-    expression = factory.createJsxExpression(undefined, defaultValueAttributeMap[dataType](stateName));
+  if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {
+    expression = factory.createJsxExpression(undefined, convertedValueAttributeMap[dataType](identifier));
   }
 
   return factory.createJsxAttribute(factory.createIdentifier('defaultValue'), expression);
+};
+
+export const renderValueAttribute = ({
+  fieldConfig,
+  componentName,
+  currentValueIdentifier,
+}: {
+  fieldConfig: FieldConfigMetadata;
+  componentName: string;
+  currentValueIdentifier?: Identifier;
+}): JsxAttribute | undefined => {
+  const componentType = fieldConfig.studioFormComponentType ?? fieldConfig.componentType;
+  const shouldGetForUncontrolled = fieldConfig.isArray;
+
+  const valueIdentifier = currentValueIdentifier || factory.createIdentifier(componentName.split('.')[0]);
+
+  const controlledComponentToAttributesMap: { [key: string]: JsxAttribute } = {
+    ToggleButton: factory.createJsxAttribute(
+      factory.createIdentifier('isPressed'),
+      factory.createJsxExpression(undefined, valueIdentifier),
+    ),
+    SliderField: factory.createJsxAttribute(
+      factory.createIdentifier('value'),
+      factory.createJsxExpression(undefined, valueIdentifier),
+    ),
+    SelectField: factory.createJsxAttribute(
+      factory.createIdentifier('value'),
+      factory.createJsxExpression(undefined, valueIdentifier),
+    ),
+    StepperField: factory.createJsxAttribute(
+      factory.createIdentifier('value'),
+      factory.createJsxExpression(undefined, valueIdentifier),
+    ),
+    SwitchField: factory.createJsxAttribute(
+      factory.createIdentifier('isChecked'),
+      factory.createJsxExpression(undefined, valueIdentifier),
+    ),
+  };
+
+  if (controlledComponentToAttributesMap[componentType]) {
+    return controlledComponentToAttributesMap[componentType];
+  }
+
+  // TODO: all components should be controlled once conversions are solid
+  if (shouldGetForUncontrolled) {
+    const { dataType } = fieldConfig;
+
+    let expression = factory.createJsxExpression(undefined, valueIdentifier);
+
+    if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {
+      expression = factory.createJsxExpression(undefined, convertedValueAttributeMap[dataType](valueIdentifier));
+    }
+
+    return factory.createJsxAttribute(factory.createIdentifier('value'), expression);
+  }
+
+  return undefined;
 };
 
 /**

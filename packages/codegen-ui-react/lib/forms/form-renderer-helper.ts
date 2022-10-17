@@ -39,7 +39,7 @@ import {
   StringLiteral,
   ElementAccessExpression,
 } from 'typescript';
-import { isControlledComponent, renderDefaultValueAttribute } from './component-helper';
+import { isControlledComponent, renderDefaultValueAttribute, renderValueAttribute } from './component-helper';
 import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
 import { buildTargetVariable, getFormattedValueExpression } from './event-targets';
@@ -176,10 +176,19 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
     attributes.push(
       ...buildComponentSpecificAttributes({
         componentType: fieldConfig.studioFormComponentType ?? fieldConfig.componentType,
-        componentName: renderedVariableName,
-        currentValueIdentifier: fieldConfig.isArray ? getCurrentValueIdentifier(renderedVariableName) : undefined,
       }),
     );
+
+    const valueAttribute = renderValueAttribute({
+      componentName: renderedVariableName,
+      currentValueIdentifier: fieldConfig.isArray ? getCurrentValueIdentifier(renderedVariableName) : undefined,
+      fieldConfig,
+    });
+
+    if (valueAttribute) {
+      attributes.push(valueAttribute);
+    }
+
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
       attributes.push(renderDefaultValueAttribute(renderedVariableName, fieldConfig));
     }
@@ -455,48 +464,8 @@ function getOnValueChangeProp(fieldType: string): string {
   return map[fieldType] ?? 'onChange';
 }
 
-export const buildComponentSpecificAttributes = ({
-  componentType,
-  componentName,
-  currentValueIdentifier,
-}: {
-  componentType: string;
-  componentName: string;
-  currentValueIdentifier?: Identifier;
-}) => {
-  const valueIdentifier = currentValueIdentifier || factory.createIdentifier(componentName.split('.')[0]);
-
+export const buildComponentSpecificAttributes = ({ componentType }: { componentType: string }) => {
   const componentToAttributesMap: { [key: string]: JsxAttribute[] } = {
-    ToggleButton: [
-      factory.createJsxAttribute(
-        factory.createIdentifier('isPressed'),
-        factory.createJsxExpression(undefined, valueIdentifier),
-      ),
-    ],
-    SliderField: [
-      factory.createJsxAttribute(
-        factory.createIdentifier('value'),
-        factory.createJsxExpression(undefined, valueIdentifier),
-      ),
-    ],
-    SelectField: [
-      factory.createJsxAttribute(
-        factory.createIdentifier('value'),
-        factory.createJsxExpression(undefined, valueIdentifier),
-      ),
-    ],
-    StepperField: [
-      factory.createJsxAttribute(
-        factory.createIdentifier('value'),
-        factory.createJsxExpression(undefined, valueIdentifier),
-      ),
-    ],
-    SwitchField: [
-      factory.createJsxAttribute(
-        factory.createIdentifier('isChecked'),
-        factory.createJsxExpression(undefined, valueIdentifier),
-      ),
-    ],
     NumberField: [factory.createJsxAttribute(factory.createIdentifier('step'), factory.createStringLiteral('any'))],
   };
 
