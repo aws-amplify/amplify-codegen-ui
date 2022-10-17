@@ -38,6 +38,13 @@
           "isRequired": false,
           "attributes": []
         },
+        "editedAt": {
+          "name": "editedAt",
+          "isArray": true,
+          "type": "AWSTimestamp",
+          "isRequired": false,
+          "attributes": []
+        },
         "createdAt": {
           "name": "createdAt",
           "isArray": false,

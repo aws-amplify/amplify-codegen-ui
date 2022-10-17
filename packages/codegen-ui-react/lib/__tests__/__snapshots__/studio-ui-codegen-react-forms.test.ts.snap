@@ -1062,6 +1062,7 @@ export default function CustomDataForm(props) {
           label=\\"E-mail\\"
           isRequired={true}
           defaultValue=\\"johndoe@amplify.com\\"
+          value={currentEmailValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.email?.hasError) {
@@ -1104,6 +1105,7 @@ export default function CustomDataForm(props) {
           isRequired={true}
           defaultValue=\\"+1-401-152-6995\\"
           type=\\"tel\\"
+          value={currentPhoneValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.phone?.hasError) {
@@ -1585,6 +1587,7 @@ export default function MyPostForm(props) {
         <TextField
           label=\\"Tags\\"
           placeholder=\\"goals\\"
+          value={currentCustomtagsValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Customtags?.hasError) {
@@ -2130,6 +2133,7 @@ export default function NestedJson(props) {
       >
         <TextField
           label=\\"Nick Names1\\"
+          value={currentNicknames1Value}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Nicknames1?.hasError) {
@@ -2174,6 +2178,7 @@ export default function NestedJson(props) {
       >
         <TextField
           label=\\"nick-Names2\\"
+          value={currentNicknamesValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors[\\"nick-names2\\"]?.hasError) {
@@ -2628,6 +2633,7 @@ export default function NestedJson(props) {
       >
         <TextField
           label=\\"lastName\\"
+          value={currentLastName1Value}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.lastName?.hasError) {
@@ -3733,13 +3739,150 @@ import { fetchByPath, validateField } from \\"./utils\\";
 import { Blog } from \\"../models\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
   SwitchField,
+  Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
 export default function BlogCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -3757,24 +3900,32 @@ export default function BlogCreateForm(props) {
     content: undefined,
     switch: false,
     published: undefined,
+    editedAt: [],
   };
   const [title, setTitle] = React.useState(initialValues.title);
   const [content, setContent] = React.useState(initialValues.content);
   const [switch1, setSwitch1] = React.useState(initialValues.switch);
   const [published, setPublished] = React.useState(initialValues.published);
+  const [editedAt, setEditedAt] = React.useState(initialValues.editedAt);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setTitle(initialValues.title);
     setContent(initialValues.content);
     setSwitch1(initialValues.switch);
     setPublished(initialValues.published);
+    setEditedAt(initialValues.editedAt);
+    setCurrentEditedAtValue(undefined);
     setErrors({});
   };
+  const [currentEditedAtValue, setCurrentEditedAtValue] =
+    React.useState(undefined);
+  const editedAtRef = React.createRef();
   const validations = {
     title: [],
     content: [],
     switch: [],
     published: [],
+    editedAt: [],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -3784,6 +3935,29 @@ export default function BlogCreateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const convertTimeStampToDate = (ts) => {
+    if (Math.abs(Date.now() - ts) < Math.abs(Date.now() - ts * 1000)) {
+      return new Date(ts);
+    }
+    return new Date(ts * 1000);
+  };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat(\\"default\\", {
+      year: \\"numeric\\",
+      month: \\"2-digit\\",
+      day: \\"2-digit\\",
+      hour: \\"2-digit\\",
+      minute: \\"2-digit\\",
+      calendar: \\"iso8601\\",
+      numberingSystem: \\"latn\\",
+      hour12: false,
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return \`\${parts.year}-\${parts.month}-\${parts.day}T\${parts.hour}:\${parts.minute}\`;
   };
   return (
     <Grid
@@ -3798,6 +3972,7 @@ export default function BlogCreateForm(props) {
           content,
           switch: switch1,
           published,
+          editedAt,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3850,6 +4025,7 @@ export default function BlogCreateForm(props) {
               content,
               switch: switch1,
               published,
+              editedAt,
             };
             const result = onChange(modelFields);
             value = result?.title ?? value;
@@ -3876,6 +4052,7 @@ export default function BlogCreateForm(props) {
               content: value,
               switch: switch1,
               published,
+              editedAt,
             };
             const result = onChange(modelFields);
             value = result?.content ?? value;
@@ -3903,6 +4080,7 @@ export default function BlogCreateForm(props) {
               content,
               switch: switch1,
               published,
+              editedAt,
             };
             const result = onChange(modelFields);
             value = result?.switch ?? value;
@@ -3930,6 +4108,7 @@ export default function BlogCreateForm(props) {
               content,
               switch: switch1,
               published: value,
+              editedAt,
             };
             const result = onChange(modelFields);
             value = result?.published ?? value;
@@ -3944,6 +4123,62 @@ export default function BlogCreateForm(props) {
         hasError={errors.published?.hasError}
         {...getOverrideProps(overrides, \\"published\\")}
       ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              title,
+              content,
+              switch: switch1,
+              published,
+              editedAt: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.editedAt ?? values;
+          }
+          setEditedAt(values);
+          setCurrentEditedAtValue(undefined);
+        }}
+        currentFieldValue={currentEditedAtValue}
+        label={\\"Edited at\\"}
+        items={editedAt}
+        hasError={errors.editedAt?.hasError}
+        setFieldValue={setCurrentEditedAtValue}
+        inputFieldRef={editedAtRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"Edited at\\"
+          isRequired={false}
+          isReadOnly={false}
+          type=\\"datetime-local\\"
+          value={
+            currentEditedAtValue &&
+            convertToLocal(convertTimeStampToDate(currentEditedAtValue))
+          }
+          onChange={(e) => {
+            const date = new Date(e.target.value);
+            if (!(date instanceof Date && !isNaN(date))) {
+              setErrors((errors) => ({
+                ...errors,
+                editedAt: \\"The value must be a valid date\\",
+              }));
+              return;
+            }
+            let value = Number(date);
+            if (errors.editedAt?.hasError) {
+              runValidationTasks(\\"editedAt\\", value);
+            }
+            setCurrentEditedAtValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"editedAt\\", currentEditedAtValue)}
+          errorMessage={errors.editedAt?.errorMessage}
+          hasError={errors.editedAt?.hasError}
+          ref={editedAtRef}
+          {...getOverrideProps(overrides, \\"editedAt\\")}
+        ></TextField>
+      </ArrayField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -3992,12 +4227,14 @@ export declare type BlogCreateFormInputValues = {
     content?: string;
     switch?: boolean;
     published?: string;
+    editedAt?: number[];
 };
 export declare type BlogCreateFormValidationValues = {
     title?: ValidationFunction<string>;
     content?: ValidationFunction<string>;
     switch?: ValidationFunction<boolean>;
     published?: ValidationFunction<string>;
+    editedAt?: ValidationFunction<number>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BlogCreateFormOverridesProps = {
@@ -4006,6 +4243,7 @@ export declare type BlogCreateFormOverridesProps = {
     content?: FormProps<TextFieldProps>;
     switch?: FormProps<SwitchFieldProps>;
     published?: FormProps<TextFieldProps>;
+    editedAt?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type BlogCreateFormProps = React.PropsWithChildren<{
     overrides?: BlogCreateFormOverridesProps | undefined | null;
@@ -4526,6 +4764,7 @@ export default function InputGalleryCreateForm(props) {
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
+          value={currentArrayTypeFieldValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.arrayTypeField?.hasError) {
@@ -5284,6 +5523,7 @@ export default function InputGalleryUpdateForm(props) {
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
+          value={currentArrayTypeFieldValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.arrayTypeField?.hasError) {
