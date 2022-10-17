@@ -17,7 +17,6 @@
 import {
   ComponentMetadata,
   computeComponentMetadata,
-  DataFieldDataType,
   FormDefinition,
   generateFormDefinition,
   GenericDataSchema,
@@ -487,19 +486,45 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     statements.push(buildValidations(formMetadata.fieldConfigs));
     statements.push(runValidationTasksFunction);
 
-    if (formActionType === 'update') {
-      // list of defined dataTypes
-      const dataTypes = Object.values(formMetadata.fieldConfigs).reduce<DataFieldDataType[]>((acc, config) => {
-        if (config.dataType) acc.push(config.dataType);
+    // list of fields by dataType
+    const dataTypesMap = Object.entries(formMetadata.fieldConfigs).reduce<{ [dataType: string]: string[] }>(
+      (acc, [fieldName, config]) => {
+        let dataTypeKey: string | undefined;
+        if (config.dataType) {
+          if (typeof config.dataType === 'string') {
+            dataTypeKey = config.dataType;
+          }
+        }
+
+        if (dataTypeKey) {
+          if (acc[dataTypeKey]) {
+            acc[dataTypeKey].push(fieldName);
+          } else {
+            acc[dataTypeKey] = [fieldName];
+          }
+        }
         return acc;
-      }, []);
-      // timestamp type takes precendence over datetime as it includes formatter for datetime
-      // we include both the timestamp conversion and local date formatter
-      if (dataTypes.includes('AWSTimestamp')) {
+      },
+      {},
+    );
+    // timestamp type takes precedence over datetime as it includes formatter for datetime
+    // we include both the timestamp conversion and local date formatter
+    if (dataTypesMap.AWSTimestamp) {
+      // helper needed if update form
+      // or, if create form and the field is an array and therefore controlled
+      if (
+        formActionType === 'update' ||
+        dataTypesMap.AWSTimestamp.some((fieldName) => formMetadata.fieldConfigs[fieldName].isArray)
+      ) {
         statements.push(convertTimeStampToDateAST, convertToLocalAST);
       }
-      // if we only have date time then we only need the local conversion
-      else if (dataTypes.includes('AWSDateTime')) {
+    }
+    // if we only have date time then we only need the local conversion
+    else if (dataTypesMap.AWSDateTime) {
+      if (
+        formActionType === 'update' ||
+        dataTypesMap.AWSDateTime.some((fieldName) => formMetadata.fieldConfigs[fieldName].isArray)
+      ) {
         statements.push(convertToLocalAST);
       }
     }
