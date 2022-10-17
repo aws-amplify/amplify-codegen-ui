@@ -1,15 +1,47 @@
-/*
-  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+/** *************************************************************************
+ * The contents of this file were generated with Amplify Studio.           *
+ * Please refrain from making any modifications to this file.              *
+ * Any changes to this file will be overwritten when running amplify pull. *
+ ************************************************************************* */
+/* eslint-disable */
 
-  Licensed under the Apache License, Version 2.0 (the "License").
-  You may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
- */
+import * as React from 'react';
+import { EscapeHatchProps } from '@aws-amplify/ui-react/internal';
+import { Author } from '../models';
+import { GridProps, AutocompleteProps, TextFieldProps } from '@aws-amplify/ui-react';
+export declare type ValidationResponse = {
+  hasError: boolean;
+  errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (
+  value: T,
+  validationResponse: ValidationResponse,
+) => ValidationResponse | Promise<ValidationResponse>;
+export declare type BookCreateFormInputValues = {
+  name?: string;
+  primaryAuthor?: Author;
+};
+export declare type BookCreateFormValidationValues = {
+  name?: ValidationFunction<string>;
+  primaryAuthor?: ValidationFunction<string>; // validate against display value
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type BookCreateFormOverridesProps = {
+  BookCreateFormGrid?: FormProps<GridProps>;
+  name?: FormProps<TextFieldProps>;
+  primaryAuthor?: FormProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type BookCreateFormProps = React.PropsWithChildren<
+  {
+    overrides?: BookCreateFormOverridesProps | undefined | null;
+  } & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
+    onSuccess?: (fields: BookCreateFormInputValues) => void;
+    onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
+    onValidate?: BookCreateFormValidationValues;
+  }
+>;
+export default function BookCreateForm(props: BookCreateFormProps): React.ReactElement;
