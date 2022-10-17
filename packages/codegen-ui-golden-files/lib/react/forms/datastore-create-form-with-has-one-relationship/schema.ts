@@ -14,4 +14,180 @@
   limitations under the License.
  */
 
-// TODO: implement StudioForm and DataStore schema
+import { StudioForm } from '@aws-amplify/codegen-ui';
+import { Schema } from '@aws-amplify/datastore';
+
+export const bookCreateForm: StudioForm = {
+  name: 'BookCreateForm',
+  dataType: { dataSourceType: 'DataStore', dataTypeName: 'Book' },
+  formActionType: 'create',
+  fields: {
+    primaryAuthor: {
+      inputType: {
+        type: 'Autocomplete',
+        valueMappings: {
+          values: [
+            {
+              value: {
+                bindingProperties: {
+                  property: 'Author',
+                  field: 'id',
+                },
+              },
+              displayValue: {
+                bindingProperties: {
+                  property: 'Author',
+                  field: 'name',
+                },
+              },
+            },
+          ],
+          bindingProperties: {
+            Author: { type: 'Data', bindingProperties: { model: 'Author' } },
+          },
+        },
+      },
+    },
+  },
+  sectionalElements: {},
+  style: {},
+  cta: {},
+};
+
+export const BookSchema: Schema = {
+  models: {
+    Book: {
+      name: 'Book',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        primaryAuthor: {
+          name: 'primaryAuthor',
+          isArray: false,
+          type: {
+            model: 'Author',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'HAS_ONE',
+            associatedWith: 'id',
+            targetName: 'authorId',
+          },
+        },
+        authorId: {
+          // note that associated field does not get auto-mapped
+          name: 'authorId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Books',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'auth',
+          properties: {
+            rules: [
+              {
+                allow: 'public',
+                operations: ['create', 'update', 'delete', 'read'],
+              },
+            ],
+          },
+        },
+      ],
+    },
+    Author: {
+      name: 'Author',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Authors',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'auth',
+          properties: {
+            rules: [
+              {
+                allow: 'public',
+                operations: ['create', 'update', 'delete', 'read'],
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  enums: {},
+  nonModels: {},
+  version: 'f82a568b6f94e51882664a44c5a847fe',
+};
