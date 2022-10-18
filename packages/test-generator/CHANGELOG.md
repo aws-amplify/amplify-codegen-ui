@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.1...v2.5.2) (2022-10-18)
+
+
+### Bug Fixes
+
+* fix dependency ([95979eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/95979eb3baa672ab98acbd8cf7fcdb12184b8f98))
+* minimize type usage of datastore ([#701](https://github.com/aws-amplify/amplify-codegen-ui/issues/701)) ([40b0f23](https://github.com/aws-amplify/amplify-codegen-ui/commit/40b0f231d4e42cdcdbcb0e74580a34a03952eb18))
+
+
+
+
+
 ## [2.5.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.1...v2.5.1) (2022-10-12)
 
 
