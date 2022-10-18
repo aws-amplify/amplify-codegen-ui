@@ -76,6 +76,16 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
+
+    it('should generate a create form for model with relationships', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/book-datastore-create',
+        'datastore/book',
+      );
+      expect(componentText).toContain('DataStore.save');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
   });
 
   describe('custom form tests', () => {

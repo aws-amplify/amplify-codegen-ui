@@ -69,6 +69,7 @@ export enum Primitive {
   ToggleButtonGroup = 'ToggleButtonGroup',
   View = 'View',
   VisuallyHidden = 'VisuallyHidden',
+  Autocomplete = 'Autocomplete',
 }
 
 /*

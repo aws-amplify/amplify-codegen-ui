@@ -71,6 +71,7 @@ import {
   buildUpdateDatastoreQuery,
   buildValidations,
   runValidationTasksFunction,
+  shouldWrapInArrayField,
 } from './form-renderer-helper';
 import {
   buildUseStateExpression,
@@ -148,7 +149,11 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     let result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
     if (this.componentMetadata.formMetadata) {
-      if (Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)) {
+      if (
+        Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some((config) =>
+          shouldWrapInArrayField(config),
+        )
+      ) {
         const arrayFieldText = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
         result = arrayFieldText + EOL + result;
       }
@@ -191,7 +196,11 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     });
 
     if (this.componentMetadata.formMetadata) {
-      if (Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)) {
+      if (
+        Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some((config) =>
+          shouldWrapInArrayField(config),
+        )
+      ) {
         const arrayFieldComponent = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
         componentText += arrayFieldComponent;
       }
