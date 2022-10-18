@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.1...v2.5.2) (2022-10-18)
+
+
+### Bug Fixes
+
+* allow float to have decimals ([#704](https://github.com/aws-amplify/amplify-codegen-ui/issues/704)) ([2edfafa](https://github.com/aws-amplify/amplify-codegen-ui/commit/2edfafa802870f1afecf6fa72f48bad340330c67))
+* make ArrayField children value controlled again ([f3e639c](https://github.com/aws-amplify/amplify-codegen-ui/commit/f3e639c8f38c6dcf3d368952571229f779212ff8))
+
+
+
+
+
 ## [2.5.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.1...v2.5.1) (2022-10-12)
 
 
