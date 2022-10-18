@@ -71,7 +71,6 @@ describe('generateFormDefinition', () => {
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {
           tricks: {
-            dataType: 'String',
             inputType: {
               isArray: true,
               type: 'TextField',

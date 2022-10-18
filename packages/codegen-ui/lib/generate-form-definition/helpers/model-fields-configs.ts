@@ -25,8 +25,9 @@ import {
   GenericDataSchema,
   ModelFieldsConfigs,
   StudioFieldInputConfig,
-  StudioGenericFieldConfig,
+  StudioFormValueMappings,
 } from '../../types';
+import { ExtendedStudioGenericFieldConfig } from '../../types/form/form-definition';
 import { FIELD_TYPE_MAP } from './field-type-map';
 
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
@@ -44,6 +45,45 @@ export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
   return field.dataType;
 }
 
+function getValueMappings({
+  field,
+  enums,
+}: {
+  field: GenericDataField;
+  enums: GenericDataSchema['enums'];
+}): StudioFormValueMappings | undefined {
+  // if enum
+  if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
+    const fieldEnums = enums[field.dataType.enum];
+    if (!fieldEnums) {
+      throw new InvalidInputError(`Values could not be found for enum ${field.dataType.enum}`);
+    }
+
+    return {
+      values: fieldEnums.values.map((value) => ({
+        displayValue: { value: sentenceCase(value) ? sentenceCase(value) : value },
+        value: { value },
+      })),
+    };
+  }
+
+  // if relationship
+  if (field.relationship) {
+    // if model & HAS_ONE
+    if (typeof field.dataType === 'object' && 'model' in field.dataType && field.relationship.type === 'HAS_ONE') {
+      const modelName = field.dataType.model;
+      return {
+        values: [{ value: { bindingProperties: { property: modelName, field: 'id' } } }],
+        bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },
+      };
+    }
+
+    // TODO: handle relationship fields that are not model, e.g. ID
+  }
+
+  return undefined;
+}
+
 export function getFieldConfigFromModelField({
   fieldName,
   field,
@@ -52,12 +92,12 @@ export function getFieldConfigFromModelField({
   fieldName: string;
   field: GenericDataField;
   dataSchema: GenericDataSchema;
-}): StudioGenericFieldConfig {
+}): ExtendedStudioGenericFieldConfig {
   const fieldTypeMapKey = getFieldTypeMapKey(field);
 
   const { defaultComponent } = FIELD_TYPE_MAP[fieldTypeMapKey];
 
-  const config: StudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
+  const config: ExtendedStudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
     label: sentenceCase(fieldName),
     dataType: field.dataType,
     inputType: {
@@ -70,18 +110,13 @@ export function getFieldConfigFromModelField({
     },
   };
 
-  if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
-    const fieldEnums = dataSchema.enums[field.dataType.enum];
-    if (!fieldEnums) {
-      throw new InvalidInputError(`Values could not be found for enum ${field.dataType.enum}`);
-    }
+  if (field.relationship) {
+    config.relationship = field.relationship;
+  }
 
-    config.inputType.valueMappings = {
-      values: fieldEnums.values.map((value) => ({
-        displayValue: { value: sentenceCase(value) ? sentenceCase(value) : value },
-        value: { value },
-      })),
-    };
+  const valueMappings = getValueMappings({ field, enums: dataSchema.enums });
+  if (valueMappings) {
+    config.inputType.valueMappings = valueMappings;
   }
 
   return config;
@@ -111,6 +146,7 @@ export function mapModelFieldsConfigs({
     const isAutoExcludedField =
       field.readOnly ||
       (fieldName === 'id' && field.dataType === 'ID' && field.required) ||
+      (field.relationship && !(typeof field.dataType === 'object' && 'model' in field.dataType)) ||
       !checkIsSupportedAsFormField(field);
 
     if (!isAutoExcludedField) {

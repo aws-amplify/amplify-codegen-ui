@@ -16,16 +16,17 @@
 import {
   FormDefinition,
   FormDefinitionInputElement,
-  StudioGenericFieldConfig,
   ModelFieldsConfigs,
   StudioFormFieldConfig,
   StudioFormValueMappings,
   FieldValidationConfiguration,
   ValidationTypes,
+  DataFieldDataType,
 } from '../../types';
 import { InternalError, InvalidInputError } from '../../errors';
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
 import { deleteUndefined, getFirstDefinedValue, getFirstNumber, getFirstString } from './mapper-utils';
+import { ExtendedStudioGenericFieldConfig } from '../../types/form/form-definition';
 
 export function mergeValueMappings(
   base?: StudioFormValueMappings,
@@ -58,8 +59,8 @@ export function mergeValueMappings(
 }
 
 function getRadioGroupFieldValueMappings(
-  config: StudioGenericFieldConfig,
-  baseConfig?: StudioGenericFieldConfig,
+  config: ExtendedStudioGenericFieldConfig,
+  baseConfig?: ExtendedStudioGenericFieldConfig,
 ): StudioFormValueMappings {
   const valueMappings: StudioFormValueMappings =
     baseConfig?.inputType?.valueMappings?.values.length || config?.inputType?.valueMappings?.values.length
@@ -91,16 +92,29 @@ function getRadioGroupFieldValueMappings(
   return valueMappings;
 }
 
+function getRequiredValidationMessage(dataType?: DataFieldDataType): string | undefined {
+  if (typeof dataType === 'object' && 'model' in dataType) {
+    return `${dataType.model} is required.`;
+  }
+
+  return undefined;
+}
+
 // pure function that merges in validations in param with defaults
 function getMergedValidations(
   componentType: string,
   validations: (FieldValidationConfiguration[] | undefined)[],
   isRequired?: boolean,
+  dataType?: DataFieldDataType,
 ): (FieldValidationConfiguration & { immutable?: true })[] | undefined {
   const mergedValidations: (FieldValidationConfiguration & { immutable?: true })[] = [];
-
   if (isRequired) {
-    mergedValidations.push({ type: ValidationTypes.REQUIRED, immutable: true });
+    const requiredValidation: typeof mergedValidations[0] = { type: ValidationTypes.REQUIRED, immutable: true };
+    const requiredValidationMessage = getRequiredValidationMessage(dataType);
+    if (requiredValidationMessage) {
+      requiredValidation.validationMessage = requiredValidationMessage;
+    }
+    mergedValidations.push(requiredValidation);
   }
 
   const ComponentTypeToDefaultValidations: {
@@ -144,8 +158,8 @@ function getTextFieldType(componentType: string): string | undefined {
  */
 
 export function getFormDefinitionInputElement(
-  config: StudioGenericFieldConfig,
-  baseConfig?: StudioGenericFieldConfig,
+  config: ExtendedStudioGenericFieldConfig,
+  baseConfig?: ExtendedStudioGenericFieldConfig,
 ): FormDefinitionInputElement {
   const componentType = config.inputType?.type || baseConfig?.inputType?.type;
 
@@ -316,6 +330,22 @@ export function getFormDefinitionInputElement(
         },
       };
       break;
+
+    case 'Autocomplete':
+      formDefinitionElement = {
+        componentType: 'Autocomplete',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          isRequired: isRequiredValue,
+          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
+          defaultValue: defaultStringValue,
+        },
+        valueMappings: mergeValueMappings(baseConfig?.inputType?.valueMappings, config.inputType?.valueMappings),
+      };
+      break;
+
     default:
       throw new InvalidInputError(`componentType ${componentType} could not be mapped`);
   }
@@ -324,11 +354,13 @@ export function getFormDefinitionInputElement(
     componentType,
     [baseConfig?.validations, config?.validations],
     isRequiredValue,
+    config?.dataType ?? baseConfig?.dataType,
   );
 
   formDefinitionElement.validations = mergedValidations;
   formDefinitionElement.dataType = config?.dataType || baseConfig?.dataType;
   formDefinitionElement.isArray = baseConfig ? baseConfig.inputType?.isArray : config.inputType?.isArray;
+  formDefinitionElement.relationship = config.relationship ?? baseConfig?.relationship;
 
   deleteUndefined(formDefinitionElement);
   deleteUndefined(formDefinitionElement.props);

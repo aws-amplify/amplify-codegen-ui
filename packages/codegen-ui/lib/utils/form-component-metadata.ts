@@ -60,42 +60,47 @@ export function generateUniqueFieldName(name: string, sanitizedFieldNames: Set<s
 }
 
 export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition): FormMetadata => {
-  const inputElementEntries = Object.entries(formDefinition.elements).filter(([, element]) => elementIsInput(element));
   const sanitizedFieldNames = new Set<string>(reservedWords);
   return {
     id: form.id,
     name: form.name,
     formActionType: form.formActionType,
     layoutConfigs: formDefinition.form.layoutStyle,
-    fieldConfigs: inputElementEntries.reduce<Record<string, FieldConfigMetadata>>((configs, [name, config]) => {
-      const updatedConfigs = configs;
-      const metadata: FieldConfigMetadata = {
-        validationRules: [],
-        componentType: config.componentType,
-        studioFormComponentType: 'studioFormComponentType' in config ? config.studioFormComponentType : undefined,
-        isArray: 'isArray' in config && config.isArray,
-      };
-      if ('validations' in config && config.validations) {
-        metadata.validationRules = config.validations.map<FieldValidationConfiguration>((validation) => {
-          const updatedValidation = validation;
-          delete updatedValidation.immutable;
-          return updatedValidation;
-        });
-      }
-      if ('dataType' in config && config.dataType) {
-        metadata.dataType = config.dataType;
-      }
-      // we add the name of the model as a resvered word
-      if (form.dataType.dataSourceType === 'DataStore') {
-        sanitizedFieldNames.add(form.dataType.dataTypeName);
-      }
-      const sanitizedFieldName = generateUniqueFieldName(name, sanitizedFieldNames);
-      if (sanitizedFieldName) {
-        metadata.sanitizedFieldName = sanitizedFieldName;
-      }
+    fieldConfigs: Object.entries(formDefinition.elements).reduce<Record<string, FieldConfigMetadata>>(
+      (configs, [name, element]) => {
+        if (!elementIsInput(element)) {
+          return configs;
+        }
 
-      updatedConfigs[name] = metadata;
-      return updatedConfigs;
-    }, {}),
+        const updatedConfigs = configs;
+        const metadata: FieldConfigMetadata = {
+          validationRules: [],
+          componentType: element.componentType,
+          studioFormComponentType: 'studioFormComponentType' in element ? element.studioFormComponentType : undefined,
+          isArray: element.isArray,
+          dataType: element.dataType,
+          relationship: element.relationship,
+        };
+        if ('validations' in element && element.validations) {
+          metadata.validationRules = element.validations.map<FieldValidationConfiguration>((validation) => {
+            const updatedValidation = validation;
+            delete updatedValidation.immutable;
+            return updatedValidation;
+          });
+        }
+        // we add the name of the model as a resvered word
+        if (form.dataType.dataSourceType === 'DataStore') {
+          sanitizedFieldNames.add(form.dataType.dataTypeName);
+        }
+        const sanitizedFieldName = generateUniqueFieldName(name, sanitizedFieldNames);
+        if (sanitizedFieldName) {
+          metadata.sanitizedFieldName = sanitizedFieldName;
+        }
+
+        updatedConfigs[name] = metadata;
+        return updatedConfigs;
+      },
+      {},
+    ),
   };
 };

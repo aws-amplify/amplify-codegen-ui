@@ -101,6 +101,32 @@ describe('mapFormMetaData', () => {
     expect(fieldConfigs.badges.isArray).toBe(true);
   });
 
+  it('should map relationship if it exists', () => {
+    const dataSchema = getGenericFromDataStore(schemaWithAssumptions);
+
+    const form: StudioForm = {
+      name: 'DataStoreForm',
+      formActionType: 'create',
+      dataType: {
+        dataSourceType: 'DataStore',
+        dataTypeName: 'User',
+      },
+      fields: {},
+      sectionalElements: {},
+      style: {},
+      cta: {},
+    };
+
+    const { fieldConfigs } = mapFormMetadata(form, generateFormDefinition({ form, dataSchema }));
+
+    expect('friends' in fieldConfigs).toBe(true);
+    expect(fieldConfigs.friends.relationship).toStrictEqual({
+      type: 'HAS_MANY',
+      relatedModelName: 'Friend',
+      relatedModelField: 'friendId',
+    });
+  });
+
   describe('generateUniqueFieldName tests', () => {
     let usedFieldNames: Set<string>;
     beforeEach(() => {
