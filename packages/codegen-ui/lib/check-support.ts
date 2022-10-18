@@ -22,7 +22,6 @@ import { GenericDataField, GenericDataModel } from './types';
 export const checkIsSupportedAsFormField = (field: GenericDataField): boolean => {
   const unsupportedFieldMap: { [key: string]: (f: GenericDataField) => boolean } = {
     nonModel: (f) => typeof f.dataType === 'object' && 'nonModel' in f.dataType,
-    relationship: (f) => !!f.relationship,
   };
 
   const unsupportedArray = Object.values(unsupportedFieldMap);

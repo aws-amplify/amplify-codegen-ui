@@ -16,8 +16,14 @@
 import { FormStyleConfig } from './style';
 import { FormDefinitionElement, FormDefinitionButtonElement } from './form-definition-element';
 import { StudioGenericFieldConfig } from './fields';
+import { DataFieldDataType, GenericDataRelationshipType } from '../data';
 
-export type ModelFieldsConfigs = { [key: string]: StudioGenericFieldConfig };
+export type ExtendedStudioGenericFieldConfig = StudioGenericFieldConfig & {
+  dataType?: DataFieldDataType;
+  relationship?: GenericDataRelationshipType;
+};
+
+export type ModelFieldsConfigs = { [key: string]: ExtendedStudioGenericFieldConfig };
 
 export type ButtonConfig = {
   buttonConfigs: {

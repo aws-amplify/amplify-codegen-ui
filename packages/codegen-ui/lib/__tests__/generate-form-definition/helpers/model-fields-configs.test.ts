@@ -163,7 +163,53 @@ describe('mapModelFieldsConfigs', () => {
     });
   });
 
-  it('should add relationship fields to configs but not to matrix', () => {
+  it('should add model-type relationship fields to configs and matrix', () => {
+    const formDefinition: FormDefinition = getBasicFormDefinition();
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Dog: {
+          fields: {
+            Owner: {
+              dataType: { model: 'Owner' },
+              readOnly: false,
+              required: false,
+              isArray: false,
+              relationship: { type: 'HAS_ONE', relatedModelName: 'Owner' },
+            },
+          },
+        },
+      },
+    };
+
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
+
+    expect(formDefinition.elementMatrix).toStrictEqual([['Owner']]);
+    expect(modelFieldsConfigs).toStrictEqual({
+      Owner: {
+        dataType: { model: 'Owner' },
+        inputType: {
+          name: 'Owner',
+          readOnly: false,
+          required: false,
+          type: 'Autocomplete',
+          value: 'Owner',
+          isArray: false,
+          valueMappings: {
+            values: [{ value: { bindingProperties: { property: 'Owner', field: 'id' } } }],
+            bindingProperties: { Owner: { type: 'Data', bindingProperties: { model: 'Owner' } } },
+          },
+        },
+        label: 'Owner',
+        relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },
+      },
+    });
+  });
+
+  it('should add not-model type relationship fields to configs but not to matrix', () => {
     const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
@@ -195,11 +241,12 @@ describe('mapModelFieldsConfigs', () => {
           name: 'ownerId',
           readOnly: false,
           required: false,
-          type: 'SelectField',
+          type: 'Autocomplete',
           value: 'ownerId',
           isArray: false,
         },
         label: 'Owner id',
+        relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },
       },
     });
   });

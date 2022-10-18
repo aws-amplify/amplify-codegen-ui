@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { DataFieldDataType } from '../data';
+import { DataFieldDataType, GenericDataRelationshipType } from '../data';
 import { FieldValidationConfiguration } from './form-validation';
 import { StudioFormValueMappings } from './input-config';
 
@@ -22,6 +22,7 @@ type FormDefinitionInputElementCommon = {
   dataType?: DataFieldDataType;
   validations?: (FieldValidationConfiguration & { immutable?: true })[];
   isArray?: boolean;
+  relationship?: GenericDataRelationshipType;
 };
 
 export type FormDefinitionTextFieldElement = {
@@ -45,6 +46,19 @@ export type FormDefinitionTextFieldElement = {
     | 'URLField'
     | 'EmailField'
     | 'PhoneNumberField';
+};
+
+export type FormDefinitionAutocompleteElement = {
+  componentType: 'Autocomplete';
+  props: {
+    label: string;
+    descriptiveText?: string;
+    isRequired?: boolean;
+    isReadOnly?: boolean;
+    placeholder?: string;
+    defaultValue?: string;
+  };
+  valueMappings: StudioFormValueMappings;
 };
 
 export type FormDefinitionSwitchFieldElement = {
@@ -178,6 +192,7 @@ export type FormDefinitionInputElement = (
   | FormDefinitionCheckboxFieldElement
   | FormDefinitionRadioGroupFieldElement
   | FormDefinitionPasswordFieldElement
+  | FormDefinitionAutocompleteElement
 ) &
   FormDefinitionInputElementCommon;
 
