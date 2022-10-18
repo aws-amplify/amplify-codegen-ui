@@ -55,6 +55,8 @@ import {
   setStateExpression,
 } from './form-state';
 
+export const shouldWrapInArrayField = (config: FieldConfigMetadata) => config.isArray || config.relationship;
+
 export const buildMutationBindings = (form: StudioForm) => {
   const {
     dataType: { dataSourceType, dataTypeName },
