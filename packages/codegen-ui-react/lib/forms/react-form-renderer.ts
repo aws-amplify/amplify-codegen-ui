@@ -71,8 +71,8 @@ import {
   buildUpdateDatastoreQuery,
   buildValidations,
   runValidationTasksFunction,
-  shouldWrapInArrayField,
 } from './form-renderer-helper';
+import { shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
 import {
   buildUseStateExpression,
   getCurrentValueName,
@@ -80,14 +80,14 @@ import {
   getInitialValues,
   getUseStateHooks,
   resetStateFunction,
-} from './form-state';
+} from './form-renderer-helper/form-state';
 import {
   buildFormPropNode,
   formOverrideProp,
   generateFieldTypes,
   validationFunctionType,
   validationResponseType,
-} from './type-helper';
+} from './form-renderer-helper/type-helper';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   string,

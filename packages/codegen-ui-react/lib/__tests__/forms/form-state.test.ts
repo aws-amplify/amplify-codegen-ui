@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { factory } from 'typescript';
-import { buildNestedStateSet, setFieldState } from '../../forms/form-state';
+import { buildNestedStateSet, setFieldState } from '../../forms/form-renderer-helper/form-state';
 import { genericPrinter } from '../__utils__';
 
 describe('nested state', () => {

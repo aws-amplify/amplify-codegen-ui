@@ -22,7 +22,7 @@ import {
   getCurrentValueName,
   getDefaultValueExpression,
   getSetNameIdentifier,
-} from '../../forms/form-state';
+} from '../../forms/form-renderer-helper/form-state';
 import { buildOverrideOnChangeStatement } from '../../forms/form-renderer-helper';
 import { addUseEffectWrapper } from '../generate-react-hooks';
 

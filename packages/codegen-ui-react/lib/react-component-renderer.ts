@@ -43,7 +43,8 @@ import {
   filterStateReferencesForComponent,
 } from './workflow';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
-import { addFormAttributes, shouldWrapInArrayField } from './forms';
+import { addFormAttributes } from './forms';
+import { shouldWrapInArrayField } from './forms/form-renderer-helper/render-checkers';
 import { renderArrayFieldComponent } from './utils/forms/array-field-component';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<

@@ -15,7 +15,7 @@
  */
 
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
-import { generateFieldTypes } from '../../forms/type-helper';
+import { generateFieldTypes } from '../../forms/form-renderer-helper/type-helper';
 import { genericPrinter } from '../__utils__';
 
 describe('should generate nested object types', () => {
