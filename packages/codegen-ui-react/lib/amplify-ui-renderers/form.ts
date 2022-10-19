@@ -28,7 +28,7 @@ import { ImportCollection, ImportSource } from '../imports';
 import { buildDataStoreExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
-import { resetFunctionCheck } from '../forms/component-helper';
+import { resetFunctionCheck } from '../forms/form-renderer-helper/value-props';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(

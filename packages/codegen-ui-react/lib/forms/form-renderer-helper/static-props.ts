@@ -13,6 +13,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export { buildDataStoreExpression, addFormAttributes } from './form-renderer-helper';
-export * from './react-form-renderer';
-export * from './form-renderer-helper/type-helper';
+import { factory, JsxAttribute } from 'typescript';
+
+export const buildComponentSpecificAttributes = ({ componentType }: { componentType: string }) => {
+  const componentToAttributesMap: { [key: string]: JsxAttribute[] } = {
+    NumberField: [factory.createJsxAttribute(factory.createIdentifier('step'), factory.createStringLiteral('any'))],
+  };
+
+  return componentToAttributesMap[componentType] ?? [];
+};

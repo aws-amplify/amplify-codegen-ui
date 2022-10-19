@@ -21,6 +21,7 @@ import {
   Expression,
   NodeFlags,
   Identifier,
+  ExpressionStatement,
   SyntaxKind,
   ObjectLiteralExpression,
   CallExpression,
@@ -445,4 +446,47 @@ export const setFieldState = (name: string, value: Expression): CallExpression =
     ]);
   }
   return factory.createCallExpression(getSetNameIdentifier(name), undefined, [value]);
+};
+
+export const buildSetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>) => {
+  const fieldSet = new Set<string>();
+  const expression = Object.keys(fieldConfigs).reduce<ExpressionStatement[]>((acc, field) => {
+    const fieldName = field.split('.')[0];
+    const renderedFieldName = fieldConfigs[field].sanitizedFieldName || fieldName;
+    if (!fieldSet.has(renderedFieldName)) {
+      acc.push(
+        factory.createExpressionStatement(
+          factory.createCallExpression(
+            factory.createIdentifier(`set${capitalizeFirstLetter(renderedFieldName)}`),
+            undefined,
+            [
+              isValidVariableName(fieldName)
+                ? factory.createPropertyAccessExpression(
+                    factory.createIdentifier('initialData'),
+                    factory.createIdentifier(fieldName),
+                  )
+                : factory.createElementAccessExpression(
+                    factory.createIdentifier('initialData'),
+                    factory.createStringLiteral(fieldName),
+                  ),
+            ],
+          ),
+        ),
+      );
+      fieldSet.add(renderedFieldName);
+    }
+    return acc;
+  }, []);
+  return factory.createIfStatement(factory.createIdentifier('initialData'), factory.createBlock(expression, true));
+};
+
+// ex. React.useEffect(resetStateValues, [bookRecord])
+export const buildResetValuesOnRecordUpdate = (recordName: string) => {
+  return factory.createExpressionStatement(
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('React'), factory.createIdentifier('useEffect')),
+      undefined,
+      [resetValuesName, factory.createArrayLiteralExpression([factory.createIdentifier(recordName)], false)],
+    ),
+  );
 };

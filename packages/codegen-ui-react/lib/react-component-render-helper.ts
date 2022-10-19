@@ -58,7 +58,7 @@ import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 import { getChildPropMappingForComponentName } from './workflow/utils';
 import nameReplacements from './name-replacements';
 import keywords from './keywords';
-import { buildAccessChain } from './forms/form-state';
+import { buildAccessChain } from './forms/form-renderer-helper/form-state';
 
 export function getFixedComponentPropValueExpression(prop: FixedStudioComponentProperty): StringLiteral {
   return factory.createStringLiteral(prop.value.toString(), true);

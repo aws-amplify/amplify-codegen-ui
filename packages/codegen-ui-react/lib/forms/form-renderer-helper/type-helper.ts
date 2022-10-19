@@ -13,10 +13,27 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, DataFieldDataType, StudioForm, isValidVariableName } from '@aws-amplify/codegen-ui';
-import { factory, SyntaxKind, KeywordTypeSyntaxKind, TypeElement, PropertySignature, TypeNode } from 'typescript';
-import { lowerCaseFirst } from '../helpers';
+import {
+  FieldConfigMetadata,
+  DataFieldDataType,
+  StudioForm,
+  StudioComponent,
+  FormDefinition,
+  isValidVariableName,
+} from '@aws-amplify/codegen-ui';
+import {
+  factory,
+  SyntaxKind,
+  KeywordTypeSyntaxKind,
+  TypeElement,
+  PropertySignature,
+  TypeNode,
+  Identifier,
+  StringLiteral,
+} from 'typescript';
+import { lowerCaseFirst } from '../../helpers';
 import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
+import { ImportCollection, ImportSource } from '../../imports';
 
 type Node<T> = {
   [n: string]: T | Node<T>;
@@ -442,4 +459,67 @@ export const buildFormPropNode = (form: StudioForm) => {
     ),
   );
   return factory.createTypeLiteralNode(propSignatures);
+};
+
+export const buildOverrideTypesBindings = (
+  formComponent: StudioComponent,
+  formDefinition: FormDefinition,
+  importCollection: ImportCollection,
+) => {
+  importCollection.addImport(ImportSource.UI_REACT, 'GridProps');
+
+  const typeNodes = [
+    factory.createPropertySignature(
+      undefined,
+      factory.createIdentifier(`${formComponent.name}Grid`),
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+        factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+      ]),
+    ),
+  ];
+
+  formDefinition.elementMatrix.forEach((row, index) => {
+    if (row.length > 1) {
+      typeNodes.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier(`RowGrid${index}`),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+            factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+          ]),
+        ),
+      );
+    }
+    row.forEach((field) => {
+      let propKey: Identifier | StringLiteral = factory.createIdentifier(field);
+      if (field.split('.').length > 1 || !isValidVariableName(field)) {
+        propKey = factory.createStringLiteral(field);
+      }
+      const componentTypePropName = `${formDefinition.elements[field].componentType}Props`;
+      typeNodes.push(
+        factory.createPropertySignature(
+          undefined,
+          propKey,
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+            factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName), undefined),
+          ]),
+        ),
+      );
+      importCollection.addImport(ImportSource.UI_REACT, componentTypePropName);
+    });
+  });
+
+  return factory.createTypeAliasDeclaration(
+    undefined,
+    [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
+    factory.createIdentifier(`${formComponent.name}OverridesProps`),
+    undefined,
+    factory.createIntersectionTypeNode([
+      factory.createTypeLiteralNode(typeNodes),
+      factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+    ]),
+  );
 };
