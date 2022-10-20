@@ -72,6 +72,7 @@ import {
   buildUpdateDatastoreQuery,
   runValidationTasksFunction,
   mapFromFieldConfigs,
+  buildRelationshipQuery,
 } from './form-renderer-helper';
 import {
   buildUseStateExpression,
@@ -395,37 +396,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
 
-    // datastore relationship query
-    /**
-      const authorRecords = useDataStoreBinding({
-        type: 'collection',
-        model: Author,
-      }).items;
-    */
-    Object.values(formMetadata?.fieldConfigs).forEach((config) => {
-      if (config.relationship) {
-        const { relatedModelName } = config.relationship;
-        this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
-        this.importCollection.addImport(ImportSource.LOCAL_MODELS, relatedModelName);
-        const itemsName = getActionIdentifier(relatedModelName, 'Records');
-        const objectProperties = [
-          factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral('collection')),
-          factory.createPropertyAssignment(
-            factory.createIdentifier('model'),
-            factory.createIdentifier(relatedModelName),
-          ),
-        ];
-        statements.push(
-          buildBaseCollectionVariableStatement(
-            itemsName,
-            factory.createCallExpression(factory.createIdentifier('useDataStoreBinding'), undefined, [
-              factory.createObjectLiteralExpression(objectProperties, true),
-            ]),
-          ),
-        );
-      }
-    });
-
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
     let defaultValueVariableName: undefined | string;
@@ -472,7 +442,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
     Object.entries(formMetadata.fieldConfigs).forEach(
-      ([field, { isArray, sanitizedFieldName, componentType, dataType }]) => {
+      ([field, { isArray, sanitizedFieldName, componentType, dataType, relationship }]) => {
         if (isArray) {
           const renderedName = sanitizedFieldName || field;
           statements.push(
@@ -502,6 +472,16 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
               ),
             ),
           );
+        }
+        // datastore relationship query
+        /**
+          const authorRecords = useDataStoreBinding({
+            type: 'collection',
+            model: Author,
+          }).items;
+        */
+        if (relationship) {
+          statements.push(buildRelationshipQuery(relationship, this.importCollection));
         }
       },
     );

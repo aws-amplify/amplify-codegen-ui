@@ -28,3 +28,5 @@ export { buildValidations, runValidationTasksFunction } from './validation';
 export { addFormAttributes } from './all-props';
 
 export { mapFromFieldConfigs } from './map-from-fieldConfigs';
+
+export { buildRelationshipQuery } from './relationship';

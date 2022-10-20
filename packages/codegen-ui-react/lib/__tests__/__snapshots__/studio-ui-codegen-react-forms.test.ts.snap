@@ -3307,12 +3307,12 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 exports[`amplify form renderer tests datastore form tests should generate a create form for model with relationships 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Author, Book } from \\"../models\\";
 import {
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Author, Book } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import {
   Autocomplete,
   Badge,
@@ -3478,16 +3478,16 @@ export default function BookCreateForm(props) {
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
     initialValues[\\"primary-author\\"]
   );
-  const authorRecords = useDataStoreBinding({
-    type: \\"collection\\",
-    model: Author,
-  }).items;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setPrimaryAuthor(initialValues[\\"primary-author\\"]);
     setErrors({});
   };
+  const authorRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Author,
+  }).items;
   const getDisplayValue = {
     \\"primary-author\\": (record) => record?.name,
   };
@@ -3706,12 +3706,12 @@ export default function BookCreateForm(props: BookCreateFormProps): React.ReactE
 exports[`amplify form renderer tests datastore form tests should generate a create form with hasOne relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Author, Book } from \\"../models\\";
 import {
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Author, Book } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import {
   Autocomplete,
   Badge,
@@ -3877,15 +3877,18 @@ export default function BookCreateForm(props) {
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
     initialValues.primaryAuthor
   );
-  const authorRecords = useDataStoreBinding({
-    type: \\"collection\\",
-    model: Author,
-  }).items;
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setPrimaryAuthor(initialValues.primaryAuthor);
     setErrors({});
+  };
+  const authorRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Author,
+  }).items;
+  const getDisplayValue = {
+    primaryAuthor: (record) => record?.name,
   };
   const validations = {
     name: [],
@@ -4029,24 +4032,29 @@ export default function BookCreateForm(props) {
           label=\\"Primary author\\"
           isRequired={false}
           isReadOnly={false}
+          value={currentPrimaryAuthorDisplayValue}
+          suggestions={Array.from(authorRecords).map(([key, record]) => ({
+            id: key,
+            label: getDisplayValue[\\"primaryAuthor\\"]?.(record) ?? key,
+          }))}
+          onSuggestionSelect={({ id, label }) => {
+            setCurrentPrimaryAuthorValue(
+              authorRecords.find((r) => r.id === id)
+            );
+            setCurrentPrimaryAuthorDisplayValue(label);
+          }}
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                name,
-                primaryAuthor: value,
-              };
-              const result = onChange(modelFields);
-              value = result?.primaryAuthor ?? value;
-            }
             if (errors.primaryAuthor?.hasError) {
               runValidationTasks(\\"primaryAuthor\\", value);
             }
-            setPrimaryAuthor(value);
+            setCurrentPrimaryAuthorDisplayValue(value);
+            setCurrentPrimaryAuthorValue(undefined);
           }}
           onBlur={() => runValidationTasks(\\"primaryAuthor\\", primaryAuthor)}
           errorMessage={errors.primaryAuthor?.errorMessage}
           hasError={errors.primaryAuthor?.hasError}
+          ref={primaryAuthorRef}
           {...getOverrideProps(overrides, \\"primaryAuthor\\")}
         ></Autocomplete>
       </ArrayField>
@@ -4097,12 +4105,12 @@ export default function BookCreateForm(props: BookCreateFormProps): React.ReactE
 exports[`amplify form renderer tests datastore form tests should generate a create form with multiple hasOne relationships 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Author, Book, Title } from \\"../models\\";
 import {
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Author, Book, Title } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
 import {
   Autocomplete,
   Badge,
@@ -4272,6 +4280,13 @@ export default function BookCreateForm(props) {
   const [primaryTitle, setPrimaryTitle] = React.useState(
     initialValues.primaryTitle
   );
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(initialValues.name);
+    setPrimaryAuthor(initialValues.primaryAuthor);
+    setPrimaryTitle(initialValues.primaryTitle);
+    setErrors({});
+  };
   const authorRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Author,
@@ -4280,12 +4295,9 @@ export default function BookCreateForm(props) {
     type: \\"collection\\",
     model: Title,
   }).items;
-  const [errors, setErrors] = React.useState({});
-  const resetStateValues = () => {
-    setName(initialValues.name);
-    setPrimaryAuthor(initialValues.primaryAuthor);
-    setPrimaryTitle(initialValues.primaryTitle);
-    setErrors({});
+  const getDisplayValue = {
+    primaryAuthor: (record) => record?.name,
+    primaryTitle: (record) => record?.name,
   };
   const validations = {
     name: [],
@@ -4433,25 +4445,29 @@ export default function BookCreateForm(props) {
           label=\\"Primary author\\"
           isRequired={false}
           isReadOnly={false}
+          value={currentPrimaryAuthorDisplayValue}
+          suggestions={Array.from(authorRecords).map(([key, record]) => ({
+            id: key,
+            label: getDisplayValue[\\"primaryAuthor\\"]?.(record) ?? key,
+          }))}
+          onSuggestionSelect={({ id, label }) => {
+            setCurrentPrimaryAuthorValue(
+              authorRecords.find((r) => r.id === id)
+            );
+            setCurrentPrimaryAuthorDisplayValue(label);
+          }}
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                name,
-                primaryAuthor: value,
-                primaryTitle,
-              };
-              const result = onChange(modelFields);
-              value = result?.primaryAuthor ?? value;
-            }
             if (errors.primaryAuthor?.hasError) {
               runValidationTasks(\\"primaryAuthor\\", value);
             }
-            setPrimaryAuthor(value);
+            setCurrentPrimaryAuthorDisplayValue(value);
+            setCurrentPrimaryAuthorValue(undefined);
           }}
           onBlur={() => runValidationTasks(\\"primaryAuthor\\", primaryAuthor)}
           errorMessage={errors.primaryAuthor?.errorMessage}
           hasError={errors.primaryAuthor?.hasError}
+          ref={primaryAuthorRef}
           {...getOverrideProps(overrides, \\"primaryAuthor\\")}
         ></Autocomplete>
       </ArrayField>
@@ -4482,25 +4498,27 @@ export default function BookCreateForm(props) {
           label=\\"Primary title\\"
           isRequired={false}
           isReadOnly={false}
+          value={currentPrimaryTitleDisplayValue}
+          suggestions={Array.from(titleRecords).map(([key, record]) => ({
+            id: key,
+            label: getDisplayValue[\\"primaryTitle\\"]?.(record) ?? key,
+          }))}
+          onSuggestionSelect={({ id, label }) => {
+            setCurrentPrimaryTitleValue(titleRecords.find((r) => r.id === id));
+            setCurrentPrimaryTitleDisplayValue(label);
+          }}
           onChange={(e) => {
             let { value } = e.target;
-            if (onChange) {
-              const modelFields = {
-                name,
-                primaryAuthor,
-                primaryTitle: value,
-              };
-              const result = onChange(modelFields);
-              value = result?.primaryTitle ?? value;
-            }
             if (errors.primaryTitle?.hasError) {
               runValidationTasks(\\"primaryTitle\\", value);
             }
-            setPrimaryTitle(value);
+            setCurrentPrimaryTitleDisplayValue(value);
+            setCurrentPrimaryTitleValue(undefined);
           }}
           onBlur={() => runValidationTasks(\\"primaryTitle\\", primaryTitle)}
           errorMessage={errors.primaryTitle?.errorMessage}
           hasError={errors.primaryTitle?.hasError}
+          ref={primaryTitleRef}
           {...getOverrideProps(overrides, \\"primaryTitle\\")}
         ></Autocomplete>
       </ArrayField>

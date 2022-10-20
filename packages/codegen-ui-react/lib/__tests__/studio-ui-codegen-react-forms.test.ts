@@ -29,7 +29,7 @@ describe('amplify form renderer tests', () => {
 
     it('should generate a create form with hasOne relationship', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
-        'forms/post-datastore-relationship',
+        'forms/book-datastore-relationship',
         'datastore/relationship',
       );
       // check nested model is imported
@@ -44,7 +44,7 @@ describe('amplify form renderer tests', () => {
 
     it('should generate a create form with multiple hasOne relationships', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
-        'forms/post-datastore-relationship-multiple',
+        'forms/book-datastore-relationship-multiple',
         'datastore/relationship-multiple',
       );
       // check nested model is imported
