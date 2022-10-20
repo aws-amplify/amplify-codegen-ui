@@ -17,8 +17,10 @@ import { StudioComponent, StudioComponentChild, FormMetadata, isValidVariableNam
 import { factory, SyntaxKind, JsxAttribute } from 'typescript';
 import { buildComponentSpecificAttributes } from './static-props';
 import { renderValueAttribute, renderDefaultValueAttribute, isControlledComponent } from './value-props';
-import { buildOnChangeStatement, buildOnBlurStatement } from './event-handler-props';
-import { getCurrentValueIdentifier, resetValuesName } from './form-state';
+import { buildOnChangeStatement, buildOnBlurStatement, buildOnSuggestionSelect } from './event-handler-props';
+import { resetValuesName } from './form-state';
+import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
+import { getAutocompleteSuggestionsPropFromModel } from './display-value';
 
 export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
   const { name: componentName, componentType } = component;
@@ -62,12 +64,17 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
 
     const valueAttribute = renderValueAttribute({
       componentName: renderedVariableName,
-      currentValueIdentifier: fieldConfig.isArray ? getCurrentValueIdentifier(renderedVariableName) : undefined,
       fieldConfig,
     });
 
     if (valueAttribute) {
       attributes.push(valueAttribute);
+    }
+
+    if (fieldConfig.componentType === 'Autocomplete' && isModelDataType(fieldConfig)) {
+      const modelName = fieldConfig.dataType.model;
+      attributes.push(getAutocompleteSuggestionsPropFromModel({ fieldName: componentName, modelName }));
+      attributes.push(buildOnSuggestionSelect({ sanitizedFieldName: renderedVariableName, modelName }));
     }
 
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
@@ -99,7 +106,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
         ),
       ),
     );
-    if (fieldConfig.isArray) {
+    if (shouldWrapInArrayField(fieldConfig)) {
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('ref'),

@@ -69,10 +69,9 @@ import {
   buildResetValuesOnRecordUpdate,
   buildSetStateFunction,
   buildUpdateDatastoreQuery,
-  buildValidations,
   runValidationTasksFunction,
+  mapFromFieldConfigs,
 } from './form-renderer-helper';
-import { shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
 import {
   buildUseStateExpression,
   getCurrentValueName,
@@ -110,6 +109,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
   public fileName: string;
 
+  protected requiredDataModels: string[] = [];
+
+  protected shouldRenderArrayField = false;
+
   constructor(component: StudioForm, dataSchema: GenericDataSchema | undefined, renderConfig: ReactRenderConfig) {
     super(component, new ReactOutputManager(), renderConfig);
     this.renderConfig = {
@@ -132,7 +135,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   renderComponentOnly() {
     const variableStatements = this.buildVariableStatements();
     const jsx = this.renderJsx(this.formComponent);
-    const requiredDataModels = [];
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
@@ -148,25 +150,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, false);
     let result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
-    if (this.componentMetadata.formMetadata) {
-      if (
-        Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some((config) =>
-          shouldWrapInArrayField(config),
-        )
-      ) {
-        const arrayFieldText = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
-        result = arrayFieldText + EOL + result;
-      }
+    if (this.shouldRenderArrayField) {
+      const arrayFieldText = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+      result = arrayFieldText + EOL + result;
     }
     // do not produce declaration becuase it is not used
     const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
 
-    if (this.component.dataType.dataSourceType === 'DataStore') {
-      requiredDataModels.push(this.component.dataType.dataTypeName);
-      // TODO: require other models if form is handling querying relational models
-    }
-
-    return { compText, importsText, requiredDataModels };
+    return { compText, importsText, requiredDataModels: this.requiredDataModels };
   }
 
   renderComponentInternal() {
@@ -195,15 +186,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       componentText += propsPrinted;
     });
 
-    if (this.componentMetadata.formMetadata) {
-      if (
-        Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some((config) =>
-          shouldWrapInArrayField(config),
-        )
-      ) {
-        const arrayFieldComponent = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
-        componentText += arrayFieldComponent;
-      }
+    if (this.shouldRenderArrayField) {
+      const arrayFieldComponent = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+      componentText += arrayFieldComponent;
     }
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
@@ -278,11 +263,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   abstract renderJsx(component: StudioComponent, parent?: StudioNode): JsxElement | JsxFragment | JsxSelfClosingElement;
 
   private renderBindingPropsType(): TypeAliasDeclaration[] {
-    const {
-      name: formName,
-      formActionType,
-      dataType: { dataSourceType, dataTypeName },
-    } = this.component;
+    const { name: formName } = this.component;
     const fieldConfigs = this.componentMetadata.formMetadata?.fieldConfigs ?? {};
     const overrideTypeAliasDeclaration = buildOverrideTypesBindings(
       this.formComponent,
@@ -304,9 +285,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const formPropType = getComponentPropName(formName);
 
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
-    if (dataSourceType === 'DataStore' && formActionType === 'update') {
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
-    }
 
     return [
       validationResponseType,
@@ -449,6 +427,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
+      this.requiredDataModels.push(dataTypeName);
       this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
     }
 
@@ -492,30 +471,24 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         }
       },
     );
-    statements.push(buildValidations(formMetadata.fieldConfigs));
+
+    const { validationsObject, dataTypesMap, displayValueObject, modelsToImport, usesArrayField } = mapFromFieldConfigs(
+      formMetadata.fieldConfigs,
+    );
+
+    this.shouldRenderArrayField = usesArrayField;
+
+    this.requiredDataModels.push(...modelsToImport);
+
+    modelsToImport.forEach((modelName) => this.importCollection.addImport(ImportSource.LOCAL_MODELS, modelName));
+
+    if (displayValueObject) {
+      statements.push(displayValueObject);
+    }
+
+    statements.push(validationsObject);
     statements.push(runValidationTasksFunction);
 
-    // list of fields by dataType
-    const dataTypesMap = Object.entries(formMetadata.fieldConfigs).reduce<{ [dataType: string]: string[] }>(
-      (acc, [fieldName, config]) => {
-        let dataTypeKey: string | undefined;
-        if (config.dataType) {
-          if (typeof config.dataType === 'string') {
-            dataTypeKey = config.dataType;
-          }
-        }
-
-        if (dataTypeKey) {
-          if (acc[dataTypeKey]) {
-            acc[dataTypeKey].push(fieldName);
-          } else {
-            acc[dataTypeKey] = [fieldName];
-          }
-        }
-        return acc;
-      },
-      {},
-    );
     // timestamp type takes precedence over datetime as it includes formatter for datetime
     // we include both the timestamp conversion and local date formatter
     if (dataTypesMap.AWSTimestamp) {

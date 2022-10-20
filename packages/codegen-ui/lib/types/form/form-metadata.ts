@@ -15,6 +15,7 @@
  */
 import { DataFieldDataType, GenericDataRelationshipType } from '../data';
 import { FieldValidationConfiguration } from './form-validation';
+import { StudioFormValueMappings } from './input-config';
 import { FormStyleConfig, StudioFormStyle } from './style';
 
 /**
@@ -33,6 +34,8 @@ export type FieldConfigMetadata = {
   isArray?: boolean;
   componentType: string;
   studioFormComponentType?: string;
+  // used for dynamic mapping of displayValue
+  valueMappings?: StudioFormValueMappings;
 };
 
 export type FormMetadata = {

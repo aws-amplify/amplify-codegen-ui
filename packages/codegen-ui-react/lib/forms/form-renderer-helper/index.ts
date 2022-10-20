@@ -26,3 +26,5 @@ export { buildResetValuesOnRecordUpdate, buildSetStateFunction } from './form-st
 export { buildValidations, runValidationTasksFunction } from './validation';
 
 export { addFormAttributes } from './all-props';
+
+export { mapFromFieldConfigs } from './map-from-fieldConfigs';
