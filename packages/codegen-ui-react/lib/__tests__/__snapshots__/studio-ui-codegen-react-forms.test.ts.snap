@@ -814,6 +814,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -846,6 +848,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -901,11 +906,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -1222,6 +1229,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -1254,6 +1263,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -1309,11 +1321,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -1773,6 +1787,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -1805,6 +1821,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -1860,11 +1879,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -2339,6 +2360,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -2371,6 +2394,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -2426,11 +2452,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -3337,6 +3365,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -3369,6 +3399,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -3424,11 +3457,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -3472,7 +3507,7 @@ export default function BookCreateForm(props) {
   } = props;
   const initialValues = {
     name: undefined,
-    \\"primary-author\\": {},
+    \\"primary-author\\": undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
@@ -3482,8 +3517,17 @@ export default function BookCreateForm(props) {
   const resetStateValues = () => {
     setName(initialValues.name);
     setPrimaryAuthor(initialValues[\\"primary-author\\"]);
+    setCurrentPrimaryAuthorValue(undefined);
+    setCurrentPrimaryAuthorDisplayValue(undefined);
     setErrors({});
   };
+  const [
+    currentPrimaryAuthorDisplayValue,
+    setCurrentPrimaryAuthorDisplayValue,
+  ] = React.useState(undefined);
+  const [currentPrimaryAuthorValue, setCurrentPrimaryAuthorValue] =
+    React.useState(undefined);
+  const primaryAuthorRef = React.createRef();
   const authorRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Author,
@@ -3580,26 +3624,29 @@ export default function BookCreateForm(props) {
         {...getOverrideProps(overrides, \\"name\\")}
       ></TextField>
       <ArrayField
+        lengthLimit={1}
         onChange={async (items) => {
-          let values = items;
+          let value = items[0];
           if (onChange) {
             const modelFields = {
               name,
-              \\"primary-author\\": values,
+              \\"primary-author\\": value,
             };
             const result = onChange(modelFields);
-            values = result?.[\\"primary-author\\"] ?? values;
+            value = result?.[\\"primary-author\\"] ?? value;
           }
-          setPrimaryAuthor(values);
-          setCurrentPrimaryAuthorValue({});
+          setPrimaryAuthor(value);
+          setCurrentPrimaryAuthorValue(undefined);
+          setCurrentPrimaryAuthorDisplayValue(undefined);
         }}
         currentFieldValue={currentPrimaryAuthorValue}
         label={\\"Primary author\\"}
-        items={primaryAuthor}
+        items={[primaryAuthor]}
         hasError={errors?.[\\"primary-author\\"]?.hasError}
-        setFieldValue={setCurrentPrimaryAuthorValue}
+        getBadgeText={getDisplayValue[\\"primary-author\\"]}
+        setFieldValue={currentPrimaryAuthorDisplayValue}
         inputFieldRef={primaryAuthorRef}
-        defaultFieldValue={{}}
+        defaultFieldValue={undefined}
       >
         <Autocomplete
           label=\\"Primary author\\"
@@ -3736,6 +3783,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -3768,6 +3817,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -3823,11 +3875,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -3871,7 +3925,7 @@ export default function BookCreateForm(props) {
   } = props;
   const initialValues = {
     name: undefined,
-    primaryAuthor: {},
+    primaryAuthor: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
@@ -3881,8 +3935,17 @@ export default function BookCreateForm(props) {
   const resetStateValues = () => {
     setName(initialValues.name);
     setPrimaryAuthor(initialValues.primaryAuthor);
+    setCurrentPrimaryAuthorValue(undefined);
+    setCurrentPrimaryAuthorDisplayValue(undefined);
     setErrors({});
   };
+  const [
+    currentPrimaryAuthorDisplayValue,
+    setCurrentPrimaryAuthorDisplayValue,
+  ] = React.useState(undefined);
+  const [currentPrimaryAuthorValue, setCurrentPrimaryAuthorValue] =
+    React.useState(undefined);
+  const primaryAuthorRef = React.createRef();
   const authorRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Author,
@@ -4007,26 +4070,29 @@ export default function BookCreateForm(props) {
         {...getOverrideProps(overrides, \\"name\\")}
       ></TextField>
       <ArrayField
+        lengthLimit={1}
         onChange={async (items) => {
-          let values = items;
+          let value = items[0];
           if (onChange) {
             const modelFields = {
               name,
-              primaryAuthor: values,
+              primaryAuthor: value,
             };
             const result = onChange(modelFields);
-            values = result?.primaryAuthor ?? values;
+            value = result?.primaryAuthor ?? value;
           }
-          setPrimaryAuthor(values);
-          setCurrentPrimaryAuthorValue({});
+          setPrimaryAuthor(value);
+          setCurrentPrimaryAuthorValue(undefined);
+          setCurrentPrimaryAuthorDisplayValue(undefined);
         }}
         currentFieldValue={currentPrimaryAuthorValue}
         label={\\"Primary author\\"}
-        items={primaryAuthor}
+        items={[primaryAuthor]}
         hasError={errors.primaryAuthor?.hasError}
-        setFieldValue={setCurrentPrimaryAuthorValue}
+        getBadgeText={getDisplayValue[primaryAuthor]}
+        setFieldValue={currentPrimaryAuthorDisplayValue}
         inputFieldRef={primaryAuthorRef}
-        defaultFieldValue={{}}
+        defaultFieldValue={undefined}
       >
         <Autocomplete
           label=\\"Primary author\\"
@@ -4135,6 +4201,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -4167,6 +4235,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -4222,11 +4293,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -4270,8 +4343,8 @@ export default function BookCreateForm(props) {
   } = props;
   const initialValues = {
     name: undefined,
-    primaryAuthor: {},
-    primaryTitle: {},
+    primaryAuthor: undefined,
+    primaryTitle: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
@@ -4284,13 +4357,29 @@ export default function BookCreateForm(props) {
   const resetStateValues = () => {
     setName(initialValues.name);
     setPrimaryAuthor(initialValues.primaryAuthor);
+    setCurrentPrimaryAuthorValue(undefined);
+    setCurrentPrimaryAuthorDisplayValue(undefined);
     setPrimaryTitle(initialValues.primaryTitle);
+    setCurrentPrimaryTitleValue(undefined);
+    setCurrentPrimaryTitleDisplayValue(undefined);
     setErrors({});
   };
+  const [
+    currentPrimaryAuthorDisplayValue,
+    setCurrentPrimaryAuthorDisplayValue,
+  ] = React.useState(undefined);
+  const [currentPrimaryAuthorValue, setCurrentPrimaryAuthorValue] =
+    React.useState(undefined);
+  const primaryAuthorRef = React.createRef();
   const authorRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Author,
   }).items;
+  const [currentPrimaryTitleDisplayValue, setCurrentPrimaryTitleDisplayValue] =
+    React.useState(undefined);
+  const [currentPrimaryTitleValue, setCurrentPrimaryTitleValue] =
+    React.useState(undefined);
+  const primaryTitleRef = React.createRef();
   const titleRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Title,
@@ -4419,27 +4508,30 @@ export default function BookCreateForm(props) {
         {...getOverrideProps(overrides, \\"name\\")}
       ></TextField>
       <ArrayField
+        lengthLimit={1}
         onChange={async (items) => {
-          let values = items;
+          let value = items[0];
           if (onChange) {
             const modelFields = {
               name,
-              primaryAuthor: values,
+              primaryAuthor: value,
               primaryTitle,
             };
             const result = onChange(modelFields);
-            values = result?.primaryAuthor ?? values;
+            value = result?.primaryAuthor ?? value;
           }
-          setPrimaryAuthor(values);
-          setCurrentPrimaryAuthorValue({});
+          setPrimaryAuthor(value);
+          setCurrentPrimaryAuthorValue(undefined);
+          setCurrentPrimaryAuthorDisplayValue(undefined);
         }}
         currentFieldValue={currentPrimaryAuthorValue}
         label={\\"Primary author\\"}
-        items={primaryAuthor}
+        items={[primaryAuthor]}
         hasError={errors.primaryAuthor?.hasError}
-        setFieldValue={setCurrentPrimaryAuthorValue}
+        getBadgeText={getDisplayValue[primaryAuthor]}
+        setFieldValue={currentPrimaryAuthorDisplayValue}
         inputFieldRef={primaryAuthorRef}
-        defaultFieldValue={{}}
+        defaultFieldValue={undefined}
       >
         <Autocomplete
           label=\\"Primary author\\"
@@ -4472,27 +4564,30 @@ export default function BookCreateForm(props) {
         ></Autocomplete>
       </ArrayField>
       <ArrayField
+        lengthLimit={1}
         onChange={async (items) => {
-          let values = items;
+          let value = items[0];
           if (onChange) {
             const modelFields = {
               name,
               primaryAuthor,
-              primaryTitle: values,
+              primaryTitle: value,
             };
             const result = onChange(modelFields);
-            values = result?.primaryTitle ?? values;
+            value = result?.primaryTitle ?? value;
           }
-          setPrimaryTitle(values);
-          setCurrentPrimaryTitleValue({});
+          setPrimaryTitle(value);
+          setCurrentPrimaryTitleValue(undefined);
+          setCurrentPrimaryTitleDisplayValue(undefined);
         }}
         currentFieldValue={currentPrimaryTitleValue}
         label={\\"Primary title\\"}
-        items={primaryTitle}
+        items={[primaryTitle]}
         hasError={errors.primaryTitle?.hasError}
-        setFieldValue={setCurrentPrimaryTitleValue}
+        getBadgeText={getDisplayValue[primaryTitle]}
+        setFieldValue={currentPrimaryTitleDisplayValue}
         inputFieldRef={primaryTitleRef}
-        defaultFieldValue={{}}
+        defaultFieldValue={undefined}
       >
         <Autocomplete
           label=\\"Primary title\\"
@@ -5027,6 +5122,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -5059,6 +5156,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -5114,11 +5214,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -5558,6 +5660,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -5590,6 +5694,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -5645,11 +5752,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",
@@ -6275,6 +6384,8 @@ function ArrayField({
   setFieldValue,
   currentFieldValue,
   defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
 }) {
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
@@ -6307,6 +6418,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
   return (
     <React.Fragment>
       {isEditing && children}
@@ -6362,11 +6476,13 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
                   setIsEditing(true);
                 }}
               >
-                {value.toString()}
+                {getBadgeText ? getBadgeText(value) : value.toString()}
                 <Icon
                   style={{
                     cursor: \\"pointer\\",

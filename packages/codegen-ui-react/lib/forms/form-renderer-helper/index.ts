@@ -30,3 +30,7 @@ export { addFormAttributes } from './all-props';
 export { mapFromFieldConfigs } from './map-from-fieldConfigs';
 
 export { buildRelationshipQuery } from './relationship';
+
+export { shouldWrapInArrayField } from './render-checkers';
+
+export { renderArrayFieldComponent } from './render-array-field';

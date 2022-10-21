@@ -75,12 +75,14 @@ import {
 } from './form-renderer-helper';
 import {
   buildUseStateExpression,
+  getCurrentDisplayValueName,
   getCurrentValueName,
   getDefaultValueExpression,
   getInitialValues,
   getUseStateHooks,
   resetStateFunction,
 } from './form-renderer-helper/form-state';
+import { isModelDataType, shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
 import {
   buildFormPropNode,
   formOverrideProp,
@@ -439,50 +441,58 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
-    Object.entries(formMetadata.fieldConfigs).forEach(
-      ([field, { isArray, sanitizedFieldName, componentType, dataType, relationship }]) => {
-        if (isArray) {
-          const renderedName = sanitizedFieldName || field;
+    Object.entries(formMetadata.fieldConfigs).forEach(([field, fieldConfig]) => {
+      const { sanitizedFieldName, componentType, dataType, relationship } = fieldConfig;
+      if (shouldWrapInArrayField(fieldConfig)) {
+        const renderedName = sanitizedFieldName || field;
+        if (isModelDataType(fieldConfig)) {
           statements.push(
             buildUseStateExpression(
-              getCurrentValueName(renderedName),
+              getCurrentDisplayValueName(renderedName),
               getDefaultValueExpression(formMetadata.name, componentType, dataType),
-            ),
-            factory.createVariableStatement(
-              undefined,
-              factory.createVariableDeclarationList(
-                [
-                  factory.createVariableDeclaration(
-                    factory.createIdentifier(`${renderedName}Ref`),
-                    undefined,
-                    undefined,
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('React'),
-                        factory.createIdentifier('createRef'),
-                      ),
-                      undefined,
-                      [],
-                    ),
-                  ),
-                ],
-                NodeFlags.Const,
-              ),
             ),
           );
         }
-        // datastore relationship query
-        /**
+
+        statements.push(
+          buildUseStateExpression(
+            getCurrentValueName(renderedName),
+            getDefaultValueExpression(formMetadata.name, componentType, dataType),
+          ),
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createIdentifier(`${renderedName}Ref`),
+                  undefined,
+                  undefined,
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('React'),
+                      factory.createIdentifier('createRef'),
+                    ),
+                    undefined,
+                    [],
+                  ),
+                ),
+              ],
+              NodeFlags.Const,
+            ),
+          ),
+        );
+      }
+      // datastore relationship query
+      /**
           const authorRecords = useDataStoreBinding({
             type: 'collection',
             model: Author,
           }).items;
         */
-        if (relationship) {
-          statements.push(buildRelationshipQuery(relationship, this.importCollection));
-        }
-      },
-    );
+      if (relationship) {
+        statements.push(buildRelationshipQuery(relationship, this.importCollection));
+      }
+    });
 
     const { validationsObject, dataTypesMap, displayValueObject, modelsToImport, usesArrayField } = mapFromFieldConfigs(
       formMetadata.fieldConfigs,
