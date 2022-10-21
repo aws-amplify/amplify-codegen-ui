@@ -71,6 +71,7 @@ import {
   buildUpdateDatastoreQuery,
   runValidationTasksFunction,
   mapFromFieldConfigs,
+  buildRelationshipQuery,
 } from './form-renderer-helper';
 import {
   buildUseStateExpression,
@@ -392,6 +393,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     statements.push(getInitialValues(formMetadata.fieldConfigs));
 
     statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
+
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
     let defaultValueVariableName: undefined | string;
@@ -438,7 +440,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
     Object.entries(formMetadata.fieldConfigs).forEach(
-      ([field, { isArray, sanitizedFieldName, componentType, dataType }]) => {
+      ([field, { isArray, sanitizedFieldName, componentType, dataType, relationship }]) => {
         if (isArray) {
           const renderedName = sanitizedFieldName || field;
           statements.push(
@@ -468,6 +470,16 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
               ),
             ),
           );
+        }
+        // datastore relationship query
+        /**
+          const authorRecords = useDataStoreBinding({
+            type: 'collection',
+            model: Author,
+          }).items;
+        */
+        if (relationship) {
+          statements.push(buildRelationshipQuery(relationship, this.importCollection));
         }
       },
     );

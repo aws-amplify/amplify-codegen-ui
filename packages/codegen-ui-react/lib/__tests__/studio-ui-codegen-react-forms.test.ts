@@ -27,6 +27,37 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate a create form with hasOne relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/book-datastore-relationship',
+        'datastore/relationship',
+      );
+      // check nested model is imported
+      expect(componentText).toContain('import { Author, Book } from "../models";');
+
+      // check binding call is generated
+      expect(componentText).toContain('const authorRecords = useDataStoreBinding({');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate a create form with multiple hasOne relationships', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/book-datastore-relationship-multiple',
+        'datastore/relationship-multiple',
+      );
+      // check nested model is imported
+      expect(componentText).toContain('import { Author, Book, Title } from "../models";');
+
+      // check binding calls are generated
+      expect(componentText).toContain('const authorRecords = useDataStoreBinding({');
+      expect(componentText).toContain('const titleRecords = useDataStoreBinding({');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should render form with a two inputs in row', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-create-row',
