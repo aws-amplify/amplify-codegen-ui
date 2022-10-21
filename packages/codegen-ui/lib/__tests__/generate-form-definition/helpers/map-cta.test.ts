@@ -19,7 +19,25 @@ describe('mapButtons', () => {
   it('correctly excludes from matrix but returns all configs', () => {
     const buttonConfigs = mapButtons('create', { submit: { excluded: true } });
 
+    expect(buttonConfigs.buttonMatrix).toStrictEqual([['clear'], []]);
+    expect(buttonConfigs.buttonConfigs.submit).toBeDefined();
+    expect(buttonConfigs.buttonConfigs.cancel).toBeDefined();
+    expect(buttonConfigs.buttonConfigs.clear).toBeDefined();
+  });
+
+  it('should add cancel if object is defined and still exclude submit', () => {
+    const buttonConfigs = mapButtons('create', { submit: { excluded: true }, cancel: {} });
+
     expect(buttonConfigs.buttonMatrix).toStrictEqual([['clear'], ['cancel']]);
+    expect(buttonConfigs.buttonConfigs.submit).toBeDefined();
+    expect(buttonConfigs.buttonConfigs.cancel).toBeDefined();
+    expect(buttonConfigs.buttonConfigs.clear).toBeDefined();
+  });
+
+  it('by default should only include clear and submit', () => {
+    const buttonConfigs = mapButtons('create', {});
+
+    expect(buttonConfigs.buttonMatrix).toStrictEqual([['clear'], ['submit']]);
     expect(buttonConfigs.buttonConfigs.submit).toBeDefined();
     expect(buttonConfigs.buttonConfigs.cancel).toBeDefined();
     expect(buttonConfigs.buttonConfigs.clear).toBeDefined();

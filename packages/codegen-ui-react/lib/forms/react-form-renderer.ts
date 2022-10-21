@@ -333,8 +333,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const elements: BindingElement[] = [
       // add in hooks for before/complete with ds and basic onSubmit with props
       ...buildMutationBindings(this.component),
-      // onCancel prop
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onCancel'), undefined),
       // onValidate prop
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onValidate'), undefined),
       // onChange prop

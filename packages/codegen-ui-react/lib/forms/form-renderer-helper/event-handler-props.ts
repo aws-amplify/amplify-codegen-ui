@@ -20,6 +20,7 @@ import {
   StudioForm,
   FieldConfigMetadata,
   isValidVariableName,
+  shouldIncludeCancel,
 } from '@aws-amplify/codegen-ui';
 import {
   BindingElement,
@@ -88,6 +89,10 @@ export const buildMutationBindings = (form: StudioForm) => {
     );
   }
   elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onSubmit'), undefined));
+  if (shouldIncludeCancel(form)) {
+    // onCancel prop
+    elements.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier('onCancel'), undefined));
+  }
   return elements;
 };
 

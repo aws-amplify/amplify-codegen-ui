@@ -1895,8 +1895,7 @@ function ArrayField({
   );
 }
 export default function NestedJson(props) {
-  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
-    props;
+  const { onSubmit, onValidate, onChange, overrides, ...rest } = props;
   const { tokens } = useTheme();
   const initialValues = {
     \\"first-Name\\": undefined,
@@ -2233,14 +2232,6 @@ export default function NestedJson(props) {
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
-            children=\\"Cancel\\"
-            type=\\"button\\"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, \\"CancelButton\\")}
-          ></Button>
-          <Button
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
@@ -2302,7 +2293,6 @@ export declare type NestedJsonProps = React.PropsWithChildren<{
     overrides?: NestedJsonOverridesProps | undefined | null;
 } & {
     onSubmit: (fields: NestedJsonInputValues) => void;
-    onCancel?: () => void;
     onChange?: (fields: NestedJsonInputValues) => NestedJsonInputValues;
     onValidate?: NestedJsonValidationValues;
 }>;
@@ -2461,15 +2451,8 @@ function ArrayField({
   );
 }
 export default function NestedJson(props) {
-  const {
-    initialData,
-    onSubmit,
-    onCancel,
-    onValidate,
-    onChange,
-    overrides,
-    ...rest
-  } = props;
+  const { initialData, onSubmit, onValidate, onChange, overrides, ...rest } =
+    props;
   const initialValues = {
     firstName: undefined,
     \\"last-Name\\": undefined,
@@ -2719,14 +2702,6 @@ export default function NestedJson(props) {
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
-            children=\\"Cancel\\"
-            type=\\"button\\"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, \\"CancelButton\\")}
-          ></Button>
-          <Button
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
@@ -2783,7 +2758,6 @@ export declare type NestedJsonProps = React.PropsWithChildren<{
 } & {
     initialData?: NestedJsonInputValues;
     onSubmit: (fields: NestedJsonInputValues) => void;
-    onCancel?: () => void;
     onChange?: (fields: NestedJsonInputValues) => NestedJsonInputValues;
     onValidate?: NestedJsonValidationValues;
 }>;
@@ -3461,7 +3435,6 @@ export default function BookCreateForm(props) {
     onSuccess,
     onError,
     onSubmit,
-    onCancel,
     onValidate,
     onChange,
     overrides,
@@ -3636,14 +3609,6 @@ export default function BookCreateForm(props) {
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
-            children=\\"Cancel\\"
-            type=\\"button\\"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, \\"CancelButton\\")}
-          ></Button>
-          <Button
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
@@ -3688,7 +3653,6 @@ export declare type BookCreateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
     onSuccess?: (fields: BookCreateFormInputValues) => void;
     onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
     onValidate?: BookCreateFormValidationValues;
 }>;
@@ -4281,7 +4245,6 @@ export default function BlogCreateForm(props) {
     onSuccess,
     onError,
     onSubmit,
-    onCancel,
     onValidate,
     onChange,
     overrides,
@@ -4583,14 +4546,6 @@ export default function BlogCreateForm(props) {
         ></Button>
         <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
           <Button
-            children=\\"Cancel\\"
-            type=\\"button\\"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, \\"CancelButton\\")}
-          ></Button>
-          <Button
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
@@ -4644,7 +4599,6 @@ export declare type BlogCreateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
     onSuccess?: (fields: BlogCreateFormInputValues) => void;
     onError?: (fields: BlogCreateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
     onValidate?: BlogCreateFormValidationValues;
 }>;
