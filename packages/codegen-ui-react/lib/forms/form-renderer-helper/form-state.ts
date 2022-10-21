@@ -30,8 +30,14 @@ import {
   PropertyAssignment,
   PropertyName,
 } from 'typescript';
+import { lowerCaseFirst } from '../../helpers';
 
 export const getCurrentValueName = (fieldName: string) => `current${capitalizeFirstLetter(fieldName)}Value`;
+
+export const getCurrentDisplayValueName = (fieldName: string) =>
+  `current${capitalizeFirstLetter(fieldName)}DisplayValue`;
+
+export const getRecordsName = (modelName: string) => `${lowerCaseFirst(modelName)}Records`;
 
 export const getCurrentValueIdentifier = (fieldName: string) =>
   factory.createIdentifier(getCurrentValueName(fieldName));

@@ -16,7 +16,8 @@
 
 import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
 import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind } from 'typescript';
-import { resetValuesName } from './form-state';
+import { getCurrentDisplayValueName, getCurrentValueName, resetValuesName } from './form-state';
+import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 
 export const ControlledComponents = ['StepperField', 'SliderField', 'SelectField', 'ToggleButton', 'SwitchField'];
 
@@ -67,16 +68,22 @@ export const renderDefaultValueAttribute = (stateName: string, { dataType }: Fie
 export const renderValueAttribute = ({
   fieldConfig,
   componentName,
-  currentValueIdentifier,
 }: {
   fieldConfig: FieldConfigMetadata;
   componentName: string;
-  currentValueIdentifier?: Identifier;
 }): JsxAttribute | undefined => {
   const componentType = fieldConfig.studioFormComponentType ?? fieldConfig.componentType;
-  const shouldGetForUncontrolled = fieldConfig.isArray;
+  const shouldGetForUncontrolled = shouldWrapInArrayField(fieldConfig);
 
-  const valueIdentifier = currentValueIdentifier || factory.createIdentifier(componentName.split('.')[0]);
+  let valueIdentifier = factory.createIdentifier(componentName.split('.')[0]);
+
+  if (shouldWrapInArrayField(fieldConfig)) {
+    if (isModelDataType(fieldConfig)) {
+      valueIdentifier = factory.createIdentifier(getCurrentDisplayValueName(componentName));
+    } else {
+      valueIdentifier = factory.createIdentifier(getCurrentValueName(componentName));
+    }
+  }
 
   const controlledComponentToAttributesMap: { [key: string]: JsxAttribute } = {
     ToggleButton: factory.createJsxAttribute(
