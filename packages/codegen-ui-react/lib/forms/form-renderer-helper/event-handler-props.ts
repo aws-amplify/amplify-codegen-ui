@@ -29,19 +29,24 @@ import {
   IfStatement,
   Identifier,
   ElementAccessExpression,
+  Statement,
+  JsxAttribute,
 } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { buildTargetVariable, getFormattedValueExpression } from './event-targets';
 import {
   buildAccessChain,
   buildNestedStateSet,
+  getCurrentDisplayValueName,
   getCurrentValueIdentifier,
   getCurrentValueName,
+  getRecordsName,
   setFieldState,
   setStateExpression,
 } from './form-state';
 import { getOnChangeValidationBlock } from './validation';
 import { buildModelFieldObject } from './model-fields';
+import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 
 export const buildMutationBindings = (form: StudioForm) => {
   const {
@@ -140,9 +145,7 @@ export const buildOverrideOnChangeStatement = (
   const keyName = keyPath[0];
   const valueName = valueNameOverride ?? factory.createIdentifier('value');
   let keyValueExpression = factory.createPropertyAssignment(
-    isValidVariableName(keyName)
-      ? factory.createIdentifier(keyName)
-      : factory.createComputedPropertyName(factory.createStringLiteral(keyName)),
+    isValidVariableName(keyName) ? factory.createIdentifier(keyName) : factory.createStringLiteral(keyName),
     valueName,
   );
   if (keyPath.length > 1) {
@@ -205,41 +208,36 @@ export const buildOnChangeStatement = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
 ) => {
   const { name: fieldName, componentType: fieldType } = component;
-  const { dataType, isArray, sanitizedFieldName } = fieldConfigs[fieldName];
+  const fieldConfig = fieldConfigs[fieldName];
+  const { dataType, sanitizedFieldName } = fieldConfig;
   const renderedFieldName = sanitizedFieldName || fieldName;
-  if (isArray) {
-    return factory.createJsxAttribute(
-      factory.createIdentifier(getOnValueChangeProp(fieldType)),
-      factory.createJsxExpression(
-        undefined,
-        factory.createArrowFunction(
-          undefined,
-          undefined,
-          [
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              factory.createIdentifier('e'),
-              undefined,
-              undefined,
-              undefined,
-            ),
-          ],
-          undefined,
-          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-          factory.createBlock(
-            [
-              ...buildTargetVariable(fieldType, fieldName, dataType),
-              getOnChangeValidationBlock(fieldName),
-              setStateExpression(getCurrentValueName(renderedFieldName), getFormattedValueExpression(dataType)),
-            ],
-            true,
-          ),
-        ),
-      ),
+
+  // build statements that handle new value
+  const handleChangeStatements: Statement[] = [...buildTargetVariable(fieldType, renderedFieldName, dataType)];
+
+  if (!shouldWrapInArrayField(fieldConfig)) {
+    handleChangeStatements.push(buildOverrideOnChangeStatement(fieldName, fieldConfigs));
+  }
+
+  handleChangeStatements.push(getOnChangeValidationBlock(fieldName));
+
+  if (shouldWrapInArrayField(fieldConfig)) {
+    if (isModelDataType(fieldConfig)) {
+      handleChangeStatements.push(
+        setStateExpression(getCurrentDisplayValueName(renderedFieldName), getFormattedValueExpression(dataType)),
+        setStateExpression(getCurrentValueName(renderedFieldName), factory.createIdentifier('undefined')),
+      );
+    } else {
+      handleChangeStatements.push(
+        setStateExpression(getCurrentValueName(renderedFieldName), getFormattedValueExpression(dataType)),
+      );
+    }
+  } else {
+    handleChangeStatements.push(
+      factory.createExpressionStatement(setFieldState(renderedFieldName, getFormattedValueExpression(dataType))),
     );
   }
+
   return factory.createJsxAttribute(
     factory.createIdentifier(getOnValueChangeProp(fieldType)),
     factory.createJsxExpression(
@@ -260,16 +258,93 @@ export const buildOnChangeStatement = (
         ],
         undefined,
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createBlock(handleChangeStatements, true),
+      ),
+    ),
+  );
+};
+
+/**
+  example:
+  onSuggestionSelect={({ id, label }) => {
+    setCurrentPrimaryAuthorValue(authorRecords.find((r) => r.id === id));
+    setCurrentPrimaryAuthorDisplayValue(label);
+  }}
+ */
+export function buildOnSuggestionSelect({
+  sanitizedFieldName,
+  modelName,
+}: {
+  sanitizedFieldName: string;
+  modelName: string;
+}): JsxAttribute {
+  return factory.createJsxAttribute(
+    factory.createIdentifier('onSuggestionSelect'),
+    factory.createJsxExpression(
+      undefined,
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createObjectBindingPattern([
+              factory.createBindingElement(undefined, undefined, factory.createIdentifier('id'), undefined),
+              factory.createBindingElement(undefined, undefined, factory.createIdentifier('label'), undefined),
+            ]),
+            undefined,
+            undefined,
+            undefined,
+          ),
+        ],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createBlock(
           [
-            ...buildTargetVariable(fieldType, fieldName, dataType),
-            buildOverrideOnChangeStatement(fieldName, fieldConfigs),
-            getOnChangeValidationBlock(fieldName),
-            factory.createExpressionStatement(setFieldState(renderedFieldName, getFormattedValueExpression(dataType))),
+            setStateExpression(
+              getCurrentValueName(sanitizedFieldName),
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier(getRecordsName(modelName)),
+                  factory.createIdentifier('find'),
+                ),
+                undefined,
+                [
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier('r'),
+                        undefined,
+                        undefined,
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createBinaryExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('r'),
+                        factory.createIdentifier('id'),
+                      ),
+                      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                      factory.createIdentifier('id'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            setStateExpression(getCurrentDisplayValueName(sanitizedFieldName), factory.createIdentifier('label')),
           ],
           true,
         ),
       ),
     ),
   );
-};
+}

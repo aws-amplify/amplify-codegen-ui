@@ -161,7 +161,7 @@ describe('mapFormMetaData', () => {
       });
       expect(mappedFieldNames[0]).toEqual('testFieldName');
       expect(mappedFieldNames[1]).toEqual('testFieldName1');
-      expect(mappedFieldNames[10]).toEqual('testFieldname10');
+      expect(mappedFieldNames[10]).toEqual('testFieldName10');
       expect(usedFieldNames.size).toEqual(mappedFieldNames.length);
       expect(usedFieldNames.has('testFieldName'.toLowerCase())).toBeTruthy();
       expect(usedFieldNames.has('testFieldName1'.toLowerCase())).toBeTruthy();

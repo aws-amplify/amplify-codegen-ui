@@ -20,8 +20,9 @@ import {
   SyntaxKind,
   ObjectLiteralElementLike,
   ObjectLiteralExpression,
+  PropertyAssignment,
 } from 'typescript';
-import { FieldValidationConfiguration, FieldConfigMetadata, isValidVariableName } from '@aws-amplify/codegen-ui';
+import { FieldValidationConfiguration, isValidVariableName } from '@aws-amplify/codegen-ui';
 
 export const createValidationExpression = (validationRules: FieldValidationConfiguration[] = []): Expression => {
   const validateExpressions = validationRules.map<ObjectLiteralExpression>((rule) => {
@@ -74,15 +75,7 @@ export const createValidationExpression = (validationRules: FieldValidationConfi
  * @param fieldConfigs
  * @returns
  */
-export function buildValidations(fieldConfigs: Record<string, FieldConfigMetadata>) {
-  const validationsForField = Object.entries(fieldConfigs).map(([fieldName, { validationRules }]) => {
-    const propKey =
-      fieldName.split('.').length > 1 || !isValidVariableName(fieldName)
-        ? factory.createStringLiteral(fieldName)
-        : factory.createIdentifier(fieldName);
-    return factory.createPropertyAssignment(propKey, createValidationExpression(validationRules));
-  });
-
+export function buildValidations(validationsAssignments: PropertyAssignment[]) {
   return factory.createVariableStatement(
     undefined,
     factory.createVariableDeclarationList(
@@ -91,12 +84,20 @@ export function buildValidations(fieldConfigs: Record<string, FieldConfigMetadat
           factory.createIdentifier('validations'),
           undefined,
           undefined,
-          factory.createObjectLiteralExpression(validationsForField, true),
+          factory.createObjectLiteralExpression(validationsAssignments, true),
         ),
       ],
       NodeFlags.Const,
     ),
   );
+}
+
+export function buildValidationForField(fieldName: string, validationRules: FieldValidationConfiguration[]) {
+  const propKey =
+    fieldName.split('.').length > 1 || !isValidVariableName(fieldName)
+      ? factory.createStringLiteral(fieldName)
+      : factory.createIdentifier(fieldName);
+  return factory.createPropertyAssignment(propKey, createValidationExpression(validationRules));
 }
 
 /**

@@ -13,6 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+
+import { camelCase } from 'change-case';
+
 import {
   FormDefinition,
   FormMetadata,
@@ -37,7 +40,7 @@ export const isValidVariableName = (input: string, resveredNames?: Set<string>):
   return /^[a-zA-Z_$][a-zA-Z_$0-9]*$/g.test(input) && preCheck;
 };
 
-export const filterFieldName = (input: string): string => input.split('.')[0].replace(/[^a-zA-Z_$]/g, '');
+export const formatFieldName = (input: string): string => camelCase(input.split('.')[0].replace(/[^a-zA-Z_$]/g, '-'));
 
 function elementIsInput(element: FormDefinitionElement): element is FormDefinitionInputElement {
   return element.componentType !== 'Text' && element.componentType !== 'Divider' && element.componentType !== 'Heading';
@@ -45,7 +48,7 @@ function elementIsInput(element: FormDefinitionElement): element is FormDefiniti
 
 // create mapping for field name collisions
 export function generateUniqueFieldName(name: string, sanitizedFieldNames: Set<string>) {
-  let sanitizedFieldName = isValidVariableName(name, sanitizedFieldNames) ? name : filterFieldName(name);
+  let sanitizedFieldName = isValidVariableName(name, sanitizedFieldNames) ? name : formatFieldName(name);
   let count = 1;
   if (sanitizedFieldNames.has(sanitizedFieldName.toLowerCase()) && !name.includes('.')) {
     let prospectiveNewName = sanitizedFieldName + count;
@@ -88,6 +91,11 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
             return updatedValidation;
           });
         }
+
+        if (element.relationship && 'valueMappings' in element) {
+          metadata.valueMappings = element.valueMappings;
+        }
+
         // we add the name of the model as a resvered word
         if (form.dataType.dataSourceType === 'DataStore') {
           sanitizedFieldNames.add(form.dataType.dataTypeName);

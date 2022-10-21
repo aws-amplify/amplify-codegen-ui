@@ -41,10 +41,15 @@ export const buildModelFieldObject = (
     const { sanitizedFieldName } = fieldConfigs[value];
     const renderedFieldName = sanitizedFieldName || fieldName;
     if (!fieldSet.has(renderedFieldName)) {
-      let assignment = nameOverrides[fieldName]
-        ? nameOverrides[fieldName]
-        : factory.createShorthandPropertyAssignment(factory.createIdentifier(fieldName), undefined);
-      if (sanitizedFieldName) {
+      let assignment: ObjectLiteralElementLike = factory.createShorthandPropertyAssignment(
+        factory.createIdentifier(fieldName),
+        undefined,
+      );
+
+      if (nameOverrides[fieldName]) {
+        assignment = nameOverrides[fieldName];
+      } else if (sanitizedFieldName) {
+        // if overrides present, ignore sanitizedFieldName
         assignment = factory.createPropertyAssignment(
           factory.createStringLiteral(fieldName),
           factory.createIdentifier(sanitizedFieldName),

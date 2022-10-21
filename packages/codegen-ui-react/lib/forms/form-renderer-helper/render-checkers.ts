@@ -16,3 +16,8 @@
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
 
 export const shouldWrapInArrayField = (config: FieldConfigMetadata) => config.isArray || config.relationship;
+
+export const isModelDataType = (
+  config: FieldConfigMetadata,
+): config is FieldConfigMetadata & { dataType: { model: string } } =>
+  !!(config.dataType && typeof config.dataType === 'object' && 'model' in config.dataType);
