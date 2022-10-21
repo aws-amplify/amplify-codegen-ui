@@ -57,7 +57,6 @@ import {
   defaultRenderConfig,
   getDeclarationFilename,
   transpile,
-  buildBaseCollectionVariableStatement,
 } from '../react-studio-template-renderer-helper';
 import { generateArrayFieldComponent } from '../utils/forms/array-field-component';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
@@ -89,7 +88,6 @@ import {
   validationFunctionType,
   validationResponseType,
 } from './form-renderer-helper/type-helper';
-import { getActionIdentifier } from '../workflow';
 
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   string,
