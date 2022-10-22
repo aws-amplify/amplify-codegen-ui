@@ -13,11 +13,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './component-metadata';
-export * from './component-tree';
-export * from './state-reference-metadata';
-export * from './string-formatter';
-export * from './form-component-metadata';
-export * from './form-to-component';
-export * from './breakpoint-utils';
-export * from './form-utils';
+
+import { StudioForm } from '../types';
+
+export const shouldIncludeCancel = ({ cta }: StudioForm): boolean => {
+  // first check if excluded is added in explicitly
+  if (cta?.cancel && 'excluded' in cta.cancel && cta.cancel.excluded) {
+    return false;
+  }
+  // if we find that cta has cancel defined (ex. an empty object)
+  // we include the cancel button
+  if (cta && cta.cancel) {
+    return true;
+  }
+
+  // otherwise we return false
+  return false;
+};

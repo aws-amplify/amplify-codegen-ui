@@ -20,6 +20,7 @@ import {
   StudioComponent,
   FormDefinition,
   isValidVariableName,
+  shouldIncludeCancel,
 } from '@aws-amplify/codegen-ui';
 import {
   factory,
@@ -421,14 +422,18 @@ export const buildFormPropNode = (form: StudioForm) => {
       ),
     );
   }
+  if (shouldIncludeCancel(form)) {
+    propSignatures.push(
+      // onCancel?: () => void
+      factory.createPropertySignature(
+        undefined,
+        'onCancel',
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
+      ),
+    );
+  }
   propSignatures.push(
-    // onCancel?: () => void
-    factory.createPropertySignature(
-      undefined,
-      'onCancel',
-      factory.createToken(SyntaxKind.QuestionToken),
-      factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
-    ),
     // onChange?: (fields: Record<string, unknown>) => Record<string, unknown>
     factory.createPropertySignature(
       undefined,
