@@ -13,17 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
-import { isValidVariableName } from '@aws-amplify/codegen-ui';
-import { factory, JsxChild, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
-import {
-  capitalizeFirstLetter,
-  getCurrentValueIdentifier,
-  getCurrentValueName,
-  getDefaultValueExpression,
-  getSetNameIdentifier,
-} from '../../forms/form-renderer-helper/form-state';
-import { buildOverrideOnChangeStatement } from '../../forms/form-renderer-helper';
+import { factory, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
 import { addUseEffectWrapper } from '../generate-react-hooks';
 
 export const generateArrayFieldComponent = () => {
@@ -369,6 +359,37 @@ export const generateArrayFieldComponent = () => {
         NodeFlags.Const,
       ),
     ),
+
+    /**
+        if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+         return arraySection;
+        }
+     */
+    factory.createIfStatement(
+      factory.createBinaryExpression(
+        factory.createBinaryExpression(
+          factory.createBinaryExpression(
+            factory.createIdentifier('lengthLimit'),
+            factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+            factory.createIdentifier('undefined'),
+          ),
+          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+          factory.createBinaryExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('items'),
+              factory.createIdentifier('length'),
+            ),
+            factory.createToken(SyntaxKind.GreaterThanEqualsToken),
+            factory.createIdentifier('lengthLimit'),
+          ),
+        ),
+        factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+        factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier('isEditing')),
+      ),
+      factory.createBlock([factory.createReturnStatement(factory.createIdentifier('arraySection'))], true),
+      undefined,
+    ),
+
     factory.createReturnStatement(
       factory.createParenthesizedExpression(
         factory.createJsxElement(
@@ -742,18 +763,39 @@ export const generateArrayFieldComponent = () => {
                                                         [factory.createIdentifier('index')],
                                                       ),
                                                     ),
+                                                    /**
+                                                      setFieldValue(getBadgeText ? 
+                                                        getBadgeText(items[index]) 
+                                                        : items[index]);
+                                                     */
                                                     factory.createExpressionStatement(
                                                       factory.createCallExpression(
                                                         factory.createIdentifier('setFieldValue'),
                                                         undefined,
                                                         [
-                                                          factory.createElementAccessExpression(
-                                                            factory.createIdentifier('items'),
-                                                            factory.createIdentifier('index'),
+                                                          factory.createConditionalExpression(
+                                                            factory.createIdentifier('getBadgeText'),
+                                                            factory.createToken(SyntaxKind.QuestionToken),
+                                                            factory.createCallExpression(
+                                                              factory.createIdentifier('getBadgeText'),
+                                                              undefined,
+                                                              [
+                                                                factory.createElementAccessExpression(
+                                                                  factory.createIdentifier('items'),
+                                                                  factory.createIdentifier('index'),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            factory.createToken(SyntaxKind.ColonToken),
+                                                            factory.createElementAccessExpression(
+                                                              factory.createIdentifier('items'),
+                                                              factory.createIdentifier('index'),
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
                                                     ),
+
                                                     factory.createExpressionStatement(
                                                       factory.createCallExpression(
                                                         factory.createIdentifier('setIsEditing'),
@@ -770,15 +812,26 @@ export const generateArrayFieldComponent = () => {
                                         ]),
                                       ),
                                       [
+                                        // { getBadgeText ? getBadgeText(value) : value.toString() }
                                         factory.createJsxExpression(
                                           undefined,
-                                          factory.createCallExpression(
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('value'),
-                                              factory.createIdentifier('toString'),
+                                          factory.createConditionalExpression(
+                                            factory.createIdentifier('getBadgeText'),
+                                            factory.createToken(SyntaxKind.QuestionToken),
+                                            factory.createCallExpression(
+                                              factory.createIdentifier('getBadgeText'),
+                                              undefined,
+                                              [factory.createIdentifier('value')],
                                             ),
-                                            undefined,
-                                            [],
+                                            factory.createToken(SyntaxKind.ColonToken),
+                                            factory.createCallExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createIdentifier('value'),
+                                                factory.createIdentifier('toString'),
+                                              ),
+                                              undefined,
+                                              [],
+                                            ),
                                           ),
                                         ),
                                         factory.createJsxSelfClosingElement(
@@ -975,6 +1028,8 @@ export const generateArrayFieldComponent = () => {
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('setFieldValue'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('currentFieldValue'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('defaultFieldValue'), undefined),
+          factory.createBindingElement(undefined, undefined, factory.createIdentifier('lengthLimit'), undefined),
+          factory.createBindingElement(undefined, undefined, factory.createIdentifier('getBadgeText'), undefined),
         ]),
         undefined,
         undefined,
@@ -983,136 +1038,5 @@ export const generateArrayFieldComponent = () => {
     ],
     undefined,
     factory.createBlock(bodyBlock, true),
-  );
-};
-/*
-  <ArrayField
-    onChange = { async(items) => {
-      setBreeds(items);
-      setCurrentBreedsValue('');
-    }}
-    currentBreedsValue = { currentBreedsValue }
-    hasError = { errors.breeds?.hasError }
-    setFieldValue = { setCurrentBreedsValue }
-    inputFieldRef={ breedsRef }
-    >
-    <ExampleInputField />
-  </ArrayField>
-
-  wraps input field component with array field component
- */
-
-export const renderArrayFieldComponent = (
-  fieldName: string,
-  fieldLabel: string,
-  fieldConfigs: Record<string, FieldConfigMetadata>,
-  inputField: JsxChild,
-) => {
-  const { sanitizedFieldName, dataType, componentType } = fieldConfigs[fieldName];
-  const renderedFieldName = sanitizedFieldName || fieldName;
-  const stateName = getCurrentValueIdentifier(renderedFieldName);
-  const setStateName = getSetNameIdentifier(getCurrentValueName(renderedFieldName));
-  const valuesListName = factory.createIdentifier('values');
-  const onChangeArgName = factory.createIdentifier('items');
-  return factory.createJsxElement(
-    factory.createJsxOpeningElement(
-      factory.createIdentifier('ArrayField'),
-      undefined,
-      factory.createJsxAttributes([
-        factory.createJsxAttribute(
-          factory.createIdentifier('onChange'),
-          factory.createJsxExpression(
-            undefined,
-            factory.createArrowFunction(
-              [factory.createModifier(SyntaxKind.AsyncKeyword)],
-              undefined,
-              [
-                factory.createParameterDeclaration(
-                  undefined,
-                  undefined,
-                  undefined,
-                  onChangeArgName,
-                  undefined,
-                  undefined,
-                ),
-              ],
-              undefined,
-              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-              factory.createBlock(
-                [
-                  factory.createVariableStatement(
-                    undefined,
-                    factory.createVariableDeclarationList(
-                      [factory.createVariableDeclaration(valuesListName, undefined, undefined, onChangeArgName)],
-                      NodeFlags.Let,
-                    ),
-                  ),
-                  buildOverrideOnChangeStatement(fieldName, fieldConfigs, valuesListName),
-                  factory.createExpressionStatement(
-                    factory.createCallExpression(
-                      factory.createIdentifier(`set${capitalizeFirstLetter(renderedFieldName)}`),
-                      undefined,
-                      [valuesListName],
-                    ),
-                  ),
-                  factory.createExpressionStatement(
-                    factory.createCallExpression(setStateName, undefined, [
-                      getDefaultValueExpression(fieldName, componentType, dataType),
-                    ]),
-                  ),
-                ],
-                true,
-              ),
-            ),
-          ),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier(`currentFieldValue`),
-          factory.createJsxExpression(undefined, stateName),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier(`label`),
-          factory.createJsxExpression(undefined, factory.createStringLiteral(fieldLabel)),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('items'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(renderedFieldName)),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('hasError'),
-          factory.createJsxExpression(
-            undefined,
-            factory.createPropertyAccessChain(
-              isValidVariableName(fieldName)
-                ? factory.createPropertyAccessExpression(
-                    factory.createIdentifier('errors'),
-                    factory.createIdentifier(fieldName),
-                  )
-                : factory.createElementAccessChain(
-                    factory.createIdentifier('errors'),
-                    factory.createToken(SyntaxKind.QuestionDotToken),
-                    factory.createStringLiteral(fieldName),
-                  ),
-              factory.createToken(SyntaxKind.QuestionDotToken),
-              factory.createIdentifier('hasError'),
-            ),
-          ),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('setFieldValue'),
-          factory.createJsxExpression(undefined, setStateName),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('inputFieldRef'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedFieldName}Ref`)),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('defaultFieldValue'),
-          factory.createJsxExpression(undefined, getDefaultValueExpression(fieldName, componentType, dataType)),
-        ),
-      ]),
-    ),
-    [inputField],
-    factory.createJsxClosingElement(factory.createIdentifier('ArrayField')),
   );
 };

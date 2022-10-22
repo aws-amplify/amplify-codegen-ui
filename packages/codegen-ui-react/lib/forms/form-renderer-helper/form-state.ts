@@ -31,6 +31,7 @@ import {
   PropertyName,
 } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
+import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 
 export const getCurrentValueName = (fieldName: string) => `current${capitalizeFirstLetter(fieldName)}Value`;
 
@@ -115,8 +116,8 @@ export const getDefaultValueExpression = (
     SliderField: factory.createNumericLiteral(0),
   };
 
-  // it's a nonModel or relationship object
-  if (dataType && typeof dataType === 'object' && !('enum' in dataType)) {
+  // it's a nonModel
+  if (dataType && typeof dataType === 'object' && 'nonModel' in dataType) {
     return factory.createObjectLiteralExpression();
   }
   // the name itself is a nested json object
@@ -240,47 +241,49 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
   const recordOrInitialValues = recordName ? 'cleanValues' : 'initialValues';
 
   const stateNames = new Set<string>();
-  const expressions = Object.entries(fieldConfigs).reduce<Statement[]>(
-    (acc, [name, { isArray, sanitizedFieldName, componentType, dataType }]) => {
-      const stateName = name.split('.')[0];
-      const renderedName = sanitizedFieldName || stateName;
-      if (!stateNames.has(stateName)) {
-        const accessExpression = isValidVariableName(stateName)
-          ? factory.createPropertyAccessExpression(
-              factory.createIdentifier(recordOrInitialValues),
-              factory.createIdentifier(stateName),
-            )
-          : factory.createElementAccessExpression(
-              factory.createIdentifier(recordOrInitialValues),
-              factory.createStringLiteral(stateName),
-            );
+  const expressions = Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, fieldConfig]) => {
+    const { isArray, sanitizedFieldName, componentType, dataType } = fieldConfig;
+    const stateName = name.split('.')[0];
+    const renderedName = sanitizedFieldName || stateName;
+    if (!stateNames.has(stateName)) {
+      const accessExpression = isValidVariableName(stateName)
+        ? factory.createPropertyAccessExpression(
+            factory.createIdentifier(recordOrInitialValues),
+            factory.createIdentifier(stateName),
+          )
+        : factory.createElementAccessExpression(
+            factory.createIdentifier(recordOrInitialValues),
+            factory.createStringLiteral(stateName),
+          );
 
+      acc.push(
+        setStateExpression(
+          renderedName,
+          isArray && recordOrInitialValues === 'cleanValues'
+            ? factory.createBinaryExpression(
+                accessExpression,
+                factory.createToken(SyntaxKind.QuestionQuestionToken),
+                factory.createArrayLiteralExpression([], false),
+              )
+            : accessExpression,
+        ),
+      );
+      if (shouldWrapInArrayField(fieldConfig)) {
         acc.push(
           setStateExpression(
-            renderedName,
-            isArray && recordOrInitialValues === 'cleanValues'
-              ? factory.createBinaryExpression(
-                  accessExpression,
-                  factory.createToken(SyntaxKind.QuestionQuestionToken),
-                  factory.createArrayLiteralExpression([], false),
-                )
-              : accessExpression,
+            getCurrentValueName(renderedName),
+            getDefaultValueExpression(name, componentType, dataType),
           ),
         );
-        if (isArray) {
-          acc.push(
-            setStateExpression(
-              getCurrentValueName(renderedName),
-              getDefaultValueExpression(name, componentType, dataType),
-            ),
-          );
+
+        if (isModelDataType(fieldConfig)) {
+          acc.push(setStateExpression(getCurrentDisplayValueName(renderedName), factory.createIdentifier('undefined')));
         }
-        stateNames.add(stateName);
       }
-      return acc;
-    },
-    [],
-  );
+      stateNames.add(stateName);
+    }
+    return acc;
+  }, []);
 
   // ex. const cleanValues = {...initialValues, ...bookRecord}
   if (recordName) {
@@ -310,6 +313,7 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
 
   // also reset the state of the errors
   expressions.push(setStateExpression('errors', factory.createObjectLiteralExpression()));
+
   return factory.createVariableStatement(
     undefined,
     factory.createVariableDeclarationList(
