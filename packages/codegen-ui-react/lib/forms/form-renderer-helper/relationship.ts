@@ -15,16 +15,11 @@
  */
 import { factory } from 'typescript';
 import { GenericDataRelationshipType } from '@aws-amplify/codegen-ui';
-import { ImportCollection, ImportValue } from '../../imports';
 import { getRecordsName } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 
-export const buildRelationshipQuery = (
-  relationship: GenericDataRelationshipType,
-  importCollection: ImportCollection,
-) => {
+export const buildRelationshipQuery = (relationship: GenericDataRelationshipType) => {
   const { relatedModelName } = relationship;
-  importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
   const itemsName = getRecordsName(relatedModelName);
   const objectProperties = [
     factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral('collection')),

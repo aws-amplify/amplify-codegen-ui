@@ -13,8 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { factory, NodeFlags, SyntaxKind } from 'typescript';
+import { factory, NodeFlags, SyntaxKind, Expression } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
+import { getDisplayValueObjectName } from './display-value';
 import { getSetNameIdentifier } from './form-state';
 
 export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', modelName: string) => {
@@ -98,218 +99,241 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
 };
 
 /**
-        const validationResponses = await Promise.all(
-          Object.keys(validations).reduce((promises, fieldName) => {
-              if (Array.isArray(modelFields[fieldName])) {
-                  promises.push(...modelFields[fieldName].map(item => runValidationTasks(fieldName, item)));
-              }
-              promises.push(runValidationTasks(fieldName, modelFields[fieldName]))
-              return promises
-          }, [])
+  example: const validationResponses = await Promise.all(
+    Object.keys(validations).reduce((promises, fieldName) => {
+      if (Array.isArray(modelFields[fieldName])) {
+        promises.push(
+          ...modelFields[fieldName].map((item) =>
+            runValidationTasks(fieldName, item, getDisplayValue[fieldName]),
+          ),
         );
-      
-        if (validationResponses.some((r) => r.hasError)) {
-          return;
-        }
-       */
+        return promises;
+      }
+      promises.push(runValidationTasks(fieldName, modelFields[fieldName], getDisplayValue[fieldName]));
+      return promises;
+    }, []),
+  );
+  if (validationResponses.some((r) => r.hasError)) {
+    return;
+  }
+*/
 
-export const onSubmitValidationRun = [
-  factory.createVariableStatement(
-    undefined,
-    factory.createVariableDeclarationList(
-      [
-        factory.createVariableDeclaration(
-          factory.createIdentifier('validationResponses'),
-          undefined,
-          undefined,
-          factory.createAwaitExpression(
-            factory.createCallExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier('Promise'),
-                factory.createIdentifier('all'),
-              ),
-              undefined,
-              [
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('Object'),
-                        factory.createIdentifier('keys'),
+export const onSubmitValidationRun = (shouldUseGetDisplayValue?: boolean) => {
+  const getDisplayValueAccess = factory.createElementAccessExpression(
+    factory.createIdentifier(getDisplayValueObjectName),
+    factory.createIdentifier('fieldName'),
+  );
+
+  const runValidationTasksArgsForArray: Expression[] = [
+    factory.createIdentifier('fieldName'),
+    factory.createIdentifier('item'),
+  ];
+
+  const runValidationTasksArgs = [
+    factory.createIdentifier('fieldName'),
+    factory.createElementAccessExpression(
+      factory.createIdentifier('modelFields'),
+      factory.createIdentifier('fieldName'),
+    ),
+  ];
+
+  if (shouldUseGetDisplayValue) {
+    runValidationTasksArgsForArray.push(getDisplayValueAccess);
+    runValidationTasksArgs.push(getDisplayValueAccess);
+  }
+
+  return [
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('validationResponses'),
+            undefined,
+            undefined,
+            factory.createAwaitExpression(
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('Promise'),
+                  factory.createIdentifier('all'),
+                ),
+                undefined,
+                [
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createIdentifier('Object'),
+                          factory.createIdentifier('keys'),
+                        ),
+                        undefined,
+                        [factory.createIdentifier('validations')],
                       ),
-                      undefined,
-                      [factory.createIdentifier('validations')],
+                      factory.createIdentifier('reduce'),
                     ),
-                    factory.createIdentifier('reduce'),
-                  ),
-                  undefined,
-                  [
-                    factory.createArrowFunction(
-                      undefined,
-                      undefined,
-                      [
-                        factory.createParameterDeclaration(
-                          undefined,
-                          undefined,
-                          undefined,
-                          factory.createIdentifier('promises'),
-                          undefined,
-                          undefined,
-                        ),
-                        factory.createParameterDeclaration(
-                          undefined,
-                          undefined,
-                          undefined,
-                          factory.createIdentifier('fieldName'),
-                          undefined,
-                          undefined,
-                        ),
-                      ],
-                      undefined,
-                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                      factory.createBlock(
+                    undefined,
+                    [
+                      factory.createArrowFunction(
+                        undefined,
+                        undefined,
                         [
-                          factory.createIfStatement(
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('Array'),
-                                factory.createIdentifier('isArray'),
-                              ),
-                              undefined,
-                              [
-                                factory.createElementAccessExpression(
-                                  factory.createIdentifier('modelFields'),
-                                  factory.createIdentifier('fieldName'),
-                                ),
-                              ],
-                            ),
-                            factory.createBlock(
-                              [
-                                factory.createExpressionStatement(
-                                  factory.createCallExpression(
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier('promises'),
-                                      factory.createIdentifier('push'),
-                                    ),
-                                    undefined,
-                                    [
-                                      factory.createSpreadElement(
-                                        factory.createCallExpression(
-                                          factory.createPropertyAccessExpression(
-                                            factory.createElementAccessExpression(
-                                              factory.createIdentifier('modelFields'),
-                                              factory.createIdentifier('fieldName'),
-                                            ),
-                                            factory.createIdentifier('map'),
-                                          ),
-                                          undefined,
-                                          [
-                                            factory.createArrowFunction(
-                                              undefined,
-                                              undefined,
-                                              [
-                                                factory.createParameterDeclaration(
-                                                  undefined,
-                                                  undefined,
-                                                  undefined,
-                                                  factory.createIdentifier('item'),
-                                                  undefined,
-                                                  undefined,
-                                                ),
-                                              ],
-                                              undefined,
-                                              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                              factory.createCallExpression(
-                                                factory.createIdentifier('runValidationTasks'),
-                                                undefined,
-                                                [
-                                                  factory.createIdentifier('fieldName'),
-                                                  factory.createIdentifier('item'),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                factory.createReturnStatement(factory.createIdentifier('promises')),
-                              ],
-                              true,
-                            ),
+                          factory.createParameterDeclaration(
+                            undefined,
+                            undefined,
+                            undefined,
+                            factory.createIdentifier('promises'),
+                            undefined,
+                            undefined,
                             undefined,
                           ),
-                          factory.createExpressionStatement(
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('promises'),
-                                factory.createIdentifier('push'),
+                          factory.createParameterDeclaration(
+                            undefined,
+                            undefined,
+                            undefined,
+                            factory.createIdentifier('fieldName'),
+                            undefined,
+                            undefined,
+                            undefined,
+                          ),
+                        ],
+                        undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        factory.createBlock(
+                          [
+                            factory.createIfStatement(
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('Array'),
+                                  factory.createIdentifier('isArray'),
+                                ),
+                                undefined,
+                                [
+                                  factory.createElementAccessExpression(
+                                    factory.createIdentifier('modelFields'),
+                                    factory.createIdentifier('fieldName'),
+                                  ),
+                                ],
+                              ),
+                              factory.createBlock(
+                                [
+                                  factory.createExpressionStatement(
+                                    factory.createCallExpression(
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier('promises'),
+                                        factory.createIdentifier('push'),
+                                      ),
+                                      undefined,
+                                      [
+                                        factory.createSpreadElement(
+                                          factory.createCallExpression(
+                                            factory.createPropertyAccessExpression(
+                                              factory.createElementAccessExpression(
+                                                factory.createIdentifier('modelFields'),
+                                                factory.createIdentifier('fieldName'),
+                                              ),
+                                              factory.createIdentifier('map'),
+                                            ),
+                                            undefined,
+                                            [
+                                              factory.createArrowFunction(
+                                                undefined,
+                                                undefined,
+                                                [
+                                                  factory.createParameterDeclaration(
+                                                    undefined,
+                                                    undefined,
+                                                    undefined,
+                                                    factory.createIdentifier('item'),
+                                                    undefined,
+                                                    undefined,
+                                                    undefined,
+                                                  ),
+                                                ],
+                                                undefined,
+                                                factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                                factory.createCallExpression(
+                                                  factory.createIdentifier('runValidationTasks'),
+                                                  undefined,
+                                                  runValidationTasksArgsForArray,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  factory.createReturnStatement(factory.createIdentifier('promises')),
+                                ],
+                                true,
                               ),
                               undefined,
-                              [
-                                factory.createCallExpression(
-                                  factory.createIdentifier('runValidationTasks'),
-                                  undefined,
-                                  [
-                                    factory.createIdentifier('fieldName'),
-                                    factory.createElementAccessExpression(
-                                      factory.createIdentifier('modelFields'),
-                                      factory.createIdentifier('fieldName'),
-                                    ),
-                                  ],
-                                ),
-                              ],
                             ),
-                          ),
-                          factory.createReturnStatement(factory.createIdentifier('promises')),
-                        ],
-                        true,
+                            factory.createExpressionStatement(
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('promises'),
+                                  factory.createIdentifier('push'),
+                                ),
+                                undefined,
+                                [
+                                  factory.createCallExpression(
+                                    factory.createIdentifier('runValidationTasks'),
+                                    undefined,
+                                    runValidationTasksArgs,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            factory.createReturnStatement(factory.createIdentifier('promises')),
+                          ],
+                          true,
+                        ),
                       ),
-                    ),
-                    factory.createArrayLiteralExpression([], false),
-                  ],
-                ),
-              ],
+                      factory.createArrayLiteralExpression([], false),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-      NodeFlags.Const,
-    ),
-  ),
-  factory.createIfStatement(
-    factory.createCallExpression(
-      factory.createPropertyAccessExpression(
-        factory.createIdentifier('validationResponses'),
-        factory.createIdentifier('some'),
+        ],
+        NodeFlags.Const,
       ),
-      undefined,
-      [
-        factory.createArrowFunction(
-          undefined,
-          undefined,
-          [
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              factory.createIdentifier('r'),
-              undefined,
-              undefined,
-              undefined,
-            ),
-          ],
-          undefined,
-          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-          factory.createPropertyAccessExpression(factory.createIdentifier('r'), factory.createIdentifier('hasError')),
-        ),
-      ],
     ),
-    factory.createBlock([factory.createReturnStatement(undefined)], true),
-    undefined,
-  ),
-];
+    factory.createIfStatement(
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier('validationResponses'),
+          factory.createIdentifier('some'),
+        ),
+        undefined,
+        [
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('r'),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createPropertyAccessExpression(factory.createIdentifier('r'), factory.createIdentifier('hasError')),
+          ),
+        ],
+      ),
+      factory.createBlock([factory.createReturnStatement(undefined)], true),
+      undefined,
+    ),
+  ];
+};
 
 export const buildUpdateDatastoreQuery = (dataTypeName: string, recordName: string) => {
   // TODO: update this once cpk is supported in datastore

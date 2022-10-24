@@ -17,10 +17,14 @@ import { isValidVariableName } from '@aws-amplify/codegen-ui';
 import { factory } from 'typescript';
 
 export function getElementAccessExpression(elementName: string, propertyName: string) {
+  if (isValidVariableName(propertyName)) {
+    return factory.createPropertyAccessExpression(
+      factory.createIdentifier(elementName),
+      factory.createIdentifier(propertyName),
+    );
+  }
   return factory.createElementAccessExpression(
     factory.createIdentifier(elementName),
-    isValidVariableName(propertyName)
-      ? factory.createIdentifier(propertyName)
-      : factory.createStringLiteral(propertyName),
+    factory.createStringLiteral(propertyName),
   );
 }

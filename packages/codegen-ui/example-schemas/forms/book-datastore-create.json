@@ -6,6 +6,7 @@
     },
     "formActionType": "create",
     "fields": {
+        "authorId": {},
         "primary-author": {
             "inputType": {
                 "type": "Autocomplete",

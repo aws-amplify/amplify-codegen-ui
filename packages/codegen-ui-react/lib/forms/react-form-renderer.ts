@@ -20,6 +20,7 @@ import {
   FormDefinition,
   generateFormDefinition,
   GenericDataSchema,
+  GenericDataRelationshipType,
   handleCodegenErrors,
   mapFormDefinitionToComponent,
   mapFormMetadata,
@@ -439,6 +440,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
+
+    const relationshipCollection: GenericDataRelationshipType[] = [];
+
     Object.entries(formMetadata.fieldConfigs).forEach(([field, fieldConfig]) => {
       const { sanitizedFieldName, componentType, dataType, relationship } = fieldConfig;
       if (shouldWrapInArrayField(fieldConfig)) {
@@ -480,17 +484,23 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           ),
         );
       }
-      // datastore relationship query
-      /**
+
+      if (relationship) {
+        relationshipCollection.push(relationship);
+      }
+    });
+
+    // datastore relationship query
+    /**
           const authorRecords = useDataStoreBinding({
             type: 'collection',
             model: Author,
           }).items;
         */
-      if (relationship) {
-        statements.push(buildRelationshipQuery(relationship, this.importCollection));
-      }
-    });
+    if (relationshipCollection.length) {
+      this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
+      statements.push(...relationshipCollection.map((relationship) => buildRelationshipQuery(relationship)));
+    }
 
     const { validationsObject, dataTypesMap, displayValueObject, modelsToImport, usesArrayField } = mapFromFieldConfigs(
       formMetadata.fieldConfigs,

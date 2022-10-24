@@ -21,6 +21,7 @@ import {
   FieldConfigMetadata,
   isValidVariableName,
   shouldIncludeCancel,
+  InvalidInputError,
 } from '@aws-amplify/codegen-ui';
 import {
   BindingElement,
@@ -32,6 +33,8 @@ import {
   ElementAccessExpression,
   Statement,
   JsxAttribute,
+  Expression,
+  ExpressionStatement,
 } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { buildTargetVariable, getFormattedValueExpression } from './event-targets';
@@ -48,6 +51,7 @@ import {
 import { getOnChangeValidationBlock } from './validation';
 import { buildModelFieldObject } from './model-fields';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
+import { extractModelAndKey } from './display-value';
 
 export const buildMutationBindings = (form: StudioForm) => {
   const {
@@ -269,6 +273,13 @@ export const buildOnChangeStatement = (
   );
 };
 
+// onSuggestionSelect={({ id }) => {
+//   setCurrentPrimaryAuthorValue(
+//     id
+//   );
+//   setCurrentPrimaryAuthorDisplayValue(id);
+// }}
+
 /**
   example:
   onSuggestionSelect={({ id, label }) => {
@@ -278,11 +289,78 @@ export const buildOnChangeStatement = (
  */
 export function buildOnSuggestionSelect({
   sanitizedFieldName,
-  modelName,
+  fieldConfig,
 }: {
   sanitizedFieldName: string;
-  modelName: string;
+  fieldConfig: FieldConfigMetadata;
 }): JsxAttribute {
+  const { model, key } = extractModelAndKey(fieldConfig.valueMappings);
+  if (!model || !key) {
+    throw new InvalidInputError(`Invalid value mappings`);
+  }
+
+  const labelString = 'label';
+  const idString = 'id';
+  const recordString = 'r';
+
+  const props: BindingElement[] = [
+    factory.createBindingElement(undefined, undefined, factory.createIdentifier(idString), undefined),
+  ];
+
+  let nextCurrentValue: Expression = factory.createIdentifier(idString);
+  let nextCurrentDisplayValue: Expression = factory.createIdentifier(idString);
+
+  if (isModelDataType(fieldConfig)) {
+    props.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier(labelString), undefined));
+
+    nextCurrentDisplayValue = factory.createIdentifier(labelString);
+
+    nextCurrentValue = factory.createCallExpression(
+      factory.createPropertyAccessExpression(
+        factory.createIdentifier(getRecordsName(model)),
+        factory.createIdentifier('find'),
+      ),
+      undefined,
+      [
+        factory.createArrowFunction(
+          undefined,
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier(recordString),
+              undefined,
+              undefined,
+              undefined,
+            ),
+          ],
+          undefined,
+          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+          factory.createBinaryExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier(recordString),
+              factory.createIdentifier(key),
+            ),
+            factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+            factory.createIdentifier(idString),
+          ),
+        ),
+      ],
+    );
+  }
+
+  const setStateExpressions: ExpressionStatement[] = [
+    setStateExpression(getCurrentValueName(sanitizedFieldName), nextCurrentValue),
+  ];
+
+  if (isModelDataType(fieldConfig)) {
+    setStateExpressions.push(
+      setStateExpression(getCurrentDisplayValueName(sanitizedFieldName), nextCurrentDisplayValue),
+    );
+  }
+
   return factory.createJsxAttribute(
     factory.createIdentifier('onSuggestionSelect'),
     factory.createJsxExpression(
@@ -295,10 +373,7 @@ export function buildOnSuggestionSelect({
             undefined,
             undefined,
             undefined,
-            factory.createObjectBindingPattern([
-              factory.createBindingElement(undefined, undefined, factory.createIdentifier('id'), undefined),
-              factory.createBindingElement(undefined, undefined, factory.createIdentifier('label'), undefined),
-            ]),
+            factory.createObjectBindingPattern(props),
             undefined,
             undefined,
             undefined,
@@ -306,49 +381,7 @@ export function buildOnSuggestionSelect({
         ],
         undefined,
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-        factory.createBlock(
-          [
-            setStateExpression(
-              getCurrentValueName(sanitizedFieldName),
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier(getRecordsName(modelName)),
-                  factory.createIdentifier('find'),
-                ),
-                undefined,
-                [
-                  factory.createArrowFunction(
-                    undefined,
-                    undefined,
-                    [
-                      factory.createParameterDeclaration(
-                        undefined,
-                        undefined,
-                        undefined,
-                        factory.createIdentifier('r'),
-                        undefined,
-                        undefined,
-                        undefined,
-                      ),
-                    ],
-                    undefined,
-                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                    factory.createBinaryExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('r'),
-                        factory.createIdentifier('id'),
-                      ),
-                      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-                      factory.createIdentifier('id'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            setStateExpression(getCurrentDisplayValueName(sanitizedFieldName), factory.createIdentifier('label')),
-          ],
-          true,
-        ),
+        factory.createBlock(setStateExpressions, true),
       ),
     ),
   );
