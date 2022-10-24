@@ -25,6 +25,7 @@ import {
   StudioForm,
   getGenericFromDataStore,
   StudioSchema,
+  StudioView,
 } from '@aws-amplify/codegen-ui';
 import {
   AmplifyRenderer,
@@ -33,6 +34,7 @@ import {
   ReactUtilsStudioTemplateRenderer,
   AmplifyFormRenderer,
   UtilTemplateType,
+  AmplifyViewRenderer,
 } from '@aws-amplify/codegen-ui-react';
 import schema from '../models/schema';
 import { TestGenerator, TestGeneratorParams } from './TestGenerator';
@@ -44,6 +46,8 @@ export class NodeTestGenerator extends TestGenerator {
 
   private readonly formRendererFactory: any;
 
+  private readonly viewRendererFactory: any;
+
   private readonly indexRendererFactory: any;
 
   private readonly utilsRendererFactory: any;
@@ -51,6 +55,8 @@ export class NodeTestGenerator extends TestGenerator {
   private readonly componentRendererManager: any;
 
   private readonly formRendererManager: any;
+
+  private readonly viewRendererManager: any;
 
   private readonly themeRendererManager: any;
 
@@ -70,6 +76,9 @@ export class NodeTestGenerator extends TestGenerator {
     this.formRendererFactory = new StudioTemplateRendererFactory(
       (form: StudioForm) => new AmplifyFormRenderer(form, getGenericFromDataStore(schema), this.renderConfig),
     );
+    this.viewRendererFactory = new StudioTemplateRendererFactory(
+      (view: StudioView) => new AmplifyViewRenderer(view, getGenericFromDataStore(schema), this.renderConfig),
+    );
     this.indexRendererFactory = new StudioTemplateRendererFactory(
       (schemas: StudioSchema[]) => new ReactIndexStudioTemplateRenderer(schemas, this.renderConfig),
     );
@@ -78,6 +87,7 @@ export class NodeTestGenerator extends TestGenerator {
     );
     this.componentRendererManager = new StudioTemplateRendererManager(this.componentRendererFactory, this.outputConfig);
     this.formRendererManager = new StudioTemplateRendererManager(this.formRendererFactory, this.outputConfig);
+    this.viewRendererManager = new StudioTemplateRendererManager(this.viewRendererFactory, this.outputConfig);
     this.themeRendererManager = new StudioTemplateRendererManager(this.themeRendererFactory, this.outputConfig);
     this.indexRendererManager = new StudioTemplateRendererManager(this.indexRendererFactory, this.outputConfig);
     this.utilsRendererManager = new StudioTemplateRendererManager(this.utilsRendererFactory, this.outputConfig);
@@ -96,8 +106,17 @@ export class NodeTestGenerator extends TestGenerator {
     return this.formRendererManager.renderSchemaToTemplate(form);
   }
 
+  writeViewToDisk(view: StudioView) {
+    return this.viewRendererManager.renderSchemaToTemplate(view);
+  }
+
   renderForm(form: StudioForm) {
     const buildRenderer = this.formRendererFactory.buildRenderer(form);
+    return buildRenderer.renderComponentOnly();
+  }
+
+  renderView(view: StudioView) {
+    const buildRenderer = this.viewRendererFactory.buildRenderer(view);
     return buildRenderer.renderComponentOnly();
   }
 

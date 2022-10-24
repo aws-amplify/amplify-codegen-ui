@@ -19,6 +19,7 @@ import { CallExpression, factory, ObjectLiteralExpression, SyntaxKind } from 'ty
 export const getFilterName = (model: string) => `${model.toLowerCase()}Filter`;
 export const getPredicateName = (model: string) => `${model.toLowerCase()}Predicate`;
 export const getPaginationName = (model: string) => `${model.toLowerCase()}Pagination`;
+export const getDataStoreName = (model: string) => `${model.toLowerCase()}DataStore`;
 
 /*
 checks table to see if there is a formatter for stringFormat
