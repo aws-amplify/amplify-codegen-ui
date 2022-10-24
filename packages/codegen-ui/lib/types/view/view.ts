@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import { StudioComponentPredicate, StudioComponentSort } from '../bindings';
+import { CollectionBindingBody, CollectionComponentSlotBody, CollectionBindingTitle } from './collection';
 import { ViewStyle } from './style';
 import { ColumnsMap } from './table';
 
@@ -29,6 +30,8 @@ export interface StudioView {
   viewConfiguration: ViewConfiguration;
 }
 
+export declare type ViewType = 'Table' | 'Collection';
+
 export interface BaseViewConfiguration {
   type: ViewType;
 }
@@ -42,9 +45,17 @@ export interface TableConfiguration extends BaseViewConfiguration {
     enableOnRowClick?: boolean;
   };
 }
+export interface CollectionConfiguration extends BaseViewConfiguration {
+  type: 'Collection';
+  collection: {
+    body: CollectionComponentSlotBody | CollectionBindingBody;
+    collectionType: 'expander';
+    title: CollectionBindingTitle;
+  };
+}
 
 // Append other configuration types here
-export type ViewConfiguration = TableConfiguration;
+export type ViewConfiguration = TableConfiguration | CollectionConfiguration | CollectionConfiguration;
 
 export interface ViewDataTypeConfig {
   identifiers?: string[];
@@ -66,5 +77,3 @@ export interface ViewSummary {
 }
 
 export declare type ViewSummaryList = ViewSummary[];
-
-export declare type ViewType = 'Table';

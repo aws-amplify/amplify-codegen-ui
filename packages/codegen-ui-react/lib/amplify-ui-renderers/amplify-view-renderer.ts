@@ -18,6 +18,7 @@ import { JsxElement, factory, JsxFragment } from 'typescript';
 import { ReactViewTemplateRenderer } from '../views/react-view-renderer';
 import { Primitive } from '../primitive';
 import { ReactTableRenderer } from '../react-table-renderer';
+import { ReactExpanderRenderer } from '../react-expander-renderer';
 
 export class AmplifyViewRenderer extends ReactViewTemplateRenderer {
   renderJsx(): JsxElement | JsxFragment {
@@ -29,6 +30,15 @@ export class AmplifyViewRenderer extends ReactViewTemplateRenderer {
           this.viewMetadata,
           this.importCollection,
         ).renderElement();
+      case 'Collection':
+        switch (this.viewComponent.viewConfiguration.collection.collectionType) {
+          case 'expander':
+            return new ReactExpanderRenderer(this.viewComponent, this.importCollection).renderElement();
+          default:
+            throw new Error(
+              `Collection type ${this.viewComponent.viewConfiguration.collection.collectionType} is not supported`,
+            );
+        }
       default:
         return factory.createJsxFragment(factory.createJsxOpeningFragment(), [], factory.createJsxJsxClosingFragment());
     }
