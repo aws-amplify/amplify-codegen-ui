@@ -19,8 +19,8 @@ import { buildComponentSpecificAttributes } from './static-props';
 import { renderValueAttribute, renderDefaultValueAttribute, isControlledComponent } from './value-props';
 import { buildOnChangeStatement, buildOnBlurStatement, buildOnSuggestionSelect } from './event-handler-props';
 import { resetValuesName } from './form-state';
-import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
-import { getAutocompleteSuggestionsPropFromModel } from './display-value';
+import { shouldWrapInArrayField } from './render-checkers';
+import { getAutocompleteSuggestionsProp } from './display-value';
 
 export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
   const { name: componentName, componentType } = component;
@@ -71,10 +71,10 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       attributes.push(valueAttribute);
     }
 
-    if (fieldConfig.componentType === 'Autocomplete' && isModelDataType(fieldConfig)) {
-      const modelName = fieldConfig.dataType.model;
-      attributes.push(getAutocompleteSuggestionsPropFromModel({ fieldName: componentName, modelName }));
-      attributes.push(buildOnSuggestionSelect({ sanitizedFieldName: renderedVariableName, modelName }));
+    // TODO: Allow for other relationship types once valueMappings available
+    if (fieldConfig.componentType === 'Autocomplete' && fieldConfig.relationship?.type === 'HAS_ONE') {
+      attributes.push(getAutocompleteSuggestionsProp({ fieldName: componentName, fieldConfig }));
+      attributes.push(buildOnSuggestionSelect({ sanitizedFieldName: renderedVariableName, fieldConfig }));
     }
 
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {

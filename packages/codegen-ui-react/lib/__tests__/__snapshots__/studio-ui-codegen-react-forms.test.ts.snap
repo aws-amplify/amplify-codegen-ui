@@ -50,7 +50,14 @@ export default function CustomDataForm(props) {
     pages: [],
     phone: [{ type: \\"Required\\" }, { type: \\"Phone\\" }],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -453,7 +460,14 @@ export default function CustomDataForm(props) {
     category: [],
     pages: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -971,7 +985,14 @@ export default function CustomDataForm(props) {
     email: [{ type: \\"Required\\" }],
     phone: [{ type: \\"Required\\" }, { type: \\"Phone\\" }],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -1415,7 +1436,14 @@ export default function MyPostForm(props) {
     metadata: [{ type: \\"JSON\\" }],
     profile_url: [{ type: \\"URL\\" }],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -1963,7 +1991,14 @@ export default function NestedJson(props) {
     \\"nick-names2\\": [],
     \\"first Name\\": [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -2520,7 +2555,14 @@ export default function NestedJson(props) {
     \\"bio.favoriteQuote\\": [],
     \\"bio.favoriteAnimal\\": [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -2822,7 +2864,14 @@ export default function CustomWithSectionalElements(props) {
   const validations = {
     name: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -3027,7 +3076,14 @@ export default function MyPostForm(props) {
     metadata: [{ type: \\"JSON\\" }],
     profile_url: [{ type: \\"URL\\" }],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -3481,17 +3537,21 @@ export default function BookCreateForm(props) {
   const initialValues = {
     name: undefined,
     \\"primary-author\\": undefined,
+    authorId: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
     initialValues[\\"primary-author\\"]
   );
+  const [authorId, setAuthorId] = React.useState(initialValues.authorId);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setPrimaryAuthor(initialValues[\\"primary-author\\"]);
     setCurrentPrimaryAuthorValue(undefined);
     setCurrentPrimaryAuthorDisplayValue(undefined);
+    setAuthorId(initialValues.authorId);
+    setCurrentAuthorIdValue(undefined);
     setErrors({});
   };
   const [
@@ -3501,6 +3561,13 @@ export default function BookCreateForm(props) {
   const [currentPrimaryAuthorValue, setCurrentPrimaryAuthorValue] =
     React.useState(undefined);
   const primaryAuthorRef = React.createRef();
+  const [currentAuthorIdValue, setCurrentAuthorIdValue] =
+    React.useState(undefined);
+  const authorIdRef = React.createRef();
+  const authorRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Author,
+  }).items;
   const authorRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Author,
@@ -3511,8 +3578,16 @@ export default function BookCreateForm(props) {
   const validations = {
     name: [],
     \\"primary-author\\": [],
+    authorId: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -3532,19 +3607,28 @@ export default function BookCreateForm(props) {
         let modelFields = {
           name,
           \\"primary-author\\": primaryAuthor,
+          authorId,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
                 )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
             );
             return promises;
           }, [])
@@ -3582,6 +3666,7 @@ export default function BookCreateForm(props) {
             const modelFields = {
               name: value,
               \\"primary-author\\": primaryAuthor,
+              authorId,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -3604,6 +3689,7 @@ export default function BookCreateForm(props) {
             const modelFields = {
               name,
               \\"primary-author\\": value,
+              authorId,
             };
             const result = onChange(modelFields);
             value = result?.[\\"primary-author\\"] ?? value;
@@ -3626,9 +3712,9 @@ export default function BookCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPrimaryAuthorDisplayValue}
-          suggestions={Array.from(authorRecords).map(([key, record]) => ({
-            id: key,
-            label: getDisplayValue[\\"primary-author\\"]?.(record) ?? key,
+          suggestions={authorRecords.map((r) => ({
+            id: r.id,
+            label: getDisplayValue[\\"primary-author\\"]?.(r) ?? r.id,
           }))}
           onSuggestionSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
@@ -3649,6 +3735,56 @@ export default function BookCreateForm(props) {
           hasError={errors[\\"primary-author\\"]?.hasError}
           ref={primaryAuthorRef}
           {...getOverrideProps(overrides, \\"primary-author\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              \\"primary-author\\": primaryAuthor,
+              authorId: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.authorId ?? value;
+          }
+          setAuthorId(value);
+          setCurrentAuthorIdValue(undefined);
+        }}
+        currentFieldValue={currentAuthorIdValue}
+        label={\\"Author id\\"}
+        items={[authorId]}
+        hasError={errors.authorId?.hasError}
+        setFieldValue={setCurrentAuthorIdValue}
+        inputFieldRef={authorIdRef}
+        defaultFieldValue={undefined}
+      >
+        <Autocomplete
+          label=\\"Author id\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentAuthorIdValue}
+          suggestions={authorRecords.map((r) => ({
+            id: r.id,
+            label: r.id,
+          }))}
+          onSuggestionSelect={({ id }) => {
+            setCurrentAuthorIdValue(id);
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.authorId?.hasError) {
+              runValidationTasks(\\"authorId\\", value);
+            }
+            setCurrentAuthorIdValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"authorId\\", authorId)}
+          errorMessage={errors.authorId?.errorMessage}
+          hasError={errors.authorId?.hasError}
+          ref={authorIdRef}
+          {...getOverrideProps(overrides, \\"authorId\\")}
         ></Autocomplete>
       </ArrayField>
       <Flex
@@ -3689,16 +3825,19 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type BookCreateFormInputValues = {
     name?: string;
     \\"primary-author\\"?: string;
+    authorId?: string;
 };
 export declare type BookCreateFormValidationValues = {
     name?: ValidationFunction<string>;
     \\"primary-author\\"?: ValidationFunction<string>;
+    authorId?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BookCreateFormOverridesProps = {
     BookCreateFormGrid?: FormProps<GridProps>;
     name?: FormProps<TextFieldProps>;
     \\"primary-author\\"?: FormProps<AutocompleteProps>;
+    authorId?: FormProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type BookCreateFormProps = React.PropsWithChildren<{
     overrides?: BookCreateFormOverridesProps | undefined | null;
@@ -3921,7 +4060,14 @@ export default function BookCreateForm(props) {
     name: [],
     primaryAuthor: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -3947,13 +4093,21 @@ export default function BookCreateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
                 )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
             );
             return promises;
           }, [])
@@ -4053,7 +4207,7 @@ export default function BookCreateForm(props) {
         label={\\"Primary author\\"}
         items={[primaryAuthor]}
         hasError={errors.primaryAuthor?.hasError}
-        getBadgeText={getDisplayValue[primaryAuthor]}
+        getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={currentPrimaryAuthorDisplayValue}
         inputFieldRef={primaryAuthorRef}
         defaultFieldValue={undefined}
@@ -4063,9 +4217,9 @@ export default function BookCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPrimaryAuthorDisplayValue}
-          suggestions={Array.from(authorRecords).map(([key, record]) => ({
-            id: key,
-            label: getDisplayValue[\\"primaryAuthor\\"]?.(record) ?? key,
+          suggestions={authorRecords.map((r) => ({
+            id: r.id,
+            label: getDisplayValue.primaryAuthor?.(r) ?? r.id,
           }))}
           onSuggestionSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
@@ -4335,15 +4489,15 @@ export default function BookCreateForm(props) {
   const [currentPrimaryAuthorValue, setCurrentPrimaryAuthorValue] =
     React.useState(undefined);
   const primaryAuthorRef = React.createRef();
-  const authorRecords = useDataStoreBinding({
-    type: \\"collection\\",
-    model: Author,
-  }).items;
   const [currentPrimaryTitleDisplayValue, setCurrentPrimaryTitleDisplayValue] =
     React.useState(undefined);
   const [currentPrimaryTitleValue, setCurrentPrimaryTitleValue] =
     React.useState(undefined);
   const primaryTitleRef = React.createRef();
+  const authorRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Author,
+  }).items;
   const titleRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Title,
@@ -4357,7 +4511,14 @@ export default function BookCreateForm(props) {
     primaryAuthor: [],
     primaryTitle: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -4384,13 +4545,21 @@ export default function BookCreateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
                 )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
             );
             return promises;
           }, [])
@@ -4492,7 +4661,7 @@ export default function BookCreateForm(props) {
         label={\\"Primary author\\"}
         items={[primaryAuthor]}
         hasError={errors.primaryAuthor?.hasError}
-        getBadgeText={getDisplayValue[primaryAuthor]}
+        getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={currentPrimaryAuthorDisplayValue}
         inputFieldRef={primaryAuthorRef}
         defaultFieldValue={undefined}
@@ -4502,9 +4671,9 @@ export default function BookCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPrimaryAuthorDisplayValue}
-          suggestions={Array.from(authorRecords).map(([key, record]) => ({
-            id: key,
-            label: getDisplayValue[\\"primaryAuthor\\"]?.(record) ?? key,
+          suggestions={authorRecords.map((r) => ({
+            id: r.id,
+            label: getDisplayValue.primaryAuthor?.(r) ?? r.id,
           }))}
           onSuggestionSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
@@ -4548,7 +4717,7 @@ export default function BookCreateForm(props) {
         label={\\"Primary title\\"}
         items={[primaryTitle]}
         hasError={errors.primaryTitle?.hasError}
-        getBadgeText={getDisplayValue[primaryTitle]}
+        getBadgeText={getDisplayValue.primaryTitle}
         setFieldValue={currentPrimaryTitleDisplayValue}
         inputFieldRef={primaryTitleRef}
         defaultFieldValue={undefined}
@@ -4558,9 +4727,9 @@ export default function BookCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPrimaryTitleDisplayValue}
-          suggestions={Array.from(titleRecords).map(([key, record]) => ({
-            id: key,
-            label: getDisplayValue[\\"primaryTitle\\"]?.(record) ?? key,
+          suggestions={titleRecords.map((r) => ({
+            id: r.id,
+            label: getDisplayValue.primaryTitle?.(r) ?? r.id,
           }))}
           onSuggestionSelect={({ id, label }) => {
             setCurrentPrimaryTitleValue(titleRecords.find((r) => r.id === id));
@@ -4703,7 +4872,14 @@ export default function MyPostForm(props) {
     post_url: [{ type: \\"URL\\" }],
     metadata: [{ type: \\"JSON\\" }],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -5257,7 +5433,14 @@ export default function BlogCreateForm(props) {
     published: [],
     editedAt: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -5804,7 +5987,14 @@ export default function InputGalleryCreateForm(props) {
     ippy: [{ type: \\"IpAddress\\" }],
     timeisnow: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -6542,7 +6732,14 @@ export default function InputGalleryUpdateForm(props) {
     ippy: [{ type: \\"IpAddress\\" }],
     timeisnow: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -7147,7 +7344,14 @@ export default function PostCreateFormRow(props) {
     status: [],
     metadata: [{ type: \\"JSON\\" }],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {

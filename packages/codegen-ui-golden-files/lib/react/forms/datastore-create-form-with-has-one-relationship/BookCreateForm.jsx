@@ -338,9 +338,9 @@ export default function BookCreateForm(props) {
             setCurrentPrimaryAuthorDisplayValue(value);
             setCurrentPrimaryAuthorValue(undefined); // empty out prev selected option
           }}
-          suggestions={Array.from(authorRecords).map(([key, record]) => ({
-            id: key,
-            label: getDisplayValue['primaryAuthor']?.(record) ?? key,
+          suggestions={authorRecords.map((r) => ({
+            id: r.id,
+            label: getDisplayValue['primaryAuthor']?.(record) ?? r.id,
           }))}
           onSuggestionSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(authorRecords.find((r) => r.id === id));

@@ -244,6 +244,10 @@ describe('mapModelFieldsConfigs', () => {
           type: 'Autocomplete',
           value: 'ownerId',
           isArray: false,
+          valueMappings: {
+            values: [{ value: { bindingProperties: { property: 'Owner', field: 'id' } } }],
+            bindingProperties: { Owner: { type: 'Data', bindingProperties: { model: 'Owner' } } },
+          },
         },
         label: 'Owner id',
         relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },

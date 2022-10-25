@@ -29,6 +29,7 @@ import { buildDataStoreExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
 import { resetFunctionCheck } from '../forms/form-renderer-helper/value-props';
+import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -185,6 +186,10 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       dataType: { dataSourceType },
     } = this.form;
     const { formMetadata } = this.componentMetadata;
+
+    const hasModelField =
+      formMetadata?.fieldConfigs && Object.values(formMetadata.fieldConfigs).some((config) => isModelDataType(config));
+
     return factory.createJsxAttribute(
       factory.createIdentifier('onSubmit'),
       factory.createJsxExpression(
@@ -218,7 +223,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 ),
               ),
               buildModelFieldObject(dataSourceType !== 'DataStore', formMetadata?.fieldConfigs),
-              ...onSubmitValidationRun,
+              ...onSubmitValidationRun(hasModelField),
               ...this.getOnSubmitDSCall(),
             ],
             false,

@@ -13,9 +13,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, isValidVariableName } from '@aws-amplify/codegen-ui';
+import {
+  FieldConfigMetadata,
+  InvalidInputError,
+  isValidVariableName,
+  StudioFormValueMappings,
+} from '@aws-amplify/codegen-ui';
 import { StudioFormInputFieldProperty } from '@aws-amplify/codegen-ui/lib/types/form/input-config';
-import { Expression, factory, JsxAttribute, PropertyAssignment, SyntaxKind, NodeFlags } from 'typescript';
+import {
+  Expression,
+  factory,
+  JsxAttribute,
+  PropertyAssignment,
+  SyntaxKind,
+  NodeFlags,
+  CallExpression,
+} from 'typescript';
 import {
   buildBindingExpression,
   buildConcatExpression,
@@ -23,86 +36,148 @@ import {
   isConcatenatedProperty,
 } from '../../react-component-render-helper';
 import { getRecordsName } from './form-state';
+import { getElementAccessExpression } from './invalid-variable-helpers';
 import { isModelDataType } from './render-checkers';
 
 export const getDisplayValueObjectName = 'getDisplayValue';
 
 /**
-    example:
-    suggestions={Array.from(authorRecords).map(([key, record]) => ({
-        id: key,
-        label: getDisplayValue['primaryAuthor']?.(record) ?? key,
-    }))}
+  authorRecords.map((r) => ({
+    id: r.id,
+    label: r.id,
+  }))
  */
-export function getAutocompleteSuggestionsPropFromModel({
+
+/**
+  examples:
+  for model -
+  authorRecords.map((r) => ({
+    id: r.id,
+    label: getDisplayValue['primaryAuthor']?.(r) ?? r.id,
+  }))
+
+  for scalar - 
+  authorRecords.map((r) => ({
+    id: r.id,
+    label: r.id,
+  }))
+ */
+function getModelTypeSuggestions({
   modelName,
   fieldName,
+  key,
+  isModelType,
 }: {
   modelName: string;
   fieldName: string;
-}): JsxAttribute {
-  return factory.createJsxAttribute(
-    factory.createIdentifier('suggestions'),
-    factory.createJsxExpression(
-      undefined,
-      factory.createCallExpression(
-        factory.createPropertyAccessExpression(
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(factory.createIdentifier('Array'), factory.createIdentifier('from')),
-            undefined,
-            [factory.createIdentifier(getRecordsName(modelName))],
-          ),
-          factory.createIdentifier('map'),
+  key: string;
+  isModelType: boolean;
+}): CallExpression {
+  const recordString = 'r';
+
+  const labelExpression = isModelType
+    ? factory.createBinaryExpression(
+        factory.createCallChain(
+          getElementAccessExpression('getDisplayValue', fieldName),
+          factory.createToken(SyntaxKind.QuestionDotToken),
+          undefined,
+          [factory.createIdentifier('r')],
         ),
+        factory.createToken(SyntaxKind.QuestionQuestionToken),
+        getElementAccessExpression(recordString, key),
+      )
+    : getElementAccessExpression(recordString, key);
+
+  return factory.createCallExpression(
+    factory.createPropertyAccessExpression(
+      factory.createIdentifier(getRecordsName(modelName)),
+      factory.createIdentifier('map'),
+    ),
+    undefined,
+    [
+      factory.createArrowFunction(
+        undefined,
         undefined,
         [
-          factory.createArrowFunction(
+          factory.createParameterDeclaration(
             undefined,
             undefined,
-            [
-              factory.createParameterDeclaration(
-                undefined,
-                undefined,
-                undefined,
-                factory.createArrayBindingPattern([
-                  factory.createBindingElement(undefined, undefined, factory.createIdentifier('key'), undefined),
-                  factory.createBindingElement(undefined, undefined, factory.createIdentifier('record'), undefined),
-                ]),
-                undefined,
-                undefined,
-                undefined,
-              ),
-            ],
             undefined,
-            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-            factory.createParenthesizedExpression(
-              factory.createObjectLiteralExpression(
-                [
-                  factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('key')),
-                  factory.createPropertyAssignment(
-                    factory.createIdentifier('label'),
-                    factory.createBinaryExpression(
-                      factory.createCallChain(
-                        factory.createElementAccessExpression(
-                          factory.createIdentifier('getDisplayValue'),
-                          factory.createStringLiteral(fieldName),
-                        ),
-                        factory.createToken(SyntaxKind.QuestionDotToken),
-                        undefined,
-                        [factory.createIdentifier('record')],
-                      ),
-                      factory.createToken(SyntaxKind.QuestionQuestionToken),
-                      factory.createIdentifier('key'),
-                    ),
-                  ),
-                ],
-                true,
-              ),
-            ),
+            factory.createIdentifier(recordString),
+            undefined,
+            undefined,
+            undefined,
           ),
         ],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createParenthesizedExpression(
+          factory.createObjectLiteralExpression(
+            [
+              factory.createPropertyAssignment(
+                factory.createIdentifier('id'),
+                getElementAccessExpression(recordString, key),
+              ),
+              factory.createPropertyAssignment(factory.createIdentifier('label'), labelExpression),
+            ],
+            true,
+          ),
+        ),
       ),
-    ),
+    ],
+  );
+}
+
+export function extractModelAndKey(valueMappings?: StudioFormValueMappings): { model?: string; key?: string } {
+  let model: undefined | string;
+  let key: undefined | string;
+  const bindingProperty = valueMappings?.bindingProperties && Object.values(valueMappings.bindingProperties)[0];
+  if (bindingProperty && bindingProperty.type === 'Data') {
+    model = bindingProperty.bindingProperties.model;
+    const { value } = valueMappings.values[0];
+    if (isBoundProperty(value) && value.bindingProperties.field) {
+      key = value.bindingProperties.field;
+    }
+  }
+
+  return { model, key };
+}
+
+/**
+    example:
+    suggestions={authorRecords.map(r) => ({
+        id: r.id,
+        label: getDisplayValue['primaryAuthor']?.(r) ?? r.id,
+    }))}
+ */
+export function getAutocompleteSuggestionsProp({
+  fieldName,
+  fieldConfig,
+}: {
+  fieldName: string;
+  fieldConfig: FieldConfigMetadata;
+}): JsxAttribute {
+  let suggestions: Expression | undefined;
+
+  const { valueMappings } = fieldConfig;
+  const { model, key } = extractModelAndKey(valueMappings);
+
+  if (model && key) {
+    suggestions = getModelTypeSuggestions({
+      modelName: model,
+      fieldName,
+      key,
+      isModelType: isModelDataType(fieldConfig),
+    });
+  }
+
+  if (!suggestions) {
+    throw new InvalidInputError(`Invalid value mappings on ${fieldName}`);
+  }
+
+  return factory.createJsxAttribute(
+    factory.createIdentifier('suggestions'),
+    factory.createJsxExpression(undefined, suggestions),
   );
 }
 
@@ -124,7 +199,7 @@ export function getDisplayValueObject(displayValueFunctions: PropertyAssignment[
     factory.createVariableDeclarationList(
       [
         factory.createVariableDeclaration(
-          factory.createIdentifier('getDisplayValue'),
+          factory.createIdentifier(getDisplayValueObjectName),
           undefined,
           undefined,
           factory.createObjectLiteralExpression(displayValueFunctions, true),

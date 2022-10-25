@@ -31,6 +31,7 @@ import {
   PropertyName,
 } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
+import { getElementAccessExpression } from './invalid-variable-helpers';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 
 export const getCurrentValueName = (fieldName: string) => `current${capitalizeFirstLetter(fieldName)}Value`;
@@ -246,15 +247,7 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
     const stateName = name.split('.')[0];
     const renderedName = sanitizedFieldName || stateName;
     if (!stateNames.has(stateName)) {
-      const accessExpression = isValidVariableName(stateName)
-        ? factory.createPropertyAccessExpression(
-            factory.createIdentifier(recordOrInitialValues),
-            factory.createIdentifier(stateName),
-          )
-        : factory.createElementAccessExpression(
-            factory.createIdentifier(recordOrInitialValues),
-            factory.createStringLiteral(stateName),
-          );
+      const accessExpression = getElementAccessExpression(recordOrInitialValues, stateName);
 
       acc.push(
         setStateExpression(

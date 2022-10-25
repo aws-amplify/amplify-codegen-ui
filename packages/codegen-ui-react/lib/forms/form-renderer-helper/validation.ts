@@ -136,14 +136,16 @@ export function getOnChangeValidationBlock(fieldName: string) {
 }
 
 /**
-    const runValidationTasks = async (fieldName, value) => {
-      let validationResponse = validateField(value, validations[fieldName]);
-      if (onValidate?.[fieldName]) {
-        validationResponse = await onValidate[fieldName](value, validationResponse);
-      }
-      setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
-      return validationResponse;
-    };
+  const runValidationTasks = async (fieldName, currentValue, getDisplayValue) => {
+    const value = getDisplayValue ? getDisplayValue(currentValue) : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
    */
 
 export const runValidationTasksFunction = factory.createVariableStatement(
@@ -171,7 +173,16 @@ export const runValidationTasksFunction = factory.createVariableStatement(
               undefined,
               undefined,
               undefined,
-              factory.createIdentifier('value'),
+              factory.createIdentifier('currentValue'),
+              undefined,
+              undefined,
+              undefined,
+            ),
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('getDisplayValue'),
               undefined,
               undefined,
               undefined,
@@ -181,6 +192,28 @@ export const runValidationTasksFunction = factory.createVariableStatement(
           factory.createToken(SyntaxKind.EqualsGreaterThanToken),
           factory.createBlock(
             [
+              factory.createVariableStatement(
+                undefined,
+                factory.createVariableDeclarationList(
+                  [
+                    factory.createVariableDeclaration(
+                      factory.createIdentifier('value'),
+                      undefined,
+                      undefined,
+                      factory.createConditionalExpression(
+                        factory.createIdentifier('getDisplayValue'),
+                        factory.createToken(SyntaxKind.QuestionToken),
+                        factory.createCallExpression(factory.createIdentifier('getDisplayValue'), undefined, [
+                          factory.createIdentifier('currentValue'),
+                        ]),
+                        factory.createToken(SyntaxKind.ColonToken),
+                        factory.createIdentifier('currentValue'),
+                      ),
+                    ),
+                  ],
+                  NodeFlags.Const,
+                ),
+              ),
               factory.createVariableStatement(
                 undefined,
                 factory.createVariableDeclarationList(

@@ -70,15 +70,14 @@ function getValueMappings({
   // if relationship
   if (field.relationship) {
     // if model & HAS_ONE
-    if (typeof field.dataType === 'object' && 'model' in field.dataType && field.relationship.type === 'HAS_ONE') {
-      const modelName = field.dataType.model;
+    if (field.relationship.type === 'HAS_ONE') {
+      const modelName = field.relationship.relatedModelName;
       return {
+        // TODO: map field dynamically as part of cpk task
         values: [{ value: { bindingProperties: { property: modelName, field: 'id' } } }],
         bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },
       };
     }
-
-    // TODO: handle relationship fields that are not model, e.g. ID
   }
 
   return undefined;
