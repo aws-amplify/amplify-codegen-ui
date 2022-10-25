@@ -81,7 +81,7 @@ function getModelTypeSuggestions({
           getElementAccessExpression('getDisplayValue', fieldName),
           factory.createToken(SyntaxKind.QuestionDotToken),
           undefined,
-          [factory.createIdentifier('r')],
+          [factory.createIdentifier(recordString)],
         ),
         factory.createToken(SyntaxKind.QuestionQuestionToken),
         getElementAccessExpression(recordString, key),
