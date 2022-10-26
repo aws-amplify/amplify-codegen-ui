@@ -345,6 +345,7 @@ exports[`amplify render tests actions with conditional in parameters 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
+import { User } from \\"../models\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
@@ -352,7 +353,6 @@ import {
   useDataStoreBinding,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { User } from \\"../models\\";
 import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
 
 export type ConditionalInMutationProps = React.PropsWithChildren<
@@ -578,6 +578,39 @@ export default function DataBindingNamedClass(
 "
 `;
 
+exports[`amplify render tests bindings data supports model with conflicting component type 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { Flex as Flex0 } from \\"../models\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
+
+export type DataBindingNamedClassProps = React.PropsWithChildren<
+  Partial<TextProps> & {
+    class?: Flex0;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function DataBindingNamedClass(
+  props: DataBindingNamedClassProps
+): React.ReactElement {
+  const { class: classProp, overrides, ...rest } = props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <Text
+      children={classProp?.name}
+      {...rest}
+      {...getOverrideProps(overrides, \\"DataBindingNamedClass\\")}
+    ></Text>
+  );
+}
+"
+`;
+
 exports[`amplify render tests collection should not render nested query if the data schema is not provided 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -639,13 +672,13 @@ export default function AuthorProfileCollection(
 exports[`amplify render tests collection should render collection with data binding 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
+import { UserPreferences, User } from \\"../models\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
   Collection,
@@ -742,6 +775,7 @@ exports[`amplify render tests collection should render collection with data bind
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
+import { UserPreferences, User } from \\"../models\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
@@ -749,7 +783,6 @@ import {
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
-import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
   Collection,
@@ -853,13 +886,13 @@ export default function CollectionOfCustomButtons(
 exports[`amplify render tests collection should render collection with data binding if binding name is items 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
+import { UserPreferences, User } from \\"../models\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { User, UserPreferences } from \\"../models\\";
 import {
   Button,
   Collection,
@@ -1051,6 +1084,123 @@ export default function ListingCardCollection(
           key={item.id}
           {...(overrideItems && overrideItems({ item, index }))}
         ></ListingCard>
+      )}
+    </Collection>
+  );
+}
+"
+`;
+
+exports[`amplify render tests collection should render if model name collides with component types 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { Flex as Flex0, FlexModel, Button as Button0 } from \\"../models\\";
+import {
+  EscapeHatchProps,
+  createDataStorePredicate,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
+import {
+  Button,
+  Collection,
+  CollectionProps,
+  Flex,
+} from \\"@aws-amplify/ui-react\\";
+import { MyFlexProps } from \\"./MyFlex\\";
+
+export type CollectionWithModelNameCollisionsProps = React.PropsWithChildren<
+  Partial<CollectionProps<any>> & {
+    backgroundColor?: String;
+    buttonColor?: Flex0;
+    buttonShape?: FlexModel;
+    items?: any[];
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => MyFlexProps;
+  } & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function CollectionWithModelNameCollisions(
+  props: CollectionWithModelNameCollisionsProps
+): React.ReactElement {
+  const {
+    backgroundColor,
+    buttonColor: buttonColorProp,
+    buttonShape: buttonShapeProp,
+    items,
+    overrideItems,
+    overrides,
+    ...rest
+  } = props;
+  const buttonModelFilterObj = {
+    and: [
+      { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
+      { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
+    ],
+  };
+  const buttonModelFilter =
+    createDataStorePredicate<Button0>(buttonModelFilterObj);
+  const buttonModelPagination = {
+    sort: (s: SortPredicate<Button0>) => s.lastName(SortDirection.ASCENDING),
+  };
+  const buttonModelDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Button0,
+    criteria: buttonModelFilter,
+    pagination: buttonModelPagination,
+  }).items;
+  const buttonModel = items !== undefined ? items : buttonModelDataStore;
+  const buttonColorFilterObj = {
+    field: \\"userID\\",
+    operand: \\"user@email.com\\",
+    operator: \\"eq\\",
+  };
+  const buttonColorFilter =
+    createDataStorePredicate<Flex0>(buttonColorFilterObj);
+  const buttonColorDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Flex0,
+    criteria: buttonColorFilter,
+  }).items[0];
+  const buttonColor =
+    buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
+  const buttonShapeFilterObj = {
+    field: \\"userID\\",
+    operand: \\"user@email.com\\",
+    operator: \\"eq\\",
+  };
+  const buttonShapeFilter =
+    createDataStorePredicate<FlexModel>(buttonShapeFilterObj);
+  const buttonShapeDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: FlexModel,
+    criteria: buttonShapeFilter,
+  }).items[0];
+  const buttonShape =
+    buttonShapeProp !== undefined ? buttonShapeProp : buttonShapeDataStore;
+  return (
+    /* @ts-ignore: TS2322 */
+    <Collection
+      type=\\"list\\"
+      items={buttonModel || []}
+      {...rest}
+      {...getOverrideProps(overrides, \\"CollectionWithModelNameCollisions\\")}
+    >
+      {(item, index) => (
+        <Flex
+          key={item.id}
+          {...(overrideItems && overrideItems({ item, index }))}
+        >
+          <Button
+            backgroundColor={buttonColor?.favoriteColor}
+            children={item.lastName}
+            {...(overrideItems && overrideItems({ item, index }))}
+          ></Button>
+        </Flex>
       )}
     </Collection>
   );
@@ -5981,6 +6131,7 @@ exports[`amplify render tests mutations supports all initial value binding types
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
+import { User } from \\"../models\\";
 import {
   EscapeHatchProps,
   createDataStorePredicate,
@@ -5989,7 +6140,6 @@ import {
   useDataStoreBinding,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { User } from \\"../models\\";
 import { useEffect } from \\"react\\";
 import {
   Button,
@@ -6283,12 +6433,12 @@ exports[`amplify render tests mutations supports invalid statement names for mut
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
+import { Listing } from \\"../models\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Listing } from \\"../models\\";
 import { Flex, FlexProps, Image, Text } from \\"@aws-amplify/ui-react\\";
 
 export type CardAProps = React.PropsWithChildren<

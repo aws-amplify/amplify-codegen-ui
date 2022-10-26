@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ImportCollection } from '../../imports';
+import { ImportCollection, ImportSource } from '../../imports';
 import { assertASTMatchesSnapshot } from '../__utils__';
 
 function assertImportCollectionMatchesSnapshot(importCollection: ImportCollection) {
@@ -68,6 +68,22 @@ describe('ImportCollection', () => {
       importCollection.addImport('@aws-amplify/ui-react', 'Text');
       importCollection.addImport('@aws-amplify/ui-react', 'getOverrideProps');
       assertImportCollectionMatchesSnapshot(importCollection);
+    });
+    test('model imports colliding with exisiting imports', () => {
+      const importCollection = new ImportCollection({
+        componentNameToTypeMap: { TextInput: 'TextField' },
+        hasAuthBindings: false,
+        requiredDataModels: [],
+        stateReferences: [],
+      });
+      importCollection.addImport(ImportSource.LOCAL_MODELS, 'TextField0');
+      importCollection.addImport(ImportSource.LOCAL_MODELS, 'TextField');
+      importCollection.addImport(ImportSource.LOCAL_MODELS, 'TestModel');
+      importCollection.addImport(ImportSource.LOCAL_MODELS, 'ButtonProps');
+      expect(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'TextField')).toEqual('TextField1');
+      expect(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'TextField0')).toEqual('TextField0');
+      expect(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'TestModel')).toEqual('TestModel');
+      expect(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'ButtonProps')).toEqual('ButtonProps0');
     });
   });
 
