@@ -293,7 +293,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     return [
       validationResponseType,
       validationFunctionType,
-      generateFieldTypes(formName, 'input', fieldConfigs),
+      // pass in importCollection once to collect models to import
+      generateFieldTypes(formName, 'input', fieldConfigs, this.importCollection),
       generateFieldTypes(formName, 'validation', fieldConfigs),
       formOverrideProp,
       overrideTypeAliasDeclaration,

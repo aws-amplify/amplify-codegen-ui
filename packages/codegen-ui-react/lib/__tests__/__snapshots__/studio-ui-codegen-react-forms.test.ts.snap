@@ -3815,6 +3815,7 @@ export default function BookCreateForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should generate a create form for model with relationships 2`] = `
 "import * as React from \\"react\\";
+import { Author } from \\"../models\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
@@ -3824,12 +3825,12 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type BookCreateFormInputValues = {
     name?: string;
-    \\"primary-author\\"?: string;
+    \\"primary-author\\"?: Author;
     authorId?: string;
 };
 export declare type BookCreateFormValidationValues = {
     name?: ValidationFunction<string>;
-    \\"primary-author\\"?: ValidationFunction<string>;
+    \\"primary-author\\"?: ValidationFunction<Author>;
     authorId?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -4250,6 +4251,7 @@ export default function BookCreateForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should generate a create form with hasOne relationship 2`] = `
 "import * as React from \\"react\\";
+import { Author } from \\"../models\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
@@ -4259,11 +4261,11 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type BookCreateFormInputValues = {
     name?: string;
-    primaryAuthor?: string;
+    primaryAuthor?: Author;
 };
 export declare type BookCreateFormValidationValues = {
     name?: ValidationFunction<string>;
-    primaryAuthor?: ValidationFunction<string>;
+    primaryAuthor?: ValidationFunction<Author>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BookCreateFormOverridesProps = {
@@ -4758,6 +4760,7 @@ export default function BookCreateForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should generate a create form with multiple hasOne relationships 2`] = `
 "import * as React from \\"react\\";
+import { Author, Title } from \\"../models\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
@@ -4767,13 +4770,13 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type BookCreateFormInputValues = {
     name?: string;
-    primaryAuthor?: string;
-    primaryTitle?: string;
+    primaryAuthor?: Author;
+    primaryTitle?: Title;
 };
 export declare type BookCreateFormValidationValues = {
     name?: ValidationFunction<string>;
-    primaryAuthor?: ValidationFunction<string>;
-    primaryTitle?: ValidationFunction<string>;
+    primaryAuthor?: ValidationFunction<Author>;
+    primaryTitle?: ValidationFunction<Title>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BookCreateFormOverridesProps = {

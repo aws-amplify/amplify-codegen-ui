@@ -31,6 +31,8 @@ import {
   TypeNode,
   Identifier,
   StringLiteral,
+  TypeReferenceNode,
+  KeywordTypeNode,
 } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
@@ -45,24 +47,29 @@ type GetTypeNodeParam = {
   dataType?: DataFieldDataType;
   isArray: boolean;
   isValidation: boolean;
+  importCollection?: ImportCollection;
 };
 /**
  * based on the provided dataType (appsync scalar)
- * converst to the correct typescript type
+ * converts to the correct typescript type
  * default assumption is string type
  */
-const getTypeNode = ({ componentType, dataType, isArray, isValidation }: GetTypeNodeParam) => {
-  let typescriptType: KeywordTypeSyntaxKind = SyntaxKind.StringKeyword;
+const getTypeNode = ({ componentType, dataType, isArray, isValidation, importCollection }: GetTypeNodeParam) => {
+  let typeNode: KeywordTypeNode | TypeReferenceNode = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
+
   if (componentType in FIELD_TYPE_TO_TYPESCRIPT_MAP) {
-    typescriptType = FIELD_TYPE_TO_TYPESCRIPT_MAP[componentType];
+    typeNode = factory.createKeywordTypeNode(FIELD_TYPE_TO_TYPESCRIPT_MAP[componentType]);
   }
 
   if (dataType && typeof dataType === 'string' && dataType in DATA_TYPE_TO_TYPESCRIPT_MAP) {
-    typescriptType = DATA_TYPE_TO_TYPESCRIPT_MAP[dataType];
+    typeNode = factory.createKeywordTypeNode(DATA_TYPE_TO_TYPESCRIPT_MAP[dataType]);
   }
 
-  // e.g. string
-  const typeNode = factory.createKeywordTypeNode(typescriptType);
+  if (dataType && typeof dataType === 'object' && 'model' in dataType) {
+    const modelName = dataType.model;
+    importCollection?.addImport(ImportSource.LOCAL_MODELS, modelName);
+    typeNode = factory.createTypeReferenceNode(factory.createIdentifier(modelName));
+  }
 
   if (isValidation) {
     return factory.createTypeReferenceNode(factory.createIdentifier('ValidationFunction'), [typeNode]);
@@ -146,13 +153,14 @@ export const generateFieldTypes = (
   formName: string,
   type: 'input' | 'validation',
   fieldConfigs: Record<string, FieldConfigMetadata>,
+  importCollection?: ImportCollection,
 ) => {
   const nestedPaths: [fieldName: string, getTypeNodeParam: GetTypeNodeParam][] = [];
   const typeNodes: TypeElement[] = [];
   const isValidation = type === 'validation';
   const typeName = isValidation ? getValidationTypeName(formName) : getInputValuesTypeName(formName);
   Object.entries(fieldConfigs).forEach(([fieldName, { dataType, componentType, isArray }]) => {
-    const getTypeNodeParam = { dataType, componentType, isArray: !!isArray, isValidation };
+    const getTypeNodeParam = { dataType, componentType, isArray: !!isArray, isValidation, importCollection };
     const hasNestedFieldPath = fieldName.split('.').length > 1;
     if (hasNestedFieldPath) {
       nestedPaths.push([fieldName, getTypeNodeParam]);
