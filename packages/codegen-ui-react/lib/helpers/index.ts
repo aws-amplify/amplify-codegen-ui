@@ -13,4 +13,5 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+
 export const lowerCaseFirst = (input: string) => input.charAt(0).toLowerCase() + input.slice(1);

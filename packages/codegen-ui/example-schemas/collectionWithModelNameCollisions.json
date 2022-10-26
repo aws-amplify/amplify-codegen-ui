@@ -1,0 +1,79 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Collection",
+  "name": "CollectionWithModelNameCollisions",
+  "properties": {
+    "type": {
+      "value": "list"
+    }
+  },
+  "bindingProperties": {
+    "backgroundColor": {
+      "type": "String"
+    },
+    "buttonColor": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "Flex",
+        "predicate": {
+          "field": "userID",
+          "operand": "user@email.com",
+          "operator": "eq"
+        }
+      }
+    }
+  },
+  "collectionProperties": {
+    "buttonModel": {
+      "model": "Button",
+      "sort": [
+        {
+          "field": "lastName",
+          "direction": "ASC"
+        }
+      ],
+      "predicate": {
+        "and": [
+          {
+            "field": "age",
+            "operand": "10",
+            "operator": "gt"
+          },
+          {
+            "field": "lastName",
+            "operand": "L",
+            "operator": "beginsWith"
+          }
+        ]
+      }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Flex",
+      "name": "MyFlex",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "Button",
+          "name": "MyButton",
+          "properties": {
+            "backgroundColor": {
+              "bindingProperties": {
+                "property": "buttonColor",
+                "field": "favoriteColor"
+              }
+            },
+            "children": {
+              "collectionBindingProperties": {
+                "property": "buttonModel",
+                "field": "lastName"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "schemaVersion": "1.0"
+}

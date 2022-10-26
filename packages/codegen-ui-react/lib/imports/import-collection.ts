@@ -15,10 +15,20 @@
  */
 import { ImportDeclaration, factory } from 'typescript';
 import path from 'path';
+import { ComponentMetadata } from '@aws-amplify/codegen-ui/lib/utils';
 import { ImportMapping, ImportValue, ImportSource } from './import-mapping';
+import { isPrimitive } from '../primitive';
 
 export class ImportCollection {
+  constructor(componentMetadata?: ComponentMetadata) {
+    this.componentTypes = Object.values(componentMetadata?.componentNameToTypeMap || {});
+  }
+
+  componentTypes: string[];
+
   #collection: Map<string, Set<string>> = new Map();
+
+  importAlias: Map<string, Map<string, string>> = new Map();
 
   addMappedImport(importValue: ImportValue) {
     const importPackage = ImportMapping[importValue];
@@ -35,10 +45,34 @@ export class ImportCollection {
     if (!existingPackage?.has(importName)) {
       existingPackage?.add(importName);
     }
+    // add model alias logic
+
+    if (packageName === ImportSource.LOCAL_MODELS) {
+      if (
+        this.componentTypes.includes(importName) ||
+        (importName.endsWith('Props') && isPrimitive(importName.replace(/Props/g, '')))
+      ) {
+        const existingPackageAlias = this.importAlias.get(packageName);
+        const modelAlias = `${importName}Modelty9wf`;
+        if (existingPackageAlias) {
+          existingPackageAlias.set(importName, modelAlias);
+        } else {
+          const aliasMap = new Map();
+          aliasMap.set(importName, modelAlias);
+          this.importAlias.set(packageName, aliasMap);
+        }
+        return modelAlias;
+      }
+    }
+    return importName;
   }
 
   removeImportSource(packageImport: ImportSource) {
     this.#collection.delete(packageImport);
+  }
+
+  getMappedAlias(packageName: string, importName: string) {
+    return this.importAlias.get(packageName)?.get(importName) || importName;
   }
 
   mergeCollections(otherCollection: ImportCollection) {
@@ -87,6 +121,28 @@ export class ImportCollection {
       .concat(
         Array.from(this.#collection).map(([moduleName, imports]) => {
           const namedImports = [...imports].filter((namedImport) => namedImport !== 'default').sort();
+          const aliasMap = this.importAlias.get(moduleName);
+          if (aliasMap) {
+            const importClause = factory.createImportClause(
+              false,
+              undefined,
+              factory.createNamedImports(
+                [...imports].map((item) => {
+                  const alias = aliasMap.get(item);
+                  return factory.createImportSpecifier(
+                    factory.createIdentifier(item),
+                    factory.createIdentifier(alias ?? item),
+                  );
+                }),
+              ),
+            );
+            return factory.createImportDeclaration(
+              undefined,
+              undefined,
+              importClause,
+              factory.createStringLiteral(moduleName),
+            );
+          }
           return factory.createImportDeclaration(
             undefined,
             undefined,

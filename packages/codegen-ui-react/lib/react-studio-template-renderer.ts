@@ -64,7 +64,7 @@ import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
-import { getComponentPropName } from './react-component-render-helper';
+import { addBindingPropertiesImports, getComponentPropName } from './react-component-render-helper';
 import {
   transpile,
   buildPrinter,
@@ -100,7 +100,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     renderComponentToFilesystem: (outputPath: string) => Promise<void>;
   }
 > {
-  protected importCollection = new ImportCollection();
+  protected importCollection: ImportCollection;
 
   protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
 
@@ -123,6 +123,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     this.mapSyntheticPropsForVariants();
     this.mapSyntheticProps();
     this.dataSchema = dataSchema;
+    this.importCollection = new ImportCollection(this.componentMetadata);
+    addBindingPropertiesImports(this.component, this.importCollection);
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
   }
 
@@ -440,11 +442,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           );
           propSignatures.push(propSignature);
         } else if (isDataPropertyBinding(binding)) {
+          const modelName = this.importCollection.getMappedAlias(
+            ImportSource.LOCAL_MODELS,
+            binding.bindingProperties.model,
+          );
           const propSignature = factory.createPropertySignature(
             undefined,
             propName,
             factory.createToken(SyntaxKind.QuestionToken),
-            factory.createTypeReferenceNode(binding.bindingProperties.model, undefined),
+            factory.createTypeReferenceNode(modelName, undefined),
           );
           propSignatures.push(propSignature);
         } else if (isEventPropertyBinding(binding)) {
@@ -861,20 +867,20 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private buildCollectionBindingStatements(component: StudioComponent): Statement[] {
     const statements: Statement[] = [];
-
     if (isStudioComponentWithCollectionProperties(component)) {
       Object.entries(component.collectionProperties).forEach((collectionProp) => {
         const [propName, { model, sort, predicate }] = collectionProp;
+        const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+
         if (predicate) {
           statements.push(this.buildPredicateDeclaration(propName, predicate));
-          statements.push(this.buildCreateDataStorePredicateCall(model, propName));
+          statements.push(this.buildCreateDataStorePredicateCall(modelName, propName));
         }
         if (sort) {
           this.importCollection.addMappedImport(ImportValue.SORT_DIRECTION);
           this.importCollection.addMappedImport(ImportValue.SORT_PREDICATE);
-          statements.push(this.buildPaginationStatement(propName, model, sort));
+          statements.push(this.buildPaginationStatement(propName, modelName, sort));
         }
-        this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
         /**
          * const userDataStore = useDataStoreBinding({
          *  type: "collection",
@@ -884,7 +890,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
          */
         statements.push(
           ...this.buildCollectionBindingCall(
-            model,
+            modelName,
             this.getDataStoreName(propName),
             predicate ? this.getFilterName(propName) : undefined,
             sort ? this.getPaginationName(propName) : undefined,
@@ -939,6 +945,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           const { bindingProperties } = binding;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
             this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
+            const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, bindingProperties.model);
+
             /* const buttonColorFilter = {
              *   field: "userID",
              *   operand: "user@email.com",
@@ -946,10 +954,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
              * }
              */
             statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
-            statements.push(this.buildCreateDataStorePredicateCall(bindingProperties.model, propName));
-            const { model } = bindingProperties;
-            this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
-
+            statements.push(this.buildCreateDataStorePredicateCall(modelName, propName));
             /**
              * const buttonColorDataStore = useDataStoreBinding({
              *   type: "collection"
@@ -967,7 +972,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
                       undefined,
                       factory.createElementAccessExpression(
                         factory.createPropertyAccessExpression(
-                          this.buildUseDataStoreBindingCall('collection', model, this.getFilterName(propName)),
+                          this.buildUseDataStoreBindingCall('collection', modelName, this.getFilterName(propName)),
                           factory.createIdentifier('items'),
                         ),
                         factory.createNumericLiteral('0'),
@@ -1090,12 +1095,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       Object.entries(this.dataSchema.models[model].fields).forEach(([key, field]) => {
         if (field.relationship?.type === 'HAS_MANY') {
           const { relatedModelName, relatedModelField } = field.relationship;
-          this.importCollection.addImport(ImportSource.LOCAL_MODELS, relatedModelName);
+          const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, relatedModelName);
           const itemsName = getActionIdentifier(relatedModelName, 'Items');
           statements.push(
             buildBaseCollectionVariableStatement(
               factory.createIdentifier(itemsName),
-              this.buildUseDataStoreBindingCall('collection', relatedModelName),
+              this.buildUseDataStoreBindingCall('collection', modelName),
             ),
           );
           propAssigments.push(buildPropAssignmentWithFilter(key, itemsName, relatedModelField));
