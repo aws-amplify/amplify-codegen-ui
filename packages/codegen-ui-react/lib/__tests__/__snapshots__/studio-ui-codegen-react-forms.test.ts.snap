@@ -417,7 +417,7 @@ export default function CustomDataForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
-  const [metadataField, setMetadataField] = React.useState(
+  const [metadatafield, setMetadatafield] = React.useState(
     initialValues[\\"metadata-field\\"]
   );
   const [city, setCity] = React.useState(initialValues.city);
@@ -428,7 +428,7 @@ export default function CustomDataForm(props) {
     const cleanValues = { ...initialValues, ...initialData };
     setName(cleanValues.name);
     setEmail(cleanValues.email);
-    setMetadataField(cleanValues[\\"metadata-field\\"]);
+    setMetadatafield(cleanValues[\\"metadata-field\\"]);
     setCity(cleanValues.city);
     setCategory(cleanValues.category);
     setPages(cleanValues.pages);
@@ -439,7 +439,7 @@ export default function CustomDataForm(props) {
     if (initialData) {
       setName(initialData.name);
       setEmail(initialData.email);
-      setMetadataField(initialData[\\"metadata-field\\"]);
+      setMetadatafield(initialData[\\"metadata-field\\"]);
       setCity(initialData.city);
       setCategory(initialData.category);
       setPages(initialData.pages);
@@ -473,7 +473,7 @@ export default function CustomDataForm(props) {
         const modelFields = {
           name,
           email,
-          \\"metadata-field\\": metadataField,
+          \\"metadata-field\\": metadatafield,
           city,
           category,
           pages,
@@ -513,7 +513,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name: value,
               email,
-              \\"metadata-field\\": metadataField,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages,
@@ -542,7 +542,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email: value,
-              \\"metadata-field\\": metadataField,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages,
@@ -563,14 +563,14 @@ export default function CustomDataForm(props) {
       <TextAreaField
         label=\\"Metadata\\"
         isRequired={true}
-        defaultValue={metadataField}
+        defaultValue={metadatafield}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,
               email,
-              \\"metadata-field\\": metadataField,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages,
@@ -581,9 +581,9 @@ export default function CustomDataForm(props) {
           if (errors[\\"metadata-field\\"]?.hasError) {
             runValidationTasks(\\"metadata-field\\", value);
           }
-          setMetadataField(value);
+          setMetadatafield(value);
         }}
-        onBlur={() => runValidationTasks(\\"metadata-field\\", metadataField)}
+        onBlur={() => runValidationTasks(\\"metadata-field\\", metadatafield)}
         errorMessage={errors[\\"metadata-field\\"]?.errorMessage}
         hasError={errors[\\"metadata-field\\"]?.hasError}
         {...getOverrideProps(overrides, \\"metadata-field\\")}
@@ -598,7 +598,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
-              \\"metadata-field\\": metadataField,
+              \\"metadata-field\\": metadatafield,
               city: value,
               category,
               pages,
@@ -644,7 +644,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
-              \\"metadata-field\\": metadataField,
+              \\"metadata-field\\": metadatafield,
               city,
               category: value,
               pages,
@@ -687,7 +687,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
-              \\"metadata-field\\": metadataField,
+              \\"metadata-field\\": metadatafield,
               city,
               category,
               pages: value,
@@ -1907,7 +1907,7 @@ export default function NestedJson(props) {
   const [lastName, setLastName] = React.useState(initialValues.lastName);
   const [bio, setBio] = React.useState(initialValues.bio);
   const [Nicknames1, setNicknames1] = React.useState(initialValues.Nicknames1);
-  const [nickNames, setNickNames] = React.useState(
+  const [nicknames, setNicknames] = React.useState(
     initialValues[\\"nick-names2\\"]
   );
   const [firstName1, setFirstName1] = React.useState(
@@ -1920,17 +1920,17 @@ export default function NestedJson(props) {
     setBio(initialValues.bio);
     setNicknames1(initialValues.Nicknames1);
     setCurrentNicknames1Value(undefined);
-    setNickNames(initialValues[\\"nick-names2\\"]);
-    setCurrentNickNamesValue(undefined);
+    setNicknames(initialValues[\\"nick-names2\\"]);
+    setCurrentNicknamesValue(undefined);
     setFirstName1(initialValues[\\"first Name\\"]);
     setErrors({});
   };
   const [currentNicknames1Value, setCurrentNicknames1Value] =
     React.useState(undefined);
   const Nicknames1Ref = React.createRef();
-  const [currentNickNamesValue, setCurrentNickNamesValue] =
+  const [currentNicknamesValue, setCurrentNicknamesValue] =
     React.useState(undefined);
-  const nickNamesRef = React.createRef();
+  const nicknamesRef = React.createRef();
   const validations = {
     \\"first-Name\\": [],
     lastName: [],
@@ -1962,7 +1962,7 @@ export default function NestedJson(props) {
           lastName,
           bio,
           Nicknames1,
-          \\"nick-names2\\": nickNames,
+          \\"nick-names2\\": nicknames,
           \\"first Name\\": firstName1,
         };
         const validationResponses = await Promise.all(
@@ -1999,7 +1999,7 @@ export default function NestedJson(props) {
               lastName,
               bio,
               Nicknames1,
-              \\"nick-names2\\": nickNames,
+              \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
@@ -2025,7 +2025,7 @@ export default function NestedJson(props) {
               lastName: value,
               bio,
               Nicknames1,
-              \\"nick-names2\\": nickNames,
+              \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
@@ -2056,7 +2056,7 @@ export default function NestedJson(props) {
               lastName,
               bio: { ...bio, [\\"favorite Quote\\"]: value },
               Nicknames1,
-              \\"nick-names2\\": nickNames,
+              \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
@@ -2084,7 +2084,7 @@ export default function NestedJson(props) {
               lastName,
               bio: { ...bio, [\\"favorite-Animal\\"]: value },
               Nicknames1,
-              \\"nick-names2\\": nickNames,
+              \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
@@ -2111,7 +2111,7 @@ export default function NestedJson(props) {
               lastName,
               bio,
               Nicknames1: values,
-              \\"nick-names2\\": nickNames,
+              \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
@@ -2155,21 +2155,21 @@ export default function NestedJson(props) {
               lastName,
               bio,
               Nicknames1,
-              \\"nick-names2\\": nickNames,
+              \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
             values = result?.[\\"nick-names2\\"] ?? values;
           }
-          setNickNames(values);
-          setCurrentNickNamesValue(undefined);
+          setNicknames(values);
+          setCurrentNicknamesValue(undefined);
         }}
-        currentFieldValue={currentNickNamesValue}
+        currentFieldValue={currentNicknamesValue}
         label={\\"nick-Names2\\"}
-        items={nickNames}
+        items={nicknames}
         hasError={errors?.[\\"nick-names2\\"]?.hasError}
-        setFieldValue={setCurrentNickNamesValue}
-        inputFieldRef={nickNamesRef}
+        setFieldValue={setCurrentNicknamesValue}
+        inputFieldRef={nicknamesRef}
         defaultFieldValue={undefined}
       >
         <TextField
@@ -2179,14 +2179,14 @@ export default function NestedJson(props) {
             if (errors[\\"nick-names2\\"]?.hasError) {
               runValidationTasks(\\"nick-names2\\", value);
             }
-            setCurrentNickNamesValue(value);
+            setCurrentNicknamesValue(value);
           }}
           onBlur={() =>
-            runValidationTasks(\\"nick-names2\\", currentNickNamesValue)
+            runValidationTasks(\\"nick-names2\\", currentNicknamesValue)
           }
           errorMessage={errors[\\"nick-names2\\"]?.errorMessage}
           hasError={errors[\\"nick-names2\\"]?.hasError}
-          ref={nickNamesRef}
+          ref={nicknamesRef}
           {...getOverrideProps(overrides, \\"nick-names2\\")}
         ></TextField>
       </ArrayField>
@@ -2200,7 +2200,7 @@ export default function NestedJson(props) {
               lastName,
               bio,
               Nicknames1,
-              \\"nick-names2\\": nickNames,
+              \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
