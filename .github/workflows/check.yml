@@ -20,10 +20,10 @@ jobs:
         with:
           path: amplify-cli
           repository: aws-amplify/amplify-cli
-      - name: Setup Node.js LTS
+      - name: Setup Node.js LTS/gallium
         uses: actions/setup-node@v2
         with:
-          node-version: lts/*
+          node-version: lts/gallium
       - name: Build amplify-codegen-ui
         working-directory: amplify-codegen-ui
         run: |
