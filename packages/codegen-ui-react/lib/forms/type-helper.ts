@@ -263,7 +263,7 @@ export const validationFunctionType = factory.createTypeAliasDeclaration(
     - onSuccess(fields)
     - onError(fields, errorMessage)
    */
-export const buildFormPropNode = (form: StudioForm) => {
+export const buildFormPropNode = (form: StudioForm, modelName?: string) => {
   const {
     name: formName,
     dataType: { dataSourceType, dataTypeName },
@@ -283,7 +283,7 @@ export const buildFormPropNode = (form: StudioForm) => {
           undefined,
           factory.createIdentifier(lowerCaseFirst(dataTypeName)),
           factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(factory.createIdentifier(dataTypeName), undefined),
+          factory.createTypeReferenceNode(factory.createIdentifier(modelName ?? dataTypeName), undefined),
         ),
       );
     }

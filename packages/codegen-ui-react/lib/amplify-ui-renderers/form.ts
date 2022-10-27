@@ -91,6 +91,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       dataType: { dataSourceType, dataTypeName },
       formActionType,
     } = this.form;
+    const importedModelName = this.importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, dataTypeName);
 
     const onSubmitIdentifier = factory.createIdentifier('onSubmit');
 
@@ -126,7 +127,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
         factory.createTryStatement(
           factory.createBlock(
             [
-              ...buildDataStoreExpression(formActionType, dataTypeName),
+              ...buildDataStoreExpression(formActionType, dataTypeName, importedModelName),
               // call onSuccess hook if it exists
               factory.createIfStatement(
                 factory.createIdentifier('onSuccess'),
