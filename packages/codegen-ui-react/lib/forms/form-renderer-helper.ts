@@ -580,6 +580,29 @@ export const buildOnChangeStatement = (
 export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', modelName: string) => {
   if (dataStoreActionType === 'update') {
     return [
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('original'),
+              undefined,
+              undefined,
+              factory.createAwaitExpression(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('DataStore'),
+                    factory.createIdentifier('query'),
+                  ),
+                  undefined,
+                  [factory.createIdentifier(modelName), factory.createIdentifier('id')],
+                ),
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
       factory.createExpressionStatement(
         factory.createAwaitExpression(
           factory.createCallExpression(
@@ -596,7 +619,7 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
                 ),
                 undefined,
                 [
-                  factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
+                  factory.createIdentifier('original'),
                   factory.createArrowFunction(
                     undefined,
                     undefined,
