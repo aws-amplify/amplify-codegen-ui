@@ -14,12 +14,12 @@
   limitations under the License.
  */
 import { mapElements } from '../../../generate-form-definition/helpers';
-import { FormDefinition, SectionalElement, ModelFieldsConfigs, StudioForm } from '../../../types';
+import { FormDefinition, GenericSectionalElementConfig, ModelFieldsConfigs, StudioForm } from '../../../types';
 import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('mapElements', () => {
   it('should map sectional elements & input elements with and without overrides', () => {
-    const sectionalConfig: SectionalElement = {
+    const sectionalConfig: GenericSectionalElementConfig = {
       type: 'Text',
       text: 'MyText',
       position: { fixed: 'first' },
