@@ -497,6 +497,12 @@ export const buildComponentSpecificAttributes = ({
         factory.createJsxExpression(undefined, valueIdentifier),
       ),
     ],
+    CheckboxField: [
+      factory.createJsxAttribute(
+        factory.createIdentifier('checked'),
+        factory.createJsxExpression(undefined, valueIdentifier),
+      ),
+    ],
     NumberField: [factory.createJsxAttribute(factory.createIdentifier('step'), factory.createStringLiteral('any'))],
   };
 
