@@ -104,6 +104,7 @@ export const getDefaultValueExpression = (
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
     ToggleButton: factory.createFalse(),
     SwitchField: factory.createFalse(),
+    CheckboxField: factory.createFalse(),
     StepperField: factory.createNumericLiteral(0),
     SliderField: factory.createNumericLiteral(0),
   };
