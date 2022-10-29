@@ -1422,9 +1422,9 @@ export default function MyPostForm(props) {
           username,
           caption,
           Customtags,
-          post_url,
+          post_url: post_url || undefined,
           metadata,
-          profile_url,
+          profile_url: profile_url || undefined,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3045,9 +3045,9 @@ export default function MyPostForm(props) {
         let modelFields = {
           caption,
           username,
-          post_url,
+          post_url: post_url || undefined,
           metadata,
-          profile_url,
+          profile_url: profile_url || undefined,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3400,8 +3400,8 @@ export default function MyPostForm(props) {
           TextAreaFieldbbd63464,
           caption,
           username,
-          profile_url,
-          post_url,
+          profile_url: profile_url || undefined,
+          post_url: post_url || undefined,
           metadata,
         };
         const validationResponses = await Promise.all(
@@ -5832,8 +5832,8 @@ export default function PostCreateFormRow(props) {
         let modelFields = {
           username,
           caption,
-          post_url,
-          profile_url,
+          post_url: post_url || undefined,
+          profile_url: profile_url || undefined,
           status,
           metadata,
         };
