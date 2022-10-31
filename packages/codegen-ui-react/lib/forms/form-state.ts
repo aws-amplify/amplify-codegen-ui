@@ -106,6 +106,7 @@ export const getDefaultValueExpression = (
     SwitchField: factory.createFalse(),
     StepperField: factory.createNumericLiteral(0),
     SliderField: factory.createNumericLiteral(0),
+    CheckboxField: factory.createFalse(),
   };
 
   // it's a nonModel or relationship object
