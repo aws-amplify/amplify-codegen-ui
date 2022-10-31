@@ -916,7 +916,7 @@ export const buildModelFieldObject = (
   const fieldSet = new Set<string>();
   const fields = Object.keys(fieldConfigs).reduce<ObjectLiteralElementLike[]>((acc, value) => {
     const fieldName = value.split('.')[0];
-    const { sanitizedFieldName } = fieldConfigs[value];
+    const { sanitizedFieldName, dataType } = fieldConfigs[value];
     const renderedFieldName = sanitizedFieldName || fieldName;
     if (!fieldSet.has(renderedFieldName)) {
       let assignment = nameOverrides[fieldName]
@@ -926,6 +926,22 @@ export const buildModelFieldObject = (
         assignment = factory.createPropertyAssignment(
           factory.createStringLiteral(fieldName),
           factory.createIdentifier(sanitizedFieldName),
+        );
+      }
+      /*
+       Empty string value for not required url field fails to save at datastore
+       let modelFields = {
+        url: url || undefined,
+       }
+      */
+      if (dataType === 'AWSURL' && !shouldBeConst) {
+        assignment = factory.createPropertyAssignment(
+          factory.createStringLiteral(fieldName),
+          factory.createBinaryExpression(
+            factory.createIdentifier(renderedFieldName),
+            factory.createToken(SyntaxKind.BarBarToken),
+            factory.createIdentifier('undefined'),
+          ),
         );
       }
 
