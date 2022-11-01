@@ -38,13 +38,15 @@ const checkValidation = (value: any, validation: FieldValidationConfiguration) =
     switch (validation.type) {
       case 'LessThanChar':
         return {
-          hasError: !(value.length < validation.numValues[0]),
-          errorMessage: validation.validationMessage || `The value must be shorter than ${validation.numValues[0]}`,
+          hasError: !(value.length <= validation.numValues[0]),
+          errorMessage:
+            validation.validationMessage || `The value must be ${validation.numValues[0]} characters or fewer`,
         };
       case 'GreaterThanChar':
         return {
           hasError: !(value.length > validation.numValues[0]),
-          errorMessage: validation.validationMessage || `The value must be longer than ${validation.numValues[0]}`,
+          errorMessage:
+            validation.validationMessage || `The value must be at least ${validation.numValues[0]} characters`,
         };
       case 'LessThanNum':
         return {
@@ -459,7 +461,7 @@ export const generateValidationFunction = () => {
                                               factory.createIdentifier('value'),
                                               factory.createIdentifier('length'),
                                             ),
-                                            factory.createToken(ts.SyntaxKind.LessThanToken),
+                                            factory.createToken(ts.SyntaxKind.LessThanEqualsToken),
                                             factory.createElementAccessExpression(
                                               factory.createPropertyAccessExpression(
                                                 factory.createIdentifier('validation'),
