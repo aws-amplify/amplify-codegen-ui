@@ -14,3 +14,15 @@
   limitations under the License.
  */
 export const lowerCaseFirst = (input: string) => input.charAt(0).toLowerCase() + input.slice(1);
+
+export const createUniqueName = (name: string, isNameUsed: (input: string) => boolean) => {
+  if (!isNameUsed(name)) {
+    return name;
+  }
+  let count = 0;
+  const prospectiveNewName = name;
+  while (isNameUsed(prospectiveNewName + count)) {
+    count += 1;
+  }
+  return prospectiveNewName + count;
+};

@@ -1,21 +1,10 @@
 {
   "id": "1234-5678-9010",
   "componentType": "Collection",
-  "name": "CollectionWithSort",
+  "name": "CollectionWithModelNameCollisions",
   "properties": {
     "type": {
       "value": "list"
-    },
-    "isPaginated": {
-      "value": true
-    },
-    "gap": {
-      "value": "1.5rem"
-    },
-    "backgroundColor": {
-      "bindingProperties": {
-        "property": "backgroundColor"
-      }
     }
   },
   "bindingProperties": {
@@ -25,7 +14,18 @@
     "buttonColor": {
       "type": "Data",
       "bindingProperties": {
-        "model": "UserPreference",
+        "model": "Flex",
+        "predicate": {
+          "field": "userID",
+          "operand": "user@email.com",
+          "operator": "eq"
+        }
+      }
+    },
+    "buttonShape": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "FlexModel",
         "predicate": {
           "field": "userID",
           "operand": "user@email.com",
@@ -35,8 +35,8 @@
     }
   },
   "collectionProperties": {
-    "buttonUser": {
-      "model": "User",
+    "buttonModel": {
+      "model": "Button",
       "sort": [
         {
           "field": "lastName",
@@ -77,7 +77,7 @@
             },
             "children": {
               "collectionBindingProperties": {
-                "property": "buttonUser",
+                "property": "buttonModel",
                 "field": "lastName"
               }
             }
