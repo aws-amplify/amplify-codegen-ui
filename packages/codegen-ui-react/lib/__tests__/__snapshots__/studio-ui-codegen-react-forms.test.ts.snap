@@ -3427,8 +3427,9 @@ export default function MyPostForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          const original = await DataStore.query(Post, id);
           await DataStore.save(
-            Post.copyOf(postRecord, (updated) => {
+            Post.copyOf(original, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -3995,8 +3996,9 @@ export default function MyFlexUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          const original = await DataStore.query(Flex0, id);
           await DataStore.save(
-            Flex0.copyOf(flexRecord, (updated) => {
+            Flex0.copyOf(original, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -5827,8 +5829,9 @@ export default function InputGalleryUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          const original = await DataStore.query(InputGallery, id);
           await DataStore.save(
-            InputGallery.copyOf(inputGalleryRecord, (updated) => {
+            InputGallery.copyOf(original, (updated) => {
               Object.assign(updated, modelFields);
             })
           );

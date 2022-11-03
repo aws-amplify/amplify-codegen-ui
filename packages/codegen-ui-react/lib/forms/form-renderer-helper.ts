@@ -546,13 +546,32 @@ export const buildOnChangeStatement = (
   );
 };
 
-export const buildDataStoreExpression = (
-  dataStoreActionType: 'update' | 'create',
-  dataTypeName: string,
-  importedModelName: string,
-) => {
+export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', importedModelName: string) => {
   if (dataStoreActionType === 'update') {
     return [
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('original'),
+              undefined,
+              undefined,
+              factory.createAwaitExpression(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('DataStore'),
+                    factory.createIdentifier('query'),
+                  ),
+                  undefined,
+                  [factory.createIdentifier(importedModelName), factory.createIdentifier('id')],
+                ),
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
       factory.createExpressionStatement(
         factory.createAwaitExpression(
           factory.createCallExpression(
@@ -569,7 +588,7 @@ export const buildDataStoreExpression = (
                 ),
                 undefined,
                 [
-                  factory.createIdentifier(`${lowerCaseFirst(dataTypeName)}Record`),
+                  factory.createIdentifier('original'),
                   factory.createArrowFunction(
                     undefined,
                     undefined,
