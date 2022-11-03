@@ -19,6 +19,7 @@ import {
   schemaWithEnums,
   schemaWithNonModels,
   schemaWithRelationships,
+  schemaWithRelationshipsV2,
   schemaWithAssumptions,
 } from './__utils__/mock-schemas';
 
@@ -55,6 +56,58 @@ describe('getGenericFromDataStore', () => {
 
   it('should map relationships', () => {
     const genericSchema = getGenericFromDataStore(schemaWithRelationships);
+
+    expect(genericSchema.models.PrimaryCareGiver.fields.Child.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Child',
+    });
+
+    expect(genericSchema.models.PrimaryCareGiver.fields.primaryCareGiverChildId.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Child',
+    });
+
+    expect(genericSchema.models.Student.fields.Teachers.relationship).toStrictEqual<HasManyRelationshipType>({
+      type: 'HAS_MANY',
+      relatedModelName: 'Teacher',
+      relatedModelField: 'student',
+    });
+
+    expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
+      type: 'HAS_MANY',
+      relatedModelName: 'Student',
+      relatedModelField: 'teacher',
+    });
+
+    expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Key',
+    });
+
+    expect(genericSchema.models.Lock.fields.lockKeyId.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Key',
+    });
+
+    expect(genericSchema.models.Key.fields.Lock.relationship).toStrictEqual({
+      type: 'BELONGS_TO',
+      relatedModelName: 'Lock',
+    });
+
+    expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
+      type: 'HAS_MANY',
+      relatedModelName: 'Dog',
+      relatedModelField: 'ownerID',
+    });
+
+    expect(genericSchema.models.Dog.fields.ownerID.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Owner',
+    });
+  });
+
+  it('should map v2 relationships', () => {
+    const genericSchema = getGenericFromDataStore(schemaWithRelationshipsV2);
 
     expect(genericSchema.models.PrimaryCareGiver.fields.Child.relationship).toStrictEqual({
       type: 'HAS_ONE',
