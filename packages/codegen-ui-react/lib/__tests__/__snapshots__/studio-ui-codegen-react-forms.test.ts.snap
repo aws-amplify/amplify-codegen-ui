@@ -3732,6 +3732,552 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 
+exports[`amplify form renderer tests datastore form tests should render a create form with colliding model name 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Flex as Flex0 } from \\"../models\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
+export default function MyFlexUpdateForm(props) {
+  const {
+    id,
+    flex,
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    username: undefined,
+    caption: undefined,
+    Customtags: [],
+    tags: [],
+    profile_url: undefined,
+  };
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [Customtags, setCustomtags] = React.useState(initialValues.Customtags);
+  const [tags, setTags] = React.useState(initialValues.tags);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = { ...initialValues, ...flexRecord };
+    setUsername(cleanValues.username);
+    setCaption(cleanValues.caption);
+    setCustomtags(cleanValues.Customtags ?? []);
+    setCurrentCustomtagsValue(undefined);
+    setTags(cleanValues.tags ?? []);
+    setCurrentTagsValue(undefined);
+    setProfile_url(cleanValues.profile_url);
+    setErrors({});
+  };
+  const [flexRecord, setFlexRecord] = React.useState(flex);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = id ? await DataStore.query(Flex0, id) : flex0;
+      setFlexRecord(record);
+    };
+    queryData();
+  }, [id, flex]);
+  React.useEffect(resetStateValues, [flexRecord]);
+  const [currentCustomtagsValue, setCurrentCustomtagsValue] =
+    React.useState(undefined);
+  const CustomtagsRef = React.createRef();
+  const [currentTagsValue, setCurrentTagsValue] = React.useState(undefined);
+  const tagsRef = React.createRef();
+  const validations = {
+    username: [
+      {
+        type: \\"GreaterThanChar\\",
+        numValues: [2],
+        validationMessage: \\"needs to be of length 2\\",
+      },
+    ],
+    caption: [],
+    Customtags: [],
+    tags: [],
+    profile_url: [{ type: \\"URL\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          username,
+          caption,
+          Customtags,
+          tags,
+          profile_url: profile_url || undefined,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(
+            Flex0.copyOf(flexRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"MyFlexUpdateForm\\")}
+    >
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+      <Grid
+        columnGap=\\"inherit\\"
+        rowGap=\\"inherit\\"
+        templateColumns=\\"repeat(2, auto)\\"
+        {...getOverrideProps(overrides, \\"RowGrid0\\")}
+      >
+        <TextField
+          label=\\"Username\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"john\\"
+          defaultValue={username}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username: value,
+                caption,
+                Customtags,
+                tags,
+                profile_url,
+              };
+              const result = onChange(modelFields);
+              value = result?.username ?? value;
+            }
+            if (errors.username?.hasError) {
+              runValidationTasks(\\"username\\", value);
+            }
+            setUsername(value);
+          }}
+          onBlur={() => runValidationTasks(\\"username\\", username)}
+          errorMessage={errors.username?.errorMessage}
+          hasError={errors.username?.hasError}
+          {...getOverrideProps(overrides, \\"username\\")}
+        ></TextField>
+        <TextField
+          label=\\"Caption\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"i love code\\"
+          defaultValue={caption}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username,
+                caption: value,
+                Customtags,
+                tags,
+                profile_url,
+              };
+              const result = onChange(modelFields);
+              value = result?.caption ?? value;
+            }
+            if (errors.caption?.hasError) {
+              runValidationTasks(\\"caption\\", value);
+            }
+            setCaption(value);
+          }}
+          onBlur={() => runValidationTasks(\\"caption\\", caption)}
+          errorMessage={errors.caption?.errorMessage}
+          hasError={errors.caption?.hasError}
+          {...getOverrideProps(overrides, \\"caption\\")}
+        ></TextField>
+      </Grid>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags: values,
+              tags,
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            values = result?.Customtags ?? values;
+          }
+          setCustomtags(values);
+          setCurrentCustomtagsValue(undefined);
+        }}
+        currentFieldValue={currentCustomtagsValue}
+        label={\\"Tags\\"}
+        items={Customtags}
+        hasError={errors.Customtags?.hasError}
+        setFieldValue={setCurrentCustomtagsValue}
+        inputFieldRef={CustomtagsRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"Tags\\"
+          placeholder=\\"goals\\"
+          value={currentCustomtagsValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Customtags?.hasError) {
+              runValidationTasks(\\"Customtags\\", value);
+            }
+            setCurrentCustomtagsValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"Customtags\\", currentCustomtagsValue)
+          }
+          errorMessage={errors.Customtags?.errorMessage}
+          hasError={errors.Customtags?.hasError}
+          ref={CustomtagsRef}
+          {...getOverrideProps(overrides, \\"Customtags\\")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              tags: values,
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            values = result?.tags ?? values;
+          }
+          setTags(values);
+          setCurrentTagsValue(undefined);
+        }}
+        currentFieldValue={currentTagsValue}
+        label={\\"Tags\\"}
+        items={tags}
+        hasError={errors.tags?.hasError}
+        setFieldValue={setCurrentTagsValue}
+        inputFieldRef={tagsRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"Tags\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentTagsValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.tags?.hasError) {
+              runValidationTasks(\\"tags\\", value);
+            }
+            setCurrentTagsValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"tags\\", currentTagsValue)}
+          errorMessage={errors.tags?.errorMessage}
+          hasError={errors.tags?.hasError}
+          ref={tagsRef}
+          {...getOverrideProps(overrides, \\"tags\\")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label=\\"Profile url\\"
+        isRequired={false}
+        isReadOnly={false}
+        defaultValue={profile_url}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              tags,
+              profile_url: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.profile_url ?? value;
+          }
+          if (errors.profile_url?.hasError) {
+            runValidationTasks(\\"profile_url\\", value);
+          }
+          setProfile_url(value);
+        }}
+        onBlur={() => runValidationTasks(\\"profile_url\\", profile_url)}
+        errorMessage={errors.profile_url?.errorMessage}
+        hasError={errors.profile_url?.hasError}
+        {...getOverrideProps(overrides, \\"profile_url\\")}
+      ></TextField>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a create form with colliding model name 2`] = `
+"import * as React from \\"react\\";
+import { Flex as Flex0 } from \\"../models\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type MyFlexUpdateFormInputValues = {
+    username?: string;
+    caption?: string;
+    Customtags?: string[];
+    tags?: string[];
+    profile_url?: string;
+};
+export declare type MyFlexUpdateFormValidationValues = {
+    username?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    Customtags?: ValidationFunction<string>;
+    tags?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type MyFlexUpdateFormOverridesProps = {
+    MyFlexUpdateFormGrid?: FormProps<GridProps>;
+    RowGrid0?: FormProps<GridProps>;
+    username?: FormProps<TextFieldProps>;
+    caption?: FormProps<TextFieldProps>;
+    Customtags?: FormProps<TextFieldProps>;
+    tags?: FormProps<TextFieldProps>;
+    profile_url?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type MyFlexUpdateFormProps = React.PropsWithChildren<{
+    overrides?: MyFlexUpdateFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    flex?: Flex0;
+    onSubmit?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
+    onSuccess?: (fields: MyFlexUpdateFormInputValues) => void;
+    onError?: (fields: MyFlexUpdateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
+    onValidate?: MyFlexUpdateFormValidationValues;
+}>;
+export default function MyFlexUpdateForm(props: MyFlexUpdateFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests should render a form with a javascript reserved word as the field name 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -5740,6 +6286,535 @@ export declare type InputGalleryUpdateFormProps = React.PropsWithChildren<{
     onValidate?: InputGalleryUpdateFormValidationValues;
 }>;
 export default function InputGalleryUpdateForm(props: InputGalleryUpdateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a update form with colliding model name 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Flex as Flex0 } from \\"../models\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+}
+export default function MyFlexCreateForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    username: undefined,
+    caption: undefined,
+    Customtags: [],
+    tags: [],
+    profile_url: undefined,
+  };
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [Customtags, setCustomtags] = React.useState(initialValues.Customtags);
+  const [tags, setTags] = React.useState(initialValues.tags);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setUsername(initialValues.username);
+    setCaption(initialValues.caption);
+    setCustomtags(initialValues.Customtags);
+    setCurrentCustomtagsValue(undefined);
+    setTags(initialValues.tags);
+    setCurrentTagsValue(undefined);
+    setProfile_url(initialValues.profile_url);
+    setErrors({});
+  };
+  const [currentCustomtagsValue, setCurrentCustomtagsValue] =
+    React.useState(undefined);
+  const CustomtagsRef = React.createRef();
+  const [currentTagsValue, setCurrentTagsValue] = React.useState(undefined);
+  const tagsRef = React.createRef();
+  const validations = {
+    username: [
+      {
+        type: \\"GreaterThanChar\\",
+        numValues: [2],
+        validationMessage: \\"needs to be of length 2\\",
+      },
+    ],
+    caption: [],
+    Customtags: [],
+    tags: [],
+    profile_url: [{ type: \\"URL\\" }],
+  };
+  const runValidationTasks = async (fieldName, value) => {
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          username,
+          caption,
+          Customtags,
+          tags,
+          profile_url: profile_url || undefined,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(new Flex0(modelFields));
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"MyFlexCreateForm\\")}
+    >
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+      <Grid
+        columnGap=\\"inherit\\"
+        rowGap=\\"inherit\\"
+        templateColumns=\\"repeat(2, auto)\\"
+        {...getOverrideProps(overrides, \\"RowGrid0\\")}
+      >
+        <TextField
+          label=\\"Username\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"john\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username: value,
+                caption,
+                Customtags,
+                tags,
+                profile_url,
+              };
+              const result = onChange(modelFields);
+              value = result?.username ?? value;
+            }
+            if (errors.username?.hasError) {
+              runValidationTasks(\\"username\\", value);
+            }
+            setUsername(value);
+          }}
+          onBlur={() => runValidationTasks(\\"username\\", username)}
+          errorMessage={errors.username?.errorMessage}
+          hasError={errors.username?.hasError}
+          {...getOverrideProps(overrides, \\"username\\")}
+        ></TextField>
+        <TextField
+          label=\\"Caption\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"i love code\\"
+          onChange={(e) => {
+            let { value } = e.target;
+            if (onChange) {
+              const modelFields = {
+                username,
+                caption: value,
+                Customtags,
+                tags,
+                profile_url,
+              };
+              const result = onChange(modelFields);
+              value = result?.caption ?? value;
+            }
+            if (errors.caption?.hasError) {
+              runValidationTasks(\\"caption\\", value);
+            }
+            setCaption(value);
+          }}
+          onBlur={() => runValidationTasks(\\"caption\\", caption)}
+          errorMessage={errors.caption?.errorMessage}
+          hasError={errors.caption?.hasError}
+          {...getOverrideProps(overrides, \\"caption\\")}
+        ></TextField>
+      </Grid>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags: values,
+              tags,
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            values = result?.Customtags ?? values;
+          }
+          setCustomtags(values);
+          setCurrentCustomtagsValue(undefined);
+        }}
+        currentFieldValue={currentCustomtagsValue}
+        label={\\"Tags\\"}
+        items={Customtags}
+        hasError={errors.Customtags?.hasError}
+        setFieldValue={setCurrentCustomtagsValue}
+        inputFieldRef={CustomtagsRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"Tags\\"
+          placeholder=\\"goals\\"
+          value={currentCustomtagsValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Customtags?.hasError) {
+              runValidationTasks(\\"Customtags\\", value);
+            }
+            setCurrentCustomtagsValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"Customtags\\", currentCustomtagsValue)
+          }
+          errorMessage={errors.Customtags?.errorMessage}
+          hasError={errors.Customtags?.hasError}
+          ref={CustomtagsRef}
+          {...getOverrideProps(overrides, \\"Customtags\\")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              tags: values,
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            values = result?.tags ?? values;
+          }
+          setTags(values);
+          setCurrentTagsValue(undefined);
+        }}
+        currentFieldValue={currentTagsValue}
+        label={\\"Tags\\"}
+        items={tags}
+        hasError={errors.tags?.hasError}
+        setFieldValue={setCurrentTagsValue}
+        inputFieldRef={tagsRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"Tags\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentTagsValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.tags?.hasError) {
+              runValidationTasks(\\"tags\\", value);
+            }
+            setCurrentTagsValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"tags\\", currentTagsValue)}
+          errorMessage={errors.tags?.errorMessage}
+          hasError={errors.tags?.hasError}
+          ref={tagsRef}
+          {...getOverrideProps(overrides, \\"tags\\")}
+        ></TextField>
+      </ArrayField>
+      <TextField
+        label=\\"Profile url\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              tags,
+              profile_url: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.profile_url ?? value;
+          }
+          if (errors.profile_url?.hasError) {
+            runValidationTasks(\\"profile_url\\", value);
+          }
+          setProfile_url(value);
+        }}
+        onBlur={() => runValidationTasks(\\"profile_url\\", profile_url)}
+        errorMessage={errors.profile_url?.errorMessage}
+        hasError={errors.profile_url?.hasError}
+        {...getOverrideProps(overrides, \\"profile_url\\")}
+      ></TextField>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should render a update form with colliding model name 2`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type MyFlexCreateFormInputValues = {
+    username?: string;
+    caption?: string;
+    Customtags?: string[];
+    tags?: string[];
+    profile_url?: string;
+};
+export declare type MyFlexCreateFormValidationValues = {
+    username?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    Customtags?: ValidationFunction<string>;
+    tags?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type MyFlexCreateFormOverridesProps = {
+    MyFlexCreateFormGrid?: FormProps<GridProps>;
+    RowGrid0?: FormProps<GridProps>;
+    username?: FormProps<TextFieldProps>;
+    caption?: FormProps<TextFieldProps>;
+    Customtags?: FormProps<TextFieldProps>;
+    tags?: FormProps<TextFieldProps>;
+    profile_url?: FormProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type MyFlexCreateFormProps = React.PropsWithChildren<{
+    overrides?: MyFlexCreateFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
+    onSuccess?: (fields: MyFlexCreateFormInputValues) => void;
+    onError?: (fields: MyFlexCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
+    onValidate?: MyFlexCreateFormValidationValues;
+}>;
+export default function MyFlexCreateForm(props: MyFlexCreateFormProps): React.ReactElement;
 "
 `;
 
