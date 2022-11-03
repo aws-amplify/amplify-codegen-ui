@@ -127,7 +127,7 @@ export type FormDefinitionToggleButtonElement = {
 
 export type FormDefinitionCheckboxFieldElement = {
   componentType: 'CheckboxField';
-  props: { label: string; value: string; name: string; isDisabled?: boolean; defaultChecked?: boolean };
+  props: { label: string; value: string; name: string; isDisabled?: boolean };
 };
 
 export type FormDefinitionRadioGroupFieldElement = {
