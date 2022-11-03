@@ -15,14 +15,14 @@
  */
 import { ImportDeclaration, factory } from 'typescript';
 import path from 'path';
-import { ComponentMetadata } from '@aws-amplify/codegen-ui/lib/utils';
+import { ComponentMetadata, reservedWords } from '@aws-amplify/codegen-ui';
 import { ImportMapping, ImportValue, ImportSource } from './import-mapping';
 import { isPrimitive } from '../primitive';
 import { createUniqueName } from '../helpers';
 
 export class ImportCollection {
   constructor(componentMetadata?: ComponentMetadata) {
-    this.importedNames = new Set(Object.values(componentMetadata?.componentNameToTypeMap || {}));
+    this.importedNames = new Set(Object.values(componentMetadata?.componentNameToTypeMap || {}).concat(reservedWords));
   }
 
   importedNames: Set<string>;

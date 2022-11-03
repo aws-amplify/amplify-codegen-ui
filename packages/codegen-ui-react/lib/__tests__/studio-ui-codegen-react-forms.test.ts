@@ -76,6 +76,26 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
+    it('should render a create form with colliding model name', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/flex-datastore-create',
+        'datastore/flex',
+      );
+      expect(componentText).toContain('DataStore.save');
+      expect(componentText).toContain('Flex0');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+    it('should render a update form with colliding model name', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/flex-datastore-update',
+        'datastore/flex',
+      );
+      expect(componentText).toContain('DataStore.save');
+      expect(componentText).toContain('Flex0');
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
   });
 
   describe('custom form tests', () => {

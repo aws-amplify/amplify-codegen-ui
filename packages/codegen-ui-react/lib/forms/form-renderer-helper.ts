@@ -546,7 +546,11 @@ export const buildOnChangeStatement = (
   );
 };
 
-export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', modelName: string) => {
+export const buildDataStoreExpression = (
+  dataStoreActionType: 'update' | 'create',
+  dataTypeName: string,
+  importedModelName: string,
+) => {
   if (dataStoreActionType === 'update') {
     return [
       factory.createVariableStatement(
@@ -583,7 +587,7 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
             [
               factory.createCallExpression(
                 factory.createPropertyAccessExpression(
-                  factory.createIdentifier(modelName),
+                  factory.createIdentifier(importedModelName),
                   factory.createIdentifier('copyOf'),
                 ),
                 undefined,
@@ -639,7 +643,7 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
           ),
           undefined,
           [
-            factory.createNewExpression(factory.createIdentifier(modelName), undefined, [
+            factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
               factory.createIdentifier('modelFields'),
             ]),
           ],
