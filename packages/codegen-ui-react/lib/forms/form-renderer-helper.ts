@@ -546,11 +546,7 @@ export const buildOnChangeStatement = (
   );
 };
 
-export const buildDataStoreExpression = (
-  dataStoreActionType: 'update' | 'create',
-  dataTypeName: string,
-  importedModelName: string,
-) => {
+export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', importedModelName: string) => {
   if (dataStoreActionType === 'update') {
     return [
       factory.createVariableStatement(
