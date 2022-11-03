@@ -78,7 +78,9 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
 
           if (relationshipType === 'HAS_MANY' && 'associatedWith' in field.association) {
             const associatedModel = dataStoreSchema.models[relatedModelName];
-            const associatedFieldName = field.association.associatedWith;
+            const associatedFieldName = Array.isArray(field.association?.associatedWith)
+              ? field.association.associatedWith[0]
+              : field.association.associatedWith;
             const associatedField = associatedModel?.fields[associatedFieldName];
             // if the associated model is a join table, update relatedModelName to the actual related model
             if (
@@ -109,12 +111,19 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
           }
 
           // note implicit relationship for associated field within same model
-          if (relationshipType === 'HAS_ONE' && 'targetName' in field.association && field.association.targetName) {
-            addRelationship(fieldsWithImplicitRelationships, model.name, field.association.targetName, {
-              type: relationshipType,
-              relatedModelName,
-            });
-            modelRelationship = { type: relationshipType, relatedModelName };
+          if (
+            relationshipType === 'HAS_ONE' &&
+            ('targetName' in field.association || 'targetNames' in field.association) &&
+            (field.association.targetName || field.association.targetNames)
+          ) {
+            const targetName = field.association.targetName || field.association.targetNames?.[0];
+            if (targetName) {
+              addRelationship(fieldsWithImplicitRelationships, model.name, targetName, {
+                type: relationshipType,
+                relatedModelName,
+              });
+              modelRelationship = { type: relationshipType, relatedModelName };
+            }
           }
 
           if (relationshipType === 'BELONGS_TO') {

@@ -531,4 +531,5 @@ export default {
     },
   },
   version: 'f6252c821249b6b1abda9fb24481c5a4',
+  codegenVersion: '000000',
 } as Schema;

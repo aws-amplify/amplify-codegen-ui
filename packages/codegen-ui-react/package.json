@@ -20,7 +20,7 @@
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
-    "@aws-amplify/datastore": "^3.12.12",
+    "@aws-amplify/datastore": "^3.12.6-next.51",
     "@aws-amplify/ui-react": "^2.1.0",
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.4",
