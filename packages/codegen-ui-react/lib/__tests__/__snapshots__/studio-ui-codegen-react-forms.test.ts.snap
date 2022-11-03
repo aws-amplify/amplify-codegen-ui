@@ -4978,7 +4978,7 @@ export default function InputGalleryCreateForm(props) {
     rootbeer: undefined,
     attend: undefined,
     maybeSlide: false,
-    maybeCheck: undefined,
+    maybeCheck: false,
     arrayTypeField: [],
     timestamp: undefined,
     ippy: undefined,
@@ -5250,7 +5250,7 @@ export default function InputGalleryCreateForm(props) {
         name=\\"maybeCheck\\"
         value=\\"maybeCheck\\"
         isDisabled={false}
-        defaultChecked={false}
+        checked={maybeCheck}
         onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
@@ -5696,7 +5696,7 @@ export default function InputGalleryUpdateForm(props) {
     rootbeer: undefined,
     attend: undefined,
     maybeSlide: false,
-    maybeCheck: undefined,
+    maybeCheck: false,
     arrayTypeField: [],
     timestamp: undefined,
     ippy: undefined,
@@ -6009,7 +6009,7 @@ export default function InputGalleryUpdateForm(props) {
         name=\\"maybeCheck\\"
         value=\\"maybeCheck\\"
         isDisabled={false}
-        defaultChecked={false}
+        checked={maybeCheck}
         defaultValue={maybeCheck}
         onChange={(e) => {
           let value = e.target.checked;

@@ -282,8 +282,6 @@ export function getFormDefinitionInputElement(
           value:
             config.inputType?.value || baseConfig?.inputType?.value || FORM_DEFINITION_DEFAULTS.field.inputType.value,
           isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
-          defaultChecked:
-            getFirstDefinedValue([config.inputType?.defaultChecked, baseConfig?.inputType?.defaultChecked]) || false,
         },
       };
       break;
