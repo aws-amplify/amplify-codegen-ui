@@ -546,11 +546,7 @@ export const buildOnChangeStatement = (
   );
 };
 
-export const buildDataStoreExpression = (
-  dataStoreActionType: 'update' | 'create',
-  dataTypeName: string,
-  importedModelName: string,
-) => {
+export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', importedModelName: string) => {
   if (dataStoreActionType === 'update') {
     return [
       factory.createVariableStatement(
@@ -568,7 +564,7 @@ export const buildDataStoreExpression = (
                     factory.createIdentifier('query'),
                   ),
                   undefined,
-                  [factory.createIdentifier(modelName), factory.createIdentifier('id')],
+                  [factory.createIdentifier(importedModelName), factory.createIdentifier('id')],
                 ),
               ),
             ),
