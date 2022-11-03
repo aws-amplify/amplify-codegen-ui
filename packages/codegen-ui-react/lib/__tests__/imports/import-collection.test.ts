@@ -80,10 +80,12 @@ describe('ImportCollection', () => {
       importCollection.addImport(ImportSource.LOCAL_MODELS, 'TextField');
       importCollection.addImport(ImportSource.LOCAL_MODELS, 'TestModel');
       importCollection.addImport(ImportSource.LOCAL_MODELS, 'ButtonProps');
+      importCollection.addImport(ImportSource.LOCAL_MODELS, 'React');
       expect(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'TextField')).toEqual('TextField1');
       expect(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'TextField0')).toEqual('TextField0');
       expect(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'TestModel')).toEqual('TestModel');
       expect(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'ButtonProps')).toEqual('ButtonProps0');
+      expect(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'React')).toEqual('React0');
     });
   });
 
