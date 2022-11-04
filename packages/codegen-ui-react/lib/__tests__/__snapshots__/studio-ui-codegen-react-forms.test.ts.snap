@@ -1928,6 +1928,9 @@ export default function NestedJson(props) {
     setFirstName1(initialValues[\\"first Name\\"]);
     setErrors({});
   };
+  const [currentBioFavoritetreesValue, setCurrentBioFavoritetreesValue] =
+    React.useState(undefined);
+  const bioFavoritetreesRef = React.createRef();
   const [currentNicknames1Value, setCurrentNicknames1Value] =
     React.useState(undefined);
   const Nicknames1Ref = React.createRef();
@@ -1939,6 +1942,7 @@ export default function NestedJson(props) {
     lastName: [],
     \\"bio.favorite Quote\\": [],
     \\"bio.favorite-Animal\\": [],
+    \\"bio.favorite-trees\\": [],
     Nicknames1: [],
     \\"nick-names2\\": [],
     \\"first Name\\": [],
@@ -2112,6 +2116,54 @@ export default function NestedJson(props) {
             const modelFields = {
               \\"first-Name\\": firstName,
               lastName,
+              bio: { ...bio, [\\"favorite-trees\\"]: values },
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
+            };
+            const result = onChange(modelFields);
+            values = result?.bio?.[\\"favorite-trees\\"] ?? values;
+          }
+          setBio({ ...bio, [\\"favorite-trees\\"]: values });
+          setCurrentBioFavoritetreesValue(undefined);
+        }}
+        currentFieldValue={currentBioFavoritetreesValue}
+        label={\\"favorite trees\\"}
+        items={bio.favorite - trees ?? []}
+        hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
+        setFieldValue={setCurrentBioFavoritetreesValue}
+        inputFieldRef={bio.favorite - treesRef}
+        defaultFieldValue={undefined}
+      >
+        <TextField
+          label=\\"favorite trees\\"
+          value={currentBioFavoritetreesValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors[\\"bio.favorite-trees\\"]?.hasError) {
+              runValidationTasks(\\"bio.favorite-trees\\", value);
+            }
+            setCurrentBioFavoritetreesValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"bio.favorite-trees\\",
+              currentBioFavoritetreesValue
+            )
+          }
+          errorMessage={errors[\\"bio.favorite-trees\\"]?.errorMessage}
+          hasError={errors[\\"bio.favorite-trees\\"]?.hasError}
+          ref={bioFavoritetreesRef}
+          {...getOverrideProps(overrides, \\"bio.favorite-trees\\")}
+        ></TextField>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              \\"first-Name\\": firstName,
+              lastName,
               bio,
               Nicknames1: values,
               \\"nick-names2\\": nicknames,
@@ -2273,6 +2325,7 @@ export declare type NestedJsonInputValues = {
     bio?: {
         \\"favorite Quote\\"?: string;
         \\"favorite-Animal\\"?: string;
+        \\"favorite-trees\\"?: string[];
     };
 };
 export declare type NestedJsonValidationValues = {
@@ -2284,6 +2337,7 @@ export declare type NestedJsonValidationValues = {
     bio?: {
         \\"favorite Quote\\"?: ValidationFunction<string>;
         \\"favorite-Animal\\"?: ValidationFunction<string>;
+        \\"favorite-trees\\"?: ValidationFunction<string>;
     };
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -2294,6 +2348,7 @@ export declare type NestedJsonOverridesProps = {
     bio?: FormProps<HeadingProps>;
     \\"bio.favorite Quote\\"?: FormProps<TextFieldProps>;
     \\"bio.favorite-Animal\\"?: FormProps<TextFieldProps>;
+    \\"bio.favorite-trees\\"?: FormProps<TextFieldProps>;
     Nicknames1?: FormProps<TextFieldProps>;
     \\"nick-names2\\"?: FormProps<TextFieldProps>;
     \\"first Name\\"?: FormProps<TextFieldProps>;

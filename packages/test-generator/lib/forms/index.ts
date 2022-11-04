@@ -17,3 +17,5 @@
 export { default as CustomFormCreateDog } from './custom-form-create-dog.json';
 // eslint-disable-next-line max-len
 export { default as DataStoreFormCreateAllSupportedFormFields } from './datastore-form-create-all-supported-form-fields.json';
+
+export { default as CustomFormCreateNestedJson } from './custom-form-nested-json-create.json';

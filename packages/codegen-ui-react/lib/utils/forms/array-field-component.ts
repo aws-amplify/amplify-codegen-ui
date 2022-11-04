@@ -17,11 +17,11 @@ import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
 import { isValidVariableName } from '@aws-amplify/codegen-ui';
 import { factory, JsxChild, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
 import {
-  capitalizeFirstLetter,
   getCurrentValueIdentifier,
   getCurrentValueName,
   getDefaultValueExpression,
   getSetNameIdentifier,
+  setFieldState,
 } from '../../forms/form-state';
 import { buildOverrideOnChangeStatement } from '../../forms/form-renderer-helper';
 import { addUseEffectWrapper } from '../generate-react-hooks';
@@ -1014,6 +1014,7 @@ export const renderArrayFieldComponent = (
   const setStateName = getSetNameIdentifier(getCurrentValueName(renderedFieldName));
   const valuesListName = factory.createIdentifier('values');
   const onChangeArgName = factory.createIdentifier('items');
+
   return factory.createJsxElement(
     factory.createJsxOpeningElement(
       factory.createIdentifier('ArrayField'),
@@ -1048,13 +1049,8 @@ export const renderArrayFieldComponent = (
                     ),
                   ),
                   buildOverrideOnChangeStatement(fieldName, fieldConfigs, valuesListName),
-                  factory.createExpressionStatement(
-                    factory.createCallExpression(
-                      factory.createIdentifier(`set${capitalizeFirstLetter(renderedFieldName)}`),
-                      undefined,
-                      [valuesListName],
-                    ),
-                  ),
+                  factory.createExpressionStatement(setFieldState(renderedFieldName, valuesListName)),
+
                   factory.createExpressionStatement(
                     factory.createCallExpression(setStateName, undefined, [
                       getDefaultValueExpression(fieldName, componentType, dataType),
@@ -1076,7 +1072,17 @@ export const renderArrayFieldComponent = (
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('items'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(renderedFieldName)),
+          factory.createJsxExpression(
+            undefined,
+            // render `?? []` if nested.
+            renderedFieldName.includes('.')
+              ? factory.createBinaryExpression(
+                  factory.createIdentifier(renderedFieldName),
+                  factory.createToken(SyntaxKind.QuestionQuestionToken),
+                  factory.createArrayLiteralExpression([], false),
+                )
+              : factory.createIdentifier(renderedFieldName),
+          ),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('hasError'),

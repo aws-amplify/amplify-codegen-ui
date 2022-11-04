@@ -31,6 +31,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'ListingExpanderWithComponentSlot',
   'CustomFormCreateDog',
   'DataStoreFormCreateAllSupportedFormFields',
+  'CustomFormCreateNestedJson',
   'ComponentWithDataBindingWithPredicate',
   'ComponentWithDataBindingWithoutPredicate',
   'ComponentWithSimplePropertyBinding',
