@@ -313,7 +313,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         factory.createIdentifier(formPropType),
         undefined,
         factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
-          factory.createIntersectionTypeNode([escapeHatchTypeNode, buildFormPropNode(this.component, modelName)]),
+          factory.createIntersectionTypeNode([
+            escapeHatchTypeNode,
+            buildFormPropNode(this.component, modelName),
+            factory.createTypeReferenceNode(
+              factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('CSSProperties')),
+              undefined,
+            ),
+          ]),
         ]),
       ),
     ];
