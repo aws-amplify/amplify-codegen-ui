@@ -3,29 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.5.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.1...v2.5.2) (2022-10-18)
-
+## [2.5.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.2...v2.5.3) (2022-11-04)
 
 ### Bug Fixes
 
-* fix dependency ([95979eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/95979eb3baa672ab98acbd8cf7fcdb12184b8f98))
-* minimize type usage of datastore ([#701](https://github.com/aws-amplify/amplify-codegen-ui/issues/701)) ([40b0f23](https://github.com/aws-amplify/amplify-codegen-ui/commit/40b0f231d4e42cdcdbcb0e74580a34a03952eb18))
+- alias model names collision with component types ([#733](https://github.com/aws-amplify/amplify-codegen-ui/issues/733)) ([ec0167d](https://github.com/aws-amplify/amplify-codegen-ui/commit/ec0167d5a13cc89988df242ec637078283af1faa)), closes [#730](https://github.com/aws-amplify/amplify-codegen-ui/issues/730)
+- support nested arrays ([c4ab231](https://github.com/aws-amplify/amplify-codegen-ui/commit/c4ab23133354274c0cee7ebfb192c6b564da9e08))
 
+### Features
 
+- expander init ([#725](https://github.com/aws-amplify/amplify-codegen-ui/issues/725)) ([bad7b04](https://github.com/aws-amplify/amplify-codegen-ui/commit/bad7b04cb84e45050dd016db36eb055b2be5cfc1))
 
+## [2.5.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.1...v2.5.2) (2022-10-18)
 
+### Bug Fixes
+
+- fix dependency ([95979eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/95979eb3baa672ab98acbd8cf7fcdb12184b8f98))
+- minimize type usage of datastore ([#701](https://github.com/aws-amplify/amplify-codegen-ui/issues/701)) ([40b0f23](https://github.com/aws-amplify/amplify-codegen-ui/commit/40b0f231d4e42cdcdbcb0e74580a34a03952eb18))
 
 ## [2.5.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.1...v2.5.1) (2022-10-12)
 
-
 ### Bug Fixes
 
-* fix dependency ([95979eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/95979eb3baa672ab98acbd8cf7fcdb12184b8f98))
-* minimize type usage of datastore ([#701](https://github.com/aws-amplify/amplify-codegen-ui/issues/701)) ([40b0f23](https://github.com/aws-amplify/amplify-codegen-ui/commit/40b0f231d4e42cdcdbcb0e74580a34a03952eb18))
-
-
-
-
+- fix dependency ([95979eb](https://github.com/aws-amplify/amplify-codegen-ui/commit/95979eb3baa672ab98acbd8cf7fcdb12184b8f98))
+- minimize type usage of datastore ([#701](https://github.com/aws-amplify/amplify-codegen-ui/issues/701)) ([40b0f23](https://github.com/aws-amplify/amplify-codegen-ui/commit/40b0f231d4e42cdcdbcb0e74580a34a03952eb18))
 
 # [2.5.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.4.2...v2.5.0) (2022-10-12)
 
