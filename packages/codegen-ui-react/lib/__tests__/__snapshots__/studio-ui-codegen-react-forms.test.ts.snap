@@ -376,7 +376,7 @@ export declare type CustomDataFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
     onValidate?: CustomDataFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
 "
 `;
@@ -782,7 +782,7 @@ export declare type CustomDataFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
     onValidate?: CustomDataFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
 "
 `;
@@ -1187,7 +1187,7 @@ export declare type CustomDataFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
     onValidate?: CustomDataFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
 "
 `;
@@ -1740,7 +1740,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
     onValidate?: MyPostFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
@@ -2305,7 +2305,7 @@ export declare type NestedJsonProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: NestedJsonInputValues) => NestedJsonInputValues;
     onValidate?: NestedJsonValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
 `;
@@ -2786,7 +2786,7 @@ export declare type NestedJsonProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: NestedJsonInputValues) => NestedJsonInputValues;
     onValidate?: NestedJsonValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
 `;
@@ -2962,7 +2962,7 @@ export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: CustomWithSectionalElementsInputValues) => CustomWithSectionalElementsInputValues;
     onValidate?: CustomWithSectionalElementsValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function CustomWithSectionalElements(props: CustomWithSectionalElementsProps): React.ReactElement;
 "
 `;
@@ -3299,7 +3299,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
     onValidate?: MyPostFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
@@ -3728,7 +3728,7 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
     onValidate?: MyPostFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
@@ -4275,7 +4275,7 @@ export declare type MyFlexUpdateFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
     onValidate?: MyFlexUpdateFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function MyFlexUpdateForm(props: MyFlexUpdateFormProps): React.ReactElement;
 "
 `;
@@ -4803,7 +4803,7 @@ export declare type BlogCreateFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: BlogCreateFormInputValues) => BlogCreateFormInputValues;
     onValidate?: BlogCreateFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function BlogCreateForm(props: BlogCreateFormProps): React.ReactElement;
 "
 `;
@@ -5520,7 +5520,7 @@ export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: InputGalleryCreateFormInputValues) => InputGalleryCreateFormInputValues;
     onValidate?: InputGalleryCreateFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function InputGalleryCreateForm(props: InputGalleryCreateFormProps): React.ReactElement;
 "
 `;
@@ -6287,7 +6287,7 @@ export declare type InputGalleryUpdateFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: InputGalleryUpdateFormInputValues) => InputGalleryUpdateFormInputValues;
     onValidate?: InputGalleryUpdateFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function InputGalleryUpdateForm(props: InputGalleryUpdateFormProps): React.ReactElement;
 "
 `;
@@ -6816,7 +6816,7 @@ export declare type MyFlexCreateFormProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
     onValidate?: MyFlexCreateFormValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function MyFlexCreateForm(props: MyFlexCreateFormProps): React.ReactElement;
 "
 `;
@@ -7213,7 +7213,7 @@ export declare type PostCreateFormRowProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: PostCreateFormRowInputValues) => PostCreateFormRowInputValues;
     onValidate?: PostCreateFormRowValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function PostCreateFormRow(props: PostCreateFormRowProps): React.ReactElement;
 "
 `;
