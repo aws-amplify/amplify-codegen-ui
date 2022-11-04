@@ -47,6 +47,7 @@ import {
   buildAccessChain,
   buildNestedStateSet,
   capitalizeFirstLetter,
+  getArrayChildRefName,
   getCurrentValueIdentifier,
   getCurrentValueName,
   getSetNameIdentifier,
@@ -222,7 +223,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('ref'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedVariableName}Ref`)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(getArrayChildRefName(renderedVariableName))),
         ),
       );
     }

@@ -74,6 +74,7 @@ import {
 } from './form-renderer-helper';
 import {
   buildUseStateExpression,
+  getArrayChildRefName,
   getCurrentValueName,
   getDefaultValueExpression,
   getInitialValues,
@@ -469,7 +470,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
               factory.createVariableDeclarationList(
                 [
                   factory.createVariableDeclaration(
-                    factory.createIdentifier(`${renderedName}Ref`),
+                    factory.createIdentifier(getArrayChildRefName(renderedName)),
                     undefined,
                     undefined,
                     factory.createCallExpression(

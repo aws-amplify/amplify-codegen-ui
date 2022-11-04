@@ -30,7 +30,21 @@ import {
   PropertyName,
 } from 'typescript';
 
-export const getCurrentValueName = (fieldName: string) => `current${capitalizeFirstLetter(fieldName)}Value`;
+// used just to sanitize nested array field names
+// when rendering currentValue state and ref
+const getVariableName = (input: string[]) =>
+  input.length > 1 ? input.join('').replace(/[^a-zA-Z0-9_$]/g, '') : input.join('');
+
+export const getArrayChildRefName = (fieldName: string) => {
+  const paths = fieldName.split('.').map((path, i) => (i === 0 ? path : capitalizeFirstLetter(path)));
+  return `${getVariableName(paths)}Ref`;
+};
+
+// value of the child of an ArrayField
+export const getCurrentValueName = (fieldName: string) => {
+  const paths = fieldName.split('.').map((path) => capitalizeFirstLetter(path));
+  return `current${getVariableName(paths)}Value`;
+};
 
 export const getCurrentValueIdentifier = (fieldName: string) =>
   factory.createIdentifier(getCurrentValueName(fieldName));
@@ -100,6 +114,7 @@ export const getDefaultValueExpression = (
   name: string,
   componentType: string,
   dataType?: DataFieldDataType,
+  isArray?: boolean,
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
     ToggleButton: factory.createFalse(),
@@ -109,12 +124,12 @@ export const getDefaultValueExpression = (
     CheckboxField: factory.createFalse(),
   };
 
+  if (isArray) {
+    return factory.createArrayLiteralExpression([], false);
+  }
+
   // it's a nonModel or relationship object
   if (dataType && typeof dataType === 'object' && !('enum' in dataType)) {
-    return factory.createObjectLiteralExpression();
-  }
-  // the name itself is a nested json object
-  if (name.split('.').length > 1) {
     return factory.createObjectLiteralExpression();
   }
 
@@ -132,16 +147,21 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
   const stateNames = new Set<string>();
   const propertyAssignments = Object.entries(fieldConfigs).reduce<PropertyAssignment[]>(
     (acc, [name, { dataType, componentType, isArray }]) => {
+      const isNested = name.includes('.');
+      // we are only setting top-level keys
       const stateName = name.split('.')[0];
+      let initialValue = getDefaultValueExpression(name, componentType, dataType, isArray);
+      if (isNested) {
+        // if nested, just set up an empty object for the top-level key
+        initialValue = factory.createObjectLiteralExpression();
+      }
       if (!stateNames.has(stateName)) {
         acc.push(
           factory.createPropertyAssignment(
             isValidVariableName(stateName)
               ? factory.createIdentifier(stateName)
               : factory.createStringLiteral(stateName),
-            isArray
-              ? factory.createArrayLiteralExpression([], false)
-              : getDefaultValueExpression(name, componentType, dataType),
+            initialValue,
           ),
         );
         stateNames.add(stateName);
