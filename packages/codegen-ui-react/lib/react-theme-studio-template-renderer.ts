@@ -44,6 +44,10 @@ import {
 } from './react-studio-template-renderer-helper';
 import { RequiredKeys } from './utils/type-utils';
 
+export type ReactThemeStudioTemplateRendererOptions = {
+  renderDefaultTheme?: boolean;
+};
+
 export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
   StudioTheme,
@@ -57,15 +61,18 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 
   protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
 
+  protected options: ReactThemeStudioTemplateRendererOptions | undefined;
+
   fileName: string;
 
-  constructor(theme: StudioTheme, renderConfig: ReactRenderConfig) {
+  constructor(theme: StudioTheme, renderConfig: ReactRenderConfig, options?: ReactThemeStudioTemplateRendererOptions) {
     super(theme, new ReactOutputManager(), renderConfig);
     this.renderConfig = {
       ...defaultRenderConfig,
       ...renderConfig,
     };
     this.fileName = `${this.component.name}.${scriptKindToFileExtensionNonReact(this.renderConfig.script)}`;
+    this.options = options;
   }
 
   renderComponentInternal() {
@@ -106,6 +113,9 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
    */
   private buildImports() {
     this.importCollection.addMappedImport(ImportValue.CREATE_THEME);
+    if (this.options?.renderDefaultTheme) {
+      this.importCollection.addMappedImport(ImportValue.DEFAULT_THEME);
+    }
 
     return this.importCollection.buildImportStatements(true);
   }
@@ -118,7 +128,11 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
       undefined,
       undefined,
       undefined,
-      factory.createCallExpression(factory.createIdentifier('createTheme'), undefined, [this.buildThemeObject()]),
+      factory.createCallExpression(factory.createIdentifier('createTheme'), undefined, [
+        this.options?.renderDefaultTheme
+          ? factory.createIdentifier(ImportValue.DEFAULT_THEME)
+          : this.buildThemeObject(),
+      ]),
     );
   }
 

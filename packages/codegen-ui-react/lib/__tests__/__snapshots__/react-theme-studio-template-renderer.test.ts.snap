@@ -26,6 +26,13 @@ exports[`react theme renderer tests renderThemeJson should render theme json suc
 }"
 `;
 
+exports[`react theme renderer tests theme should render the default theme 1`] = `
+"/* eslint-disable */
+import { createTheme, defaultTheme } from \\"@aws-amplify/ui-react\\";
+export default createTheme(defaultTheme);
+"
+`;
+
 exports[`react theme renderer tests theme should render the theme 1`] = `
 "/* eslint-disable */
 import { createTheme } from \\"@aws-amplify/ui-react\\";
