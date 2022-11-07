@@ -15,12 +15,19 @@
  */
 import { StudioTemplateRendererFactory, StudioTheme } from '@aws-amplify/codegen-ui';
 import { ScriptTarget, ScriptKind, ReactRenderConfig } from '..';
-import { ReactThemeStudioTemplateRenderer } from '../react-theme-studio-template-renderer';
+import {
+  ReactThemeStudioTemplateRenderer,
+  ReactThemeStudioTemplateRendererOptions,
+} from '../react-theme-studio-template-renderer';
 import { loadSchemaFromJSONFile } from './__utils__';
 
-function generateWithThemeRenderer(jsonFile: string, renderConfig: ReactRenderConfig = {}): string {
+function generateWithThemeRenderer(
+  jsonFile: string,
+  renderConfig: ReactRenderConfig = {},
+  options?: ReactThemeStudioTemplateRendererOptions,
+): string {
   const rendererFactory = new StudioTemplateRendererFactory(
-    (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig),
+    (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig, options),
   );
   return rendererFactory.buildRenderer(loadSchemaFromJSONFile(jsonFile)).renderComponent().componentText;
 }
@@ -48,6 +55,10 @@ describe('react theme renderer tests', () => {
 
     it('should render the theme with ES5', () => {
       expect(generateWithThemeRenderer('theme', { target: ScriptTarget.ES5, script: ScriptKind.JS })).toMatchSnapshot();
+    });
+
+    it('should render the default theme', () => {
+      expect(generateWithThemeRenderer('theme', {}, { renderDefaultTheme: true })).toMatchSnapshot();
     });
   });
 
