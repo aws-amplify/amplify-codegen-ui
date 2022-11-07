@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.2...v2.5.4) (2022-11-07)
+
+### Bug Fixes
+
+- alias model names collision with component types ([#733](https://github.com/aws-amplify/amplify-codegen-ui/issues/733)) ([ec0167d](https://github.com/aws-amplify/amplify-codegen-ui/commit/ec0167d5a13cc89988df242ec637078283af1faa)), closes [#730](https://github.com/aws-amplify/amplify-codegen-ui/issues/730)
+- forms checkbox to reflect correct model state ([#738](https://github.com/aws-amplify/amplify-codegen-ui/issues/738)) ([db310d7](https://github.com/aws-amplify/amplify-codegen-ui/commit/db310d7865cc7f23a41d4c619ad5d7a2062df3be))
+- support nested arrays ([c4ab231](https://github.com/aws-amplify/amplify-codegen-ui/commit/c4ab23133354274c0cee7ebfb192c6b564da9e08))
+
+### Features
+
+- expander init ([#725](https://github.com/aws-amplify/amplify-codegen-ui/issues/725)) ([bad7b04](https://github.com/aws-amplify/amplify-codegen-ui/commit/bad7b04cb84e45050dd016db36eb055b2be5cfc1))
+
 ## [2.5.3](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.2...v2.5.3) (2022-11-04)
 
 ### Bug Fixes
