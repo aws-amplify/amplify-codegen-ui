@@ -3414,7 +3414,11 @@ export default function MyPostForm(props) {
     setUsername(cleanValues.username);
     setProfile_url(cleanValues.profile_url);
     setPost_url(cleanValues.post_url);
-    setMetadata(cleanValues.metadata);
+    setMetadata(
+      typeof cleanValues.metadata === \\"string\\"
+        ? cleanValues.metadata
+        : JSON.stringify(cleanValues.metadata)
+    );
     setErrors({});
   };
   const [postRecord, setPostRecord] = React.useState(post);
