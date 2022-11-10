@@ -28,6 +28,9 @@ import {
   PropertyAccessChain,
   PropertyAssignment,
   PropertyName,
+  PropertyAccessExpression,
+  ElementAccessExpression,
+  ConditionalExpression,
 } from 'typescript';
 
 // used just to sanitize nested array field names
@@ -269,18 +272,24 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
               factory.createStringLiteral(stateName),
             );
 
-        acc.push(
-          setStateExpression(
-            renderedName,
-            isArray && recordOrInitialValues === 'cleanValues'
-              ? factory.createBinaryExpression(
-                  accessExpression,
-                  factory.createToken(SyntaxKind.QuestionQuestionToken),
-                  factory.createArrayLiteralExpression([], false),
-                )
-              : accessExpression,
-          ),
-        );
+        // Initial values should have the correct values and not need a modifier
+        if (dataType === 'AWSJSON' && !isArray && recordOrInitialValues !== 'initialValues') {
+          const awsJSONAccessModifier = stringifyAWSJSONFieldValue(accessExpression);
+          acc.push(setStateExpression(renderedName, awsJSONAccessModifier));
+        } else {
+          acc.push(
+            setStateExpression(
+              renderedName,
+              isArray && recordOrInitialValues === 'cleanValues'
+                ? factory.createBinaryExpression(
+                    accessExpression,
+                    factory.createToken(SyntaxKind.QuestionQuestionToken),
+                    factory.createArrayLiteralExpression([], false),
+                  )
+                : accessExpression,
+            ),
+          );
+        }
         if (isArray) {
           acc.push(
             setStateExpression(
@@ -343,6 +352,33 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
         ),
       ],
       NodeFlags.Const,
+    ),
+  );
+};
+
+/**
+ * Datastore allows JSON strings and normal JSON so check for a string
+ * before stringifying or else the string will return with escaped quotes
+ *
+ * Example output:
+ * typeof cleanValues.metadata === 'string' ? cleanValues.metadata : JSON.stringify(cleanValues.metadata)
+ */
+const stringifyAWSJSONFieldValue = (
+  value: PropertyAccessExpression | ElementAccessExpression,
+): ConditionalExpression => {
+  return factory.createConditionalExpression(
+    factory.createBinaryExpression(
+      factory.createTypeOfExpression(value),
+      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+      factory.createStringLiteral('string'),
+    ),
+    factory.createToken(SyntaxKind.QuestionToken),
+    value,
+    factory.createToken(SyntaxKind.ColonToken),
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('JSON'), factory.createIdentifier('stringify')),
+      undefined,
+      [value],
     ),
   );
 };
