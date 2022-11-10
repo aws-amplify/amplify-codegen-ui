@@ -194,7 +194,7 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
  */
 export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
   const stateNames = new Set();
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, dataType }]) => {
+  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, dataType, isArray }]) => {
     const fieldName = name.split('.')[0];
     const renderedFieldName = sanitizedFieldName || fieldName;
 
@@ -211,7 +211,7 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
     }
 
     function renderCorrectUseStateValue() {
-      if (dataType === 'AWSJSON') {
+      if (dataType === 'AWSJSON' && !isArray) {
         return factory.createConditionalExpression(
           determinePropertyName(),
           factory.createToken(SyntaxKind.QuestionToken),
