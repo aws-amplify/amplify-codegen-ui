@@ -201,8 +201,11 @@ export default function BookUpdateForm(props) {
       const record = id ? await DataStore.query(Book, id) : book;
       setBookRecord(record);
       // get existing relationship record
-      const existingAuthor = record ? await DataStore.query(Author, (a) => a.id.eq(record.authorId)) : primaryAuthor;
+      const existingAuthor = record ? await DataStore.query(Author, (a) => a.id.eq(record.authorId)) : undefined;
+      // set existing record on autocomplete if it exists
       setPrimaryAuthor(existingAuthor);
+      setCurrentPrimaryAuthorValue(existingAuthor && existingAuthor[0].id);
+      setCurrentPrimaryAuthorDisplayValue(existingAuthor && existingAuthor[0]?.name);
     };
     queryData();
   }, [id, book]);
@@ -241,7 +244,7 @@ export default function BookUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          primaryAuthor,
+          primaryAuthor: primaryAuthor?.id, // pass in id field
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -326,7 +329,7 @@ export default function BookUpdateForm(props) {
         }}
         currentFieldValue={currentPrimaryAuthorValue}
         label={'Primary author'}
-        items={[primaryAuthor]} // passed in as array
+        items={primaryAuthor ? [primaryAuthor] : []} // pass in array unless undefined
         hasError={errors.primaryAuthor?.hasError}
         setFieldValue={setCurrentPrimaryAuthorDisplayValue} // display value must be set on edit
         inputFieldRef={primaryAuthorRef}
@@ -345,11 +348,11 @@ export default function BookUpdateForm(props) {
             setCurrentPrimaryAuthorDisplayValue(value);
             setCurrentPrimaryAuthorValue(undefined); // empty out prev selected option
           }}
-          suggestions={authorRecords.map((r) => ({
+          options={authorRecords.map((r) => ({
             id: r.id,
             label: getDisplayValue['primaryAuthor']?.(record) ?? r.id,
           }))}
-          onSuggestionSelect={({ id, label }) => {
+          onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(authorRecords.find((r) => r.id === id));
             setCurrentPrimaryAuthorDisplayValue(label);
           }}
