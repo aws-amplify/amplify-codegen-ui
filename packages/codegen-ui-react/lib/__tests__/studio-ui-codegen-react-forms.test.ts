@@ -42,6 +42,21 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it.only('should generate a create form with belongsTo relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/member-datastore-create',
+        'datastore/project-team-model',
+      );
+      // check nested model is imported
+      expect(componentText).toContain('import { Member, Team } from "../models";');
+
+      // check binding call is generated
+      expect(componentText).toContain('const authorRecords = useDataStoreBinding({');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should generate a create form with multiple hasOne relationships', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/book-datastore-relationship-multiple',

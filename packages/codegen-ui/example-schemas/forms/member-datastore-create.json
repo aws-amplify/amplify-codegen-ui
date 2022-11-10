@@ -1,0 +1,17 @@
+{
+  "name": "MyMemberForm",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "Member"
+  },
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {
+    "position": "top",
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  }
+}
