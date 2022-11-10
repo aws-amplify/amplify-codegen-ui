@@ -52,6 +52,20 @@
           "isRequired": false,
           "attributes": []
         },
+        "jsonArray": {
+          "name": "jsonArray",
+          "isArray": true,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "attributes": []
+        },
+        "jsonField": {
+          "name": "jsonField",
+          "isArray": false,
+          "type": "AWSJSON",
+          "isRequired": false,
+          "attributes": []
+        },
         "timestamp": {
           "name": "timestamp",
           "isArray": false,
