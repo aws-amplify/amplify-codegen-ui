@@ -244,7 +244,7 @@ export default function BookUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          primaryAuthor: primaryAuthor?.id, // pass in id field
+          authorId: primaryAuthor?.id, // pass in id field
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
