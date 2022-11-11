@@ -72,7 +72,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
     }
 
     // TODO: Allow for other relationship types once valueMappings available
-    if (fieldConfig.componentType === 'Autocomplete' && fieldConfig.relationship?.type === 'HAS_ONE') {
+    if (fieldConfig.componentType === 'Autocomplete' && fieldConfig.relationship) {
       attributes.push(getAutocompleteSuggestionsProp({ fieldName: componentName, fieldConfig }));
       attributes.push(buildOnSuggestionSelect({ sanitizedFieldName: renderedVariableName, fieldConfig }));
     }
