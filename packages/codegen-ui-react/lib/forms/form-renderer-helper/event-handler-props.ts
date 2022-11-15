@@ -273,7 +273,7 @@ export const buildOnChangeStatement = (
   );
 };
 
-// onSuggestionSelect={({ id }) => {
+// onSelect={({ id }) => {
 //   setCurrentPrimaryAuthorValue(
 //     id
 //   );

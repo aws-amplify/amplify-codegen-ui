@@ -71,6 +71,7 @@ function getValueMappings({
   if (field.relationship) {
     const modelName = field.relationship.relatedModelName;
     return {
+      // TODO: map field dynamically as part of cpk task
       values: [{ value: { bindingProperties: { property: modelName, field: 'id' } } }],
       bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },
     };
