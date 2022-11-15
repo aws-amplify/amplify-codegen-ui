@@ -145,25 +145,25 @@ export function extractModelAndKey(valueMappings?: StudioFormValueMappings): { m
 
 /**
     example:
-    suggestions={authorRecords.map(r) => ({
+    options={authorRecords.map(r) => ({
         id: r.id,
         label: getDisplayValue['primaryAuthor']?.(r) ?? r.id,
     }))}
  */
-export function getAutocompleteSuggestionsProp({
+export function getAutocompleteOptionsProp({
   fieldName,
   fieldConfig,
 }: {
   fieldName: string;
   fieldConfig: FieldConfigMetadata;
 }): JsxAttribute {
-  let suggestions: Expression | undefined;
+  let options: Expression | undefined;
 
   const { valueMappings } = fieldConfig;
   const { model, key } = extractModelAndKey(valueMappings);
 
   if (model && key) {
-    suggestions = getModelTypeSuggestions({
+    options = getModelTypeSuggestions({
       modelName: model,
       fieldName,
       key,
@@ -171,13 +171,13 @@ export function getAutocompleteSuggestionsProp({
     });
   }
 
-  if (!suggestions) {
+  if (!options) {
     throw new InvalidInputError(`Invalid value mappings on ${fieldName}`);
   }
 
   return factory.createJsxAttribute(
-    factory.createIdentifier('suggestions'),
-    factory.createJsxExpression(undefined, suggestions),
+    factory.createIdentifier('options'),
+    factory.createJsxExpression(undefined, options),
   );
 }
 

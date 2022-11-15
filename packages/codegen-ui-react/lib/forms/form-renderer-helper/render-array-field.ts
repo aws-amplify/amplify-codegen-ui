@@ -147,7 +147,14 @@ export const renderArrayFieldComponent = (
   let itemsExpression: Expression = factory.createIdentifier(renderedFieldName);
 
   if (isLimitedToOneValue) {
-    itemsExpression = factory.createArrayLiteralExpression([factory.createIdentifier(renderedFieldName)], false);
+    // "book ? [book] : []"
+    itemsExpression = factory.createConditionalExpression(
+      factory.createIdentifier(renderedFieldName),
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createArrayLiteralExpression([factory.createIdentifier(renderedFieldName)], false),
+      factory.createToken(SyntaxKind.ColonToken),
+      factory.createArrayLiteralExpression([], false),
+    );
 
     props.push(
       factory.createJsxAttribute(

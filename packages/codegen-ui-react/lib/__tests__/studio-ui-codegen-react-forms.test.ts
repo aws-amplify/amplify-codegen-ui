@@ -58,6 +58,35 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate a create form with belongsTo relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/member-datastore-create',
+        'datastore/project-team-model',
+      );
+      // check nested model is imported
+      expect(componentText).toContain('import { Member, Team } from "../models";');
+
+      // check binding call is generated
+      expect(componentText).toContain('const teamRecords = useDataStoreBinding({');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should use proper field overrides for belongsTo relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/member-datastore-create',
+        'datastore/project-team-model',
+      );
+      // Check that custom field label is working as expected
+      expect(componentText).toContain('Team Label');
+      // Check that Autocomplete custom display value is set
+      expect(componentText).toContain('team: (record) => record?.name');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should render form with a two inputs in row', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-create-row',
