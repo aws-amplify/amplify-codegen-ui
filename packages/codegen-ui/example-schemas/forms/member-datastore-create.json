@@ -5,7 +5,35 @@
     "dataSourceType": "DataStore",
     "dataTypeName": "Member"
   },
-  "fields": {},
+  "fields": {
+    "team": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "Team",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "bindingProperties": {
+                  "property": "Team",
+                  "field": "name"
+                }
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Team": { "type": "Data", "bindingProperties": { "model": "Team" } }
+          }
+        }
+      },
+      "label": "Team Label"
+    }
+  },
   "sectionalElements": {},
   "style": {},
   "cta": {
