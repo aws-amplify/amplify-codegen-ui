@@ -5920,7 +5920,11 @@ export default function InputGalleryUpdateForm(props) {
     setCurrentArrayTypeFieldValue(undefined);
     setJsonArray(cleanValues.jsonArray ?? []);
     setCurrentJsonArrayValue(undefined);
-    setJsonField(cleanValues.jsonField);
+    setJsonField(
+      typeof cleanValues.jsonField === \\"string\\"
+        ? cleanValues.jsonField
+        : JSON.stringify(cleanValues.jsonField)
+    );
     setTimestamp(cleanValues.timestamp);
     setIppy(cleanValues.ippy);
     setTimeisnow(cleanValues.timeisnow);
