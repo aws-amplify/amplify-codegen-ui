@@ -69,15 +69,12 @@ function getValueMappings({
 
   // if relationship
   if (field.relationship) {
-    // if model & HAS_ONE
-    if (field.relationship.type === 'HAS_ONE') {
-      const modelName = field.relationship.relatedModelName;
-      return {
-        // TODO: map field dynamically as part of cpk task
-        values: [{ value: { bindingProperties: { property: modelName, field: 'id' } } }],
-        bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },
-      };
-    }
+    const modelName = field.relationship.relatedModelName;
+    return {
+      // TODO: map field dynamically as part of cpk task
+      values: [{ value: { bindingProperties: { property: modelName, field: 'id' } } }],
+      bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },
+    };
   }
 
   return undefined;
