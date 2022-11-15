@@ -4355,48 +4355,9 @@ function ArrayField({
       setIsEditing(false);
     }
   };
-  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
-  }
-  return (
+  const arraySection = (
     <React.Fragment>
-      {isEditing && children}
-      {!isEditing ? (
-        <>
-          <Text>{label}</Text>
-          <Button
-            onClick={() => {
-              setIsEditing(true);
-            }}
-          >
-            Add item
-          </Button>
-        </>
-      ) : (
-        <Flex justifyContent=\\"flex-end\\">
-          {(currentFieldValue || isEditing) && (
-            <Button
-              children=\\"Cancel\\"
-              type=\\"button\\"
-              size=\\"small\\"
-              onClick={() => {
-                setFieldValue(defaultFieldValue);
-                setIsEditing(false);
-                setSelectedBadgeIndex(undefined);
-              }}
-            ></Button>
-          )}
-          <Button
-            size=\\"small\\"
-            variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
-            isDisabled={hasError}
-            onClick={addItem}
-          >
-            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
-          </Button>
-        </Flex>
-      )}
+      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -4446,6 +4407,50 @@ function ArrayField({
         </ScrollView>
       )}
       <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
     </React.Fragment>
   );
 }
@@ -4635,7 +4640,7 @@ export default function MyMemberForm(props) {
         }}
         currentFieldValue={currentTeamValue}
         label={\\"Team\\"}
-        items={[team]}
+        items={team ? [team] : []}
         hasError={errors.team?.hasError}
         getBadgeText={getDisplayValue.team}
         setFieldValue={currentTeamDisplayValue}
@@ -4647,11 +4652,11 @@ export default function MyMemberForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentTeamDisplayValue}
-          suggestions={teamRecords.map((r) => ({
+          options={teamRecords.map((r) => ({
             id: r.id,
             label: getDisplayValue.team?.(r) ?? r.id,
           }))}
-          onSuggestionSelect={({ id, label }) => {
+          onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
             setCurrentTeamDisplayValue(label);
           }}

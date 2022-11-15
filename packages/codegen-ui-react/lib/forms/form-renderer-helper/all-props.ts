@@ -17,10 +17,10 @@ import { StudioComponent, StudioComponentChild, FormMetadata, isValidVariableNam
 import { factory, SyntaxKind, JsxAttribute } from 'typescript';
 import { buildComponentSpecificAttributes } from './static-props';
 import { renderValueAttribute, renderDefaultValueAttribute, isControlledComponent } from './value-props';
-import { buildOnChangeStatement, buildOnBlurStatement, buildOnSuggestionSelect } from './event-handler-props';
+import { buildOnChangeStatement, buildOnBlurStatement, buildOnSelect } from './event-handler-props';
 import { resetValuesName } from './form-state';
 import { shouldWrapInArrayField } from './render-checkers';
-import { getAutocompleteSuggestionsProp } from './display-value';
+import { getAutocompleteOptionsProp } from './display-value';
 
 export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
   const { name: componentName, componentType } = component;
@@ -73,8 +73,8 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
 
     // TODO: Allow for other relationship types once valueMappings available
     if (fieldConfig.componentType === 'Autocomplete' && fieldConfig.relationship) {
-      attributes.push(getAutocompleteSuggestionsProp({ fieldName: componentName, fieldConfig }));
-      attributes.push(buildOnSuggestionSelect({ sanitizedFieldName: renderedVariableName, fieldConfig }));
+      attributes.push(getAutocompleteOptionsProp({ fieldName: componentName, fieldConfig }));
+      attributes.push(buildOnSelect({ sanitizedFieldName: renderedVariableName, fieldConfig }));
     }
 
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {

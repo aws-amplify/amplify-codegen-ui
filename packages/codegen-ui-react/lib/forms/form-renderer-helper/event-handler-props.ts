@@ -282,12 +282,12 @@ export const buildOnChangeStatement = (
 
 /**
   example:
-  onSuggestionSelect={({ id, label }) => {
+  onSelect={({ id, label }) => {
     setCurrentPrimaryAuthorValue(authorRecords.find((r) => r.id === id));
     setCurrentPrimaryAuthorDisplayValue(label);
   }}
  */
-export function buildOnSuggestionSelect({
+export function buildOnSelect({
   sanitizedFieldName,
   fieldConfig,
 }: {
@@ -362,7 +362,7 @@ export function buildOnSuggestionSelect({
   }
 
   return factory.createJsxAttribute(
-    factory.createIdentifier('onSuggestionSelect'),
+    factory.createIdentifier('onSelect'),
     factory.createJsxExpression(
       undefined,
       factory.createArrowFunction(

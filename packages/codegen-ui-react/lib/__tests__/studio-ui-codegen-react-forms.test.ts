@@ -58,7 +58,7 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
-    it.only('should generate a create form with multiple belongsTo relationships', () => {
+    it('should generate a create form with belongsTo relationship', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/member-datastore-create',
         'datastore/project-team-model',
