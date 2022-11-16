@@ -179,7 +179,7 @@ export default function TagCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    label: undefined,
+    label: '',
     Posts: [],
   };
   const [label, setLabel] = React.useState(initialValues.label);
@@ -196,14 +196,14 @@ export default function TagCreateForm(props) {
   };
 
   const [currentPostsValue, setCurrentPostsValue] = React.useState(undefined);
-  const [currentPostsDisplayValue, setCurrentPostsDisplayValue] = React.useState(undefined);
+  const [currentPostsDisplayValue, setCurrentPostsDisplayValue] = React.useState('');
 
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setLabel(initialValues.label);
     setPosts(initialValues.Posts);
     setCurrentPostsValue(undefined);
-    setCurrentPostsDisplayValue(undefined);
+    setCurrentPostsDisplayValue('');
     setErrors({});
   };
 
@@ -292,6 +292,7 @@ export default function TagCreateForm(props) {
     >
       <TextField
         label="Label"
+        value={label}
         isRequired={false}
         isReadOnly={false}
         onChange={(e) => {
@@ -328,7 +329,7 @@ export default function TagCreateForm(props) {
           }
           setPosts(value);
           setCurrentPostsValue(undefined); // both value and displayValue emptied
-          setCurrentPostsDisplayValue(undefined);
+          setCurrentPostsDisplayValue('');
         }}
         currentFieldValue={currentPostsValue}
         label="Posts"
@@ -336,7 +337,7 @@ export default function TagCreateForm(props) {
         hasError={errors.Posts?.hasError}
         setFieldValue={setCurrentPostsDisplayValue} // display value must be set on edit
         inputFieldRef={PostsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={''}
       >
         <Autocomplete
           label="Posts"
@@ -361,6 +362,7 @@ export default function TagCreateForm(props) {
           }}
           value={currentPostsDisplayValue}
           onBlur={() => runValidationTasks('Posts', currentPostsValue)}
+          onClear={() => setCurrentPostsDisplayValue('')}
           errorMessage={errors.Posts?.errorMessage}
           hasError={errors.Posts?.hasError}
           ref={PostsRef}
