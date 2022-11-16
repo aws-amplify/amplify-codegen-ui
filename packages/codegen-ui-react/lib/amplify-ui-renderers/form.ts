@@ -23,7 +23,7 @@ import {
 } from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, Statement, SyntaxKind } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
-import { buildLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
+import { buildFormLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
 import { ImportCollection, ImportSource } from '../imports';
 import { buildDataStoreExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
@@ -67,7 +67,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       buildOpeningElementProperties(this.componentMetadata, value, key),
     );
 
-    propsArray.push(...buildLayoutProperties(this.componentMetadata.formMetadata));
+    propsArray.push(...buildFormLayoutProperties(this.componentMetadata.formMetadata));
 
     const submitAttribute = this.getFormOnSubmitAttribute();
     propsArray.push(submitAttribute);
