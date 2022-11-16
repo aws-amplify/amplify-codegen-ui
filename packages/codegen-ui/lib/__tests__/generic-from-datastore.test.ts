@@ -71,12 +71,16 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
       relatedModelField: 'student',
+      relatedJoinFieldName: 'teacher',
+      relatedJoinTableName: 'StudentTeacher',
     });
 
     expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Student',
       relatedModelField: 'teacher',
+      relatedJoinFieldName: 'student',
+      relatedJoinTableName: 'StudentTeacher',
     });
 
     expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
@@ -98,6 +102,8 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Dog',
       relatedModelField: 'ownerID',
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
     });
 
     expect(genericSchema.models.Dog.fields.ownerID.relationship).toStrictEqual({
@@ -123,12 +129,16 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
       relatedModelField: 'student',
+      relatedJoinFieldName: 'teacher',
+      relatedJoinTableName: 'StudentTeacher',
     });
 
     expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Student',
       relatedModelField: 'teacher',
+      relatedJoinFieldName: 'student',
+      relatedJoinTableName: 'StudentTeacher',
     });
 
     expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
@@ -150,6 +160,8 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Dog',
       relatedModelField: 'ownerID',
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
     });
 
     expect(genericSchema.models.Dog.fields.ownerID.relationship).toStrictEqual({
@@ -185,12 +197,16 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Friend',
       relatedModelField: 'friendId',
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
     });
 
     expect(userFields.posts.relationship).toStrictEqual({
       type: 'HAS_MANY',
       relatedModelName: 'Post',
       relatedModelField: 'userPostsId',
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
     });
   });
 

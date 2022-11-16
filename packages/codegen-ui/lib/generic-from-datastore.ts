@@ -123,9 +123,9 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
           if (
             relationshipType === 'HAS_ONE' &&
             ('targetName' in field.association || 'targetNames' in field.association) &&
-            field.association.targetName
+            (field.association.targetName || field.association.targetNames)
           ) {
-            const { targetName } = field.association;
+            const targetName = field.association.targetName || field.association.targetNames?.[0];
             if (targetName) {
               addRelationship(fieldsWithImplicitRelationships, model.name, targetName, {
                 type: relationshipType,
