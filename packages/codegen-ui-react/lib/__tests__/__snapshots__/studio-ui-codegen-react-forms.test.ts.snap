@@ -19,12 +19,12 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: undefined,
-    email: undefined,
+    name: \\"\\",
+    email: \\"\\",
     city: undefined,
     category: undefined,
     pages: 0,
-    phone: undefined,
+    phone: \\"\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -110,6 +110,7 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -138,6 +139,7 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -415,8 +417,8 @@ export default function CustomDataForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
-    email: undefined,
+    name: \\"\\",
+    email: \\"\\",
     \\"metadata-field\\": undefined,
     city: undefined,
     category: undefined,
@@ -520,6 +522,7 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
+        value={name}
         defaultValue={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -549,6 +552,7 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
+        value={email}
         defaultValue={email}
         onChange={(e) => {
           let { value } = e.target;
@@ -966,7 +970,7 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     email: [],
     phone: [],
   };
@@ -977,14 +981,14 @@ export default function CustomDataForm(props) {
   const resetStateValues = () => {
     setName(initialValues.name);
     setEmail(initialValues.email);
-    setCurrentEmailValue(undefined);
+    setCurrentEmailValue(\\"\\");
     setPhone(initialValues.phone);
-    setCurrentPhoneValue(undefined);
+    setCurrentPhoneValue(\\"\\");
     setErrors({});
   };
-  const [currentEmailValue, setCurrentEmailValue] = React.useState(undefined);
+  const [currentEmailValue, setCurrentEmailValue] = React.useState(\\"\\");
   const emailRef = React.createRef();
-  const [currentPhoneValue, setCurrentPhoneValue] = React.useState(undefined);
+  const [currentPhoneValue, setCurrentPhoneValue] = React.useState(\\"\\");
   const phoneRef = React.createRef();
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -1048,6 +1052,7 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1082,7 +1087,7 @@ export default function CustomDataForm(props) {
             values = result?.email ?? values;
           }
           setEmail(values);
-          setCurrentEmailValue(undefined);
+          setCurrentEmailValue(\\"\\");
         }}
         currentFieldValue={currentEmailValue}
         label={\\"E-mail\\"}
@@ -1090,7 +1095,7 @@ export default function CustomDataForm(props) {
         hasError={errors.email?.hasError}
         setFieldValue={setCurrentEmailValue}
         inputFieldRef={emailRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"E-mail\\"
@@ -1124,7 +1129,7 @@ export default function CustomDataForm(props) {
             values = result?.phone ?? values;
           }
           setPhone(values);
-          setCurrentPhoneValue(undefined);
+          setCurrentPhoneValue(\\"\\");
         }}
         currentFieldValue={currentPhoneValue}
         label={\\"phone\\"}
@@ -1132,7 +1137,7 @@ export default function CustomDataForm(props) {
         hasError={errors.phone?.hasError}
         setFieldValue={setCurrentPhoneValue}
         inputFieldRef={phoneRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"phone\\"
@@ -1403,12 +1408,12 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: undefined,
-    caption: undefined,
+    username: \\"\\",
+    caption: \\"\\",
     Customtags: [],
-    post_url: undefined,
+    post_url: \\"\\",
     metadata: undefined,
-    profile_url: undefined,
+    profile_url: \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -1425,14 +1430,14 @@ export default function MyPostForm(props) {
     setUsername(initialValues.username);
     setCaption(initialValues.caption);
     setCustomtags(initialValues.Customtags);
-    setCurrentCustomtagsValue(undefined);
+    setCurrentCustomtagsValue(\\"\\");
     setPost_url(initialValues.post_url);
     setMetadata(initialValues.metadata);
     setProfile_url(initialValues.profile_url);
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const CustomtagsRef = React.createRef();
   const validations = {
     username: [
@@ -1558,6 +1563,7 @@ export default function MyPostForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
+          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -1587,6 +1593,7 @@ export default function MyPostForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
+          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -1628,7 +1635,7 @@ export default function MyPostForm(props) {
             values = result?.Customtags ?? values;
           }
           setCustomtags(values);
-          setCurrentCustomtagsValue(undefined);
+          setCurrentCustomtagsValue(\\"\\");
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -1636,7 +1643,7 @@ export default function MyPostForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"
@@ -1965,12 +1972,12 @@ export default function NestedJson(props) {
   const { onSubmit, onValidate, onChange, overrides, ...rest } = props;
   const { tokens } = useTheme();
   const initialValues = {
-    \\"first-Name\\": undefined,
-    lastName: undefined,
+    \\"first-Name\\": \\"\\",
+    lastName: \\"\\",
     bio: {},
     Nicknames1: [],
     \\"nick-names2\\": [],
-    \\"first Name\\": undefined,
+    \\"first Name\\": \\"\\",
   };
   const [firstName, setFirstName] = React.useState(initialValues[\\"first-Name\\"]);
   const [lastName, setLastName] = React.useState(initialValues.lastName);
@@ -1988,9 +1995,9 @@ export default function NestedJson(props) {
     setLastName(initialValues.lastName);
     setBio(initialValues.bio);
     setNicknames1(initialValues.Nicknames1);
-    setCurrentNicknames1Value(undefined);
+    setCurrentNicknames1Value(\\"\\");
     setNickNames(initialValues[\\"nick-names2\\"]);
-    setCurrentNickNamesValue(undefined);
+    setCurrentNickNamesValue(\\"\\");
     setFirstName1(initialValues[\\"first Name\\"]);
     setErrors({});
   };
@@ -1998,10 +2005,9 @@ export default function NestedJson(props) {
     React.useState(undefined);
   const bioFavoritetreesRef = React.createRef();
   const [currentNicknames1Value, setCurrentNicknames1Value] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const Nicknames1Ref = React.createRef();
-  const [currentNickNamesValue, setCurrentNickNamesValue] =
-    React.useState(undefined);
+  const [currentNickNamesValue, setCurrentNickNamesValue] = React.useState(\\"\\");
   const nickNamesRef = React.createRef();
   const validations = {
     \\"first-Name\\": [],
@@ -2071,6 +2077,7 @@ export default function NestedJson(props) {
     >
       <TextField
         label=\\"firstName\\"
+        value={firstName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2097,6 +2104,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"lastName\\"
+        value={lastName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2128,6 +2136,7 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
+        value={bio}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2156,6 +2165,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
+        value={bio}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2246,7 +2256,7 @@ export default function NestedJson(props) {
             values = result?.Nicknames1 ?? values;
           }
           setNicknames1(values);
-          setCurrentNicknames1Value(undefined);
+          setCurrentNicknames1Value(\\"\\");
         }}
         currentFieldValue={currentNicknames1Value}
         label={\\"Nick Names1\\"}
@@ -2254,7 +2264,7 @@ export default function NestedJson(props) {
         hasError={errors.Nicknames1?.hasError}
         setFieldValue={setCurrentNicknames1Value}
         inputFieldRef={Nicknames1Ref}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Nick Names1\\"
@@ -2291,7 +2301,7 @@ export default function NestedJson(props) {
             values = result?.[\\"nick-names2\\"] ?? values;
           }
           setNickNames(values);
-          setCurrentNickNamesValue(undefined);
+          setCurrentNickNamesValue(\\"\\");
         }}
         currentFieldValue={currentNickNamesValue}
         label={\\"nick-Names2\\"}
@@ -2299,7 +2309,7 @@ export default function NestedJson(props) {
         hasError={errors?.[\\"nick-names2\\"]?.hasError}
         setFieldValue={setCurrentNickNamesValue}
         inputFieldRef={nickNamesRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"nick-Names2\\"
@@ -2322,6 +2332,7 @@ export default function NestedJson(props) {
       </ArrayField>
       <TextField
         label=\\"first Name1\\"
+        value={firstName1}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2596,7 +2607,7 @@ export default function NestedJson(props) {
   const { initialData, onSubmit, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    firstName: undefined,
+    firstName: \\"\\",
     \\"last-Name\\": undefined,
     lastName: [],
     bio: {},
@@ -2611,7 +2622,7 @@ export default function NestedJson(props) {
     setFirstName(cleanValues.firstName);
     setLastName(cleanValues[\\"last-Name\\"]);
     setLastName1(cleanValues.lastName ?? []);
-    setCurrentLastName1Value(undefined);
+    setCurrentLastName1Value(\\"\\");
     setBio(cleanValues.bio);
     setErrors({});
   };
@@ -2624,8 +2635,7 @@ export default function NestedJson(props) {
       setBio(initialData.bio);
     }
   }, []);
-  const [currentLastName1Value, setCurrentLastName1Value] =
-    React.useState(undefined);
+  const [currentLastName1Value, setCurrentLastName1Value] = React.useState(\\"\\");
   const lastName1Ref = React.createRef();
   const validations = {
     firstName: [],
@@ -2690,6 +2700,7 @@ export default function NestedJson(props) {
     >
       <TextField
         label=\\"firstName\\"
+        value={firstName}
         defaultValue={firstName}
         onChange={(e) => {
           let { value } = e.target;
@@ -2753,7 +2764,7 @@ export default function NestedJson(props) {
             values = result?.lastName ?? values;
           }
           setLastName1(values);
-          setCurrentLastName1Value(undefined);
+          setCurrentLastName1Value(\\"\\");
         }}
         currentFieldValue={currentLastName1Value}
         label={\\"lastName\\"}
@@ -2761,7 +2772,7 @@ export default function NestedJson(props) {
         hasError={errors.lastName?.hasError}
         setFieldValue={setCurrentLastName1Value}
         inputFieldRef={lastName1Ref}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"lastName\\"
@@ -2787,6 +2798,7 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
+        value={bio}
         defaultValue={bio.favoriteQuote}
         onChange={(e) => {
           let { value } = e.target;
@@ -2814,6 +2826,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
+        value={bio}
         defaultValue={bio.favoriteAnimal}
         onChange={(e) => {
           let { value } = e.target;
@@ -2932,7 +2945,7 @@ export default function CustomWithSectionalElements(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [errors, setErrors] = React.useState({});
@@ -3001,6 +3014,7 @@ export default function CustomWithSectionalElements(props) {
       ></Heading>
       <TextField
         label=\\"Label\\"
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3124,11 +3138,11 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    caption: undefined,
-    username: undefined,
-    post_url: undefined,
+    caption: \\"\\",
+    username: \\"\\",
+    post_url: \\"\\",
     metadata: undefined,
-    profile_url: undefined,
+    profile_url: \\"\\",
   };
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [username, setUsername] = React.useState(initialValues.username);
@@ -3257,6 +3271,7 @@ export default function MyPostForm(props) {
         label=\\"Caption\\"
         isRequired={false}
         isReadOnly={false}
+        value={caption}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3284,6 +3299,7 @@ export default function MyPostForm(props) {
         label=\\"Username\\"
         isRequired={false}
         isReadOnly={false}
+        value={username}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3756,6 +3772,7 @@ export default function MyMemberForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3813,6 +3830,9 @@ export default function MyMemberForm(props) {
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
             setCurrentTeamDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentAuthorIdDisplayValue(\\"\\");
           }}
           onChange={(e) => {
             let { value } = e.target;
@@ -4194,6 +4214,7 @@ export default function BookCreateForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -4253,6 +4274,9 @@ export default function BookCreateForm(props) {
               authorRecords.find((r) => r.id === id)
             );
             setCurrentPrimaryAuthorDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentTeamDisplayValue(\\"\\");
           }}
           onChange={(e) => {
             let { value } = e.target;
@@ -4494,7 +4518,7 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     primaryAuthor: undefined,
     primaryTitle: undefined,
   };
@@ -4519,7 +4543,7 @@ export default function BookCreateForm(props) {
   const [
     currentPrimaryAuthorDisplayValue,
     setCurrentPrimaryAuthorDisplayValue,
-  ] = React.useState(undefined);
+  ] = React.useState(\\"\\");
   const [currentPrimaryAuthorValue, setCurrentPrimaryAuthorValue] =
     React.useState(undefined);
   const primaryAuthorRef = React.createRef();
@@ -4653,6 +4677,7 @@ export default function BookCreateForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -4689,16 +4714,16 @@ export default function BookCreateForm(props) {
           }
           setPrimaryAuthor(value);
           setCurrentPrimaryAuthorValue(undefined);
-          setCurrentPrimaryAuthorDisplayValue(undefined);
+          setCurrentPrimaryAuthorDisplayValue(\\"\\");
         }}
         currentFieldValue={currentPrimaryAuthorValue}
         label={\\"Primary author\\"}
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors.primaryAuthor?.hasError}
         getBadgeText={getDisplayValue.primaryAuthor}
-        setFieldValue={currentPrimaryAuthorDisplayValue}
+        setFieldValue={setCurrentPrimaryAuthorDisplayValue}
         inputFieldRef={primaryAuthorRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <Autocomplete
           label=\\"Primary author\\"
@@ -4714,6 +4739,9 @@ export default function BookCreateForm(props) {
               authorRecords.find((r) => r.id === id)
             );
             setCurrentPrimaryAuthorDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentPrimaryAuthorDisplayValue(\\"\\");
           }}
           onChange={(e) => {
             let { value } = e.target;
@@ -6015,10 +6043,10 @@ export default function BlogCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    title: undefined,
-    content: undefined,
+    title: \\"\\",
+    content: \\"\\",
     switch: false,
-    published: undefined,
+    published: \\"\\",
     editedAt: [],
   };
   const [title, setTitle] = React.useState(initialValues.title);
@@ -6033,11 +6061,10 @@ export default function BlogCreateForm(props) {
     setSwitch1(initialValues.switch);
     setPublished(initialValues.published);
     setEditedAt(initialValues.editedAt);
-    setCurrentEditedAtValue(undefined);
+    setCurrentEditedAtValue(\\"\\");
     setErrors({});
   };
-  const [currentEditedAtValue, setCurrentEditedAtValue] =
-    React.useState(undefined);
+  const [currentEditedAtValue, setCurrentEditedAtValue] = React.useState(\\"\\");
   const editedAtRef = React.createRef();
   const validations = {
     title: [],
@@ -6143,6 +6170,7 @@ export default function BlogCreateForm(props) {
         label=\\"Title\\"
         isRequired={false}
         isReadOnly={false}
+        value={title}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6170,6 +6198,7 @@ export default function BlogCreateForm(props) {
         label=\\"Content\\"
         isRequired={false}
         isReadOnly={false}
+        value={content}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6264,7 +6293,7 @@ export default function BlogCreateForm(props) {
             values = result?.editedAt ?? values;
           }
           setEditedAt(values);
-          setCurrentEditedAtValue(undefined);
+          setCurrentEditedAtValue(\\"\\");
         }}
         currentFieldValue={currentEditedAtValue}
         label={\\"Edited at\\"}
@@ -6272,7 +6301,7 @@ export default function BlogCreateForm(props) {
         hasError={errors.editedAt?.hasError}
         setFieldValue={setCurrentEditedAtValue}
         inputFieldRef={editedAtRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Edited at\\"
@@ -6558,8 +6587,8 @@ export default function InputGalleryCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    num: undefined,
-    rootbeer: undefined,
+    num: \\"\\",
+    rootbeer: \\"\\",
     attend: undefined,
     maybeSlide: false,
     maybeCheck: false,
@@ -6605,7 +6634,7 @@ export default function InputGalleryCreateForm(props) {
     setErrors({});
   };
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const arrayTypeFieldRef = React.createRef();
   const [currentJsonArrayValue, setCurrentJsonArrayValue] =
     React.useState(undefined);
@@ -6918,7 +6947,7 @@ export default function InputGalleryCreateForm(props) {
             values = result?.arrayTypeField ?? values;
           }
           setArrayTypeField(values);
-          setCurrentArrayTypeFieldValue(undefined);
+          setCurrentArrayTypeFieldValue(\\"\\");
         }}
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
@@ -6926,7 +6955,7 @@ export default function InputGalleryCreateForm(props) {
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Array type field\\"
@@ -7422,8 +7451,8 @@ export default function InputGalleryUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    num: undefined,
-    rootbeer: undefined,
+    num: \\"\\",
+    rootbeer: \\"\\",
     attend: undefined,
     maybeSlide: false,
     maybeCheck: false,
@@ -7486,7 +7515,7 @@ export default function InputGalleryUpdateForm(props) {
   }, [id, inputGallery]);
   React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const arrayTypeFieldRef = React.createRef();
   const [currentJsonArrayValue, setCurrentJsonArrayValue] =
     React.useState(undefined);
@@ -8735,10 +8764,10 @@ export default function PostCreateFormRow(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: undefined,
-    caption: undefined,
-    post_url: undefined,
-    profile_url: undefined,
+    username: \\"\\",
+    caption: \\"\\",
+    post_url: \\"\\",
+    profile_url: \\"\\",
     status: undefined,
     metadata: undefined,
   };
@@ -8858,6 +8887,7 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
+          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -8887,6 +8917,7 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
+          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -9291,7 +9322,7 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -9301,11 +9332,11 @@ export default function MyMemberForm(props) {
     setName(initialValues.name);
     setTeam(initialValues.team);
     setCurrentTeamValue(undefined);
-    setCurrentTeamDisplayValue(undefined);
+    setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
   };
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const teamRef = React.createRef();
   const teamRecords = useDataStoreBinding({
@@ -9426,6 +9457,7 @@ export default function MyMemberForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -9460,16 +9492,16 @@ export default function MyMemberForm(props) {
           }
           setTeam(value);
           setCurrentTeamValue(undefined);
-          setCurrentTeamDisplayValue(undefined);
+          setCurrentTeamDisplayValue(\\"\\");
         }}
         currentFieldValue={currentTeamValue}
         label={\\"Team Label\\"}
         items={team ? [team] : []}
         hasError={errors.team?.hasError}
         getBadgeText={getDisplayValue.team}
-        setFieldValue={currentTeamDisplayValue}
+        setFieldValue={setCurrentTeamDisplayValue}
         inputFieldRef={teamRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <Autocomplete
           label=\\"Team Label\\"
@@ -9483,6 +9515,9 @@ export default function MyMemberForm(props) {
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
             setCurrentTeamDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentTeamDisplayValue(\\"\\");
           }}
           onChange={(e) => {
             let { value } = e.target;

@@ -93,6 +93,12 @@ export function getFieldConfigFromModelField({
 
   const { defaultComponent } = FIELD_TYPE_MAP[fieldTypeMapKey];
 
+  // When the relationship is many to many, set data type to the actual related model instead of the join table
+  if (field.relationship && field.relationship.type === 'HAS_MANY' && field.relationship.relatedJoinTableName) {
+    const dataType = field.dataType as { model: string };
+    dataType.model = field.relationship.relatedModelName;
+  }
+
   const config: ExtendedStudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
     label: sentenceCase(fieldName),
     dataType: field.dataType,

@@ -17,7 +17,12 @@ import { StudioComponent, StudioComponentChild, FormMetadata, isValidVariableNam
 import { factory, SyntaxKind, JsxAttribute } from 'typescript';
 import { buildComponentSpecificAttributes } from './static-props';
 import { renderValueAttribute, renderDefaultValueAttribute, isControlledComponent } from './value-props';
-import { buildOnChangeStatement, buildOnBlurStatement, buildOnSelect } from './event-handler-props';
+import {
+  buildOnChangeStatement,
+  buildOnClearStatement,
+  buildOnBlurStatement,
+  buildOnSelect,
+} from './event-handler-props';
 import { getArrayChildRefName, resetValuesName } from './form-state';
 import { shouldWrapInArrayField } from './render-checkers';
 import { getAutocompleteOptionsProp } from './display-value';
@@ -71,9 +76,11 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       attributes.push(valueAttribute);
     }
 
+    // TODO: Allow for other relationship types once valueMappings available
     if (fieldConfig.componentType === 'Autocomplete' && fieldConfig.relationship) {
       attributes.push(getAutocompleteOptionsProp({ fieldName: componentName, fieldConfig }));
       attributes.push(buildOnSelect({ sanitizedFieldName: renderedVariableName, fieldConfig }));
+      attributes.push(buildOnClearStatement(componentName, fieldConfig));
     }
 
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {

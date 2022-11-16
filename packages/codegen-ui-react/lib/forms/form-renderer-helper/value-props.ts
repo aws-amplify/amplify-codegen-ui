@@ -86,6 +86,10 @@ export const renderValueAttribute = ({
   }
 
   const controlledComponentToAttributesMap: { [key: string]: JsxAttribute } = {
+    TextField: factory.createJsxAttribute(
+      factory.createIdentifier('value'),
+      factory.createJsxExpression(undefined, valueIdentifier),
+    ),
     ToggleButton: factory.createJsxAttribute(
       factory.createIdentifier('isPressed'),
       factory.createJsxExpression(undefined, valueIdentifier),

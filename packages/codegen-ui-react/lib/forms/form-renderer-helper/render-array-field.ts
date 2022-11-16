@@ -69,7 +69,7 @@ function getOnChangeAttribute({
         factory.createCallExpression(
           factory.createIdentifier(`set${capitalizeFirstLetter(getCurrentDisplayValueName(renderedFieldName))}`),
           undefined,
-          [getDefaultValueExpression(fieldName, componentType, dataType)],
+          [getDefaultValueExpression(fieldName, componentType, dataType, false, true)],
         ),
       ),
     );
@@ -212,7 +212,7 @@ export const renderArrayFieldComponent = (
   let setFieldValueIdentifier = setStateName;
 
   if (isModelDataType(fieldConfig)) {
-    setFieldValueIdentifier = factory.createIdentifier(getCurrentDisplayValueName(renderedFieldName));
+    setFieldValueIdentifier = getSetNameIdentifier(getCurrentDisplayValueName(renderedFieldName));
     props.push(
       factory.createJsxAttribute(
         factory.createIdentifier('getBadgeText'),
@@ -235,7 +235,10 @@ export const renderArrayFieldComponent = (
     ),
     factory.createJsxAttribute(
       factory.createIdentifier('defaultFieldValue'),
-      factory.createJsxExpression(undefined, getDefaultValueExpression(fieldName, componentType, dataType)),
+      factory.createJsxExpression(
+        undefined,
+        getDefaultValueExpression(fieldName, componentType, dataType, false, true),
+      ),
     ),
   );
 

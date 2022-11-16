@@ -44,7 +44,9 @@ import {
   getCurrentDisplayValueName,
   getCurrentValueIdentifier,
   getCurrentValueName,
+  getDefaultValueExpression,
   getRecordsName,
+  getSetNameIdentifier,
   setFieldState,
   setStateExpression,
 } from './form-state';
@@ -125,6 +127,43 @@ export function buildOnBlurStatement(fieldName: string, fieldConfig: FieldConfig
           factory.createStringLiteral(fieldName),
           fieldConfig.isArray ? getCurrentValueIdentifier(renderedFieldName) : fieldNameIdentifier,
         ]),
+      ),
+    ),
+  );
+}
+
+/**
+ * e.g.
+ * onClear={() => {
+ *  setCurrentTeamDisplayValue('');
+ * }}
+ */
+export function buildOnClearStatement(fieldName: string, fieldConfig: FieldConfigMetadata) {
+  const { componentType, dataType } = fieldConfig;
+  const renderedFieldName = fieldConfig.sanitizedFieldName || fieldName;
+
+  return factory.createJsxAttribute(
+    factory.createIdentifier('onClear'),
+    factory.createJsxExpression(
+      undefined,
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createBlock(
+          [
+            factory.createExpressionStatement(
+              factory.createCallExpression(
+                getSetNameIdentifier(getCurrentDisplayValueName(renderedFieldName)),
+                undefined,
+                [getDefaultValueExpression(fieldName, componentType, dataType, false, true)],
+              ),
+            ),
+          ],
+          true,
+        ),
       ),
     ),
   );

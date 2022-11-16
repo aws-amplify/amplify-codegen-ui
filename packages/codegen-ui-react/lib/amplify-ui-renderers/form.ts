@@ -94,6 +94,14 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     } = this.form;
     const importedModelName = this.importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, dataTypeName);
 
+    const { formMetadata } = this.componentMetadata;
+    if (!formMetadata) {
+      throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
+    }
+    const hasManyFieldConfigs = Object.entries(formMetadata.fieldConfigs).filter(
+      ([, fieldConfigMetaData]) => fieldConfigMetaData.relationship?.type === 'HAS_MANY',
+    );
+
     const onSubmitIdentifier = factory.createIdentifier('onSubmit');
 
     if (dataSourceType === 'Custom') {
@@ -128,7 +136,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
         factory.createTryStatement(
           factory.createBlock(
             [
-              ...buildDataStoreExpression(formActionType, importedModelName),
+              ...buildDataStoreExpression(formActionType, importedModelName, hasManyFieldConfigs),
               // call onSuccess hook if it exists
               factory.createIfStatement(
                 factory.createIdentifier('onSuccess'),
