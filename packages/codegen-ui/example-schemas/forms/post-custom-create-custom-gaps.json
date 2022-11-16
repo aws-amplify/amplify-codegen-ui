@@ -1,0 +1,85 @@
+{
+  "name": "CustomDataForm",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "Custom",
+    "dataTypeName": "Post"
+  },
+  "fields": {
+    "name": {
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "name",
+        "defaultValue": "John Doe"
+      },
+      "label": "name"
+    },
+    "email": {
+      "inputType": {
+        "required": true,
+        "type": "TextField",
+        "name": "email",
+        "defaultValue": "johndoe@amplify.com"
+      },
+      "label": "E-mail"
+    },
+    "city": {
+      "inputType": {
+        "type": "SelectField",
+        "defaultValue": "New York",
+        "valueMappings": {
+          "bindingProperties": {},
+          "values": [{"value": {"value": "Los Angeles"}}, {"value": {"value": "Houston"}}, {"value": {"value": "New York"}}]
+        }
+      }
+    },
+    "category": {
+      "inputType": {
+        "type": "RadioGroupField",
+        "defaultValue": "Hobbies",
+        "valueMappings": {
+          "bindingProperties": {},
+          "values": [{"value": {"value": "Hobbies"}}, {"value": {"value": "Travel"}}, {"value": {"value": "Health"}}]
+        }
+      }
+    },
+    "pages": {
+      "inputType": {
+        "type": "StepperField"
+      }
+    },
+    "phone": {
+      "inputType": {
+        "required": true,
+        "type": "PhoneNumberField",
+        "name": "phoneNumber",
+        "defaultValue": "+1-401-152-6995"
+      },
+      "label": "Phone Number"
+    }
+  },
+  "sectionalElements": {},
+  "style": {
+    "horizontalGap": {
+      "tokenReference": "space.large"
+    },
+    "verticalGap": {
+      "tokenReference": "space.xl"
+    },
+    "outerPadding": {
+      "value": "35px"
+    }
+  },
+  "cta": {
+    "clear": {
+      "children": "empty"
+    },
+    "cancel": {
+      "children": "go back"
+    },
+    "submit": {
+      "children": "create"
+    }
+  }
+}

@@ -52,7 +52,7 @@ import {
   ArrayLiteralExpression,
 } from 'typescript';
 
-import { FormMetadata } from '@aws-amplify/codegen-ui/lib/types';
+import { FormMetadata, FormStyleConfig } from '@aws-amplify/codegen-ui/lib/types';
 import { ImportCollection, ImportSource } from './imports';
 import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 import { getChildPropMappingForComponentName } from './workflow/utils';
@@ -602,38 +602,49 @@ export function buildOpeningElementProperties(
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
 
-export function buildLayoutProperties(componentMetadata: FormMetadata | undefined): JsxAttribute[] {
+function buildFixedOrTokenRefAttribute(styleConfig: FormStyleConfig, propName: string): JsxAttribute | undefined {
+  if (styleConfig.value) {
+    return buildFixedAttr({ value: styleConfig.value }, propName);
+  }
+  if (styleConfig.tokenReference) {
+    const tokenReference = ['tokens', ...styleConfig.tokenReference.split('.')];
+
+    return factory.createJsxAttribute(
+      factory.createIdentifier(propName),
+      factory.createJsxExpression(
+        undefined,
+        factory.createPropertyAccessExpression(buildAccessChain(tokenReference, false), 'value'),
+      ),
+    );
+  }
+  return undefined;
+}
+
+export function buildFormLayoutProperties(formMetadata: FormMetadata | undefined): JsxAttribute[] {
   const propMap: Record<string, string> = {
     horizontalGap: 'rowGap',
     verticalGap: 'columnGap',
     outerPadding: 'padding',
   };
 
-  return Object.entries(componentMetadata?.layoutConfigs ?? {}).reduce<JsxAttribute[]>((acc, value) => {
+  return Object.entries(formMetadata?.layoutConfigs ?? {}).reduce<JsxAttribute[]>((acc, value) => {
     const mappedProp = propMap[value[0]];
 
     if (!mappedProp) {
       return acc;
     }
 
-    if (value[1].value) {
-      acc.push(buildFixedAttr({ value: value[1].value }, mappedProp));
-    } else if (value[1].tokenReference) {
-      const tokenReference = ['tokens', ...value[1].tokenReference.split('.')];
-
-      acc.push(
-        factory.createJsxAttribute(
-          factory.createIdentifier(mappedProp),
-          factory.createJsxExpression(
-            undefined,
-            factory.createPropertyAccessExpression(buildAccessChain(tokenReference, false), 'value'),
-          ),
-        ),
-      );
+    const mappedAttribute = buildFixedOrTokenRefAttribute(value[1], mappedProp);
+    if (mappedAttribute) {
+      acc.push(mappedAttribute);
     }
 
     return acc;
   }, []);
+}
+
+export function buildCtaLayoutProperties(formMetadata: FormMetadata): JsxAttribute | undefined {
+  return buildFixedOrTokenRefAttribute(formMetadata.layoutConfigs.verticalGap, 'gap');
 }
 
 export function addBindingPropertiesImports(

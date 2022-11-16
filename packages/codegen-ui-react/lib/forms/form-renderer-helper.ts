@@ -55,6 +55,7 @@ import {
   setFieldState,
   setStateExpression,
 } from './form-state';
+import { buildCtaLayoutProperties } from '../react-component-render-helper';
 
 export const buildMutationBindings = (form: StudioForm) => {
   const {
@@ -226,6 +227,12 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
           factory.createJsxExpression(undefined, factory.createIdentifier(getArrayChildRefName(renderedVariableName))),
         ),
       );
+    }
+  }
+  if (componentName === 'RightAlignCTASubFlex') {
+    const flexGapAttribute = buildCtaLayoutProperties(formMetadata);
+    if (flexGapAttribute) {
+      attributes.push(flexGapAttribute);
     }
   }
   if (componentName === 'ClearButton' || componentName === 'ResetButton') {
