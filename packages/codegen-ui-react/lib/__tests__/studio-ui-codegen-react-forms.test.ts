@@ -33,7 +33,7 @@ describe('amplify form renderer tests', () => {
         'datastore/relationship',
       );
       // check nested model is imported
-      expect(componentText).toContain('import { Author, Book } from "../models";');
+      expect(componentText).toContain('import { Book, Author } from "../models";');
 
       // check binding call is generated
       expect(componentText).toContain('const authorRecords = useDataStoreBinding({');
@@ -48,7 +48,7 @@ describe('amplify form renderer tests', () => {
         'datastore/relationship-multiple',
       );
       // check nested model is imported
-      expect(componentText).toContain('import { Author, Book, Title } from "../models";');
+      expect(componentText).toContain('import { Book, Author, Title } from "../models";');
 
       // check binding calls are generated
       expect(componentText).toContain('const authorRecords = useDataStoreBinding({');
@@ -138,79 +138,94 @@ describe('amplify form renderer tests', () => {
     });
 
     it('should generate a create form for model with relationships', () => {
+      const { componentText } = generateWithAmplifyFormRenderer('forms/book-datastore-create', 'datastore/book');
+      expect(componentText).toContain('DataStore.save');
+    });
+    it('should render a create form with colliding model name', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
-        'forms/book-datastore-create',
-        'datastore/book',
+        'forms/flex-datastore-create',
+        'datastore/flex',
       );
       expect(componentText).toContain('DataStore.save');
+      expect(componentText).toContain('Flex0');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
-  });
-
-  describe('custom form tests', () => {
-    it('should render a custom backed form', () => {
-      const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-create', undefined);
-      expect(componentText.replace(/\s/g, '')).toContain('onSubmit');
-      expect(componentText).toMatchSnapshot();
-      expect(declaration).toMatchSnapshot();
-    });
-
-    it('should render a custom backed form', () => {
-      const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-update', undefined);
-      expect(componentText.replace(/\s/g, '')).toContain('onSubmit');
-      expect(componentText).toMatchSnapshot();
-      expect(declaration).toMatchSnapshot();
-    });
-
-    it('should render sectional elements', () => {
+    it('should render a update form with colliding model name', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
-        'forms/custom-with-sectional-elements',
-        undefined,
+        'forms/flex-datastore-update',
+        'datastore/flex',
       );
+      expect(componentText).toContain('DataStore.save');
+      expect(componentText).toContain('Flex0');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
 
-    it('should render nested json fields', () => {
-      const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-create', undefined);
-      expect(componentText).toMatchSnapshot();
-      expect(declaration).toMatchSnapshot();
-    });
+    describe('custom form tests', () => {
+      it('should render a custom backed form', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-create', undefined);
+        expect(componentText.replace(/\s/g, '')).toContain('onSubmit');
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
 
-    it('should render nested json fields', () => {
-      const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-update', undefined);
-      expect(componentText).toMatchSnapshot();
-      expect(declaration).toMatchSnapshot();
-    });
+      it('should render a custom backed form', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-update', undefined);
+        expect(componentText.replace(/\s/g, '')).toContain('onSubmit');
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
 
-    it('should render a custom backed form with an array field', () => {
-      const { componentText, declaration } = generateWithAmplifyFormRenderer(
-        'forms/custom-with-array-field',
-        undefined,
-      );
-      expect(componentText).toMatchSnapshot();
-      expect(declaration).toMatchSnapshot();
-    });
+      it('should render sectional elements', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/custom-with-sectional-elements',
+          undefined,
+        );
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
 
-    it('should render a datastore backed form with a custom array field', () => {
-      const { componentText, declaration } = generateWithAmplifyFormRenderer(
-        'forms/post-datastore-create-with-custom-array',
-        'datastore/post',
-      );
-      expect(componentText).toMatchSnapshot();
-      expect(declaration).toMatchSnapshot();
-    });
+      it('should render nested json fields', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-create', undefined);
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
 
-    it('should use matching case for ref when array field is capitalized', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
-        'forms/post-datastore-create-with-custom-array',
-        'datastore/post',
-      );
+      it('should render nested json fields', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-update', undefined);
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
 
-      expect(componentText).toContain('const CustomtagsRef');
-      expect(componentText).toContain('inputFieldRef={CustomtagsRef}');
-      expect(componentText).toContain('ref={CustomtagsRef}');
+      it('should render a custom backed form with an array field', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/custom-with-array-field',
+          undefined,
+        );
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render a datastore backed form with a custom array field', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/post-datastore-create-with-custom-array',
+          'datastore/post',
+        );
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should use matching case for ref when array field is capitalized', () => {
+        const { componentText } = generateWithAmplifyFormRenderer(
+          'forms/post-datastore-create-with-custom-array',
+          'datastore/post',
+        );
+
+        expect(componentText).toContain('const CustomtagsRef');
+        expect(componentText).toContain('inputFieldRef={CustomtagsRef}');
+        expect(componentText).toContain('ref={CustomtagsRef}');
+      });
     });
   });
 });

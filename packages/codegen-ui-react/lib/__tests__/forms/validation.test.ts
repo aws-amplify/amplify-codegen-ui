@@ -84,14 +84,14 @@ describe('validateField tests', () => {
   });
   it('should validate LESS_THAN_CHAR_LENGTH type', () => {
     expect(
-      validateField('123', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [4], validationMessage: '' }]),
+      validateField('123', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [3], validationMessage: '' }]),
     ).toEqual({ hasError: false });
     expect(
       validateField('', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [3], validationMessage: '' }]),
     ).toEqual({ hasError: false });
     expect(
       validateField('23445', [{ type: ValidationTypes.LESS_THAN_CHAR_LENGTH, numValues: [3], validationMessage: '' }]),
-    ).toEqual({ hasError: true, errorMessage: 'The value must be shorter than 3' });
+    ).toEqual({ hasError: true, errorMessage: 'The value must be 3 characters or fewer' });
   });
   it('should validate GREATER_THAN_CHAR_LENGTH type', () => {
     expect(

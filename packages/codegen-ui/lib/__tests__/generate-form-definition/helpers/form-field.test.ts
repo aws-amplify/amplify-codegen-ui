@@ -472,13 +472,12 @@ describe('getFormDefinitionInputElement', () => {
     const config = {
       inputType: {
         type: 'CheckboxField',
-        defaultChecked: true,
       },
     };
 
     expect(getFormDefinitionInputElement(config)).toStrictEqual({
       componentType: 'CheckboxField',
-      props: { label: 'Label', name: 'fieldName', value: 'fieldName', defaultChecked: true },
+      props: { label: 'Label', name: 'fieldName', value: 'fieldName' },
     });
   });
 

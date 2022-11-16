@@ -18,9 +18,32 @@ import { lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './display-value';
 import { getSetNameIdentifier } from './form-state';
 
-export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', modelName: string) => {
+export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', importedModelName: string) => {
   if (dataStoreActionType === 'update') {
     return [
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier('original'),
+              undefined,
+              undefined,
+              factory.createAwaitExpression(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('DataStore'),
+                    factory.createIdentifier('query'),
+                  ),
+                  undefined,
+                  [factory.createIdentifier(importedModelName), factory.createIdentifier('id')],
+                ),
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
       factory.createExpressionStatement(
         factory.createAwaitExpression(
           factory.createCallExpression(
@@ -32,12 +55,12 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
             [
               factory.createCallExpression(
                 factory.createPropertyAccessExpression(
-                  factory.createIdentifier(modelName),
+                  factory.createIdentifier(importedModelName),
                   factory.createIdentifier('copyOf'),
                 ),
                 undefined,
                 [
-                  factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
+                  factory.createIdentifier('original'),
                   factory.createArrowFunction(
                     undefined,
                     undefined,
@@ -88,7 +111,7 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
           ),
           undefined,
           [
-            factory.createNewExpression(factory.createIdentifier(modelName), undefined, [
+            factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
               factory.createIdentifier('modelFields'),
             ]),
           ],

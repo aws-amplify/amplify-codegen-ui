@@ -18,7 +18,7 @@ import { factory, SyntaxKind, JsxAttribute } from 'typescript';
 import { buildComponentSpecificAttributes } from './static-props';
 import { renderValueAttribute, renderDefaultValueAttribute, isControlledComponent } from './value-props';
 import { buildOnChangeStatement, buildOnBlurStatement, buildOnSelect } from './event-handler-props';
-import { resetValuesName } from './form-state';
+import { getArrayChildRefName, resetValuesName } from './form-state';
 import { shouldWrapInArrayField } from './render-checkers';
 import { getAutocompleteOptionsProp } from './display-value';
 
@@ -109,7 +109,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('ref'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedVariableName}Ref`)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(getArrayChildRefName(renderedVariableName))),
         ),
       );
     }

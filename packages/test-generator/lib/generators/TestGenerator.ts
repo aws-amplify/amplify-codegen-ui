@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FormMetadata, StudioComponent, StudioForm, StudioTheme } from '@aws-amplify/codegen-ui';
+import { FormMetadata, StudioComponent, StudioForm, StudioTheme, StudioView } from '@aws-amplify/codegen-ui';
 import {
   ModuleKind,
   ScriptTarget,
@@ -26,6 +26,7 @@ import log from 'loglevel';
 import * as ComponentSchemas from '../components';
 import * as ThemeSchemas from '../themes';
 import * as FormSchemas from '../forms';
+import * as ViewSchemas from '../views';
 
 const DEFAULT_RENDER_CONFIG = {
   module: ModuleKind.CommonJS,
@@ -42,7 +43,7 @@ log.setLevel('info');
 export type TestCase = {
   name: string;
   schema: any;
-  testType: 'Component' | 'Theme' | 'Form' | 'Snippet';
+  testType: 'Component' | 'Theme' | 'Form' | 'Snippet' | 'View';
 };
 
 export type TestGeneratorParams = {
@@ -143,6 +144,30 @@ export abstract class TestGenerator {
       }
     };
 
+    const generateView = (testCase: TestCase) => {
+      const { name, schema } = testCase;
+      try {
+        if (this.params.writeToDisk) {
+          this.writeViewToDisk(schema as StudioView);
+        }
+
+        if (this.params.writeToLogger) {
+          const { importsText, compText } = this.renderView(schema as StudioView);
+          log.info(`# ${name}`);
+          log.info('## View Only Output');
+          log.info('### viewImports');
+          log.info(this.decorateTypescriptWithMarkdown(importsText));
+          log.info('### viewText');
+          log.info(this.decorateTypescriptWithMarkdown(compText));
+        }
+      } catch (err) {
+        if (this.params.immediatelyThrowGenerateErrors) {
+          throw err;
+        }
+        renderErrors[name] = err;
+      }
+    };
+
     const generateIndexFile = (indexFileTestCases: TestCase[]) => {
       const schemas = indexFileTestCases.map((testCase) => testCase.schema);
       try {
@@ -217,6 +242,9 @@ export abstract class TestGenerator {
         case 'Snippet':
           generateSnippet([testCase]);
           break;
+        case 'View':
+          generateView(testCase);
+          break;
         default:
           throw new Error('Expected either a `Component`, `Theme`, `Form` test case type');
       }
@@ -251,11 +279,15 @@ export abstract class TestGenerator {
 
   abstract writeFormToDisk(form: StudioForm): { formMetadata: FormMetadata };
 
+  abstract writeViewToDisk(view: StudioView): void;
+
   abstract renderComponent(component: StudioComponent): { compText: string; importsText: string };
 
   abstract renderTheme(theme: StudioTheme): { componentText: string };
 
   abstract renderForm(form: StudioForm): { compText: string; importsText: string };
+
+  abstract renderView(view: StudioView): { compText: string; importsText: string };
 
   abstract writeIndexFileToDisk(schemas: (StudioComponent | StudioForm | StudioTheme)[]): void;
 
@@ -280,6 +312,9 @@ export abstract class TestGenerator {
       }),
       ...Object.entries(FormSchemas).map(([name, schema]) => {
         return { name, schema, testType: 'Form' } as TestCase;
+      }),
+      ...Object.entries(ViewSchemas).map(([name, schema]) => {
+        return { name, schema, testType: 'View' } as TestCase;
       }),
     ].filter((testCase) => !disabledSchemaSet.has(testCase.name));
   }

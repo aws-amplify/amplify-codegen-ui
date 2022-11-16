@@ -431,5 +431,7 @@ describe('validation-helper', () => {
         });
       }).toThrowErrorMatchingSnapshot();
     });
+
+    // TODO: add tests for validateFormSchema and validateViewSchema
   });
 });

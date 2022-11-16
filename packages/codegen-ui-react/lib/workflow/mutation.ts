@@ -53,7 +53,6 @@ const genericEventToReactEventImplementationOverrides: PrimitiveLevelPropConfigu
 
 const PrimitiveDefaultValuePropMapping: PrimitiveLevelPropConfiguration<string> = new Proxy(
   {
-    [Primitive.CheckboxField]: { checked: 'defaultChecked' },
     [Primitive.SwitchField]: { isChecked: 'defaultChecked' },
   },
   {

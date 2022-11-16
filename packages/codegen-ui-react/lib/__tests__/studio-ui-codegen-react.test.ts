@@ -134,6 +134,10 @@ describe('amplify render tests', () => {
       const { componentText } = generateWithAmplifyRenderer('authorCollectionComponent');
       expect(componentText).toMatchSnapshot();
     });
+    it('should render if model name collides with component types', () => {
+      const { componentText } = generateWithAmplifyRenderer('collectionWithModelNameCollisions');
+      expect(componentText).toMatchSnapshot();
+    });
   });
 
   describe('complex examples', () => {
@@ -593,6 +597,9 @@ describe('amplify render tests', () => {
     describe('data', () => {
       it('supports bindings with reserved keywords', () => {
         expect(generateWithAmplifyRenderer('bindings/data/dataBindingNamedClass').componentText).toMatchSnapshot();
+      });
+      it('supports model with conflicting component type', () => {
+        expect(generateWithAmplifyRenderer('bindings/data/dataBindingNamedFlex').componentText).toMatchSnapshot();
       });
     });
   });

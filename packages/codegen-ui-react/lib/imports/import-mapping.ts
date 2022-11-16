@@ -47,10 +47,12 @@ export enum ImportValue {
   VALIDATE_FIELD_CODEGEN = 'validateField',
   FORMATTER = 'formatter',
   FETCH_BY_PATH = 'fetchByPath',
+  DEFAULT_THEME = 'defaultTheme',
 }
 
 export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.CREATE_THEME]: ImportSource.UI_REACT,
+  [ImportValue.DEFAULT_THEME]: ImportSource.UI_REACT,
   [ImportValue.ESCAPE_HATCH_PROPS]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.GET_OVERRIDE_PROPS]: ImportSource.UI_REACT_INTERNAL,
   [ImportValue.USE_AUTH]: ImportSource.UI_REACT_INTERNAL,

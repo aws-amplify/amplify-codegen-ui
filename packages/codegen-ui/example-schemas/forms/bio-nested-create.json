@@ -69,6 +69,16 @@
       "position": {
         "below": "bio.favorite Quote"
       }
+    },
+    "bio.favorite-trees": {
+      "inputType": {
+        "type": "TextField",
+        "isArray": true
+      },
+      "label": "favorite trees",
+      "position": {
+        "below": "bio.favorite-Animal"
+      }
     }
   },
   "formActionType": "create",
