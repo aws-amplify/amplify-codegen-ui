@@ -958,6 +958,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -1385,6 +1386,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -1955,6 +1957,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -2585,6 +2588,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -3600,6 +3604,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -4032,6 +4037,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -4471,6 +4477,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -5424,6 +5431,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -5991,6 +5999,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -6532,6 +6541,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -7394,6 +7404,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -8306,6 +8317,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }
@@ -9262,6 +9274,7 @@ function ArrayField({
           </Button>
         </Flex>
       )}
+      {arraySection}
     </React.Fragment>
   );
 }

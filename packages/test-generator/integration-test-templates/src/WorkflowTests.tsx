@@ -95,14 +95,12 @@ export default function ComplexTests() {
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore').onsuccess = async function () {
         await initializeUserTestData();
-        const queriedIdToDelete = (await DataStore.query(User, (criteria) => criteria.firstName('eq', 'DeleteMe')))[0]
-          .id;
+        const queriedIdToDelete = (await DataStore.query(User, (criteria) => criteria.firstName.eq('DeleteMe')))[0].id;
         setIdToDelete(queriedIdToDelete);
-        const queriedIdToUpdate = (await DataStore.query(User, (criteria) => criteria.firstName('eq', 'UpdateMe')))[0]
-          .id;
+        const queriedIdToUpdate = (await DataStore.query(User, (criteria) => criteria.firstName.eq('UpdateMe')))[0].id;
         setIdToUpdate(queriedIdToUpdate);
         const queriedFormIdToUpdate = (
-          await DataStore.query(User, (criteria) => criteria.firstName('eq', 'FormUpdate'))
+          await DataStore.query(User, (criteria) => criteria.firstName.eq('FormUpdate'))
         )[0].id;
         setFormIdToUpdate(queriedFormIdToUpdate);
         initializeAuthListener();
