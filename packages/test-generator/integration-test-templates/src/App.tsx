@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import Amplify from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ComponentTests from './ComponentTests';
 import GenerateTests from './GenerateTests';
