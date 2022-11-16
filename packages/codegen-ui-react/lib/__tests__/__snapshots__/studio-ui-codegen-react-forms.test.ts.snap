@@ -1994,6 +1994,9 @@ export default function NestedJson(props) {
     setFirstName(initialValues[\\"first-Name\\"]);
     setLastName(initialValues.lastName);
     setBio(initialValues.bio);
+    setBio(initialValues.bio);
+    setBio(initialValues.bio);
+    setCurrentBioValue(\\"\\");
     setNicknames1(initialValues.Nicknames1);
     setCurrentNicknames1Value(\\"\\");
     setNickNames(initialValues[\\"nick-names2\\"]);
@@ -2002,7 +2005,7 @@ export default function NestedJson(props) {
     setErrors({});
   };
   const [currentBioFavoritetreesValue, setCurrentBioFavoritetreesValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const bioFavoritetreesRef = React.createRef();
   const [currentNicknames1Value, setCurrentNicknames1Value] =
     React.useState(\\"\\");
@@ -2208,7 +2211,7 @@ export default function NestedJson(props) {
             values = result?.bio?.[\\"favorite-trees\\"] ?? values;
           }
           setBio({ ...bio, [\\"favorite-trees\\"]: values });
-          setCurrentBioFavoritetreesValue(undefined);
+          setCurrentBioFavoritetreesValue(\\"\\");
         }}
         currentFieldValue={currentBioFavoritetreesValue}
         label={\\"favorite trees\\"}
@@ -2216,7 +2219,7 @@ export default function NestedJson(props) {
         hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
         setFieldValue={setCurrentBioFavoritetreesValue}
         inputFieldRef={bio.favorite - treesRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"favorite trees\\"
@@ -2623,6 +2626,7 @@ export default function NestedJson(props) {
     setLastName(cleanValues[\\"last-Name\\"]);
     setLastName1(cleanValues.lastName ?? []);
     setCurrentLastName1Value(\\"\\");
+    setBio(cleanValues.bio);
     setBio(cleanValues.bio);
     setErrors({});
   };
@@ -3637,7 +3641,7 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -3647,11 +3651,11 @@ export default function MyMemberForm(props) {
     setName(initialValues.name);
     setTeam(initialValues.team);
     setCurrentTeamValue(undefined);
-    setCurrentTeamDisplayValue(undefined);
+    setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
   };
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const teamRef = React.createRef();
   const teamRecords = useDataStoreBinding({
@@ -3807,16 +3811,16 @@ export default function MyMemberForm(props) {
           }
           setTeam(value);
           setCurrentTeamValue(undefined);
-          setCurrentTeamDisplayValue(undefined);
+          setCurrentTeamDisplayValue(\\"\\");
         }}
         currentFieldValue={currentTeamValue}
         label={\\"Team Label\\"}
         items={team ? [team] : []}
         hasError={errors.team?.hasError}
         getBadgeText={getDisplayValue.team}
-        setFieldValue={currentTeamDisplayValue}
+        setFieldValue={setCurrentTeamDisplayValue}
         inputFieldRef={teamRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <Autocomplete
           label=\\"Team Label\\"
@@ -3832,7 +3836,7 @@ export default function MyMemberForm(props) {
             setCurrentTeamDisplayValue(label);
           }}
           onClear={() => {
-            setCurrentAuthorIdDisplayValue(\\"\\");
+            setCurrentTeamDisplayValue(\\"\\");
           }}
           onChange={(e) => {
             let { value } = e.target;
@@ -4074,7 +4078,7 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     primaryAuthor: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -4086,13 +4090,13 @@ export default function BookCreateForm(props) {
     setName(initialValues.name);
     setPrimaryAuthor(initialValues.primaryAuthor);
     setCurrentPrimaryAuthorValue(undefined);
-    setCurrentPrimaryAuthorDisplayValue(undefined);
+    setCurrentPrimaryAuthorDisplayValue(\\"\\");
     setErrors({});
   };
   const [
     currentPrimaryAuthorDisplayValue,
     setCurrentPrimaryAuthorDisplayValue,
-  ] = React.useState(undefined);
+  ] = React.useState(\\"\\");
   const [currentPrimaryAuthorValue, setCurrentPrimaryAuthorValue] =
     React.useState(undefined);
   const primaryAuthorRef = React.createRef();
@@ -4249,16 +4253,16 @@ export default function BookCreateForm(props) {
           }
           setPrimaryAuthor(value);
           setCurrentPrimaryAuthorValue(undefined);
-          setCurrentPrimaryAuthorDisplayValue(undefined);
+          setCurrentPrimaryAuthorDisplayValue(\\"\\");
         }}
         currentFieldValue={currentPrimaryAuthorValue}
         label={\\"Primary author\\"}
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors.primaryAuthor?.hasError}
         getBadgeText={getDisplayValue.primaryAuthor}
-        setFieldValue={currentPrimaryAuthorDisplayValue}
+        setFieldValue={setCurrentPrimaryAuthorDisplayValue}
         inputFieldRef={primaryAuthorRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <Autocomplete
           label=\\"Primary author\\"
@@ -4276,7 +4280,7 @@ export default function BookCreateForm(props) {
             setCurrentPrimaryAuthorDisplayValue(label);
           }}
           onClear={() => {
-            setCurrentTeamDisplayValue(\\"\\");
+            setCurrentPrimaryAuthorDisplayValue(\\"\\");
           }}
           onChange={(e) => {
             let { value } = e.target;
@@ -4335,6 +4339,455 @@ export declare type BookCreateFormProps = React.PropsWithChildren<{
     onValidate?: BookCreateFormValidationValues;
 } & React.CSSProperties>;
 export default function BookCreateForm(props: BookCreateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should generate a create form with manyToMany relationship 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { Tag, Post, TagPost } from \\"../models\\";
+import {
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+}) {
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      <Text>{label}</Text>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(
+                    getBadgeText ? getBadgeText(items[index]) : items[index]
+                  );
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return arraySection;
+  }
+  return (
+    <React.Fragment>
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Text>{label}</Text>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function TagCreateForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    label: \\"\\",
+    Posts: [],
+  };
+  const [label, setLabel] = React.useState(initialValues.label);
+  const [Posts, setPosts] = React.useState(initialValues.Posts);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setLabel(initialValues.label);
+    setPosts(initialValues.Posts);
+    setCurrentPostsValue(undefined);
+    setCurrentPostsDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [currentPostsDisplayValue, setCurrentPostsDisplayValue] =
+    React.useState(\\"\\");
+  const [currentPostsValue, setCurrentPostsValue] = React.useState(undefined);
+  const PostsRef = React.createRef();
+  const postRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Post,
+  }).items;
+  const getDisplayValue = {
+    Posts: (record) => record?.title,
+  };
+  const validations = {
+    label: [],
+    Posts: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          label,
+          Posts,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          const tag = await DataStore.save(new Tag(modelFields));
+          await Promise.all(
+            Posts.reduce((promises, post) => {
+              promises.push(
+                DataStore.save(
+                  new TagPost({
+                    tag,
+                    post,
+                  })
+                )
+              );
+              return promises;
+            }, [])
+          );
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"TagCreateForm\\")}
+    >
+      <TextField
+        label=\\"Label\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={label}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              label: value,
+              Posts,
+            };
+            const result = onChange(modelFields);
+            value = result?.label ?? value;
+          }
+          if (errors.label?.hasError) {
+            runValidationTasks(\\"label\\", value);
+          }
+          setLabel(value);
+        }}
+        onBlur={() => runValidationTasks(\\"label\\", label)}
+        errorMessage={errors.label?.errorMessage}
+        hasError={errors.label?.hasError}
+        {...getOverrideProps(overrides, \\"label\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              label,
+              Posts: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.Posts ?? values;
+          }
+          setPosts(values);
+          setCurrentPostsValue(undefined);
+          setCurrentPostsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentPostsValue}
+        label={\\"Posts\\"}
+        items={Posts}
+        hasError={errors.Posts?.hasError}
+        getBadgeText={getDisplayValue.Posts}
+        setFieldValue={setCurrentPostsDisplayValue}
+        inputFieldRef={PostsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Posts\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentPostsDisplayValue}
+          options={postRecords.map((r) => ({
+            id: r.id,
+            label: getDisplayValue.Posts?.(r) ?? r.id,
+          }))}
+          onSelect={({ id, label }) => {
+            setCurrentPostsValue(postRecords.find((r) => r.id === id));
+            setCurrentPostsDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentPostsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Posts?.hasError) {
+              runValidationTasks(\\"Posts\\", value);
+            }
+            setCurrentPostsDisplayValue(value);
+            setCurrentPostsValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"Posts\\", currentPostsValue)}
+          errorMessage={errors.Posts?.errorMessage}
+          hasError={errors.Posts?.hasError}
+          ref={PostsRef}
+          {...getOverrideProps(overrides, \\"Posts\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests should generate a create form with manyToMany relationship 2`] = `
+"import * as React from \\"react\\";
+import { Post } from \\"../models\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type TagCreateFormInputValues = {
+    label?: string;
+    Posts?: Post[];
+};
+export declare type TagCreateFormValidationValues = {
+    label?: ValidationFunction<string>;
+    Posts?: ValidationFunction<Post>;
+};
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type TagCreateFormOverridesProps = {
+    TagCreateFormGrid?: FormProps<GridProps>;
+    label?: FormProps<TextFieldProps>;
+    Posts?: FormProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type TagCreateFormProps = React.PropsWithChildren<{
+    overrides?: TagCreateFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
+    onSuccess?: (fields: TagCreateFormInputValues) => void;
+    onError?: (fields: TagCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
+    onValidate?: TagCreateFormValidationValues;
+} & React.CSSProperties>;
+export default function TagCreateForm(props: TagCreateFormProps): React.ReactElement;
 "
 `;
 
@@ -4534,10 +4987,10 @@ export default function BookCreateForm(props) {
     setName(initialValues.name);
     setPrimaryAuthor(initialValues.primaryAuthor);
     setCurrentPrimaryAuthorValue(undefined);
-    setCurrentPrimaryAuthorDisplayValue(undefined);
+    setCurrentPrimaryAuthorDisplayValue(\\"\\");
     setPrimaryTitle(initialValues.primaryTitle);
     setCurrentPrimaryTitleValue(undefined);
-    setCurrentPrimaryTitleDisplayValue(undefined);
+    setCurrentPrimaryTitleDisplayValue(\\"\\");
     setErrors({});
   };
   const [
@@ -4548,7 +5001,7 @@ export default function BookCreateForm(props) {
     React.useState(undefined);
   const primaryAuthorRef = React.createRef();
   const [currentPrimaryTitleDisplayValue, setCurrentPrimaryTitleDisplayValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const [currentPrimaryTitleValue, setCurrentPrimaryTitleValue] =
     React.useState(undefined);
   const primaryTitleRef = React.createRef();
@@ -4773,16 +5226,16 @@ export default function BookCreateForm(props) {
           }
           setPrimaryTitle(value);
           setCurrentPrimaryTitleValue(undefined);
-          setCurrentPrimaryTitleDisplayValue(undefined);
+          setCurrentPrimaryTitleDisplayValue(\\"\\");
         }}
         currentFieldValue={currentPrimaryTitleValue}
         label={\\"Primary title\\"}
         items={primaryTitle ? [primaryTitle] : []}
         hasError={errors.primaryTitle?.hasError}
         getBadgeText={getDisplayValue.primaryTitle}
-        setFieldValue={currentPrimaryTitleDisplayValue}
+        setFieldValue={setCurrentPrimaryTitleDisplayValue}
         inputFieldRef={primaryTitleRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <Autocomplete
           label=\\"Primary title\\"
@@ -4796,6 +5249,9 @@ export default function BookCreateForm(props) {
           onSelect={({ id, label }) => {
             setCurrentPrimaryTitleValue(titleRecords.find((r) => r.id === id));
             setCurrentPrimaryTitleDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentPrimaryTitleDisplayValue(\\"\\");
           }}
           onChange={(e) => {
             let { value } = e.target;
@@ -4889,10 +5345,10 @@ export default function MyPostForm(props) {
   } = props;
   const initialValues = {
     TextAreaFieldbbd63464: undefined,
-    caption: undefined,
-    username: undefined,
-    profile_url: undefined,
-    post_url: undefined,
+    caption: \\"\\",
+    username: \\"\\",
+    profile_url: \\"\\",
+    post_url: \\"\\",
     metadata: undefined,
   };
   const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
@@ -5073,6 +5529,7 @@ export default function MyPostForm(props) {
         label=\\"Caption\\"
         isRequired={false}
         isReadOnly={false}
+        value={caption}
         defaultValue={caption}
         onChange={(e) => {
           let { value } = e.target;
@@ -5102,6 +5559,7 @@ export default function MyPostForm(props) {
         label=\\"Username\\"
         isRequired={false}
         isReadOnly={false}
+        value={username}
         defaultValue={username}
         onChange={(e) => {
           let { value } = e.target;
@@ -5477,11 +5935,11 @@ export default function MyFlexUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: undefined,
-    caption: undefined,
+    username: \\"\\",
+    caption: \\"\\",
     Customtags: [],
     tags: [],
-    profile_url: undefined,
+    profile_url: \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -5496,9 +5954,9 @@ export default function MyFlexUpdateForm(props) {
     setUsername(cleanValues.username);
     setCaption(cleanValues.caption);
     setCustomtags(cleanValues.Customtags ?? []);
-    setCurrentCustomtagsValue(undefined);
+    setCurrentCustomtagsValue(\\"\\");
     setTags(cleanValues.tags ?? []);
-    setCurrentTagsValue(undefined);
+    setCurrentTagsValue(\\"\\");
     setProfile_url(cleanValues.profile_url);
     setErrors({});
   };
@@ -5512,9 +5970,9 @@ export default function MyFlexUpdateForm(props) {
   }, [id, flex]);
   React.useEffect(resetStateValues, [flexRecord]);
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const CustomtagsRef = React.createRef();
-  const [currentTagsValue, setCurrentTagsValue] = React.useState(undefined);
+  const [currentTagsValue, setCurrentTagsValue] = React.useState(\\"\\");
   const tagsRef = React.createRef();
   const validations = {
     username: [
@@ -5640,6 +6098,7 @@ export default function MyFlexUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
+          value={username}
           defaultValue={username}
           onChange={(e) => {
             let { value } = e.target;
@@ -5669,6 +6128,7 @@ export default function MyFlexUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
+          value={caption}
           defaultValue={caption}
           onChange={(e) => {
             let { value } = e.target;
@@ -5709,7 +6169,7 @@ export default function MyFlexUpdateForm(props) {
             values = result?.Customtags ?? values;
           }
           setCustomtags(values);
-          setCurrentCustomtagsValue(undefined);
+          setCurrentCustomtagsValue(\\"\\");
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -5717,7 +6177,7 @@ export default function MyFlexUpdateForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"
@@ -5754,7 +6214,7 @@ export default function MyFlexUpdateForm(props) {
             values = result?.tags ?? values;
           }
           setTags(values);
-          setCurrentTagsValue(undefined);
+          setCurrentTagsValue(\\"\\");
         }}
         currentFieldValue={currentTagsValue}
         label={\\"Tags\\"}
@@ -5762,7 +6222,7 @@ export default function MyFlexUpdateForm(props) {
         hasError={errors.tags?.hasError}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"
@@ -6595,9 +7055,9 @@ export default function InputGalleryCreateForm(props) {
     arrayTypeField: [],
     jsonArray: [],
     jsonField: undefined,
-    timestamp: undefined,
-    ippy: undefined,
-    timeisnow: undefined,
+    timestamp: \\"\\",
+    ippy: \\"\\",
+    timeisnow: \\"\\",
   };
   const [num, setNum] = React.useState(initialValues.num);
   const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
@@ -6624,7 +7084,7 @@ export default function InputGalleryCreateForm(props) {
     setMaybeSlide(initialValues.maybeSlide);
     setMaybeCheck(initialValues.maybeCheck);
     setArrayTypeField(initialValues.arrayTypeField);
-    setCurrentArrayTypeFieldValue(undefined);
+    setCurrentArrayTypeFieldValue(\\"\\");
     setJsonArray(initialValues.jsonArray);
     setCurrentJsonArrayValue(undefined);
     setJsonField(initialValues.jsonField);
@@ -7459,9 +7919,9 @@ export default function InputGalleryUpdateForm(props) {
     arrayTypeField: [],
     jsonArray: [],
     jsonField: undefined,
-    timestamp: undefined,
-    ippy: undefined,
-    timeisnow: undefined,
+    timestamp: \\"\\",
+    ippy: \\"\\",
+    timeisnow: \\"\\",
   };
   const [num, setNum] = React.useState(initialValues.num);
   const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
@@ -7489,7 +7949,7 @@ export default function InputGalleryUpdateForm(props) {
     setMaybeSlide(cleanValues.maybeSlide);
     setMaybeCheck(cleanValues.maybeCheck);
     setArrayTypeField(cleanValues.arrayTypeField ?? []);
-    setCurrentArrayTypeFieldValue(undefined);
+    setCurrentArrayTypeFieldValue(\\"\\");
     setJsonArray(cleanValues.jsonArray ?? []);
     setCurrentJsonArrayValue(undefined);
     setJsonField(
@@ -7857,7 +8317,7 @@ export default function InputGalleryUpdateForm(props) {
             values = result?.arrayTypeField ?? values;
           }
           setArrayTypeField(values);
-          setCurrentArrayTypeFieldValue(undefined);
+          setCurrentArrayTypeFieldValue(\\"\\");
         }}
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
@@ -7865,7 +8325,7 @@ export default function InputGalleryUpdateForm(props) {
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Array type field\\"
@@ -8363,11 +8823,11 @@ export default function MyFlexCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: undefined,
-    caption: undefined,
+    username: \\"\\",
+    caption: \\"\\",
     Customtags: [],
     tags: [],
-    profile_url: undefined,
+    profile_url: \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -8381,16 +8841,16 @@ export default function MyFlexCreateForm(props) {
     setUsername(initialValues.username);
     setCaption(initialValues.caption);
     setCustomtags(initialValues.Customtags);
-    setCurrentCustomtagsValue(undefined);
+    setCurrentCustomtagsValue(\\"\\");
     setTags(initialValues.tags);
-    setCurrentTagsValue(undefined);
+    setCurrentTagsValue(\\"\\");
     setProfile_url(initialValues.profile_url);
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const CustomtagsRef = React.createRef();
-  const [currentTagsValue, setCurrentTagsValue] = React.useState(undefined);
+  const [currentTagsValue, setCurrentTagsValue] = React.useState(\\"\\");
   const tagsRef = React.createRef();
   const validations = {
     username: [
@@ -8514,6 +8974,7 @@ export default function MyFlexCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
+          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -8542,6 +9003,7 @@ export default function MyFlexCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
+          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -8581,7 +9043,7 @@ export default function MyFlexCreateForm(props) {
             values = result?.Customtags ?? values;
           }
           setCustomtags(values);
-          setCurrentCustomtagsValue(undefined);
+          setCurrentCustomtagsValue(\\"\\");
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -8589,7 +9051,7 @@ export default function MyFlexCreateForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"
@@ -8626,7 +9088,7 @@ export default function MyFlexCreateForm(props) {
             values = result?.tags ?? values;
           }
           setTags(values);
-          setCurrentTagsValue(undefined);
+          setCurrentTagsValue(\\"\\");
         }}
         currentFieldValue={currentTagsValue}
         label={\\"Tags\\"}
@@ -8634,7 +9096,7 @@ export default function MyFlexCreateForm(props) {
         hasError={errors.tags?.hasError}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"

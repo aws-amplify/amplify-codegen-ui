@@ -124,6 +124,8 @@ describe('mapFormMetaData', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Friend',
       relatedModelField: 'friendId',
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
     });
   });
 

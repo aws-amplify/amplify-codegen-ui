@@ -93,7 +93,7 @@ describe('amplify form renderer tests', () => {
         'datastore/tag-post',
       );
       // check nested model is imported
-      expect(componentText).toContain('import { Post, Tag, TagPost } from "../models";');
+      expect(componentText).toContain('import { Tag, Post, TagPost } from "../models";');
 
       // check binding call is generated
       expect(componentText).toContain('const postRecords = useDataStoreBinding({');
