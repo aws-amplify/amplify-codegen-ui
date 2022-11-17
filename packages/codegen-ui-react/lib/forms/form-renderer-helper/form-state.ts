@@ -307,6 +307,7 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
 
         stateNames.add(stateName);
       }
+      stateNames.add(stateName);
     }
     return acc;
   }, []);

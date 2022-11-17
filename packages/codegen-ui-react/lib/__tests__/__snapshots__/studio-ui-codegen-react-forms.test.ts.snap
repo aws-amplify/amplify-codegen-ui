@@ -1987,9 +1987,6 @@ export default function NestedJson(props) {
     setFirstName(initialValues[\\"first-Name\\"]);
     setLastName(initialValues.lastName);
     setBio(initialValues.bio);
-    setBio(initialValues.bio);
-    setBio(initialValues.bio);
-    setCurrentBioValue(undefined);
     setNicknames1(initialValues.Nicknames1);
     setCurrentNicknames1Value(undefined);
     setNickNames(initialValues[\\"nick-names2\\"]);
@@ -2615,7 +2612,6 @@ export default function NestedJson(props) {
     setLastName(cleanValues[\\"last-Name\\"]);
     setLastName1(cleanValues.lastName ?? []);
     setCurrentLastName1Value(undefined);
-    setBio(cleanValues.bio);
     setBio(cleanValues.bio);
     setErrors({});
   };
