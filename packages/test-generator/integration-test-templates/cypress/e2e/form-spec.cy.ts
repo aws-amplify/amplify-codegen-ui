@@ -101,6 +101,7 @@ describe('Forms', () => {
         getInputByLabel('Aws date').type('2022-10-12');
         getInputByLabel('Aws time').type('10:12');
         getInputByLabel('Aws date time').type('2017-06-01T08:30');
+        getInputByLabel('Aws timestamp').type('2017-06-01T08:30');
         getInputByLabel('Aws email').type('myemail@yahoo.com');
         getInputByLabel('Aws url').type('https://amazon.com');
         getInputByLabel('Aws ip address').type('192.0.2.146');
@@ -120,6 +121,7 @@ describe('Forms', () => {
           expect(record.awsDate).to.equal('2022-10-12');
           expect(record.awsTime).to.equal('10:12');
           expect(record.awsDateTime).to.equal('2017-06-01T08:30:00.000Z');
+          expect(record.awsTimestamp).to.equal('1496331000000');
           expect(record.awsEmail).to.equal('myemail@yahoo.com');
           expect(record.awsUrl).to.equal('https://amazon.com');
           expect(record.awsIPAddress).to.equal('192.0.2.146');

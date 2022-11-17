@@ -131,7 +131,6 @@ export const getDefaultValueExpression = (
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
     Autocomplete: isDisplayValue ? factory.createStringLiteral('') : factory.createIdentifier('undefined'),
-    TextField: factory.createStringLiteral(''),
     ToggleButton: factory.createFalse(),
     SwitchField: factory.createFalse(),
     StepperField: factory.createNumericLiteral(0),

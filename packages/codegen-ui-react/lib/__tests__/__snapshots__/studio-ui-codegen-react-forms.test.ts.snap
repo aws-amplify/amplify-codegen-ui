@@ -19,12 +19,12 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"\\",
-    email: \\"\\",
+    name: undefined,
+    email: undefined,
     city: undefined,
     category: undefined,
     pages: 0,
-    phone: \\"\\",
+    phone: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -415,8 +415,8 @@ export default function CustomDataForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    email: \\"\\",
+    name: undefined,
+    email: undefined,
     \\"metadata-field\\": undefined,
     city: undefined,
     category: undefined,
@@ -966,7 +966,7 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"\\",
+    name: undefined,
     email: [],
     phone: [],
   };
@@ -977,14 +977,14 @@ export default function CustomDataForm(props) {
   const resetStateValues = () => {
     setName(initialValues.name);
     setEmail(initialValues.email);
-    setCurrentEmailValue(\\"\\");
+    setCurrentEmailValue(undefined);
     setPhone(initialValues.phone);
-    setCurrentPhoneValue(\\"\\");
+    setCurrentPhoneValue(undefined);
     setErrors({});
   };
-  const [currentEmailValue, setCurrentEmailValue] = React.useState(\\"\\");
+  const [currentEmailValue, setCurrentEmailValue] = React.useState(undefined);
   const emailRef = React.createRef();
-  const [currentPhoneValue, setCurrentPhoneValue] = React.useState(\\"\\");
+  const [currentPhoneValue, setCurrentPhoneValue] = React.useState(undefined);
   const phoneRef = React.createRef();
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -1082,7 +1082,7 @@ export default function CustomDataForm(props) {
             values = result?.email ?? values;
           }
           setEmail(values);
-          setCurrentEmailValue(\\"\\");
+          setCurrentEmailValue(undefined);
         }}
         currentFieldValue={currentEmailValue}
         label={\\"E-mail\\"}
@@ -1090,7 +1090,7 @@ export default function CustomDataForm(props) {
         hasError={errors.email?.hasError}
         setFieldValue={setCurrentEmailValue}
         inputFieldRef={emailRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"E-mail\\"
@@ -1124,7 +1124,7 @@ export default function CustomDataForm(props) {
             values = result?.phone ?? values;
           }
           setPhone(values);
-          setCurrentPhoneValue(\\"\\");
+          setCurrentPhoneValue(undefined);
         }}
         currentFieldValue={currentPhoneValue}
         label={\\"phone\\"}
@@ -1132,7 +1132,7 @@ export default function CustomDataForm(props) {
         hasError={errors.phone?.hasError}
         setFieldValue={setCurrentPhoneValue}
         inputFieldRef={phoneRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"phone\\"
@@ -1403,12 +1403,12 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: \\"\\",
-    caption: \\"\\",
+    username: undefined,
+    caption: undefined,
     Customtags: [],
-    post_url: \\"\\",
+    post_url: undefined,
     metadata: undefined,
-    profile_url: \\"\\",
+    profile_url: undefined,
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -1425,14 +1425,14 @@ export default function MyPostForm(props) {
     setUsername(initialValues.username);
     setCaption(initialValues.caption);
     setCustomtags(initialValues.Customtags);
-    setCurrentCustomtagsValue(\\"\\");
+    setCurrentCustomtagsValue(undefined);
     setPost_url(initialValues.post_url);
     setMetadata(initialValues.metadata);
     setProfile_url(initialValues.profile_url);
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const CustomtagsRef = React.createRef();
   const validations = {
     username: [
@@ -1628,7 +1628,7 @@ export default function MyPostForm(props) {
             values = result?.Customtags ?? values;
           }
           setCustomtags(values);
-          setCurrentCustomtagsValue(\\"\\");
+          setCurrentCustomtagsValue(undefined);
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -1636,7 +1636,7 @@ export default function MyPostForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Tags\\"
@@ -1965,12 +1965,12 @@ export default function NestedJson(props) {
   const { onSubmit, onValidate, onChange, overrides, ...rest } = props;
   const { tokens } = useTheme();
   const initialValues = {
-    \\"first-Name\\": \\"\\",
-    lastName: \\"\\",
+    \\"first-Name\\": undefined,
+    lastName: undefined,
     bio: {},
     Nicknames1: [],
     \\"nick-names2\\": [],
-    \\"first Name\\": \\"\\",
+    \\"first Name\\": undefined,
   };
   const [firstName, setFirstName] = React.useState(initialValues[\\"first-Name\\"]);
   const [lastName, setLastName] = React.useState(initialValues.lastName);
@@ -1989,21 +1989,22 @@ export default function NestedJson(props) {
     setBio(initialValues.bio);
     setBio(initialValues.bio);
     setBio(initialValues.bio);
-    setCurrentBioValue(\\"\\");
+    setCurrentBioValue(undefined);
     setNicknames1(initialValues.Nicknames1);
-    setCurrentNicknames1Value(\\"\\");
+    setCurrentNicknames1Value(undefined);
     setNickNames(initialValues[\\"nick-names2\\"]);
-    setCurrentNickNamesValue(\\"\\");
+    setCurrentNickNamesValue(undefined);
     setFirstName1(initialValues[\\"first Name\\"]);
     setErrors({});
   };
   const [currentBioFavoritetreesValue, setCurrentBioFavoritetreesValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const bioFavoritetreesRef = React.createRef();
   const [currentNicknames1Value, setCurrentNicknames1Value] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const Nicknames1Ref = React.createRef();
-  const [currentNickNamesValue, setCurrentNickNamesValue] = React.useState(\\"\\");
+  const [currentNickNamesValue, setCurrentNickNamesValue] =
+    React.useState(undefined);
   const nickNamesRef = React.createRef();
   const validations = {
     \\"first-Name\\": [],
@@ -2200,7 +2201,7 @@ export default function NestedJson(props) {
             values = result?.bio?.[\\"favorite-trees\\"] ?? values;
           }
           setBio({ ...bio, [\\"favorite-trees\\"]: values });
-          setCurrentBioFavoritetreesValue(\\"\\");
+          setCurrentBioFavoritetreesValue(undefined);
         }}
         currentFieldValue={currentBioFavoritetreesValue}
         label={\\"favorite trees\\"}
@@ -2208,7 +2209,7 @@ export default function NestedJson(props) {
         hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
         setFieldValue={setCurrentBioFavoritetreesValue}
         inputFieldRef={bio.favorite - treesRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"favorite trees\\"
@@ -2248,7 +2249,7 @@ export default function NestedJson(props) {
             values = result?.Nicknames1 ?? values;
           }
           setNicknames1(values);
-          setCurrentNicknames1Value(\\"\\");
+          setCurrentNicknames1Value(undefined);
         }}
         currentFieldValue={currentNicknames1Value}
         label={\\"Nick Names1\\"}
@@ -2256,7 +2257,7 @@ export default function NestedJson(props) {
         hasError={errors.Nicknames1?.hasError}
         setFieldValue={setCurrentNicknames1Value}
         inputFieldRef={Nicknames1Ref}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Nick Names1\\"
@@ -2293,7 +2294,7 @@ export default function NestedJson(props) {
             values = result?.[\\"nick-names2\\"] ?? values;
           }
           setNickNames(values);
-          setCurrentNickNamesValue(\\"\\");
+          setCurrentNickNamesValue(undefined);
         }}
         currentFieldValue={currentNickNamesValue}
         label={\\"nick-Names2\\"}
@@ -2301,7 +2302,7 @@ export default function NestedJson(props) {
         hasError={errors?.[\\"nick-names2\\"]?.hasError}
         setFieldValue={setCurrentNickNamesValue}
         inputFieldRef={nickNamesRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"nick-Names2\\"
@@ -2598,7 +2599,7 @@ export default function NestedJson(props) {
   const { initialData, onSubmit, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    firstName: \\"\\",
+    firstName: undefined,
     \\"last-Name\\": undefined,
     lastName: [],
     bio: {},
@@ -2613,7 +2614,7 @@ export default function NestedJson(props) {
     setFirstName(cleanValues.firstName);
     setLastName(cleanValues[\\"last-Name\\"]);
     setLastName1(cleanValues.lastName ?? []);
-    setCurrentLastName1Value(\\"\\");
+    setCurrentLastName1Value(undefined);
     setBio(cleanValues.bio);
     setBio(cleanValues.bio);
     setErrors({});
@@ -2627,7 +2628,8 @@ export default function NestedJson(props) {
       setBio(initialData.bio);
     }
   }, []);
-  const [currentLastName1Value, setCurrentLastName1Value] = React.useState(\\"\\");
+  const [currentLastName1Value, setCurrentLastName1Value] =
+    React.useState(undefined);
   const lastName1Ref = React.createRef();
   const validations = {
     firstName: [],
@@ -2755,7 +2757,7 @@ export default function NestedJson(props) {
             values = result?.lastName ?? values;
           }
           setLastName1(values);
-          setCurrentLastName1Value(\\"\\");
+          setCurrentLastName1Value(undefined);
         }}
         currentFieldValue={currentLastName1Value}
         label={\\"lastName\\"}
@@ -2763,7 +2765,7 @@ export default function NestedJson(props) {
         hasError={errors.lastName?.hasError}
         setFieldValue={setCurrentLastName1Value}
         inputFieldRef={lastName1Ref}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"lastName\\"
@@ -2934,7 +2936,7 @@ export default function CustomWithSectionalElements(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"\\",
+    name: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [errors, setErrors] = React.useState({});
@@ -3126,11 +3128,11 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    caption: \\"\\",
-    username: \\"\\",
-    post_url: \\"\\",
+    caption: undefined,
+    username: undefined,
+    post_url: undefined,
     metadata: undefined,
-    profile_url: \\"\\",
+    profile_url: undefined,
   };
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [username, setUsername] = React.useState(initialValues.username);
@@ -3623,7 +3625,7 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
+    name: undefined,
     team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -4059,7 +4061,7 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
+    name: undefined,
     primaryAuthor: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -4502,7 +4504,7 @@ export default function TagCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    label: \\"\\",
+    label: undefined,
     Posts: [],
   };
   const [label, setLabel] = React.useState(initialValues.label);
@@ -4950,7 +4952,7 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
+    name: undefined,
     primaryAuthor: undefined,
     primaryTitle: undefined,
   };
@@ -5323,10 +5325,10 @@ export default function MyPostForm(props) {
   } = props;
   const initialValues = {
     TextAreaFieldbbd63464: undefined,
-    caption: \\"\\",
-    username: \\"\\",
-    profile_url: \\"\\",
-    post_url: \\"\\",
+    caption: undefined,
+    username: undefined,
+    profile_url: undefined,
+    post_url: undefined,
     metadata: undefined,
   };
   const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
@@ -5911,11 +5913,11 @@ export default function MyFlexUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: \\"\\",
-    caption: \\"\\",
+    username: undefined,
+    caption: undefined,
     Customtags: [],
     tags: [],
-    profile_url: \\"\\",
+    profile_url: undefined,
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -5930,9 +5932,9 @@ export default function MyFlexUpdateForm(props) {
     setUsername(cleanValues.username);
     setCaption(cleanValues.caption);
     setCustomtags(cleanValues.Customtags ?? []);
-    setCurrentCustomtagsValue(\\"\\");
+    setCurrentCustomtagsValue(undefined);
     setTags(cleanValues.tags ?? []);
-    setCurrentTagsValue(\\"\\");
+    setCurrentTagsValue(undefined);
     setProfile_url(cleanValues.profile_url);
     setErrors({});
   };
@@ -5946,9 +5948,9 @@ export default function MyFlexUpdateForm(props) {
   }, [id, flex]);
   React.useEffect(resetStateValues, [flexRecord]);
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const CustomtagsRef = React.createRef();
-  const [currentTagsValue, setCurrentTagsValue] = React.useState(\\"\\");
+  const [currentTagsValue, setCurrentTagsValue] = React.useState(undefined);
   const tagsRef = React.createRef();
   const validations = {
     username: [
@@ -6143,7 +6145,7 @@ export default function MyFlexUpdateForm(props) {
             values = result?.Customtags ?? values;
           }
           setCustomtags(values);
-          setCurrentCustomtagsValue(\\"\\");
+          setCurrentCustomtagsValue(undefined);
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -6151,7 +6153,7 @@ export default function MyFlexUpdateForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Tags\\"
@@ -6188,7 +6190,7 @@ export default function MyFlexUpdateForm(props) {
             values = result?.tags ?? values;
           }
           setTags(values);
-          setCurrentTagsValue(\\"\\");
+          setCurrentTagsValue(undefined);
         }}
         currentFieldValue={currentTagsValue}
         label={\\"Tags\\"}
@@ -6196,7 +6198,7 @@ export default function MyFlexUpdateForm(props) {
         hasError={errors.tags?.hasError}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Tags\\"
@@ -6477,10 +6479,10 @@ export default function BlogCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    title: \\"\\",
-    content: \\"\\",
+    title: undefined,
+    content: undefined,
     switch: false,
-    published: \\"\\",
+    published: undefined,
     editedAt: [],
   };
   const [title, setTitle] = React.useState(initialValues.title);
@@ -6495,10 +6497,11 @@ export default function BlogCreateForm(props) {
     setSwitch1(initialValues.switch);
     setPublished(initialValues.published);
     setEditedAt(initialValues.editedAt);
-    setCurrentEditedAtValue(\\"\\");
+    setCurrentEditedAtValue(undefined);
     setErrors({});
   };
-  const [currentEditedAtValue, setCurrentEditedAtValue] = React.useState(\\"\\");
+  const [currentEditedAtValue, setCurrentEditedAtValue] =
+    React.useState(undefined);
   const editedAtRef = React.createRef();
   const validations = {
     title: [],
@@ -6725,7 +6728,7 @@ export default function BlogCreateForm(props) {
             values = result?.editedAt ?? values;
           }
           setEditedAt(values);
-          setCurrentEditedAtValue(\\"\\");
+          setCurrentEditedAtValue(undefined);
         }}
         currentFieldValue={currentEditedAtValue}
         label={\\"Edited at\\"}
@@ -6733,7 +6736,7 @@ export default function BlogCreateForm(props) {
         hasError={errors.editedAt?.hasError}
         setFieldValue={setCurrentEditedAtValue}
         inputFieldRef={editedAtRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Edited at\\"
@@ -7019,17 +7022,17 @@ export default function InputGalleryCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    num: \\"\\",
-    rootbeer: \\"\\",
+    num: undefined,
+    rootbeer: undefined,
     attend: undefined,
     maybeSlide: false,
     maybeCheck: false,
     arrayTypeField: [],
     jsonArray: [],
     jsonField: undefined,
-    timestamp: \\"\\",
-    ippy: \\"\\",
-    timeisnow: \\"\\",
+    timestamp: undefined,
+    ippy: undefined,
+    timeisnow: undefined,
   };
   const [num, setNum] = React.useState(initialValues.num);
   const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
@@ -7056,7 +7059,7 @@ export default function InputGalleryCreateForm(props) {
     setMaybeSlide(initialValues.maybeSlide);
     setMaybeCheck(initialValues.maybeCheck);
     setArrayTypeField(initialValues.arrayTypeField);
-    setCurrentArrayTypeFieldValue(\\"\\");
+    setCurrentArrayTypeFieldValue(undefined);
     setJsonArray(initialValues.jsonArray);
     setCurrentJsonArrayValue(undefined);
     setJsonField(initialValues.jsonField);
@@ -7066,7 +7069,7 @@ export default function InputGalleryCreateForm(props) {
     setErrors({});
   };
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const arrayTypeFieldRef = React.createRef();
   const [currentJsonArrayValue, setCurrentJsonArrayValue] =
     React.useState(undefined);
@@ -7379,7 +7382,7 @@ export default function InputGalleryCreateForm(props) {
             values = result?.arrayTypeField ?? values;
           }
           setArrayTypeField(values);
-          setCurrentArrayTypeFieldValue(\\"\\");
+          setCurrentArrayTypeFieldValue(undefined);
         }}
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
@@ -7387,7 +7390,7 @@ export default function InputGalleryCreateForm(props) {
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Array type field\\"
@@ -7883,17 +7886,17 @@ export default function InputGalleryUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    num: \\"\\",
-    rootbeer: \\"\\",
+    num: undefined,
+    rootbeer: undefined,
     attend: undefined,
     maybeSlide: false,
     maybeCheck: false,
     arrayTypeField: [],
     jsonArray: [],
     jsonField: undefined,
-    timestamp: \\"\\",
-    ippy: \\"\\",
-    timeisnow: \\"\\",
+    timestamp: undefined,
+    ippy: undefined,
+    timeisnow: undefined,
   };
   const [num, setNum] = React.useState(initialValues.num);
   const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
@@ -7921,7 +7924,7 @@ export default function InputGalleryUpdateForm(props) {
     setMaybeSlide(cleanValues.maybeSlide);
     setMaybeCheck(cleanValues.maybeCheck);
     setArrayTypeField(cleanValues.arrayTypeField ?? []);
-    setCurrentArrayTypeFieldValue(\\"\\");
+    setCurrentArrayTypeFieldValue(undefined);
     setJsonArray(cleanValues.jsonArray ?? []);
     setCurrentJsonArrayValue(undefined);
     setJsonField(
@@ -7947,7 +7950,7 @@ export default function InputGalleryUpdateForm(props) {
   }, [id, inputGallery]);
   React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const arrayTypeFieldRef = React.createRef();
   const [currentJsonArrayValue, setCurrentJsonArrayValue] =
     React.useState(undefined);
@@ -8289,7 +8292,7 @@ export default function InputGalleryUpdateForm(props) {
             values = result?.arrayTypeField ?? values;
           }
           setArrayTypeField(values);
-          setCurrentArrayTypeFieldValue(\\"\\");
+          setCurrentArrayTypeFieldValue(undefined);
         }}
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
@@ -8297,7 +8300,7 @@ export default function InputGalleryUpdateForm(props) {
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Array type field\\"
@@ -8795,11 +8798,11 @@ export default function MyFlexCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: \\"\\",
-    caption: \\"\\",
+    username: undefined,
+    caption: undefined,
     Customtags: [],
     tags: [],
-    profile_url: \\"\\",
+    profile_url: undefined,
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -8813,16 +8816,16 @@ export default function MyFlexCreateForm(props) {
     setUsername(initialValues.username);
     setCaption(initialValues.caption);
     setCustomtags(initialValues.Customtags);
-    setCurrentCustomtagsValue(\\"\\");
+    setCurrentCustomtagsValue(undefined);
     setTags(initialValues.tags);
-    setCurrentTagsValue(\\"\\");
+    setCurrentTagsValue(undefined);
     setProfile_url(initialValues.profile_url);
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(\\"\\");
+    React.useState(undefined);
   const CustomtagsRef = React.createRef();
-  const [currentTagsValue, setCurrentTagsValue] = React.useState(\\"\\");
+  const [currentTagsValue, setCurrentTagsValue] = React.useState(undefined);
   const tagsRef = React.createRef();
   const validations = {
     username: [
@@ -9013,7 +9016,7 @@ export default function MyFlexCreateForm(props) {
             values = result?.Customtags ?? values;
           }
           setCustomtags(values);
-          setCurrentCustomtagsValue(\\"\\");
+          setCurrentCustomtagsValue(undefined);
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -9021,7 +9024,7 @@ export default function MyFlexCreateForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Tags\\"
@@ -9058,7 +9061,7 @@ export default function MyFlexCreateForm(props) {
             values = result?.tags ?? values;
           }
           setTags(values);
-          setCurrentTagsValue(\\"\\");
+          setCurrentTagsValue(undefined);
         }}
         currentFieldValue={currentTagsValue}
         label={\\"Tags\\"}
@@ -9066,7 +9069,7 @@ export default function MyFlexCreateForm(props) {
         hasError={errors.tags?.hasError}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
-        defaultFieldValue={\\"\\"}
+        defaultFieldValue={undefined}
       >
         <TextField
           label=\\"Tags\\"
@@ -9196,10 +9199,10 @@ export default function PostCreateFormRow(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: \\"\\",
-    caption: \\"\\",
-    post_url: \\"\\",
-    profile_url: \\"\\",
+    username: undefined,
+    caption: undefined,
+    post_url: undefined,
+    profile_url: undefined,
     status: undefined,
     metadata: undefined,
   };
@@ -9752,7 +9755,7 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
+    name: undefined,
     team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
