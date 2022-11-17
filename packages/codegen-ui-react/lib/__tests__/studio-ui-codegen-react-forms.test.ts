@@ -64,7 +64,7 @@ describe('amplify form renderer tests', () => {
         'datastore/project-team-model',
       );
       // check nested model is imported
-      expect(componentText).toContain('import { Member, Team } from "../models";');
+      expect(componentText).toContain('import { Member, Team as Team0 } from "../models";');
 
       // check binding call is generated
       expect(componentText).toContain('const teamRecords = useDataStoreBinding({');

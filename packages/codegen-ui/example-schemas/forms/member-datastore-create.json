@@ -6,7 +6,7 @@
     "dataTypeName": "Member"
   },
   "fields": {
-    "team": {
+    "Team": {
       "inputType": {
         "type": "Autocomplete",
         "valueMappings": {

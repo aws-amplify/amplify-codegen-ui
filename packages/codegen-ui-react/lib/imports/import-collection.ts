@@ -23,6 +23,10 @@ import { createUniqueName } from '../helpers';
 export class ImportCollection {
   constructor(componentMetadata?: ComponentMetadata) {
     this.importedNames = new Set(Object.values(componentMetadata?.componentNameToTypeMap || {}).concat(reservedWords));
+    // Add form fields so we dont reuse the identifier
+    if (componentMetadata?.formMetadata) {
+      Object.keys(componentMetadata.formMetadata.fieldConfigs).forEach((key) => this.importedNames.add(key));
+    }
   }
 
   importedNames: Set<string>;
