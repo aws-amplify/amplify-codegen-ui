@@ -4642,7 +4642,6 @@ export default function TagCreateForm(props) {
         label=\\"Label\\"
         isRequired={false}
         isReadOnly={false}
-        value={label}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
