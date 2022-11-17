@@ -405,9 +405,7 @@ export const buildOverrideOnChangeStatement = (
   const keyName = keyPath[0];
   const valueName = valueNameOverride ?? factory.createIdentifier('value');
   let keyValueExpression = factory.createPropertyAssignment(
-    isValidVariableName(keyName)
-      ? factory.createIdentifier(keyName)
-      : factory.createComputedPropertyName(factory.createStringLiteral(keyName)),
+    isValidVariableName(keyName) ? factory.createIdentifier(keyName) : factory.createStringLiteral(keyName),
     valueName,
   );
   if (keyPath.length > 1) {
@@ -920,10 +918,15 @@ export const buildModelFieldObject = (
     const { sanitizedFieldName, dataType } = fieldConfigs[value];
     const renderedFieldName = sanitizedFieldName || fieldName;
     if (!fieldSet.has(renderedFieldName)) {
-      let assignment = nameOverrides[fieldName]
-        ? nameOverrides[fieldName]
-        : factory.createShorthandPropertyAssignment(factory.createIdentifier(fieldName), undefined);
-      if (sanitizedFieldName) {
+      let assignment: ObjectLiteralElementLike = factory.createShorthandPropertyAssignment(
+        factory.createIdentifier(fieldName),
+        undefined,
+      );
+
+      if (nameOverrides[fieldName]) {
+        assignment = nameOverrides[fieldName];
+      } else if (sanitizedFieldName) {
+        // if overrides present, ignore sanitizedFieldName
         assignment = factory.createPropertyAssignment(
           factory.createStringLiteral(fieldName),
           factory.createIdentifier(sanitizedFieldName),
