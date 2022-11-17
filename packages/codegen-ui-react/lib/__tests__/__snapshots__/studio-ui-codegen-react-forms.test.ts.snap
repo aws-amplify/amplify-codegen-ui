@@ -570,7 +570,7 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
-              \\"metadata-field\\": metadatafield,
+              \\"metadata-field\\": value,
               city,
               category,
               pages,
@@ -2002,7 +2002,7 @@ export default function NestedJson(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              \\"first-Name\\": firstName,
+              \\"first-Name\\": value,
               lastName,
               bio,
               Nicknames1,
@@ -2211,7 +2211,7 @@ export default function NestedJson(props) {
               lastName,
               bio,
               Nicknames1,
-              \\"nick-names2\\": nicknames,
+              \\"nick-names2\\": values,
               \\"first Name\\": firstName1,
             };
             const result = onChange(modelFields);
@@ -2258,7 +2258,7 @@ export default function NestedJson(props) {
               bio,
               Nicknames1,
               \\"nick-names2\\": nicknames,
-              \\"first Name\\": firstName1,
+              \\"first Name\\": value,
             };
             const result = onChange(modelFields);
             value = result?.[\\"first Name\\"] ?? value;
@@ -2645,7 +2645,7 @@ export default function NestedJson(props) {
           if (onChange) {
             const modelFields = {
               firstName,
-              \\"last-Name\\": lastName,
+              \\"last-Name\\": value,
               lastName: lastName1,
               bio,
             };
@@ -2669,7 +2669,7 @@ export default function NestedJson(props) {
             const modelFields = {
               firstName,
               \\"last-Name\\": lastName,
-              lastName: lastName1,
+              lastName: values,
               bio,
             };
             const result = onChange(modelFields);
@@ -4685,7 +4685,7 @@ export default function BlogCreateForm(props) {
             const modelFields = {
               title,
               content,
-              switch: switch1,
+              switch: value,
               published,
               editedAt,
             };
