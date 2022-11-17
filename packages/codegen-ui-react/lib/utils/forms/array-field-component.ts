@@ -17,6 +17,8 @@ import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
 import { isValidVariableName } from '@aws-amplify/codegen-ui';
 import { factory, JsxChild, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
 import {
+  buildAccessChain,
+  getArrayChildRefName,
   getCurrentValueIdentifier,
   getCurrentValueName,
   getDefaultValueExpression,
@@ -1074,10 +1076,10 @@ export const renderArrayFieldComponent = (
           factory.createIdentifier('items'),
           factory.createJsxExpression(
             undefined,
-            // render `?? []` if nested.
+            // render `?? []` if nested && build access chain
             renderedFieldName.includes('.')
               ? factory.createBinaryExpression(
-                  factory.createIdentifier(renderedFieldName),
+                  buildAccessChain(renderedFieldName.split('.'), true),
                   factory.createToken(SyntaxKind.QuestionQuestionToken),
                   factory.createArrayLiteralExpression([], false),
                 )
@@ -1110,7 +1112,7 @@ export const renderArrayFieldComponent = (
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('inputFieldRef'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedFieldName}Ref`)),
+          factory.createJsxExpression(undefined, factory.createIdentifier(getArrayChildRefName(renderedFieldName))),
         ),
         factory.createJsxAttribute(
           factory.createIdentifier('defaultFieldValue'),

@@ -2129,10 +2129,10 @@ export default function NestedJson(props) {
         }}
         currentFieldValue={currentBioFavoritetreesValue}
         label={\\"favorite trees\\"}
-        items={bio.favorite - trees ?? []}
+        items={bio?.[\\"favorite-trees\\"] ?? []}
         hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
         setFieldValue={setCurrentBioFavoritetreesValue}
-        inputFieldRef={bio.favorite - treesRef}
+        inputFieldRef={bioFavoritetreesRef}
         defaultFieldValue={undefined}
       >
         <TextField
