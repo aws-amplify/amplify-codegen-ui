@@ -110,7 +110,6 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
-        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -139,7 +138,6 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
-        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -522,7 +520,6 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
-        value={name}
         defaultValue={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -552,7 +549,6 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
-        value={email}
         defaultValue={email}
         onChange={(e) => {
           let { value } = e.target;
@@ -1052,7 +1048,6 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
-        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1563,7 +1558,6 @@ export default function MyPostForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -1593,7 +1587,6 @@ export default function MyPostForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -2080,7 +2073,6 @@ export default function NestedJson(props) {
     >
       <TextField
         label=\\"firstName\\"
-        value={firstName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2107,7 +2099,6 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"lastName\\"
-        value={lastName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2139,7 +2130,6 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
-        value={bio}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2168,7 +2158,6 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
-        value={bio}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2335,7 +2324,6 @@ export default function NestedJson(props) {
       </ArrayField>
       <TextField
         label=\\"first Name1\\"
-        value={firstName1}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2704,7 +2692,6 @@ export default function NestedJson(props) {
     >
       <TextField
         label=\\"firstName\\"
-        value={firstName}
         defaultValue={firstName}
         onChange={(e) => {
           let { value } = e.target;
@@ -2802,7 +2789,6 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
-        value={bio}
         defaultValue={bio.favoriteQuote}
         onChange={(e) => {
           let { value } = e.target;
@@ -2830,7 +2816,6 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
-        value={bio}
         defaultValue={bio.favoriteAnimal}
         onChange={(e) => {
           let { value } = e.target;
@@ -3018,7 +3003,6 @@ export default function CustomWithSectionalElements(props) {
       ></Heading>
       <TextField
         label=\\"Label\\"
-        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3275,7 +3259,6 @@ export default function MyPostForm(props) {
         label=\\"Caption\\"
         isRequired={false}
         isReadOnly={false}
-        value={caption}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3303,7 +3286,6 @@ export default function MyPostForm(props) {
         label=\\"Username\\"
         isRequired={false}
         isReadOnly={false}
-        value={username}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3776,7 +3758,6 @@ export default function MyMemberForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
-        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -4218,7 +4199,6 @@ export default function BookCreateForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
-        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -5129,7 +5109,6 @@ export default function BookCreateForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
-        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -5528,7 +5507,6 @@ export default function MyPostForm(props) {
         label=\\"Caption\\"
         isRequired={false}
         isReadOnly={false}
-        value={caption}
         defaultValue={caption}
         onChange={(e) => {
           let { value } = e.target;
@@ -5558,7 +5536,6 @@ export default function MyPostForm(props) {
         label=\\"Username\\"
         isRequired={false}
         isReadOnly={false}
-        value={username}
         defaultValue={username}
         onChange={(e) => {
           let { value } = e.target;
@@ -6097,7 +6074,6 @@ export default function MyFlexUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-          value={username}
           defaultValue={username}
           onChange={(e) => {
             let { value } = e.target;
@@ -6127,7 +6103,6 @@ export default function MyFlexUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-          value={caption}
           defaultValue={caption}
           onChange={(e) => {
             let { value } = e.target;
@@ -6629,7 +6604,6 @@ export default function BlogCreateForm(props) {
         label=\\"Title\\"
         isRequired={false}
         isReadOnly={false}
-        value={title}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6657,7 +6631,6 @@ export default function BlogCreateForm(props) {
         label=\\"Content\\"
         isRequired={false}
         isReadOnly={false}
-        value={content}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -8973,7 +8946,6 @@ export default function MyFlexCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -9002,7 +8974,6 @@ export default function MyFlexCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -9348,7 +9319,6 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -9378,7 +9348,6 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -9918,7 +9887,6 @@ export default function MyMemberForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
-        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
