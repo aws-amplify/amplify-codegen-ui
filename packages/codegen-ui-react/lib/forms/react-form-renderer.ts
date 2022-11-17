@@ -473,7 +473,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           statements.push(
             buildUseStateExpression(
               getCurrentDisplayValueName(renderedName),
-              getDefaultValueExpression(formMetadata.name, componentType, dataType),
+              getDefaultValueExpression(formMetadata.name, componentType, dataType, false, true),
             ),
           );
         }

@@ -13,12 +13,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
 import { factory, NodeFlags, SyntaxKind, Expression } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './display-value';
 import { getSetNameIdentifier } from './form-state';
+import { buildManyToManyRelationshipCreateStatements } from './relationship';
 
-export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', importedModelName: string) => {
+export const buildDataStoreExpression = (
+  dataStoreActionType: 'update' | 'create',
+  importedModelName: string,
+  hasManyFieldConfigs: [string, FieldConfigMetadata][],
+) => {
   if (dataStoreActionType === 'update') {
     return [
       factory.createVariableStatement(
@@ -101,6 +107,25 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
       ),
     ];
   }
+
+  // TODO: Many to Many update action, this condition dataStoreActionType === 'create' can be moved inside the functon
+  if (hasManyFieldConfigs.length > 0 && dataStoreActionType === 'create') {
+    return hasManyFieldConfigs
+      .map((hasManyFieldConfig) => {
+        const [, fieldConfigMetaData] = hasManyFieldConfig;
+        if (
+          fieldConfigMetaData.relationship?.type === 'HAS_MANY' &&
+          fieldConfigMetaData.relationship.relatedJoinTableName
+        ) {
+          return buildManyToManyRelationshipCreateStatements(importedModelName, hasManyFieldConfig);
+        }
+        return [];
+      })
+      .reduce((statements, statement) => {
+        return [...statements, ...statement];
+      }, []);
+  }
+
   return [
     factory.createExpressionStatement(
       factory.createAwaitExpression(

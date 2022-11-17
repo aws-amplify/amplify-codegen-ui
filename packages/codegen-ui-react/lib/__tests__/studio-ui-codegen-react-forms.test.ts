@@ -87,6 +87,24 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate a create form with manyToMany relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/tag-datastore-create',
+        'datastore/tag-post',
+      );
+      // check nested model is imported
+      expect(componentText).toContain('import { Tag, Post, TagPost } from "../models";');
+
+      // check binding call is generated
+      expect(componentText).toContain('const postRecords = useDataStoreBinding({');
+
+      // check custom display value is set
+      expect(componentText).toContain('Posts: (record) => record?.title');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should render form with a two inputs in row', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-create-row',

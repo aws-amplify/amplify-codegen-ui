@@ -266,5 +266,10 @@ export function getModelsToImport(fieldConfig: FieldConfigMetadata): string[] {
     });
   }
 
+  // Import join table model
+  if (fieldConfig.relationship?.type === 'HAS_MANY' && fieldConfig.relationship.relatedJoinTableName) {
+    modelDependencies.push(fieldConfig.relationship.relatedJoinTableName);
+  }
+
   return modelDependencies;
 }

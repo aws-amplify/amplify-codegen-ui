@@ -127,8 +127,10 @@ export const getDefaultValueExpression = (
   componentType: string,
   dataType?: DataFieldDataType,
   isArray?: boolean,
+  isDisplayValue?: boolean,
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
+    Autocomplete: isDisplayValue ? factory.createStringLiteral('') : factory.createIdentifier('undefined'),
     ToggleButton: factory.createFalse(),
     SwitchField: factory.createFalse(),
     StepperField: factory.createNumericLiteral(0),
@@ -296,7 +298,12 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
       }
 
       if (isModelDataType(fieldConfig)) {
-        acc.push(setStateExpression(getCurrentDisplayValueName(renderedName), factory.createIdentifier('undefined')));
+        acc.push(
+          setStateExpression(
+            getCurrentDisplayValueName(renderedName),
+            getDefaultValueExpression(name, componentType, dataType, false, true),
+          ),
+        );
 
         stateNames.add(stateName);
       }

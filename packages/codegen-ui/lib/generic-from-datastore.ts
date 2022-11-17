@@ -73,7 +73,8 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
           const relationshipType = field.association.connectionType;
 
           let relatedModelName = field.type.model;
-
+          let relatedJoinFieldName;
+          let relatedJoinTableName;
           let modelRelationship: GenericDataRelationshipType | undefined;
 
           if (relationshipType === 'HAS_MANY' && 'associatedWith' in field.association) {
@@ -99,6 +100,8 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
               );
               if (relatedJoinField && typeof relatedJoinField.type === 'object' && 'model' in relatedJoinField.type) {
                 relatedModelName = relatedJoinField.type.model;
+                relatedJoinFieldName = relatedJoinField.name;
+                relatedJoinTableName = field.type.model;
               }
               // if the associated model is not a join table, note implicit relationship for associated field
             } else {
@@ -107,7 +110,13 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
                 relatedModelName: model.name,
               });
             }
-            modelRelationship = { type: relationshipType, relatedModelName, relatedModelField: associatedFieldName };
+            modelRelationship = {
+              type: relationshipType,
+              relatedModelName,
+              relatedModelField: associatedFieldName,
+              relatedJoinFieldName,
+              relatedJoinTableName,
+            };
           }
 
           // note implicit relationship for associated field within same model
