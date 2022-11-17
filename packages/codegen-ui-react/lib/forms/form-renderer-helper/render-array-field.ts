@@ -22,6 +22,7 @@ import {
   getCurrentValueName,
   getDefaultValueExpression,
   getSetNameIdentifier,
+  setFieldState,
 } from './form-state';
 import { buildOverrideOnChangeStatement } from './event-handler-props';
 import { isModelDataType } from './render-checkers';
@@ -54,13 +55,7 @@ function getOnChangeAttribute({
   }
 
   const setStateStatements = [
-    factory.createExpressionStatement(
-      factory.createCallExpression(
-        factory.createIdentifier(`set${capitalizeFirstLetter(renderedFieldName)}`),
-        undefined,
-        [valueName],
-      ),
-    ),
+    factory.createExpressionStatement(setFieldState(renderedFieldName, valueName)),
     factory.createExpressionStatement(
       factory.createCallExpression(setStateName, undefined, [
         getDefaultValueExpression(fieldName, componentType, dataType),
@@ -144,7 +139,14 @@ export const renderArrayFieldComponent = (
 
   const props: JsxAttribute[] = [];
 
-  let itemsExpression: Expression = factory.createIdentifier(renderedFieldName);
+  // render `?? []` if nested.
+  let itemsExpression: Expression = renderedFieldName.includes('.')
+    ? factory.createBinaryExpression(
+        factory.createIdentifier(renderedFieldName),
+        factory.createToken(SyntaxKind.QuestionQuestionToken),
+        factory.createArrayLiteralExpression([], false),
+      )
+    : factory.createIdentifier(renderedFieldName);
 
   if (isLimitedToOneValue) {
     // "book ? [book] : []"

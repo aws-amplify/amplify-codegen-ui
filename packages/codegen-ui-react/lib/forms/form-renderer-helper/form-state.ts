@@ -29,12 +29,29 @@ import {
   PropertyAccessChain,
   PropertyAssignment,
   PropertyName,
+  PropertyAccessExpression,
+  ElementAccessExpression,
+  ConditionalExpression,
 } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { getElementAccessExpression } from './invalid-variable-helpers';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 
-export const getCurrentValueName = (fieldName: string) => `current${capitalizeFirstLetter(fieldName)}Value`;
+// used just to sanitize nested array field names
+// when rendering currentValue state and ref
+const getVariableName = (input: string[]) =>
+  input.length > 1 ? input.join('').replace(/[^a-zA-Z0-9_$]/g, '') : input.join('');
+
+export const getArrayChildRefName = (fieldName: string) => {
+  const paths = fieldName.split('.').map((path, i) => (i === 0 ? path : capitalizeFirstLetter(path)));
+  return `${getVariableName(paths)}Ref`;
+};
+
+// value of the child of an ArrayField
+export const getCurrentValueName = (fieldName: string) => {
+  const paths = fieldName.split('.').map((path) => capitalizeFirstLetter(path));
+  return `current${getVariableName(paths)}Value`;
+};
 
 export const getCurrentDisplayValueName = (fieldName: string) =>
   `current${capitalizeFirstLetter(fieldName)}DisplayValue`;
@@ -109,21 +126,18 @@ export const getDefaultValueExpression = (
   name: string,
   componentType: string,
   dataType?: DataFieldDataType,
+  isArray?: boolean,
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
     ToggleButton: factory.createFalse(),
     SwitchField: factory.createFalse(),
     StepperField: factory.createNumericLiteral(0),
     SliderField: factory.createNumericLiteral(0),
+    CheckboxField: factory.createFalse(),
   };
 
-  // it's a nonModel
-  if (dataType && typeof dataType === 'object' && 'nonModel' in dataType) {
-    return factory.createObjectLiteralExpression();
-  }
-  // the name itself is a nested json object
-  if (name.split('.').length > 1) {
-    return factory.createObjectLiteralExpression();
+  if (isArray) {
+    return factory.createArrayLiteralExpression([], false);
   }
 
   if (componentType in componentTypeToDefaultValueMap) {
@@ -140,16 +154,21 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
   const stateNames = new Set<string>();
   const propertyAssignments = Object.entries(fieldConfigs).reduce<PropertyAssignment[]>(
     (acc, [name, { dataType, componentType, isArray }]) => {
+      const isNested = name.includes('.');
+      // we are only setting top-level keys
       const stateName = name.split('.')[0];
+      let initialValue = getDefaultValueExpression(name, componentType, dataType, isArray);
+      if (isNested) {
+        // if nested, just set up an empty object for the top-level key
+        initialValue = factory.createObjectLiteralExpression();
+      }
       if (!stateNames.has(stateName)) {
         acc.push(
           factory.createPropertyAssignment(
             isValidVariableName(stateName)
               ? factory.createIdentifier(stateName)
               : factory.createStringLiteral(stateName),
-            isArray
-              ? factory.createArrayLiteralExpression([], false)
-              : getDefaultValueExpression(name, componentType, dataType),
+            initialValue,
           ),
         );
         stateNames.add(stateName);
@@ -182,7 +201,7 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
  */
 export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
   const stateNames = new Set();
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, dataType }]) => {
+  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, dataType, isArray }]) => {
     const fieldName = name.split('.')[0];
     const renderedFieldName = sanitizedFieldName || fieldName;
 
@@ -199,7 +218,7 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
     }
 
     function renderCorrectUseStateValue() {
-      if (dataType === 'AWSJSON') {
+      if (dataType === 'AWSJSON' && !isArray) {
         return factory.createConditionalExpression(
           determinePropertyName(),
           factory.createToken(SyntaxKind.QuestionToken),
@@ -249,18 +268,24 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
     if (!stateNames.has(stateName)) {
       const accessExpression = getElementAccessExpression(recordOrInitialValues, stateName);
 
-      acc.push(
-        setStateExpression(
-          renderedName,
-          isArray && recordOrInitialValues === 'cleanValues'
-            ? factory.createBinaryExpression(
-                accessExpression,
-                factory.createToken(SyntaxKind.QuestionQuestionToken),
-                factory.createArrayLiteralExpression([], false),
-              )
-            : accessExpression,
-        ),
-      );
+      // Initial values should have the correct values and not need a modifier
+      if (dataType === 'AWSJSON' && !isArray && recordOrInitialValues !== 'initialValues') {
+        const awsJSONAccessModifier = stringifyAWSJSONFieldValue(accessExpression);
+        acc.push(setStateExpression(renderedName, awsJSONAccessModifier));
+      } else {
+        acc.push(
+          setStateExpression(
+            renderedName,
+            isArray && recordOrInitialValues === 'cleanValues'
+              ? factory.createBinaryExpression(
+                  accessExpression,
+                  factory.createToken(SyntaxKind.QuestionQuestionToken),
+                  factory.createArrayLiteralExpression([], false),
+                )
+              : accessExpression,
+          ),
+        );
+      }
       if (shouldWrapInArrayField(fieldConfig)) {
         acc.push(
           setStateExpression(
@@ -268,10 +293,12 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
             getDefaultValueExpression(name, componentType, dataType),
           ),
         );
+      }
 
-        if (isModelDataType(fieldConfig)) {
-          acc.push(setStateExpression(getCurrentDisplayValueName(renderedName), factory.createIdentifier('undefined')));
-        }
+      if (isModelDataType(fieldConfig)) {
+        acc.push(setStateExpression(getCurrentDisplayValueName(renderedName), factory.createIdentifier('undefined')));
+
+        stateNames.add(stateName);
       }
       stateNames.add(stateName);
     }
@@ -326,6 +353,33 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
         ),
       ],
       NodeFlags.Const,
+    ),
+  );
+};
+
+/**
+ * Datastore allows JSON strings and normal JSON so check for a string
+ * before stringifying or else the string will return with escaped quotes
+ *
+ * Example output:
+ * typeof cleanValues.metadata === 'string' ? cleanValues.metadata : JSON.stringify(cleanValues.metadata)
+ */
+const stringifyAWSJSONFieldValue = (
+  value: PropertyAccessExpression | ElementAccessExpression,
+): ConditionalExpression => {
+  return factory.createConditionalExpression(
+    factory.createBinaryExpression(
+      factory.createTypeOfExpression(value),
+      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+      factory.createStringLiteral('string'),
+    ),
+    factory.createToken(SyntaxKind.QuestionToken),
+    value,
+    factory.createToken(SyntaxKind.ColonToken),
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('JSON'), factory.createIdentifier('stringify')),
+      undefined,
+      [value],
     ),
   );
 };

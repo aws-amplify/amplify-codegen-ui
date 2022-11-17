@@ -207,8 +207,8 @@ export function getActionParameterValue(
   importCollection: ImportCollection,
 ): Expression {
   if (key === 'model') {
-    importCollection.addImport(ImportSource.LOCAL_MODELS, value as string);
-    return factory.createIdentifier(value as string);
+    const modelName = importCollection.addImport(ImportSource.LOCAL_MODELS, value as string);
+    return factory.createIdentifier(modelName);
   }
   if (key === 'fields') {
     return factory.createObjectLiteralExpression(

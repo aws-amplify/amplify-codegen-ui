@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import Amplify from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import awsconfig from './aws-exports';

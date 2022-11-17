@@ -77,6 +77,7 @@ import {
 import {
   buildUseStateExpression,
   getCurrentDisplayValueName,
+  getArrayChildRefName,
   getCurrentValueName,
   getDefaultValueExpression,
   getInitialValues,
@@ -101,7 +102,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     renderComponentToFilesystem: (outputPath: string) => Promise<void>;
   }
 > {
-  protected importCollection = new ImportCollection();
+  protected importCollection: ImportCollection;
 
   protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
 
@@ -133,6 +134,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.componentMetadata = computeComponentMetadata(this.formComponent);
     this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition);
+    this.importCollection = new ImportCollection(this.componentMetadata);
   }
 
   @handleCodegenErrors
@@ -267,7 +269,11 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   abstract renderJsx(component: StudioComponent, parent?: StudioNode): JsxElement | JsxFragment | JsxSelfClosingElement;
 
   private renderBindingPropsType(): TypeAliasDeclaration[] {
-    const { name: formName } = this.component;
+    const {
+      name: formName,
+      formActionType,
+      dataType: { dataSourceType, dataTypeName },
+    } = this.component;
     const fieldConfigs = this.componentMetadata.formMetadata?.fieldConfigs ?? {};
     const overrideTypeAliasDeclaration = buildOverrideTypesBindings(
       this.formComponent,
@@ -290,6 +296,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
 
+    let modelName = dataTypeName;
+    if (dataSourceType === 'DataStore' && formActionType === 'update') {
+      // add model import for datastore type
+      if (dataSourceType === 'DataStore') {
+        this.requiredDataModels.push(dataTypeName);
+        modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      }
+    }
     return [
       validationResponseType,
       validationFunctionType,
@@ -304,7 +318,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         factory.createIdentifier(formPropType),
         undefined,
         factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
-          factory.createIntersectionTypeNode([escapeHatchTypeNode, buildFormPropNode(this.component)]),
+          factory.createIntersectionTypeNode([
+            escapeHatchTypeNode,
+            buildFormPropNode(this.component, modelName),
+            factory.createTypeReferenceNode(
+              factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('CSSProperties')),
+              undefined,
+            ),
+          ]),
         ]),
       ),
     ];
@@ -330,9 +351,16 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
     const lowerCaseDataTypeNameRecord = `${lowerCaseDataTypeName}Record`;
     const isDataStoreUpdateForm = dataSourceType === 'DataStore' && formActionType === 'update';
-
+    let modelName = dataTypeName;
     if (!formMetadata) {
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
+    }
+    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
+    this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
+
+    // add model import for datastore type
+    if (dataSourceType === 'DataStore') {
+      modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
     }
 
     const elements: BindingElement[] = [
@@ -415,7 +443,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       );
       statements.push(
         addUseEffectWrapper(
-          buildUpdateDatastoreQuery(dataTypeName, lowerCaseDataTypeNameRecord),
+          buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeNameRecord),
           // TODO: change once cpk is supported in datastore
           ['id', lowerCaseDataTypeName],
         ),
@@ -429,17 +457,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
 
-    // add model import for datastore type
-    if (dataSourceType === 'DataStore') {
-      this.requiredDataModels.push(dataTypeName);
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
-    }
-
     if (dataSourceType === 'Custom' && formActionType === 'update') {
       statements.push(addUseEffectWrapper([buildSetStateFunction(formMetadata.fieldConfigs)], []));
     }
 
-    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
     // Add value state and ref array type fields in ArrayField wrapper
 
     const relationshipCollection: GenericDataRelationshipType[] = [];
@@ -467,7 +488,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
             factory.createVariableDeclarationList(
               [
                 factory.createVariableDeclaration(
-                  factory.createIdentifier(`${renderedName}Ref`),
+                  factory.createIdentifier(getArrayChildRefName(renderedName)),
                   undefined,
                   undefined,
                   factory.createCallExpression(
@@ -511,7 +532,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.requiredDataModels.push(...modelsToImport);
 
-    modelsToImport.forEach((modelName) => this.importCollection.addImport(ImportSource.LOCAL_MODELS, modelName));
+    modelsToImport.forEach((model) => this.importCollection.addImport(ImportSource.LOCAL_MODELS, model));
 
     if (displayValueObject) {
       statements.push(displayValueObject);

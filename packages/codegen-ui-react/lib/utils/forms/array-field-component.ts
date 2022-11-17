@@ -821,6 +821,7 @@ export const generateArrayFieldComponent = () => {
                 factory.createIdentifier('children'),
               ),
             ),
+            // here?
             factory.createJsxExpression(
               undefined,
               factory.createConditionalExpression(
@@ -1033,6 +1034,8 @@ export const generateArrayFieldComponent = () => {
                 ),
               ),
             ),
+            // {arraySection}
+            factory.createJsxExpression(undefined, factory.createIdentifier(arraySection)),
           ],
           factory.createJsxClosingElement(
             factory.createPropertyAccessExpression(

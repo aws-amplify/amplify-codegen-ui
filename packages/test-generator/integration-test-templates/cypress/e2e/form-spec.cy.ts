@@ -18,6 +18,10 @@ describe('Forms', () => {
     cy.visit('http://localhost:3000/form-tests');
   });
 
+  const getInputByLabel = (label) => {
+    return cy.contains('label', label).parent().find('input');
+  };
+
   describe('CustomFormCreateDog', () => {
     it('should validate, clear, and submit', () => {
       const ErrorMessageMap = {
@@ -85,10 +89,6 @@ describe('Forms', () => {
   describe('DataStoreFormCreateAllSupportedFormFields', () => {
     it('should save to DataStore', () => {
       cy.get('#dataStoreFormCreateAllSupportedFormFields').within(() => {
-        const getInputByLabel = (label) => {
-          return cy.contains('label', label).parent().find('input');
-        };
-
         getInputByLabel('String').type('MyString');
 
         // String array
@@ -128,6 +128,19 @@ describe('Forms', () => {
           expect(record.enum).to.equal('SAN_FRANCISCO');
           expect(record.stringArray[0]).to.equal('String1');
         });
+      });
+    });
+  });
+
+  describe('CustomFormCreateNestedJson', () => {
+    it('should have a working ArrayField', () => {
+      cy.get('#customFormCreateNestedJson').within(() => {
+        cy.contains('Add item').click();
+        getInputByLabel('Animals').type('String1');
+        cy.contains('Add').click();
+        cy.contains('Add item').click();
+        getInputByLabel('Animals').type('String2');
+        cy.contains('String1').should('exist');
       });
     });
   });

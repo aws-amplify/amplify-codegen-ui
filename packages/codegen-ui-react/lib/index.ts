@@ -14,6 +14,7 @@
   limitations under the License.
  */
 export * from './react-component-renderer';
+export * from './react-expander-renderer';
 export * from './react-table-renderer';
 export * from './imports';
 export * from './react-studio-template-renderer';

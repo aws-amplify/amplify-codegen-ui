@@ -1,0 +1,29 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Text",
+  "name": "DataBindingNamedClass",
+  "bindingProperties": {
+    "class": {
+      "type": "Data",
+      "bindingProperties": {
+        "model": "Flex"
+      }
+    }
+  },
+  "properties": {
+    "label": {
+      "bindingProperties": {
+        "property": "class",
+        "field": "name"
+      }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Flex",
+      "name": "FlexChild",
+      "properties": {}
+    }
+  ],
+  "schemaVersion": "1.0"
+}

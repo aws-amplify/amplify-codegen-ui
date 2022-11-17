@@ -17,7 +17,11 @@ import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider, Text } from '@aws-amplify/ui-react';
 import { useState, useEffect, useRef } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
-import { CustomFormCreateDog, DataStoreFormCreateAllSupportedFormFields } from './ui-components'; // eslint-disable-line import/extensions, max-len
+import {
+  CustomFormCreateDog,
+  DataStoreFormCreateAllSupportedFormFields,
+  CustomFormCreateNestedJson,
+} from './ui-components'; // eslint-disable-line import/extensions, max-len
 import { AllSupportedFormFields } from './models';
 
 export default function FormTests() {
@@ -82,6 +86,11 @@ export default function FormTests() {
           }}
         />
         <Text>{dataStoreFormCreateAllSupportedFormFieldsRecord}</Text>
+      </View>
+      <Divider />
+      <Heading>Custom Form - CreateNestedJson</Heading>
+      <View id="customFormCreateNestedJson">
+        <CustomFormCreateNestedJson onSubmit={() => undefined} />
       </View>
     </AmplifyProvider>
   );

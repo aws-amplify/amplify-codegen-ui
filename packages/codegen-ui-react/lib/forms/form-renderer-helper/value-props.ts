@@ -106,6 +106,10 @@ export const renderValueAttribute = ({
       factory.createIdentifier('isChecked'),
       factory.createJsxExpression(undefined, valueIdentifier),
     ),
+    CheckboxField: factory.createJsxAttribute(
+      factory.createIdentifier('checked'),
+      factory.createJsxExpression(undefined, valueIdentifier),
+    ),
   };
 
   if (controlledComponentToAttributesMap[componentType]) {
