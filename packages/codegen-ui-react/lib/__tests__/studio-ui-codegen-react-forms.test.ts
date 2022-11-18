@@ -81,7 +81,7 @@ describe('amplify form renderer tests', () => {
       // Check that custom field label is working as expected
       expect(componentText).toContain('Team Label');
       // Check that Autocomplete custom display value is set
-      expect(componentText).toContain('team: (record) => record?.name');
+      expect(componentText).toContain('Team: (record) => record?.name');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();

@@ -3797,9 +3797,9 @@ export default function MyMemberForm(props) {
         items={Team ? [Team] : []}
         hasError={errors.Team?.hasError}
         getBadgeText={getDisplayValue.Team}
-        setFieldValue={currentTeamDisplayValue}
+        setFieldValue={setCurrentTeamDisplayValue}
         inputFieldRef={TeamRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <Autocomplete
           label=\\"Team Label\\"
@@ -9575,7 +9575,7 @@ exports[`amplify form renderer tests datastore form tests should use proper fiel
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
-import { Member, Team } from \\"../models\\";
+import { Member, Team as Team0 } from \\"../models\\";
 import {
   getOverrideProps,
   useDataStoreBinding,
@@ -9752,14 +9752,14 @@ export default function MyMemberForm(props) {
   } = props;
   const initialValues = {
     name: undefined,
-    team: undefined,
+    Team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
-  const [team, setTeam] = React.useState(initialValues.team);
+  const [Team, setTeam] = React.useState(initialValues.Team);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
-    setTeam(initialValues.team);
+    setTeam(initialValues.Team);
     setCurrentTeamValue(undefined);
     setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
@@ -9767,17 +9767,17 @@ export default function MyMemberForm(props) {
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
-  const teamRef = React.createRef();
+  const TeamRef = React.createRef();
   const teamRecords = useDataStoreBinding({
     type: \\"collection\\",
-    model: Team,
+    model: Team0,
   }).items;
   const getDisplayValue = {
-    team: (record) => record?.name,
+    Team: (record) => record?.name,
   };
   const validations = {
     name: [],
-    team: [],
+    Team: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -9805,7 +9805,7 @@ export default function MyMemberForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          team,
+          Team,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -9891,7 +9891,7 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              team,
+              Team,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -9913,10 +9913,10 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              team: value,
+              Team: value,
             };
             const result = onChange(modelFields);
-            value = result?.team ?? value;
+            value = result?.Team ?? value;
           }
           setTeam(value);
           setCurrentTeamValue(undefined);
@@ -9924,11 +9924,11 @@ export default function MyMemberForm(props) {
         }}
         currentFieldValue={currentTeamValue}
         label={\\"Team Label\\"}
-        items={team ? [team] : []}
-        hasError={errors.team?.hasError}
-        getBadgeText={getDisplayValue.team}
+        items={Team ? [Team] : []}
+        hasError={errors.Team?.hasError}
+        getBadgeText={getDisplayValue.Team}
         setFieldValue={setCurrentTeamDisplayValue}
-        inputFieldRef={teamRef}
+        inputFieldRef={TeamRef}
         defaultFieldValue={\\"\\"}
       >
         <Autocomplete
@@ -9938,7 +9938,7 @@ export default function MyMemberForm(props) {
           value={currentTeamDisplayValue}
           options={teamRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.team?.(r) ?? r.id,
+            label: getDisplayValue.Team?.(r) ?? r.id,
           }))}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
@@ -9949,17 +9949,17 @@ export default function MyMemberForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.team?.hasError) {
-              runValidationTasks(\\"team\\", value);
+            if (errors.Team?.hasError) {
+              runValidationTasks(\\"Team\\", value);
             }
             setCurrentTeamDisplayValue(value);
             setCurrentTeamValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"team\\", team)}
-          errorMessage={errors.team?.errorMessage}
-          hasError={errors.team?.hasError}
-          ref={teamRef}
-          {...getOverrideProps(overrides, \\"team\\")}
+          onBlur={() => runValidationTasks(\\"Team\\", Team)}
+          errorMessage={errors.Team?.errorMessage}
+          hasError={errors.Team?.hasError}
+          ref={TeamRef}
+          {...getOverrideProps(overrides, \\"Team\\")}
         ></Autocomplete>
       </ArrayField>
     </Grid>
@@ -9970,7 +9970,7 @@ export default function MyMemberForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should use proper field overrides for belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
-import { Team } from \\"../models\\";
+import { Team as Team0 } from \\"../models\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
@@ -9980,17 +9980,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type MyMemberFormInputValues = {
     name?: string;
-    team?: Team;
+    Team?: Team0;
 };
 export declare type MyMemberFormValidationValues = {
     name?: ValidationFunction<string>;
-    team?: ValidationFunction<Team>;
+    Team?: ValidationFunction<Team0>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyMemberFormOverridesProps = {
     MyMemberFormGrid?: FormProps<GridProps>;
     name?: FormProps<TextFieldProps>;
-    team?: FormProps<AutocompleteProps>;
+    Team?: FormProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type MyMemberFormProps = React.PropsWithChildren<{
     overrides?: MyMemberFormOverridesProps | undefined | null;

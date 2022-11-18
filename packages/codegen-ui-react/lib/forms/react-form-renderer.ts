@@ -271,7 +271,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   private renderBindingPropsType(): TypeAliasDeclaration[] {
     const {
       name: formName,
-      formActionType,
       dataType: { dataSourceType, dataTypeName },
     } = this.component;
     const fieldConfigs = this.componentMetadata.formMetadata?.fieldConfigs ?? {};
@@ -297,13 +296,13 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
 
     let modelName = dataTypeName;
-    if (dataSourceType === 'DataStore' && formActionType === 'update') {
-      // add model import for datastore type
-      if (dataSourceType === 'DataStore') {
-        this.requiredDataModels.push(dataTypeName);
-        modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
-      }
+
+    // add model import for datastore type
+    if (dataSourceType === 'DataStore') {
+      this.requiredDataModels.push(dataTypeName);
+      modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
     }
+
     return [
       validationResponseType,
       validationFunctionType,
