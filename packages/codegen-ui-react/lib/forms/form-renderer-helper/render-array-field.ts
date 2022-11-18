@@ -221,12 +221,48 @@ export const renderArrayFieldComponent = (
     );
   }
 
-  props.push(
-    factory.createJsxAttribute(
-      factory.createIdentifier('setFieldValue'),
-      factory.createJsxExpression(undefined, setFieldValueIdentifier),
-    ),
-  );
+  if (isModelDataType(fieldConfig)) {
+    const valueArgument = 'model';
+    props.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('setFieldValue'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier(valueArgument),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createCallExpression(setFieldValueIdentifier, undefined, [
+              factory.createCallExpression(
+                getElementAccessExpression(getDisplayValueObjectName, fieldName),
+                undefined,
+                [factory.createIdentifier(valueArgument)],
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+  } else {
+    props.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('setFieldValue'),
+        factory.createJsxExpression(undefined, setFieldValueIdentifier),
+      ),
+    );
+  }
 
   props.push(
     factory.createJsxAttribute(
