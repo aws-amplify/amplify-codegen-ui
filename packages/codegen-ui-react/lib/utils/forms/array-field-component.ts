@@ -522,34 +522,14 @@ export const generateArrayFieldComponent = () => {
                                                             [factory.createIdentifier('index')],
                                                           ),
                                                         ),
-                                                        /**
-                                                          setFieldValue(getBadgeText ? 
-                                                            getBadgeText(items[index]) 
-                                                            : items[index]);
-                                                         */
                                                         factory.createExpressionStatement(
                                                           factory.createCallExpression(
                                                             factory.createIdentifier('setFieldValue'),
                                                             undefined,
                                                             [
-                                                              factory.createConditionalExpression(
-                                                                factory.createIdentifier('getBadgeText'),
-                                                                factory.createToken(SyntaxKind.QuestionToken),
-                                                                factory.createCallExpression(
-                                                                  factory.createIdentifier('getBadgeText'),
-                                                                  undefined,
-                                                                  [
-                                                                    factory.createElementAccessExpression(
-                                                                      factory.createIdentifier('items'),
-                                                                      factory.createIdentifier('index'),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                factory.createToken(SyntaxKind.ColonToken),
-                                                                factory.createElementAccessExpression(
-                                                                  factory.createIdentifier('items'),
-                                                                  factory.createIdentifier('index'),
-                                                                ),
+                                                              factory.createElementAccessExpression(
+                                                                factory.createIdentifier('items'),
+                                                                factory.createIdentifier('index'),
                                                               ),
                                                             ],
                                                           ),

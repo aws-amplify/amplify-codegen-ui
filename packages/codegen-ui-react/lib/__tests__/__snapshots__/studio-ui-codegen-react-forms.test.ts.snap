@@ -880,9 +880,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -1309,9 +1307,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -1880,9 +1876,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -2513,9 +2507,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -3529,9 +3521,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -3799,7 +3789,9 @@ export default function MyMemberForm(props) {
         items={Team ? [Team] : []}
         hasError={errors.Team?.hasError}
         getBadgeText={getDisplayValue.Team}
-        setFieldValue={setCurrentTeamDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentTeamDisplayValue(getDisplayValue.Team(model))
+        }
         inputFieldRef={TeamRef}
         defaultFieldValue={\\"\\"}
       >
@@ -3965,9 +3957,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -4240,7 +4230,11 @@ export default function BookCreateForm(props) {
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors.primaryAuthor?.hasError}
         getBadgeText={getDisplayValue.primaryAuthor}
-        setFieldValue={setCurrentPrimaryAuthorDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentPrimaryAuthorDisplayValue(
+            getDisplayValue.primaryAuthor(model)
+          )
+        }
         inputFieldRef={primaryAuthorRef}
         defaultFieldValue={\\"\\"}
       >
@@ -4408,9 +4402,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -4662,7 +4654,9 @@ export default function TagCreateForm(props) {
         items={Posts}
         hasError={errors.Posts?.hasError}
         getBadgeText={getDisplayValue.Posts}
-        setFieldValue={setCurrentPostsDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentPostsDisplayValue(getDisplayValue.Posts(model))
+        }
         inputFieldRef={PostsRef}
         defaultFieldValue={\\"\\"}
       >
@@ -4856,9 +4850,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -5152,7 +5144,11 @@ export default function BookCreateForm(props) {
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors.primaryAuthor?.hasError}
         getBadgeText={getDisplayValue.primaryAuthor}
-        setFieldValue={setCurrentPrimaryAuthorDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentPrimaryAuthorDisplayValue(
+            getDisplayValue.primaryAuthor(model)
+          )
+        }
         inputFieldRef={primaryAuthorRef}
         defaultFieldValue={\\"\\"}
       >
@@ -5212,7 +5208,11 @@ export default function BookCreateForm(props) {
         items={primaryTitle ? [primaryTitle] : []}
         hasError={errors.primaryTitle?.hasError}
         getBadgeText={getDisplayValue.primaryTitle}
-        setFieldValue={setCurrentPrimaryTitleDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentPrimaryTitleDisplayValue(
+            getDisplayValue.primaryTitle(model)
+          )
+        }
         inputFieldRef={primaryTitleRef}
         defaultFieldValue={\\"\\"}
       >
@@ -5817,9 +5817,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -6386,9 +6384,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -6928,9 +6924,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -7792,9 +7786,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -8706,9 +8698,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -9664,9 +9654,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -9934,7 +9922,9 @@ export default function MyMemberForm(props) {
         items={Team ? [Team] : []}
         hasError={errors.Team?.hasError}
         getBadgeText={getDisplayValue.Team}
-        setFieldValue={setCurrentTeamDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentTeamDisplayValue(getDisplayValue.Team(model))
+        }
         inputFieldRef={TeamRef}
         defaultFieldValue={\\"\\"}
       >
