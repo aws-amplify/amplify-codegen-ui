@@ -4471,7 +4471,7 @@ export default function MyFlexUpdateForm(props) {
         }
         try {
           await DataStore.save(
-            Flex0.copyOf(flex0Record, (updated) => {
+            Flex0.copyOf(flexRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );

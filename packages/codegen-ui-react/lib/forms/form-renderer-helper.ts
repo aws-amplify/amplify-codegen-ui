@@ -552,7 +552,11 @@ export const buildOnChangeStatement = (
   );
 };
 
-export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create', importedModelName: string) => {
+export const buildDataStoreExpression = (
+  dataStoreActionType: 'update' | 'create',
+  importedModelName: string,
+  dataTypeName: string,
+) => {
   if (dataStoreActionType === 'update') {
     return [
       factory.createExpressionStatement(
@@ -571,7 +575,7 @@ export const buildDataStoreExpression = (dataStoreActionType: 'update' | 'create
                 ),
                 undefined,
                 [
-                  factory.createIdentifier(`${lowerCaseFirst(importedModelName)}Record`),
+                  factory.createIdentifier(`${lowerCaseFirst(dataTypeName)}Record`),
                   factory.createArrowFunction(
                     undefined,
                     undefined,
