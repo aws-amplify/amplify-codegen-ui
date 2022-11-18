@@ -67,8 +67,8 @@ const getTypeNode = ({ componentType, dataType, isArray, isValidation, importCol
 
   if (dataType && typeof dataType === 'object' && 'model' in dataType) {
     const modelName = dataType.model;
-    importCollection?.addImport(ImportSource.LOCAL_MODELS, modelName);
-    typeNode = factory.createTypeReferenceNode(factory.createIdentifier(modelName));
+    const aliasedModel = importCollection?.addImport(ImportSource.LOCAL_MODELS, modelName);
+    typeNode = factory.createTypeReferenceNode(factory.createIdentifier(aliasedModel || modelName));
   }
 
   if (isValidation) {
