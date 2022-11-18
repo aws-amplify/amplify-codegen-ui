@@ -379,15 +379,6 @@ export const generateArrayFieldComponent = () => {
                 factory.createJsxAttributes([]),
               ),
               [
-                factory.createJsxElement(
-                  factory.createJsxOpeningElement(
-                    factory.createIdentifier('Text'),
-                    undefined,
-                    factory.createJsxAttributes([]),
-                  ),
-                  [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
-                  factory.createJsxClosingElement(factory.createIdentifier('Text')),
-                ),
                 factory.createJsxExpression(
                   undefined,
                   factory.createBinaryExpression(
@@ -814,6 +805,15 @@ export const generateArrayFieldComponent = () => {
             factory.createJsxAttributes([]),
           ),
           [
+            factory.createJsxElement(
+              factory.createJsxOpeningElement(
+                factory.createIdentifier('Text'),
+                undefined,
+                factory.createJsxAttributes([]),
+              ),
+              [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
+              factory.createJsxClosingElement(factory.createIdentifier('Text')),
+            ),
             factory.createJsxExpression(
               undefined,
               factory.createBinaryExpression(
@@ -822,7 +822,6 @@ export const generateArrayFieldComponent = () => {
                 factory.createIdentifier('children'),
               ),
             ),
-            // here?
             factory.createJsxExpression(
               undefined,
               factory.createConditionalExpression(
@@ -832,16 +831,6 @@ export const generateArrayFieldComponent = () => {
                   factory.createJsxFragment(
                     factory.createJsxOpeningFragment(),
                     [
-                      factory.createJsxElement(
-                        factory.createJsxOpeningElement(
-                          factory.createIdentifier('Text'),
-                          undefined,
-                          factory.createJsxAttributes([]),
-                        ),
-                        [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
-                        factory.createJsxClosingElement(factory.createIdentifier('Text')),
-                      ),
-
                       factory.createJsxElement(
                         factory.createJsxOpeningElement(
                           factory.createIdentifier('Button'),

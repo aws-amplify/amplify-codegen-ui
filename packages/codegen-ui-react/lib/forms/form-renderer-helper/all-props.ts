@@ -119,6 +119,14 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
           factory.createJsxExpression(undefined, factory.createIdentifier(getArrayChildRefName(renderedVariableName))),
         ),
       );
+
+      // labelHidden={true}. Label rendered on ArrayField instead
+      attributes.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('labelHidden'),
+          factory.createJsxExpression(undefined, factory.createTrue()),
+        ),
+      );
     }
   }
   if (componentName === 'ClearButton' || componentName === 'ResetButton') {
