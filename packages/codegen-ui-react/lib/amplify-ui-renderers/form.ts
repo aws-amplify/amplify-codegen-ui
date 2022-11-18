@@ -127,7 +127,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
         factory.createTryStatement(
           factory.createBlock(
             [
-              ...buildDataStoreExpression(formActionType, importedModelName),
+              ...buildDataStoreExpression(formActionType, importedModelName, dataTypeName),
               // call onSuccess hook if it exists
               factory.createIfStatement(
                 factory.createIdentifier('onSuccess'),
