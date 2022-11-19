@@ -26,7 +26,7 @@ import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
 import { ImportCollection, ImportSource } from '../imports';
 import { buildDataStoreExpression } from '../forms';
-import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
+import { onSubmitValidationRun, buildModelFieldObject, getHasManyFieldConfigs } from '../forms/form-renderer-helper';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
 import { resetFunctionCheck } from '../forms/form-renderer-helper/value-props';
 import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
@@ -98,9 +98,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     if (!formMetadata) {
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
     }
-    const hasManyFieldConfigs = Object.entries(formMetadata.fieldConfigs).filter(
-      ([, fieldConfigMetaData]) => fieldConfigMetaData.relationship?.type === 'HAS_MANY',
-    );
+    const hasManyFieldConfigs = getHasManyFieldConfigs(formMetadata.fieldConfigs);
 
     const onSubmitIdentifier = factory.createIdentifier('onSubmit');
 

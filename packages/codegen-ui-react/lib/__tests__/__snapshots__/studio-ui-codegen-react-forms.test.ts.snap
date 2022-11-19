@@ -432,7 +432,9 @@ export default function CustomDataForm(props) {
   const [pages, setPages] = React.useState(initialValues.pages);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...initialData };
+    const cleanValues = initialData
+      ? { ...initialValues, ...initialData }
+      : initialValues;
     setName(cleanValues.name);
     setEmail(cleanValues.email);
     setMetadataField(cleanValues[\\"metadata-field\\"]);
@@ -2607,7 +2609,9 @@ export default function NestedJson(props) {
   const [bio, setBio] = React.useState(initialValues.bio);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...initialData };
+    const cleanValues = initialData
+      ? { ...initialValues, ...initialData }
+      : initialValues;
     setFirstName(cleanValues.firstName);
     setLastName(cleanValues[\\"last-Name\\"]);
     setLastName1(cleanValues.lastName ?? []);
@@ -5341,7 +5345,9 @@ export default function MyPostForm(props) {
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...postRecord };
+    const cleanValues = postRecord
+      ? { ...initialValues, ...postRecord }
+      : initialValues;
     setTextAreaFieldbbd63464(cleanValues.TextAreaFieldbbd63464);
     setCaption(cleanValues.caption);
     setUsername(cleanValues.username);
@@ -5924,7 +5930,9 @@ export default function MyFlexUpdateForm(props) {
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...flexRecord };
+    const cleanValues = flexRecord
+      ? { ...initialValues, ...flexRecord }
+      : initialValues;
     setUsername(cleanValues.username);
     setCaption(cleanValues.caption);
     setCustomtags(cleanValues.Customtags ?? []);
@@ -7913,7 +7921,9 @@ export default function InputGalleryUpdateForm(props) {
   const [timeisnow, setTimeisnow] = React.useState(initialValues.timeisnow);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...inputGalleryRecord };
+    const cleanValues = inputGalleryRecord
+      ? { ...initialValues, ...inputGalleryRecord }
+      : initialValues;
     setNum(cleanValues.num);
     setRootbeer(cleanValues.rootbeer);
     setAttend(cleanValues.attend);

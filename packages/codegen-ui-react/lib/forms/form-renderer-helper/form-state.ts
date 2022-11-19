@@ -58,6 +58,8 @@ export const getCurrentDisplayValueName = (fieldName: string) =>
 
 export const getRecordsName = (modelName: string) => `${lowerCaseFirst(modelName)}Records`;
 
+export const getLinkedRecordsName = (modelName: string) => `linked${capitalizeFirstLetter(modelName)}`;
+
 export const getCurrentValueIdentifier = (fieldName: string) =>
   factory.createIdentifier(getCurrentValueName(fieldName));
 
@@ -259,7 +261,11 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
  *   ....
  * };
  */
-export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>, recordName?: string) => {
+export const resetStateFunction = (
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+  recordName?: string,
+  hasManyFieldConfigs?: [string, FieldConfigMetadata][],
+) => {
   const recordOrInitialValues = recordName ? 'cleanValues' : 'initialValues';
 
   const stateNames = new Set<string>();
@@ -312,6 +318,18 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
     return acc;
   }, []);
 
+  const linkedDataPropertyAssignments: PropertyAssignment[] = [];
+  if (hasManyFieldConfigs && hasManyFieldConfigs.length > 0) {
+    hasManyFieldConfigs.forEach(([fieldName]) => {
+      linkedDataPropertyAssignments.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier(fieldName),
+          factory.createIdentifier(getLinkedRecordsName(fieldName)),
+        ),
+      );
+    });
+  }
+
   // ex. const cleanValues = {...initialValues, ...bookRecord}
   if (recordName) {
     expressions.unshift(
@@ -323,12 +341,19 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
               factory.createIdentifier('cleanValues'),
               undefined,
               undefined,
-              factory.createObjectLiteralExpression(
-                [
-                  factory.createSpreadAssignment(factory.createIdentifier('initialValues')),
-                  factory.createSpreadAssignment(factory.createIdentifier(recordName)),
-                ],
-                false,
+              factory.createConditionalExpression(
+                factory.createIdentifier(recordName),
+                factory.createToken(SyntaxKind.QuestionToken),
+                factory.createObjectLiteralExpression(
+                  [
+                    factory.createSpreadAssignment(factory.createIdentifier('initialValues')),
+                    factory.createSpreadAssignment(factory.createIdentifier(recordName)),
+                    ...linkedDataPropertyAssignments,
+                  ],
+                  false,
+                ),
+                factory.createToken(SyntaxKind.ColonToken),
+                factory.createIdentifier('initialValues'),
               ),
             ),
           ],
@@ -545,12 +570,19 @@ export const buildSetStateFunction = (fieldConfigs: Record<string, FieldConfigMe
 };
 
 // ex. React.useEffect(resetStateValues, [bookRecord])
-export const buildResetValuesOnRecordUpdate = (recordName: string) => {
+export const buildResetValuesOnRecordUpdate = (recordName: string, linkedDataNames: string[]) => {
+  const linkedDataIdentifiers: Identifier[] = [];
+  linkedDataNames.forEach((linkedDataName) => {
+    linkedDataIdentifiers.push(factory.createIdentifier(linkedDataName));
+  });
   return factory.createExpressionStatement(
     factory.createCallExpression(
       factory.createPropertyAccessExpression(factory.createIdentifier('React'), factory.createIdentifier('useEffect')),
       undefined,
-      [resetValuesName, factory.createArrayLiteralExpression([factory.createIdentifier(recordName)], false)],
+      [
+        resetValuesName,
+        factory.createArrayLiteralExpression([factory.createIdentifier(recordName), ...linkedDataIdentifiers], false),
+      ],
     ),
   );
 };

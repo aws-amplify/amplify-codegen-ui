@@ -70,8 +70,11 @@ import {
   buildResetValuesOnRecordUpdate,
   buildSetStateFunction,
   buildUpdateDatastoreQuery,
+  buildUpdateDatastoreQueryForHasMany,
   runValidationTasksFunction,
   mapFromFieldConfigs,
+  getHasManyFieldConfigs,
+  getLinkedRecordsName,
   buildRelationshipQuery,
 } from './form-renderer-helper';
 import {
@@ -435,23 +438,44 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       }
     }
 
-    statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName));
+    const hasManyFieldConfigs = getHasManyFieldConfigs(formMetadata.fieldConfigs);
+    statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName, hasManyFieldConfigs));
 
+    const linkedDataNames: string[] = [];
     if (isDataStoreUpdateForm) {
       statements.push(
         buildUseStateExpression(lowerCaseDataTypeNameRecord, factory.createIdentifier(lowerCaseDataTypeName)),
       );
-      statements.push(
-        addUseEffectWrapper(
-          buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeNameRecord),
-          // TODO: change once cpk is supported in datastore
-          ['id', lowerCaseDataTypeName],
-        ),
-      );
+      if (hasManyFieldConfigs.length > 0) {
+        hasManyFieldConfigs.forEach((hasManyFieldConfig) => {
+          const [fieldName] = hasManyFieldConfig;
+          const linkedDataName = getLinkedRecordsName(fieldName);
+          linkedDataNames.push(fieldName);
+          statements.push(buildUseStateExpression(linkedDataName, factory.createIdentifier(linkedDataName)));
+        });
+      }
+
+      if (hasManyFieldConfigs.length > 0) {
+        statements.push(
+          addUseEffectWrapper(
+            buildUpdateDatastoreQueryForHasMany(modelName, lowerCaseDataTypeNameRecord, hasManyFieldConfigs),
+            // TODO: change once cpk is supported in datastore
+            ['id', lowerCaseDataTypeName],
+          ),
+        );
+      } else {
+        statements.push(
+          addUseEffectWrapper(
+            buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeNameRecord),
+            // TODO: change once cpk is supported in datastore
+            ['id', lowerCaseDataTypeName],
+          ),
+        );
+      }
     }
 
     if (defaultValueVariableName) {
-      statements.push(buildResetValuesOnRecordUpdate(defaultValueVariableName));
+      statements.push(buildResetValuesOnRecordUpdate(defaultValueVariableName, linkedDataNames));
     }
 
     this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
