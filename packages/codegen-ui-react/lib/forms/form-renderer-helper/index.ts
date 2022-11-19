@@ -26,7 +26,7 @@ export { buildMutationBindings, buildOverrideOnChangeStatement } from './event-h
 
 export { buildOverrideTypesBindings } from './type-helper';
 
-export { buildResetValuesOnRecordUpdate, buildSetStateFunction, getLinkedRecordsName } from './form-state';
+export { buildResetValuesOnRecordUpdate, buildSetStateFunction, getLinkedDataName } from './form-state';
 
 export { buildValidations, runValidationTasksFunction } from './validation';
 

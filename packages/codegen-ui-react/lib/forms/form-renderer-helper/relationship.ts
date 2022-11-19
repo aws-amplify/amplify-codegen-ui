@@ -15,7 +15,7 @@
  */
 import { factory, NodeFlags, SyntaxKind } from 'typescript';
 import { FieldConfigMetadata, GenericDataRelationshipType, HasManyRelationshipType } from '@aws-amplify/codegen-ui';
-import { getRecordsName, getLinkedRecordsName } from './form-state';
+import { getRecordsName, getLinkedDataName } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
 
@@ -49,21 +49,21 @@ export const buildManyToManyRelationshipCreateStatements = (
   const { relatedModelField, relatedJoinFieldName, relatedJoinTableName } =
     fieldConfigMetaData.relationship as HasManyRelationshipType;
   if (dataStoreActionType === 'update') {
-    const linkedRecordsName = getLinkedRecordsName(fieldName);
-    const dataToLink = `${fieldName.toLowerCase()}ToLink`;
-    const dataToUnlink = `${fieldName.toLowerCase()}ToUnLink`;
-    const updatedSet = `${fieldName.toLowerCase()}Set`;
-    const originalSet = `${linkedRecordsName}Set`;
+    const linkedDataName = getLinkedDataName(fieldName);
+    const dataToLinkMap = `${fieldName.toLowerCase()}ToLinkMap`;
+    const dataToUnlinkMap = `${fieldName.toLowerCase()}ToUnLinkMap`;
+    const updatedMap = `${fieldName.toLowerCase()}Map`;
+    const originalMap = `${linkedDataName}Map`;
     return [
       factory.createVariableStatement(
         undefined,
         factory.createVariableDeclarationList(
           [
             factory.createVariableDeclaration(
-              factory.createIdentifier(dataToLink),
+              factory.createIdentifier(dataToLinkMap),
               undefined,
               undefined,
-              factory.createArrayLiteralExpression([], false),
+              factory.createNewExpression(factory.createIdentifier('Map'), undefined, []),
             ),
           ],
           NodeFlags.Const,
@@ -74,10 +74,10 @@ export const buildManyToManyRelationshipCreateStatements = (
         factory.createVariableDeclarationList(
           [
             factory.createVariableDeclaration(
-              factory.createIdentifier(dataToUnlink),
+              factory.createIdentifier(dataToUnlinkMap),
               undefined,
               undefined,
-              factory.createArrayLiteralExpression([], false),
+              factory.createNewExpression(factory.createIdentifier('Map'), undefined, []),
             ),
           ],
           NodeFlags.Const,
@@ -88,10 +88,10 @@ export const buildManyToManyRelationshipCreateStatements = (
         factory.createVariableDeclarationList(
           [
             factory.createVariableDeclaration(
-              factory.createIdentifier(updatedSet),
+              factory.createIdentifier(updatedMap),
               undefined,
               undefined,
-              factory.createNewExpression(factory.createIdentifier('Set'), undefined, []),
+              factory.createNewExpression(factory.createIdentifier('Map'), undefined, []),
             ),
           ],
           NodeFlags.Const,
@@ -102,10 +102,10 @@ export const buildManyToManyRelationshipCreateStatements = (
         factory.createVariableDeclarationList(
           [
             factory.createVariableDeclaration(
-              factory.createIdentifier(originalSet),
+              factory.createIdentifier(originalMap),
               undefined,
               undefined,
-              factory.createNewExpression(factory.createIdentifier('Set'), undefined, []),
+              factory.createNewExpression(factory.createIdentifier('Map'), undefined, []),
             ),
           ],
           NodeFlags.Const,
@@ -135,113 +135,73 @@ export const buildManyToManyRelationshipCreateStatements = (
               ],
               undefined,
               factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier(updatedSet),
-                  factory.createIdentifier('add'),
-                ),
-                undefined,
-                [factory.createPropertyAccessExpression(factory.createIdentifier('r'), factory.createIdentifier('id'))],
-              ),
-            ),
-          ],
-        ),
-      ),
-      factory.createExpressionStatement(
-        factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier(linkedRecordsName),
-            factory.createIdentifier('forEach'),
-          ),
-          undefined,
-          [
-            factory.createArrowFunction(
-              undefined,
-              undefined,
-              [
-                factory.createParameterDeclaration(
-                  undefined,
-                  undefined,
-                  undefined,
-                  factory.createIdentifier('r'),
-                  undefined,
-                  undefined,
-                  undefined,
-                ),
-              ],
-              undefined,
-              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier(originalSet),
-                  factory.createIdentifier('add'),
-                ),
-                undefined,
-                [factory.createPropertyAccessExpression(factory.createIdentifier('r'), factory.createIdentifier('id'))],
-              ),
-            ),
-          ],
-        ),
-      ),
-      factory.createExpressionStatement(
-        factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier(linkedRecordsName),
-            factory.createIdentifier('forEach'),
-          ),
-          undefined,
-          [
-            factory.createArrowFunction(
-              undefined,
-              undefined,
-              [
-                factory.createParameterDeclaration(
-                  undefined,
-                  undefined,
-                  undefined,
-                  factory.createIdentifier('r'),
-                  undefined,
-                  undefined,
-                  undefined,
-                ),
-              ],
-              undefined,
-              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
               factory.createBlock(
                 [
-                  factory.createIfStatement(
-                    factory.createPrefixUnaryExpression(
-                      SyntaxKind.ExclamationToken,
-                      factory.createCallExpression(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier(updatedSet),
-                          factory.createIdentifier('has'),
-                        ),
-                        undefined,
-                        [
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('r'),
-                            factory.createIdentifier('id'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    factory.createBlock(
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
                       [
-                        factory.createExpressionStatement(
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('count'),
+                          undefined,
+                          undefined,
                           factory.createCallExpression(
                             factory.createPropertyAccessExpression(
-                              factory.createIdentifier(dataToUnlink),
-                              factory.createIdentifier('push'),
+                              factory.createIdentifier(updatedMap),
+                              factory.createIdentifier('get'),
                             ),
                             undefined,
-                            [factory.createIdentifier('r')],
+                            [
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('r'),
+                                factory.createIdentifier('id'),
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                      true,
+                      NodeFlags.Const,
                     ),
+                  ),
+                  factory.createVariableStatement(
                     undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('newCount'),
+                          undefined,
+                          undefined,
+                          factory.createConditionalExpression(
+                            factory.createIdentifier('count'),
+                            factory.createToken(SyntaxKind.QuestionToken),
+                            factory.createBinaryExpression(
+                              factory.createIdentifier('count'),
+                              factory.createToken(SyntaxKind.PlusToken),
+                              factory.createNumericLiteral('1'),
+                            ),
+                            factory.createToken(SyntaxKind.ColonToken),
+                            factory.createNumericLiteral('1'),
+                          ),
+                        ),
+                      ],
+                      NodeFlags.Const,
+                    ),
+                  ),
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier(updatedMap),
+                        factory.createIdentifier('set'),
+                      ),
+                      undefined,
+                      [
+                        factory.createPropertyAccessExpression(
+                          factory.createIdentifier('r'),
+                          factory.createIdentifier('id'),
+                        ),
+                        factory.createIdentifier('newCount'),
+                      ],
+                    ),
                   ),
                 ],
                 true,
@@ -253,7 +213,7 @@ export const buildManyToManyRelationshipCreateStatements = (
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
-            factory.createIdentifier(fieldName),
+            factory.createIdentifier(linkedDataName),
             factory.createIdentifier('forEach'),
           ),
           undefined,
@@ -276,39 +236,325 @@ export const buildManyToManyRelationshipCreateStatements = (
               factory.createToken(SyntaxKind.EqualsGreaterThanToken),
               factory.createBlock(
                 [
-                  factory.createIfStatement(
-                    factory.createPrefixUnaryExpression(
-                      SyntaxKind.ExclamationToken,
-                      factory.createCallExpression(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier(originalSet),
-                          factory.createIdentifier('has'),
-                        ),
-                        undefined,
-                        [
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('r'),
-                            factory.createIdentifier('id'),
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('count'),
+                          undefined,
+                          undefined,
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier(originalMap),
+                              factory.createIdentifier('get'),
+                            ),
+                            undefined,
+                            [
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('r'),
+                                factory.createIdentifier('id'),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
+                      ],
+                      NodeFlags.Const,
+                    ),
+                  ),
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('newCount'),
+                          undefined,
+                          undefined,
+                          factory.createConditionalExpression(
+                            factory.createIdentifier('count'),
+                            factory.createToken(SyntaxKind.QuestionToken),
+                            factory.createBinaryExpression(
+                              factory.createIdentifier('count'),
+                              factory.createToken(SyntaxKind.PlusToken),
+                              factory.createNumericLiteral('1'),
+                            ),
+                            factory.createToken(SyntaxKind.ColonToken),
+                            factory.createNumericLiteral('1'),
+                          ),
+                        ),
+                      ],
+                      NodeFlags.Const,
+                    ),
+                  ),
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier(originalMap),
+                        factory.createIdentifier('set'),
                       ),
+                      undefined,
+                      [
+                        factory.createPropertyAccessExpression(
+                          factory.createIdentifier('r'),
+                          factory.createIdentifier('id'),
+                        ),
+                        factory.createIdentifier('newCount'),
+                      ],
+                    ),
+                  ),
+                ],
+                true,
+              ),
+            ),
+          ],
+        ),
+      ),
+      factory.createExpressionStatement(
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(originalMap),
+            factory.createIdentifier('forEach'),
+          ),
+          undefined,
+          [
+            factory.createArrowFunction(
+              undefined,
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('count'),
+                  undefined,
+                  undefined,
+                  undefined,
+                ),
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('id'),
+                  undefined,
+                  undefined,
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
+                [
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('newCount'),
+                          undefined,
+                          undefined,
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier(updatedMap),
+                              factory.createIdentifier('get'),
+                            ),
+                            undefined,
+                            [factory.createIdentifier('id')],
+                          ),
+                        ),
+                      ],
+                      NodeFlags.Const,
+                    ),
+                  ),
+                  factory.createIfStatement(
+                    factory.createIdentifier('newCount'),
+                    factory.createBlock(
+                      [
+                        factory.createVariableStatement(
+                          undefined,
+                          factory.createVariableDeclarationList(
+                            [
+                              factory.createVariableDeclaration(
+                                factory.createIdentifier('diffCount'),
+                                undefined,
+                                undefined,
+                                factory.createBinaryExpression(
+                                  factory.createIdentifier('count'),
+                                  factory.createToken(SyntaxKind.MinusToken),
+                                  factory.createIdentifier('newCount'),
+                                ),
+                              ),
+                            ],
+                            NodeFlags.Const,
+                          ),
+                        ),
+                        factory.createIfStatement(
+                          factory.createBinaryExpression(
+                            factory.createIdentifier('diffCount'),
+                            factory.createToken(SyntaxKind.GreaterThanToken),
+                            factory.createNumericLiteral('0'),
+                          ),
+                          factory.createBlock(
+                            [
+                              factory.createExpressionStatement(
+                                factory.createCallExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier(dataToUnlinkMap),
+                                    factory.createIdentifier('set'),
+                                  ),
+                                  undefined,
+                                  [factory.createIdentifier('id'), factory.createIdentifier('diffCount')],
+                                ),
+                              ),
+                            ],
+                            true,
+                          ),
+                          undefined,
+                        ),
+                      ],
+                      true,
                     ),
                     factory.createBlock(
                       [
                         factory.createExpressionStatement(
                           factory.createCallExpression(
                             factory.createPropertyAccessExpression(
-                              factory.createIdentifier(dataToLink),
-                              factory.createIdentifier('push'),
+                              factory.createIdentifier(dataToUnlinkMap),
+                              factory.createIdentifier('set'),
                             ),
                             undefined,
-                            [factory.createIdentifier('r')],
+                            [factory.createIdentifier('id'), factory.createIdentifier('count')],
                           ),
                         ),
                       ],
                       true,
                     ),
+                  ),
+                ],
+                true,
+              ),
+            ),
+          ],
+        ),
+      ),
+      factory.createExpressionStatement(
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(updatedMap),
+            factory.createIdentifier('forEach'),
+          ),
+          undefined,
+          [
+            factory.createArrowFunction(
+              undefined,
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('count'),
+                  undefined,
+                  undefined,
+                  undefined,
+                ),
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('id'),
+                  undefined,
+                  undefined,
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
+                [
+                  factory.createVariableStatement(
                     undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('originalCount'),
+                          undefined,
+                          undefined,
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier(originalMap),
+                              factory.createIdentifier('get'),
+                            ),
+                            undefined,
+                            [factory.createIdentifier('id')],
+                          ),
+                        ),
+                      ],
+                      NodeFlags.Const,
+                    ),
+                  ),
+                  factory.createIfStatement(
+                    factory.createIdentifier('originalCount'),
+                    factory.createBlock(
+                      [
+                        factory.createVariableStatement(
+                          undefined,
+                          factory.createVariableDeclarationList(
+                            [
+                              factory.createVariableDeclaration(
+                                factory.createIdentifier('diffCount'),
+                                undefined,
+                                undefined,
+                                factory.createBinaryExpression(
+                                  factory.createIdentifier('count'),
+                                  factory.createToken(SyntaxKind.MinusToken),
+                                  factory.createIdentifier('originalCount'),
+                                ),
+                              ),
+                            ],
+                            NodeFlags.Const,
+                          ),
+                        ),
+                        factory.createIfStatement(
+                          factory.createBinaryExpression(
+                            factory.createIdentifier('diffCount'),
+                            factory.createToken(SyntaxKind.GreaterThanToken),
+                            factory.createNumericLiteral('0'),
+                          ),
+                          factory.createBlock(
+                            [
+                              factory.createExpressionStatement(
+                                factory.createCallExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier(dataToLinkMap),
+                                    factory.createIdentifier('set'),
+                                  ),
+                                  undefined,
+                                  [factory.createIdentifier('id'), factory.createIdentifier('diffCount')],
+                                ),
+                              ),
+                            ],
+                            true,
+                          ),
+                          undefined,
+                        ),
+                      ],
+                      true,
+                    ),
+                    factory.createBlock(
+                      [
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier(dataToLinkMap),
+                              factory.createIdentifier('set'),
+                            ),
+                            undefined,
+                            [factory.createIdentifier('id'), factory.createIdentifier('count')],
+                          ),
+                        ),
+                      ],
+                      true,
+                    ),
                   ),
                 ],
                 true,
@@ -334,80 +580,196 @@ export const buildManyToManyRelationshipCreateStatements = (
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
-            factory.createIdentifier('promises'),
-            factory.createIdentifier('push'),
+            factory.createIdentifier(dataToUnlinkMap),
+            factory.createIdentifier('forEach'),
           ),
           undefined,
           [
-            factory.createSpreadElement(
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier(dataToUnlink),
-                  factory.createIdentifier('map'),
+            factory.createArrowFunction(
+              [factory.createModifier(SyntaxKind.AsyncKeyword)],
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('count'),
+                  undefined,
+                  undefined,
+                  undefined,
                 ),
-                undefined,
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('id'),
+                  undefined,
+                  undefined,
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
                 [
-                  factory.createArrowFunction(
+                  factory.createVariableStatement(
                     undefined,
-                    undefined,
-                    [
-                      factory.createParameterDeclaration(
-                        undefined,
-                        undefined,
-                        undefined,
-                        factory.createIdentifier(relatedJoinFieldName as string),
-                        undefined,
-                        undefined,
-                        undefined,
-                      ),
-                    ],
-                    undefined,
-                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('DataStore'),
-                        factory.createIdentifier('delete'),
-                      ),
-                      undefined,
+                    factory.createVariableDeclarationList(
                       [
-                        factory.createIdentifier(relatedJoinTableName as string),
-                        factory.createArrowFunction(
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier(getRecordsName(relatedJoinTableName as string)),
                           undefined,
                           undefined,
-                          [
-                            factory.createParameterDeclaration(
+                          factory.createAwaitExpression(
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('DataStore'),
+                                factory.createIdentifier('query'),
+                              ),
                               undefined,
-                              undefined,
-                              undefined,
-                              factory.createIdentifier('r'),
-                              undefined,
-                              undefined,
-                              undefined,
+                              [
+                                factory.createIdentifier(relatedJoinTableName as string),
+                                factory.createArrowFunction(
+                                  undefined,
+                                  undefined,
+                                  [
+                                    factory.createParameterDeclaration(
+                                      undefined,
+                                      undefined,
+                                      undefined,
+                                      factory.createIdentifier('r'),
+                                      undefined,
+                                      undefined,
+                                      undefined,
+                                    ),
+                                  ],
+                                  undefined,
+                                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                  factory.createCallExpression(
+                                    factory.createPropertyAccessExpression(
+                                      factory.createIdentifier('r'),
+                                      factory.createIdentifier('and'),
+                                    ),
+                                    undefined,
+                                    [
+                                      factory.createArrowFunction(
+                                        undefined,
+                                        undefined,
+                                        [
+                                          factory.createParameterDeclaration(
+                                            undefined,
+                                            undefined,
+                                            undefined,
+                                            factory.createIdentifier('r'),
+                                            undefined,
+                                            undefined,
+                                            undefined,
+                                          ),
+                                        ],
+                                        undefined,
+                                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                        factory.createArrayLiteralExpression(
+                                          [
+                                            factory.createCallExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('r'),
+                                                    factory.createIdentifier(relatedJoinFieldName as string),
+                                                  ),
+                                                  factory.createIdentifier('id'),
+                                                ),
+                                                factory.createIdentifier('eq'),
+                                              ),
+                                              undefined,
+                                              [factory.createIdentifier('id')],
+                                            ),
+                                            factory.createCallExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('r'),
+                                                    factory.createIdentifier(relatedModelField as string),
+                                                  ),
+                                                  factory.createIdentifier('id'),
+                                                ),
+                                                factory.createIdentifier('eq'),
+                                              ),
+                                              undefined,
+                                              [
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createIdentifier(`${modelName.toLowerCase()}Record`),
+                                                  factory.createIdentifier('id'),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                          false,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
+                        ),
+                      ],
+                      // eslint-disable-next-line no-bitwise
+                      NodeFlags.Const | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
+                    ),
+                  ),
+                  factory.createForStatement(
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('i'),
                           undefined,
-                          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                          undefined,
+                          factory.createNumericLiteral('0'),
+                        ),
+                      ],
+                      // eslint-disable-next-line no-bitwise
+                      NodeFlags.Let | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
+                    ),
+                    factory.createBinaryExpression(
+                      factory.createIdentifier('i'),
+                      factory.createToken(SyntaxKind.LessThanToken),
+                      factory.createIdentifier('count'),
+                    ),
+                    factory.createPostfixUnaryExpression(factory.createIdentifier('i'), SyntaxKind.PlusPlusToken),
+                    factory.createBlock(
+                      [
+                        factory.createExpressionStatement(
                           factory.createCallExpression(
                             factory.createPropertyAccessExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('r'),
-                                factory.createIdentifier(`${relatedJoinFieldName}ID`),
-                              ),
-                              factory.createIdentifier('eq'),
+                              factory.createIdentifier('promises'),
+                              factory.createIdentifier('push'),
                             ),
                             undefined,
                             [
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier(relatedJoinFieldName as string),
-                                factory.createIdentifier('id'),
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('DataStore'),
+                                  factory.createIdentifier('delete'),
+                                ),
+                                undefined,
+                                [
+                                  factory.createElementAccessExpression(
+                                    factory.createIdentifier(getRecordsName(relatedJoinTableName as string)),
+                                    factory.createIdentifier('i'),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
                       ],
+                      true,
                     ),
                   ),
                 ],
+                true,
               ),
             ),
           ],
@@ -416,65 +778,106 @@ export const buildManyToManyRelationshipCreateStatements = (
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
-            factory.createIdentifier('promises'),
-            factory.createIdentifier('push'),
+            factory.createIdentifier(dataToLinkMap),
+            factory.createIdentifier('forEach'),
           ),
           undefined,
           [
-            factory.createSpreadElement(
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier(dataToLink),
-                  factory.createIdentifier('map'),
+            factory.createArrowFunction(
+              undefined,
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('count'),
+                  undefined,
+                  undefined,
+                  undefined,
                 ),
-                undefined,
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('id'),
+                  undefined,
+                  undefined,
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
                 [
-                  factory.createArrowFunction(
-                    undefined,
-                    undefined,
-                    [
-                      factory.createParameterDeclaration(
-                        undefined,
-                        undefined,
-                        undefined,
-                        factory.createIdentifier(relatedJoinFieldName as string),
-                        undefined,
-                        undefined,
-                        undefined,
-                      ),
-                    ],
-                    undefined,
-                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('DataStore'),
-                        factory.createIdentifier('save'),
-                      ),
-                      undefined,
+                  factory.createForStatement(
+                    factory.createVariableDeclarationList(
                       [
-                        factory.createNewExpression(
-                          factory.createIdentifier(relatedJoinTableName as string),
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('i'),
                           undefined,
-                          [
-                            factory.createObjectLiteralExpression(
-                              [
-                                factory.createPropertyAssignment(
-                                  factory.createIdentifier(relatedModelField),
-                                  factory.createIdentifier(`${relatedModelField}Record`),
-                                ),
-                                factory.createShorthandPropertyAssignment(
-                                  factory.createIdentifier(relatedJoinFieldName as string),
-                                  undefined,
-                                ),
-                              ],
-                              true,
-                            ),
-                          ],
+                          undefined,
+                          factory.createIdentifier('count'),
                         ),
                       ],
+                      NodeFlags.Let,
+                    ),
+                    factory.createBinaryExpression(
+                      factory.createIdentifier('i'),
+                      factory.createToken(SyntaxKind.GreaterThanToken),
+                      factory.createNumericLiteral('0'),
+                    ),
+                    factory.createPostfixUnaryExpression(factory.createIdentifier('i'), SyntaxKind.MinusMinusToken),
+                    factory.createBlock(
+                      [
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('promises'),
+                              factory.createIdentifier('push'),
+                            ),
+                            undefined,
+                            [
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('DataStore'),
+                                  factory.createIdentifier('save'),
+                                ),
+                                undefined,
+                                [
+                                  factory.createNewExpression(
+                                    factory.createIdentifier(relatedJoinTableName as string),
+                                    undefined,
+                                    [
+                                      factory.createObjectLiteralExpression(
+                                        [
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier(`${relatedModelField}ID`),
+                                            factory.createPropertyAccessExpression(
+                                              factory.createIdentifier(`${modelName.toLowerCase()}Record`),
+                                              factory.createIdentifier('id'),
+                                            ),
+                                          ),
+                                          factory.createPropertyAssignment(
+                                            factory.createIdentifier(`${relatedJoinFieldName}ID`),
+                                            factory.createIdentifier('id'),
+                                          ),
+                                        ],
+                                        true,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      true,
                     ),
                   ),
                 ],
+                true,
               ),
             ),
           ],
@@ -502,7 +905,7 @@ export const buildManyToManyRelationshipCreateStatements = (
                   ),
                   undefined,
                   [
-                    factory.createIdentifier(`${relatedModelField}Record`),
+                    factory.createIdentifier(`${modelName.toLowerCase()}Record`),
                     factory.createArrowFunction(
                       undefined,
                       undefined,

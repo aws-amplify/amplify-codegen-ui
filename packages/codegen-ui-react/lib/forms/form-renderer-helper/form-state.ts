@@ -58,7 +58,7 @@ export const getCurrentDisplayValueName = (fieldName: string) =>
 
 export const getRecordsName = (modelName: string) => `${lowerCaseFirst(modelName)}Records`;
 
-export const getLinkedRecordsName = (modelName: string) => `linked${capitalizeFirstLetter(modelName)}`;
+export const getLinkedDataName = (modelName: string) => `linked${capitalizeFirstLetter(modelName)}`;
 
 export const getCurrentValueIdentifier = (fieldName: string) =>
   factory.createIdentifier(getCurrentValueName(fieldName));
@@ -324,7 +324,7 @@ export const resetStateFunction = (
       linkedDataPropertyAssignments.push(
         factory.createPropertyAssignment(
           factory.createIdentifier(fieldName),
-          factory.createIdentifier(getLinkedRecordsName(fieldName)),
+          factory.createIdentifier(getLinkedDataName(fieldName)),
         ),
       );
     });
