@@ -447,6 +447,27 @@ export default {
           isRequired: false,
           attributes: [],
         },
+        HasOneUser: {
+          name: 'HasOneUser',
+          isArray: false,
+          type: {
+            model: 'User',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'HAS_ONE',
+            associatedWith: 'id',
+            targetName: 'allSupportedFormFieldsHasOneUserId',
+          },
+        },
+        allSupportedFormFieldsHasOneUserId: {
+          name: 'allSupportedFormFieldsHasOneUserId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
         createdAt: {
           name: 'createdAt',
           isArray: false,
