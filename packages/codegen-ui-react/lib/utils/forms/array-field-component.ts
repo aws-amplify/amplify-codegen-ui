@@ -379,15 +379,6 @@ export const generateArrayFieldComponent = () => {
                 factory.createJsxAttributes([]),
               ),
               [
-                factory.createJsxElement(
-                  factory.createJsxOpeningElement(
-                    factory.createIdentifier('Text'),
-                    undefined,
-                    factory.createJsxAttributes([]),
-                  ),
-                  [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
-                  factory.createJsxClosingElement(factory.createIdentifier('Text')),
-                ),
                 factory.createJsxExpression(
                   undefined,
                   factory.createBinaryExpression(
@@ -531,34 +522,14 @@ export const generateArrayFieldComponent = () => {
                                                             [factory.createIdentifier('index')],
                                                           ),
                                                         ),
-                                                        /**
-                                                          setFieldValue(getBadgeText ? 
-                                                            getBadgeText(items[index]) 
-                                                            : items[index]);
-                                                         */
                                                         factory.createExpressionStatement(
                                                           factory.createCallExpression(
                                                             factory.createIdentifier('setFieldValue'),
                                                             undefined,
                                                             [
-                                                              factory.createConditionalExpression(
-                                                                factory.createIdentifier('getBadgeText'),
-                                                                factory.createToken(SyntaxKind.QuestionToken),
-                                                                factory.createCallExpression(
-                                                                  factory.createIdentifier('getBadgeText'),
-                                                                  undefined,
-                                                                  [
-                                                                    factory.createElementAccessExpression(
-                                                                      factory.createIdentifier('items'),
-                                                                      factory.createIdentifier('index'),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                factory.createToken(SyntaxKind.ColonToken),
-                                                                factory.createElementAccessExpression(
-                                                                  factory.createIdentifier('items'),
-                                                                  factory.createIdentifier('index'),
-                                                                ),
+                                                              factory.createElementAccessExpression(
+                                                                factory.createIdentifier('items'),
+                                                                factory.createIdentifier('index'),
                                                               ),
                                                             ],
                                                           ),
@@ -814,6 +785,15 @@ export const generateArrayFieldComponent = () => {
             factory.createJsxAttributes([]),
           ),
           [
+            factory.createJsxElement(
+              factory.createJsxOpeningElement(
+                factory.createIdentifier('Text'),
+                undefined,
+                factory.createJsxAttributes([]),
+              ),
+              [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
+              factory.createJsxClosingElement(factory.createIdentifier('Text')),
+            ),
             factory.createJsxExpression(
               undefined,
               factory.createBinaryExpression(
@@ -822,7 +802,6 @@ export const generateArrayFieldComponent = () => {
                 factory.createIdentifier('children'),
               ),
             ),
-            // here?
             factory.createJsxExpression(
               undefined,
               factory.createConditionalExpression(
@@ -832,16 +811,6 @@ export const generateArrayFieldComponent = () => {
                   factory.createJsxFragment(
                     factory.createJsxOpeningFragment(),
                     [
-                      factory.createJsxElement(
-                        factory.createJsxOpeningElement(
-                          factory.createIdentifier('Text'),
-                          undefined,
-                          factory.createJsxAttributes([]),
-                        ),
-                        [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
-                        factory.createJsxClosingElement(factory.createIdentifier('Text')),
-                      ),
-
                       factory.createJsxElement(
                         factory.createJsxOpeningElement(
                           factory.createIdentifier('Button'),

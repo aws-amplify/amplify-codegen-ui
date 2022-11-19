@@ -866,7 +866,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -883,9 +882,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -923,10 +920,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -1110,6 +1107,7 @@ export default function CustomDataForm(props) {
           errorMessage={errors.email?.errorMessage}
           hasError={errors.email?.hasError}
           ref={emailRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"email\\")}
         ></TextField>
       </ArrayField>
@@ -1153,6 +1151,7 @@ export default function CustomDataForm(props) {
           errorMessage={errors.phone?.errorMessage}
           hasError={errors.phone?.hasError}
           ref={phoneRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"phone\\")}
         ></TextField>
       </ArrayField>
@@ -1294,7 +1293,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -1311,9 +1309,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -1351,10 +1347,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -1657,6 +1653,7 @@ export default function MyPostForm(props) {
           errorMessage={errors.Customtags?.errorMessage}
           hasError={errors.Customtags?.hasError}
           ref={CustomtagsRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"Customtags\\")}
         ></TextField>
       </ArrayField>
@@ -1865,7 +1862,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -1882,9 +1878,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -1922,10 +1916,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -2229,6 +2223,7 @@ export default function NestedJson(props) {
           errorMessage={errors[\\"bio.favorite-trees\\"]?.errorMessage}
           hasError={errors[\\"bio.favorite-trees\\"]?.hasError}
           ref={bioFavoritetreesRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"bio.favorite-trees\\")}
         ></TextField>
       </ArrayField>
@@ -2274,6 +2269,7 @@ export default function NestedJson(props) {
           errorMessage={errors.Nicknames1?.errorMessage}
           hasError={errors.Nicknames1?.hasError}
           ref={Nicknames1Ref}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"Nicknames1\\")}
         ></TextField>
       </ArrayField>
@@ -2319,6 +2315,7 @@ export default function NestedJson(props) {
           errorMessage={errors[\\"nick-names2\\"]?.errorMessage}
           hasError={errors[\\"nick-names2\\"]?.hasError}
           ref={nickNamesRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"nick-names2\\")}
         ></TextField>
       </ArrayField>
@@ -2496,7 +2493,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -2513,9 +2509,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -2553,10 +2547,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -2781,6 +2775,7 @@ export default function NestedJson(props) {
           errorMessage={errors.lastName?.errorMessage}
           hasError={errors.lastName?.hasError}
           ref={lastName1Ref}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"lastName\\")}
         ></TextField>
       </ArrayField>
@@ -3449,7 +3444,7 @@ exports[`amplify form renderer tests datastore form tests should generate a crea
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
-import { Member, Team } from \\"../models\\";
+import { Member, Team as Team0 } from \\"../models\\";
 import {
   getOverrideProps,
   useDataStoreBinding,
@@ -3514,7 +3509,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -3531,9 +3525,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -3571,10 +3563,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -3626,14 +3618,14 @@ export default function MyMemberForm(props) {
   } = props;
   const initialValues = {
     name: undefined,
-    team: undefined,
+    Team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
-  const [team, setTeam] = React.useState(initialValues.team);
+  const [Team, setTeam] = React.useState(initialValues.Team);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
-    setTeam(initialValues.team);
+    setTeam(initialValues.Team);
     setCurrentTeamValue(undefined);
     setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
@@ -3641,17 +3633,17 @@ export default function MyMemberForm(props) {
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
-  const teamRef = React.createRef();
+  const TeamRef = React.createRef();
   const teamRecords = useDataStoreBinding({
     type: \\"collection\\",
-    model: Team,
+    model: Team0,
   }).items;
   const getDisplayValue = {
-    team: (record) => record?.name,
+    Team: (record) => record?.name,
   };
   const validations = {
     name: [],
-    team: [],
+    Team: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -3679,7 +3671,7 @@ export default function MyMemberForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          team,
+          Team,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3765,7 +3757,7 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              team,
+              Team,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -3787,10 +3779,10 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              team: value,
+              Team: value,
             };
             const result = onChange(modelFields);
-            value = result?.team ?? value;
+            value = result?.Team ?? value;
           }
           setTeam(value);
           setCurrentTeamValue(undefined);
@@ -3798,11 +3790,13 @@ export default function MyMemberForm(props) {
         }}
         currentFieldValue={currentTeamValue}
         label={\\"Team Label\\"}
-        items={team ? [team] : []}
-        hasError={errors.team?.hasError}
-        getBadgeText={getDisplayValue.team}
-        setFieldValue={setCurrentTeamDisplayValue}
-        inputFieldRef={teamRef}
+        items={Team ? [Team] : []}
+        hasError={errors.Team?.hasError}
+        getBadgeText={getDisplayValue.Team}
+        setFieldValue={(model) =>
+          setCurrentTeamDisplayValue(getDisplayValue.Team(model))
+        }
+        inputFieldRef={TeamRef}
         defaultFieldValue={\\"\\"}
       >
         <Autocomplete
@@ -3812,7 +3806,7 @@ export default function MyMemberForm(props) {
           value={currentTeamDisplayValue}
           options={teamRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.team?.(r) ?? r.id,
+            label: getDisplayValue.Team?.(r) ?? r.id,
           }))}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
@@ -3823,17 +3817,18 @@ export default function MyMemberForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.team?.hasError) {
-              runValidationTasks(\\"team\\", value);
+            if (errors.Team?.hasError) {
+              runValidationTasks(\\"Team\\", value);
             }
             setCurrentTeamDisplayValue(value);
             setCurrentTeamValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"team\\", team)}
-          errorMessage={errors.team?.errorMessage}
-          hasError={errors.team?.hasError}
-          ref={teamRef}
-          {...getOverrideProps(overrides, \\"team\\")}
+          onBlur={() => runValidationTasks(\\"Team\\", Team)}
+          errorMessage={errors.Team?.errorMessage}
+          hasError={errors.Team?.hasError}
+          ref={TeamRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"Team\\")}
         ></Autocomplete>
       </ArrayField>
     </Grid>
@@ -3844,7 +3839,7 @@ export default function MyMemberForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should generate a create form with belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
-import { Team } from \\"../models\\";
+import { Team as Team0 } from \\"../models\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
@@ -3854,17 +3849,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type MyMemberFormInputValues = {
     name?: string;
-    team?: Team;
+    Team?: Team0;
 };
 export declare type MyMemberFormValidationValues = {
     name?: ValidationFunction<string>;
-    team?: ValidationFunction<Team>;
+    Team?: ValidationFunction<Team0>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyMemberFormOverridesProps = {
     MyMemberFormGrid?: FormProps<GridProps>;
     name?: FormProps<TextFieldProps>;
-    team?: FormProps<AutocompleteProps>;
+    Team?: FormProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type MyMemberFormProps = React.PropsWithChildren<{
     overrides?: MyMemberFormOverridesProps | undefined | null;
@@ -3950,7 +3945,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -3967,9 +3961,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -4007,10 +3999,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -4242,7 +4234,11 @@ export default function BookCreateForm(props) {
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors.primaryAuthor?.hasError}
         getBadgeText={getDisplayValue.primaryAuthor}
-        setFieldValue={setCurrentPrimaryAuthorDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentPrimaryAuthorDisplayValue(
+            getDisplayValue.primaryAuthor(model)
+          )
+        }
         inputFieldRef={primaryAuthorRef}
         defaultFieldValue={\\"\\"}
       >
@@ -4276,6 +4272,7 @@ export default function BookCreateForm(props) {
           errorMessage={errors.primaryAuthor?.errorMessage}
           hasError={errors.primaryAuthor?.hasError}
           ref={primaryAuthorRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"primaryAuthor\\")}
         ></Autocomplete>
       </ArrayField>
@@ -4393,7 +4390,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -4410,9 +4406,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -4450,10 +4444,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -4664,7 +4658,9 @@ export default function TagCreateForm(props) {
         items={Posts}
         hasError={errors.Posts?.hasError}
         getBadgeText={getDisplayValue.Posts}
-        setFieldValue={setCurrentPostsDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentPostsDisplayValue(getDisplayValue.Posts(model))
+        }
         inputFieldRef={PostsRef}
         defaultFieldValue={\\"\\"}
       >
@@ -4696,6 +4692,7 @@ export default function TagCreateForm(props) {
           errorMessage={errors.Posts?.errorMessage}
           hasError={errors.Posts?.hasError}
           ref={PostsRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"Posts\\")}
         ></Autocomplete>
       </ArrayField>
@@ -4841,7 +4838,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -4858,9 +4854,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -4898,10 +4892,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -5154,7 +5148,11 @@ export default function BookCreateForm(props) {
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors.primaryAuthor?.hasError}
         getBadgeText={getDisplayValue.primaryAuthor}
-        setFieldValue={setCurrentPrimaryAuthorDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentPrimaryAuthorDisplayValue(
+            getDisplayValue.primaryAuthor(model)
+          )
+        }
         inputFieldRef={primaryAuthorRef}
         defaultFieldValue={\\"\\"}
       >
@@ -5188,6 +5186,7 @@ export default function BookCreateForm(props) {
           errorMessage={errors.primaryAuthor?.errorMessage}
           hasError={errors.primaryAuthor?.hasError}
           ref={primaryAuthorRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"primaryAuthor\\")}
         ></Autocomplete>
       </ArrayField>
@@ -5213,7 +5212,11 @@ export default function BookCreateForm(props) {
         items={primaryTitle ? [primaryTitle] : []}
         hasError={errors.primaryTitle?.hasError}
         getBadgeText={getDisplayValue.primaryTitle}
-        setFieldValue={setCurrentPrimaryTitleDisplayValue}
+        setFieldValue={(model) =>
+          setCurrentPrimaryTitleDisplayValue(
+            getDisplayValue.primaryTitle(model)
+          )
+        }
         inputFieldRef={primaryTitleRef}
         defaultFieldValue={\\"\\"}
       >
@@ -5245,6 +5248,7 @@ export default function BookCreateForm(props) {
           errorMessage={errors.primaryTitle?.errorMessage}
           hasError={errors.primaryTitle?.hasError}
           ref={primaryTitleRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"primaryTitle\\")}
         ></Autocomplete>
       </ArrayField>
@@ -5803,7 +5807,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -5820,9 +5823,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -5860,10 +5861,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -6176,6 +6177,7 @@ export default function MyFlexUpdateForm(props) {
           errorMessage={errors.Customtags?.errorMessage}
           hasError={errors.Customtags?.hasError}
           ref={CustomtagsRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"Customtags\\")}
         ></TextField>
       </ArrayField>
@@ -6220,6 +6222,7 @@ export default function MyFlexUpdateForm(props) {
           errorMessage={errors.tags?.errorMessage}
           hasError={errors.tags?.hasError}
           ref={tagsRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"tags\\")}
         ></TextField>
       </ArrayField>
@@ -6373,7 +6376,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -6390,9 +6392,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -6430,10 +6430,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -6770,6 +6770,7 @@ export default function BlogCreateForm(props) {
           errorMessage={errors.editedAt?.errorMessage}
           hasError={errors.editedAt?.hasError}
           ref={editedAtRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"editedAt\\")}
         ></TextField>
       </ArrayField>
@@ -6915,7 +6916,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -6932,9 +6932,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -6972,10 +6970,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -7414,6 +7412,7 @@ export default function InputGalleryCreateForm(props) {
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
           ref={arrayTypeFieldRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"arrayTypeField\\")}
         ></TextField>
       </ArrayField>
@@ -7464,6 +7463,7 @@ export default function InputGalleryCreateForm(props) {
           errorMessage={errors.jsonArray?.errorMessage}
           hasError={errors.jsonArray?.hasError}
           ref={jsonArrayRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"jsonArray\\")}
         ></TextAreaField>
       </ArrayField>
@@ -7778,7 +7778,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -7795,9 +7794,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -7835,10 +7832,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -8326,6 +8323,7 @@ export default function InputGalleryUpdateForm(props) {
           errorMessage={errors.arrayTypeField?.errorMessage}
           hasError={errors.arrayTypeField?.hasError}
           ref={arrayTypeFieldRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"arrayTypeField\\")}
         ></TextField>
       </ArrayField>
@@ -8376,6 +8374,7 @@ export default function InputGalleryUpdateForm(props) {
           errorMessage={errors.jsonArray?.errorMessage}
           hasError={errors.jsonArray?.hasError}
           ref={jsonArrayRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"jsonArray\\")}
         ></TextAreaField>
       </ArrayField>
@@ -8693,7 +8692,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -8710,9 +8708,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -8750,10 +8746,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -9049,6 +9045,7 @@ export default function MyFlexCreateForm(props) {
           errorMessage={errors.Customtags?.errorMessage}
           hasError={errors.Customtags?.hasError}
           ref={CustomtagsRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"Customtags\\")}
         ></TextField>
       </ArrayField>
@@ -9093,6 +9090,7 @@ export default function MyFlexCreateForm(props) {
           errorMessage={errors.tags?.errorMessage}
           hasError={errors.tags?.hasError}
           ref={tagsRef}
+          labelHidden={true}
           {...getOverrideProps(overrides, \\"tags\\")}
         ></TextField>
       </ArrayField>
@@ -9585,7 +9583,7 @@ exports[`amplify form renderer tests datastore form tests should use proper fiel
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { fetchByPath, validateField } from \\"./utils\\";
-import { Member, Team } from \\"../models\\";
+import { Member, Team as Team0 } from \\"../models\\";
 import {
   getOverrideProps,
   useDataStoreBinding,
@@ -9650,7 +9648,6 @@ function ArrayField({
   };
   const arraySection = (
     <React.Fragment>
-      <Text>{label}</Text>
       {!!items?.length && (
         <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
           {items.map((value, index) => {
@@ -9667,9 +9664,7 @@ function ArrayField({
                 }}
                 onClick={() => {
                   setSelectedBadgeIndex(index);
-                  setFieldValue(
-                    getBadgeText ? getBadgeText(items[index]) : items[index]
-                  );
+                  setFieldValue(items[index]);
                   setIsEditing(true);
                 }}
               >
@@ -9707,10 +9702,10 @@ function ArrayField({
   }
   return (
     <React.Fragment>
+      <Text>{label}</Text>
       {isEditing && children}
       {!isEditing ? (
         <>
-          <Text>{label}</Text>
           <Button
             onClick={() => {
               setIsEditing(true);
@@ -9762,14 +9757,14 @@ export default function MyMemberForm(props) {
   } = props;
   const initialValues = {
     name: undefined,
-    team: undefined,
+    Team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
-  const [team, setTeam] = React.useState(initialValues.team);
+  const [Team, setTeam] = React.useState(initialValues.Team);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
-    setTeam(initialValues.team);
+    setTeam(initialValues.Team);
     setCurrentTeamValue(undefined);
     setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
@@ -9777,17 +9772,17 @@ export default function MyMemberForm(props) {
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
-  const teamRef = React.createRef();
+  const TeamRef = React.createRef();
   const teamRecords = useDataStoreBinding({
     type: \\"collection\\",
-    model: Team,
+    model: Team0,
   }).items;
   const getDisplayValue = {
-    team: (record) => record?.name,
+    Team: (record) => record?.name,
   };
   const validations = {
     name: [],
-    team: [],
+    Team: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -9815,7 +9810,7 @@ export default function MyMemberForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          team,
+          Team,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -9901,7 +9896,7 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              team,
+              Team,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -9923,10 +9918,10 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              team: value,
+              Team: value,
             };
             const result = onChange(modelFields);
-            value = result?.team ?? value;
+            value = result?.Team ?? value;
           }
           setTeam(value);
           setCurrentTeamValue(undefined);
@@ -9934,11 +9929,13 @@ export default function MyMemberForm(props) {
         }}
         currentFieldValue={currentTeamValue}
         label={\\"Team Label\\"}
-        items={team ? [team] : []}
-        hasError={errors.team?.hasError}
-        getBadgeText={getDisplayValue.team}
-        setFieldValue={setCurrentTeamDisplayValue}
-        inputFieldRef={teamRef}
+        items={Team ? [Team] : []}
+        hasError={errors.Team?.hasError}
+        getBadgeText={getDisplayValue.Team}
+        setFieldValue={(model) =>
+          setCurrentTeamDisplayValue(getDisplayValue.Team(model))
+        }
+        inputFieldRef={TeamRef}
         defaultFieldValue={\\"\\"}
       >
         <Autocomplete
@@ -9948,7 +9945,7 @@ export default function MyMemberForm(props) {
           value={currentTeamDisplayValue}
           options={teamRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.team?.(r) ?? r.id,
+            label: getDisplayValue.Team?.(r) ?? r.id,
           }))}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
@@ -9959,17 +9956,18 @@ export default function MyMemberForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.team?.hasError) {
-              runValidationTasks(\\"team\\", value);
+            if (errors.Team?.hasError) {
+              runValidationTasks(\\"Team\\", value);
             }
             setCurrentTeamDisplayValue(value);
             setCurrentTeamValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"team\\", team)}
-          errorMessage={errors.team?.errorMessage}
-          hasError={errors.team?.hasError}
-          ref={teamRef}
-          {...getOverrideProps(overrides, \\"team\\")}
+          onBlur={() => runValidationTasks(\\"Team\\", Team)}
+          errorMessage={errors.Team?.errorMessage}
+          hasError={errors.Team?.hasError}
+          ref={TeamRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"Team\\")}
         ></Autocomplete>
       </ArrayField>
     </Grid>
@@ -9980,7 +9978,7 @@ export default function MyMemberForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should use proper field overrides for belongsTo relationship 2`] = `
 "import * as React from \\"react\\";
-import { Team } from \\"../models\\";
+import { Team as Team0 } from \\"../models\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
@@ -9990,17 +9988,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type MyMemberFormInputValues = {
     name?: string;
-    team?: Team;
+    Team?: Team0;
 };
 export declare type MyMemberFormValidationValues = {
     name?: ValidationFunction<string>;
-    team?: ValidationFunction<Team>;
+    Team?: ValidationFunction<Team0>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyMemberFormOverridesProps = {
     MyMemberFormGrid?: FormProps<GridProps>;
     name?: FormProps<TextFieldProps>;
-    team?: FormProps<AutocompleteProps>;
+    Team?: FormProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type MyMemberFormProps = React.PropsWithChildren<{
     overrides?: MyMemberFormOverridesProps | undefined | null;

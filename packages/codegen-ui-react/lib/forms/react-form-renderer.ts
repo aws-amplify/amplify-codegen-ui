@@ -274,7 +274,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   private renderBindingPropsType(): TypeAliasDeclaration[] {
     const {
       name: formName,
-      formActionType,
       dataType: { dataSourceType, dataTypeName },
     } = this.component;
     const fieldConfigs = this.componentMetadata.formMetadata?.fieldConfigs ?? {};
@@ -300,19 +299,19 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
 
     let modelName = dataTypeName;
-    if (dataSourceType === 'DataStore' && formActionType === 'update') {
-      // add model import for datastore type
-      if (dataSourceType === 'DataStore') {
-        this.requiredDataModels.push(dataTypeName);
-        modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
-      }
+
+    // add model import for datastore type
+    if (dataSourceType === 'DataStore') {
+      this.requiredDataModels.push(dataTypeName);
+      modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
     }
+
     return [
       validationResponseType,
       validationFunctionType,
       // pass in importCollection once to collect models to import
       generateFieldTypes(formName, 'input', fieldConfigs, this.importCollection),
-      generateFieldTypes(formName, 'validation', fieldConfigs),
+      generateFieldTypes(formName, 'validation', fieldConfigs, this.importCollection),
       formOverrideProp,
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
@@ -536,18 +535,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       }
     });
 
-    // datastore relationship query
-    /**
-          const authorRecords = useDataStoreBinding({
-            type: 'collection',
-            model: Author,
-          }).items;
-        */
-    if (relationshipCollection.length) {
-      this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
-      statements.push(...relationshipCollection.map((relationship) => buildRelationshipQuery(relationship)));
-    }
-
     const { validationsObject, dataTypesMap, displayValueObject, modelsToImport, usesArrayField } = mapFromFieldConfigs(
       formMetadata.fieldConfigs,
     );
@@ -557,6 +544,20 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.requiredDataModels.push(...modelsToImport);
 
     modelsToImport.forEach((model) => this.importCollection.addImport(ImportSource.LOCAL_MODELS, model));
+
+    // datastore relationship query
+    /**
+          const authorRecords = useDataStoreBinding({
+            type: 'collection',
+            model: Author,
+          }).items;
+        */
+    if (relationshipCollection.length) {
+      this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
+      statements.push(
+        ...relationshipCollection.map((relationship) => buildRelationshipQuery(relationship, this.importCollection)),
+      );
+    }
 
     if (displayValueObject) {
       statements.push(displayValueObject);

@@ -17,13 +17,20 @@ import { factory, NodeFlags, SyntaxKind } from 'typescript';
 import { FieldConfigMetadata, GenericDataRelationshipType, HasManyRelationshipType } from '@aws-amplify/codegen-ui';
 import { getRecordsName, getLinkedRecordsName } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
+import { ImportCollection, ImportSource } from '../../imports';
 
-export const buildRelationshipQuery = (relationship: GenericDataRelationshipType) => {
+export const buildRelationshipQuery = (
+  relationship: GenericDataRelationshipType,
+  importCollection: ImportCollection,
+) => {
   const { relatedModelName } = relationship;
   const itemsName = getRecordsName(relatedModelName);
   const objectProperties = [
     factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral('collection')),
-    factory.createPropertyAssignment(factory.createIdentifier('model'), factory.createIdentifier(relatedModelName)),
+    factory.createPropertyAssignment(
+      factory.createIdentifier('model'),
+      factory.createIdentifier(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, relatedModelName)),
+    ),
   ];
   return buildBaseCollectionVariableStatement(
     itemsName,
