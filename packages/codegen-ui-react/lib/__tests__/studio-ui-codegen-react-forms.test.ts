@@ -158,7 +158,22 @@ describe('amplify form renderer tests', () => {
 
       // check resetStateValues has correct dependencies
       expect(componentText).toContain('React.useEffect(resetStateValues, [tagRecord, linkedPosts]);');
+    });
 
+    it('should generate a create form with array of Enums', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/tag-datastore-create',
+        'datastore/tag-post',
+      );
+      // get displayValue function
+      expect(componentText).toContain('statuses: (record) => {');
+      expect(componentText).toContain('return enumDisplayValueMap[record];');
+      // ArrayField returns the item on a badge click
+      expect(componentText).toContain('setFieldValue(items[index]);');
+      // set the badgeText param
+      expect(componentText).toContain('getBadgeText={getDisplayValue.statuses}');
+      // ArrayField displays the getBadgeText return value
+      expect(componentText).toContain('{getBadgeText ? getBadgeText(value) : value.toString()}');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
