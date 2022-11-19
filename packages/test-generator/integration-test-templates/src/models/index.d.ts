@@ -196,6 +196,11 @@ export declare class AllSupportedFormFields {
   readonly createdAt?: string | null;
 
   readonly updatedAt?: string | null;
+
+  readonly HasOneUser?: User | null;
+
+  readonly allSupportedFormFieldsHasOneUserId?: string | null;
+
   constructor(init: ModelInit<AllSupportedFormFields, AllSupportedFormFieldsMetaData>);
   static copyOf(
     source: AllSupportedFormFields,

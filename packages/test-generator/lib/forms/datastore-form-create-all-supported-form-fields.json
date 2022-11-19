@@ -1,14 +1,58 @@
 {
-    "id": "123-ds-create-class",
-    "name": "DataStoreFormCreateAllSupportedFormFields",
-    "formActionType": "create",
-    "dataType": {
-      "dataSourceType": "DataStore",
-      "dataTypeName": "AllSupportedFormFields"
-    },
-    "fields": {},
-    "sectionalElements": { },
-    "style": {},
-    "cta": {},
-    "schemaVersion": "1.0"
-  }
+  "id": "123-ds-create-class",
+  "name": "DataStoreFormCreateAllSupportedFormFields",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "AllSupportedFormFields"
+  },
+  "fields": {
+    "HasOneUser": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "User",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "concat": [
+                  {
+                    "bindingProperties": {
+                      "property": "User",
+                      "field": "firstName"
+                    }
+                  },
+                  {
+                    "value": " "
+                  },
+                  {
+                    "bindingProperties": {
+                      "property": "User",
+                      "field": "lastName"
+                    }
+                  }                ]
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Author": {
+              "type": "Data",
+              "bindingProperties": {
+                "model": "User"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": {},
+  "schemaVersion": "1.0"
+}

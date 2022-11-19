@@ -22,7 +22,14 @@ import {
   DataStoreFormCreateAllSupportedFormFields,
   CustomFormCreateNestedJson,
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
-import { AllSupportedFormFields } from './models';
+import { AllSupportedFormFields, User } from './models';
+
+const initializeUserTestData = async (): Promise<void> => {
+  await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
+  await DataStore.save(new User({ firstName: 'Paul', lastName: 'McCartney', age: 72 }));
+  await DataStore.save(new User({ firstName: 'George', lastName: 'Harrison', age: 50 }));
+  await DataStore.save(new User({ firstName: 'Ringo', lastName: 'Starr', age: 5 }));
+};
 
 export default function FormTests() {
   const [customFormCreateDogSubmitResults, setCustomFormCreateDogSubmitResults] = useState<any>({});
@@ -38,9 +45,9 @@ export default function FormTests() {
         return;
       }
       // DataStore.clear() doesn't appear to reliably work in this scenario.
-      indexedDB.deleteDatabase('amplify-datastore').onsuccess = async function () {
-        setInitialized(true);
-      };
+      indexedDB.deleteDatabase('amplify-datastore');
+      await initializeUserTestData();
+      setInitialized(true);
     };
 
     initializeTestState();
@@ -82,7 +89,10 @@ export default function FormTests() {
         <DataStoreFormCreateAllSupportedFormFields
           onSuccess={async () => {
             const records = await DataStore.query(AllSupportedFormFields);
-            setDataStoreFormCreateAllSupportedFormFieldsRecord(JSON.stringify(records[0]));
+            const record = records[0];
+            setDataStoreFormCreateAllSupportedFormFieldsRecord(
+              JSON.stringify({ ...record, HasOneUser: await record.HasOneUser }),
+            );
           }}
         />
         <Text>{dataStoreFormCreateAllSupportedFormFieldsRecord}</Text>
