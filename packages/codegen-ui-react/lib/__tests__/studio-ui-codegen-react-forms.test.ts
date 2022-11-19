@@ -105,7 +105,7 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
-    it.only('should generate an update form with manyToMany relationship', () => {
+    it('should generate an update form with manyToMany relationship', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/tag-datastore-update',
         'datastore/tag-post',
