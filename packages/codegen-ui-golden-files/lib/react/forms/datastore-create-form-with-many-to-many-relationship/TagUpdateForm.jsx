@@ -277,38 +277,69 @@ export default function TagUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          const postsToLink = [];
-          const postsToUnlink = [];
-          const postsSet = new Set();
-          const linkedPostsSet = new Set();
-          Posts.forEach((r) => postsSet.add(r.id));
-          linkedPosts.forEach((r) => linkedPostsSet.add(r.id));
+          const postsToLinkMap = new Map();
+          const postsToUnLinkMap = new Map();
+          const postsMap = new Map();
+          const linkedPostsMap = new Map();
+
+          Posts.forEach((r) => {
+            const count = postsMap.get(r.id);
+            const newCount = count ? count + 1 : 1;
+            postsMap.set(r.id, newCount);
+          });
 
           linkedPosts.forEach((r) => {
-            if (!postsSet.has(r.id)) {
-              postsToUnlink.push(r);
+            const count = linkedPostsMap.get(r.id);
+            const newCount = count ? count + 1 : 1;
+            linkedPostsMap.set(r.id, newCount);
+          });
+
+          linkedPostsMap.forEach((count, id) => {
+            const newCount = postsMap.get(id);
+            if (newCount) {
+              const diffCount = count - newCount;
+              if (diffCount > 0) {
+                postsToUnLinkMap.set(id, diffCount);
+              }
+            } else {
+              postsToUnLinkMap.set(id, count);
             }
           });
 
-          Posts.forEach((r) => {
-            if (!linkedPostsSet.has(r.id)) {
-              postsToLink.push(r);
+          postsMap.forEach((count, id) => {
+            const originalCount = linkedPostsMap.get(id);
+            if (originalCount) {
+              const diffCount = count - originalCount;
+              if (diffCount > 0) {
+                postsToLinkMap.set(id, diffCount);
+              }
+            } else {
+              postsToLinkMap.set(id, count);
             }
           });
 
           const promises = [];
-          promises.push(...postsToUnlink.map((post) => DataStore.delete(TagPost, (r) => r.postID.eq(post.id))));
+          postsToUnLinkMap.forEach(async (count, id) => {
+            const tagPostRecords = await DataStore.query(TagPost, (r) =>
+              r.and((r) => [r.post.id.eq(id), r.tag.id.eq(tagRecord.id)]),
+            );
+            for (let i = 0; i < count; i++) {
+              promises.push(DataStore.delete(tagPostRecords[i]));
+            }
+          });
 
-          promises.push(
-            ...postsToLink.map((post) =>
-              DataStore.save(
-                new TagPost({
-                  tag: tagRecord,
-                  post,
-                }),
-              ),
-            ),
-          );
+          postsToLinkMap.forEach((count, id) => {
+            for (let i = count; i > 0; i--) {
+              promises.push(
+                DataStore.save(
+                  new TagPost({
+                    tagID: tagRecord.id,
+                    postID: id,
+                  }),
+                ),
+              );
+            }
+          });
 
           promises.push(
             DataStore.save(
