@@ -13,18 +13,37 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
-import { factory, NodeFlags, SyntaxKind, Expression } from 'typescript';
+import { FieldConfigMetadata, HasManyRelationshipType } from '@aws-amplify/codegen-ui/lib/types';
+import { factory, NodeFlags, SyntaxKind, Expression, VariableStatement, ExpressionStatement } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './display-value';
-import { getSetNameIdentifier } from './form-state';
+import { getSetNameIdentifier, getLinkedRecordsName } from './form-state';
 import { buildManyToManyRelationshipCreateStatements } from './relationship';
+import { isManyToManyRelationship } from './map-from-fieldConfigs';
 
 export const buildDataStoreExpression = (
   dataStoreActionType: 'update' | 'create',
   importedModelName: string,
   hasManyFieldConfigs: [string, FieldConfigMetadata][],
 ) => {
+  if (hasManyFieldConfigs.length > 0) {
+    return hasManyFieldConfigs
+      .map((hasManyFieldConfig) => {
+        const [, fieldConfigMetaData] = hasManyFieldConfig;
+        if (isManyToManyRelationship(fieldConfigMetaData)) {
+          return buildManyToManyRelationshipCreateStatements(
+            dataStoreActionType,
+            importedModelName,
+            hasManyFieldConfig,
+          );
+        }
+        return [];
+      })
+      .reduce((statements, statement) => {
+        return [...statements, ...statement];
+      }, []);
+  }
+
   if (dataStoreActionType === 'update') {
     return [
       factory.createVariableStatement(
@@ -106,24 +125,6 @@ export const buildDataStoreExpression = (
         ),
       ),
     ];
-  }
-
-  // TODO: Many to Many update action, this condition dataStoreActionType === 'create' can be moved inside the functon
-  if (hasManyFieldConfigs.length > 0 && dataStoreActionType === 'create') {
-    return hasManyFieldConfigs
-      .map((hasManyFieldConfig) => {
-        const [, fieldConfigMetaData] = hasManyFieldConfig;
-        if (
-          fieldConfigMetaData.relationship?.type === 'HAS_MANY' &&
-          fieldConfigMetaData.relationship.relatedJoinTableName
-        ) {
-          return buildManyToManyRelationshipCreateStatements(importedModelName, hasManyFieldConfig);
-        }
-        return [];
-      })
-      .reduce((statements, statement) => {
-        return [...statements, ...statement];
-      }, []);
   }
 
   return [
@@ -432,6 +433,196 @@ export const buildUpdateDatastoreQuery = (dataTypeName: string, recordName: stri
                       NodeFlags.Const,
                     ),
                   ),
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(getSetNameIdentifier(recordName), undefined, [
+                      factory.createIdentifier('record'),
+                    ]),
+                  ),
+                ],
+                true,
+              ),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
+    factory.createExpressionStatement(
+      factory.createCallExpression(factory.createIdentifier('queryData'), undefined, []),
+    ),
+  ];
+};
+
+/**
+ *    const queryData = async () => {
+ *    const record = id ? await DataStore.query(Tag, id) : tag;
+ *    const linkedPosts = record
+ *       ? await Promise.all(
+ *           (
+ *             await record.Posts.toArray()
+ *           ).map((r) => {
+ *             return r.post;
+ *           }),
+ *         )
+ *       : [];
+ *     setLinkedPosts(linkedPosts);
+ *     setTagRecord(record);
+ *   };
+ *   queryData();
+ */
+export const buildUpdateDatastoreQueryForHasMany = (
+  dataTypeName: string,
+  recordName: string,
+  hasManyFieldConfigs: [string, FieldConfigMetadata][],
+) => {
+  const lazyLoadLinkedDataStatements: VariableStatement[] = [];
+  const setLinkedDataStateStatements: ExpressionStatement[] = [];
+
+  hasManyFieldConfigs.forEach(([fieldName, fieldConfig]) => {
+    const linkedRecordsName = getLinkedRecordsName(fieldName);
+    const { relatedJoinFieldName } = fieldConfig.relationship as HasManyRelationshipType;
+    const lazyLoadLinkedDataStatement = factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(linkedRecordsName),
+            undefined,
+            undefined,
+            factory.createConditionalExpression(
+              factory.createIdentifier('record'),
+              factory.createToken(SyntaxKind.QuestionToken),
+              factory.createAwaitExpression(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('Promise'),
+                    factory.createIdentifier('all'),
+                  ),
+                  undefined,
+                  [
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createParenthesizedExpression(
+                          factory.createAwaitExpression(
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('record'),
+                                  factory.createIdentifier(fieldName),
+                                ),
+                                factory.createIdentifier('toArray'),
+                              ),
+                              undefined,
+                              [],
+                            ),
+                          ),
+                        ),
+                        factory.createIdentifier('map'),
+                      ),
+                      undefined,
+                      [
+                        factory.createArrowFunction(
+                          undefined,
+                          undefined,
+                          [
+                            factory.createParameterDeclaration(
+                              undefined,
+                              undefined,
+                              undefined,
+                              factory.createIdentifier('r'),
+                              undefined,
+                              undefined,
+                              undefined,
+                            ),
+                          ],
+                          undefined,
+                          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                          factory.createBlock(
+                            [
+                              factory.createReturnStatement(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('r'),
+                                  factory.createIdentifier(relatedJoinFieldName as string),
+                                ),
+                              ),
+                            ],
+                            true,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              factory.createToken(SyntaxKind.ColonToken),
+              factory.createArrayLiteralExpression([], false),
+            ),
+          ),
+        ],
+        // eslint-disable-next-line no-bitwise
+        NodeFlags.Const | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
+      ),
+    );
+
+    const setLinkedDataStateStatement = factory.createExpressionStatement(
+      factory.createCallExpression(getSetNameIdentifier(linkedRecordsName), undefined, [
+        factory.createIdentifier(linkedRecordsName),
+      ]),
+    );
+
+    lazyLoadLinkedDataStatements.push(lazyLoadLinkedDataStatement);
+    setLinkedDataStateStatements.push(setLinkedDataStateStatement);
+  });
+
+  return [
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('queryData'),
+            undefined,
+            undefined,
+            factory.createArrowFunction(
+              [factory.createModifier(SyntaxKind.AsyncKeyword)],
+              undefined,
+              [],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
+                [
+                  factory.createVariableStatement(
+                    undefined,
+                    factory.createVariableDeclarationList(
+                      [
+                        factory.createVariableDeclaration(
+                          factory.createIdentifier('record'),
+                          undefined,
+                          undefined,
+                          factory.createConditionalExpression(
+                            factory.createIdentifier('id'),
+                            factory.createToken(SyntaxKind.QuestionToken),
+                            factory.createAwaitExpression(
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('DataStore'),
+                                  factory.createIdentifier('query'),
+                                ),
+                                undefined,
+                                [factory.createIdentifier(dataTypeName), factory.createIdentifier('id')],
+                              ),
+                            ),
+                            factory.createToken(SyntaxKind.ColonToken),
+                            factory.createIdentifier('tag'),
+                          ),
+                        ),
+                      ],
+                      // eslint-disable-next-line no-bitwise
+                      NodeFlags.Const | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
+                    ),
+                  ),
+                  ...lazyLoadLinkedDataStatements,
+                  ...setLinkedDataStateStatements,
                   factory.createExpressionStatement(
                     factory.createCallExpression(getSetNameIdentifier(recordName), undefined, [
                       factory.createIdentifier('record'),

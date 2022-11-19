@@ -73,3 +73,12 @@ export function mapFromFieldConfigs(fieldConfigs: Record<string, FieldConfigMeta
     usesArrayField,
   };
 }
+
+export const isManyToManyRelationship = (fieldConfigMetaData: FieldConfigMetadata) =>
+  fieldConfigMetaData.relationship?.type === 'HAS_MANY' && fieldConfigMetaData.relationship.relatedJoinTableName;
+
+export const getHasManyFieldConfigs = (fieldConfigs: Record<string, FieldConfigMetadata>) => {
+  return Object.entries(fieldConfigs).filter(
+    ([, fieldConfigMetaData]) => fieldConfigMetaData.relationship?.type === 'HAS_MANY',
+  );
+};
