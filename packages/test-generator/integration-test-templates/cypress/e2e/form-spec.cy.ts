@@ -22,6 +22,14 @@ describe('Forms', () => {
     return cy.contains('label', label).parent().find('input');
   };
 
+  const getArrayFieldButtonByLabel = (label) => {
+    return cy.contains(label).next('button');
+  };
+
+  const clickAddToArray = () => {
+    cy.get('.amplify-button--link').contains('Add').click();
+  };
+
   describe('CustomFormCreateDog', () => {
     it('should validate, clear, and submit', () => {
       const ErrorMessageMap = {
@@ -39,26 +47,26 @@ describe('Forms', () => {
         cy.contains('submitted: false');
 
         // validates email
-        cy.get('input').eq(2).type('fdfdsfd');
+        getInputByLabel('Email').type('fdfdsfd');
         // does not validate onChange if no error
         cy.contains(ErrorMessageMap.validEmail).should('not.exist');
         // validates on blur
         blurField();
         cy.contains(ErrorMessageMap.validEmail);
         // validates onChange if error
-        cy.get('input').eq(2).type('jd@yahoo.com');
+        getInputByLabel('Email').type('jd@yahoo.com');
         cy.contains(ErrorMessageMap.validEmail).should('not.exist');
 
         cy.contains('Clear').click();
 
         // validates on blur & extends with onValidate prop
-        cy.get('input').eq(0).type('S');
+        getInputByLabel('Name').type('S');
         blurField();
-        cy.get('input').eq(1).type('-1');
+        getInputByLabel('Age').type('-1');
         blurField();
-        cy.get('input').eq(2).type('spot@gmail.com');
+        getInputByLabel('Email').type('spot@gmail.com');
         blurField();
-        cy.get('input').eq(3).type('invalid ip');
+        getInputByLabel('IP Address').type('invalid ip');
         blurField();
         cy.contains(ErrorMessageMap.name);
         cy.contains(ErrorMessageMap.age);
@@ -68,13 +76,13 @@ describe('Forms', () => {
 
         // clears and submits
         cy.contains('Clear').click();
-        cy.get('input').eq(0).type('Spot');
+        getInputByLabel('Name').type('Spot');
         blurField();
-        cy.get('input').eq(1).type('3');
+        getInputByLabel('Age').type('3');
         blurField();
-        cy.get('input').eq(2).type('spot@yahoo.com');
+        getInputByLabel('Email').type('spot@yahoo.com');
         blurField();
-        cy.get('input').eq(3).type('192.0.2.146');
+        getInputByLabel('IP Address').type('192.0.2.146');
         blurField();
         cy.contains('Submit').click();
         cy.contains('submitted: true');
@@ -92,9 +100,9 @@ describe('Forms', () => {
         getInputByLabel('String').type('MyString');
 
         // String array
-        cy.contains('Add item').click();
+        getArrayFieldButtonByLabel('String array').click();
         getInputByLabel('String array').type('String1');
-        cy.contains('Add').click();
+        clickAddToArray();
 
         getInputByLabel('Int').type('40');
         getInputByLabel('Float').type('40.2');
@@ -109,6 +117,13 @@ describe('Forms', () => {
         cy.get('textarea').type(JSON.stringify({ myKey: 'myValue' }), { parseSpecialCharSequences: false });
         getInputByLabel('Aws phone').type('714-234-4829');
         cy.get('select').select('San francisco');
+
+        // HasOne Autocomplete
+        getArrayFieldButtonByLabel('Has one user').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`{downArrow}{enter}`);
+        });
+        clickAddToArray();
 
         cy.contains('Submit').click();
 
@@ -129,6 +144,7 @@ describe('Forms', () => {
           expect(record.awsPhone).to.equal('714-234-4829');
           expect(record.enum).to.equal('SAN_FRANCISCO');
           expect(record.stringArray[0]).to.equal('String1');
+          expect(record.HasOneUser.firstName).to.equal('John');
         });
       });
     });
