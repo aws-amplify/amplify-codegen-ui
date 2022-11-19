@@ -17,7 +17,7 @@ import { FieldConfigMetadata, HasManyRelationshipType } from '@aws-amplify/codeg
 import { factory, NodeFlags, SyntaxKind, Expression, VariableStatement, ExpressionStatement } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './display-value';
-import { getSetNameIdentifier, getLinkedRecordsName } from './form-state';
+import { getSetNameIdentifier, getLinkedDataName } from './form-state';
 import { buildManyToManyRelationshipCreateStatements } from './relationship';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 
@@ -479,14 +479,14 @@ export const buildUpdateDatastoreQueryForHasMany = (
   const setLinkedDataStateStatements: ExpressionStatement[] = [];
 
   hasManyFieldConfigs.forEach(([fieldName, fieldConfig]) => {
-    const linkedRecordsName = getLinkedRecordsName(fieldName);
+    const linkedDataName = getLinkedDataName(fieldName);
     const { relatedJoinFieldName } = fieldConfig.relationship as HasManyRelationshipType;
     const lazyLoadLinkedDataStatement = factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
         [
           factory.createVariableDeclaration(
-            factory.createIdentifier(linkedRecordsName),
+            factory.createIdentifier(linkedDataName),
             undefined,
             undefined,
             factory.createConditionalExpression(
@@ -565,8 +565,8 @@ export const buildUpdateDatastoreQueryForHasMany = (
     );
 
     const setLinkedDataStateStatement = factory.createExpressionStatement(
-      factory.createCallExpression(getSetNameIdentifier(linkedRecordsName), undefined, [
-        factory.createIdentifier(linkedRecordsName),
+      factory.createCallExpression(getSetNameIdentifier(linkedDataName), undefined, [
+        factory.createIdentifier(linkedDataName),
       ]),
     );
 

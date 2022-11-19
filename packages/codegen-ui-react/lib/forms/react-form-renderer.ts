@@ -74,7 +74,7 @@ import {
   runValidationTasksFunction,
   mapFromFieldConfigs,
   getHasManyFieldConfigs,
-  getLinkedRecordsName,
+  getLinkedDataName,
   buildRelationshipQuery,
 } from './form-renderer-helper';
 import {
@@ -448,9 +448,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       if (hasManyFieldConfigs.length > 0) {
         hasManyFieldConfigs.forEach((hasManyFieldConfig) => {
           const [fieldName] = hasManyFieldConfig;
-          const linkedDataName = getLinkedRecordsName(fieldName);
-          linkedDataNames.push(fieldName);
-          statements.push(buildUseStateExpression(linkedDataName, factory.createIdentifier(linkedDataName)));
+          const linkedDataName = getLinkedDataName(fieldName);
+          linkedDataNames.push(getLinkedDataName(fieldName));
+          statements.push(buildUseStateExpression(linkedDataName, factory.createIdentifier('[]')));
         });
       }
 
