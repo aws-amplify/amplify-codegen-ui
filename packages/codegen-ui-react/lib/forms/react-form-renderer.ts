@@ -449,7 +449,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         hasManyFieldConfigs.forEach((hasManyFieldConfig) => {
           const [fieldName] = hasManyFieldConfig;
           const linkedDataName = getLinkedDataName(fieldName);
-          linkedDataNames.push(getLinkedDataName(fieldName));
+          linkedDataNames.push(linkedDataName);
           statements.push(buildUseStateExpression(linkedDataName, factory.createIdentifier('[]')));
         });
       }
