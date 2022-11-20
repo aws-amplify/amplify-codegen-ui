@@ -613,7 +613,7 @@ export const buildUpdateDatastoreQueryForHasMany = (
                               ),
                             ),
                             factory.createToken(SyntaxKind.ColonToken),
-                            factory.createIdentifier('tag'),
+                            factory.createIdentifier(lowerCaseFirst(dataTypeName)),
                           ),
                         ),
                       ],

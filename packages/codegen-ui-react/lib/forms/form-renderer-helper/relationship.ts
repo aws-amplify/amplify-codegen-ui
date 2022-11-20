@@ -18,6 +18,7 @@ import { FieldConfigMetadata, GenericDataRelationshipType, HasManyRelationshipTy
 import { getRecordsName, getLinkedDataName } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
+import { lowerCaseFirst } from '../../helpers';
 
 export const buildRelationshipQuery = (
   relationship: GenericDataRelationshipType,
@@ -50,9 +51,9 @@ export const buildManyToManyRelationshipCreateStatements = (
     fieldConfigMetaData.relationship as HasManyRelationshipType;
   if (dataStoreActionType === 'update') {
     const linkedDataName = getLinkedDataName(fieldName);
-    const dataToLinkMap = `${fieldName.toLowerCase()}ToLinkMap`;
-    const dataToUnlinkMap = `${fieldName.toLowerCase()}ToUnLinkMap`;
-    const updatedMap = `${fieldName.toLowerCase()}Map`;
+    const dataToLinkMap = `${lowerCaseFirst(fieldName)}ToLinkMap`;
+    const dataToUnlinkMap = `${lowerCaseFirst(fieldName)}ToUnLinkMap`;
+    const updatedMap = `${lowerCaseFirst(fieldName)}Map`;
     const originalMap = `${linkedDataName}Map`;
     return [
       factory.createVariableStatement(
@@ -698,7 +699,7 @@ export const buildManyToManyRelationshipCreateStatements = (
                                               undefined,
                                               [
                                                 factory.createPropertyAccessExpression(
-                                                  factory.createIdentifier(`${modelName.toLowerCase()}Record`),
+                                                  factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
                                                   factory.createIdentifier('id'),
                                                 ),
                                               ],
@@ -854,7 +855,7 @@ export const buildManyToManyRelationshipCreateStatements = (
                                           factory.createPropertyAssignment(
                                             factory.createIdentifier(`${relatedModelField}ID`),
                                             factory.createPropertyAccessExpression(
-                                              factory.createIdentifier(`${modelName.toLowerCase()}Record`),
+                                              factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
                                               factory.createIdentifier('id'),
                                             ),
                                           ),
@@ -905,7 +906,7 @@ export const buildManyToManyRelationshipCreateStatements = (
                   ),
                   undefined,
                   [
-                    factory.createIdentifier(`${modelName.toLowerCase()}Record`),
+                    factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
                     factory.createArrowFunction(
                       undefined,
                       undefined,
