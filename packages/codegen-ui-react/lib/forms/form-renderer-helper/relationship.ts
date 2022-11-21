@@ -1081,3 +1081,161 @@ export const buildManyToManyRelationshipCreateStatements = (
     ),
   ];
 };
+
+export const buildHasManyRelationshipCreateStatements = (
+  dataStoreActionType: 'update' | 'create',
+  modelName: string,
+  hasManyFieldConfig: [string, FieldConfigMetadata],
+) => {
+  const [fieldName, fieldConfig] = hasManyFieldConfig;
+  const { relatedModelName, relatedModelField } = fieldConfig.relationship as HasManyRelationshipType;
+  if (dataStoreActionType === 'update') {
+    return [];
+  }
+  return [
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(modelName.toLowerCase()),
+            undefined,
+            undefined,
+            factory.createAwaitExpression(
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('DataStore'),
+                  factory.createIdentifier('save'),
+                ),
+                undefined,
+                [
+                  factory.createNewExpression(factory.createIdentifier(modelName), undefined, [
+                    factory.createIdentifier('modelFields'),
+                  ]),
+                ],
+              ),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
+    factory.createExpressionStatement(
+      factory.createAwaitExpression(
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(factory.createIdentifier('Promise'), factory.createIdentifier('all')),
+          undefined,
+          [
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier(fieldName),
+                factory.createIdentifier('reduce'),
+              ),
+              undefined,
+              [
+                factory.createArrowFunction(
+                  undefined,
+                  undefined,
+                  [
+                    factory.createParameterDeclaration(
+                      undefined,
+                      undefined,
+                      undefined,
+                      factory.createIdentifier('promises'),
+                      undefined,
+                      undefined,
+                      undefined,
+                    ),
+                    factory.createParameterDeclaration(
+                      undefined,
+                      undefined,
+                      undefined,
+                      factory.createIdentifier('original'),
+                      undefined,
+                      undefined,
+                      undefined,
+                    ),
+                  ],
+                  undefined,
+                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                  factory.createBlock(
+                    [
+                      factory.createExpressionStatement(
+                        factory.createCallExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('promises'),
+                            factory.createIdentifier('push'),
+                          ),
+                          undefined,
+                          [
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('DataStore'),
+                                factory.createIdentifier('save'),
+                              ),
+                              undefined,
+                              [
+                                factory.createCallExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier(relatedModelName),
+                                    factory.createIdentifier('copyOf'),
+                                  ),
+                                  undefined,
+                                  [
+                                    factory.createIdentifier('original'),
+                                    factory.createArrowFunction(
+                                      undefined,
+                                      undefined,
+                                      [
+                                        factory.createParameterDeclaration(
+                                          undefined,
+                                          undefined,
+                                          undefined,
+                                          factory.createIdentifier('updated'),
+                                          undefined,
+                                          undefined,
+                                          undefined,
+                                        ),
+                                      ],
+                                      undefined,
+                                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                      factory.createBlock(
+                                        [
+                                          factory.createExpressionStatement(
+                                            factory.createBinaryExpression(
+                                              factory.createPropertyAccessExpression(
+                                                factory.createIdentifier('updated'),
+                                                factory.createIdentifier(relatedModelField),
+                                              ),
+                                              factory.createToken(SyntaxKind.EqualsToken),
+                                              factory.createPropertyAccessExpression(
+                                                factory.createIdentifier(modelName.toLowerCase()),
+                                                factory.createIdentifier('id'),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        true,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      factory.createReturnStatement(factory.createIdentifier('promises')),
+                    ],
+                    true,
+                  ),
+                ),
+                factory.createArrayLiteralExpression([], false),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  ];
+};

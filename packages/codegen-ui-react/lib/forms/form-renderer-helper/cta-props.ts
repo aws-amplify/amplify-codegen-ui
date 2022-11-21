@@ -18,7 +18,7 @@ import { factory, NodeFlags, SyntaxKind, Expression, VariableStatement, Expressi
 import { lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './display-value';
 import { getSetNameIdentifier, getLinkedDataName } from './form-state';
-import { buildManyToManyRelationshipCreateStatements } from './relationship';
+import { buildHasManyRelationshipCreateStatements, buildManyToManyRelationshipCreateStatements } from './relationship';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 
 export const buildDataStoreExpression = (
@@ -37,7 +37,7 @@ export const buildDataStoreExpression = (
             hasManyFieldConfig,
           );
         }
-        return [];
+        return buildHasManyRelationshipCreateStatements(dataStoreActionType, importedModelName, hasManyFieldConfig);
       })
       .reduce((statements, statement) => {
         return [...statements, ...statement];
