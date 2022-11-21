@@ -13,7 +13,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export { onSubmitValidationRun, buildUpdateDatastoreQuery, buildDataStoreExpression } from './cta-props';
+export {
+  onSubmitValidationRun,
+  buildUpdateDatastoreQuery,
+  buildUpdateDatastoreQueryForHasMany,
+  buildDataStoreExpression,
+} from './cta-props';
 
 export { buildModelFieldObject } from './model-fields';
 
@@ -21,13 +26,13 @@ export { buildMutationBindings, buildOverrideOnChangeStatement } from './event-h
 
 export { buildOverrideTypesBindings } from './type-helper';
 
-export { buildResetValuesOnRecordUpdate, buildSetStateFunction } from './form-state';
+export { buildResetValuesOnRecordUpdate, buildSetStateFunction, getLinkedDataName } from './form-state';
 
 export { buildValidations, runValidationTasksFunction } from './validation';
 
 export { addFormAttributes } from './all-props';
 
-export { mapFromFieldConfigs } from './map-from-fieldConfigs';
+export { mapFromFieldConfigs, getHasManyFieldConfigs, isManyToManyRelationship } from './map-from-fieldConfigs';
 
 export { buildRelationshipQuery } from './relationship';
 
