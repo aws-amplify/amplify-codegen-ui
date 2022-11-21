@@ -76,6 +76,7 @@ import {
   getHasManyFieldConfigs,
   getLinkedDataName,
   buildRelationshipQuery,
+  buildGetRelationshipModels,
 } from './form-renderer-helper';
 import {
   buildUseStateExpression,
@@ -172,13 +173,13 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
+    const propsDeclaration = this.renderBindingPropsType();
+
     // build form related variable statments
     const variableStatements = this.buildVariableStatements();
     const jsx = this.renderJsx(this.formComponent);
 
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, true);
-    const propsDeclaration = this.renderBindingPropsType();
-
     const imports = this.importCollection.buildImportStatements();
 
     let componentText = `/* eslint-disable */${EOL}`;
@@ -469,6 +470,16 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
             ['id', lowerCaseDataTypeName],
           ),
         );
+        // Build effects to grab nested models off target record for relationships
+        Object.entries(formMetadata.fieldConfigs).forEach(([key, value]) => {
+          if (value.relationship) {
+            statements.push(
+              addUseEffectWrapper(buildGetRelationshipModels(key, lowerCaseDataTypeNameRecord), [
+                lowerCaseDataTypeNameRecord,
+              ]),
+            );
+          }
+        });
       }
     }
 

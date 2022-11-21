@@ -1081,3 +1081,55 @@ export const buildManyToManyRelationshipCreateStatements = (
     ),
   ];
 };
+
+export const buildGetRelationshipModels = (fieldName: string, recordName: string) => {
+  return [
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier('getRelationshipModel'),
+            undefined,
+            undefined,
+            factory.createArrowFunction(
+              [factory.createModifier(SyntaxKind.AsyncKeyword)],
+              undefined,
+              [],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
+                [
+                  factory.createIfStatement(
+                    factory.createIdentifier(recordName),
+                    factory.createBlock(
+                      [
+                        factory.createExpressionStatement(
+                          factory.createCallExpression(factory.createIdentifier(`set${fieldName}`), undefined, [
+                            factory.createAwaitExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier(recordName),
+                                factory.createIdentifier(fieldName),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ],
+                      true,
+                    ),
+                    undefined,
+                  ),
+                ],
+                true,
+              ),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
+    factory.createExpressionStatement(
+      factory.createCallExpression(factory.createIdentifier('getRelationshipModel'), undefined, []),
+    ),
+  ];
+};
