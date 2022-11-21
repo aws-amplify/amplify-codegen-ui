@@ -159,6 +159,24 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate a create form with hasMany relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/school-datastore-create',
+        'datastore/school-student',
+      );
+      // check nested model is imported
+      expect(componentText).toContain('import { School, Student } from "../models";');
+
+      // check binding call is generated
+      expect(componentText).toContain('const studentRecords = useDataStoreBinding({');
+
+      // check custom display value is set
+      expect(componentText).toContain('Students: (record) => record?.name');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should render form with a two inputs in row', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-create-row',

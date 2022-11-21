@@ -1,0 +1,36 @@
+{
+  "name": "SchoolCreateForm",
+  "dataType": { "dataSourceType": "DataStore", "dataTypeName": "School" },
+  "formActionType": "create",
+  "fields": {
+    "Students": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "Student",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "bindingProperties": {
+                  "property": "Student",
+                  "field": "name"
+                }
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Student": { "type": "Data", "bindingProperties": { "model": "Student" } }
+          }
+        }
+      }
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": { "clear": {}, "cancel": {}, "submit": {} }
+}

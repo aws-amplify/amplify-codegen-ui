@@ -26,7 +26,10 @@ import {
 import { lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './display-value';
 import { getSetNameIdentifier, getLinkedDataName } from './form-state';
-import { buildManyToManyRelationshipCreateStatements } from './relationship';
+import {
+  buildHasManyRelationshipDataStoreStatements,
+  buildManyToManyRelationshipDataStoreStatements,
+} from './relationship';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 
 export const buildDataStoreExpression = (
@@ -39,13 +42,13 @@ export const buildDataStoreExpression = (
       .map((hasManyFieldConfig) => {
         const [, fieldConfigMetaData] = hasManyFieldConfig;
         if (isManyToManyRelationship(fieldConfigMetaData)) {
-          return buildManyToManyRelationshipCreateStatements(
+          return buildManyToManyRelationshipDataStoreStatements(
             dataStoreActionType,
             importedModelName,
             hasManyFieldConfig,
           );
         }
-        return [];
+        return buildHasManyRelationshipDataStoreStatements(dataStoreActionType, importedModelName, hasManyFieldConfig);
       })
       .reduce((statements, statement) => {
         return [...statements, ...statement];
