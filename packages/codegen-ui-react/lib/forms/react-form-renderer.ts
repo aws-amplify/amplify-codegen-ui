@@ -463,23 +463,21 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           ),
         );
       } else {
+        const relatedModelStatements: Statement[] = [];
+        // Build effects to grab nested models off target record for relationships
+        Object.entries(formMetadata.fieldConfigs).forEach(([key, value]) => {
+          if (value.relationship?.type === 'BELONGS_TO' || value.relationship?.type === 'HAS_ONE') {
+            // Flatten statments into 1d array
+            relatedModelStatements.push(...buildGetRelationshipModels(key));
+          }
+        });
         statements.push(
           addUseEffectWrapper(
-            buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeNameRecord),
+            buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeNameRecord, relatedModelStatements),
             // TODO: change once cpk is supported in datastore
             ['id', lowerCaseDataTypeName],
           ),
         );
-        // Build effects to grab nested models off target record for relationships
-        Object.entries(formMetadata.fieldConfigs).forEach(([key, value]) => {
-          if (value.relationship) {
-            statements.push(
-              addUseEffectWrapper(buildGetRelationshipModels(key, lowerCaseDataTypeNameRecord), [
-                lowerCaseDataTypeNameRecord,
-              ]),
-            );
-          }
-        });
       }
     }
 

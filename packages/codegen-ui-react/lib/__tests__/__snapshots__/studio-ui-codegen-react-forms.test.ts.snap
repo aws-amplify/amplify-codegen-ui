@@ -5941,17 +5941,11 @@ export default function MyMemberForm(props) {
     const queryData = async () => {
       const record = id ? await DataStore.query(Member, id) : member;
       setMemberRecord(record);
+      const TeamRecord = record ? await record.Team : undefined;
+      setTeam(TeamRecord);
     };
     queryData();
   }, [id, member]);
-  React.useEffect(() => {
-    const getRelationshipModel = async () => {
-      if (memberRecord) {
-        setTeam(await memberRecord.Team);
-      }
-    };
-    getRelationshipModel();
-  }, [memberRecord]);
   React.useEffect(resetStateValues, [memberRecord]);
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState(\\"\\");

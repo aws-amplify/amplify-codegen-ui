@@ -1082,46 +1082,27 @@ export const buildManyToManyRelationshipCreateStatements = (
   ];
 };
 
-export const buildGetRelationshipModels = (fieldName: string, recordName: string) => {
+export const buildGetRelationshipModels = (fieldName: string) => {
   return [
     factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
         [
           factory.createVariableDeclaration(
-            factory.createIdentifier('getRelationshipModel'),
+            factory.createIdentifier(`${fieldName}Record`),
             undefined,
             undefined,
-            factory.createArrowFunction(
-              [factory.createModifier(SyntaxKind.AsyncKeyword)],
-              undefined,
-              [],
-              undefined,
-              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-              factory.createBlock(
-                [
-                  factory.createIfStatement(
-                    factory.createIdentifier(recordName),
-                    factory.createBlock(
-                      [
-                        factory.createExpressionStatement(
-                          factory.createCallExpression(factory.createIdentifier(`set${fieldName}`), undefined, [
-                            factory.createAwaitExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier(recordName),
-                                factory.createIdentifier(fieldName),
-                              ),
-                            ),
-                          ]),
-                        ),
-                      ],
-                      true,
-                    ),
-                    undefined,
-                  ),
-                ],
-                true,
+            factory.createConditionalExpression(
+              factory.createIdentifier('record'),
+              factory.createToken(SyntaxKind.QuestionToken),
+              factory.createAwaitExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('record'),
+                  factory.createIdentifier(fieldName),
+                ),
               ),
+              factory.createToken(SyntaxKind.ColonToken),
+              factory.createIdentifier('undefined'),
             ),
           ),
         ],
@@ -1129,7 +1110,9 @@ export const buildGetRelationshipModels = (fieldName: string, recordName: string
       ),
     ),
     factory.createExpressionStatement(
-      factory.createCallExpression(factory.createIdentifier('getRelationshipModel'), undefined, []),
+      factory.createCallExpression(factory.createIdentifier(`set${fieldName}`), undefined, [
+        factory.createIdentifier(`${fieldName}Record`),
+      ]),
     ),
   ];
 };
