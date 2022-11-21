@@ -15,7 +15,7 @@
  */
 import { factory, NodeFlags, SyntaxKind } from 'typescript';
 import { FieldConfigMetadata, GenericDataRelationshipType, HasManyRelationshipType } from '@aws-amplify/codegen-ui';
-import { getRecordsName, getLinkedDataName } from './form-state';
+import { getRecordsName, getLinkedDataName, getSetNameIdentifier } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst } from '../../helpers';
@@ -1110,7 +1110,7 @@ export const buildGetRelationshipModels = (fieldName: string) => {
       ),
     ),
     factory.createExpressionStatement(
-      factory.createCallExpression(factory.createIdentifier(`set${fieldName}`), undefined, [
+      factory.createCallExpression(getSetNameIdentifier(fieldName), undefined, [
         factory.createIdentifier(`${fieldName}Record`),
       ]),
     ),
