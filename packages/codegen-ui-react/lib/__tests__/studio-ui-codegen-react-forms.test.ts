@@ -116,6 +116,9 @@ describe('amplify form renderer tests', () => {
       // check binding call is generated
       expect(componentText).toContain('const postRecords = useDataStoreBinding({');
 
+      // check lazy load linked data
+      expect(componentText).toContain('await record.Posts.toArray()');
+
       // check custom display value is set
       expect(componentText).toContain('Posts: (record) => record?.title');
 

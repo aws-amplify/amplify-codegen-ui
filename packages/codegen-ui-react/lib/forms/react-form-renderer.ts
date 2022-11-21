@@ -445,6 +445,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       statements.push(
         buildUseStateExpression(lowerCaseDataTypeNameRecord, factory.createIdentifier(lowerCaseDataTypeName)),
       );
+
       if (hasManyFieldConfigs.length > 0) {
         hasManyFieldConfigs.forEach((hasManyFieldConfig) => {
           const [fieldName] = hasManyFieldConfig;
@@ -452,9 +453,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           linkedDataNames.push(linkedDataName);
           statements.push(buildUseStateExpression(linkedDataName, factory.createIdentifier('[]')));
         });
-      }
 
-      if (hasManyFieldConfigs.length > 0) {
         statements.push(
           addUseEffectWrapper(
             buildUpdateDatastoreQueryForHasMany(modelName, lowerCaseDataTypeNameRecord, hasManyFieldConfigs),
