@@ -73,6 +73,21 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate an update form with belongsTo relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/member-datastore-update-belongs-to',
+        'datastore/project-team-model',
+      );
+      // check nested model is imported
+      expect(componentText).toContain('import { Member, Team as Team0 } from "../models";');
+
+      // check binding call is generated
+      expect(componentText).toContain('const teamRecords = useDataStoreBinding({');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should use proper field overrides for belongsTo relationship', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/member-datastore-create',
