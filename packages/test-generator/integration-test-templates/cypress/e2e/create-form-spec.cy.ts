@@ -13,9 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-describe('Forms', () => {
+describe('CreateForms', () => {
   before(() => {
-    cy.visit('http://localhost:3000/form-tests');
+    cy.visit('http://localhost:3000/create-form-tests');
   });
 
   const getInputByLabel = (label) => {

@@ -24,7 +24,8 @@ import SnippetTests from './SnippetTests'; // eslint-disable-line import/extensi
 import WorkflowTests from './WorkflowTests';
 import TwoWayBindingTests from './TwoWayBindingTests';
 import ActionBindingTests from './ActionBindingTests';
-import FormTests from './FormTests';
+import CreateFormTests from './CreateFormTests';
+import UpdateFormTests from './UpdateFormTests';
 import { DATA_STORE_MOCK_EXPORTS, AUTH_MOCK_EXPORTS } from './mock-utils';
 
 // use fake endpoint so useDataStoreBinding does not fail
@@ -66,7 +67,10 @@ const HomePage = () => {
           <a href="/action-binding-tests">Action Binding Test</a>
         </li>
         <li>
-          <a href="/form-tests">Form Tests</a>
+          <a href="/create-form-tests">Create Form Tests</a>
+        </li>
+        <li>
+          <a href="/update-form-tests">Update Form Tests</a>
         </li>
       </ul>
     </div>
@@ -86,7 +90,8 @@ export default function App() {
         <Route path="/view-tests" element={<ViewTests />} />
         <Route path="/two-way-binding-tests" element={<TwoWayBindingTests />} />
         <Route path="/action-binding-tests" element={<ActionBindingTests />} />
-        <Route path="/form-tests" element={<FormTests />} />
+        <Route path="/create-form-tests" element={<CreateFormTests />} />
+        <Route path="/update-form-tests" element={<UpdateFormTests />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>
