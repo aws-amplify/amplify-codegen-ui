@@ -25,7 +25,7 @@ import {
   setFieldState,
 } from './form-state';
 import { buildOverrideOnChangeStatement } from './event-handler-props';
-import { isModelDataType } from './render-checkers';
+import { isModelDataType, shouldImplementDisplayValueFunction } from './render-checkers';
 import { getDisplayValueObjectName } from './display-value';
 import { getElementAccessExpression } from './invalid-variable-helpers';
 
@@ -211,7 +211,7 @@ export const renderArrayFieldComponent = (
 
   let setFieldValueIdentifier = setStateName;
 
-  if (isModelDataType(fieldConfig)) {
+  if (shouldImplementDisplayValueFunction(fieldConfig)) {
     setFieldValueIdentifier = getSetNameIdentifier(getCurrentDisplayValueName(renderedFieldName));
     props.push(
       factory.createJsxAttribute(

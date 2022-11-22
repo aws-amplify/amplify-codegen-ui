@@ -31,6 +31,15 @@
             "associatedWith": "tag"
           }
         },
+        "statuses": {
+          "name": "statuses",
+          "isArray": true,
+          "type": {
+            "enum": "Status"
+          },
+          "isRequired": false,
+          "attributes": []
+        },
         "createdAt": {
           "name": "createdAt",
           "isArray": false,
@@ -220,7 +229,16 @@
       ]
     }
   },
-  "enums": {},
+  "enums": {
+    "Status": {
+      "name": "Status",
+      "values": [
+        "PENDING",
+        "POSTED",
+        "IN_REVIEW"
+      ]
+    }
+  },
   "nonModels": {},
   "codegenVersion": "3.3.1",
   "version": "6661fbcb644d38cea3d27e2933e70457"

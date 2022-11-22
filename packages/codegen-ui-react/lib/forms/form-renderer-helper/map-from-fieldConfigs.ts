@@ -16,7 +16,7 @@
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
 import { PropertyAssignment } from 'typescript';
 import { buildDisplayValueFunction, getDisplayValueObject, getModelsToImport } from './display-value';
-import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
+import { shouldImplementDisplayValueFunction, shouldWrapInArrayField } from './render-checkers';
 import { buildValidationForField, buildValidations } from './validation';
 
 /**
@@ -54,7 +54,7 @@ export function mapFromFieldConfigs(fieldConfigs: Record<string, FieldConfigMeta
     }
 
     // displayValue
-    if (isModelDataType(fieldConfig)) {
+    if (shouldImplementDisplayValueFunction(fieldConfig)) {
       displayValueFunctions.push(buildDisplayValueFunction(fieldName, fieldConfig));
     }
 

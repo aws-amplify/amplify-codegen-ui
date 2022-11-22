@@ -20,6 +20,7 @@ import {
   StudioFormValueMappings,
 } from '@aws-amplify/codegen-ui';
 import { StudioFormInputFieldProperty } from '@aws-amplify/codegen-ui/lib/types/form/input-config';
+import { isEnumFieldType } from '@aws-amplify/datastore';
 import {
   Expression,
   factory,
@@ -28,12 +29,14 @@ import {
   SyntaxKind,
   NodeFlags,
   CallExpression,
+  VariableStatement,
 } from 'typescript';
 import {
   buildBindingExpression,
   buildConcatExpression,
   isBoundProperty,
   isConcatenatedProperty,
+  isFixedPropertyWithValue,
 } from '../../react-component-render-helper';
 import { getRecordsName } from './form-state';
 import { getElementAccessExpression } from './invalid-variable-helpers';
@@ -213,6 +216,10 @@ export function getDisplayValueObject(displayValueFunctions: PropertyAssignment[
 // example - primaryAuthor: (record) => record?.name,
 export function buildDisplayValueFunction(fieldName: string, fieldConfig: FieldConfigMetadata): PropertyAssignment {
   const recordString = 'record';
+  const propertyName = isValidVariableName(fieldName)
+    ? factory.createIdentifier(fieldName)
+    : factory.createStringLiteral(fieldName);
+  let additionalStatements: VariableStatement[] = [];
   let renderedDisplayValue: Expression = factory.createPropertyAccessChain(
     factory.createIdentifier(recordString),
     factory.createToken(SyntaxKind.QuestionDotToken),
@@ -233,8 +240,52 @@ export function buildDisplayValueFunction(fieldName: string, fieldConfig: FieldC
     }
   }
 
+  if (isEnumFieldType(fieldConfig.dataType) && fieldConfig.valueMappings && fieldConfig.isArray) {
+    const displayValueMapName = `enumDisplayValueMap`;
+    additionalStatements = [
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier(displayValueMapName),
+              undefined,
+              undefined,
+              factory.createObjectLiteralExpression(
+                fieldConfig.valueMappings.values.map((v) => {
+                  let value = '';
+                  let displayValue = '';
+                  if (isFixedPropertyWithValue(v.value)) {
+                    value = v.value.value.toString();
+                  }
+                  if (v.displayValue && isFixedPropertyWithValue(v.displayValue)) {
+                    displayValue = v.displayValue.value.toString();
+                  }
+                  if (value === '') {
+                    throw Error('Enum cannot have an empty value');
+                  }
+                  return factory.createPropertyAssignment(
+                    factory.createStringLiteral(value),
+                    factory.createStringLiteral(displayValue ?? value),
+                  );
+                }),
+
+                true,
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
+    ];
+    renderedDisplayValue = factory.createElementAccessExpression(
+      factory.createIdentifier(displayValueMapName),
+      factory.createIdentifier(recordString),
+    );
+  }
+
   return factory.createPropertyAssignment(
-    isValidVariableName(fieldName) ? factory.createIdentifier(fieldName) : factory.createStringLiteral(fieldName),
+    propertyName,
     factory.createArrowFunction(
       undefined,
       undefined,
@@ -251,7 +302,9 @@ export function buildDisplayValueFunction(fieldName: string, fieldConfig: FieldC
       ],
       undefined,
       factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-      renderedDisplayValue,
+      additionalStatements.length
+        ? factory.createBlock([...additionalStatements, factory.createReturnStatement(renderedDisplayValue)], false)
+        : renderedDisplayValue,
     ),
   );
 }
