@@ -76,6 +76,7 @@ import {
   getHasManyFieldConfigs,
   getLinkedDataName,
   buildRelationshipQuery,
+  buildGetRelationshipModels,
 } from './form-renderer-helper';
 import {
   buildUseStateExpression,
@@ -172,13 +173,13 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
+    const propsDeclaration = this.renderBindingPropsType();
+
     // build form related variable statments
     const variableStatements = this.buildVariableStatements();
     const jsx = this.renderJsx(this.formComponent);
 
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, true);
-    const propsDeclaration = this.renderBindingPropsType();
-
     const imports = this.importCollection.buildImportStatements();
 
     let componentText = `/* eslint-disable */${EOL}`;
@@ -438,7 +439,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     }
 
     const hasManyFieldConfigs = getHasManyFieldConfigs(formMetadata.fieldConfigs);
-    statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName, hasManyFieldConfigs));
+    statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName));
 
     const linkedDataNames: string[] = [];
     if (isDataStoreUpdateForm) {
@@ -462,9 +463,19 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           ),
         );
       } else {
+        const relatedModelStatements: Statement[] = [];
+        // Build effects to grab nested models off target record for relationships
+        Object.entries(formMetadata.fieldConfigs).forEach(([key, value]) => {
+          if (value.relationship?.type === 'BELONGS_TO' || value.relationship?.type === 'HAS_ONE') {
+            const fieldName = value.sanitizedFieldName || key;
+            linkedDataNames.push(fieldName);
+            // Flatten statments into 1d array
+            relatedModelStatements.push(...buildGetRelationshipModels(fieldName));
+          }
+        });
         statements.push(
           addUseEffectWrapper(
-            buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeNameRecord),
+            buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeNameRecord, relatedModelStatements),
             // TODO: change once cpk is supported in datastore
             ['id', lowerCaseDataTypeName],
           ),

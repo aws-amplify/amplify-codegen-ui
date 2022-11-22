@@ -261,11 +261,7 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
  *   ....
  * };
  */
-export const resetStateFunction = (
-  fieldConfigs: Record<string, FieldConfigMetadata>,
-  recordName?: string,
-  hasManyFieldConfigs?: [string, FieldConfigMetadata][],
-) => {
+export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>, recordName?: string) => {
   const recordOrInitialValues = recordName ? 'cleanValues' : 'initialValues';
 
   const stateNames = new Set<string>();
@@ -318,15 +314,19 @@ export const resetStateFunction = (
     return acc;
   }, []);
 
-  const linkedDataPropertyAssignments: PropertyAssignment[] = [];
-  if (hasManyFieldConfigs && hasManyFieldConfigs.length > 0) {
-    hasManyFieldConfigs.forEach(([fieldName]) => {
-      linkedDataPropertyAssignments.push(
-        factory.createPropertyAssignment(
-          factory.createIdentifier(fieldName),
-          factory.createIdentifier(getLinkedDataName(fieldName)),
-        ),
-      );
+  const linkedDataPropertyAssignments: any[] = [];
+  if (fieldConfigs) {
+    Object.entries(fieldConfigs).forEach(([fieldName, fieldConfig]) => {
+      if (fieldConfig.relationship?.type === 'HAS_MANY') {
+        linkedDataPropertyAssignments.push(
+          factory.createPropertyAssignment(
+            factory.createIdentifier(fieldConfig.sanitizedFieldName || fieldName),
+            factory.createIdentifier(getLinkedDataName(fieldName)),
+          ),
+        );
+      } else if (fieldConfig.relationship?.type === 'BELONGS_TO' || fieldConfig.relationship?.type === 'HAS_ONE') {
+        linkedDataPropertyAssignments.push(factory.createIdentifier(fieldConfig.sanitizedFieldName || fieldName));
+      }
     });
   }
 

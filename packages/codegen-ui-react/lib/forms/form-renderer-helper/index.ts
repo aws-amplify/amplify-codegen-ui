@@ -34,7 +34,7 @@ export { addFormAttributes } from './all-props';
 
 export { mapFromFieldConfigs, getHasManyFieldConfigs, isManyToManyRelationship } from './map-from-fieldConfigs';
 
-export { buildRelationshipQuery } from './relationship';
+export { buildRelationshipQuery, buildGetRelationshipModels } from './relationship';
 
 export { shouldWrapInArrayField } from './render-checkers';
 

@@ -14,7 +14,15 @@
   limitations under the License.
  */
 import { FieldConfigMetadata, HasManyRelationshipType } from '@aws-amplify/codegen-ui/lib/types';
-import { factory, NodeFlags, SyntaxKind, Expression, VariableStatement, ExpressionStatement } from 'typescript';
+import {
+  factory,
+  NodeFlags,
+  SyntaxKind,
+  Expression,
+  VariableStatement,
+  ExpressionStatement,
+  Statement,
+} from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './display-value';
 import { getSetNameIdentifier, getLinkedDataName } from './form-state';
@@ -384,7 +392,11 @@ export const onSubmitValidationRun = (shouldUseGetDisplayValue?: boolean) => {
   ];
 };
 
-export const buildUpdateDatastoreQuery = (dataTypeName: string, recordName: string) => {
+export const buildUpdateDatastoreQuery = (
+  dataTypeName: string,
+  recordName: string,
+  relatedModelStatements: Statement[],
+) => {
   // TODO: update this once cpk is supported in datastore
   const pkQueryIdentifier = factory.createIdentifier('id');
   return [
@@ -438,6 +450,8 @@ export const buildUpdateDatastoreQuery = (dataTypeName: string, recordName: stri
                       factory.createIdentifier('record'),
                     ]),
                   ),
+                  // Add logic to pull related relationship models off record
+                  ...relatedModelStatements,
                 ],
                 true,
               ),
