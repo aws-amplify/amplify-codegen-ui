@@ -15,7 +15,7 @@
  */
 import { factory, NodeFlags, SyntaxKind } from 'typescript';
 import { FieldConfigMetadata, GenericDataRelationshipType, HasManyRelationshipType } from '@aws-amplify/codegen-ui';
-import { getRecordsName, getLinkedDataName } from './form-state';
+import { getRecordsName, getLinkedDataName, getSetNameIdentifier } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst } from '../../helpers';
@@ -1078,6 +1078,41 @@ export const buildManyToManyRelationshipCreateStatements = (
           ],
         ),
       ),
+    ),
+  ];
+};
+
+export const buildGetRelationshipModels = (fieldName: string) => {
+  return [
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(`${fieldName}Record`),
+            undefined,
+            undefined,
+            factory.createConditionalExpression(
+              factory.createIdentifier('record'),
+              factory.createToken(SyntaxKind.QuestionToken),
+              factory.createAwaitExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('record'),
+                  factory.createIdentifier(fieldName),
+                ),
+              ),
+              factory.createToken(SyntaxKind.ColonToken),
+              factory.createIdentifier('undefined'),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
+    factory.createExpressionStatement(
+      factory.createCallExpression(getSetNameIdentifier(fieldName), undefined, [
+        factory.createIdentifier(`${fieldName}Record`),
+      ]),
     ),
   ];
 };
