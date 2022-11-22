@@ -31,7 +31,7 @@ const initializeUserTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'Ringo', lastName: 'Starr', age: 5 }));
 };
 
-export default function FormTests() {
+export default function CreateFormTests() {
   const [customFormCreateDogSubmitResults, setCustomFormCreateDogSubmitResults] = useState<any>({});
 
   const [isInitialized, setInitialized] = useState(false);
