@@ -1,0 +1,18 @@
+{
+    "id": "123-ds-update-allsupprted",
+    "name": "DataStoreFormUpdateAllSupportedFormFields",
+    "formActionType": "update",
+    "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "AllSupportedFormFields"
+    },
+    "fields": {
+      "HasOneUser": {
+        "excluded": true
+      }
+    },
+    "sectionalElements": {},
+    "style": {},
+    "cta": {},
+    "schemaVersion": "1.0"
+  }
