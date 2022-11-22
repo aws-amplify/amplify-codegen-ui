@@ -50,8 +50,9 @@ export default function FormTests() {
   if (!isInitialized) {
     return null;
   }
+  // TODO: remove typecasting once ui-react issue settled
   return (
-    <AmplifyProvider theme={MyTheme}>
+    <AmplifyProvider theme={MyTheme as any}>
       <View id="expanderWithSlot">
         <Heading>Expander with Component Slot</Heading>
         <ListingExpanderWithComponentSlot />
