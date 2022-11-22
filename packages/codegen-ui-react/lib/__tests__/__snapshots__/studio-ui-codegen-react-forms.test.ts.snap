@@ -5928,7 +5928,7 @@ export default function MyMemberForm(props) {
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = memberRecord
-      ? { ...initialValues, ...memberRecord }
+      ? { ...initialValues, ...memberRecord, Team }
       : initialValues;
     setName(cleanValues.name);
     setTeam(cleanValues.Team);
@@ -5946,7 +5946,7 @@ export default function MyMemberForm(props) {
     };
     queryData();
   }, [id, member]);
-  React.useEffect(resetStateValues, [memberRecord]);
+  React.useEffect(resetStateValues, [memberRecord, Team]);
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);

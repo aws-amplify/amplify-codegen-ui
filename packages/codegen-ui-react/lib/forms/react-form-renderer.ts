@@ -439,7 +439,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     }
 
     const hasManyFieldConfigs = getHasManyFieldConfigs(formMetadata.fieldConfigs);
-    statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName, hasManyFieldConfigs));
+    statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName));
 
     const linkedDataNames: string[] = [];
     if (isDataStoreUpdateForm) {
@@ -467,8 +467,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         // Build effects to grab nested models off target record for relationships
         Object.entries(formMetadata.fieldConfigs).forEach(([key, value]) => {
           if (value.relationship?.type === 'BELONGS_TO' || value.relationship?.type === 'HAS_ONE') {
+            const fieldName = value.sanitizedFieldName || key;
+            linkedDataNames.push(fieldName);
             // Flatten statments into 1d array
-            relatedModelStatements.push(...buildGetRelationshipModels(key));
+            relatedModelStatements.push(...buildGetRelationshipModels(fieldName));
           }
         });
         statements.push(
