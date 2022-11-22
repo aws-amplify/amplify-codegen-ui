@@ -30,8 +30,18 @@ const City = {
   SEATTLE: 'SEATTLE',
 };
 
-const { UserPreference, User, Listing, ComplexModel, Class, Tag, AllSupportedFormFieldsTag, AllSupportedFormFields } =
-  initSchema(schema);
+const {
+  UserPreference,
+  User,
+  Listing,
+  ComplexModel,
+  Class,
+  Tag,
+  AllSupportedFormFieldsTag,
+  Owner,
+  Student,
+  AllSupportedFormFields,
+} = initSchema(schema);
 
 export {
   UserPreference,
@@ -41,6 +51,8 @@ export {
   Class,
   Tag,
   AllSupportedFormFieldsTag,
+  Owner,
+  Student,
   AllSupportedFormFields,
   City,
 };

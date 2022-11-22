@@ -294,7 +294,7 @@ export declare class AllSupportedFormFields {
 
   readonly BelongsToOwner?: Owner | null;
 
-  readonly HasManySrudents?: Student[] | null;
+  readonly HasManyStudents?: Student[] | null;
 
   readonly ManyToManyTags?: AllSupportedFormFieldsTag[] | null;
 
