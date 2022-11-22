@@ -17,6 +17,7 @@
 import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
 import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind } from 'typescript';
 import { resetValuesName } from './form-state';
+import { FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
 export const ControlledComponents = ['StepperField', 'SliderField', 'SelectField', 'ToggleButton', 'SwitchField'];
 
@@ -76,7 +77,7 @@ export const renderValueAttribute = ({
   const componentType = fieldConfig.studioFormComponentType ?? fieldConfig.componentType;
   const shouldGetForUncontrolled = fieldConfig.isArray;
 
-  const valueIdentifier = currentValueIdentifier || factory.createIdentifier(componentName.split('.')[0]);
+  const valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
 
   const controlledComponentToAttributesMap: { [key: string]: JsxAttribute } = {
     ToggleButton: factory.createJsxAttribute(
@@ -151,4 +152,13 @@ export const resetFunctionCheck = ({
     ];
   }
   return [];
+};
+
+const getValueIdentifier = (componentName: string, componentType: string) => {
+  // For Boolean components like SwitchField, they need the full dot notation name
+  // e.g. isChecked={options.enabled}
+  if (FIELD_TYPE_TO_TYPESCRIPT_MAP[componentType] === SyntaxKind.BooleanKeyword) {
+    return factory.createIdentifier(componentName);
+  }
+  return factory.createIdentifier(componentName.split('.')[0]);
 };
