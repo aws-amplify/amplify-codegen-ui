@@ -82,6 +82,7 @@
       }
     },
     "HasManyStudents": {
+      "excluded": true,
       "inputType": {
         "type": "Autocomplete",
         "valueMappings": {
