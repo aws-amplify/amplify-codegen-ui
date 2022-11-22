@@ -2157,6 +2157,7 @@ import {
   Heading,
   Icon,
   ScrollView,
+  SwitchField,
   Text,
   TextField,
   useTheme,
@@ -2303,6 +2304,7 @@ export default function NestedJson(props) {
     Nicknames1: [],
     \\"nick-names2\\": [],
     \\"first Name\\": undefined,
+    options: {},
   };
   const [firstName, setFirstName] = React.useState(initialValues[\\"first-Name\\"]);
   const [lastName, setLastName] = React.useState(initialValues.lastName);
@@ -2314,6 +2316,7 @@ export default function NestedJson(props) {
   const [firstName1, setFirstName1] = React.useState(
     initialValues[\\"first Name\\"]
   );
+  const [options, setOptions] = React.useState(initialValues.options);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setFirstName(initialValues[\\"first-Name\\"]);
@@ -2324,6 +2327,7 @@ export default function NestedJson(props) {
     setNicknames(initialValues[\\"nick-names2\\"]);
     setCurrentNicknamesValue(undefined);
     setFirstName1(initialValues[\\"first Name\\"]);
+    setOptions(initialValues.options);
     setErrors({});
   };
   const [currentBioFavoritetreesValue, setCurrentBioFavoritetreesValue] =
@@ -2344,6 +2348,7 @@ export default function NestedJson(props) {
     Nicknames1: [],
     \\"nick-names2\\": [],
     \\"first Name\\": [],
+    \\"options.enabled\\": [],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -2369,6 +2374,7 @@ export default function NestedJson(props) {
           Nicknames1,
           \\"nick-names2\\": nicknames,
           \\"first Name\\": firstName1,
+          options,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -2406,6 +2412,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.[\\"first-Name\\"] ?? value;
@@ -2432,6 +2439,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.lastName ?? value;
@@ -2463,6 +2471,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.bio?.[\\"favorite Quote\\"] ?? value;
@@ -2491,6 +2500,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.bio?.[\\"favorite-Animal\\"] ?? value;
@@ -2518,6 +2528,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             values = result?.bio?.[\\"favorite-trees\\"] ?? values;
@@ -2555,6 +2566,11 @@ export default function NestedJson(props) {
           {...getOverrideProps(overrides, \\"bio.favorite-trees\\")}
         ></TextField>
       </ArrayField>
+      <Heading
+        level={3}
+        children=\\"Options\\"
+        {...getOverrideProps(overrides, \\"options\\")}
+      ></Heading>
       <ArrayField
         onChange={async (items) => {
           let values = items;
@@ -2566,6 +2582,7 @@ export default function NestedJson(props) {
               Nicknames1: values,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             values = result?.Nicknames1 ?? values;
@@ -2611,6 +2628,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": values,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             values = result?.[\\"nick-names2\\"] ?? values;
@@ -2657,6 +2675,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": value,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.[\\"first Name\\"] ?? value;
@@ -2671,6 +2690,35 @@ export default function NestedJson(props) {
         hasError={errors[\\"first Name\\"]?.hasError}
         {...getOverrideProps(overrides, \\"first Name\\")}
       ></TextField>
+      <SwitchField
+        label=\\"Enabled\\"
+        defaultChecked={false}
+        isChecked={options.enabled}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              \\"first-Name\\": firstName,
+              lastName,
+              bio,
+              Nicknames1,
+              \\"nick-names2\\": nicknames,
+              \\"first Name\\": firstName1,
+              options: { ...options, enabled: value },
+            };
+            const result = onChange(modelFields);
+            value = result?.options?.enabled ?? value;
+          }
+          if (errors[\\"options.enabled\\"]?.hasError) {
+            runValidationTasks(\\"options.enabled\\", value);
+          }
+          setOptions({ ...options, enabled: value });
+        }}
+        onBlur={() => runValidationTasks(\\"options.enabled\\", options[\\"enabled\\"])}
+        errorMessage={errors[\\"options.enabled\\"]?.errorMessage}
+        hasError={errors[\\"options.enabled\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"options.enabled\\")}
+      ></SwitchField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -2711,7 +2759,7 @@ export default function NestedJson(props) {
 exports[`amplify form renderer tests custom form tests should render nested json fields 2`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { GridProps, HeadingProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, HeadingProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -2728,6 +2776,9 @@ export declare type NestedJsonInputValues = {
         \\"favorite-Animal\\"?: string;
         \\"favorite-trees\\"?: string[];
     };
+    options?: {
+        enabled?: boolean;
+    };
 };
 export declare type NestedJsonValidationValues = {
     \\"first-Name\\"?: ValidationFunction<string>;
@@ -2740,6 +2791,9 @@ export declare type NestedJsonValidationValues = {
         \\"favorite-Animal\\"?: ValidationFunction<string>;
         \\"favorite-trees\\"?: ValidationFunction<string>;
     };
+    options?: {
+        enabled?: ValidationFunction<boolean>;
+    };
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NestedJsonOverridesProps = {
@@ -2750,9 +2804,11 @@ export declare type NestedJsonOverridesProps = {
     \\"bio.favorite Quote\\"?: FormProps<TextFieldProps>;
     \\"bio.favorite-Animal\\"?: FormProps<TextFieldProps>;
     \\"bio.favorite-trees\\"?: FormProps<TextFieldProps>;
+    options?: FormProps<HeadingProps>;
     Nicknames1?: FormProps<TextFieldProps>;
     \\"nick-names2\\"?: FormProps<TextFieldProps>;
     \\"first Name\\"?: FormProps<TextFieldProps>;
+    \\"options.enabled\\"?: FormProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type NestedJsonProps = React.PropsWithChildren<{
     overrides?: NestedJsonOverridesProps | undefined | null;

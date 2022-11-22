@@ -79,6 +79,12 @@
       "position": {
         "below": "bio.favorite-Animal"
       }
+    },
+    "options.enabled" : {
+      "inputType" : {
+        "type" : "SwitchField"
+      },
+      "label" : "Enabled"
     }
   },
   "formActionType": "create",
@@ -91,6 +97,14 @@
       },
       "text": "bio",
       "type": "Heading"
+    },
+    "options" : {
+      "level" : 3,
+      "position" : {
+        "below" : "bio.favorite-trees"
+      },
+      "text" : "Options",
+      "type" : "Heading"
     }
   },
   "style": {
