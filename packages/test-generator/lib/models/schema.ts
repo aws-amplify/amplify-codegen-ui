@@ -330,6 +330,293 @@ export default {
         },
       ],
     },
+    Tag: {
+      name: 'Tag',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        label: {
+          name: 'label',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        AllSupportedFormFields: {
+          name: 'AllSupportedFormFields',
+          isArray: true,
+          type: {
+            model: 'AllSupportedFormFieldsTag',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: 'tag',
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Tags',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'auth',
+          properties: {
+            rules: [
+              {
+                allow: 'public',
+                operations: ['create', 'update', 'delete', 'read'],
+              },
+            ],
+          },
+        },
+      ],
+    },
+    AllSupportedFormFieldsTag: {
+      name: 'AllSupportedFormFieldsTag',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        tag: {
+          name: 'tag',
+          isArray: false,
+          type: {
+            model: 'Tag',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetName: 'tagID',
+          },
+        },
+        allSupportedFormFields: {
+          name: 'allSupportedFormFields',
+          isArray: false,
+          type: {
+            model: 'AllSupportedFormFields',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetName: 'allSupportedFormFieldsID',
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'AllSupportedFormFieldsTags',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byTag',
+            fields: ['tagID'],
+          },
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byAllSupportedFormFields',
+            fields: ['allSupportedFormFieldsID'],
+          },
+        },
+      ],
+    },
+    Owner: {
+      name: 'Owner',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        AllSupportedFormFields: {
+          name: 'AllSupportedFormFields',
+          isArray: false,
+          type: {
+            model: 'AllSupportedFormFields',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'HAS_ONE',
+            associatedWith: 'BelongsToOwner',
+            targetName: 'ownerAllSupportedFormFieldsId',
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        ownerAllSupportedFormFieldsId: {
+          name: 'ownerAllSupportedFormFieldsId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'Owners',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'auth',
+          properties: {
+            rules: [
+              {
+                allow: 'public',
+                operations: ['create', 'update', 'delete', 'read'],
+              },
+            ],
+          },
+        },
+      ],
+    },
+    Student: {
+      name: 'Student',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        allSupportedFormFieldsID: {
+          name: 'allSupportedFormFieldsID',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Students',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byAllSupportedFormFieldsID',
+            fields: ['allSupportedFormFieldsID'],
+          },
+        },
+        {
+          type: 'auth',
+          properties: {
+            rules: [
+              {
+                allow: 'public',
+                operations: ['create', 'update', 'delete', 'read'],
+              },
+            ],
+          },
+        },
+      ],
+    },
     AllSupportedFormFields: {
       name: 'AllSupportedFormFields',
       fields: {
@@ -467,6 +754,47 @@ export default {
           type: 'ID',
           isRequired: false,
           attributes: [],
+        },
+        BelongsToOwner: {
+          name: 'BelongsToOwner',
+          isArray: false,
+          type: {
+            model: 'Owner',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetName: 'allSupportedFormFieldsOwnerId',
+          },
+        },
+        HasManyStudents: {
+          name: 'HasManyStudents',
+          isArray: true,
+          type: {
+            model: 'Student',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: 'allSupportedFormFieldsID',
+          },
+        },
+        ManyToManyTags: {
+          name: ' ManyToManyTags',
+          isArray: true,
+          type: {
+            model: 'AllSupportedFormFieldsTag',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: 'allSupportedFormFields',
+          },
         },
         createdAt: {
           name: 'createdAt',
