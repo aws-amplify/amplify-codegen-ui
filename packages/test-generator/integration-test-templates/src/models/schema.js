@@ -598,7 +598,7 @@ export const schema = {
         {
           type: 'key',
           properties: {
-            name: 'byAllSupportedFormFieldsID',
+            name: 'byAllSupportedFormFields',
             fields: ['allSupportedFormFieldsID'],
           },
         },

@@ -600,7 +600,7 @@ export default {
         {
           type: 'key',
           properties: {
-            name: 'byAllSupportedFormFieldsID',
+            name: 'byAllSupportedFormFields',
             fields: ['allSupportedFormFieldsID'],
           },
         },
