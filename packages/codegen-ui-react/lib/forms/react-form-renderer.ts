@@ -49,7 +49,7 @@ import {
 } from 'typescript';
 import { lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
-import { PrimitiveTypeParameter, Primitive } from '../primitive';
+import { PrimitiveTypeParameter, Primitive, primitiveOverrideProp } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
 import { ReactOutputManager } from '../react-output-manager';
 import { ReactRenderConfig, scriptKindToFileExtension } from '../react-render-config';
@@ -91,7 +91,6 @@ import {
 import { isModelDataType, shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
 import {
   buildFormPropNode,
-  formOverrideProp,
   generateFieldTypes,
   validationFunctionType,
   validationResponseType,
@@ -313,7 +312,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       // pass in importCollection once to collect models to import
       generateFieldTypes(formName, 'input', fieldConfigs, this.importCollection),
       generateFieldTypes(formName, 'validation', fieldConfigs, this.importCollection),
-      formOverrideProp,
+      primitiveOverrideProp,
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
         undefined,

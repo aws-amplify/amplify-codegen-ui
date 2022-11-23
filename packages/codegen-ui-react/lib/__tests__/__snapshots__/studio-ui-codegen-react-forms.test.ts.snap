@@ -366,15 +366,15 @@ export declare type CustomDataFormValidationValues = {
     pages?: ValidationFunction<number>;
     phone?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
-    CustomDataFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    email?: FormProps<TextFieldProps>;
-    city?: FormProps<SelectFieldProps>;
-    category?: FormProps<RadioGroupFieldProps>;
-    pages?: FormProps<StepperFieldProps>;
-    phone?: FormProps<TextFieldProps>;
+    CustomDataFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
+    city?: PrimitiveOverrideProps<SelectFieldProps>;
+    category?: PrimitiveOverrideProps<RadioGroupFieldProps>;
+    pages?: PrimitiveOverrideProps<StepperFieldProps>;
+    phone?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
@@ -780,15 +780,15 @@ export declare type CustomDataFormValidationValues = {
     category?: ValidationFunction<string>;
     pages?: ValidationFunction<number>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
-    CustomDataFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    email?: FormProps<TextFieldProps>;
-    \\"metadata-field\\"?: FormProps<TextAreaFieldProps>;
-    city?: FormProps<SelectFieldProps>;
-    category?: FormProps<RadioGroupFieldProps>;
-    pages?: FormProps<StepperFieldProps>;
+    CustomDataFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
+    \\"metadata-field\\"?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    city?: PrimitiveOverrideProps<SelectFieldProps>;
+    category?: PrimitiveOverrideProps<RadioGroupFieldProps>;
+    pages?: PrimitiveOverrideProps<StepperFieldProps>;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
@@ -1208,12 +1208,12 @@ export declare type CustomDataFormValidationValues = {
     email?: ValidationFunction<string>;
     phone?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
-    CustomDataFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    email?: FormProps<TextFieldProps>;
-    phone?: FormProps<TextFieldProps>;
+    CustomDataFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
+    phone?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
@@ -1772,16 +1772,16 @@ export declare type MyPostFormValidationValues = {
     metadata?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
-    MyPostFormGrid?: FormProps<GridProps>;
-    RowGrid0?: FormProps<GridProps>;
-    username?: FormProps<TextFieldProps>;
-    caption?: FormProps<TextFieldProps>;
-    Customtags?: FormProps<TextFieldProps>;
-    post_url?: FormProps<TextFieldProps>;
-    metadata?: FormProps<TextAreaFieldProps>;
-    profile_url?: FormProps<TextFieldProps>;
+    MyPostFormGrid?: PrimitiveOverrideProps<GridProps>;
+    RowGrid0?: PrimitiveOverrideProps<GridProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    caption?: PrimitiveOverrideProps<TextFieldProps>;
+    Customtags?: PrimitiveOverrideProps<TextFieldProps>;
+    post_url?: PrimitiveOverrideProps<TextFieldProps>;
+    metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    profile_url?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -2404,18 +2404,18 @@ export declare type NestedJsonValidationValues = {
         \\"favorite-trees\\"?: ValidationFunction<string>;
     };
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NestedJsonOverridesProps = {
-    NestedJsonGrid?: FormProps<GridProps>;
-    \\"first-Name\\"?: FormProps<TextFieldProps>;
-    lastName?: FormProps<TextFieldProps>;
-    bio?: FormProps<HeadingProps>;
-    \\"bio.favorite Quote\\"?: FormProps<TextFieldProps>;
-    \\"bio.favorite-Animal\\"?: FormProps<TextFieldProps>;
-    \\"bio.favorite-trees\\"?: FormProps<TextFieldProps>;
-    Nicknames1?: FormProps<TextFieldProps>;
-    \\"nick-names2\\"?: FormProps<TextFieldProps>;
-    \\"first Name\\"?: FormProps<TextFieldProps>;
+    NestedJsonGrid?: PrimitiveOverrideProps<GridProps>;
+    \\"first-Name\\"?: PrimitiveOverrideProps<TextFieldProps>;
+    lastName?: PrimitiveOverrideProps<TextFieldProps>;
+    bio?: PrimitiveOverrideProps<HeadingProps>;
+    \\"bio.favorite Quote\\"?: PrimitiveOverrideProps<TextFieldProps>;
+    \\"bio.favorite-Animal\\"?: PrimitiveOverrideProps<TextFieldProps>;
+    \\"bio.favorite-trees\\"?: PrimitiveOverrideProps<TextFieldProps>;
+    Nicknames1?: PrimitiveOverrideProps<TextFieldProps>;
+    \\"nick-names2\\"?: PrimitiveOverrideProps<TextFieldProps>;
+    \\"first Name\\"?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type NestedJsonProps = React.PropsWithChildren<{
     overrides?: NestedJsonOverridesProps | undefined | null;
@@ -2891,15 +2891,15 @@ export declare type NestedJsonValidationValues = {
         favoriteAnimal?: ValidationFunction<string>;
     };
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NestedJsonOverridesProps = {
-    NestedJsonGrid?: FormProps<GridProps>;
-    firstName?: FormProps<TextFieldProps>;
-    \\"last-Name\\"?: FormProps<SelectFieldProps>;
-    lastName?: FormProps<TextFieldProps>;
-    bio?: FormProps<HeadingProps>;
-    \\"bio.favoriteQuote\\"?: FormProps<TextFieldProps>;
-    \\"bio.favoriteAnimal\\"?: FormProps<TextFieldProps>;
+    NestedJsonGrid?: PrimitiveOverrideProps<GridProps>;
+    firstName?: PrimitiveOverrideProps<TextFieldProps>;
+    \\"last-Name\\"?: PrimitiveOverrideProps<SelectFieldProps>;
+    lastName?: PrimitiveOverrideProps<TextFieldProps>;
+    bio?: PrimitiveOverrideProps<HeadingProps>;
+    \\"bio.favoriteQuote\\"?: PrimitiveOverrideProps<TextFieldProps>;
+    \\"bio.favoriteAnimal\\"?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type NestedJsonProps = React.PropsWithChildren<{
     overrides?: NestedJsonOverridesProps | undefined | null;
@@ -3076,13 +3076,13 @@ export declare type CustomWithSectionalElementsInputValues = {
 export declare type CustomWithSectionalElementsValidationValues = {
     name?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomWithSectionalElementsOverridesProps = {
-    CustomWithSectionalElementsGrid?: FormProps<GridProps>;
-    myHeading?: FormProps<HeadingProps>;
-    name?: FormProps<TextFieldProps>;
-    myText?: FormProps<TextProps>;
-    myDivider?: FormProps<DividerProps>;
+    CustomWithSectionalElementsGrid?: PrimitiveOverrideProps<GridProps>;
+    myHeading?: PrimitiveOverrideProps<HeadingProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    myText?: PrimitiveOverrideProps<TextProps>;
+    myDivider?: PrimitiveOverrideProps<DividerProps>;
 } & EscapeHatchProps;
 export declare type CustomWithSectionalElementsProps = React.PropsWithChildren<{
     overrides?: CustomWithSectionalElementsOverridesProps | undefined | null;
@@ -3416,14 +3416,14 @@ export declare type MyPostFormValidationValues = {
     metadata?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
-    MyPostFormGrid?: FormProps<GridProps>;
-    caption?: FormProps<TextFieldProps>;
-    username?: FormProps<TextFieldProps>;
-    post_url?: FormProps<TextFieldProps>;
-    metadata?: FormProps<TextAreaFieldProps>;
-    profile_url?: FormProps<TextFieldProps>;
+    MyPostFormGrid?: PrimitiveOverrideProps<GridProps>;
+    caption?: PrimitiveOverrideProps<TextFieldProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    post_url?: PrimitiveOverrideProps<TextFieldProps>;
+    metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    profile_url?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -3949,12 +3949,12 @@ export declare type TagCreateFormValidationValues = {
     Posts?: ValidationFunction<Post>;
     statuses?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TagCreateFormOverridesProps = {
-    TagCreateFormGrid?: FormProps<GridProps>;
-    label?: FormProps<TextFieldProps>;
-    Posts?: FormProps<AutocompleteProps>;
-    statuses?: FormProps<SelectFieldProps>;
+    TagCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    label?: PrimitiveOverrideProps<TextFieldProps>;
+    Posts?: PrimitiveOverrideProps<AutocompleteProps>;
+    statuses?: PrimitiveOverrideProps<SelectFieldProps>;
 } & EscapeHatchProps;
 export declare type TagCreateFormProps = React.PropsWithChildren<{
     overrides?: TagCreateFormOverridesProps | undefined | null;
@@ -4386,11 +4386,11 @@ export declare type MyMemberFormValidationValues = {
     name?: ValidationFunction<string>;
     Team?: ValidationFunction<Team0>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyMemberFormOverridesProps = {
-    MyMemberFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    Team?: FormProps<AutocompleteProps>;
+    MyMemberFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Team?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type MyMemberFormProps = React.PropsWithChildren<{
     overrides?: MyMemberFormOverridesProps | undefined | null;
@@ -4831,11 +4831,11 @@ export declare type BookCreateFormValidationValues = {
     name?: ValidationFunction<string>;
     primaryAuthor?: ValidationFunction<Author>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BookCreateFormOverridesProps = {
-    BookCreateFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    primaryAuthor?: FormProps<AutocompleteProps>;
+    BookCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    primaryAuthor?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type BookCreateFormProps = React.PropsWithChildren<{
     overrides?: BookCreateFormOverridesProps | undefined | null;
@@ -5361,12 +5361,12 @@ export declare type TagCreateFormValidationValues = {
     Posts?: ValidationFunction<Post>;
     statuses?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TagCreateFormOverridesProps = {
-    TagCreateFormGrid?: FormProps<GridProps>;
-    label?: FormProps<TextFieldProps>;
-    Posts?: FormProps<AutocompleteProps>;
-    statuses?: FormProps<SelectFieldProps>;
+    TagCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    label?: PrimitiveOverrideProps<TextFieldProps>;
+    Posts?: PrimitiveOverrideProps<AutocompleteProps>;
+    statuses?: PrimitiveOverrideProps<SelectFieldProps>;
 } & EscapeHatchProps;
 export declare type TagCreateFormProps = React.PropsWithChildren<{
     overrides?: TagCreateFormOverridesProps | undefined | null;
@@ -5892,12 +5892,12 @@ export declare type BookCreateFormValidationValues = {
     primaryAuthor?: ValidationFunction<Author>;
     primaryTitle?: ValidationFunction<Title>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BookCreateFormOverridesProps = {
-    BookCreateFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    primaryAuthor?: FormProps<AutocompleteProps>;
-    primaryTitle?: FormProps<AutocompleteProps>;
+    BookCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    primaryAuthor?: PrimitiveOverrideProps<AutocompleteProps>;
+    primaryTitle?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type BookCreateFormProps = React.PropsWithChildren<{
     overrides?: BookCreateFormOverridesProps | undefined | null;
@@ -6330,15 +6330,15 @@ export declare type MyPostFormValidationValues = {
     post_url?: ValidationFunction<string>;
     metadata?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
-    MyPostFormGrid?: FormProps<GridProps>;
-    TextAreaFieldbbd63464?: FormProps<TextAreaFieldProps>;
-    caption?: FormProps<TextFieldProps>;
-    username?: FormProps<TextFieldProps>;
-    profile_url?: FormProps<TextFieldProps>;
-    post_url?: FormProps<TextFieldProps>;
-    metadata?: FormProps<TextAreaFieldProps>;
+    MyPostFormGrid?: PrimitiveOverrideProps<GridProps>;
+    TextAreaFieldbbd63464?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    caption?: PrimitiveOverrideProps<TextFieldProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    profile_url?: PrimitiveOverrideProps<TextFieldProps>;
+    post_url?: PrimitiveOverrideProps<TextFieldProps>;
+    metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -6790,11 +6790,11 @@ export declare type MyMemberFormValidationValues = {
     name?: ValidationFunction<string>;
     Team?: ValidationFunction<Team0>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyMemberFormOverridesProps = {
-    MyMemberFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    Team?: FormProps<AutocompleteProps>;
+    MyMemberFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Team?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type MyMemberFormProps = React.PropsWithChildren<{
     overrides?: MyMemberFormOverridesProps | undefined | null;
@@ -7354,15 +7354,15 @@ export declare type MyFlexUpdateFormValidationValues = {
     tags?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyFlexUpdateFormOverridesProps = {
-    MyFlexUpdateFormGrid?: FormProps<GridProps>;
-    RowGrid0?: FormProps<GridProps>;
-    username?: FormProps<TextFieldProps>;
-    caption?: FormProps<TextFieldProps>;
-    Customtags?: FormProps<TextFieldProps>;
-    tags?: FormProps<TextFieldProps>;
-    profile_url?: FormProps<TextFieldProps>;
+    MyFlexUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    RowGrid0?: PrimitiveOverrideProps<GridProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    caption?: PrimitiveOverrideProps<TextFieldProps>;
+    Customtags?: PrimitiveOverrideProps<TextFieldProps>;
+    tags?: PrimitiveOverrideProps<TextFieldProps>;
+    profile_url?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type MyFlexUpdateFormProps = React.PropsWithChildren<{
     overrides?: MyFlexUpdateFormOverridesProps | undefined | null;
@@ -7893,14 +7893,14 @@ export declare type BlogCreateFormValidationValues = {
     published?: ValidationFunction<string>;
     editedAt?: ValidationFunction<number>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type BlogCreateFormOverridesProps = {
-    BlogCreateFormGrid?: FormProps<GridProps>;
-    title?: FormProps<TextFieldProps>;
-    content?: FormProps<TextFieldProps>;
-    switch?: FormProps<SwitchFieldProps>;
-    published?: FormProps<TextFieldProps>;
-    editedAt?: FormProps<TextFieldProps>;
+    BlogCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    title?: PrimitiveOverrideProps<TextFieldProps>;
+    content?: PrimitiveOverrideProps<TextFieldProps>;
+    switch?: PrimitiveOverrideProps<SwitchFieldProps>;
+    published?: PrimitiveOverrideProps<TextFieldProps>;
+    editedAt?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type BlogCreateFormProps = React.PropsWithChildren<{
     overrides?: BlogCreateFormOverridesProps | undefined | null;
@@ -8748,20 +8748,20 @@ export declare type InputGalleryCreateFormValidationValues = {
     ippy?: ValidationFunction<string>;
     timeisnow?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type InputGalleryCreateFormOverridesProps = {
-    InputGalleryCreateFormGrid?: FormProps<GridProps>;
-    num?: FormProps<TextFieldProps>;
-    rootbeer?: FormProps<TextFieldProps>;
-    attend?: FormProps<RadioGroupFieldProps>;
-    maybeSlide?: FormProps<ToggleButtonProps>;
-    maybeCheck?: FormProps<CheckboxFieldProps>;
-    arrayTypeField?: FormProps<TextFieldProps>;
-    jsonArray?: FormProps<TextAreaFieldProps>;
-    jsonField?: FormProps<TextAreaFieldProps>;
-    timestamp?: FormProps<TextFieldProps>;
-    ippy?: FormProps<TextFieldProps>;
-    timeisnow?: FormProps<TextFieldProps>;
+    InputGalleryCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    num?: PrimitiveOverrideProps<TextFieldProps>;
+    rootbeer?: PrimitiveOverrideProps<TextFieldProps>;
+    attend?: PrimitiveOverrideProps<RadioGroupFieldProps>;
+    maybeSlide?: PrimitiveOverrideProps<ToggleButtonProps>;
+    maybeCheck?: PrimitiveOverrideProps<CheckboxFieldProps>;
+    arrayTypeField?: PrimitiveOverrideProps<TextFieldProps>;
+    jsonArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    jsonField?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    timestamp?: PrimitiveOverrideProps<TextFieldProps>;
+    ippy?: PrimitiveOverrideProps<TextFieldProps>;
+    timeisnow?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type InputGalleryCreateFormProps = React.PropsWithChildren<{
     overrides?: InputGalleryCreateFormOverridesProps | undefined | null;
@@ -9666,20 +9666,20 @@ export declare type InputGalleryUpdateFormValidationValues = {
     ippy?: ValidationFunction<string>;
     timeisnow?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type InputGalleryUpdateFormOverridesProps = {
-    InputGalleryUpdateFormGrid?: FormProps<GridProps>;
-    num?: FormProps<TextFieldProps>;
-    rootbeer?: FormProps<TextFieldProps>;
-    attend?: FormProps<RadioGroupFieldProps>;
-    maybeSlide?: FormProps<ToggleButtonProps>;
-    maybeCheck?: FormProps<CheckboxFieldProps>;
-    arrayTypeField?: FormProps<TextFieldProps>;
-    jsonArray?: FormProps<TextAreaFieldProps>;
-    jsonField?: FormProps<TextAreaFieldProps>;
-    timestamp?: FormProps<TextFieldProps>;
-    ippy?: FormProps<TextFieldProps>;
-    timeisnow?: FormProps<TextFieldProps>;
+    InputGalleryUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    num?: PrimitiveOverrideProps<TextFieldProps>;
+    rootbeer?: PrimitiveOverrideProps<TextFieldProps>;
+    attend?: PrimitiveOverrideProps<RadioGroupFieldProps>;
+    maybeSlide?: PrimitiveOverrideProps<ToggleButtonProps>;
+    maybeCheck?: PrimitiveOverrideProps<CheckboxFieldProps>;
+    arrayTypeField?: PrimitiveOverrideProps<TextFieldProps>;
+    jsonArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    jsonField?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    timestamp?: PrimitiveOverrideProps<TextFieldProps>;
+    ippy?: PrimitiveOverrideProps<TextFieldProps>;
+    timeisnow?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type InputGalleryUpdateFormProps = React.PropsWithChildren<{
     overrides?: InputGalleryUpdateFormOverridesProps | undefined | null;
@@ -10220,15 +10220,15 @@ export declare type MyFlexCreateFormValidationValues = {
     tags?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyFlexCreateFormOverridesProps = {
-    MyFlexCreateFormGrid?: FormProps<GridProps>;
-    RowGrid0?: FormProps<GridProps>;
-    username?: FormProps<TextFieldProps>;
-    caption?: FormProps<TextFieldProps>;
-    Customtags?: FormProps<TextFieldProps>;
-    tags?: FormProps<TextFieldProps>;
-    profile_url?: FormProps<TextFieldProps>;
+    MyFlexCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    RowGrid0?: PrimitiveOverrideProps<GridProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    caption?: PrimitiveOverrideProps<TextFieldProps>;
+    Customtags?: PrimitiveOverrideProps<TextFieldProps>;
+    tags?: PrimitiveOverrideProps<TextFieldProps>;
+    profile_url?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type MyFlexCreateFormProps = React.PropsWithChildren<{
     overrides?: MyFlexCreateFormOverridesProps | undefined | null;
@@ -10623,16 +10623,16 @@ export declare type PostCreateFormRowValidationValues = {
     status?: ValidationFunction<string>;
     metadata?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PostCreateFormRowOverridesProps = {
-    PostCreateFormRowGrid?: FormProps<GridProps>;
-    RowGrid0?: FormProps<GridProps>;
-    username?: FormProps<TextFieldProps>;
-    caption?: FormProps<TextFieldProps>;
-    post_url?: FormProps<TextFieldProps>;
-    profile_url?: FormProps<TextFieldProps>;
-    status?: FormProps<SelectFieldProps>;
-    metadata?: FormProps<TextAreaFieldProps>;
+    PostCreateFormRowGrid?: PrimitiveOverrideProps<GridProps>;
+    RowGrid0?: PrimitiveOverrideProps<GridProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    caption?: PrimitiveOverrideProps<TextFieldProps>;
+    post_url?: PrimitiveOverrideProps<TextFieldProps>;
+    profile_url?: PrimitiveOverrideProps<TextFieldProps>;
+    status?: PrimitiveOverrideProps<SelectFieldProps>;
+    metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type PostCreateFormRowProps = React.PropsWithChildren<{
     overrides?: PostCreateFormRowOverridesProps | undefined | null;
@@ -11064,11 +11064,11 @@ export declare type MyMemberFormValidationValues = {
     name?: ValidationFunction<string>;
     Team?: ValidationFunction<Team0>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyMemberFormOverridesProps = {
-    MyMemberFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    Team?: FormProps<AutocompleteProps>;
+    MyMemberFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Team?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type MyMemberFormProps = React.PropsWithChildren<{
     overrides?: MyMemberFormOverridesProps | undefined | null;

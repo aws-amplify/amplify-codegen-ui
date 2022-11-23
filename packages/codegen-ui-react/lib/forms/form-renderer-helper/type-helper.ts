@@ -37,6 +37,7 @@ import {
 import { lowerCaseFirst } from '../../helpers';
 import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 import { ImportCollection, ImportSource } from '../../imports';
+import { PRIMITIVE_OVERRIDE_PROPS } from '../../primitive';
 
 type Node<T> = {
   [n: string]: T | Node<T>;
@@ -216,28 +217,6 @@ export const validationResponseType = factory.createTypeAliasDeclaration(
       factory.createIdentifier('errorMessage'),
       factory.createToken(SyntaxKind.QuestionToken),
       factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-    ),
-  ]),
-);
-
-/**
- * export declare type ValidationResponse = {
- *  hasError: boolean;
- *  errorMessage?: string;
- * };
- */
-export const formOverrideProp = factory.createTypeAliasDeclaration(
-  undefined,
-  [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
-  factory.createIdentifier('FormProps'),
-  [factory.createTypeParameterDeclaration(factory.createIdentifier('T'), undefined, undefined)],
-  factory.createIntersectionTypeNode([
-    factory.createTypeReferenceNode(factory.createIdentifier('Partial'), [
-      factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined),
-    ]),
-    factory.createTypeReferenceNode(
-      factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('DOMAttributes')),
-      [factory.createTypeReferenceNode(factory.createIdentifier('HTMLDivElement'), undefined)],
     ),
   ]),
 );
@@ -486,7 +465,7 @@ export const buildOverrideTypesBindings = (
       undefined,
       factory.createIdentifier(`${formComponent.name}Grid`),
       factory.createToken(SyntaxKind.QuestionToken),
-      factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+      factory.createTypeReferenceNode(factory.createIdentifier(PRIMITIVE_OVERRIDE_PROPS), [
         factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
       ]),
     ),
@@ -499,7 +478,7 @@ export const buildOverrideTypesBindings = (
           undefined,
           factory.createIdentifier(`RowGrid${index}`),
           factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+          factory.createTypeReferenceNode(factory.createIdentifier(PRIMITIVE_OVERRIDE_PROPS), [
             factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
           ]),
         ),
@@ -516,7 +495,7 @@ export const buildOverrideTypesBindings = (
           undefined,
           propKey,
           factory.createToken(SyntaxKind.QuestionToken),
-          factory.createTypeReferenceNode(factory.createIdentifier('FormProps'), [
+          factory.createTypeReferenceNode(factory.createIdentifier(PRIMITIVE_OVERRIDE_PROPS), [
             factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName), undefined),
           ]),
         ),
