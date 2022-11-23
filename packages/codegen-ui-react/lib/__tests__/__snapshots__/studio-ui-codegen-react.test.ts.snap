@@ -1305,6 +1305,38 @@ export default function ViewWithButton(
 "
 `;
 
+exports[`amplify render tests complex component tests should generate a component with custom child (malformed property) 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import CustomButton from \\"./CustomButton\\";
+import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
+
+export type ViewWithCustomButtonProps = React.PropsWithChildren<
+  Partial<ViewProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function ViewWithCustomButton(
+  props: ViewWithCustomButtonProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithCustomButton\\")}>
+      <CustomButton
+        color={\`\${\\"Concatenated \\"}\${\\"Value!\\"}\`}
+        {...getOverrideProps(overrides, \\"MyCustomButton\\")}
+      ></CustomButton>
+    </View>
+  );
+}
+"
+`;
+
 exports[`amplify render tests complex component tests should generate a component with custom child 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";

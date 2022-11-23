@@ -63,8 +63,8 @@ export function generateFormDefinition({
   )
     .map(([fieldName, fieldConfig]) => ({
       name: fieldName,
-      position: 'position' in fieldConfig ? fieldConfig.position : undefined,
-      excluded: 'excluded' in fieldConfig ? fieldConfig.excluded : false,
+      position: typeof fieldConfig === 'object' && 'position' in fieldConfig ? fieldConfig.position : undefined,
+      excluded: typeof fieldConfig === 'object' && 'excluded' in fieldConfig ? fieldConfig.excluded : false,
     }))
     .concat(
       Object.entries(form.sectionalElements).map(([elementName, elementConfig]) => ({

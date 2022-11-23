@@ -30,11 +30,11 @@ import { breakpointSizes, BreakpointSizeType } from './utils/breakpoint-utils';
 export function isStudioComponentWithBinding(
   component: StudioComponent | StudioComponentChild,
 ): component is StudioComponent {
-  return 'bindingProperties' in component;
+  return typeof component === 'object' && 'bindingProperties' in component;
 }
 
 export function isAuthProperty(prop: StudioComponentProperty): prop is StudioComponentAuthProperty {
-  return 'userAttribute' in prop;
+  return typeof prop === 'object' && 'userAttribute' in prop;
 }
 
 /**
@@ -44,13 +44,20 @@ export function isAuthProperty(prop: StudioComponentProperty): prop is StudioCom
 export function isStudioComponentWithCollectionProperties(
   component: StudioComponent | StudioComponentChild,
 ): component is StudioComponent & Required<Pick<StudioComponent, 'collectionProperties'>> {
-  return 'collectionProperties' in component && component.collectionProperties !== undefined;
+  return (
+    typeof component === 'object' && 'collectionProperties' in component && component.collectionProperties !== undefined
+  );
 }
 
 export function isStudioComponentWithVariants(
   component: StudioComponent | StudioComponentChild,
 ): component is StudioComponent & Required<Pick<StudioComponent, 'variants'>> {
-  return 'variants' in component && component.variants !== undefined && component.variants.length > 0;
+  return (
+    typeof component === 'object' &&
+    'variants' in component &&
+    component.variants !== undefined &&
+    component.variants.length > 0
+  );
 }
 
 export function isStudioComponentWithBreakpoints(
@@ -67,13 +74,14 @@ export function isStudioComponentWithBreakpoints(
 export function isDataPropertyBinding(
   prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentDataPropertyBinding {
-  return 'type' in prop && prop.type === 'Data';
+  return typeof prop === 'object' && 'type' in prop && prop.type === 'Data';
 }
 
 export function isSimplePropertyBinding(
   prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentSimplePropertyBinding {
   return (
+    typeof prop === 'object' &&
     'type' in prop &&
     [
       StudioComponentPropertyType.Boolean.toString(),
@@ -87,9 +95,9 @@ export function isSimplePropertyBinding(
 export function isEventPropertyBinding(
   prop: StudioComponentPropertyBinding,
 ): prop is StudioComponentEventPropertyBinding {
-  return 'type' in prop && prop.type === 'Event';
+  return typeof prop === 'object' && 'type' in prop && prop.type === 'Event';
 }
 
 export function isSlotBinding(prop: StudioComponentPropertyBinding): prop is StudioComponentSlotBinding {
-  return 'type' in prop && prop.type === 'Amplify.Slot';
+  return typeof prop === 'object' && 'type' in prop && prop.type === 'Amplify.Slot';
 }

@@ -38,7 +38,12 @@ function mapOptions(
       },
     };
 
-    if (element.componentType === 'SelectField' && 'value' in value && value.value === element.defaultValue) {
+    if (
+      element.componentType === 'SelectField' &&
+      typeof value === 'object' &&
+      'value' in value &&
+      value.value === element.defaultValue
+    ) {
       option.properties.selected = { value: true };
     }
 

@@ -7,7 +7,8 @@
     "attend": {
       "inputType": {
         "required": "false",
-        "type": "RadioGroupField"
+        "type": "RadioGroupField",
+        "valueMappings": { "values": [{ "value": "{ value: 'Option' }" }] }
       }
     },
     "maybeSlide": {
