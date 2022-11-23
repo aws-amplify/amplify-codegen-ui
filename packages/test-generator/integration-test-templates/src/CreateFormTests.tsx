@@ -22,7 +22,11 @@ import {
   DataStoreFormCreateAllSupportedFormFields,
   CustomFormCreateNestedJson,
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
+<<<<<<< HEAD
 import { AllSupportedFormFields, Owner, User, Tag, LazyTag, LazyAllSupportedFormFieldsTag } from './models';
+=======
+import { AllSupportedFormFields, Owner, Student, User } from './models';
+>>>>>>> 2a2e05e (chore: add integ test for create hasMany relationship)
 
 const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
@@ -33,10 +37,17 @@ const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new Owner({ name: 'Paul' }));
   await DataStore.save(new Owner({ name: 'George' }));
   await DataStore.save(new Owner({ name: 'Ringo' }));
+<<<<<<< HEAD
   await DataStore.save(new Tag({ label: 'Red' }));
   await DataStore.save(new Tag({ label: 'Blue' }));
   await DataStore.save(new Tag({ label: 'Green' }));
   await DataStore.save(new Tag({ label: 'Orange' }));
+=======
+  await DataStore.save(new Student({ name: 'David' }));
+  await DataStore.save(new Student({ name: 'Taylor' }));
+  await DataStore.save(new Student({ name: 'Michael' }));
+  await DataStore.save(new Student({ name: 'Sarah' }));
+>>>>>>> 2a2e05e (chore: add integ test for create hasMany relationship)
 };
 
 export default function CreateFormTests() {
@@ -98,6 +109,7 @@ export default function CreateFormTests() {
           onSuccess={async () => {
             const records = await DataStore.query(AllSupportedFormFields);
             const record = records[0];
+<<<<<<< HEAD
             const joinTableRecords = (await record.ManyToManyTags?.toArray()) as LazyAllSupportedFormFieldsTag[];
             const ManyToManyTags = await Promise.all(
               joinTableRecords?.reduce((promises: AsyncItem<LazyTag>[], joinTableRecord) => {
@@ -107,10 +119,14 @@ export default function CreateFormTests() {
             );
             // sort to make sure order
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
+=======
+
+>>>>>>> 2a2e05e (chore: add integ test for create hasMany relationship)
             setDataStoreFormCreateAllSupportedFormFieldsRecord(
               JSON.stringify({
                 ...record,
                 HasOneUser: await record.HasOneUser,
+                HasManyStudents: record.HasManyStudents,
                 BelongsToOwner: await record.BelongsToOwner,
                 ManyToManyTags,
               }),
