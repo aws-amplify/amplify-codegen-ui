@@ -125,6 +125,19 @@ describe('CreateForms', () => {
         });
         clickAddToArray();
 
+        // HasMany Autocomplete
+        getArrayFieldButtonByLabel('Has many students').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
+        getArrayFieldButtonByLabel('Has many students').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`Sa{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
         // BelongsTo Autocomplete
         getArrayFieldButtonByLabel('Belongs to owner').click();
         cy.get(`.amplify-autocomplete`).within(() => {
@@ -152,6 +165,8 @@ describe('CreateForms', () => {
           expect(record.enum).to.equal('SAN_FRANCISCO');
           expect(record.stringArray[0]).to.equal('String1');
           expect(record.HasOneUser.firstName).to.equal('John');
+          expect(record.HasManyStudents?.[0].name).to.equal('David');
+          expect(record.HasManyStudents?.[1].name).to.equal('Sarah');
           expect(record.BelongsToOwner.name).to.equal('John');
         });
       });
