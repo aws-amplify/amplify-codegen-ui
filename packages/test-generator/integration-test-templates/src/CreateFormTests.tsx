@@ -22,13 +22,17 @@ import {
   DataStoreFormCreateAllSupportedFormFields,
   CustomFormCreateNestedJson,
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
-import { AllSupportedFormFields, User } from './models';
+import { AllSupportedFormFields, Owner, User } from './models';
 
 const initializeUserTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
   await DataStore.save(new User({ firstName: 'Paul', lastName: 'McCartney', age: 72 }));
   await DataStore.save(new User({ firstName: 'George', lastName: 'Harrison', age: 50 }));
   await DataStore.save(new User({ firstName: 'Ringo', lastName: 'Starr', age: 5 }));
+  await DataStore.save(new Owner({ name: 'John' }));
+  await DataStore.save(new Owner({ name: 'Paul' }));
+  await DataStore.save(new Owner({ name: 'George' }));
+  await DataStore.save(new Owner({ name: 'Ringo' }));
 };
 
 export default function CreateFormTests() {
@@ -91,7 +95,11 @@ export default function CreateFormTests() {
             const records = await DataStore.query(AllSupportedFormFields);
             const record = records[0];
             setDataStoreFormCreateAllSupportedFormFieldsRecord(
-              JSON.stringify({ ...record, HasOneUser: await record.HasOneUser }),
+              JSON.stringify({
+                ...record,
+                HasOneUser: await record.HasOneUser,
+                BelongsToOwner: await record.BelongsToOwner,
+              }),
             );
           }}
         />
