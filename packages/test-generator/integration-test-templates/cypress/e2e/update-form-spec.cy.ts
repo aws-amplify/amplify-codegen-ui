@@ -13,15 +13,34 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+
+import { getArrayFieldButtonByLabel, clickAddToArray, removeArrayItem } from '../utils/form';
+
 describe('UpdateForms', () => {
   before(() => {
     cy.visit('http://localhost:3000/update-form-tests');
   });
 
   describe('DataStoreFormUpdateAllSupportedFormFields', () => {
-    it('should save to DataStore', () => {
+    it('should display current values and save to DataStore', () => {
       cy.get('#dataStoreFormUpdateAllSupportedFormFields').within(() => {
-        // TODO
+        // TODO: check current values on all fields and change
+
+        removeArrayItem('John Lennon');
+
+        getArrayFieldButtonByLabel('Has one user').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`Paul McCartney{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
+        cy.contains('Submit').click();
+
+        cy.contains(/My string/).then((recordElement) => {
+          const record = JSON.parse(recordElement.text());
+
+          expect(record.HasOneUser.firstName).to.equal('Paul');
+        });
       });
     });
   });
