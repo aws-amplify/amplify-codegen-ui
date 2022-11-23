@@ -783,7 +783,7 @@ export default {
           },
         },
         ManyToManyTags: {
-          name: ' ManyToManyTags',
+          name: 'ManyToManyTags',
           isArray: true,
           type: {
             model: 'AllSupportedFormFieldsTag',
