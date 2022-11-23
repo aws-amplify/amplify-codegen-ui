@@ -193,26 +193,29 @@ function computeBindingPropertyMetadata(bindingProperty: StudioComponentProperty
  */
 
 function computePropertyMetadata(property: StudioComponentProperty): ComponentMetadata {
-  return reduceComponentMetadata(
-    ([] as ComponentMetadata[])
-      .concat('concat' in property && property.concat ? property.concat.map(computePropertyMetadata) : [])
-      .concat('userAttribute' in property && property.userAttribute ? [generateAuthBindingMetadata()] : [])
-      .concat(
-        'condition' in property && property.condition && 'then' in property.condition && property.condition.then
-          ? [computePropertyMetadata(property.condition.then)]
-          : [],
-      )
-      .concat(
-        'condition' in property && property.condition && 'else' in property.condition && property.condition.else
-          ? [computePropertyMetadata(property.condition.else)]
-          : [],
-      )
-      .concat(
-        'componentName' in property && property.componentName && 'property' in property && property.property
-          ? [generateReferenceMetadata(property as StateReference)]
-          : [],
-      ),
-  );
+  const meta =
+    typeof property !== 'object'
+      ? []
+      : ([] as ComponentMetadata[])
+          .concat('concat' in property && property.concat ? property.concat.map(computePropertyMetadata) : [])
+          .concat('userAttribute' in property && property.userAttribute ? [generateAuthBindingMetadata()] : [])
+          .concat(
+            'condition' in property && property.condition && 'then' in property.condition && property.condition.then
+              ? [computePropertyMetadata(property.condition.then)]
+              : [],
+          )
+          .concat(
+            'condition' in property && property.condition && 'else' in property.condition && property.condition.else
+              ? [computePropertyMetadata(property.condition.else)]
+              : [],
+          )
+          .concat(
+            'componentName' in property && property.componentName && 'property' in property && property.property
+              ? [generateReferenceMetadata(property as StateReference)]
+              : [],
+          );
+
+  return reduceComponentMetadata(meta);
 }
 
 /**
