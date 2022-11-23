@@ -125,6 +125,13 @@ describe('CreateForms', () => {
         });
         clickAddToArray();
 
+        // BelongsTo Autocomplete
+        getArrayFieldButtonByLabel('Belongs to owner').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`John{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
         cy.contains('Submit').click();
 
         cy.contains(/MyString/).then((recordElement) => {
@@ -145,6 +152,7 @@ describe('CreateForms', () => {
           expect(record.enum).to.equal('SAN_FRANCISCO');
           expect(record.stringArray[0]).to.equal('String1');
           expect(record.HasOneUser.firstName).to.equal('John');
+          expect(record.BelongsToOwner.name).to.equal('John');
         });
       });
     });
