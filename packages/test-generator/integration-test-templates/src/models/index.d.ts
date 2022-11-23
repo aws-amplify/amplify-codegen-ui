@@ -49,6 +49,22 @@ type ClassMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
 
+type TagMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type AllSupportedFormFieldsTagMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type OwnerMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type StudentMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
 type AllSupportedFormFieldsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
@@ -160,6 +176,83 @@ export declare class Class {
     mutator: (draft: MutableModel<Class, ClassMetaData>) => MutableModel<Class, ClassMetaData> | void,
   ): Class;
 }
+
+export declare class Tag {
+  readonly id: string;
+
+  readonly label?: string;
+
+  readonly AllSupportedFormFields?: AllSupportedFormFieldsTag[] | null;
+
+  readonly createdAt?: string;
+
+  readonly updatedAt?: string;
+
+  constructor(init: ModelInit<Tag, TagMetaData>);
+  static copyOf(
+    source: Tag,
+    mutator: (draft: MutableModel<Tag, TagMetaData>) => MutableModel<Tag, TagMetaData> | void,
+  ): Tag;
+}
+
+export declare class AllSupportedFormFieldsTag {
+  readonly id: string;
+
+  readonly tag?: Tag | null;
+
+  readonly allSupportedFormFields?: AllSupportedFormFields | null;
+
+  readonly createdAt?: string;
+
+  readonly updatedAt?: string;
+
+  constructor(init: ModelInit<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData>);
+  static copyOf(
+    source: AllSupportedFormFieldsTag,
+    mutator: (
+      draft: MutableModel<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData>,
+    ) => MutableModel<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData> | void,
+  ): AllSupportedFormFieldsTag;
+}
+
+export declare class Owner {
+  readonly id: string;
+
+  readonly name?: string;
+
+  readonly AllSupportedFormFields?: AllSupportedFormFields | null;
+
+  readonly ownerAllSupportedFormFieldsId?: string;
+
+  readonly createdAt?: string;
+
+  readonly updatedAt?: string;
+
+  constructor(init: ModelInit<Owner, OwnerMetaData>);
+  static copyOf(
+    source: Owner,
+    mutator: (draft: MutableModel<Owner, OwnerMetaData>) => MutableModel<Owner, OwnerMetaData> | void,
+  ): Owner;
+}
+
+export declare class Student {
+  readonly id: string;
+
+  readonly name?: string;
+
+  readonly allSupportedFormFieldsID?: string;
+
+  readonly createdAt?: string;
+
+  readonly updatedAt?: string;
+
+  constructor(init: ModelInit<Student, StudentMetaData>);
+  static copyOf(
+    source: Student,
+    mutator: (draft: MutableModel<Student, StudentMetaData>) => MutableModel<Student, StudentMetaData> | void,
+  ): Student;
+}
+
 export declare class AllSupportedFormFields {
   readonly id: string;
 
@@ -198,6 +291,12 @@ export declare class AllSupportedFormFields {
   readonly updatedAt?: string | null;
 
   readonly HasOneUser?: User | null;
+
+  readonly BelongsToOwner?: Owner | null;
+
+  readonly HasManyStudents?: Student[] | null;
+
+  readonly ManyToManyTags?: AllSupportedFormFieldsTag[] | null;
 
   readonly allSupportedFormFieldsHasOneUserId?: string | null;
 

@@ -9,6 +9,15 @@
     "fields": {
       "HasOneUser": {
         "excluded": true
+      },
+      "BelongsToOwner": {
+        "excluded": true
+      },
+      "HasManyStudents": {
+        "excluded": true
+      },
+      "ManyToManyTags": {
+        "excluded": true
       }
     },
     "sectionalElements": {},
