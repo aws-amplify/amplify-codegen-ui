@@ -4834,11 +4834,11 @@ export declare type SchoolCreateFormValidationValues = {
     name?: ValidationFunction<string>;
     Students?: ValidationFunction<Student>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SchoolCreateFormOverridesProps = {
-    SchoolCreateFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    Students?: FormProps<AutocompleteProps>;
+    SchoolCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Students?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type SchoolCreateFormProps = React.PropsWithChildren<{
     overrides?: SchoolCreateFormOverridesProps | undefined | null;
@@ -7275,11 +7275,11 @@ export declare type SchoolUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
     Students?: ValidationFunction<Student>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SchoolUpdateFormOverridesProps = {
-    SchoolUpdateFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    Students?: FormProps<AutocompleteProps>;
+    SchoolUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Students?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type SchoolUpdateFormProps = React.PropsWithChildren<{
     overrides?: SchoolUpdateFormOverridesProps | undefined | null;

@@ -14,7 +14,14 @@
   limitations under the License.
  */
 /* eslint-disable max-classes-per-file */
-import { ModelInit, MutableModel } from '@aws-amplify/datastore';
+import {
+  ModelInit,
+  MutableModel,
+  LazyLoading,
+  LazyLoadingDisabled,
+  AsyncItem,
+  AsyncCollection,
+} from '@aws-amplify/datastore';
 
 export enum City {
   SAN_FRANCISCO = 'SAN_FRANCISCO',
@@ -86,7 +93,7 @@ export declare class UserPreference {
   ): UserPreference;
 }
 
-export declare class User {
+type EagerUser = {
   readonly id: string;
 
   readonly firstName?: string;
@@ -104,12 +111,37 @@ export declare class User {
   readonly createdAt?: string;
 
   readonly updatedAt?: string;
-  constructor(init: ModelInit<User, UserMetaData>);
-  static copyOf(
+};
+
+type LazyUser = {
+  readonly id: string;
+
+  readonly firstName?: string;
+
+  readonly lastName?: string;
+
+  readonly age?: number;
+
+  readonly isLoggedIn?: boolean;
+
+  readonly loggedInColor?: string;
+
+  readonly loggedOutColor?: string;
+
+  readonly createdAt?: string;
+
+  readonly updatedAt?: string;
+};
+
+export declare type User = LazyLoading extends LazyLoadingDisabled ? EagerUser : LazyUser;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const User: (new (init: ModelInit<User, UserMetaData>) => User) & {
+  copyOf(
     source: User,
     mutator: (draft: MutableModel<User, UserMetaData>) => MutableModel<User, UserMetaData> | void,
   ): User;
-}
+};
 
 export declare class Listing {
   readonly id: string;
@@ -177,45 +209,78 @@ export declare class Class {
   ): Class;
 }
 
-export declare class Tag {
+type EagerTag = {
   readonly id: string;
 
-  readonly label?: string;
+  readonly label?: string | null;
 
-  readonly AllSupportedFormFields?: AllSupportedFormFieldsTag[] | null;
+  readonly AllSupportedFormFields?: (AllSupportedFormFieldsTag | null)[] | null;
 
-  readonly createdAt?: string;
+  readonly createdAt?: string | null;
 
-  readonly updatedAt?: string;
+  readonly updatedAt?: string | null;
+};
 
-  constructor(init: ModelInit<Tag, TagMetaData>);
-  static copyOf(
-    source: Tag,
-    mutator: (draft: MutableModel<Tag, TagMetaData>) => MutableModel<Tag, TagMetaData> | void,
-  ): Tag;
-}
-
-export declare class AllSupportedFormFieldsTag {
+type LazyTag = {
   readonly id: string;
 
-  readonly tag?: Tag | null;
+  readonly label?: string | null;
+
+  readonly AllSupportedFormFields?: AsyncCollection<AllSupportedFormFieldsTag>;
+
+  readonly createdAt?: string | null;
+
+  readonly updatedAt?: string | null;
+};
+
+export declare type Tag = LazyLoading extends LazyLoadingDisabled ? EagerTag : LazyTag;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const Tag: (new (init: ModelInit<Tag, TagMetaData>) => Tag) & {
+  copyOf(source: Tag, mutator: (draft: MutableModel<Tag, TagMetaData>) => MutableModel<Tag, TagMetaData> | void): Tag;
+};
+
+type EagerAllSupportedFormFieldsTag = {
+  readonly id: string;
+
+  readonly tag?: Tag;
 
   readonly allSupportedFormFields?: AllSupportedFormFields | null;
 
-  readonly createdAt?: string;
+  readonly createdAt?: string | null;
 
-  readonly updatedAt?: string;
+  readonly updatedAt?: string | null;
+};
 
-  constructor(init: ModelInit<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData>);
-  static copyOf(
+type LazyAllSupportedFormFieldsTag = {
+  readonly id: string;
+
+  readonly tag?: AsyncItem<Tag>;
+
+  readonly allSupportedFormFields?: AsyncItem<AllSupportedFormFields>;
+
+  readonly createdAt?: string | null;
+
+  readonly updatedAt?: string | null;
+};
+
+export declare type AllSupportedFormFieldsTag = LazyLoading extends LazyLoadingDisabled
+  ? EagerAllSupportedFormFieldsTag
+  : LazyAllSupportedFormFieldsTag;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const AllSupportedFormFieldsTag: (new (
+  init: ModelInit<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData>,
+) => AllSupportedFormFieldsTag) & {
+  copyOf(
     source: AllSupportedFormFieldsTag,
     mutator: (
       draft: MutableModel<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData>,
     ) => MutableModel<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData> | void,
   ): AllSupportedFormFieldsTag;
-}
+};
 
-export declare class Owner {
+type EagerOwner = {
   readonly id: string;
 
   readonly name?: string;
@@ -227,33 +292,59 @@ export declare class Owner {
   readonly createdAt?: string;
 
   readonly updatedAt?: string;
+};
 
-  constructor(init: ModelInit<Owner, OwnerMetaData>);
-  static copyOf(
-    source: Owner,
-    mutator: (draft: MutableModel<Owner, OwnerMetaData>) => MutableModel<Owner, OwnerMetaData> | void,
-  ): Owner;
-}
-
-export declare class Student {
+type LazyOwner = {
   readonly id: string;
 
   readonly name?: string;
 
-  readonly allSupportedFormFieldsID?: string;
+  readonly AllSupportedFormFields?: AsyncItem<AllSupportedFormFields | undefined>;
+
+  readonly ownerAllSupportedFormFieldsId?: string;
 
   readonly createdAt?: string;
 
   readonly updatedAt?: string;
+};
 
-  constructor(init: ModelInit<Student, StudentMetaData>);
-  static copyOf(
+export declare type Owner = LazyLoading extends LazyLoadingDisabled ? EagerOwner : LazyOwner;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const Owner: (new (init: ModelInit<Owner, OwnerMetaData>) => Owner) & {
+  copyOf(
+    source: Owner,
+    mutator: (draft: MutableModel<Owner, OwnerMetaData>) => MutableModel<Owner, OwnerMetaData> | void,
+  ): Owner;
+};
+
+type EagerStudent = {
+  readonly id: string;
+  readonly name?: string | null;
+  readonly allSupportedFormFieldsID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyStudent = {
+  readonly id: string;
+  readonly name?: string | null;
+  readonly allSupportedFormFieldsID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type Student = LazyLoading extends LazyLoadingDisabled ? EagerStudent : LazyStudent;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const Student: (new (init: ModelInit<Student, StudentMetaData>) => Student) & {
+  copyOf(
     source: Student,
     mutator: (draft: MutableModel<Student, StudentMetaData>) => MutableModel<Student, StudentMetaData> | void,
   ): Student;
-}
+};
 
-export declare class AllSupportedFormFields {
+type EagerAllSupportedFormFields = {
   readonly id: string;
 
   readonly string?: string | null;
@@ -296,15 +387,71 @@ export declare class AllSupportedFormFields {
 
   readonly HasManyStudents?: Student[] | null;
 
-  readonly ManyToManyTags?: AllSupportedFormFieldsTag[] | null;
+  readonly ManyToManyTags?: (AllSupportedFormFieldsTag | null)[] | null;
 
   readonly allSupportedFormFieldsHasOneUserId?: string | null;
+};
 
-  constructor(init: ModelInit<AllSupportedFormFields, AllSupportedFormFieldsMetaData>);
-  static copyOf(
+type LazyAllSupportedFormFields = {
+  readonly id: string;
+
+  readonly string?: string | null;
+
+  readonly stringArray?: string[] | null;
+
+  readonly int?: number | null;
+
+  readonly float?: number | null;
+
+  readonly awsDate?: string | null;
+
+  readonly awsTime?: string | null;
+
+  readonly awsDateTime?: string | null;
+
+  readonly awsTimestamp?: number | null;
+
+  readonly awsEmail?: string | null;
+
+  readonly awsUrl?: string | null;
+
+  readonly awsIPAddress?: string | null;
+
+  readonly boolean?: boolean | null;
+
+  readonly awsJson?: string | null;
+
+  readonly awsPhone?: string | null;
+
+  readonly enum?: City | keyof typeof City | null;
+
+  readonly createdAt?: string | null;
+
+  readonly updatedAt?: string | null;
+
+  readonly HasOneUser?: AsyncItem<User | undefined>;
+
+  readonly BelongsToOwner?: AsyncItem<Owner | undefined>;
+
+  readonly HasManyStudents?: AsyncCollection<Student>;
+
+  readonly ManyToManyTags?: AsyncCollection<AllSupportedFormFieldsTag>;
+
+  readonly allSupportedFormFieldsHasOneUserId?: string | null;
+};
+
+export declare type AllSupportedFormFields = LazyLoading extends LazyLoadingDisabled
+  ? EagerAllSupportedFormFields
+  : LazyAllSupportedFormFields;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const AllSupportedFormFields: (new (
+  init: ModelInit<AllSupportedFormFields, AllSupportedFormFieldsMetaData>,
+) => AllSupportedFormFields) & {
+  copyOf(
     source: AllSupportedFormFields,
     mutator: (
       draft: MutableModel<AllSupportedFormFields, AllSupportedFormFieldsMetaData>,
     ) => MutableModel<AllSupportedFormFields, AllSupportedFormFieldsMetaData> | void,
   ): AllSupportedFormFields;
-}
+};
