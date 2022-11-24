@@ -26,8 +26,18 @@ describe('UpdateForms', () => {
       cy.get('#dataStoreFormUpdateAllSupportedFormFields').within(() => {
         // TODO: check current values on all fields and change
 
-        removeArrayItem('John Lennon');
+        // label should exist even if no input field displayed
+        cy.contains('Has one user').should('exist');
+        // should be able to hit edit and save
+        // cypress does not populate value in ci w/out wait
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(8000);
+        cy.contains('John Lennon').click();
+        cy.contains('Save').click();
+        cy.contains('John Lennon').should('exist');
 
+        // should be able to change value
+        removeArrayItem('John Lennon');
         getArrayFieldButtonByLabel('Has one user').click();
         cy.get(`.amplify-autocomplete`).within(() => {
           cy.get('input').type(`Paul McCartney{downArrow}{enter}`);
