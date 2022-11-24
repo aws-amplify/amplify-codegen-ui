@@ -833,6 +833,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -916,11 +917,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -1260,6 +1266,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -1343,11 +1350,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -1829,6 +1841,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -1912,11 +1925,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -2460,6 +2478,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -2543,11 +2562,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -3477,6 +3501,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -3560,11 +3585,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -3797,9 +3827,10 @@ export default function TagCreateForm(props) {
         items={Posts}
         hasError={errors.Posts?.hasError}
         getBadgeText={getDisplayValue.Posts}
-        setFieldValue={(model) =>
-          setCurrentPostsDisplayValue(getDisplayValue.Posts(model))
-        }
+        setFieldValue={(model) => {
+          setCurrentPostsDisplayValue(getDisplayValue.Posts(model));
+          setCurrentPostsValue(model);
+        }}
         inputFieldRef={PostsRef}
         defaultFieldValue={\\"\\"}
       >
@@ -4007,6 +4038,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -4090,11 +4122,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -4324,9 +4361,10 @@ export default function MyMemberForm(props) {
         items={Team ? [Team] : []}
         hasError={errors.Team?.hasError}
         getBadgeText={getDisplayValue.Team}
-        setFieldValue={(model) =>
-          setCurrentTeamDisplayValue(getDisplayValue.Team(model))
-        }
+        setFieldValue={(model) => {
+          setCurrentTeamDisplayValue(getDisplayValue.Team(model));
+          setCurrentTeamValue(model);
+        }}
         inputFieldRef={TeamRef}
         defaultFieldValue={\\"\\"}
       >
@@ -4443,6 +4481,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -4526,11 +4565,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -4744,9 +4788,10 @@ export default function SchoolCreateForm(props) {
         items={Students}
         hasError={errors.Students?.hasError}
         getBadgeText={getDisplayValue.Students}
-        setFieldValue={(model) =>
-          setCurrentStudentsDisplayValue(getDisplayValue.Students(model))
-        }
+        setFieldValue={(model) => {
+          setCurrentStudentsDisplayValue(getDisplayValue.Students(model));
+          setCurrentStudentsValue(model);
+        }}
         inputFieldRef={StudentsRef}
         defaultFieldValue={\\"\\"}
       >
@@ -4891,6 +4936,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -4974,11 +5020,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -5213,11 +5264,12 @@ export default function BookCreateForm(props) {
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors.primaryAuthor?.hasError}
         getBadgeText={getDisplayValue.primaryAuthor}
-        setFieldValue={(model) =>
+        setFieldValue={(model) => {
           setCurrentPrimaryAuthorDisplayValue(
             getDisplayValue.primaryAuthor(model)
-          )
-        }
+          );
+          setCurrentPrimaryAuthorValue(model);
+        }}
         inputFieldRef={primaryAuthorRef}
         defaultFieldValue={\\"\\"}
       >
@@ -5337,6 +5389,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -5420,11 +5473,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -5657,9 +5715,10 @@ export default function TagCreateForm(props) {
         items={Posts}
         hasError={errors.Posts?.hasError}
         getBadgeText={getDisplayValue.Posts}
-        setFieldValue={(model) =>
-          setCurrentPostsDisplayValue(getDisplayValue.Posts(model))
-        }
+        setFieldValue={(model) => {
+          setCurrentPostsDisplayValue(getDisplayValue.Posts(model));
+          setCurrentPostsValue(model);
+        }}
         inputFieldRef={PostsRef}
         defaultFieldValue={\\"\\"}
       >
@@ -5867,6 +5926,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -5950,11 +6010,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -6210,11 +6275,12 @@ export default function BookCreateForm(props) {
         items={primaryAuthor ? [primaryAuthor] : []}
         hasError={errors.primaryAuthor?.hasError}
         getBadgeText={getDisplayValue.primaryAuthor}
-        setFieldValue={(model) =>
+        setFieldValue={(model) => {
           setCurrentPrimaryAuthorDisplayValue(
             getDisplayValue.primaryAuthor(model)
-          )
-        }
+          );
+          setCurrentPrimaryAuthorValue(model);
+        }}
         inputFieldRef={primaryAuthorRef}
         defaultFieldValue={\\"\\"}
       >
@@ -6274,11 +6340,12 @@ export default function BookCreateForm(props) {
         items={primaryTitle ? [primaryTitle] : []}
         hasError={errors.primaryTitle?.hasError}
         getBadgeText={getDisplayValue.primaryTitle}
-        setFieldValue={(model) =>
+        setFieldValue={(model) => {
           setCurrentPrimaryTitleDisplayValue(
             getDisplayValue.primaryTitle(model)
-          )
-        }
+          );
+          setCurrentPrimaryTitleValue(model);
+        }}
         inputFieldRef={primaryTitleRef}
         defaultFieldValue={\\"\\"}
       >
@@ -6840,6 +6907,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -6923,11 +6991,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -7185,9 +7258,10 @@ export default function SchoolUpdateForm(props) {
         items={Students}
         hasError={errors.Students?.hasError}
         getBadgeText={getDisplayValue.Students}
-        setFieldValue={(model) =>
-          setCurrentStudentsDisplayValue(getDisplayValue.Students(model))
-        }
+        setFieldValue={(model) => {
+          setCurrentStudentsDisplayValue(getDisplayValue.Students(model));
+          setCurrentStudentsValue(model);
+        }}
         inputFieldRef={StudentsRef}
         defaultFieldValue={\\"\\"}
       >
@@ -7333,6 +7407,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -7416,11 +7491,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -7668,9 +7748,10 @@ export default function MyMemberForm(props) {
         items={Team ? [Team] : []}
         hasError={errors.Team?.hasError}
         getBadgeText={getDisplayValue.Team}
-        setFieldValue={(model) =>
-          setCurrentTeamDisplayValue(getDisplayValue.Team(model))
-        }
+        setFieldValue={(model) => {
+          setCurrentTeamDisplayValue(getDisplayValue.Team(model));
+          setCurrentTeamValue(model);
+        }}
         inputFieldRef={TeamRef}
         defaultFieldValue={\\"\\"}
       >
@@ -7785,6 +7866,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -7868,11 +7950,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -8354,6 +8441,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -8437,11 +8525,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -8894,6 +8987,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -8977,11 +9071,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -9756,6 +9855,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -9839,11 +9939,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -10670,6 +10775,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -10753,11 +10859,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -11626,6 +11737,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -11709,11 +11821,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -11943,9 +12060,10 @@ export default function MyMemberForm(props) {
         items={Team ? [Team] : []}
         hasError={errors.Team?.hasError}
         getBadgeText={getDisplayValue.Team}
-        setFieldValue={(model) =>
-          setCurrentTeamDisplayValue(getDisplayValue.Team(model))
-        }
+        setFieldValue={(model) => {
+          setCurrentTeamDisplayValue(getDisplayValue.Team(model));
+          setCurrentTeamValue(model);
+        }}
         inputFieldRef={TeamRef}
         defaultFieldValue={\\"\\"}
       >

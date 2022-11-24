@@ -221,6 +221,12 @@ export const renderArrayFieldComponent = (
     );
   }
 
+  /**
+  setFieldValue={(model) => {
+    setCurrentHasOneUserDisplayValue(getDisplayValue.HasOneUser(model))
+    setCurrentHasOneUserValue(model)
+  }
+   */
   if (isModelDataType(fieldConfig)) {
     const valueArgument = 'model';
     props.push(
@@ -244,13 +250,23 @@ export const renderArrayFieldComponent = (
             ],
             undefined,
             factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-            factory.createCallExpression(setFieldValueIdentifier, undefined, [
-              factory.createCallExpression(
-                getElementAccessExpression(getDisplayValueObjectName, fieldName),
-                undefined,
-                [factory.createIdentifier(valueArgument)],
-              ),
-            ]),
+            factory.createBlock(
+              [
+                factory.createExpressionStatement(
+                  factory.createCallExpression(setFieldValueIdentifier, undefined, [
+                    factory.createCallExpression(
+                      getElementAccessExpression(getDisplayValueObjectName, fieldName),
+                      undefined,
+                      [factory.createIdentifier(valueArgument)],
+                    ),
+                  ]),
+                ),
+                factory.createExpressionStatement(
+                  factory.createCallExpression(setStateName, undefined, [factory.createIdentifier(valueArgument)]),
+                ),
+              ],
+              true,
+            ),
           ),
         ),
       ),
