@@ -70,10 +70,8 @@ import {
   buildResetValuesOnRecordUpdate,
   buildSetStateFunction,
   buildUpdateDatastoreQuery,
-  buildUpdateDatastoreQueryForHasMany,
   runValidationTasksFunction,
   mapFromFieldConfigs,
-  getHasManyFieldConfigs,
   getLinkedDataName,
   buildRelationshipQuery,
   buildGetRelationshipModels,
@@ -437,7 +435,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       }
     }
 
-    const hasManyFieldConfigs = getHasManyFieldConfigs(formMetadata.fieldConfigs);
     statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName));
 
     const linkedDataNames: string[] = [];
@@ -446,40 +443,30 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         buildUseStateExpression(lowerCaseDataTypeNameRecord, factory.createIdentifier(lowerCaseDataTypeName)),
       );
 
-      if (hasManyFieldConfigs.length > 0) {
-        hasManyFieldConfigs.forEach((hasManyFieldConfig) => {
-          const [fieldName] = hasManyFieldConfig;
-          const linkedDataName = getLinkedDataName(fieldName);
-          linkedDataNames.push(linkedDataName);
-          statements.push(buildUseStateExpression(linkedDataName, factory.createIdentifier('[]')));
-        });
-
-        statements.push(
-          addUseEffectWrapper(
-            buildUpdateDatastoreQueryForHasMany(modelName, lowerCaseDataTypeNameRecord, hasManyFieldConfigs),
-            // TODO: change once cpk is supported in datastore
-            ['id', lowerCaseDataTypeName],
-          ),
-        );
-      } else {
-        const relatedModelStatements: Statement[] = [];
-        // Build effects to grab nested models off target record for relationships
-        Object.entries(formMetadata.fieldConfigs).forEach(([key, value]) => {
-          if (value.relationship?.type === 'BELONGS_TO' || value.relationship?.type === 'HAS_ONE') {
-            const fieldName = value.sanitizedFieldName || key;
-            linkedDataNames.push(fieldName);
-            // Flatten statments into 1d array
-            relatedModelStatements.push(...buildGetRelationshipModels(fieldName));
+      const relatedModelStatements: Statement[] = [];
+      // Build effects to grab nested models off target record for relationships
+      Object.entries(formMetadata.fieldConfigs).forEach(([key, value]) => {
+        if (value.relationship) {
+          const fieldName = value.sanitizedFieldName || key;
+          if (value.relationship.type === 'HAS_MANY') {
+            const linkedDataName = getLinkedDataName(fieldName);
+            linkedDataNames.push(linkedDataName);
+            statements.push(buildUseStateExpression(linkedDataName, factory.createIdentifier('[]')));
           }
-        });
-        statements.push(
-          addUseEffectWrapper(
-            buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeNameRecord, relatedModelStatements),
-            // TODO: change once cpk is supported in datastore
-            ['id', lowerCaseDataTypeName],
-          ),
-        );
-      }
+          if (value.relationship.type === 'BELONGS_TO' || value.relationship?.type === 'HAS_ONE') {
+            linkedDataNames.push(fieldName);
+          }
+          // Flatten statments into 1d array
+          relatedModelStatements.push(...buildGetRelationshipModels(fieldName, value));
+        }
+      });
+      statements.push(
+        addUseEffectWrapper(
+          buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeNameRecord, relatedModelStatements),
+          // TODO: change once cpk is supported in datastore
+          ['id', lowerCaseDataTypeName],
+        ),
+      );
     }
 
     if (defaultValueVariableName) {
