@@ -779,7 +779,7 @@ export default {
           isArrayNullable: true,
           association: {
             connectionType: 'HAS_MANY',
-            associatedWith: 'allSupportedFormFieldsHasManyStudentsId',
+            associatedWith: 'allSupportedFormFieldsID',
           },
         },
         ManyToManyTags: {

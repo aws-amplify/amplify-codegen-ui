@@ -103,8 +103,8 @@ export default function CreateFormTests() {
               JSON.stringify({
                 ...record,
                 HasOneUser: await record.HasOneUser,
-                HasManyStudents: record.HasManyStudents,
                 BelongsToOwner: await record.BelongsToOwner,
+                HasManyStudents: await record.HasManyStudents?.toArray(),
               }),
             );
           }}
