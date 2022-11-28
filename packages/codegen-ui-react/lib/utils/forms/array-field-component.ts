@@ -19,8 +19,33 @@ import { addUseEffectWrapper } from '../generate-react-hooks';
 export const generateArrayFieldComponent = () => {
   const iconPath = 'M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z';
 
+  const labelElementIdentifier = 'labelElement';
+
   const arraySection = 'arraySection';
   const bodyBlock = [
+    // const labelElement = <Text>{label}</Text>
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(labelElementIdentifier),
+            undefined,
+            undefined,
+            factory.createJsxElement(
+              factory.createJsxOpeningElement(
+                factory.createIdentifier('Text'),
+                undefined,
+                factory.createJsxAttributes([]),
+              ),
+              [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
+              factory.createJsxClosingElement(factory.createIdentifier('Text')),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
     factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -745,7 +770,7 @@ export const generateArrayFieldComponent = () => {
 
     /**
         if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-         return arraySection;
+         return <>{labelElement}{arraySection}</>;
         }
      */
     factory.createIfStatement(
@@ -769,7 +794,33 @@ export const generateArrayFieldComponent = () => {
         factory.createToken(SyntaxKind.AmpersandAmpersandToken),
         factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier('isEditing')),
       ),
-      factory.createBlock([factory.createReturnStatement(factory.createIdentifier(arraySection))], true),
+      factory.createBlock(
+        [
+          factory.createReturnStatement(
+            factory.createJsxElement(
+              factory.createJsxOpeningElement(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('React'),
+                  factory.createIdentifier('Fragment'),
+                ) as JsxTagNamePropertyAccess,
+                undefined,
+                factory.createJsxAttributes([]),
+              ),
+              [
+                factory.createJsxExpression(undefined, factory.createIdentifier(labelElementIdentifier)),
+                factory.createJsxExpression(undefined, factory.createIdentifier(arraySection)),
+              ],
+              factory.createJsxClosingElement(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('React'),
+                  factory.createIdentifier('Fragment'),
+                ) as JsxTagNamePropertyAccess,
+              ),
+            ),
+          ),
+        ],
+        true,
+      ),
       undefined,
     ),
 
@@ -785,15 +836,8 @@ export const generateArrayFieldComponent = () => {
             factory.createJsxAttributes([]),
           ),
           [
-            factory.createJsxElement(
-              factory.createJsxOpeningElement(
-                factory.createIdentifier('Text'),
-                undefined,
-                factory.createJsxAttributes([]),
-              ),
-              [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
-              factory.createJsxClosingElement(factory.createIdentifier('Text')),
-            ),
+            // {labelElement}
+            factory.createJsxExpression(undefined, factory.createIdentifier(labelElementIdentifier)),
             factory.createJsxExpression(
               undefined,
               factory.createBinaryExpression(
