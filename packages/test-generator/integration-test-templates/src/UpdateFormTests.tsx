@@ -14,11 +14,11 @@
   limitations under the License.
  */
 import '@aws-amplify/ui-react/styles.css';
-import { AmplifyProvider, View, Heading } from '@aws-amplify/ui-react';
-import { useState, useEffect, useRef } from 'react';
+import { AmplifyProvider, View, Heading, Text } from '@aws-amplify/ui-react';
+import React, { useState, useEffect, useRef, SetStateAction } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
 import { DataStoreFormUpdateAllSupportedFormFields } from './ui-components'; // eslint-disable-line import/extensions, max-len
-import { User } from './models';
+import { AllSupportedFormFields, User } from './models';
 
 const initializeUserTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
@@ -27,9 +27,47 @@ const initializeUserTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'Ringo', lastName: 'Starr', age: 5 }));
 };
 
+const initializeAllSupportedFormFieldsTestData = async ({
+  setAllSupportedFormFieldsRecordId,
+}: {
+  setAllSupportedFormFieldsRecordId: React.Dispatch<SetStateAction<string | undefined>>;
+}): Promise<void> => {
+  const connectedUser = (await DataStore.query(User, (u) => u.firstName.eq('John')))[0];
+  const createdRecord = await DataStore.save(
+    new AllSupportedFormFields({
+      string: 'My string',
+      stringArray: ['String1'],
+      int: 10,
+      float: 4.3,
+      awsDate: '2022-11-22',
+      awsTime: '10:20:30.111',
+      awsDateTime: '2022-11-22T10:20:30.111Z',
+      awsTimestamp: 100000000,
+      awsEmail: 'myemail@amazon.com',
+      awsUrl: 'https://www.amazon.com',
+      awsIPAddress: '123.12.34.56',
+      boolean: true,
+      awsJson: JSON.stringify({ myKey: 'myValue' }),
+      awsPhone: '713 343 5938',
+      enum: 'NEW_YORK',
+      HasOneUser: connectedUser,
+    }),
+  );
+
+  setAllSupportedFormFieldsRecordId((prevId) => {
+    if (!prevId) {
+      return createdRecord.id;
+    }
+    return prevId;
+  });
+};
+
 export default function UpdateFormTests() {
   const [isInitialized, setInitialized] = useState(false);
+  const [allSupportedFormFieldsRecordId, setAllSupportedFormFieldsRecordId] = useState<string | undefined>(undefined);
 
+  const [dataStoreFormUpdateAllSupportedFormFieldsRecord, setDataStoreFormUpdateAllSupportedFormFieldsRecord] =
+    useState('');
   const initializeStarted = useRef(false);
 
   useEffect(() => {
@@ -40,6 +78,8 @@ export default function UpdateFormTests() {
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
       await initializeUserTestData();
+      await initializeAllSupportedFormFieldsTestData({ setAllSupportedFormFieldsRecordId });
+
       setInitialized(true);
     };
 
@@ -55,7 +95,17 @@ export default function UpdateFormTests() {
     <AmplifyProvider>
       <Heading>DataStore Form - UpdateAllSupportedFormFields</Heading>
       <View id="dataStoreFormUpdateAllSupportedFormFields">
-        <DataStoreFormUpdateAllSupportedFormFields />
+        <DataStoreFormUpdateAllSupportedFormFields
+          id={allSupportedFormFieldsRecordId}
+          onSuccess={async () => {
+            const records = await DataStore.query(AllSupportedFormFields);
+            const record = records[0];
+            setDataStoreFormUpdateAllSupportedFormFieldsRecord(
+              JSON.stringify({ ...record, HasOneUser: await record.HasOneUser }),
+            );
+          }}
+        />
+        <Text>{dataStoreFormUpdateAllSupportedFormFieldsRecord}</Text>
       </View>
     </AmplifyProvider>
   );

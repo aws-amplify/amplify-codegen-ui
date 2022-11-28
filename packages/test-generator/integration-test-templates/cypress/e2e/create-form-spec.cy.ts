@@ -13,22 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+
+import { getInputByLabel, getArrayFieldButtonByLabel, clickAddToArray } from '../utils/form';
+
 describe('CreateForms', () => {
   before(() => {
     cy.visit('http://localhost:3000/create-form-tests');
   });
-
-  const getInputByLabel = (label) => {
-    return cy.contains('label', label).parent().find('input');
-  };
-
-  const getArrayFieldButtonByLabel = (label) => {
-    return cy.contains(label).next('button');
-  };
-
-  const clickAddToArray = () => {
-    cy.get('.amplify-button--link').contains('Add').click();
-  };
 
   describe('CustomFormCreateDog', () => {
     it('should validate, clear, and submit', () => {
@@ -120,6 +111,13 @@ describe('CreateForms', () => {
 
         // HasOne Autocomplete
         getArrayFieldButtonByLabel('Has one user').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`John Lennon{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
+        // HasMany Autocomplete
+        getArrayFieldButtonByLabel('Has many students').click();
         cy.get(`.amplify-autocomplete`).within(() => {
           cy.get('input').type(`{downArrow}{enter}`);
         });
