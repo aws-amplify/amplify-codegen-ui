@@ -103,7 +103,7 @@ export function getFieldConfigFromModelField({
     field.relationship &&
     typeof field.dataType === 'object' &&
     'model' in field.dataType &&
-    dataSchema.models[field.dataType.model].isJoinTable
+    dataSchema.models[field.dataType.model]?.isJoinTable
   ) {
     dataType = { model: field.relationship.relatedModelName };
   }
