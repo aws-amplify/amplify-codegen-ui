@@ -34,12 +34,30 @@ describe('UpdateForms', () => {
         });
         clickAddToArray();
 
+        // Many to many update
+        removeArrayItem('Red');
+        removeArrayItem('Blue');
+
+        getArrayFieldButtonByLabel('Many to many tags').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`Or{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
+        getArrayFieldButtonByLabel('Many to many tags').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`Gr{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
         cy.contains('Submit').click();
 
-        cy.contains(/My string/).then((recordElement) => {
+        cy.contains(/My string/).then((recordElement: JQuery) => {
           const record = JSON.parse(recordElement.text());
 
           expect(record.HasOneUser.firstName).to.equal('Paul');
+          expect(record.ManyToManyTags[0].label).to.equal('Green');
+          expect(record.ManyToManyTags[1].label).to.equal('Orange');
         });
       });
     });

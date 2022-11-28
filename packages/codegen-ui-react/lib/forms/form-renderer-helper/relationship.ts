@@ -19,6 +19,7 @@ import { getRecordsName, getLinkedDataName, getSetNameIdentifier } from './form-
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst } from '../../helpers';
+import { isManyToManyRelationship } from './map-from-fieldConfigs';
 
 export const buildRelationshipQuery = (
   relationship: GenericDataRelationshipType,
@@ -674,11 +675,8 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                                             factory.createCallExpression(
                                               factory.createPropertyAccessExpression(
                                                 factory.createPropertyAccessExpression(
-                                                  factory.createPropertyAccessExpression(
-                                                    factory.createIdentifier('r'),
-                                                    factory.createIdentifier(relatedJoinFieldName as string),
-                                                  ),
-                                                  factory.createIdentifier('id'),
+                                                  factory.createIdentifier('r'),
+                                                  factory.createIdentifier(`${relatedJoinFieldName}ID`),
                                                 ),
                                                 factory.createIdentifier('eq'),
                                               ),
@@ -688,11 +686,8 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                                             factory.createCallExpression(
                                               factory.createPropertyAccessExpression(
                                                 factory.createPropertyAccessExpression(
-                                                  factory.createPropertyAccessExpression(
-                                                    factory.createIdentifier('r'),
-                                                    factory.createIdentifier(relatedModelField as string),
-                                                  ),
-                                                  factory.createIdentifier('id'),
+                                                  factory.createIdentifier('r'),
+                                                  factory.createIdentifier(`${relatedModelField}ID`),
                                                 ),
                                                 factory.createIdentifier('eq'),
                                               ),
@@ -1082,7 +1077,136 @@ export const buildManyToManyRelationshipDataStoreStatements = (
   ];
 };
 
-export const buildGetRelationshipModels = (fieldName: string) => {
+export const buildGetRelationshipModels = (fieldName: string, fieldConfigMetaData: FieldConfigMetadata) => {
+  if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
+    const linkedDataName = getLinkedDataName(fieldName);
+    const { relatedJoinFieldName } = fieldConfigMetaData.relationship as HasManyRelationshipType;
+    let lazyLoadLinkedDataStatement;
+    if (isManyToManyRelationship(fieldConfigMetaData)) {
+      lazyLoadLinkedDataStatement = factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier(linkedDataName),
+              undefined,
+              undefined,
+              factory.createConditionalExpression(
+                factory.createIdentifier('record'),
+                factory.createToken(SyntaxKind.QuestionToken),
+                factory.createAwaitExpression(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('Promise'),
+                      factory.createIdentifier('all'),
+                    ),
+                    undefined,
+                    [
+                      factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createParenthesizedExpression(
+                            factory.createAwaitExpression(
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('record'),
+                                    factory.createIdentifier(fieldName),
+                                  ),
+                                  factory.createIdentifier('toArray'),
+                                ),
+                                undefined,
+                                [],
+                              ),
+                            ),
+                          ),
+                          factory.createIdentifier('map'),
+                        ),
+                        undefined,
+                        [
+                          factory.createArrowFunction(
+                            undefined,
+                            undefined,
+                            [
+                              factory.createParameterDeclaration(
+                                undefined,
+                                undefined,
+                                undefined,
+                                factory.createIdentifier('r'),
+                                undefined,
+                                undefined,
+                                undefined,
+                              ),
+                            ],
+                            undefined,
+                            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                            factory.createBlock(
+                              [
+                                factory.createReturnStatement(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('r'),
+                                    factory.createIdentifier(relatedJoinFieldName as string),
+                                  ),
+                                ),
+                              ],
+                              true,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                factory.createToken(SyntaxKind.ColonToken),
+                factory.createArrayLiteralExpression([], false),
+              ),
+            ),
+          ],
+          // eslint-disable-next-line no-bitwise
+          NodeFlags.Const | NodeFlags.AwaitContext | NodeFlags.ContextFlags | NodeFlags.TypeExcludesFlags,
+        ),
+      );
+    } else {
+      lazyLoadLinkedDataStatement = factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier(linkedDataName),
+              undefined,
+              undefined,
+              factory.createConditionalExpression(
+                factory.createIdentifier('record'),
+                factory.createToken(SyntaxKind.QuestionToken),
+                factory.createAwaitExpression(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('record'),
+                        factory.createIdentifier(fieldName),
+                      ),
+                      factory.createIdentifier('toArray'),
+                    ),
+                    undefined,
+                    [],
+                  ),
+                ),
+                factory.createToken(SyntaxKind.ColonToken),
+                factory.createArrayLiteralExpression([], false),
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      );
+    }
+
+    const setLinkedDataStateStatement = factory.createExpressionStatement(
+      factory.createCallExpression(getSetNameIdentifier(linkedDataName), undefined, [
+        factory.createIdentifier(linkedDataName),
+      ]),
+    );
+    return [lazyLoadLinkedDataStatement, setLinkedDataStateStatement];
+  }
   return [
     factory.createVariableStatement(
       undefined,
