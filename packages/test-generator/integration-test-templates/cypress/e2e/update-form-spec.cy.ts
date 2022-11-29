@@ -48,7 +48,7 @@ describe('UpdateForms', () => {
         removeArrayItem('John');
         getArrayFieldButtonByLabel('Belongs to owner').click();
         cy.get(`.amplify-autocomplete`).within(() => {
-          cy.get('input').type(`John{downArrow}{enter}`);
+          cy.get('input').type(`George{downArrow}{enter}`);
         });
         clickAddToArray();
 
@@ -76,7 +76,7 @@ describe('UpdateForms', () => {
           expect(record.HasOneUser.firstName).to.equal('Paul');
           expect(record.ManyToManyTags[0].label).to.equal('Green');
           expect(record.ManyToManyTags[1].label).to.equal('Orange');
-          expect(record.BelongsToOwner.name).to.equal('John');
+          expect(record.BelongsToOwner.name).to.equal('George');
         });
       });
     });
