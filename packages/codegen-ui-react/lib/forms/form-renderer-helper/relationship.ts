@@ -46,7 +46,9 @@ export const buildManyToManyRelationshipDataStoreStatements = (
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
 ) => {
-  const [fieldName, fieldConfigMetaData] = hasManyFieldConfig;
+  let [fieldName] = hasManyFieldConfig;
+  const [, fieldConfigMetaData] = hasManyFieldConfig;
+  fieldName = fieldConfigMetaData.sanitizedFieldName || fieldName;
   const { relatedModelField, relatedJoinFieldName, relatedJoinTableName } =
     fieldConfigMetaData.relationship as HasManyRelationshipType;
   if (dataStoreActionType === 'update') {
@@ -564,20 +566,6 @@ export const buildManyToManyRelationshipDataStoreStatements = (
           ],
         ),
       ),
-      factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createIdentifier('promises'),
-              undefined,
-              undefined,
-              factory.createArrayLiteralExpression([], false),
-            ),
-          ],
-          NodeFlags.Const,
-        ),
-      ),
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
@@ -884,110 +872,9 @@ export const buildManyToManyRelationshipDataStoreStatements = (
           ],
         ),
       ),
-      factory.createExpressionStatement(
-        factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier('promises'),
-            factory.createIdentifier('push'),
-          ),
-          undefined,
-          [
-            factory.createCallExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier('DataStore'),
-                factory.createIdentifier('save'),
-              ),
-              undefined,
-              [
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier(modelName),
-                    factory.createIdentifier('copyOf'),
-                  ),
-                  undefined,
-                  [
-                    factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                    factory.createArrowFunction(
-                      undefined,
-                      undefined,
-                      [
-                        factory.createParameterDeclaration(
-                          undefined,
-                          undefined,
-                          undefined,
-                          factory.createIdentifier('updated'),
-                          undefined,
-                          undefined,
-                          undefined,
-                        ),
-                      ],
-                      undefined,
-                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                      factory.createBlock(
-                        [
-                          factory.createExpressionStatement(
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('Object'),
-                                factory.createIdentifier('assign'),
-                              ),
-                              undefined,
-                              [factory.createIdentifier('updated'), factory.createIdentifier('modelFields')],
-                            ),
-                          ),
-                        ],
-                        true,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-      factory.createExpressionStatement(
-        factory.createAwaitExpression(
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('Promise'),
-              factory.createIdentifier('all'),
-            ),
-            undefined,
-            [factory.createIdentifier('promises')],
-          ),
-        ),
-      ),
     ];
   }
   return [
-    factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createIdentifier(relatedModelField),
-            undefined,
-            undefined,
-            factory.createAwaitExpression(
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('DataStore'),
-                  factory.createIdentifier('save'),
-                ),
-                undefined,
-                [
-                  factory.createNewExpression(factory.createIdentifier(modelName), undefined, [
-                    factory.createIdentifier('modelFields'),
-                  ]),
-                ],
-              ),
-            ),
-          ),
-        ],
-        NodeFlags.Const,
-      ),
-    ),
     factory.createExpressionStatement(
       factory.createAwaitExpression(
         factory.createCallExpression(
@@ -1122,8 +1009,10 @@ export const buildHasManyRelationshipDataStoreStatements = (
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
 ) => {
-  const [fieldName, fieldConfig] = hasManyFieldConfig;
-  const { relatedModelName, relatedModelField } = fieldConfig.relationship as HasManyRelationshipType;
+  let [fieldName] = hasManyFieldConfig;
+  const [, fieldConfigMetaData] = hasManyFieldConfig;
+  fieldName = fieldConfigMetaData.sanitizedFieldName || fieldName;
+  const { relatedModelName, relatedModelField } = fieldConfigMetaData.relationship as HasManyRelationshipType;
   const linkedDataName = getLinkedDataName(fieldName);
   const dataToLink = `${lowerCaseFirst(fieldName)}ToLink`;
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
@@ -1393,20 +1282,6 @@ export const buildHasManyRelationshipDataStoreStatements = (
           ],
         ),
       ),
-      factory.createVariableStatement(
-        undefined,
-        factory.createVariableDeclarationList(
-          [
-            factory.createVariableDeclaration(
-              factory.createIdentifier('promises'),
-              undefined,
-              undefined,
-              factory.createArrayLiteralExpression([], false),
-            ),
-          ],
-          NodeFlags.Const,
-        ),
-      ),
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
@@ -1600,110 +1475,9 @@ export const buildHasManyRelationshipDataStoreStatements = (
           ],
         ),
       ),
-      factory.createExpressionStatement(
-        factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier('promises'),
-            factory.createIdentifier('push'),
-          ),
-          undefined,
-          [
-            factory.createCallExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier('DataStore'),
-                factory.createIdentifier('save'),
-              ),
-              undefined,
-              [
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier(modelName),
-                    factory.createIdentifier('copyOf'),
-                  ),
-                  undefined,
-                  [
-                    factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                    factory.createArrowFunction(
-                      undefined,
-                      undefined,
-                      [
-                        factory.createParameterDeclaration(
-                          undefined,
-                          undefined,
-                          undefined,
-                          factory.createIdentifier('updated'),
-                          undefined,
-                          undefined,
-                          undefined,
-                        ),
-                      ],
-                      undefined,
-                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                      factory.createBlock(
-                        [
-                          factory.createExpressionStatement(
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('Object'),
-                                factory.createIdentifier('assign'),
-                              ),
-                              undefined,
-                              [factory.createIdentifier('updated'), factory.createIdentifier('modelFields')],
-                            ),
-                          ),
-                        ],
-                        true,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-      factory.createExpressionStatement(
-        factory.createAwaitExpression(
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('Promise'),
-              factory.createIdentifier('all'),
-            ),
-            undefined,
-            [factory.createIdentifier('promises')],
-          ),
-        ),
-      ),
     ];
   }
   return [
-    factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createIdentifier(modelName.toLowerCase()),
-            undefined,
-            undefined,
-            factory.createAwaitExpression(
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('DataStore'),
-                  factory.createIdentifier('save'),
-                ),
-                undefined,
-                [
-                  factory.createNewExpression(factory.createIdentifier(modelName), undefined, [
-                    factory.createIdentifier('modelFields'),
-                  ]),
-                ],
-              ),
-            ),
-          ),
-        ],
-        NodeFlags.Const,
-      ),
-    ),
     factory.createExpressionStatement(
       factory.createAwaitExpression(
         factory.createCallExpression(
@@ -1793,7 +1567,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                               ),
                                               factory.createToken(SyntaxKind.EqualsToken),
                                               factory.createPropertyAccessExpression(
-                                                factory.createIdentifier(modelName.toLowerCase()),
+                                                factory.createIdentifier(lowerCaseFirst(modelName)),
                                                 factory.createIdentifier('id'),
                                               ),
                                             ),

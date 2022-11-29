@@ -26,7 +26,7 @@ import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
 import { ImportCollection, ImportSource } from '../imports';
 import { buildDataStoreExpression } from '../forms';
-import { onSubmitValidationRun, buildModelFieldObject, getHasManyFieldConfigs } from '../forms/form-renderer-helper';
+import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
 import { resetFunctionCheck } from '../forms/form-renderer-helper/value-props';
 import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
@@ -98,7 +98,6 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     if (!formMetadata) {
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
     }
-    const hasManyFieldConfigs = getHasManyFieldConfigs(formMetadata.fieldConfigs);
 
     const onSubmitIdentifier = factory.createIdentifier('onSubmit');
 
@@ -134,7 +133,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
         factory.createTryStatement(
           factory.createBlock(
             [
-              ...buildDataStoreExpression(formActionType, importedModelName, hasManyFieldConfigs),
+              ...buildDataStoreExpression(formActionType, importedModelName, formMetadata.fieldConfigs),
               // call onSuccess hook if it exists
               factory.createIfStatement(
                 factory.createIdentifier('onSuccess'),
