@@ -286,15 +286,25 @@ describe('amplify form renderer tests', () => {
     });
 
     describe('custom form tests', () => {
-      it('should render a custom backed form', () => {
+      it('should render a custom backed create form', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-create', undefined);
         expect(componentText.replace(/\s/g, '')).toContain('onSubmit');
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });
 
-      it('should render a custom backed form', () => {
+      it('should render a custom backed update form', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/post-custom-update', undefined);
+        expect(componentText.replace(/\s/g, '')).toContain('onSubmit');
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render a custom backed create form with styled gaps', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/post-custom-create-custom-gaps',
+          undefined,
+        );
         expect(componentText.replace(/\s/g, '')).toContain('onSubmit');
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();

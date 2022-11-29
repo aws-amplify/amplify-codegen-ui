@@ -74,9 +74,9 @@ export function mapElementMatrix({
         if (previousIndices) {
           removeFromMatrix(previousIndices, formDefinition);
         }
-      } else if (element.position && 'rightOf' in element.position && element.position.rightOf) {
+      } else if (typeof element.position === 'object' && 'rightOf' in element.position && element.position.rightOf) {
         tempRightOf.push(element);
-      } else if (element.position && 'below' in element.position && element.position.below) {
+      } else if (typeof element.position === 'object' && 'below' in element.position && element.position.below) {
         const relationIndices = findIndices(element.position.below, formDefinition.elementMatrix);
         if (!relationIndices) {
           requeued.push(element);
@@ -87,7 +87,11 @@ export function mapElementMatrix({
           }
           formDefinition.elementMatrix.splice(relationIndices[0] + 1, 0, [element.name]);
         }
-      } else if (element.position && 'fixed' in element.position && element.position.fixed === 'first') {
+      } else if (
+        typeof element.position === 'object' &&
+        'fixed' in element.position &&
+        element.position.fixed === 'first'
+      ) {
         const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
         if (previousIndices) {
           removeFromMatrix(previousIndices, formDefinition);
@@ -112,7 +116,7 @@ export function mapElementMatrix({
     const requeued: typeof elementQueue = [];
 
     rightOfElementQueue.forEach((element) => {
-      if (element.position && 'rightOf' in element.position && element.position.rightOf) {
+      if (typeof element.position === 'object' && 'rightOf' in element.position && element.position.rightOf) {
         const relationIndices = findIndices(element.position.rightOf, formDefinition.elementMatrix);
         if (!relationIndices) {
           requeued.push(element);

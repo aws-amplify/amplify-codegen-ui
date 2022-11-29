@@ -44,34 +44,40 @@ function reduceDataDependencies(dataDependencies: string[]): string[] {
  */
 
 export function computeDataDependenciesForStudioComponentProperty(property: StudioComponentProperty): string[] {
-  return reduceDataDependencies(
-    ([] as string[])
-      .concat(
-        'concat' in property && property.concat
-          ? property.concat.flatMap(computeDataDependenciesForStudioComponentProperty)
-          : [],
-      )
-      .concat('userAttribute' in property && property.userAttribute ? ['authAttributes'] : [])
-      .concat(
-        'bindingProperties' in property && property.bindingProperties ? [property.bindingProperties.property] : [],
-      )
-      .concat('collectionBindingProperties' in property && property.collectionBindingProperties ? ['items'] : [])
-      .concat(
-        'condition' in property && property.condition && 'property' in property.condition && property.condition.property
-          ? [property.condition.property]
-          : [],
-      )
-      .concat(
-        'condition' in property && property.condition && 'then' in property.condition && property.condition.then
-          ? computeDataDependenciesForStudioComponentProperty(property.condition.then)
-          : [],
-      )
-      .concat(
-        'condition' in property && property.condition && 'else' in property.condition && property.condition.else
-          ? computeDataDependenciesForStudioComponentProperty(property.condition.else)
-          : [],
-      ),
-  );
+  const deps =
+    typeof property !== 'object'
+      ? []
+      : ([] as string[])
+          .concat(
+            'concat' in property && property.concat
+              ? property.concat.flatMap(computeDataDependenciesForStudioComponentProperty)
+              : [],
+          )
+          .concat('userAttribute' in property && property.userAttribute ? ['authAttributes'] : [])
+          .concat(
+            'bindingProperties' in property && property.bindingProperties ? [property.bindingProperties.property] : [],
+          )
+          .concat('collectionBindingProperties' in property && property.collectionBindingProperties ? ['items'] : [])
+          .concat(
+            'condition' in property &&
+              property.condition &&
+              'property' in property.condition &&
+              property.condition.property
+              ? [property.condition.property]
+              : [],
+          )
+          .concat(
+            'condition' in property && property.condition && 'then' in property.condition && property.condition.then
+              ? computeDataDependenciesForStudioComponentProperty(property.condition.then)
+              : [],
+          )
+          .concat(
+            'condition' in property && property.condition && 'else' in property.condition && property.condition.else
+              ? computeDataDependenciesForStudioComponentProperty(property.condition.else)
+              : [],
+          );
+
+  return reduceDataDependencies(deps);
 }
 
 /**

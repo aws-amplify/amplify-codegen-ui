@@ -90,7 +90,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       this.importCollection.addImport(ImportSource.UI_REACT, 'useTheme');
 
       let label = '';
-      if ('value' in this.component.properties.label) {
+      if (typeof this.component.properties.label === 'object' && 'value' in this.component.properties.label) {
         label = this.component.properties.label.value.toString() ?? '';
       }
       return renderArrayFieldComponent(this.component.name, label, formFieldConfigs, element);

@@ -64,6 +64,11 @@ describe('amplify render tests', () => {
       expect(generatedCode.componentText).toMatchSnapshot();
     });
 
+    it('should generate a component with custom child (malformed property)', () => {
+      const generatedCode = generateWithAmplifyRenderer('customChildMalformedProperty');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+
     it('should generate a component with exposeAs prop', () => {
       const generatedCode = generateWithAmplifyRenderer('exposedAsTest');
       expect(generatedCode.componentText).toMatchSnapshot();

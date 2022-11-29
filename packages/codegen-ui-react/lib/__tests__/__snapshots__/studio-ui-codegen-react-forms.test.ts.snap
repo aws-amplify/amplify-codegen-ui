@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed form 1`] = `
+exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed create form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
@@ -317,7 +317,10 @@ export default function CustomDataForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"go back\\"
             type=\\"button\\"
@@ -341,7 +344,7 @@ export default function CustomDataForm(props) {
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed form 2`] = `
+exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed create form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
@@ -388,7 +391,7 @@ export default function CustomDataForm(props: CustomDataFormProps): React.ReactE
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed form 3`] = `
+exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed create form with styled gaps 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
@@ -399,68 +402,46 @@ import {
   RadioGroupField,
   SelectField,
   StepperField,
-  TextAreaField,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 export default function CustomDataForm(props) {
-  const {
-    initialData,
-    onSubmit,
-    onCancel,
-    onValidate,
-    onChange,
-    overrides,
-    ...rest
-  } = props;
+  const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
+    props;
+  const { tokens } = useTheme();
   const initialValues = {
     name: undefined,
     email: undefined,
-    \\"metadata-field\\": undefined,
     city: undefined,
     category: undefined,
     pages: 0,
+    phone: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
-  const [metadataField, setMetadataField] = React.useState(
-    initialValues[\\"metadata-field\\"]
-  );
   const [city, setCity] = React.useState(initialValues.city);
   const [category, setCategory] = React.useState(initialValues.category);
   const [pages, setPages] = React.useState(initialValues.pages);
+  const [phone, setPhone] = React.useState(initialValues.phone);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = initialData
-      ? { ...initialValues, ...initialData }
-      : initialValues;
-    setName(cleanValues.name);
-    setEmail(cleanValues.email);
-    setMetadataField(cleanValues[\\"metadata-field\\"]);
-    setCity(cleanValues.city);
-    setCategory(cleanValues.category);
-    setPages(cleanValues.pages);
+    setName(initialValues.name);
+    setEmail(initialValues.email);
+    setCity(initialValues.city);
+    setCategory(initialValues.category);
+    setPages(initialValues.pages);
+    setPhone(initialValues.phone);
     setErrors({});
   };
-  React.useEffect(resetStateValues, [initialData]);
-  React.useEffect(() => {
-    if (initialData) {
-      setName(initialData.name);
-      setEmail(initialData.email);
-      setMetadataField(initialData[\\"metadata-field\\"]);
-      setCity(initialData.city);
-      setCategory(initialData.category);
-      setPages(initialData.pages);
-    }
-  }, []);
   const validations = {
     name: [{ type: \\"Required\\" }],
     email: [{ type: \\"Required\\" }],
-    \\"metadata-field\\": [{ type: \\"Required\\" }, { type: \\"JSON\\" }],
     city: [],
     category: [],
     pages: [],
+    phone: [{ type: \\"Required\\" }, { type: \\"Phone\\" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -481,18 +462,18 @@ export default function CustomDataForm(props) {
   return (
     <Grid
       as=\\"form\\"
-      rowGap=\\"15px\\"
-      columnGap=\\"15px\\"
-      padding=\\"20px\\"
+      rowGap={tokens.space.large.value}
+      columnGap={tokens.space.xl.value}
+      padding=\\"35px\\"
       onSubmit={async (event) => {
         event.preventDefault();
         const modelFields = {
           name,
           email,
-          \\"metadata-field\\": metadataField,
           city,
           category,
           pages,
+          phone,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -522,17 +503,16 @@ export default function CustomDataForm(props) {
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
-        defaultValue={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name: value,
               email,
-              \\"metadata-field\\": metadataField,
               city,
               category,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -551,17 +531,16 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
-        defaultValue={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,
               email: value,
-              \\"metadata-field\\": metadataField,
               city,
               category,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -576,34 +555,6 @@ export default function CustomDataForm(props) {
         hasError={errors.email?.hasError}
         {...getOverrideProps(overrides, \\"email\\")}
       ></TextField>
-      <TextAreaField
-        label=\\"Metadata\\"
-        isRequired={true}
-        defaultValue={metadataField}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              email,
-              \\"metadata-field\\": value,
-              city,
-              category,
-              pages,
-            };
-            const result = onChange(modelFields);
-            value = result?.[\\"metadata-field\\"] ?? value;
-          }
-          if (errors[\\"metadata-field\\"]?.hasError) {
-            runValidationTasks(\\"metadata-field\\", value);
-          }
-          setMetadataField(value);
-        }}
-        onBlur={() => runValidationTasks(\\"metadata-field\\", metadataField)}
-        errorMessage={errors[\\"metadata-field\\"]?.errorMessage}
-        hasError={errors[\\"metadata-field\\"]?.hasError}
-        {...getOverrideProps(overrides, \\"metadata-field\\")}
-      ></TextAreaField>
       <SelectField
         label=\\"Label\\"
         placeholder=\\"Please select an option\\"
@@ -614,10 +565,10 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
-              \\"metadata-field\\": metadataField,
               city: value,
               category,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -653,17 +604,16 @@ export default function CustomDataForm(props) {
         label=\\"Label\\"
         name=\\"fieldName\\"
         defaultValue=\\"Hobbies\\"
-        defaultValue={category}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,
               email,
-              \\"metadata-field\\": metadataField,
               city,
               category: value,
               pages,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.category ?? value;
@@ -703,10 +653,10 @@ export default function CustomDataForm(props) {
             const modelFields = {
               name,
               email,
-              \\"metadata-field\\": metadataField,
               city,
               category,
               pages: value,
+              phone,
             };
             const result = onChange(modelFields);
             value = result?.pages ?? value;
@@ -721,6 +671,35 @@ export default function CustomDataForm(props) {
         hasError={errors.pages?.hasError}
         {...getOverrideProps(overrides, \\"pages\\")}
       ></StepperField>
+      <TextField
+        label=\\"Phone Number\\"
+        isRequired={true}
+        defaultValue=\\"+1-401-152-6995\\"
+        type=\\"tel\\"
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              city,
+              category,
+              pages,
+              phone: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks(\\"phone\\", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks(\\"phone\\", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, \\"phone\\")}
+      ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -729,9 +708,12 @@ export default function CustomDataForm(props) {
           children=\\"empty\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ResetButton\\")}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap={tokens.space.xl.value}
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"go back\\"
             type=\\"button\\"
@@ -755,9 +737,9 @@ export default function CustomDataForm(props) {
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed form 4`] = `
+exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed create form with styled gaps 2`] = `
 "import * as React from \\"react\\";
-import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -767,33 +749,32 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type CustomDataFormInputValues = {
     name?: string;
     email?: string;
-    \\"metadata-field\\"?: string;
     city?: string;
     category?: string;
     pages?: number;
+    phone?: string;
 };
 export declare type CustomDataFormValidationValues = {
     name?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
-    \\"metadata-field\\"?: ValidationFunction<string>;
     city?: ValidationFunction<string>;
     category?: ValidationFunction<string>;
     pages?: ValidationFunction<number>;
+    phone?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
     CustomDataFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
     email?: PrimitiveOverrideProps<TextFieldProps>;
-    \\"metadata-field\\"?: PrimitiveOverrideProps<TextAreaFieldProps>;
     city?: PrimitiveOverrideProps<SelectFieldProps>;
     category?: PrimitiveOverrideProps<RadioGroupFieldProps>;
     pages?: PrimitiveOverrideProps<StepperFieldProps>;
+    phone?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
 } & {
-    initialData?: CustomDataFormInputValues;
     onSubmit: (fields: CustomDataFormInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
@@ -1171,7 +1152,10 @@ export default function CustomDataForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"go back\\"
             type=\\"button\\"
@@ -1224,6 +1208,424 @@ export declare type CustomDataFormOverridesProps = {
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
 } & {
+    onSubmit: (fields: CustomDataFormInputValues) => void;
+    onCancel?: () => void;
+    onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
+    onValidate?: CustomDataFormValidationValues;
+} & React.CSSProperties>;
+export default function CustomDataForm(props: CustomDataFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed update form 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Button,
+  Flex,
+  Grid,
+  Radio,
+  RadioGroupField,
+  SelectField,
+  StepperField,
+  TextAreaField,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+export default function CustomDataForm(props) {
+  const {
+    initialData,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: undefined,
+    email: undefined,
+    \\"metadata-field\\": undefined,
+    city: undefined,
+    category: undefined,
+    pages: 0,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [metadataField, setMetadataField] = React.useState(
+    initialValues[\\"metadata-field\\"]
+  );
+  const [city, setCity] = React.useState(initialValues.city);
+  const [category, setCategory] = React.useState(initialValues.category);
+  const [pages, setPages] = React.useState(initialValues.pages);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = initialData
+      ? { ...initialValues, ...initialData }
+      : initialValues;
+    setName(cleanValues.name);
+    setEmail(cleanValues.email);
+    setMetadataField(cleanValues[\\"metadata-field\\"]);
+    setCity(cleanValues.city);
+    setCategory(cleanValues.category);
+    setPages(cleanValues.pages);
+    setErrors({});
+  };
+  React.useEffect(resetStateValues, [initialData]);
+  React.useEffect(() => {
+    if (initialData) {
+      setName(initialData.name);
+      setEmail(initialData.email);
+      setMetadataField(initialData[\\"metadata-field\\"]);
+      setCity(initialData.city);
+      setCategory(initialData.category);
+      setPages(initialData.pages);
+    }
+  }, []);
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    email: [{ type: \\"Required\\" }],
+    \\"metadata-field\\": [{ type: \\"Required\\" }, { type: \\"JSON\\" }],
+    city: [],
+    category: [],
+    pages: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const modelFields = {
+          name,
+          email,
+          \\"metadata-field\\": metadataField,
+          city,
+          category,
+          pages,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        await onSubmit(modelFields);
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+    >
+      <TextField
+        label=\\"name\\"
+        isRequired={true}
+        defaultValue=\\"John Doe\\"
+        defaultValue={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              email,
+              \\"metadata-field\\": metadataField,
+              city,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <TextField
+        label=\\"E-mail\\"
+        isRequired={true}
+        defaultValue=\\"johndoe@amplify.com\\"
+        defaultValue={email}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email: value,
+              \\"metadata-field\\": metadataField,
+              city,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.email ?? value;
+          }
+          if (errors.email?.hasError) {
+            runValidationTasks(\\"email\\", value);
+          }
+          setEmail(value);
+        }}
+        onBlur={() => runValidationTasks(\\"email\\", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, \\"email\\")}
+      ></TextField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={true}
+        defaultValue={metadataField}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              \\"metadata-field\\": value,
+              city,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.[\\"metadata-field\\"] ?? value;
+          }
+          if (errors[\\"metadata-field\\"]?.hasError) {
+            runValidationTasks(\\"metadata-field\\", value);
+          }
+          setMetadataField(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata-field\\", metadataField)}
+        errorMessage={errors[\\"metadata-field\\"]?.errorMessage}
+        hasError={errors[\\"metadata-field\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"metadata-field\\")}
+      ></TextAreaField>
+      <SelectField
+        label=\\"Label\\"
+        placeholder=\\"Please select an option\\"
+        value={city}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              \\"metadata-field\\": metadataField,
+              city: value,
+              category,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.city ?? value;
+          }
+          if (errors.city?.hasError) {
+            runValidationTasks(\\"city\\", value);
+          }
+          setCity(value);
+        }}
+        onBlur={() => runValidationTasks(\\"city\\", city)}
+        errorMessage={errors.city?.errorMessage}
+        hasError={errors.city?.hasError}
+        {...getOverrideProps(overrides, \\"city\\")}
+      >
+        <option
+          children=\\"Los Angeles\\"
+          value=\\"Los Angeles\\"
+          {...getOverrideProps(overrides, \\"cityoption0\\")}
+        ></option>
+        <option
+          children=\\"Houston\\"
+          value=\\"Houston\\"
+          {...getOverrideProps(overrides, \\"cityoption1\\")}
+        ></option>
+        <option
+          children=\\"New York\\"
+          value=\\"New York\\"
+          selected={true}
+          {...getOverrideProps(overrides, \\"cityoption2\\")}
+        ></option>
+      </SelectField>
+      <RadioGroupField
+        label=\\"Label\\"
+        name=\\"fieldName\\"
+        defaultValue=\\"Hobbies\\"
+        defaultValue={category}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              \\"metadata-field\\": metadataField,
+              city,
+              category: value,
+              pages,
+            };
+            const result = onChange(modelFields);
+            value = result?.category ?? value;
+          }
+          if (errors.category?.hasError) {
+            runValidationTasks(\\"category\\", value);
+          }
+          setCategory(value);
+        }}
+        onBlur={() => runValidationTasks(\\"category\\", category)}
+        errorMessage={errors.category?.errorMessage}
+        hasError={errors.category?.hasError}
+        {...getOverrideProps(overrides, \\"category\\")}
+      >
+        <Radio
+          children=\\"Hobbies\\"
+          value=\\"Hobbies\\"
+          {...getOverrideProps(overrides, \\"categoryRadio0\\")}
+        ></Radio>
+        <Radio
+          children=\\"Travel\\"
+          value=\\"Travel\\"
+          {...getOverrideProps(overrides, \\"categoryRadio1\\")}
+        ></Radio>
+        <Radio
+          children=\\"Health\\"
+          value=\\"Health\\"
+          {...getOverrideProps(overrides, \\"categoryRadio2\\")}
+        ></Radio>
+      </RadioGroupField>
+      <StepperField
+        label=\\"Label\\"
+        value={pages}
+        onStepChange={(e) => {
+          let value = e;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              \\"metadata-field\\": metadataField,
+              city,
+              category,
+              pages: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.pages ?? value;
+          }
+          if (errors.pages?.hasError) {
+            runValidationTasks(\\"pages\\", value);
+          }
+          setPages(value);
+        }}
+        onBlur={() => runValidationTasks(\\"pages\\", pages)}
+        errorMessage={errors.pages?.errorMessage}
+        hasError={errors.pages?.hasError}
+        {...getOverrideProps(overrides, \\"pages\\")}
+      ></StepperField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"empty\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"go back\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"create\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed update form 2`] = `
+"import * as React from \\"react\\";
+import { GridProps, RadioGroupFieldProps, SelectFieldProps, StepperFieldProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CustomDataFormInputValues = {
+    name?: string;
+    email?: string;
+    \\"metadata-field\\"?: string;
+    city?: string;
+    category?: string;
+    pages?: number;
+};
+export declare type CustomDataFormValidationValues = {
+    name?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    \\"metadata-field\\"?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
+    category?: ValidationFunction<string>;
+    pages?: ValidationFunction<number>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomDataFormOverridesProps = {
+    CustomDataFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
+    \\"metadata-field\\"?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    city?: PrimitiveOverrideProps<SelectFieldProps>;
+    category?: PrimitiveOverrideProps<RadioGroupFieldProps>;
+    pages?: PrimitiveOverrideProps<StepperFieldProps>;
+} & EscapeHatchProps;
+export declare type CustomDataFormProps = React.PropsWithChildren<{
+    overrides?: CustomDataFormOverridesProps | undefined | null;
+} & {
+    initialData?: CustomDataFormInputValues;
     onSubmit: (fields: CustomDataFormInputValues) => void;
     onCancel?: () => void;
     onChange?: (fields: CustomDataFormInputValues) => CustomDataFormInputValues;
@@ -1539,7 +1941,10 @@ export default function MyPostForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -1822,6 +2227,7 @@ import {
   Heading,
   Icon,
   ScrollView,
+  SwitchField,
   Text,
   TextField,
   useTheme,
@@ -1985,6 +2391,7 @@ export default function NestedJson(props) {
     Nicknames1: [],
     \\"nick-names2\\": [],
     \\"first Name\\": undefined,
+    options: {},
   };
   const [firstName, setFirstName] = React.useState(initialValues[\\"first-Name\\"]);
   const [lastName, setLastName] = React.useState(initialValues.lastName);
@@ -1996,6 +2403,7 @@ export default function NestedJson(props) {
   const [firstName1, setFirstName1] = React.useState(
     initialValues[\\"first Name\\"]
   );
+  const [options, setOptions] = React.useState(initialValues.options);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setFirstName(initialValues[\\"first-Name\\"]);
@@ -2006,6 +2414,7 @@ export default function NestedJson(props) {
     setNickNames(initialValues[\\"nick-names2\\"]);
     setCurrentNickNamesValue(undefined);
     setFirstName1(initialValues[\\"first Name\\"]);
+    setOptions(initialValues.options);
     setErrors({});
   };
   const [currentBioFavoritetreesValue, setCurrentBioFavoritetreesValue] =
@@ -2026,6 +2435,7 @@ export default function NestedJson(props) {
     Nicknames1: [],
     \\"nick-names2\\": [],
     \\"first Name\\": [],
+    \\"options.enabled\\": [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -2058,6 +2468,7 @@ export default function NestedJson(props) {
           Nicknames1,
           \\"nick-names2\\": nickNames,
           \\"first Name\\": firstName1,
+          options,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -2095,6 +2506,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nickNames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.[\\"first-Name\\"] ?? value;
@@ -2121,6 +2533,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nickNames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.lastName ?? value;
@@ -2152,6 +2565,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nickNames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.bio?.[\\"favorite Quote\\"] ?? value;
@@ -2180,6 +2594,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nickNames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.bio?.[\\"favorite-Animal\\"] ?? value;
@@ -2207,6 +2622,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nickNames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             values = result?.bio?.[\\"favorite-trees\\"] ?? values;
@@ -2219,7 +2635,7 @@ export default function NestedJson(props) {
         items={bio.favorite - trees ?? []}
         hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
         setFieldValue={setCurrentBioFavoritetreesValue}
-        inputFieldRef={bio.favorite - treesRef}
+        inputFieldRef={bioFavoritetreesRef}
         defaultFieldValue={undefined}
       >
         <TextField
@@ -2245,6 +2661,11 @@ export default function NestedJson(props) {
           {...getOverrideProps(overrides, \\"bio.favorite-trees\\")}
         ></TextField>
       </ArrayField>
+      <Heading
+        level={3}
+        children=\\"Options\\"
+        {...getOverrideProps(overrides, \\"options\\")}
+      ></Heading>
       <ArrayField
         onChange={async (items) => {
           let values = items;
@@ -2256,6 +2677,7 @@ export default function NestedJson(props) {
               Nicknames1: values,
               \\"nick-names2\\": nickNames,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             values = result?.Nicknames1 ?? values;
@@ -2302,6 +2724,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": values,
               \\"first Name\\": firstName1,
+              options,
             };
             const result = onChange(modelFields);
             values = result?.[\\"nick-names2\\"] ?? values;
@@ -2349,6 +2772,7 @@ export default function NestedJson(props) {
               Nicknames1,
               \\"nick-names2\\": nickNames,
               \\"first Name\\": value,
+              options,
             };
             const result = onChange(modelFields);
             value = result?.[\\"first Name\\"] ?? value;
@@ -2363,6 +2787,35 @@ export default function NestedJson(props) {
         hasError={errors[\\"first Name\\"]?.hasError}
         {...getOverrideProps(overrides, \\"first Name\\")}
       ></TextField>
+      <SwitchField
+        label=\\"Enabled\\"
+        defaultChecked={false}
+        isChecked={options.enabled}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              \\"first-Name\\": firstName,
+              lastName,
+              bio,
+              Nicknames1,
+              \\"nick-names2\\": nickNames,
+              \\"first Name\\": firstName1,
+              options: { ...options, enabled: value },
+            };
+            const result = onChange(modelFields);
+            value = result?.options?.enabled ?? value;
+          }
+          if (errors[\\"options.enabled\\"]?.hasError) {
+            runValidationTasks(\\"options.enabled\\", value);
+          }
+          setOptions({ ...options, enabled: value });
+        }}
+        onBlur={() => runValidationTasks(\\"options.enabled\\", options[\\"enabled\\"])}
+        errorMessage={errors[\\"options.enabled\\"]?.errorMessage}
+        hasError={errors[\\"options.enabled\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"options.enabled\\")}
+      ></SwitchField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -2373,7 +2826,10 @@ export default function NestedJson(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Submit\\"
             type=\\"submit\\"
@@ -2391,7 +2847,7 @@ export default function NestedJson(props) {
 
 exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields 2`] = `
 "import * as React from \\"react\\";
-import { GridProps, HeadingProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { GridProps, HeadingProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -2409,6 +2865,9 @@ export declare type NestedJsonInputValues = {
         \\"favorite-Animal\\"?: string;
         \\"favorite-trees\\"?: string[];
     };
+    options?: {
+        enabled?: boolean;
+    };
 };
 export declare type NestedJsonValidationValues = {
     \\"first-Name\\"?: ValidationFunction<string>;
@@ -2421,6 +2880,9 @@ export declare type NestedJsonValidationValues = {
         \\"favorite-Animal\\"?: ValidationFunction<string>;
         \\"favorite-trees\\"?: ValidationFunction<string>;
     };
+    options?: {
+        enabled?: ValidationFunction<boolean>;
+    };
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type NestedJsonOverridesProps = {
@@ -2431,9 +2893,11 @@ export declare type NestedJsonOverridesProps = {
     \\"bio.favorite Quote\\"?: PrimitiveOverrideProps<TextFieldProps>;
     \\"bio.favorite-Animal\\"?: PrimitiveOverrideProps<TextFieldProps>;
     \\"bio.favorite-trees\\"?: PrimitiveOverrideProps<TextFieldProps>;
+    options?: PrimitiveOverrideProps<HeadingProps>;
     Nicknames1?: PrimitiveOverrideProps<TextFieldProps>;
     \\"nick-names2\\"?: PrimitiveOverrideProps<TextFieldProps>;
     \\"first Name\\"?: PrimitiveOverrideProps<TextFieldProps>;
+    \\"options.enabled\\"?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type NestedJsonProps = React.PropsWithChildren<{
     overrides?: NestedJsonOverridesProps | undefined | null;
@@ -2872,7 +3336,10 @@ export default function NestedJson(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Submit\\"
             type=\\"submit\\"
@@ -3061,7 +3528,10 @@ export default function CustomWithSectionalElements(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -3258,7 +3728,10 @@ export default function MyPostForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -3886,7 +4359,7 @@ export default function TagCreateForm(props) {
         items={statuses}
         hasError={errors.statuses?.hasError}
         getBadgeText={getDisplayValue.statuses}
-        setFieldValue={setCurrentStatusesDisplayValue}
+        setFieldValue={setCurrentStatusesValue}
         inputFieldRef={statusesRef}
         defaultFieldValue={undefined}
       >
@@ -3936,7 +4409,10 @@ export default function TagCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -4298,7 +4774,10 @@ export default function MyMemberForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -4837,7 +5316,10 @@ export default function SchoolCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -5201,7 +5683,10 @@ export default function BookCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -5774,7 +6259,7 @@ export default function TagCreateForm(props) {
         items={statuses}
         hasError={errors.statuses?.hasError}
         getBadgeText={getDisplayValue.statuses}
-        setFieldValue={setCurrentStatusesDisplayValue}
+        setFieldValue={setCurrentStatusesValue}
         inputFieldRef={statusesRef}
         defaultFieldValue={undefined}
       >
@@ -5824,7 +6309,10 @@ export default function TagCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -6210,7 +6698,10 @@ export default function BookCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -6565,9 +7056,8 @@ export default function MyPostForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          const original = await DataStore.query(Post, id);
           await DataStore.save(
-            Post.copyOf(original, (updated) => {
+            Post.copyOf(postRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -6593,7 +7083,10 @@ export default function MyPostForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -6795,7 +7288,10 @@ export default function MyPostForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -7307,7 +7803,10 @@ export default function SchoolUpdateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -7656,9 +8155,8 @@ export default function MyMemberForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          const original = await DataStore.query(Member, id);
           await DataStore.save(
-            Member.copyOf(original, (updated) => {
+            Member.copyOf(memberRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -7684,7 +8182,10 @@ export default function MyMemberForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -8329,7 +8830,7 @@ export default function TagUpdateForm(props) {
         items={statuses}
         hasError={errors.statuses?.hasError}
         getBadgeText={getDisplayValue.statuses}
-        setFieldValue={setCurrentStatusesDisplayValue}
+        setFieldValue={setCurrentStatusesValue}
         inputFieldRef={statusesRef}
         defaultFieldValue={undefined}
       >
@@ -8379,7 +8880,10 @@ export default function TagUpdateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -8734,9 +9238,8 @@ export default function MyFlexUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          const original = await DataStore.query(Flex0, id);
           await DataStore.save(
-            Flex0.copyOf(original, (updated) => {
+            Flex0.copyOf(flexRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -8762,7 +9265,10 @@ export default function MyFlexUpdateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -9500,7 +10006,10 @@ export default function BlogCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Submit\\"
             type=\\"submit\\"
@@ -10341,7 +10850,10 @@ export default function InputGalleryCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -10782,9 +11294,8 @@ export default function InputGalleryUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          const original = await DataStore.query(InputGallery, id);
           await DataStore.save(
-            InputGallery.copyOf(original, (updated) => {
+            InputGallery.copyOf(inputGalleryRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -11264,7 +11775,10 @@ export default function InputGalleryUpdateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -11656,7 +12170,10 @@ export default function MyFlexCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -12238,7 +12755,10 @@ export default function PostCreateFormRow(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"
@@ -12609,7 +13129,10 @@ export default function MyMemberForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
           <Button
             children=\\"Cancel\\"
             type=\\"button\\"

@@ -56,7 +56,7 @@ function getButtonElement(
     },
   };
 
-  if (override && 'children' in override && override.children) {
+  if (typeof override === 'object' && 'children' in override && override.children) {
     element.props.children = override.children;
   }
 
@@ -77,7 +77,7 @@ function mapMatrix(buttons?: StudioFormCTA): string[][] {
   return matrix.map((subArray) => {
     return subArray.filter((element) => {
       if (
-        buttons[element] &&
+        typeof buttons[element] === 'object' &&
         'excluded' in (buttons[element] as StudioFormCTAButton) &&
         (buttons[element] as { excluded: boolean }).excluded
       ) {

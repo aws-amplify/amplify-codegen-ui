@@ -17,6 +17,7 @@ import { FieldConfigMetadata, isValidVariableName } from '@aws-amplify/codegen-u
 import { Expression, factory, Identifier, JsxAttribute, JsxChild, NodeFlags, SyntaxKind } from 'typescript';
 import {
   capitalizeFirstLetter,
+  getArrayChildRefName,
   getCurrentDisplayValueName,
   getCurrentValueIdentifier,
   getCurrentValueName,
@@ -275,7 +276,7 @@ export const renderArrayFieldComponent = (
     props.push(
       factory.createJsxAttribute(
         factory.createIdentifier('setFieldValue'),
-        factory.createJsxExpression(undefined, setFieldValueIdentifier),
+        factory.createJsxExpression(undefined, setStateName),
       ),
     );
   }
@@ -283,7 +284,7 @@ export const renderArrayFieldComponent = (
   props.push(
     factory.createJsxAttribute(
       factory.createIdentifier('inputFieldRef'),
-      factory.createJsxExpression(undefined, factory.createIdentifier(`${renderedFieldName}Ref`)),
+      factory.createJsxExpression(undefined, factory.createIdentifier(getArrayChildRefName(renderedFieldName))),
     ),
     factory.createJsxAttribute(
       factory.createIdentifier('defaultFieldValue'),

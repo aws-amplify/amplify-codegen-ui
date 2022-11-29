@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.5...v2.5.6) (2022-11-23)
+
+**Note:** Version bump only for package @aws-amplify/codegen-ui-test-generator
+
+## [2.5.5](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.4...v2.5.5) (2022-11-18)
+
+### Bug Fixes
+
+- accommodate major release of aws-amplify in CLI test ([36362a2](https://github.com/aws-amplify/amplify-codegen-ui/commit/36362a29487a467f639eb54ed21f748fbd2c54c1))
+- accommodate new major release of aws-amplify and datastore in e2e tests ([7901efd](https://github.com/aws-amplify/amplify-codegen-ui/commit/7901efdb1aea6566dfbd0db54a6d147f00711e3e))
+
 ## [2.5.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.2...v2.5.4) (2022-11-07)
 
 ### Bug Fixes
