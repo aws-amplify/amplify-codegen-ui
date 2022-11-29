@@ -18,6 +18,7 @@ import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from 
 import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind } from 'typescript';
 import { getCurrentDisplayValueName, getCurrentValueName, resetValuesName } from './form-state';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
+import { FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
 export const ControlledComponents = ['StepperField', 'SliderField', 'SelectField', 'ToggleButton', 'SwitchField'];
 
@@ -68,14 +69,16 @@ export const renderDefaultValueAttribute = (stateName: string, { dataType }: Fie
 export const renderValueAttribute = ({
   fieldConfig,
   componentName,
+  currentValueIdentifier,
 }: {
   fieldConfig: FieldConfigMetadata;
   componentName: string;
+  currentValueIdentifier?: Identifier;
 }): JsxAttribute | undefined => {
   const componentType = fieldConfig.studioFormComponentType ?? fieldConfig.componentType;
   const shouldGetForUncontrolled = shouldWrapInArrayField(fieldConfig);
 
-  let valueIdentifier = factory.createIdentifier(componentName.split('.')[0]);
+  let valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
 
   if (shouldWrapInArrayField(fieldConfig)) {
     if (isModelDataType(fieldConfig)) {
@@ -158,4 +161,13 @@ export const resetFunctionCheck = ({
     ];
   }
   return [];
+};
+
+const getValueIdentifier = (componentName: string, componentType: string) => {
+  // For Boolean components like SwitchField, they need the full dot notation name
+  // e.g. isChecked={options.enabled}
+  if (FIELD_TYPE_TO_TYPESCRIPT_MAP[componentType] === SyntaxKind.BooleanKeyword) {
+    return factory.createIdentifier(componentName);
+  }
+  return factory.createIdentifier(componentName.split('.')[0]);
 };

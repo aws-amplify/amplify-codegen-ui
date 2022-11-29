@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.5...v2.5.6) (2022-11-23)
+
+### Bug Fixes
+
+- improve runtime safety for usage of the in operator ([fa3e09a](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa3e09aaad4872c634d47fc3c4b73fb8f0e1b204))
+- nested boolean field isn't controlled ([#783](https://github.com/aws-amplify/amplify-codegen-ui/issues/783)) ([fb943e8](https://github.com/aws-amplify/amplify-codegen-ui/commit/fb943e86328cb84c1afea73a854a854c6c9f29fd))
+
+## [2.5.5](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.4...v2.5.5) (2022-11-18)
+
+### Bug Fixes
+
+- fix grammar in pull warning message ([#758](https://github.com/aws-amplify/amplify-codegen-ui/issues/758)) ([5e06e62](https://github.com/aws-amplify/amplify-codegen-ui/commit/5e06e626390b2fdcd0d7c3939baed589e4dd82cf))
+- fix typo in required dependency provider ([f62a8ad](https://github.com/aws-amplify/amplify-codegen-ui/commit/f62a8ad127dbe7fe2d6a874f09f07beabe5c627a))
+- fix value passed to onChange override ([d30aacf](https://github.com/aws-amplify/amplify-codegen-ui/commit/d30aacfa717ed28e45de0f11e3738803bec90846))
+- fix variables for nested arrays ([3559c31](https://github.com/aws-amplify/amplify-codegen-ui/commit/3559c31779239883755b110646c9e59bcbab25ac))
+- generate gap attribute for CTA row ([e658019](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6580193652ef47ee2a0219f22927c96443937b7))
+- remove stringify for json type array initial value ([#753](https://github.com/aws-amplify/amplify-codegen-ui/issues/753)) ([362564f](https://github.com/aws-amplify/amplify-codegen-ui/commit/362564f571bf5a5027b9fb97ffbd94dfed6501c5))
+- stringify existing AWSJSON field value ([#754](https://github.com/aws-amplify/amplify-codegen-ui/issues/754)) ([e3e285d](https://github.com/aws-amplify/amplify-codegen-ui/commit/e3e285d42b94765d787fe160022d3986614009ef))
+- update model used ([ad0beda](https://github.com/aws-amplify/amplify-codegen-ui/commit/ad0beda3f05b086bdd4347589b4f8bde243be07a))
+- update snapshot ([3b86a7b](https://github.com/aws-amplify/amplify-codegen-ui/commit/3b86a7b23f0a62ddf0c402f107eab7e57cce562e))
+
+### Reverts
+
+- Revert "fix: refresh stale data on update form" ([b1444cd](https://github.com/aws-amplify/amplify-codegen-ui/commit/b1444cd564fd9c1908d730489a3402407d27a934))
+
 ## [2.5.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.2...v2.5.4) (2022-11-07)
 
 ### Bug Fixes

@@ -70,10 +70,10 @@ function getRadioGroupFieldValueMappings(
   const dataType = config.dataType ?? baseConfig?.dataType;
   if (dataType === 'Boolean') {
     const trueOverride = valueMappings.values.find(
-      ({ value }) => 'value' in value && value.value === 'true',
+      ({ value }) => typeof value === 'object' && 'value' in value && value.value === 'true',
     )?.displayValue;
     const falseOverride = valueMappings.values.find(
-      ({ value }) => 'value' in value && value.value === 'false',
+      ({ value }) => typeof value === 'object' && 'value' in value && value.value === 'false',
     )?.displayValue;
 
     const {
@@ -375,7 +375,7 @@ export function mapFormFieldConfig(
   formDefinition: FormDefinition,
   modelFieldsConfigs: ModelFieldsConfigs,
 ) {
-  if ('excluded' in element.config) {
+  if (typeof element.config === 'object' && 'excluded' in element.config) {
     throw new InternalError(`Attempted to map excluded element ${element.name}`);
   }
   formDefinition.elements[element.name] = getFormDefinitionInputElement(

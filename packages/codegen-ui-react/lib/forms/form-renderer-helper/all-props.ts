@@ -26,6 +26,7 @@ import {
 import { getArrayChildRefName, resetValuesName } from './form-state';
 import { shouldWrapInArrayField } from './render-checkers';
 import { getAutocompleteOptionsProp } from './display-value';
+import { buildCtaLayoutProperties } from '../../react-component-render-helper';
 
 export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
   const { name: componentName, componentType } = component;
@@ -129,6 +130,14 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       );
     }
   }
+
+  if (componentName === 'RightAlignCTASubFlex') {
+    const flexGapAttribute = buildCtaLayoutProperties(formMetadata);
+    if (flexGapAttribute) {
+      attributes.push(flexGapAttribute);
+    }
+  }
+
   if (componentName === 'ClearButton' || componentName === 'ResetButton') {
     attributes.push(
       factory.createJsxAttribute(

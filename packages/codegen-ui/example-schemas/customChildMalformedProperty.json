@@ -1,0 +1,27 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "View",
+  "name": "ViewWithCustomButton",
+  "properties": {},
+  "children": [
+    {
+      "id": "0987-6543-3211",
+      "componentType": "CustomButton",
+      "name": "MyCustomButton",
+      "properties": {
+        "color": {
+          "concat": [
+            {
+              "value": "Concatenated "
+            },
+            "{atiempo:values.atiempo}",
+            {
+              "value": "Value!"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "schemaVersion": "1.0"
+}

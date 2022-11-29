@@ -52,7 +52,7 @@ import {
   ArrayLiteralExpression,
 } from 'typescript';
 
-import { FormMetadata } from '@aws-amplify/codegen-ui/lib/types';
+import { FormMetadata, FormStyleConfig } from '@aws-amplify/codegen-ui/lib/types';
 import { ImportCollection, ImportSource } from './imports';
 import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 import { getChildPropMappingForComponentName } from './workflow/utils';
@@ -72,47 +72,51 @@ export function getComponentPropName(componentName?: string): string {
 }
 
 export function isFixedPropertyWithValue(prop: StudioComponentProperty): prop is FixedStudioComponentProperty {
-  return 'value' in prop;
+  return typeof prop === 'object' && 'value' in prop;
 }
 
 export function isBoundProperty(prop: StudioComponentProperty): prop is BoundStudioComponentProperty {
-  return 'bindingProperties' in prop;
+  return typeof prop === 'object' && 'bindingProperties' in prop;
 }
 
 export function isCollectionItemBoundProperty(
   prop: StudioComponentProperty,
 ): prop is CollectionStudioComponentProperty {
-  return 'collectionBindingProperties' in prop;
+  return typeof prop === 'object' && 'collectionBindingProperties' in prop;
 }
 
 export function isConcatenatedProperty(prop: StudioComponentProperty): prop is ConcatenatedStudioComponentProperty {
-  return 'concat' in prop;
+  return typeof prop === 'object' && 'concat' in prop;
 }
 
 export function isConditionalProperty(prop: StudioComponentProperty): prop is ConditionalStudioComponentProperty {
-  return 'condition' in prop;
+  return typeof prop === 'object' && 'condition' in prop;
 }
 
 export function isStateProperty(property: StudioComponentProperty): property is StateStudioComponentProperty {
-  return 'componentName' in property && 'property' in property;
+  return typeof property === 'object' && 'componentName' in property && 'property' in property;
 }
 
 export function isSetStateParameter(parameter: StudioComponentProperty): parameter is MutationActionSetStateParameter {
-  return 'componentName' in parameter && 'property' in parameter && 'set' in parameter;
+  return typeof parameter === 'object' && 'componentName' in parameter && 'property' in parameter && 'set' in parameter;
 }
 
 export function isDefaultValueOnly(
   prop: StudioComponentProperty,
 ): prop is CollectionStudioComponentProperty | BoundStudioComponentProperty {
-  return 'defaultValue' in prop && !(isCollectionItemBoundProperty(prop) || isBoundProperty(prop));
+  return (
+    typeof prop === 'object' &&
+    'defaultValue' in prop &&
+    !(isCollectionItemBoundProperty(prop) || isBoundProperty(prop))
+  );
 }
 
 export function isBoundEvent(event: StudioComponentEvent): event is BoundStudioComponentEvent {
-  return 'bindingEvent' in event;
+  return typeof event === 'object' && 'bindingEvent' in event;
 }
 
 export function isActionEvent(event: StudioComponentEvent): event is ActionStudioComponentEvent {
-  return 'action' in event;
+  return typeof event === 'object' && 'action' in event;
 }
 
 /**
@@ -602,47 +606,58 @@ export function buildOpeningElementProperties(
   return factory.createJsxAttribute(factory.createIdentifier(name), undefined);
 }
 
-export function buildLayoutProperties(componentMetadata: FormMetadata | undefined): JsxAttribute[] {
+function buildFixedOrTokenRefAttribute(styleConfig: FormStyleConfig, propName: string): JsxAttribute | undefined {
+  if (styleConfig.value) {
+    return buildFixedAttr({ value: styleConfig.value }, propName);
+  }
+  if (styleConfig.tokenReference) {
+    const tokenReference = ['tokens', ...styleConfig.tokenReference.split('.')];
+
+    return factory.createJsxAttribute(
+      factory.createIdentifier(propName),
+      factory.createJsxExpression(
+        undefined,
+        factory.createPropertyAccessExpression(buildAccessChain(tokenReference, false), 'value'),
+      ),
+    );
+  }
+  return undefined;
+}
+
+export function buildFormLayoutProperties(formMetadata: FormMetadata | undefined): JsxAttribute[] {
   const propMap: Record<string, string> = {
     horizontalGap: 'rowGap',
     verticalGap: 'columnGap',
     outerPadding: 'padding',
   };
 
-  return Object.entries(componentMetadata?.layoutConfigs ?? {}).reduce<JsxAttribute[]>((acc, value) => {
+  return Object.entries(formMetadata?.layoutConfigs ?? {}).reduce<JsxAttribute[]>((acc, value) => {
     const mappedProp = propMap[value[0]];
 
     if (!mappedProp) {
       return acc;
     }
 
-    if (value[1].value) {
-      acc.push(buildFixedAttr({ value: value[1].value }, mappedProp));
-    } else if (value[1].tokenReference) {
-      const tokenReference = ['tokens', ...value[1].tokenReference.split('.')];
-
-      acc.push(
-        factory.createJsxAttribute(
-          factory.createIdentifier(mappedProp),
-          factory.createJsxExpression(
-            undefined,
-            factory.createPropertyAccessExpression(buildAccessChain(tokenReference, false), 'value'),
-          ),
-        ),
-      );
+    const mappedAttribute = buildFixedOrTokenRefAttribute(value[1], mappedProp);
+    if (mappedAttribute) {
+      acc.push(mappedAttribute);
     }
 
     return acc;
   }, []);
 }
 
+export function buildCtaLayoutProperties(formMetadata: FormMetadata): JsxAttribute | undefined {
+  return buildFixedOrTokenRefAttribute(formMetadata.layoutConfigs.verticalGap, 'gap');
+}
+
 export function addBindingPropertiesImports(
   component: StudioComponent | StudioComponentChild,
   importCollection: ImportCollection,
 ) {
-  if ('bindingProperties' in component) {
+  if (typeof component === 'object' && 'bindingProperties' in component) {
     Object.entries(component.bindingProperties).forEach(([, binding]) => {
-      if ('bindingProperties' in binding && 'model' in binding.bindingProperties) {
+      if (typeof binding === 'object' && 'bindingProperties' in binding && 'model' in binding.bindingProperties) {
         importCollection.addImport(ImportSource.LOCAL_MODELS, binding.bindingProperties.model);
       }
     });
@@ -672,5 +687,9 @@ export function getSetStateName(stateReference: StateStudioComponentProperty): s
 }
 
 export function hasChildrenProp(componentProperties: StudioComponentProperties): boolean {
-  return !!('children' in componentProperties && componentProperties.children);
+  return !!(
+    typeof componentProperties === 'object' &&
+    'children' in componentProperties &&
+    componentProperties.children
+  );
 }
