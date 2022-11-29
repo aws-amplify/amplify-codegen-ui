@@ -34,8 +34,8 @@ export default function CreateCustomerButton(
       onClick={() => {
         createCustomerButtonOnClick();
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"CreateCustomerButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -79,8 +79,8 @@ export default function DeleteCustomerButton(
       onClick={() => {
         deleteCustomerButtonOnClick();
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"DeleteCustomerButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -125,8 +125,8 @@ export default function UpdateCustomerButton(
       onClick={() => {
         updateCustomerButtonOnClick();
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"UpdateCustomerButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -164,8 +164,8 @@ export default function SignOutButton(
       onClick={() => {
         signOutButtonOnClick();
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"SignOutButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -206,8 +206,8 @@ export default function NavigateButton(
       onClick={() => {
         navigateButtonOnClick();
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -248,8 +248,8 @@ export default function NavigateButton(
       onClick={() => {
         navigateButtonOnClick();
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -291,8 +291,8 @@ export default function NavigateButton(
       onClick={() => {
         navigateButtonOnClick();
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"NavigateButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -330,8 +330,8 @@ export default function ReloadButton(
       onClick={() => {
         reloadButtonOnClick();
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"ReloadButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -387,7 +387,7 @@ export default function ConditionalInMutation(
   };
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"ConditionalInMutation\\")}>
+    <Flex {...getOverrideProps(overrides, \\"ConditionalInMutation\\")} {...rest}>
       <Text
         children={mutatedValueChildren}
         {...getOverrideProps(overrides, \\"MutatedValue\\")}
@@ -432,8 +432,8 @@ export default function CustomButton(
       color=\\"#ff0000\\"
       width={20}
       isDisabled={true}
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -462,8 +462,8 @@ export default function CustomText(props: CustomTextProps): React.ReactElement {
       color=\\"#ff0000\\"
       width=\\"20px\\"
       children=\\"Text Value\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomText\\")}
+      {...rest}
     ></Text>
   );
 }
@@ -491,8 +491,8 @@ export default function Test(props: TestProps): React.ReactElement {
     <View
       fontFamily=\\"Times New Roman\\"
       fontSize=\\"20px\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"Test\\")}
+      {...rest}
     ></View>
   );
 }
@@ -537,8 +537,8 @@ export default function ComponentWithAuthEventBinding(
       onClick={() => {
         componentWithAuthEventBindingOnClick();
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"ComponentWithAuthEventBinding\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -570,8 +570,8 @@ export default function DataBindingNamedClass(
     /* @ts-ignore: TS2322 */
     <Text
       children={classProp?.name}
-      {...rest}
       {...getOverrideProps(overrides, \\"DataBindingNamedClass\\")}
+      {...rest}
     ></Text>
   );
 }
@@ -603,8 +603,8 @@ export default function DataBindingNamedClass(
     /* @ts-ignore: TS2322 */
     <Text
       children={classProp?.name}
-      {...rest}
       {...getOverrideProps(overrides, \\"DataBindingNamedClass\\")}
+      {...rest}
     ></Text>
   );
 }
@@ -653,8 +653,8 @@ export default function AuthorProfileCollection(
       alignItems=\\"stretch\\"
       justifyContent=\\"stretch\\"
       items={items || []}
-      {...rest}
       {...getOverrideProps(overrides, \\"AuthorProfileCollection\\")}
+      {...rest}
     >
       {(item, index) => (
         <AuthorProfile
@@ -748,8 +748,8 @@ export default function CollectionOfCustomButtons(
       gap=\\"1.5rem\\"
       backgroundColor={backgroundColor}
       items={buttonUser || []}
-      {...rest}
       {...getOverrideProps(overrides, \\"CollectionOfCustomButtons\\")}
+      {...rest}
     >
       {(item, index) => (
         <Flex
@@ -857,8 +857,8 @@ export default function CollectionOfCustomButtons(
       gap=\\"1.5rem\\"
       backgroundColor={backgroundColor}
       items={buttonUser || []}
-      {...rest}
       {...getOverrideProps(overrides, \\"CollectionOfCustomButtons\\")}
+      {...rest}
     >
       {(item, index) => (
         <Flex
@@ -962,8 +962,8 @@ export default function CollectionOfCustomButtons(
       gap=\\"1.5rem\\"
       backgroundColor={backgroundColor}
       items={items || []}
-      {...rest}
       {...getOverrideProps(overrides, \\"CollectionOfCustomButtons\\")}
+      {...rest}
     >
       {(item, index) => (
         <Flex
@@ -1026,8 +1026,8 @@ export default function ListingCardCollection(
       columns=\\"2\\"
       order=\\"left-to-right\\"
       items={bananas || []}
-      {...rest}
       {...getOverrideProps(overrides, \\"ListingCardCollection\\")}
+      {...rest}
     >
       {(item, index) => (
         <ListingCard
@@ -1076,8 +1076,8 @@ export default function ListingCardCollection(
       type=\\"list\\"
       isPaginated=\\"true\\"
       items={items || []}
-      {...rest}
       {...getOverrideProps(overrides, \\"ListingCardCollection\\")}
+      {...rest}
     >
       {(item, index) => (
         <ListingCard
@@ -1187,8 +1187,8 @@ export default function CollectionWithModelNameCollisions(
     <Collection
       type=\\"list\\"
       items={buttonModel || []}
-      {...rest}
       {...getOverrideProps(overrides, \\"CollectionWithModelNameCollisions\\")}
+      {...rest}
     >
       {(item, index) => (
         <Flex
@@ -1257,8 +1257,8 @@ export default function AuthorProfileCollection(
       alignItems=\\"stretch\\"
       justifyContent=\\"stretch\\"
       items={items || []}
-      {...rest}
       {...getOverrideProps(overrides, \\"AuthorProfileCollection\\")}
+      {...rest}
     >
       {(item, index) => (
         <AuthorProfile
@@ -1293,7 +1293,7 @@ export default function ViewWithButton(
   const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
-    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
+    <View {...getOverrideProps(overrides, \\"ViewWithButton\\")} {...rest}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -1326,7 +1326,7 @@ export default function ViewWithCustomButton(
   const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
-    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithCustomButton\\")}>
+    <View {...getOverrideProps(overrides, \\"ViewWithCustomButton\\")} {...rest}>
       <CustomButton
         color={\`\${\\"Concatenated \\"}\${\\"Value!\\"}\`}
         {...getOverrideProps(overrides, \\"MyCustomButton\\")}
@@ -1358,7 +1358,7 @@ export default function ViewWithCustomButton(
   const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
-    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithCustomButton\\")}>
+    <View {...getOverrideProps(overrides, \\"ViewWithCustomButton\\")} {...rest}>
       <CustomButton
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -1390,7 +1390,7 @@ export default function ViewWithButton(
   const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
-    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
+    <View {...getOverrideProps(overrides, \\"ViewWithButton\\")} {...rest}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -1430,8 +1430,8 @@ export default function ComplexTest1(
       gap=\\"10px\\"
       position=\\"relative\\"
       direction=\\"row\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest1\\")}
+      {...rest}
     >
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -1482,8 +1482,8 @@ export default function ComplexTest2(
       position=\\"relative\\"
       direction=\\"row\\"
       height=\\"289px\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest2\\")}
+      {...rest}
     >
       <Flex
         padding=\\"10px 10px 10px 10px\\"
@@ -1552,8 +1552,8 @@ export default function ComplexTest3(
       position=\\"relative\\"
       justifyContent=\\"center\\"
       direction=\\"column\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest3\\")}
+      {...rest}
     >
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -1682,8 +1682,8 @@ export default function ComplexTest4(
       gap=\\"10px\\"
       position=\\"relative\\"
       direction=\\"row\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest4\\")}
+      {...rest}
     >
       <Flex
         width=\\"323px\\"
@@ -1748,8 +1748,8 @@ export default function ComplexTest5(
       alignItems=\\"flex-start\\"
       gap=\\"0\\"
       direction=\\"row\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest5\\")}
+      {...rest}
     >
       <View
         width=\\"120px\\"
@@ -1802,8 +1802,8 @@ export default function ComplexTest6(
       position=\\"relative\\"
       gap=\\"22px\\"
       direction=\\"column\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest6\\")}
+      {...rest}
     >
       <Text
         padding=\\"0px 0px 0px 0px\\"
@@ -1878,8 +1878,8 @@ export default function ComplexTest7(
       padding=\\"0px 0px 0px 0px\\"
       position=\\"relative\\"
       height=\\"192px\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest7\\")}
+      {...rest}
     >
       <Image
         border=\\"4px SOLID rgb(0,0,0)\\"
@@ -1956,8 +1956,8 @@ export default function ComplexTest8(
       position=\\"relative\\"
       direction=\\"row\\"
       height=\\"243px\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest8\\")}
+      {...rest}
     >
       <Flex
         padding=\\"0px 0px 0px 0px\\"
@@ -2265,8 +2265,8 @@ export default function ComplexTest9(
       alignItems=\\"center\\"
       position=\\"relative\\"
       padding=\\"0px 0px 0px 0px\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest9\\")}
+      {...rest}
     >
       <Flex
         gap=\\"10px\\"
@@ -2422,8 +2422,8 @@ export default function ComplexTest10(
       position=\\"relative\\"
       padding=\\"40px 140px 40px 140px\\"
       backgroundColor=\\"rgba(239.00000095367432,240.00000089406967,240.00000089406967,1)\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest10\\")}
+      {...rest}
     >
       <Flex
         gap=\\"24px\\"
@@ -3311,8 +3311,8 @@ export default function ComplexTest11(
       alignItems=\\"flex-start\\"
       position=\\"relative\\"
       padding=\\"0px 0px 0px 0px\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ComplexTest11\\")}
+      {...rest}
     >
       <Flex
         gap=\\"0\\"
@@ -4205,8 +4205,8 @@ export default function TextWithDataBinding(
       color=\\"#ff0000\\"
       width=\\"20px\\"
       children={textValue}
-      {...rest}
       {...getOverrideProps(overrides, \\"TextWithDataBinding\\")}
+      {...rest}
     ></Text>
   );
 }
@@ -4236,8 +4236,8 @@ export default function ComponentWithSlotBinding(
   return (
     /* @ts-ignore: TS2322 */
     <Flex
-      {...rest}
       {...getOverrideProps(overrides, \\"ComponentWithSlotBinding\\")}
+      {...rest}
     >
       <View
         children={mySlot}
@@ -4280,8 +4280,8 @@ export default function ComponentWithDataBinding(
       labelWidth={width}
       disabled={isDisabled}
       children={buttonUser?.username || \\"hspain@gmail.com\\"}
-      {...rest}
       {...getOverrideProps(overrides, \\"ComponentWithDataBinding\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -4315,8 +4315,8 @@ export default function SectionHeading(
       padding=\\"0px 0px 10px 0px\\"
       backgroundColor=\\"rgb(255,255,255)\\"
       direction=\\"column\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"SectionHeading\\")}
+      {...rest}
     >
       <Flex
         tes={newProp6fd1.untitledfield}
@@ -4372,8 +4372,8 @@ export default function ChildComponentWithDataBinding(
   return (
     /* @ts-ignore: TS2322 */
     <Button
-      {...rest}
       {...getOverrideProps(overrides, \\"ChildComponentWithDataBinding\\")}
+      {...rest}
     >
       <Text
         children={textValue}
@@ -4425,8 +4425,8 @@ export default function ViewPrimitive(
     /* @ts-ignore: TS2322 */
     <View
       children=\\"Nice view! 🏔\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ViewPrimitive\\")}
+      {...rest}
     ></View>
   );
 }
@@ -4498,7 +4498,7 @@ export default function IconVariants(
   );
   return (
     /* @ts-ignore: TS2322 */
-    <Icon {...rest} {...getOverrideProps(overrides, \\"IconVariants\\")}></Icon>
+    <Icon {...getOverrideProps(overrides, \\"IconVariants\\")} {...rest}></Icon>
   );
 }
 ",
@@ -4552,7 +4552,7 @@ export default function CustomButton(
   );
   return (
     /* @ts-ignore: TS2322 */
-    <Button {...rest} {...getOverrideProps(overrides, \\"CustomButton\\")}></Button>
+    <Button {...getOverrideProps(overrides, \\"CustomButton\\")} {...rest}></Button>
   );
 }
 ",
@@ -4617,7 +4617,7 @@ export default function CustomButton(
   );
   return (
     /* @ts-ignore: TS2322 */
-    <Button {...rest} {...getOverrideProps(overrides, \\"CustomButton\\")}></Button>
+    <Button {...getOverrideProps(overrides, \\"CustomButton\\")} {...rest}></Button>
   );
 }
 ",
@@ -4650,11 +4650,11 @@ export default function ChildComponentWithDataBoundConcatenation(
   return (
     /* @ts-ignore: TS2322 */
     <Button
-      {...rest}
       {...getOverrideProps(
         overrides,
         \\"ChildComponentWithDataBoundConcatenation\\"
       )}
+      {...rest}
     >
       <Text
         children={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
@@ -4690,8 +4690,8 @@ export default function ChildComponentWithStaticConcatenation(
   return (
     /* @ts-ignore: TS2322 */
     <Button
-      {...rest}
       {...getOverrideProps(overrides, \\"ChildComponentWithStaticConcatenation\\")}
+      {...rest}
     >
       <Text
         children={\`\${\\"Concatenate\\"}\${\\" \\"}\${\\"Me!\\"}\`}
@@ -4733,8 +4733,8 @@ export default function CustomButton(
       children={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
         buttonUser?.lastname || \\"Spain\\"
       }\`}
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -4784,8 +4784,8 @@ export default function CustomButton(
       children={\`\${buttonUser?.firstname || \\"Harrison\\"}\${\\" \\"}\${
         buttonUser?.lastname || \\"Spain\\"
       }\`}
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -4816,8 +4816,8 @@ export default function ConditionalComponentWithDataBinding(
   return (
     /* @ts-ignore: TS2322 */
     <Flex
-      {...rest}
       {...getOverrideProps(overrides, \\"ConditionalComponentWithDataBinding\\")}
+      {...rest}
     >
       <Text
         value={
@@ -4870,8 +4870,8 @@ export default function CustomButton(
     /* @ts-ignore: TS2322 */
     <Button
       disabled={buttonColor && buttonColor == \\"red\\" ? true : false}
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomButton\\")}
+      {...rest}
     ></Button>
   );
 }
@@ -4899,7 +4899,7 @@ export default function CustomChildren(
   const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
-    <MyView {...rest} {...getOverrideProps(overrides, \\"CustomChildren\\")}>
+    <MyView {...getOverrideProps(overrides, \\"CustomChildren\\")} {...rest}>
       <CustomButton
         {...getOverrideProps(overrides, \\"MyCustomButton\\")}
       ></CustomButton>
@@ -4952,7 +4952,7 @@ export default function CustomChildren(props) {
     rest = __rest(props, [\\"overrides\\"]);
   return React.createElement(
     MyView,
-    __assign({}, rest, getOverrideProps(overrides, \\"CustomChildren\\")),
+    __assign({}, getOverrideProps(overrides, \\"CustomChildren\\"), rest),
     React.createElement(
       CustomButton,
       __assign({}, getOverrideProps(overrides, \\"MyCustomButton\\"))
@@ -4995,8 +4995,8 @@ export default function CustomParentAndChildren(
   return (
     /* @ts-ignore: TS2322 */
     <ViewTest
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomParentAndChildren\\")}
+      {...rest}
     >
       <CustomButton
         {...getOverrideProps(overrides, \\"MyCustomButton\\")}
@@ -5050,7 +5050,7 @@ export default function CustomParentAndChildren(props) {
     rest = __rest(props, [\\"overrides\\"]);
   return React.createElement(
     ViewTest,
-    __assign({}, rest, getOverrideProps(overrides, \\"CustomParentAndChildren\\")),
+    __assign({}, getOverrideProps(overrides, \\"CustomParentAndChildren\\"), rest),
     React.createElement(
       CustomButton,
       __assign({}, getOverrideProps(overrides, \\"MyCustomButton\\"))
@@ -5092,7 +5092,7 @@ export default function CustomParent(
   const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
-    <MyView {...rest} {...getOverrideProps(overrides, \\"CustomParent\\")}>
+    <MyView {...getOverrideProps(overrides, \\"CustomParent\\")} {...rest}>
       <Button {...getOverrideProps(overrides, \\"MyButton\\")}></Button>
     </MyView>
   );
@@ -5143,7 +5143,7 @@ export default function CustomParent(props) {
     rest = __rest(props, [\\"overrides\\"]);
   return React.createElement(
     MyView,
-    __assign({}, rest, getOverrideProps(overrides, \\"CustomParent\\")),
+    __assign({}, getOverrideProps(overrides, \\"CustomParent\\"), rest),
     React.createElement(
       Button,
       __assign({}, getOverrideProps(overrides, \\"MyButton\\"))
@@ -5206,7 +5206,7 @@ export default function ViewWithButton(props) {
     rest = __rest(props, [\\"overrides\\"]);
   return React.createElement(
     View,
-    __assign({}, rest, getOverrideProps(overrides, \\"ViewWithButton\\")),
+    __assign({}, getOverrideProps(overrides, \\"ViewWithButton\\"), rest),
     React.createElement(
       Button,
       __assign(
@@ -5245,7 +5245,7 @@ export default function ViewWithButton(props) {
   const { overrides } = props,
     rest = __rest(props, [\\"overrides\\"]);
   return (
-    <View {...rest} {...getOverrideProps(overrides, \\"ViewWithButton\\")}>
+    <View {...getOverrideProps(overrides, \\"ViewWithButton\\")} {...rest}>
       <Button
         color=\\"#ff0000\\"
         width=\\"20px\\"
@@ -5325,8 +5325,8 @@ function ViewWithButton(props) {
     ui_react_1.View,
     Object.assign(
       {},
-      rest,
-      (0, internal_1.getOverrideProps)(overrides, \\"ViewWithButton\\")
+      (0, internal_1.getOverrideProps)(overrides, \\"ViewWithButton\\"),
+      rest
     ),
     React.createElement(
       ui_react_1.Button,
@@ -5377,8 +5377,8 @@ export default function BoundDefaultValue(
     /* @ts-ignore: TS2322 */
     <Text
       children={label || \\"Bound Default\\"}
-      {...rest}
       {...getOverrideProps(overrides, \\"BoundDefaultValue\\")}
+      {...rest}
     ></Text>
   );
 }
@@ -5425,8 +5425,8 @@ export default function CollectionDefaultValue(
     /* @ts-ignore: TS2322 */
     <Collection
       items={user || []}
-      {...rest}
       {...getOverrideProps(overrides, \\"CollectionDefaultValue\\")}
+      {...rest}
     >
       {(item, index) => (
         <Text
@@ -5469,8 +5469,8 @@ export default function SimpleAndBoundDefaultValue(
     /* @ts-ignore: TS2322 */
     <Text
       children={label || \\"Bound Double Default\\"}
-      {...rest}
       {...getOverrideProps(overrides, \\"SimpleAndBoundDefaultValue\\")}
+      {...rest}
     ></Text>
   );
 }
@@ -5505,8 +5505,8 @@ export default function SimplePropertyBindingDefaultValue(
     /* @ts-ignore: TS2322 */
     <Text
       children={label}
-      {...rest}
       {...getOverrideProps(overrides, \\"SimplePropertyBindingDefaultValue\\")}
+      {...rest}
     ></Text>
   );
 }
@@ -5541,8 +5541,8 @@ export default function SocialA(props: SocialAProps): React.ReactElement {
       position=\\"relative\\"
       gap=\\"16px\\"
       direction=\\"column\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"SocialA\\")}
+      {...rest}
     >
       <Flex
         padding=\\"0px 0px 0px 0px\\"
@@ -5841,7 +5841,7 @@ export default function InputMutationOnClick(
   };
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"InputMutationOnClick\\")}>
+    <Flex {...getOverrideProps(overrides, \\"InputMutationOnClick\\")} {...rest}>
       <TextField
         value={myInputValue}
         onChange={(event: SyntheticEvent) => {
@@ -5896,7 +5896,7 @@ export default function MyForm(props: MyFormProps): React.ReactElement {
   });
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"MyForm\\")}>
+    <Flex {...getOverrideProps(overrides, \\"MyForm\\")} {...rest}>
       <TextField
         label=\\"Username\\"
         value={usernameTextFieldValue}
@@ -5948,7 +5948,7 @@ export default function ColorChangeOnClick(
   };
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"ColorChangeOnClick\\")}>
+    <Flex {...getOverrideProps(overrides, \\"ColorChangeOnClick\\")} {...rest}>
       <Flex
         backgroundColor={coloredBoxBackgroundColor}
         {...getOverrideProps(overrides, \\"ColoredBox\\")}
@@ -5995,8 +5995,8 @@ export default function TwoWayBindings(
     /* @ts-ignore: TS2322 */
     <Flex
       direction=\\"column\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"TwoWayBindings\\")}
+      {...rest}
     >
       <TextField
         label=\\"Name\\"
@@ -6044,8 +6044,8 @@ export default function CheckboxControlledElement(
   return (
     /* @ts-ignore: TS2322 */
     <Flex
-      {...rest}
       {...getOverrideProps(overrides, \\"CheckboxControlledElement\\")}
+      {...rest}
     >
       <CheckboxField
         checked={inputChecked}
@@ -6091,8 +6091,8 @@ export default function StepperControlledElement(
   return (
     /* @ts-ignore: TS2322 */
     <Flex
-      {...rest}
       {...getOverrideProps(overrides, \\"StepperControlledElement\\")}
+      {...rest}
     >
       <StepperField
         label=\\"Stepper\\"
@@ -6140,7 +6140,7 @@ export default function SwitchControlledElement(
   const [inputIsChecked, setInputIsChecked] = useStateMutationAction(false);
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"SwitchControlledElement\\")}>
+    <Flex {...getOverrideProps(overrides, \\"SwitchControlledElement\\")} {...rest}>
       <SwitchField
         isChecked={inputIsChecked}
         onChange={() => setInputIsChecked(!inputIsChecked)}
@@ -6287,8 +6287,8 @@ export default function InitialValueBindings(
     /* @ts-ignore: TS2322 */
     <Flex
       direction=\\"column\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"InitialValueBindings\\")}
+      {...rest}
     >
       <Heading
         level={3}
@@ -6496,8 +6496,8 @@ export default function CardA(props: CardAProps): React.ReactElement {
       position=\\"relative\\"
       padding=\\"0px 0px 0px 0px\\"
       backgroundColor=\\"rgba(255,255,255,1)\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"CardA\\")}
+      {...rest}
     >
       <Image
         height=\\"400px\\"
@@ -6629,8 +6629,8 @@ export default function CardA(props) {
         padding: \\"0px 0px 0px 0px\\",
         backgroundColor: \\"rgba(255,255,255,1)\\",
       },
-      rest,
-      getOverrideProps(overrides, \\"CardA\\")
+      getOverrideProps(overrides, \\"CardA\\"),
+      rest
     ),
     React.createElement(
       Image,
@@ -6744,7 +6744,7 @@ export default function ButtonsToggleState(
   };
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"ButtonsToggleState\\")}>
+    <Flex {...getOverrideProps(overrides, \\"ButtonsToggleState\\")} {...rest}>
       <Text
         children={fooBarValueChildren}
         {...getOverrideProps(overrides, \\"FooBarValue\\")}
@@ -6800,8 +6800,8 @@ export default function MutationWithSyntheticProp(
   return (
     /* @ts-ignore: TS2322 */
     <Flex
-      {...rest}
       {...getOverrideProps(overrides, \\"MutationWithSyntheticProp\\")}
+      {...rest}
     >
       <Text
         children={fooBarValueChildren}
@@ -6853,7 +6853,7 @@ export default function UpdateVisibility(
   };
   return (
     /* @ts-ignore: TS2322 */
-    <Card {...rest} {...getOverrideProps(overrides, \\"UpdateVisibility\\")}>
+    <Card {...getOverrideProps(overrides, \\"UpdateVisibility\\")} {...rest}>
       <Text
         display={textDisplayDisplay}
         children=\\"This is a text to display.\\"
@@ -6913,8 +6913,8 @@ export default function SetStateWithoutInitialValue(
   return (
     /* @ts-ignore: TS2322 */
     <Card
-      {...rest}
       {...getOverrideProps(overrides, \\"SetStateWithoutInitialValue\\")}
+      {...rest}
     >
       <Text
         children=\\"This is a text to display.\\"
@@ -6968,7 +6968,7 @@ export default function InvalidNameForMethod(
     useNavigateAction({ type: \\"url\\", url: \\"emails\\" });
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"InvalidNameForMethod\\")}>
+    <Flex {...getOverrideProps(overrides, \\"InvalidNameForMethod\\")} {...rest}>
       <Text
         onClick={() => {
           loremipsumdolorsitametCommaconsecteturadipiscingelitCommaseddoeiusmodtemporincididuntutlaborePeriodOnClick();
@@ -7016,7 +7016,7 @@ export default function NestedMutation(
   };
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"NestedMutation\\")}>
+    <Flex {...getOverrideProps(overrides, \\"NestedMutation\\")} {...rest}>
       <Text
         children={mutatedValueChildren}
         {...getOverrideProps(overrides, \\"MutatedValue\\")}
@@ -7139,8 +7139,8 @@ export default function TwoWayBindings(
     /* @ts-ignore: TS2322 */
     <Flex
       direction=\\"column\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"TwoWayBindings\\")}
+      {...rest}
     >
       <Heading
         level={1}
@@ -7547,8 +7547,8 @@ export default function CheckBoxFieldPrimitive(
       label=\\"Subscribe\\"
       name=\\"subscribe\\"
       value=\\"yes\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"CheckBoxFieldPrimitive\\")}
+      {...rest}
     ></CheckboxField>
   );
 }
@@ -7578,8 +7578,8 @@ export default function ExpanderPrimitive(
     <Expander
       type=\\"single\\"
       isCollapsible={true}
-      {...rest}
       {...getOverrideProps(overrides, \\"ExpanderPrimitive\\")}
+      {...rest}
     >
       <ExpanderItem
         title=\\"title1\\"
@@ -7623,8 +7623,8 @@ export default function MyExpanderItem(
       title=\\"title1\\"
       value=\\"ExpanderItem1\\"
       children=\\"ExpanderItem1Content\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"MyExpanderItem\\")}
+      {...rest}
     ></ExpanderItem>
   );
 }
@@ -7660,8 +7660,8 @@ export default function IconPrimitive(
           fill: \\"black\\",
         },
       ]}
-      {...rest}
       {...getOverrideProps(overrides, \\"IconPrimitive\\")}
+      {...rest}
     ></Icon>
   );
 }
@@ -7688,7 +7688,7 @@ export default function MenuPrimitive(
   const { overrides, ...rest } = props;
   return (
     /* @ts-ignore: TS2322 */
-    <Menu {...rest} {...getOverrideProps(overrides, \\"MenuPrimitive\\")}>
+    <Menu {...getOverrideProps(overrides, \\"MenuPrimitive\\")} {...rest}>
       <MenuItem
         children=\\"Item\\"
         {...getOverrideProps(overrides, \\"MyMenuItem\\")}
@@ -7721,8 +7721,8 @@ export default function MenuButtonPrimitive(
     /* @ts-ignore: TS2322 */
     <MenuButton
       children=\\"Menu Button\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"MenuButtonPrimitive\\")}
+      {...rest}
     ></MenuButton>
   );
 }
@@ -7756,8 +7756,8 @@ export default function SliderFieldPrimitive(
       min={0}
       max={100}
       step={1}
-      {...rest}
       {...getOverrideProps(overrides, \\"SliderFieldPrimitive\\")}
+      {...rest}
     ></SliderField>
   );
 }
@@ -7797,8 +7797,8 @@ export default function TablePrimitive(
       highlightOnHover={true}
       size=\\"small\\"
       variation=\\"striped\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"TablePrimitive\\")}
+      {...rest}
     >
       <TableHead {...getOverrideProps(overrides, \\"MyTableHead\\")}>
         <TableRow {...getOverrideProps(overrides, \\"MyTableRow\\")}>
@@ -7912,8 +7912,8 @@ export default function TextAreaFieldPrimitive(
       label=\\"Name\\"
       placeholder=\\"Holden\\"
       descriptiveText=\\"Please enter valid name\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"TextAreaFieldPrimitive\\")}
+      {...rest}
     ></TextAreaField>
   );
 }
@@ -7945,8 +7945,8 @@ export default function TextFieldPrimitive<Multiline extends boolean>(
       label=\\"Name\\"
       placeholder=\\"Holden\\"
       descriptiveText=\\"Please enter valid name\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"TextFieldPrimitive\\")}
+      {...rest}
     ></TextField>
   );
 }
@@ -7976,8 +7976,8 @@ export default function ViewWithButton(
     /* @ts-ignore: TS2322 */
     <View
       padding-left
-      {...rest}
       {...getOverrideProps(overrides, \\"ViewWithButton\\")}
+      {...rest}
     >
       <CustomButton
         color=\\"#ff0000\\"
@@ -8047,7 +8047,7 @@ export default function Events(props: EventsProps): React.ReactElement {
   } = props;
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"Events\\")}>
+    <Flex {...getOverrideProps(overrides, \\"Events\\")} {...rest}>
       <Flex {...getOverrideProps(overrides, \\"GenericEvents\\")}>
         <Text
           children=\\"onClick\\"
@@ -8165,8 +8165,8 @@ export default function ParsedFixedValues(
     /* @ts-ignore: TS2322 */
     <View
       id=\\"parsed-fixed-values\\"
-      {...rest}
       {...getOverrideProps(overrides, \\"ParsedFixedValues\\")}
+      {...rest}
     >
       <Input
         id=\\"string-value\\"
@@ -8267,7 +8267,7 @@ export default function Profile(props) {
       : {};
   return React.createElement(
     Flex,
-    Object.assign({}, rest, getOverrideProps(overrides, \\"Profile\\")),
+    Object.assign({}, getOverrideProps(overrides, \\"Profile\\"), rest),
     React.createElement(
       Image,
       Object.assign(
@@ -8291,7 +8291,7 @@ export default function Profile(props) {
     )
   );
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssS0FBSyxNQUFNLE9BQU8sQ0FBQztBQUMvQixPQUFPLEVBQW9CLGdCQUFnQixFQUFFLE9BQU8sRUFBRSxNQUFNLGdDQUFnQyxDQUFDO0FBQzdGLE9BQU8sRUFBRSxNQUFNLEVBQUUsSUFBSSxFQUFhLEtBQUssRUFBRSxNQUFNLHVCQUF1QixDQUFDO0FBS3ZFLE1BQU0sQ0FBQyxPQUFPLFVBQVUsT0FBTyxDQUFDLEtBQW1COztJQUMvQyxNQUFNLEVBQUUsU0FBUyxLQUFjLEtBQUssRUFBZCxJQUFJLFVBQUssS0FBSyxFQUE5QixhQUFzQixDQUFRLENBQUM7SUFDckMsTUFBTSxjQUFjLEdBQUcsTUFBQSxNQUFBLE9BQU8sRUFBRSxDQUFDLElBQUksMENBQUUsVUFBVSxtQ0FBSSxFQUFFLENBQUM7SUFDeEQsT0FBTyxDQUFDLG9CQUFDLElBQUksb0JBQUssSUFBSSxFQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxTQUFTLENBQUM7UUFBRSxvQkFBQyxLQUFLLGtCQUFDLEdBQUcsRUFBRSxjQUFjLENBQUMsVUFBVSxDQUFDLElBQU0sZ0JBQWdCLENBQUMsU0FBUyxFQUFFLFFBQVEsQ0FBQyxFQUFVO1FBQUEsb0JBQUMsTUFBTSxrQkFBQyxRQUFRLEVBQUUsY0FBYyxDQUFDLFNBQVMsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVztRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLGNBQWMsQ0FBQywwQkFBMEIsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVyxDQUFPLENBQUMsQ0FBQztBQUMvWCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyogZXNsaW50LWRpc2FibGUgKi9cbmltcG9ydCAqIGFzIFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IHsgRXNjYXBlSGF0Y2hQcm9wcywgZ2V0T3ZlcnJpZGVQcm9wcywgdXNlQXV0aCB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3QvaW50ZXJuYWxcIjtcbmltcG9ydCB7IEJ1dHRvbiwgRmxleCwgRmxleFByb3BzLCBJbWFnZSB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3RcIjtcblxuZXhwb3J0IHR5cGUgUHJvZmlsZVByb3BzID0gUmVhY3QuUHJvcHNXaXRoQ2hpbGRyZW48UGFydGlhbDxGbGV4UHJvcHM+ICYge1xuICAgIG92ZXJyaWRlcz86IEVzY2FwZUhhdGNoUHJvcHMgfCB1bmRlZmluZWQgfCBudWxsO1xufT47XG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQcm9maWxlKHByb3BzOiBQcm9maWxlUHJvcHMpOiBSZWFjdC5SZWFjdEVsZW1lbnQge1xuICAgIGNvbnN0IHsgb3ZlcnJpZGVzLCAuLi5yZXN0IH0gPSBwcm9wcztcbiAgICBjb25zdCBhdXRoQXR0cmlidXRlcyA9IHVzZUF1dGgoKS51c2VyPy5hdHRyaWJ1dGVzID8/IHt9O1xuICAgIHJldHVybiAoPEZsZXggey4uLnJlc3R9IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJQcm9maWxlXCIpfT48SW1hZ2Ugc3JjPXthdXRoQXR0cmlidXRlc1tcInVzZXJuYW1lXCJdfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiY2hpbGQxXCIpfT48L0ltYWdlPjxCdXR0b24gY2hpbGRyZW49e2F1dGhBdHRyaWJ1dGVzW1wicGljdHVyZVwiXX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcImNoaWxkMlwiKX0+PC9CdXR0b24+PEJ1dHRvbiBjaGlsZHJlbj17YXV0aEF0dHJpYnV0ZXNbXCJjdXN0b206ZmF2b3JpdGVfaWNlY3JlYW1cIl19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJjaGlsZDNcIil9PjwvQnV0dG9uPjwvRmxleD4pO1xufSJdfQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssS0FBSyxNQUFNLE9BQU8sQ0FBQztBQUMvQixPQUFPLEVBQW9CLGdCQUFnQixFQUFFLE9BQU8sRUFBRSxNQUFNLGdDQUFnQyxDQUFDO0FBQzdGLE9BQU8sRUFBRSxNQUFNLEVBQUUsSUFBSSxFQUFhLEtBQUssRUFBRSxNQUFNLHVCQUF1QixDQUFDO0FBS3ZFLE1BQU0sQ0FBQyxPQUFPLFVBQVUsT0FBTyxDQUFDLEtBQW1COztJQUMvQyxNQUFNLEVBQUUsU0FBUyxLQUFjLEtBQUssRUFBZCxJQUFJLFVBQUssS0FBSyxFQUE5QixhQUFzQixDQUFRLENBQUM7SUFDckMsTUFBTSxjQUFjLEdBQUcsTUFBQSxNQUFBLE9BQU8sRUFBRSxDQUFDLElBQUksMENBQUUsVUFBVSxtQ0FBSSxFQUFFLENBQUM7SUFDeEQsT0FBTyxDQUFDLG9CQUFDLElBQUksb0JBQUssZ0JBQWdCLENBQUMsU0FBUyxFQUFFLFNBQVMsQ0FBQyxFQUFNLElBQUk7UUFBRSxvQkFBQyxLQUFLLGtCQUFDLEdBQUcsRUFBRSxjQUFjLENBQUMsVUFBVSxDQUFDLElBQU0sZ0JBQWdCLENBQUMsU0FBUyxFQUFFLFFBQVEsQ0FBQyxFQUFVO1FBQUEsb0JBQUMsTUFBTSxrQkFBQyxRQUFRLEVBQUUsY0FBYyxDQUFDLFNBQVMsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVztRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLGNBQWMsQ0FBQywwQkFBMEIsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVyxDQUFPLENBQUMsQ0FBQztBQUMvWCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyogZXNsaW50LWRpc2FibGUgKi9cbmltcG9ydCAqIGFzIFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IHsgRXNjYXBlSGF0Y2hQcm9wcywgZ2V0T3ZlcnJpZGVQcm9wcywgdXNlQXV0aCB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3QvaW50ZXJuYWxcIjtcbmltcG9ydCB7IEJ1dHRvbiwgRmxleCwgRmxleFByb3BzLCBJbWFnZSB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3RcIjtcblxuZXhwb3J0IHR5cGUgUHJvZmlsZVByb3BzID0gUmVhY3QuUHJvcHNXaXRoQ2hpbGRyZW48UGFydGlhbDxGbGV4UHJvcHM+ICYge1xuICAgIG92ZXJyaWRlcz86IEVzY2FwZUhhdGNoUHJvcHMgfCB1bmRlZmluZWQgfCBudWxsO1xufT47XG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQcm9maWxlKHByb3BzOiBQcm9maWxlUHJvcHMpOiBSZWFjdC5SZWFjdEVsZW1lbnQge1xuICAgIGNvbnN0IHsgb3ZlcnJpZGVzLCAuLi5yZXN0IH0gPSBwcm9wcztcbiAgICBjb25zdCBhdXRoQXR0cmlidXRlcyA9IHVzZUF1dGgoKS51c2VyPy5hdHRyaWJ1dGVzID8/IHt9O1xuICAgIHJldHVybiAoPEZsZXggey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcIlByb2ZpbGVcIil9IHsuLi5yZXN0fT48SW1hZ2Ugc3JjPXthdXRoQXR0cmlidXRlc1tcInVzZXJuYW1lXCJdfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiY2hpbGQxXCIpfT48L0ltYWdlPjxCdXR0b24gY2hpbGRyZW49e2F1dGhBdHRyaWJ1dGVzW1wicGljdHVyZVwiXX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcImNoaWxkMlwiKX0+PC9CdXR0b24+PEJ1dHRvbiBjaGlsZHJlbj17YXV0aEF0dHJpYnV0ZXNbXCJjdXN0b206ZmF2b3JpdGVfaWNlY3JlYW1cIl19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJjaGlsZDNcIil9PjwvQnV0dG9uPjwvRmxleD4pO1xufSJdfQ==
 "
 `;
 
@@ -8315,7 +8315,7 @@ export default function Profile(props: ProfileProps): React.ReactElement {
   const authAttributes = useAuth().user?.attributes ?? {};
   return (
     /* @ts-ignore: TS2322 */
-    <Flex {...rest} {...getOverrideProps(overrides, \\"Profile\\")}>
+    <Flex {...getOverrideProps(overrides, \\"Profile\\")} {...rest}>
       <Image
         src={authAttributes[\\"username\\"]}
         {...getOverrideProps(overrides, \\"child1\\")}
