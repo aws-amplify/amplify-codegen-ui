@@ -14,7 +14,12 @@
   limitations under the License.
  */
 
-import { FieldConfigMetadata, DataFieldDataType, isValidVariableName } from '@aws-amplify/codegen-ui';
+import {
+  FieldConfigMetadata,
+  DataFieldDataType,
+  isValidVariableName,
+  isNonModelDataType,
+} from '@aws-amplify/codegen-ui';
 import {
   factory,
   Statement,
@@ -222,7 +227,7 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
     }
 
     function renderCorrectUseStateValue() {
-      if (dataType === 'AWSJSON' && !isArray) {
+      if ((dataType === 'AWSJSON' || isNonModelDataType(dataType)) && !isArray) {
         return factory.createConditionalExpression(
           determinePropertyName(),
           factory.createToken(SyntaxKind.QuestionToken),
@@ -273,7 +278,11 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
       const accessExpression = getElementAccessExpression(recordOrInitialValues, stateName);
 
       // Initial values should have the correct values and not need a modifier
-      if (dataType === 'AWSJSON' && !isArray && recordOrInitialValues !== 'initialValues') {
+      if (
+        (dataType === 'AWSJSON' || isNonModelDataType(dataType)) &&
+        !isArray &&
+        recordOrInitialValues !== 'initialValues'
+      ) {
         const awsJSONAccessModifier = stringifyAWSJSONFieldValue(accessExpression);
         acc.push(setStateExpression(renderedName, awsJSONAccessModifier));
       } else {

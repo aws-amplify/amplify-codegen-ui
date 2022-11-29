@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { getInputByLabel, getArrayFieldButtonByLabel, clickAddToArray } from '../utils/form';
+import { getInputByLabel, getArrayFieldButtonByLabel, clickAddToArray, getTextAreaByLabel } from '../utils/form';
 
 describe('CreateForms', () => {
   before(() => {
@@ -105,7 +105,10 @@ describe('CreateForms', () => {
         getInputByLabel('Aws url').type('https://amazon.com');
         getInputByLabel('Aws ip address').type('192.0.2.146');
         cy.get('.amplify-switch-track').click();
-        cy.get('textarea').type(JSON.stringify({ myKey: 'myValue' }), { parseSpecialCharSequences: false });
+        getTextAreaByLabel('Aws json').type(JSON.stringify({ myKey: 'myValue' }), { parseSpecialCharSequences: false });
+        getTextAreaByLabel('Non model field').type(JSON.stringify({ StringVal: 'myValue' }), {
+          parseSpecialCharSequences: false,
+        });
         getInputByLabel('Aws phone').type('714-234-4829');
         cy.get('select').select('San francisco');
 
@@ -156,6 +159,7 @@ describe('CreateForms', () => {
           expect(record.awsUrl).to.equal('https://amazon.com');
           expect(record.awsIPAddress).to.equal('192.0.2.146');
           expect(record.awsJson.myKey).to.equal('myValue');
+          expect(record.nonModelField.StringVal).to.equal('myValue');
           expect(record.awsPhone).to.equal('714-234-4829');
           expect(record.enum).to.equal('SAN_FRANCISCO');
           expect(record.stringArray[0]).to.equal('String1');

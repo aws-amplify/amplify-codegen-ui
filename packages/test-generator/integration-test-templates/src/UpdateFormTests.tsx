@@ -66,6 +66,7 @@ const initializeAllSupportedFormFieldsTestData = async ({
       awsIPAddress: '123.12.34.56',
       boolean: true,
       awsJson: JSON.stringify({ myKey: 'myValue' }),
+      nonModelField: JSON.stringify({ StringVal: 'myValue' }),
       awsPhone: '713 343 5938',
       enum: 'NEW_YORK',
       HasOneUser: connectedUser,

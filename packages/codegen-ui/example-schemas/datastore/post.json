@@ -45,6 +45,15 @@
           "isRequired": false,
           "attributes": []
         },
+        "nonModelField": {
+          "name": "nonModelField",
+          "isArray": false,
+          "type": {
+            "nonModel": "CustomType"
+          },
+          "isRequired": false,
+          "attributes": []
+        },
         "createdAt": {
           "name": "createdAt",
           "isArray": false,
@@ -89,8 +98,34 @@
       ]
     }
   },
-  "enums": {
+  "enums": {},
+  "nonModels": {
+    "CustomType": {
+      "name": "CustomType",
+      "fields": {
+        "StringVal": {
+          "name": "StringVal",
+          "isArray": false,
+          "type": "String",
+          "isRequired": false,
+          "attributes": []
+        },
+        "NumVal": {
+          "name": "NumVal",
+          "isArray": false,
+          "type": "Int",
+          "isRequired": false,
+          "attributes": []
+        },
+        "BoolVal": {
+          "name": "BoolVal",
+          "isArray": false,
+          "type": "Boolean",
+          "isRequired": false,
+          "attributes": []
+        }
+      }
+    }
   },
-  "nonModels": {},
   "version": "000000"
 }
