@@ -14,7 +14,15 @@
   limitations under the License.
  */
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
-import { factory, NodeFlags, SyntaxKind, Expression, Statement } from 'typescript';
+import {
+  factory,
+  NodeFlags,
+  SyntaxKind,
+  Expression,
+  Statement,
+  VariableStatement,
+  ExpressionStatement,
+} from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './display-value';
 import { getSetNameIdentifier } from './form-state';
@@ -27,127 +35,258 @@ import { isManyToManyRelationship } from './map-from-fieldConfigs';
 export const buildDataStoreExpression = (
   dataStoreActionType: 'update' | 'create',
   importedModelName: string,
-  hasManyFieldConfigs: [string, FieldConfigMetadata][],
+  fieldConfigs: Record<string, FieldConfigMetadata>,
 ) => {
-  if (hasManyFieldConfigs.length > 0) {
-    return hasManyFieldConfigs
-      .map((hasManyFieldConfig) => {
-        const [, fieldConfigMetaData] = hasManyFieldConfig;
-        if (isManyToManyRelationship(fieldConfigMetaData)) {
-          return buildManyToManyRelationshipDataStoreStatements(
-            dataStoreActionType,
-            importedModelName,
-            hasManyFieldConfig,
-          );
-        }
-        return buildHasManyRelationshipDataStoreStatements(dataStoreActionType, importedModelName, hasManyFieldConfig);
-      })
-      .reduce((statements, statement) => {
-        return [...statements, ...statement];
-      }, []);
-  }
+  let isHasManyFieldConfigExisting = false;
+  const hasManyDataStoreStatements: (VariableStatement | ExpressionStatement)[] = [];
 
-  if (dataStoreActionType === 'update') {
-    return [
+  Object.entries(fieldConfigs).forEach((fieldConfig) => {
+    const [, fieldConfigMetaData] = fieldConfig;
+    if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
+      isHasManyFieldConfigExisting = true;
+      if (isManyToManyRelationship(fieldConfigMetaData)) {
+        hasManyDataStoreStatements.push(
+          ...buildManyToManyRelationshipDataStoreStatements(dataStoreActionType, importedModelName, fieldConfig),
+        );
+      } else {
+        hasManyDataStoreStatements.push(
+          ...buildHasManyRelationshipDataStoreStatements(dataStoreActionType, importedModelName, fieldConfig),
+        );
+      }
+    }
+  });
+
+  if (isHasManyFieldConfigExisting && dataStoreActionType === 'update') {
+    hasManyDataStoreStatements.unshift(
       factory.createVariableStatement(
         undefined,
         factory.createVariableDeclarationList(
           [
             factory.createVariableDeclaration(
-              factory.createIdentifier('original'),
+              factory.createIdentifier('promises'),
               undefined,
               undefined,
-              factory.createAwaitExpression(
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier('DataStore'),
-                    factory.createIdentifier('query'),
-                  ),
-                  undefined,
-                  [factory.createIdentifier(importedModelName), factory.createIdentifier('id')],
-                ),
-              ),
+              factory.createArrayLiteralExpression([], false),
             ),
           ],
           NodeFlags.Const,
         ),
       ),
-      factory.createExpressionStatement(
-        factory.createAwaitExpression(
+    );
+  }
+
+  const genericSaveStatement = isHasManyFieldConfigExisting
+    ? [
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier(lowerCaseFirst(importedModelName)),
+                undefined,
+                undefined,
+                factory.createAwaitExpression(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('DataStore'),
+                      factory.createIdentifier('save'),
+                    ),
+                    undefined,
+                    [
+                      factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
+                        factory.createIdentifier('modelFields'),
+                      ]),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+            NodeFlags.Const,
+          ),
+        ),
+      ]
+    : [
+        factory.createExpressionStatement(
+          factory.createAwaitExpression(
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('DataStore'),
+                factory.createIdentifier('save'),
+              ),
+              undefined,
+              [
+                factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
+                  factory.createIdentifier('modelFields'),
+                ]),
+              ],
+            ),
+          ),
+        ),
+      ];
+
+  const genericUpdateStatement = isHasManyFieldConfigExisting
+    ? [
+        factory.createExpressionStatement(
           factory.createCallExpression(
             factory.createPropertyAccessExpression(
-              factory.createIdentifier('DataStore'),
-              factory.createIdentifier('save'),
+              factory.createIdentifier('promises'),
+              factory.createIdentifier('push'),
             ),
             undefined,
             [
               factory.createCallExpression(
                 factory.createPropertyAccessExpression(
-                  factory.createIdentifier(importedModelName),
-                  factory.createIdentifier('copyOf'),
+                  factory.createIdentifier('DataStore'),
+                  factory.createIdentifier('save'),
                 ),
                 undefined,
                 [
-                  factory.createIdentifier('original'),
-                  factory.createArrowFunction(
-                    undefined,
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier(importedModelName),
+                      factory.createIdentifier('copyOf'),
+                    ),
                     undefined,
                     [
-                      factory.createParameterDeclaration(
+                      factory.createIdentifier(`${lowerCaseFirst(importedModelName)}Record`),
+                      factory.createArrowFunction(
                         undefined,
                         undefined,
+                        [
+                          factory.createParameterDeclaration(
+                            undefined,
+                            undefined,
+                            undefined,
+                            factory.createIdentifier('updated'),
+                            undefined,
+                            undefined,
+                            undefined,
+                          ),
+                        ],
                         undefined,
-                        factory.createIdentifier('updated'),
-                        undefined,
-                        undefined,
-                        undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        factory.createBlock(
+                          [
+                            factory.createExpressionStatement(
+                              factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('Object'),
+                                  factory.createIdentifier('assign'),
+                                ),
+                                undefined,
+                                [factory.createIdentifier('updated'), factory.createIdentifier('modelFields')],
+                              ),
+                            ),
+                          ],
+                          true,
+                        ),
                       ),
                     ],
-                    undefined,
-                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                    factory.createBlock(
-                      [
-                        factory.createExpressionStatement(
-                          factory.createCallExpression(
-                            factory.createPropertyAccessExpression(
-                              factory.createIdentifier('Object'),
-                              factory.createIdentifier('assign'),
-                            ),
-                            undefined,
-                            [factory.createIdentifier('updated'), factory.createIdentifier('modelFields')],
-                          ),
-                        ),
-                      ],
-                      true,
-                    ),
                   ),
                 ],
               ),
             ],
           ),
         ),
-      ),
-    ];
+        factory.createExpressionStatement(
+          factory.createAwaitExpression(
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('Promise'),
+                factory.createIdentifier('all'),
+              ),
+              undefined,
+              [factory.createIdentifier('promises')],
+            ),
+          ),
+        ),
+      ]
+    : [
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier('original'),
+                undefined,
+                undefined,
+                factory.createAwaitExpression(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('DataStore'),
+                      factory.createIdentifier('query'),
+                    ),
+                    undefined,
+                    [factory.createIdentifier(importedModelName), factory.createIdentifier('id')],
+                  ),
+                ),
+              ),
+            ],
+            NodeFlags.Const,
+          ),
+        ),
+        factory.createExpressionStatement(
+          factory.createAwaitExpression(
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('DataStore'),
+                factory.createIdentifier('save'),
+              ),
+              undefined,
+              [
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier(importedModelName),
+                    factory.createIdentifier('copyOf'),
+                  ),
+                  undefined,
+                  [
+                    factory.createIdentifier('original'),
+                    factory.createArrowFunction(
+                      undefined,
+                      undefined,
+                      [
+                        factory.createParameterDeclaration(
+                          undefined,
+                          undefined,
+                          undefined,
+                          factory.createIdentifier('updated'),
+                          undefined,
+                          undefined,
+                          undefined,
+                        ),
+                      ],
+                      undefined,
+                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                      factory.createBlock(
+                        [
+                          factory.createExpressionStatement(
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createIdentifier('Object'),
+                                factory.createIdentifier('assign'),
+                              ),
+                              undefined,
+                              [factory.createIdentifier('updated'), factory.createIdentifier('modelFields')],
+                            ),
+                          ),
+                        ],
+                        true,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ];
+
+  if (dataStoreActionType === 'update') {
+    return [...hasManyDataStoreStatements, ...genericUpdateStatement];
   }
 
-  return [
-    factory.createExpressionStatement(
-      factory.createAwaitExpression(
-        factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier('DataStore'),
-            factory.createIdentifier('save'),
-          ),
-          undefined,
-          [
-            factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
-              factory.createIdentifier('modelFields'),
-            ]),
-          ],
-        ),
-      ),
-    ),
-  ];
+  return [...genericSaveStatement, ...hasManyDataStoreStatements];
 };
 
 /**

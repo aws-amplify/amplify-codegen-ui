@@ -7158,6 +7158,7 @@ export default function SchoolUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          const promises = [];
           const studentsToLink = [];
           const studentsToUnLink = [];
           const studentsSet = new Set();
@@ -7174,7 +7175,6 @@ export default function SchoolUpdateForm(props) {
               studentsToLink.push(r);
             }
           });
-          const promises = [];
           studentsToUnLink.forEach((original) => {
             promises.push(
               DataStore.save(
@@ -7871,6 +7871,7 @@ function ArrayField({
   lengthLimit,
   getBadgeText,
 }) {
+  const labelElement = <Text>{label}</Text>;
   const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
@@ -7954,11 +7955,16 @@ function ArrayField({
     </React.Fragment>
   );
   if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return arraySection;
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
   }
   return (
     <React.Fragment>
-      <Text>{label}</Text>
+      {labelElement}
       {isEditing && children}
       {!isEditing ? (
         <>
@@ -8140,6 +8146,7 @@ export default function TagUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          const promises = [];
           const postsToLinkMap = new Map();
           const postsToUnLinkMap = new Map();
           const postsMap = new Map();
@@ -8176,7 +8183,6 @@ export default function TagUpdateForm(props) {
               postsToLinkMap.set(id, count);
             }
           });
-          const promises = [];
           postsToUnLinkMap.forEach(async (count, id) => {
             const tagPostRecords = await DataStore.query(TagPost, (r) =>
               r.and((r) => [r.postID.eq(id), r.tagID.eq(tagRecord.id)])
@@ -8264,9 +8270,10 @@ export default function TagUpdateForm(props) {
         items={Posts}
         hasError={errors.Posts?.hasError}
         getBadgeText={getDisplayValue.Posts}
-        setFieldValue={(model) =>
-          setCurrentPostsDisplayValue(getDisplayValue.Posts(model))
-        }
+        setFieldValue={(model) => {
+          setCurrentPostsDisplayValue(getDisplayValue.Posts(model));
+          setCurrentPostsValue(model);
+        }}
         inputFieldRef={PostsRef}
         defaultFieldValue={\\"\\"}
       >
