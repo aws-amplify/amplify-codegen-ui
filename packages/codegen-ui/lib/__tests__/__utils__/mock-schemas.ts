@@ -1498,3 +1498,206 @@ export const schemaWithAssumptions: Schema = {
   version: 'version',
   codegenVersion: '000000',
 };
+
+/**
+  type Student @model {
+    specialStudentId: ID! @primaryKey(sortKeyFields: ["grade", "age"])
+    grade: Int!
+    age: Int!
+  }
+
+  type Teacher @model {
+    specialTeacherId: ID! @primaryKey
+    Student: Student @hasOne
+  }
+
+  type Dog @model {
+    id: ID!
+    name: String
+  }
+*/
+
+export const schemaWithCPK: Schema = {
+  models: {
+    Student: {
+      name: 'Student',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        specialStudentId: {
+          name: 'specialStudentId',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        grade: {
+          name: 'grade',
+          isArray: false,
+          type: 'Int',
+          isRequired: true,
+          attributes: [],
+        },
+        age: {
+          name: 'age',
+          isArray: false,
+          type: 'Int',
+          isRequired: true,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Students',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['specialStudentId', 'grade', 'age'],
+          },
+        },
+      ],
+    },
+    Teacher: {
+      name: 'Teacher',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        specialTeacherId: {
+          name: 'specialTeacherId',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        Student: {
+          name: 'Student',
+          isArray: false,
+          type: {
+            model: 'Student',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'HAS_ONE',
+            associatedWith: 'id',
+            targetName: 'TeacherStudentId',
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        TeacherStudentId: {
+          name: 'TeacherStudentId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'Teachers',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['specialTeacherId'],
+          },
+        },
+      ],
+    },
+    Dog: {
+      name: 'Dog',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Dogs',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+  },
+  enums: {},
+  nonModels: {},
+  version: '38a1a46479c6cd75d21439d7f3122c1d',
+  codegenVersion: '000000',
+};

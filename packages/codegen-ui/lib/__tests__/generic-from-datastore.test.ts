@@ -21,6 +21,7 @@ import {
   schemaWithRelationships,
   schemaWithRelationshipsV2,
   schemaWithAssumptions,
+  schemaWithCPK,
 } from './__utils__/mock-schemas';
 
 describe('getGenericFromDataStore', () => {
@@ -217,5 +218,13 @@ describe('getGenericFromDataStore', () => {
       .map(([name]) => name);
     expect(joinTables).toHaveLength(1);
     expect(joinTables).toStrictEqual(['StudentTeacher']);
+  });
+
+  it('should correctly identify primary keys', () => {
+    const genericSchema = getGenericFromDataStore(schemaWithCPK);
+    const { models } = genericSchema;
+    expect(models.Dog.primaryKeys).toStrictEqual(['id']);
+    expect(models.Student.primaryKeys).toStrictEqual(['specialStudentId', 'grade', 'age']);
+    expect(models.Teacher.primaryKeys).toStrictEqual(['specialTeacherId']);
   });
 });
