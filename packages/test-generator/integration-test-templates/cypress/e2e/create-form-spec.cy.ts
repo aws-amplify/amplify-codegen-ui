@@ -143,9 +143,26 @@ describe('CreateForms', () => {
         });
         clickAddToArray();
 
+        // ManyToMany Autocomplete
+        getArrayFieldButtonByLabel('Many to many tags').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`Red{downArrow}{enter}`);
+        });
+        clickAddToArray();
+        getArrayFieldButtonByLabel('Many to many tags').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`B{downArrow}{enter}`);
+        });
+        clickAddToArray();
+        getArrayFieldButtonByLabel('Many to many tags').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`Gr{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
         cy.contains('Submit').click();
 
-        cy.contains(/MyString/).then((recordElement) => {
+        cy.contains(/MyString/).then((recordElement: JQuery) => {
           const record = JSON.parse(recordElement.text());
 
           expect(record.string).to.equal('MyString');
@@ -166,6 +183,9 @@ describe('CreateForms', () => {
           expect(record.HasManyStudents?.[0].name).to.equal('David');
           expect(record.HasManyStudents?.[1].name).to.equal('Sarah');
           expect(record.BelongsToOwner.name).to.equal('John');
+          expect(record.ManyToManyTags[0].label).to.equal('Blue');
+          expect(record.ManyToManyTags[1].label).to.equal('Green');
+          expect(record.ManyToManyTags[2].label).to.equal('Red');
         });
       });
     });

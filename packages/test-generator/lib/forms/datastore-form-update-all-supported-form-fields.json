@@ -58,7 +58,35 @@
       "excluded": true
     },
     "ManyToManyTags": {
-      "excluded": true
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "Tag",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "bindingProperties": {
+                  "property": "Tag",
+                  "field": "label"
+                }
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Tag": {
+              "type": "Data",
+              "bindingProperties": {
+                "model": "Tag"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "sectionalElements": {},

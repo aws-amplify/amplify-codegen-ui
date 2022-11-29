@@ -16,15 +16,16 @@
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider, Text } from '@aws-amplify/ui-react';
 import { useState, useEffect, useRef } from 'react';
-import { DataStore } from '@aws-amplify/datastore';
+import { AsyncItem, DataStore } from '@aws-amplify/datastore';
 import {
   CustomFormCreateDog,
   DataStoreFormCreateAllSupportedFormFields,
   CustomFormCreateNestedJson,
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
-import { AllSupportedFormFields, Owner, Student, User } from './models';
 
-const initializeUserTestData = async (): Promise<void> => {
+import { AllSupportedFormFields, Owner, User, Tag, LazyTag, LazyAllSupportedFormFieldsTag } from './models';
+
+const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
   await DataStore.save(new User({ firstName: 'Paul', lastName: 'McCartney', age: 72 }));
   await DataStore.save(new User({ firstName: 'George', lastName: 'Harrison', age: 50 }));
@@ -37,6 +38,10 @@ const initializeUserTestData = async (): Promise<void> => {
   await DataStore.save(new Student({ name: 'Taylor' }));
   await DataStore.save(new Student({ name: 'Michael' }));
   await DataStore.save(new Student({ name: 'Sarah' }));
+  await DataStore.save(new Tag({ label: 'Red' }));
+  await DataStore.save(new Tag({ label: 'Blue' }));
+  await DataStore.save(new Tag({ label: 'Green' }));
+  await DataStore.save(new Tag({ label: 'Orange' }));
 };
 
 export default function CreateFormTests() {
@@ -54,7 +59,7 @@ export default function CreateFormTests() {
       }
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
-      await initializeUserTestData();
+      await initializeTestData();
       setInitialized(true);
     };
 
@@ -98,6 +103,15 @@ export default function CreateFormTests() {
           onSuccess={async () => {
             const records = await DataStore.query(AllSupportedFormFields);
             const record = records[0];
+            const joinTableRecords = (await record.ManyToManyTags?.toArray()) as LazyAllSupportedFormFieldsTag[];
+            const ManyToManyTags = await Promise.all(
+              joinTableRecords?.reduce((promises: AsyncItem<LazyTag>[], joinTableRecord) => {
+                promises.push(joinTableRecord.tag as AsyncItem<LazyTag>);
+                return promises;
+              }, []),
+            );
+            // sort to make sure order
+            ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
 
             setDataStoreFormCreateAllSupportedFormFieldsRecord(
               JSON.stringify({
@@ -105,6 +119,7 @@ export default function CreateFormTests() {
                 HasOneUser: await record.HasOneUser,
                 BelongsToOwner: await record.BelongsToOwner,
                 HasManyStudents: await record.HasManyStudents?.toArray(),
+                ManyToManyTags,
               }),
             );
           }}
