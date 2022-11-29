@@ -121,7 +121,10 @@ describe('amplify form renderer tests', () => {
     });
 
     it('should generate an update form with manyToMany relationship', () => {
-      const { componentText } = generateWithAmplifyFormRenderer('forms/tag-datastore-update', 'datastore/tag-post');
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/tag-datastore-update',
+        'datastore/tag-post',
+      );
       // check nested model is imported
       expect(componentText).toContain('import { Tag, Post, TagPost } from "../models";');
 
@@ -139,6 +142,9 @@ describe('amplify form renderer tests', () => {
 
       // check resetStateValues has correct dependencies
       expect(componentText).toContain('React.useEffect(resetStateValues, [tagRecord, linkedPosts]);');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should generate a create form with array of Enums', () => {
