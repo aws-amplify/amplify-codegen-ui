@@ -23,7 +23,7 @@ import {
   CustomFormCreateNestedJson,
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
 
-import { AllSupportedFormFields, Owner, User, Tag, LazyTag, LazyAllSupportedFormFieldsTag } from './models';
+import { AllSupportedFormFields, Owner, User, Tag, LazyTag, Student, LazyAllSupportedFormFieldsTag } from './models';
 
 const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
