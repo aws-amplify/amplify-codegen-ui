@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { factory, NodeFlags, ObjectLiteralElementLike, SyntaxKind } from 'typescript';
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, isNonModelDataType } from '@aws-amplify/codegen-ui';
 
 /**
  * builds modelFields object which is used to validate, onSubmit, onSuccess/onError
@@ -62,7 +62,7 @@ export const buildModelFieldObject = (
         url: url || undefined,
        }
       */
-      if (dataType === 'AWSURL' && !shouldBeConst) {
+      if ((dataType === 'AWSURL' || isNonModelDataType(dataType)) && !shouldBeConst) {
         assignment = factory.createPropertyAssignment(
           factory.createStringLiteral(fieldName),
           factory.createBinaryExpression(

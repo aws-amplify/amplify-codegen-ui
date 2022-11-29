@@ -255,7 +255,7 @@ describe('mapModelFieldsConfigs', () => {
     });
   });
 
-  it('should not add nonModel field to matrix', () => {
+  it('should add nonModel field to matrix', () => {
     const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
@@ -276,9 +276,25 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
 
-    expect(formDefinition.elementMatrix).toStrictEqual([]);
+    expect(modelFieldsConfigs).toStrictEqual({
+      ownerId: {
+        dataType: {
+          nonModel: 'Interaction',
+        },
+        inputType: {
+          isArray: false,
+          name: 'ownerId',
+          readOnly: false,
+          required: false,
+          type: 'TextAreaField',
+          value: 'ownerId',
+        },
+        label: 'Owner id',
+      },
+    });
+    expect(formDefinition.elementMatrix).toStrictEqual([['ownerId']]);
   });
 
   it('should add value mappings from enums', () => {

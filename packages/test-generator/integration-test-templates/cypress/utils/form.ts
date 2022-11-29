@@ -17,6 +17,10 @@ export const getInputByLabel = (label) => {
   return cy.contains('label', label).parent().find('input');
 };
 
+export const getTextAreaByLabel = (label) => {
+  return cy.contains('label', label).parent().find('textarea');
+};
+
 export const getArrayFieldButtonByLabel = (label) => {
   return cy.contains(label).next('button');
 };

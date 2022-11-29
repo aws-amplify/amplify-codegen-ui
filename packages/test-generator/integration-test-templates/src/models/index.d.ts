@@ -377,6 +377,8 @@ type EagerAllSupportedFormFields = {
 
   readonly enum?: City | keyof typeof City | null;
 
+  readonly nonModelField?: string | null;
+
   readonly createdAt?: string | null;
 
   readonly updatedAt?: string | null;
@@ -424,6 +426,8 @@ type LazyAllSupportedFormFields = {
   readonly awsPhone?: string | null;
 
   readonly enum?: City | keyof typeof City | null;
+
+  readonly nonModelField?: string | null;
 
   readonly createdAt?: string | null;
 

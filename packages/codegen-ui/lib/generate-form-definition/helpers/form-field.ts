@@ -27,6 +27,7 @@ import { InternalError, InvalidInputError } from '../../errors';
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
 import { deleteUndefined, getFirstDefinedValue, getFirstNumber, getFirstString } from './mapper-utils';
 import { ExtendedStudioGenericFieldConfig } from '../../types/form/form-definition';
+import { isNonModelDataType } from '../../check-support';
 
 export function mergeValueMappings(
   base?: StudioFormValueMappings,
@@ -129,7 +130,9 @@ function getMergedValidations(
 
   const defaultValidation = ComponentTypeToDefaultValidations[componentType];
 
-  if (defaultValidation) {
+  if (isNonModelDataType(dataType)) {
+    mergedValidations.push({ type: ValidationTypes.JSON, immutable: true });
+  } else if (defaultValidation) {
     mergedValidations.push(...defaultValidation);
   }
 

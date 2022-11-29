@@ -734,6 +734,15 @@ export default {
           isRequired: false,
           attributes: [],
         },
+        nonModelField: {
+          name: 'nonModelField',
+          isArray: false,
+          type: {
+            nonModel: 'CustomType',
+          },
+          isRequired: false,
+          attributes: [],
+        },
         HasOneUser: {
           name: 'HasOneUser',
           isArray: false,
