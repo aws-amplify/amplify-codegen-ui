@@ -13,7 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import type { Schema as DataStoreSchema, ModelField } from '@aws-amplify/datastore';
+import type {
+  Schema as DataStoreSchema,
+  ModelField,
+  SchemaModel as DataStoreSchemaModel,
+} from '@aws-amplify/datastore';
 import { InvalidInputError } from './errors';
 import { GenericDataField, GenericDataRelationshipType, GenericDataSchema } from './types';
 
@@ -45,6 +49,20 @@ function addRelationship(
 
   // eslint-disable-next-line no-param-reassign
   fields[modelName][fieldName] = relationship;
+}
+
+// get custom primary keys || id
+// TODO: when moved over to use introspection schema, this can be vastly simplified
+function getPrimaryKeys({ model }: { model: DataStoreSchemaModel }) {
+  const customPrimaryKeys = model.attributes?.find(
+    (attr) =>
+      attr.type === 'key' &&
+      (attr.properties === undefined ||
+        // presence of name indicates that it is a secondary index and not a primary key
+        !Object.keys(attr.properties).includes('name')),
+  )?.properties?.fields;
+
+  return customPrimaryKeys && Array.isArray(customPrimaryKeys) && customPrimaryKeys.length ? customPrimaryKeys : ['id'];
 }
 
 export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): GenericDataSchema {
@@ -146,7 +164,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
       genericFields[field.name] = genericField;
     });
 
-    genericSchema.models[model.name] = { fields: genericFields };
+    genericSchema.models[model.name] = { fields: genericFields, primaryKeys: getPrimaryKeys({ model }) };
   });
 
   Object.entries(fieldsWithImplicitRelationships).forEach(([modelName, fields]) => {
