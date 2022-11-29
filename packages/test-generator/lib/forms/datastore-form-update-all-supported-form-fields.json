@@ -52,7 +52,35 @@
       }
     },
     "BelongsToOwner": {
-      "excluded": true
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "Owner",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "bindingProperties": {
+                  "property": "Owner",
+                  "field": "name"
+                }
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Owner": {
+              "type": "Data",
+              "bindingProperties": {
+                "model": "Owner"
+              }
+            }
+          }
+        }
+      }
     },
     "HasManyStudents": {
       "excluded": true
