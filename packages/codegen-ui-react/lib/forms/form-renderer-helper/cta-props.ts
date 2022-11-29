@@ -14,7 +14,15 @@
   limitations under the License.
  */
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
-import { factory, NodeFlags, SyntaxKind, Expression, Statement } from 'typescript';
+import {
+  factory,
+  NodeFlags,
+  SyntaxKind,
+  Expression,
+  Statement,
+  VariableStatement,
+  ExpressionStatement,
+} from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './display-value';
 import { getSetNameIdentifier } from './form-state';
