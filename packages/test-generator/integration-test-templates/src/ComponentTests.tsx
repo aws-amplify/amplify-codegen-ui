@@ -229,6 +229,7 @@ export default function ComponentTests() {
         <ComponentWithVariant id="variant3" variant="primary" size="large" />
         <ComponentWithVariant id="variant4" variant="success" />
         <ComponentWithVariant id="variant5" variant="light" />
+        <ComponentWithVariant id="variantWithRest" variant="secondary" fontSize="10px" />
         <ComponentWithVariantsAndNotOverrideChildProp id="variant6" mode="test" />
         <ComponentWithVariantAndOverrides id="variantAndOverrideDefault" />
         <ComponentWithVariantAndOverrides id="variantAndOverrideVariantValue" variant="greeting" />
