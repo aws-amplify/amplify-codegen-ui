@@ -13,13 +13,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export * from './component-metadata';
-export * from './component-tree';
-export * from './state-reference-metadata';
-export * from './string-formatter';
-export * from './form-component-metadata';
-export * from './form-to-component';
-export * from './breakpoint-utils';
-export * from './form-utils';
-export * from './reserved-words';
-export * from './dataschema-metadata';
+import { GenericDataSchema } from '../types/data';
+
+export type DataSchemaMetaData = {
+  models: { [modelName: string]: { primaryKey: string } };
+};
+
+export function getDataSchemaMetaData({ dataSchema }: { dataSchema: GenericDataSchema }): DataSchemaMetaData {
+  const metaData: DataSchemaMetaData = { models: {} };
+
+  Object.entries(dataSchema.models).forEach(([modelName, modelConfig]) => {
+    metaData.models[modelName] = { primaryKey: modelConfig.primaryKeys[0] };
+  });
+
+  return metaData;
+}

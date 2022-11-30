@@ -56,7 +56,7 @@ export const getDisplayValueObjectName = 'getDisplayValue';
   for model -
   authorRecords.map((r) => ({
     id: r.id,
-    label: getDisplayValue['primaryAuthor']?.(r) ?? r.id,
+    label: getDisplayValue['primaryAuthor']?.(r),
   }))
 
   for scalar - 
@@ -79,15 +79,11 @@ function getModelTypeSuggestions({
   const recordString = 'r';
 
   const labelExpression = isModelType
-    ? factory.createBinaryExpression(
-        factory.createCallChain(
-          getElementAccessExpression('getDisplayValue', fieldName),
-          factory.createToken(SyntaxKind.QuestionDotToken),
-          undefined,
-          [factory.createIdentifier(recordString)],
-        ),
-        factory.createToken(SyntaxKind.QuestionQuestionToken),
-        getElementAccessExpression(recordString, key),
+    ? factory.createCallChain(
+        getElementAccessExpression('getDisplayValue', fieldName),
+        factory.createToken(SyntaxKind.QuestionDotToken),
+        undefined,
+        [factory.createIdentifier(recordString)],
       )
     : getElementAccessExpression(recordString, key);
 
@@ -220,10 +216,13 @@ export function buildDisplayValueFunction(fieldName: string, fieldConfig: FieldC
     ? factory.createIdentifier(fieldName)
     : factory.createStringLiteral(fieldName);
   let additionalStatements: VariableStatement[] = [];
+  const { key: primaryKey } = extractModelAndKey(fieldConfig.valueMappings);
+
   let renderedDisplayValue: Expression = factory.createPropertyAccessChain(
     factory.createIdentifier(recordString),
     factory.createToken(SyntaxKind.QuestionDotToken),
-    factory.createIdentifier('id'),
+    // if this expression is used, primaryKey should exist
+    factory.createIdentifier(primaryKey || ''),
   );
 
   if (isModelDataType(fieldConfig) && fieldConfig.valueMappings) {

@@ -68,6 +68,10 @@ export const getLinkedDataName = (modelName: string) => `linked${capitalizeFirst
 export const getCurrentValueIdentifier = (fieldName: string) =>
   factory.createIdentifier(getCurrentValueName(fieldName));
 
+// in update form, there will be conflict if field `id` is editable.
+// so the prop `id` should be destructured as `idProp`
+export const getPropName = (propName: string) => `${propName}Prop`;
+
 export const resetValuesName = factory.createIdentifier('resetStateValues');
 
 export const setStateExpression = (fieldName: string, value: Expression) => {

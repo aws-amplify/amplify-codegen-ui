@@ -45,6 +45,7 @@ import {
   getCurrentValueIdentifier,
   getCurrentValueName,
   getDefaultValueExpression,
+  getPropName,
   getRecordsName,
   getSetNameIdentifier,
   setFieldState,
@@ -55,17 +56,22 @@ import { buildModelFieldObject } from './model-fields';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 import { extractModelAndKey } from './display-value';
 
-export const buildMutationBindings = (form: StudioForm) => {
+export const buildMutationBindings = (form: StudioForm, primaryKey?: string) => {
   const {
     dataType: { dataSourceType, dataTypeName },
     formActionType,
   } = form;
   const elements: BindingElement[] = [];
-  if (dataSourceType === 'DataStore') {
+  if (dataSourceType === 'DataStore' && primaryKey) {
     if (formActionType === 'update') {
       elements.push(
-        // TODO: change once cpk is supported in datastore
-        factory.createBindingElement(undefined, undefined, factory.createIdentifier('id'), undefined),
+        // id: idProp
+        factory.createBindingElement(
+          undefined,
+          factory.createIdentifier(primaryKey),
+          factory.createIdentifier(getPropName(primaryKey)),
+          undefined,
+        ),
         factory.createBindingElement(
           undefined,
           undefined,

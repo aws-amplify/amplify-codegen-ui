@@ -508,9 +508,9 @@ export const buildUpdateDatastoreQuery = (
   dataTypeName: string,
   recordName: string,
   relatedModelStatements: Statement[],
+  primaryKey: string,
 ) => {
-  // TODO: update this once cpk is supported in datastore
-  const pkQueryIdentifier = factory.createIdentifier('id');
+  const pkQueryIdentifier = factory.createIdentifier(primaryKey);
   return [
     factory.createVariableStatement(
       undefined,

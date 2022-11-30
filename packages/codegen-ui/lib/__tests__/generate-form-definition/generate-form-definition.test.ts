@@ -35,6 +35,7 @@ describe('generateFormDefinition', () => {
         nonModels: {},
         models: {
           Dog: {
+            primaryKeys: ['id'],
             fields: {
               name: { dataType: 'String', readOnly: false, required: true, isArray: false },
               tricks: { dataType: 'String', readOnly: false, required: false, isArray: true },
@@ -87,6 +88,7 @@ describe('generateFormDefinition', () => {
         nonModels: {},
         models: {
           Dog: {
+            primaryKeys: ['id'],
             fields: {
               tricks: { dataType: 'String', readOnly: false, required: false, isArray: false },
             },
@@ -138,7 +140,12 @@ describe('generateFormDefinition', () => {
         dataSourceType: 'DataStore',
         enums: {},
         nonModels: {},
-        models: { Dog: { fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } } } },
+        models: {
+          Dog: {
+            primaryKeys: ['id'],
+            fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } },
+          },
+        },
       },
     });
     expect(formDefinition.elements).toStrictEqual({
@@ -168,7 +175,12 @@ describe('generateFormDefinition', () => {
         dataSourceType: 'DataStore',
         enums: {},
         nonModels: {},
-        models: { Dog: { fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } } } },
+        models: {
+          Dog: {
+            primaryKeys: ['id'],
+            fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } },
+          },
+        },
       },
     });
 
@@ -187,7 +199,12 @@ describe('generateFormDefinition', () => {
         style: {},
         cta: {},
       },
-      dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: { Dog: { primaryKeys: ['id'], fields: {} } },
+      },
     });
     expect(formDefinition.elements).toStrictEqual({
       weight: { componentType: 'SliderField', props: { min: 1, max: 100, step: 2, label: 'Label' } },
@@ -206,7 +223,12 @@ describe('generateFormDefinition', () => {
         style: {},
         cta: {},
       },
-      dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: { Dog: { primaryKeys: ['id'], fields: {} } },
+      },
     });
     expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
   });
@@ -278,6 +300,7 @@ describe('generateFormDefinition', () => {
         nonModels: {},
         models: {
           Dog: {
+            primaryKeys: ['id'],
             fields: {
               name: { dataType: 'String', readOnly: false, required: true, isArray: false },
               weight: { dataType: 'Float', readOnly: false, required: true, isArray: false },
@@ -315,6 +338,7 @@ describe('generateFormDefinition', () => {
         nonModels: {},
         models: {
           Dog: {
+            primaryKeys: ['id'],
             fields: {
               name: { dataType: 'String', readOnly: false, required: true, isArray: false },
               weight: { dataType: 'Float', readOnly: false, required: true, isArray: false },
@@ -417,6 +441,7 @@ it('should skip read-only fields without overrides', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: true, required: true, isArray: false },
           },
@@ -446,6 +471,7 @@ it('should add read-only fields if it has overrides', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: true, required: true, isArray: false },
           },
@@ -484,6 +510,7 @@ it('should skip adding id field if it has no overrides', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             id: { dataType: 'ID', readOnly: false, required: true, isArray: false },
           },

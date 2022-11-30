@@ -268,7 +268,7 @@ export const validationFunctionType = factory.createTypeAliasDeclaration(
     - onSuccess(fields)
     - onError(fields, errorMessage)
    */
-export const buildFormPropNode = (form: StudioForm, modelName?: string) => {
+export const buildFormPropNode = (form: StudioForm, modelName?: string, primaryKey?: string) => {
   const {
     name: formName,
     dataType: { dataSourceType, dataTypeName },
@@ -277,13 +277,17 @@ export const buildFormPropNode = (form: StudioForm, modelName?: string) => {
   const propSignatures: PropertySignature[] = [];
   if (dataSourceType === 'DataStore') {
     if (formActionType === 'update') {
+      if (primaryKey) {
+        propSignatures.push(
+          factory.createPropertySignature(
+            undefined,
+            factory.createIdentifier(primaryKey),
+            factory.createToken(SyntaxKind.QuestionToken),
+            factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+          ),
+        );
+      }
       propSignatures.push(
-        factory.createPropertySignature(
-          undefined,
-          factory.createIdentifier('id'),
-          factory.createToken(SyntaxKind.QuestionToken),
-          factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-        ),
         factory.createPropertySignature(
           undefined,
           factory.createIdentifier(lowerCaseFirst(dataTypeName)),

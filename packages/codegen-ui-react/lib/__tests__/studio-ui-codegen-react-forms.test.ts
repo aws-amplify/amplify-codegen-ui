@@ -359,6 +359,19 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toContain('inputFieldRef={CustomtagsRef}');
         expect(componentText).toContain('ref={CustomtagsRef}');
       });
+
+      it('should render an update form for model with cpk', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/teacher-datastore-update-cpk',
+          'datastore/cpk-relationships',
+        );
+        expect(componentText).toContain('specialTeacherId: specialTeacherIdProp');
+        expect(componentText).toContain('await DataStore.query(Teacher, specialTeacherIdProp)');
+        expect(componentText).toContain('Student: (record) => record?.specialStudentId');
+        expect(componentText).toContain('id: r.specialStudentId');
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
     });
   });
 });

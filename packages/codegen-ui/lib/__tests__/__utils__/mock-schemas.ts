@@ -1609,7 +1609,7 @@ export const schemaWithCPK: Schema = {
           attributes: [],
           association: {
             connectionType: 'HAS_ONE',
-            associatedWith: 'id',
+            associatedWith: 'specialStudentId',
             targetName: 'TeacherStudentId',
           },
         },
