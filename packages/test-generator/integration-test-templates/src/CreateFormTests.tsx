@@ -110,7 +110,6 @@ export default function CreateFormTests() {
                 return promises;
               }, []),
             );
-            // sort to make sure order
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
 
             setDataStoreFormCreateAllSupportedFormFieldsRecord(
@@ -118,7 +117,7 @@ export default function CreateFormTests() {
                 ...record,
                 HasOneUser: await record.HasOneUser,
                 BelongsToOwner: await record.BelongsToOwner,
-                HasManyStudents: await record.HasManyStudents?.toArray(),
+                HasManyStudents: await record.HasManyStudents,
                 ManyToManyTags,
               }),
             );

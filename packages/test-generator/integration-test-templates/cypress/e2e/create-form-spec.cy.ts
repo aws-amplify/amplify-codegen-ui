@@ -123,13 +123,6 @@ describe('CreateForms', () => {
         });
         clickAddToArray();
 
-        // HasMany Autocomplete
-        getArrayFieldButtonByLabel('Has many students').click();
-        cy.get(`.amplify-autocomplete`).within(() => {
-          cy.get('input').type(`{downArrow}{enter}`);
-        });
-        clickAddToArray();
-
         getArrayFieldButtonByLabel('Has many students').click();
         cy.get(`.amplify-autocomplete`).within(() => {
           cy.get('input').type(`Sa{downArrow}{enter}`);
