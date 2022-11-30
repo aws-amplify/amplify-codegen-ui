@@ -21,6 +21,7 @@ import {
   FieldTypeMapKeys,
   FormDefinition,
   GenericDataField,
+  GenericDataModel,
   GenericDataSchema,
   ModelFieldsConfigs,
   StudioFieldInputConfig,
@@ -47,9 +48,11 @@ export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
 function getValueMappings({
   field,
   enums,
+  allModels,
 }: {
   field: GenericDataField;
   enums: GenericDataSchema['enums'];
+  allModels: { [modelName: string]: GenericDataModel };
 }): StudioFormValueMappings | undefined {
   // if enum
   if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
@@ -70,8 +73,7 @@ function getValueMappings({
   if (field.relationship) {
     const modelName = field.relationship.relatedModelName;
     return {
-      // TODO: map field dynamically as part of cpk task
-      values: [{ value: { bindingProperties: { property: modelName, field: 'id' } } }],
+      values: [{ value: { bindingProperties: { property: modelName, field: allModels[modelName].primaryKeys[0] } } }],
       bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },
     };
   }
@@ -124,7 +126,7 @@ export function getFieldConfigFromModelField({
     config.relationship = field.relationship;
   }
 
-  const valueMappings = getValueMappings({ field, enums: dataSchema.enums });
+  const valueMappings = getValueMappings({ field, enums: dataSchema.enums, allModels: dataSchema.models });
   if (valueMappings) {
     config.inputType.valueMappings = valueMappings;
   }

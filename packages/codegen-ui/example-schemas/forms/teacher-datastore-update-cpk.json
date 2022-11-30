@@ -1,0 +1,12 @@
+{
+    "name": "UpdateTeacherForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "Teacher"
+    },
+    "formActionType": "update",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

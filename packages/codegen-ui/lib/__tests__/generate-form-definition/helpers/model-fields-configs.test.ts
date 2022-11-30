@@ -28,6 +28,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: false, required: false, isArray: true },
           },
@@ -54,6 +55,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: false, required: false, isArray: false },
             camelCaseField: { dataType: 'String', readOnly: false, required: false, isArray: false },
@@ -83,6 +85,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: false, required: false, isArray: false },
           },
@@ -102,6 +105,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             id: { dataType: 'ID', readOnly: false, required: true, isArray: false },
           },
@@ -137,6 +141,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: true, required: false, isArray: false },
           },
@@ -171,7 +176,12 @@ describe('mapModelFieldsConfigs', () => {
       enums: {},
       nonModels: {},
       models: {
+        Owner: {
+          primaryKeys: ['id'],
+          fields: {},
+        },
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             Owner: {
               dataType: { model: 'Owner' },
@@ -217,7 +227,12 @@ describe('mapModelFieldsConfigs', () => {
       enums: {},
       nonModels: {},
       models: {
+        Owner: {
+          primaryKeys: ['id'],
+          fields: {},
+        },
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             ownerId: {
               dataType: 'ID',
@@ -264,6 +279,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: { Interaction: { fields: {} } },
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             ownerId: {
               dataType: { nonModel: 'Interaction' },
@@ -308,6 +324,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             city: { dataType: { enum: 'City' }, readOnly: false, required: false, isArray: false },
           },
@@ -352,6 +369,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             city: { dataType: { enum: 'City' }, readOnly: false, required: false, isArray: false },
           },

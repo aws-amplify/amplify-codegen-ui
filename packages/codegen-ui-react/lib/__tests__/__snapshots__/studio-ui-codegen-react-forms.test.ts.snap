@@ -2262,6 +2262,468 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 
+exports[`amplify form renderer tests datastore form tests custom form tests should render an update form for model with cpk 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import {
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Teacher, Student as Student0 } from \\"../models\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      (currentFieldValue !== undefined ||
+        currentFieldValue !== null ||
+        currentFieldValue !== \\"\\") &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function UpdateTeacherForm(props) {
+  const {
+    specialTeacherId: specialTeacherIdProp,
+    teacher,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    specialTeacherId: undefined,
+    Student: undefined,
+  };
+  const [specialTeacherId, setSpecialTeacherId] = React.useState(
+    initialValues.specialTeacherId
+  );
+  const [Student, setStudent] = React.useState(initialValues.Student);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = teacherRecord
+      ? { ...initialValues, ...teacherRecord, Student }
+      : initialValues;
+    setSpecialTeacherId(cleanValues.specialTeacherId);
+    setStudent(cleanValues.Student);
+    setCurrentStudentValue(undefined);
+    setCurrentStudentDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [teacherRecord, setTeacherRecord] = React.useState(teacher);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = specialTeacherIdProp
+        ? await DataStore.query(Teacher, specialTeacherIdProp)
+        : teacher;
+      setTeacherRecord(record);
+      const StudentRecord = record ? await record.Student : undefined;
+      setStudent(StudentRecord);
+    };
+    queryData();
+  }, [specialTeacherIdProp, teacher]);
+  React.useEffect(resetStateValues, [teacherRecord, Student]);
+  const [currentStudentDisplayValue, setCurrentStudentDisplayValue] =
+    React.useState(\\"\\");
+  const [currentStudentValue, setCurrentStudentValue] =
+    React.useState(undefined);
+  const StudentRef = React.createRef();
+  const studentRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Student0,
+  }).items;
+  const getDisplayValue = {
+    Student: (record) => record?.specialStudentId,
+  };
+  const validations = {
+    specialTeacherId: [{ type: \\"Required\\" }],
+    Student: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          specialTeacherId,
+          Student,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          await DataStore.save(
+            Teacher.copyOf(teacherRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"UpdateTeacherForm\\")}
+    >
+      <TextField
+        label=\\"Special teacher id\\"
+        isRequired={true}
+        isReadOnly={false}
+        defaultValue={specialTeacherId}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId: value,
+              Student,
+            };
+            const result = onChange(modelFields);
+            value = result?.specialTeacherId ?? value;
+          }
+          if (errors.specialTeacherId?.hasError) {
+            runValidationTasks(\\"specialTeacherId\\", value);
+          }
+          setSpecialTeacherId(value);
+        }}
+        onBlur={() => runValidationTasks(\\"specialTeacherId\\", specialTeacherId)}
+        errorMessage={errors.specialTeacherId?.errorMessage}
+        hasError={errors.specialTeacherId?.hasError}
+        {...getOverrideProps(overrides, \\"specialTeacherId\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId,
+              Student: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Student ?? value;
+          }
+          setStudent(value);
+          setCurrentStudentValue(undefined);
+          setCurrentStudentDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentStudentValue}
+        label={\\"Student\\"}
+        items={Student ? [Student] : []}
+        hasError={errors.Student?.hasError}
+        getBadgeText={getDisplayValue.Student}
+        setFieldValue={(model) => {
+          setCurrentStudentDisplayValue(getDisplayValue.Student(model));
+          setCurrentStudentValue(model);
+        }}
+        inputFieldRef={StudentRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Student\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentStudentDisplayValue}
+          options={studentRecords.map((r) => ({
+            id: r.specialStudentId,
+            label: getDisplayValue.Student?.(r),
+          }))}
+          onSelect={({ id, label }) => {
+            setCurrentStudentValue(
+              studentRecords.find((r) => r.specialStudentId === id)
+            );
+            setCurrentStudentDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentStudentDisplayValue(\\"\\");
+          }}
+          defaultValue={Student}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Student?.hasError) {
+              runValidationTasks(\\"Student\\", value);
+            }
+            setCurrentStudentDisplayValue(value);
+            setCurrentStudentValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"Student\\", Student)}
+          errorMessage={errors.Student?.errorMessage}
+          hasError={errors.Student?.hasError}
+          ref={StudentRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"Student\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests custom form tests should render an update form for model with cpk 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Teacher, Student as Student0 } from \\"../models\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdateTeacherFormInputValues = {
+    specialTeacherId?: string;
+    Student?: Student0;
+};
+export declare type UpdateTeacherFormValidationValues = {
+    specialTeacherId?: ValidationFunction<string>;
+    Student?: ValidationFunction<Student0>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateTeacherFormOverridesProps = {
+    UpdateTeacherFormGrid?: PrimitiveOverrideProps<GridProps>;
+    specialTeacherId?: PrimitiveOverrideProps<TextFieldProps>;
+    Student?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type UpdateTeacherFormProps = React.PropsWithChildren<{
+    overrides?: UpdateTeacherFormOverridesProps | undefined | null;
+} & {
+    specialTeacherId?: string;
+    teacher?: Teacher;
+    onSubmit?: (fields: UpdateTeacherFormInputValues) => UpdateTeacherFormInputValues;
+    onSuccess?: (fields: UpdateTeacherFormInputValues) => void;
+    onError?: (fields: UpdateTeacherFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateTeacherFormInputValues) => UpdateTeacherFormInputValues;
+    onValidate?: UpdateTeacherFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdateTeacherForm(props: UpdateTeacherFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -4406,7 +4868,7 @@ export default function TagCreateForm(props) {
           value={currentPostsDisplayValue}
           options={postRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.Posts?.(r) ?? r.id,
+            label: getDisplayValue.Posts?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(postRecords.find((r) => r.id === id));
@@ -4946,7 +5408,7 @@ export default function MyMemberForm(props) {
           value={currentTeamDisplayValue}
           options={teamRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.Team?.(r) ?? r.id,
+            label: getDisplayValue.Team?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
@@ -5373,7 +5835,7 @@ export default function SchoolCreateForm(props) {
           value={currentStudentsDisplayValue}
           options={studentRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.Students?.(r) ?? r.id,
+            label: getDisplayValue.Students?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(studentRecords.find((r) => r.id === id));
@@ -5857,7 +6319,7 @@ export default function BookCreateForm(props) {
           value={currentPrimaryAuthorDisplayValue}
           options={authorRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.primaryAuthor?.(r) ?? r.id,
+            label: getDisplayValue.primaryAuthor?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
@@ -6306,7 +6768,7 @@ export default function TagCreateForm(props) {
           value={currentPostsDisplayValue}
           options={postRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.Posts?.(r) ?? r.id,
+            label: getDisplayValue.Posts?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(postRecords.find((r) => r.id === id));
@@ -6874,7 +7336,7 @@ export default function BookCreateForm(props) {
           value={currentPrimaryAuthorDisplayValue}
           options={authorRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.primaryAuthor?.(r) ?? r.id,
+            label: getDisplayValue.primaryAuthor?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
@@ -6939,7 +7401,7 @@ export default function BookCreateForm(props) {
           value={currentPrimaryTitleDisplayValue}
           options={titleRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.primaryTitle?.(r) ?? r.id,
+            label: getDisplayValue.primaryTitle?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentPrimaryTitleValue(titleRecords.find((r) => r.id === id));
@@ -7028,7 +7490,7 @@ import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function MyPostForm(props) {
   const {
-    id,
+    id: idProp,
     post,
     onSuccess,
     onError,
@@ -7090,11 +7552,11 @@ export default function MyPostForm(props) {
   const [postRecord, setPostRecord] = React.useState(post);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id ? await DataStore.query(Post, id) : post;
+      const record = idProp ? await DataStore.query(Post, idProp) : post;
       setPostRecord(record);
     };
     queryData();
-  }, [id, post]);
+  }, [idProp, post]);
   React.useEffect(resetStateValues, [postRecord]);
   const validations = {
     TextAreaFieldbbd63464: [],
@@ -7683,7 +8145,7 @@ function ArrayField({
 }
 export default function SchoolUpdateForm(props) {
   const {
-    id,
+    id: idProp,
     school,
     onSuccess,
     onError,
@@ -7715,13 +8177,13 @@ export default function SchoolUpdateForm(props) {
   const [linkedStudents, setLinkedStudents] = React.useState([]);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id ? await DataStore.query(School, id) : school;
+      const record = idProp ? await DataStore.query(School, idProp) : school;
       setSchoolRecord(record);
       const linkedStudents = record ? await record.Students.toArray() : [];
       setLinkedStudents(linkedStudents);
     };
     queryData();
-  }, [id, school]);
+  }, [idProp, school]);
   React.useEffect(resetStateValues, [schoolRecord, linkedStudents]);
   const [currentStudentsDisplayValue, setCurrentStudentsDisplayValue] =
     React.useState(\\"\\");
@@ -7912,7 +8374,7 @@ export default function SchoolUpdateForm(props) {
           value={currentStudentsDisplayValue}
           options={studentRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.Students?.(r) ?? r.id,
+            label: getDisplayValue.Students?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(studentRecords.find((r) => r.id === id));
@@ -8186,7 +8648,7 @@ function ArrayField({
 }
 export default function MyMemberForm(props) {
   const {
-    id,
+    id: idProp,
     member,
     onSuccess,
     onError,
@@ -8217,13 +8679,13 @@ export default function MyMemberForm(props) {
   const [memberRecord, setMemberRecord] = React.useState(member);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id ? await DataStore.query(Member, id) : member;
+      const record = idProp ? await DataStore.query(Member, idProp) : member;
       setMemberRecord(record);
       const TeamRecord = record ? await record.Team : undefined;
       setTeam(TeamRecord);
     };
     queryData();
-  }, [id, member]);
+  }, [idProp, member]);
   React.useEffect(resetStateValues, [memberRecord, Team]);
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState(\\"\\");
@@ -8407,7 +8869,7 @@ export default function MyMemberForm(props) {
           value={currentTeamDisplayValue}
           options={teamRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.Team?.(r) ?? r.id,
+            label: getDisplayValue.Team?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
@@ -8652,7 +9114,7 @@ function ArrayField({
 }
 export default function TagUpdateForm(props) {
   const {
-    id,
+    id: idProp,
     tag,
     onSuccess,
     onError,
@@ -8688,7 +9150,7 @@ export default function TagUpdateForm(props) {
   const [linkedPosts, setLinkedPosts] = React.useState([]);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id ? await DataStore.query(Tag, id) : tag;
+      const record = idProp ? await DataStore.query(Tag, idProp) : tag;
       setTagRecord(record);
       const linkedPosts = record
         ? await Promise.all(
@@ -8702,7 +9164,7 @@ export default function TagUpdateForm(props) {
       setLinkedPosts(linkedPosts);
     };
     queryData();
-  }, [id, tag]);
+  }, [idProp, tag]);
   React.useEffect(resetStateValues, [tagRecord, linkedPosts]);
   const [currentPostsDisplayValue, setCurrentPostsDisplayValue] =
     React.useState(\\"\\");
@@ -8929,7 +9391,7 @@ export default function TagUpdateForm(props) {
           value={currentPostsDisplayValue}
           options={postRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.Posts?.(r) ?? r.id,
+            label: getDisplayValue.Posts?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(postRecords.find((r) => r.id === id));
@@ -9262,7 +9724,7 @@ function ArrayField({
 }
 export default function MyFlexUpdateForm(props) {
   const {
-    id,
+    id: idProp,
     flex,
     onSuccess,
     onError,
@@ -9304,11 +9766,11 @@ export default function MyFlexUpdateForm(props) {
   const [flexRecord, setFlexRecord] = React.useState(flex);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id ? await DataStore.query(Flex0, id) : flex0;
+      const record = idProp ? await DataStore.query(Flex0, idProp) : flex0;
       setFlexRecord(record);
     };
     queryData();
-  }, [id, flex]);
+  }, [idProp, flex]);
   React.useEffect(resetStateValues, [flexRecord]);
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
     React.useState(undefined);
@@ -11259,7 +11721,7 @@ function ArrayField({
 }
 export default function InputGalleryUpdateForm(props) {
   const {
-    id,
+    id: idProp,
     inputGallery,
     onSuccess,
     onError,
@@ -11328,13 +11790,13 @@ export default function InputGalleryUpdateForm(props) {
     React.useState(inputGallery);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id
-        ? await DataStore.query(InputGallery, id)
+      const record = idProp
+        ? await DataStore.query(InputGallery, idProp)
         : inputGallery;
       setInputGalleryRecord(record);
     };
     queryData();
-  }, [id, inputGallery]);
+  }, [idProp, inputGallery]);
   React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
     React.useState(undefined);
@@ -13400,7 +13862,7 @@ export default function MyMemberForm(props) {
           value={currentTeamDisplayValue}
           options={teamRecords.map((r) => ({
             id: r.id,
-            label: getDisplayValue.Team?.(r) ?? r.id,
+            label: getDisplayValue.Team?.(r),
           }))}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
