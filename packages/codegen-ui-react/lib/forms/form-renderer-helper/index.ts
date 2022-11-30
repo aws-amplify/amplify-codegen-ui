@@ -27,7 +27,7 @@ export { buildValidations, runValidationTasksFunction } from './validation';
 
 export { addFormAttributes } from './all-props';
 
-export { mapFromFieldConfigs, getHasManyFieldConfigs, isManyToManyRelationship } from './map-from-fieldConfigs';
+export { mapFromFieldConfigs, isManyToManyRelationship } from './map-from-fieldConfigs';
 
 export { buildRelationshipQuery, buildGetRelationshipModels } from './relationship';
 

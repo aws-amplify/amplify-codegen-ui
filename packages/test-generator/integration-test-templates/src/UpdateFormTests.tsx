@@ -20,6 +20,7 @@ import { AsyncItem, DataStore } from '@aws-amplify/datastore';
 import { DataStoreFormUpdateAllSupportedFormFields } from './ui-components'; // eslint-disable-line import/extensions, max-len
 import {
   AllSupportedFormFields,
+  Owner,
   User,
   Tag,
   LazyTag,
@@ -32,6 +33,10 @@ const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'Paul', lastName: 'McCartney', age: 72 }));
   await DataStore.save(new User({ firstName: 'George', lastName: 'Harrison', age: 50 }));
   await DataStore.save(new User({ firstName: 'Ringo', lastName: 'Starr', age: 5 }));
+  await DataStore.save(new Owner({ name: 'John' }));
+  await DataStore.save(new Owner({ name: 'Paul' }));
+  await DataStore.save(new Owner({ name: 'George' }));
+  await DataStore.save(new Owner({ name: 'Ringo' }));
   await DataStore.save(new Tag({ label: 'Red' }));
   await DataStore.save(new Tag({ label: 'Blue' }));
   await DataStore.save(new Tag({ label: 'Green' }));
@@ -45,6 +50,7 @@ const initializeAllSupportedFormFieldsTestData = async ({
 }): Promise<void> => {
   const connectedUser = (await DataStore.query(User, (u) => u.firstName.eq('John')))[0];
   const connectedTags = await DataStore.query(Tag, (tag) => tag.or((t) => [t.label.eq('Red'), t.label.eq('Blue')]));
+  const connectedOwner = (await DataStore.query(Owner, (owner) => owner.name.eq('John')))[0];
   const createdRecord = await DataStore.save(
     new AllSupportedFormFields({
       string: 'My string',
@@ -63,6 +69,7 @@ const initializeAllSupportedFormFieldsTestData = async ({
       awsPhone: '713 343 5938',
       enum: 'NEW_YORK',
       HasOneUser: connectedUser,
+      BelongsToOwner: connectedOwner,
     }),
   );
 
@@ -137,7 +144,12 @@ export default function UpdateFormTests() {
             // sort to make sure order
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
             setDataStoreFormUpdateAllSupportedFormFieldsRecord(
-              JSON.stringify({ ...record, HasOneUser: await record.HasOneUser, ManyToManyTags }),
+              JSON.stringify({
+                ...record,
+                HasOneUser: await record.HasOneUser,
+                ManyToManyTags,
+                BelongsToOwner: await record.BelongsToOwner,
+              }),
             );
           }}
         />
