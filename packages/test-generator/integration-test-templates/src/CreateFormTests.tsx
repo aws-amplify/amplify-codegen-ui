@@ -117,7 +117,7 @@ export default function CreateFormTests() {
                 ...record,
                 HasOneUser: await record.HasOneUser,
                 BelongsToOwner: await record.BelongsToOwner,
-                HasManyStudents: await record.HasManyStudents,
+                HasManyStudents: await record.HasManyStudents?.toArray(),
                 ManyToManyTags,
               }),
             );

@@ -30,7 +30,7 @@ describe('CreateForms', () => {
         customValidation: 'All dog emails are yahoo emails',
         ip: 'The value must be an IPv4 or IPv6 address',
       };
-      cy.get('#customFormCreateDog').within(() => {
+      cy.get('#customFormCreateDog', { timeout: 8000 }).within(() => {
         const blurField = () => cy.contains('Register your dog').click();
 
         // should not submit if required field empty
@@ -177,9 +177,11 @@ describe('CreateForms', () => {
           expect(record.enum).to.equal('SAN_FRANCISCO');
           expect(record.stringArray[0]).to.equal('String1');
           expect(record.HasOneUser.firstName).to.equal('John');
-          expect(record.HasManyStudents?.[0].name).to.equal('David');
-          expect(record.HasManyStudents?.[1].name).to.equal('Sarah');
+          expect(record.HasManyStudents.length).to.equal(2);
+          expect(record.HasManyStudents[0].name).to.equal('David');
+          expect(record.HasManyStudents[1].name).to.equal('Sarah');
           expect(record.BelongsToOwner.name).to.equal('John');
+          expect(record.ManyToManyTags.length).to.equal(3);
           expect(record.ManyToManyTags[0].label).to.equal('Blue');
           expect(record.ManyToManyTags[1].label).to.equal('Green');
           expect(record.ManyToManyTags[2].label).to.equal('Red');

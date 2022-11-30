@@ -23,7 +23,9 @@ import {
   Owner,
   User,
   Tag,
+  Student,
   LazyTag,
+  LazyStudent,
   LazyAllSupportedFormFieldsTag,
   AllSupportedFormFieldsTag,
 } from './models';
@@ -37,6 +39,10 @@ const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new Owner({ name: 'Paul' }));
   await DataStore.save(new Owner({ name: 'George' }));
   await DataStore.save(new Owner({ name: 'Ringo' }));
+  await DataStore.save(new Student({ name: 'David' }));
+  await DataStore.save(new Student({ name: 'Taylor' }));
+  await DataStore.save(new Student({ name: 'Michael' }));
+  await DataStore.save(new Student({ name: 'Sarah' }));
   await DataStore.save(new Tag({ label: 'Red' }));
   await DataStore.save(new Tag({ label: 'Blue' }));
   await DataStore.save(new Tag({ label: 'Green' }));
@@ -51,6 +57,9 @@ const initializeAllSupportedFormFieldsTestData = async ({
   const connectedUser = (await DataStore.query(User, (u) => u.firstName.eq('John')))[0];
   const connectedTags = await DataStore.query(Tag, (tag) => tag.or((t) => [t.label.eq('Red'), t.label.eq('Blue')]));
   const connectedOwner = (await DataStore.query(Owner, (owner) => owner.name.eq('John')))[0];
+  const connectedStudents = await DataStore.query(Student, (student) =>
+    student.or((s) => [s.name.eq('David'), s.name.eq('Taylor')]),
+  );
   const createdRecord = await DataStore.save(
     new AllSupportedFormFields({
       string: 'My string',
@@ -82,6 +91,20 @@ const initializeAllSupportedFormFieldsTestData = async ({
           new AllSupportedFormFieldsTag({
             allSupportedFormFields: createdRecord,
             tag,
+          }),
+        ),
+      );
+      return promises;
+    }, []),
+  );
+
+  // conncect students
+  await Promise.all(
+    connectedStudents.reduce((promises: AsyncItem<LazyStudent>[], student) => {
+      promises.push(
+        DataStore.save(
+          Student.copyOf(student, (updated) => {
+            Object.assign(updated, { allSupportedFormFieldsID: createdRecord.id });
           }),
         ),
       );
@@ -144,12 +167,14 @@ export default function UpdateFormTests() {
             );
             // sort to make sure order
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
+
             setDataStoreFormUpdateAllSupportedFormFieldsRecord(
               JSON.stringify({
                 ...record,
                 HasOneUser: await record.HasOneUser,
-                ManyToManyTags,
                 BelongsToOwner: await record.BelongsToOwner,
+                HasManyStudents: await record.HasManyStudents?.toArray(),
+                ManyToManyTags,
               }),
             );
           }}

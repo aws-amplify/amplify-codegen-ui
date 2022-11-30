@@ -23,7 +23,7 @@ describe('UpdateForms', () => {
 
   describe('DataStoreFormUpdateAllSupportedFormFields', () => {
     it('should display current values and save to DataStore', () => {
-      cy.get('#dataStoreFormUpdateAllSupportedFormFields').within(() => {
+      cy.get('#dataStoreFormUpdateAllSupportedFormFields', { timeout: 8000 }).within(() => {
         // TODO: check current values on all fields and change
 
         // label should exist even if no input field displayed
@@ -52,6 +52,22 @@ describe('UpdateForms', () => {
         });
         clickAddToArray();
 
+        // Has many update
+        removeArrayItem('David');
+        removeArrayItem('Taylor');
+
+        getArrayFieldButtonByLabel('Has many students').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`M{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
+        getArrayFieldButtonByLabel('Has many students').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`S{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
         // Many to many update
         removeArrayItem('Red');
         removeArrayItem('Blue');
@@ -74,6 +90,10 @@ describe('UpdateForms', () => {
           const record = JSON.parse(recordElement.text());
 
           expect(record.HasOneUser.firstName).to.equal('Paul');
+          expect(record.HasManyStudents.length).to.equal(2);
+          expect(record.HasManyStudents[0].name).to.equal('Michael');
+          expect(record.HasManyStudents[1].name).to.equal('Sarah');
+          expect(record.ManyToManyTags.length).to.equal(2);
           expect(record.ManyToManyTags[0].label).to.equal('Green');
           expect(record.ManyToManyTags[1].label).to.equal('Orange');
           expect(record.BelongsToOwner.name).to.equal('George');
