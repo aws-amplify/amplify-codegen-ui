@@ -22,7 +22,8 @@ import {
   DataStoreFormCreateAllSupportedFormFields,
   CustomFormCreateNestedJson,
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
-import { AllSupportedFormFields, Owner, User, Tag, LazyTag, LazyAllSupportedFormFieldsTag } from './models';
+
+import { AllSupportedFormFields, Owner, User, Tag, LazyTag, Student, LazyAllSupportedFormFieldsTag } from './models';
 
 const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
@@ -33,6 +34,10 @@ const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new Owner({ name: 'Paul' }));
   await DataStore.save(new Owner({ name: 'George' }));
   await DataStore.save(new Owner({ name: 'Ringo' }));
+  await DataStore.save(new Student({ name: 'David' }));
+  await DataStore.save(new Student({ name: 'Taylor' }));
+  await DataStore.save(new Student({ name: 'Michael' }));
+  await DataStore.save(new Student({ name: 'Sarah' }));
   await DataStore.save(new Tag({ label: 'Red' }));
   await DataStore.save(new Tag({ label: 'Blue' }));
   await DataStore.save(new Tag({ label: 'Green' }));
@@ -105,13 +110,14 @@ export default function CreateFormTests() {
                 return promises;
               }, []),
             );
-            // sort to make sure order
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
+
             setDataStoreFormCreateAllSupportedFormFieldsRecord(
               JSON.stringify({
                 ...record,
                 HasOneUser: await record.HasOneUser,
                 BelongsToOwner: await record.BelongsToOwner,
+                HasManyStudents: await record.HasManyStudents,
                 ManyToManyTags,
               }),
             );

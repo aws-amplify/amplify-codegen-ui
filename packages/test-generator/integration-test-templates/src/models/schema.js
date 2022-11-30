@@ -775,8 +775,8 @@ export const schema = {
             targetName: 'allSupportedFormFieldsOwnerId',
           },
         },
-        HasManyStudents: {
-          name: 'HasManyStudents',
+        HasManyStudent: {
+          name: 'HasManyStudent',
           isArray: true,
           type: {
             model: 'Student',
