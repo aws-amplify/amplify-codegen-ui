@@ -570,7 +570,7 @@ export default {
           name: 'allSupportedFormFieldsID',
           isArray: false,
           type: 'ID',
-          isRequired: true,
+          isRequired: false,
           attributes: [],
         },
         createdAt: {

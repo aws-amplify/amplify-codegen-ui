@@ -568,7 +568,7 @@ export const schema = {
           name: 'allSupportedFormFieldsID',
           isArray: false,
           type: 'ID',
-          isRequired: true,
+          isRequired: false,
           attributes: [],
         },
         createdAt: {
