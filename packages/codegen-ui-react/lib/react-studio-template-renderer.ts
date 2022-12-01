@@ -914,7 +914,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithCollectionProperties(component)) {
       Object.entries(component.collectionProperties).forEach((collectionProp) => {
         const [propName, { model, sort, predicate }] = collectionProp;
-        const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+        const { importName, importAlias } = this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+        const modelName = importAlias ?? importName;
 
         if (predicate) {
           statements.push(this.buildPredicateDeclaration(propName, predicate));
@@ -989,7 +990,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           const { bindingProperties } = binding;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
             this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
-            const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, bindingProperties.model);
+            const { importName, importAlias } = this.importCollection.addImport(
+              ImportSource.LOCAL_MODELS,
+              bindingProperties.model,
+            );
+            const modelName = importAlias ?? importName;
 
             /* const buttonColorFilter = {
              *   field: "userID",
@@ -1139,7 +1144,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       Object.entries(this.dataSchema.models[model].fields).forEach(([key, field]) => {
         if (field.relationship?.type === 'HAS_MANY') {
           const { relatedModelName, relatedModelField } = field.relationship;
-          const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, relatedModelName);
+          const { importName, importAlias } = this.importCollection.addImport(
+            ImportSource.LOCAL_MODELS,
+            relatedModelName,
+          );
+          const modelName = importAlias ?? importName;
           const itemsName = getActionIdentifier(relatedModelName, 'Items');
           statements.push(
             buildBaseCollectionVariableStatement(

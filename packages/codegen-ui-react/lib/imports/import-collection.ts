@@ -40,7 +40,7 @@ export class ImportCollection {
     this.addImport(importPackage, importValue);
   }
 
-  addImport(packageName: string, importName: string) {
+  addImport(packageName: string, importName: string): { importName: string; importAlias: string | undefined } {
     if (!this.#collection.has(packageName)) {
       this.#collection.set(packageName, new Set());
     }
@@ -54,11 +54,13 @@ export class ImportCollection {
       }
     }
 
+    let modelAlias: string | undefined;
+
     if (packageName === ImportSource.LOCAL_MODELS) {
       const existingPackageAlias = this.importAlias.get(packageName);
       const existingAlias = existingPackageAlias?.get(importName);
-      if (existingAlias) return existingAlias;
-      const modelAlias = createUniqueName(
+      if (existingAlias) return { importName, importAlias: existingAlias };
+      modelAlias = createUniqueName(
         importName,
         (input) =>
           this.importedNames.has(input) || (input.endsWith('Props') && isPrimitive(input.replace(/Props/g, ''))),
@@ -71,9 +73,9 @@ export class ImportCollection {
         this.importAlias.set(packageName, aliasMap);
       }
       this.importedNames.add(modelAlias);
-      return modelAlias;
+      return { importName, importAlias: modelAlias };
     }
-    return importName;
+    return { importName, importAlias: modelAlias };
   }
 
   removeImportSource(packageImport: ImportSource) {

@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { generateWithAmplifyFormRenderer } from './__utils__';
+import { generateComponentOnlyWithAmplifyFormRenderer, generateWithAmplifyFormRenderer } from './__utils__';
 
 describe('amplify form renderer tests', () => {
   describe('datastore form tests', () => {
@@ -283,6 +283,16 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('Flex0');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
+    });
+
+    it('should return import aliases in requredDataModels', () => {
+      const { requiredDataModels } = generateComponentOnlyWithAmplifyFormRenderer(
+        'forms/member-datastore-update-belongs-to',
+        'datastore/project-team-model',
+      );
+
+      const { importAlias } = requiredDataModels.get('Team') ?? { importAlias: 'Will Fail' };
+      expect(importAlias).toEqual('Team0');
     });
 
     describe('custom form tests', () => {

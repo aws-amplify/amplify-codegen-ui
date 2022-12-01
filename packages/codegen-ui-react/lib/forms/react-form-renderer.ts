@@ -118,7 +118,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
   public fileName: string;
 
-  protected requiredDataModels: string[] = [];
+  protected requiredDataModels: Map<string, { importAlias: string | undefined }> = new Map();
 
   protected shouldRenderArrayField = false;
 
@@ -314,8 +314,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
-      this.requiredDataModels.push(dataTypeName);
-      modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      const { importName, importAlias } = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      modelName = importAlias ?? importName;
     }
 
     return [
@@ -374,7 +374,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
-      modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      const { importName, importAlias } = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      modelName = importAlias ?? importName;
     }
 
     const elements: BindingElement[] = [
@@ -560,9 +561,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.shouldRenderArrayField = usesArrayField;
 
-    this.requiredDataModels.push(...modelsToImport);
-
-    modelsToImport.forEach((model) => this.importCollection.addImport(ImportSource.LOCAL_MODELS, model));
+    modelsToImport.forEach((model) => {
+      const { importName, importAlias } = this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+      this.requiredDataModels.set(importName, { importAlias });
+    });
 
     // datastore relationship query
     /**
