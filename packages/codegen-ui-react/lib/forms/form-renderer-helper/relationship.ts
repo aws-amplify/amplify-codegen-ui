@@ -14,12 +14,18 @@
   limitations under the License.
  */
 import { factory, NodeFlags, SyntaxKind } from 'typescript';
-import { FieldConfigMetadata, GenericDataRelationshipType, HasManyRelationshipType } from '@aws-amplify/codegen-ui';
+import {
+  FieldConfigMetadata,
+  GenericDataRelationshipType,
+  HasManyRelationshipType,
+  InternalError,
+} from '@aws-amplify/codegen-ui';
 import { getRecordsName, getLinkedDataName, getSetNameIdentifier } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
+import { extractModelAndKey } from './display-value';
 
 export const buildRelationshipQuery = (
   relationship: GenericDataRelationshipType,
@@ -46,11 +52,12 @@ export const buildManyToManyRelationshipDataStoreStatements = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
+  thisModelPrimaryKey: string,
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
   fieldName = fieldConfigMetaData.sanitizedFieldName || fieldName;
-  const { relatedModelField, relatedJoinFieldName, relatedJoinTableName } =
+  const { relatedModelField, relatedJoinFieldName, relatedJoinTableName, relatedModelName } =
     fieldConfigMetaData.relationship as HasManyRelationshipType;
   if (dataStoreActionType === 'update') {
     const linkedDataName = getLinkedDataName(fieldName);
@@ -58,6 +65,12 @@ export const buildManyToManyRelationshipDataStoreStatements = (
     const dataToUnlinkMap = `${lowerCaseFirst(fieldName)}ToUnLinkMap`;
     const updatedMap = `${lowerCaseFirst(fieldName)}Map`;
     const originalMap = `${linkedDataName}Map`;
+    const { key } = extractModelAndKey(fieldConfigMetaData.valueMappings);
+    if (!key) {
+      throw new InternalError(`Could not identify primary key for ${relatedModelName}`);
+    }
+    const relatedModelPrimaryKey = key;
+
     return [
       factory.createVariableStatement(
         undefined,
@@ -101,6 +114,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
           NodeFlags.Const,
         ),
       ),
+      // const linkedCPKClassesMap  = new Map();
       factory.createVariableStatement(
         undefined,
         factory.createVariableDeclarationList(
@@ -143,6 +157,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                 [
                   factory.createVariableStatement(
                     undefined,
+                    // const count = cPKClassesMap.get(r.specialClassId);
                     factory.createVariableDeclarationList(
                       [
                         factory.createVariableDeclaration(
@@ -158,7 +173,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                             [
                               factory.createPropertyAccessExpression(
                                 factory.createIdentifier('r'),
-                                factory.createIdentifier('id'),
+                                factory.createIdentifier(relatedModelPrimaryKey),
                               ),
                             ],
                           ),
@@ -191,6 +206,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                       NodeFlags.Const,
                     ),
                   ),
+                  // cPKClassesMap.set(r.specialClassId, newCount);
                   factory.createExpressionStatement(
                     factory.createCallExpression(
                       factory.createPropertyAccessExpression(
@@ -201,7 +217,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                       [
                         factory.createPropertyAccessExpression(
                           factory.createIdentifier('r'),
-                          factory.createIdentifier('id'),
+                          factory.createIdentifier(relatedModelPrimaryKey),
                         ),
                         factory.createIdentifier('newCount'),
                       ],
@@ -244,6 +260,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                     undefined,
                     factory.createVariableDeclarationList(
                       [
+                        // const count = linkedCPKClassesMap.get(r.specialClassId);
                         factory.createVariableDeclaration(
                           factory.createIdentifier('count'),
                           undefined,
@@ -257,7 +274,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                             [
                               factory.createPropertyAccessExpression(
                                 factory.createIdentifier('r'),
-                                factory.createIdentifier('id'),
+                                factory.createIdentifier(relatedModelPrimaryKey),
                               ),
                             ],
                           ),
@@ -291,6 +308,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                     ),
                   ),
                   factory.createExpressionStatement(
+                    //  linkedCPKClassesMap.set(r.specialClassId, newCount);
                     factory.createCallExpression(
                       factory.createPropertyAccessExpression(
                         factory.createIdentifier(originalMap),
@@ -300,7 +318,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                       [
                         factory.createPropertyAccessExpression(
                           factory.createIdentifier('r'),
-                          factory.createIdentifier('id'),
+                          factory.createIdentifier(relatedModelPrimaryKey),
                         ),
                         factory.createIdentifier('newCount'),
                       ],
@@ -671,6 +689,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                                               undefined,
                                               [factory.createIdentifier('id')],
                                             ),
+                                            // r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId),
                                             factory.createCallExpression(
                                               factory.createPropertyAccessExpression(
                                                 factory.createPropertyAccessExpression(
@@ -683,7 +702,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                                               [
                                                 factory.createPropertyAccessExpression(
                                                   factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                                                  factory.createIdentifier('id'),
+                                                  factory.createIdentifier(thisModelPrimaryKey),
                                                 ),
                                               ],
                                             ),
@@ -835,11 +854,12 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                                     [
                                       factory.createObjectLiteralExpression(
                                         [
+                                          // cpkTeacherID: cPKTeacherRecord.specialTeacherId,
                                           factory.createPropertyAssignment(
                                             factory.createIdentifier(`${relatedModelField}ID`),
                                             factory.createPropertyAccessExpression(
                                               factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                                              factory.createIdentifier('id'),
+                                              factory.createIdentifier(thisModelPrimaryKey),
                                             ),
                                           ),
                                           factory.createPropertyAssignment(

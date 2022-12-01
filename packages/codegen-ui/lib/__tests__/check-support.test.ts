@@ -19,6 +19,7 @@ import { GenericDataModel } from '../types';
 describe('checkIsSupportedAsForm', () => {
   it('should return false if model has no fields', () => {
     const model: GenericDataModel = {
+      primaryKeys: [],
       fields: {},
     };
 
@@ -27,6 +28,7 @@ describe('checkIsSupportedAsForm', () => {
 
   it('should return false if all fields are unsupported', () => {
     const model: GenericDataModel = {
+      primaryKeys: ['id'],
       fields: {
         nonModel: { dataType: { nonModel: 'myNonModel' }, required: false, readOnly: false, isArray: false },
       },
@@ -37,6 +39,7 @@ describe('checkIsSupportedAsForm', () => {
 
   it('should return true if one supported field w unrequired unsupported fields', () => {
     const model: GenericDataModel = {
+      primaryKeys: ['id'],
       fields: {
         nonModel: { dataType: { nonModel: 'myNonModel' }, required: false, readOnly: false, isArray: false },
         supportedField: { dataType: 'Boolean', required: false, readOnly: false, isArray: false },
@@ -48,6 +51,7 @@ describe('checkIsSupportedAsForm', () => {
 
   it('should return false if an unsupported field is required', () => {
     const model: GenericDataModel = {
+      primaryKeys: ['id'],
       fields: {
         requiredNonModel: { dataType: { nonModel: 'myNonModel' }, required: true, readOnly: false, isArray: false },
         supportedField: { dataType: 'Boolean', required: false, readOnly: false, isArray: false },
@@ -59,6 +63,7 @@ describe('checkIsSupportedAsForm', () => {
 
   it('should support relationships', () => {
     const model: GenericDataModel = {
+      primaryKeys: ['id'],
       fields: {
         relationship: {
           dataType: 'ID',

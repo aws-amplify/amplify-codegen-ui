@@ -29,7 +29,6 @@ import {
   StudioNode,
   StudioTemplateRenderer,
   validateFormSchema,
-  DataSchemaMetaData,
   getDataSchemaMetaData,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
@@ -122,8 +121,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
   protected shouldRenderArrayField = false;
 
-  protected dataSchemaMetadata: DataSchemaMetaData | undefined;
-
   protected primaryKey: string | undefined;
 
   constructor(component: StudioForm, dataSchema: GenericDataSchema | undefined, renderConfig: ReactRenderConfig) {
@@ -144,10 +141,11 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition);
     this.importCollection = new ImportCollection(this.componentMetadata);
     if (dataSchema) {
-      this.dataSchemaMetadata = getDataSchemaMetaData({ dataSchema });
+      const dataSchemaMetadata = getDataSchemaMetaData({ dataSchema });
+      this.componentMetadata.dataSchemaMetadata = dataSchemaMetadata;
       const { dataSourceType, dataTypeName } = this.component.dataType;
       if (dataSourceType === 'DataStore') {
-        this.primaryKey = this.dataSchemaMetadata?.models[dataTypeName].primaryKey;
+        this.primaryKey = dataSchemaMetadata.models[dataTypeName].primaryKey;
       }
     }
   }

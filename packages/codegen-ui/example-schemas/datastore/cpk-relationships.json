@@ -1,145 +1,288 @@
 {
     "models": {
-        "Student": {
-            "name": "Student",
+        "CPKStudent": {
+            "name": "CPKStudent",
             "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "specialStudentId": {
-                    "name": "specialStudentId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "grade": {
-                    "name": "grade",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "age": {
-                    "name": "age",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
+              "id": {
+                "name": "id",
+                "isArray": false,
+                "type": "ID",
+                "isRequired": true,
+                "attributes": []
+              },
+              "specialStudentId": {
+                "name": "specialStudentId",
+                "isArray": false,
+                "type": "ID",
+                "isRequired": true,
+                "attributes": []
+              },
+              "createdAt": {
+                "name": "createdAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+              },
+              "updatedAt": {
+                "name": "updatedAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+              }
             },
             "syncable": true,
             "pluralName": "Students",
             "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "fields": [
-                            "specialStudentId",
-                            "grade",
-                            "age"
-                        ]
-                    }
+              {
+                "type": "model",
+                "properties": {}
+              },
+              {
+                "type": "key",
+                "properties": {
+                  "fields": [
+                    "specialStudentId"
+                  ]
                 }
+              }
             ]
-        },
-        "Teacher": {
-            "name": "Teacher",
+          },
+          "CPKTeacherCPKClass": {
+            "name": "CPKTeacherCPKClass",
             "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
+              "id": {
+                "name": "id",
+                "isArray": false,
+                "type": "ID",
+                "isRequired": true,
+                "attributes": []
+              },
+              "cpkTeacher": {
+                "name": "cpkTeacher",
+                "isArray": false,
+                "type": {
+                  "model": "CPKTeacher"
                 },
-                "specialTeacherId": {
-                    "name": "specialTeacherId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "Student": {
-                    "name": "Student",
-                    "isArray": false,
-                    "type": {
-                        "model": "Student"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "specialStudentId",
-                        "targetName": "TeacherStudentId"
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "TeacherStudentId": {
-                    "name": "TeacherStudentId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
+                "isRequired": true,
+                "attributes": [],
+                "association": {
+                  "connectionType": "BELONGS_TO",
+                  "targetName": "cpkTeacherID"
                 }
+              },
+              "cpkClass": {
+                "name": "cpkClass",
+                "isArray": false,
+                "type": {
+                  "model": "CPKClass"
+                },
+                "isRequired": true,
+                "attributes": [],
+                "association": {
+                  "connectionType": "BELONGS_TO",
+                  "targetName": "cpkClassID"
+                }
+              },
+              "createdAt": {
+                "name": "createdAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+              },
+              "updatedAt": {
+                "name": "updatedAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+              }
             },
             "syncable": true,
-            "pluralName": "Teachers",
+            "pluralName": "CPKTeacherCPKClasses",
             "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "fields": [
-                            "specialTeacherId"
-                        ]
-                    }
+              {
+                "type": "model",
+                "properties": {}
+              },
+              {
+                "type": "key",
+                "properties": {
+                  "name": "byCPKTeacher",
+                  "fields": [
+                    "cpkTeacherID"
+                  ]
                 }
+              },
+              {
+                "type": "key",
+                "properties": {
+                  "name": "byCPKClass",
+                  "fields": [
+                    "cpkClassID"
+                  ]
+                }
+              }
             ]
-        }
-    },
+          },
+          "CPKTeacher": {
+            "name": "CPKTeacher",
+            "fields": {
+              "id": {
+                "name": "id",
+                "isArray": false,
+                "type": "ID",
+                "isRequired": true,
+                "attributes": []
+              },
+              "specialTeacherId": {
+                "name": "specialTeacherId",
+                "isArray": false,
+                "type": "ID",
+                "isRequired": true,
+                "attributes": []
+              },
+              "CPKStudent": {
+                "name": "CPKStudent",
+                "isArray": false,
+                "type": {
+                  "model": "CPKStudent"
+                },
+                "isRequired": false,
+                "attributes": [],
+                "association": {
+                  "connectionType": "HAS_ONE",
+                  "associatedWith": "specialStudentId",
+                  "targetName": "cPKTeacherCPKStudentId"
+                }
+              },
+              "CPKClasses": {
+                "name": "CPKClasses",
+                "isArray": true,
+                "type": {
+                  "model": "CPKTeacherCPKClass"
+                },
+                "isRequired": false,
+                "attributes": [],
+                "isArrayNullable": true,
+                "association": {
+                  "connectionType": "HAS_MANY",
+                  "associatedWith": "cpkTeacher"
+                }
+              },
+              "createdAt": {
+                "name": "createdAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+              },
+              "updatedAt": {
+                "name": "updatedAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+              },
+              "cPKTeacherCPKStudentId": {
+                "name": "cPKTeacherCPKStudentId",
+                "isArray": false,
+                "type": "ID",
+                "isRequired": false,
+                "attributes": []
+              }
+            },
+            "syncable": true,
+            "pluralName": "CPKTeachers",
+            "attributes": [
+              {
+                "type": "model",
+                "properties": {}
+              },
+              {
+                "type": "key",
+                "properties": {
+                  "fields": [
+                    "specialTeacherId"
+                  ]
+                }
+              }
+            ]
+          },
+          "CPKClass": {
+            "name": "CPKClass",
+            "fields": {
+              "id": {
+                "name": "id",
+                "isArray": false,
+                "type": "ID",
+                "isRequired": true,
+                "attributes": []
+              },
+              "specialClassId": {
+                "name": "specialClassId",
+                "isArray": false,
+                "type": "ID",
+                "isRequired": true,
+                "attributes": []
+              },
+              "CPKTeachers": {
+                "name": "CPKTeachers",
+                "isArray": true,
+                "type": {
+                  "model": "CPKTeacherCPKClass"
+                },
+                "isRequired": false,
+                "attributes": [],
+                "isArrayNullable": true,
+                "association": {
+                  "connectionType": "HAS_MANY",
+                  "associatedWith": "cpkClass"
+                }
+              },
+              "createdAt": {
+                "name": "createdAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+              },
+              "updatedAt": {
+                "name": "updatedAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+              }
+            },
+            "syncable": true,
+            "pluralName": "CPKClasses",
+            "attributes": [
+              {
+                "type": "model",
+                "properties": {}
+              },
+              {
+                "type": "key",
+                "properties": {
+                  "fields": [
+                    "specialClassId"
+                  ]
+                }
+              }
+            ]
+          }
+          },
     "enums": {},
     "nonModels": {},
     "version": "38a1a46479c6cd75d21439d7f3122c1d",

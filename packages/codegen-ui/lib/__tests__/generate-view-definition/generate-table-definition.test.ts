@@ -67,6 +67,7 @@ describe('generateTableDefinition', () => {
       nonModels: {},
       models: {
         TestModel: {
+          primaryKeys: [],
           fields: {},
         },
       },

@@ -2282,7 +2282,12 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Teacher, Student as Student0 } from \\"../models\\";
+import {
+  CPKTeacher,
+  CPKStudent as CPKStudent0,
+  CPKClass,
+  CPKTeacherCPKClass,
+} from \\"../models\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
 function ArrayField({
@@ -2432,10 +2437,10 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function UpdateTeacherForm(props) {
+export default function UpdateCPKTeacherForm(props) {
   const {
     specialTeacherId: specialTeacherIdProp,
-    teacher,
+    cPKTeacher,
     onSuccess,
     onError,
     onSubmit,
@@ -2446,51 +2451,87 @@ export default function UpdateTeacherForm(props) {
   } = props;
   const initialValues = {
     specialTeacherId: undefined,
-    Student: undefined,
+    CPKStudent: undefined,
+    CPKClasses: [],
   };
   const [specialTeacherId, setSpecialTeacherId] = React.useState(
     initialValues.specialTeacherId
   );
-  const [Student, setStudent] = React.useState(initialValues.Student);
+  const [CPKStudent, setCPKStudent] = React.useState(initialValues.CPKStudent);
+  const [CPKClasses, setCPKClasses] = React.useState(initialValues.CPKClasses);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = teacherRecord
-      ? { ...initialValues, ...teacherRecord, Student }
+    const cleanValues = cPKTeacherRecord
+      ? {
+          ...initialValues,
+          ...cPKTeacherRecord,
+          CPKStudent,
+          CPKClasses: linkedCPKClasses,
+        }
       : initialValues;
     setSpecialTeacherId(cleanValues.specialTeacherId);
-    setStudent(cleanValues.Student);
-    setCurrentStudentValue(undefined);
-    setCurrentStudentDisplayValue(\\"\\");
+    setCPKStudent(cleanValues.CPKStudent);
+    setCurrentCPKStudentValue(undefined);
+    setCurrentCPKStudentDisplayValue(\\"\\");
+    setCPKClasses(cleanValues.CPKClasses ?? []);
+    setCurrentCPKClassesValue(undefined);
+    setCurrentCPKClassesDisplayValue(\\"\\");
     setErrors({});
   };
-  const [teacherRecord, setTeacherRecord] = React.useState(teacher);
+  const [cPKTeacherRecord, setCPKTeacherRecord] = React.useState(cPKTeacher);
+  const [linkedCPKClasses, setLinkedCPKClasses] = React.useState([]);
   React.useEffect(() => {
     const queryData = async () => {
       const record = specialTeacherIdProp
-        ? await DataStore.query(Teacher, specialTeacherIdProp)
-        : teacher;
-      setTeacherRecord(record);
-      const StudentRecord = record ? await record.Student : undefined;
-      setStudent(StudentRecord);
+        ? await DataStore.query(CPKTeacher, specialTeacherIdProp)
+        : cPKTeacher;
+      setCPKTeacherRecord(record);
+      const CPKStudentRecord = record ? await record.CPKStudent : undefined;
+      setCPKStudent(CPKStudentRecord);
+      const linkedCPKClasses = record
+        ? await Promise.all(
+            (
+              await record.CPKClasses.toArray()
+            ).map((r) => {
+              return r.cpkClass;
+            })
+          )
+        : [];
+      setLinkedCPKClasses(linkedCPKClasses);
     };
     queryData();
-  }, [specialTeacherIdProp, teacher]);
-  React.useEffect(resetStateValues, [teacherRecord, Student]);
-  const [currentStudentDisplayValue, setCurrentStudentDisplayValue] =
+  }, [specialTeacherIdProp, cPKTeacher]);
+  React.useEffect(resetStateValues, [
+    cPKTeacherRecord,
+    CPKStudent,
+    linkedCPKClasses,
+  ]);
+  const [currentCPKStudentDisplayValue, setCurrentCPKStudentDisplayValue] =
     React.useState(\\"\\");
-  const [currentStudentValue, setCurrentStudentValue] =
+  const [currentCPKStudentValue, setCurrentCPKStudentValue] =
     React.useState(undefined);
-  const StudentRef = React.createRef();
-  const studentRecords = useDataStoreBinding({
+  const CPKStudentRef = React.createRef();
+  const [currentCPKClassesDisplayValue, setCurrentCPKClassesDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCPKClassesValue, setCurrentCPKClassesValue] =
+    React.useState(undefined);
+  const CPKClassesRef = React.createRef();
+  const cPKStudentRecords = useDataStoreBinding({
     type: \\"collection\\",
-    model: Student0,
+    model: CPKStudent0,
+  }).items;
+  const cPKClassRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CPKClass,
   }).items;
   const getDisplayValue = {
-    Student: (record) => record?.specialStudentId,
+    CPKStudent: (record) => record?.specialStudentId,
+    CPKClasses: (record) => record?.specialClassId,
   };
   const validations = {
     specialTeacherId: [{ type: \\"Required\\" }],
-    Student: [],
+    CPKStudent: [],
+    CPKClasses: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -2518,7 +2559,8 @@ export default function UpdateTeacherForm(props) {
         event.preventDefault();
         let modelFields = {
           specialTeacherId,
-          Student,
+          CPKStudent,
+          CPKClasses,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -2551,11 +2593,76 @@ export default function UpdateTeacherForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(
-            Teacher.copyOf(teacherRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
+          const promises = [];
+          const cPKClassesToLinkMap = new Map();
+          const cPKClassesToUnLinkMap = new Map();
+          const cPKClassesMap = new Map();
+          const linkedCPKClassesMap = new Map();
+          CPKClasses.forEach((r) => {
+            const count = cPKClassesMap.get(r.specialClassId);
+            const newCount = count ? count + 1 : 1;
+            cPKClassesMap.set(r.specialClassId, newCount);
+          });
+          linkedCPKClasses.forEach((r) => {
+            const count = linkedCPKClassesMap.get(r.specialClassId);
+            const newCount = count ? count + 1 : 1;
+            linkedCPKClassesMap.set(r.specialClassId, newCount);
+          });
+          linkedCPKClassesMap.forEach((count, id) => {
+            const newCount = cPKClassesMap.get(id);
+            if (newCount) {
+              const diffCount = count - newCount;
+              if (diffCount > 0) {
+                cPKClassesToUnLinkMap.set(id, diffCount);
+              }
+            } else {
+              cPKClassesToUnLinkMap.set(id, count);
+            }
+          });
+          cPKClassesMap.forEach((count, id) => {
+            const originalCount = linkedCPKClassesMap.get(id);
+            if (originalCount) {
+              const diffCount = count - originalCount;
+              if (diffCount > 0) {
+                cPKClassesToLinkMap.set(id, diffCount);
+              }
+            } else {
+              cPKClassesToLinkMap.set(id, count);
+            }
+          });
+          cPKClassesToUnLinkMap.forEach(async (count, id) => {
+            const cPKTeacherCPKClassRecords = await DataStore.query(
+              CPKTeacherCPKClass,
+              (r) =>
+                r.and((r) => [
+                  r.cpkClassID.eq(id),
+                  r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId),
+                ])
+            );
+            for (let i = 0; i < count; i++) {
+              promises.push(DataStore.delete(cPKTeacherCPKClassRecords[i]));
+            }
+          });
+          cPKClassesToLinkMap.forEach((count, id) => {
+            for (let i = count; i > 0; i--) {
+              promises.push(
+                DataStore.save(
+                  new CPKTeacherCPKClass({
+                    cpkTeacherID: cPKTeacherRecord.specialTeacherId,
+                    cpkClassID: id,
+                  })
+                )
+              );
+            }
+          });
+          promises.push(
+            DataStore.save(
+              CPKTeacher.copyOf(cPKTeacherRecord, (updated) => {
+                Object.assign(updated, modelFields);
+              })
+            )
           );
+          await Promise.all(promises);
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -2566,7 +2673,7 @@ export default function UpdateTeacherForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, \\"UpdateTeacherForm\\")}
+      {...getOverrideProps(overrides, \\"UpdateCPKTeacherForm\\")}
     >
       <TextField
         label=\\"Special teacher id\\"
@@ -2578,7 +2685,8 @@ export default function UpdateTeacherForm(props) {
           if (onChange) {
             const modelFields = {
               specialTeacherId: value,
-              Student,
+              CPKStudent,
+              CPKClasses,
             };
             const result = onChange(modelFields);
             value = result?.specialTeacherId ?? value;
@@ -2600,60 +2708,125 @@ export default function UpdateTeacherForm(props) {
           if (onChange) {
             const modelFields = {
               specialTeacherId,
-              Student: value,
+              CPKStudent: value,
+              CPKClasses,
             };
             const result = onChange(modelFields);
-            value = result?.Student ?? value;
+            value = result?.CPKStudent ?? value;
           }
-          setStudent(value);
-          setCurrentStudentValue(undefined);
-          setCurrentStudentDisplayValue(\\"\\");
+          setCPKStudent(value);
+          setCurrentCPKStudentValue(undefined);
+          setCurrentCPKStudentDisplayValue(\\"\\");
         }}
-        currentFieldValue={currentStudentValue}
-        label={\\"Student\\"}
-        items={Student ? [Student] : []}
-        hasError={errors.Student?.hasError}
-        getBadgeText={getDisplayValue.Student}
+        currentFieldValue={currentCPKStudentValue}
+        label={\\"Cpk student\\"}
+        items={CPKStudent ? [CPKStudent] : []}
+        hasError={errors.CPKStudent?.hasError}
+        getBadgeText={getDisplayValue.CPKStudent}
         setFieldValue={(model) => {
-          setCurrentStudentDisplayValue(getDisplayValue.Student(model));
-          setCurrentStudentValue(model);
+          setCurrentCPKStudentDisplayValue(getDisplayValue.CPKStudent(model));
+          setCurrentCPKStudentValue(model);
         }}
-        inputFieldRef={StudentRef}
+        inputFieldRef={CPKStudentRef}
         defaultFieldValue={\\"\\"}
       >
         <Autocomplete
-          label=\\"Student\\"
+          label=\\"Cpk student\\"
           isRequired={false}
           isReadOnly={false}
-          value={currentStudentDisplayValue}
-          options={studentRecords.map((r) => ({
+          value={currentCPKStudentDisplayValue}
+          options={cPKStudentRecords.map((r) => ({
             id: r.specialStudentId,
-            label: getDisplayValue.Student?.(r),
+            label: getDisplayValue.CPKStudent?.(r),
           }))}
           onSelect={({ id, label }) => {
-            setCurrentStudentValue(
-              studentRecords.find((r) => r.specialStudentId === id)
+            setCurrentCPKStudentValue(
+              cPKStudentRecords.find((r) => r.specialStudentId === id)
             );
-            setCurrentStudentDisplayValue(label);
+            setCurrentCPKStudentDisplayValue(label);
           }}
           onClear={() => {
-            setCurrentStudentDisplayValue(\\"\\");
+            setCurrentCPKStudentDisplayValue(\\"\\");
           }}
-          defaultValue={Student}
+          defaultValue={CPKStudent}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.Student?.hasError) {
-              runValidationTasks(\\"Student\\", value);
+            if (errors.CPKStudent?.hasError) {
+              runValidationTasks(\\"CPKStudent\\", value);
             }
-            setCurrentStudentDisplayValue(value);
-            setCurrentStudentValue(undefined);
+            setCurrentCPKStudentDisplayValue(value);
+            setCurrentCPKStudentValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Student\\", Student)}
-          errorMessage={errors.Student?.errorMessage}
-          hasError={errors.Student?.hasError}
-          ref={StudentRef}
+          onBlur={() => runValidationTasks(\\"CPKStudent\\", CPKStudent)}
+          errorMessage={errors.CPKStudent?.errorMessage}
+          hasError={errors.CPKStudent?.hasError}
+          ref={CPKStudentRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, \\"Student\\")}
+          {...getOverrideProps(overrides, \\"CPKStudent\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId,
+              CPKStudent,
+              CPKClasses: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.CPKClasses ?? values;
+          }
+          setCPKClasses(values);
+          setCurrentCPKClassesValue(undefined);
+          setCurrentCPKClassesDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCPKClassesValue}
+        label={\\"Cpk classes\\"}
+        items={CPKClasses}
+        hasError={errors.CPKClasses?.hasError}
+        getBadgeText={getDisplayValue.CPKClasses}
+        setFieldValue={(model) => {
+          setCurrentCPKClassesDisplayValue(getDisplayValue.CPKClasses(model));
+          setCurrentCPKClassesValue(model);
+        }}
+        inputFieldRef={CPKClassesRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Cpk classes\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentCPKClassesDisplayValue}
+          options={cPKClassRecords.map((r) => ({
+            id: r.specialClassId,
+            label: getDisplayValue.CPKClasses?.(r),
+          }))}
+          onSelect={({ id, label }) => {
+            setCurrentCPKClassesValue(
+              cPKClassRecords.find((r) => r.specialClassId === id)
+            );
+            setCurrentCPKClassesDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentCPKClassesDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CPKClasses?.hasError) {
+              runValidationTasks(\\"CPKClasses\\", value);
+            }
+            setCurrentCPKClassesDisplayValue(value);
+            setCurrentCPKClassesValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"CPKClasses\\", currentCPKClassesValue)
+          }
+          errorMessage={errors.CPKClasses?.errorMessage}
+          hasError={errors.CPKClasses?.hasError}
+          ref={CPKClassesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CPKClasses\\")}
         ></Autocomplete>
       </ArrayField>
       <Flex
@@ -2689,38 +2862,41 @@ exports[`amplify form renderer tests datastore form tests custom form tests shou
 "import * as React from \\"react\\";
 import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Teacher, Student as Student0 } from \\"../models\\";
+import { CPKTeacher, CPKStudent as CPKStudent0, CPKClass } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UpdateTeacherFormInputValues = {
+export declare type UpdateCPKTeacherFormInputValues = {
     specialTeacherId?: string;
-    Student?: Student0;
+    CPKStudent?: CPKStudent0;
+    CPKClasses?: CPKClass[];
 };
-export declare type UpdateTeacherFormValidationValues = {
+export declare type UpdateCPKTeacherFormValidationValues = {
     specialTeacherId?: ValidationFunction<string>;
-    Student?: ValidationFunction<Student0>;
+    CPKStudent?: ValidationFunction<CPKStudent0>;
+    CPKClasses?: ValidationFunction<CPKClass>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type UpdateTeacherFormOverridesProps = {
-    UpdateTeacherFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type UpdateCPKTeacherFormOverridesProps = {
+    UpdateCPKTeacherFormGrid?: PrimitiveOverrideProps<GridProps>;
     specialTeacherId?: PrimitiveOverrideProps<TextFieldProps>;
-    Student?: PrimitiveOverrideProps<AutocompleteProps>;
+    CPKStudent?: PrimitiveOverrideProps<AutocompleteProps>;
+    CPKClasses?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
-export declare type UpdateTeacherFormProps = React.PropsWithChildren<{
-    overrides?: UpdateTeacherFormOverridesProps | undefined | null;
+export declare type UpdateCPKTeacherFormProps = React.PropsWithChildren<{
+    overrides?: UpdateCPKTeacherFormOverridesProps | undefined | null;
 } & {
     specialTeacherId?: string;
-    teacher?: Teacher;
-    onSubmit?: (fields: UpdateTeacherFormInputValues) => UpdateTeacherFormInputValues;
-    onSuccess?: (fields: UpdateTeacherFormInputValues) => void;
-    onError?: (fields: UpdateTeacherFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: UpdateTeacherFormInputValues) => UpdateTeacherFormInputValues;
-    onValidate?: UpdateTeacherFormValidationValues;
+    cPKTeacher?: CPKTeacher;
+    onSubmit?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
+    onSuccess?: (fields: UpdateCPKTeacherFormInputValues) => void;
+    onError?: (fields: UpdateCPKTeacherFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
+    onValidate?: UpdateCPKTeacherFormValidationValues;
 } & React.CSSProperties>;
-export default function UpdateTeacherForm(props: UpdateTeacherFormProps): React.ReactElement;
+export default function UpdateCPKTeacherForm(props: UpdateCPKTeacherFormProps): React.ReactElement;
 "
 `;
 
