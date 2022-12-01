@@ -64,6 +64,10 @@ type AllSupportedFormFieldsTagMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
 
+type AllSupportedFormFieldsStudentMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
 type OwnerMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
@@ -321,7 +325,7 @@ export declare const Owner: (new (init: ModelInit<Owner, OwnerMetaData>) => Owne
 type EagerStudent = {
   readonly id: string;
   readonly name?: string | null;
-  readonly allSupportedFormFieldsID?: string | null;
+  readonly AllSupportedFormFields?: (AllSupportedFormFieldsStudent | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 };
@@ -329,7 +333,7 @@ type EagerStudent = {
 type LazyStudent = {
   readonly id: string;
   readonly name?: string | null;
-  readonly allSupportedFormFieldsID?: string | null;
+  readonly AllSupportedFormFields?: AsyncCollection<AllSupportedFormFieldsStudent>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 };
@@ -342,6 +346,46 @@ export declare const Student: (new (init: ModelInit<Student, StudentMetaData>) =
     source: Student,
     mutator: (draft: MutableModel<Student, StudentMetaData>) => MutableModel<Student, StudentMetaData> | void,
   ): Student;
+};
+
+type EagerAllSupportedFormFieldsStudent = {
+  readonly id: string;
+
+  readonly student?: Student;
+
+  readonly allSupportedFormFields?: AllSupportedFormFields | null;
+
+  readonly createdAt?: string | null;
+
+  readonly updatedAt?: string | null;
+};
+
+type LazyAllSupportedFormFieldsStudent = {
+  readonly id: string;
+
+  readonly student?: AsyncItem<Student>;
+
+  readonly allSupportedFormFields?: AsyncItem<AllSupportedFormFields>;
+
+  readonly createdAt?: string | null;
+
+  readonly updatedAt?: string | null;
+};
+
+export declare type AllSupportedFormFieldsStudent = LazyLoading extends LazyLoadingDisabled
+  ? EagerAllSupportedFormFieldsStudent
+  : LazyAllSupportedFormFieldsStudent;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const AllSupportedFormFieldsStudent: (new (
+  init: ModelInit<AllSupportedFormFieldsStudent, AllSupportedFormFieldsStudentMetaData>,
+) => AllSupportedFormFieldsStudent) & {
+  copyOf(
+    source: AllSupportedFormFieldsStudent,
+    mutator: (
+      draft: MutableModel<AllSupportedFormFieldsStudent, AllSupportedFormFieldsStudentMetaData>,
+    ) => MutableModel<AllSupportedFormFieldsStudent, AllSupportedFormFieldsStudentMetaData> | void,
+  ): AllSupportedFormFieldsStudent;
 };
 
 type EagerAllSupportedFormFields = {
@@ -387,7 +431,7 @@ type EagerAllSupportedFormFields = {
 
   readonly BelongsToOwner?: Owner | null;
 
-  readonly HasManyStudents?: Student[] | null;
+  readonly HasManyStudents?: (AllSupportedFormFieldsStudent | null)[] | null;
 
   readonly ManyToManyTags?: (AllSupportedFormFieldsTag | null)[] | null;
 
@@ -437,7 +481,7 @@ type LazyAllSupportedFormFields = {
 
   readonly BelongsToOwner?: AsyncItem<Owner | undefined>;
 
-  readonly HasManyStudents?: AsyncCollection<Student>;
+  readonly HasManyStudents?: AsyncCollection<AllSupportedFormFieldsStudent>;
 
   readonly ManyToManyTags?: AsyncCollection<AllSupportedFormFieldsTag>;
 
