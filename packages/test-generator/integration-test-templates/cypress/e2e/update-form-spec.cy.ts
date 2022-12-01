@@ -93,6 +93,7 @@ describe('UpdateForms', () => {
           expect(record.ManyToManyTags[0].label).to.equal('Green');
           expect(record.ManyToManyTags[1].label).to.equal('Orange');
           expect(record.BelongsToOwner.name).to.equal('George');
+          expect(record.HasManyStudents.length).to.equal(2);
           expect(record.HasManyStudents[0].name).to.equal('Matthew');
           expect(record.HasManyStudents[0].allSupportedFormFieldsID).to.equal(record.id);
           expect(record.HasManyStudents[1].name).to.equal('Sarah');
