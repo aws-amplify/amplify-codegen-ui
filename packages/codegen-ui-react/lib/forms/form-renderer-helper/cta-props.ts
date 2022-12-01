@@ -57,7 +57,12 @@ export const buildDataStoreExpression = (
         );
       } else {
         hasManyDataStoreStatements.push(
-          ...buildHasManyRelationshipDataStoreStatements(dataStoreActionType, importedModelName, fieldConfig),
+          ...buildHasManyRelationshipDataStoreStatements(
+            dataStoreActionType,
+            importedModelName,
+            fieldConfig,
+            thisModelPrimaryKey,
+          ),
         );
       }
     }

@@ -134,89 +134,170 @@
           "CPKTeacher": {
             "name": "CPKTeacher",
             "fields": {
-              "id": {
-                "name": "id",
-                "isArray": false,
-                "type": "ID",
-                "isRequired": true,
-                "attributes": []
-              },
-              "specialTeacherId": {
-                "name": "specialTeacherId",
-                "isArray": false,
-                "type": "ID",
-                "isRequired": true,
-                "attributes": []
-              },
-              "CPKStudent": {
-                "name": "CPKStudent",
-                "isArray": false,
-                "type": {
-                  "model": "CPKStudent"
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 },
-                "isRequired": false,
-                "attributes": [],
-                "association": {
-                  "connectionType": "HAS_ONE",
-                  "associatedWith": "specialStudentId",
-                  "targetName": "cPKTeacherCPKStudentId"
-                }
-              },
-              "CPKClasses": {
-                "name": "CPKClasses",
-                "isArray": true,
-                "type": {
-                  "model": "CPKTeacherCPKClass"
+                "specialTeacherId": {
+                    "name": "specialTeacherId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 },
-                "isRequired": false,
-                "attributes": [],
-                "isArrayNullable": true,
-                "association": {
-                  "connectionType": "HAS_MANY",
-                  "associatedWith": "cpkTeacher"
+                "CPKStudent": {
+                    "name": "CPKStudent",
+                    "isArray": false,
+                    "type": {
+                        "model": "CPKStudent"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "specialStudentId",
+                        "targetName": "cPKTeacherCPKStudentId"
+                    }
+                },
+                "CPKClasses": {
+                    "name": "CPKClasses",
+                    "isArray": true,
+                    "type": {
+                        "model": "CPKTeacherCPKClass"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "cpkTeacher"
+                    }
+                },
+                "CPKProjects": {
+                    "name": "CPKProjects",
+                    "isArray": true,
+                    "type": {
+                        "model": "CPKProject"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "cPKTeacherID"
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "cPKTeacherCPKStudentId": {
+                    "name": "cPKTeacherCPKStudentId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
                 }
-              },
-              "createdAt": {
-                "name": "createdAt",
-                "isArray": false,
-                "type": "AWSDateTime",
-                "isRequired": false,
-                "attributes": [],
-                "isReadOnly": true
-              },
-              "updatedAt": {
-                "name": "updatedAt",
-                "isArray": false,
-                "type": "AWSDateTime",
-                "isRequired": false,
-                "attributes": [],
-                "isReadOnly": true
-              },
-              "cPKTeacherCPKStudentId": {
-                "name": "cPKTeacherCPKStudentId",
-                "isArray": false,
-                "type": "ID",
-                "isRequired": false,
-                "attributes": []
-              }
             },
             "syncable": true,
             "pluralName": "CPKTeachers",
             "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "specialTeacherId"
+                        ]
+                    }
+                }
+            ]
+        },
+        "CPKProject": {
+          "name": "CPKProject",
+          "fields": {
+              "id": {
+                  "name": "id",
+                  "isArray": false,
+                  "type": "ID",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "specialProjectId": {
+                  "name": "specialProjectId",
+                  "isArray": false,
+                  "type": "ID",
+                  "isRequired": true,
+                  "attributes": []
+              },
+              "cPKTeacherID": {
+                  "name": "cPKTeacherID",
+                  "isArray": false,
+                  "type": "ID",
+                  "isRequired": false,
+                  "attributes": []
+              },
+              "createdAt": {
+                  "name": "createdAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              },
+              "updatedAt": {
+                  "name": "updatedAt",
+                  "isArray": false,
+                  "type": "AWSDateTime",
+                  "isRequired": false,
+                  "attributes": [],
+                  "isReadOnly": true
+              }
+          },
+          "syncable": true,
+          "pluralName": "CPKProjects",
+          "attributes": [
               {
-                "type": "model",
-                "properties": {}
+                  "type": "model",
+                  "properties": {}
               },
               {
-                "type": "key",
-                "properties": {
-                  "fields": [
-                    "specialTeacherId"
-                  ]
-                }
+                  "type": "key",
+                  "properties": {
+                      "fields": [
+                          "specialProjectId"
+                      ]
+                  }
+              },
+              {
+                  "type": "key",
+                  "properties": {
+                      "name": "byCPKTeacher",
+                      "fields": [
+                          "cPKTeacherID"
+                      ]
+                  }
               }
-            ]
-          },
+          ]
+      },
           "CPKClass": {
             "name": "CPKClass",
             "fields": {

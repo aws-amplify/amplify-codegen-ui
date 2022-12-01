@@ -379,6 +379,11 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toContain('r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId)');
         expect(componentText).toContain('cpkTeacherID: cPKTeacherRecord.specialTeacherId');
 
+        // hasMany
+        expect(componentText).toContain('CPKProjects.forEach((r) => cPKProjectsSet.add(r.specialProjectId))');
+        expect(componentText).toContain('linkedCPKProjectsSet.add(r.specialProjectId)');
+        expect(componentText).toContain('updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId');
+
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });

@@ -1152,6 +1152,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
+  thisModelPrimaryKey: string,
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
@@ -1162,6 +1163,11 @@ export const buildHasManyRelationshipDataStoreStatements = (
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
   const dataToLinkSet = `${lowerCaseFirst(fieldName)}Set`;
   const linkedDataSet = `${linkedDataName}Set`;
+  const { key } = extractModelAndKey(fieldConfigMetaData.valueMappings);
+  if (!key) {
+    throw new InternalError(`Could not identify primary key for ${relatedModelName}`);
+  }
+  const relatedModelPrimaryKey = key;
   if (dataStoreActionType === 'update') {
     return [
       factory.createVariableStatement(
@@ -1222,6 +1228,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
       ),
       factory.createExpressionStatement(
         factory.createCallExpression(
+          // CPKProjects.forEach((r) => cPKProjectsSet.add(r.specialProjectId));
           factory.createPropertyAccessExpression(
             factory.createIdentifier(fieldName),
             factory.createIdentifier('forEach'),
@@ -1250,12 +1257,18 @@ export const buildHasManyRelationshipDataStoreStatements = (
                   factory.createIdentifier('add'),
                 ),
                 undefined,
-                [factory.createPropertyAccessExpression(factory.createIdentifier('r'), factory.createIdentifier('id'))],
+                [
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('r'),
+                    factory.createIdentifier(relatedModelPrimaryKey),
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ),
+      // linkedCPKProjects.forEach((r) => linkedCPKProjectsSet.add(r.specialProjectId));
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
@@ -1286,7 +1299,12 @@ export const buildHasManyRelationshipDataStoreStatements = (
                   factory.createIdentifier('add'),
                 ),
                 undefined,
-                [factory.createPropertyAccessExpression(factory.createIdentifier('r'), factory.createIdentifier('id'))],
+                [
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('r'),
+                    factory.createIdentifier(relatedModelPrimaryKey),
+                  ),
+                ],
               ),
             ),
           ],
@@ -1588,6 +1606,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                   factory.createToken(SyntaxKind.EqualsGreaterThanToken),
                                   factory.createBlock(
                                     [
+                                      // updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId;
                                       factory.createExpressionStatement(
                                         factory.createBinaryExpression(
                                           factory.createPropertyAccessExpression(
@@ -1597,7 +1616,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                           factory.createToken(SyntaxKind.EqualsToken),
                                           factory.createPropertyAccessExpression(
                                             factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                                            factory.createIdentifier('id'),
+                                            factory.createIdentifier(thisModelPrimaryKey),
                                           ),
                                         ),
                                       ),
