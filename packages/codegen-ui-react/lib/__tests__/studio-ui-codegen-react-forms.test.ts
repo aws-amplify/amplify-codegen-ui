@@ -362,13 +362,23 @@ describe('amplify form renderer tests', () => {
 
       it('should render an update form for model with cpk', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer(
-          'forms/teacher-datastore-update-cpk',
+          'forms/cpk-teacher-datastore-update',
           'datastore/cpk-relationships',
         );
+        // hasOne
         expect(componentText).toContain('specialTeacherId: specialTeacherIdProp');
-        expect(componentText).toContain('await DataStore.query(Teacher, specialTeacherIdProp)');
+        expect(componentText).toContain('await DataStore.query(CPKTeacher, specialTeacherIdProp)');
         expect(componentText).toContain('Student: (record) => record?.specialStudentId');
         expect(componentText).toContain('id: r.specialStudentId');
+
+        // manyToMany
+        expect(componentText).toContain('const count = cPKClassesMap.get(r.specialClassId)');
+        expect(componentText).toContain('cPKClassesMap.set(r.specialClassId, newCount)');
+        expect(componentText).toContain('const count = linkedCPKClassesMap.get(r.specialClassId)');
+        expect(componentText).toContain('linkedCPKClassesMap.set(r.specialClassId, newCount)');
+        expect(componentText).toContain('r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId)');
+        expect(componentText).toContain('cpkTeacherID: cPKTeacherRecord.specialTeacherId');
+
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });

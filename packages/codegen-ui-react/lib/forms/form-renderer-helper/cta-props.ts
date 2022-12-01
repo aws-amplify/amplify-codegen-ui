@@ -37,6 +37,7 @@ export const buildDataStoreExpression = (
   modelName: string,
   importedModelName: string,
   fieldConfigs: Record<string, FieldConfigMetadata>,
+  thisModelPrimaryKey: string,
 ) => {
   let isHasManyFieldConfigExisting = false;
   const hasManyDataStoreStatements: (VariableStatement | ExpressionStatement)[] = [];
@@ -47,7 +48,12 @@ export const buildDataStoreExpression = (
       isHasManyFieldConfigExisting = true;
       if (isManyToManyRelationship(fieldConfigMetaData)) {
         hasManyDataStoreStatements.push(
-          ...buildManyToManyRelationshipDataStoreStatements(dataStoreActionType, importedModelName, fieldConfig),
+          ...buildManyToManyRelationshipDataStoreStatements(
+            dataStoreActionType,
+            importedModelName,
+            fieldConfig,
+            thisModelPrimaryKey,
+          ),
         );
       } else {
         hasManyDataStoreStatements.push(

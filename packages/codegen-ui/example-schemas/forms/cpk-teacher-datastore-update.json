@@ -1,8 +1,8 @@
 {
-    "name": "UpdateTeacherForm",
+    "name": "UpdateCPKTeacherForm",
     "dataType": {
         "dataSourceType": "DataStore",
-        "dataTypeName": "Teacher"
+        "dataTypeName": "CPKTeacher"
     },
     "formActionType": "update",
     "fields": {},

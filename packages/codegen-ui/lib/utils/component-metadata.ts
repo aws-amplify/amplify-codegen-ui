@@ -23,6 +23,7 @@ import {
   StateReference,
   FormMetadata,
 } from '../types';
+import { DataSchemaMetaData } from './dataschema-metadata';
 import { StateReferenceMetadata, computeStateReferenceMetadata } from './state-reference-metadata';
 
 export type ComponentMetadata = {
@@ -31,6 +32,7 @@ export type ComponentMetadata = {
   stateReferences: StateReferenceMetadata[];
   componentNameToTypeMap: Record<string, string>;
   formMetadata?: FormMetadata;
+  dataSchemaMetadata?: DataSchemaMetaData;
 };
 
 /**

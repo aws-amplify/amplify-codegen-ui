@@ -16,6 +16,7 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import {
   ComponentMetadata,
+  InternalError,
   StudioComponent,
   StudioComponentChild,
   StudioForm,
@@ -111,6 +112,11 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       ];
     }
     if (dataSourceType === 'DataStore') {
+      const primaryKey = this.componentMetadata.dataSchemaMetadata?.models[dataTypeName].primaryKey;
+
+      if (!primaryKey) {
+        throw new InternalError(`Could not find primary key for ${dataTypeName}`);
+      }
       return [
         factory.createIfStatement(
           onSubmitIdentifier,
@@ -133,7 +139,13 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
         factory.createTryStatement(
           factory.createBlock(
             [
-              ...buildDataStoreExpression(formActionType, dataTypeName, importedModelName, formMetadata.fieldConfigs),
+              ...buildDataStoreExpression(
+                formActionType,
+                dataTypeName,
+                importedModelName,
+                formMetadata.fieldConfigs,
+                primaryKey,
+              ),
               // call onSuccess hook if it exists
               factory.createIfStatement(
                 factory.createIdentifier('onSuccess'),
