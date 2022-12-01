@@ -78,13 +78,13 @@ export function mapElementMatrix({
         tempRightOf.push(element);
       } else if (typeof element.position === 'object' && 'below' in element.position && element.position.below) {
         const relationIndices = findIndices(element.position.below, formDefinition.elementMatrix);
+        const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
+        if (previousIndices) {
+          removeFromMatrix(previousIndices, formDefinition);
+        }
         if (!relationIndices) {
           requeued.push(element);
         } else {
-          const previousIndices = findIndices(element.name, formDefinition.elementMatrix);
-          if (previousIndices) {
-            removeFromMatrix(previousIndices, formDefinition);
-          }
           formDefinition.elementMatrix.splice(relationIndices[0] + 1, 0, [element.name]);
         }
       } else if (
