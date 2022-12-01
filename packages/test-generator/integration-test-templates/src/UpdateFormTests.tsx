@@ -19,14 +19,17 @@ import React, { useState, useEffect, useRef, SetStateAction } from 'react';
 import { AsyncItem, DataStore } from '@aws-amplify/datastore';
 import { DataStoreFormUpdateAllSupportedFormFields } from './ui-components'; // eslint-disable-line import/extensions, max-len
 import {
-  AllSupportedFormFields,
   Owner,
   User,
   Tag,
+  Student,
   LazyTag,
-  LazyAllSupportedFormFieldsTag,
+  AllSupportedFormFields,
   AllSupportedFormFieldsTag,
+  LazyAllSupportedFormFieldsTag,
+  LazyStudent,
 } from './models';
+import { getModelsFromJoinTableRecords } from './test-utils';
 
 const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
@@ -41,6 +44,10 @@ const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new Tag({ label: 'Blue' }));
   await DataStore.save(new Tag({ label: 'Green' }));
   await DataStore.save(new Tag({ label: 'Orange' }));
+  await DataStore.save(new Student({ name: 'Matthew' }));
+  await DataStore.save(new Student({ name: 'Sarah' }));
+  await DataStore.save(new Student({ name: 'David' }));
+  await DataStore.save(new Student({ name: 'Jessica' }));
 };
 
 const initializeAllSupportedFormFieldsTestData = async ({
@@ -49,8 +56,11 @@ const initializeAllSupportedFormFieldsTestData = async ({
   setAllSupportedFormFieldsRecordId: React.Dispatch<SetStateAction<string | undefined>>;
 }): Promise<void> => {
   const connectedUser = (await DataStore.query(User, (u) => u.firstName.eq('John')))[0];
-  const connectedTags = await DataStore.query(Tag, (tag) => tag.or((t) => [t.label.eq('Red'), t.label.eq('Blue')]));
   const connectedOwner = (await DataStore.query(Owner, (owner) => owner.name.eq('John')))[0];
+  const connectedTags = await DataStore.query(Tag, (tag) => tag.or((t) => [t.label.eq('Red'), t.label.eq('Blue')]));
+  const connectedStudents = await DataStore.query(Student, (student) =>
+    student.or((s) => [s.name.eq('David'), s.name.eq('Jessica')]),
+  );
   const createdRecord = await DataStore.save(
     new AllSupportedFormFields({
       string: 'My string',
@@ -82,6 +92,20 @@ const initializeAllSupportedFormFieldsTestData = async ({
           new AllSupportedFormFieldsTag({
             allSupportedFormFields: createdRecord,
             tag,
+          }),
+        ),
+      );
+      return promises;
+    }, []),
+  );
+
+  // connect students to form
+  await Promise.all(
+    connectedStudents.reduce((promises: AsyncItem<LazyStudent>[], student) => {
+      promises.push(
+        DataStore.save(
+          Student.copyOf(student, (updated) => {
+            Object.assign(updated, { allSupportedFormFieldsID: createdRecord.id });
           }),
         ),
       );
@@ -135,21 +159,21 @@ export default function UpdateFormTests() {
           onSuccess={async () => {
             const records = await DataStore.query(AllSupportedFormFields);
             const record = records[0];
-            const joinTableRecords = (await record.ManyToManyTags?.toArray()) as LazyAllSupportedFormFieldsTag[];
-            const ManyToManyTags = await Promise.all(
-              joinTableRecords?.reduce((promises: AsyncItem<LazyTag>[], joinTableRecord) => {
-                promises.push(joinTableRecord.tag as AsyncItem<LazyTag>);
-                return promises;
-              }, []),
+
+            const ManyToManyTags = await getModelsFromJoinTableRecords<LazyTag, LazyAllSupportedFormFieldsTag>(
+              record,
+              'ManyToManyTags',
+              'tag',
             );
-            // sort to make sure order
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
+
             setDataStoreFormUpdateAllSupportedFormFieldsRecord(
               JSON.stringify({
                 ...record,
                 HasOneUser: await record.HasOneUser,
-                ManyToManyTags,
                 BelongsToOwner: await record.BelongsToOwner,
+                HasManyStudents: await record.HasManyStudents?.toArray(),
+                ManyToManyTags,
               }),
             );
           }}

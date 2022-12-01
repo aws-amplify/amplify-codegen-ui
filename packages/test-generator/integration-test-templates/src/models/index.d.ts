@@ -321,7 +321,7 @@ export declare const Owner: (new (init: ModelInit<Owner, OwnerMetaData>) => Owne
 type EagerStudent = {
   readonly id: string;
   readonly name?: string | null;
-  readonly allSupportedFormFieldsID?: string | null;
+  readonly allSupportedFormFieldsID?: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 };
@@ -329,7 +329,7 @@ type EagerStudent = {
 type LazyStudent = {
   readonly id: string;
   readonly name?: string | null;
-  readonly allSupportedFormFieldsID?: string | null;
+  readonly allSupportedFormFieldsID?: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 };
@@ -387,7 +387,7 @@ type EagerAllSupportedFormFields = {
 
   readonly BelongsToOwner?: Owner | null;
 
-  readonly HasManyStudents?: Student[] | null;
+  readonly HasManyStudents?: (Student | null)[] | null;
 
   readonly ManyToManyTags?: (AllSupportedFormFieldsTag | null)[] | null;
 

@@ -68,6 +68,22 @@ describe('UpdateForms', () => {
         });
         clickAddToArray();
 
+        // Many to many update
+        removeArrayItem('David');
+        removeArrayItem('Jessica');
+
+        getArrayFieldButtonByLabel('Has many students').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
+        getArrayFieldButtonByLabel('Has many students').click();
+        cy.get(`.amplify-autocomplete`).within(() => {
+          cy.get('input').type(`Sar{downArrow}{enter}`);
+        });
+        clickAddToArray();
+
         cy.contains('Submit').click();
 
         cy.contains(/My string/).then((recordElement: JQuery) => {
@@ -77,6 +93,11 @@ describe('UpdateForms', () => {
           expect(record.ManyToManyTags[0].label).to.equal('Green');
           expect(record.ManyToManyTags[1].label).to.equal('Orange');
           expect(record.BelongsToOwner.name).to.equal('George');
+          expect(record.HasManyStudents.length).to.equal(2);
+          expect(record.HasManyStudents[0].name).to.equal('Matthew');
+          expect(record.HasManyStudents[0].allSupportedFormFieldsID).to.equal(record.id);
+          expect(record.HasManyStudents[1].name).to.equal('Sarah');
+          expect(record.HasManyStudents[1].allSupportedFormFieldsID).to.equal(record.id);
         });
       });
     });

@@ -16,7 +16,7 @@
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Divider, Text } from '@aws-amplify/ui-react';
 import { useState, useEffect, useRef } from 'react';
-import { AsyncItem, DataStore } from '@aws-amplify/datastore';
+import { DataStore } from '@aws-amplify/datastore';
 import {
   CustomFormCreateDog,
   DataStoreFormCreateAllSupportedFormFields,
@@ -24,6 +24,7 @@ import {
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
 
 import { AllSupportedFormFields, Owner, User, Tag, LazyTag, Student, LazyAllSupportedFormFieldsTag } from './models';
+import { getModelsFromJoinTableRecords } from './test-utils';
 
 const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
@@ -103,12 +104,11 @@ export default function CreateFormTests() {
           onSuccess={async () => {
             const records = await DataStore.query(AllSupportedFormFields);
             const record = records[0];
-            const joinTableRecords = (await record.ManyToManyTags?.toArray()) as LazyAllSupportedFormFieldsTag[];
-            const ManyToManyTags = await Promise.all(
-              joinTableRecords?.reduce((promises: AsyncItem<LazyTag>[], joinTableRecord) => {
-                promises.push(joinTableRecord.tag as AsyncItem<LazyTag>);
-                return promises;
-              }, []),
+
+            const ManyToManyTags = await getModelsFromJoinTableRecords<LazyTag, LazyAllSupportedFormFieldsTag>(
+              record,
+              'ManyToManyTags',
+              'tag',
             );
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
 
@@ -117,7 +117,7 @@ export default function CreateFormTests() {
                 ...record,
                 HasOneUser: await record.HasOneUser,
                 BelongsToOwner: await record.BelongsToOwner,
-                HasManyStudents: await record.HasManyStudents,
+                HasManyStudents: await record.HasManyStudents?.toArray(),
                 ManyToManyTags,
               }),
             );

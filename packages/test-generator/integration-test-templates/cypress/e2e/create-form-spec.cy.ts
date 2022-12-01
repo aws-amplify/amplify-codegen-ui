@@ -177,8 +177,11 @@ describe('CreateForms', () => {
           expect(record.enum).to.equal('SAN_FRANCISCO');
           expect(record.stringArray[0]).to.equal('String1');
           expect(record.HasOneUser.firstName).to.equal('John');
+          expect(record.HasManyStudents.length).to.equal(2);
           expect(record.HasManyStudents?.[0].name).to.equal('David');
+          expect(record.HasManyStudents?.[0].allSupportedFormFieldsID).to.equal(record.id);
           expect(record.HasManyStudents?.[1].name).to.equal('Sarah');
+          expect(record.HasManyStudents?.[1].allSupportedFormFieldsID).to.equal(record.id);
           expect(record.BelongsToOwner.name).to.equal('John');
           expect(record.ManyToManyTags[0].label).to.equal('Blue');
           expect(record.ManyToManyTags[1].label).to.equal('Green');
