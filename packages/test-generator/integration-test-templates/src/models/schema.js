@@ -472,82 +472,6 @@ export const schema = {
         },
       ],
     },
-    AllSupportedFormFieldsStudent: {
-      name: 'AllSupportedFormFieldsStudent',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        student: {
-          name: 'student',
-          isArray: false,
-          type: {
-            model: 'Student',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetName: 'studentID',
-          },
-        },
-        allSupportedFormFields: {
-          name: 'allSupportedFormFields',
-          isArray: false,
-          type: {
-            model: 'AllSupportedFormFields',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetName: 'allSupportedFormFieldsID',
-          },
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-      },
-      syncable: true,
-      pluralName: 'AllSupportedFormFieldsStudents',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'byStudent',
-            fields: ['studentID'],
-          },
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'byAllSupportedFormFields',
-            fields: ['allSupportedFormFieldsID'],
-          },
-        },
-      ],
-    },
     Owner: {
       name: 'Owner',
       fields: {
@@ -640,19 +564,12 @@ export const schema = {
           isRequired: false,
           attributes: [],
         },
-        AllSupportedFormFields: {
-          name: 'AllSupportedFormFields',
-          isArray: true,
-          type: {
-            model: 'AllSupportedFormFieldsStudent',
-          },
-          isRequired: false,
+        allSupportedFormFieldsID: {
+          name: 'allSupportedFormFieldsID',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
           attributes: [],
-          isArrayNullable: true,
-          association: {
-            connectionType: 'HAS_MANY',
-            associatedWith: 'student',
-          },
         },
         createdAt: {
           name: 'createdAt',
@@ -862,14 +779,14 @@ export const schema = {
           name: 'HasManyStudents',
           isArray: true,
           type: {
-            model: 'AllSupportedFormFieldsStudent',
+            model: 'Student',
           },
           isRequired: false,
           attributes: [],
           isArrayNullable: true,
           association: {
             connectionType: 'HAS_MANY',
-            associatedWith: 'allSupportedFormFields',
+            associatedWith: 'allSupportedFormFieldsID',
           },
         },
         ManyToManyTags: {

@@ -24,12 +24,9 @@ import {
   Tag,
   Student,
   LazyTag,
-  LazyStudent,
   AllSupportedFormFields,
   AllSupportedFormFieldsTag,
-  AllSupportedFormFieldsStudent,
   LazyAllSupportedFormFieldsTag,
-  LazyAllSupportedFormFieldsStudent,
 } from './models';
 import { getModelsFromJoinTableRecords } from './test-utils';
 
@@ -47,8 +44,6 @@ const initializeTestData = async (): Promise<void> => {
   await DataStore.save(new Tag({ label: 'Green' }));
   await DataStore.save(new Tag({ label: 'Orange' }));
   await DataStore.save(new Student({ name: 'Matthew' }));
-  await DataStore.save(new Student({ name: 'Jessica' }));
-  await DataStore.save(new Student({ name: 'David' }));
   await DataStore.save(new Student({ name: 'Sarah' }));
 };
 
@@ -60,9 +55,6 @@ const initializeAllSupportedFormFieldsTestData = async ({
   const connectedUser = (await DataStore.query(User, (u) => u.firstName.eq('John')))[0];
   const connectedOwner = (await DataStore.query(Owner, (owner) => owner.name.eq('John')))[0];
   const connectedTags = await DataStore.query(Tag, (tag) => tag.or((t) => [t.label.eq('Red'), t.label.eq('Blue')]));
-  const connectedStudent = await DataStore.query(Student, (tag) =>
-    tag.or((t) => [t.name.eq('David'), t.name.eq('Jessica')]),
-  );
   const createdRecord = await DataStore.save(
     new AllSupportedFormFields({
       string: 'My string',
@@ -86,6 +78,9 @@ const initializeAllSupportedFormFieldsTestData = async ({
     }),
   );
 
+  await DataStore.save(new Student({ name: 'David', allSupportedFormFieldsID: createdRecord.id }));
+  await DataStore.save(new Student({ name: 'Jessica', allSupportedFormFieldsID: createdRecord.id }));
+
   // connect tags through join table
   await Promise.all(
     connectedTags.reduce((promises: AsyncItem<LazyTag>[], tag) => {
@@ -94,20 +89,6 @@ const initializeAllSupportedFormFieldsTestData = async ({
           new AllSupportedFormFieldsTag({
             allSupportedFormFields: createdRecord,
             tag,
-          }),
-        ),
-      );
-      return promises;
-    }, []),
-  );
-
-  await Promise.all(
-    connectedStudent.reduce((promises: AsyncItem<LazyStudent>[], student) => {
-      promises.push(
-        DataStore.save(
-          new AllSupportedFormFieldsStudent({
-            allSupportedFormFields: createdRecord,
-            student,
           }),
         ),
       );
@@ -169,19 +150,13 @@ export default function UpdateFormTests() {
             );
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
 
-            const HasManyStudents = await getModelsFromJoinTableRecords<LazyStudent, LazyAllSupportedFormFieldsStudent>(
-              record,
-              'HasManyStudents',
-              'student',
-            );
-
             setDataStoreFormUpdateAllSupportedFormFieldsRecord(
               JSON.stringify({
                 ...record,
                 HasOneUser: await record.HasOneUser,
                 BelongsToOwner: await record.BelongsToOwner,
+                HasManyStudents: await record.HasManyStudents?.toArray(),
                 ManyToManyTags,
-                HasManyStudents,
               }),
             );
           }}

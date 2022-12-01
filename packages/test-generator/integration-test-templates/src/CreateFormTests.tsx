@@ -23,17 +23,7 @@ import {
   CustomFormCreateNestedJson,
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
 
-import {
-  AllSupportedFormFields,
-  Owner,
-  User,
-  Tag,
-  LazyTag,
-  Student,
-  LazyAllSupportedFormFieldsStudent,
-  LazyAllSupportedFormFieldsTag,
-  LazyStudent,
-} from './models';
+import { AllSupportedFormFields, Owner, User, Tag, LazyTag, Student, LazyAllSupportedFormFieldsTag } from './models';
 import { getModelsFromJoinTableRecords } from './test-utils';
 
 const initializeTestData = async (): Promise<void> => {
@@ -122,19 +112,13 @@ export default function CreateFormTests() {
             );
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
 
-            const HasManyStudents = await getModelsFromJoinTableRecords<LazyStudent, LazyAllSupportedFormFieldsStudent>(
-              record,
-              'HasManyStudents',
-              'student',
-            );
-
             setDataStoreFormCreateAllSupportedFormFieldsRecord(
               JSON.stringify({
                 ...record,
                 HasOneUser: await record.HasOneUser,
                 BelongsToOwner: await record.BelongsToOwner,
+                HasManyStudents: await record.HasManyStudents?.toArray(),
                 ManyToManyTags,
-                HasManyStudents,
               }),
             );
           }}
