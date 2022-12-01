@@ -344,13 +344,41 @@ it('should requeue if related element is not yet found', () => {
       },
       sectionalElements: {
         Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
+        Heading456: { type: 'Heading', position: { below: 'color' }, level: 1, text: 'Dog Created' },
       },
-
       style: {},
       cta: {},
     },
+    dataSchema: {
+      dataSourceType: 'DataStore',
+      models: {
+        Event: {
+          fields: {
+            name: {
+              dataType: 'String',
+              required: false,
+              readOnly: false,
+              isArray: false,
+            },
+            age: {
+              dataType: 'String',
+              required: false,
+              readOnly: false,
+              isArray: false,
+            },
+          },
+        },
+      },
+      enums: {},
+      nonModels: {},
+    },
   });
-  expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color']]);
+  expect(formDefinition.elementMatrix).toStrictEqual([
+    ['Heading123'],
+    ['name', 'age', 'weight'],
+    ['color'],
+    ['Heading456'],
+  ]);
 });
 
 it('should handle fields without position', () => {
@@ -370,7 +398,6 @@ it('should handle fields without position', () => {
       sectionalElements: {
         Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
       },
-
       style: {},
       cta: {},
     },
@@ -387,7 +414,6 @@ it('should fill out styles using defaults', () => {
       dataType: { dataSourceType: 'Custom', dataTypeName: 'dfkjad' },
       fields: {},
       sectionalElements: {},
-
       style: {},
       cta: {},
     },
