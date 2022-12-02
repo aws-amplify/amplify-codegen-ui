@@ -2,34 +2,7 @@ name: 'CodeQL'
 
 on:
   push:
-    branches:
-      [
-        'main',
-        'array-field',
-        'circleci-integ',
-        'cli-check',
-        'cli-setup',
-        'cy-setup',
-        'dep_update',
-        'dep-update',
-        'form-fixes',
-        'form-to-component',
-        'form-types',
-        'prop-string-formatting',
-        'refactor-tests',
-        'schema-version-required',
-        'tagged-release/cms-support',
-        'tagged-release/dev',
-        'tagged-release/expander',
-        'tagged-release/forms',
-        'tagged-release/forms-and-views',
-        'tagged-release/render-default-theme',
-        'update-codeowners',
-        'upgrade-typescript',
-        'use-callback',
-      ]
   pull_request:
-    branches: ['main']
   schedule:
     - cron: '41 11 * * 3'
 
