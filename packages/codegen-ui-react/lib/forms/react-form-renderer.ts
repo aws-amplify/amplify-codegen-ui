@@ -386,6 +386,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
+      this.requiredDataModels.push(dataTypeName);
       modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
     }
 

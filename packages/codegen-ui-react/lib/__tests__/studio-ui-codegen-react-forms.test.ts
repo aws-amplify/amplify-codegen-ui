@@ -292,11 +292,13 @@ describe('amplify form renderer tests', () => {
         'datastore/project-team-model',
       );
 
-      const teamAlias = importCollection.importAlias.get(ImportSource.LOCAL_MODELS)?.get('Team');
+      const teamAlias = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, 'Team');
 
       const includesTeam = requiredDataModels.includes('Team');
+      const includesMember = requiredDataModels.includes('Member');
       expect(teamAlias).toBe('Team0');
       expect(includesTeam).toBe(true);
+      expect(includesMember).toBe(true);
       expect(importCollection).toBeDefined();
     });
 
