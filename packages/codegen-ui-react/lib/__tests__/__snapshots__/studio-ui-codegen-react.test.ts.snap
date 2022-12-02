@@ -4878,6 +4878,46 @@ export default function CustomButton(
 "
 `;
 
+exports[`amplify render tests custom components alias parent should render declarations 1`] = `
+"import * as React from \\"react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { ViewTestProps } from \\"./ViewTest\\";
+export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+"
+`;
+
+exports[`amplify render tests custom components alias parent should render parent with aliased child instead of primitive 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { GridCustom } from \\"./Grid\\";
+import ViewTest, { ViewTestProps } from \\"./ViewTest\\";
+
+export type AliasParentProps = React.PropsWithChildren<
+  Partial<ViewTestProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+  }
+>;
+export default function AliasParent(
+  props: AliasParentProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <ViewTest {...getOverrideProps(overrides, \\"AliasParent\\")} {...rest}>
+      <GridCustom {...getOverrideProps(overrides, \\"Grid\\")}></GridCustom>
+    </ViewTest>
+  );
+}
+"
+`;
+
 exports[`amplify render tests custom components custom children should render component with custom children 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
