@@ -96,6 +96,15 @@ import {
   validationResponseType,
 } from './form-renderer-helper/type-helper';
 
+type RenderComponentOnlyResponse = {
+  compText: string;
+  /**
+   * @deprecated Use {@link RenderComponentOnlyResponse.importCollection} instead.
+   */
+  importsText: string;
+  requiredDataModels: string[];
+  importCollection: ImportCollection;
+};
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   string,
   StudioForm,
@@ -151,7 +160,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   }
 
   @handleCodegenErrors
-  renderComponentOnly() {
+  renderComponentOnly(): RenderComponentOnlyResponse {
     const variableStatements = this.buildVariableStatements();
     const jsx = this.renderJsx(this.formComponent);
 
@@ -176,7 +185,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // do not produce declaration becuase it is not used
     const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
 
-    return { compText, importsText, requiredDataModels: this.requiredDataModels };
+    return {
+      compText,
+      importsText,
+      requiredDataModels: this.requiredDataModels,
+      importCollection: this.importCollection,
+    };
   }
 
   renderComponentInternal() {
@@ -558,9 +572,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.shouldRenderArrayField = usesArrayField;
 
-    this.requiredDataModels.push(...modelsToImport);
-
-    modelsToImport.forEach((model) => this.importCollection.addImport(ImportSource.LOCAL_MODELS, model));
+    modelsToImport.forEach((model) => {
+      this.requiredDataModels.push(model);
+      this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+    });
 
     // datastore relationship query
     /**

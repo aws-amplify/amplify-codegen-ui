@@ -13,7 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { generateWithAmplifyFormRenderer } from './__utils__';
+import { ImportSource } from '../imports';
+import { generateComponentOnlyWithAmplifyFormRenderer, generateWithAmplifyFormRenderer } from './__utils__';
 
 describe('amplify form renderer tests', () => {
   describe('datastore form tests', () => {
@@ -283,6 +284,20 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('Flex0');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
+    });
+
+    it('should use requiredDataModels and importCollection to get model alias', () => {
+      const { requiredDataModels, importCollection } = generateComponentOnlyWithAmplifyFormRenderer(
+        'forms/member-datastore-update-belongs-to',
+        'datastore/project-team-model',
+      );
+
+      const teamAlias = importCollection.importAlias.get(ImportSource.LOCAL_MODELS)?.get('Team');
+
+      const includesTeam = requiredDataModels.includes('Team');
+      expect(teamAlias).toBe('Team0');
+      expect(includesTeam).toBe(true);
+      expect(importCollection).toBeDefined();
     });
 
     describe('custom form tests', () => {
