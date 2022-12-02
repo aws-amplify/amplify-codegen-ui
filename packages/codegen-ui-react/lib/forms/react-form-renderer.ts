@@ -89,6 +89,15 @@ import {
   validationResponseType,
 } from './type-helper';
 
+type RenderComponentOnlyResponse = {
+  compText: string;
+  /**
+   * @deprecated Use {@link RenderComponentOnlyResponse.importCollection} instead.
+   */
+  importsText: string;
+  requiredDataModels: string[];
+  importCollection: ImportCollection;
+};
 export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   string,
   StudioForm,
@@ -130,7 +139,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   }
 
   @handleCodegenErrors
-  renderComponentOnly() {
+  renderComponentOnly(): RenderComponentOnlyResponse {
     const variableStatements = this.buildVariableStatements();
     const jsx = this.renderJsx(this.formComponent);
     const requiredDataModels = [];
@@ -163,7 +172,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       // TODO: require other models if form is handling querying relational models
     }
 
-    return { compText, importsText, requiredDataModels };
+    return {
+      compText,
+      importsText,
+      requiredDataModels,
+      importCollection: this.importCollection,
+    };
   }
 
   renderComponentInternal() {
