@@ -119,6 +119,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
   public fileName: string;
 
+  protected requiredDataModels: string[] = [];
+
   constructor(component: StudioForm, dataSchema: GenericDataSchema | undefined, renderConfig: ReactRenderConfig) {
     super(component, new ReactOutputManager(), renderConfig);
     this.renderConfig = {
@@ -142,7 +144,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   renderComponentOnly(): RenderComponentOnlyResponse {
     const variableStatements = this.buildVariableStatements();
     const jsx = this.renderJsx(this.formComponent);
-    const requiredDataModels = [];
 
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
@@ -167,15 +168,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // do not produce declaration becuase it is not used
     const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
 
-    if (this.component.dataType.dataSourceType === 'DataStore') {
-      requiredDataModels.push(this.component.dataType.dataTypeName);
-      // TODO: require other models if form is handling querying relational models
-    }
-
     return {
       compText,
       importsText,
-      requiredDataModels,
+      requiredDataModels: this.requiredDataModels,
       importCollection: this.importCollection,
     };
   }
@@ -370,6 +366,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
+      this.requiredDataModels.push(dataTypeName);
       modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
     }
 
