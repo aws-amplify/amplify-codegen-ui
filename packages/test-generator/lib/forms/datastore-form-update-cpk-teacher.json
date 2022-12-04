@@ -1,0 +1,13 @@
+{
+    "id": "kdjfskdj",
+    "name": "DataStoreFormUpdateCPKTeacher",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "CPKTeacher"
+    },
+    "formActionType": "update",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

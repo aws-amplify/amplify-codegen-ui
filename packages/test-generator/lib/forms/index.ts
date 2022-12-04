@@ -20,3 +20,4 @@ export { default as DataStoreFormCreateAllSupportedFormFields } from './datastor
 export { default as DataStoreFormUpdateAllSupportedFormFields } from './datastore-form-update-all-supported-form-fields.json';
 
 export { default as CustomFormCreateNestedJson } from './custom-form-nested-json-create.json';
+export { default as DataStoreFormUpdateCPKTeacher } from './datastore-form-update-cpk-teacher.json';

@@ -38,3 +38,9 @@ export const removeArrayItem = (itemLabel: string) => {
     cy.get('svg').trigger('mouseover').trigger('click', { force: true });
   });
 };
+
+export const typeInAutocomplete = (content: string) => {
+  cy.get(`.amplify-autocomplete`).within(() => {
+    cy.get('input').type(content);
+  });
+};
