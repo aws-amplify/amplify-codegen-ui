@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { getArrayFieldButtonByLabel, clickAddToArray, removeArrayItem } from '../utils/form';
+import { getArrayFieldButtonByLabel, clickAddToArray, removeArrayItem, typeInAutocomplete } from '../utils/form';
 
 describe('UpdateForms', () => {
   before(() => {
@@ -39,17 +39,13 @@ describe('UpdateForms', () => {
         // should be able to change value
         removeArrayItem('John Lennon');
         getArrayFieldButtonByLabel('Has one user').click();
-        cy.get(`.amplify-autocomplete`).within(() => {
-          cy.get('input').type(`Paul McCartney{downArrow}{enter}`);
-        });
+        typeInAutocomplete(`Paul McCartney{downArrow}{enter}`);
         clickAddToArray();
 
         // Belongs to update
         removeArrayItem('John');
         getArrayFieldButtonByLabel('Belongs to owner').click();
-        cy.get(`.amplify-autocomplete`).within(() => {
-          cy.get('input').type(`George{downArrow}{enter}`);
-        });
+        typeInAutocomplete(`George{downArrow}{enter}`);
         clickAddToArray();
 
         // Many to many update
@@ -57,31 +53,23 @@ describe('UpdateForms', () => {
         removeArrayItem('Blue');
 
         getArrayFieldButtonByLabel('Many to many tags').click();
-        cy.get(`.amplify-autocomplete`).within(() => {
-          cy.get('input').type(`Or{downArrow}{enter}`);
-        });
+        typeInAutocomplete(`Or{downArrow}{enter}`);
         clickAddToArray();
 
         getArrayFieldButtonByLabel('Many to many tags').click();
-        cy.get(`.amplify-autocomplete`).within(() => {
-          cy.get('input').type(`Gr{downArrow}{enter}`);
-        });
+        typeInAutocomplete(`Gr{downArrow}{enter}`);
         clickAddToArray();
 
-        // Many to many update
+        // Has many update
         removeArrayItem('David');
         removeArrayItem('Jessica');
 
         getArrayFieldButtonByLabel('Has many students').click();
-        cy.get(`.amplify-autocomplete`).within(() => {
-          cy.get('input').type(`{downArrow}{enter}`);
-        });
+        typeInAutocomplete(`{downArrow}{enter}`);
         clickAddToArray();
 
         getArrayFieldButtonByLabel('Has many students').click();
-        cy.get(`.amplify-autocomplete`).within(() => {
-          cy.get('input').type(`Sar{downArrow}{enter}`);
-        });
+        typeInAutocomplete(`Sar{downArrow}{enter}`);
         clickAddToArray();
 
         cy.contains('Submit').click();
@@ -98,6 +86,44 @@ describe('UpdateForms', () => {
           expect(record.HasManyStudents[0].allSupportedFormFieldsID).to.equal(record.id);
           expect(record.HasManyStudents[1].name).to.equal('Sarah');
           expect(record.HasManyStudents[1].allSupportedFormFieldsID).to.equal(record.id);
+        });
+      });
+    });
+  });
+
+  // this model & related models all use CPK
+  describe('DataStoreFormUpdateCPKTeacher', () => {
+    it('should display current values and save to DataStore', () => {
+      cy.get('#dataStoreFormUpdateCPKTeacher').within(() => {
+        // hasOne
+        removeArrayItem('Harry');
+        getArrayFieldButtonByLabel('Cpk student').click();
+        typeInAutocomplete('Her{downArrow}{enter}');
+        clickAddToArray();
+
+        // manyToMany
+        removeArrayItem('Math');
+        getArrayFieldButtonByLabel('Cpk classes').click();
+        typeInAutocomplete('English{downArrow}{enter}');
+        clickAddToArray();
+
+        // hasMany
+        removeArrayItem('Figure 8');
+        getArrayFieldButtonByLabel('Cpk projects').click();
+        typeInAutocomplete('Either{downArrow}{enter}');
+        clickAddToArray();
+
+        cy.contains('Submit').click();
+
+        cy.contains(/mySpecialTeacherId/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
+
+          expect(record.cPKTeacherCPKStudentId).to.equal('Hermione');
+          expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
+          expect(record.CPKClasses.length).to.equal(1);
+          expect(record.CPKClasses[0].specialClassId).to.equal('English');
+          expect(record.CPKProjects.length).to.equal(1);
+          expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
         });
       });
     });

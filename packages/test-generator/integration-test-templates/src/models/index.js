@@ -41,6 +41,11 @@ const {
   Owner,
   Student,
   AllSupportedFormFields,
+  CPKStudent,
+  CPKTeacher,
+  CPKClass,
+  CPKTeacherCPKClass,
+  CPKProject,
 } = initSchema(schema);
 
 export {
@@ -55,4 +60,9 @@ export {
   Student,
   AllSupportedFormFields,
   City,
+  CPKStudent,
+  CPKTeacher,
+  CPKClass,
+  CPKTeacherCPKClass,
+  CPKProject,
 };

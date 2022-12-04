@@ -14,10 +14,10 @@
   limitations under the License.
  */
 import '@aws-amplify/ui-react/styles.css';
-import { AmplifyProvider, View, Heading, Text } from '@aws-amplify/ui-react';
+import { AmplifyProvider, View, Heading, Text, Divider } from '@aws-amplify/ui-react';
 import React, { useState, useEffect, useRef, SetStateAction } from 'react';
 import { AsyncItem, DataStore } from '@aws-amplify/datastore';
-import { DataStoreFormUpdateAllSupportedFormFields } from './ui-components'; // eslint-disable-line import/extensions, max-len
+import { DataStoreFormUpdateAllSupportedFormFields, DataStoreFormUpdateCPKTeacher } from './ui-components'; // eslint-disable-line import/extensions, max-len
 import {
   Owner,
   User,
@@ -28,26 +28,45 @@ import {
   AllSupportedFormFieldsTag,
   LazyAllSupportedFormFieldsTag,
   LazyStudent,
+  CPKStudent,
+  CPKClass,
+  CPKProject,
+  CPKTeacher,
+  LazyCPKProject,
+  LazyCPKTeacherCPKClass,
+  CPKTeacherCPKClass,
+  LazyCPKClass,
 } from './models';
 import { getModelsFromJoinTableRecords } from './test-utils';
 
 const initializeTestData = async (): Promise<void> => {
-  await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
-  await DataStore.save(new User({ firstName: 'Paul', lastName: 'McCartney', age: 72 }));
-  await DataStore.save(new User({ firstName: 'George', lastName: 'Harrison', age: 50 }));
-  await DataStore.save(new User({ firstName: 'Ringo', lastName: 'Starr', age: 5 }));
-  await DataStore.save(new Owner({ name: 'John' }));
-  await DataStore.save(new Owner({ name: 'Paul' }));
-  await DataStore.save(new Owner({ name: 'George' }));
-  await DataStore.save(new Owner({ name: 'Ringo' }));
-  await DataStore.save(new Tag({ label: 'Red' }));
-  await DataStore.save(new Tag({ label: 'Blue' }));
-  await DataStore.save(new Tag({ label: 'Green' }));
-  await DataStore.save(new Tag({ label: 'Orange' }));
-  await DataStore.save(new Student({ name: 'Matthew' }));
-  await DataStore.save(new Student({ name: 'Sarah' }));
-  await DataStore.save(new Student({ name: 'David' }));
-  await DataStore.save(new Student({ name: 'Jessica' }));
+  await Promise.all<any>([
+    // for AllSupportedFormFields
+    DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 })),
+    DataStore.save(new User({ firstName: 'Paul', lastName: 'McCartney', age: 72 })),
+    DataStore.save(new User({ firstName: 'George', lastName: 'Harrison', age: 50 })),
+    DataStore.save(new User({ firstName: 'Ringo', lastName: 'Starr', age: 5 })),
+    DataStore.save(new Owner({ name: 'John' })),
+    DataStore.save(new Owner({ name: 'Paul' })),
+    DataStore.save(new Owner({ name: 'George' })),
+    DataStore.save(new Owner({ name: 'Ringo' })),
+    DataStore.save(new Tag({ label: 'Red' })),
+    DataStore.save(new Tag({ label: 'Blue' })),
+    DataStore.save(new Tag({ label: 'Green' })),
+    DataStore.save(new Tag({ label: 'Orange' })),
+    DataStore.save(new Student({ name: 'Matthew' })),
+    DataStore.save(new Student({ name: 'Sarah' })),
+    DataStore.save(new Student({ name: 'David' })),
+    DataStore.save(new Student({ name: 'Jessica' })),
+
+    // for CPKTeacher
+    DataStore.save(new CPKStudent({ specialStudentId: 'Harry' })),
+    DataStore.save(new CPKStudent({ specialStudentId: 'Hermione' })),
+    DataStore.save(new CPKClass({ specialClassId: 'Math' })),
+    DataStore.save(new CPKClass({ specialClassId: 'English' })),
+    DataStore.save(new CPKProject({ specialProjectId: 'Either/Or' })),
+    DataStore.save(new CPKProject({ specialProjectId: 'Figure 8' })),
+  ]);
 };
 
 const initializeAllSupportedFormFieldsTestData = async ({
@@ -121,12 +140,66 @@ const initializeAllSupportedFormFieldsTestData = async ({
   });
 };
 
+const initializeCPKTeacherTestData = async ({
+  setCPKTeacherId,
+}: {
+  setCPKTeacherId: React.Dispatch<SetStateAction<string | undefined>>;
+}): Promise<void> => {
+  const connectedStudent = (await DataStore.query(CPKStudent, (s) => s.specialStudentId.eq('Harry')))[0];
+  const connectedClasses = await DataStore.query(CPKClass, (c) => c.specialClassId.eq('Math'));
+  const connectedProjects = await DataStore.query(CPKProject, (p) => p.specialProjectId.eq('Figure 8'));
+
+  const createdRecord = await DataStore.save(
+    new CPKTeacher({
+      specialTeacherId: 'mySpecialTeacherId',
+      CPKStudent: connectedStudent,
+    }),
+  );
+
+  await Promise.all(
+    connectedClasses.reduce((promises: AsyncItem<LazyCPKTeacherCPKClass>[], cpkClass) => {
+      promises.push(
+        DataStore.save(
+          new CPKTeacherCPKClass({
+            cpkClass,
+            cpkTeacher: createdRecord,
+          }),
+        ),
+      );
+      return promises;
+    }, []),
+  );
+
+  await Promise.all(
+    connectedProjects.reduce((promises: AsyncItem<LazyCPKProject>[], project) => {
+      promises.push(
+        DataStore.save(
+          CPKProject.copyOf(project, (updated) => {
+            Object.assign(updated, { cPKTeacherID: createdRecord.specialTeacherId });
+          }),
+        ),
+      );
+      return promises;
+    }, []),
+  );
+
+  setCPKTeacherId((prevId) => {
+    if (!prevId) {
+      return createdRecord.specialTeacherId;
+    }
+    return prevId;
+  });
+};
+
 export default function UpdateFormTests() {
   const [isInitialized, setInitialized] = useState(false);
   const [allSupportedFormFieldsRecordId, setAllSupportedFormFieldsRecordId] = useState<string | undefined>(undefined);
 
   const [dataStoreFormUpdateAllSupportedFormFieldsRecord, setDataStoreFormUpdateAllSupportedFormFieldsRecord] =
     useState('');
+  const [cpkTeacherId, setCPKTeacherId] = useState<string | undefined>('');
+  const [dataStoreFormUpdateCPKTeacherRecord, setDataStoreFormUpdateCPKTeacherRecord] = useState<string>('');
+
   const initializeStarted = useRef(false);
 
   useEffect(() => {
@@ -137,8 +210,10 @@ export default function UpdateFormTests() {
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
       await initializeTestData();
-      await initializeAllSupportedFormFieldsTestData({ setAllSupportedFormFieldsRecordId });
-
+      await Promise.all([
+        initializeAllSupportedFormFieldsTestData({ setAllSupportedFormFieldsRecordId }),
+        initializeCPKTeacherTestData({ setCPKTeacherId }),
+      ]);
       setInitialized(true);
     };
 
@@ -179,6 +254,36 @@ export default function UpdateFormTests() {
           }}
         />
         <Text>{dataStoreFormUpdateAllSupportedFormFieldsRecord}</Text>
+      </View>
+      <Divider />
+      <Heading>DataStore Form - UpdateCPKTeacher</Heading>
+      <View id="dataStoreFormUpdateCPKTeacher">
+        <DataStoreFormUpdateCPKTeacher
+          specialTeacherId={cpkTeacherId}
+          onSuccess={async () => {
+            const records = await DataStore.query(CPKTeacher);
+            const record = records[0];
+
+            const joinTableRecords = (await record.CPKClasses?.toArray()) as LazyCPKTeacherCPKClass[];
+
+            const CPKClasses = await Promise.all(
+              joinTableRecords?.reduce((promises: AsyncItem<LazyCPKClass>[], joinTableRecord) => {
+                promises.push(joinTableRecord.cpkClass as AsyncItem<LazyCPKClass>);
+                return promises;
+              }, []),
+            );
+
+            setDataStoreFormUpdateCPKTeacherRecord(
+              JSON.stringify({
+                ...record,
+                CPKStudent: await record.CPKStudent,
+                CPKClasses,
+                CPKProjects: await record.CPKProjects?.toArray(),
+              }),
+            );
+          }}
+        />
+        <Text>{dataStoreFormUpdateCPKTeacherRecord}</Text>
       </View>
     </AmplifyProvider>
   );

@@ -33,6 +33,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'DataStoreFormCreateAllSupportedFormFields',
   'DataStoreFormUpdateAllSupportedFormFields',
   'CustomFormCreateNestedJson',
+  'DataStoreFormUpdateCPKTeacher',
   'ComponentWithDataBindingWithPredicate',
   'ComponentWithDataBindingWithoutPredicate',
   'ComponentWithSimplePropertyBinding',

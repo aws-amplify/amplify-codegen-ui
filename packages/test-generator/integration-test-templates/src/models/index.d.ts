@@ -76,6 +76,26 @@ type AllSupportedFormFieldsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 };
 
+type CPKStudentMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type CPKTeacherMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type CPKClassMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type CPKTeacherCPKClassMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type CPKProjectMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
 export declare class UserPreference {
   readonly id: string;
 
@@ -458,4 +478,145 @@ export declare const AllSupportedFormFields: (new (
       draft: MutableModel<AllSupportedFormFields, AllSupportedFormFieldsMetaData>,
     ) => MutableModel<AllSupportedFormFields, AllSupportedFormFieldsMetaData> | void,
   ): AllSupportedFormFields;
+};
+
+type EagerCPKStudent = {
+  readonly id: string;
+  readonly specialStudentId: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyCPKStudent = {
+  readonly id: string;
+  readonly specialStudentId: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type CPKStudent = LazyLoading extends LazyLoadingDisabled ? EagerCPKStudent : LazyCPKStudent;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const CPKStudent: (new (init: ModelInit<CPKStudent, CPKStudentMetaData>) => CPKStudent) & {
+  copyOf(
+    source: CPKStudent,
+    mutator: (
+      draft: MutableModel<CPKStudent, CPKStudentMetaData>,
+    ) => MutableModel<CPKStudent, CPKStudentMetaData> | void,
+  ): CPKStudent;
+};
+
+type EagerCPKClass = {
+  readonly id: string;
+  readonly specialClassId: string;
+  readonly CPKTeachers?: (CPKTeacherCPKClass | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyCPKClass = {
+  readonly id: string;
+  readonly specialClassId: string;
+  readonly CPKTeachers: AsyncCollection<CPKTeacherCPKClass>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type CPKClass = LazyLoading extends LazyLoadingDisabled ? EagerCPKClass : LazyCPKClass;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const CPKClass: (new (init: ModelInit<CPKClass, CPKClassMetaData>) => CPKClass) & {
+  copyOf(
+    source: CPKClass,
+    mutator: (draft: MutableModel<CPKClass, CPKClassMetaData>) => MutableModel<CPKClass, CPKClassMetaData> | void,
+  ): CPKClass;
+};
+
+type EagerCPKTeacher = {
+  readonly id: string;
+  readonly specialTeacherId: string;
+  readonly CPKStudent?: CPKStudent | null;
+  readonly CPKClasses?: (CPKTeacherCPKClass | null)[] | null;
+  readonly CPKProjects?: (CPKProject | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly cPKTeacherCPKStudentId?: string | null;
+};
+
+type LazyCPKTeacher = {
+  readonly id: string;
+  readonly specialTeacherId: string;
+  readonly CPKStudent: AsyncItem<CPKStudent | undefined>;
+  readonly CPKClasses: AsyncCollection<CPKTeacherCPKClass>;
+  readonly CPKProjects: AsyncCollection<CPKProject>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly cPKTeacherCPKStudentId?: string | null;
+};
+
+export declare type CPKTeacher = LazyLoading extends LazyLoadingDisabled ? EagerCPKTeacher : LazyCPKTeacher;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const CPKTeacher: (new (init: ModelInit<CPKTeacher, CPKTeacherMetaData>) => CPKTeacher) & {
+  copyOf(
+    source: CPKTeacher,
+    mutator: (
+      draft: MutableModel<CPKTeacher, CPKTeacherMetaData>,
+    ) => MutableModel<CPKTeacher, CPKTeacherMetaData> | void,
+  ): CPKTeacher;
+};
+
+type EagerCPKTeacherCPKClass = {
+  readonly id: string;
+  readonly cpkTeacher: CPKTeacher;
+  readonly cpkClass: CPKClass;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyCPKTeacherCPKClass = {
+  readonly id: string;
+  readonly cpkTeacher: AsyncItem<CPKTeacher>;
+  readonly cpkClass: AsyncItem<CPKClass>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type CPKTeacherCPKClass = LazyLoading extends LazyLoadingDisabled
+  ? EagerCPKTeacherCPKClass
+  : LazyCPKTeacherCPKClass;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const CPKTeacherCPKClass: (new (
+  init: ModelInit<CPKTeacherCPKClass, CPKTeacherCPKClassMetaData>,
+) => CPKTeacherCPKClass) & {
+  copyOf(
+    source: CPKTeacherCPKClass,
+    mutator: (
+      draft: MutableModel<CPKTeacherCPKClass, CPKTeacherCPKClassMetaData>,
+    ) => MutableModel<CPKTeacherCPKClass, CPKTeacherCPKClassMetaData> | void,
+  ): CPKTeacherCPKClass;
+};
+
+type EagerCPKProject = {
+  readonly id: string;
+  readonly specialProjectId: string;
+  readonly cPKTeacherID?: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyCPKProject = {
+  readonly id: string;
+  readonly specialProjectId: string;
+  readonly cPKTeacherID?: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type CPKProject = LazyLoading extends LazyLoadingDisabled ? EagerCPKProject : LazyCPKProject;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export declare const CPKProject: (new (init: ModelInit<CPKProject, CPKProjectMetaData>) => CPKProject) & {
+  copyOf(
+    source: CPKProject,
+    mutator: (
+      draft: MutableModel<CPKProject, CPKProjectMetaData>,
+    ) => MutableModel<CPKProject, CPKProjectMetaData> | void,
+  ): CPKProject;
 };
