@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.6...v2.5.7) (2022-12-06)
+
+
+### Bug Fixes
+
+* have rest props override variant values ([6df4d94](https://github.com/aws-amplify/amplify-codegen-ui/commit/6df4d94ea31465e36a1a293d5fdb6bd85829368a))
+* remove existing element in matrix when requeued ([#810](https://github.com/aws-amplify/amplify-codegen-ui/issues/810)) ([aa92f84](https://github.com/aws-amplify/amplify-codegen-ui/commit/aa92f8474df661a0325120a00beb480ef137534a))
+
+
+
+
+
 ## [2.5.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.5...v2.5.6) (2022-11-23)
 
 
