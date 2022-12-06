@@ -155,9 +155,8 @@ export default function ComponentTests() {
     return null;
   }
 
-  // TODO: remove typecasting once ui-react issue settled
   return (
-    <AmplifyProvider theme={MyTheme as any}>
+    <AmplifyProvider theme={MyTheme}>
       <h1>Generated Component Tests</h1>
       <div id={'basic-components'}>
         <h2>Basic Components</h2>
