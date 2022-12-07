@@ -139,7 +139,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
 
           // note implicit relationship for associated field within same model
           if (
-            relationshipType === 'HAS_ONE' &&
+            (relationshipType === 'HAS_ONE' || relationshipType === 'BELONGS_TO') &&
             ('targetName' in field.association || 'targetNames' in field.association) &&
             (field.association.targetName || field.association.targetNames)
           ) {
@@ -149,12 +149,8 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
                 type: relationshipType,
                 relatedModelName,
               });
-              modelRelationship = { type: relationshipType, relatedModelName };
+              modelRelationship = { type: relationshipType, relatedModelName, associatedField: targetName };
             }
-          }
-
-          if (relationshipType === 'BELONGS_TO') {
-            modelRelationship = { type: relationshipType, relatedModelName };
           }
 
           genericField.relationship = modelRelationship;

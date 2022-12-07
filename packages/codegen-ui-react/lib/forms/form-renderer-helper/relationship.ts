@@ -13,19 +13,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { factory, NodeFlags, SyntaxKind } from 'typescript';
+import { factory, IfStatement, NodeFlags, SyntaxKind } from 'typescript';
 import {
   FieldConfigMetadata,
   GenericDataRelationshipType,
   HasManyRelationshipType,
   InternalError,
 } from '@aws-amplify/codegen-ui';
-import { getRecordsName, getLinkedDataName, getSetNameIdentifier } from './form-state';
+import { getRecordsName, getLinkedDataName, getSetNameIdentifier, buildAccessChain } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { extractModelAndKey } from './display-value';
+import { isModelDataType } from './render-checkers';
 
 export const buildRelationshipQuery = (
   relationship: GenericDataRelationshipType,
@@ -1759,4 +1760,51 @@ export const buildHasManyRelationshipDataStoreStatements = (
       ),
     ),
   ];
+};
+
+export const getRelationshipBasedRecordUpdateStatements = ({
+  updatedObjectName,
+  modelFieldsObjectName,
+  fieldConfigs,
+}: {
+  updatedObjectName: string;
+  modelFieldsObjectName: string;
+  fieldConfigs: Record<string, FieldConfigMetadata>;
+}): IfStatement[] => {
+  const statements: IfStatement[] = [];
+  const modelToFieldsMap: { [modelName: string]: { model: string; scalar: string } } = {};
+
+  Object.entries(fieldConfigs).forEach(([fieldName, config]) => {
+    if (config.relationship && (config.relationship.type === 'HAS_ONE' || config.relationship?.type === 'BELONGS_TO')) {
+      const { associatedField, relatedModelName } = config.relationship;
+      if (isModelDataType(config) && associatedField) {
+        modelToFieldsMap[relatedModelName] = { model: fieldName, scalar: associatedField };
+      } else {
+        // if the scalar relationship field is mapped on the form,
+        // we do not need to set its value at DataStore.save
+        delete modelToFieldsMap[relatedModelName];
+      }
+    }
+  });
+
+  // if(!modelFields.HasOneUser) updated.webUserId = undefined;
+  Object.values(modelToFieldsMap).forEach(({ model: modelField, scalar: scalarField }) => {
+    statements.push(
+      factory.createIfStatement(
+        factory.createPrefixUnaryExpression(
+          SyntaxKind.ExclamationToken,
+          buildAccessChain([modelFieldsObjectName, modelField], false),
+        ),
+        factory.createExpressionStatement(
+          factory.createBinaryExpression(
+            buildAccessChain([updatedObjectName, scalarField], false),
+            factory.createToken(SyntaxKind.EqualsToken),
+            factory.createIdentifier('undefined'),
+          ),
+        ),
+        undefined,
+      ),
+    );
+  });
+  return statements;
 };

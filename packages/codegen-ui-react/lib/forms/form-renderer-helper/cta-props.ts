@@ -29,8 +29,79 @@ import { getSetNameIdentifier } from './form-state';
 import {
   buildHasManyRelationshipDataStoreStatements,
   buildManyToManyRelationshipDataStoreStatements,
+  getRelationshipBasedRecordUpdateStatements,
 } from './relationship';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
+
+const getRecordUpdateDataStoreCallExpression = ({
+  modelName,
+  importedModelName,
+  fieldConfigs,
+}: {
+  modelName: string;
+  importedModelName: string;
+  fieldConfigs: Record<string, FieldConfigMetadata>;
+}) => {
+  const updatedObjectName = 'updated';
+  const modelFieldsObjectName = 'modelFields';
+  // TODO: remove after DataStore addresses issue: https://github.com/aws-amplify/amplify-js/issues/10750
+  // temporary solution to remove hasOne & belongsTo records
+  const relationshipBasedUpdates = getRelationshipBasedRecordUpdateStatements({
+    updatedObjectName,
+    modelFieldsObjectName,
+    fieldConfigs,
+  });
+
+  return factory.createCallExpression(
+    factory.createPropertyAccessExpression(factory.createIdentifier('DataStore'), factory.createIdentifier('save')),
+    undefined,
+    [
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier(importedModelName),
+          factory.createIdentifier('copyOf'),
+        ),
+        undefined,
+        [
+          factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier(updatedObjectName),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createExpressionStatement(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('Object'),
+                      factory.createIdentifier('assign'),
+                    ),
+                    undefined,
+                    [factory.createIdentifier(updatedObjectName), factory.createIdentifier(modelFieldsObjectName)],
+                  ),
+                ),
+                ...relationshipBasedUpdates,
+              ],
+              true,
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+};
 
 export const buildDataStoreExpression = (
   dataStoreActionType: 'update' | 'create',
@@ -145,59 +216,7 @@ export const buildDataStoreExpression = (
               factory.createIdentifier('push'),
             ),
             undefined,
-            [
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('DataStore'),
-                  factory.createIdentifier('save'),
-                ),
-                undefined,
-                [
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier(importedModelName),
-                      factory.createIdentifier('copyOf'),
-                    ),
-                    undefined,
-                    [
-                      factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                      factory.createArrowFunction(
-                        undefined,
-                        undefined,
-                        [
-                          factory.createParameterDeclaration(
-                            undefined,
-                            undefined,
-                            undefined,
-                            factory.createIdentifier('updated'),
-                            undefined,
-                            undefined,
-                            undefined,
-                          ),
-                        ],
-                        undefined,
-                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                        factory.createBlock(
-                          [
-                            factory.createExpressionStatement(
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('Object'),
-                                  factory.createIdentifier('assign'),
-                                ),
-                                undefined,
-                                [factory.createIdentifier('updated'), factory.createIdentifier('modelFields')],
-                              ),
-                            ),
-                          ],
-                          true,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+            [getRecordUpdateDataStoreCallExpression({ modelName, importedModelName, fieldConfigs })],
           ),
         ),
         factory.createExpressionStatement(
@@ -216,57 +235,7 @@ export const buildDataStoreExpression = (
     : [
         factory.createExpressionStatement(
           factory.createAwaitExpression(
-            factory.createCallExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier('DataStore'),
-                factory.createIdentifier('save'),
-              ),
-              undefined,
-              [
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier(importedModelName),
-                    factory.createIdentifier('copyOf'),
-                  ),
-                  undefined,
-                  [
-                    factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                    factory.createArrowFunction(
-                      undefined,
-                      undefined,
-                      [
-                        factory.createParameterDeclaration(
-                          undefined,
-                          undefined,
-                          undefined,
-                          factory.createIdentifier('updated'),
-                          undefined,
-                          undefined,
-                          undefined,
-                        ),
-                      ],
-                      undefined,
-                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                      factory.createBlock(
-                        [
-                          factory.createExpressionStatement(
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('Object'),
-                                factory.createIdentifier('assign'),
-                              ),
-                              undefined,
-                              [factory.createIdentifier('updated'), factory.createIdentifier('modelFields')],
-                            ),
-                          ),
-                        ],
-                        true,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            getRecordUpdateDataStoreCallExpression({ modelName, importedModelName, fieldConfigs }),
           ),
         ),
       ];

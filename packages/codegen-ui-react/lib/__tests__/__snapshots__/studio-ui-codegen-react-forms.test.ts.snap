@@ -2722,6 +2722,8 @@ export default function UpdateCPKTeacherForm(props) {
             DataStore.save(
               CPKTeacher.copyOf(cPKTeacherRecord, (updated) => {
                 Object.assign(updated, modelFields);
+                if (!modelFields.CPKStudent)
+                  updated.cPKTeacherCPKStudentId = undefined;
               })
             )
           );
@@ -9074,6 +9076,7 @@ export default function MyMemberForm(props) {
           await DataStore.save(
             Member.copyOf(memberRecord, (updated) => {
               Object.assign(updated, modelFields);
+              if (!modelFields.Team) updated.teamMembersId = undefined;
             })
           );
           if (onSuccess) {
