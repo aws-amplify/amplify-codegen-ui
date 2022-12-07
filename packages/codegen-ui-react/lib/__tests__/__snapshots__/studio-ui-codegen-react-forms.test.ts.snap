@@ -2452,17 +2452,17 @@ export default function UpdateCPKTeacherForm(props) {
   const CPKStudentIdSet = new Set(
     Array.isArray(CPKStudent)
       ? CPKStudent.map((cPKStudent) => cPKStudent.id)
-      : CPKStudent.id
+      : CPKStudent?.id
   );
   const CPKClassesIdSet = new Set(
     Array.isArray(CPKClasses)
       ? CPKClasses.map((cPKClass) => cPKClass.id)
-      : CPKClasses.id
+      : CPKClasses?.id
   );
   const CPKProjectsIdSet = new Set(
     Array.isArray(CPKProjects)
       ? CPKProjects.map((cPKProject) => cPKProject.id)
-      : CPKProjects.id
+      : CPKProjects?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -4986,7 +4986,7 @@ export default function TagCreateForm(props) {
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
   const PostsIdSet = new Set(
-    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts.id
+    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -5524,7 +5524,7 @@ export default function MyMemberForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [Team, setTeam] = React.useState(initialValues.Team);
   const TeamIdSet = new Set(
-    Array.isArray(Team) ? Team.map((team) => team.id) : Team.id
+    Array.isArray(Team) ? Team.map((team) => team.id) : Team?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -5972,7 +5972,7 @@ export default function SchoolCreateForm(props) {
   const StudentsIdSet = new Set(
     Array.isArray(Students)
       ? Students.map((student) => student.id)
-      : Students.id
+      : Students?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -6434,7 +6434,7 @@ export default function BookCreateForm(props) {
   const primaryAuthorIdSet = new Set(
     Array.isArray(primaryAuthor)
       ? primaryAuthor.map((author) => author.id)
-      : primaryAuthor.id
+      : primaryAuthor?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -6890,7 +6890,7 @@ export default function TagCreateForm(props) {
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
   const PostsIdSet = new Set(
-    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts.id
+    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -7436,12 +7436,12 @@ export default function BookCreateForm(props) {
   const primaryAuthorIdSet = new Set(
     Array.isArray(primaryAuthor)
       ? primaryAuthor.map((author) => author.id)
-      : primaryAuthor.id
+      : primaryAuthor?.id
   );
   const primaryTitleIdSet = new Set(
     Array.isArray(primaryTitle)
       ? primaryTitle.map((title) => title.id)
-      : primaryTitle.id
+      : primaryTitle?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -8481,7 +8481,7 @@ export default function SchoolUpdateForm(props) {
   const StudentsIdSet = new Set(
     Array.isArray(Students)
       ? Students.map((student) => student.id)
-      : Students.id
+      : Students?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -8984,7 +8984,7 @@ export default function MyMemberForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [Team, setTeam] = React.useState(initialValues.Team);
   const TeamIdSet = new Set(
-    Array.isArray(Team) ? Team.map((team) => team.id) : Team.id
+    Array.isArray(Team) ? Team.map((team) => team.id) : Team?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -9453,7 +9453,7 @@ export default function TagUpdateForm(props) {
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
   const PostsIdSet = new Set(
-    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts.id
+    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -13969,7 +13969,7 @@ export default function MyMemberForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [Team, setTeam] = React.useState(initialValues.Team);
   const TeamIdSet = new Set(
-    Array.isArray(Team) ? Team.map((team) => team.id) : Team.id
+    Array.isArray(Team) ? Team.map((team) => team.id) : Team?.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
