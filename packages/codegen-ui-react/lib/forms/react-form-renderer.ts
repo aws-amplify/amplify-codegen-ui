@@ -80,6 +80,7 @@ import {
 } from './form-renderer-helper';
 import {
   buildUseStateExpression,
+  buildSelectedRecordsIdSet,
   getCurrentDisplayValueName,
   getArrayChildRefName,
   getCurrentValueName,
@@ -450,6 +451,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     statements.push(getInitialValues(formMetadata.fieldConfigs));
 
     statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
+
+    statements.push(...buildSelectedRecordsIdSet(formMetadata.fieldConfigs));
 
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 

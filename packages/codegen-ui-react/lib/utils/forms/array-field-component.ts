@@ -267,29 +267,7 @@ export const generateArrayFieldComponent = () => {
                 [
                   factory.createIfStatement(
                     factory.createBinaryExpression(
-                      factory.createParenthesizedExpression(
-                        factory.createBinaryExpression(
-                          factory.createBinaryExpression(
-                            factory.createBinaryExpression(
-                              factory.createIdentifier('currentFieldValue'),
-                              factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
-                              factory.createIdentifier('undefined'),
-                            ),
-                            factory.createToken(SyntaxKind.BarBarToken),
-                            factory.createBinaryExpression(
-                              factory.createIdentifier('currentFieldValue'),
-                              factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
-                              factory.createNull(),
-                            ),
-                          ),
-                          factory.createToken(SyntaxKind.BarBarToken),
-                          factory.createBinaryExpression(
-                            factory.createIdentifier('currentFieldValue'),
-                            factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
-                            factory.createStringLiteral(''),
-                          ),
-                        ),
-                      ),
+                      factory.createIdentifier('currentFieldValue'),
                       factory.createToken(SyntaxKind.AmpersandAmpersandToken),
                       factory.createPrefixUnaryExpression(
                         SyntaxKind.ExclamationToken,
