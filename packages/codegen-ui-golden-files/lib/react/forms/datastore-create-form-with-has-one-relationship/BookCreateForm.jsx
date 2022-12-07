@@ -50,7 +50,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if ((currentFieldValue !== undefined || currentFieldValue !== '') && !hasError) {
+    if (currentFieldValue !== undefined && currentFieldValue !== null && currentFieldValue !== '' && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
