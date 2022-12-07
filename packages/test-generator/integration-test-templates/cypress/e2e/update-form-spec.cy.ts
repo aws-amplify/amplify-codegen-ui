@@ -89,6 +89,28 @@ describe('UpdateForms', () => {
         });
       });
     });
+
+    it('should remove hasOne and belongsTo relationships', () => {
+      // reset state
+      cy.reload();
+
+      cy.get('#dataStoreFormUpdateAllSupportedFormFields').within(() => {
+        // hasOne
+        removeArrayItem('John Lennon');
+
+        // belongsTo
+        removeArrayItem('John');
+
+        cy.contains('Submit').click();
+
+        cy.contains(/My string/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
+
+          expect('HasOneUser' in record).to.equal(false);
+          expect('BelongsToOwner' in record).to.equal(false);
+        });
+      });
+    });
   });
 
   // this model & related models all use CPK

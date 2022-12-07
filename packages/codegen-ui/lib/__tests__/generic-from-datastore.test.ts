@@ -61,6 +61,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.PrimaryCareGiver.fields.Child.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Child',
+      associatedField: 'primaryCareGiverChildId',
     });
 
     expect(genericSchema.models.PrimaryCareGiver.fields.primaryCareGiverChildId.relationship).toStrictEqual({
@@ -87,6 +88,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Key',
+      associatedField: 'lockKeyId',
     });
 
     expect(genericSchema.models.Lock.fields.lockKeyId.relationship).toStrictEqual({
@@ -97,6 +99,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Key.fields.Lock.relationship).toStrictEqual({
       type: 'BELONGS_TO',
       relatedModelName: 'Lock',
+      associatedField: 'keyLockId',
     });
 
     expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
@@ -119,6 +122,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.PrimaryCareGiver.fields.Child.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Child',
+      associatedField: 'primaryCareGiverChildId',
     });
 
     expect(genericSchema.models.PrimaryCareGiver.fields.primaryCareGiverChildId.relationship).toStrictEqual({
@@ -145,6 +149,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Key',
+      associatedField: 'lockKeyId',
     });
 
     expect(genericSchema.models.Lock.fields.lockKeyId.relationship).toStrictEqual({
@@ -155,6 +160,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Key.fields.Lock.relationship).toStrictEqual({
       type: 'BELONGS_TO',
       relatedModelName: 'Lock',
+      associatedField: 'keyLockId',
     });
 
     expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
