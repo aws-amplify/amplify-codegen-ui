@@ -10,8 +10,7 @@
       "inputType": {
         "required": true,
         "type": "TextField",
-        "name": "name",
-        "defaultValue": "John Doe"
+        "name": "name"
       },
       "label": "name"
     },

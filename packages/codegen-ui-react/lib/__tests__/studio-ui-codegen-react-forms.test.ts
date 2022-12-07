@@ -23,6 +23,7 @@ describe('amplify form renderer tests', () => {
         'datastore/post',
       );
       expect(componentText).toContain('DataStore.save');
+      expect(componentText).toContain('resetStateValues();');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
@@ -57,22 +58,24 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
-    it('should render a form with multiple date types', () => {
+    it('should render a form with multiple date types on create form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/input-gallery-create',
         'datastore/input-gallery',
       );
       expect(componentText).toContain('DataStore.save');
+      expect(componentText).toContain('const convertToLocal');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
 
-    it('should render a form with multiple date types', () => {
+    it('should render a form with multiple date types on update form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/input-gallery-update',
         'datastore/input-gallery',
       );
       expect(componentText).toContain('DataStore.save');
+      expect(componentText).toContain('const convertToLocal');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
@@ -132,13 +135,13 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
-    it('should render nested json fields', () => {
+    it('should render nested json fields for create form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-create', undefined);
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });
 
-    it('should render nested json fields', () => {
+    it('should render nested json fields for update form', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/bio-nested-update', undefined);
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();

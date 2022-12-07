@@ -19,7 +19,14 @@ import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind } from 
 import { resetValuesName } from './form-state';
 import { FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
-export const ControlledComponents = ['StepperField', 'SliderField', 'SelectField', 'ToggleButton', 'SwitchField'];
+export const ControlledComponents = [
+  'StepperField',
+  'SliderField',
+  'SelectField',
+  'ToggleButton',
+  'SwitchField',
+  'TextField',
+];
 
 /**
  * given the component returns true if the component is a controlled component
@@ -54,7 +61,11 @@ export const convertedValueAttributeMap: Record<string, (valueIdentifier: Identi
  * @param { dataType } the dataType
  * @returns
  */
-export const renderDefaultValueAttribute = (stateName: string, { dataType }: FieldConfigMetadata) => {
+export const renderDefaultValueAttribute = (
+  stateName: string,
+  { dataType }: FieldConfigMetadata,
+  componentType: string,
+) => {
   const identifier = factory.createIdentifier(stateName);
   let expression = factory.createJsxExpression(undefined, identifier);
 
@@ -62,7 +73,10 @@ export const renderDefaultValueAttribute = (stateName: string, { dataType }: Fie
     expression = factory.createJsxExpression(undefined, convertedValueAttributeMap[dataType](identifier));
   }
 
-  return factory.createJsxAttribute(factory.createIdentifier('defaultValue'), expression);
+  return factory.createJsxAttribute(
+    componentType === 'TextField' ? factory.createIdentifier('value') : factory.createIdentifier('defaultValue'),
+    expression,
+  );
 };
 
 export const renderValueAttribute = ({
@@ -75,9 +89,19 @@ export const renderValueAttribute = ({
   currentValueIdentifier?: Identifier;
 }): JsxAttribute | undefined => {
   const componentType = fieldConfig.studioFormComponentType ?? fieldConfig.componentType;
+  const { dataType } = fieldConfig;
   const shouldGetForUncontrolled = fieldConfig.isArray;
 
   const valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
+
+  let controlledExpression = factory.createJsxExpression(undefined, factory.createIdentifier(componentName));
+
+  if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {
+    controlledExpression = factory.createJsxExpression(
+      undefined,
+      convertedValueAttributeMap[dataType](valueIdentifier),
+    );
+  }
 
   const controlledComponentToAttributesMap: { [key: string]: JsxAttribute } = {
     ToggleButton: factory.createJsxAttribute(
@@ -104,6 +128,15 @@ export const renderValueAttribute = ({
       factory.createIdentifier('checked'),
       factory.createJsxExpression(undefined, valueIdentifier),
     ),
+    TextField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    DateTimeField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    IPAddressField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    DateField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    TimeField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    NumberField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    URLField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    PhoneNumberField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    EmailField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
   };
 
   if (controlledComponentToAttributesMap[componentType]) {
@@ -112,8 +145,6 @@ export const renderValueAttribute = ({
 
   // TODO: all components should be controlled once conversions are solid
   if (shouldGetForUncontrolled) {
-    const { dataType } = fieldConfig;
-
     let expression = factory.createJsxExpression(undefined, valueIdentifier);
 
     if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {

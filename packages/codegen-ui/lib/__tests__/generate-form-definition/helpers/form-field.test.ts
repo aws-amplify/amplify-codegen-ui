@@ -104,7 +104,7 @@ describe('getFormDefinitionInputElement', () => {
         isRequired: true,
         isReadOnly: false,
         placeholder: 'MyPlaceholder',
-        defaultValue: 'MyDefaultValue',
+        value: 'MyDefaultValue',
       },
     };
 
@@ -114,7 +114,6 @@ describe('getFormDefinitionInputElement', () => {
         label: 'MyLabel',
         descriptiveText: 'MyDescriptiveText',
         placeholder: 'MyPlaceholder',
-        defaultValue: 'MyDefaultValue',
       },
       studioFormComponentType: 'TextField',
     });
