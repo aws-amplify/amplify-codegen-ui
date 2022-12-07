@@ -599,3 +599,79 @@ export const buildResetValuesOnRecordUpdate = (recordName: string, linkedDataNam
     ),
   );
 };
+
+// e.g.   const PostsIdSet = new Set(Posts.map(post => post.id));
+export const buildSelectedRecordsIdSet = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
+  const statements: Statement[] = [];
+  Object.entries(fieldConfigs).forEach((fieldConfig) => {
+    const [name, fieldConfigMetaData] = fieldConfig;
+    const fieldName = fieldConfigMetaData.sanitizedFieldName || name;
+    if (fieldConfigMetaData.relationship) {
+      const { relatedModelName } = fieldConfigMetaData.relationship;
+      statements.push(
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier(`${fieldName}IdSet`),
+                undefined,
+                undefined,
+                factory.createNewExpression(factory.createIdentifier('Set'), undefined, [
+                  factory.createConditionalExpression(
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('Array'),
+                        factory.createIdentifier('isArray'),
+                      ),
+                      undefined,
+                      [factory.createIdentifier(fieldName)],
+                    ),
+                    factory.createToken(SyntaxKind.QuestionToken),
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier(fieldName),
+                        factory.createIdentifier('map'),
+                      ),
+                      undefined,
+                      [
+                        factory.createArrowFunction(
+                          undefined,
+                          undefined,
+                          [
+                            factory.createParameterDeclaration(
+                              undefined,
+                              undefined,
+                              undefined,
+                              factory.createIdentifier(lowerCaseFirst(relatedModelName)),
+                              undefined,
+                              undefined,
+                              undefined,
+                            ),
+                          ],
+                          undefined,
+                          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier(lowerCaseFirst(relatedModelName)),
+                            factory.createIdentifier('id'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    factory.createToken(SyntaxKind.ColonToken),
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier(fieldName),
+                      factory.createIdentifier('id'),
+                    ),
+                  ),
+                ]),
+              ),
+            ],
+            NodeFlags.Const,
+          ),
+        ),
+      );
+    }
+  });
+  return statements;
+};

@@ -829,12 +829,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -1683,12 +1678,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -2319,12 +2309,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -2463,6 +2448,21 @@ export default function UpdateCPKTeacherForm(props) {
   const [CPKClasses, setCPKClasses] = React.useState(initialValues.CPKClasses);
   const [CPKProjects, setCPKProjects] = React.useState(
     initialValues.CPKProjects
+  );
+  const CPKStudentIdSet = new Set(
+    Array.isArray(CPKStudent)
+      ? CPKStudent.map((cPKStudent) => cPKStudent.id)
+      : CPKStudent.id
+  );
+  const CPKClassesIdSet = new Set(
+    Array.isArray(CPKClasses)
+      ? CPKClasses.map((cPKClass) => cPKClass.id)
+      : CPKClasses.id
+  );
+  const CPKProjectsIdSet = new Set(
+    Array.isArray(CPKProjects)
+      ? CPKProjects.map((cPKProject) => cPKProject.id)
+      : CPKProjects.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -2802,10 +2802,12 @@ export default function UpdateCPKTeacherForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentCPKStudentDisplayValue}
-          options={cPKStudentRecords.map((r) => ({
-            id: r.specialStudentId,
-            label: getDisplayValue.CPKStudent?.(r),
-          }))}
+          options={cPKStudentRecords
+            .filter((cPKStudent) => !CPKStudentIdSet.has(cPKStudent.id))
+            .map((r) => ({
+              id: r.specialStudentId,
+              label: getDisplayValue.CPKStudent?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentCPKStudentValue(
               cPKStudentRecords.find((r) => r.specialStudentId === id)
@@ -2866,10 +2868,12 @@ export default function UpdateCPKTeacherForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentCPKClassesDisplayValue}
-          options={cPKClassRecords.map((r) => ({
-            id: r.specialClassId,
-            label: getDisplayValue.CPKClasses?.(r),
-          }))}
+          options={cPKClassRecords
+            .filter((cPKClass) => !CPKClassesIdSet.has(cPKClass.id))
+            .map((r) => ({
+              id: r.specialClassId,
+              label: getDisplayValue.CPKClasses?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentCPKClassesValue(
               cPKClassRecords.find((r) => r.specialClassId === id)
@@ -2931,10 +2935,12 @@ export default function UpdateCPKTeacherForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentCPKProjectsDisplayValue}
-          options={cPKProjectRecords.map((r) => ({
-            id: r.specialProjectId,
-            label: getDisplayValue.CPKProjects?.(r),
-          }))}
+          options={cPKProjectRecords
+            .filter((cPKProject) => !CPKProjectsIdSet.has(cPKProject.id))
+            .map((r) => ({
+              id: r.specialProjectId,
+              label: getDisplayValue.CPKProjects?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentCPKProjectsValue(
               cPKProjectRecords.find((r) => r.specialProjectId === id)
@@ -3083,12 +3089,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -3778,12 +3779,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -4855,12 +4851,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -4994,6 +4985,9 @@ export default function TagCreateForm(props) {
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
+  const PostsIdSet = new Set(
+    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts.id
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setLabel(initialValues.label);
@@ -5178,10 +5172,12 @@ export default function TagCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPostsDisplayValue}
-          options={postRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.Posts?.(r),
-          }))}
+          options={postRecords
+            .filter((post) => !PostsIdSet.has(post.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.Posts?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(postRecords.find((r) => r.id === id));
             setCurrentPostsDisplayValue(label);
@@ -5395,12 +5391,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -5532,6 +5523,9 @@ export default function MyMemberForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Team, setTeam] = React.useState(initialValues.Team);
+  const TeamIdSet = new Set(
+    Array.isArray(Team) ? Team.map((team) => team.id) : Team.id
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -5718,10 +5712,12 @@ export default function MyMemberForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentTeamDisplayValue}
-          options={teamRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.Team?.(r),
-          }))}
+          options={teamRecords
+            .filter((team) => !TeamIdSet.has(team.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.Team?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
             setCurrentTeamDisplayValue(label);
@@ -5841,12 +5837,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -5978,6 +5969,11 @@ export default function SchoolCreateForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
+  const StudentsIdSet = new Set(
+    Array.isArray(Students)
+      ? Students.map((student) => student.id)
+      : Students.id
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -6145,10 +6141,12 @@ export default function SchoolCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentStudentsDisplayValue}
-          options={studentRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.Students?.(r),
-          }))}
+          options={studentRecords
+            .filter((student) => !StudentsIdSet.has(student.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.Students?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(studentRecords.find((r) => r.id === id));
             setCurrentStudentsDisplayValue(label);
@@ -6299,12 +6297,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -6437,6 +6430,11 @@ export default function BookCreateForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
     initialValues.primaryAuthor
+  );
+  const primaryAuthorIdSet = new Set(
+    Array.isArray(primaryAuthor)
+      ? primaryAuthor.map((author) => author.id)
+      : primaryAuthor.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -6629,10 +6627,12 @@ export default function BookCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPrimaryAuthorDisplayValue}
-          options={authorRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.primaryAuthor?.(r),
-          }))}
+          options={authorRecords
+            .filter((author) => !primaryAuthorIdSet.has(author.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.primaryAuthor?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
               authorRecords.find((r) => r.id === id)
@@ -6755,12 +6755,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -6894,6 +6889,9 @@ export default function TagCreateForm(props) {
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
+  const PostsIdSet = new Set(
+    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts.id
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setLabel(initialValues.label);
@@ -7078,10 +7076,12 @@ export default function TagCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPostsDisplayValue}
-          options={postRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.Posts?.(r),
-          }))}
+          options={postRecords
+            .filter((post) => !PostsIdSet.has(post.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.Posts?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(postRecords.find((r) => r.id === id));
             setCurrentPostsDisplayValue(label);
@@ -7295,12 +7295,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -7437,6 +7432,16 @@ export default function BookCreateForm(props) {
   );
   const [primaryTitle, setPrimaryTitle] = React.useState(
     initialValues.primaryTitle
+  );
+  const primaryAuthorIdSet = new Set(
+    Array.isArray(primaryAuthor)
+      ? primaryAuthor.map((author) => author.id)
+      : primaryAuthor.id
+  );
+  const primaryTitleIdSet = new Set(
+    Array.isArray(primaryTitle)
+      ? primaryTitle.map((title) => title.id)
+      : primaryTitle.id
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -7646,10 +7651,12 @@ export default function BookCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPrimaryAuthorDisplayValue}
-          options={authorRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.primaryAuthor?.(r),
-          }))}
+          options={authorRecords
+            .filter((author) => !primaryAuthorIdSet.has(author.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.primaryAuthor?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
               authorRecords.find((r) => r.id === id)
@@ -7711,10 +7718,12 @@ export default function BookCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPrimaryTitleDisplayValue}
-          options={titleRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.primaryTitle?.(r),
-          }))}
+          options={titleRecords
+            .filter((title) => !primaryTitleIdSet.has(title.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.primaryTitle?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentPrimaryTitleValue(titleRecords.find((r) => r.id === id));
             setCurrentPrimaryTitleDisplayValue(label);
@@ -8336,12 +8345,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -8474,6 +8478,11 @@ export default function SchoolUpdateForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
+  const StudentsIdSet = new Set(
+    Array.isArray(Students)
+      ? Students.map((student) => student.id)
+      : Students.id
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = schoolRecord
@@ -8684,10 +8693,12 @@ export default function SchoolUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentStudentsDisplayValue}
-          options={studentRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.Students?.(r),
-          }))}
+          options={studentRecords
+            .filter((student) => !StudentsIdSet.has(student.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.Students?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(studentRecords.find((r) => r.id === id));
             setCurrentStudentsDisplayValue(label);
@@ -8839,12 +8850,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -8977,6 +8983,9 @@ export default function MyMemberForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Team, setTeam] = React.useState(initialValues.Team);
+  const TeamIdSet = new Set(
+    Array.isArray(Team) ? Team.map((team) => team.id) : Team.id
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = memberRecord
@@ -9180,10 +9189,12 @@ export default function MyMemberForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentTeamDisplayValue}
-          options={teamRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.Team?.(r),
-          }))}
+          options={teamRecords
+            .filter((team) => !TeamIdSet.has(team.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.Team?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
             setCurrentTeamDisplayValue(label);
@@ -9306,12 +9317,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -9446,6 +9452,9 @@ export default function TagUpdateForm(props) {
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
+  const PostsIdSet = new Set(
+    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts.id
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = tagRecord
@@ -9702,10 +9711,12 @@ export default function TagUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentPostsDisplayValue}
-          options={postRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.Posts?.(r),
-          }))}
+          options={postRecords
+            .filter((post) => !PostsIdSet.has(post.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.Posts?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(postRecords.find((r) => r.id === id));
             setCurrentPostsDisplayValue(label);
@@ -9916,12 +9927,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -10493,12 +10499,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -11042,12 +11043,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -11913,12 +11909,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -12835,12 +12826,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -13850,12 +13836,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== \\"\\") &&
-      !hasError
-    ) {
+    if (currentFieldValue && !hasError) {
       const newItems = [...items];
       if (selectedBadgeIndex !== undefined) {
         newItems[selectedBadgeIndex] = currentFieldValue;
@@ -13987,6 +13968,9 @@ export default function MyMemberForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Team, setTeam] = React.useState(initialValues.Team);
+  const TeamIdSet = new Set(
+    Array.isArray(Team) ? Team.map((team) => team.id) : Team.id
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -14173,10 +14157,12 @@ export default function MyMemberForm(props) {
           isRequired={false}
           isReadOnly={false}
           value={currentTeamDisplayValue}
-          options={teamRecords.map((r) => ({
-            id: r.id,
-            label: getDisplayValue.Team?.(r),
-          }))}
+          options={teamRecords
+            .filter((team) => !TeamIdSet.has(team.id))
+            .map((r) => ({
+              id: r.id,
+              label: getDisplayValue.Team?.(r),
+            }))}
           onSelect={({ id, label }) => {
             setCurrentTeamValue(teamRecords.find((r) => r.id === id));
             setCurrentTeamDisplayValue(label);

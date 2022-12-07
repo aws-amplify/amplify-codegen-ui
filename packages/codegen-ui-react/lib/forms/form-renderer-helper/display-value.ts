@@ -31,6 +31,7 @@ import {
   CallExpression,
   VariableStatement,
 } from 'typescript';
+import { lowerCaseFirst } from '../../helpers';
 import {
   buildBindingExpression,
   buildConcatExpression,
@@ -87,11 +88,53 @@ function getModelTypeSuggestions({
       )
     : getElementAccessExpression(recordString, key);
 
+  const filterOptionsExpression = isModelType
+    ? factory.createCallExpression(
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier(getRecordsName(modelName)),
+          factory.createIdentifier('filter'),
+        ),
+        undefined,
+        [
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier(lowerCaseFirst(modelName)),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createPrefixUnaryExpression(
+              SyntaxKind.ExclamationToken,
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier(`${fieldName}IdSet`),
+                  factory.createIdentifier('has'),
+                ),
+                undefined,
+                [
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier(lowerCaseFirst(modelName)),
+                    factory.createIdentifier('id'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      )
+    : factory.createIdentifier(getRecordsName(modelName));
+
   return factory.createCallExpression(
-    factory.createPropertyAccessExpression(
-      factory.createIdentifier(getRecordsName(modelName)),
-      factory.createIdentifier('map'),
-    ),
+    factory.createPropertyAccessExpression(filterOptionsExpression, factory.createIdentifier('map')),
     undefined,
     [
       factory.createArrowFunction(
