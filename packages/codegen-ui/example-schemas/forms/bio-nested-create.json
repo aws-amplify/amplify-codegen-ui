@@ -52,7 +52,7 @@
         "below": "Nicknames1"
       }
     },
-    "bio.favorite Quote": {
+    "bio.favoriteQuote": {
       "inputType": {
         "type": "TextField"
       },
@@ -61,23 +61,23 @@
         "below": "bio"
       }
     },
-    "bio.favorite-Animal": {
+    "bio.favoriteAnimal": {
       "inputType": {
         "type": "TextField"
       },
       "label": "favoriteAnimal",
       "position": {
-        "below": "bio.favorite Quote"
+        "below": "bio.favoriteQuote"
       }
     },
-    "bio.favorite-trees": {
+    "bio.favoriteTrees": {
       "inputType": {
         "type": "TextField",
         "isArray": true
       },
       "label": "favorite trees",
       "position": {
-        "below": "bio.favorite-Animal"
+        "below": "bio.favoriteAnimal"
       }
     },
     "options.enabled" : {
@@ -101,7 +101,7 @@
     "options" : {
       "level" : 3,
       "position" : {
-        "below" : "bio.favorite-trees"
+        "below" : "bio.favoriteTrees"
       },
       "text" : "Options",
       "type" : "Heading"

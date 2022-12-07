@@ -1057,7 +1057,7 @@ export default function CustomDataForm(props) {
           label=\\"E-mail\\"
           isRequired={true}
           defaultValue=\\"johndoe@amplify.com\\"
-          value={currentEmailValue}
+          value={email}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.email?.hasError) {
@@ -1100,7 +1100,7 @@ export default function CustomDataForm(props) {
           isRequired={true}
           defaultValue=\\"+1-401-152-6995\\"
           type=\\"tel\\"
-          value={currentPhoneValue}
+          value={phone}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.phone?.hasError) {
@@ -2008,7 +2008,7 @@ export default function MyPostForm(props) {
         <TextField
           label=\\"Tags\\"
           placeholder=\\"goals\\"
-          value={currentCustomtagsValue}
+          value={Customtags}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Customtags?.hasError) {
@@ -2355,9 +2355,15 @@ export default function NestedJson(props) {
     setOptions(initialValues.options);
     setErrors({});
   };
+<<<<<<< HEAD
   const [currentBioFavoritetreesValue, setCurrentBioFavoritetreesValue] =
     React.useState(\\"\\");
   const bioFavoritetreesRef = React.createRef();
+=======
+  const [currentBioFavoriteTreesValue, setCurrentBioFavoriteTreesValue] =
+    React.useState(\\"\\");
+  const bioFavoriteTreesRef = React.createRef();
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
   const [currentNicknames1Value, setCurrentNicknames1Value] =
     React.useState(\\"\\");
   const Nicknames1Ref = React.createRef();
@@ -2366,9 +2372,9 @@ export default function NestedJson(props) {
   const validations = {
     \\"first-Name\\": [],
     lastName: [],
-    \\"bio.favorite Quote\\": [],
-    \\"bio.favorite-Animal\\": [],
-    \\"bio.favorite-trees\\": [],
+    \\"bio.favoriteQuote\\": [],
+    \\"bio.favoriteAnimal\\": [],
+    \\"bio.favoriteTrees\\": [],
     Nicknames1: [],
     \\"nick-names2\\": [],
     \\"first Name\\": [],
@@ -2487,63 +2493,71 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
+<<<<<<< HEAD
         value={bio[\\"favorite Quote\\"]}
+=======
+        value={bio.favoriteQuote}
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               \\"first-Name\\": firstName,
               lastName,
-              bio: { ...bio, [\\"favorite Quote\\"]: value },
+              bio: { ...bio, favoriteQuote: value },
               Nicknames1,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
               options,
             };
             const result = onChange(modelFields);
-            value = result?.bio?.[\\"favorite Quote\\"] ?? value;
+            value = result?.bio?.favoriteQuote ?? value;
           }
-          if (errors[\\"bio.favorite Quote\\"]?.hasError) {
-            runValidationTasks(\\"bio.favorite Quote\\", value);
+          if (errors[\\"bio.favoriteQuote\\"]?.hasError) {
+            runValidationTasks(\\"bio.favoriteQuote\\", value);
           }
-          setBio({ ...bio, [\\"favorite Quote\\"]: value });
+          setBio({ ...bio, favoriteQuote: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favorite Quote\\", bio[\\"favorite Quote\\"])
+          runValidationTasks(\\"bio.favoriteQuote\\", bio[\\"favoriteQuote\\"])
         }
-        errorMessage={errors[\\"bio.favorite Quote\\"]?.errorMessage}
-        hasError={errors[\\"bio.favorite Quote\\"]?.hasError}
-        {...getOverrideProps(overrides, \\"bio.favorite Quote\\")}
+        errorMessage={errors[\\"bio.favoriteQuote\\"]?.errorMessage}
+        hasError={errors[\\"bio.favoriteQuote\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"bio.favoriteQuote\\")}
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
+<<<<<<< HEAD
         value={bio[\\"favorite-Animal\\"]}
+=======
+        value={bio.favoriteAnimal}
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               \\"first-Name\\": firstName,
               lastName,
-              bio: { ...bio, [\\"favorite-Animal\\"]: value },
+              bio: { ...bio, favoriteAnimal: value },
               Nicknames1,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
               options,
             };
             const result = onChange(modelFields);
-            value = result?.bio?.[\\"favorite-Animal\\"] ?? value;
+            value = result?.bio?.favoriteAnimal ?? value;
           }
-          if (errors[\\"bio.favorite-Animal\\"]?.hasError) {
-            runValidationTasks(\\"bio.favorite-Animal\\", value);
+          if (errors[\\"bio.favoriteAnimal\\"]?.hasError) {
+            runValidationTasks(\\"bio.favoriteAnimal\\", value);
           }
-          setBio({ ...bio, [\\"favorite-Animal\\"]: value });
+          setBio({ ...bio, favoriteAnimal: value });
         }}
         onBlur={() =>
-          runValidationTasks(\\"bio.favorite-Animal\\", bio[\\"favorite-Animal\\"])
+          runValidationTasks(\\"bio.favoriteAnimal\\", bio[\\"favoriteAnimal\\"])
         }
-        errorMessage={errors[\\"bio.favorite-Animal\\"]?.errorMessage}
-        hasError={errors[\\"bio.favorite-Animal\\"]?.hasError}
-        {...getOverrideProps(overrides, \\"bio.favorite-Animal\\")}
+        errorMessage={errors[\\"bio.favoriteAnimal\\"]?.errorMessage}
+        hasError={errors[\\"bio.favoriteAnimal\\"]?.hasError}
+        {...getOverrideProps(overrides, \\"bio.favoriteAnimal\\")}
       ></TextField>
       <ArrayField
         onChange={async (items) => {
@@ -2552,46 +2566,62 @@ export default function NestedJson(props) {
             const modelFields = {
               \\"first-Name\\": firstName,
               lastName,
-              bio: { ...bio, [\\"favorite-trees\\"]: values },
+              bio: { ...bio, favoriteTrees: values },
               Nicknames1,
               \\"nick-names2\\": nicknames,
               \\"first Name\\": firstName1,
               options,
             };
             const result = onChange(modelFields);
-            values = result?.bio?.[\\"favorite-trees\\"] ?? values;
+            values = result?.bio?.favoriteTrees ?? values;
           }
+<<<<<<< HEAD
           setBio({ ...bio, [\\"favorite-trees\\"]: values });
           setCurrentBioFavoritetreesValue(\\"\\");
+=======
+          setBio({ ...bio, favoriteTrees: values });
+          setCurrentBioFavoriteTreesValue(\\"\\");
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
         }}
-        currentFieldValue={currentBioFavoritetreesValue}
+        currentFieldValue={currentBioFavoriteTreesValue}
         label={\\"favorite trees\\"}
+<<<<<<< HEAD
         items={bio?.[\\"favorite-trees\\"] ?? []}
         hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
         setFieldValue={setCurrentBioFavoritetreesValue}
         inputFieldRef={bioFavoritetreesRef}
+=======
+        items={bio?.favoriteTrees ?? []}
+        hasError={errors?.[\\"bio.favoriteTrees\\"]?.hasError}
+        setFieldValue={setCurrentBioFavoriteTreesValue}
+        inputFieldRef={bioFavoriteTreesRef}
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
         defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"favorite trees\\"
+<<<<<<< HEAD
           value={bio[\\"favorite-trees\\"]}
+=======
+          value={bio.favoriteTrees}
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
           onChange={(e) => {
             let { value } = e.target;
-            if (errors[\\"bio.favorite-trees\\"]?.hasError) {
-              runValidationTasks(\\"bio.favorite-trees\\", value);
+            if (errors[\\"bio.favoriteTrees\\"]?.hasError) {
+              runValidationTasks(\\"bio.favoriteTrees\\", value);
             }
-            setCurrentBioFavoritetreesValue(value);
+            setCurrentBioFavoriteTreesValue(value);
           }}
           onBlur={() =>
             runValidationTasks(
-              \\"bio.favorite-trees\\",
-              currentBioFavoritetreesValue
+              \\"bio.favoriteTrees\\",
+              currentBioFavoriteTreesValue
             )
           }
-          errorMessage={errors[\\"bio.favorite-trees\\"]?.errorMessage}
-          hasError={errors[\\"bio.favorite-trees\\"]?.hasError}
-          ref={bioFavoritetreesRef}
-          {...getOverrideProps(overrides, \\"bio.favorite-trees\\")}
+          errorMessage={errors[\\"bio.favoriteTrees\\"]?.errorMessage}
+          hasError={errors[\\"bio.favoriteTrees\\"]?.hasError}
+          ref={bioFavoriteTreesRef}
+          {...getOverrideProps(overrides, \\"bio.favoriteTrees\\")}
         ></TextField>
       </ArrayField>
       <Heading
@@ -2628,7 +2658,7 @@ export default function NestedJson(props) {
       >
         <TextField
           label=\\"Nick Names1\\"
-          value={currentNicknames1Value}
+          value={Nicknames1}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Nicknames1?.hasError) {
@@ -2674,7 +2704,7 @@ export default function NestedJson(props) {
       >
         <TextField
           label=\\"nick-Names2\\"
-          value={currentNicknamesValue}
+          value={nicknames}
           onChange={(e) => {
             let { value } = e.target;
             if (errors[\\"nick-names2\\"]?.hasError) {
@@ -2804,9 +2834,9 @@ export declare type NestedJsonInputValues = {
     \\"nick-names2\\"?: string[];
     \\"first Name\\"?: string;
     bio?: {
-        \\"favorite Quote\\"?: string;
-        \\"favorite-Animal\\"?: string;
-        \\"favorite-trees\\"?: string[];
+        favoriteQuote?: string;
+        favoriteAnimal?: string;
+        favoriteTrees?: string[];
     };
     options?: {
         enabled?: boolean;
@@ -2819,9 +2849,9 @@ export declare type NestedJsonValidationValues = {
     \\"nick-names2\\"?: ValidationFunction<string>;
     \\"first Name\\"?: ValidationFunction<string>;
     bio?: {
-        \\"favorite Quote\\"?: ValidationFunction<string>;
-        \\"favorite-Animal\\"?: ValidationFunction<string>;
-        \\"favorite-trees\\"?: ValidationFunction<string>;
+        favoriteQuote?: ValidationFunction<string>;
+        favoriteAnimal?: ValidationFunction<string>;
+        favoriteTrees?: ValidationFunction<string>;
     };
     options?: {
         enabled?: ValidationFunction<boolean>;
@@ -2833,9 +2863,9 @@ export declare type NestedJsonOverridesProps = {
     \\"first-Name\\"?: FormProps<TextFieldProps>;
     lastName?: FormProps<TextFieldProps>;
     bio?: FormProps<HeadingProps>;
-    \\"bio.favorite Quote\\"?: FormProps<TextFieldProps>;
-    \\"bio.favorite-Animal\\"?: FormProps<TextFieldProps>;
-    \\"bio.favorite-trees\\"?: FormProps<TextFieldProps>;
+    \\"bio.favoriteQuote\\"?: FormProps<TextFieldProps>;
+    \\"bio.favoriteAnimal\\"?: FormProps<TextFieldProps>;
+    \\"bio.favoriteTrees\\"?: FormProps<TextFieldProps>;
     options?: FormProps<HeadingProps>;
     Nicknames1?: FormProps<TextFieldProps>;
     \\"nick-names2\\"?: FormProps<TextFieldProps>;
@@ -3176,7 +3206,7 @@ export default function NestedJson(props) {
       >
         <TextField
           label=\\"lastName\\"
-          value={currentLastName1Value}
+          value={lastName1}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.lastName?.hasError) {
@@ -3198,7 +3228,11 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
+<<<<<<< HEAD
         value={bio[\\"favoriteQuote\\"]}
+=======
+        value={bio.favoriteQuote}
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3225,7 +3259,11 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
+<<<<<<< HEAD
         value={bio[\\"favoriteAnimal\\"]}
+=======
+        value={bio.favoriteAnimal}
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -4022,6 +4060,7 @@ export default function MyPostForm(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
 <<<<<<< HEAD
+<<<<<<< HEAD
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
@@ -4030,6 +4069,16 @@ export default function MyPostForm(props) {
           onClick={resetStateValues}
           isDisabled={!(id || post)}
 >>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
+=======
+          onClick={resetStateValues}
+          isDisabled={!(id || post)}
+=======
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+>>>>>>> dbc5b58 (fix: make TextField a controlled component)
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -4237,6 +4286,7 @@ export default function MyPostForm(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
 <<<<<<< HEAD
+<<<<<<< HEAD
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
@@ -4245,6 +4295,16 @@ export default function MyPostForm(props) {
           onClick={resetStateValues}
           isDisabled={!(id || post)}
 >>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
+=======
+          onClick={resetStateValues}
+          isDisabled={!(id || post)}
+=======
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+>>>>>>> dbc5b58 (fix: make TextField a controlled component)
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -4507,6 +4567,7 @@ export default function MyFlexCreateForm(props) {
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
     const cleanValues = { ...initialValues, ...flexRecord };
     setUsername(cleanValues.username);
     setCaption(cleanValues.caption);
@@ -4516,6 +4577,8 @@ export default function MyFlexCreateForm(props) {
     setCurrentTagsValue(\\"\\");
     setProfile_url(cleanValues.profile_url);
 =======
+=======
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
     setUsername(initialValues.username);
     setCaption(initialValues.caption);
     setCustomtags(initialValues.Customtags);
@@ -4523,7 +4586,20 @@ export default function MyFlexCreateForm(props) {
     setTags(initialValues.tags);
     setCurrentTagsValue(undefined);
     setProfile_url(initialValues.profile_url);
+<<<<<<< HEAD
 >>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
+=======
+=======
+    const cleanValues = { ...initialValues, ...flexRecord };
+    setUsername(cleanValues.username);
+    setCaption(cleanValues.caption);
+    setCustomtags(cleanValues.Customtags ?? []);
+    setCurrentCustomtagsValue(\\"\\");
+    setTags(cleanValues.tags ?? []);
+    setCurrentTagsValue(\\"\\");
+    setProfile_url(cleanValues.profile_url);
+>>>>>>> dbc5b58 (fix: make TextField a controlled component)
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
@@ -4615,6 +4691,7 @@ export default function MyFlexCreateForm(props) {
           children=\\"Clear\\"
           type=\\"reset\\"
 <<<<<<< HEAD
+<<<<<<< HEAD
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
@@ -4624,6 +4701,17 @@ export default function MyFlexCreateForm(props) {
           onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
 >>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
+=======
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+=======
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+>>>>>>> dbc5b58 (fix: make TextField a controlled component)
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
         ></Button>
         <Flex
           gap=\\"15px\\"
@@ -4658,9 +4746,15 @@ export default function MyFlexCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"john\\"
 <<<<<<< HEAD
+<<<<<<< HEAD
           value={username}
 =======
 >>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
+=======
+=======
+          value={username}
+>>>>>>> dbc5b58 (fix: make TextField a controlled component)
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -4690,9 +4784,15 @@ export default function MyFlexCreateForm(props) {
           isReadOnly={false}
           placeholder=\\"i love code\\"
 <<<<<<< HEAD
+<<<<<<< HEAD
           value={caption}
 =======
 >>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
+=======
+=======
+          value={caption}
+>>>>>>> dbc5b58 (fix: make TextField a controlled component)
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -4745,7 +4845,7 @@ export default function MyFlexCreateForm(props) {
         <TextField
           label=\\"Tags\\"
           placeholder=\\"goals\\"
-          value={currentCustomtagsValue}
+          value={Customtags}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Customtags?.hasError) {
@@ -4791,7 +4891,7 @@ export default function MyFlexCreateForm(props) {
           label=\\"Tags\\"
           isRequired={false}
           isReadOnly={false}
-          value={currentTagsValue}
+          value={tags}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.tags?.hasError) {
@@ -4811,9 +4911,15 @@ export default function MyFlexCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
 <<<<<<< HEAD
+<<<<<<< HEAD
         value={profile_url}
 =======
 >>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
+=======
+=======
+        value={profile_url}
+>>>>>>> dbc5b58 (fix: make TextField a controlled component)
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -5987,7 +6093,7 @@ export default function InputGalleryCreateForm(props) {
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
-          value={currentArrayTypeFieldValue}
+          value={arrayTypeField}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.arrayTypeField?.hasError) {
@@ -6885,7 +6991,7 @@ export default function InputGalleryUpdateForm(props) {
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
-          value={currentArrayTypeFieldValue}
+          value={arrayTypeField}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.arrayTypeField?.hasError) {
@@ -7106,6 +7212,7 @@ export default function InputGalleryUpdateForm(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
 <<<<<<< HEAD
+<<<<<<< HEAD
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
@@ -7114,6 +7221,16 @@ export default function InputGalleryUpdateForm(props) {
           onClick={resetStateValues}
           isDisabled={!(id || inputGallery)}
 >>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
+=======
+          onClick={resetStateValues}
+          isDisabled={!(id || inputGallery)}
+=======
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+>>>>>>> dbc5b58 (fix: make TextField a controlled component)
+>>>>>>> 775abd0 (fix: make TextField a controlled component)
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -7608,7 +7725,7 @@ export default function MyFlexCreateForm(props) {
         <TextField
           label=\\"Tags\\"
           placeholder=\\"goals\\"
-          value={currentCustomtagsValue}
+          value={Customtags}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Customtags?.hasError) {
@@ -7654,7 +7771,7 @@ export default function MyFlexCreateForm(props) {
           label=\\"Tags\\"
           isRequired={false}
           isReadOnly={false}
-          value={currentTagsValue}
+          value={tags}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.tags?.hasError) {
