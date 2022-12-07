@@ -1510,6 +1510,7 @@ export default function CustomDataForm(props) {
           children=\\"empty\\"
           type=\\"reset\\"
           onClick={resetStateValues}
+          isDisabled={!(id || myData)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -1528,7 +1529,9 @@ export default function CustomDataForm(props) {
             children=\\"create\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -3227,6 +3230,7 @@ export default function NestedJson(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
+          isDisabled={!(id || myData)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -3245,7 +3249,9 @@ export default function NestedJson(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -3977,6 +3983,7 @@ export default function MyPostForm(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
+          isDisabled={!(id || myData)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -3995,7 +4002,9 @@ export default function MyPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -4182,6 +4191,7 @@ export default function MyPostForm(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
+          isDisabled={!(id || myData)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -4200,7 +4210,9 @@ export default function MyPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -4413,10 +4425,9 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function MyFlexUpdateForm(props) {
+export default function MyFlexCreateForm(props) {
   const {
-    id,
-    flex,
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -4442,25 +4453,15 @@ export default function MyFlexUpdateForm(props) {
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...flexRecord };
-    setUsername(cleanValues.username);
-    setCaption(cleanValues.caption);
-    setCustomtags(cleanValues.Customtags ?? []);
+    setUsername(initialValues.username);
+    setCaption(initialValues.caption);
+    setCustomtags(initialValues.Customtags);
     setCurrentCustomtagsValue(undefined);
-    setTags(cleanValues.tags ?? []);
+    setTags(initialValues.tags);
     setCurrentTagsValue(undefined);
-    setProfile_url(cleanValues.profile_url);
+    setProfile_url(initialValues.profile_url);
     setErrors({});
   };
-  const [flexRecord, setFlexRecord] = React.useState(flex);
-  React.useEffect(() => {
-    const queryData = async () => {
-      const record = id ? await DataStore.query(Flex0, id) : flex0;
-      setFlexRecord(record);
-    };
-    queryData();
-  }, [id, flex]);
-  React.useEffect(resetStateValues, [flexRecord]);
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
     React.useState(undefined);
   const CustomtagsRef = React.createRef();
@@ -4526,13 +4527,12 @@ export default function MyFlexUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(
-            Flex0.copyOf(flexRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
-          );
+          await DataStore.save(new Flex0(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -4540,7 +4540,7 @@ export default function MyFlexUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, \\"MyFlexUpdateForm\\")}
+      {...getOverrideProps(overrides, \\"MyFlexCreateForm\\")}
       {...rest}
     >
       <Flex
@@ -4548,10 +4548,10 @@ export default function MyFlexUpdateForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Reset\\"
+          children=\\"Clear\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ResetButton\\")}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
           gap=\\"15px\\"
@@ -4585,7 +4585,6 @@ export default function MyFlexUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-          defaultValue={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -4614,7 +4613,6 @@ export default function MyFlexUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-          defaultValue={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -4732,7 +4730,6 @@ export default function MyFlexUpdateForm(props) {
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={profile_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -4764,7 +4761,6 @@ export default function MyFlexUpdateForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should render a create form with colliding model name 2`] = `
 "import * as React from \\"react\\";
-import { Flex as Flex0 } from \\"../models\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
@@ -4772,14 +4768,14 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type MyFlexUpdateFormInputValues = {
+export declare type MyFlexCreateFormInputValues = {
     username?: string;
     caption?: string;
     Customtags?: string[];
     tags?: string[];
     profile_url?: string;
 };
-export declare type MyFlexUpdateFormValidationValues = {
+export declare type MyFlexCreateFormValidationValues = {
     username?: ValidationFunction<string>;
     caption?: ValidationFunction<string>;
     Customtags?: ValidationFunction<string>;
@@ -4787,8 +4783,8 @@ export declare type MyFlexUpdateFormValidationValues = {
     profile_url?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type MyFlexUpdateFormOverridesProps = {
-    MyFlexUpdateFormGrid?: FormProps<GridProps>;
+export declare type MyFlexCreateFormOverridesProps = {
+    MyFlexCreateFormGrid?: FormProps<GridProps>;
     RowGrid0?: FormProps<GridProps>;
     username?: FormProps<TextFieldProps>;
     caption?: FormProps<TextFieldProps>;
@@ -4796,19 +4792,18 @@ export declare type MyFlexUpdateFormOverridesProps = {
     tags?: FormProps<TextFieldProps>;
     profile_url?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type MyFlexUpdateFormProps = React.PropsWithChildren<{
-    overrides?: MyFlexUpdateFormOverridesProps | undefined | null;
+export declare type MyFlexCreateFormProps = React.PropsWithChildren<{
+    overrides?: MyFlexCreateFormOverridesProps | undefined | null;
 } & {
-    id?: string;
-    flex?: Flex0;
-    onSubmit?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
-    onSuccess?: (fields: MyFlexUpdateFormInputValues) => void;
-    onError?: (fields: MyFlexUpdateFormInputValues, errorMessage: string) => void;
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
+    onSuccess?: (fields: MyFlexCreateFormInputValues) => void;
+    onError?: (fields: MyFlexCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
-    onValidate?: MyFlexUpdateFormValidationValues;
+    onChange?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
+    onValidate?: MyFlexCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function MyFlexUpdateForm(props: MyFlexUpdateFormProps): React.ReactElement;
+export default function MyFlexCreateForm(props: MyFlexCreateFormProps): React.ReactElement;
 "
 `;
 
@@ -6993,6 +6988,7 @@ export default function InputGalleryUpdateForm(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
+          isDisabled={!(id || myData)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -7011,7 +7007,9 @@ export default function InputGalleryUpdateForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
