@@ -659,8 +659,9 @@ export const buildSelectedRecordsIdSet = (fieldConfigs: Record<string, FieldConf
                       ],
                     ),
                     factory.createToken(SyntaxKind.ColonToken),
-                    factory.createPropertyAccessExpression(
+                    factory.createPropertyAccessChain(
                       factory.createIdentifier(fieldName),
+                      factory.createToken(SyntaxKind.QuestionDotToken),
                       factory.createIdentifier('id'),
                     ),
                   ),
