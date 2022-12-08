@@ -1510,7 +1510,6 @@ export default function CustomDataForm(props) {
           children=\\"empty\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          isDisabled={!(id || myData)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -1529,9 +1528,7 @@ export default function CustomDataForm(props) {
             children=\\"create\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={
-              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
-            }
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -3230,7 +3227,6 @@ export default function NestedJson(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          isDisabled={!(id || myData)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -3249,9 +3245,7 @@ export default function NestedJson(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={
-              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
-            }
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -3983,7 +3977,7 @@ export default function MyPostForm(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          isDisabled={!(id || myData)}
+          isDisabled={!(id || post)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -4003,7 +3997,7 @@ export default function MyPostForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
+              !(id || post) || Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
@@ -4191,7 +4185,7 @@ export default function MyPostForm(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          isDisabled={!(id || myData)}
+          isDisabled={!(id || post)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -4211,7 +4205,7 @@ export default function MyPostForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
+              !(id || post) || Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
@@ -6988,7 +6982,7 @@ export default function InputGalleryUpdateForm(props) {
           children=\\"Reset\\"
           type=\\"reset\\"
           onClick={resetStateValues}
-          isDisabled={!(id || myData)}
+          isDisabled={!(id || inputGallery)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -7008,7 +7002,8 @@ export default function InputGalleryUpdateForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(id || myData) || Object.values(errors).some((e) => e?.hasError)
+              !(id || inputGallery) ||
+              Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>

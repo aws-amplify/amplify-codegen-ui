@@ -143,6 +143,9 @@ export const createValidationExpression = (validationRules: FieldValidationConfi
 
 export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
   const { name: componentName, componentType } = component;
+  const {
+    dataType: { dataTypeName },
+  } = formMetadata;
   const attributes: JsxAttribute[] = [];
   /*
       boolean => RadioGroupField
@@ -242,7 +245,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
         factory.createJsxExpression(undefined, resetValuesName),
       ),
     );
-    if (formMetadata.formActionType === 'update') {
+    if (formMetadata.formActionType === 'update' && formMetadata.dataType.dataSourceType === 'DataStore') {
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('isDisabled'),
@@ -254,7 +257,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
                 factory.createBinaryExpression(
                   factory.createIdentifier('id'),
                   factory.createToken(SyntaxKind.BarBarToken),
-                  factory.createIdentifier('myData'),
+                  factory.createIdentifier(lowerCaseFirst(dataTypeName)),
                 ),
               ),
             ),
@@ -264,7 +267,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
     }
   }
   if (componentName === 'SubmitButton') {
-    if (formMetadata.formActionType === 'update') {
+    if (formMetadata.formActionType === 'update' && formMetadata.dataType.dataSourceType === 'DataStore') {
       attributes.push(
         factory.createJsxAttribute(
           factory.createIdentifier('isDisabled'),
@@ -277,7 +280,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
                   factory.createBinaryExpression(
                     factory.createIdentifier('id'),
                     factory.createToken(SyntaxKind.BarBarToken),
-                    factory.createIdentifier('myData'),
+                    factory.createIdentifier(lowerCaseFirst(dataTypeName)),
                   ),
                 ),
               ),
