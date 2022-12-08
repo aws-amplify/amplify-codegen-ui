@@ -175,7 +175,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       false,
     );
 
-    return { compText, importsText, requiredDataModels: this.componentMetadata.requiredDataModels };
+    return {
+      compText,
+      importsText,
+      requiredDataModels: this.componentMetadata.requiredDataModels,
+      importCollection: this.importCollection,
+    };
   }
 
   renderComponentInternal() {
