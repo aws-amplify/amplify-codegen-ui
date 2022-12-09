@@ -15,8 +15,8 @@
  */
 
 import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
-import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind } from 'typescript';
-import { resetValuesName } from './form-state';
+import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind, ElementAccessExpression } from 'typescript';
+import { getCurrentValueName, resetValuesName } from './form-state';
 import { FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
 export const ControlledComponents = [
@@ -94,7 +94,20 @@ export const renderValueAttribute = ({
 
   const valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
 
-  let controlledExpression = factory.createJsxExpression(undefined, factory.createIdentifier(componentName));
+  let renderedFieldName = fieldConfig.sanitizedFieldName || componentName;
+  if (fieldConfig.isArray) {
+    renderedFieldName = getCurrentValueName(renderedFieldName);
+  }
+  let fieldNameIdentifier: Identifier | ElementAccessExpression = factory.createIdentifier(renderedFieldName);
+  if (componentName.includes('.')) {
+    const [parent, child] = componentName.split('.');
+    fieldNameIdentifier = factory.createElementAccessExpression(
+      factory.createIdentifier(parent),
+      factory.createStringLiteral(child),
+    );
+  }
+
+  let controlledExpression = factory.createJsxExpression(undefined, fieldNameIdentifier);
 
   if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {
     controlledExpression = factory.createJsxExpression(
