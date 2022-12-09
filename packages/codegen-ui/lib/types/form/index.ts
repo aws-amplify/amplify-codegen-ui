@@ -21,18 +21,13 @@ import { FormDefinition, ModelFieldsConfigs, FieldTypeMapKeys, ButtonConfig } fr
 import { StudioFieldInputConfig, StudioFormValueMappings } from './input-config';
 import { StudioFieldPosition } from './position';
 import { StudioFormCTA } from './form-cta';
-import { FormMetadata, FieldConfigMetadata, StudioFormActionType } from './form-metadata';
-
-export type StudioDataSourceType = 'DataStore' | 'Custom';
-
-/**
- * Data type definition for StudioForm
- */
-export type StudioFormDataType = {
-  dataSourceType: StudioDataSourceType;
-
-  dataTypeName: string;
-};
+import {
+  FormMetadata,
+  FieldConfigMetadata,
+  StudioFormActionType,
+  StudioFormDataType,
+  StudioDataSourceType,
+} from './form-metadata';
 
 /**
  * This is the base type for all StudioForms
@@ -86,6 +81,7 @@ export type {
   SectionalElement,
   StudioFormFieldConfig,
   StudioFormActionType,
+  StudioDataSourceType,
   FormDefinition,
   FormMetadata,
   FieldConfigMetadata,
