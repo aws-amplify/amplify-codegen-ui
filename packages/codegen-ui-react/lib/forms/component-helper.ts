@@ -94,7 +94,6 @@ export const renderValueAttribute = ({
 
   const valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
 
-<<<<<<< HEAD
   let renderedFieldName = fieldConfig.sanitizedFieldName || componentName;
   if (fieldConfig.isArray) {
     renderedFieldName = getCurrentValueName(renderedFieldName);
@@ -109,9 +108,6 @@ export const renderValueAttribute = ({
   }
 
   let controlledExpression = factory.createJsxExpression(undefined, fieldNameIdentifier);
-=======
-  let controlledExpression = factory.createJsxExpression(undefined, factory.createIdentifier(componentName));
->>>>>>> 775abd0 (fix: make TextField a controlled component)
 
   if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {
     controlledExpression = factory.createJsxExpression(
