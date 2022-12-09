@@ -1057,7 +1057,7 @@ export default function CustomDataForm(props) {
           label=\\"E-mail\\"
           isRequired={true}
           defaultValue=\\"johndoe@amplify.com\\"
-          value={email}
+          value={currentEmailValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.email?.hasError) {
@@ -1100,7 +1100,7 @@ export default function CustomDataForm(props) {
           isRequired={true}
           defaultValue=\\"+1-401-152-6995\\"
           type=\\"tel\\"
-          value={phone}
+          value={currentPhoneValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.phone?.hasError) {
@@ -2008,7 +2008,7 @@ export default function MyPostForm(props) {
         <TextField
           label=\\"Tags\\"
           placeholder=\\"goals\\"
-          value={Customtags}
+          value={currentCustomtagsValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Customtags?.hasError) {
@@ -2355,15 +2355,9 @@ export default function NestedJson(props) {
     setOptions(initialValues.options);
     setErrors({});
   };
-<<<<<<< HEAD
-  const [currentBioFavoritetreesValue, setCurrentBioFavoritetreesValue] =
-    React.useState(\\"\\");
-  const bioFavoritetreesRef = React.createRef();
-=======
   const [currentBioFavoriteTreesValue, setCurrentBioFavoriteTreesValue] =
     React.useState(\\"\\");
   const bioFavoriteTreesRef = React.createRef();
->>>>>>> 775abd0 (fix: make TextField a controlled component)
   const [currentNicknames1Value, setCurrentNicknames1Value] =
     React.useState(\\"\\");
   const Nicknames1Ref = React.createRef();
@@ -2493,11 +2487,7 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
-<<<<<<< HEAD
-        value={bio[\\"favorite Quote\\"]}
-=======
-        value={bio.favoriteQuote}
->>>>>>> 775abd0 (fix: make TextField a controlled component)
+        value={bio[\\"favoriteQuote\\"]}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2527,11 +2517,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
-<<<<<<< HEAD
-        value={bio[\\"favorite-Animal\\"]}
-=======
-        value={bio.favoriteAnimal}
->>>>>>> 775abd0 (fix: make TextField a controlled component)
+        value={bio[\\"favoriteAnimal\\"]}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2575,36 +2561,20 @@ export default function NestedJson(props) {
             const result = onChange(modelFields);
             values = result?.bio?.favoriteTrees ?? values;
           }
-<<<<<<< HEAD
-          setBio({ ...bio, [\\"favorite-trees\\"]: values });
-          setCurrentBioFavoritetreesValue(\\"\\");
-=======
           setBio({ ...bio, favoriteTrees: values });
           setCurrentBioFavoriteTreesValue(\\"\\");
->>>>>>> 775abd0 (fix: make TextField a controlled component)
         }}
         currentFieldValue={currentBioFavoriteTreesValue}
         label={\\"favorite trees\\"}
-<<<<<<< HEAD
-        items={bio?.[\\"favorite-trees\\"] ?? []}
-        hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
-        setFieldValue={setCurrentBioFavoritetreesValue}
-        inputFieldRef={bioFavoritetreesRef}
-=======
         items={bio?.favoriteTrees ?? []}
         hasError={errors?.[\\"bio.favoriteTrees\\"]?.hasError}
         setFieldValue={setCurrentBioFavoriteTreesValue}
         inputFieldRef={bioFavoriteTreesRef}
->>>>>>> 775abd0 (fix: make TextField a controlled component)
         defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"favorite trees\\"
-<<<<<<< HEAD
-          value={bio[\\"favorite-trees\\"]}
-=======
-          value={bio.favoriteTrees}
->>>>>>> 775abd0 (fix: make TextField a controlled component)
+          value={bio[\\"favoriteTrees\\"]}
           onChange={(e) => {
             let { value } = e.target;
             if (errors[\\"bio.favoriteTrees\\"]?.hasError) {
@@ -2658,7 +2628,7 @@ export default function NestedJson(props) {
       >
         <TextField
           label=\\"Nick Names1\\"
-          value={Nicknames1}
+          value={currentNicknames1Value}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Nicknames1?.hasError) {
@@ -2704,7 +2674,7 @@ export default function NestedJson(props) {
       >
         <TextField
           label=\\"nick-Names2\\"
-          value={nicknames}
+          value={currentNicknamesValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors[\\"nick-names2\\"]?.hasError) {
@@ -3206,7 +3176,7 @@ export default function NestedJson(props) {
       >
         <TextField
           label=\\"lastName\\"
-          value={lastName1}
+          value={currentLastName1Value}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.lastName?.hasError) {
@@ -3228,11 +3198,7 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
-<<<<<<< HEAD
         value={bio[\\"favoriteQuote\\"]}
-=======
-        value={bio.favoriteQuote}
->>>>>>> 775abd0 (fix: make TextField a controlled component)
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3259,11 +3225,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
-<<<<<<< HEAD
         value={bio[\\"favoriteAnimal\\"]}
-=======
-        value={bio.favoriteAnimal}
->>>>>>> 775abd0 (fix: make TextField a controlled component)
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -4059,26 +4021,11 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-<<<<<<< HEAD
-<<<<<<< HEAD
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-=======
-          onClick={resetStateValues}
           isDisabled={!(id || post)}
->>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
-=======
-          onClick={resetStateValues}
-          isDisabled={!(id || post)}
-=======
-          onClick={(event) => {
-            event.preventDefault();
-            resetStateValues();
-          }}
->>>>>>> dbc5b58 (fix: make TextField a controlled component)
->>>>>>> 775abd0 (fix: make TextField a controlled component)
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -4285,26 +4232,11 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-<<<<<<< HEAD
-<<<<<<< HEAD
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-=======
-          onClick={resetStateValues}
           isDisabled={!(id || post)}
->>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
-=======
-          onClick={resetStateValues}
-          isDisabled={!(id || post)}
-=======
-          onClick={(event) => {
-            event.preventDefault();
-            resetStateValues();
-          }}
->>>>>>> dbc5b58 (fix: make TextField a controlled component)
->>>>>>> 775abd0 (fix: make TextField a controlled component)
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -4566,40 +4498,13 @@ export default function MyFlexCreateForm(props) {
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    const cleanValues = { ...initialValues, ...flexRecord };
-    setUsername(cleanValues.username);
-    setCaption(cleanValues.caption);
-    setCustomtags(cleanValues.Customtags ?? []);
-    setCurrentCustomtagsValue(\\"\\");
-    setTags(cleanValues.tags ?? []);
-    setCurrentTagsValue(\\"\\");
-    setProfile_url(cleanValues.profile_url);
-=======
-=======
->>>>>>> 775abd0 (fix: make TextField a controlled component)
     setUsername(initialValues.username);
     setCaption(initialValues.caption);
     setCustomtags(initialValues.Customtags);
-    setCurrentCustomtagsValue(undefined);
-    setTags(initialValues.tags);
-    setCurrentTagsValue(undefined);
-    setProfile_url(initialValues.profile_url);
-<<<<<<< HEAD
->>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
-=======
-=======
-    const cleanValues = { ...initialValues, ...flexRecord };
-    setUsername(cleanValues.username);
-    setCaption(cleanValues.caption);
-    setCustomtags(cleanValues.Customtags ?? []);
     setCurrentCustomtagsValue(\\"\\");
-    setTags(cleanValues.tags ?? []);
+    setTags(initialValues.tags);
     setCurrentTagsValue(\\"\\");
-    setProfile_url(cleanValues.profile_url);
->>>>>>> dbc5b58 (fix: make TextField a controlled component)
->>>>>>> 775abd0 (fix: make TextField a controlled component)
+    setProfile_url(initialValues.profile_url);
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
@@ -4690,28 +4595,11 @@ export default function MyFlexCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-<<<<<<< HEAD
-<<<<<<< HEAD
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          {...getOverrideProps(overrides, \\"ResetButton\\")}
-=======
-          onClick={resetStateValues}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
->>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
-=======
-          onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
-=======
-          onClick={(event) => {
-            event.preventDefault();
-            resetStateValues();
-          }}
-          {...getOverrideProps(overrides, \\"ResetButton\\")}
->>>>>>> dbc5b58 (fix: make TextField a controlled component)
->>>>>>> 775abd0 (fix: make TextField a controlled component)
         ></Button>
         <Flex
           gap=\\"15px\\"
@@ -4745,16 +4633,7 @@ export default function MyFlexCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-<<<<<<< HEAD
-<<<<<<< HEAD
           value={username}
-=======
->>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
-=======
-=======
-          value={username}
->>>>>>> dbc5b58 (fix: make TextField a controlled component)
->>>>>>> 775abd0 (fix: make TextField a controlled component)
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -4783,16 +4662,7 @@ export default function MyFlexCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-<<<<<<< HEAD
-<<<<<<< HEAD
           value={caption}
-=======
->>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
-=======
-=======
-          value={caption}
->>>>>>> dbc5b58 (fix: make TextField a controlled component)
->>>>>>> 775abd0 (fix: make TextField a controlled component)
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -4845,7 +4715,7 @@ export default function MyFlexCreateForm(props) {
         <TextField
           label=\\"Tags\\"
           placeholder=\\"goals\\"
-          value={Customtags}
+          value={currentCustomtagsValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Customtags?.hasError) {
@@ -4891,7 +4761,7 @@ export default function MyFlexCreateForm(props) {
           label=\\"Tags\\"
           isRequired={false}
           isReadOnly={false}
-          value={tags}
+          value={currentTagsValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.tags?.hasError) {
@@ -4910,16 +4780,7 @@ export default function MyFlexCreateForm(props) {
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
-<<<<<<< HEAD
-<<<<<<< HEAD
         value={profile_url}
-=======
->>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
-=======
-=======
-        value={profile_url}
->>>>>>> dbc5b58 (fix: make TextField a controlled component)
->>>>>>> 775abd0 (fix: make TextField a controlled component)
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6093,7 +5954,7 @@ export default function InputGalleryCreateForm(props) {
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
-          value={arrayTypeField}
+          value={currentArrayTypeFieldValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.arrayTypeField?.hasError) {
@@ -6991,7 +6852,7 @@ export default function InputGalleryUpdateForm(props) {
           label=\\"Array type field\\"
           isRequired={false}
           isReadOnly={false}
-          value={arrayTypeField}
+          value={currentArrayTypeFieldValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.arrayTypeField?.hasError) {
@@ -7211,26 +7072,11 @@ export default function InputGalleryUpdateForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-<<<<<<< HEAD
-<<<<<<< HEAD
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-=======
-          onClick={resetStateValues}
           isDisabled={!(id || inputGallery)}
->>>>>>> 6898d10 (feat: disable form submit when model is invalid (#826))
-=======
-          onClick={resetStateValues}
-          isDisabled={!(id || inputGallery)}
-=======
-          onClick={(event) => {
-            event.preventDefault();
-            resetStateValues();
-          }}
->>>>>>> dbc5b58 (fix: make TextField a controlled component)
->>>>>>> 775abd0 (fix: make TextField a controlled component)
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -7725,7 +7571,7 @@ export default function MyFlexCreateForm(props) {
         <TextField
           label=\\"Tags\\"
           placeholder=\\"goals\\"
-          value={Customtags}
+          value={currentCustomtagsValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.Customtags?.hasError) {
@@ -7771,7 +7617,7 @@ export default function MyFlexCreateForm(props) {
           label=\\"Tags\\"
           isRequired={false}
           isReadOnly={false}
-          value={tags}
+          value={currentTagsValue}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.tags?.hasError) {
