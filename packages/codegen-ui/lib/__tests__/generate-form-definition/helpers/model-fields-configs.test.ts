@@ -260,7 +260,7 @@ describe('mapModelFieldsConfigs', () => {
           value: 'ownerId',
           isArray: false,
           valueMappings: {
-            values: [{ value: { bindingProperties: { property: 'Owner', field: 'id' } } }],
+            values: [{ value: { bindingProperties: { property: 'Owner', field: 'ownerId' } } }],
             bindingProperties: { Owner: { type: 'Data', bindingProperties: { model: 'Owner' } } },
           },
         },

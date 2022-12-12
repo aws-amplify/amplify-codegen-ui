@@ -25,7 +25,7 @@ import {
 } from './event-handler-props';
 import { getArrayChildRefName, resetValuesName } from './form-state';
 import { shouldWrapInArrayField } from './render-checkers';
-import { getAutocompleteOptionsProp } from './display-value';
+import { getAutocompleteOptionsProp } from './model-values';
 import { buildCtaLayoutProperties } from '../../react-component-render-helper';
 
 export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {

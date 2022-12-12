@@ -309,7 +309,6 @@ describe('getFormDefinitionInputElement', () => {
       props: { label: 'Label', isDisabled: true, placeholder: 'Please select an option' },
       valueMappings: {
         values: [{ value: { value: 'value1' }, displayvalue: { value: 'displayValue1' } }],
-        bindingProperties: {},
       },
       defaultValue: 'value1',
     });
@@ -495,7 +494,6 @@ describe('getFormDefinitionInputElement', () => {
       props: { label: 'Label', name: 'MyFieldName' },
       valueMappings: {
         values: [{ value: { value: 'value1' }, displayvalue: { value: 'displayValue1' } }],
-        bindingProperties: {},
       },
     });
   });
@@ -642,21 +640,22 @@ describe('mergeValueMappings', () => {
     expect(mergedMappings.values.find((v) => 'value' in v.value && v.value.value === 'AUSTIN')).toBeUndefined();
   });
 
-  it('should merge base and override bindingProperties', () => {
+  it('should transfer bindingProperties', () => {
     expect(
       mergeValueMappings(
         {
           values: [{ value: { value: 'sdjoiflj' }, displayValue: { bindingProperties: { property: 'Dog' } } }],
           bindingProperties: {
             Dog: { type: 'Data', bindingProperties: { model: 'Dog' } },
-            Person: { type: 'Data', bindingProperties: { model: 'Person' } },
           },
         },
-        { values: [], bindingProperties: { Dog: { type: 'Data', bindingProperties: { model: 'MyDog' } } } },
+        {
+          values: [{ value: { value: 'sdjoiflj' } }],
+          bindingProperties: { Dog: { type: 'Data', bindingProperties: { model: 'Dog' } } },
+        },
       ).bindingProperties,
     ).toStrictEqual({
-      Person: { type: 'Data', bindingProperties: { model: 'Person' } },
-      Dog: { type: 'Data', bindingProperties: { model: 'MyDog' } },
+      Dog: { type: 'Data', bindingProperties: { model: 'Dog' } },
     });
   });
 });

@@ -46,10 +46,12 @@ export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
 }
 
 function getValueMappings({
+  fieldName,
   field,
   enums,
   allModels,
 }: {
+  fieldName: string;
   field: GenericDataField;
   enums: GenericDataSchema['enums'];
   allModels: { [modelName: string]: GenericDataModel };
@@ -72,8 +74,14 @@ function getValueMappings({
   // if relationship
   if (field.relationship) {
     const modelName = field.relationship.relatedModelName;
+    // if model, store all keys; else, store field as key
+    const keys =
+      typeof field.dataType === 'object' && 'model' in field.dataType ? allModels[modelName].primaryKeys : [fieldName];
+    const values: StudioFormValueMappings['values'] = keys.map((key) => ({
+      value: { bindingProperties: { property: modelName, field: key } },
+    }));
     return {
-      values: [{ value: { bindingProperties: { property: modelName, field: allModels[modelName].primaryKeys[0] } } }],
+      values,
       bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },
     };
   }
@@ -126,7 +134,7 @@ export function getFieldConfigFromModelField({
     config.relationship = field.relationship;
   }
 
-  const valueMappings = getValueMappings({ field, enums: dataSchema.enums, allModels: dataSchema.models });
+  const valueMappings = getValueMappings({ fieldName, field, enums: dataSchema.enums, allModels: dataSchema.models });
   if (valueMappings) {
     config.inputType.valueMappings = valueMappings;
   }

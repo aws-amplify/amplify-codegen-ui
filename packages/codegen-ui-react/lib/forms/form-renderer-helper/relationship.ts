@@ -25,7 +25,7 @@ import { buildBaseCollectionVariableStatement } from '../../react-studio-templat
 import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
-import { extractModelAndKey } from './display-value';
+import { extractModelAndKeys } from './model-values';
 import { isModelDataType } from './render-checkers';
 
 export const buildRelationshipQuery = (
@@ -66,11 +66,12 @@ export const buildManyToManyRelationshipDataStoreStatements = (
     const dataToUnlinkMap = `${lowerCaseFirst(fieldName)}ToUnLinkMap`;
     const updatedMap = `${lowerCaseFirst(fieldName)}Map`;
     const originalMap = `${linkedDataName}Map`;
-    const { key } = extractModelAndKey(fieldConfigMetaData.valueMappings);
-    if (!key) {
-      throw new InternalError(`Could not identify primary key for ${relatedModelName}`);
+    const { keys } = extractModelAndKeys(fieldConfigMetaData.valueMappings);
+    if (!keys) {
+      throw new InternalError(`Could not identify primary key(s) for ${relatedModelName}`);
     }
-    const relatedModelPrimaryKey = key;
+    // TODO: update for composite
+    const relatedModelPrimaryKey = keys[0];
 
     return [
       factory.createVariableStatement(
@@ -1164,11 +1165,12 @@ export const buildHasManyRelationshipDataStoreStatements = (
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
   const dataToLinkSet = `${lowerCaseFirst(fieldName)}Set`;
   const linkedDataSet = `${linkedDataName}Set`;
-  const { key } = extractModelAndKey(fieldConfigMetaData.valueMappings);
-  if (!key) {
-    throw new InternalError(`Could not identify primary key for ${relatedModelName}`);
+  const { keys } = extractModelAndKeys(fieldConfigMetaData.valueMappings);
+  if (!keys) {
+    throw new InternalError(`Could not identify primary key(s) for ${relatedModelName}`);
   }
-  const relatedModelPrimaryKey = key;
+  // TODO: update for composite keys
+  const relatedModelPrimaryKey = keys[0];
   if (dataStoreActionType === 'update') {
     return [
       factory.createVariableStatement(

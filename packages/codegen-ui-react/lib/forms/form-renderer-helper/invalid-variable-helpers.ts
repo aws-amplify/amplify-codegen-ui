@@ -28,3 +28,7 @@ export function getElementAccessExpression(elementName: string, propertyName: st
     factory.createStringLiteral(propertyName),
   );
 }
+
+export function getValidProperty(key: string) {
+  return isValidVariableName(key) ? factory.createIdentifier(key) : factory.createStringLiteral(key);
+}

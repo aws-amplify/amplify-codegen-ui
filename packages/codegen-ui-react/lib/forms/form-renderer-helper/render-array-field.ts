@@ -27,7 +27,7 @@ import {
 } from './form-state';
 import { buildOverrideOnChangeStatement } from './event-handler-props';
 import { isModelDataType, shouldImplementDisplayValueFunction } from './render-checkers';
-import { getDisplayValueObjectName } from './display-value';
+import { getDisplayValueObjectName } from './model-values';
 import { getElementAccessExpression } from './invalid-variable-helpers';
 
 function getOnChangeAttribute({

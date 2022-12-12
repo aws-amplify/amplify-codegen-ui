@@ -33,6 +33,22 @@ export function mergeValueMappings(
   base?: StudioFormValueMappings,
   override?: StudioFormValueMappings,
 ): StudioFormValueMappings {
+  // if model-based
+  if (base?.bindingProperties || override?.bindingProperties) {
+    const valueMappings = override || base;
+    const firstValue = valueMappings?.values[0];
+    if (!firstValue) {
+      throw new InternalError(`No valueMapping found for model-bound field`);
+    }
+    firstValue.displayValue = override?.values?.[0]?.displayValue;
+
+    return {
+      values: valueMappings.values,
+      bindingProperties: valueMappings.bindingProperties,
+    };
+  }
+
+  // if not model-based
   let values: StudioFormValueMappings['values'] = [];
 
   if (!base && override) {
@@ -55,7 +71,6 @@ export function mergeValueMappings(
 
   return {
     values,
-    bindingProperties: { ...base?.bindingProperties, ...override?.bindingProperties },
   };
 }
 

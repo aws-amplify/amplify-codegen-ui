@@ -97,7 +97,7 @@ describe('amplify form renderer tests', () => {
       // Check that custom field label is working as expected
       expect(componentText).toContain('Team Label');
       // Check that Autocomplete custom display value is set
-      expect(componentText).toContain('Team: (record) => record?.name');
+      expect(componentText).toContain('Team: (r) => r?.name');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -115,7 +115,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('const postRecords = useDataStoreBinding({');
 
       // check custom display value is set
-      expect(componentText).toContain('Posts: (record) => record?.title');
+      expect(componentText).toContain('Posts: (r) => r?.title');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -136,7 +136,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('await record.Posts.toArray()');
 
       // check custom display value is set
-      expect(componentText).toContain('Posts: (record) => record?.title');
+      expect(componentText).toContain('Posts: (r) => r?.title');
 
       // check linked data useState is generate
       expect(componentText).toContain('const [linkedPosts, setLinkedPosts] = React.useState([]);');
@@ -154,8 +154,8 @@ describe('amplify form renderer tests', () => {
         'datastore/tag-post',
       );
       // get displayValue function
-      expect(componentText).toContain('statuses: (record) => {');
-      expect(componentText).toContain('return enumDisplayValueMap[record];');
+      expect(componentText).toContain('statuses: (r) => {');
+      expect(componentText).toContain('return enumDisplayValueMap[r];');
       // ArrayField returns the item on a badge click
       expect(componentText).toContain('setFieldValue(items[index]);');
       // set the badgeText param
@@ -178,7 +178,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('const studentRecords = useDataStoreBinding({');
 
       // check custom display value is set
-      expect(componentText).toContain('Students: (record) => record?.name');
+      expect(componentText).toContain('Students: (r) => r?.name');
 
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
@@ -199,7 +199,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('const linkedStudents = record ? await record.Students.toArray() : [];');
 
       // check custom display value is set
-      expect(componentText).toContain('Students: (record) => record?.name');
+      expect(componentText).toContain('Students: (r) => r?.name');
 
       // check linked data useState is generate
       expect(componentText).toContain('const [linkedStudents, setLinkedStudents] = React.useState([]);');
@@ -385,8 +385,8 @@ describe('amplify form renderer tests', () => {
         // hasOne
         expect(componentText).toContain('specialTeacherId: specialTeacherIdProp');
         expect(componentText).toContain('await DataStore.query(CPKTeacher, specialTeacherIdProp)');
-        expect(componentText).toContain('Student: (record) => record?.specialStudentId');
-        expect(componentText).toContain('id: r.specialStudentId');
+        expect(componentText).toContain('Student: (r) => r?.specialStudentId');
+        expect(componentText).toContain('JSON.stringify({ specialStudentId: r?.specialStudentId })');
 
         // manyToMany
         expect(componentText).toContain('const count = cPKClassesMap.get(r.specialClassId)');
@@ -400,6 +400,16 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toContain('CPKProjects.forEach((r) => cPKProjectsSet.add(r.specialProjectId))');
         expect(componentText).toContain('linkedCPKProjectsSet.add(r.specialProjectId)');
         expect(componentText).toContain('updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId');
+
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render an update form for model with composite keys', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/composite-dog-datastore-update',
+          'datastore/composite-relationships',
+        );
 
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
