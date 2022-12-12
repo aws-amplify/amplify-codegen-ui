@@ -2262,6 +2262,1115 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 
+exports[`amplify form renderer tests datastore form tests custom form tests should render an update form for model with composite keys 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import {
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  CompositeDog,
+  CompositeBowl as CompositeBowl0,
+  CompositeOwner as CompositeOwner0,
+  CompositeToy,
+  CompositeVet,
+  CompositeDogCompositeVet,
+} from \\"../models\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function UpdateCompositeDogForm(props) {
+  const {
+    name: nameProp,
+    compositeDog,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: undefined,
+    description: undefined,
+    CompositeBowl: undefined,
+    CompositeOwner: undefined,
+    CompositeToys: [],
+    CompositeVets: [],
+    compositeDogCompositeBowlSize: undefined,
+    compositeDogCompositeOwnerFirstName: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [description, setDescription] = React.useState(
+    initialValues.description
+  );
+  const [CompositeBowl, setCompositeBowl] = React.useState(
+    initialValues.CompositeBowl
+  );
+  const [CompositeOwner, setCompositeOwner] = React.useState(
+    initialValues.CompositeOwner
+  );
+  const [CompositeToys, setCompositeToys] = React.useState(
+    initialValues.CompositeToys
+  );
+  const [CompositeVets, setCompositeVets] = React.useState(
+    initialValues.CompositeVets
+  );
+  const [compositeDogCompositeBowlSize, setCompositeDogCompositeBowlSize] =
+    React.useState(initialValues.compositeDogCompositeBowlSize);
+  const [
+    compositeDogCompositeOwnerFirstName,
+    setCompositeDogCompositeOwnerFirstName,
+  ] = React.useState(initialValues.compositeDogCompositeOwnerFirstName);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = compositeDogRecord
+      ? {
+          ...initialValues,
+          ...compositeDogRecord,
+          CompositeBowl,
+          CompositeOwner,
+          CompositeToys: linkedCompositeToys,
+          CompositeVets: linkedCompositeVets,
+        }
+      : initialValues;
+    setName(cleanValues.name);
+    setDescription(cleanValues.description);
+    setCompositeBowl(cleanValues.CompositeBowl);
+    setCurrentCompositeBowlValue(undefined);
+    setCurrentCompositeBowlDisplayValue(\\"\\");
+    setCompositeOwner(cleanValues.CompositeOwner);
+    setCurrentCompositeOwnerValue(undefined);
+    setCurrentCompositeOwnerDisplayValue(\\"\\");
+    setCompositeToys(cleanValues.CompositeToys ?? []);
+    setCurrentCompositeToysValue(undefined);
+    setCurrentCompositeToysDisplayValue(\\"\\");
+    setCompositeVets(cleanValues.CompositeVets ?? []);
+    setCurrentCompositeVetsValue(undefined);
+    setCurrentCompositeVetsDisplayValue(\\"\\");
+    setCompositeDogCompositeBowlSize(cleanValues.compositeDogCompositeBowlSize);
+    setCompositeDogCompositeOwnerFirstName(
+      cleanValues.compositeDogCompositeOwnerFirstName
+    );
+    setErrors({});
+  };
+  const [compositeDogRecord, setCompositeDogRecord] =
+    React.useState(compositeDog);
+  const [linkedCompositeToys, setLinkedCompositeToys] = React.useState([]);
+  const [linkedCompositeVets, setLinkedCompositeVets] = React.useState([]);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = nameProp
+        ? await DataStore.query(CompositeDog, nameProp)
+        : compositeDog;
+      setCompositeDogRecord(record);
+      const CompositeBowlRecord = record
+        ? await record.CompositeBowl
+        : undefined;
+      setCompositeBowl(CompositeBowlRecord);
+      const CompositeOwnerRecord = record
+        ? await record.CompositeOwner
+        : undefined;
+      setCompositeOwner(CompositeOwnerRecord);
+      const linkedCompositeToys = record
+        ? await record.CompositeToys.toArray()
+        : [];
+      setLinkedCompositeToys(linkedCompositeToys);
+      const linkedCompositeVets = record
+        ? await Promise.all(
+            (
+              await record.CompositeVets.toArray()
+            ).map((r) => {
+              return r.compositeVet;
+            })
+          )
+        : [];
+      setLinkedCompositeVets(linkedCompositeVets);
+    };
+    queryData();
+  }, [nameProp, compositeDog]);
+  React.useEffect(resetStateValues, [
+    compositeDogRecord,
+    CompositeBowl,
+    CompositeOwner,
+    linkedCompositeToys,
+    linkedCompositeVets,
+  ]);
+  const [
+    currentCompositeBowlDisplayValue,
+    setCurrentCompositeBowlDisplayValue,
+  ] = React.useState(\\"\\");
+  const [currentCompositeBowlValue, setCurrentCompositeBowlValue] =
+    React.useState(undefined);
+  const CompositeBowlRef = React.createRef();
+  const [
+    currentCompositeOwnerDisplayValue,
+    setCurrentCompositeOwnerDisplayValue,
+  ] = React.useState(\\"\\");
+  const [currentCompositeOwnerValue, setCurrentCompositeOwnerValue] =
+    React.useState(undefined);
+  const CompositeOwnerRef = React.createRef();
+  const [
+    currentCompositeToysDisplayValue,
+    setCurrentCompositeToysDisplayValue,
+  ] = React.useState(\\"\\");
+  const [currentCompositeToysValue, setCurrentCompositeToysValue] =
+    React.useState(undefined);
+  const CompositeToysRef = React.createRef();
+  const [
+    currentCompositeVetsDisplayValue,
+    setCurrentCompositeVetsDisplayValue,
+  ] = React.useState(\\"\\");
+  const [currentCompositeVetsValue, setCurrentCompositeVetsValue] =
+    React.useState(undefined);
+  const CompositeVetsRef = React.createRef();
+  const getIDValue = {
+    CompositeBowl: (r) => JSON.stringify({ shape: r?.shape, size: r?.size }),
+    CompositeOwner: (r) =>
+      JSON.stringify({ lastName: r?.lastName, firstName: r?.firstName }),
+    CompositeToys: (r) => JSON.stringify({ kind: r?.kind, color: r?.color }),
+    CompositeVets: (r) =>
+      JSON.stringify({ specialty: r?.specialty, city: r?.city }),
+  };
+  const CompositeBowlIdSet = new Set(
+    Array.isArray(CompositeBowl)
+      ? CompositeBowl.map((r) => getIDValue.CompositeBowl?.(r))
+      : getIDValue.CompositeBowl?.(CompositeBowl)
+  );
+  const CompositeOwnerIdSet = new Set(
+    Array.isArray(CompositeOwner)
+      ? CompositeOwner.map((r) => getIDValue.CompositeOwner?.(r))
+      : getIDValue.CompositeOwner?.(CompositeOwner)
+  );
+  const CompositeToysIdSet = new Set(
+    Array.isArray(CompositeToys)
+      ? CompositeToys.map((r) => getIDValue.CompositeToys?.(r))
+      : getIDValue.CompositeToys?.(CompositeToys)
+  );
+  const CompositeVetsIdSet = new Set(
+    Array.isArray(CompositeVets)
+      ? CompositeVets.map((r) => getIDValue.CompositeVets?.(r))
+      : getIDValue.CompositeVets?.(CompositeVets)
+  );
+  const compositeBowlRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositeBowl0,
+  }).items;
+  const compositeOwnerRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositeOwner0,
+  }).items;
+  const compositeToyRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositeToy,
+  }).items;
+  const compositeVetRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositeVet,
+  }).items;
+  const getDisplayValue = {
+    CompositeBowl: (r) => \`\${r?.shape}\${\\" - \\"}\${r?.size}\`,
+    CompositeOwner: (r) => \`\${r?.lastName}\${\\" - \\"}\${r?.firstName}\`,
+    CompositeToys: (r) => \`\${r?.kind}\${\\" - \\"}\${r?.color}\`,
+    CompositeVets: (r) => \`\${r?.specialty}\${\\" - \\"}\${r?.city}\`,
+  };
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    description: [{ type: \\"Required\\" }],
+    CompositeBowl: [],
+    CompositeOwner: [],
+    CompositeToys: [],
+    CompositeVets: [],
+    compositeDogCompositeBowlSize: [],
+    compositeDogCompositeOwnerFirstName: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          description,
+          CompositeBowl,
+          CompositeOwner,
+          CompositeToys,
+          CompositeVets,
+          compositeDogCompositeBowlSize,
+          compositeDogCompositeOwnerFirstName,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          const promises = [];
+          const compositeToysToLink = [];
+          const compositeToysToUnLink = [];
+          const compositeToysSet = new Set();
+          const linkedCompositeToysSet = new Set();
+          CompositeToys.forEach((r) => compositeToysSet.add(r.kind));
+          linkedCompositeToys.forEach((r) =>
+            linkedCompositeToysSet.add(r.kind)
+          );
+          linkedCompositeToys.forEach((r) => {
+            if (!compositeToysSet.has(r.id)) {
+              compositeToysToUnLink.push(r);
+            }
+          });
+          CompositeToys.forEach((r) => {
+            if (!linkedCompositeToysSet.has(r.id)) {
+              compositeToysToLink.push(r);
+            }
+          });
+          compositeToysToUnLink.forEach((original) => {
+            promises.push(
+              DataStore.save(
+                CompositeToy.copyOf(original, (updated) => {
+                  updated.compositeDogCompositeToysName = null;
+                })
+              )
+            );
+          });
+          compositeToysToLink.forEach((original) => {
+            promises.push(
+              DataStore.save(
+                CompositeToy.copyOf(original, (updated) => {
+                  updated.compositeDogCompositeToysName =
+                    compositeDogRecord.name;
+                })
+              )
+            );
+          });
+          const compositeVetsToLinkMap = new Map();
+          const compositeVetsToUnLinkMap = new Map();
+          const compositeVetsMap = new Map();
+          const linkedCompositeVetsMap = new Map();
+          CompositeVets.forEach((r) => {
+            const count = compositeVetsMap.get(r.specialty);
+            const newCount = count ? count + 1 : 1;
+            compositeVetsMap.set(r.specialty, newCount);
+          });
+          linkedCompositeVets.forEach((r) => {
+            const count = linkedCompositeVetsMap.get(r.specialty);
+            const newCount = count ? count + 1 : 1;
+            linkedCompositeVetsMap.set(r.specialty, newCount);
+          });
+          linkedCompositeVetsMap.forEach((count, id) => {
+            const newCount = compositeVetsMap.get(id);
+            if (newCount) {
+              const diffCount = count - newCount;
+              if (diffCount > 0) {
+                compositeVetsToUnLinkMap.set(id, diffCount);
+              }
+            } else {
+              compositeVetsToUnLinkMap.set(id, count);
+            }
+          });
+          compositeVetsMap.forEach((count, id) => {
+            const originalCount = linkedCompositeVetsMap.get(id);
+            if (originalCount) {
+              const diffCount = count - originalCount;
+              if (diffCount > 0) {
+                compositeVetsToLinkMap.set(id, diffCount);
+              }
+            } else {
+              compositeVetsToLinkMap.set(id, count);
+            }
+          });
+          compositeVetsToUnLinkMap.forEach(async (count, id) => {
+            const compositeDogCompositeVetRecords = await DataStore.query(
+              CompositeDogCompositeVet,
+              (r) =>
+                r.and((r) => [
+                  r.compositeVetID.eq(id),
+                  r.compositeDogID.eq(compositeDogRecord.name),
+                ])
+            );
+            for (let i = 0; i < count; i++) {
+              promises.push(
+                DataStore.delete(compositeDogCompositeVetRecords[i])
+              );
+            }
+          });
+          compositeVetsToLinkMap.forEach((count, id) => {
+            for (let i = count; i > 0; i--) {
+              promises.push(
+                DataStore.save(
+                  new CompositeDogCompositeVet({
+                    compositeDogID: compositeDogRecord.name,
+                    compositeVetID: id,
+                  })
+                )
+              );
+            }
+          });
+          promises.push(
+            DataStore.save(
+              CompositeDog.copyOf(compositeDogRecord, (updated) => {
+                Object.assign(updated, modelFields);
+                if (!modelFields.CompositeBowl)
+                  updated.compositeDogCompositeBowlShape = undefined;
+                if (!modelFields.CompositeOwner)
+                  updated.compositeDogCompositeOwnerLastName = undefined;
+              })
+            )
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...rest}
+      {...getOverrideProps(overrides, \\"UpdateCompositeDogForm\\")}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={true}
+        isReadOnly={false}
+        defaultValue={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              description,
+              CompositeBowl,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlSize,
+              compositeDogCompositeOwnerFirstName,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <TextField
+        label=\\"Description\\"
+        isRequired={true}
+        isReadOnly={false}
+        defaultValue={description}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description: value,
+              CompositeBowl,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlSize,
+              compositeDogCompositeOwnerFirstName,
+            };
+            const result = onChange(modelFields);
+            value = result?.description ?? value;
+          }
+          if (errors.description?.hasError) {
+            runValidationTasks(\\"description\\", value);
+          }
+          setDescription(value);
+        }}
+        onBlur={() => runValidationTasks(\\"description\\", description)}
+        errorMessage={errors.description?.errorMessage}
+        hasError={errors.description?.hasError}
+        {...getOverrideProps(overrides, \\"description\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeBowl: value,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlSize,
+              compositeDogCompositeOwnerFirstName,
+            };
+            const result = onChange(modelFields);
+            value = result?.CompositeBowl ?? value;
+          }
+          setCompositeBowl(value);
+          setCurrentCompositeBowlValue(undefined);
+          setCurrentCompositeBowlDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCompositeBowlValue}
+        label={\\"Composite bowl\\"}
+        items={CompositeBowl ? [CompositeBowl] : []}
+        hasError={errors.CompositeBowl?.hasError}
+        getBadgeText={getDisplayValue.CompositeBowl}
+        setFieldValue={(model) => {
+          setCurrentCompositeBowlDisplayValue(
+            getDisplayValue.CompositeBowl(model)
+          );
+          setCurrentCompositeBowlValue(model);
+        }}
+        inputFieldRef={CompositeBowlRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite bowl\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentCompositeBowlDisplayValue}
+          options={compositeBowlRecords
+            .filter(
+              (r) => !CompositeBowlIdSet.has(getIDValue.CompositeBowl?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeBowl?.(r),
+              label: getDisplayValue.CompositeBowl?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCompositeBowlValue(
+              compositeBowlRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeBowlDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentCompositeBowlDisplayValue(\\"\\");
+          }}
+          defaultValue={CompositeBowl}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CompositeBowl?.hasError) {
+              runValidationTasks(\\"CompositeBowl\\", value);
+            }
+            setCurrentCompositeBowlDisplayValue(value);
+            setCurrentCompositeBowlValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"CompositeBowl\\", CompositeBowl)}
+          errorMessage={errors.CompositeBowl?.errorMessage}
+          hasError={errors.CompositeBowl?.hasError}
+          ref={CompositeBowlRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CompositeBowl\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeBowl,
+              CompositeOwner: value,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlSize,
+              compositeDogCompositeOwnerFirstName,
+            };
+            const result = onChange(modelFields);
+            value = result?.CompositeOwner ?? value;
+          }
+          setCompositeOwner(value);
+          setCurrentCompositeOwnerValue(undefined);
+          setCurrentCompositeOwnerDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCompositeOwnerValue}
+        label={\\"Composite owner\\"}
+        items={CompositeOwner ? [CompositeOwner] : []}
+        hasError={errors.CompositeOwner?.hasError}
+        getBadgeText={getDisplayValue.CompositeOwner}
+        setFieldValue={(model) => {
+          setCurrentCompositeOwnerDisplayValue(
+            getDisplayValue.CompositeOwner(model)
+          );
+          setCurrentCompositeOwnerValue(model);
+        }}
+        inputFieldRef={CompositeOwnerRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite owner\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentCompositeOwnerDisplayValue}
+          options={compositeOwnerRecords
+            .filter(
+              (r) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeOwner?.(r),
+              label: getDisplayValue.CompositeOwner?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCompositeOwnerValue(
+              compositeOwnerRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeOwnerDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentCompositeOwnerDisplayValue(\\"\\");
+          }}
+          defaultValue={CompositeOwner}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CompositeOwner?.hasError) {
+              runValidationTasks(\\"CompositeOwner\\", value);
+            }
+            setCurrentCompositeOwnerDisplayValue(value);
+            setCurrentCompositeOwnerValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"CompositeOwner\\", CompositeOwner)}
+          errorMessage={errors.CompositeOwner?.errorMessage}
+          hasError={errors.CompositeOwner?.hasError}
+          ref={CompositeOwnerRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CompositeOwner\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeBowl,
+              CompositeOwner,
+              CompositeToys: values,
+              CompositeVets,
+              compositeDogCompositeBowlSize,
+              compositeDogCompositeOwnerFirstName,
+            };
+            const result = onChange(modelFields);
+            values = result?.CompositeToys ?? values;
+          }
+          setCompositeToys(values);
+          setCurrentCompositeToysValue(undefined);
+          setCurrentCompositeToysDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCompositeToysValue}
+        label={\\"Composite toys\\"}
+        items={CompositeToys}
+        hasError={errors.CompositeToys?.hasError}
+        getBadgeText={getDisplayValue.CompositeToys}
+        setFieldValue={(model) => {
+          setCurrentCompositeToysDisplayValue(
+            getDisplayValue.CompositeToys(model)
+          );
+          setCurrentCompositeToysValue(model);
+        }}
+        inputFieldRef={CompositeToysRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite toys\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentCompositeToysDisplayValue}
+          options={compositeToyRecords
+            .filter(
+              (r) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeToys?.(r),
+              label: getDisplayValue.CompositeToys?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCompositeToysValue(
+              compositeToyRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeToysDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentCompositeToysDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CompositeToys?.hasError) {
+              runValidationTasks(\\"CompositeToys\\", value);
+            }
+            setCurrentCompositeToysDisplayValue(value);
+            setCurrentCompositeToysValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"CompositeToys\\", currentCompositeToysValue)
+          }
+          errorMessage={errors.CompositeToys?.errorMessage}
+          hasError={errors.CompositeToys?.hasError}
+          ref={CompositeToysRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CompositeToys\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeBowl,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets: values,
+              compositeDogCompositeBowlSize,
+              compositeDogCompositeOwnerFirstName,
+            };
+            const result = onChange(modelFields);
+            values = result?.CompositeVets ?? values;
+          }
+          setCompositeVets(values);
+          setCurrentCompositeVetsValue(undefined);
+          setCurrentCompositeVetsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCompositeVetsValue}
+        label={\\"Composite vets\\"}
+        items={CompositeVets}
+        hasError={errors.CompositeVets?.hasError}
+        getBadgeText={getDisplayValue.CompositeVets}
+        setFieldValue={(model) => {
+          setCurrentCompositeVetsDisplayValue(
+            getDisplayValue.CompositeVets(model)
+          );
+          setCurrentCompositeVetsValue(model);
+        }}
+        inputFieldRef={CompositeVetsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite vets\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentCompositeVetsDisplayValue}
+          options={compositeVetRecords
+            .filter(
+              (r) => !CompositeVetsIdSet.has(getIDValue.CompositeVets?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeVets?.(r),
+              label: getDisplayValue.CompositeVets?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCompositeVetsValue(
+              compositeVetRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeVetsDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentCompositeVetsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CompositeVets?.hasError) {
+              runValidationTasks(\\"CompositeVets\\", value);
+            }
+            setCurrentCompositeVetsDisplayValue(value);
+            setCurrentCompositeVetsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"CompositeVets\\", currentCompositeVetsValue)
+          }
+          errorMessage={errors.CompositeVets?.errorMessage}
+          hasError={errors.CompositeVets?.hasError}
+          ref={CompositeVetsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CompositeVets\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <TextField
+        label=\\"Composite dog composite bowl size\\"
+        isRequired={false}
+        isReadOnly={false}
+        defaultValue={compositeDogCompositeBowlSize}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeBowl,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlSize: value,
+              compositeDogCompositeOwnerFirstName,
+            };
+            const result = onChange(modelFields);
+            value = result?.compositeDogCompositeBowlSize ?? value;
+          }
+          if (errors.compositeDogCompositeBowlSize?.hasError) {
+            runValidationTasks(\\"compositeDogCompositeBowlSize\\", value);
+          }
+          setCompositeDogCompositeBowlSize(value);
+        }}
+        onBlur={() =>
+          runValidationTasks(
+            \\"compositeDogCompositeBowlSize\\",
+            compositeDogCompositeBowlSize
+          )
+        }
+        errorMessage={errors.compositeDogCompositeBowlSize?.errorMessage}
+        hasError={errors.compositeDogCompositeBowlSize?.hasError}
+        {...getOverrideProps(overrides, \\"compositeDogCompositeBowlSize\\")}
+      ></TextField>
+      <TextField
+        label=\\"Composite dog composite owner first name\\"
+        isRequired={false}
+        isReadOnly={false}
+        defaultValue={compositeDogCompositeOwnerFirstName}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeBowl,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlSize,
+              compositeDogCompositeOwnerFirstName: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.compositeDogCompositeOwnerFirstName ?? value;
+          }
+          if (errors.compositeDogCompositeOwnerFirstName?.hasError) {
+            runValidationTasks(\\"compositeDogCompositeOwnerFirstName\\", value);
+          }
+          setCompositeDogCompositeOwnerFirstName(value);
+        }}
+        onBlur={() =>
+          runValidationTasks(
+            \\"compositeDogCompositeOwnerFirstName\\",
+            compositeDogCompositeOwnerFirstName
+          )
+        }
+        errorMessage={errors.compositeDogCompositeOwnerFirstName?.errorMessage}
+        hasError={errors.compositeDogCompositeOwnerFirstName?.hasError}
+        {...getOverrideProps(overrides, \\"compositeDogCompositeOwnerFirstName\\")}
+      ></TextField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={resetStateValues}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests custom form tests should render an update form for model with composite keys 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CompositeDog, CompositeBowl as CompositeBowl0, CompositeOwner as CompositeOwner0, CompositeToy, CompositeVet } from \\"../models\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdateCompositeDogFormInputValues = {
+    name?: string;
+    description?: string;
+    CompositeBowl?: CompositeBowl0;
+    CompositeOwner?: CompositeOwner0;
+    CompositeToys?: CompositeToy[];
+    CompositeVets?: CompositeVet[];
+    compositeDogCompositeBowlSize?: string;
+    compositeDogCompositeOwnerFirstName?: string;
+};
+export declare type UpdateCompositeDogFormValidationValues = {
+    name?: ValidationFunction<string>;
+    description?: ValidationFunction<string>;
+    CompositeBowl?: ValidationFunction<CompositeBowl0>;
+    CompositeOwner?: ValidationFunction<CompositeOwner0>;
+    CompositeToys?: ValidationFunction<CompositeToy>;
+    CompositeVets?: ValidationFunction<CompositeVet>;
+    compositeDogCompositeBowlSize?: ValidationFunction<string>;
+    compositeDogCompositeOwnerFirstName?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateCompositeDogFormOverridesProps = {
+    UpdateCompositeDogFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    description?: PrimitiveOverrideProps<TextFieldProps>;
+    CompositeBowl?: PrimitiveOverrideProps<AutocompleteProps>;
+    CompositeOwner?: PrimitiveOverrideProps<AutocompleteProps>;
+    CompositeToys?: PrimitiveOverrideProps<AutocompleteProps>;
+    CompositeVets?: PrimitiveOverrideProps<AutocompleteProps>;
+    compositeDogCompositeBowlSize?: PrimitiveOverrideProps<TextFieldProps>;
+    compositeDogCompositeOwnerFirstName?: PrimitiveOverrideProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type UpdateCompositeDogFormProps = React.PropsWithChildren<{
+    overrides?: UpdateCompositeDogFormOverridesProps | undefined | null;
+} & {
+    name?: string;
+    compositeDog?: CompositeDog;
+    onSubmit?: (fields: UpdateCompositeDogFormInputValues) => UpdateCompositeDogFormInputValues;
+    onSuccess?: (fields: UpdateCompositeDogFormInputValues) => void;
+    onError?: (fields: UpdateCompositeDogFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateCompositeDogFormInputValues) => UpdateCompositeDogFormInputValues;
+    onValidate?: UpdateCompositeDogFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdateCompositeDogForm(props: UpdateCompositeDogFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests custom form tests should render an update form for model with cpk 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -2464,21 +3573,6 @@ export default function UpdateCPKTeacherForm(props) {
   const [CPKProjects, setCPKProjects] = React.useState(
     initialValues.CPKProjects
   );
-  const CPKStudentIdSet = new Set(
-    Array.isArray(CPKStudent)
-      ? CPKStudent.map((cPKStudent) => cPKStudent.id)
-      : CPKStudent?.id
-  );
-  const CPKClassesIdSet = new Set(
-    Array.isArray(CPKClasses)
-      ? CPKClasses.map((cPKClass) => cPKClass.id)
-      : CPKClasses?.id
-  );
-  const CPKProjectsIdSet = new Set(
-    Array.isArray(CPKProjects)
-      ? CPKProjects.map((cPKProject) => cPKProject.id)
-      : CPKProjects?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = cPKTeacherRecord
@@ -2551,6 +3645,28 @@ export default function UpdateCPKTeacherForm(props) {
   const [currentCPKProjectsValue, setCurrentCPKProjectsValue] =
     React.useState(undefined);
   const CPKProjectsRef = React.createRef();
+  const getIDValue = {
+    CPKStudent: (r) =>
+      JSON.stringify({ specialStudentId: r?.specialStudentId }),
+    CPKClasses: (r) => JSON.stringify({ specialClassId: r?.specialClassId }),
+    CPKProjects: (r) =>
+      JSON.stringify({ specialProjectId: r?.specialProjectId }),
+  };
+  const CPKStudentIdSet = new Set(
+    Array.isArray(CPKStudent)
+      ? CPKStudent.map((r) => getIDValue.CPKStudent?.(r))
+      : getIDValue.CPKStudent?.(CPKStudent)
+  );
+  const CPKClassesIdSet = new Set(
+    Array.isArray(CPKClasses)
+      ? CPKClasses.map((r) => getIDValue.CPKClasses?.(r))
+      : getIDValue.CPKClasses?.(CPKClasses)
+  );
+  const CPKProjectsIdSet = new Set(
+    Array.isArray(CPKProjects)
+      ? CPKProjects.map((r) => getIDValue.CPKProjects?.(r))
+      : getIDValue.CPKProjects?.(CPKProjects)
+  );
   const cPKStudentRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: CPKStudent0,
@@ -2564,9 +3680,9 @@ export default function UpdateCPKTeacherForm(props) {
     model: CPKProject,
   }).items;
   const getDisplayValue = {
-    CPKStudent: (record) => record?.specialStudentId,
-    CPKClasses: (record) => record?.specialClassId,
-    CPKProjects: (record) => record?.specialProjectId,
+    CPKStudent: (r) => r?.specialStudentId,
+    CPKClasses: (r) => r?.specialClassId,
+    CPKProjects: (r) => r?.specialProjectId,
   };
   const validations = {
     specialTeacherId: [{ type: \\"Required\\" }],
@@ -2818,14 +3934,18 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           value={currentCPKStudentDisplayValue}
           options={cPKStudentRecords
-            .filter((cPKStudent) => !CPKStudentIdSet.has(cPKStudent.id))
+            .filter((r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r)))
             .map((r) => ({
-              id: r.specialStudentId,
+              id: getIDValue.CPKStudent?.(r),
               label: getDisplayValue.CPKStudent?.(r),
             }))}
           onSelect={({ id, label }) => {
             setCurrentCPKStudentValue(
-              cPKStudentRecords.find((r) => r.specialStudentId === id)
+              cPKStudentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
             );
             setCurrentCPKStudentDisplayValue(label);
           }}
@@ -2884,14 +4004,18 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           value={currentCPKClassesDisplayValue}
           options={cPKClassRecords
-            .filter((cPKClass) => !CPKClassesIdSet.has(cPKClass.id))
+            .filter((r) => !CPKClassesIdSet.has(getIDValue.CPKClasses?.(r)))
             .map((r) => ({
-              id: r.specialClassId,
+              id: getIDValue.CPKClasses?.(r),
               label: getDisplayValue.CPKClasses?.(r),
             }))}
           onSelect={({ id, label }) => {
             setCurrentCPKClassesValue(
-              cPKClassRecords.find((r) => r.specialClassId === id)
+              cPKClassRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
             );
             setCurrentCPKClassesDisplayValue(label);
           }}
@@ -2951,14 +4075,18 @@ export default function UpdateCPKTeacherForm(props) {
           isReadOnly={false}
           value={currentCPKProjectsDisplayValue}
           options={cPKProjectRecords
-            .filter((cPKProject) => !CPKProjectsIdSet.has(cPKProject.id))
+            .filter((r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r)))
             .map((r) => ({
-              id: r.specialProjectId,
+              id: getIDValue.CPKProjects?.(r),
               label: getDisplayValue.CPKProjects?.(r),
             }))}
           onSelect={({ id, label }) => {
             setCurrentCPKProjectsValue(
-              cPKProjectRecords.find((r) => r.specialProjectId === id)
+              cPKProjectRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
             );
             setCurrentCPKProjectsDisplayValue(label);
           }}
@@ -5015,9 +6143,6 @@ export default function TagCreateForm(props) {
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
-  const PostsIdSet = new Set(
-    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setLabel(initialValues.label);
@@ -5035,19 +6160,27 @@ export default function TagCreateForm(props) {
   const [currentStatusesValue, setCurrentStatusesValue] =
     React.useState(undefined);
   const statusesRef = React.createRef();
+  const getIDValue = {
+    Posts: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const PostsIdSet = new Set(
+    Array.isArray(Posts)
+      ? Posts.map((r) => getIDValue.Posts?.(r))
+      : getIDValue.Posts?.(Posts)
+  );
   const postRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Post,
   }).items;
   const getDisplayValue = {
-    Posts: (record) => record?.title,
-    statuses: (record) => {
+    Posts: (r) => r?.title,
+    statuses: (r) => {
       const enumDisplayValueMap = {
         PENDING: \\"Pending\\",
         POSTED: \\"Posted\\",
         IN_REVIEW: \\"In review\\",
       };
-      return enumDisplayValueMap[record];
+      return enumDisplayValueMap[r];
     },
   };
   const validations = {
@@ -5203,13 +6336,19 @@ export default function TagCreateForm(props) {
           isReadOnly={false}
           value={currentPostsDisplayValue}
           options={postRecords
-            .filter((post) => !PostsIdSet.has(post.id))
+            .filter((r) => !PostsIdSet.has(getIDValue.Posts?.(r)))
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.Posts?.(r),
               label: getDisplayValue.Posts?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentPostsValue(postRecords.find((r) => r.id === id));
+            setCurrentPostsValue(
+              postRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
             setCurrentPostsDisplayValue(label);
           }}
           onClear={() => {
@@ -5558,9 +6697,6 @@ export default function MyMemberForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Team, setTeam] = React.useState(initialValues.Team);
-  const TeamIdSet = new Set(
-    Array.isArray(Team) ? Team.map((team) => team.id) : Team?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -5573,12 +6709,20 @@ export default function MyMemberForm(props) {
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const TeamRef = React.createRef();
+  const getIDValue = {
+    Team: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const TeamIdSet = new Set(
+    Array.isArray(Team)
+      ? Team.map((r) => getIDValue.Team?.(r))
+      : getIDValue.Team?.(Team)
+  );
   const teamRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Team0,
   }).items;
   const getDisplayValue = {
-    Team: (record) => record?.name,
+    Team: (r) => r?.name,
   };
   const validations = {
     name: [],
@@ -5748,13 +6892,19 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           value={currentTeamDisplayValue}
           options={teamRecords
-            .filter((team) => !TeamIdSet.has(team.id))
+            .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.Team?.(r),
               label: getDisplayValue.Team?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentTeamValue(teamRecords.find((r) => r.id === id));
+            setCurrentTeamValue(
+              teamRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
             setCurrentTeamDisplayValue(label);
           }}
           onClear={() => {
@@ -6009,11 +7159,6 @@ export default function SchoolCreateForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
-  const StudentsIdSet = new Set(
-    Array.isArray(Students)
-      ? Students.map((student) => student.id)
-      : Students?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -6027,12 +7172,20 @@ export default function SchoolCreateForm(props) {
   const [currentStudentsValue, setCurrentStudentsValue] =
     React.useState(undefined);
   const StudentsRef = React.createRef();
+  const getIDValue = {
+    Students: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const StudentsIdSet = new Set(
+    Array.isArray(Students)
+      ? Students.map((r) => getIDValue.Students?.(r))
+      : getIDValue.Students?.(Students)
+  );
   const studentRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Student,
   }).items;
   const getDisplayValue = {
-    Students: (record) => record?.name,
+    Students: (r) => r?.name,
   };
   const validations = {
     name: [],
@@ -6182,13 +7335,19 @@ export default function SchoolCreateForm(props) {
           isReadOnly={false}
           value={currentStudentsDisplayValue}
           options={studentRecords
-            .filter((student) => !StudentsIdSet.has(student.id))
+            .filter((r) => !StudentsIdSet.has(getIDValue.Students?.(r)))
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.Students?.(r),
               label: getDisplayValue.Students?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentStudentsValue(studentRecords.find((r) => r.id === id));
+            setCurrentStudentsValue(
+              studentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
             setCurrentStudentsDisplayValue(label);
           }}
           onClear={() => {
@@ -6476,11 +7635,6 @@ export default function BookCreateForm(props) {
   const [primaryAuthor, setPrimaryAuthor] = React.useState(
     initialValues.primaryAuthor
   );
-  const primaryAuthorIdSet = new Set(
-    Array.isArray(primaryAuthor)
-      ? primaryAuthor.map((author) => author.id)
-      : primaryAuthor?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -6496,12 +7650,20 @@ export default function BookCreateForm(props) {
   const [currentPrimaryAuthorValue, setCurrentPrimaryAuthorValue] =
     React.useState(undefined);
   const primaryAuthorRef = React.createRef();
+  const getIDValue = {
+    primaryAuthor: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const primaryAuthorIdSet = new Set(
+    Array.isArray(primaryAuthor)
+      ? primaryAuthor.map((r) => getIDValue.primaryAuthor?.(r))
+      : getIDValue.primaryAuthor?.(primaryAuthor)
+  );
   const authorRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Author,
   }).items;
   const getDisplayValue = {
-    primaryAuthor: (record) => record?.name,
+    primaryAuthor: (r) => r?.name,
   };
   const validations = {
     name: [],
@@ -6673,14 +7835,20 @@ export default function BookCreateForm(props) {
           isReadOnly={false}
           value={currentPrimaryAuthorDisplayValue}
           options={authorRecords
-            .filter((author) => !primaryAuthorIdSet.has(author.id))
+            .filter(
+              (r) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(r))
+            )
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.primaryAuthor?.(r),
               label: getDisplayValue.primaryAuthor?.(r),
             }))}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
-              authorRecords.find((r) => r.id === id)
+              authorRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
             );
             setCurrentPrimaryAuthorDisplayValue(label);
           }}
@@ -6939,9 +8107,6 @@ export default function TagCreateForm(props) {
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
-  const PostsIdSet = new Set(
-    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setLabel(initialValues.label);
@@ -6959,19 +8124,27 @@ export default function TagCreateForm(props) {
   const [currentStatusesValue, setCurrentStatusesValue] =
     React.useState(undefined);
   const statusesRef = React.createRef();
+  const getIDValue = {
+    Posts: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const PostsIdSet = new Set(
+    Array.isArray(Posts)
+      ? Posts.map((r) => getIDValue.Posts?.(r))
+      : getIDValue.Posts?.(Posts)
+  );
   const postRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Post,
   }).items;
   const getDisplayValue = {
-    Posts: (record) => record?.title,
-    statuses: (record) => {
+    Posts: (r) => r?.title,
+    statuses: (r) => {
       const enumDisplayValueMap = {
         PENDING: \\"Pending\\",
         POSTED: \\"Posted\\",
         IN_REVIEW: \\"In review\\",
       };
-      return enumDisplayValueMap[record];
+      return enumDisplayValueMap[r];
     },
   };
   const validations = {
@@ -7127,13 +8300,19 @@ export default function TagCreateForm(props) {
           isReadOnly={false}
           value={currentPostsDisplayValue}
           options={postRecords
-            .filter((post) => !PostsIdSet.has(post.id))
+            .filter((r) => !PostsIdSet.has(getIDValue.Posts?.(r)))
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.Posts?.(r),
               label: getDisplayValue.Posts?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentPostsValue(postRecords.find((r) => r.id === id));
+            setCurrentPostsValue(
+              postRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
             setCurrentPostsDisplayValue(label);
           }}
           onClear={() => {
@@ -7488,16 +8667,6 @@ export default function BookCreateForm(props) {
   const [primaryTitle, setPrimaryTitle] = React.useState(
     initialValues.primaryTitle
   );
-  const primaryAuthorIdSet = new Set(
-    Array.isArray(primaryAuthor)
-      ? primaryAuthor.map((author) => author.id)
-      : primaryAuthor?.id
-  );
-  const primaryTitleIdSet = new Set(
-    Array.isArray(primaryTitle)
-      ? primaryTitle.map((title) => title.id)
-      : primaryTitle?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -7521,6 +8690,20 @@ export default function BookCreateForm(props) {
   const [currentPrimaryTitleValue, setCurrentPrimaryTitleValue] =
     React.useState(undefined);
   const primaryTitleRef = React.createRef();
+  const getIDValue = {
+    primaryAuthor: (r) => JSON.stringify({ id: r?.id }),
+    primaryTitle: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const primaryAuthorIdSet = new Set(
+    Array.isArray(primaryAuthor)
+      ? primaryAuthor.map((r) => getIDValue.primaryAuthor?.(r))
+      : getIDValue.primaryAuthor?.(primaryAuthor)
+  );
+  const primaryTitleIdSet = new Set(
+    Array.isArray(primaryTitle)
+      ? primaryTitle.map((r) => getIDValue.primaryTitle?.(r))
+      : getIDValue.primaryTitle?.(primaryTitle)
+  );
   const authorRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Author,
@@ -7530,8 +8713,8 @@ export default function BookCreateForm(props) {
     model: Title,
   }).items;
   const getDisplayValue = {
-    primaryAuthor: (record) => record?.name,
-    primaryTitle: (record) => record?.name,
+    primaryAuthor: (r) => r?.name,
+    primaryTitle: (r) => r?.name,
   };
   const validations = {
     name: [],
@@ -7707,14 +8890,20 @@ export default function BookCreateForm(props) {
           isReadOnly={false}
           value={currentPrimaryAuthorDisplayValue}
           options={authorRecords
-            .filter((author) => !primaryAuthorIdSet.has(author.id))
+            .filter(
+              (r) => !primaryAuthorIdSet.has(getIDValue.primaryAuthor?.(r))
+            )
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.primaryAuthor?.(r),
               label: getDisplayValue.primaryAuthor?.(r),
             }))}
           onSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(
-              authorRecords.find((r) => r.id === id)
+              authorRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
             );
             setCurrentPrimaryAuthorDisplayValue(label);
           }}
@@ -7774,13 +8963,19 @@ export default function BookCreateForm(props) {
           isReadOnly={false}
           value={currentPrimaryTitleDisplayValue}
           options={titleRecords
-            .filter((title) => !primaryTitleIdSet.has(title.id))
+            .filter((r) => !primaryTitleIdSet.has(getIDValue.primaryTitle?.(r)))
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.primaryTitle?.(r),
               label: getDisplayValue.primaryTitle?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentPrimaryTitleValue(titleRecords.find((r) => r.id === id));
+            setCurrentPrimaryTitleValue(
+              titleRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
             setCurrentPrimaryTitleDisplayValue(label);
           }}
           onClear={() => {
@@ -8538,11 +9733,6 @@ export default function SchoolUpdateForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Students, setStudents] = React.useState(initialValues.Students);
-  const StudentsIdSet = new Set(
-    Array.isArray(Students)
-      ? Students.map((student) => student.id)
-      : Students?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = schoolRecord
@@ -8571,12 +9761,20 @@ export default function SchoolUpdateForm(props) {
   const [currentStudentsValue, setCurrentStudentsValue] =
     React.useState(undefined);
   const StudentsRef = React.createRef();
+  const getIDValue = {
+    Students: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const StudentsIdSet = new Set(
+    Array.isArray(Students)
+      ? Students.map((r) => getIDValue.Students?.(r))
+      : getIDValue.Students?.(Students)
+  );
   const studentRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Student,
   }).items;
   const getDisplayValue = {
-    Students: (record) => record?.name,
+    Students: (r) => r?.name,
   };
   const validations = {
     name: [],
@@ -8754,13 +9952,19 @@ export default function SchoolUpdateForm(props) {
           isReadOnly={false}
           value={currentStudentsDisplayValue}
           options={studentRecords
-            .filter((student) => !StudentsIdSet.has(student.id))
+            .filter((r) => !StudentsIdSet.has(getIDValue.Students?.(r)))
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.Students?.(r),
               label: getDisplayValue.Students?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentStudentsValue(studentRecords.find((r) => r.id === id));
+            setCurrentStudentsValue(
+              studentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
             setCurrentStudentsDisplayValue(label);
           }}
           onClear={() => {
@@ -9048,9 +10252,6 @@ export default function MyMemberForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Team, setTeam] = React.useState(initialValues.Team);
-  const TeamIdSet = new Set(
-    Array.isArray(Team) ? Team.map((team) => team.id) : Team?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = memberRecord
@@ -9077,12 +10278,20 @@ export default function MyMemberForm(props) {
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const TeamRef = React.createRef();
+  const getIDValue = {
+    Team: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const TeamIdSet = new Set(
+    Array.isArray(Team)
+      ? Team.map((r) => getIDValue.Team?.(r))
+      : getIDValue.Team?.(Team)
+  );
   const teamRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Team0,
   }).items;
   const getDisplayValue = {
-    Team: (record) => record?.name,
+    Team: (r) => r?.name,
   };
   const validations = {
     name: [],
@@ -9255,13 +10464,19 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           value={currentTeamDisplayValue}
           options={teamRecords
-            .filter((team) => !TeamIdSet.has(team.id))
+            .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.Team?.(r),
               label: getDisplayValue.Team?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentTeamValue(teamRecords.find((r) => r.id === id));
+            setCurrentTeamValue(
+              teamRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
             setCurrentTeamDisplayValue(label);
           }}
           onClear={() => {
@@ -9522,9 +10737,6 @@ export default function TagUpdateForm(props) {
   const [label, setLabel] = React.useState(initialValues.label);
   const [Posts, setPosts] = React.useState(initialValues.Posts);
   const [statuses, setStatuses] = React.useState(initialValues.statuses);
-  const PostsIdSet = new Set(
-    Array.isArray(Posts) ? Posts.map((post) => post.id) : Posts?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = tagRecord
@@ -9565,19 +10777,27 @@ export default function TagUpdateForm(props) {
   const [currentStatusesValue, setCurrentStatusesValue] =
     React.useState(undefined);
   const statusesRef = React.createRef();
+  const getIDValue = {
+    Posts: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const PostsIdSet = new Set(
+    Array.isArray(Posts)
+      ? Posts.map((r) => getIDValue.Posts?.(r))
+      : getIDValue.Posts?.(Posts)
+  );
   const postRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Post,
   }).items;
   const getDisplayValue = {
-    Posts: (record) => record?.title,
-    statuses: (record) => {
+    Posts: (r) => r?.title,
+    statuses: (r) => {
       const enumDisplayValueMap = {
         PENDING: \\"Pending\\",
         POSTED: \\"Posted\\",
         IN_REVIEW: \\"In review\\",
       };
-      return enumDisplayValueMap[record];
+      return enumDisplayValueMap[r];
     },
   };
   const validations = {
@@ -9782,13 +11002,19 @@ export default function TagUpdateForm(props) {
           isReadOnly={false}
           value={currentPostsDisplayValue}
           options={postRecords
-            .filter((post) => !PostsIdSet.has(post.id))
+            .filter((r) => !PostsIdSet.has(getIDValue.Posts?.(r)))
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.Posts?.(r),
               label: getDisplayValue.Posts?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentPostsValue(postRecords.find((r) => r.id === id));
+            setCurrentPostsValue(
+              postRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
             setCurrentPostsDisplayValue(label);
           }}
           onClear={() => {
@@ -14068,9 +15294,6 @@ export default function MyMemberForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Team, setTeam] = React.useState(initialValues.Team);
-  const TeamIdSet = new Set(
-    Array.isArray(Team) ? Team.map((team) => team.id) : Team?.id
-  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -14083,12 +15306,20 @@ export default function MyMemberForm(props) {
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const TeamRef = React.createRef();
+  const getIDValue = {
+    Team: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const TeamIdSet = new Set(
+    Array.isArray(Team)
+      ? Team.map((r) => getIDValue.Team?.(r))
+      : getIDValue.Team?.(Team)
+  );
   const teamRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: Team0,
   }).items;
   const getDisplayValue = {
-    Team: (record) => record?.name,
+    Team: (r) => r?.name,
   };
   const validations = {
     name: [],
@@ -14258,13 +15489,19 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           value={currentTeamDisplayValue}
           options={teamRecords
-            .filter((team) => !TeamIdSet.has(team.id))
+            .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
             .map((r) => ({
-              id: r.id,
+              id: getIDValue.Team?.(r),
               label: getDisplayValue.Team?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentTeamValue(teamRecords.find((r) => r.id === id));
+            setCurrentTeamValue(
+              teamRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
             setCurrentTeamDisplayValue(label);
           }}
           onClear={() => {

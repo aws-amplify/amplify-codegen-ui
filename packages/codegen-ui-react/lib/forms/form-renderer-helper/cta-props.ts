@@ -24,7 +24,7 @@ import {
   ExpressionStatement,
 } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
-import { getDisplayValueObjectName } from './display-value';
+import { getDisplayValueObjectName } from './model-values';
 import { getSetNameIdentifier } from './form-state';
 import {
   buildHasManyRelationshipDataStoreStatements,

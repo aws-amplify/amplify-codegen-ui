@@ -80,7 +80,6 @@ import {
 } from './form-renderer-helper';
 import {
   buildUseStateExpression,
-  buildSelectedRecordsIdSet,
   getCurrentDisplayValueName,
   getArrayChildRefName,
   getCurrentValueName,
@@ -96,6 +95,7 @@ import {
   validationFunctionType,
   validationResponseType,
 } from './form-renderer-helper/type-helper';
+import { buildSelectedRecordsIdSet } from './form-renderer-helper/model-values';
 
 type RenderComponentOnlyResponse = {
   compText: string;
@@ -452,8 +452,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
 
-    statements.push(...buildSelectedRecordsIdSet(formMetadata.fieldConfigs));
-
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
     let defaultValueVariableName: undefined | string;
@@ -570,9 +568,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       }
     });
 
-    const { validationsObject, dataTypesMap, displayValueObject, modelsToImport, usesArrayField } = mapFromFieldConfigs(
-      formMetadata.fieldConfigs,
-    );
+    const { validationsObject, dataTypesMap, displayValueObject, idValueObject, modelsToImport, usesArrayField } =
+      mapFromFieldConfigs(formMetadata.fieldConfigs);
+
+    if (idValueObject) {
+      statements.push(idValueObject);
+    }
+
+    statements.push(...buildSelectedRecordsIdSet(formMetadata.fieldConfigs));
 
     this.shouldRenderArrayField = usesArrayField;
 

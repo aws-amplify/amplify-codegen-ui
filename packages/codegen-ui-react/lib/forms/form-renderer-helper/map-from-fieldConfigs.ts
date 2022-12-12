@@ -15,8 +15,18 @@
  */
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
 import { PropertyAssignment } from 'typescript';
-import { buildDisplayValueFunction, getDisplayValueObject, getModelsToImport } from './display-value';
-import { shouldImplementDisplayValueFunction, shouldWrapInArrayField } from './render-checkers';
+import {
+  buildDisplayValueFunction,
+  getDisplayValueObject,
+  getModelsToImport,
+  buildIDValueFunction,
+  getIDValueObject,
+} from './model-values';
+import {
+  shouldImplementDisplayValueFunction,
+  shouldWrapInArrayField,
+  shouldImplementIDValueFunction,
+} from './render-checkers';
 import { buildValidationForField, buildValidations } from './validation';
 
 /**
@@ -28,6 +38,7 @@ export function mapFromFieldConfigs(fieldConfigs: Record<string, FieldConfigMeta
   const validationsForField: PropertyAssignment[] = [];
   const dataTypesMap: { [dataType: string]: string[] } = {};
   const displayValueFunctions: PropertyAssignment[] = [];
+  const idValueFunctions: PropertyAssignment[] = [];
   const modelsToImport: string[] = [];
   let usesArrayField = false;
 
@@ -58,6 +69,11 @@ export function mapFromFieldConfigs(fieldConfigs: Record<string, FieldConfigMeta
       displayValueFunctions.push(buildDisplayValueFunction(fieldName, fieldConfig));
     }
 
+    // idValue
+    if (shouldImplementIDValueFunction(fieldConfig)) {
+      idValueFunctions.push(buildIDValueFunction(fieldName, fieldConfig));
+    }
+
     // modelsToImport
     modelsToImport.push(...getModelsToImport(fieldConfig));
 
@@ -69,6 +85,7 @@ export function mapFromFieldConfigs(fieldConfigs: Record<string, FieldConfigMeta
     validationsObject: buildValidations(validationsForField),
     dataTypesMap,
     displayValueObject: displayValueFunctions.length ? getDisplayValueObject(displayValueFunctions) : undefined,
+    idValueObject: idValueFunctions.length ? getIDValueObject(idValueFunctions) : undefined,
     modelsToImport,
     usesArrayField,
   };

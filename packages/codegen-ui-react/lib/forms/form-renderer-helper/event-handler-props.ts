@@ -54,7 +54,7 @@ import {
 import { getOnChangeValidationBlock } from './validation';
 import { buildModelFieldObject } from './model-fields';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
-import { extractModelAndKey } from './display-value';
+import { extractModelAndKeys, getMatchEveryModelFieldCallExpression } from './model-values';
 
 export const buildMutationBindings = (form: StudioForm, primaryKey?: string) => {
   const {
@@ -318,17 +318,21 @@ export const buildOnChangeStatement = (
   );
 };
 
-// onSelect={({ id }) => {
-//   setCurrentPrimaryAuthorValue(
-//     id
-//   );
-//   setCurrentPrimaryAuthorDisplayValue(id);
-// }}
-
 /**
-  example:
+examples:
+
+  scalar:
+  onSelect={({ id }) => {
+    setCurrentPrimaryAuthorValue(id);
+    setCurrentPrimaryAuthorDisplayValue(id);
+  }}
+
+  model:
   onSelect={({ id, label }) => {
-    setCurrentPrimaryAuthorValue(authorRecords.find((r) => r.id === id));
+    setCurrentPrimaryAuthorValue(
+      primaryAuthorRecords.find((r) => Object.entries(JSON.parse(id)).every(([key, value]) =>
+      r[key] === value)));
+    );
     setCurrentPrimaryAuthorDisplayValue(label);
   }}
  */
@@ -339,14 +343,8 @@ export function buildOnSelect({
   sanitizedFieldName: string;
   fieldConfig: FieldConfigMetadata;
 }): JsxAttribute {
-  const { model, key } = extractModelAndKey(fieldConfig.valueMappings);
-  if (!model || !key) {
-    throw new InvalidInputError(`Invalid value mappings`);
-  }
-
   const labelString = 'label';
   const idString = 'id';
-  const recordString = 'r';
 
   const props: BindingElement[] = [
     factory.createBindingElement(undefined, undefined, factory.createIdentifier(idString), undefined),
@@ -356,44 +354,19 @@ export function buildOnSelect({
   let nextCurrentDisplayValue: Expression = factory.createIdentifier(idString);
 
   if (isModelDataType(fieldConfig)) {
+    const { model, keys } = extractModelAndKeys(fieldConfig.valueMappings);
+    if (!model || !keys || !keys.length) {
+      throw new InvalidInputError(`Invalid value mappings`);
+    }
+
     props.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier(labelString), undefined));
 
     nextCurrentDisplayValue = factory.createIdentifier(labelString);
 
-    nextCurrentValue = factory.createCallExpression(
-      factory.createPropertyAccessExpression(
-        factory.createIdentifier(getRecordsName(model)),
-        factory.createIdentifier('find'),
-      ),
-      undefined,
-      [
-        factory.createArrowFunction(
-          undefined,
-          undefined,
-          [
-            factory.createParameterDeclaration(
-              undefined,
-              undefined,
-              undefined,
-              factory.createIdentifier(recordString),
-              undefined,
-              undefined,
-              undefined,
-            ),
-          ],
-          undefined,
-          factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-          factory.createBinaryExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier(recordString),
-              factory.createIdentifier(key),
-            ),
-            factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-            factory.createIdentifier(idString),
-          ),
-        ),
-      ],
-    );
+    nextCurrentValue = getMatchEveryModelFieldCallExpression({
+      recordsArrayName: getRecordsName(model),
+      JSONName: idString,
+    });
   }
 
   const setStateExpressions: ExpressionStatement[] = [

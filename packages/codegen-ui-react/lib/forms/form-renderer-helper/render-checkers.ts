@@ -26,3 +26,7 @@ export const isModelDataType = (
 export const shouldImplementDisplayValueFunction = (config: FieldConfigMetadata): boolean => {
   return isModelDataType(config) || (isEnumFieldType(config.dataType) && shouldWrapInArrayField(config));
 };
+
+export const shouldImplementIDValueFunction = (config: FieldConfigMetadata): boolean => {
+  return !!(isModelDataType(config) && config.valueMappings);
+};
