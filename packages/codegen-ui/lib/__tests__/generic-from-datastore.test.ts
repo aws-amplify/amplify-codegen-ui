@@ -22,6 +22,7 @@ import {
   schemaWithRelationshipsV2,
   schemaWithAssumptions,
   schemaWithCPK,
+  schemaWithCompositeKeys,
 } from './__utils__/mock-schemas';
 
 describe('getGenericFromDataStore', () => {
@@ -61,7 +62,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.PrimaryCareGiver.fields.Child.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Child',
-      associatedField: 'primaryCareGiverChildId',
+      associatedFields: ['primaryCareGiverChildId'],
     });
 
     expect(genericSchema.models.PrimaryCareGiver.fields.primaryCareGiverChildId.relationship).toStrictEqual({
@@ -88,7 +89,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Key',
-      associatedField: 'lockKeyId',
+      associatedFields: ['lockKeyId'],
     });
 
     expect(genericSchema.models.Lock.fields.lockKeyId.relationship).toStrictEqual({
@@ -99,7 +100,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Key.fields.Lock.relationship).toStrictEqual({
       type: 'BELONGS_TO',
       relatedModelName: 'Lock',
-      associatedField: 'keyLockId',
+      associatedFields: ['keyLockId'],
     });
 
     expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
@@ -122,7 +123,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.PrimaryCareGiver.fields.Child.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Child',
-      associatedField: 'primaryCareGiverChildId',
+      associatedFields: ['primaryCareGiverChildId'],
     });
 
     expect(genericSchema.models.PrimaryCareGiver.fields.primaryCareGiverChildId.relationship).toStrictEqual({
@@ -149,7 +150,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Key',
-      associatedField: 'lockKeyId',
+      associatedFields: ['lockKeyId'],
     });
 
     expect(genericSchema.models.Lock.fields.lockKeyId.relationship).toStrictEqual({
@@ -160,7 +161,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Key.fields.Lock.relationship).toStrictEqual({
       type: 'BELONGS_TO',
       relatedModelName: 'Lock',
-      associatedField: 'keyLockId',
+      associatedFields: ['keyLockId'],
     });
 
     expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
@@ -232,5 +233,21 @@ describe('getGenericFromDataStore', () => {
     expect(models.Dog.primaryKeys).toStrictEqual(['id']);
     expect(models.Student.primaryKeys).toStrictEqual(['specialStudentId', 'grade', 'age']);
     expect(models.Teacher.primaryKeys).toStrictEqual(['specialTeacherId']);
+  });
+
+  it('should correctly map model with composite keys', () => {
+    const genericSchema = getGenericFromDataStore(schemaWithCompositeKeys);
+    const { CompositeDog } = genericSchema.models;
+    expect(CompositeDog.primaryKeys).toStrictEqual(['name', 'description']);
+    expect(CompositeDog.fields.CompositeBowl.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'CompositeBowl',
+      associatedFields: ['compositeDogCompositeBowlShape', 'compositeDogCompositeBowlSize'],
+    });
+    expect(CompositeDog.fields.CompositeOwner.relationship).toStrictEqual({
+      type: 'BELONGS_TO',
+      relatedModelName: 'CompositeOwner',
+      associatedFields: ['compositeDogCompositeOwnerLastName', 'compositeDogCompositeOwnerFirstName'],
+    });
   });
 });

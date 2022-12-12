@@ -143,14 +143,24 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
             ('targetName' in field.association || 'targetNames' in field.association) &&
             (field.association.targetName || field.association.targetNames)
           ) {
-            const targetName = field.association.targetName || field.association.targetNames?.[0];
-            if (targetName) {
-              addRelationship(fieldsWithImplicitRelationships, model.name, targetName, {
-                type: relationshipType,
-                relatedModelName,
+            const targetNames = field.association.targetName
+              ? [field.association.targetName]
+              : field.association.targetNames;
+            const associatedFields: string[] = [];
+            if (targetNames) {
+              targetNames.forEach((targetName) => {
+                addRelationship(fieldsWithImplicitRelationships, model.name, targetName, {
+                  type: relationshipType,
+                  relatedModelName,
+                });
+                associatedFields.push(targetName);
               });
-              modelRelationship = { type: relationshipType, relatedModelName, associatedField: targetName };
             }
+            modelRelationship = {
+              type: relationshipType,
+              relatedModelName,
+              associatedFields: associatedFields.length ? associatedFields : undefined,
+            };
           }
 
           genericField.relationship = modelRelationship;

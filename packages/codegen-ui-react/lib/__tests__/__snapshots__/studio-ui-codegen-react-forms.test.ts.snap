@@ -2458,8 +2458,6 @@ export default function UpdateCompositeDogForm(props) {
     CompositeOwner: undefined,
     CompositeToys: [],
     CompositeVets: [],
-    compositeDogCompositeBowlSize: undefined,
-    compositeDogCompositeOwnerFirstName: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -2477,12 +2475,6 @@ export default function UpdateCompositeDogForm(props) {
   const [CompositeVets, setCompositeVets] = React.useState(
     initialValues.CompositeVets
   );
-  const [compositeDogCompositeBowlSize, setCompositeDogCompositeBowlSize] =
-    React.useState(initialValues.compositeDogCompositeBowlSize);
-  const [
-    compositeDogCompositeOwnerFirstName,
-    setCompositeDogCompositeOwnerFirstName,
-  ] = React.useState(initialValues.compositeDogCompositeOwnerFirstName);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = compositeDogRecord
@@ -2509,10 +2501,6 @@ export default function UpdateCompositeDogForm(props) {
     setCompositeVets(cleanValues.CompositeVets ?? []);
     setCurrentCompositeVetsValue(undefined);
     setCurrentCompositeVetsDisplayValue(\\"\\");
-    setCompositeDogCompositeBowlSize(cleanValues.compositeDogCompositeBowlSize);
-    setCompositeDogCompositeOwnerFirstName(
-      cleanValues.compositeDogCompositeOwnerFirstName
-    );
     setErrors({});
   };
   const [compositeDogRecord, setCompositeDogRecord] =
@@ -2642,8 +2630,6 @@ export default function UpdateCompositeDogForm(props) {
     CompositeOwner: [],
     CompositeToys: [],
     CompositeVets: [],
-    compositeDogCompositeBowlSize: [],
-    compositeDogCompositeOwnerFirstName: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -2676,8 +2662,6 @@ export default function UpdateCompositeDogForm(props) {
           CompositeOwner,
           CompositeToys,
           CompositeVets,
-          compositeDogCompositeBowlSize,
-          compositeDogCompositeOwnerFirstName,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -2815,10 +2799,14 @@ export default function UpdateCompositeDogForm(props) {
             DataStore.save(
               CompositeDog.copyOf(compositeDogRecord, (updated) => {
                 Object.assign(updated, modelFields);
-                if (!modelFields.CompositeBowl)
+                if (!modelFields.CompositeBowl) {
                   updated.compositeDogCompositeBowlShape = undefined;
-                if (!modelFields.CompositeOwner)
+                  updated.compositeDogCompositeBowlSize = undefined;
+                }
+                if (!modelFields.CompositeOwner) {
                   updated.compositeDogCompositeOwnerLastName = undefined;
+                  updated.compositeDogCompositeOwnerFirstName = undefined;
+                }
               })
             )
           );
@@ -2850,8 +2838,6 @@ export default function UpdateCompositeDogForm(props) {
               CompositeOwner,
               CompositeToys,
               CompositeVets,
-              compositeDogCompositeBowlSize,
-              compositeDogCompositeOwnerFirstName,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -2881,8 +2867,6 @@ export default function UpdateCompositeDogForm(props) {
               CompositeOwner,
               CompositeToys,
               CompositeVets,
-              compositeDogCompositeBowlSize,
-              compositeDogCompositeOwnerFirstName,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -2909,8 +2893,6 @@ export default function UpdateCompositeDogForm(props) {
               CompositeOwner,
               CompositeToys,
               CompositeVets,
-              compositeDogCompositeBowlSize,
-              compositeDogCompositeOwnerFirstName,
             };
             const result = onChange(modelFields);
             value = result?.CompositeBowl ?? value;
@@ -2988,8 +2970,6 @@ export default function UpdateCompositeDogForm(props) {
               CompositeOwner: value,
               CompositeToys,
               CompositeVets,
-              compositeDogCompositeBowlSize,
-              compositeDogCompositeOwnerFirstName,
             };
             const result = onChange(modelFields);
             value = result?.CompositeOwner ?? value;
@@ -3066,8 +3046,6 @@ export default function UpdateCompositeDogForm(props) {
               CompositeOwner,
               CompositeToys: values,
               CompositeVets,
-              compositeDogCompositeBowlSize,
-              compositeDogCompositeOwnerFirstName,
             };
             const result = onChange(modelFields);
             values = result?.CompositeToys ?? values;
@@ -3145,8 +3123,6 @@ export default function UpdateCompositeDogForm(props) {
               CompositeOwner,
               CompositeToys,
               CompositeVets: values,
-              compositeDogCompositeBowlSize,
-              compositeDogCompositeOwnerFirstName,
             };
             const result = onChange(modelFields);
             values = result?.CompositeVets ?? values;
@@ -3213,78 +3189,6 @@ export default function UpdateCompositeDogForm(props) {
           {...getOverrideProps(overrides, \\"CompositeVets\\")}
         ></Autocomplete>
       </ArrayField>
-      <TextField
-        label=\\"Composite dog composite bowl size\\"
-        isRequired={false}
-        isReadOnly={false}
-        defaultValue={compositeDogCompositeBowlSize}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              description,
-              CompositeBowl,
-              CompositeOwner,
-              CompositeToys,
-              CompositeVets,
-              compositeDogCompositeBowlSize: value,
-              compositeDogCompositeOwnerFirstName,
-            };
-            const result = onChange(modelFields);
-            value = result?.compositeDogCompositeBowlSize ?? value;
-          }
-          if (errors.compositeDogCompositeBowlSize?.hasError) {
-            runValidationTasks(\\"compositeDogCompositeBowlSize\\", value);
-          }
-          setCompositeDogCompositeBowlSize(value);
-        }}
-        onBlur={() =>
-          runValidationTasks(
-            \\"compositeDogCompositeBowlSize\\",
-            compositeDogCompositeBowlSize
-          )
-        }
-        errorMessage={errors.compositeDogCompositeBowlSize?.errorMessage}
-        hasError={errors.compositeDogCompositeBowlSize?.hasError}
-        {...getOverrideProps(overrides, \\"compositeDogCompositeBowlSize\\")}
-      ></TextField>
-      <TextField
-        label=\\"Composite dog composite owner first name\\"
-        isRequired={false}
-        isReadOnly={false}
-        defaultValue={compositeDogCompositeOwnerFirstName}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              description,
-              CompositeBowl,
-              CompositeOwner,
-              CompositeToys,
-              CompositeVets,
-              compositeDogCompositeBowlSize,
-              compositeDogCompositeOwnerFirstName: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.compositeDogCompositeOwnerFirstName ?? value;
-          }
-          if (errors.compositeDogCompositeOwnerFirstName?.hasError) {
-            runValidationTasks(\\"compositeDogCompositeOwnerFirstName\\", value);
-          }
-          setCompositeDogCompositeOwnerFirstName(value);
-        }}
-        onBlur={() =>
-          runValidationTasks(
-            \\"compositeDogCompositeOwnerFirstName\\",
-            compositeDogCompositeOwnerFirstName
-          )
-        }
-        errorMessage={errors.compositeDogCompositeOwnerFirstName?.errorMessage}
-        hasError={errors.compositeDogCompositeOwnerFirstName?.hasError}
-        {...getOverrideProps(overrides, \\"compositeDogCompositeOwnerFirstName\\")}
-      ></TextField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -3331,8 +3235,6 @@ export declare type UpdateCompositeDogFormInputValues = {
     CompositeOwner?: CompositeOwner0;
     CompositeToys?: CompositeToy[];
     CompositeVets?: CompositeVet[];
-    compositeDogCompositeBowlSize?: string;
-    compositeDogCompositeOwnerFirstName?: string;
 };
 export declare type UpdateCompositeDogFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -3341,8 +3243,6 @@ export declare type UpdateCompositeDogFormValidationValues = {
     CompositeOwner?: ValidationFunction<CompositeOwner0>;
     CompositeToys?: ValidationFunction<CompositeToy>;
     CompositeVets?: ValidationFunction<CompositeVet>;
-    compositeDogCompositeBowlSize?: ValidationFunction<string>;
-    compositeDogCompositeOwnerFirstName?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UpdateCompositeDogFormOverridesProps = {
@@ -3353,8 +3253,6 @@ export declare type UpdateCompositeDogFormOverridesProps = {
     CompositeOwner?: PrimitiveOverrideProps<AutocompleteProps>;
     CompositeToys?: PrimitiveOverrideProps<AutocompleteProps>;
     CompositeVets?: PrimitiveOverrideProps<AutocompleteProps>;
-    compositeDogCompositeBowlSize?: PrimitiveOverrideProps<TextFieldProps>;
-    compositeDogCompositeOwnerFirstName?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type UpdateCompositeDogFormProps = React.PropsWithChildren<{
     overrides?: UpdateCompositeDogFormOverridesProps | undefined | null;
@@ -3853,8 +3751,9 @@ export default function UpdateCPKTeacherForm(props) {
             DataStore.save(
               CPKTeacher.copyOf(cPKTeacherRecord, (updated) => {
                 Object.assign(updated, modelFields);
-                if (!modelFields.CPKStudent)
+                if (!modelFields.CPKStudent) {
                   updated.cPKTeacherCPKStudentId = undefined;
+                }
               })
             )
           );
@@ -10359,7 +10258,9 @@ export default function MyMemberForm(props) {
           await DataStore.save(
             Member.copyOf(memberRecord, (updated) => {
               Object.assign(updated, modelFields);
-              if (!modelFields.Team) updated.teamMembersId = undefined;
+              if (!modelFields.Team) {
+                updated.teamMembersId = undefined;
+              }
             })
           );
           if (onSuccess) {

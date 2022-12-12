@@ -1774,13 +1774,13 @@ export const getRelationshipBasedRecordUpdateStatements = ({
   fieldConfigs: Record<string, FieldConfigMetadata>;
 }): IfStatement[] => {
   const statements: IfStatement[] = [];
-  const modelToFieldsMap: { [modelName: string]: { model: string; scalar: string } } = {};
+  const modelToFieldsMap: { [modelName: string]: { model: string; scalar: string[] } } = {};
 
   Object.entries(fieldConfigs).forEach(([fieldName, config]) => {
     if (config.relationship && (config.relationship.type === 'HAS_ONE' || config.relationship?.type === 'BELONGS_TO')) {
-      const { associatedField, relatedModelName } = config.relationship;
-      if (isModelDataType(config) && associatedField) {
-        modelToFieldsMap[relatedModelName] = { model: fieldName, scalar: associatedField };
+      const { associatedFields, relatedModelName } = config.relationship;
+      if (isModelDataType(config) && associatedFields) {
+        modelToFieldsMap[relatedModelName] = { model: fieldName, scalar: associatedFields };
       } else {
         // if the scalar relationship field is mapped on the form,
         // we do not need to set its value at DataStore.save
@@ -1790,19 +1790,24 @@ export const getRelationshipBasedRecordUpdateStatements = ({
   });
 
   // if(!modelFields.HasOneUser) updated.webUserId = undefined;
-  Object.values(modelToFieldsMap).forEach(({ model: modelField, scalar: scalarField }) => {
+  Object.values(modelToFieldsMap).forEach(({ model: modelField, scalar: scalarFields }) => {
     statements.push(
       factory.createIfStatement(
         factory.createPrefixUnaryExpression(
           SyntaxKind.ExclamationToken,
           buildAccessChain([modelFieldsObjectName, modelField], false),
         ),
-        factory.createExpressionStatement(
-          factory.createBinaryExpression(
-            buildAccessChain([updatedObjectName, scalarField], false),
-            factory.createToken(SyntaxKind.EqualsToken),
-            factory.createIdentifier('undefined'),
+        factory.createBlock(
+          scalarFields.map((scalarField) =>
+            factory.createExpressionStatement(
+              factory.createBinaryExpression(
+                buildAccessChain([updatedObjectName, scalarField], false),
+                factory.createToken(SyntaxKind.EqualsToken),
+                factory.createIdentifier('undefined'),
+              ),
+            ),
           ),
+          true,
         ),
         undefined,
       ),

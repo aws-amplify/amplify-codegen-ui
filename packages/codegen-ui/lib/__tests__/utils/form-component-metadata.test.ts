@@ -123,7 +123,7 @@ describe('mapFormMetaData', () => {
     expect(fieldConfigs.Student.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Student',
-      associatedField: 'TeacherStudentId',
+      associatedFields: ['TeacherStudentId'],
     });
   });
 
