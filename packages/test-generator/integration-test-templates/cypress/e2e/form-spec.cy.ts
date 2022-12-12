@@ -120,7 +120,7 @@ describe('Forms', () => {
           expect(record.float).to.equal(40.2);
           expect(record.awsDate).to.equal('2022-10-12');
           expect(record.awsTime).to.equal('10:12');
-          expect(record.awsDateTime).to.equal('2022-12-06T08:00:00.000Z');
+          expect(record.awsDateTime).to.equal('2022-12-06T00:00:00.000Z');
           expect(record.awsTimestamp).to.equal(1669919400000);
           expect(record.awsEmail).to.equal('myemail@yahoo.com');
           expect(record.awsUrl).to.equal('https://amazon.com');
