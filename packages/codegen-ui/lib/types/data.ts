@@ -43,12 +43,12 @@ export type HasManyRelationshipType = {
 
 export type HasOneRelationshipType = {
   type: 'HAS_ONE';
-  associatedField?: string;
+  associatedFields?: string[];
 } & CommonRelationshipType;
 
 export type BelongsToRelationshipType = {
   type: 'BELONGS_TO';
-  associatedField?: string;
+  associatedFields?: string[];
 } & CommonRelationshipType;
 
 export type GenericDataRelationshipType = HasManyRelationshipType | HasOneRelationshipType | BelongsToRelationshipType;
