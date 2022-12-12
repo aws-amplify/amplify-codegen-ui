@@ -125,6 +125,7 @@ export const getDefaultValueExpression = (
     StepperField: factory.createNumericLiteral(0),
     SliderField: factory.createNumericLiteral(0),
     CheckboxField: factory.createFalse(),
+    TextField: factory.createStringLiteral(''),
   };
 
   if (isArray) {

@@ -528,23 +528,11 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // timestamp type takes precedence over datetime as it includes formatter for datetime
     // we include both the timestamp conversion and local date formatter
     if (dataTypesMap.AWSTimestamp) {
-      // helper needed if update form
-      // or, if create form and the field is an array and therefore controlled
-      if (
-        formActionType === 'update' ||
-        dataTypesMap.AWSTimestamp.some((fieldName) => formMetadata.fieldConfigs[fieldName].isArray)
-      ) {
-        statements.push(convertTimeStampToDateAST, convertToLocalAST);
-      }
+      statements.push(convertTimeStampToDateAST, convertToLocalAST);
     }
     // if we only have date time then we only need the local conversion
     else if (dataTypesMap.AWSDateTime) {
-      if (
-        formActionType === 'update' ||
-        dataTypesMap.AWSDateTime.some((fieldName) => formMetadata.fieldConfigs[fieldName].isArray)
-      ) {
-        statements.push(convertToLocalAST);
-      }
+      statements.push(convertToLocalAST);
     }
 
     return statements;
