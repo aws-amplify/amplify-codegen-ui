@@ -195,7 +195,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
     }
 
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
-      attributes.push(renderDefaultValueAttribute(renderedVariableName, fieldConfig));
+      attributes.push(renderDefaultValueAttribute(renderedVariableName, fieldConfig, componentType));
     }
     attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs));
     attributes.push(buildOnBlurStatement(componentName, fieldConfig));
@@ -238,11 +238,52 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       attributes.push(flexGapAttribute);
     }
   }
+  /*
+    onClick={(event) => {
+      event.preventDefault();
+      resetStateValues();
+    }}
+  */
   if (componentName === 'ClearButton' || componentName === 'ResetButton') {
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('onClick'),
-        factory.createJsxExpression(undefined, resetValuesName),
+        factory.createJsxExpression(
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('event'),
+                undefined,
+                factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createExpressionStatement(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('event'),
+                      factory.createIdentifier('preventDefault'),
+                    ),
+                    undefined,
+                    [],
+                  ),
+                ),
+                factory.createExpressionStatement(factory.createCallExpression(resetValuesName, undefined, [])),
+              ],
+              true,
+            ),
+          ),
+        ),
       ),
     );
     if (formMetadata.formActionType === 'update' && formMetadata.dataType.dataSourceType === 'DataStore') {
