@@ -109,7 +109,7 @@ describe('mapFormMetaData', () => {
       formActionType: 'create',
       dataType: {
         dataSourceType: 'DataStore',
-        dataTypeName: 'Teacher',
+        dataTypeName: 'CPKTeacher',
       },
       fields: {},
       sectionalElements: {},
@@ -119,11 +119,11 @@ describe('mapFormMetaData', () => {
 
     const { fieldConfigs } = mapFormMetadata(form, generateFormDefinition({ form, dataSchema }));
 
-    expect('Student' in fieldConfigs).toBe(true);
-    expect(fieldConfigs.Student.relationship).toStrictEqual({
+    expect('CPKStudent' in fieldConfigs).toBe(true);
+    expect(fieldConfigs.CPKStudent.relationship).toStrictEqual({
       type: 'HAS_ONE',
-      relatedModelName: 'Student',
-      associatedFields: ['TeacherStudentId'],
+      relatedModelName: 'CPKStudent',
+      associatedFields: ['cPKTeacherCPKStudentSpecialStudentId'],
     });
   });
 

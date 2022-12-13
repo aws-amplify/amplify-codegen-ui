@@ -32,7 +32,6 @@ import {
   CPKClass,
   CPKProject,
   CPKTeacher,
-  LazyCPKProject,
   LazyCPKTeacherCPKClass,
   CPKTeacherCPKClass,
   LazyCPKClass,
@@ -145,9 +144,9 @@ const initializeCPKTeacherTestData = async ({
 }: {
   setCPKTeacherId: React.Dispatch<SetStateAction<string | undefined>>;
 }): Promise<void> => {
-  const connectedStudent = (await DataStore.query(CPKStudent, (s) => s.specialStudentId.eq('Harry')))[0];
-  const connectedClasses = await DataStore.query(CPKClass, (c) => c.specialClassId.eq('Math'));
-  const connectedProjects = await DataStore.query(CPKProject, (p) => p.specialProjectId.eq('Figure 8'));
+  const connectedStudent = await DataStore.query(CPKStudent, 'Harry');
+  const connectedClass = await DataStore.query(CPKClass, 'Math');
+  const connectedProject = await DataStore.query(CPKProject, 'Figure 8');
 
   const createdRecord = await DataStore.save(
     new CPKTeacher({
@@ -156,32 +155,22 @@ const initializeCPKTeacherTestData = async ({
     }),
   );
 
-  await Promise.all(
-    connectedClasses.reduce((promises: AsyncItem<LazyCPKTeacherCPKClass>[], cpkClass) => {
-      promises.push(
-        DataStore.save(
-          new CPKTeacherCPKClass({
-            cpkClass,
-            cpkTeacher: createdRecord,
-          }),
-        ),
-      );
-      return promises;
-    }, []),
-  );
+  if (connectedClass) {
+    await DataStore.save(
+      new CPKTeacherCPKClass({
+        cpkClass: connectedClass,
+        cpkTeacher: createdRecord,
+      }),
+    );
+  }
 
-  await Promise.all(
-    connectedProjects.reduce((promises: AsyncItem<LazyCPKProject>[], project) => {
-      promises.push(
-        DataStore.save(
-          CPKProject.copyOf(project, (updated) => {
-            Object.assign(updated, { cPKTeacherID: createdRecord.specialTeacherId });
-          }),
-        ),
-      );
-      return promises;
-    }, []),
-  );
+  if (connectedProject) {
+    await DataStore.save(
+      CPKProject.copyOf(connectedProject, (updated) => {
+        Object.assign(updated, { cPKTeacherID: createdRecord.specialTeacherId });
+      }),
+    );
+  }
 
   setCPKTeacherId((prevId) => {
     if (!prevId) {

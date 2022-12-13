@@ -3711,8 +3711,10 @@ export default function UpdateCPKTeacherForm(props) {
                 r.and((r) => {
                   const recordKeys = JSON.parse(id);
                   return [
-                    r.cpkClassID.eq(recordKeys.specialClassId),
-                    r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId),
+                    r.cPKClassSpecialClassId.eq(recordKeys.specialClassId),
+                    r.cPKTeacherSpecialTeacherId.eq(
+                      cPKTeacherRecord.specialTeacherId
+                    ),
                   ];
                 })
             );
@@ -3779,7 +3781,7 @@ export default function UpdateCPKTeacherForm(props) {
               CPKTeacher.copyOf(cPKTeacherRecord, (updated) => {
                 Object.assign(updated, modelFields);
                 if (!modelFields.CPKStudent) {
-                  updated.cPKTeacherCPKStudentId = undefined;
+                  updated.cPKTeacherCPKStudentSpecialStudentId = undefined;
                 }
               })
             )

@@ -393,7 +393,7 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toContain('cPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
         expect(componentText).toContain('const count = linkedCPKClassesMap.get(getIDValue.CPKClasses?.(r))');
         expect(componentText).toContain('linkedCPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
-        expect(componentText).toContain('r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId)');
+        expect(componentText).toContain('r.cPKTeacherSpecialTeacherId.eq');
         expect(componentText).toContain('cpkTeacher: cPKTeacherRecord');
 
         // hasMany

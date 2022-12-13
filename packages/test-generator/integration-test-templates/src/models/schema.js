@@ -843,13 +843,6 @@ export const schema = {
     CPKStudent: {
       name: 'CPKStudent',
       fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
         specialStudentId: {
           name: 'specialStudentId',
           isArray: false,
@@ -875,7 +868,7 @@ export const schema = {
         },
       },
       syncable: true,
-      pluralName: 'Students',
+      pluralName: 'CPKStudents',
       attributes: [
         {
           type: 'model',
@@ -889,92 +882,9 @@ export const schema = {
         },
       ],
     },
-    CPKTeacherCPKClass: {
-      name: 'CPKTeacherCPKClass',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        cpkTeacher: {
-          name: 'cpkTeacher',
-          isArray: false,
-          type: {
-            model: 'CPKTeacher',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetName: 'cpkTeacherID',
-          },
-        },
-        cpkClass: {
-          name: 'cpkClass',
-          isArray: false,
-          type: {
-            model: 'CPKClass',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetName: 'cpkClassID',
-          },
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-      },
-      syncable: true,
-      pluralName: 'CPKTeacherCPKClasses',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'byCPKTeacher',
-            fields: ['cpkTeacherID'],
-          },
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'byCPKClass',
-            fields: ['cpkClassID'],
-          },
-        },
-      ],
-    },
     CPKTeacher: {
       name: 'CPKTeacher',
       fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
         specialTeacherId: {
           name: 'specialTeacherId',
           isArray: false,
@@ -992,8 +902,8 @@ export const schema = {
           attributes: [],
           association: {
             connectionType: 'HAS_ONE',
-            associatedWith: 'specialStudentId',
-            targetName: 'cPKTeacherCPKStudentId',
+            associatedWith: ['specialStudentId'],
+            targetNames: ['cPKTeacherCPKStudentSpecialStudentId'],
           },
         },
         CPKClasses: {
@@ -1007,7 +917,7 @@ export const schema = {
           isArrayNullable: true,
           association: {
             connectionType: 'HAS_MANY',
-            associatedWith: 'cpkTeacher',
+            associatedWith: ['cpkTeacher'],
           },
         },
         CPKProjects: {
@@ -1021,7 +931,7 @@ export const schema = {
           isArrayNullable: true,
           association: {
             connectionType: 'HAS_MANY',
-            associatedWith: 'cPKTeacherID',
+            associatedWith: ['cPKTeacherID'],
           },
         },
         createdAt: {
@@ -1040,8 +950,8 @@ export const schema = {
           attributes: [],
           isReadOnly: true,
         },
-        cPKTeacherCPKStudentId: {
-          name: 'cPKTeacherCPKStudentId',
+        cPKTeacherCPKStudentSpecialStudentId: {
+          name: 'cPKTeacherCPKStudentSpecialStudentId',
           isArray: false,
           type: 'ID',
           isRequired: false,
@@ -1066,13 +976,6 @@ export const schema = {
     CPKClass: {
       name: 'CPKClass',
       fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
         specialClassId: {
           name: 'specialClassId',
           isArray: false,
@@ -1091,7 +994,7 @@ export const schema = {
           isArrayNullable: true,
           association: {
             connectionType: 'HAS_MANY',
-            associatedWith: 'cpkClass',
+            associatedWith: ['cpkClass'],
           },
         },
         createdAt: {
@@ -1129,13 +1032,6 @@ export const schema = {
     CPKProject: {
       name: 'CPKProject',
       fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
         specialProjectId: {
           name: 'specialProjectId',
           isArray: false,
@@ -1185,6 +1081,96 @@ export const schema = {
           properties: {
             name: 'byCPKTeacher',
             fields: ['cPKTeacherID'],
+          },
+        },
+      ],
+    },
+    CPKTeacherCPKClass: {
+      name: 'CPKTeacherCPKClass',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        cPKTeacherSpecialTeacherId: {
+          name: 'cPKTeacherSpecialTeacherId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        cPKClassSpecialClassId: {
+          name: 'cPKClassSpecialClassId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        cpkTeacher: {
+          name: 'cpkTeacher',
+          isArray: false,
+          type: {
+            model: 'CPKTeacher',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['cPKTeacherSpecialTeacherId'],
+          },
+        },
+        cpkClass: {
+          name: 'cpkClass',
+          isArray: false,
+          type: {
+            model: 'CPKClass',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['cPKClassSpecialClassId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'CPKTeacherCPKClasses',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byCPKTeacher',
+            fields: ['cPKTeacherSpecialTeacherId'],
+          },
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byCPKClass',
+            fields: ['cPKClassSpecialClassId'],
           },
         },
       ],

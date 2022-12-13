@@ -230,9 +230,8 @@ describe('getGenericFromDataStore', () => {
   it('should correctly identify primary keys', () => {
     const genericSchema = getGenericFromDataStore(schemaWithCPK);
     const { models } = genericSchema;
-    expect(models.Dog.primaryKeys).toStrictEqual(['id']);
-    expect(models.Student.primaryKeys).toStrictEqual(['specialStudentId', 'grade', 'age']);
-    expect(models.Teacher.primaryKeys).toStrictEqual(['specialTeacherId']);
+    expect(models.CPKStudent.primaryKeys).toStrictEqual(['specialStudentId']);
+    expect(models.CPKTeacher.primaryKeys).toStrictEqual(['specialTeacherId']);
   });
 
   it('should correctly map model with composite keys', () => {
