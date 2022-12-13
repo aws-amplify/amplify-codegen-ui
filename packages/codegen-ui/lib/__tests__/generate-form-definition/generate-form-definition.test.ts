@@ -521,3 +521,47 @@ it('should skip adding id field if it has no overrides', () => {
   expect(formDefinition.elements).toStrictEqual({});
   expect(formDefinition.elementMatrix).toStrictEqual([]);
 });
+
+it('should make primary key read-only', () => {
+  const formDefinition = generateFormDefinition({
+    form: {
+      id: '123',
+      name: 'mySampleForm',
+      formActionType: 'create',
+      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Student' },
+      fields: {
+        specialStudentId: { position: { below: 'Heading123' }, inputType: { type: 'TextField' } },
+        grade: { position: { rightOf: 'age' }, inputType: { type: 'TextField' } },
+        age: { position: { below: 'specialStudentId' }, inputType: { type: 'TextField' } },
+      },
+      sectionalElements: {
+        Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Student' },
+      },
+      style: {},
+      cta: {},
+    },
+    dataSchema: {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Student: {
+          primaryKeys: ['specialStudentId'],
+          fields: {
+            id: { dataType: 'ID', readOnly: false, required: true, isArray: false },
+            specialStudentId: { dataType: 'ID', readOnly: false, required: true, isArray: false },
+            grade: { dataType: 'Int', readOnly: false, required: true, isArray: false },
+            age: { dataType: 'Int', readOnly: false, required: true, isArray: false },
+          },
+        },
+      },
+    },
+  });
+
+  expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['specialStudentId'], ['age', 'grade']]);
+  expect(formDefinition.elements.specialStudentId.props).toStrictEqual({
+    label: 'Special student id',
+    isRequired: true,
+    isReadOnly: true,
+  });
+});

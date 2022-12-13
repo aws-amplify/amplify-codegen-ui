@@ -2758,7 +2758,7 @@ export default function UpdateCPKTeacherForm(props) {
       <TextField
         label=\\"Special teacher id\\"
         isRequired={true}
-        isReadOnly={false}
+        isReadOnly={true}
         defaultValue={specialTeacherId}
         onChange={(e) => {
           let { value } = e.target;

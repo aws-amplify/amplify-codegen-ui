@@ -85,10 +85,12 @@ export function getFieldConfigFromModelField({
   fieldName,
   field,
   dataSchema,
+  isPrimaryKey,
 }: {
   fieldName: string;
   field: GenericDataField;
   dataSchema: GenericDataSchema;
+  isPrimaryKey: boolean;
 }): ExtendedStudioGenericFieldConfig {
   const fieldTypeMapKey = getFieldTypeMapKey(field);
 
@@ -109,13 +111,18 @@ export function getFieldConfigFromModelField({
     dataType = { model: field.relationship.relatedModelName };
   }
 
+  let { readOnly } = field;
+  if (isPrimaryKey) {
+    readOnly = true;
+  }
+
   const config: ExtendedStudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
     label: sentenceCase(fieldName),
     dataType,
     inputType: {
       type: defaultComponent,
       required: field.required,
-      readOnly: field.readOnly,
+      readOnly,
       name: fieldName,
       value: fieldName,
       isArray: field.isArray,
@@ -164,7 +171,9 @@ export function mapModelFieldsConfigs({
       formDefinition.elementMatrix.push([fieldName]);
     }
 
-    modelFieldsConfigs[fieldName] = getFieldConfigFromModelField({ fieldName, field, dataSchema });
+    const isPrimaryKey = model.primaryKeys.includes(fieldName);
+
+    modelFieldsConfigs[fieldName] = getFieldConfigFromModelField({ fieldName, field, dataSchema, isPrimaryKey });
   });
 
   return modelFieldsConfigs;
