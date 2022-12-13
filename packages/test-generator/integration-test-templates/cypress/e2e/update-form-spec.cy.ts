@@ -140,7 +140,7 @@ describe('UpdateForms', () => {
         cy.contains(/mySpecialTeacherId/).then((recordElement: JQuery) => {
           const record = JSON.parse(recordElement.text());
 
-          expect(record.cPKTeacherCPKStudentId).to.equal('Hermione');
+          expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
           expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
           expect(record.CPKClasses.length).to.equal(1);
           expect(record.CPKClasses[0].specialClassId).to.equal('English');
