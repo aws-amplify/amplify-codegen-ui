@@ -109,6 +109,19 @@ export class ImportCollection {
     ];
   }
 
+  getAliasMap(): { model: { [modelName: string]: string } } {
+    const modelMap: { [modelName: string]: string } = {};
+    const modelSet = this.#collection.get(ImportSource.LOCAL_MODELS);
+    const modelAliases = this.importAlias.get(ImportSource.LOCAL_MODELS);
+    if (modelSet) {
+      [...modelSet].forEach((item) => {
+        const alias = modelAliases?.get(item);
+        if (alias) modelMap[item] = alias;
+      });
+    }
+    return { model: modelMap };
+  }
+
   buildImportStatements(skipReactImport?: boolean): ImportDeclaration[] {
     const importDeclarations = ([] as ImportDeclaration[])
       .concat(
