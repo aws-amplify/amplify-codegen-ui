@@ -36,7 +36,7 @@ export type StudioFormValueMappings = {
 
 // represents API shape after type casting
 export type StudioFieldInputConfig = {
-  type: string;
+  type?: string;
 
   required?: boolean;
 
