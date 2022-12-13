@@ -1138,7 +1138,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       const propAssigments: PropertyAssignment[] = [];
       Object.entries(this.dataSchema.models[model].fields).forEach(([key, field]) => {
         if (field.relationship?.type === 'HAS_MANY') {
-          const { relatedModelName, relatedModelField } = field.relationship;
+          const { relatedModelName, relatedModelFields } = field.relationship;
           const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, relatedModelName);
           const itemsName = getActionIdentifier(relatedModelName, 'Items');
           statements.push(
@@ -1147,7 +1147,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
               this.buildUseDataStoreBindingCall('collection', modelName),
             ),
           );
-          propAssigments.push(buildPropAssignmentWithFilter(key, itemsName, relatedModelField));
+          // TODO: support composite keys in collections
+          propAssigments.push(buildPropAssignmentWithFilter(key, itemsName, relatedModelFields[0]));
         }
       });
       statements.push(

@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
+import { FieldConfigMetadata, GenericDataSchema } from '@aws-amplify/codegen-ui';
 import {
   factory,
   NodeFlags,
@@ -108,8 +108,9 @@ export const buildDataStoreExpression = (
   modelName: string,
   importedModelName: string,
   fieldConfigs: Record<string, FieldConfigMetadata>,
-  thisModelPrimaryKey: string,
+  dataSchema: GenericDataSchema,
 ) => {
+  const thisModelPrimaryKeys = dataSchema.models[modelName].primaryKeys;
   let isHasManyFieldConfigExisting = false;
   const hasManyDataStoreStatements: (VariableStatement | ExpressionStatement)[] = [];
 
@@ -118,12 +119,14 @@ export const buildDataStoreExpression = (
     if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
       isHasManyFieldConfigExisting = true;
       if (isManyToManyRelationship(fieldConfigMetaData)) {
+        const joinTable = dataSchema.models[fieldConfigMetaData.relationship.relatedJoinTableName];
         hasManyDataStoreStatements.push(
           ...buildManyToManyRelationshipDataStoreStatements(
             dataStoreActionType,
             importedModelName,
             fieldConfig,
-            thisModelPrimaryKey,
+            thisModelPrimaryKeys,
+            joinTable,
           ),
         );
       } else {
@@ -132,7 +135,7 @@ export const buildDataStoreExpression = (
             dataStoreActionType,
             importedModelName,
             fieldConfig,
-            thisModelPrimaryKey,
+            thisModelPrimaryKeys,
           ),
         );
       }

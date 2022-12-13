@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, HasManyRelationshipType } from '@aws-amplify/codegen-ui';
 import { PropertyAssignment } from 'typescript';
 import {
   buildDisplayValueFunction,
@@ -91,5 +91,8 @@ export function mapFromFieldConfigs(fieldConfigs: Record<string, FieldConfigMeta
   };
 }
 
-export const isManyToManyRelationship = (fieldConfigMetaData: FieldConfigMetadata) =>
-  fieldConfigMetaData.relationship?.type === 'HAS_MANY' && fieldConfigMetaData.relationship.relatedJoinTableName;
+export const isManyToManyRelationship = (
+  fieldConfigMetaData: FieldConfigMetadata,
+): fieldConfigMetaData is FieldConfigMetadata & {
+  relationship: HasManyRelationshipType & { relatedJoinTableName: string };
+} => !!(fieldConfigMetaData.relationship?.type === 'HAS_MANY' && fieldConfigMetaData.relationship.relatedJoinTableName);

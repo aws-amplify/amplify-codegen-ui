@@ -29,7 +29,6 @@ import {
   StudioNode,
   StudioTemplateRenderer,
   validateFormSchema,
-  getDataSchemaMetaData,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import {
@@ -131,7 +130,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
   protected shouldRenderArrayField = false;
 
-  protected primaryKey: string | undefined;
+  protected primaryKeys: string[] | undefined;
 
   constructor(component: StudioForm, dataSchema: GenericDataSchema | undefined, renderConfig: ReactRenderConfig) {
     super(component, new ReactOutputManager(), renderConfig);
@@ -151,11 +150,11 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition);
     this.importCollection = new ImportCollection(this.componentMetadata);
     if (dataSchema) {
-      const dataSchemaMetadata = getDataSchemaMetaData({ dataSchema });
+      const dataSchemaMetadata = dataSchema;
       this.componentMetadata.dataSchemaMetadata = dataSchemaMetadata;
       const { dataSourceType, dataTypeName } = this.component.dataType;
       if (dataSourceType === 'DataStore') {
-        this.primaryKey = dataSchemaMetadata.models[dataTypeName].primaryKey;
+        this.primaryKeys = dataSchemaMetadata.models[dataTypeName].primaryKeys;
       }
     }
   }
@@ -347,7 +346,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
           factory.createIntersectionTypeNode([
             escapeHatchTypeNode,
-            buildFormPropNode(this.component, modelName, this.primaryKey),
+            buildFormPropNode(this.component, modelName, this.primaryKeys?.[0]),
             factory.createTypeReferenceNode(
               factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('CSSProperties')),
               undefined,
@@ -393,7 +392,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     const elements: BindingElement[] = [
       // add in hooks for before/complete with ds and basic onSubmit with props
-      ...buildMutationBindings(this.component, this.primaryKey),
+      ...buildMutationBindings(this.component, this.primaryKeys?.[0]),
       // onValidate prop
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onValidate'), undefined),
       // onChange prop
@@ -490,8 +489,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       });
 
       // primaryKey should exist if DataStore update form. This condition is just for ts
-      if (this.primaryKey) {
-        const destructuredPrimaryKey = getPropName(this.primaryKey);
+      if (this.primaryKeys) {
+        const destructuredPrimaryKey = getPropName(this.primaryKeys[0]);
         statements.push(
           addUseEffectWrapper(
             buildUpdateDatastoreQuery(
