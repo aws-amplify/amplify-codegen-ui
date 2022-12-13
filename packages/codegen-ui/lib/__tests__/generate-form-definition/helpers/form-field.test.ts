@@ -119,6 +119,25 @@ describe('getFormDefinitionInputElement', () => {
     });
   });
 
+  it(`should gracefully fall back to TextField if the field type isn't available`, () => {
+    const config = {
+      label: 'MyLabel',
+      inputType: {
+        isReadOnly: false,
+        placeholder: 'MyPlaceholder',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'MyLabel',
+        placeholder: 'MyPlaceholder',
+      },
+      studioFormComponentType: 'TextField',
+    });
+  });
+
   it('should get NumberField', () => {
     const config = {
       inputType: {
@@ -548,12 +567,6 @@ describe('getFormDefinitionInputElement', () => {
         type: 'NotValid',
       },
     };
-
-    expect(() => getFormDefinitionInputElement(config)).toThrow();
-  });
-
-  it('should throw if the inputType is missing type', () => {
-    const config = { label: 'MyLabel' };
 
     expect(() => getFormDefinitionInputElement(config)).toThrow();
   });

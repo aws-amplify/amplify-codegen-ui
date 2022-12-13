@@ -291,6 +291,59 @@ describe('generateFormDefinition', () => {
     expect(formDefinition.elementMatrix).toStrictEqual([['Heading123']]);
   });
 
+  it('should gracefully handle a customized field being renamed', () => {
+    const formDefinition = generateFormDefinition({
+      form: {
+        cta: {
+          cancel: {},
+          clear: {},
+          position: 'bottom',
+          submit: {},
+        },
+        dataType: {
+          dataSourceType: 'DataStore',
+          dataTypeName: 'Event',
+        },
+        fields: {
+          startDate: {
+            position: {
+              fixed: 'first',
+            },
+          },
+          sourceAccountId: {
+            position: {
+              below: 'startDate',
+            },
+          },
+          endTime: {
+            position: {
+              below: 'sourceAccountId',
+            },
+          },
+        },
+        formActionType: 'create',
+        name: 'EventFormTest',
+        sectionalElements: {},
+        style: {},
+      },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: {
+          Event: {
+            fields: {
+              sourceAccountId: { dataType: 'String', readOnly: false, required: true, isArray: false },
+              endTime: { dataType: 'Float', readOnly: false, required: true, isArray: false },
+            },
+          },
+        },
+      },
+    });
+
+    expect(formDefinition.elementMatrix).toStrictEqual([['startDate'], ['sourceAccountId'], ['endTime']]);
+  });
+
   it('should correctly map positions', () => {
     const formDefinition = generateFormDefinition({
       form: {
