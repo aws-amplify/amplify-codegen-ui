@@ -389,16 +389,16 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toContain('JSON.stringify({ specialStudentId: r?.specialStudentId })');
 
         // manyToMany
-        expect(componentText).toContain('const count = cPKClassesMap.get(r.specialClassId)');
-        expect(componentText).toContain('cPKClassesMap.set(r.specialClassId, newCount)');
-        expect(componentText).toContain('const count = linkedCPKClassesMap.get(r.specialClassId)');
-        expect(componentText).toContain('linkedCPKClassesMap.set(r.specialClassId, newCount)');
+        expect(componentText).toContain('const count = cPKClassesMap.get(getIDValue.CPKClasses?.(r))');
+        expect(componentText).toContain('cPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
+        expect(componentText).toContain('const count = linkedCPKClassesMap.get(getIDValue.CPKClasses?.(r))');
+        expect(componentText).toContain('linkedCPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
         expect(componentText).toContain('r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId)');
-        expect(componentText).toContain('cpkTeacherID: cPKTeacherRecord.specialTeacherId');
+        expect(componentText).toContain('cpkTeacher: cPKTeacherRecord');
 
         // hasMany
-        expect(componentText).toContain('CPKProjects.forEach((r) => cPKProjectsSet.add(r.specialProjectId))');
-        expect(componentText).toContain('linkedCPKProjectsSet.add(r.specialProjectId)');
+        expect(componentText).toContain('cPKProjectsSet.add(getIDValue.CPKProjects?.(r)');
+        expect(componentText).toContain('linkedCPKProjectsSet.add(getIDValue.CPKProjects?.(r))');
         expect(componentText).toContain('updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId');
 
         expect(componentText).toMatchSnapshot();

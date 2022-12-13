@@ -22,4 +22,3 @@ export * from './form-to-component';
 export * from './breakpoint-utils';
 export * from './form-utils';
 export * from './reserved-words';
-export * from './dataschema-metadata';

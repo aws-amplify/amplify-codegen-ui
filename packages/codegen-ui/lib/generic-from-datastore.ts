@@ -97,41 +97,44 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
 
           if (relationshipType === 'HAS_MANY' && 'associatedWith' in field.association) {
             const associatedModel = dataStoreSchema.models[relatedModelName];
-            const associatedFieldName = Array.isArray(field.association?.associatedWith)
-              ? field.association.associatedWith[0]
-              : field.association.associatedWith;
-            const associatedField = associatedModel?.fields[associatedFieldName];
-            // if the associated model is a join table, update relatedModelName to the actual related model
-            if (
-              associatedField &&
-              typeof associatedField.type === 'object' &&
-              'model' in associatedField.type &&
-              associatedField.type.model === model.name
-            ) {
-              joinTableNames.push(associatedModel.name);
+            const associatedFieldNames = Array.isArray(field.association?.associatedWith)
+              ? field.association.associatedWith
+              : [field.association.associatedWith];
 
-              const relatedJoinField = Object.values(associatedModel.fields).find(
-                (joinField) =>
-                  joinField.name !== associatedFieldName &&
-                  typeof joinField.type === 'object' &&
-                  'model' in joinField.type,
-              );
-              if (relatedJoinField && typeof relatedJoinField.type === 'object' && 'model' in relatedJoinField.type) {
-                relatedModelName = relatedJoinField.type.model;
-                relatedJoinFieldName = relatedJoinField.name;
-                relatedJoinTableName = field.type.model;
+            associatedFieldNames.forEach((associatedFieldName) => {
+              const associatedField = associatedModel?.fields[associatedFieldName];
+              // if the associated model is a join table, update relatedModelName to the actual related model
+              if (
+                associatedField &&
+                typeof associatedField.type === 'object' &&
+                'model' in associatedField.type &&
+                associatedField.type.model === model.name
+              ) {
+                joinTableNames.push(associatedModel.name);
+
+                const relatedJoinField = Object.values(associatedModel.fields).find(
+                  (joinField) =>
+                    joinField.name !== associatedFieldName &&
+                    typeof joinField.type === 'object' &&
+                    'model' in joinField.type,
+                );
+                if (relatedJoinField && typeof relatedJoinField.type === 'object' && 'model' in relatedJoinField.type) {
+                  relatedJoinTableName = relatedModelName;
+                  relatedModelName = relatedJoinField.type.model;
+                  relatedJoinFieldName = relatedJoinField.name;
+                }
+                // if the associated model is not a join table, note implicit relationship for associated field
+              } else {
+                addRelationship(fieldsWithImplicitRelationships, relatedModelName, associatedFieldName, {
+                  type: 'HAS_ONE',
+                  relatedModelName: model.name,
+                });
               }
-              // if the associated model is not a join table, note implicit relationship for associated field
-            } else {
-              addRelationship(fieldsWithImplicitRelationships, relatedModelName, associatedFieldName, {
-                type: 'HAS_ONE',
-                relatedModelName: model.name,
-              });
-            }
+            });
             modelRelationship = {
               type: relationshipType,
               relatedModelName,
-              relatedModelField: associatedFieldName,
+              relatedModelFields: associatedFieldNames,
               relatedJoinFieldName,
               relatedJoinTableName,
             };

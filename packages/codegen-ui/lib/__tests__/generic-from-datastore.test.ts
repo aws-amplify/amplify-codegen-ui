@@ -73,7 +73,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Student.fields.Teachers.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
-      relatedModelField: 'student',
+      relatedModelFields: ['student'],
       relatedJoinFieldName: 'teacher',
       relatedJoinTableName: 'StudentTeacher',
     });
@@ -81,7 +81,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Student',
-      relatedModelField: 'teacher',
+      relatedModelFields: ['teacher'],
       relatedJoinFieldName: 'student',
       relatedJoinTableName: 'StudentTeacher',
     });
@@ -106,7 +106,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Dog',
-      relatedModelField: 'ownerID',
+      relatedModelFields: ['ownerID'],
       relatedJoinFieldName: undefined,
       relatedJoinTableName: undefined,
     });
@@ -134,7 +134,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Student.fields.Teachers.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
-      relatedModelField: 'student',
+      relatedModelFields: ['student'],
       relatedJoinFieldName: 'teacher',
       relatedJoinTableName: 'StudentTeacher',
     });
@@ -142,7 +142,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Student',
-      relatedModelField: 'teacher',
+      relatedModelFields: ['teacher'],
       relatedJoinFieldName: 'student',
       relatedJoinTableName: 'StudentTeacher',
     });
@@ -167,7 +167,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Dog',
-      relatedModelField: 'ownerID',
+      relatedModelFields: ['ownerID'],
       relatedJoinFieldName: undefined,
       relatedJoinTableName: undefined,
     });
@@ -204,7 +204,7 @@ describe('getGenericFromDataStore', () => {
     expect(userFields.friends.relationship).toStrictEqual({
       type: 'HAS_MANY',
       relatedModelName: 'Friend',
-      relatedModelField: 'friendId',
+      relatedModelFields: ['friendId'],
       relatedJoinFieldName: undefined,
       relatedJoinTableName: undefined,
     });
@@ -212,7 +212,7 @@ describe('getGenericFromDataStore', () => {
     expect(userFields.posts.relationship).toStrictEqual({
       type: 'HAS_MANY',
       relatedModelName: 'Post',
-      relatedModelField: 'userPostsId',
+      relatedModelFields: ['userPostsId'],
       relatedJoinFieldName: undefined,
       relatedJoinTableName: undefined,
     });

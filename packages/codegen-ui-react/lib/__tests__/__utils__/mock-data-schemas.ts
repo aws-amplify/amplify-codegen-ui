@@ -19,6 +19,7 @@ export const authorHasManySchema: GenericDataSchema = {
   dataSourceType: 'DataStore',
   models: {
     Book: {
+      primaryKeys: ['id'],
       fields: {
         id: {
           dataType: 'ID',
@@ -69,6 +70,7 @@ export const authorHasManySchema: GenericDataSchema = {
       },
     },
     Author: {
+      primaryKeys: ['id'],
       fields: {
         id: {
           dataType: 'ID',
@@ -104,7 +106,7 @@ export const authorHasManySchema: GenericDataSchema = {
           relationship: {
             type: 'HAS_MANY',
             relatedModelName: 'Book',
-            relatedModelField: 'authorID',
+            relatedModelFields: ['authorID'],
           },
         },
         createdAt: {

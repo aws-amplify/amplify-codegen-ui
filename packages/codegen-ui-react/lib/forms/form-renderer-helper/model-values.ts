@@ -228,7 +228,6 @@ export function extractModelAndKeys(valueMappings?: StudioFormValueMappings): { 
       }
     });
   }
-  console.log('KEYSSS', keys);
   return { model, keys };
 }
 

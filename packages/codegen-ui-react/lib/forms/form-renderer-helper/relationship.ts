@@ -13,19 +13,21 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { factory, IfStatement, NodeFlags, SyntaxKind } from 'typescript';
+import { CallExpression, factory, IfStatement, NodeFlags, SyntaxKind } from 'typescript';
 import {
   FieldConfigMetadata,
   GenericDataRelationshipType,
   HasManyRelationshipType,
   InternalError,
+  GenericDataModel,
+  GenericDataField,
 } from '@aws-amplify/codegen-ui';
 import { getRecordsName, getLinkedDataName, getSetNameIdentifier, buildAccessChain } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
-import { extractModelAndKeys } from './model-values';
+import { extractModelAndKeys, getIDValueCallChain, getMatchEveryModelFieldCallExpression } from './model-values';
 import { isModelDataType } from './render-checkers';
 
 export const buildRelationshipQuery = (
@@ -49,29 +51,142 @@ export const buildRelationshipQuery = (
   );
 };
 
+const getJoinTableQueryArrowFunction = ({
+  thisModelPrimaryKeys,
+  relatedModelPrimaryKeys,
+  joinTableThisModelFields,
+  joinTableRelatedModelFields,
+  thisModelRecord,
+}: {
+  thisModelPrimaryKeys: string[];
+  relatedModelPrimaryKeys: string[];
+  joinTableThisModelFields: string[];
+  joinTableRelatedModelFields: string[];
+  thisModelRecord: string;
+}) => {
+  const getQueryCallExpression = (queriedKey: string, recordName: string, recordKey: string) =>
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier('r'), factory.createIdentifier(queriedKey)),
+        factory.createIdentifier('eq'),
+      ),
+      undefined,
+      [
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier(recordName),
+          factory.createIdentifier(recordKey),
+        ),
+      ],
+    );
+
+  const recordKeysString = 'recordKeys';
+
+  const queryCallExpressions: CallExpression[] = [];
+
+  joinTableRelatedModelFields.forEach((field, index) => {
+    const recordKey = relatedModelPrimaryKeys[index];
+    if (!recordKey) {
+      throw new InternalError(`Cannot find corresponding key for ${field}`);
+    }
+    queryCallExpressions.push(getQueryCallExpression(field, recordKeysString, recordKey));
+  });
+
+  joinTableThisModelFields.forEach((field, index) => {
+    const recordKey = thisModelPrimaryKeys[index];
+    if (!recordKey) {
+      throw new InternalError(`Cannot find corresponding key for ${field}`);
+    }
+    queryCallExpressions.push(getQueryCallExpression(field, thisModelRecord, recordKey));
+  });
+
+  return factory.createArrowFunction(
+    undefined,
+    undefined,
+    [
+      factory.createParameterDeclaration(
+        undefined,
+        undefined,
+        undefined,
+        factory.createIdentifier('r'),
+        undefined,
+        undefined,
+        undefined,
+      ),
+    ],
+    undefined,
+    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+    factory.createBlock(
+      [
+        factory.createVariableStatement(
+          undefined,
+          factory.createVariableDeclarationList(
+            [
+              factory.createVariableDeclaration(
+                factory.createIdentifier(recordKeysString),
+                undefined,
+                undefined,
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('JSON'),
+                    factory.createIdentifier('parse'),
+                  ),
+                  undefined,
+                  [factory.createIdentifier('id')],
+                ),
+              ),
+            ],
+            NodeFlags.Const,
+          ),
+        ),
+        factory.createReturnStatement(factory.createArrayLiteralExpression(queryCallExpressions, true)),
+      ],
+      true,
+    ),
+  );
+};
+
+function extractAssociatedFields(field: GenericDataField): string[] | undefined {
+  const { relationship } = field;
+  if (relationship && 'associatedFields' in relationship && relationship.associatedFields) {
+    return relationship.associatedFields;
+  }
+  return undefined;
+}
+
 export const buildManyToManyRelationshipDataStoreStatements = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
-  thisModelPrimaryKey: string,
+  thisModelPrimaryKeys: string[],
+  joinTable: GenericDataModel,
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
   fieldName = fieldConfigMetaData.sanitizedFieldName || fieldName;
-  const { relatedModelField, relatedJoinFieldName, relatedJoinTableName, relatedModelName } =
+  const { relatedModelFields, relatedJoinFieldName, relatedJoinTableName, relatedModelName } =
     fieldConfigMetaData.relationship as HasManyRelationshipType;
+  const joinTableThisModelName = relatedModelFields[0];
+  const joinTableRelatedModelName = relatedJoinFieldName;
+  if (!joinTableRelatedModelName) {
+    throw new InternalError(`Cannot find corresponding field in join table for ${fieldName}`);
+  }
+  const joinTableThisModelFields = extractAssociatedFields(joinTable.fields[joinTableThisModelName]);
+  const joinTableRelatedModelFields = extractAssociatedFields(joinTable.fields[joinTableRelatedModelName]);
+
+  if (!joinTableThisModelFields || !joinTableRelatedModelFields) {
+    throw new InternalError(`Cannot find associated fields to build ${fieldName}`);
+  }
   if (dataStoreActionType === 'update') {
+    const idValueCallChain = getIDValueCallChain({ fieldName, recordString: 'r' });
     const linkedDataName = getLinkedDataName(fieldName);
     const dataToLinkMap = `${lowerCaseFirst(fieldName)}ToLinkMap`;
     const dataToUnlinkMap = `${lowerCaseFirst(fieldName)}ToUnLinkMap`;
     const updatedMap = `${lowerCaseFirst(fieldName)}Map`;
     const originalMap = `${linkedDataName}Map`;
-    const { keys } = extractModelAndKeys(fieldConfigMetaData.valueMappings);
-    if (!keys) {
+    const { keys: relatedModelPrimaryKeys } = extractModelAndKeys(fieldConfigMetaData.valueMappings);
+    if (!relatedModelPrimaryKeys) {
       throw new InternalError(`Could not identify primary key(s) for ${relatedModelName}`);
     }
-    // TODO: update for composite
-    const relatedModelPrimaryKey = keys[0];
 
     return [
       factory.createVariableStatement(
@@ -159,7 +274,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                 [
                   factory.createVariableStatement(
                     undefined,
-                    // const count = cPKClassesMap.get(r.specialClassId);
+                    // const count = cPKClassesMap.get(getIDValue.CPKClasses?.(r));
                     factory.createVariableDeclarationList(
                       [
                         factory.createVariableDeclaration(
@@ -172,12 +287,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                               factory.createIdentifier('get'),
                             ),
                             undefined,
-                            [
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('r'),
-                                factory.createIdentifier(relatedModelPrimaryKey),
-                              ),
-                            ],
+                            [idValueCallChain],
                           ),
                         ),
                       ],
@@ -208,7 +318,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                       NodeFlags.Const,
                     ),
                   ),
-                  // cPKClassesMap.set(r.specialClassId, newCount);
+                  // cPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount);
                   factory.createExpressionStatement(
                     factory.createCallExpression(
                       factory.createPropertyAccessExpression(
@@ -216,13 +326,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                         factory.createIdentifier('set'),
                       ),
                       undefined,
-                      [
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('r'),
-                          factory.createIdentifier(relatedModelPrimaryKey),
-                        ),
-                        factory.createIdentifier('newCount'),
-                      ],
+                      [idValueCallChain, factory.createIdentifier('newCount')],
                     ),
                   ),
                 ],
@@ -262,7 +366,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                     undefined,
                     factory.createVariableDeclarationList(
                       [
-                        // const count = linkedCPKClassesMap.get(r.specialClassId);
+                        // const count = linkedCPKClassesMap.get(getIDValue.CPKClasses?.(r));
                         factory.createVariableDeclaration(
                           factory.createIdentifier('count'),
                           undefined,
@@ -273,12 +377,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                               factory.createIdentifier('get'),
                             ),
                             undefined,
-                            [
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier('r'),
-                                factory.createIdentifier(relatedModelPrimaryKey),
-                              ),
-                            ],
+                            [idValueCallChain],
                           ),
                         ),
                       ],
@@ -310,20 +409,14 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                     ),
                   ),
                   factory.createExpressionStatement(
-                    //  linkedCPKClassesMap.set(r.specialClassId, newCount);
+                    //  linkedCPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount);
                     factory.createCallExpression(
                       factory.createPropertyAccessExpression(
                         factory.createIdentifier(originalMap),
                         factory.createIdentifier('set'),
                       ),
                       undefined,
-                      [
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('r'),
-                          factory.createIdentifier(relatedModelPrimaryKey),
-                        ),
-                        factory.createIdentifier('newCount'),
-                      ],
+                      [idValueCallChain, factory.createIdentifier('newCount')],
                     ),
                   ),
                 ],
@@ -662,56 +755,13 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                                     ),
                                     undefined,
                                     [
-                                      factory.createArrowFunction(
-                                        undefined,
-                                        undefined,
-                                        [
-                                          factory.createParameterDeclaration(
-                                            undefined,
-                                            undefined,
-                                            undefined,
-                                            factory.createIdentifier('r'),
-                                            undefined,
-                                            undefined,
-                                            undefined,
-                                          ),
-                                        ],
-                                        undefined,
-                                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                        factory.createArrayLiteralExpression(
-                                          [
-                                            factory.createCallExpression(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createPropertyAccessExpression(
-                                                  factory.createIdentifier('r'),
-                                                  factory.createIdentifier(`${relatedJoinFieldName}ID`),
-                                                ),
-                                                factory.createIdentifier('eq'),
-                                              ),
-                                              undefined,
-                                              [factory.createIdentifier('id')],
-                                            ),
-                                            // r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId),
-                                            factory.createCallExpression(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createPropertyAccessExpression(
-                                                  factory.createIdentifier('r'),
-                                                  factory.createIdentifier(`${relatedModelField}ID`),
-                                                ),
-                                                factory.createIdentifier('eq'),
-                                              ),
-                                              undefined,
-                                              [
-                                                factory.createPropertyAccessExpression(
-                                                  factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                                                  factory.createIdentifier(thisModelPrimaryKey),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                          false,
-                                        ),
-                                      ),
+                                      getJoinTableQueryArrowFunction({
+                                        thisModelPrimaryKeys,
+                                        relatedModelPrimaryKeys,
+                                        joinTableThisModelFields,
+                                        joinTableRelatedModelFields,
+                                        thisModelRecord: `${lowerCaseFirst(modelName)}Record`,
+                                      }),
                                     ],
                                   ),
                                 ),
@@ -856,17 +906,20 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                                     [
                                       factory.createObjectLiteralExpression(
                                         [
-                                          // cpkTeacherID: cPKTeacherRecord.specialTeacherId,
+                                          // cpkTeacher: cPKTeacherRecord,
                                           factory.createPropertyAssignment(
-                                            factory.createIdentifier(`${relatedModelField}ID`),
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                                              factory.createIdentifier(thisModelPrimaryKey),
-                                            ),
+                                            factory.createIdentifier(joinTableThisModelName),
+                                            factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
                                           ),
+                                          // compositeVet: compositeVetRecords.find(
+                                          //   (r) => Object.entries(JSON.parse(id)).every(([key, value]) =>
+                                          //   r[key] === value))
                                           factory.createPropertyAssignment(
-                                            factory.createIdentifier(`${relatedJoinFieldName}ID`),
-                                            factory.createIdentifier('id'),
+                                            factory.createIdentifier(joinTableRelatedModelName),
+                                            getMatchEveryModelFieldCallExpression({
+                                              recordsArrayName: getRecordsName(relatedModelName),
+                                              JSONName: 'id',
+                                            }),
                                           ),
                                         ],
                                         true,
@@ -954,7 +1007,8 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                                     factory.createObjectLiteralExpression(
                                       [
                                         factory.createShorthandPropertyAssignment(
-                                          factory.createIdentifier(relatedModelField),
+                                          // TODO: update w/ create form support for composite keys
+                                          factory.createIdentifier(relatedModelFields[0]),
                                           undefined,
                                         ),
                                         factory.createShorthandPropertyAssignment(
@@ -1154,12 +1208,12 @@ export const buildHasManyRelationshipDataStoreStatements = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
-  thisModelPrimaryKey: string,
+  thisModelPrimaryKeys: string[],
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
   fieldName = fieldConfigMetaData.sanitizedFieldName || fieldName;
-  const { relatedModelName, relatedModelField } = fieldConfigMetaData.relationship as HasManyRelationshipType;
+  const { relatedModelName, relatedModelFields } = fieldConfigMetaData.relationship as HasManyRelationshipType;
   const linkedDataName = getLinkedDataName(fieldName);
   const dataToLink = `${lowerCaseFirst(fieldName)}ToLink`;
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
@@ -1169,9 +1223,9 @@ export const buildHasManyRelationshipDataStoreStatements = (
   if (!keys) {
     throw new InternalError(`Could not identify primary key(s) for ${relatedModelName}`);
   }
-  // TODO: update for composite keys
-  const relatedModelPrimaryKey = keys[0];
   if (dataStoreActionType === 'update') {
+    const idValueCallChain = getIDValueCallChain({ fieldName, recordString: 'r' });
+
     return [
       factory.createVariableStatement(
         undefined,
@@ -1231,7 +1285,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
       ),
       factory.createExpressionStatement(
         factory.createCallExpression(
-          // CPKProjects.forEach((r) => cPKProjectsSet.add(r.specialProjectId));
+          // CPKProjects.forEach((r) => cPKProjectsSet.add(getIDValue.CPKProjects?.(r)));
           factory.createPropertyAccessExpression(
             factory.createIdentifier(fieldName),
             factory.createIdentifier('forEach'),
@@ -1260,18 +1314,13 @@ export const buildHasManyRelationshipDataStoreStatements = (
                   factory.createIdentifier('add'),
                 ),
                 undefined,
-                [
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier('r'),
-                    factory.createIdentifier(relatedModelPrimaryKey),
-                  ),
-                ],
+                [idValueCallChain],
               ),
             ),
           ],
         ),
       ),
-      // linkedCPKProjects.forEach((r) => linkedCPKProjectsSet.add(r.specialProjectId));
+      // linkedCPKProjects.forEach((r) => linkedCPKProjectsSet.add(getIDValue.CPKProjects?.(r)));
       factory.createExpressionStatement(
         factory.createCallExpression(
           factory.createPropertyAccessExpression(
@@ -1302,12 +1351,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                   factory.createIdentifier('add'),
                 ),
                 undefined,
-                [
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier('r'),
-                    factory.createIdentifier(relatedModelPrimaryKey),
-                  ),
-                ],
+                [idValueCallChain],
               ),
             ),
           ],
@@ -1348,12 +1392,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                           factory.createIdentifier('has'),
                         ),
                         undefined,
-                        [
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('r'),
-                            factory.createIdentifier('id'),
-                          ),
-                        ],
+                        [idValueCallChain],
                       ),
                     ),
                     factory.createBlock(
@@ -1415,12 +1454,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                           factory.createIdentifier('has'),
                         ),
                         undefined,
-                        [
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('r'),
-                            factory.createIdentifier('id'),
-                          ),
-                        ],
+                        [idValueCallChain],
                       ),
                     ),
                     factory.createBlock(
@@ -1513,7 +1547,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                   undefined,
                                   factory.createToken(SyntaxKind.EqualsGreaterThanToken),
                                   factory.createBlock(
-                                    [
+                                    relatedModelFields.map((relatedModelField) =>
                                       factory.createExpressionStatement(
                                         factory.createBinaryExpression(
                                           factory.createPropertyAccessExpression(
@@ -1524,7 +1558,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                           factory.createNull(),
                                         ),
                                       ),
-                                    ],
+                                    ),
                                     true,
                                   ),
                                 ),
@@ -1608,9 +1642,16 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                   undefined,
                                   factory.createToken(SyntaxKind.EqualsGreaterThanToken),
                                   factory.createBlock(
-                                    [
-                                      // updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId;
-                                      factory.createExpressionStatement(
+                                    // updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId;
+                                    relatedModelFields.map((relatedModelField, index) => {
+                                      const correspondingPrimaryKey = thisModelPrimaryKeys[index];
+                                      if (!correspondingPrimaryKey) {
+                                        throw new InternalError(
+                                          `Corresponding primary key not found for ${relatedModelField}`,
+                                        );
+                                      }
+
+                                      return factory.createExpressionStatement(
                                         factory.createBinaryExpression(
                                           factory.createPropertyAccessExpression(
                                             factory.createIdentifier('updated'),
@@ -1619,11 +1660,11 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                           factory.createToken(SyntaxKind.EqualsToken),
                                           factory.createPropertyAccessExpression(
                                             factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                                            factory.createIdentifier(thisModelPrimaryKey),
+                                            factory.createIdentifier(correspondingPrimaryKey),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      );
+                                    }),
                                     true,
                                   ),
                                 ),
@@ -1729,7 +1770,8 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                             factory.createBinaryExpression(
                                               factory.createPropertyAccessExpression(
                                                 factory.createIdentifier('updated'),
-                                                factory.createIdentifier(relatedModelField),
+                                                // TODO: update w/ create form support for composite keys
+                                                factory.createIdentifier(relatedModelFields[0]),
                                               ),
                                               factory.createToken(SyntaxKind.EqualsToken),
                                               factory.createPropertyAccessExpression(

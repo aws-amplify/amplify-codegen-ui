@@ -2699,17 +2699,19 @@ export default function UpdateCompositeDogForm(props) {
           const compositeToysToUnLink = [];
           const compositeToysSet = new Set();
           const linkedCompositeToysSet = new Set();
-          CompositeToys.forEach((r) => compositeToysSet.add(r.kind));
+          CompositeToys.forEach((r) =>
+            compositeToysSet.add(getIDValue.CompositeToys?.(r))
+          );
           linkedCompositeToys.forEach((r) =>
-            linkedCompositeToysSet.add(r.kind)
+            linkedCompositeToysSet.add(getIDValue.CompositeToys?.(r))
           );
           linkedCompositeToys.forEach((r) => {
-            if (!compositeToysSet.has(r.id)) {
+            if (!compositeToysSet.has(getIDValue.CompositeToys?.(r))) {
               compositeToysToUnLink.push(r);
             }
           });
           CompositeToys.forEach((r) => {
-            if (!linkedCompositeToysSet.has(r.id)) {
+            if (!linkedCompositeToysSet.has(getIDValue.CompositeToys?.(r))) {
               compositeToysToLink.push(r);
             }
           });
@@ -2718,6 +2720,7 @@ export default function UpdateCompositeDogForm(props) {
               DataStore.save(
                 CompositeToy.copyOf(original, (updated) => {
                   updated.compositeDogCompositeToysName = null;
+                  updated.compositeDogCompositeToysDescription = null;
                 })
               )
             );
@@ -2728,6 +2731,8 @@ export default function UpdateCompositeDogForm(props) {
                 CompositeToy.copyOf(original, (updated) => {
                   updated.compositeDogCompositeToysName =
                     compositeDogRecord.name;
+                  updated.compositeDogCompositeToysDescription =
+                    compositeDogRecord.description;
                 })
               )
             );
@@ -2737,14 +2742,16 @@ export default function UpdateCompositeDogForm(props) {
           const compositeVetsMap = new Map();
           const linkedCompositeVetsMap = new Map();
           CompositeVets.forEach((r) => {
-            const count = compositeVetsMap.get(r.specialty);
+            const count = compositeVetsMap.get(getIDValue.CompositeVets?.(r));
             const newCount = count ? count + 1 : 1;
-            compositeVetsMap.set(r.specialty, newCount);
+            compositeVetsMap.set(getIDValue.CompositeVets?.(r), newCount);
           });
           linkedCompositeVets.forEach((r) => {
-            const count = linkedCompositeVetsMap.get(r.specialty);
+            const count = linkedCompositeVetsMap.get(
+              getIDValue.CompositeVets?.(r)
+            );
             const newCount = count ? count + 1 : 1;
-            linkedCompositeVetsMap.set(r.specialty, newCount);
+            linkedCompositeVetsMap.set(getIDValue.CompositeVets?.(r), newCount);
           });
           linkedCompositeVetsMap.forEach((count, id) => {
             const newCount = compositeVetsMap.get(id);
@@ -2772,10 +2779,17 @@ export default function UpdateCompositeDogForm(props) {
             const compositeDogCompositeVetRecords = await DataStore.query(
               CompositeDogCompositeVet,
               (r) =>
-                r.and((r) => [
-                  r.compositeVetID.eq(id),
-                  r.compositeDogID.eq(compositeDogRecord.name),
-                ])
+                r.and((r) => {
+                  const recordKeys = JSON.parse(id);
+                  return [
+                    r.compositeVetSpecialty.eq(recordKeys.specialty),
+                    r.compositeVetcity.eq(recordKeys.city),
+                    r.compositeDogName.eq(compositeDogRecord.name),
+                    r.compositeDogdescription.eq(
+                      compositeDogRecord.description
+                    ),
+                  ];
+                })
             );
             for (let i = 0; i < count; i++) {
               promises.push(
@@ -2788,8 +2802,12 @@ export default function UpdateCompositeDogForm(props) {
               promises.push(
                 DataStore.save(
                   new CompositeDogCompositeVet({
-                    compositeDogID: compositeDogRecord.name,
-                    compositeVetID: id,
+                    compositeDog: compositeDogRecord,
+                    compositeVet: compositeVetRecords.find((r) =>
+                      Object.entries(JSON.parse(id)).every(
+                        ([key, value]) => r[key] === value
+                      )
+                    ),
                   })
                 )
               );
@@ -2826,7 +2844,7 @@ export default function UpdateCompositeDogForm(props) {
       <TextField
         label=\\"Name\\"
         isRequired={true}
-        isReadOnly={false}
+        isReadOnly={true}
         defaultValue={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -2855,7 +2873,7 @@ export default function UpdateCompositeDogForm(props) {
       <TextField
         label=\\"Description\\"
         isRequired={true}
-        isReadOnly={false}
+        isReadOnly={true}
         defaultValue={description}
         onChange={(e) => {
           let { value } = e.target;
@@ -3655,14 +3673,14 @@ export default function UpdateCPKTeacherForm(props) {
           const cPKClassesMap = new Map();
           const linkedCPKClassesMap = new Map();
           CPKClasses.forEach((r) => {
-            const count = cPKClassesMap.get(r.specialClassId);
+            const count = cPKClassesMap.get(getIDValue.CPKClasses?.(r));
             const newCount = count ? count + 1 : 1;
-            cPKClassesMap.set(r.specialClassId, newCount);
+            cPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount);
           });
           linkedCPKClasses.forEach((r) => {
-            const count = linkedCPKClassesMap.get(r.specialClassId);
+            const count = linkedCPKClassesMap.get(getIDValue.CPKClasses?.(r));
             const newCount = count ? count + 1 : 1;
-            linkedCPKClassesMap.set(r.specialClassId, newCount);
+            linkedCPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount);
           });
           linkedCPKClassesMap.forEach((count, id) => {
             const newCount = cPKClassesMap.get(id);
@@ -3690,10 +3708,13 @@ export default function UpdateCPKTeacherForm(props) {
             const cPKTeacherCPKClassRecords = await DataStore.query(
               CPKTeacherCPKClass,
               (r) =>
-                r.and((r) => [
-                  r.cpkClassID.eq(id),
-                  r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId),
-                ])
+                r.and((r) => {
+                  const recordKeys = JSON.parse(id);
+                  return [
+                    r.cpkClassID.eq(recordKeys.specialClassId),
+                    r.cpkTeacherID.eq(cPKTeacherRecord.specialTeacherId),
+                  ];
+                })
             );
             for (let i = 0; i < count; i++) {
               promises.push(DataStore.delete(cPKTeacherCPKClassRecords[i]));
@@ -3704,8 +3725,12 @@ export default function UpdateCPKTeacherForm(props) {
               promises.push(
                 DataStore.save(
                   new CPKTeacherCPKClass({
-                    cpkTeacherID: cPKTeacherRecord.specialTeacherId,
-                    cpkClassID: id,
+                    cpkTeacher: cPKTeacherRecord,
+                    cpkClass: cPKClassRecords.find((r) =>
+                      Object.entries(JSON.parse(id)).every(
+                        ([key, value]) => r[key] === value
+                      )
+                    ),
                   })
                 )
               );
@@ -3715,17 +3740,19 @@ export default function UpdateCPKTeacherForm(props) {
           const cPKProjectsToUnLink = [];
           const cPKProjectsSet = new Set();
           const linkedCPKProjectsSet = new Set();
-          CPKProjects.forEach((r) => cPKProjectsSet.add(r.specialProjectId));
+          CPKProjects.forEach((r) =>
+            cPKProjectsSet.add(getIDValue.CPKProjects?.(r))
+          );
           linkedCPKProjects.forEach((r) =>
-            linkedCPKProjectsSet.add(r.specialProjectId)
+            linkedCPKProjectsSet.add(getIDValue.CPKProjects?.(r))
           );
           linkedCPKProjects.forEach((r) => {
-            if (!cPKProjectsSet.has(r.id)) {
+            if (!cPKProjectsSet.has(getIDValue.CPKProjects?.(r))) {
               cPKProjectsToUnLink.push(r);
             }
           });
           CPKProjects.forEach((r) => {
-            if (!linkedCPKProjectsSet.has(r.id)) {
+            if (!linkedCPKProjectsSet.has(getIDValue.CPKProjects?.(r))) {
               cPKProjectsToLink.push(r);
             }
           });
@@ -9743,15 +9770,17 @@ export default function SchoolUpdateForm(props) {
           const studentsToUnLink = [];
           const studentsSet = new Set();
           const linkedStudentsSet = new Set();
-          Students.forEach((r) => studentsSet.add(r.id));
-          linkedStudents.forEach((r) => linkedStudentsSet.add(r.id));
+          Students.forEach((r) => studentsSet.add(getIDValue.Students?.(r)));
+          linkedStudents.forEach((r) =>
+            linkedStudentsSet.add(getIDValue.Students?.(r))
+          );
           linkedStudents.forEach((r) => {
-            if (!studentsSet.has(r.id)) {
+            if (!studentsSet.has(getIDValue.Students?.(r))) {
               studentsToUnLink.push(r);
             }
           });
           Students.forEach((r) => {
-            if (!linkedStudentsSet.has(r.id)) {
+            if (!linkedStudentsSet.has(getIDValue.Students?.(r))) {
               studentsToLink.push(r);
             }
           });
@@ -10772,14 +10801,14 @@ export default function TagUpdateForm(props) {
           const postsMap = new Map();
           const linkedPostsMap = new Map();
           Posts.forEach((r) => {
-            const count = postsMap.get(r.id);
+            const count = postsMap.get(getIDValue.Posts?.(r));
             const newCount = count ? count + 1 : 1;
-            postsMap.set(r.id, newCount);
+            postsMap.set(getIDValue.Posts?.(r), newCount);
           });
           linkedPosts.forEach((r) => {
-            const count = linkedPostsMap.get(r.id);
+            const count = linkedPostsMap.get(getIDValue.Posts?.(r));
             const newCount = count ? count + 1 : 1;
-            linkedPostsMap.set(r.id, newCount);
+            linkedPostsMap.set(getIDValue.Posts?.(r), newCount);
           });
           linkedPostsMap.forEach((count, id) => {
             const newCount = postsMap.get(id);
@@ -10805,7 +10834,10 @@ export default function TagUpdateForm(props) {
           });
           postsToUnLinkMap.forEach(async (count, id) => {
             const tagPostRecords = await DataStore.query(TagPost, (r) =>
-              r.and((r) => [r.postID.eq(id), r.tagID.eq(tagRecord.id)])
+              r.and((r) => {
+                const recordKeys = JSON.parse(id);
+                return [r.postID.eq(recordKeys.id), r.tagID.eq(tagRecord.id)];
+              })
             );
             for (let i = 0; i < count; i++) {
               promises.push(DataStore.delete(tagPostRecords[i]));
@@ -10816,8 +10848,12 @@ export default function TagUpdateForm(props) {
               promises.push(
                 DataStore.save(
                   new TagPost({
-                    tagID: tagRecord.id,
-                    postID: id,
+                    tag: tagRecord,
+                    post: postRecords.find((r) =>
+                      Object.entries(JSON.parse(id)).every(
+                        ([key, value]) => r[key] === value
+                      )
+                    ),
                   })
                 )
               );

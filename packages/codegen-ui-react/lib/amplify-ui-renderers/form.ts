@@ -112,10 +112,9 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       ];
     }
     if (dataSourceType === 'DataStore') {
-      const primaryKey = this.componentMetadata.dataSchemaMetadata?.models[dataTypeName].primaryKey;
-
-      if (!primaryKey) {
-        throw new InternalError(`Could not find primary key for ${dataTypeName}`);
+      const { dataSchemaMetadata } = this.componentMetadata;
+      if (!dataSchemaMetadata) {
+        throw new InternalError(`Could not find data schema for data-backed form`);
       }
       return [
         factory.createIfStatement(
@@ -144,7 +143,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 dataTypeName,
                 importedModelName,
                 formMetadata.fieldConfigs,
-                primaryKey,
+                dataSchemaMetadata,
               ),
               // call onSuccess hook if it exists
               factory.createIfStatement(
