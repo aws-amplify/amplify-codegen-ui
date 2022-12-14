@@ -15,18 +15,17 @@
  */
 
 import { AsyncCollection, AsyncItem } from '@aws-amplify/datastore';
-import { LazyAllSupportedFormFields } from './models';
 
-export async function getModelsFromJoinTableRecords<T, Y>(
-  record: LazyAllSupportedFormFields,
-  fieldName: keyof LazyAllSupportedFormFields,
-  dataField: keyof Y,
-): Promise<T[]> {
-  const joinTableRecords = await (record[fieldName] as unknown as AsyncCollection<Y>)?.toArray();
+export async function getModelsFromJoinTableRecords<Record, RelatedModel, JoinTable>(
+  record: Record,
+  fieldName: keyof Record,
+  dataField: keyof JoinTable,
+): Promise<RelatedModel[]> {
+  const joinTableRecords = await (record[fieldName] as unknown as AsyncCollection<JoinTable>)?.toArray();
 
   return Promise.all(
-    joinTableRecords.reduce((promises: AsyncItem<T>[], joinTableRecord) => {
-      promises.push(joinTableRecord[dataField] as unknown as AsyncItem<T>);
+    joinTableRecords.reduce((promises: AsyncItem<RelatedModel>[], joinTableRecord) => {
+      promises.push(joinTableRecord[dataField] as unknown as AsyncItem<RelatedModel>);
       return promises;
     }, []),
   );

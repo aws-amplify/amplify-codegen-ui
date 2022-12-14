@@ -25,6 +25,7 @@ import {
   __modelMeta__,
   CustomIdentifier,
   ManagedIdentifier,
+  CompositeIdentifier,
 } from '@aws-amplify/datastore';
 
 export enum City {
@@ -611,4 +612,232 @@ export declare const CPKTeacherCPKClass: (new (init: ModelInit<CPKTeacherCPKClas
     source: CPKTeacherCPKClass,
     mutator: (draft: MutableModel<CPKTeacherCPKClass>) => MutableModel<CPKTeacherCPKClass> | void,
   ): CPKTeacherCPKClass;
+};
+
+type EagerCompositeDog = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeDog, ['name', 'description']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly name: string;
+  readonly description: string;
+  readonly CompositeBowl?: CompositeBowl | null;
+  readonly CompositeOwner?: CompositeOwner | null;
+  readonly CompositeToys?: (CompositeToy | null)[] | null;
+  readonly CompositeVets?: (CompositeDogCompositeVet | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly compositeDogCompositeBowlShape?: string | null;
+  readonly compositeDogCompositeBowlSize?: string | null;
+  readonly compositeDogCompositeOwnerLastName?: string | null;
+  readonly compositeDogCompositeOwnerFirstName?: string | null;
+};
+
+type LazyCompositeDog = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeDog, ['name', 'description']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly name: string;
+  readonly description: string;
+  readonly CompositeBowl: AsyncItem<CompositeBowl | undefined>;
+  readonly CompositeOwner: AsyncItem<CompositeOwner | undefined>;
+  readonly CompositeToys: AsyncCollection<CompositeToy>;
+  readonly CompositeVets: AsyncCollection<CompositeDogCompositeVet>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly compositeDogCompositeBowlShape?: string | null;
+  readonly compositeDogCompositeBowlSize?: string | null;
+  readonly compositeDogCompositeOwnerLastName?: string | null;
+  readonly compositeDogCompositeOwnerFirstName?: string | null;
+};
+
+export declare type CompositeDog = LazyLoading extends LazyLoadingDisabled ? EagerCompositeDog : LazyCompositeDog;
+
+export declare const CompositeDog: (new (init: ModelInit<CompositeDog>) => CompositeDog) & {
+  copyOf(
+    source: CompositeDog,
+    mutator: (draft: MutableModel<CompositeDog>) => MutableModel<CompositeDog> | void,
+  ): CompositeDog;
+};
+
+type EagerCompositeBowl = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeBowl, ['shape', 'size']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly shape: string;
+  readonly size: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyCompositeBowl = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeBowl, ['shape', 'size']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly shape: string;
+  readonly size: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type CompositeBowl = LazyLoading extends LazyLoadingDisabled ? EagerCompositeBowl : LazyCompositeBowl;
+
+export declare const CompositeBowl: (new (init: ModelInit<CompositeBowl>) => CompositeBowl) & {
+  copyOf(
+    source: CompositeBowl,
+    mutator: (draft: MutableModel<CompositeBowl>) => MutableModel<CompositeBowl> | void,
+  ): CompositeBowl;
+};
+
+type EagerCompositeOwner = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeOwner, ['lastName', 'firstName']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly lastName: string;
+  readonly firstName: string;
+  readonly CompositeDog?: CompositeDog | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly compositeOwnerCompositeDogName?: string | null;
+  readonly compositeOwnerCompositeDogDescription?: string | null;
+};
+
+type LazyCompositeOwner = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeOwner, ['lastName', 'firstName']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly lastName: string;
+  readonly firstName: string;
+  readonly CompositeDog: AsyncItem<CompositeDog | undefined>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly compositeOwnerCompositeDogName?: string | null;
+  readonly compositeOwnerCompositeDogDescription?: string | null;
+};
+
+export declare type CompositeOwner = LazyLoading extends LazyLoadingDisabled ? EagerCompositeOwner : LazyCompositeOwner;
+
+export declare const CompositeOwner: (new (init: ModelInit<CompositeOwner>) => CompositeOwner) & {
+  copyOf(
+    source: CompositeOwner,
+    mutator: (draft: MutableModel<CompositeOwner>) => MutableModel<CompositeOwner> | void,
+  ): CompositeOwner;
+};
+
+type EagerCompositeToy = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeToy, ['kind', 'color']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly kind: string;
+  readonly color: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly compositeDogCompositeToysName?: string | null;
+  readonly compositeDogCompositeToysDescription?: string | null;
+};
+
+type LazyCompositeToy = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeToy, ['kind', 'color']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly kind: string;
+  readonly color: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly compositeDogCompositeToysName?: string | null;
+  readonly compositeDogCompositeToysDescription?: string | null;
+};
+
+export declare type CompositeToy = LazyLoading extends LazyLoadingDisabled ? EagerCompositeToy : LazyCompositeToy;
+
+export declare const CompositeToy: (new (init: ModelInit<CompositeToy>) => CompositeToy) & {
+  copyOf(
+    source: CompositeToy,
+    mutator: (draft: MutableModel<CompositeToy>) => MutableModel<CompositeToy> | void,
+  ): CompositeToy;
+};
+
+type EagerCompositeVet = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeVet, ['specialty', 'city']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly specialty: string;
+  readonly city: string;
+  readonly CompositeDogs?: (CompositeDogCompositeVet | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyCompositeVet = {
+  readonly [__modelMeta__]: {
+    identifier: CompositeIdentifier<CompositeVet, ['specialty', 'city']>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly specialty: string;
+  readonly city: string;
+  readonly CompositeDogs: AsyncCollection<CompositeDogCompositeVet>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type CompositeVet = LazyLoading extends LazyLoadingDisabled ? EagerCompositeVet : LazyCompositeVet;
+
+export declare const CompositeVet: (new (init: ModelInit<CompositeVet>) => CompositeVet) & {
+  copyOf(
+    source: CompositeVet,
+    mutator: (draft: MutableModel<CompositeVet>) => MutableModel<CompositeVet> | void,
+  ): CompositeVet;
+};
+
+type EagerCompositeDogCompositeVet = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CompositeDogCompositeVet, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly compositeDogName?: string | null;
+  readonly compositeDogdescription?: string | null;
+  readonly compositeVetSpecialty?: string | null;
+  readonly compositeVetcity?: string | null;
+  readonly compositeDog: CompositeDog;
+  readonly compositeVet: CompositeVet;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyCompositeDogCompositeVet = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CompositeDogCompositeVet, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly compositeDogName?: string | null;
+  readonly compositeDogdescription?: string | null;
+  readonly compositeVetSpecialty?: string | null;
+  readonly compositeVetcity?: string | null;
+  readonly compositeDog: AsyncItem<CompositeDog>;
+  readonly compositeVet: AsyncItem<CompositeVet>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type CompositeDogCompositeVet = LazyLoading extends LazyLoadingDisabled
+  ? EagerCompositeDogCompositeVet
+  : LazyCompositeDogCompositeVet;
+
+export declare const CompositeDogCompositeVet: (new (
+  init: ModelInit<CompositeDogCompositeVet>,
+) => CompositeDogCompositeVet) & {
+  copyOf(
+    source: CompositeDogCompositeVet,
+    mutator: (draft: MutableModel<CompositeDogCompositeVet>) => MutableModel<CompositeDogCompositeVet> | void,
+  ): CompositeDogCompositeVet;
 };
