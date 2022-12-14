@@ -17,7 +17,11 @@ import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Text, Divider } from '@aws-amplify/ui-react';
 import React, { useState, useEffect, useRef, SetStateAction } from 'react';
 import { AsyncItem, DataStore } from '@aws-amplify/datastore';
-import { DataStoreFormUpdateAllSupportedFormFields, DataStoreFormUpdateCPKTeacher } from './ui-components'; // eslint-disable-line import/extensions, max-len
+import {
+  DataStoreFormUpdateAllSupportedFormFields,
+  DataStoreFormUpdateCompositeDog,
+  DataStoreFormUpdateCPKTeacher,
+} from './ui-components'; // eslint-disable-line import/extensions, max-len
 import {
   Owner,
   User,
@@ -35,6 +39,14 @@ import {
   LazyCPKTeacherCPKClass,
   CPKTeacherCPKClass,
   LazyCPKClass,
+  CompositeDog,
+  CompositeOwner,
+  CompositeToy,
+  CompositeBowl,
+  CompositeVet,
+  LazyCompositeVet,
+  CompositeDogCompositeVet,
+  LazyCompositeDogCompositeVet,
 } from './models';
 import { getModelsFromJoinTableRecords } from './test-utils';
 
@@ -65,6 +77,16 @@ const initializeTestData = async (): Promise<void> => {
     DataStore.save(new CPKClass({ specialClassId: 'English' })),
     DataStore.save(new CPKProject({ specialProjectId: 'Either/Or' })),
     DataStore.save(new CPKProject({ specialProjectId: 'Figure 8' })),
+
+    // for CompositeDog
+    DataStore.save(new CompositeOwner({ lastName: 'Cooper', firstName: 'Dale' })),
+    DataStore.save(new CompositeOwner({ lastName: 'Cooper', firstName: 'Gordon' })),
+    DataStore.save(new CompositeToy({ kind: 'chew', color: 'green' })),
+    DataStore.save(new CompositeToy({ kind: 'chew', color: 'red' })),
+    DataStore.save(new CompositeBowl({ shape: 'round', size: 'xs' })),
+    DataStore.save(new CompositeBowl({ shape: 'round', size: 'xl' })),
+    DataStore.save(new CompositeVet({ specialty: 'Dentistry', city: 'Seattle' })),
+    DataStore.save(new CompositeVet({ specialty: 'Dentistry', city: 'Los Angeles' })),
   ]);
 };
 
@@ -180,6 +202,55 @@ const initializeCPKTeacherTestData = async ({
   });
 };
 
+const initializeCompositeDogTestData = async ({
+  setCompositeDogRecord,
+}: {
+  setCompositeDogRecord: React.Dispatch<SetStateAction<CompositeDog | undefined>>;
+}): Promise<void> => {
+  const connectedBowl = await DataStore.query(CompositeBowl, { shape: 'round', size: 'xs' });
+  const connectedOwner = await DataStore.query(CompositeOwner, { lastName: 'Cooper', firstName: 'Dale' });
+  const connectedVet = await DataStore.query(CompositeVet, { specialty: 'Dentistry', city: 'Seattle' });
+  const connectedToy = await DataStore.query(CompositeToy, { kind: 'chew', color: 'green' });
+
+  const createdRecord = await DataStore.save(
+    new CompositeDog({
+      name: 'Yundoo',
+      description: 'tiny but mighty',
+      CompositeBowl: connectedBowl,
+      CompositeOwner: connectedOwner,
+    }),
+  );
+
+  // connect vet through join table
+  if (connectedVet) {
+    await DataStore.save(
+      new CompositeDogCompositeVet({
+        compositeDog: createdRecord,
+        compositeVet: connectedVet,
+      }),
+    );
+  }
+
+  // connect toy
+  if (connectedToy) {
+    await DataStore.save(
+      CompositeToy.copyOf(connectedToy, (updated) => {
+        Object.assign(updated, {
+          compositeDogCompositeToysName: createdRecord.name,
+          compositeDogCompositeToysDescription: createdRecord.description,
+        });
+      }),
+    );
+  }
+
+  setCompositeDogRecord((prevRecord) => {
+    if (!prevRecord) {
+      return createdRecord;
+    }
+    return prevRecord;
+  });
+};
+
 export default function UpdateFormTests() {
   const [isInitialized, setInitialized] = useState(false);
   const [allSupportedFormFieldsRecordId, setAllSupportedFormFieldsRecordId] = useState<string | undefined>(undefined);
@@ -189,6 +260,9 @@ export default function UpdateFormTests() {
   const [cpkTeacherId, setCPKTeacherId] = useState<string | undefined>('');
   const [dataStoreFormUpdateCPKTeacherRecord, setDataStoreFormUpdateCPKTeacherRecord] = useState<string>('');
 
+  const [compositeDogRecord, setCompositeDogRecord] = useState<CompositeDog | undefined>();
+
+  const [compositeDogRecordString, setCompositeDogRecordString] = useState<string>('');
   const initializeStarted = useRef(false);
 
   useEffect(() => {
@@ -202,6 +276,7 @@ export default function UpdateFormTests() {
       await Promise.all([
         initializeAllSupportedFormFieldsTestData({ setAllSupportedFormFieldsRecordId }),
         initializeCPKTeacherTestData({ setCPKTeacherId }),
+        initializeCompositeDogTestData({ setCompositeDogRecord }),
       ]);
       setInitialized(true);
     };
@@ -224,11 +299,11 @@ export default function UpdateFormTests() {
             const records = await DataStore.query(AllSupportedFormFields);
             const record = records[0];
 
-            const ManyToManyTags = await getModelsFromJoinTableRecords<LazyTag, LazyAllSupportedFormFieldsTag>(
-              record,
-              'ManyToManyTags',
-              'tag',
-            );
+            const ManyToManyTags = await getModelsFromJoinTableRecords<
+              AllSupportedFormFields,
+              LazyTag,
+              LazyAllSupportedFormFieldsTag
+            >(record, 'ManyToManyTags', 'tag');
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
 
             setDataStoreFormUpdateAllSupportedFormFieldsRecord(
@@ -253,13 +328,10 @@ export default function UpdateFormTests() {
             const records = await DataStore.query(CPKTeacher);
             const record = records[0];
 
-            const joinTableRecords = (await record.CPKClasses?.toArray()) as LazyCPKTeacherCPKClass[];
-
-            const CPKClasses = await Promise.all(
-              joinTableRecords?.reduce((promises: AsyncItem<LazyCPKClass>[], joinTableRecord) => {
-                promises.push(joinTableRecord.cpkClass as AsyncItem<LazyCPKClass>);
-                return promises;
-              }, []),
+            const CPKClasses = await getModelsFromJoinTableRecords<CPKTeacher, LazyCPKClass, LazyCPKTeacherCPKClass>(
+              record,
+              'CPKClasses',
+              'cpkClass',
             );
 
             setDataStoreFormUpdateCPKTeacherRecord(
@@ -273,6 +345,34 @@ export default function UpdateFormTests() {
           }}
         />
         <Text>{dataStoreFormUpdateCPKTeacherRecord}</Text>
+      </View>
+      <Divider />
+      <Heading>DataStore Form - UpdateCompositeDog</Heading>
+      <View id="dataStoreFormUpdateCompositeDog">
+        <DataStoreFormUpdateCompositeDog
+          compositeDog={compositeDogRecord}
+          onSuccess={async () => {
+            const records = await DataStore.query(CompositeDog);
+            const record = records[0];
+
+            const CompositeVets = await getModelsFromJoinTableRecords<
+              CompositeDog,
+              LazyCompositeVet,
+              LazyCompositeDogCompositeVet
+            >(record, 'CompositeVets', 'compositeVet');
+
+            setCompositeDogRecordString(
+              JSON.stringify({
+                ...record,
+                CompositeBowl: await record.CompositeBowl,
+                CompositeOwner: await record.CompositeOwner,
+                CompositeToys: await record.CompositeToys?.toArray(),
+                CompositeVets,
+              }),
+            );
+          }}
+        />
+        <Text>{compositeDogRecordString}</Text>
       </View>
     </AmplifyProvider>
   );

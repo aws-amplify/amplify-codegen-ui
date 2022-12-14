@@ -21,3 +21,6 @@ export { default as DataStoreFormUpdateAllSupportedFormFields } from './datastor
 
 export { default as CustomFormCreateNestedJson } from './custom-form-nested-json-create.json';
 export { default as DataStoreFormUpdateCPKTeacher } from './datastore-form-update-cpk-teacher.json';
+export { default as DataStoreFormUpdateCompositeDog } from './datastore-form-update-composite-dog.json';
+export { default as DataStoreFormCreateCPKTeacher } from './datastore-form-create-cpk-teacher.json';
+export { default as DataStoreFormCreateCompositeDog } from './datastore-form-create-composite-dog.json';

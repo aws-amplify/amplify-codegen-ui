@@ -21,28 +21,72 @@ import {
   CustomFormCreateDog,
   DataStoreFormCreateAllSupportedFormFields,
   CustomFormCreateNestedJson,
+  DataStoreFormCreateCPKTeacher,
+  DataStoreFormCreateCompositeDog,
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
 
-import { AllSupportedFormFields, Owner, User, Tag, LazyTag, Student, LazyAllSupportedFormFieldsTag } from './models';
+import {
+  AllSupportedFormFields,
+  Owner,
+  User,
+  Tag,
+  LazyTag,
+  Student,
+  LazyAllSupportedFormFieldsTag,
+  CPKStudent,
+  CPKClass,
+  CPKProject,
+  CPKTeacher,
+  LazyCPKTeacherCPKClass,
+  LazyCPKClass,
+  CompositeDog,
+  CompositeOwner,
+  CompositeToy,
+  CompositeBowl,
+  CompositeVet,
+  LazyCompositeVet,
+  LazyCompositeDogCompositeVet,
+} from './models';
 import { getModelsFromJoinTableRecords } from './test-utils';
 
 const initializeTestData = async (): Promise<void> => {
-  await DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 }));
-  await DataStore.save(new User({ firstName: 'Paul', lastName: 'McCartney', age: 72 }));
-  await DataStore.save(new User({ firstName: 'George', lastName: 'Harrison', age: 50 }));
-  await DataStore.save(new User({ firstName: 'Ringo', lastName: 'Starr', age: 5 }));
-  await DataStore.save(new Owner({ name: 'John' }));
-  await DataStore.save(new Owner({ name: 'Paul' }));
-  await DataStore.save(new Owner({ name: 'George' }));
-  await DataStore.save(new Owner({ name: 'Ringo' }));
-  await DataStore.save(new Student({ name: 'David' }));
-  await DataStore.save(new Student({ name: 'Taylor' }));
-  await DataStore.save(new Student({ name: 'Michael' }));
-  await DataStore.save(new Student({ name: 'Sarah' }));
-  await DataStore.save(new Tag({ label: 'Red' }));
-  await DataStore.save(new Tag({ label: 'Blue' }));
-  await DataStore.save(new Tag({ label: 'Green' }));
-  await DataStore.save(new Tag({ label: 'Orange' }));
+  await Promise.all<any>([
+    // for AllSupportedFormFields
+    DataStore.save(new User({ firstName: 'John', lastName: 'Lennon', age: 29 })),
+    DataStore.save(new User({ firstName: 'Paul', lastName: 'McCartney', age: 72 })),
+    DataStore.save(new User({ firstName: 'George', lastName: 'Harrison', age: 50 })),
+    DataStore.save(new User({ firstName: 'Ringo', lastName: 'Starr', age: 5 })),
+    DataStore.save(new Owner({ name: 'John' })),
+    DataStore.save(new Owner({ name: 'Paul' })),
+    DataStore.save(new Owner({ name: 'George' })),
+    DataStore.save(new Owner({ name: 'Ringo' })),
+    DataStore.save(new Student({ name: 'David' })),
+    DataStore.save(new Student({ name: 'Taylor' })),
+    DataStore.save(new Student({ name: 'Michael' })),
+    DataStore.save(new Student({ name: 'Sarah' })),
+    DataStore.save(new Tag({ label: 'Red' })),
+    DataStore.save(new Tag({ label: 'Blue' })),
+    DataStore.save(new Tag({ label: 'Green' })),
+    DataStore.save(new Tag({ label: 'Orange' })),
+
+    // for CPKTeacher
+    DataStore.save(new CPKStudent({ specialStudentId: 'Harry' })),
+    DataStore.save(new CPKStudent({ specialStudentId: 'Hermione' })),
+    DataStore.save(new CPKClass({ specialClassId: 'Math' })),
+    DataStore.save(new CPKClass({ specialClassId: 'English' })),
+    DataStore.save(new CPKProject({ specialProjectId: 'Either/Or' })),
+    DataStore.save(new CPKProject({ specialProjectId: 'Figure 8' })),
+
+    // for CompositeDog
+    DataStore.save(new CompositeOwner({ lastName: 'Cooper', firstName: 'Dale' })),
+    DataStore.save(new CompositeOwner({ lastName: 'Cooper', firstName: 'Gordon' })),
+    DataStore.save(new CompositeToy({ kind: 'chew', color: 'green' })),
+    DataStore.save(new CompositeToy({ kind: 'chew', color: 'red' })),
+    DataStore.save(new CompositeBowl({ shape: 'round', size: 'xs' })),
+    DataStore.save(new CompositeBowl({ shape: 'round', size: 'xl' })),
+    DataStore.save(new CompositeVet({ specialty: 'Dentistry', city: 'Seattle' })),
+    DataStore.save(new CompositeVet({ specialty: 'Dentistry', city: 'Los Angeles' })),
+  ]);
 };
 
 export default function CreateFormTests() {
@@ -51,6 +95,9 @@ export default function CreateFormTests() {
   const [isInitialized, setInitialized] = useState(false);
   const [dataStoreFormCreateAllSupportedFormFieldsRecord, setDataStoreFormCreateAllSupportedFormFieldsRecord] =
     useState('');
+  const [cpkTeacherRecordString, setCPKTeacherRecordString] = useState('');
+  const [compositeDogRecordString, setCompositeDogRecordString] = useState('');
+
   const initializeStarted = useRef(false);
 
   useEffect(() => {
@@ -105,11 +152,11 @@ export default function CreateFormTests() {
             const records = await DataStore.query(AllSupportedFormFields);
             const record = records[0];
 
-            const ManyToManyTags = await getModelsFromJoinTableRecords<LazyTag, LazyAllSupportedFormFieldsTag>(
-              record,
-              'ManyToManyTags',
-              'tag',
-            );
+            const ManyToManyTags = await getModelsFromJoinTableRecords<
+              AllSupportedFormFields,
+              LazyTag,
+              LazyAllSupportedFormFieldsTag
+            >(record, 'ManyToManyTags', 'tag');
             ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
 
             setDataStoreFormCreateAllSupportedFormFieldsRecord(
@@ -129,6 +176,59 @@ export default function CreateFormTests() {
       <Heading>Custom Form - CreateNestedJson</Heading>
       <View id="customFormCreateNestedJson">
         <CustomFormCreateNestedJson onSubmit={() => undefined} />
+      </View>
+      <Divider />
+      <Heading>DataStore Form - CreateCPKTeacher</Heading>
+      <View id="dataStoreFormCreateCPKTeacher">
+        <DataStoreFormCreateCPKTeacher
+          onSuccess={async () => {
+            const records = await DataStore.query(CPKTeacher);
+            const record = records[0];
+
+            const CPKClasses = await getModelsFromJoinTableRecords<CPKTeacher, LazyCPKClass, LazyCPKTeacherCPKClass>(
+              record,
+              'CPKClasses',
+              'cpkClass',
+            );
+
+            setCPKTeacherRecordString(
+              JSON.stringify({
+                ...record,
+                CPKStudent: await record.CPKStudent,
+                CPKClasses,
+                CPKProjects: await record.CPKProjects?.toArray(),
+              }),
+            );
+          }}
+        />
+        <Text>{cpkTeacherRecordString}</Text>
+      </View>
+      <Divider />
+      <Heading>DataStore Form - CreateCompositeDog</Heading>
+      <View id="dataStoreFormCreateCompositeDog">
+        <DataStoreFormCreateCompositeDog
+          onSuccess={async () => {
+            const records = await DataStore.query(CompositeDog);
+            const record = records[0];
+
+            const CompositeVets = await getModelsFromJoinTableRecords<
+              CompositeDog,
+              LazyCompositeVet,
+              LazyCompositeDogCompositeVet
+            >(record, 'CompositeVets', 'compositeVet');
+
+            setCompositeDogRecordString(
+              JSON.stringify({
+                ...record,
+                CompositeBowl: await record.CompositeBowl,
+                CompositeOwner: await record.CompositeOwner,
+                CompositeToys: await record.CompositeToys?.toArray(),
+                CompositeVets,
+              }),
+            );
+          }}
+        />
+        <Text>{compositeDogRecordString}</Text>
       </View>
     </AmplifyProvider>
   );

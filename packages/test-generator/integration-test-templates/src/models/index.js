@@ -46,6 +46,12 @@ const {
   CPKClass,
   CPKTeacherCPKClass,
   CPKProject,
+  CompositeDog,
+  CompositeBowl,
+  CompositeOwner,
+  CompositeToy,
+  CompositeVet,
+  CompositeDogCompositeVet,
 } = initSchema(schema);
 
 export {
@@ -65,4 +71,10 @@ export {
   CPKClass,
   CPKTeacherCPKClass,
   CPKProject,
+  CompositeDog,
+  CompositeBowl,
+  CompositeOwner,
+  CompositeToy,
+  CompositeVet,
+  CompositeDogCompositeVet,
 };

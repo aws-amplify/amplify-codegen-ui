@@ -14,7 +14,13 @@
   limitations under the License.
  */
 
-import { getArrayFieldButtonByLabel, clickAddToArray, removeArrayItem, typeInAutocomplete } from '../utils/form';
+import {
+  getInputByLabel,
+  getArrayFieldButtonByLabel,
+  clickAddToArray,
+  removeArrayItem,
+  typeInAutocomplete,
+} from '../utils/form';
 
 describe('UpdateForms', () => {
   before(() => {
@@ -146,6 +152,54 @@ describe('UpdateForms', () => {
           expect(record.CPKClasses[0].specialClassId).to.equal('English');
           expect(record.CPKProjects.length).to.equal(1);
           expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
+        });
+      });
+    });
+  });
+
+  // this model & related models all use composite keys
+  describe('DataStoreFormUpdateCompositeDog', () => {
+    it('should display current values and save to DataStore', () => {
+      cy.get('#dataStoreFormUpdateCompositeDog').within(() => {
+        // composite keys should be readonly
+        getInputByLabel('Name').should('have.attr', 'readonly');
+        getInputByLabel('Description').should('have.attr', 'readonly');
+
+        // hasOne
+        removeArrayItem('round - xs');
+        getArrayFieldButtonByLabel('Composite bowl').click();
+        typeInAutocomplete('round - xl{downArrow}{enter}');
+        clickAddToArray();
+
+        // belongsTo
+        removeArrayItem('Cooper - Dale');
+        getArrayFieldButtonByLabel('Composite owner').click();
+        typeInAutocomplete('Cooper - Gordon{downArrow}{enter}');
+        clickAddToArray();
+
+        // manyToMany
+        removeArrayItem('chew - green');
+        getArrayFieldButtonByLabel('Composite toys').click();
+        typeInAutocomplete('chew - red{downArrow}{enter}');
+        clickAddToArray();
+
+        // hasMany
+        removeArrayItem('Dentistry - Seattle');
+        getArrayFieldButtonByLabel('Composite vets').click();
+        typeInAutocomplete('Dentistry - Los Angeles{downArrow}{enter}');
+        clickAddToArray();
+
+        cy.contains('Submit').click();
+
+        cy.contains(/Yundoo/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
+
+          expect(record.CompositeBowl.size).to.equal('xl');
+          expect(record.CompositeOwner.firstName).to.equal('Gordon');
+          expect(record.CompositeToys.length).to.equal(1);
+          expect(record.CompositeToys[0].color).to.equal('red');
+          expect(record.CompositeVets.length).to.equal(1);
+          expect(record.CompositeVets[0].city).to.equal('Los Angeles');
         });
       });
     });
