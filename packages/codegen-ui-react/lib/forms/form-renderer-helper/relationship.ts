@@ -153,12 +153,48 @@ function extractAssociatedFields(field: GenericDataField): string[] | undefined 
   return undefined;
 }
 
+function createHasManyUpdateRelatedModelBlock({
+  relatedModelFields,
+  thisModelPrimaryKeys,
+  thisModelRecord,
+}: {
+  relatedModelFields: string[];
+  thisModelPrimaryKeys: string[];
+  thisModelRecord: string;
+}) {
+  return factory.createBlock(
+    // updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId;
+    relatedModelFields.map((relatedModelField, index) => {
+      const correspondingPrimaryKey = thisModelPrimaryKeys[index];
+      if (!correspondingPrimaryKey) {
+        throw new InternalError(`Corresponding primary key not found for ${relatedModelField}`);
+      }
+
+      return factory.createExpressionStatement(
+        factory.createBinaryExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('updated'),
+            factory.createIdentifier(relatedModelField),
+          ),
+          factory.createToken(SyntaxKind.EqualsToken),
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(thisModelRecord),
+            factory.createIdentifier(correspondingPrimaryKey),
+          ),
+        ),
+      );
+    }),
+    true,
+  );
+}
+
 export const buildManyToManyRelationshipDataStoreStatements = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
   thisModelPrimaryKeys: string[],
   joinTable: GenericDataModel,
+  savedModelName: string,
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
@@ -167,6 +203,9 @@ export const buildManyToManyRelationshipDataStoreStatements = (
     fieldConfigMetaData.relationship as HasManyRelationshipType;
   const joinTableThisModelName = relatedModelFields[0];
   const joinTableRelatedModelName = relatedJoinFieldName;
+  if (!relatedJoinTableName) {
+    throw new InternalError(`Cannot find join table for ${fieldName}`);
+  }
   if (!joinTableRelatedModelName) {
     throw new InternalError(`Cannot find corresponding field in join table for ${fieldName}`);
   }
@@ -720,7 +759,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                     factory.createVariableDeclarationList(
                       [
                         factory.createVariableDeclaration(
-                          factory.createIdentifier(getRecordsName(relatedJoinTableName as string)),
+                          factory.createIdentifier(getRecordsName(relatedJoinTableName)),
                           undefined,
                           undefined,
                           factory.createAwaitExpression(
@@ -731,7 +770,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                               ),
                               undefined,
                               [
-                                factory.createIdentifier(relatedJoinTableName as string),
+                                factory.createIdentifier(relatedJoinTableName),
                                 factory.createArrowFunction(
                                   undefined,
                                   undefined,
@@ -975,7 +1014,7 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                       undefined,
                       undefined,
                       undefined,
-                      factory.createIdentifier(relatedJoinFieldName as string),
+                      factory.createIdentifier(joinTableRelatedModelName),
                       undefined,
                       undefined,
                       undefined,
@@ -1000,26 +1039,30 @@ export const buildManyToManyRelationshipDataStoreStatements = (
                               ),
                               undefined,
                               [
-                                factory.createNewExpression(
-                                  factory.createIdentifier(relatedJoinTableName as string),
-                                  undefined,
-                                  [
-                                    factory.createObjectLiteralExpression(
-                                      [
-                                        factory.createShorthandPropertyAssignment(
-                                          // TODO: update w/ create form support for composite keys
-                                          factory.createIdentifier(relatedModelFields[0]),
-                                          undefined,
-                                        ),
-                                        factory.createShorthandPropertyAssignment(
-                                          factory.createIdentifier(relatedJoinFieldName as string),
-                                          undefined,
-                                        ),
-                                      ],
-                                      true,
-                                    ),
-                                  ],
-                                ),
+                                factory.createNewExpression(factory.createIdentifier(relatedJoinTableName), undefined, [
+                                  // {
+                                  //   cpkTeacher: cPKTeacher,
+                                  //   cpkClass,
+                                  // }
+                                  factory.createObjectLiteralExpression(
+                                    [
+                                      savedModelName === joinTableThisModelName
+                                        ? factory.createShorthandPropertyAssignment(
+                                            factory.createIdentifier(joinTableThisModelName),
+                                            undefined,
+                                          )
+                                        : factory.createPropertyAssignment(
+                                            factory.createIdentifier(joinTableThisModelName),
+                                            factory.createIdentifier(savedModelName),
+                                          ),
+                                      factory.createShorthandPropertyAssignment(
+                                        factory.createIdentifier(joinTableRelatedModelName),
+                                        undefined,
+                                      ),
+                                    ],
+                                    true,
+                                  ),
+                                ]),
                               ],
                             ),
                           ],
@@ -1209,6 +1252,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
   modelName: string,
   hasManyFieldConfig: [string, FieldConfigMetadata],
   thisModelPrimaryKeys: string[],
+  savedModelName: string,
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
@@ -1641,32 +1685,11 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                   ],
                                   undefined,
                                   factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                  factory.createBlock(
-                                    // updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId;
-                                    relatedModelFields.map((relatedModelField, index) => {
-                                      const correspondingPrimaryKey = thisModelPrimaryKeys[index];
-                                      if (!correspondingPrimaryKey) {
-                                        throw new InternalError(
-                                          `Corresponding primary key not found for ${relatedModelField}`,
-                                        );
-                                      }
-
-                                      return factory.createExpressionStatement(
-                                        factory.createBinaryExpression(
-                                          factory.createPropertyAccessExpression(
-                                            factory.createIdentifier('updated'),
-                                            factory.createIdentifier(relatedModelField),
-                                          ),
-                                          factory.createToken(SyntaxKind.EqualsToken),
-                                          factory.createPropertyAccessExpression(
-                                            factory.createIdentifier(`${lowerCaseFirst(modelName)}Record`),
-                                            factory.createIdentifier(correspondingPrimaryKey),
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                                    true,
-                                  ),
+                                  createHasManyUpdateRelatedModelBlock({
+                                    relatedModelFields,
+                                    thisModelPrimaryKeys,
+                                    thisModelRecord: `${lowerCaseFirst(modelName)}Record`,
+                                  }),
                                 ),
                               ],
                             ),
@@ -1764,25 +1787,11 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                       ],
                                       undefined,
                                       factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                      factory.createBlock(
-                                        [
-                                          factory.createExpressionStatement(
-                                            factory.createBinaryExpression(
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier('updated'),
-                                                // TODO: update w/ create form support for composite keys
-                                                factory.createIdentifier(relatedModelFields[0]),
-                                              ),
-                                              factory.createToken(SyntaxKind.EqualsToken),
-                                              factory.createPropertyAccessExpression(
-                                                factory.createIdentifier(lowerCaseFirst(modelName)),
-                                                factory.createIdentifier('id'),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                        true,
-                                      ),
+                                      createHasManyUpdateRelatedModelBlock({
+                                        relatedModelFields,
+                                        thisModelPrimaryKeys,
+                                        thisModelRecord: savedModelName,
+                                      }),
                                     ),
                                   ],
                                 ),

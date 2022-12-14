@@ -25,6 +25,7 @@ import {
   GenericDataSchema,
   ModelFieldsConfigs,
   StudioFieldInputConfig,
+  StudioForm,
   StudioFormValueMappings,
 } from '../../types';
 import { ExtendedStudioGenericFieldConfig } from '../../types/form/form-definition';
@@ -93,12 +94,12 @@ export function getFieldConfigFromModelField({
   fieldName,
   field,
   dataSchema,
-  isPrimaryKey,
+  setReadOnly,
 }: {
   fieldName: string;
   field: GenericDataField;
   dataSchema: GenericDataSchema;
-  isPrimaryKey: boolean;
+  setReadOnly?: boolean;
 }): ExtendedStudioGenericFieldConfig {
   const fieldTypeMapKey = getFieldTypeMapKey(field);
 
@@ -120,7 +121,7 @@ export function getFieldConfigFromModelField({
   }
 
   let { readOnly } = field;
-  if (isPrimaryKey) {
+  if (setReadOnly) {
     readOnly = true;
   }
 
@@ -157,10 +158,12 @@ export function mapModelFieldsConfigs({
   dataTypeName,
   formDefinition,
   dataSchema,
+  formActionType,
 }: {
   dataTypeName: string;
   dataSchema: GenericDataSchema;
   formDefinition: FormDefinition;
+  formActionType?: StudioForm['formActionType'];
 }) {
   const modelFieldsConfigs: ModelFieldsConfigs = {};
   const model = dataSchema.models[dataTypeName];
@@ -181,7 +184,12 @@ export function mapModelFieldsConfigs({
 
     const isPrimaryKey = model.primaryKeys.includes(fieldName);
 
-    modelFieldsConfigs[fieldName] = getFieldConfigFromModelField({ fieldName, field, dataSchema, isPrimaryKey });
+    modelFieldsConfigs[fieldName] = getFieldConfigFromModelField({
+      fieldName,
+      field,
+      dataSchema,
+      setReadOnly: isPrimaryKey && formActionType === 'update',
+    });
   });
 
   return modelFieldsConfigs;

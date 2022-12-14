@@ -55,6 +55,7 @@ export function generateFormDefinition({
       dataSchema,
       formDefinition,
       dataTypeName: form.dataType.dataTypeName,
+      formActionType: form.formActionType,
     });
   }
 

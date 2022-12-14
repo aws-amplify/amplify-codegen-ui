@@ -418,6 +418,16 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });
+
+      it('should render a create form for model with composite keys', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/composite-dog-datastore-create',
+          'datastore/composite-relationships',
+        );
+
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
     });
   });
 });
