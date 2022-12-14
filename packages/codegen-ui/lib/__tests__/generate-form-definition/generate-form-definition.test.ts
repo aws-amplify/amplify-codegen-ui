@@ -522,12 +522,12 @@ it('should skip adding id field if it has no overrides', () => {
   expect(formDefinition.elementMatrix).toStrictEqual([]);
 });
 
-it('should make primary key read-only', () => {
+it('should make primary key read-only if update form', () => {
   const formDefinition = generateFormDefinition({
     form: {
       id: '123',
       name: 'mySampleForm',
-      formActionType: 'create',
+      formActionType: 'update',
       dataType: { dataSourceType: 'DataStore', dataTypeName: 'Student' },
       fields: {
         specialStudentId: { position: { below: 'Heading123' }, inputType: { type: 'TextField' } },

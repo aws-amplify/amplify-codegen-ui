@@ -111,13 +111,15 @@ export const buildDataStoreExpression = (
   dataSchema: GenericDataSchema,
 ) => {
   const thisModelPrimaryKeys = dataSchema.models[modelName].primaryKeys;
-  let isHasManyFieldConfigExisting = false;
   const hasManyDataStoreStatements: (VariableStatement | ExpressionStatement)[] = [];
+  const hasManyRelationshipFields: string[] = [];
+  const savedModelName = lowerCaseFirst(modelName);
 
   Object.entries(fieldConfigs).forEach((fieldConfig) => {
-    const [, fieldConfigMetaData] = fieldConfig;
+    const [fieldName, fieldConfigMetaData] = fieldConfig;
     if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
-      isHasManyFieldConfigExisting = true;
+      hasManyRelationshipFields.push(fieldName);
+
       if (isManyToManyRelationship(fieldConfigMetaData)) {
         const joinTable = dataSchema.models[fieldConfigMetaData.relationship.relatedJoinTableName];
         hasManyDataStoreStatements.push(
@@ -127,6 +129,7 @@ export const buildDataStoreExpression = (
             fieldConfig,
             thisModelPrimaryKeys,
             joinTable,
+            savedModelName,
           ),
         );
       } else {
@@ -136,13 +139,14 @@ export const buildDataStoreExpression = (
             importedModelName,
             fieldConfig,
             thisModelPrimaryKeys,
+            savedModelName,
           ),
         );
       }
     }
   });
 
-  if (isHasManyFieldConfigExisting && dataStoreActionType === 'update') {
+  if (hasManyRelationshipFields.length && dataStoreActionType === 'update') {
     hasManyDataStoreStatements.unshift(
       factory.createVariableStatement(
         undefined,
@@ -161,14 +165,14 @@ export const buildDataStoreExpression = (
     );
   }
 
-  const genericSaveStatement = isHasManyFieldConfigExisting
+  const genericSaveStatement = hasManyRelationshipFields.length
     ? [
         factory.createVariableStatement(
           undefined,
           factory.createVariableDeclarationList(
             [
               factory.createVariableDeclaration(
-                factory.createIdentifier(lowerCaseFirst(importedModelName)),
+                factory.createIdentifier(savedModelName),
                 undefined,
                 undefined,
                 factory.createAwaitExpression(
@@ -180,7 +184,23 @@ export const buildDataStoreExpression = (
                     undefined,
                     [
                       factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
-                        factory.createIdentifier('modelFields'),
+                        // {
+                        //  ...modelFields,
+                        //  CPKClasses: undefined,
+                        //  CPKProjects: undefined
+                        // }
+                        factory.createObjectLiteralExpression(
+                          [
+                            factory.createSpreadAssignment(factory.createIdentifier('modelFields')),
+                            ...hasManyRelationshipFields.map((field) =>
+                              factory.createPropertyAssignment(
+                                factory.createIdentifier(field),
+                                factory.createIdentifier('undefined'),
+                              ),
+                            ),
+                          ],
+                          true,
+                        ),
                       ]),
                     ],
                   ),
@@ -210,7 +230,7 @@ export const buildDataStoreExpression = (
         ),
       ];
 
-  const genericUpdateStatement = isHasManyFieldConfigExisting
+  const genericUpdateStatement = hasManyRelationshipFields.length
     ? [
         factory.createExpressionStatement(
           factory.createCallExpression(

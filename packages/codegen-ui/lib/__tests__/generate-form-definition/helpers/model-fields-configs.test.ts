@@ -121,7 +121,7 @@ describe('mapModelFieldsConfigs', () => {
         dataType: 'ID',
         inputType: {
           name: 'id',
-          readOnly: true,
+          readOnly: false,
           required: true,
           type: 'TextField',
           value: 'id',

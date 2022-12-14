@@ -1,0 +1,12 @@
+{
+    "name": "CreateCompositeDogForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "CompositeDog"
+    },
+    "formActionType": "create",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}
