@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { FieldConfigMetadata, DataFieldDataType, isValidVariableName } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, DataFieldDataType, isValidVariableName, StudioForm } from '@aws-amplify/codegen-ui';
 import {
   factory,
   Statement,
@@ -118,6 +118,7 @@ export const getDefaultValueExpression = (
   componentType: string,
   dataType?: DataFieldDataType,
   isArray?: boolean,
+  defaultValue?: string | null,
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
     ToggleButton: factory.createFalse(),
@@ -127,6 +128,10 @@ export const getDefaultValueExpression = (
     CheckboxField: factory.createFalse(),
     TextField: factory.createStringLiteral(''),
   };
+
+  if (defaultValue) {
+    return factory.createStringLiteral(defaultValue);
+  }
 
   if (isArray) {
     return factory.createArrayLiteralExpression([], false);
@@ -147,18 +152,38 @@ export const getDefaultValueExpression = (
   isChecked: false
 }
 */
-export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement => {
+export const getInitialValues = (
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+  component: StudioForm,
+): Statement => {
+  // Object.entries(component.fields).forEach(([key, value]) => {
+  //   console.log('key', key);
+  //   console.log('value', value);
+
+  // });
   const stateNames = new Set<string>();
   const propertyAssignments = Object.entries(fieldConfigs).reduce<PropertyAssignment[]>(
     (acc, [name, { dataType, componentType, isArray }]) => {
       const isNested = name.includes('.');
       // we are only setting top-level keys
       const stateName = name.split('.')[0];
-      let initialValue = getDefaultValueExpression(name, componentType, dataType, isArray);
+      let defaultValue = null;
+      Object.entries(component.fields).forEach(([key, value]) => {
+        // console.log('name', name);
+        // console.log('key', key);
+        // console.log('value', 'inputType' in value);
+        // console.log('componentType', componentType);
+        if (key === name && 'inputType' in value && value.inputType?.defaultValue && componentType === 'TextField') {
+          console.log('we found defaultValue in inputType', value.inputType.defaultValue);
+          defaultValue = value.inputType.defaultValue;
+        }
+      });
+      let initialValue = getDefaultValueExpression(name, componentType, dataType, isArray, defaultValue);
       if (isNested) {
         // if nested, just set up an empty object for the top-level key
         initialValue = factory.createObjectLiteralExpression();
       }
+      // console.log('initialValue is', initialValue);
       if (!stateNames.has(stateName)) {
         acc.push(
           factory.createPropertyAssignment(
@@ -168,6 +193,7 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
             initialValue,
           ),
         );
+        // console.log('adding statename', stateName, initialValue);
         stateNames.add(stateName);
       }
       return acc;
