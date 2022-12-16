@@ -20,6 +20,8 @@ describe('e2e-tests', () => {
   });
 
   it('renders datastore collection', () => {
-    cy.get('#blogPosts').contains('Working on E2E Tests');
+    cy.contains('Email exists');
+    // cy.get('#blogPosts').contains('Working on E2E Tests');
+    // cy.get('#actionCardCollection').contains('Yundoo');
   });
 });

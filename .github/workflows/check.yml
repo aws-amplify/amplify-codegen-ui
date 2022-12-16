@@ -68,6 +68,9 @@ jobs:
       - name: Write test files
         working-directory: e2e-test-app
         run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates/. .
+        env:
+          USER_EMAIL: ${{ secrets.E2E_TEST_USER_EMAIL }}
+          USER_PASSWORD: ${{ secrets.E2E_TEST_USER_PASSWORD }}
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
