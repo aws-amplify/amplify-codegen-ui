@@ -73,7 +73,7 @@ jobs:
         with:
           working-directory: e2e-test-app
           install: false
-          start: npm start
+          start: export REACT_APP_USER_EMAIL=${{ secrets.E2E_TEST_USER_EMAIL }} && export REACT_APP_USER_PASSWORD=${{ secrets.E2E_TEST_USER_PASSWORD }} && npm start
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
           config-file: cypress.config.js
