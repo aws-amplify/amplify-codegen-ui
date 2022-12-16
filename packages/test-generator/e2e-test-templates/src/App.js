@@ -13,20 +13,57 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { Amplify } from 'aws-amplify';
+import { Amplify, Auth, AuthModeStrategyType } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
+import { useEffect, useRef, useState } from 'react';
 import awsconfig from './aws-exports';
-import { BlogPosts } from './ui-components';
+import { ActionCardCollection, BlogPosts } from './ui-components';
 
-Amplify.configure(awsconfig);
+Amplify.configure({
+  ...awsconfig,
+  DataStore: {
+    authModeStrategyType: AuthModeStrategyType.MULTI_AUTH,
+  },
+});
 
 function App() {
-  return (
-    <AmplifyProvider>
-      <BlogPosts id="blogPosts" />
-    </AmplifyProvider>
-  );
+  const [user, setUser] = useState();
+  const [error, setError] = useState();
+
+  const initiated = useRef(false);
+  useEffect(() => {
+    if (initiated.current) {
+      return;
+    }
+    async function signIn() {
+      let currentUser;
+      try {
+        currentUser = await Auth.signIn(process.env.REACT_APP_USER_EMAIL, process.env.REACT_APP_USER_PASSWORD);
+        setUser(currentUser);
+      } catch {
+        console.log('error signing in');
+        setError('there was error');
+      }
+    }
+    signIn();
+    initiated.current = true;
+  }, []);
+
+  if (error) {
+    return <div>error!</div>;
+  }
+
+  if (user) {
+    return (
+      <AmplifyProvider>
+        <BlogPosts id="blogPosts" />
+        <ActionCardCollection id="actionCardCollection" />
+      </AmplifyProvider>
+    );
+  }
+
+  return null;
 }
 
 export default App;
