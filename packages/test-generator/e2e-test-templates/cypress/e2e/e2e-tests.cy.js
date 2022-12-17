@@ -20,6 +20,9 @@ describe('e2e-tests', () => {
   });
 
   it('renders datastore collection', () => {
+    // wait to log in
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(4000);
     cy.get('#blogPosts').contains('Working on E2E Tests');
   });
 });
