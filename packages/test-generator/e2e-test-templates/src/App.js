@@ -13,14 +13,19 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { Amplify, Auth } from 'aws-amplify';
+import { Amplify, Auth, AuthModeStrategyType } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import { useEffect, useRef, useState } from 'react';
 import awsconfig from './aws-exports';
 import { BlogPosts } from './ui-components';
 
-Amplify.configure(awsconfig);
+Amplify.configure({
+  ...awsconfig,
+  DataStore: {
+    authModeStrategyType: AuthModeStrategyType.MULTI_AUTH,
+  },
+});
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
