@@ -5,30 +5,53 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [2.6.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.8...v2.6.0) (2022-12-14)
 
+
 ### Bug Fixes
 
-- make textfield a controlled component ([#830](https://github.com/aws-amplify/amplify-codegen-ui/issues/830)) ([1dcda83](https://github.com/aws-amplify/amplify-codegen-ui/commit/1dcda8390aab1539f607474885a98526763828a9))
+* make textfield a controlled component ([#830](https://github.com/aws-amplify/amplify-codegen-ui/issues/830)) ([1dcda83](https://github.com/aws-amplify/amplify-codegen-ui/commit/1dcda8390aab1539f607474885a98526763828a9))
+
+
+
+
 
 ## [2.5.8](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.7...v2.5.8) (2022-12-08)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui-test-generator
 
+
+
+
+
 ## [2.5.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.6...v2.5.7) (2022-12-06)
+
 
 ### Bug Fixes
 
-- have rest props override variant values ([6df4d94](https://github.com/aws-amplify/amplify-codegen-ui/commit/6df4d94ea31465e36a1a293d5fdb6bd85829368a))
+* have rest props override variant values ([6df4d94](https://github.com/aws-amplify/amplify-codegen-ui/commit/6df4d94ea31465e36a1a293d5fdb6bd85829368a))
+
+
+
+
 
 ## [2.5.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.5...v2.5.6) (2022-11-23)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui-test-generator
 
+
+
+
+
 ## [2.5.5](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.4...v2.5.5) (2022-11-18)
+
 
 ### Bug Fixes
 
-- accommodate major release of aws-amplify in CLI test ([36362a2](https://github.com/aws-amplify/amplify-codegen-ui/commit/36362a29487a467f639eb54ed21f748fbd2c54c1))
-- accommodate new major release of aws-amplify and datastore in e2e tests ([7901efd](https://github.com/aws-amplify/amplify-codegen-ui/commit/7901efdb1aea6566dfbd0db54a6d147f00711e3e))
+* accommodate major release of aws-amplify in CLI test ([36362a2](https://github.com/aws-amplify/amplify-codegen-ui/commit/36362a29487a467f639eb54ed21f748fbd2c54c1))
+* accommodate new major release of aws-amplify and datastore in e2e tests ([7901efd](https://github.com/aws-amplify/amplify-codegen-ui/commit/7901efdb1aea6566dfbd0db54a6d147f00711e3e))
+
+
+
+
 
 ## [2.5.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.2...v2.5.4) (2022-11-07)
 
