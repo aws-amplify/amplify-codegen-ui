@@ -40,6 +40,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
     
         componentType => SelectField && boolean
         const value = Boolean(e.target.checked)
+        ckdjflj!ß
   
       */
 
