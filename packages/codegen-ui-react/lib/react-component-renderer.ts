@@ -153,7 +153,6 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     if (this.componentMetadata.formMetadata) {
       attributes.push(...addFormAttributes(this.component, this.componentMetadata.formMetadata));
     }
-    // IT SPREADS HERE
     this.addPropsSpreadAttributes(attributes);
 
     return factory.createJsxOpeningElement(

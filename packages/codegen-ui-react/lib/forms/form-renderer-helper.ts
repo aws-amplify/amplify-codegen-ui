@@ -40,17 +40,15 @@ import {
   ElementAccessExpression,
 } from 'typescript';
 import { isControlledComponent, renderDefaultValueAttribute, renderValueAttribute } from './component-helper';
-import { lowerCaseFirst } from '../helpers';
+import { capitalizeFirstLetter, getSetNameIdentifier, lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource } from '../imports';
 import { buildTargetVariable, getFormattedValueExpression } from './event-targets';
 import {
   buildAccessChain,
   buildNestedStateSet,
-  capitalizeFirstLetter,
   getArrayChildRefName,
   getCurrentValueIdentifier,
   getCurrentValueName,
-  getSetNameIdentifier,
   resetValuesName,
   setFieldState,
   setStateExpression,

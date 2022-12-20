@@ -46,7 +46,7 @@ import {
   SyntaxKind,
   TypeAliasDeclaration,
 } from 'typescript';
-import { lowerCaseFirst } from '../helpers';
+import { buildUseStateExpression, lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { PrimitiveTypeParameter, Primitive } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
@@ -73,7 +73,6 @@ import {
   runValidationTasksFunction,
 } from './form-renderer-helper';
 import {
-  buildUseStateExpression,
   getArrayChildRefName,
   getCurrentValueName,
   getDefaultValueExpression,
