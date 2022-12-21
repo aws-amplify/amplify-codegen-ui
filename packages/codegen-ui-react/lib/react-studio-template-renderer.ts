@@ -36,6 +36,7 @@ import {
   GenericDataSchema,
   getBreakpoints,
   isValidVariableName,
+  InternalError,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -60,6 +61,7 @@ import ts, {
   JsxSelfClosingElement,
   PropertyAssignment,
   ObjectLiteralElementLike,
+  Identifier,
 } from 'typescript';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
@@ -75,8 +77,6 @@ import {
   bindingPropertyUsesHook,
   json,
   buildBaseCollectionVariableStatement,
-  buildPropAssignmentWithFilter,
-  buildCollectionWithItemMap,
   createHookStatement,
   buildSortFunction,
 } from './react-studio-template-renderer-helper';
@@ -95,9 +95,15 @@ import {
   mapSyntheticStateReferences,
   buildStateStatements,
   buildUseEffectStatements,
-  getActionIdentifier,
 } from './workflow';
 import keywords from './keywords';
+import {
+  getSetNameIdentifier,
+  capitalizeFirstLetter,
+  buildUseStateExpression,
+  modelNeedsRelationshipsLoadedForCollection,
+  fieldNeedsRelationshipLoadedForCollection,
+} from './helpers';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -183,7 +189,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       false,
     );
 
-    return { compText, importsText, requiredDataModels: this.componentMetadata.requiredDataModels };
+    return {
+      compText,
+      importsText,
+      requiredDataModels: this.componentMetadata.requiredDataModels,
+      importCollection: this.importCollection,
+    };
   }
 
   renderComponentInternal() {
@@ -925,6 +936,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           this.importCollection.addMappedImport(ImportValue.SORT_PREDICATE);
           statements.push(this.buildPaginationStatement(propName, modelName, sort));
         }
+
+        statements.push(buildUseStateExpression(propName, factory.createIdentifier('undefined')));
         /**
          * const userDataStore = useDataStoreBinding({
          *  type: "collection",
@@ -940,20 +953,255 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             sort ? this.getPaginationName(propName) : undefined,
           ),
         );
-        /**
-         * const items = itemsProp !== undefined ? itemsProp : userDataStore;
-         */
+
         statements.push(
-          this.buildPropPrecedentStatement(
+          this.buildSetCollectionItemsUseEffectStatement({
+            itemsDataStoreName: this.getDataStoreName(propName),
+            itemsPropName: this.hasCollectionPropertyNamedItems(component) ? 'itemsProp' : 'items',
+            needsRelationshipsLoaded: modelNeedsRelationshipsLoadedForCollection(model, this.dataSchema),
+            modelName: model,
             propName,
-            this.hasCollectionPropertyNamedItems(component) ? 'itemsProp' : 'items',
-            factory.createIdentifier(this.getDataStoreName(propName)),
-          ),
+          }),
         );
       });
     }
 
     return statements;
+  }
+
+  /**
+  React.useEffect(() => {
+    if (itemsProp !== undefined) {
+      setItems(itemsProp)
+      return;
+    }
+
+    <setItemsFromDataStoreFunctionDeclaration>
+    
+    setItemsFromDataStore() 
+
+  }, [itemsProp, itemsDataStore])
+   */
+  private buildSetCollectionItemsUseEffectStatement({
+    itemsDataStoreName,
+    itemsPropName,
+    needsRelationshipsLoaded,
+    modelName,
+    propName,
+  }: {
+    itemsDataStoreName: string;
+    itemsPropName: string;
+    needsRelationshipsLoaded: boolean;
+    modelName: string;
+    propName: string;
+  }) {
+    const setItemsIdentifier = getSetNameIdentifier(propName);
+    const setItemsFromDataStoreFunctionName = `set${capitalizeFirstLetter(propName)}FromDataStore`;
+
+    const setItemsExpressionStatements: Statement[] = needsRelationshipsLoaded
+      ? [
+          this.buildSetItemsFromDataStoreFunction({
+            functionName: setItemsFromDataStoreFunctionName,
+            itemsDataStoreName,
+            setItemsIdentifier,
+            modelName,
+          }),
+          factory.createExpressionStatement(
+            factory.createCallExpression(factory.createIdentifier(setItemsFromDataStoreFunctionName), undefined, []),
+          ),
+        ]
+      : [
+          factory.createExpressionStatement(
+            factory.createCallExpression(setItemsIdentifier, undefined, [factory.createIdentifier(itemsDataStoreName)]),
+          ),
+        ];
+
+    return factory.createExpressionStatement(
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier('React'),
+          factory.createIdentifier('useEffect'),
+        ),
+        undefined,
+        [
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [],
+            undefined,
+            factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createIfStatement(
+                  factory.createBinaryExpression(
+                    factory.createIdentifier(itemsPropName),
+                    factory.createToken(ts.SyntaxKind.ExclamationEqualsEqualsToken),
+                    factory.createIdentifier('undefined'),
+                  ),
+                  factory.createBlock(
+                    [
+                      factory.createExpressionStatement(
+                        factory.createCallExpression(setItemsIdentifier, undefined, [
+                          factory.createIdentifier(itemsPropName),
+                        ]),
+                      ),
+                      factory.createReturnStatement(undefined),
+                    ],
+                    true,
+                  ),
+                  undefined,
+                ),
+                ...setItemsExpressionStatements,
+              ],
+              true,
+            ),
+          ),
+          factory.createArrayLiteralExpression(
+            [factory.createIdentifier(itemsPropName), factory.createIdentifier(itemsDataStoreName)],
+            false,
+          ),
+        ],
+      ),
+    );
+  }
+
+  /**
+  async function setItemsFromDataStore() {
+    const loaded = await Promise.all(itemsDataStore.map(async (item) => ({
+        ...item,
+        CompositeOwner: await item.CompositeOwner,
+        CompositeToys: await item.CompositeToys.toArray()
+      })))
+
+    setItems(loaded)
+  }
+   */
+
+  private buildSetItemsFromDataStoreFunction({
+    functionName,
+    itemsDataStoreName,
+    setItemsIdentifier,
+    modelName,
+  }: {
+    functionName: string;
+    itemsDataStoreName: string;
+    setItemsIdentifier: Identifier;
+    modelName: string;
+  }) {
+    const model = this.dataSchema?.models[modelName];
+    if (!model) {
+      throw new InternalError(`Could not find schema for ${modelName}`);
+    }
+
+    const loadedFields: PropertyAssignment[] = [];
+    Object.entries(model.fields).forEach(([fieldName, fieldSchema]) => {
+      if (fieldNeedsRelationshipLoadedForCollection(fieldSchema, this.dataSchema as GenericDataSchema)) {
+        const { relationship } = fieldSchema;
+        if (relationship?.type === 'HAS_MANY') {
+          loadedFields.push(
+            factory.createPropertyAssignment(
+              factory.createIdentifier(fieldName),
+              factory.createAwaitExpression(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('item'),
+                      factory.createIdentifier(fieldName),
+                    ),
+                    factory.createIdentifier('toArray'),
+                  ),
+                  undefined,
+                  [],
+                ),
+              ),
+            ),
+          );
+        } else {
+          loadedFields.push(
+            factory.createPropertyAssignment(
+              factory.createIdentifier(fieldName),
+              factory.createAwaitExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('item'),
+                  factory.createIdentifier(fieldName),
+                ),
+              ),
+            ),
+          );
+        }
+      }
+    });
+
+    return factory.createFunctionDeclaration(
+      undefined,
+      [factory.createModifier(ts.SyntaxKind.AsyncKeyword)],
+      undefined,
+      factory.createIdentifier(functionName),
+      undefined,
+      [],
+      undefined,
+      factory.createBlock(
+        [
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList([
+              factory.createVariableDeclaration(
+                factory.createIdentifier('loaded'),
+                undefined,
+                undefined,
+                factory.createAwaitExpression(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('Promise'),
+                      factory.createIdentifier('all'),
+                    ),
+                    undefined,
+                    [
+                      factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createIdentifier(itemsDataStoreName),
+                          factory.createIdentifier('map'),
+                        ),
+                        undefined,
+                        [
+                          factory.createArrowFunction(
+                            [factory.createModifier(ts.SyntaxKind.AsyncKeyword)],
+                            undefined,
+                            [
+                              factory.createParameterDeclaration(
+                                undefined,
+                                undefined,
+                                undefined,
+                                factory.createIdentifier('item'),
+                                undefined,
+                                undefined,
+                                undefined,
+                              ),
+                            ],
+                            undefined,
+                            factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                            factory.createParenthesizedExpression(
+                              factory.createObjectLiteralExpression(
+                                [factory.createSpreadAssignment(factory.createIdentifier('item')), ...loadedFields],
+                                true,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+          ),
+          factory.createExpressionStatement(
+            factory.createCallExpression(setItemsIdentifier, undefined, [factory.createIdentifier('loaded')]),
+          ),
+        ],
+        true,
+      ),
+    );
   }
 
   private buildCreateDataStorePredicateCall(type: string, name: string): Statement {
@@ -1130,42 +1378,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     paginationName?: string,
   ) {
     const statements: Statement[] = [];
-    if (
-      this.dataSchema &&
-      !!this.dataSchema.models[model] &&
-      Object.values(this.dataSchema.models[model].fields).some((field) => field.relationship?.type === 'HAS_MANY')
-    ) {
-      const propAssigments: PropertyAssignment[] = [];
-      Object.entries(this.dataSchema.models[model].fields).forEach(([key, field]) => {
-        if (field.relationship?.type === 'HAS_MANY') {
-          const { relatedModelName, relatedModelFields } = field.relationship;
-          const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, relatedModelName);
-          const itemsName = getActionIdentifier(relatedModelName, 'Items');
-          statements.push(
-            buildBaseCollectionVariableStatement(
-              factory.createIdentifier(itemsName),
-              this.buildUseDataStoreBindingCall('collection', modelName),
-            ),
-          );
-          // TODO: support composite keys in collections
-          propAssigments.push(buildPropAssignmentWithFilter(key, itemsName, relatedModelFields[0]));
-        }
-      });
-      statements.push(
-        buildCollectionWithItemMap(
-          modelVariableName,
-          this.buildUseDataStoreBindingCall('collection', model, criteriaName, paginationName),
-          propAssigments,
-        ),
-      );
-    } else {
-      statements.push(
-        buildBaseCollectionVariableStatement(
-          factory.createIdentifier(modelVariableName),
-          this.buildUseDataStoreBindingCall('collection', model, criteriaName, paginationName),
-        ),
-      );
-    }
+    statements.push(
+      buildBaseCollectionVariableStatement(
+        factory.createIdentifier(modelVariableName),
+        this.buildUseDataStoreBindingCall('collection', model, criteriaName, paginationName),
+      ),
+    );
+
     return statements;
   }
 

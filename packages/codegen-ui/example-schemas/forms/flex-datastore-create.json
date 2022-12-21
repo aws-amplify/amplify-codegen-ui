@@ -1,6 +1,6 @@
 {
-  "name": "MyFlexUpdateForm",
-  "formActionType": "update",
+  "name": "MyFlexCreateForm",
+  "formActionType": "create",
   "dataType": {
     "dataSourceType": "DataStore",
     "dataTypeName": "Flex"

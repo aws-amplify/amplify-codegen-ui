@@ -15,12 +15,19 @@
  */
 
 import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
-import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind } from 'typescript';
+import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind, ElementAccessExpression } from 'typescript';
 import { getCurrentDisplayValueName, getCurrentValueName, resetValuesName } from './form-state';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 import { FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
-export const ControlledComponents = ['StepperField', 'SliderField', 'SelectField', 'ToggleButton', 'SwitchField'];
+export const ControlledComponents = [
+  'StepperField',
+  'SliderField',
+  'SelectField',
+  'ToggleButton',
+  'SwitchField',
+  'TextField',
+];
 
 /**
  * given the component returns true if the component is a controlled component
@@ -55,7 +62,11 @@ export const convertedValueAttributeMap: Record<string, (valueIdentifier: Identi
  * @param { dataType } the dataType
  * @returns
  */
-export const renderDefaultValueAttribute = (stateName: string, { dataType }: FieldConfigMetadata) => {
+export const renderDefaultValueAttribute = (
+  stateName: string,
+  { dataType }: FieldConfigMetadata,
+  componentType: string,
+) => {
   const identifier = factory.createIdentifier(stateName);
   let expression = factory.createJsxExpression(undefined, identifier);
 
@@ -63,7 +74,10 @@ export const renderDefaultValueAttribute = (stateName: string, { dataType }: Fie
     expression = factory.createJsxExpression(undefined, convertedValueAttributeMap[dataType](identifier));
   }
 
-  return factory.createJsxAttribute(factory.createIdentifier('defaultValue'), expression);
+  return factory.createJsxAttribute(
+    componentType === 'TextField' ? factory.createIdentifier('value') : factory.createIdentifier('defaultValue'),
+    expression,
+  );
 };
 
 export const renderValueAttribute = ({
@@ -77,6 +91,7 @@ export const renderValueAttribute = ({
 }): JsxAttribute | undefined => {
   const componentType = fieldConfig.studioFormComponentType ?? fieldConfig.componentType;
   const shouldGetForUncontrolled = shouldWrapInArrayField(fieldConfig);
+  const { dataType } = fieldConfig;
 
   let valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
 
@@ -86,6 +101,28 @@ export const renderValueAttribute = ({
     } else {
       valueIdentifier = factory.createIdentifier(getCurrentValueName(componentName));
     }
+  }
+
+  let renderedFieldName = fieldConfig.sanitizedFieldName || componentName;
+  if (fieldConfig.isArray) {
+    renderedFieldName = getCurrentValueName(renderedFieldName);
+  }
+  let fieldNameIdentifier: Identifier | ElementAccessExpression = factory.createIdentifier(renderedFieldName);
+  if (componentName.includes('.')) {
+    const [parent, child] = componentName.split('.');
+    fieldNameIdentifier = factory.createElementAccessExpression(
+      factory.createIdentifier(parent),
+      factory.createStringLiteral(child),
+    );
+  }
+
+  let controlledExpression = factory.createJsxExpression(undefined, fieldNameIdentifier);
+
+  if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {
+    controlledExpression = factory.createJsxExpression(
+      undefined,
+      convertedValueAttributeMap[dataType](valueIdentifier),
+    );
   }
 
   const controlledComponentToAttributesMap: { [key: string]: JsxAttribute } = {
@@ -113,6 +150,15 @@ export const renderValueAttribute = ({
       factory.createIdentifier('checked'),
       factory.createJsxExpression(undefined, valueIdentifier),
     ),
+    TextField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    DateTimeField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    IPAddressField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    DateField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    TimeField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    NumberField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    URLField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    PhoneNumberField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
+    EmailField: factory.createJsxAttribute(factory.createIdentifier('value'), controlledExpression),
   };
 
   if (controlledComponentToAttributesMap[componentType]) {
@@ -121,8 +167,6 @@ export const renderValueAttribute = ({
 
   // TODO: all components should be controlled once conversions are solid
   if (shouldGetForUncontrolled) {
-    const { dataType } = fieldConfig;
-
     let expression = factory.createJsxExpression(undefined, valueIdentifier);
 
     if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {

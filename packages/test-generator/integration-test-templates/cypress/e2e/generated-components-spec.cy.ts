@@ -108,6 +108,10 @@ describe('Generated Components', () => {
       cy.get('#variant6').contains('Nice view!! 🏔');
     });
 
+    it('should have rest props override variant values', () => {
+      cy.get('#variantWithRest').should('have.css', 'font-size', '10px');
+    });
+
     it('allows for use of both variants and overrides, prioritizing overrides if they collide', () => {
       cy.get('#variantAndOverrideDefault').contains('DefaultText');
       cy.get('#variantAndOverrideVariantValue').contains('Hello');

@@ -313,6 +313,60 @@ describe('generateFormDefinition', () => {
     expect(formDefinition.elementMatrix).toStrictEqual([['Heading123']]);
   });
 
+  it('should gracefully handle a customized field being renamed', () => {
+    const formDefinition = generateFormDefinition({
+      form: {
+        cta: {
+          cancel: {},
+          clear: {},
+          position: 'bottom',
+          submit: {},
+        },
+        dataType: {
+          dataSourceType: 'DataStore',
+          dataTypeName: 'Event',
+        },
+        fields: {
+          startDate: {
+            position: {
+              fixed: 'first',
+            },
+          },
+          sourceAccountId: {
+            position: {
+              below: 'startDate',
+            },
+          },
+          endTime: {
+            position: {
+              below: 'sourceAccountId',
+            },
+          },
+        },
+        formActionType: 'create',
+        name: 'EventFormTest',
+        sectionalElements: {},
+        style: {},
+      },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: {
+          Event: {
+            primaryKeys: ['id'],
+            fields: {
+              sourceAccountId: { dataType: 'String', readOnly: false, required: true, isArray: false },
+              endTime: { dataType: 'Float', readOnly: false, required: true, isArray: false },
+            },
+          },
+        },
+      },
+    });
+
+    expect(formDefinition.elementMatrix).toStrictEqual([['startDate'], ['sourceAccountId'], ['endTime']]);
+  });
+
   it('should correctly map positions', () => {
     const formDefinition = generateFormDefinition({
       form: {
@@ -367,13 +421,42 @@ it('should requeue if related element is not yet found', () => {
       },
       sectionalElements: {
         Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
+        Heading456: { type: 'Heading', position: { below: 'color' }, level: 1, text: 'Dog Created' },
       },
-
       style: {},
       cta: {},
     },
+    dataSchema: {
+      dataSourceType: 'DataStore',
+      models: {
+        Event: {
+          primaryKeys: ['id'],
+          fields: {
+            name: {
+              dataType: 'String',
+              required: false,
+              readOnly: false,
+              isArray: false,
+            },
+            age: {
+              dataType: 'String',
+              required: false,
+              readOnly: false,
+              isArray: false,
+            },
+          },
+        },
+      },
+      enums: {},
+      nonModels: {},
+    },
   });
-  expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['name', 'age', 'weight'], ['color']]);
+  expect(formDefinition.elementMatrix).toStrictEqual([
+    ['Heading123'],
+    ['name', 'age', 'weight'],
+    ['color'],
+    ['Heading456'],
+  ]);
 });
 
 it('should handle fields without position', () => {
@@ -393,7 +476,6 @@ it('should handle fields without position', () => {
       sectionalElements: {
         Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Dog' },
       },
-
       style: {},
       cta: {},
     },
@@ -410,7 +492,6 @@ it('should fill out styles using defaults', () => {
       dataType: { dataSourceType: 'Custom', dataTypeName: 'dfkjad' },
       fields: {},
       sectionalElements: {},
-
       style: {},
       cta: {},
     },

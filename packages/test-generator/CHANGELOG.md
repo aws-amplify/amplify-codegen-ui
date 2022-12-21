@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.8...v2.6.0) (2022-12-14)
+
+### Bug Fixes
+
+- make textfield a controlled component ([#830](https://github.com/aws-amplify/amplify-codegen-ui/issues/830)) ([1dcda83](https://github.com/aws-amplify/amplify-codegen-ui/commit/1dcda8390aab1539f607474885a98526763828a9))
+
+## [2.5.8](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.7...v2.5.8) (2022-12-08)
+
+**Note:** Version bump only for package @aws-amplify/codegen-ui-test-generator
+
+## [2.5.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.6...v2.5.7) (2022-12-06)
+
+### Bug Fixes
+
+- have rest props override variant values ([6df4d94](https://github.com/aws-amplify/amplify-codegen-ui/commit/6df4d94ea31465e36a1a293d5fdb6bd85829368a))
+
 ## [2.5.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.5...v2.5.6) (2022-11-23)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui-test-generator

@@ -13,7 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioComponent, StudioComponentChild, FormMetadata, isValidVariableName } from '@aws-amplify/codegen-ui';
+import {
+  StudioComponent,
+  StudioComponentChild,
+  FormMetadata,
+  isValidVariableName,
+  GenericDataSchema,
+} from '@aws-amplify/codegen-ui';
 import { factory, SyntaxKind, JsxAttribute } from 'typescript';
 import { buildComponentSpecificAttributes } from './static-props';
 import { renderValueAttribute, renderDefaultValueAttribute, isControlledComponent } from './value-props';
@@ -23,13 +29,21 @@ import {
   buildOnBlurStatement,
   buildOnSelect,
 } from './event-handler-props';
-import { getArrayChildRefName, resetValuesName } from './form-state';
+import { getArrayChildRefName, resetValuesName, getPropName } from './form-state';
 import { shouldWrapInArrayField } from './render-checkers';
 import { getAutocompleteOptionsProp } from './model-values';
 import { buildCtaLayoutProperties } from '../../react-component-render-helper';
+import { lowerCaseFirst } from '../../helpers';
 
-export const addFormAttributes = (component: StudioComponent | StudioComponentChild, formMetadata: FormMetadata) => {
+export const addFormAttributes = (
+  component: StudioComponent | StudioComponentChild,
+  formMetadata: FormMetadata,
+  dataSchema?: GenericDataSchema,
+) => {
   const { name: componentName, componentType } = component;
+  const {
+    dataType: { dataTypeName },
+  } = formMetadata;
   const attributes: JsxAttribute[] = [];
   /*
         boolean => RadioGroupField
@@ -85,7 +99,7 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
     }
 
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
-      attributes.push(renderDefaultValueAttribute(renderedVariableName, fieldConfig));
+      attributes.push(renderDefaultValueAttribute(renderedVariableName, fieldConfig, componentType));
     }
     attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs));
     attributes.push(buildOnBlurStatement(componentName, fieldConfig));
@@ -137,62 +151,186 @@ export const addFormAttributes = (component: StudioComponent | StudioComponentCh
       attributes.push(flexGapAttribute);
     }
   }
-
+  /*
+    onClick={(event) => {
+      event.preventDefault();
+      resetStateValues();
+    }}
+  */
+  const firstPrimaryKey = dataSchema?.models[dataTypeName]?.primaryKeys[0];
+  const idProp = firstPrimaryKey ? getPropName(firstPrimaryKey) : '';
   if (componentName === 'ClearButton' || componentName === 'ResetButton') {
     attributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('onClick'),
-        factory.createJsxExpression(undefined, resetValuesName),
-      ),
-    );
-  }
-  if (componentName === 'SubmitButton') {
-    attributes.push(
-      factory.createJsxAttribute(
-        factory.createIdentifier('isDisabled'),
         factory.createJsxExpression(
           undefined,
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('Object'),
-                  factory.createIdentifier('values'),
-                ),
-                undefined,
-                [factory.createIdentifier('errors')],
-              ),
-              factory.createIdentifier('some'),
-            ),
+          factory.createArrowFunction(
+            undefined,
             undefined,
             [
-              factory.createArrowFunction(
+              factory.createParameterDeclaration(
                 undefined,
                 undefined,
-                [
-                  factory.createParameterDeclaration(
-                    undefined,
-                    undefined,
-                    undefined,
-                    factory.createIdentifier('e'),
-                    undefined,
-                    undefined,
-                    undefined,
-                  ),
-                ],
                 undefined,
-                factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                factory.createPropertyAccessChain(
-                  factory.createIdentifier('e'),
-                  factory.createToken(SyntaxKind.QuestionDotToken),
-                  factory.createIdentifier('hasError'),
-                ),
+                factory.createIdentifier('event'),
+                undefined,
+                factory.createTypeReferenceNode(factory.createIdentifier('SyntheticEvent'), undefined),
+                undefined,
               ),
             ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createExpressionStatement(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('event'),
+                      factory.createIdentifier('preventDefault'),
+                    ),
+                    undefined,
+                    [],
+                  ),
+                ),
+                factory.createExpressionStatement(factory.createCallExpression(resetValuesName, undefined, [])),
+              ],
+              true,
+            ),
           ),
         ),
       ),
     );
+    if (formMetadata.formActionType === 'update' && formMetadata.dataType.dataSourceType === 'DataStore') {
+      attributes.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('isDisabled'),
+          factory.createJsxExpression(
+            undefined,
+            factory.createPrefixUnaryExpression(
+              SyntaxKind.ExclamationToken,
+              factory.createParenthesizedExpression(
+                factory.createBinaryExpression(
+                  factory.createIdentifier(idProp),
+                  factory.createToken(SyntaxKind.BarBarToken),
+                  factory.createIdentifier(lowerCaseFirst(dataTypeName)),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+  if (componentName === 'SubmitButton') {
+    if (formMetadata.formActionType === 'update' && formMetadata.dataType.dataSourceType === 'DataStore') {
+      attributes.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('isDisabled'),
+          factory.createJsxExpression(
+            undefined,
+            factory.createBinaryExpression(
+              factory.createPrefixUnaryExpression(
+                SyntaxKind.ExclamationToken,
+                factory.createParenthesizedExpression(
+                  factory.createBinaryExpression(
+                    factory.createIdentifier(idProp),
+                    factory.createToken(SyntaxKind.BarBarToken),
+                    factory.createIdentifier(lowerCaseFirst(dataTypeName)),
+                  ),
+                ),
+              ),
+              SyntaxKind.BarBarToken,
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('Object'),
+                      factory.createIdentifier('values'),
+                    ),
+                    undefined,
+                    [factory.createIdentifier('errors')],
+                  ),
+                  factory.createIdentifier('some'),
+                ),
+                undefined,
+                [
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier('e'),
+                        undefined,
+                        undefined,
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createPropertyAccessChain(
+                      factory.createIdentifier('e'),
+                      factory.createToken(SyntaxKind.QuestionDotToken),
+                      factory.createIdentifier('hasError'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      attributes.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('isDisabled'),
+          factory.createJsxExpression(
+            undefined,
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createIdentifier('Object'),
+                    factory.createIdentifier('values'),
+                  ),
+                  undefined,
+                  [factory.createIdentifier('errors')],
+                ),
+                factory.createIdentifier('some'),
+              ),
+              undefined,
+              [
+                factory.createArrowFunction(
+                  undefined,
+                  undefined,
+                  [
+                    factory.createParameterDeclaration(
+                      undefined,
+                      undefined,
+                      undefined,
+                      factory.createIdentifier('e'),
+                      undefined,
+                      undefined,
+                      undefined,
+                    ),
+                  ],
+                  undefined,
+                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                  factory.createPropertyAccessChain(
+                    factory.createIdentifier('e'),
+                    factory.createToken(SyntaxKind.QuestionDotToken),
+                    factory.createIdentifier('hasError'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
   if (componentName === 'CancelButton') {
     attributes.push(

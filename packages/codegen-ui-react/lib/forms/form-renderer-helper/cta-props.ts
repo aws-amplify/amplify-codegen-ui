@@ -23,9 +23,8 @@ import {
   VariableStatement,
   ExpressionStatement,
 } from 'typescript';
-import { lowerCaseFirst } from '../../helpers';
+import { getSetNameIdentifier, lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './model-values';
-import { getSetNameIdentifier } from './form-state';
 import {
   buildHasManyRelationshipDataStoreStatements,
   buildManyToManyRelationshipDataStoreStatements,
@@ -508,8 +507,8 @@ export const onSubmitValidationRun = (shouldUseGetDisplayValue?: boolean) => {
 };
 
 export const buildUpdateDatastoreQuery = (
-  dataTypeName: string,
-  recordName: string,
+  importedModelName: string,
+  lowerCaseDataTypeName: string,
   relatedModelStatements: Statement[],
   primaryKey: string,
 ) => {
@@ -549,11 +548,11 @@ export const buildUpdateDatastoreQuery = (
                                   factory.createIdentifier('query'),
                                 ),
                                 undefined,
-                                [factory.createIdentifier(dataTypeName), pkQueryIdentifier],
+                                [factory.createIdentifier(importedModelName), pkQueryIdentifier],
                               ),
                             ),
                             factory.createToken(SyntaxKind.ColonToken),
-                            factory.createIdentifier(lowerCaseFirst(dataTypeName)),
+                            factory.createIdentifier(lowerCaseDataTypeName),
                           ),
                         ),
                       ],
@@ -561,7 +560,7 @@ export const buildUpdateDatastoreQuery = (
                     ),
                   ),
                   factory.createExpressionStatement(
-                    factory.createCallExpression(getSetNameIdentifier(recordName), undefined, [
+                    factory.createCallExpression(getSetNameIdentifier(`${lowerCaseDataTypeName}Record`), undefined, [
                       factory.createIdentifier('record'),
                     ]),
                   ),

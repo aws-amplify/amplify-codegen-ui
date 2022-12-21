@@ -1,99 +1,99 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Primitives Alert 1`] = `"<Alert {...rest} {...getOverrideProps(overrides, \\"MyAlert\\")}></Alert>"`;
+exports[`Primitives Alert 1`] = `"<Alert {...getOverrideProps(overrides, \\"MyAlert\\")} {...rest}></Alert>"`;
 
-exports[`Primitives Autocomplete 1`] = `"<Autocomplete {...rest} {...getOverrideProps(overrides, \\"MyAutocomplete\\")}></Autocomplete>"`;
+exports[`Primitives Autocomplete 1`] = `"<Autocomplete {...getOverrideProps(overrides, \\"MyAutocomplete\\")} {...rest}></Autocomplete>"`;
 
-exports[`Primitives Badge 1`] = `"<Badge {...rest} {...getOverrideProps(overrides, \\"MyBadge\\")}></Badge>"`;
+exports[`Primitives Badge 1`] = `"<Badge {...getOverrideProps(overrides, \\"MyBadge\\")} {...rest}></Badge>"`;
 
-exports[`Primitives Button 1`] = `"<Button {...rest} {...getOverrideProps(overrides, \\"MyButton\\")}></Button>"`;
+exports[`Primitives Button 1`] = `"<Button {...getOverrideProps(overrides, \\"MyButton\\")} {...rest}></Button>"`;
 
-exports[`Primitives ButtonGroup 1`] = `"<ButtonGroup {...rest} {...getOverrideProps(overrides, \\"MyButtonGroup\\")}></ButtonGroup>"`;
+exports[`Primitives ButtonGroup 1`] = `"<ButtonGroup {...getOverrideProps(overrides, \\"MyButtonGroup\\")} {...rest}></ButtonGroup>"`;
 
-exports[`Primitives Card 1`] = `"<Card {...rest} {...getOverrideProps(overrides, \\"MyCard\\")}></Card>"`;
+exports[`Primitives Card 1`] = `"<Card {...getOverrideProps(overrides, \\"MyCard\\")} {...rest}></Card>"`;
 
-exports[`Primitives CheckboxField 1`] = `"<CheckboxField {...rest} {...getOverrideProps(overrides, \\"MyCheckboxField\\")}></CheckboxField>"`;
+exports[`Primitives CheckboxField 1`] = `"<CheckboxField {...getOverrideProps(overrides, \\"MyCheckboxField\\")} {...rest}></CheckboxField>"`;
 
-exports[`Primitives Collection 1`] = `"<Collection items={items || []} {...rest} {...getOverrideProps(overrides, \\"MyCollection\\")}>{(item, index) => ()}</Collection>"`;
+exports[`Primitives Collection 1`] = `"<Collection items={items || []} {...getOverrideProps(overrides, \\"MyCollection\\")} {...rest}>{(item, index) => ()}</Collection>"`;
 
-exports[`Primitives Divider 1`] = `"<Divider {...rest} {...getOverrideProps(overrides, \\"MyDivider\\")}></Divider>"`;
+exports[`Primitives Divider 1`] = `"<Divider {...getOverrideProps(overrides, \\"MyDivider\\")} {...rest}></Divider>"`;
 
-exports[`Primitives Expander 1`] = `"<Expander {...rest} {...getOverrideProps(overrides, \\"MyExpander\\")}></Expander>"`;
+exports[`Primitives Expander 1`] = `"<Expander {...getOverrideProps(overrides, \\"MyExpander\\")} {...rest}></Expander>"`;
 
-exports[`Primitives ExpanderItem 1`] = `"<ExpanderItem {...rest} {...getOverrideProps(overrides, \\"MyExpanderItem\\")}></ExpanderItem>"`;
+exports[`Primitives ExpanderItem 1`] = `"<ExpanderItem {...getOverrideProps(overrides, \\"MyExpanderItem\\")} {...rest}></ExpanderItem>"`;
 
-exports[`Primitives Flex 1`] = `"<Flex {...rest} {...getOverrideProps(overrides, \\"MyFlex\\")}></Flex>"`;
+exports[`Primitives Flex 1`] = `"<Flex {...getOverrideProps(overrides, \\"MyFlex\\")} {...rest}></Flex>"`;
 
-exports[`Primitives Grid 1`] = `"<Grid {...rest} {...getOverrideProps(overrides, \\"MyGrid\\")}></Grid>"`;
+exports[`Primitives Grid 1`] = `"<Grid {...getOverrideProps(overrides, \\"MyGrid\\")} {...rest}></Grid>"`;
 
-exports[`Primitives Heading 1`] = `"<Heading {...rest} {...getOverrideProps(overrides, \\"MyHeading\\")}></Heading>"`;
+exports[`Primitives Heading 1`] = `"<Heading {...getOverrideProps(overrides, \\"MyHeading\\")} {...rest}></Heading>"`;
 
-exports[`Primitives Icon 1`] = `"<Icon {...rest} {...getOverrideProps(overrides, \\"MyIcon\\")}></Icon>"`;
+exports[`Primitives Icon 1`] = `"<Icon {...getOverrideProps(overrides, \\"MyIcon\\")} {...rest}></Icon>"`;
 
-exports[`Primitives Image 1`] = `"<Image {...rest} {...getOverrideProps(overrides, \\"MyImage\\")}></Image>"`;
+exports[`Primitives Image 1`] = `"<Image {...getOverrideProps(overrides, \\"MyImage\\")} {...rest}></Image>"`;
 
-exports[`Primitives Link 1`] = `"<Link {...rest} {...getOverrideProps(overrides, \\"MyLink\\")}></Link>"`;
+exports[`Primitives Link 1`] = `"<Link {...getOverrideProps(overrides, \\"MyLink\\")} {...rest}></Link>"`;
 
-exports[`Primitives Loader 1`] = `"<Loader {...rest} {...getOverrideProps(overrides, \\"MyLoader\\")}></Loader>"`;
+exports[`Primitives Loader 1`] = `"<Loader {...getOverrideProps(overrides, \\"MyLoader\\")} {...rest}></Loader>"`;
 
-exports[`Primitives Menu 1`] = `"<Menu {...rest} {...getOverrideProps(overrides, \\"MyMenu\\")}></Menu>"`;
+exports[`Primitives Menu 1`] = `"<Menu {...getOverrideProps(overrides, \\"MyMenu\\")} {...rest}></Menu>"`;
 
-exports[`Primitives MenuButton 1`] = `"<MenuButton {...rest} {...getOverrideProps(overrides, \\"MyMenuButton\\")}></MenuButton>"`;
+exports[`Primitives MenuButton 1`] = `"<MenuButton {...getOverrideProps(overrides, \\"MyMenuButton\\")} {...rest}></MenuButton>"`;
 
-exports[`Primitives MenuItem 1`] = `"<MenuItem {...rest} {...getOverrideProps(overrides, \\"MyMenuItem\\")}></MenuItem>"`;
+exports[`Primitives MenuItem 1`] = `"<MenuItem {...getOverrideProps(overrides, \\"MyMenuItem\\")} {...rest}></MenuItem>"`;
 
-exports[`Primitives Pagination 1`] = `"<Pagination {...rest} {...getOverrideProps(overrides, \\"MyPagination\\")}></Pagination>"`;
+exports[`Primitives Pagination 1`] = `"<Pagination {...getOverrideProps(overrides, \\"MyPagination\\")} {...rest}></Pagination>"`;
 
-exports[`Primitives PasswordField 1`] = `"<PasswordField {...rest} {...getOverrideProps(overrides, \\"MyPasswordField\\")}></PasswordField>"`;
+exports[`Primitives PasswordField 1`] = `"<PasswordField {...getOverrideProps(overrides, \\"MyPasswordField\\")} {...rest}></PasswordField>"`;
 
-exports[`Primitives PhoneNumberField 1`] = `"<PhoneNumberField {...rest} {...getOverrideProps(overrides, \\"MyPhoneNumberField\\")}></PhoneNumberField>"`;
+exports[`Primitives PhoneNumberField 1`] = `"<PhoneNumberField {...getOverrideProps(overrides, \\"MyPhoneNumberField\\")} {...rest}></PhoneNumberField>"`;
 
-exports[`Primitives Placeholder 1`] = `"<Placeholder {...rest} {...getOverrideProps(overrides, \\"MyPlaceholder\\")}></Placeholder>"`;
+exports[`Primitives Placeholder 1`] = `"<Placeholder {...getOverrideProps(overrides, \\"MyPlaceholder\\")} {...rest}></Placeholder>"`;
 
-exports[`Primitives Radio 1`] = `"<Radio {...rest} {...getOverrideProps(overrides, \\"MyRadio\\")}></Radio>"`;
+exports[`Primitives Radio 1`] = `"<Radio {...getOverrideProps(overrides, \\"MyRadio\\")} {...rest}></Radio>"`;
 
-exports[`Primitives RadioGroupField 1`] = `"<RadioGroupField {...rest} {...getOverrideProps(overrides, \\"MyRadioGroupField\\")}></RadioGroupField>"`;
+exports[`Primitives RadioGroupField 1`] = `"<RadioGroupField {...getOverrideProps(overrides, \\"MyRadioGroupField\\")} {...rest}></RadioGroupField>"`;
 
-exports[`Primitives Rating 1`] = `"<Rating {...rest} {...getOverrideProps(overrides, \\"MyRating\\")}></Rating>"`;
+exports[`Primitives Rating 1`] = `"<Rating {...getOverrideProps(overrides, \\"MyRating\\")} {...rest}></Rating>"`;
 
-exports[`Primitives ScrollView 1`] = `"<ScrollView {...rest} {...getOverrideProps(overrides, \\"MyScrollView\\")}></ScrollView>"`;
+exports[`Primitives ScrollView 1`] = `"<ScrollView {...getOverrideProps(overrides, \\"MyScrollView\\")} {...rest}></ScrollView>"`;
 
-exports[`Primitives SearchField 1`] = `"<SearchField {...rest} {...getOverrideProps(overrides, \\"MySearchField\\")}></SearchField>"`;
+exports[`Primitives SearchField 1`] = `"<SearchField {...getOverrideProps(overrides, \\"MySearchField\\")} {...rest}></SearchField>"`;
 
-exports[`Primitives SelectField 1`] = `"<SelectField {...rest} {...getOverrideProps(overrides, \\"MySelectField\\")}></SelectField>"`;
+exports[`Primitives SelectField 1`] = `"<SelectField {...getOverrideProps(overrides, \\"MySelectField\\")} {...rest}></SelectField>"`;
 
-exports[`Primitives SliderField 1`] = `"<SliderField {...rest} {...getOverrideProps(overrides, \\"MySliderField\\")}></SliderField>"`;
+exports[`Primitives SliderField 1`] = `"<SliderField {...getOverrideProps(overrides, \\"MySliderField\\")} {...rest}></SliderField>"`;
 
-exports[`Primitives StepperField 1`] = `"<StepperField {...rest} {...getOverrideProps(overrides, \\"MyStepperField\\")}></StepperField>"`;
+exports[`Primitives StepperField 1`] = `"<StepperField {...getOverrideProps(overrides, \\"MyStepperField\\")} {...rest}></StepperField>"`;
 
-exports[`Primitives SwitchField 1`] = `"<SwitchField {...rest} {...getOverrideProps(overrides, \\"MySwitchField\\")}></SwitchField>"`;
+exports[`Primitives SwitchField 1`] = `"<SwitchField {...getOverrideProps(overrides, \\"MySwitchField\\")} {...rest}></SwitchField>"`;
 
-exports[`Primitives TabItem 1`] = `"<TabItem {...rest} {...getOverrideProps(overrides, \\"MyTabItem\\")}></TabItem>"`;
+exports[`Primitives TabItem 1`] = `"<TabItem {...getOverrideProps(overrides, \\"MyTabItem\\")} {...rest}></TabItem>"`;
 
-exports[`Primitives Table 1`] = `"<Table {...rest} {...getOverrideProps(overrides, \\"MyTable\\")}></Table>"`;
+exports[`Primitives Table 1`] = `"<Table {...getOverrideProps(overrides, \\"MyTable\\")} {...rest}></Table>"`;
 
-exports[`Primitives TableBody 1`] = `"<TableBody {...rest} {...getOverrideProps(overrides, \\"MyTableBody\\")}></TableBody>"`;
+exports[`Primitives TableBody 1`] = `"<TableBody {...getOverrideProps(overrides, \\"MyTableBody\\")} {...rest}></TableBody>"`;
 
-exports[`Primitives TableCell 1`] = `"<TableCell {...rest} {...getOverrideProps(overrides, \\"MyTableCell\\")}></TableCell>"`;
+exports[`Primitives TableCell 1`] = `"<TableCell {...getOverrideProps(overrides, \\"MyTableCell\\")} {...rest}></TableCell>"`;
 
-exports[`Primitives TableFoot 1`] = `"<TableFoot {...rest} {...getOverrideProps(overrides, \\"MyTableFoot\\")}></TableFoot>"`;
+exports[`Primitives TableFoot 1`] = `"<TableFoot {...getOverrideProps(overrides, \\"MyTableFoot\\")} {...rest}></TableFoot>"`;
 
-exports[`Primitives TableHead 1`] = `"<TableHead {...rest} {...getOverrideProps(overrides, \\"MyTableHead\\")}></TableHead>"`;
+exports[`Primitives TableHead 1`] = `"<TableHead {...getOverrideProps(overrides, \\"MyTableHead\\")} {...rest}></TableHead>"`;
 
-exports[`Primitives TableRow 1`] = `"<TableRow {...rest} {...getOverrideProps(overrides, \\"MyTableRow\\")}></TableRow>"`;
+exports[`Primitives TableRow 1`] = `"<TableRow {...getOverrideProps(overrides, \\"MyTableRow\\")} {...rest}></TableRow>"`;
 
-exports[`Primitives Tabs 1`] = `"<Tabs {...rest} {...getOverrideProps(overrides, \\"MyTabs\\")}></Tabs>"`;
+exports[`Primitives Tabs 1`] = `"<Tabs {...getOverrideProps(overrides, \\"MyTabs\\")} {...rest}></Tabs>"`;
 
-exports[`Primitives Text 1`] = `"<Text {...rest} {...getOverrideProps(overrides, \\"MyText\\")}></Text>"`;
+exports[`Primitives Text 1`] = `"<Text {...getOverrideProps(overrides, \\"MyText\\")} {...rest}></Text>"`;
 
-exports[`Primitives TextAreaField 1`] = `"<TextAreaField {...rest} {...getOverrideProps(overrides, \\"MyTextAreaField\\")}></TextAreaField>"`;
+exports[`Primitives TextAreaField 1`] = `"<TextAreaField {...getOverrideProps(overrides, \\"MyTextAreaField\\")} {...rest}></TextAreaField>"`;
 
-exports[`Primitives TextField 1`] = `"<TextField {...rest} {...getOverrideProps(overrides, \\"MyTextField\\")}></TextField>"`;
+exports[`Primitives TextField 1`] = `"<TextField {...getOverrideProps(overrides, \\"MyTextField\\")} {...rest}></TextField>"`;
 
-exports[`Primitives ToggleButton 1`] = `"<ToggleButton {...rest} {...getOverrideProps(overrides, \\"MyToggleButton\\")}></ToggleButton>"`;
+exports[`Primitives ToggleButton 1`] = `"<ToggleButton {...getOverrideProps(overrides, \\"MyToggleButton\\")} {...rest}></ToggleButton>"`;
 
-exports[`Primitives ToggleButtonGroup 1`] = `"<ToggleButtonGroup {...rest} {...getOverrideProps(overrides, \\"MyToggleButtonGroup\\")}></ToggleButtonGroup>"`;
+exports[`Primitives ToggleButtonGroup 1`] = `"<ToggleButtonGroup {...getOverrideProps(overrides, \\"MyToggleButtonGroup\\")} {...rest}></ToggleButtonGroup>"`;
 
-exports[`Primitives View 1`] = `"<View {...rest} {...getOverrideProps(overrides, \\"MyView\\")}></View>"`;
+exports[`Primitives View 1`] = `"<View {...getOverrideProps(overrides, \\"MyView\\")} {...rest}></View>"`;
 
-exports[`Primitives VisuallyHidden 1`] = `"<VisuallyHidden {...rest} {...getOverrideProps(overrides, \\"MyVisuallyHidden\\")}></VisuallyHidden>"`;
+exports[`Primitives VisuallyHidden 1`] = `"<VisuallyHidden {...getOverrideProps(overrides, \\"MyVisuallyHidden\\")} {...rest}></VisuallyHidden>"`;

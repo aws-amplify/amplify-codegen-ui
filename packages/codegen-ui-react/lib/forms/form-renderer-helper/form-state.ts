@@ -38,7 +38,7 @@ import {
   ElementAccessExpression,
   ConditionalExpression,
 } from 'typescript';
-import { lowerCaseFirst } from '../../helpers';
+import { capitalizeFirstLetter, lowerCaseFirst, getSetNameIdentifier, buildUseStateExpression } from '../../helpers';
 import { getElementAccessExpression } from './invalid-variable-helpers';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 
@@ -78,14 +78,6 @@ export const setStateExpression = (fieldName: string, value: Expression) => {
   return factory.createExpressionStatement(
     factory.createCallExpression(getSetNameIdentifier(fieldName), undefined, [value]),
   );
-};
-
-export const capitalizeFirstLetter = (val: string) => {
-  return val.charAt(0).toUpperCase() + val.slice(1);
-};
-
-export const getSetNameIdentifier = (value: string): Identifier => {
-  return factory.createIdentifier(`set${capitalizeFirstLetter(value)}`);
 };
 
 /**
@@ -147,6 +139,7 @@ export const getDefaultValueExpression = (
     StepperField: factory.createNumericLiteral(0),
     SliderField: factory.createNumericLiteral(0),
     CheckboxField: factory.createFalse(),
+    TextField: factory.createStringLiteral(''),
   };
 
   if (isArray) {
@@ -425,42 +418,6 @@ const stringifyAWSJSONFieldValue = (
       factory.createPropertyAccessExpression(factory.createIdentifier('JSON'), factory.createIdentifier('stringify')),
       undefined,
       [value],
-    ),
-  );
-};
-
-/**
- * const [name, setName] = React.useState({default_expression});
- *
- * name is the value we are looking to set
- * defaultValue is is the value to set for the useState
- * @param name
- * @param defaultValue
- * @returns
- */
-export const buildUseStateExpression = (name: string, defaultValue: Expression): Statement => {
-  return factory.createVariableStatement(
-    undefined,
-    factory.createVariableDeclarationList(
-      [
-        factory.createVariableDeclaration(
-          factory.createArrayBindingPattern([
-            factory.createBindingElement(undefined, undefined, factory.createIdentifier(name), undefined),
-            factory.createBindingElement(undefined, undefined, getSetNameIdentifier(name), undefined),
-          ]),
-          undefined,
-          undefined,
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('React'),
-              factory.createIdentifier('useState'),
-            ),
-            undefined,
-            [defaultValue],
-          ),
-        ),
-      ],
-      NodeFlags.Const,
     ),
   );
 };

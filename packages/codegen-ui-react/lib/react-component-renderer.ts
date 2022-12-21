@@ -152,9 +152,14 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     ];
 
     if (this.componentMetadata.formMetadata) {
-      attributes.push(...addFormAttributes(this.component, this.componentMetadata.formMetadata));
+      attributes.push(
+        ...addFormAttributes(
+          this.component,
+          this.componentMetadata.formMetadata,
+          this.componentMetadata.dataSchemaMetadata,
+        ),
+      );
     }
-
     this.addPropsSpreadAttributes(attributes);
 
     return factory.createJsxOpeningElement(
@@ -165,15 +170,15 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   }
 
   protected addPropsSpreadAttributes(attributes: JsxAttributeLike[]) {
-    if (this.node.isRoot()) {
-      const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('rest'));
-      attributes.push(propsAttr);
-    }
-
     if (this.node.hasAncestorOfType('Collection')) {
       this.addCollectionOverridePropsAttribute(attributes);
     } else {
       this.addGetOverridePropsAttribute(attributes);
+    }
+
+    if (this.node.isRoot()) {
+      const propsAttr = factory.createJsxSpreadAttribute(factory.createIdentifier('rest'));
+      attributes.push(propsAttr);
     }
   }
 

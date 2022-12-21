@@ -22,10 +22,10 @@ import {
   GenericDataModel,
   GenericDataField,
 } from '@aws-amplify/codegen-ui';
-import { getRecordsName, getLinkedDataName, getSetNameIdentifier, buildAccessChain } from './form-state';
+import { getRecordsName, getLinkedDataName, buildAccessChain } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
-import { lowerCaseFirst } from '../../helpers';
+import { lowerCaseFirst, getSetNameIdentifier } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { extractModelAndKeys, getIDValueCallChain, getMatchEveryModelFieldCallExpression } from './model-values';
 import { isModelDataType } from './render-checkers';

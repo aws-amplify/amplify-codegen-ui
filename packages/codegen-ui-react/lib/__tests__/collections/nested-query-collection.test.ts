@@ -18,26 +18,24 @@ import { authorHasManySchema, generateWithAmplifyRenderer } from '../__utils__';
 describe('nested query collections', () => {
   it('should contain nested query generated resources', () => {
     const { componentText } = generateWithAmplifyRenderer('authorCollectionComponent', {}, false, authorHasManySchema);
-    // check nested model is imported
-    expect(componentText).toContain('import { Author, Book } from "../models";');
+    // check nested model is not imported
+    expect(componentText).toContain('import { Author } from "../models";');
 
-    // check binding calls are generated
-    expect(componentText).toContain('const bookItems = useDataStoreBinding');
+    // check binding call is generated
     expect(componentText).toContain('const itemsDataStore = useDataStoreBinding');
 
-    // check for filter function in books
-    expect(componentText).toContain('books: bookItems.filter((model) => model.authorID === item.id),');
+    // check for relationships loading
+    expect(componentText).toContain('Books: await item.Books.toArray()');
+    expect(componentText).toContain('await item.Publisher');
+
+    // do not load for manyToMany
+    expect(componentText).not.toContain('Sponsor');
   });
 
   it('should only contain first level query for collection when data schema is not passed down', () => {
     const { componentText } = generateWithAmplifyRenderer('authorCollectionComponent');
-    // check only first level model is imported
-    expect(componentText).toContain('import { Author } from "../models";');
-    // only contains binding call for author and not books
-    expect(componentText).not.toContain('const bookItems = useDataStoreBinding');
-    expect(componentText).toContain('const itemsDataStore = useDataStoreBinding');
-
-    // should not contain filter function
-    expect(componentText).not.toContain('books: bookItems.filter((model) => model.authorID === item.id),');
+    // should not contain relationships loading
+    expect(componentText).not.toContain('Books: await item.Books.toArray()');
+    expect(componentText).not.toContain('await item.Publisher');
   });
 });
