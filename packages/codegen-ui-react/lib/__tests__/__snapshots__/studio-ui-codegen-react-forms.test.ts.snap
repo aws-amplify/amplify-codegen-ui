@@ -7327,9 +7327,10 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function MyFlexCreateForm(props) {
+export default function MyFlexUpdateForm(props) {
   const {
-    clearOnSuccess = true,
+    id,
+    flex,
     onSuccess,
     onError,
     onSubmit,
@@ -7355,15 +7356,25 @@ export default function MyFlexCreateForm(props) {
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setUsername(initialValues.username);
-    setCaption(initialValues.caption);
-    setCustomtags(initialValues.Customtags);
+    const cleanValues = { ...initialValues, ...flexRecord };
+    setUsername(cleanValues.username);
+    setCaption(cleanValues.caption);
+    setCustomtags(cleanValues.Customtags ?? []);
     setCurrentCustomtagsValue(\\"\\");
-    setTags(initialValues.tags);
+    setTags(cleanValues.tags ?? []);
     setCurrentTagsValue(\\"\\");
-    setProfile_url(initialValues.profile_url);
+    setProfile_url(cleanValues.profile_url);
     setErrors({});
   };
+  const [flexRecord, setFlexRecord] = React.useState(flex);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = id ? await DataStore.query(Flex0, id) : flex;
+      setFlexRecord(record);
+    };
+    queryData();
+  }, [id, flex]);
+  React.useEffect(resetStateValues, [flexRecord]);
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
     React.useState(\\"\\");
   const CustomtagsRef = React.createRef();
@@ -7429,12 +7440,13 @@ export default function MyFlexCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(new Flex0(modelFields));
+          await DataStore.save(
+            Flex0.copyOf(flexRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
-          }
-          if (clearOnSuccess) {
-            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -7442,7 +7454,7 @@ export default function MyFlexCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, \\"MyFlexCreateForm\\")}
+      {...getOverrideProps(overrides, \\"MyFlexUpdateForm\\")}
       {...rest}
     >
       <Flex
@@ -7450,13 +7462,14 @@ export default function MyFlexCreateForm(props) {
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          isDisabled={!(id || flex)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
           gap=\\"15px\\"
@@ -7474,7 +7487,9 @@ export default function MyFlexCreateForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(id || flex) || Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -7669,6 +7684,7 @@ export default function MyFlexCreateForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should render a update form with colliding model name 2`] = `
 "import * as React from \\"react\\";
+import { Flex as Flex0 } from \\"../models\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 export declare type ValidationResponse = {
@@ -7676,14 +7692,14 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type MyFlexCreateFormInputValues = {
+export declare type MyFlexUpdateFormInputValues = {
     username?: string;
     caption?: string;
     Customtags?: string[];
     tags?: string[];
     profile_url?: string;
 };
-export declare type MyFlexCreateFormValidationValues = {
+export declare type MyFlexUpdateFormValidationValues = {
     username?: ValidationFunction<string>;
     caption?: ValidationFunction<string>;
     Customtags?: ValidationFunction<string>;
@@ -7691,8 +7707,8 @@ export declare type MyFlexCreateFormValidationValues = {
     profile_url?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type MyFlexCreateFormOverridesProps = {
-    MyFlexCreateFormGrid?: FormProps<GridProps>;
+export declare type MyFlexUpdateFormOverridesProps = {
+    MyFlexUpdateFormGrid?: FormProps<GridProps>;
     RowGrid0?: FormProps<GridProps>;
     username?: FormProps<TextFieldProps>;
     caption?: FormProps<TextFieldProps>;
@@ -7700,18 +7716,19 @@ export declare type MyFlexCreateFormOverridesProps = {
     tags?: FormProps<TextFieldProps>;
     profile_url?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type MyFlexCreateFormProps = React.PropsWithChildren<{
-    overrides?: MyFlexCreateFormOverridesProps | undefined | null;
+export declare type MyFlexUpdateFormProps = React.PropsWithChildren<{
+    overrides?: MyFlexUpdateFormOverridesProps | undefined | null;
 } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
-    onSuccess?: (fields: MyFlexCreateFormInputValues) => void;
-    onError?: (fields: MyFlexCreateFormInputValues, errorMessage: string) => void;
+    id?: string;
+    flex?: Flex0;
+    onSubmit?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
+    onSuccess?: (fields: MyFlexUpdateFormInputValues) => void;
+    onError?: (fields: MyFlexUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
-    onValidate?: MyFlexCreateFormValidationValues;
+    onChange?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
+    onValidate?: MyFlexUpdateFormValidationValues;
 } & React.CSSProperties>;
-export default function MyFlexCreateForm(props: MyFlexCreateFormProps): React.ReactElement;
+export default function MyFlexUpdateForm(props: MyFlexUpdateFormProps): React.ReactElement;
 "
 `;
 

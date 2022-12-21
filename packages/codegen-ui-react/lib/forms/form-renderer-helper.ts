@@ -1340,7 +1340,7 @@ export const buildResetValuesOnRecordUpdate = (recordName: string) => {
   );
 };
 
-export const buildUpdateDatastoreQuery = (dataTypeName: string, recordName: string) => {
+export const buildUpdateDatastoreQuery = (importedModelName: string, lowerCaseDataTypeName: string) => {
   // TODO: update this once cpk is supported in datastore
   const pkQueryIdentifier = factory.createIdentifier('id');
   return [
@@ -1378,11 +1378,11 @@ export const buildUpdateDatastoreQuery = (dataTypeName: string, recordName: stri
                                   factory.createIdentifier('query'),
                                 ),
                                 undefined,
-                                [factory.createIdentifier(dataTypeName), pkQueryIdentifier],
+                                [factory.createIdentifier(importedModelName), pkQueryIdentifier],
                               ),
                             ),
                             factory.createToken(SyntaxKind.ColonToken),
-                            factory.createIdentifier(lowerCaseFirst(dataTypeName)),
+                            factory.createIdentifier(lowerCaseDataTypeName),
                           ),
                         ),
                       ],
@@ -1390,7 +1390,7 @@ export const buildUpdateDatastoreQuery = (dataTypeName: string, recordName: stri
                     ),
                   ),
                   factory.createExpressionStatement(
-                    factory.createCallExpression(getSetNameIdentifier(recordName), undefined, [
+                    factory.createCallExpression(getSetNameIdentifier(`${lowerCaseDataTypeName}Record`), undefined, [
                       factory.createIdentifier('record'),
                     ]),
                   ),
