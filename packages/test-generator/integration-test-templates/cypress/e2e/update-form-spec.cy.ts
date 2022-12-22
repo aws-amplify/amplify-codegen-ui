@@ -57,6 +57,17 @@ describe('UpdateForms', () => {
         typeInAutocomplete(`George{downArrow}{enter}`);
         clickAddToArray();
 
+        // HasMany
+        removeArrayItem('Jessica');
+
+        getArrayFieldButtonByLabel('Has many students').click();
+        typeInAutocomplete(`{downArrow}{enter}`);
+        clickAddToArray();
+
+        getArrayFieldButtonByLabel('Has many students').click();
+        typeInAutocomplete(`Sar{downArrow}{enter}`);
+        clickAddToArray();
+
         // Many to many update
         removeArrayItem('Red');
         removeArrayItem('Blue');
@@ -69,18 +80,6 @@ describe('UpdateForms', () => {
         typeInAutocomplete(`Gr{downArrow}{enter}`);
         clickAddToArray();
 
-        // Has many update
-        removeArrayItem('David');
-        removeArrayItem('Jessica');
-
-        getArrayFieldButtonByLabel('Has many students').click();
-        typeInAutocomplete(`{downArrow}{enter}`);
-        clickAddToArray();
-
-        getArrayFieldButtonByLabel('Has many students').click();
-        typeInAutocomplete(`Sar{downArrow}{enter}`);
-        clickAddToArray();
-
         cy.contains('Submit').click();
 
         cy.contains(/My string/).then((recordElement: JQuery) => {
@@ -90,11 +89,13 @@ describe('UpdateForms', () => {
           expect(record.ManyToManyTags[0].label).to.equal('Green');
           expect(record.ManyToManyTags[1].label).to.equal('Orange');
           expect(record.BelongsToOwner.name).to.equal('George');
-          expect(record.HasManyStudents.length).to.equal(2);
-          expect(record.HasManyStudents[0].name).to.equal('Matthew');
+          expect(record.HasManyStudents.length).to.equal(3);
+          expect(record.HasManyStudents[0].name).to.equal('David');
           expect(record.HasManyStudents[0].allSupportedFormFieldsID).to.equal(record.id);
-          expect(record.HasManyStudents[1].name).to.equal('Sarah');
+          expect(record.HasManyStudents[1].name).to.equal('Matthew');
           expect(record.HasManyStudents[1].allSupportedFormFieldsID).to.equal(record.id);
+          expect(record.HasManyStudents[2].name).to.equal('Sarah');
+          expect(record.HasManyStudents[2].allSupportedFormFieldsID).to.equal(record.id);
         });
       });
     });
