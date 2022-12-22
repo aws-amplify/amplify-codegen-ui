@@ -6,13 +6,20 @@ exports[`form-render utils should generate before & complete types if datastore 
     onSubmit?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
     onSuccess?: (fields: mySampleFormInputValues) => void;
     onError?: (fields: mySampleFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
     onValidate?: mySampleFormValidationValues;
 }"
 `;
 
 exports[`form-render utils should generate regular onsubmit if dataSourceType is custom 1`] = `
+"{
+    onSubmit: (fields: myCustomFormInputValues) => void;
+    onChange?: (fields: myCustomFormInputValues) => myCustomFormInputValues;
+    onValidate?: myCustomFormValidationValues;
+}"
+`;
+
+exports[`form-render utils should render cancel props if included cancel object is an empty object 1`] = `
 "{
     onSubmit: (fields: myCustomFormInputValues) => void;
     onCancel?: () => void;

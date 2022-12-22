@@ -14,12 +14,19 @@
   limitations under the License.
  */
 
-import { FieldConfigMetadata, DataFieldDataType, isValidVariableName } from '@aws-amplify/codegen-ui';
+import {
+  FieldConfigMetadata,
+  DataFieldDataType,
+  isValidVariableName,
+  isNonModelDataType,
+} from '@aws-amplify/codegen-ui';
 import {
   factory,
   Statement,
   Expression,
   NodeFlags,
+  Identifier,
+  ExpressionStatement,
   SyntaxKind,
   ObjectLiteralExpression,
   CallExpression,
@@ -31,7 +38,9 @@ import {
   ElementAccessExpression,
   ConditionalExpression,
 } from 'typescript';
-import { capitalizeFirstLetter, getSetNameIdentifier, buildUseStateExpression } from '../helpers';
+import { capitalizeFirstLetter, lowerCaseFirst, getSetNameIdentifier, buildUseStateExpression } from '../../helpers';
+import { getElementAccessExpression } from './invalid-variable-helpers';
+import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 
 // used just to sanitize nested array field names
 // when rendering currentValue state and ref
@@ -49,8 +58,19 @@ export const getCurrentValueName = (fieldName: string) => {
   return `current${getVariableName(paths)}Value`;
 };
 
+export const getCurrentDisplayValueName = (fieldName: string) =>
+  `current${capitalizeFirstLetter(fieldName)}DisplayValue`;
+
+export const getRecordsName = (modelName: string) => `${lowerCaseFirst(modelName)}Records`;
+
+export const getLinkedDataName = (modelName: string) => `linked${capitalizeFirstLetter(modelName)}`;
+
 export const getCurrentValueIdentifier = (fieldName: string) =>
   factory.createIdentifier(getCurrentValueName(fieldName));
+
+// in update form, there will be conflict if field `id` is editable.
+// so the prop `id` should be destructured as `idProp`
+export const getPropName = (propName: string) => `${propName}Prop`;
 
 export const resetValuesName = factory.createIdentifier('resetStateValues');
 
@@ -110,8 +130,10 @@ export const getDefaultValueExpression = (
   componentType: string,
   dataType?: DataFieldDataType,
   isArray?: boolean,
+  isDisplayValue?: boolean,
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
+    Autocomplete: isDisplayValue ? factory.createStringLiteral('') : factory.createIdentifier('undefined'),
     ToggleButton: factory.createFalse(),
     SwitchField: factory.createFalse(),
     StepperField: factory.createNumericLiteral(0),
@@ -122,11 +144,6 @@ export const getDefaultValueExpression = (
 
   if (isArray) {
     return factory.createArrayLiteralExpression([], false);
-  }
-
-  // it's a nonModel or relationship object
-  if (dataType && typeof dataType === 'object' && !('enum' in dataType)) {
-    return factory.createObjectLiteralExpression();
   }
 
   if (componentType in componentTypeToDefaultValueMap) {
@@ -207,7 +224,7 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
     }
 
     function renderCorrectUseStateValue() {
-      if (dataType === 'AWSJSON' && !isArray) {
+      if ((dataType === 'AWSJSON' || isNonModelDataType(dataType)) && !isArray) {
         return factory.createConditionalExpression(
           determinePropertyName(),
           factory.createToken(SyntaxKind.QuestionToken),
@@ -250,53 +267,74 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
   const recordOrInitialValues = recordName ? 'cleanValues' : 'initialValues';
 
   const stateNames = new Set<string>();
-  const expressions = Object.entries(fieldConfigs).reduce<Statement[]>(
-    (acc, [name, { isArray, sanitizedFieldName, componentType, dataType }]) => {
-      const stateName = name.split('.')[0];
-      const renderedName = sanitizedFieldName || stateName;
-      if (!stateNames.has(stateName)) {
-        const accessExpression = isValidVariableName(stateName)
-          ? factory.createPropertyAccessExpression(
-              factory.createIdentifier(recordOrInitialValues),
-              factory.createIdentifier(stateName),
-            )
-          : factory.createElementAccessExpression(
-              factory.createIdentifier(recordOrInitialValues),
-              factory.createStringLiteral(stateName),
-            );
+  const expressions = Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, fieldConfig]) => {
+    const { isArray, sanitizedFieldName, componentType, dataType } = fieldConfig;
+    const stateName = name.split('.')[0];
+    const renderedName = sanitizedFieldName || stateName;
+    if (!stateNames.has(stateName)) {
+      const accessExpression = getElementAccessExpression(recordOrInitialValues, stateName);
 
-        // Initial values should have the correct values and not need a modifier
-        if (dataType === 'AWSJSON' && !isArray && recordOrInitialValues !== 'initialValues') {
-          const awsJSONAccessModifier = stringifyAWSJSONFieldValue(accessExpression);
-          acc.push(setStateExpression(renderedName, awsJSONAccessModifier));
-        } else {
-          acc.push(
-            setStateExpression(
-              renderedName,
-              isArray && recordOrInitialValues === 'cleanValues'
-                ? factory.createBinaryExpression(
-                    accessExpression,
-                    factory.createToken(SyntaxKind.QuestionQuestionToken),
-                    factory.createArrayLiteralExpression([], false),
-                  )
-                : accessExpression,
-            ),
-          );
-        }
-        if (isArray) {
-          acc.push(
-            setStateExpression(
-              getCurrentValueName(renderedName),
-              getDefaultValueExpression(name, componentType, dataType),
-            ),
-          );
-        }
+      // Initial values should have the correct values and not need a modifier
+      if (
+        (dataType === 'AWSJSON' || isNonModelDataType(dataType)) &&
+        !isArray &&
+        recordOrInitialValues !== 'initialValues'
+      ) {
+        const awsJSONAccessModifier = stringifyAWSJSONFieldValue(accessExpression);
+        acc.push(setStateExpression(renderedName, awsJSONAccessModifier));
+      } else {
+        acc.push(
+          setStateExpression(
+            renderedName,
+            isArray && recordOrInitialValues === 'cleanValues'
+              ? factory.createBinaryExpression(
+                  accessExpression,
+                  factory.createToken(SyntaxKind.QuestionQuestionToken),
+                  factory.createArrayLiteralExpression([], false),
+                )
+              : accessExpression,
+          ),
+        );
+      }
+      if (shouldWrapInArrayField(fieldConfig)) {
+        acc.push(
+          setStateExpression(
+            getCurrentValueName(renderedName),
+            getDefaultValueExpression(name, componentType, dataType),
+          ),
+        );
+      }
+
+      if (isModelDataType(fieldConfig)) {
+        acc.push(
+          setStateExpression(
+            getCurrentDisplayValueName(renderedName),
+            getDefaultValueExpression(name, componentType, dataType, false, true),
+          ),
+        );
+
         stateNames.add(stateName);
       }
-      return acc;
-    },
-    [],
-  );
+      stateNames.add(stateName);
+    }
+    return acc;
+  }, []);
+
+  const linkedDataPropertyAssignments: any[] = [];
+  if (fieldConfigs) {
+    Object.entries(fieldConfigs).forEach(([fieldName, fieldConfig]) => {
+      if (fieldConfig.relationship?.type === 'HAS_MANY') {
+        linkedDataPropertyAssignments.push(
+          factory.createPropertyAssignment(
+            factory.createIdentifier(fieldConfig.sanitizedFieldName || fieldName),
+            factory.createIdentifier(getLinkedDataName(fieldName)),
+          ),
+        );
+      } else if (fieldConfig.relationship?.type === 'BELONGS_TO' || fieldConfig.relationship?.type === 'HAS_ONE') {
+        linkedDataPropertyAssignments.push(factory.createIdentifier(fieldConfig.sanitizedFieldName || fieldName));
+      }
+    });
+  }
 
   // ex. const cleanValues = {...initialValues, ...bookRecord}
   if (recordName) {
@@ -309,12 +347,19 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
               factory.createIdentifier('cleanValues'),
               undefined,
               undefined,
-              factory.createObjectLiteralExpression(
-                [
-                  factory.createSpreadAssignment(factory.createIdentifier('initialValues')),
-                  factory.createSpreadAssignment(factory.createIdentifier(recordName)),
-                ],
-                false,
+              factory.createConditionalExpression(
+                factory.createIdentifier(recordName),
+                factory.createToken(SyntaxKind.QuestionToken),
+                factory.createObjectLiteralExpression(
+                  [
+                    factory.createSpreadAssignment(factory.createIdentifier('initialValues')),
+                    factory.createSpreadAssignment(factory.createIdentifier(recordName)),
+                    ...linkedDataPropertyAssignments,
+                  ],
+                  false,
+                ),
+                factory.createToken(SyntaxKind.ColonToken),
+                factory.createIdentifier('initialValues'),
               ),
             ),
           ],
@@ -326,6 +371,7 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
 
   // also reset the state of the errors
   expressions.push(setStateExpression('errors', factory.createObjectLiteralExpression()));
+
   return factory.createVariableStatement(
     undefined,
     factory.createVariableDeclarationList(
@@ -459,4 +505,54 @@ export const setFieldState = (name: string, value: Expression): CallExpression =
     ]);
   }
   return factory.createCallExpression(getSetNameIdentifier(name), undefined, [value]);
+};
+
+export const buildSetStateFunction = (fieldConfigs: Record<string, FieldConfigMetadata>) => {
+  const fieldSet = new Set<string>();
+  const expression = Object.keys(fieldConfigs).reduce<ExpressionStatement[]>((acc, field) => {
+    const fieldName = field.split('.')[0];
+    const renderedFieldName = fieldConfigs[field].sanitizedFieldName || fieldName;
+    if (!fieldSet.has(renderedFieldName)) {
+      acc.push(
+        factory.createExpressionStatement(
+          factory.createCallExpression(
+            factory.createIdentifier(`set${capitalizeFirstLetter(renderedFieldName)}`),
+            undefined,
+            [
+              isValidVariableName(fieldName)
+                ? factory.createPropertyAccessExpression(
+                    factory.createIdentifier('initialData'),
+                    factory.createIdentifier(fieldName),
+                  )
+                : factory.createElementAccessExpression(
+                    factory.createIdentifier('initialData'),
+                    factory.createStringLiteral(fieldName),
+                  ),
+            ],
+          ),
+        ),
+      );
+      fieldSet.add(renderedFieldName);
+    }
+    return acc;
+  }, []);
+  return factory.createIfStatement(factory.createIdentifier('initialData'), factory.createBlock(expression, true));
+};
+
+// ex. React.useEffect(resetStateValues, [bookRecord])
+export const buildResetValuesOnRecordUpdate = (recordName: string, linkedDataNames: string[]) => {
+  const linkedDataIdentifiers: Identifier[] = [];
+  linkedDataNames.forEach((linkedDataName) => {
+    linkedDataIdentifiers.push(factory.createIdentifier(linkedDataName));
+  });
+  return factory.createExpressionStatement(
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('React'), factory.createIdentifier('useEffect')),
+      undefined,
+      [
+        resetValuesName,
+        factory.createArrayLiteralExpression([factory.createIdentifier(recordName), ...linkedDataIdentifiers], false),
+      ],
+    ),
+  );
 };

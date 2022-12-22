@@ -5,81 +5,54 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [2.6.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.8...v2.6.0) (2022-12-14)
 
-
 ### Bug Fixes
 
-* handle customized fields getting renamed ([46c74c4](https://github.com/aws-amplify/amplify-codegen-ui/commit/46c74c4b88c06d80597ee2534a2ea72f94cf7230))
-* make textfield a controlled component ([#830](https://github.com/aws-amplify/amplify-codegen-ui/issues/830)) ([1dcda83](https://github.com/aws-amplify/amplify-codegen-ui/commit/1dcda8390aab1539f607474885a98526763828a9))
-
+- handle customized fields getting renamed ([46c74c4](https://github.com/aws-amplify/amplify-codegen-ui/commit/46c74c4b88c06d80597ee2534a2ea72f94cf7230))
+- make textfield a controlled component ([#830](https://github.com/aws-amplify/amplify-codegen-ui/issues/830)) ([1dcda83](https://github.com/aws-amplify/amplify-codegen-ui/commit/1dcda8390aab1539f607474885a98526763828a9))
 
 ### Features
 
-* disable form submit when model is invalid ([#826](https://github.com/aws-amplify/amplify-codegen-ui/issues/826)) ([6898d10](https://github.com/aws-amplify/amplify-codegen-ui/commit/6898d108547fa84484364ccaf699f6f94f1fb25e))
-
-
-
-
+- disable form submit when model is invalid ([#826](https://github.com/aws-amplify/amplify-codegen-ui/issues/826)) ([6898d10](https://github.com/aws-amplify/amplify-codegen-ui/commit/6898d108547fa84484364ccaf699f6f94f1fb25e))
 
 ## [2.5.8](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.7...v2.5.8) (2022-12-08)
 
-
 ### Bug Fixes
 
-* update import file path to handle aliased children ([#814](https://github.com/aws-amplify/amplify-codegen-ui/issues/814)) ([ffe7659](https://github.com/aws-amplify/amplify-codegen-ui/commit/ffe765970e7e26579790c9e1a9fc006624c660dc))
-
-
-
-
+- update import file path to handle aliased children ([#814](https://github.com/aws-amplify/amplify-codegen-ui/issues/814)) ([ffe7659](https://github.com/aws-amplify/amplify-codegen-ui/commit/ffe765970e7e26579790c9e1a9fc006624c660dc))
 
 ## [2.5.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.6...v2.5.7) (2022-12-06)
 
-
 ### Bug Fixes
 
-* have rest props override variant values ([6df4d94](https://github.com/aws-amplify/amplify-codegen-ui/commit/6df4d94ea31465e36a1a293d5fdb6bd85829368a))
-* remove existing element in matrix when requeued ([#810](https://github.com/aws-amplify/amplify-codegen-ui/issues/810)) ([aa92f84](https://github.com/aws-amplify/amplify-codegen-ui/commit/aa92f8474df661a0325120a00beb480ef137534a))
-
-
-
-
+- have rest props override variant values ([6df4d94](https://github.com/aws-amplify/amplify-codegen-ui/commit/6df4d94ea31465e36a1a293d5fdb6bd85829368a))
+- remove existing element in matrix when requeued ([#810](https://github.com/aws-amplify/amplify-codegen-ui/issues/810)) ([aa92f84](https://github.com/aws-amplify/amplify-codegen-ui/commit/aa92f8474df661a0325120a00beb480ef137534a))
 
 ## [2.5.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.5...v2.5.6) (2022-11-23)
 
-
 ### Bug Fixes
 
-* improve runtime safety for usage of the in operator ([fa3e09a](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa3e09aaad4872c634d47fc3c4b73fb8f0e1b204))
-* nested boolean field isn't controlled ([#783](https://github.com/aws-amplify/amplify-codegen-ui/issues/783)) ([fb943e8](https://github.com/aws-amplify/amplify-codegen-ui/commit/fb943e86328cb84c1afea73a854a854c6c9f29fd))
-
-
-
-
+- improve runtime safety for usage of the in operator ([fa3e09a](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa3e09aaad4872c634d47fc3c4b73fb8f0e1b204))
+- nested boolean field isn't controlled ([#783](https://github.com/aws-amplify/amplify-codegen-ui/issues/783)) ([fb943e8](https://github.com/aws-amplify/amplify-codegen-ui/commit/fb943e86328cb84c1afea73a854a854c6c9f29fd))
 
 ## [2.5.5](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.4...v2.5.5) (2022-11-18)
 
-
 ### Bug Fixes
 
-* accommodate major release of aws-amplify in CLI test ([36362a2](https://github.com/aws-amplify/amplify-codegen-ui/commit/36362a29487a467f639eb54ed21f748fbd2c54c1))
-* accommodate new major release of aws-amplify and datastore in e2e tests ([7901efd](https://github.com/aws-amplify/amplify-codegen-ui/commit/7901efdb1aea6566dfbd0db54a6d147f00711e3e))
-* fix grammar in pull warning message ([#758](https://github.com/aws-amplify/amplify-codegen-ui/issues/758)) ([5e06e62](https://github.com/aws-amplify/amplify-codegen-ui/commit/5e06e626390b2fdcd0d7c3939baed589e4dd82cf))
-* fix typo in required dependency provider ([f62a8ad](https://github.com/aws-amplify/amplify-codegen-ui/commit/f62a8ad127dbe7fe2d6a874f09f07beabe5c627a))
-* fix value passed to onChange override ([d30aacf](https://github.com/aws-amplify/amplify-codegen-ui/commit/d30aacfa717ed28e45de0f11e3738803bec90846))
-* fix variables for nested arrays ([3559c31](https://github.com/aws-amplify/amplify-codegen-ui/commit/3559c31779239883755b110646c9e59bcbab25ac))
-* generate gap attribute for CTA row ([e658019](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6580193652ef47ee2a0219f22927c96443937b7))
-* remove stringify for json type array initial value ([#753](https://github.com/aws-amplify/amplify-codegen-ui/issues/753)) ([362564f](https://github.com/aws-amplify/amplify-codegen-ui/commit/362564f571bf5a5027b9fb97ffbd94dfed6501c5))
-* stringify existing AWSJSON field value ([#754](https://github.com/aws-amplify/amplify-codegen-ui/issues/754)) ([e3e285d](https://github.com/aws-amplify/amplify-codegen-ui/commit/e3e285d42b94765d787fe160022d3986614009ef))
-* update model used ([ad0beda](https://github.com/aws-amplify/amplify-codegen-ui/commit/ad0beda3f05b086bdd4347589b4f8bde243be07a))
-* update snapshot ([3b86a7b](https://github.com/aws-amplify/amplify-codegen-ui/commit/3b86a7b23f0a62ddf0c402f107eab7e57cce562e))
-
+- accommodate major release of aws-amplify in CLI test ([36362a2](https://github.com/aws-amplify/amplify-codegen-ui/commit/36362a29487a467f639eb54ed21f748fbd2c54c1))
+- accommodate new major release of aws-amplify and datastore in e2e tests ([7901efd](https://github.com/aws-amplify/amplify-codegen-ui/commit/7901efdb1aea6566dfbd0db54a6d147f00711e3e))
+- fix grammar in pull warning message ([#758](https://github.com/aws-amplify/amplify-codegen-ui/issues/758)) ([5e06e62](https://github.com/aws-amplify/amplify-codegen-ui/commit/5e06e626390b2fdcd0d7c3939baed589e4dd82cf))
+- fix typo in required dependency provider ([f62a8ad](https://github.com/aws-amplify/amplify-codegen-ui/commit/f62a8ad127dbe7fe2d6a874f09f07beabe5c627a))
+- fix value passed to onChange override ([d30aacf](https://github.com/aws-amplify/amplify-codegen-ui/commit/d30aacfa717ed28e45de0f11e3738803bec90846))
+- fix variables for nested arrays ([3559c31](https://github.com/aws-amplify/amplify-codegen-ui/commit/3559c31779239883755b110646c9e59bcbab25ac))
+- generate gap attribute for CTA row ([e658019](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6580193652ef47ee2a0219f22927c96443937b7))
+- remove stringify for json type array initial value ([#753](https://github.com/aws-amplify/amplify-codegen-ui/issues/753)) ([362564f](https://github.com/aws-amplify/amplify-codegen-ui/commit/362564f571bf5a5027b9fb97ffbd94dfed6501c5))
+- stringify existing AWSJSON field value ([#754](https://github.com/aws-amplify/amplify-codegen-ui/issues/754)) ([e3e285d](https://github.com/aws-amplify/amplify-codegen-ui/commit/e3e285d42b94765d787fe160022d3986614009ef))
+- update model used ([ad0beda](https://github.com/aws-amplify/amplify-codegen-ui/commit/ad0beda3f05b086bdd4347589b4f8bde243be07a))
+- update snapshot ([3b86a7b](https://github.com/aws-amplify/amplify-codegen-ui/commit/3b86a7b23f0a62ddf0c402f107eab7e57cce562e))
 
 ### Reverts
 
-* Revert "fix: refresh stale data on update form" ([b1444cd](https://github.com/aws-amplify/amplify-codegen-ui/commit/b1444cd564fd9c1908d730489a3402407d27a934))
-
-
-
-
+- Revert "fix: refresh stale data on update form" ([b1444cd](https://github.com/aws-amplify/amplify-codegen-ui/commit/b1444cd564fd9c1908d730489a3402407d27a934))
 
 ## [2.5.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.2...v2.5.4) (2022-11-07)
 

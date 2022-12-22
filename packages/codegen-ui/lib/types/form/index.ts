@@ -16,7 +16,7 @@
 
 import { StudioFormStyle } from './style';
 import { StudioFormFields, StudioFormFieldConfig, StudioGenericFieldConfig } from './fields';
-import { SectionalElement } from './sectional-element';
+import { GenericSectionalElementConfig, SectionalElementConfig, SectionalElementFields } from './sectional-element';
 import { FormDefinition, ModelFieldsConfigs, FieldTypeMapKeys, ButtonConfig } from './form-definition';
 import { StudioFieldInputConfig, StudioFormValueMappings } from './input-config';
 import { StudioFieldPosition } from './position';
@@ -43,7 +43,7 @@ export type StudioForm = {
 
   fields: StudioFormFields;
 
-  sectionalElements: { [elementName: string]: SectionalElement };
+  sectionalElements: SectionalElementFields;
 
   style: StudioFormStyle;
 
@@ -70,7 +70,7 @@ export type FormInputType =
   | 'URLField'
   | 'EmailField'
   | 'JSONField'
-  | 'ArrayField';
+  | 'Autocomplete';
 
 export * from './form-definition-element';
 export * from './style';
@@ -78,7 +78,9 @@ export * from './form-validation';
 export * from './form-cta';
 
 export type {
-  SectionalElement,
+  GenericSectionalElementConfig,
+  SectionalElementConfig,
+  SectionalElementFields,
   StudioFormFieldConfig,
   StudioFormActionType,
   StudioDataSourceType,

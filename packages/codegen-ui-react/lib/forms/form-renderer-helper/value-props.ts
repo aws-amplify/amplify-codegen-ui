@@ -16,7 +16,8 @@
 
 import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
 import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind, ElementAccessExpression } from 'typescript';
-import { getCurrentValueName, resetValuesName } from './form-state';
+import { getCurrentDisplayValueName, getCurrentValueName, resetValuesName } from './form-state';
+import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 import { FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
 export const ControlledComponents = [
@@ -89,10 +90,18 @@ export const renderValueAttribute = ({
   currentValueIdentifier?: Identifier;
 }): JsxAttribute | undefined => {
   const componentType = fieldConfig.studioFormComponentType ?? fieldConfig.componentType;
+  const shouldGetForUncontrolled = shouldWrapInArrayField(fieldConfig);
   const { dataType } = fieldConfig;
-  const shouldGetForUncontrolled = fieldConfig.isArray;
 
-  const valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
+  let valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
+
+  if (shouldWrapInArrayField(fieldConfig)) {
+    if (isModelDataType(fieldConfig)) {
+      valueIdentifier = factory.createIdentifier(getCurrentDisplayValueName(componentName));
+    } else {
+      valueIdentifier = factory.createIdentifier(getCurrentValueName(componentName));
+    }
+  }
 
   let renderedFieldName = fieldConfig.sanitizedFieldName || componentName;
   if (fieldConfig.isArray) {

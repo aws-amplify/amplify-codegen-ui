@@ -16,6 +16,7 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import {
   ComponentMetadata,
+  InternalError,
   StudioComponent,
   StudioComponentChild,
   StudioForm,
@@ -28,7 +29,8 @@ import { ImportCollection, ImportSource } from '../imports';
 import { buildDataStoreExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
-import { resetFunctionCheck } from '../forms/component-helper';
+import { resetFunctionCheck } from '../forms/form-renderer-helper/value-props';
+import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -93,6 +95,11 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     } = this.form;
     const importedModelName = this.importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, dataTypeName);
 
+    const { formMetadata } = this.componentMetadata;
+    if (!formMetadata) {
+      throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
+    }
+
     const onSubmitIdentifier = factory.createIdentifier('onSubmit');
 
     if (dataSourceType === 'Custom') {
@@ -105,6 +112,10 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       ];
     }
     if (dataSourceType === 'DataStore') {
+      const { dataSchemaMetadata } = this.componentMetadata;
+      if (!dataSchemaMetadata) {
+        throw new InternalError(`Could not find data schema for data-backed form`);
+      }
       return [
         factory.createIfStatement(
           onSubmitIdentifier,
@@ -127,7 +138,13 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
         factory.createTryStatement(
           factory.createBlock(
             [
-              ...buildDataStoreExpression(formActionType, importedModelName, dataTypeName),
+              ...buildDataStoreExpression(
+                formActionType,
+                dataTypeName,
+                importedModelName,
+                formMetadata.fieldConfigs,
+                dataSchemaMetadata,
+              ),
               // call onSuccess hook if it exists
               factory.createIfStatement(
                 factory.createIdentifier('onSuccess'),
@@ -186,6 +203,10 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       dataType: { dataSourceType },
     } = this.form;
     const { formMetadata } = this.componentMetadata;
+
+    const hasModelField =
+      formMetadata?.fieldConfigs && Object.values(formMetadata.fieldConfigs).some((config) => isModelDataType(config));
+
     return factory.createJsxAttribute(
       factory.createIdentifier('onSubmit'),
       factory.createJsxExpression(
@@ -219,7 +240,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 ),
               ),
               buildModelFieldObject(dataSourceType !== 'DataStore', formMetadata?.fieldConfigs),
-              ...onSubmitValidationRun,
+              ...onSubmitValidationRun(hasModelField),
               ...this.getOnSubmitDSCall(),
             ],
             false,

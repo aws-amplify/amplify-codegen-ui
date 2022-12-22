@@ -20,6 +20,7 @@ import {
   FormDefinition,
   generateFormDefinition,
   GenericDataSchema,
+  GenericDataRelationshipType,
   handleCodegenErrors,
   mapFormDefinitionToComponent,
   mapFormMetadata,
@@ -48,7 +49,7 @@ import {
 } from 'typescript';
 import { buildUseStateExpression, lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
-import { PrimitiveTypeParameter, Primitive } from '../primitive';
+import { PrimitiveTypeParameter, Primitive, primitiveOverrideProp } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
 import { ReactOutputManager } from '../react-output-manager';
 import { ReactRenderConfig, scriptKindToFileExtension } from '../react-render-config';
@@ -69,24 +70,30 @@ import {
   buildResetValuesOnRecordUpdate,
   buildSetStateFunction,
   buildUpdateDatastoreQuery,
-  buildValidations,
   runValidationTasksFunction,
+  mapFromFieldConfigs,
+  getLinkedDataName,
+  buildRelationshipQuery,
+  buildGetRelationshipModels,
+  getPropName,
 } from './form-renderer-helper';
 import {
+  getCurrentDisplayValueName,
   getArrayChildRefName,
   getCurrentValueName,
   getDefaultValueExpression,
   getInitialValues,
   getUseStateHooks,
   resetStateFunction,
-} from './form-state';
+} from './form-renderer-helper/form-state';
+import { isModelDataType, shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
 import {
   buildFormPropNode,
-  formOverrideProp,
   generateFieldTypes,
   validationFunctionType,
   validationResponseType,
-} from './type-helper';
+} from './form-renderer-helper/type-helper';
+import { buildSelectedRecordsIdSet } from './form-renderer-helper/model-values';
 
 type RenderComponentOnlyResponse = {
   compText: string;
@@ -120,6 +127,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
   protected requiredDataModels: string[] = [];
 
+  protected shouldRenderArrayField = false;
+
+  protected primaryKeys: string[] | undefined;
+
   constructor(component: StudioForm, dataSchema: GenericDataSchema | undefined, renderConfig: ReactRenderConfig) {
     super(component, new ReactOutputManager(), renderConfig);
     this.renderConfig = {
@@ -137,6 +148,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     this.componentMetadata = computeComponentMetadata(this.formComponent);
     this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition);
     this.importCollection = new ImportCollection(this.componentMetadata);
+    if (dataSchema) {
+      const dataSchemaMetadata = dataSchema;
+      this.componentMetadata.dataSchemaMetadata = dataSchemaMetadata;
+      const { dataSourceType, dataTypeName } = this.component.dataType;
+      if (dataSourceType === 'DataStore') {
+        this.primaryKeys = dataSchemaMetadata.models[dataTypeName].primaryKeys;
+      }
+    }
   }
 
   @handleCodegenErrors
@@ -158,11 +177,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, false);
     let result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
 
-    if (this.componentMetadata.formMetadata) {
-      if (Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)) {
-        const arrayFieldText = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
-        result = arrayFieldText + EOL + result;
-      }
+    if (this.shouldRenderArrayField) {
+      const arrayFieldText = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+      result = arrayFieldText + EOL + result;
     }
     // do not produce declaration becuase it is not used
     const { componentText: compText } = transpile(result, { ...this.renderConfig, renderTypeDeclarations: false });
@@ -178,13 +195,13 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   renderComponentInternal() {
     const { printer, file } = buildPrinter(this.fileName, this.renderConfig);
 
+    const propsDeclaration = this.renderBindingPropsType();
+
     // build form related variable statments
     const variableStatements = this.buildVariableStatements();
     const jsx = this.renderJsx(this.formComponent);
 
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, true);
-    const propsDeclaration = this.renderBindingPropsType();
-
     const imports = this.importCollection.buildImportStatements();
 
     let componentText = `/* eslint-disable */${EOL}`;
@@ -201,11 +218,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       componentText += propsPrinted;
     });
 
-    if (this.componentMetadata.formMetadata) {
-      if (Object.values(this.componentMetadata.formMetadata?.fieldConfigs).some(({ isArray }) => isArray)) {
-        const arrayFieldComponent = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
-        componentText += arrayFieldComponent;
-      }
+    if (this.shouldRenderArrayField) {
+      const arrayFieldComponent = printer.printNode(EmitHint.Unspecified, generateArrayFieldComponent(), file);
+      componentText += arrayFieldComponent;
     }
 
     const result = printer.printNode(EmitHint.Unspecified, wrappedFunction, file);
@@ -282,7 +297,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
   private renderBindingPropsType(): TypeAliasDeclaration[] {
     const {
       name: formName,
-      formActionType,
       dataType: { dataSourceType, dataTypeName },
     } = this.component;
     const fieldConfigs = this.componentMetadata.formMetadata?.fieldConfigs ?? {};
@@ -306,16 +320,22 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const formPropType = getComponentPropName(formName);
 
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
+
     let modelName = dataTypeName;
-    if (dataSourceType === 'DataStore' && formActionType === 'update') {
+
+    // add model import for datastore type
+    if (dataSourceType === 'DataStore') {
+      this.requiredDataModels.push(dataTypeName);
       modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
     }
+
     return [
       validationResponseType,
       validationFunctionType,
-      generateFieldTypes(formName, 'input', fieldConfigs),
-      generateFieldTypes(formName, 'validation', fieldConfigs),
-      formOverrideProp,
+      // pass in importCollection once to collect models to import
+      generateFieldTypes(formName, 'input', fieldConfigs, this.importCollection),
+      generateFieldTypes(formName, 'validation', fieldConfigs, this.importCollection),
+      primitiveOverrideProp,
       overrideTypeAliasDeclaration,
       factory.createTypeAliasDeclaration(
         undefined,
@@ -325,7 +345,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
           factory.createIntersectionTypeNode([
             escapeHatchTypeNode,
-            buildFormPropNode(this.component, modelName),
+            buildFormPropNode(this.component, modelName, this.primaryKeys?.[0]),
             factory.createTypeReferenceNode(
               factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('CSSProperties')),
               undefined,
@@ -371,9 +391,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     const elements: BindingElement[] = [
       // add in hooks for before/complete with ds and basic onSubmit with props
-      ...buildMutationBindings(this.component),
-      // onCancel prop
-      factory.createBindingElement(undefined, undefined, factory.createIdentifier('onCancel'), undefined),
+      ...buildMutationBindings(this.component, this.primaryKeys?.[0]),
       // onValidate prop
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onValidate'), undefined),
       // onChange prop
@@ -431,6 +449,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     statements.push(getInitialValues(formMetadata.fieldConfigs));
 
     statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
+
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
     let defaultValueVariableName: undefined | string;
@@ -444,86 +463,141 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     statements.push(resetStateFunction(formMetadata.fieldConfigs, defaultValueVariableName));
 
+    const linkedDataNames: string[] = [];
     if (isDataStoreUpdateForm) {
       statements.push(
         buildUseStateExpression(lowerCaseDataTypeNameRecord, factory.createIdentifier(lowerCaseDataTypeName)),
       );
-      statements.push(
-        addUseEffectWrapper(
-          buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeName),
-          // TODO: change once cpk is supported in datastore
-          ['id', lowerCaseDataTypeName],
-        ),
-      );
+
+      const relatedModelStatements: Statement[] = [];
+      // Build effects to grab nested models off target record for relationships
+      Object.entries(formMetadata.fieldConfigs).forEach(([key, value]) => {
+        if (value.relationship) {
+          const fieldName = value.sanitizedFieldName || key;
+          if (value.relationship.type === 'HAS_MANY') {
+            const linkedDataName = getLinkedDataName(fieldName);
+            linkedDataNames.push(linkedDataName);
+            statements.push(buildUseStateExpression(linkedDataName, factory.createIdentifier('[]')));
+          }
+          if (value.relationship.type === 'BELONGS_TO' || value.relationship?.type === 'HAS_ONE') {
+            linkedDataNames.push(fieldName);
+          }
+          // Flatten statments into 1d array
+          relatedModelStatements.push(...buildGetRelationshipModels(fieldName, value));
+        }
+      });
+
+      // primaryKey should exist if DataStore update form. This condition is just for ts
+      if (this.primaryKeys) {
+        const destructuredPrimaryKey = getPropName(this.primaryKeys[0]);
+        statements.push(
+          addUseEffectWrapper(
+            buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeName, relatedModelStatements, destructuredPrimaryKey),
+            [destructuredPrimaryKey, lowerCaseDataTypeName],
+          ),
+        );
+      }
     }
 
     if (defaultValueVariableName) {
-      statements.push(buildResetValuesOnRecordUpdate(defaultValueVariableName));
+      statements.push(buildResetValuesOnRecordUpdate(defaultValueVariableName, linkedDataNames));
     }
+
+    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
+    this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
 
     if (dataSourceType === 'Custom' && formActionType === 'update') {
       statements.push(addUseEffectWrapper([buildSetStateFunction(formMetadata.fieldConfigs)], []));
     }
 
     // Add value state and ref array type fields in ArrayField wrapper
-    Object.entries(formMetadata.fieldConfigs).forEach(
-      ([field, { isArray, sanitizedFieldName, componentType, dataType }]) => {
-        if (isArray) {
-          const renderedName = sanitizedFieldName || field;
+
+    const relationshipCollection: GenericDataRelationshipType[] = [];
+
+    Object.entries(formMetadata.fieldConfigs).forEach(([field, fieldConfig]) => {
+      const { sanitizedFieldName, componentType, dataType, relationship } = fieldConfig;
+      if (shouldWrapInArrayField(fieldConfig)) {
+        const renderedName = sanitizedFieldName || field;
+        if (isModelDataType(fieldConfig)) {
           statements.push(
             buildUseStateExpression(
-              getCurrentValueName(renderedName),
-              getDefaultValueExpression(formMetadata.name, componentType, dataType),
-            ),
-            factory.createVariableStatement(
-              undefined,
-              factory.createVariableDeclarationList(
-                [
-                  factory.createVariableDeclaration(
-                    factory.createIdentifier(getArrayChildRefName(renderedName)),
-                    undefined,
-                    undefined,
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('React'),
-                        factory.createIdentifier('createRef'),
-                      ),
-                      undefined,
-                      [],
-                    ),
-                  ),
-                ],
-                NodeFlags.Const,
-              ),
+              getCurrentDisplayValueName(renderedName),
+              getDefaultValueExpression(formMetadata.name, componentType, dataType, false, true),
             ),
           );
         }
-      },
-    );
-    statements.push(buildValidations(formMetadata.fieldConfigs));
+
+        statements.push(
+          buildUseStateExpression(
+            getCurrentValueName(renderedName),
+            getDefaultValueExpression(formMetadata.name, componentType, dataType),
+          ),
+          factory.createVariableStatement(
+            undefined,
+            factory.createVariableDeclarationList(
+              [
+                factory.createVariableDeclaration(
+                  factory.createIdentifier(getArrayChildRefName(renderedName)),
+                  undefined,
+                  undefined,
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('React'),
+                      factory.createIdentifier('createRef'),
+                    ),
+                    undefined,
+                    [],
+                  ),
+                ),
+              ],
+              NodeFlags.Const,
+            ),
+          ),
+        );
+      }
+
+      if (relationship) {
+        relationshipCollection.push(relationship);
+      }
+    });
+
+    const { validationsObject, dataTypesMap, displayValueObject, idValueObject, modelsToImport, usesArrayField } =
+      mapFromFieldConfigs(formMetadata.fieldConfigs);
+
+    if (idValueObject) {
+      statements.push(idValueObject);
+    }
+
+    statements.push(...buildSelectedRecordsIdSet(formMetadata.fieldConfigs));
+
+    this.shouldRenderArrayField = usesArrayField;
+
+    modelsToImport.forEach((model) => {
+      this.requiredDataModels.push(model);
+      this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+    });
+
+    // datastore relationship query
+    /**
+          const authorRecords = useDataStoreBinding({
+            type: 'collection',
+            model: Author,
+          }).items;
+        */
+    if (relationshipCollection.length) {
+      this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
+      statements.push(
+        ...relationshipCollection.map((relationship) => buildRelationshipQuery(relationship, this.importCollection)),
+      );
+    }
+
+    if (displayValueObject) {
+      statements.push(displayValueObject);
+    }
+
+    statements.push(validationsObject);
     statements.push(runValidationTasksFunction);
 
-    // list of fields by dataType
-    const dataTypesMap = Object.entries(formMetadata.fieldConfigs).reduce<{ [dataType: string]: string[] }>(
-      (acc, [fieldName, config]) => {
-        let dataTypeKey: string | undefined;
-        if (config.dataType) {
-          if (typeof config.dataType === 'string') {
-            dataTypeKey = config.dataType;
-          }
-        }
-
-        if (dataTypeKey) {
-          if (acc[dataTypeKey]) {
-            acc[dataTypeKey].push(fieldName);
-          } else {
-            acc[dataTypeKey] = [fieldName];
-          }
-        }
-        return acc;
-      },
-      {},
-    );
     // timestamp type takes precedence over datetime as it includes formatter for datetime
     // we include both the timestamp conversion and local date formatter
     if (dataTypesMap.AWSTimestamp) {

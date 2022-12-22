@@ -13,6 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { isEnumFieldType } from '@aws-amplify/datastore';
+import { camelCase } from 'change-case';
+
 import {
   FormDefinition,
   FormMetadata,
@@ -37,7 +40,7 @@ export const isValidVariableName = (input: string, resveredNames?: Set<string>):
   return /^[a-zA-Z_$][a-zA-Z_$0-9]*$/g.test(input) && preCheck;
 };
 
-export const filterFieldName = (input: string): string => input.split('.')[0].replace(/[^a-zA-Z_$]/g, '');
+export const formatFieldName = (input: string): string => camelCase(input.split('.')[0].replace(/[^a-zA-Z_$]/g, '-'));
 
 function elementIsInput(element: FormDefinitionElement): element is FormDefinitionInputElement {
   return element.componentType !== 'Text' && element.componentType !== 'Divider' && element.componentType !== 'Heading';
@@ -45,7 +48,7 @@ function elementIsInput(element: FormDefinitionElement): element is FormDefiniti
 
 // create mapping for field name collisions
 export function generateUniqueFieldName(name: string, sanitizedFieldNames: Set<string>) {
-  let sanitizedFieldName = isValidVariableName(name, sanitizedFieldNames) ? name : filterFieldName(name);
+  let sanitizedFieldName = isValidVariableName(name, sanitizedFieldNames) ? name : formatFieldName(name);
   let count = 1;
   if (sanitizedFieldNames.has(sanitizedFieldName.toLowerCase()) && !name.includes('.')) {
     let prospectiveNewName = sanitizedFieldName + count;
@@ -60,7 +63,6 @@ export function generateUniqueFieldName(name: string, sanitizedFieldNames: Set<s
 }
 
 export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition): FormMetadata => {
-  const inputElementEntries = Object.entries(formDefinition.elements).filter(([, element]) => elementIsInput(element));
   const sanitizedFieldNames = new Set<string>(reservedWords);
   return {
     id: form.id,
@@ -68,35 +70,46 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
     formActionType: form.formActionType,
     dataType: form.dataType,
     layoutConfigs: formDefinition.form.layoutStyle,
-    fieldConfigs: inputElementEntries.reduce<Record<string, FieldConfigMetadata>>((configs, [name, config]) => {
-      const updatedConfigs = configs;
-      const metadata: FieldConfigMetadata = {
-        validationRules: [],
-        componentType: config.componentType,
-        studioFormComponentType: 'studioFormComponentType' in config ? config.studioFormComponentType : undefined,
-        isArray: 'isArray' in config && config.isArray,
-      };
-      if ('validations' in config && config.validations) {
-        metadata.validationRules = config.validations.map<FieldValidationConfiguration>((validation) => {
-          const updatedValidation = validation;
-          delete updatedValidation.immutable;
-          return updatedValidation;
-        });
-      }
-      if ('dataType' in config && config.dataType) {
-        metadata.dataType = config.dataType;
-      }
-      // we add the name of the model as a resvered word
-      if (form.dataType.dataSourceType === 'DataStore') {
-        sanitizedFieldNames.add(form.dataType.dataTypeName);
-      }
-      const sanitizedFieldName = generateUniqueFieldName(name, sanitizedFieldNames);
-      if (sanitizedFieldName) {
-        metadata.sanitizedFieldName = sanitizedFieldName;
-      }
+    fieldConfigs: Object.entries(formDefinition.elements).reduce<Record<string, FieldConfigMetadata>>(
+      (configs, [name, element]) => {
+        if (!elementIsInput(element)) {
+          return configs;
+        }
 
-      updatedConfigs[name] = metadata;
-      return updatedConfigs;
-    }, {}),
+        const updatedConfigs = configs;
+        const metadata: FieldConfigMetadata = {
+          validationRules: [],
+          componentType: element.componentType,
+          studioFormComponentType: 'studioFormComponentType' in element ? element.studioFormComponentType : undefined,
+          isArray: element.isArray,
+          dataType: element.dataType,
+          relationship: element.relationship,
+        };
+        if ('validations' in element && element.validations) {
+          metadata.validationRules = element.validations.map<FieldValidationConfiguration>((validation) => {
+            const updatedValidation = validation;
+            delete updatedValidation.immutable;
+            return updatedValidation;
+          });
+        }
+
+        if ((element.relationship || isEnumFieldType(element.dataType)) && 'valueMappings' in element) {
+          metadata.valueMappings = element.valueMappings;
+        }
+
+        // we add the name of the model as a resvered word
+        if (form.dataType.dataSourceType === 'DataStore') {
+          sanitizedFieldNames.add(form.dataType.dataTypeName);
+        }
+        const sanitizedFieldName = generateUniqueFieldName(name, sanitizedFieldNames);
+        if (sanitizedFieldName) {
+          metadata.sanitizedFieldName = sanitizedFieldName;
+        }
+
+        updatedConfigs[name] = metadata;
+        return updatedConfigs;
+      },
+      {},
+    ),
   };
 };

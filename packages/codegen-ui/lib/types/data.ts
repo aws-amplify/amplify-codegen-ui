@@ -36,15 +36,19 @@ export type CommonRelationshipType = {
 
 export type HasManyRelationshipType = {
   type: 'HAS_MANY';
-  relatedModelField: string;
+  relatedModelFields: string[];
+  relatedJoinFieldName?: string;
+  relatedJoinTableName?: string;
 } & CommonRelationshipType;
 
 export type HasOneRelationshipType = {
   type: 'HAS_ONE';
+  associatedFields?: string[];
 } & CommonRelationshipType;
 
 export type BelongsToRelationshipType = {
   type: 'BELONGS_TO';
+  associatedFields?: string[];
 } & CommonRelationshipType;
 
 export type GenericDataRelationshipType = HasManyRelationshipType | HasOneRelationshipType | BelongsToRelationshipType;
@@ -83,6 +87,11 @@ export type GenericDataField = {
 export type GenericDataModel = {
   fields: { [fieldName: string]: GenericDataField };
   isJoinTable?: boolean;
+  primaryKeys: string[];
+};
+
+export type GenericDataNonModel = {
+  fields: { [fieldName: string]: GenericDataField };
 };
 
 export type GenericDataSchema = {
@@ -92,5 +101,5 @@ export type GenericDataSchema = {
 
   enums: { [enumName: string]: { values: string[] } };
 
-  nonModels: { [nonModelName: string]: GenericDataModel };
+  nonModels: { [nonModelName: string]: GenericDataNonModel };
 };

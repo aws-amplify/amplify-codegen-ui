@@ -15,18 +15,20 @@
  */
 
 import { sentenceCase } from 'change-case';
-import { checkIsSupportedAsFormField } from '../../check-support';
 
 import { InvalidInputError } from '../../errors';
 import {
   FieldTypeMapKeys,
   FormDefinition,
   GenericDataField,
+  GenericDataModel,
   GenericDataSchema,
   ModelFieldsConfigs,
   StudioFieldInputConfig,
-  StudioGenericFieldConfig,
+  StudioForm,
+  StudioFormValueMappings,
 } from '../../types';
+import { ExtendedStudioGenericFieldConfig } from '../../types/form/form-definition';
 import { FIELD_TYPE_MAP } from './field-type-map';
 
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
@@ -44,44 +46,105 @@ export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
   return field.dataType;
 }
 
+function getValueMappings({
+  fieldName,
+  field,
+  enums,
+  allModels,
+}: {
+  fieldName: string;
+  field: GenericDataField;
+  enums: GenericDataSchema['enums'];
+  allModels: { [modelName: string]: GenericDataModel };
+}): StudioFormValueMappings | undefined {
+  // if enum
+  if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
+    const fieldEnums = enums[field.dataType.enum];
+    if (!fieldEnums) {
+      throw new InvalidInputError(`Values could not be found for enum ${field.dataType.enum}`);
+    }
+
+    return {
+      values: fieldEnums.values.map((value) => ({
+        displayValue: { value: sentenceCase(value) ? sentenceCase(value) : value },
+        value: { value },
+      })),
+    };
+  }
+
+  // if relationship
+  if (field.relationship) {
+    const modelName = field.relationship.relatedModelName;
+    // if model, store all keys; else, store field as key
+    const keys =
+      typeof field.dataType === 'object' && 'model' in field.dataType ? allModels[modelName].primaryKeys : [fieldName];
+    const values: StudioFormValueMappings['values'] = keys.map((key) => ({
+      value: { bindingProperties: { property: modelName, field: key } },
+    }));
+    return {
+      values,
+      bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },
+    };
+  }
+
+  return undefined;
+}
+
 export function getFieldConfigFromModelField({
   fieldName,
   field,
   dataSchema,
+  setReadOnly,
 }: {
   fieldName: string;
   field: GenericDataField;
   dataSchema: GenericDataSchema;
-}): StudioGenericFieldConfig {
+  setReadOnly?: boolean;
+}): ExtendedStudioGenericFieldConfig {
   const fieldTypeMapKey = getFieldTypeMapKey(field);
 
   const { defaultComponent } = FIELD_TYPE_MAP[fieldTypeMapKey];
 
-  const config: StudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
+  // When the relationship is many to many, set data type to the actual related model instead of the join table
+  // if (field.relationship && field.relationship.type === 'HAS_MANY' && field.relationship.relatedJoinTableName) {
+  //   const dataType = field.dataType as { model: string };
+  //   dataType.model = field.relationship.relatedModelName;
+  // }
+  let { dataType } = field;
+  if (
+    field.relationship &&
+    typeof field.dataType === 'object' &&
+    'model' in field.dataType &&
+    dataSchema.models[field.dataType.model]?.isJoinTable
+  ) {
+    dataType = { model: field.relationship.relatedModelName };
+  }
+
+  let { readOnly } = field;
+  if (setReadOnly) {
+    readOnly = true;
+  }
+
+  const config: ExtendedStudioGenericFieldConfig & { inputType: StudioFieldInputConfig } = {
     label: sentenceCase(fieldName),
-    dataType: field.dataType,
+    dataType,
     inputType: {
       type: defaultComponent,
       required: field.required,
-      readOnly: field.readOnly,
+      readOnly,
       name: fieldName,
       value: fieldName,
       isArray: field.isArray,
     },
   };
 
-  if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
-    const fieldEnums = dataSchema.enums[field.dataType.enum];
-    if (!fieldEnums) {
-      throw new InvalidInputError(`Values could not be found for enum ${field.dataType.enum}`);
-    }
+  if (field.relationship) {
+    config.relationship = field.relationship;
+  }
 
-    config.inputType.valueMappings = {
-      values: fieldEnums.values.map((value) => ({
-        displayValue: { value: sentenceCase(value) ? sentenceCase(value) : value },
-        value: { value },
-      })),
-    };
+  const valueMappings = getValueMappings({ fieldName, field, enums: dataSchema.enums, allModels: dataSchema.models });
+  if (valueMappings) {
+    config.inputType.valueMappings = valueMappings;
   }
 
   return config;
@@ -95,10 +158,12 @@ export function mapModelFieldsConfigs({
   dataTypeName,
   formDefinition,
   dataSchema,
+  formActionType,
 }: {
   dataTypeName: string;
   dataSchema: GenericDataSchema;
   formDefinition: FormDefinition;
+  formActionType?: StudioForm['formActionType'];
 }) {
   const modelFieldsConfigs: ModelFieldsConfigs = {};
   const model = dataSchema.models[dataTypeName];
@@ -111,13 +176,20 @@ export function mapModelFieldsConfigs({
     const isAutoExcludedField =
       field.readOnly ||
       (fieldName === 'id' && field.dataType === 'ID' && field.required) ||
-      !checkIsSupportedAsFormField(field);
+      (field.relationship && !(typeof field.dataType === 'object' && 'model' in field.dataType));
 
     if (!isAutoExcludedField) {
       formDefinition.elementMatrix.push([fieldName]);
     }
 
-    modelFieldsConfigs[fieldName] = getFieldConfigFromModelField({ fieldName, field, dataSchema });
+    const isPrimaryKey = model.primaryKeys.includes(fieldName);
+
+    modelFieldsConfigs[fieldName] = getFieldConfigFromModelField({
+      fieldName,
+      field,
+      dataSchema,
+      setReadOnly: isPrimaryKey && formActionType === 'update',
+    });
   });
 
   return modelFieldsConfigs;

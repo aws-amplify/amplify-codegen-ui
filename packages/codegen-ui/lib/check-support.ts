@@ -13,7 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { GenericDataField, GenericDataModel } from './types';
+import { DataFieldDataType, GenericDataField, GenericDataModel } from './types';
+
+export const isNonModelDataType = (dataType?: DataFieldDataType): boolean => {
+  return typeof dataType === 'object' && 'nonModel' in dataType;
+};
 
 /**
  * Checks whether a field is supported as a form input
@@ -22,7 +26,6 @@ import { GenericDataField, GenericDataModel } from './types';
 export const checkIsSupportedAsFormField = (field: GenericDataField): boolean => {
   const unsupportedFieldMap: { [key: string]: (f: GenericDataField) => boolean } = {
     nonModel: (f) => typeof f.dataType === 'object' && 'nonModel' in f.dataType,
-    relationship: (f) => !!f.relationship,
   };
 
   const unsupportedArray = Object.values(unsupportedFieldMap);

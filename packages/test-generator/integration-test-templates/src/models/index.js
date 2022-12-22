@@ -30,6 +30,51 @@ const City = {
   SEATTLE: 'SEATTLE',
 };
 
-const { UserPreference, User, Listing, ComplexModel, Class, AllSupportedFormFields } = initSchema(schema);
+const {
+  UserPreference,
+  User,
+  Listing,
+  ComplexModel,
+  Class,
+  Tag,
+  AllSupportedFormFieldsTag,
+  Owner,
+  Student,
+  AllSupportedFormFields,
+  CPKStudent,
+  CPKTeacher,
+  CPKClass,
+  CPKTeacherCPKClass,
+  CPKProject,
+  CompositeDog,
+  CompositeBowl,
+  CompositeOwner,
+  CompositeToy,
+  CompositeVet,
+  CompositeDogCompositeVet,
+} = initSchema(schema);
 
-export { UserPreference, User, Listing, ComplexModel, Class, AllSupportedFormFields, City };
+export {
+  UserPreference,
+  User,
+  Listing,
+  ComplexModel,
+  Class,
+  Tag,
+  AllSupportedFormFieldsTag,
+  Owner,
+  Student,
+  AllSupportedFormFields,
+  City,
+  CPKStudent,
+  CPKTeacher,
+  CPKClass,
+  CPKTeacherCPKClass,
+  CPKProject,
+  CompositeDog,
+  CompositeBowl,
+  CompositeOwner,
+  CompositeToy,
+  CompositeVet,
+  CompositeDogCompositeVet,
+};

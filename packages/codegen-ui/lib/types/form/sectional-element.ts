@@ -19,7 +19,7 @@ import { StudioFieldPosition } from './position';
  * Shape below represent API shapes after typecasting
  */
 
-export type SectionalElement = {
+export type GenericSectionalElementConfig = {
   position?: StudioFieldPosition;
   type: string;
 
@@ -28,4 +28,17 @@ export type SectionalElement = {
   text?: string;
 
   orientation?: string;
+};
+
+/**
+ * If a sectional element is excluded, it should have no other properties.
+ */
+type ExcludedSectionalElementConfig = {
+  excluded: true;
+};
+
+export type SectionalElementConfig = GenericSectionalElementConfig | ExcludedSectionalElementConfig;
+
+export type SectionalElementFields = {
+  [elementname: string]: SectionalElementConfig;
 };

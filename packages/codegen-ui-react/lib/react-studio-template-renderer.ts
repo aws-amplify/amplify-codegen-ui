@@ -35,6 +35,7 @@ import {
   isSlotBinding,
   GenericDataSchema,
   getBreakpoints,
+  isValidVariableName,
   InternalError,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
@@ -79,7 +80,14 @@ import {
   createHookStatement,
   buildSortFunction,
 } from './react-studio-template-renderer-helper';
-import { Primitive, isPrimitive, PrimitiveTypeParameter, PrimitiveChildrenPropMapping } from './primitive';
+import {
+  Primitive,
+  PrimitiveTypeParameter,
+  PrimitiveChildrenPropMapping,
+  primitiveOverrideProp,
+  PRIMITIVE_OVERRIDE_PROPS,
+  isPrimitive,
+} from './primitive';
 import { RequiredKeys } from './utils/type-utils';
 import {
   getComponentActions,
@@ -200,7 +208,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const jsx = this.renderJsx(this.component);
 
     const wrappedFunction = this.renderFunctionWrapper(this.component.name, variableStatements, jsx, true);
-    const propsDeclaration = this.renderBindingPropsType(this.component);
+    const propsDeclarations = this.renderBindingPropsType(this.component);
 
     const imports = this.importCollection.buildImportStatements();
 
@@ -213,8 +221,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
     componentText += EOL;
 
-    const propsPrinted = printer.printNode(EmitHint.Unspecified, propsDeclaration, file);
-    componentText += propsPrinted;
+    propsDeclarations.forEach((propsDeclaration) => {
+      const propsPrinted = printer.printNode(EmitHint.Unspecified, propsDeclaration, file);
+      componentText += propsPrinted;
+    });
 
     componentText += EOL;
 
@@ -318,14 +328,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return new SampleCodeRenderer(component, this.componentMetadata, this.importCollection).renderElement();
   }
 
-  renderBindingPropsType(component: StudioComponent): TypeAliasDeclaration {
+  renderBindingPropsType(component: StudioComponent): TypeAliasDeclaration[] {
+    const componentOverridesPropName = `${component.name}OverridesProps`;
     const escapeHatchTypeNode = factory.createTypeLiteralNode([
       factory.createPropertySignature(
         undefined,
         factory.createIdentifier('overrides'),
         factory.createToken(ts.SyntaxKind.QuestionToken),
         factory.createUnionTypeNode([
-          factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+          factory.createTypeReferenceNode(factory.createIdentifier(componentOverridesPropName), undefined),
           factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword),
           factory.createLiteralTypeNode(factory.createNull()),
         ]),
@@ -335,23 +346,56 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const propsTypeParameter = PrimitiveTypeParameter[Primitive[component.componentType as Primitive]];
 
     this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
-
-    return factory.createTypeAliasDeclaration(
+    const overridesProps = factory.createTypeAliasDeclaration(
       undefined,
-      [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
-      factory.createIdentifier(componentPropType),
-      propsTypeParameter ? propsTypeParameter.declaration() : undefined,
-      factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
-        factory.createIntersectionTypeNode(
-          this.dropMissingListElements([
-            this.buildBasePropNode(component),
-            this.buildComponentPropNode(component),
-            this.buildVariantPropNode(component),
-            escapeHatchTypeNode,
-          ]),
+      [factory.createModifier(ts.SyntaxKind.ExportKeyword), factory.createModifier(ts.SyntaxKind.DeclareKeyword)],
+      factory.createIdentifier(componentOverridesPropName),
+      undefined,
+      factory.createIntersectionTypeNode([
+        factory.createTypeLiteralNode(
+          Object.entries(this.componentMetadata.componentNameToTypeMap).map(([name, componentType]) => {
+            const isComponentTypePrimitive = isPrimitive(componentType);
+            const componentTypePropName = `${componentType}Props`;
+            this.importCollection.addImport(
+              isComponentTypePrimitive ? ImportSource.UI_REACT : `./${componentType}`,
+              componentTypePropName,
+            );
+            return factory.createPropertySignature(
+              undefined,
+              isValidVariableName(name) ? factory.createIdentifier(name) : factory.createStringLiteral(name),
+              factory.createToken(ts.SyntaxKind.QuestionToken),
+              isComponentTypePrimitive
+                ? factory.createTypeReferenceNode(factory.createIdentifier(PRIMITIVE_OVERRIDE_PROPS), [
+                    factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName), undefined),
+                  ])
+                : factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName)),
+            );
+          }),
         ),
+        factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
       ]),
     );
+
+    return [
+      primitiveOverrideProp,
+      overridesProps,
+      factory.createTypeAliasDeclaration(
+        undefined,
+        [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+        factory.createIdentifier(componentPropType),
+        propsTypeParameter ? propsTypeParameter.declaration() : undefined,
+        factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
+          factory.createIntersectionTypeNode(
+            this.dropMissingListElements([
+              this.buildBasePropNode(component),
+              this.buildComponentPropNode(component),
+              this.buildVariantPropNode(component),
+              escapeHatchTypeNode,
+            ]),
+          ),
+        ]),
+      ),
+    ];
   }
 
   private buildBasePropNode(component: StudioComponent): TypeNode | undefined {

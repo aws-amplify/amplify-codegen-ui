@@ -486,6 +486,15 @@ export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
           parent,
         ).renderElement(renderChildren);
 
+      case Primitive.Autocomplete:
+        // TODO: after AmplifyUI implements Autocomplete, import Props type
+        return new ReactComponentRenderer<any>(
+          formComponent,
+          this.componentMetadata,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
       default:
         return new CustomComponentRenderer(
           formComponent,
