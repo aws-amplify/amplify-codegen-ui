@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.8...v2.6.0) (2022-12-14)
+
+### Bug Fixes
+
+- make textfield a controlled component ([#830](https://github.com/aws-amplify/amplify-codegen-ui/issues/830)) ([1dcda83](https://github.com/aws-amplify/amplify-codegen-ui/commit/1dcda8390aab1539f607474885a98526763828a9))
+
+### Features
+
+- disable form submit when model is invalid ([#826](https://github.com/aws-amplify/amplify-codegen-ui/issues/826)) ([6898d10](https://github.com/aws-amplify/amplify-codegen-ui/commit/6898d108547fa84484364ccaf699f6f94f1fb25e))
+
+## [2.5.8](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.7...v2.5.8) (2022-12-08)
+
+### Bug Fixes
+
+- update import file path to handle aliased children ([#814](https://github.com/aws-amplify/amplify-codegen-ui/issues/814)) ([ffe7659](https://github.com/aws-amplify/amplify-codegen-ui/commit/ffe765970e7e26579790c9e1a9fc006624c660dc))
+
+## [2.5.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.6...v2.5.7) (2022-12-06)
+
+### Bug Fixes
+
+- have rest props override variant values ([6df4d94](https://github.com/aws-amplify/amplify-codegen-ui/commit/6df4d94ea31465e36a1a293d5fdb6bd85829368a))
+
 ## [2.5.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.5...v2.5.6) (2022-11-23)
 
 ### Bug Fixes

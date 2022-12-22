@@ -540,6 +540,21 @@ describe('amplify render tests', () => {
         ).toMatchSnapshot();
       });
     });
+
+    describe('alias parent', () => {
+      it('should render parent with aliased child instead of primitive', () => {
+        expect(generateWithAmplifyRenderer('custom/aliasParent').componentText).toMatchSnapshot();
+      });
+
+      it('should render declarations', () => {
+        expect(
+          generateWithAmplifyRenderer('custom/customParentAndChildren', {
+            script: ScriptKind.JS,
+            renderTypeDeclarations: true,
+          }).declaration,
+        ).toMatchSnapshot();
+      });
+    });
   });
 
   describe('primitives', () => {

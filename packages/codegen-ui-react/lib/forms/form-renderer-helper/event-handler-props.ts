@@ -36,7 +36,7 @@ import {
   Expression,
   ExpressionStatement,
 } from 'typescript';
-import { lowerCaseFirst } from '../../helpers';
+import { lowerCaseFirst, getSetNameIdentifier } from '../../helpers';
 import { buildTargetVariable, getFormattedValueExpression } from './event-targets';
 import {
   buildAccessChain,
@@ -47,7 +47,6 @@ import {
   getDefaultValueExpression,
   getPropName,
   getRecordsName,
-  getSetNameIdentifier,
   setFieldState,
   setStateExpression,
 } from './form-state';

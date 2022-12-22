@@ -179,14 +179,17 @@ export function getFormDefinitionInputElement(
   config: ExtendedStudioGenericFieldConfig,
   baseConfig?: ExtendedStudioGenericFieldConfig,
 ): FormDefinitionInputElement {
-  const componentType = config.inputType?.type || baseConfig?.inputType?.type;
+  let componentType = config.inputType?.type || baseConfig?.inputType?.type;
 
   if (!componentType) {
-    throw new InvalidInputError('Field config is missing input type');
+    // Gracefully fall back to a TextField if the inputType is no longer available due to a field rename
+    componentType = 'TextField';
   }
+
   const defaultStringValue = getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]);
   const isRequiredValue = getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]);
   let formDefinitionElement: FormDefinitionInputElement;
+
   switch (componentType) {
     case 'TextField':
     case 'NumberField':

@@ -189,8 +189,8 @@ export default function CreateCompositeDogForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
-    description: undefined,
+    name: \\"\\",
+    description: \\"\\",
     CompositeBowl: undefined,
     CompositeOwner: undefined,
     CompositeToys: [],
@@ -425,13 +425,14 @@ export default function CreateCompositeDogForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"CreateCompositeDogForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Name\\"
         isRequired={true}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -460,6 +461,7 @@ export default function CreateCompositeDogForm(props) {
         label=\\"Description\\"
         isRequired={true}
         isReadOnly={false}
+        value={description}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -797,7 +799,10 @@ export default function CreateCompositeDogForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -888,12 +893,12 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: undefined,
-    email: undefined,
+    name: \\"\\",
+    email: \\"\\",
     city: undefined,
     category: undefined,
     pages: 0,
-    phone: undefined,
+    phone: \\"\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -972,13 +977,14 @@ export default function CustomDataForm(props) {
         }
         await onSubmit(modelFields);
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1007,6 +1013,7 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1152,6 +1159,7 @@ export default function CustomDataForm(props) {
         isRequired={true}
         defaultValue=\\"+1-401-152-6995\\"
         type=\\"tel\\"
+        value={phone}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1183,7 +1191,10 @@ export default function CustomDataForm(props) {
         <Button
           children=\\"empty\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -1281,12 +1292,12 @@ export default function CustomDataForm(props) {
     props;
   const { tokens } = useTheme();
   const initialValues = {
-    name: undefined,
-    email: undefined,
+    name: \\"\\",
+    email: \\"\\",
     city: undefined,
     category: undefined,
     pages: 0,
-    phone: undefined,
+    phone: \\"\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -1365,13 +1376,14 @@ export default function CustomDataForm(props) {
         }
         await onSubmit(modelFields);
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1400,6 +1412,7 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1545,6 +1558,7 @@ export default function CustomDataForm(props) {
         isRequired={true}
         defaultValue=\\"+1-401-152-6995\\"
         type=\\"tel\\"
+        value={phone}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1576,7 +1590,10 @@ export default function CustomDataForm(props) {
         <Button
           children=\\"empty\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -1821,7 +1838,7 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     email: [],
     phone: [],
   };
@@ -1832,14 +1849,14 @@ export default function CustomDataForm(props) {
   const resetStateValues = () => {
     setName(initialValues.name);
     setEmail(initialValues.email);
-    setCurrentEmailValue(undefined);
+    setCurrentEmailValue(\\"\\");
     setPhone(initialValues.phone);
-    setCurrentPhoneValue(undefined);
+    setCurrentPhoneValue(\\"\\");
     setErrors({});
   };
-  const [currentEmailValue, setCurrentEmailValue] = React.useState(undefined);
+  const [currentEmailValue, setCurrentEmailValue] = React.useState(\\"\\");
   const emailRef = React.createRef();
-  const [currentPhoneValue, setCurrentPhoneValue] = React.useState(undefined);
+  const [currentPhoneValue, setCurrentPhoneValue] = React.useState(\\"\\");
   const phoneRef = React.createRef();
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -1896,13 +1913,14 @@ export default function CustomDataForm(props) {
         }
         await onSubmit(modelFields);
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -1937,7 +1955,7 @@ export default function CustomDataForm(props) {
             values = result?.email ?? values;
           }
           setEmail(values);
-          setCurrentEmailValue(undefined);
+          setCurrentEmailValue(\\"\\");
         }}
         currentFieldValue={currentEmailValue}
         label={\\"E-mail\\"}
@@ -1945,7 +1963,7 @@ export default function CustomDataForm(props) {
         hasError={errors.email?.hasError}
         setFieldValue={setCurrentEmailValue}
         inputFieldRef={emailRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"E-mail\\"
@@ -1980,7 +1998,7 @@ export default function CustomDataForm(props) {
             values = result?.phone ?? values;
           }
           setPhone(values);
-          setCurrentPhoneValue(undefined);
+          setCurrentPhoneValue(\\"\\");
         }}
         currentFieldValue={currentPhoneValue}
         label={\\"phone\\"}
@@ -1988,7 +2006,7 @@ export default function CustomDataForm(props) {
         hasError={errors.phone?.hasError}
         setFieldValue={setCurrentPhoneValue}
         inputFieldRef={phoneRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"phone\\"
@@ -2018,7 +2036,10 @@ export default function CustomDataForm(props) {
         <Button
           children=\\"empty\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -2113,8 +2134,8 @@ export default function CustomDataForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
-    email: undefined,
+    name: \\"\\",
+    email: \\"\\",
     \\"metadata-field\\": undefined,
     city: undefined,
     category: undefined,
@@ -2213,14 +2234,14 @@ export default function CustomDataForm(props) {
         }
         await onSubmit(modelFields);
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomDataForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"name\\"
         isRequired={true}
         defaultValue=\\"John Doe\\"
-        defaultValue={name}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2249,7 +2270,7 @@ export default function CustomDataForm(props) {
         label=\\"E-mail\\"
         isRequired={true}
         defaultValue=\\"johndoe@amplify.com\\"
-        defaultValue={email}
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2426,7 +2447,10 @@ export default function CustomDataForm(props) {
         <Button
           children=\\"empty\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -2684,12 +2708,12 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: undefined,
-    caption: undefined,
+    username: \\"\\",
+    caption: \\"\\",
     Customtags: [],
-    post_url: undefined,
+    post_url: \\"\\",
     metadata: undefined,
-    profile_url: undefined,
+    profile_url: \\"\\",
     nonModelField: undefined,
   };
   const [username, setUsername] = React.useState(initialValues.username);
@@ -2712,7 +2736,7 @@ export default function MyPostForm(props) {
     setUsername(initialValues.username);
     setCaption(initialValues.caption);
     setCustomtags(initialValues.Customtags);
-    setCurrentCustomtagsValue(undefined);
+    setCurrentCustomtagsValue(\\"\\");
     setPost_url(initialValues.post_url);
     setMetadata(initialValues.metadata);
     setProfile_url(initialValues.profile_url);
@@ -2720,7 +2744,7 @@ export default function MyPostForm(props) {
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const CustomtagsRef = React.createRef();
   const validations = {
     username: [
@@ -2806,8 +2830,8 @@ export default function MyPostForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"MyPostForm\\")}
+      {...rest}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -2816,7 +2840,10 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -2851,6 +2878,7 @@ export default function MyPostForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
+          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -2881,6 +2909,7 @@ export default function MyPostForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
+          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -2924,7 +2953,7 @@ export default function MyPostForm(props) {
             values = result?.Customtags ?? values;
           }
           setCustomtags(values);
-          setCurrentCustomtagsValue(undefined);
+          setCurrentCustomtagsValue(\\"\\");
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -2932,7 +2961,7 @@ export default function MyPostForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"
@@ -2959,6 +2988,7 @@ export default function MyPostForm(props) {
         label=\\"Post url\\"
         isRequired={false}
         isReadOnly={false}
+        value={post_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3017,6 +3047,7 @@ export default function MyPostForm(props) {
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
+        value={profile_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3321,8 +3352,8 @@ export default function UpdateCompositeDogForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
-    description: undefined,
+    name: \\"\\",
+    description: \\"\\",
     CompositeBowl: undefined,
     CompositeOwner: undefined,
     CompositeToys: [],
@@ -3707,14 +3738,14 @@ export default function UpdateCompositeDogForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"UpdateCompositeDogForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Name\\"
         isRequired={true}
         isReadOnly={true}
-        defaultValue={name}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -3743,7 +3774,7 @@ export default function UpdateCompositeDogForm(props) {
         label=\\"Description\\"
         isRequired={true}
         isReadOnly={true}
-        defaultValue={description}
+        value={description}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -4083,7 +4114,11 @@ export default function UpdateCompositeDogForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(nameProp || compositeDog)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -4094,7 +4129,10 @@ export default function UpdateCompositeDogForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(nameProp || compositeDog) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -4345,7 +4383,7 @@ export default function UpdateCPKTeacherForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    specialTeacherId: undefined,
+    specialTeacherId: \\"\\",
     CPKStudent: undefined,
     CPKClasses: [],
     CPKProjects: [],
@@ -4665,14 +4703,14 @@ export default function UpdateCPKTeacherForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"UpdateCPKTeacherForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Special teacher id\\"
         isRequired={true}
         isReadOnly={true}
-        defaultValue={specialTeacherId}
+        value={specialTeacherId}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -4915,7 +4953,11 @@ export default function UpdateCPKTeacherForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(specialTeacherIdProp || cPKTeacher)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -4926,7 +4968,10 @@ export default function UpdateCPKTeacherForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(specialTeacherIdProp || cPKTeacher) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -4982,7 +5027,7 @@ export default function UpdateCPKTeacherForm(props: UpdateCPKTeacherFormProps): 
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields 1`] = `
+exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields for create form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
@@ -5152,12 +5197,12 @@ export default function NestedJson(props) {
   const { onSubmit, onValidate, onChange, overrides, ...rest } = props;
   const { tokens } = useTheme();
   const initialValues = {
-    \\"first-Name\\": undefined,
-    lastName: undefined,
+    \\"first-Name\\": \\"\\",
+    lastName: \\"\\",
     bio: {},
     Nicknames1: [],
     \\"nick-names2\\": [],
-    \\"first Name\\": undefined,
+    \\"first Name\\": \\"\\",
     options: {},
   };
   const [firstName, setFirstName] = React.useState(initialValues[\\"first-Name\\"]);
@@ -5177,21 +5222,20 @@ export default function NestedJson(props) {
     setLastName(initialValues.lastName);
     setBio(initialValues.bio);
     setNicknames1(initialValues.Nicknames1);
-    setCurrentNicknames1Value(undefined);
+    setCurrentNicknames1Value(\\"\\");
     setNickNames(initialValues[\\"nick-names2\\"]);
-    setCurrentNickNamesValue(undefined);
+    setCurrentNickNamesValue(\\"\\");
     setFirstName1(initialValues[\\"first Name\\"]);
     setOptions(initialValues.options);
     setErrors({});
   };
   const [currentBioFavoritetreesValue, setCurrentBioFavoritetreesValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const bioFavoritetreesRef = React.createRef();
   const [currentNicknames1Value, setCurrentNicknames1Value] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const Nicknames1Ref = React.createRef();
-  const [currentNickNamesValue, setCurrentNickNamesValue] =
-    React.useState(undefined);
+  const [currentNickNamesValue, setCurrentNickNamesValue] = React.useState(\\"\\");
   const nickNamesRef = React.createRef();
   const validations = {
     \\"first-Name\\": [],
@@ -5258,11 +5302,12 @@ export default function NestedJson(props) {
         }
         await onSubmit(modelFields);
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"NestedJson\\")}
+      {...rest}
     >
       <TextField
         label=\\"firstName\\"
+        value={firstName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -5290,6 +5335,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"lastName\\"
+        value={lastName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -5322,6 +5368,7 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
+        value={bio[\\"favorite Quote\\"]}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -5351,6 +5398,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
+        value={bio[\\"favorite-Animal\\"]}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -5395,7 +5443,7 @@ export default function NestedJson(props) {
             values = result?.bio?.[\\"favorite-trees\\"] ?? values;
           }
           setBio({ ...bio, [\\"favorite-trees\\"]: values });
-          setCurrentBioFavoritetreesValue(undefined);
+          setCurrentBioFavoritetreesValue(\\"\\");
         }}
         currentFieldValue={currentBioFavoritetreesValue}
         label={\\"favorite trees\\"}
@@ -5403,11 +5451,11 @@ export default function NestedJson(props) {
         hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
         setFieldValue={setCurrentBioFavoritetreesValue}
         inputFieldRef={bioFavoritetreesRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"favorite trees\\"
-          value={currentBioFavoritetreesValue}
+          value={bio[\\"favorite-trees\\"]}
           onChange={(e) => {
             let { value } = e.target;
             if (errors[\\"bio.favorite-trees\\"]?.hasError) {
@@ -5450,7 +5498,7 @@ export default function NestedJson(props) {
             values = result?.Nicknames1 ?? values;
           }
           setNicknames1(values);
-          setCurrentNicknames1Value(undefined);
+          setCurrentNicknames1Value(\\"\\");
         }}
         currentFieldValue={currentNicknames1Value}
         label={\\"Nick Names1\\"}
@@ -5458,7 +5506,7 @@ export default function NestedJson(props) {
         hasError={errors.Nicknames1?.hasError}
         setFieldValue={setCurrentNicknames1Value}
         inputFieldRef={Nicknames1Ref}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Nick Names1\\"
@@ -5497,7 +5545,7 @@ export default function NestedJson(props) {
             values = result?.[\\"nick-names2\\"] ?? values;
           }
           setNickNames(values);
-          setCurrentNickNamesValue(undefined);
+          setCurrentNickNamesValue(\\"\\");
         }}
         currentFieldValue={currentNickNamesValue}
         label={\\"nick-Names2\\"}
@@ -5505,7 +5553,7 @@ export default function NestedJson(props) {
         hasError={errors?.[\\"nick-names2\\"]?.hasError}
         setFieldValue={setCurrentNickNamesValue}
         inputFieldRef={nickNamesRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"nick-Names2\\"
@@ -5529,6 +5577,7 @@ export default function NestedJson(props) {
       </ArrayField>
       <TextField
         label=\\"first Name1\\"
+        value={firstName1}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -5590,7 +5639,10 @@ export default function NestedJson(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -5612,7 +5664,7 @@ export default function NestedJson(props) {
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields 2`] = `
+exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields for create form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, HeadingProps, SwitchFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
@@ -5677,7 +5729,7 @@ export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields 3`] = `
+exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields for update form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
@@ -5847,7 +5899,7 @@ export default function NestedJson(props) {
   const { initialData, onSubmit, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    firstName: undefined,
+    firstName: \\"\\",
     \\"last-Name\\": undefined,
     lastName: [],
     bio: {},
@@ -5864,7 +5916,7 @@ export default function NestedJson(props) {
     setFirstName(cleanValues.firstName);
     setLastName(cleanValues[\\"last-Name\\"]);
     setLastName1(cleanValues.lastName ?? []);
-    setCurrentLastName1Value(undefined);
+    setCurrentLastName1Value(\\"\\");
     setBio(cleanValues.bio);
     setErrors({});
   };
@@ -5877,8 +5929,7 @@ export default function NestedJson(props) {
       setBio(initialData.bio);
     }
   }, []);
-  const [currentLastName1Value, setCurrentLastName1Value] =
-    React.useState(undefined);
+  const [currentLastName1Value, setCurrentLastName1Value] = React.useState(\\"\\");
   const lastName1Ref = React.createRef();
   const validations = {
     firstName: [],
@@ -5938,12 +5989,12 @@ export default function NestedJson(props) {
         }
         await onSubmit(modelFields);
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"NestedJson\\")}
+      {...rest}
     >
       <TextField
         label=\\"firstName\\"
-        defaultValue={firstName}
+        value={firstName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6006,7 +6057,7 @@ export default function NestedJson(props) {
             values = result?.lastName ?? values;
           }
           setLastName1(values);
-          setCurrentLastName1Value(undefined);
+          setCurrentLastName1Value(\\"\\");
         }}
         currentFieldValue={currentLastName1Value}
         label={\\"lastName\\"}
@@ -6014,7 +6065,7 @@ export default function NestedJson(props) {
         hasError={errors.lastName?.hasError}
         setFieldValue={setCurrentLastName1Value}
         inputFieldRef={lastName1Ref}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"lastName\\"
@@ -6041,7 +6092,7 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
-        defaultValue={bio.favoriteQuote}
+        value={bio[\\"favoriteQuote\\"]}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6068,7 +6119,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
-        defaultValue={bio.favoriteAnimal}
+        value={bio[\\"favoriteAnimal\\"]}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6100,7 +6151,10 @@ export default function NestedJson(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -6122,7 +6176,7 @@ export default function NestedJson(props) {
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields 4`] = `
+exports[`amplify form renderer tests datastore form tests custom form tests should render nested json fields for update form 2`] = `
 "import * as React from \\"react\\";
 import { GridProps, HeadingProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
@@ -6189,7 +6243,7 @@ export default function CustomWithSectionalElements(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [errors, setErrors] = React.useState({});
@@ -6248,8 +6302,8 @@ export default function CustomWithSectionalElements(props) {
         }
         await onSubmit(modelFields);
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"CustomWithSectionalElements\\")}
+      {...rest}
     >
       <Heading
         level={2}
@@ -6258,6 +6312,7 @@ export default function CustomWithSectionalElements(props) {
       ></Heading>
       <TextField
         label=\\"Label\\"
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6292,7 +6347,10 @@ export default function CustomWithSectionalElements(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -6384,11 +6442,11 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    caption: undefined,
-    username: undefined,
-    post_url: undefined,
+    caption: \\"\\",
+    username: \\"\\",
+    post_url: \\"\\",
     metadata: undefined,
-    profile_url: undefined,
+    profile_url: \\"\\",
     nonModelField: undefined,
   };
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -6491,8 +6549,8 @@ export default function MyPostForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"MyPostForm\\")}
+      {...rest}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -6501,7 +6559,10 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -6529,6 +6590,7 @@ export default function MyPostForm(props) {
         label=\\"Caption\\"
         isRequired={false}
         isReadOnly={false}
+        value={caption}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6557,6 +6619,7 @@ export default function MyPostForm(props) {
         label=\\"Username\\"
         isRequired={false}
         isReadOnly={false}
+        value={username}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6585,6 +6648,7 @@ export default function MyPostForm(props) {
         label=\\"Post url\\"
         isRequired={false}
         isReadOnly={false}
+        value={post_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6641,6 +6705,7 @@ export default function MyPostForm(props) {
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
+        value={profile_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -6933,7 +6998,7 @@ export default function TagCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    label: undefined,
+    label: \\"\\",
     Posts: [],
     statuses: [],
   };
@@ -7076,13 +7141,14 @@ export default function TagCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"TagCreateForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Label\\"
         isRequired={false}
         isReadOnly={false}
+        value={label}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -7239,7 +7305,10 @@ export default function TagCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -7494,7 +7563,7 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     Team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -7602,8 +7671,8 @@ export default function MyMemberForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"MyMemberForm\\")}
+      {...rest}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -7612,7 +7681,10 @@ export default function MyMemberForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -7640,6 +7712,7 @@ export default function MyMemberForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -7956,7 +8029,7 @@ export default function SchoolCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     Students: [],
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -8082,13 +8155,14 @@ export default function SchoolCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"SchoolCreateForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -8183,7 +8257,10 @@ export default function SchoolCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -8435,7 +8512,7 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     primaryAuthor: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -8548,8 +8625,8 @@ export default function BookCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"BookCreateForm\\")}
+      {...rest}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -8558,7 +8635,10 @@ export default function BookCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -8586,6 +8666,7 @@ export default function BookCreateForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -8907,7 +8988,7 @@ export default function TagCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    label: undefined,
+    label: \\"\\",
     Posts: [],
     statuses: [],
   };
@@ -9050,13 +9131,14 @@ export default function TagCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"TagCreateForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Label\\"
         isRequired={false}
         isReadOnly={false}
+        value={label}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -9213,7 +9295,10 @@ export default function TagCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -9468,7 +9553,7 @@ export default function BookCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     primaryAuthor: undefined,
     primaryTitle: undefined,
   };
@@ -9606,8 +9691,8 @@ export default function BookCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"BookCreateForm\\")}
+      {...rest}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -9616,7 +9701,10 @@ export default function BookCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -9644,6 +9732,7 @@ export default function BookCreateForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -9886,10 +9975,10 @@ export default function MyPostForm(props) {
   } = props;
   const initialValues = {
     TextAreaFieldbbd63464: undefined,
-    caption: undefined,
-    username: undefined,
-    profile_url: undefined,
-    post_url: undefined,
+    caption: \\"\\",
+    username: \\"\\",
+    profile_url: \\"\\",
+    post_url: \\"\\",
     metadata: undefined,
     nonModelField: undefined,
   };
@@ -10020,8 +10109,8 @@ export default function MyPostForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"MyPostForm\\")}
+      {...rest}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -10030,7 +10119,11 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || post)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -10049,7 +10142,10 @@ export default function MyPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || post) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -10088,7 +10184,7 @@ export default function MyPostForm(props) {
         label=\\"Caption\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={caption}
+        value={caption}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -10118,7 +10214,7 @@ export default function MyPostForm(props) {
         label=\\"Username\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={username}
+        value={username}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -10148,7 +10244,7 @@ export default function MyPostForm(props) {
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={profile_url}
+        value={profile_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -10178,7 +10274,7 @@ export default function MyPostForm(props) {
         label=\\"Post url\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={post_url}
+        value={post_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -10271,7 +10367,11 @@ export default function MyPostForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || post)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -10290,7 +10390,10 @@ export default function MyPostForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || post) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -10540,7 +10643,7 @@ export default function SchoolUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     Students: [],
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -10705,14 +10808,14 @@ export default function SchoolUpdateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"SchoolUpdateForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={name}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -10807,7 +10910,11 @@ export default function SchoolUpdateForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || school)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -10826,7 +10933,10 @@ export default function SchoolUpdateForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || school) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -11061,7 +11171,7 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     Team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -11187,8 +11297,8 @@ export default function MyMemberForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"MyMemberForm\\")}
+      {...rest}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -11197,7 +11307,11 @@ export default function MyMemberForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || member)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -11216,7 +11330,10 @@ export default function MyMemberForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || member) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -11225,7 +11342,7 @@ export default function MyMemberForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={name}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -11546,7 +11663,7 @@ export default function TagUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    label: undefined,
+    label: \\"\\",
     Posts: [],
     statuses: [],
   };
@@ -11762,14 +11879,14 @@ export default function TagUpdateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"TagUpdateForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Label\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={label}
+        value={label}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -11926,7 +12043,11 @@ export default function TagUpdateForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || tag)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -11945,7 +12066,9 @@ export default function TagUpdateForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || tag) || Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -12165,10 +12288,9 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function MyFlexUpdateForm(props) {
+export default function MyFlexCreateForm(props) {
   const {
-    id: idProp,
-    flex,
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -12179,11 +12301,11 @@ export default function MyFlexUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: undefined,
-    caption: undefined,
+    username: \\"\\",
+    caption: \\"\\",
     Customtags: [],
     tags: [],
-    profile_url: undefined,
+    profile_url: \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -12194,31 +12316,19 @@ export default function MyFlexUpdateForm(props) {
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = flexRecord
-      ? { ...initialValues, ...flexRecord }
-      : initialValues;
-    setUsername(cleanValues.username);
-    setCaption(cleanValues.caption);
-    setCustomtags(cleanValues.Customtags ?? []);
-    setCurrentCustomtagsValue(undefined);
-    setTags(cleanValues.tags ?? []);
-    setCurrentTagsValue(undefined);
-    setProfile_url(cleanValues.profile_url);
+    setUsername(initialValues.username);
+    setCaption(initialValues.caption);
+    setCustomtags(initialValues.Customtags);
+    setCurrentCustomtagsValue(\\"\\");
+    setTags(initialValues.tags);
+    setCurrentTagsValue(\\"\\");
+    setProfile_url(initialValues.profile_url);
     setErrors({});
   };
-  const [flexRecord, setFlexRecord] = React.useState(flex);
-  React.useEffect(() => {
-    const queryData = async () => {
-      const record = idProp ? await DataStore.query(Flex0, idProp) : flex0;
-      setFlexRecord(record);
-    };
-    queryData();
-  }, [idProp, flex]);
-  React.useEffect(resetStateValues, [flexRecord]);
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const CustomtagsRef = React.createRef();
-  const [currentTagsValue, setCurrentTagsValue] = React.useState(undefined);
+  const [currentTagsValue, setCurrentTagsValue] = React.useState(\\"\\");
   const tagsRef = React.createRef();
   const validations = {
     username: [
@@ -12287,13 +12397,12 @@ export default function MyFlexUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(
-            Flex0.copyOf(flexRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
-          );
+          await DataStore.save(new Flex0(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -12301,18 +12410,21 @@ export default function MyFlexUpdateForm(props) {
           }
         }
       }}
+      {...getOverrideProps(overrides, \\"MyFlexCreateForm\\")}
       {...rest}
-      {...getOverrideProps(overrides, \\"MyFlexUpdateForm\\")}
     >
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Reset\\"
+          children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ResetButton\\")}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
           gap=\\"15px\\"
@@ -12346,7 +12458,7 @@ export default function MyFlexUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
-          defaultValue={username}
+          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -12375,7 +12487,7 @@ export default function MyFlexUpdateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
-          defaultValue={caption}
+          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -12415,7 +12527,7 @@ export default function MyFlexUpdateForm(props) {
             values = result?.Customtags ?? values;
           }
           setCustomtags(values);
-          setCurrentCustomtagsValue(undefined);
+          setCurrentCustomtagsValue(\\"\\");
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -12423,7 +12535,7 @@ export default function MyFlexUpdateForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"
@@ -12461,7 +12573,7 @@ export default function MyFlexUpdateForm(props) {
             values = result?.tags ?? values;
           }
           setTags(values);
-          setCurrentTagsValue(undefined);
+          setCurrentTagsValue(\\"\\");
         }}
         currentFieldValue={currentTagsValue}
         label={\\"Tags\\"}
@@ -12469,7 +12581,7 @@ export default function MyFlexUpdateForm(props) {
         hasError={errors.tags?.hasError}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"
@@ -12495,7 +12607,7 @@ export default function MyFlexUpdateForm(props) {
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={profile_url}
+        value={profile_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -12529,20 +12641,19 @@ exports[`amplify form renderer tests datastore form tests should render a create
 "import * as React from \\"react\\";
 import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex as Flex0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type MyFlexUpdateFormInputValues = {
+export declare type MyFlexCreateFormInputValues = {
     username?: string;
     caption?: string;
     Customtags?: string[];
     tags?: string[];
     profile_url?: string;
 };
-export declare type MyFlexUpdateFormValidationValues = {
+export declare type MyFlexCreateFormValidationValues = {
     username?: ValidationFunction<string>;
     caption?: ValidationFunction<string>;
     Customtags?: ValidationFunction<string>;
@@ -12550,8 +12661,8 @@ export declare type MyFlexUpdateFormValidationValues = {
     profile_url?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type MyFlexUpdateFormOverridesProps = {
-    MyFlexUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type MyFlexCreateFormOverridesProps = {
+    MyFlexCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     RowGrid0?: PrimitiveOverrideProps<GridProps>;
     username?: PrimitiveOverrideProps<TextFieldProps>;
     caption?: PrimitiveOverrideProps<TextFieldProps>;
@@ -12559,19 +12670,18 @@ export declare type MyFlexUpdateFormOverridesProps = {
     tags?: PrimitiveOverrideProps<TextFieldProps>;
     profile_url?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type MyFlexUpdateFormProps = React.PropsWithChildren<{
-    overrides?: MyFlexUpdateFormOverridesProps | undefined | null;
+export declare type MyFlexCreateFormProps = React.PropsWithChildren<{
+    overrides?: MyFlexCreateFormOverridesProps | undefined | null;
 } & {
-    id?: string;
-    flex?: Flex0;
-    onSubmit?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
-    onSuccess?: (fields: MyFlexUpdateFormInputValues) => void;
-    onError?: (fields: MyFlexUpdateFormInputValues, errorMessage: string) => void;
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
+    onSuccess?: (fields: MyFlexCreateFormInputValues) => void;
+    onError?: (fields: MyFlexCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
-    onValidate?: MyFlexUpdateFormValidationValues;
+    onChange?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
+    onValidate?: MyFlexCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function MyFlexUpdateForm(props: MyFlexUpdateFormProps): React.ReactElement;
+export default function MyFlexCreateForm(props: MyFlexCreateFormProps): React.ReactElement;
 "
 `;
 
@@ -12754,10 +12864,10 @@ export default function BlogCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    title: undefined,
-    content: undefined,
+    title: \\"\\",
+    content: \\"\\",
     switch: false,
-    published: undefined,
+    published: \\"\\",
     editedAt: [],
   };
   const [title, setTitle] = React.useState(initialValues.title);
@@ -12772,11 +12882,10 @@ export default function BlogCreateForm(props) {
     setSwitch1(initialValues.switch);
     setPublished(initialValues.published);
     setEditedAt(initialValues.editedAt);
-    setCurrentEditedAtValue(undefined);
+    setCurrentEditedAtValue(\\"\\");
     setErrors({});
   };
-  const [currentEditedAtValue, setCurrentEditedAtValue] =
-    React.useState(undefined);
+  const [currentEditedAtValue, setCurrentEditedAtValue] = React.useState(\\"\\");
   const editedAtRef = React.createRef();
   const validations = {
     title: [],
@@ -12875,13 +12984,14 @@ export default function BlogCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"BlogCreateForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Title\\"
         isRequired={false}
         isReadOnly={false}
+        value={title}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -12909,6 +13019,7 @@ export default function BlogCreateForm(props) {
         label=\\"Content\\"
         isRequired={false}
         isReadOnly={false}
+        value={content}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -12965,6 +13076,7 @@ export default function BlogCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"datetime-local\\"
+        value={published && convertToLocal(new Date(published))}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -13003,7 +13115,7 @@ export default function BlogCreateForm(props) {
             values = result?.editedAt ?? values;
           }
           setEditedAt(values);
-          setCurrentEditedAtValue(undefined);
+          setCurrentEditedAtValue(\\"\\");
         }}
         currentFieldValue={currentEditedAtValue}
         label={\\"Edited at\\"}
@@ -13011,7 +13123,7 @@ export default function BlogCreateForm(props) {
         hasError={errors.editedAt?.hasError}
         setFieldValue={setCurrentEditedAtValue}
         inputFieldRef={editedAtRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Edited at\\"
@@ -13052,7 +13164,10 @@ export default function BlogCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -13120,7 +13235,7 @@ export default function BlogCreateForm(props: BlogCreateFormProps): React.ReactE
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 1`] = `
+exports[`amplify form renderer tests datastore form tests should render a form with multiple date types on create form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
@@ -13304,17 +13419,17 @@ export default function InputGalleryCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    num: undefined,
-    rootbeer: undefined,
+    num: \\"\\",
+    rootbeer: \\"\\",
     attend: undefined,
     maybeSlide: false,
     maybeCheck: false,
     arrayTypeField: [],
     jsonArray: [],
     jsonField: undefined,
-    timestamp: undefined,
-    ippy: undefined,
-    timeisnow: undefined,
+    timestamp: \\"\\",
+    ippy: \\"\\",
+    timeisnow: \\"\\",
   };
   const [num, setNum] = React.useState(initialValues.num);
   const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
@@ -13341,7 +13456,7 @@ export default function InputGalleryCreateForm(props) {
     setMaybeSlide(initialValues.maybeSlide);
     setMaybeCheck(initialValues.maybeCheck);
     setArrayTypeField(initialValues.arrayTypeField);
-    setCurrentArrayTypeFieldValue(undefined);
+    setCurrentArrayTypeFieldValue(\\"\\");
     setJsonArray(initialValues.jsonArray);
     setCurrentJsonArrayValue(undefined);
     setJsonField(initialValues.jsonField);
@@ -13351,7 +13466,7 @@ export default function InputGalleryCreateForm(props) {
     setErrors({});
   };
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const arrayTypeFieldRef = React.createRef();
   const [currentJsonArrayValue, setCurrentJsonArrayValue] =
     React.useState(undefined);
@@ -13384,6 +13499,29 @@ export default function InputGalleryCreateForm(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const convertTimeStampToDate = (ts) => {
+    if (Math.abs(Date.now() - ts) < Math.abs(Date.now() - ts * 1000)) {
+      return new Date(ts);
+    }
+    return new Date(ts * 1000);
+  };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat(\\"default\\", {
+      year: \\"numeric\\",
+      month: \\"2-digit\\",
+      day: \\"2-digit\\",
+      hour: \\"2-digit\\",
+      minute: \\"2-digit\\",
+      calendar: \\"iso8601\\",
+      numberingSystem: \\"latn\\",
+      hour12: false,
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return \`\${parts.year}-\${parts.month}-\${parts.day}T\${parts.hour}:\${parts.minute}\`;
   };
   return (
     <Grid
@@ -13442,8 +13580,8 @@ export default function InputGalleryCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"InputGalleryCreateForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Num\\"
@@ -13451,6 +13589,7 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"number\\"
         step=\\"any\\"
+        value={num}
         onChange={(e) => {
           let value = parseInt(e.target.value);
           if (isNaN(value)) {
@@ -13493,6 +13632,7 @@ export default function InputGalleryCreateForm(props) {
         isReadOnly={false}
         type=\\"number\\"
         step=\\"any\\"
+        value={rootbeer}
         onChange={(e) => {
           let value = Number(e.target.value);
           if (isNaN(value)) {
@@ -13664,7 +13804,7 @@ export default function InputGalleryCreateForm(props) {
             values = result?.arrayTypeField ?? values;
           }
           setArrayTypeField(values);
-          setCurrentArrayTypeFieldValue(undefined);
+          setCurrentArrayTypeFieldValue(\\"\\");
         }}
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
@@ -13672,7 +13812,7 @@ export default function InputGalleryCreateForm(props) {
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Array type field\\"
@@ -13785,6 +13925,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"datetime-local\\"
+        value={timestamp && convertToLocal(convertTimeStampToDate(timestamp))}
         onChange={(e) => {
           const date = new Date(e.target.value);
           if (!(date instanceof Date && !isNaN(date))) {
@@ -13826,6 +13967,7 @@ export default function InputGalleryCreateForm(props) {
         label=\\"Ippy\\"
         isRequired={false}
         isReadOnly={false}
+        value={ippy}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -13860,6 +14002,7 @@ export default function InputGalleryCreateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"time\\"
+        value={timeisnow}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -13896,7 +14039,10 @@ export default function InputGalleryCreateForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -13926,7 +14072,7 @@ export default function InputGalleryCreateForm(props) {
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 2`] = `
+exports[`amplify form renderer tests datastore form tests should render a form with multiple date types on create form 2`] = `
 "import * as React from \\"react\\";
 import { CheckboxFieldProps, GridProps, RadioGroupFieldProps, TextAreaFieldProps, TextFieldProps, ToggleButtonProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
@@ -13991,7 +14137,7 @@ export default function InputGalleryCreateForm(props: InputGalleryCreateFormProp
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 3`] = `
+exports[`amplify form renderer tests datastore form tests should render a form with multiple date types on update form 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
@@ -14176,17 +14322,17 @@ export default function InputGalleryUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    num: undefined,
-    rootbeer: undefined,
+    num: \\"\\",
+    rootbeer: \\"\\",
     attend: undefined,
     maybeSlide: false,
     maybeCheck: false,
     arrayTypeField: [],
     jsonArray: [],
     jsonField: undefined,
-    timestamp: undefined,
-    ippy: undefined,
-    timeisnow: undefined,
+    timestamp: \\"\\",
+    ippy: \\"\\",
+    timeisnow: \\"\\",
   };
   const [num, setNum] = React.useState(initialValues.num);
   const [rootbeer, setRootbeer] = React.useState(initialValues.rootbeer);
@@ -14216,7 +14362,7 @@ export default function InputGalleryUpdateForm(props) {
     setMaybeSlide(cleanValues.maybeSlide);
     setMaybeCheck(cleanValues.maybeCheck);
     setArrayTypeField(cleanValues.arrayTypeField ?? []);
-    setCurrentArrayTypeFieldValue(undefined);
+    setCurrentArrayTypeFieldValue(\\"\\");
     setJsonArray(cleanValues.jsonArray ?? []);
     setCurrentJsonArrayValue(undefined);
     setJsonField(
@@ -14242,7 +14388,7 @@ export default function InputGalleryUpdateForm(props) {
   }, [idProp, inputGallery]);
   React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const arrayTypeFieldRef = React.createRef();
   const [currentJsonArrayValue, setCurrentJsonArrayValue] =
     React.useState(undefined);
@@ -14357,8 +14503,8 @@ export default function InputGalleryUpdateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"InputGalleryUpdateForm\\")}
+      {...rest}
     >
       <TextField
         label=\\"Num\\"
@@ -14366,7 +14512,7 @@ export default function InputGalleryUpdateForm(props) {
         isReadOnly={false}
         type=\\"number\\"
         step=\\"any\\"
-        defaultValue={num}
+        value={num}
         onChange={(e) => {
           let value = parseInt(e.target.value);
           if (isNaN(value)) {
@@ -14409,7 +14555,7 @@ export default function InputGalleryUpdateForm(props) {
         isReadOnly={false}
         type=\\"number\\"
         step=\\"any\\"
-        defaultValue={rootbeer}
+        value={rootbeer}
         onChange={(e) => {
           let value = Number(e.target.value);
           if (isNaN(value)) {
@@ -14583,7 +14729,7 @@ export default function InputGalleryUpdateForm(props) {
             values = result?.arrayTypeField ?? values;
           }
           setArrayTypeField(values);
-          setCurrentArrayTypeFieldValue(undefined);
+          setCurrentArrayTypeFieldValue(\\"\\");
         }}
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
@@ -14591,7 +14737,7 @@ export default function InputGalleryUpdateForm(props) {
         hasError={errors.arrayTypeField?.hasError}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Array type field\\"
@@ -14705,9 +14851,7 @@ export default function InputGalleryUpdateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"datetime-local\\"
-        defaultValue={
-          timestamp && convertToLocal(convertTimeStampToDate(timestamp))
-        }
+        value={timestamp && convertToLocal(convertTimeStampToDate(timestamp))}
         onChange={(e) => {
           const date = new Date(e.target.value);
           if (!(date instanceof Date && !isNaN(date))) {
@@ -14749,7 +14893,7 @@ export default function InputGalleryUpdateForm(props) {
         label=\\"Ippy\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={ippy}
+        value={ippy}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -14784,7 +14928,7 @@ export default function InputGalleryUpdateForm(props) {
         isRequired={false}
         isReadOnly={false}
         type=\\"time\\"
-        defaultValue={timeisnow}
+        value={timeisnow}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -14821,7 +14965,11 @@ export default function InputGalleryUpdateForm(props) {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || inputGallery)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -14840,7 +14988,10 @@ export default function InputGalleryUpdateForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || inputGallery) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -14851,7 +15002,7 @@ export default function InputGalleryUpdateForm(props) {
 "
 `;
 
-exports[`amplify form renderer tests datastore form tests should render a form with multiple date types 4`] = `
+exports[`amplify form renderer tests datastore form tests should render a form with multiple date types on update form 2`] = `
 "import * as React from \\"react\\";
 import { CheckboxFieldProps, GridProps, RadioGroupFieldProps, TextAreaFieldProps, TextFieldProps, ToggleButtonProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
@@ -15084,9 +15235,10 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function MyFlexCreateForm(props) {
+export default function MyFlexUpdateForm(props) {
   const {
-    clearOnSuccess = true,
+    id: idProp,
+    flex,
     onSuccess,
     onError,
     onSubmit,
@@ -15097,11 +15249,11 @@ export default function MyFlexCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: undefined,
-    caption: undefined,
+    username: \\"\\",
+    caption: \\"\\",
     Customtags: [],
     tags: [],
-    profile_url: undefined,
+    profile_url: \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -15112,19 +15264,31 @@ export default function MyFlexCreateForm(props) {
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setUsername(initialValues.username);
-    setCaption(initialValues.caption);
-    setCustomtags(initialValues.Customtags);
-    setCurrentCustomtagsValue(undefined);
-    setTags(initialValues.tags);
-    setCurrentTagsValue(undefined);
-    setProfile_url(initialValues.profile_url);
+    const cleanValues = flexRecord
+      ? { ...initialValues, ...flexRecord }
+      : initialValues;
+    setUsername(cleanValues.username);
+    setCaption(cleanValues.caption);
+    setCustomtags(cleanValues.Customtags ?? []);
+    setCurrentCustomtagsValue(\\"\\");
+    setTags(cleanValues.tags ?? []);
+    setCurrentTagsValue(\\"\\");
+    setProfile_url(cleanValues.profile_url);
     setErrors({});
   };
+  const [flexRecord, setFlexRecord] = React.useState(flex);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp ? await DataStore.query(Flex0, idProp) : flex;
+      setFlexRecord(record);
+    };
+    queryData();
+  }, [idProp, flex]);
+  React.useEffect(resetStateValues, [flexRecord]);
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
-    React.useState(undefined);
+    React.useState(\\"\\");
   const CustomtagsRef = React.createRef();
-  const [currentTagsValue, setCurrentTagsValue] = React.useState(undefined);
+  const [currentTagsValue, setCurrentTagsValue] = React.useState(\\"\\");
   const tagsRef = React.createRef();
   const validations = {
     username: [
@@ -15193,12 +15357,13 @@ export default function MyFlexCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(new Flex0(modelFields));
+          await DataStore.save(
+            Flex0.copyOf(flexRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
-          }
-          if (clearOnSuccess) {
-            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -15206,18 +15371,22 @@ export default function MyFlexCreateForm(props) {
           }
         }
       }}
+      {...getOverrideProps(overrides, \\"MyFlexUpdateForm\\")}
       {...rest}
-      {...getOverrideProps(overrides, \\"MyFlexCreateForm\\")}
     >
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
       >
         <Button
-          children=\\"Clear\\"
+          children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
-          {...getOverrideProps(overrides, \\"ClearButton\\")}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || flex)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
           gap=\\"15px\\"
@@ -15235,7 +15404,10 @@ export default function MyFlexCreateForm(props) {
             children=\\"Submit\\"
             type=\\"submit\\"
             variation=\\"primary\\"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || flex) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
         </Flex>
@@ -15251,6 +15423,7 @@ export default function MyFlexCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
+          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -15279,6 +15452,7 @@ export default function MyFlexCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
+          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -15318,7 +15492,7 @@ export default function MyFlexCreateForm(props) {
             values = result?.Customtags ?? values;
           }
           setCustomtags(values);
-          setCurrentCustomtagsValue(undefined);
+          setCurrentCustomtagsValue(\\"\\");
         }}
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
@@ -15326,7 +15500,7 @@ export default function MyFlexCreateForm(props) {
         hasError={errors.Customtags?.hasError}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"
@@ -15364,7 +15538,7 @@ export default function MyFlexCreateForm(props) {
             values = result?.tags ?? values;
           }
           setTags(values);
-          setCurrentTagsValue(undefined);
+          setCurrentTagsValue(\\"\\");
         }}
         currentFieldValue={currentTagsValue}
         label={\\"Tags\\"}
@@ -15372,7 +15546,7 @@ export default function MyFlexCreateForm(props) {
         hasError={errors.tags?.hasError}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextField
           label=\\"Tags\\"
@@ -15398,6 +15572,7 @@ export default function MyFlexCreateForm(props) {
         label=\\"Profile url\\"
         isRequired={false}
         isReadOnly={false}
+        value={profile_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -15431,19 +15606,20 @@ exports[`amplify form renderer tests datastore form tests should render a update
 "import * as React from \\"react\\";
 import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Flex as Flex0 } from \\"../models\\";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type MyFlexCreateFormInputValues = {
+export declare type MyFlexUpdateFormInputValues = {
     username?: string;
     caption?: string;
     Customtags?: string[];
     tags?: string[];
     profile_url?: string;
 };
-export declare type MyFlexCreateFormValidationValues = {
+export declare type MyFlexUpdateFormValidationValues = {
     username?: ValidationFunction<string>;
     caption?: ValidationFunction<string>;
     Customtags?: ValidationFunction<string>;
@@ -15451,8 +15627,8 @@ export declare type MyFlexCreateFormValidationValues = {
     profile_url?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type MyFlexCreateFormOverridesProps = {
-    MyFlexCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type MyFlexUpdateFormOverridesProps = {
+    MyFlexUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     RowGrid0?: PrimitiveOverrideProps<GridProps>;
     username?: PrimitiveOverrideProps<TextFieldProps>;
     caption?: PrimitiveOverrideProps<TextFieldProps>;
@@ -15460,18 +15636,19 @@ export declare type MyFlexCreateFormOverridesProps = {
     tags?: PrimitiveOverrideProps<TextFieldProps>;
     profile_url?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type MyFlexCreateFormProps = React.PropsWithChildren<{
-    overrides?: MyFlexCreateFormOverridesProps | undefined | null;
+export declare type MyFlexUpdateFormProps = React.PropsWithChildren<{
+    overrides?: MyFlexUpdateFormOverridesProps | undefined | null;
 } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
-    onSuccess?: (fields: MyFlexCreateFormInputValues) => void;
-    onError?: (fields: MyFlexCreateFormInputValues, errorMessage: string) => void;
+    id?: string;
+    flex?: Flex0;
+    onSubmit?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
+    onSuccess?: (fields: MyFlexUpdateFormInputValues) => void;
+    onError?: (fields: MyFlexUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: MyFlexCreateFormInputValues) => MyFlexCreateFormInputValues;
-    onValidate?: MyFlexCreateFormValidationValues;
+    onChange?: (fields: MyFlexUpdateFormInputValues) => MyFlexUpdateFormInputValues;
+    onValidate?: MyFlexUpdateFormValidationValues;
 } & React.CSSProperties>;
-export default function MyFlexCreateForm(props: MyFlexCreateFormProps): React.ReactElement;
+export default function MyFlexUpdateForm(props: MyFlexUpdateFormProps): React.ReactElement;
 "
 `;
 
@@ -15503,10 +15680,10 @@ export default function PostCreateFormRow(props) {
     ...rest
   } = props;
   const initialValues = {
-    username: undefined,
-    caption: undefined,
-    post_url: undefined,
-    profile_url: undefined,
+    username: \\"\\",
+    caption: \\"\\",
+    post_url: \\"\\",
+    profile_url: \\"\\",
     status: undefined,
     metadata: undefined,
     nonModelField: undefined,
@@ -15621,8 +15798,8 @@ export default function PostCreateFormRow(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"PostCreateFormRow\\")}
+      {...rest}
     >
       <Grid
         columnGap=\\"inherit\\"
@@ -15635,6 +15812,7 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"john\\"
+          value={username}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -15665,6 +15843,7 @@ export default function PostCreateFormRow(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"i love code\\"
+          value={caption}
           onChange={(e) => {
             let { value } = e.target;
             if (onChange) {
@@ -15696,6 +15875,7 @@ export default function PostCreateFormRow(props) {
         descriptiveText=\\"post url to use for the component\\"
         isRequired={false}
         isReadOnly={false}
+        value={post_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -15726,6 +15906,7 @@ export default function PostCreateFormRow(props) {
         descriptiveText=\\"profile image url\\"
         isRequired={false}
         isReadOnly={false}
+        value={profile_url}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -15845,7 +16026,10 @@ export default function PostCreateFormRow(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -16112,7 +16296,7 @@ export default function MyMemberForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
+    name: \\"\\",
     Team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -16220,8 +16404,8 @@ export default function MyMemberForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, \\"MyMemberForm\\")}
+      {...rest}
     >
       <Flex
         justifyContent=\\"space-between\\"
@@ -16230,7 +16414,10 @@ export default function MyMemberForm(props) {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, \\"ClearButton\\")}
         ></Button>
         <Flex
@@ -16258,6 +16445,7 @@ export default function MyMemberForm(props) {
         label=\\"Name\\"
         isRequired={false}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {

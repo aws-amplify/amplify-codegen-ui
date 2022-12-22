@@ -107,7 +107,7 @@ describe('getFormDefinitionInputElement', () => {
         isRequired: true,
         isReadOnly: false,
         placeholder: 'MyPlaceholder',
-        defaultValue: 'MyDefaultValue',
+        value: 'MyDefaultValue',
       },
     };
 
@@ -117,7 +117,25 @@ describe('getFormDefinitionInputElement', () => {
         label: 'MyLabel',
         descriptiveText: 'MyDescriptiveText',
         placeholder: 'MyPlaceholder',
-        defaultValue: 'MyDefaultValue',
+      },
+      studioFormComponentType: 'TextField',
+    });
+  });
+
+  it(`should gracefully fall back to TextField if the field type isn't available`, () => {
+    const config = {
+      label: 'MyLabel',
+      inputType: {
+        isReadOnly: false,
+        placeholder: 'MyPlaceholder',
+      },
+    };
+
+    expect(getFormDefinitionInputElement(config)).toStrictEqual({
+      componentType: 'TextField',
+      props: {
+        label: 'MyLabel',
+        placeholder: 'MyPlaceholder',
       },
       studioFormComponentType: 'TextField',
     });
@@ -590,12 +608,6 @@ describe('getFormDefinitionInputElement', () => {
         type: 'NotValid',
       },
     };
-
-    expect(() => getFormDefinitionInputElement(config)).toThrow();
-  });
-
-  it('should throw if the inputType is missing type', () => {
-    const config = { label: 'MyLabel' };
 
     expect(() => getFormDefinitionInputElement(config)).toThrow();
   });

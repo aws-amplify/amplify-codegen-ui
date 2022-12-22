@@ -23,6 +23,17 @@ import { FormStyleConfig, StudioFormStyle } from './style';
  */
 export type StudioFormActionType = 'create' | 'update';
 
+export type StudioDataSourceType = 'DataStore' | 'Custom';
+
+/**
+ * Data type definition for StudioForm
+ */
+export type StudioFormDataType = {
+  dataSourceType: StudioDataSourceType;
+
+  dataTypeName: string;
+};
+
 export type FieldConfigMetadata = {
   // ex. name field has a string validation type where the rule is char length > 5
   validationRules: FieldValidationConfiguration[];
@@ -41,6 +52,7 @@ export type FieldConfigMetadata = {
 export type FormMetadata = {
   id?: string;
   formActionType: StudioFormActionType;
+  dataType: StudioFormDataType;
   name: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
   layoutConfigs: Record<keyof StudioFormStyle, FormStyleConfig>;

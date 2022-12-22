@@ -16,19 +16,18 @@
 import { FieldConfigMetadata, isValidVariableName } from '@aws-amplify/codegen-ui';
 import { Expression, factory, Identifier, JsxAttribute, JsxChild, NodeFlags, SyntaxKind } from 'typescript';
 import {
-  capitalizeFirstLetter,
   getArrayChildRefName,
   getCurrentDisplayValueName,
   getCurrentValueIdentifier,
   getCurrentValueName,
   getDefaultValueExpression,
-  getSetNameIdentifier,
   setFieldState,
 } from './form-state';
 import { buildOverrideOnChangeStatement } from './event-handler-props';
 import { isModelDataType, shouldImplementDisplayValueFunction } from './render-checkers';
 import { getDisplayValueObjectName } from './model-values';
 import { getElementAccessExpression } from './invalid-variable-helpers';
+import { getSetNameIdentifier, capitalizeFirstLetter } from '../../helpers';
 
 function getOnChangeAttribute({
   setStateName,
