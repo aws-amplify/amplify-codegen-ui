@@ -13,20 +13,43 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { Amplify } from 'aws-amplify';
+import { Amplify, Auth, AuthModeStrategyType } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
+import { useEffect, useRef, useState } from 'react';
 import awsconfig from './aws-exports';
 import { BlogPosts } from './ui-components';
 
-Amplify.configure(awsconfig);
+Amplify.configure({
+  ...awsconfig,
+  DataStore: {
+    authModeStrategyType: AuthModeStrategyType.MULTI_AUTH,
+  },
+});
 
 function App() {
-  return (
-    <AmplifyProvider>
-      <BlogPosts id="blogPosts" />
-    </AmplifyProvider>
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (initialized.current) {
+      return;
+    }
+    initialized.current = true;
+    Auth.signIn(process.env.REACT_APP_USER_EMAIL, process.env.REACT_APP_USER_PASSWORD).then(() => {
+      setIsLoggedIn(true);
+    });
+  }, []);
+
+  if (isLoggedIn) {
+    return (
+      <AmplifyProvider>
+        <BlogPosts id="blogPosts" />
+      </AmplifyProvider>
+    );
+  }
+
+  return null;
 }
 
 export default App;

@@ -638,11 +638,18 @@ export default function AuthorProfileCollection(
   props: AuthorProfileCollectionProps
 ): React.ReactElement {
   const { items: itemsProp, overrideItems, overrides, ...rest } = props;
+  const [items, setItems] = React.useState(undefined);
   const itemsDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: Author,
   }).items;
-  const items = itemsProp !== undefined ? itemsProp : itemsDataStore;
+  React.useEffect(() => {
+    if (itemsProp !== undefined) {
+      setItems(itemsProp);
+      return;
+    }
+    setItems(itemsDataStore);
+  }, [itemsProp, itemsDataStore]);
   return (
     /* @ts-ignore: TS2322 */
     <Collection
@@ -720,12 +727,19 @@ export default function CollectionOfCustomButtons(
     ],
   };
   const buttonUserFilter = createDataStorePredicate<User>(buttonUserFilterObj);
+  const [buttonUser, setButtonUser] = React.useState(undefined);
   const buttonUserDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: User,
     criteria: buttonUserFilter,
   }).items;
-  const buttonUser = items !== undefined ? items : buttonUserDataStore;
+  React.useEffect(() => {
+    if (items !== undefined) {
+      setButtonUser(items);
+      return;
+    }
+    setButtonUser(buttonUserDataStore);
+  }, [items, buttonUserDataStore]);
   const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
@@ -828,13 +842,20 @@ export default function CollectionOfCustomButtons(
     sort: (s: SortPredicate<User>) =>
       s.firstName(SortDirection.ASCENDING).lastName(SortDirection.DESCENDING),
   };
+  const [buttonUser, setButtonUser] = React.useState(undefined);
   const buttonUserDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: User,
     criteria: buttonUserFilter,
     pagination: buttonUserPagination,
   }).items;
-  const buttonUser = items !== undefined ? items : buttonUserDataStore;
+  React.useEffect(() => {
+    if (items !== undefined) {
+      setButtonUser(items);
+      return;
+    }
+    setButtonUser(buttonUserDataStore);
+  }, [items, buttonUserDataStore]);
   const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
@@ -934,12 +955,19 @@ export default function CollectionOfCustomButtons(
     ],
   };
   const itemsFilter = createDataStorePredicate<User>(itemsFilterObj);
+  const [items, setItems] = React.useState(undefined);
   const itemsDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: User,
     criteria: itemsFilter,
   }).items;
-  const items = itemsProp !== undefined ? itemsProp : itemsDataStore;
+  React.useEffect(() => {
+    if (itemsProp !== undefined) {
+      setItems(itemsProp);
+      return;
+    }
+    setItems(itemsDataStore);
+  }, [itemsProp, itemsDataStore]);
   const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
@@ -1012,11 +1040,18 @@ export default function ListingCardCollection(
   props: ListingCardCollectionProps
 ): React.ReactElement {
   const { items, overrideItems, overrides, ...rest } = props;
+  const [bananas, setBananas] = React.useState(undefined);
   const bananasDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: UntitledModel,
   }).items;
-  const bananas = items !== undefined ? items : bananasDataStore;
+  React.useEffect(() => {
+    if (items !== undefined) {
+      setBananas(items);
+      return;
+    }
+    setBananas(bananasDataStore);
+  }, [items, bananasDataStore]);
   return (
     /* @ts-ignore: TS2322 */
     <Collection
@@ -1147,13 +1182,20 @@ export default function CollectionWithModelNameCollisions(
   const buttonModelPagination = {
     sort: (s: SortPredicate<Button0>) => s.lastName(SortDirection.ASCENDING),
   };
+  const [buttonModel, setButtonModel] = React.useState(undefined);
   const buttonModelDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: Button0,
     criteria: buttonModelFilter,
     pagination: buttonModelPagination,
   }).items;
-  const buttonModel = items !== undefined ? items : buttonModelDataStore;
+  React.useEffect(() => {
+    if (items !== undefined) {
+      setButtonModel(items);
+      return;
+    }
+    setButtonModel(buttonModelDataStore);
+  }, [items, buttonModelDataStore]);
   const buttonColorFilterObj = {
     field: \\"userID\\",
     operand: \\"user@email.com\\",
@@ -1211,7 +1253,7 @@ export default function CollectionWithModelNameCollisions(
 exports[`amplify render tests collection should render nested query if model has a hasMany relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
-import { Author, Book } from \\"../models\\";
+import { Author } from \\"../models\\";
 import {
   EscapeHatchProps,
   getOverrideProps,
@@ -1235,18 +1277,28 @@ export default function AuthorProfileCollection(
   props: AuthorProfileCollectionProps
 ): React.ReactElement {
   const { items: itemsProp, overrideItems, overrides, ...rest } = props;
-  const bookItems = useDataStoreBinding({
-    type: \\"collection\\",
-    model: Book,
-  }).items;
+  const [items, setItems] = React.useState(undefined);
   const itemsDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: Author,
-  }).items.map((item) => ({
-    ...item,
-    books: bookItems.filter((model) => model.authorID === item.id),
-  }));
-  const items = itemsProp !== undefined ? itemsProp : itemsDataStore;
+  }).items;
+  React.useEffect(() => {
+    if (itemsProp !== undefined) {
+      setItems(itemsProp);
+      return;
+    }
+    async function setItemsFromDataStore() {
+      var loaded = await Promise.all(
+        itemsDataStore.map(async (item) => ({
+          ...item,
+          Books: await item.Books.toArray(),
+          Publisher: await item.Publisher,
+        }))
+      );
+      setItems(loaded);
+    }
+    setItemsFromDataStore();
+  }, [itemsProp, itemsDataStore]);
   return (
     /* @ts-ignore: TS2322 */
     <Collection
@@ -5456,11 +5508,18 @@ export default function CollectionDefaultValue(
   props: CollectionDefaultValueProps
 ): React.ReactElement {
   const { items, overrideItems, overrides, ...rest } = props;
+  const [user, setUser] = React.useState(undefined);
   const userDataStore = useDataStoreBinding({
     type: \\"collection\\",
     model: User,
   }).items;
-  const user = items !== undefined ? items : userDataStore;
+  React.useEffect(() => {
+    if (items !== undefined) {
+      setUser(items);
+      return;
+    }
+    setUser(userDataStore);
+  }, [items, userDataStore]);
   return (
     /* @ts-ignore: TS2322 */
     <Collection

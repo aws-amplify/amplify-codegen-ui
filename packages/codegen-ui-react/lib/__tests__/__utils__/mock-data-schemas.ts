@@ -13,115 +13,396 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { GenericDataSchema } from '@aws-amplify/codegen-ui';
+import { GenericDataSchema, getGenericFromDataStore } from '@aws-amplify/codegen-ui';
 
-export const authorHasManySchema: GenericDataSchema = {
-  dataSourceType: 'DataStore',
+/**
+type Author @model {
+  name: String
+  profileImageSrc: AWSURL
+  description: String
+  Books: [Book] @hasMany
+  Publisher: Publisher @hasOne
+  Sponsors: [Sponsor] @manyToMany(relationName: "AuthorSponsor")
+}
+
+type Book @model {
+  name: String
+  bookImageSrc: AWSURL
+  description: String
+}
+
+type Publisher @model {
+  name: String
+}
+
+type Sponsor @model {
+  Authors: [Author] @manyToMany(relationName: "AuthorSponsor")
+}
+ */
+export const authorHasManySchema: GenericDataSchema = getGenericFromDataStore({
   models: {
-    Book: {
-      fields: {
-        id: {
-          dataType: 'ID',
-          required: true,
-          readOnly: false,
-          isArray: false,
-        },
-        name: {
-          dataType: 'String',
-          required: false,
-          readOnly: false,
-          isArray: false,
-        },
-        bookImageSrc: {
-          dataType: 'AWSURL',
-          required: false,
-          readOnly: false,
-          isArray: false,
-        },
-        description: {
-          dataType: 'String',
-          required: false,
-          readOnly: false,
-          isArray: false,
-        },
-        authorID: {
-          dataType: 'ID',
-          required: true,
-          readOnly: false,
-          isArray: false,
-          relationship: {
-            type: 'HAS_ONE',
-            relatedModelName: 'Author',
-          },
-        },
-        createdAt: {
-          dataType: 'AWSDateTime',
-          required: false,
-          readOnly: true,
-          isArray: false,
-        },
-        updatedAt: {
-          dataType: 'AWSDateTime',
-          required: false,
-          readOnly: true,
-          isArray: false,
-        },
-      },
-    },
     Author: {
+      name: 'Author',
       fields: {
         id: {
-          dataType: 'ID',
-          required: true,
-          readOnly: false,
+          name: 'id',
           isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
         },
         name: {
-          dataType: 'String',
-          required: false,
-          readOnly: false,
+          name: 'name',
           isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
         },
         profileImageSrc: {
-          dataType: 'AWSURL',
-          required: false,
-          readOnly: false,
+          name: 'profileImageSrc',
           isArray: false,
+          type: 'AWSURL',
+          isRequired: false,
+          attributes: [],
         },
         description: {
-          dataType: 'String',
-          required: false,
-          readOnly: false,
+          name: 'description',
           isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
         },
-        books: {
-          dataType: {
+        Books: {
+          name: 'Books',
+          isArray: true,
+          type: {
             model: 'Book',
           },
-          required: false,
-          readOnly: false,
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: 'authorBooksId',
+          },
+        },
+        Publisher: {
+          name: 'Publisher',
+          isArray: false,
+          type: {
+            model: 'Publisher',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'HAS_ONE',
+            associatedWith: 'id',
+            targetName: 'authorPublisherId',
+          },
+        },
+        Sponsors: {
+          name: 'Sponsors',
           isArray: true,
-          relationship: {
-            type: 'HAS_MANY',
-            relatedModelName: 'Book',
-            relatedModelField: 'authorID',
+          type: {
+            model: 'AuthorSponsor',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: 'author',
           },
         },
         createdAt: {
-          dataType: 'AWSDateTime',
-          required: false,
-          readOnly: true,
+          name: 'createdAt',
           isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
         },
         updatedAt: {
-          dataType: 'AWSDateTime',
-          required: false,
-          readOnly: true,
+          name: 'updatedAt',
           isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        authorPublisherId: {
+          name: 'authorPublisherId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
         },
       },
+      syncable: true,
+      pluralName: 'Authors',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    Book: {
+      name: 'Book',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        bookImageSrc: {
+          name: 'bookImageSrc',
+          isArray: false,
+          type: 'AWSURL',
+          isRequired: false,
+          attributes: [],
+        },
+        description: {
+          name: 'description',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        authorBooksId: {
+          name: 'authorBooksId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'Books',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'gsi-Author.Books',
+            fields: ['authorBooksId'],
+          },
+        },
+      ],
+    },
+    Publisher: {
+      name: 'Publisher',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Publishers',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    Sponsor: {
+      name: 'Sponsor',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        Authors: {
+          name: 'Authors',
+          isArray: true,
+          type: {
+            model: 'AuthorSponsor',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: 'sponsor',
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Sponsors',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    AuthorSponsor: {
+      name: 'AuthorSponsor',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        authorId: {
+          name: 'authorId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        sponsorId: {
+          name: 'sponsorId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        author: {
+          name: 'author',
+          isArray: false,
+          type: {
+            model: 'Author',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetName: 'authorId',
+          },
+        },
+        sponsor: {
+          name: 'sponsor',
+          isArray: false,
+          type: {
+            model: 'Sponsor',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetName: 'sponsorId',
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'AuthorSponsors',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byAuthor',
+            fields: ['authorId'],
+          },
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'bySponsor',
+            fields: ['sponsorId'],
+          },
+        },
+      ],
     },
   },
   enums: {},
   nonModels: {},
-};
+  version: '448accd13d4335db7822f28a44b0972a',
+});
