@@ -167,7 +167,7 @@ const EXPECTED_INTERNAL_ERROR_CASES = new Set([]);
 const TARGET_GENERATORS = ['ES2016_TSX', 'ES2016_JSX', 'ES5_TSX', 'ES5_JSX'];
 
 describe('Generate Components', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/generate-tests');
   });
 

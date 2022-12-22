@@ -14,8 +14,8 @@
   limitations under the License.
  */
 
-describe('Workflow', () => {
-  before(() => {
+describe('Action Bindings', () => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/action-binding-tests');
   });
 
@@ -59,6 +59,10 @@ describe('Workflow', () => {
   });
 
   describe('DataStore Bindings', () => {
+    beforeEach(() => {
+      cy.visit('http://localhost:3000/action-binding-tests');
+    });
+
     it('supports value bindings', () => {
       cy.get('#data-store-value').contains('Fixed Value').should('not.exist');
       cy.contains('Apply Fixed Property DataStoreUpdateItemAction').click();

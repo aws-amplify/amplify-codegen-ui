@@ -14,7 +14,7 @@
   limitations under the License.
  */
 describe('Forms', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/form-tests');
   });
 
