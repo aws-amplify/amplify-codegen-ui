@@ -61,7 +61,12 @@
             "rules": [
               {
                 "allow": "public",
-                "operations": ["create", "update", "delete", "read"]
+                "operations": [
+                  "create",
+                  "update",
+                  "delete",
+                  "read"
+                ]
               }
             ]
           }
@@ -89,7 +94,7 @@
           "name": "schoolID",
           "isArray": false,
           "type": "ID",
-          "isRequired": false,
+          "isRequired": true,
           "attributes": []
         },
         "createdAt": {
@@ -120,7 +125,9 @@
           "type": "key",
           "properties": {
             "name": "bySchool",
-            "fields": ["schoolID"]
+            "fields": [
+              "schoolID"
+            ]
           }
         },
         {
@@ -129,7 +136,12 @@
             "rules": [
               {
                 "allow": "public",
-                "operations": ["create", "update", "delete", "read"]
+                "operations": [
+                  "create",
+                  "update",
+                  "delete",
+                  "read"
+                ]
               }
             ]
           }

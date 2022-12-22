@@ -3616,14 +3616,27 @@ export default function UpdateCompositeDogForm(props) {
             }
           });
           compositeToysToUnLink.forEach((original) => {
-            promises.push(
-              DataStore.save(
-                CompositeToy.copyOf(original, (updated) => {
-                  updated.compositeDogCompositeToysName = null;
-                  updated.compositeDogCompositeToysDescription = null;
-                })
-              )
-            );
+            try {
+              promises.push(
+                DataStore.save(
+                  CompositeToy.copyOf(original, (updated) => {
+                    updated.compositeDogCompositeToysName = null;
+                    updated.compositeDogCompositeToysDescription = null;
+                  })
+                )
+              );
+            } catch (err) {
+              if (
+                err.message ===
+                \\"Field compositeDogCompositeToysName is required\\"
+              ) {
+                throw Error(
+                  \`\${original.id} cannot be unlinked from CompositeDog because compositeDogCompositeToysName is a required field.\`
+                );
+              } else {
+                throw err;
+              }
+            }
           });
           compositeToysToLink.forEach((original) => {
             promises.push(
@@ -4666,13 +4679,23 @@ export default function UpdateCPKTeacherForm(props) {
             }
           });
           cPKProjectsToUnLink.forEach((original) => {
-            promises.push(
-              DataStore.save(
-                CPKProject.copyOf(original, (updated) => {
-                  updated.cPKTeacherID = null;
-                })
-              )
-            );
+            try {
+              promises.push(
+                DataStore.save(
+                  CPKProject.copyOf(original, (updated) => {
+                    updated.cPKTeacherID = null;
+                  })
+                )
+              );
+            } catch (err) {
+              if (err.message === \\"Field cPKTeacherID is required\\") {
+                throw Error(
+                  \`\${original.id} cannot be unlinked from CPKTeacher because cPKTeacherID is a required field.\`
+                );
+              } else {
+                throw err;
+              }
+            }
           });
           cPKProjectsToLink.forEach((original) => {
             promises.push(
@@ -10774,13 +10797,23 @@ export default function SchoolUpdateForm(props) {
             }
           });
           studentsToUnLink.forEach((original) => {
-            promises.push(
-              DataStore.save(
-                Student.copyOf(original, (updated) => {
-                  updated.schoolID = null;
-                })
-              )
-            );
+            try {
+              promises.push(
+                DataStore.save(
+                  Student.copyOf(original, (updated) => {
+                    updated.schoolID = null;
+                  })
+                )
+              );
+            } catch (err) {
+              if (err.message === \\"Field schoolID is required\\") {
+                throw Error(
+                  \`\${original.id} cannot be unlinked from School because schoolID is a required field.\`
+                );
+              } else {
+                throw err;
+              }
+            }
           });
           studentsToLink.forEach((original) => {
             promises.push(
