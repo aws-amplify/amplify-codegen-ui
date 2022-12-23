@@ -13,10 +13,31 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, DataFieldDataType, StudioForm, isValidVariableName } from '@aws-amplify/codegen-ui';
-import { factory, SyntaxKind, KeywordTypeSyntaxKind, TypeElement, PropertySignature, TypeNode } from 'typescript';
-import { lowerCaseFirst } from '../helpers';
+import {
+  FieldConfigMetadata,
+  DataFieldDataType,
+  StudioForm,
+  StudioComponent,
+  FormDefinition,
+  isValidVariableName,
+  shouldIncludeCancel,
+} from '@aws-amplify/codegen-ui';
+import {
+  factory,
+  SyntaxKind,
+  KeywordTypeSyntaxKind,
+  TypeElement,
+  PropertySignature,
+  TypeNode,
+  Identifier,
+  StringLiteral,
+  TypeReferenceNode,
+  KeywordTypeNode,
+} from 'typescript';
+import { lowerCaseFirst } from '../../helpers';
 import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
+import { ImportCollection, ImportSource } from '../../imports';
+import { PRIMITIVE_OVERRIDE_PROPS } from '../../primitive';
 
 type Node<T> = {
   [n: string]: T | Node<T>;
@@ -27,24 +48,29 @@ type GetTypeNodeParam = {
   dataType?: DataFieldDataType;
   isArray: boolean;
   isValidation: boolean;
+  importCollection?: ImportCollection;
 };
 /**
  * based on the provided dataType (appsync scalar)
- * converst to the correct typescript type
+ * converts to the correct typescript type
  * default assumption is string type
  */
-const getTypeNode = ({ componentType, dataType, isArray, isValidation }: GetTypeNodeParam) => {
-  let typescriptType: KeywordTypeSyntaxKind = SyntaxKind.StringKeyword;
+const getTypeNode = ({ componentType, dataType, isArray, isValidation, importCollection }: GetTypeNodeParam) => {
+  let typeNode: KeywordTypeNode | TypeReferenceNode = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
+
   if (componentType in FIELD_TYPE_TO_TYPESCRIPT_MAP) {
-    typescriptType = FIELD_TYPE_TO_TYPESCRIPT_MAP[componentType];
+    typeNode = factory.createKeywordTypeNode(FIELD_TYPE_TO_TYPESCRIPT_MAP[componentType]);
   }
 
   if (dataType && typeof dataType === 'string' && dataType in DATA_TYPE_TO_TYPESCRIPT_MAP) {
-    typescriptType = DATA_TYPE_TO_TYPESCRIPT_MAP[dataType];
+    typeNode = factory.createKeywordTypeNode(DATA_TYPE_TO_TYPESCRIPT_MAP[dataType]);
   }
 
-  // e.g. string
-  const typeNode = factory.createKeywordTypeNode(typescriptType);
+  if (dataType && typeof dataType === 'object' && 'model' in dataType) {
+    const modelName = dataType.model;
+    const aliasedModel = importCollection?.addImport(ImportSource.LOCAL_MODELS, modelName);
+    typeNode = factory.createTypeReferenceNode(factory.createIdentifier(aliasedModel || modelName));
+  }
 
   if (isValidation) {
     return factory.createTypeReferenceNode(factory.createIdentifier('ValidationFunction'), [typeNode]);
@@ -128,13 +154,14 @@ export const generateFieldTypes = (
   formName: string,
   type: 'input' | 'validation',
   fieldConfigs: Record<string, FieldConfigMetadata>,
+  importCollection?: ImportCollection,
 ) => {
   const nestedPaths: [fieldName: string, getTypeNodeParam: GetTypeNodeParam][] = [];
   const typeNodes: TypeElement[] = [];
   const isValidation = type === 'validation';
   const typeName = isValidation ? getValidationTypeName(formName) : getInputValuesTypeName(formName);
   Object.entries(fieldConfigs).forEach(([fieldName, { dataType, componentType, isArray }]) => {
-    const getTypeNodeParam = { dataType, componentType, isArray: !!isArray, isValidation };
+    const getTypeNodeParam = { dataType, componentType, isArray: !!isArray, isValidation, importCollection };
     const hasNestedFieldPath = fieldName.split('.').length > 1;
     if (hasNestedFieldPath) {
       nestedPaths.push([fieldName, getTypeNodeParam]);
@@ -195,28 +222,6 @@ export const validationResponseType = factory.createTypeAliasDeclaration(
 );
 
 /**
- * export declare type ValidationResponse = {
- *  hasError: boolean;
- *  errorMessage?: string;
- * };
- */
-export const formOverrideProp = factory.createTypeAliasDeclaration(
-  undefined,
-  [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
-  factory.createIdentifier('FormProps'),
-  [factory.createTypeParameterDeclaration(factory.createIdentifier('T'), undefined, undefined)],
-  factory.createIntersectionTypeNode([
-    factory.createTypeReferenceNode(factory.createIdentifier('Partial'), [
-      factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined),
-    ]),
-    factory.createTypeReferenceNode(
-      factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('DOMAttributes')),
-      [factory.createTypeReferenceNode(factory.createIdentifier('HTMLDivElement'), undefined)],
-    ),
-  ]),
-);
-
-/**
  * export declare type ValidationFunction<T> =
  *  (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
  */
@@ -263,7 +268,7 @@ export const validationFunctionType = factory.createTypeAliasDeclaration(
     - onSuccess(fields)
     - onError(fields, errorMessage)
    */
-export const buildFormPropNode = (form: StudioForm, modelName?: string) => {
+export const buildFormPropNode = (form: StudioForm, modelName?: string, primaryKey?: string) => {
   const {
     name: formName,
     dataType: { dataSourceType, dataTypeName },
@@ -272,13 +277,17 @@ export const buildFormPropNode = (form: StudioForm, modelName?: string) => {
   const propSignatures: PropertySignature[] = [];
   if (dataSourceType === 'DataStore') {
     if (formActionType === 'update') {
+      if (primaryKey) {
+        propSignatures.push(
+          factory.createPropertySignature(
+            undefined,
+            factory.createIdentifier(primaryKey),
+            factory.createToken(SyntaxKind.QuestionToken),
+            factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+          ),
+        );
+      }
       propSignatures.push(
-        factory.createPropertySignature(
-          undefined,
-          factory.createIdentifier('id'),
-          factory.createToken(SyntaxKind.QuestionToken),
-          factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-        ),
         factory.createPropertySignature(
           undefined,
           factory.createIdentifier(lowerCaseFirst(dataTypeName)),
@@ -404,14 +413,18 @@ export const buildFormPropNode = (form: StudioForm, modelName?: string) => {
       ),
     );
   }
+  if (shouldIncludeCancel(form)) {
+    propSignatures.push(
+      // onCancel?: () => void
+      factory.createPropertySignature(
+        undefined,
+        'onCancel',
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
+      ),
+    );
+  }
   propSignatures.push(
-    // onCancel?: () => void
-    factory.createPropertySignature(
-      undefined,
-      'onCancel',
-      factory.createToken(SyntaxKind.QuestionToken),
-      factory.createFunctionTypeNode(undefined, [], factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)),
-    ),
     // onChange?: (fields: Record<string, unknown>) => Record<string, unknown>
     factory.createPropertySignature(
       undefined,
@@ -442,4 +455,67 @@ export const buildFormPropNode = (form: StudioForm, modelName?: string) => {
     ),
   );
   return factory.createTypeLiteralNode(propSignatures);
+};
+
+export const buildOverrideTypesBindings = (
+  formComponent: StudioComponent,
+  formDefinition: FormDefinition,
+  importCollection: ImportCollection,
+) => {
+  importCollection.addImport(ImportSource.UI_REACT, 'GridProps');
+
+  const typeNodes = [
+    factory.createPropertySignature(
+      undefined,
+      factory.createIdentifier(`${formComponent.name}Grid`),
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createTypeReferenceNode(factory.createIdentifier(PRIMITIVE_OVERRIDE_PROPS), [
+        factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+      ]),
+    ),
+  ];
+
+  formDefinition.elementMatrix.forEach((row, index) => {
+    if (row.length > 1) {
+      typeNodes.push(
+        factory.createPropertySignature(
+          undefined,
+          factory.createIdentifier(`RowGrid${index}`),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode(factory.createIdentifier(PRIMITIVE_OVERRIDE_PROPS), [
+            factory.createTypeReferenceNode(factory.createIdentifier('GridProps'), undefined),
+          ]),
+        ),
+      );
+    }
+    row.forEach((field) => {
+      let propKey: Identifier | StringLiteral = factory.createIdentifier(field);
+      if (field.split('.').length > 1 || !isValidVariableName(field)) {
+        propKey = factory.createStringLiteral(field);
+      }
+      const componentTypePropName = `${formDefinition.elements[field].componentType}Props`;
+      typeNodes.push(
+        factory.createPropertySignature(
+          undefined,
+          propKey,
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createTypeReferenceNode(factory.createIdentifier(PRIMITIVE_OVERRIDE_PROPS), [
+            factory.createTypeReferenceNode(factory.createIdentifier(componentTypePropName), undefined),
+          ]),
+        ),
+      );
+      importCollection.addImport(ImportSource.UI_REACT, componentTypePropName);
+    });
+  });
+
+  return factory.createTypeAliasDeclaration(
+    undefined,
+    [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
+    factory.createIdentifier(`${formComponent.name}OverridesProps`),
+    undefined,
+    factory.createIntersectionTypeNode([
+      factory.createTypeLiteralNode(typeNodes),
+      factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
+    ]),
+  );
 };

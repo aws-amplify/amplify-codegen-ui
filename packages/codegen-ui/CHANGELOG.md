@@ -5,66 +5,40 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [2.6.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.8...v2.6.0) (2022-12-14)
 
-
 ### Bug Fixes
 
-* handle customized fields getting renamed ([46c74c4](https://github.com/aws-amplify/amplify-codegen-ui/commit/46c74c4b88c06d80597ee2534a2ea72f94cf7230))
-* make textfield a controlled component ([#830](https://github.com/aws-amplify/amplify-codegen-ui/issues/830)) ([1dcda83](https://github.com/aws-amplify/amplify-codegen-ui/commit/1dcda8390aab1539f607474885a98526763828a9))
-
+- handle customized fields getting renamed ([46c74c4](https://github.com/aws-amplify/amplify-codegen-ui/commit/46c74c4b88c06d80597ee2534a2ea72f94cf7230))
+- make textfield a controlled component ([#830](https://github.com/aws-amplify/amplify-codegen-ui/issues/830)) ([1dcda83](https://github.com/aws-amplify/amplify-codegen-ui/commit/1dcda8390aab1539f607474885a98526763828a9))
 
 ### Features
 
-* disable form submit when model is invalid ([#826](https://github.com/aws-amplify/amplify-codegen-ui/issues/826)) ([6898d10](https://github.com/aws-amplify/amplify-codegen-ui/commit/6898d108547fa84484364ccaf699f6f94f1fb25e))
-
-
-
-
+- disable form submit when model is invalid ([#826](https://github.com/aws-amplify/amplify-codegen-ui/issues/826)) ([6898d10](https://github.com/aws-amplify/amplify-codegen-ui/commit/6898d108547fa84484364ccaf699f6f94f1fb25e))
 
 ## [2.5.8](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.7...v2.5.8) (2022-12-08)
 
-
 ### Bug Fixes
 
-* update import file path to handle aliased children ([#814](https://github.com/aws-amplify/amplify-codegen-ui/issues/814)) ([ffe7659](https://github.com/aws-amplify/amplify-codegen-ui/commit/ffe765970e7e26579790c9e1a9fc006624c660dc))
-
-
-
-
+- update import file path to handle aliased children ([#814](https://github.com/aws-amplify/amplify-codegen-ui/issues/814)) ([ffe7659](https://github.com/aws-amplify/amplify-codegen-ui/commit/ffe765970e7e26579790c9e1a9fc006624c660dc))
 
 ## [2.5.7](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.6...v2.5.7) (2022-12-06)
 
-
 ### Bug Fixes
 
-* remove existing element in matrix when requeued ([#810](https://github.com/aws-amplify/amplify-codegen-ui/issues/810)) ([aa92f84](https://github.com/aws-amplify/amplify-codegen-ui/commit/aa92f8474df661a0325120a00beb480ef137534a))
-
-
-
-
+- remove existing element in matrix when requeued ([#810](https://github.com/aws-amplify/amplify-codegen-ui/issues/810)) ([aa92f84](https://github.com/aws-amplify/amplify-codegen-ui/commit/aa92f8474df661a0325120a00beb480ef137534a))
 
 ## [2.5.6](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.5...v2.5.6) (2022-11-23)
 
-
 ### Bug Fixes
 
-* improve runtime safety for usage of the in operator ([fa3e09a](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa3e09aaad4872c634d47fc3c4b73fb8f0e1b204))
-* nested boolean field isn't controlled ([#783](https://github.com/aws-amplify/amplify-codegen-ui/issues/783)) ([fb943e8](https://github.com/aws-amplify/amplify-codegen-ui/commit/fb943e86328cb84c1afea73a854a854c6c9f29fd))
-
-
-
-
+- improve runtime safety for usage of the in operator ([fa3e09a](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa3e09aaad4872c634d47fc3c4b73fb8f0e1b204))
+- nested boolean field isn't controlled ([#783](https://github.com/aws-amplify/amplify-codegen-ui/issues/783)) ([fb943e8](https://github.com/aws-amplify/amplify-codegen-ui/commit/fb943e86328cb84c1afea73a854a854c6c9f29fd))
 
 ## [2.5.5](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.4...v2.5.5) (2022-11-18)
 
-
 ### Bug Fixes
 
-* generate gap attribute for CTA row ([e658019](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6580193652ef47ee2a0219f22927c96443937b7))
-* remove stringify for json type array initial value ([#753](https://github.com/aws-amplify/amplify-codegen-ui/issues/753)) ([362564f](https://github.com/aws-amplify/amplify-codegen-ui/commit/362564f571bf5a5027b9fb97ffbd94dfed6501c5))
-
-
-
-
+- generate gap attribute for CTA row ([e658019](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6580193652ef47ee2a0219f22927c96443937b7))
+- remove stringify for json type array initial value ([#753](https://github.com/aws-amplify/amplify-codegen-ui/issues/753)) ([362564f](https://github.com/aws-amplify/amplify-codegen-ui/commit/362564f571bf5a5027b9fb97ffbd94dfed6501c5))
 
 ## [2.5.4](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.2...v2.5.4) (2022-11-07)
 

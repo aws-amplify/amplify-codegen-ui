@@ -13,7 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import type { Schema as DataStoreSchema, ModelField } from '@aws-amplify/datastore';
+import type {
+  Schema as DataStoreSchema,
+  ModelField,
+  SchemaModel as DataStoreSchemaModel,
+} from '@aws-amplify/datastore';
 import { InvalidInputError } from './errors';
 import { GenericDataField, GenericDataRelationshipType, GenericDataSchema } from './types';
 
@@ -47,6 +51,20 @@ function addRelationship(
   fields[modelName][fieldName] = relationship;
 }
 
+// get custom primary keys || id
+// TODO: when moved over to use introspection schema, this can be vastly simplified
+function getPrimaryKeys({ model }: { model: DataStoreSchemaModel }) {
+  const customPrimaryKeys = model.attributes?.find(
+    (attr) =>
+      attr.type === 'key' &&
+      (attr.properties === undefined ||
+        // presence of name indicates that it is a secondary index and not a primary key
+        !Object.keys(attr.properties).includes('name')),
+  )?.properties?.fields;
+
+  return customPrimaryKeys && Array.isArray(customPrimaryKeys) && customPrimaryKeys.length ? customPrimaryKeys : ['id'];
+}
+
 export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): GenericDataSchema {
   const genericSchema: GenericDataSchema = {
     dataSourceType: 'DataStore',
@@ -73,52 +91,79 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
           const relationshipType = field.association.connectionType;
 
           let relatedModelName = field.type.model;
-
+          let relatedJoinFieldName;
+          let relatedJoinTableName;
           let modelRelationship: GenericDataRelationshipType | undefined;
 
           if (relationshipType === 'HAS_MANY' && 'associatedWith' in field.association) {
             const associatedModel = dataStoreSchema.models[relatedModelName];
-            const associatedFieldName = field.association.associatedWith;
-            const associatedField = associatedModel?.fields[associatedFieldName];
-            // if the associated model is a join table, update relatedModelName to the actual related model
-            if (
-              associatedField &&
-              typeof associatedField.type === 'object' &&
-              'model' in associatedField.type &&
-              associatedField.type.model === model.name
-            ) {
-              joinTableNames.push(associatedModel.name);
+            const associatedFieldNames = Array.isArray(field.association?.associatedWith)
+              ? field.association.associatedWith
+              : [field.association.associatedWith];
 
-              const relatedJoinField = Object.values(associatedModel.fields).find(
-                (joinField) =>
-                  joinField.name !== associatedFieldName &&
-                  typeof joinField.type === 'object' &&
-                  'model' in joinField.type,
-              );
-              if (relatedJoinField && typeof relatedJoinField.type === 'object' && 'model' in relatedJoinField.type) {
-                relatedModelName = relatedJoinField.type.model;
+            associatedFieldNames.forEach((associatedFieldName) => {
+              const associatedField = associatedModel?.fields[associatedFieldName];
+              // if the associated model is a join table, update relatedModelName to the actual related model
+              if (
+                associatedField &&
+                typeof associatedField.type === 'object' &&
+                'model' in associatedField.type &&
+                associatedField.type.model === model.name
+              ) {
+                joinTableNames.push(associatedModel.name);
+
+                const relatedJoinField = Object.values(associatedModel.fields).find(
+                  (joinField) =>
+                    joinField.name !== associatedFieldName &&
+                    typeof joinField.type === 'object' &&
+                    'model' in joinField.type,
+                );
+                if (relatedJoinField && typeof relatedJoinField.type === 'object' && 'model' in relatedJoinField.type) {
+                  relatedJoinTableName = relatedModelName;
+                  relatedModelName = relatedJoinField.type.model;
+                  relatedJoinFieldName = relatedJoinField.name;
+                }
+                // if the associated model is not a join table, note implicit relationship for associated field
+              } else {
+                addRelationship(fieldsWithImplicitRelationships, relatedModelName, associatedFieldName, {
+                  type: 'HAS_ONE',
+                  relatedModelName: model.name,
+                });
               }
-              // if the associated model is not a join table, note implicit relationship for associated field
-            } else {
-              addRelationship(fieldsWithImplicitRelationships, relatedModelName, associatedFieldName, {
-                type: 'HAS_ONE',
-                relatedModelName: model.name,
-              });
-            }
-            modelRelationship = { type: relationshipType, relatedModelName, relatedModelField: associatedFieldName };
+            });
+            modelRelationship = {
+              type: relationshipType,
+              relatedModelName,
+              relatedModelFields: associatedFieldNames,
+              relatedJoinFieldName,
+              relatedJoinTableName,
+            };
           }
 
           // note implicit relationship for associated field within same model
-          if (relationshipType === 'HAS_ONE' && 'targetName' in field.association && field.association.targetName) {
-            addRelationship(fieldsWithImplicitRelationships, model.name, field.association.targetName, {
+          if (
+            (relationshipType === 'HAS_ONE' || relationshipType === 'BELONGS_TO') &&
+            ('targetName' in field.association || 'targetNames' in field.association) &&
+            (field.association.targetName || field.association.targetNames)
+          ) {
+            const targetNames = field.association.targetName
+              ? [field.association.targetName]
+              : field.association.targetNames;
+            const associatedFields: string[] = [];
+            if (targetNames) {
+              targetNames.forEach((targetName) => {
+                addRelationship(fieldsWithImplicitRelationships, model.name, targetName, {
+                  type: relationshipType,
+                  relatedModelName,
+                });
+                associatedFields.push(targetName);
+              });
+            }
+            modelRelationship = {
               type: relationshipType,
               relatedModelName,
-            });
-            modelRelationship = { type: relationshipType, relatedModelName };
-          }
-
-          if (relationshipType === 'BELONGS_TO') {
-            modelRelationship = { type: relationshipType, relatedModelName };
+              associatedFields: associatedFields.length ? associatedFields : undefined,
+            };
           }
 
           genericField.relationship = modelRelationship;
@@ -128,7 +173,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
       genericFields[field.name] = genericField;
     });
 
-    genericSchema.models[model.name] = { fields: genericFields };
+    genericSchema.models[model.name] = { fields: genericFields, primaryKeys: getPrimaryKeys({ model }) };
   });
 
   Object.entries(fieldsWithImplicitRelationships).forEach(([modelName, fields]) => {

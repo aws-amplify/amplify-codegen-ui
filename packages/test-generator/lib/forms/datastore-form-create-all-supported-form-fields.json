@@ -1,14 +1,152 @@
 {
-    "id": "123-ds-create-class",
-    "name": "DataStoreFormCreateAllSupportedFormFields",
-    "formActionType": "create",
-    "dataType": {
-      "dataSourceType": "DataStore",
-      "dataTypeName": "AllSupportedFormFields"
+  "id": "123-ds-create-class",
+  "name": "DataStoreFormCreateAllSupportedFormFields",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "AllSupportedFormFields"
+  },
+  "fields": {
+    "HasOneUser": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "User",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "concat": [
+                  {
+                    "bindingProperties": {
+                      "property": "User",
+                      "field": "firstName"
+                    }
+                  },
+                  {
+                    "value": " "
+                  },
+                  {
+                    "bindingProperties": {
+                      "property": "User",
+                      "field": "lastName"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Author": {
+              "type": "Data",
+              "bindingProperties": {
+                "model": "User"
+              }
+            }
+          }
+        }
+      }
     },
-    "fields": {},
-    "sectionalElements": { },
-    "style": {},
-    "cta": {},
-    "schemaVersion": "1.0"
-  }
+    "BelongsToOwner": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "Owner",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "bindingProperties": {
+                  "property": "Owner",
+                  "field": "name"
+                }
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Owner": {
+              "type": "Data",
+              "bindingProperties": {
+                "model": "Owner"
+              }
+            }
+          }
+        }
+      }
+    },
+    "HasManyStudents": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "Student",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "bindingProperties": {
+                  "property": "Student",
+                  "field": "name"
+                }
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Student": {
+              "type": "Data",
+              "bindingProperties": {
+                "model": "Student"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ManyToManyTags": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "Tag",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "bindingProperties": {
+                  "property": "Tag",
+                  "field": "label"
+                }
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Tag": {
+              "type": "Data",
+              "bindingProperties": {
+                "model": "Tag"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": {},
+  "schemaVersion": "1.0"
+}

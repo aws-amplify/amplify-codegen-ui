@@ -86,8 +86,8 @@ export const FIELD_TYPE_MAP: {
     supportedComponents: new Set(['RadioGroupField', 'SelectField']),
   },
   Relationship: {
-    defaultComponent: 'SelectField',
-    supportedComponents: new Set(['SelectField']),
+    defaultComponent: 'Autocomplete',
+    supportedComponents: new Set(['Autocomplete']),
   },
   NonModel: {
     defaultComponent: 'TextAreaField',

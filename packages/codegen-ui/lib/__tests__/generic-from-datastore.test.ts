@@ -19,7 +19,10 @@ import {
   schemaWithEnums,
   schemaWithNonModels,
   schemaWithRelationships,
+  schemaWithRelationshipsV2,
   schemaWithAssumptions,
+  schemaWithCPK,
+  schemaWithCompositeKeys,
 } from './__utils__/mock-schemas';
 
 describe('getGenericFromDataStore', () => {
@@ -59,6 +62,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.PrimaryCareGiver.fields.Child.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Child',
+      associatedFields: ['primaryCareGiverChildId'],
     });
 
     expect(genericSchema.models.PrimaryCareGiver.fields.primaryCareGiverChildId.relationship).toStrictEqual({
@@ -69,18 +73,23 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Student.fields.Teachers.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
-      relatedModelField: 'student',
+      relatedModelFields: ['student'],
+      relatedJoinFieldName: 'teacher',
+      relatedJoinTableName: 'StudentTeacher',
     });
 
     expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Student',
-      relatedModelField: 'teacher',
+      relatedModelFields: ['teacher'],
+      relatedJoinFieldName: 'student',
+      relatedJoinTableName: 'StudentTeacher',
     });
 
     expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Key',
+      associatedFields: ['lockKeyId'],
     });
 
     expect(genericSchema.models.Lock.fields.lockKeyId.relationship).toStrictEqual({
@@ -91,12 +100,76 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Key.fields.Lock.relationship).toStrictEqual({
       type: 'BELONGS_TO',
       relatedModelName: 'Lock',
+      associatedFields: ['keyLockId'],
     });
 
     expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Dog',
-      relatedModelField: 'ownerID',
+      relatedModelFields: ['ownerID'],
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
+    });
+
+    expect(genericSchema.models.Dog.fields.ownerID.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Owner',
+    });
+  });
+
+  it('should map v2 relationships', () => {
+    const genericSchema = getGenericFromDataStore(schemaWithRelationshipsV2);
+
+    expect(genericSchema.models.PrimaryCareGiver.fields.Child.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Child',
+      associatedFields: ['primaryCareGiverChildId'],
+    });
+
+    expect(genericSchema.models.PrimaryCareGiver.fields.primaryCareGiverChildId.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Child',
+    });
+
+    expect(genericSchema.models.Student.fields.Teachers.relationship).toStrictEqual<HasManyRelationshipType>({
+      type: 'HAS_MANY',
+      relatedModelName: 'Teacher',
+      relatedModelFields: ['student'],
+      relatedJoinFieldName: 'teacher',
+      relatedJoinTableName: 'StudentTeacher',
+    });
+
+    expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
+      type: 'HAS_MANY',
+      relatedModelName: 'Student',
+      relatedModelFields: ['teacher'],
+      relatedJoinFieldName: 'student',
+      relatedJoinTableName: 'StudentTeacher',
+    });
+
+    expect(genericSchema.models.Lock.fields.Key.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Key',
+      associatedFields: ['lockKeyId'],
+    });
+
+    expect(genericSchema.models.Lock.fields.lockKeyId.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Key',
+    });
+
+    expect(genericSchema.models.Key.fields.Lock.relationship).toStrictEqual({
+      type: 'BELONGS_TO',
+      relatedModelName: 'Lock',
+      associatedFields: ['keyLockId'],
+    });
+
+    expect(genericSchema.models.Owner.fields.Dog.relationship).toStrictEqual<HasManyRelationshipType>({
+      type: 'HAS_MANY',
+      relatedModelName: 'Dog',
+      relatedModelFields: ['ownerID'],
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
     });
 
     expect(genericSchema.models.Dog.fields.ownerID.relationship).toStrictEqual({
@@ -131,13 +204,17 @@ describe('getGenericFromDataStore', () => {
     expect(userFields.friends.relationship).toStrictEqual({
       type: 'HAS_MANY',
       relatedModelName: 'Friend',
-      relatedModelField: 'friendId',
+      relatedModelFields: ['friendId'],
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
     });
 
     expect(userFields.posts.relationship).toStrictEqual({
       type: 'HAS_MANY',
       relatedModelName: 'Post',
-      relatedModelField: 'userPostsId',
+      relatedModelFields: ['userPostsId'],
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
     });
   });
 
@@ -148,5 +225,28 @@ describe('getGenericFromDataStore', () => {
       .map(([name]) => name);
     expect(joinTables).toHaveLength(1);
     expect(joinTables).toStrictEqual(['StudentTeacher']);
+  });
+
+  it('should correctly identify primary keys', () => {
+    const genericSchema = getGenericFromDataStore(schemaWithCPK);
+    const { models } = genericSchema;
+    expect(models.CPKStudent.primaryKeys).toStrictEqual(['specialStudentId']);
+    expect(models.CPKTeacher.primaryKeys).toStrictEqual(['specialTeacherId']);
+  });
+
+  it('should correctly map model with composite keys', () => {
+    const genericSchema = getGenericFromDataStore(schemaWithCompositeKeys);
+    const { CompositeDog } = genericSchema.models;
+    expect(CompositeDog.primaryKeys).toStrictEqual(['name', 'description']);
+    expect(CompositeDog.fields.CompositeBowl.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'CompositeBowl',
+      associatedFields: ['compositeDogCompositeBowlShape', 'compositeDogCompositeBowlSize'],
+    });
+    expect(CompositeDog.fields.CompositeOwner.relationship).toStrictEqual({
+      type: 'BELONGS_TO',
+      relatedModelName: 'CompositeOwner',
+      associatedFields: ['compositeDogCompositeOwnerLastName', 'compositeDogCompositeOwnerFirstName'],
+    });
   });
 });

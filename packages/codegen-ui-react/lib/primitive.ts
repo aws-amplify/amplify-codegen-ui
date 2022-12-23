@@ -69,6 +69,7 @@ export enum Primitive {
   ToggleButtonGroup = 'ToggleButtonGroup',
   View = 'View',
   VisuallyHidden = 'VisuallyHidden',
+  Autocomplete = 'Autocomplete',
 }
 
 /*
@@ -151,3 +152,23 @@ export const PrimitiveTypeParameter: Partial<
     reference: () => [factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)],
   },
 };
+
+export const PRIMITIVE_OVERRIDE_PROPS = 'PrimitiveOverrideProps';
+/**
+ * export declare type PrimitiveOverrideProp<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+ */
+export const primitiveOverrideProp = factory.createTypeAliasDeclaration(
+  undefined,
+  [factory.createModifier(SyntaxKind.ExportKeyword), factory.createModifier(SyntaxKind.DeclareKeyword)],
+  factory.createIdentifier(PRIMITIVE_OVERRIDE_PROPS),
+  [factory.createTypeParameterDeclaration(factory.createIdentifier('T'), undefined, undefined)],
+  factory.createIntersectionTypeNode([
+    factory.createTypeReferenceNode(factory.createIdentifier('Partial'), [
+      factory.createTypeReferenceNode(factory.createIdentifier('T'), undefined),
+    ]),
+    factory.createTypeReferenceNode(
+      factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('DOMAttributes')),
+      [factory.createTypeReferenceNode(factory.createIdentifier('HTMLDivElement'), undefined)],
+    ),
+  ]),
+);

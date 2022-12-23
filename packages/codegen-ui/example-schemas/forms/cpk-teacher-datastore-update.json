@@ -1,0 +1,12 @@
+{
+    "name": "UpdateCPKTeacherForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "CPKTeacher"
+    },
+    "formActionType": "update",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

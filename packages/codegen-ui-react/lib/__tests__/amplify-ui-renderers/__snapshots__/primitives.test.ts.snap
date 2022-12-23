@@ -2,6 +2,8 @@
 
 exports[`Primitives Alert 1`] = `"<Alert {...getOverrideProps(overrides, \\"MyAlert\\")} {...rest}></Alert>"`;
 
+exports[`Primitives Autocomplete 1`] = `"<Autocomplete {...getOverrideProps(overrides, \\"MyAutocomplete\\")} {...rest}></Autocomplete>"`;
+
 exports[`Primitives Badge 1`] = `"<Badge {...getOverrideProps(overrides, \\"MyBadge\\")} {...rest}></Badge>"`;
 
 exports[`Primitives Button 1`] = `"<Button {...getOverrideProps(overrides, \\"MyButton\\")} {...rest}></Button>"`;

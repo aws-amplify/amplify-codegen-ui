@@ -1,0 +1,36 @@
+{
+  "name": "TagUpdateForm",
+  "dataType": { "dataSourceType": "DataStore", "dataTypeName": "Tag" },
+  "formActionType": "update",
+  "fields": {
+    "Posts": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "Post",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "bindingProperties": {
+                  "property": "Post",
+                  "field": "title"
+                }
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Post": { "type": "Data", "bindingProperties": { "model": "Post" } }
+          }
+        }
+      }
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": { "clear": {}, "cancel": {}, "submit": {} }
+}

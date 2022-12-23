@@ -28,6 +28,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: false, required: false, isArray: true },
           },
@@ -54,6 +55,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: false, required: false, isArray: false },
             camelCaseField: { dataType: 'String', readOnly: false, required: false, isArray: false },
@@ -83,6 +85,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: false, required: false, isArray: false },
           },
@@ -102,6 +105,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             id: { dataType: 'ID', readOnly: false, required: true, isArray: false },
           },
@@ -137,6 +141,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: true, required: false, isArray: false },
           },
@@ -163,7 +168,7 @@ describe('mapModelFieldsConfigs', () => {
     });
   });
 
-  it('should add relationship fields to configs but not to matrix', () => {
+  it('should add model-type relationship fields to configs and matrix', () => {
     const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
@@ -171,7 +176,63 @@ describe('mapModelFieldsConfigs', () => {
       enums: {},
       nonModels: {},
       models: {
+        Owner: {
+          primaryKeys: ['id'],
+          fields: {},
+        },
         Dog: {
+          primaryKeys: ['id'],
+          fields: {
+            Owner: {
+              dataType: { model: 'Owner' },
+              readOnly: false,
+              required: false,
+              isArray: false,
+              relationship: { type: 'HAS_ONE', relatedModelName: 'Owner' },
+            },
+          },
+        },
+      },
+    };
+
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
+
+    expect(formDefinition.elementMatrix).toStrictEqual([['Owner']]);
+    expect(modelFieldsConfigs).toStrictEqual({
+      Owner: {
+        dataType: { model: 'Owner' },
+        inputType: {
+          name: 'Owner',
+          readOnly: false,
+          required: false,
+          type: 'Autocomplete',
+          value: 'Owner',
+          isArray: false,
+          valueMappings: {
+            values: [{ value: { bindingProperties: { property: 'Owner', field: 'id' } } }],
+            bindingProperties: { Owner: { type: 'Data', bindingProperties: { model: 'Owner' } } },
+          },
+        },
+        label: 'Owner',
+        relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },
+      },
+    });
+  });
+
+  it('should add not-model type relationship fields to configs but not to matrix', () => {
+    const formDefinition: FormDefinition = getBasicFormDefinition();
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Owner: {
+          primaryKeys: ['id'],
+          fields: {},
+        },
+        Dog: {
+          primaryKeys: ['id'],
           fields: {
             ownerId: {
               dataType: 'ID',
@@ -195,16 +256,21 @@ describe('mapModelFieldsConfigs', () => {
           name: 'ownerId',
           readOnly: false,
           required: false,
-          type: 'SelectField',
+          type: 'Autocomplete',
           value: 'ownerId',
           isArray: false,
+          valueMappings: {
+            values: [{ value: { bindingProperties: { property: 'Owner', field: 'ownerId' } } }],
+            bindingProperties: { Owner: { type: 'Data', bindingProperties: { model: 'Owner' } } },
+          },
         },
         label: 'Owner id',
+        relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },
       },
     });
   });
 
-  it('should not add nonModel field to matrix', () => {
+  it('should add nonModel field to matrix', () => {
     const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
@@ -213,6 +279,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: { Interaction: { fields: {} } },
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             ownerId: {
               dataType: { nonModel: 'Interaction' },
@@ -225,9 +292,25 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
+    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
 
-    expect(formDefinition.elementMatrix).toStrictEqual([]);
+    expect(modelFieldsConfigs).toStrictEqual({
+      ownerId: {
+        dataType: {
+          nonModel: 'Interaction',
+        },
+        inputType: {
+          isArray: false,
+          name: 'ownerId',
+          readOnly: false,
+          required: false,
+          type: 'TextAreaField',
+          value: 'ownerId',
+        },
+        label: 'Owner id',
+      },
+    });
+    expect(formDefinition.elementMatrix).toStrictEqual([['ownerId']]);
   });
 
   it('should add value mappings from enums', () => {
@@ -241,6 +324,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             city: { dataType: { enum: 'City' }, readOnly: false, required: false, isArray: false },
           },
@@ -285,6 +369,7 @@ describe('mapModelFieldsConfigs', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             city: { dataType: { enum: 'City' }, readOnly: false, required: false, isArray: false },
           },

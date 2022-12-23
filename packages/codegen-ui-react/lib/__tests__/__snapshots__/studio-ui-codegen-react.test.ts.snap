@@ -13,9 +13,14 @@ import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CreateCustomerButtonOverridesProps = {
+  CreateCustomerButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CreateCustomerButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CreateCustomerButtonOverridesProps | undefined | null;
   }
 >;
 export default function CreateCustomerButton(
@@ -58,9 +63,14 @@ import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type DeleteCustomerButtonOverridesProps = {
+  DeleteCustomerButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type DeleteCustomerButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: DeleteCustomerButtonOverridesProps | undefined | null;
   }
 >;
 export default function DeleteCustomerButton(
@@ -103,9 +113,14 @@ import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateCustomerButtonOverridesProps = {
+  UpdateCustomerButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type UpdateCustomerButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: UpdateCustomerButtonOverridesProps | undefined | null;
   }
 >;
 export default function UpdateCustomerButton(
@@ -147,9 +162,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type SignOutButtonOverridesProps = {
+  SignOutButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type SignOutButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: SignOutButtonOverridesProps | undefined | null;
   }
 >;
 export default function SignOutButton(
@@ -186,9 +206,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type NavigateButtonOverridesProps = {
+  NavigateButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type NavigateButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: NavigateButtonOverridesProps | undefined | null;
   }
 >;
 export default function NavigateButton(
@@ -228,9 +253,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type NavigateButtonOverridesProps = {
+  NavigateButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type NavigateButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: NavigateButtonOverridesProps | undefined | null;
   }
 >;
 export default function NavigateButton(
@@ -270,9 +300,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type NavigateButtonOverridesProps = {
+  NavigateButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type NavigateButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: NavigateButtonOverridesProps | undefined | null;
   }
 >;
 export default function NavigateButton(
@@ -313,9 +348,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ReloadButtonOverridesProps = {
+  ReloadButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ReloadButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ReloadButtonOverridesProps | undefined | null;
   }
 >;
 export default function ReloadButton(
@@ -353,13 +393,27 @@ import {
   useDataStoreBinding,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ConditionalInMutationOverridesProps = {
+  ConditionalInMutation?: PrimitiveOverrideProps<FlexProps>;
+  MutatedValue?: PrimitiveOverrideProps<TextProps>;
+  ConditionalPropertyMutation?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ConditionalInMutationProps = React.PropsWithChildren<
   Partial<FlexProps> & {
     user?: User;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ConditionalInMutationOverridesProps | undefined | null;
   }
 >;
 export default function ConditionalInMutation(
@@ -417,9 +471,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomButtonOverridesProps = {
+  CustomButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomButtonOverridesProps | undefined | null;
   }
 >;
 export default function CustomButton(
@@ -449,9 +508,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomTextOverridesProps = {
+  CustomText?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type CustomTextProps = React.PropsWithChildren<
   Partial<TextProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomTextOverridesProps | undefined | null;
   }
 >;
 export default function CustomText(props: CustomTextProps): React.ReactElement {
@@ -479,9 +543,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type TestOverridesProps = {
+  Test?: PrimitiveOverrideProps<ViewProps>;
+} & EscapeHatchProps;
 export type TestProps = React.PropsWithChildren<
   Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: TestOverridesProps | undefined | null;
   }
 >;
 export default function Test(props: TestProps): React.ReactElement {
@@ -512,9 +581,14 @@ import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComponentWithAuthEventBindingOverridesProps = {
+  ComponentWithAuthEventBinding?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ComponentWithAuthEventBindingProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComponentWithAuthEventBindingOverridesProps | undefined | null;
   }
 >;
 export default function ComponentWithAuthEventBinding(
@@ -555,11 +629,16 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type DataBindingNamedClassOverridesProps = {
+  DataBindingNamedClass?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type DataBindingNamedClassProps = React.PropsWithChildren<
   Partial<TextProps> & {
     class?: Class;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: DataBindingNamedClassOverridesProps | undefined | null;
   }
 >;
 export default function DataBindingNamedClass(
@@ -586,13 +665,19 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
+import { FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type DataBindingNamedClassOverridesProps = {
+  DataBindingNamedClass?: PrimitiveOverrideProps<TextProps>;
+  FlexChild?: PrimitiveOverrideProps<FlexProps>;
+} & EscapeHatchProps;
 export type DataBindingNamedClassProps = React.PropsWithChildren<
   Partial<TextProps> & {
     class?: Flex0;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: DataBindingNamedClassOverridesProps | undefined | null;
   }
 >;
 export default function DataBindingNamedClass(
@@ -623,6 +708,12 @@ import {
 import AuthorProfile, { AuthorProfileProps } from \\"./AuthorProfile\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type AuthorProfileCollectionOverridesProps = {
+  AuthorProfileCollection?: PrimitiveOverrideProps<CollectionProps>;
+  AuthorProfile?: AuthorProfileProps;
+} & EscapeHatchProps;
 export type AuthorProfileCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
@@ -631,7 +722,7 @@ export type AuthorProfileCollectionProps = React.PropsWithChildren<
       index: number;
     }) => AuthorProfileProps;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: AuthorProfileCollectionOverridesProps | undefined | null;
   }
 >;
 export default function AuthorProfileCollection(
@@ -688,12 +779,21 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Button,
+  ButtonProps,
   Collection,
   CollectionProps,
   Flex,
+  FlexProps,
 } from \\"@aws-amplify/ui-react\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CollectionOfCustomButtonsOverridesProps = {
+  CollectionOfCustomButtons?: PrimitiveOverrideProps<CollectionProps>;
+  MyFlex?: PrimitiveOverrideProps<FlexProps>;
+  MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     width?: Number;
@@ -705,7 +805,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
       index: number;
     }) => MyFlexProps;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CollectionOfCustomButtonsOverridesProps | undefined | null;
   }
 >;
 export default function CollectionOfCustomButtons(
@@ -799,12 +899,21 @@ import {
 import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
 import {
   Button,
+  ButtonProps,
   Collection,
   CollectionProps,
   Flex,
+  FlexProps,
 } from \\"@aws-amplify/ui-react\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CollectionOfCustomButtonsOverridesProps = {
+  CollectionOfCustomButtons?: PrimitiveOverrideProps<CollectionProps>;
+  MyFlex?: PrimitiveOverrideProps<FlexProps>;
+  MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     width?: Number;
@@ -816,7 +925,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
       index: number;
     }) => MyFlexProps;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CollectionOfCustomButtonsOverridesProps | undefined | null;
   }
 >;
 export default function CollectionOfCustomButtons(
@@ -916,12 +1025,21 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Button,
+  ButtonProps,
   Collection,
   CollectionProps,
   Flex,
+  FlexProps,
 } from \\"@aws-amplify/ui-react\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CollectionOfCustomButtonsOverridesProps = {
+  CollectionOfCustomButtons?: PrimitiveOverrideProps<CollectionProps>;
+  MyFlex?: PrimitiveOverrideProps<FlexProps>;
+  MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     width?: Number;
@@ -933,7 +1051,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
       index: number;
     }) => MyFlexProps;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CollectionOfCustomButtonsOverridesProps | undefined | null;
   }
 >;
 export default function CollectionOfCustomButtons(
@@ -1025,6 +1143,12 @@ import {
 import ListingCard, { ListingCardProps } from \\"./ListingCard\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ListingCardCollectionOverridesProps = {
+  ListingCardCollection?: PrimitiveOverrideProps<CollectionProps>;
+  ListingCard?: ListingCardProps;
+} & EscapeHatchProps;
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
@@ -1033,7 +1157,7 @@ export type ListingCardCollectionProps = React.PropsWithChildren<
       index: number;
     }) => ListingCardProps;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ListingCardCollectionOverridesProps | undefined | null;
   }
 >;
 export default function ListingCardCollection(
@@ -1090,6 +1214,12 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ListingCardCollectionOverridesProps = {
+  ListingCardCollection?: PrimitiveOverrideProps<CollectionProps>;
+  ListingCard?: ListingCardProps;
+} & EscapeHatchProps;
 export type ListingCardCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
@@ -1098,7 +1228,7 @@ export type ListingCardCollectionProps = React.PropsWithChildren<
       index: number;
     }) => ListingCardProps;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ListingCardCollectionOverridesProps | undefined | null;
   }
 >;
 export default function ListingCardCollection(
@@ -1139,12 +1269,21 @@ import {
 import { SortDirection, SortPredicate } from \\"@aws-amplify/datastore\\";
 import {
   Button,
+  ButtonProps,
   Collection,
   CollectionProps,
   Flex,
+  FlexProps,
 } from \\"@aws-amplify/ui-react\\";
 import { MyFlexProps } from \\"./MyFlex\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CollectionWithModelNameCollisionsOverridesProps = {
+  CollectionWithModelNameCollisions?: PrimitiveOverrideProps<CollectionProps>;
+  MyFlex?: PrimitiveOverrideProps<FlexProps>;
+  MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CollectionWithModelNameCollisionsProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     backgroundColor?: String;
@@ -1156,7 +1295,10 @@ export type CollectionWithModelNameCollisionsProps = React.PropsWithChildren<
       index: number;
     }) => MyFlexProps;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?:
+      | CollectionWithModelNameCollisionsOverridesProps
+      | undefined
+      | null;
   }
 >;
 export default function CollectionWithModelNameCollisions(
@@ -1262,6 +1404,12 @@ import {
 import AuthorProfile, { AuthorProfileProps } from \\"./AuthorProfile\\";
 import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type AuthorProfileCollectionOverridesProps = {
+  AuthorProfileCollection?: PrimitiveOverrideProps<CollectionProps>;
+  AuthorProfile?: AuthorProfileProps;
+} & EscapeHatchProps;
 export type AuthorProfileCollectionProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
@@ -1270,7 +1418,7 @@ export type AuthorProfileCollectionProps = React.PropsWithChildren<
       index: number;
     }) => AuthorProfileProps;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: AuthorProfileCollectionOverridesProps | undefined | null;
   }
 >;
 export default function AuthorProfileCollection(
@@ -1332,11 +1480,17 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, View, ViewProps } from \\"@aws-amplify/ui-react\\";
+import { Button, ButtonProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ViewWithButtonOverridesProps = {
+  ViewWithButton?: PrimitiveOverrideProps<ViewProps>;
+  MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ViewWithButtonProps = React.PropsWithChildren<
   Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ViewWithButtonOverridesProps | undefined | null;
   }
 >;
 export default function ViewWithButton(
@@ -1364,12 +1518,18 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import CustomButton from \\"./CustomButton\\";
+import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ViewWithCustomButtonOverridesProps = {
+  ViewWithCustomButton?: PrimitiveOverrideProps<ViewProps>;
+  MyCustomButton?: CustomButtonProps;
+} & EscapeHatchProps;
 export type ViewWithCustomButtonProps = React.PropsWithChildren<
   Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ViewWithCustomButtonOverridesProps | undefined | null;
   }
 >;
 export default function ViewWithCustomButton(
@@ -1396,12 +1556,18 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import CustomButton from \\"./CustomButton\\";
+import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ViewWithCustomButtonOverridesProps = {
+  ViewWithCustomButton?: PrimitiveOverrideProps<ViewProps>;
+  MyCustomButton?: CustomButtonProps;
+} & EscapeHatchProps;
 export type ViewWithCustomButtonProps = React.PropsWithChildren<
   Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ViewWithCustomButtonOverridesProps | undefined | null;
   }
 >;
 export default function ViewWithCustomButton(
@@ -1429,11 +1595,17 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, View, ViewProps } from \\"@aws-amplify/ui-react\\";
+import { Button, ButtonProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ViewWithButtonOverridesProps = {
+  ViewWithButton?: PrimitiveOverrideProps<ViewProps>;
+  MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ViewWithButtonProps = React.PropsWithChildren<
   Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ViewWithButtonOverridesProps | undefined | null;
   }
 >;
 export default function ViewWithButton(
@@ -1461,11 +1633,17 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest1OverridesProps = {
+  ComplexTest1?: PrimitiveOverrideProps<FlexProps>;
+  \\"Hi harriso\\"?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type ComplexTest1Props = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest1OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest1(
@@ -1512,11 +1690,19 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest2OverridesProps = {
+  ComplexTest2?: PrimitiveOverrideProps<FlexProps>;
+  Container?: PrimitiveOverrideProps<FlexProps>;
+  RectangleRed?: PrimitiveOverrideProps<ViewProps>;
+  RectangleYellow?: PrimitiveOverrideProps<ViewProps>;
+} & EscapeHatchProps;
 export type ComplexTest2Props = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest2OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest2(
@@ -1581,12 +1767,28 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, Text, View } from \\"@aws-amplify/ui-react\\";
-import ReneButton from \\"./ReneButton\\";
+import {
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+  View,
+  ViewProps,
+} from \\"@aws-amplify/ui-react\\";
+import ReneButton, { ReneButtonProps } from \\"./ReneButton\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest3OverridesProps = {
+  ComplexTest3?: PrimitiveOverrideProps<FlexProps>;
+  \\"Hello World!\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Rectangle 58\\"?: PrimitiveOverrideProps<ViewProps>;
+  ReneButton?: ReneButtonProps;
+  \\"Testing 123\\"?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type ComplexTest3Props = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest3OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest3(
@@ -1665,13 +1867,21 @@ import {
   getOverridesFromVariants,
   mergeVariantsAndOverrides,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest4OverridesProps = {
+  ComplexTest4?: PrimitiveOverrideProps<FlexProps>;
+  GroupTest?: PrimitiveOverrideProps<FlexProps>;
+  RectangleGreen?: PrimitiveOverrideProps<ViewProps>;
+  RectangleBlue?: PrimitiveOverrideProps<ViewProps>;
+} & EscapeHatchProps;
 export type ComplexTest4Props = React.PropsWithChildren<
   Partial<FlexProps> & {
     colors?: \\"Red/Orange\\";
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest4OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest4(
@@ -1780,11 +1990,18 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest5OverridesProps = {
+  ComplexTest5?: PrimitiveOverrideProps<FlexProps>;
+  RectangleGreen?: PrimitiveOverrideProps<ViewProps>;
+  RectangleBlue?: PrimitiveOverrideProps<ViewProps>;
+} & EscapeHatchProps;
 export type ComplexTest5Props = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest5OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest5(
@@ -1834,11 +2051,19 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest6OverridesProps = {
+  ComplexTest6?: PrimitiveOverrideProps<FlexProps>;
+  Name?: PrimitiveOverrideProps<TextProps>;
+  \\"Price / Address\\"?: PrimitiveOverrideProps<TextProps>;
+  Sqft?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type ComplexTest6Props = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest6OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest6(
@@ -1912,11 +2137,26 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Image, Text, View, ViewProps } from \\"@aws-amplify/ui-react\\";
+import {
+  Image,
+  ImageProps,
+  Text,
+  TextProps,
+  View,
+  ViewProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest7OverridesProps = {
+  ComplexTest7?: PrimitiveOverrideProps<ViewProps>;
+  Imageexy?: PrimitiveOverrideProps<ImageProps>;
+  Test?: PrimitiveOverrideProps<TextProps>;
+  Imagecgh?: PrimitiveOverrideProps<ImageProps>;
+} & EscapeHatchProps;
 export type ComplexTest7Props = React.PropsWithChildren<
   Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest7OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest7(
@@ -1986,11 +2226,19 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest8OverridesProps = {
+  ComplexTest8?: PrimitiveOverrideProps<FlexProps>;
+  \\"Frame 107\\"?: PrimitiveOverrideProps<FlexProps>;
+  \\"Rectangle 57\\"?: PrimitiveOverrideProps<ViewProps>;
+  \\"Rectangle 56\\"?: PrimitiveOverrideProps<ViewProps>;
+} & EscapeHatchProps;
 export type ComplexTest8Props = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest8OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest8(
@@ -2056,13 +2304,32 @@ import {
   getOverridesFromVariants,
   mergeVariantsAndOverrides,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest9OverridesProps = {
+  ComplexTest9?: PrimitiveOverrideProps<FlexProps>;
+  Left?: PrimitiveOverrideProps<FlexProps>;
+  HeroMessage?: PrimitiveOverrideProps<FlexProps>;
+  \\"LOREM IPSUM\\"?: PrimitiveOverrideProps<TextProps>;
+  Message?: PrimitiveOverrideProps<FlexProps>;
+  \\"Ut enim ad minim veniam quis nostrud\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.\\"?: PrimitiveOverrideProps<TextProps>;
+  Button?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ComplexTest9Props = React.PropsWithChildren<
   Partial<FlexProps> & {
     mode?: \\"Dark\\" | \\"Light\\";
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest9OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest9(
@@ -2446,16 +2713,82 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Button,
+  ButtonProps,
   Divider,
+  DividerProps,
   Flex,
   FlexProps,
   Icon,
+  IconProps,
   Text,
+  TextProps,
 } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest10OverridesProps = {
+  ComplexTest10?: PrimitiveOverrideProps<FlexProps>;
+  \\"Frame 63\\"?: PrimitiveOverrideProps<FlexProps>;
+  \\"Frame 390\\"?: PrimitiveOverrideProps<FlexProps>;
+  Free?: PrimitiveOverrideProps<TextProps>;
+  \\"$0/mo\\"?: PrimitiveOverrideProps<TextProps>;
+  Buttondmi?: PrimitiveOverrideProps<ButtonProps>;
+  Dividerxhd?: PrimitiveOverrideProps<DividerProps>;
+  \\"Frame 138mkm\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconunz?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.oat\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 139jki\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconrca?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.yfq\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 137zde\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconwrc?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.lum\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 391\\"?: PrimitiveOverrideProps<FlexProps>;
+  Hobby?: PrimitiveOverrideProps<TextProps>;
+  \\"$10/mo\\"?: PrimitiveOverrideProps<TextProps>;
+  Buttoncej?: PrimitiveOverrideProps<ButtonProps>;
+  Dividerovm?: PrimitiveOverrideProps<DividerProps>;
+  \\"Frame 138upy\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconxzy?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.vxv\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 139tvb\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconpjz?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.gwp\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 137fsd\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconhpq?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.riv\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 392\\"?: PrimitiveOverrideProps<FlexProps>;
+  Premium?: PrimitiveOverrideProps<TextProps>;
+  \\"$100/mo\\"?: PrimitiveOverrideProps<TextProps>;
+  Buttonizv?: PrimitiveOverrideProps<ButtonProps>;
+  Dividerftq?: PrimitiveOverrideProps<DividerProps>;
+  \\"Frame 138lgm\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconoyx?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.kai\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 139vsq\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconcsj?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.nuy\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 137kjg\\"?: PrimitiveOverrideProps<FlexProps>;
+  Icongvd?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.hjl\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 393\\"?: PrimitiveOverrideProps<FlexProps>;
+  Enterprise?: PrimitiveOverrideProps<TextProps>;
+  \\"Contact us\\"?: PrimitiveOverrideProps<TextProps>;
+  Buttonwez?: PrimitiveOverrideProps<ButtonProps>;
+  Dividerzxk?: PrimitiveOverrideProps<DividerProps>;
+  \\"Frame 138udv\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconkmb?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.zfj\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 139cwp\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconzyv?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.dcz\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Frame 137pog\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconsrt?: PrimitiveOverrideProps<IconProps>;
+  \\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.rug\\"?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type ComplexTest10Props = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest10OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest10(
@@ -3333,21 +3666,102 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Badge,
+  BadgeProps,
   Button,
+  ButtonProps,
   Divider,
+  DividerProps,
   Flex,
   FlexProps,
   Icon,
+  IconProps,
   Image,
+  ImageProps,
   SelectField,
+  SelectFieldProps,
   Text,
   TextField,
+  TextFieldProps,
+  TextProps,
   View,
+  ViewProps,
 } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComplexTest11OverridesProps = {
+  ComplexTest11?: PrimitiveOverrideProps<FlexProps>;
+  \\"Frame 411\\"?: PrimitiveOverrideProps<FlexProps>;
+  \\"Frame 313vza\\"?: PrimitiveOverrideProps<FlexProps>;
+  \\"Frame 406\\"?: PrimitiveOverrideProps<FlexProps>;
+  Info?: PrimitiveOverrideProps<TextProps>;
+  TextFieldlrg?: PrimitiveOverrideProps<TextFieldProps>;
+  TextFieldbcu?: PrimitiveOverrideProps<TextFieldProps>;
+  Dividervgv?: PrimitiveOverrideProps<DividerProps>;
+  \\"Frame 409\\"?: PrimitiveOverrideProps<FlexProps>;
+  Shippinguim?: PrimitiveOverrideProps<TextProps>;
+  TextFieldxak?: PrimitiveOverrideProps<TextFieldProps>;
+  TextFieldsju?: PrimitiveOverrideProps<TextFieldProps>;
+  \\"Frame 407\\"?: PrimitiveOverrideProps<FlexProps>;
+  TextFieldmoq?: PrimitiveOverrideProps<TextFieldProps>;
+  SelectFieldqqj?: PrimitiveOverrideProps<SelectFieldProps>;
+  \\"Frame 408\\"?: PrimitiveOverrideProps<FlexProps>;
+  TextFieldnts?: PrimitiveOverrideProps<TextFieldProps>;
+  SelectFieldpiz?: PrimitiveOverrideProps<SelectFieldProps>;
+  Dividerluf?: PrimitiveOverrideProps<DividerProps>;
+  \\"Frame 313pea\\"?: PrimitiveOverrideProps<FlexProps>;
+  \\"Card info\\"?: PrimitiveOverrideProps<TextProps>;
+  TextFieldavv?: PrimitiveOverrideProps<TextFieldProps>;
+  TextFieldakg?: PrimitiveOverrideProps<TextFieldProps>;
+  \\"Frame 410\\"?: PrimitiveOverrideProps<FlexProps>;
+  SelectFieldugk?: PrimitiveOverrideProps<SelectFieldProps>;
+  SelectFieldqku?: PrimitiveOverrideProps<SelectFieldProps>;
+  \\"Frame 412\\"?: PrimitiveOverrideProps<FlexProps>;
+  \\"Group 320\\"?: PrimitiveOverrideProps<FlexProps>;
+  \\"Group 314\\"?: PrimitiveOverrideProps<ViewProps>;
+  imagefpq?: PrimitiveOverrideProps<ImageProps>;
+  \\"Order Summaryogp\\"?: PrimitiveOverrideProps<TextProps>;
+  Blackjlp?: PrimitiveOverrideProps<TextProps>;
+  \\"Basic Teebko\\"?: PrimitiveOverrideProps<TextProps>;
+  Largeqzy?: PrimitiveOverrideProps<TextProps>;
+  Iconvrz?: PrimitiveOverrideProps<IconProps>;
+  SelectFieldglx?: PrimitiveOverrideProps<SelectFieldProps>;
+  Dividerqbo?: PrimitiveOverrideProps<DividerProps>;
+  Dividerxgl?: PrimitiveOverrideProps<DividerProps>;
+  Dividerpxl?: PrimitiveOverrideProps<DividerProps>;
+  \\"Group 315\\"?: PrimitiveOverrideProps<ViewProps>;
+  imageklz?: PrimitiveOverrideProps<ImageProps>;
+  \\"Order Summaryiil\\"?: PrimitiveOverrideProps<TextProps>;
+  Blackrig?: PrimitiveOverrideProps<TextProps>;
+  \\"Basic Teeyvl\\"?: PrimitiveOverrideProps<TextProps>;
+  Largedkg?: PrimitiveOverrideProps<TextProps>;
+  Iconzad?: PrimitiveOverrideProps<IconProps>;
+  SelectFieldawu?: PrimitiveOverrideProps<SelectFieldProps>;
+  Dividercos?: PrimitiveOverrideProps<DividerProps>;
+  \\"Group 316\\"?: PrimitiveOverrideProps<ViewProps>;
+  Subtotal?: PrimitiveOverrideProps<TextProps>;
+  \\"$320.00\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Group 317\\"?: PrimitiveOverrideProps<ViewProps>;
+  Shippingtjp?: PrimitiveOverrideProps<TextProps>;
+  \\"$15.00\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Group 318\\"?: PrimitiveOverrideProps<ViewProps>;
+  Taxes?: PrimitiveOverrideProps<TextProps>;
+  \\"$26.80\\"?: PrimitiveOverrideProps<TextProps>;
+  Dividerelu?: PrimitiveOverrideProps<DividerProps>;
+  \\"Group 319\\"?: PrimitiveOverrideProps<ViewProps>;
+  Total?: PrimitiveOverrideProps<TextProps>;
+  \\"$361.80\\"?: PrimitiveOverrideProps<TextProps>;
+  Divideruix?: PrimitiveOverrideProps<DividerProps>;
+  Button?: PrimitiveOverrideProps<ButtonProps>;
+  \\"Group 313\\"?: PrimitiveOverrideProps<ViewProps>;
+  Iconhpw?: PrimitiveOverrideProps<IconProps>;
+  \\"Cart (2)\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"$101.70\\"?: PrimitiveOverrideProps<TextProps>;
+  Badge?: PrimitiveOverrideProps<BadgeProps>;
+} & EscapeHatchProps;
 export type ComplexTest11Props = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComplexTest11OverridesProps | undefined | null;
   }
 >;
 export default function ComplexTest11(
@@ -4240,11 +4654,16 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type TextWithDataBindingOverridesProps = {
+  TextWithDataBinding?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type TextWithDataBindingProps = React.PropsWithChildren<
   Partial<TextProps> & {
     textValue?: String;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: TextWithDataBindingOverridesProps | undefined | null;
   }
 >;
 export default function TextWithDataBinding(
@@ -4272,13 +4691,26 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, View } from \\"@aws-amplify/ui-react\\";
+import {
+  Flex,
+  FlexProps,
+  TextProps,
+  View,
+  ViewProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComponentWithSlotBindingOverridesProps = {
+  ComponentWithSlotBinding?: PrimitiveOverrideProps<FlexProps>;
+  Rectangle?: PrimitiveOverrideProps<ViewProps>;
+  ChildText?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type ComponentWithSlotBindingProps = React.PropsWithChildren<
   Partial<FlexProps> & {
     mySlot?: React.ReactNode;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComponentWithSlotBindingOverridesProps | undefined | null;
   }
 >;
 export default function ComponentWithSlotBinding(
@@ -4311,6 +4743,11 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComponentWithDataBindingOverridesProps = {
+  ComponentWithDataBinding?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ComponentWithDataBindingProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     width?: Number;
@@ -4318,7 +4755,7 @@ export type ComponentWithDataBindingProps = React.PropsWithChildren<
     buttonUser?: User;
     buttonColor?: String;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ComponentWithDataBindingOverridesProps | undefined | null;
   }
 >;
 export default function ComponentWithDataBinding(
@@ -4348,13 +4785,21 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type SectionHeadingOverridesProps = {
+  SectionHeading?: PrimitiveOverrideProps<FlexProps>;
+  Heading?: PrimitiveOverrideProps<FlexProps>;
+  \\"Heading 2\\"?: PrimitiveOverrideProps<TextProps>;
+  subtitle?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type SectionHeadingProps = React.PropsWithChildren<
   Partial<FlexProps> & {
     newProp6fd1?: UntitledModel;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: SectionHeadingOverridesProps | undefined | null;
   }
 >;
 export default function SectionHeading(
@@ -4408,13 +4853,19 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps, Text } from \\"@aws-amplify/ui-react\\";
+import { Button, ButtonProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ChildComponentWithDataBindingOverridesProps = {
+  ChildComponentWithDataBinding?: PrimitiveOverrideProps<ButtonProps>;
+  TextWithDataBinding?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type ChildComponentWithDataBindingProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     textValue?: String;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ChildComponentWithDataBindingOverridesProps | undefined | null;
   }
 >;
 export default function ChildComponentWithDataBinding(
@@ -4450,11 +4901,16 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ViewPrimitiveOverridesProps = {
+  ViewPrimitive?: PrimitiveOverrideProps<ViewProps>;
+} & EscapeHatchProps;
 export type ViewPrimitiveProps = React.PropsWithChildren<
   Partial<ViewProps> & {
     variant?: \\"primary\\";
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ViewPrimitiveOverridesProps | undefined | null;
   }
 >;
 export default function ViewPrimitive(
@@ -4501,11 +4957,16 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Icon, IconProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type IconVariantsOverridesProps = {
+  IconVariants?: PrimitiveOverrideProps<IconProps>;
+} & EscapeHatchProps;
 export type IconVariantsProps = React.PropsWithChildren<
   Partial<IconProps> & {
     variant?: \\"primary\\" | \\"secondary\\";
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: IconVariantsOverridesProps | undefined | null;
   }
 >;
 export default function IconVariants(
@@ -4572,12 +5033,17 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomButtonOverridesProps = {
+  CustomButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     variant?: \\"primary\\" | \\"secondary\\";
     size?: \\"large\\";
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomButtonOverridesProps | undefined | null;
   }
 >;
 export default function CustomButton(
@@ -4626,12 +5092,17 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomButtonOverridesProps = {
+  CustomButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     variant?: \\"primary\\" | \\"secondary\\";
     size?: \\"large\\";
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomButtonOverridesProps | undefined | null;
   }
 >;
 export default function CustomButton(
@@ -4685,14 +5156,23 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps, Text } from \\"@aws-amplify/ui-react\\";
+import { Button, ButtonProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ChildComponentWithDataBoundConcatenationOverridesProps = {
+  ChildComponentWithDataBoundConcatenation?: PrimitiveOverrideProps<ButtonProps>;
+  TextWithConcatenation?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type ChildComponentWithDataBoundConcatenationProps =
   React.PropsWithChildren<
     Partial<ButtonProps> & {
       textValue?: String;
     } & {
-      overrides?: EscapeHatchProps | undefined | null;
+      overrides?:
+        | ChildComponentWithDataBoundConcatenationOverridesProps
+        | undefined
+        | null;
     }
   >;
 export default function ChildComponentWithDataBoundConcatenation(
@@ -4727,12 +5207,21 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, ButtonProps, Text } from \\"@aws-amplify/ui-react\\";
+import { Button, ButtonProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ChildComponentWithStaticConcatenationOverridesProps = {
+  ChildComponentWithStaticConcatenation?: PrimitiveOverrideProps<ButtonProps>;
+  TextWithConcatenation?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type ChildComponentWithStaticConcatenationProps =
   React.PropsWithChildren<
     Partial<ButtonProps> & {
-      overrides?: EscapeHatchProps | undefined | null;
+      overrides?:
+        | ChildComponentWithStaticConcatenationOverridesProps
+        | undefined
+        | null;
     }
   >;
 export default function ChildComponentWithStaticConcatenation(
@@ -4765,13 +5254,18 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomButtonOverridesProps = {
+  CustomButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     width?: Number;
     buttonUser?: User;
     buttonColor?: String;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomButtonOverridesProps | undefined | null;
   }
 >;
 export default function CustomButton(
@@ -4803,13 +5297,18 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomButtonOverridesProps = {
+  CustomButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     width?: Number;
     buttonUser?: User;
     buttonColor?: String;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomButtonOverridesProps | undefined | null;
   }
 >;
 export default function CustomButton(
@@ -4852,13 +5351,30 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ConditionalComponentWithDataBindingOverridesProps = {
+  ConditionalComponentWithDataBinding?: PrimitiveOverrideProps<FlexProps>;
+  \\"Placeholder text\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"Placeholder Button\\"?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ConditionalComponentWithDataBindingProps = React.PropsWithChildren<
   Partial<FlexProps> & {
     student?: Student;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?:
+      | ConditionalComponentWithDataBindingOverridesProps
+      | undefined
+      | null;
   }
 >;
 export default function ConditionalComponentWithDataBinding(
@@ -4907,11 +5423,16 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomButtonOverridesProps = {
+  CustomButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CustomButtonProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
     buttonColor?: String;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomButtonOverridesProps | undefined | null;
   }
 >;
 export default function CustomButton(
@@ -4933,9 +5454,15 @@ export default function CustomButton(
 exports[`amplify render tests custom components alias parent should render declarations 1`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomParentAndChildrenOverridesProps = {
+    CustomParentAndChildren?: ViewTestProps;
+    MyCustomButton?: CustomButtonProps;
+} & EscapeHatchProps;
 export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomParentAndChildrenOverridesProps | undefined | null;
 }>;
 export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
 "
@@ -4950,10 +5477,17 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { GridCustom } from \\"./Grid\\";
 import ViewTest, { ViewTestProps } from \\"./ViewTest\\";
+import { GridCustomProps } from \\"./GridCustom\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type AliasParentOverridesProps = {
+  AliasParent?: ViewTestProps;
+  Grid?: GridCustomProps;
+} & EscapeHatchProps;
 export type AliasParentProps = React.PropsWithChildren<
   Partial<ViewTestProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: AliasParentOverridesProps | undefined | null;
   }
 >;
 export default function AliasParent(
@@ -4977,12 +5511,18 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import CustomButton from \\"./CustomButton\\";
+import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import MyView, { MyViewProps } from \\"./MyView\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomChildrenOverridesProps = {
+  CustomChildren?: MyViewProps;
+  MyCustomButton?: CustomButtonProps;
+} & EscapeHatchProps;
 export type CustomChildrenProps = React.PropsWithChildren<
   Partial<MyViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomChildrenOverridesProps | undefined | null;
   }
 >;
 export default function CustomChildren(
@@ -5057,9 +5597,15 @@ export default function CustomChildren(props) {
 exports[`amplify render tests custom components custom children should render declarations 1`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CustomButtonProps } from \\"./CustomButton\\";
 import { MyViewProps } from \\"./MyView\\";
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomChildrenOverridesProps = {
+    CustomChildren?: MyViewProps;
+    MyCustomButton?: CustomButtonProps;
+} & EscapeHatchProps;
 export declare type CustomChildrenProps = React.PropsWithChildren<Partial<MyViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomChildrenOverridesProps | undefined | null;
 }>;
 export default function CustomChildren(props: CustomChildrenProps): React.ReactElement;
 "
@@ -5072,12 +5618,18 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import CustomButton from \\"./CustomButton\\";
+import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import ViewTest, { ViewTestProps } from \\"./ViewTest\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomParentAndChildrenOverridesProps = {
+  CustomParentAndChildren?: ViewTestProps;
+  MyCustomButton?: CustomButtonProps;
+} & EscapeHatchProps;
 export type CustomParentAndChildrenProps = React.PropsWithChildren<
   Partial<ViewTestProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomParentAndChildrenOverridesProps | undefined | null;
   }
 >;
 export default function CustomParentAndChildren(
@@ -5155,9 +5707,15 @@ export default function CustomParentAndChildren(props) {
 exports[`amplify render tests custom components custom parent and children should render declarations 1`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CustomButtonProps } from \\"./CustomButton\\";
 import { ViewTestProps } from \\"./ViewTest\\";
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomParentAndChildrenOverridesProps = {
+    CustomParentAndChildren?: ViewTestProps;
+    MyCustomButton?: CustomButtonProps;
+} & EscapeHatchProps;
 export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomParentAndChildrenOverridesProps | undefined | null;
 }>;
 export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
 "
@@ -5170,12 +5728,18 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button } from \\"@aws-amplify/ui-react\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 import MyView, { MyViewProps } from \\"./MyView\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CustomParentOverridesProps = {
+  CustomParent?: MyViewProps;
+  MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type CustomParentProps = React.PropsWithChildren<
   Partial<MyViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomParentOverridesProps | undefined | null;
   }
 >;
 export default function CustomParent(
@@ -5248,9 +5812,15 @@ export default function CustomParent(props) {
 exports[`amplify render tests custom components custom parent should render declarations 1`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { ButtonProps } from \\"@aws-amplify/ui-react\\";
 import { MyViewProps } from \\"./MyView\\";
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CustomParentOverridesProps = {
+    CustomParent?: MyViewProps;
+    MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export declare type CustomParentProps = React.PropsWithChildren<Partial<MyViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CustomParentOverridesProps | undefined | null;
 }>;
 export default function CustomParent(props: CustomParentProps): React.ReactElement;
 "
@@ -5436,9 +6006,16 @@ exports.default = ViewWithButton;
 exports[`amplify render tests declarations should render declarations 1`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { FlexProps } from \\"@aws-amplify/ui-react\\";
+import { ButtonProps, FlexProps, ImageProps } from \\"@aws-amplify/ui-react\\";
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type ProfileOverridesProps = {
+    Profile?: PrimitiveOverrideProps<FlexProps>;
+    child1?: PrimitiveOverrideProps<ImageProps>;
+    child2?: PrimitiveOverrideProps<ButtonProps>;
+    child3?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export declare type ProfileProps = React.PropsWithChildren<Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ProfileOverridesProps | undefined | null;
 }>;
 export default function Profile(props: ProfileProps): React.ReactElement;
 "
@@ -5454,11 +6031,16 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type BoundDefaultValueOverridesProps = {
+  BoundDefaultValue?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type BoundDefaultValueProps = React.PropsWithChildren<
   Partial<TextProps> & {
     label?: String;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: BoundDefaultValueOverridesProps | undefined | null;
   }
 >;
 export default function BoundDefaultValue(
@@ -5490,9 +6072,20 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Collection, CollectionProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Collection,
+  CollectionProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 import { MyTextProps } from \\"./MyText\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CollectionDefaultValueOverridesProps = {
+  CollectionDefaultValue?: PrimitiveOverrideProps<CollectionProps>;
+  MyText?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type CollectionDefaultValueProps = React.PropsWithChildren<
   Partial<CollectionProps<any>> & {
     items?: any[];
@@ -5501,7 +6094,7 @@ export type CollectionDefaultValueProps = React.PropsWithChildren<
       index: number;
     }) => MyTextProps;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CollectionDefaultValueOverridesProps | undefined | null;
   }
 >;
 export default function CollectionDefaultValue(
@@ -5553,11 +6146,16 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type SimpleAndBoundDefaultValueOverridesProps = {
+  SimpleAndBoundDefaultValue?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type SimpleAndBoundDefaultValueProps = React.PropsWithChildren<
   Partial<TextProps> & {
     label?: String;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: SimpleAndBoundDefaultValueOverridesProps | undefined | null;
   }
 >;
 export default function SimpleAndBoundDefaultValue(
@@ -5589,11 +6187,19 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type SimplePropertyBindingDefaultValueOverridesProps = {
+  SimplePropertyBindingDefaultValue?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type SimplePropertyBindingDefaultValueProps = React.PropsWithChildren<
   Partial<TextProps> & {
     label?: String;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?:
+      | SimplePropertyBindingDefaultValueOverridesProps
+      | undefined
+      | null;
   }
 >;
 export default function SimplePropertyBindingDefaultValue(
@@ -5622,11 +6228,44 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, Icon, Image, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Flex,
+  FlexProps,
+  Icon,
+  IconProps,
+  Image,
+  ImageProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type SocialAOverridesProps = {
+  SocialA?: PrimitiveOverrideProps<FlexProps>;
+  Body?: PrimitiveOverrideProps<FlexProps>;
+  Text?: PrimitiveOverrideProps<FlexProps>;
+  Headline?: PrimitiveOverrideProps<FlexProps>;
+  \\"New Amplify Studio gives designers the ability to export UI to React code\\"?: PrimitiveOverrideProps<TextProps>;
+  Frame?: PrimitiveOverrideProps<FlexProps>;
+  \\"Nikhil S\\"?: PrimitiveOverrideProps<TextProps>;
+  \\"2nd December 2021\\"?: PrimitiveOverrideProps<TextProps>;
+  Article?: PrimitiveOverrideProps<FlexProps>;
+  Iconynp?: PrimitiveOverrideProps<IconProps>;
+  \\"AWS Amplify Studio is a visual development environment for building full-stack web and mobile apps that grows with your business. Studio builds on existing backend building capabilities in AWS Amplify, allowing you to build your UI faster with a set of ready-to-use UI components that are editable in Figma. With Studio, you can quickly build an entire web app, front-to-back, with minimal coding, while still maintaining full control over your app design and behavior through code. Ship faster, scale effortlessly, and delight every user.\\"?: PrimitiveOverrideProps<TextProps>;
+  Shareakz?: PrimitiveOverrideProps<FlexProps>;
+  Sharedgc?: PrimitiveOverrideProps<TextProps>;
+  Iconsrv?: PrimitiveOverrideProps<IconProps>;
+  Iconwdz?: PrimitiveOverrideProps<IconProps>;
+  Iconxpr?: PrimitiveOverrideProps<IconProps>;
+  image?: PrimitiveOverrideProps<ImageProps>;
+  \\"Read moreudv\\"?: PrimitiveOverrideProps<FlexProps>;
+  Iconlxm?: PrimitiveOverrideProps<IconProps>;
+  \\"Read morepbe\\"?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type SocialAProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: SocialAOverridesProps | undefined | null;
   }
 >;
 export default function SocialA(props: SocialAProps): React.ReactElement {
@@ -5923,11 +6562,25 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  TextField,
+  TextFieldProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type InputMutationOnClickOverridesProps = {
+  InputMutationOnClick?: PrimitiveOverrideProps<FlexProps>;
+  MyInput?: PrimitiveOverrideProps<TextFieldProps>;
+  SetInputButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type InputMutationOnClickProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: InputMutationOnClickOverridesProps | undefined | null;
   }
 >;
 export default function InputMutationOnClick(
@@ -5976,11 +6629,25 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Customer } from \\"../models\\";
 import { schema } from \\"../models/schema\\";
-import { Button, Flex, FlexProps, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  TextField,
+  TextFieldProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type MyFormOverridesProps = {
+  MyForm?: PrimitiveOverrideProps<FlexProps>;
+  UsernameTextField?: PrimitiveOverrideProps<TextFieldProps>;
+  SubmitButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type MyFormProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: MyFormOverridesProps | undefined | null;
   }
 >;
 export default function MyForm(props: MyFormProps): React.ReactElement {
@@ -6029,11 +6696,18 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
+import { Button, ButtonProps, Flex, FlexProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ColorChangeOnClickOverridesProps = {
+  ColorChangeOnClick?: PrimitiveOverrideProps<FlexProps>;
+  ColoredBox?: PrimitiveOverrideProps<FlexProps>;
+  ColorChangerButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ColorChangeOnClickProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ColorChangeOnClickOverridesProps | undefined | null;
   }
 >;
 export default function ColorChangeOnClick(
@@ -6077,11 +6751,25 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, Text, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Flex,
+  FlexProps,
+  Text,
+  TextField,
+  TextFieldProps,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type TwoWayBindingsOverridesProps = {
+  TwoWayBindings?: PrimitiveOverrideProps<FlexProps>;
+  TextFieldInput?: PrimitiveOverrideProps<TextFieldProps>;
+  TextFieldValue?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type TwoWayBindingsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: TwoWayBindingsOverridesProps | undefined | null;
   }
 >;
 export default function TwoWayBindings(
@@ -6128,11 +6816,25 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { CheckboxField, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  CheckboxField,
+  CheckboxFieldProps,
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CheckboxControlledElementOverridesProps = {
+  CheckboxControlledElement?: PrimitiveOverrideProps<FlexProps>;
+  Input?: PrimitiveOverrideProps<CheckboxFieldProps>;
+  CheckboxFieldValue?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type CheckboxControlledElementProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CheckboxControlledElementOverridesProps | undefined | null;
   }
 >;
 export default function CheckboxControlledElement(
@@ -6175,11 +6877,25 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, StepperField, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Flex,
+  FlexProps,
+  StepperField,
+  StepperFieldProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type StepperControlledElementOverridesProps = {
+  StepperControlledElement?: PrimitiveOverrideProps<FlexProps>;
+  Input?: PrimitiveOverrideProps<StepperFieldProps>;
+  StepperFieldValue?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type StepperControlledElementProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: StepperControlledElementOverridesProps | undefined | null;
   }
 >;
 export default function StepperControlledElement(
@@ -6225,11 +6941,25 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, SwitchField, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Flex,
+  FlexProps,
+  SwitchField,
+  SwitchFieldProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type SwitchControlledElementOverridesProps = {
+  SwitchControlledElement?: PrimitiveOverrideProps<FlexProps>;
+  Input?: PrimitiveOverrideProps<SwitchFieldProps>;
+  SwitchFieldValue?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type SwitchControlledElementProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: SwitchControlledElementOverridesProps | undefined | null;
   }
 >;
 export default function SwitchControlledElement(
@@ -6274,18 +7004,57 @@ import {
 import { useEffect } from \\"react\\";
 import {
   Button,
+  ButtonProps,
   Flex,
   FlexProps,
   Heading,
+  HeadingProps,
   Text,
   TextField,
+  TextFieldProps,
+  TextProps,
 } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type InitialValueBindingsOverridesProps = {
+  InitialValueBindings?: PrimitiveOverrideProps<FlexProps>;
+  Heading?: PrimitiveOverrideProps<HeadingProps>;
+  FixedValueInitialBindingSection?: PrimitiveOverrideProps<FlexProps>;
+  FixedValueHeading?: PrimitiveOverrideProps<HeadingProps>;
+  FixedValueContents?: PrimitiveOverrideProps<TextProps>;
+  FixedValueMutation?: PrimitiveOverrideProps<ButtonProps>;
+  BoundValueInitialBindingSection?: PrimitiveOverrideProps<FlexProps>;
+  BoundValueHeading?: PrimitiveOverrideProps<HeadingProps>;
+  BoundValueContents?: PrimitiveOverrideProps<TextProps>;
+  BoundValueMutation?: PrimitiveOverrideProps<ButtonProps>;
+  ConcatValueInitialBindingSection?: PrimitiveOverrideProps<FlexProps>;
+  ConcatValueHeading?: PrimitiveOverrideProps<HeadingProps>;
+  ConcatValueContents?: PrimitiveOverrideProps<TextProps>;
+  ConcatValueMutation?: PrimitiveOverrideProps<ButtonProps>;
+  ConditionalValueInitialBindingSection?: PrimitiveOverrideProps<FlexProps>;
+  ConditionalValueHeading?: PrimitiveOverrideProps<HeadingProps>;
+  ConditionalValueContents?: PrimitiveOverrideProps<TextProps>;
+  ConditionalValueMutation?: PrimitiveOverrideProps<ButtonProps>;
+  AuthValueInitialBindingSection?: PrimitiveOverrideProps<FlexProps>;
+  AuthValueHeading?: PrimitiveOverrideProps<HeadingProps>;
+  AuthValueContents?: PrimitiveOverrideProps<TextProps>;
+  AuthValueMutation?: PrimitiveOverrideProps<ButtonProps>;
+  StateValueInitialBindingSection?: PrimitiveOverrideProps<FlexProps>;
+  StateValueHeading?: PrimitiveOverrideProps<HeadingProps>;
+  StateValueContents?: PrimitiveOverrideProps<TextProps>;
+  StateValueMutation?: PrimitiveOverrideProps<ButtonProps>;
+  StateSource?: PrimitiveOverrideProps<TextProps>;
+  TextFieldValueInitialBindingSection?: PrimitiveOverrideProps<FlexProps>;
+  TextFieldValueHeading?: PrimitiveOverrideProps<HeadingProps>;
+  TextFieldValueContents?: PrimitiveOverrideProps<TextFieldProps>;
+  TextFieldValueMutation?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type InitialValueBindingsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
     user?: User;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: InitialValueBindingsOverridesProps | undefined | null;
   }
 >;
 export default function InitialValueBindings(
@@ -6570,13 +7339,29 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, Image, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Flex,
+  FlexProps,
+  Image,
+  ImageProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CardAOverridesProps = {
+  CardA?: PrimitiveOverrideProps<FlexProps>;
+  image?: PrimitiveOverrideProps<ImageProps>;
+  \\"Text Grouping\\"?: PrimitiveOverrideProps<FlexProps>;
+  \\"Classic Long Sleeve T-Shirt\\"?: PrimitiveOverrideProps<TextProps>;
+  $99?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type CardAProps = React.PropsWithChildren<
   Partial<FlexProps> & {
     listing?: Listing;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CardAOverridesProps | undefined | null;
   }
 >;
 export default function CardA(props: CardAProps): React.ReactElement {
@@ -6822,11 +7607,26 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ButtonsToggleStateOverridesProps = {
+  ButtonsToggleState?: PrimitiveOverrideProps<FlexProps>;
+  FooBarValue?: PrimitiveOverrideProps<TextProps>;
+  FooButton?: PrimitiveOverrideProps<ButtonProps>;
+  BarButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ButtonsToggleStateProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ButtonsToggleStateOverridesProps | undefined | null;
   }
 >;
 export default function ButtonsToggleState(
@@ -6880,11 +7680,25 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type MutationWithSyntheticPropOverridesProps = {
+  MutationWithSyntheticProp?: PrimitiveOverrideProps<FlexProps>;
+  FooBarValue?: PrimitiveOverrideProps<TextProps>;
+  FooButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type MutationWithSyntheticPropProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: MutationWithSyntheticPropOverridesProps | undefined | null;
   }
 >;
 export default function MutationWithSyntheticProp(
@@ -6931,11 +7745,26 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Card, CardProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Card,
+  CardProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateVisibilityOverridesProps = {
+  UpdateVisibility?: PrimitiveOverrideProps<CardProps>;
+  TextDisplay?: PrimitiveOverrideProps<TextProps>;
+  DisplayBlockButton?: PrimitiveOverrideProps<ButtonProps>;
+  DisplayNoneButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type UpdateVisibilityProps = React.PropsWithChildren<
   Partial<CardProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: UpdateVisibilityOverridesProps | undefined | null;
   }
 >;
 export default function UpdateVisibility(
@@ -6990,11 +7819,26 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Card, CardProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Card,
+  CardProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type SetStateWithoutInitialValueOverridesProps = {
+  SetStateWithoutInitialValue?: PrimitiveOverrideProps<CardProps>;
+  TextDisplay?: PrimitiveOverrideProps<TextProps>;
+  DisplayBlockButton?: PrimitiveOverrideProps<ButtonProps>;
+  DisplayNoneButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type SetStateWithoutInitialValueProps = React.PropsWithChildren<
   Partial<CardProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: SetStateWithoutInitialValueOverridesProps | undefined | null;
   }
 >;
 export default function SetStateWithoutInitialValue(
@@ -7052,11 +7896,17 @@ import {
   getOverrideProps,
   useNavigateAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import { Flex, FlexProps, Text, TextProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type InvalidNameForMethodOverridesProps = {
+  InvalidNameForMethod?: PrimitiveOverrideProps<FlexProps>;
+  \\"\\\\u201CLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.\\\\u201D\\"?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type InvalidNameForMethodProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: InvalidNameForMethodOverridesProps | undefined | null;
   }
 >;
 export default function InvalidNameForMethod(
@@ -7095,11 +7945,26 @@ import {
   getOverrideProps,
   useStateMutationAction,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, Text } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  Text,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type NestedMutationOverridesProps = {
+  NestedMutation?: PrimitiveOverrideProps<FlexProps>;
+  MutatedValue?: PrimitiveOverrideProps<TextProps>;
+  StatePropertyMutation?: PrimitiveOverrideProps<ButtonProps>;
+  StateSource?: PrimitiveOverrideProps<TextProps>;
+} & EscapeHatchProps;
 export type NestedMutationProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: NestedMutationOverridesProps | undefined | null;
   }
 >;
 export default function NestedMutation(
@@ -7151,28 +8016,110 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import {
   Button,
+  ButtonProps,
   CheckboxField,
+  CheckboxFieldProps,
   Flex,
   FlexProps,
   Heading,
+  HeadingProps,
   PasswordField,
+  PasswordFieldProps,
   PhoneNumberField,
+  PhoneNumberFieldProps,
   Radio,
   RadioGroupField,
+  RadioGroupFieldProps,
+  RadioProps,
   SearchField,
+  SearchFieldProps,
   SelectField,
+  SelectFieldProps,
   SliderField,
+  SliderFieldProps,
   StepperField,
+  StepperFieldProps,
   SwitchField,
+  SwitchFieldProps,
   Text,
   TextAreaField,
+  TextAreaFieldProps,
   TextField,
+  TextFieldProps,
+  TextProps,
 } from \\"@aws-amplify/ui-react\\";
-import option from \\"./option\\";
+import option, { optionProps } from \\"./option\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type TwoWayBindingsOverridesProps = {
+  TwoWayBindings?: PrimitiveOverrideProps<FlexProps>;
+  FormHeading?: PrimitiveOverrideProps<HeadingProps>;
+  CheckboxFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  CheckboxFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  CheckboxFieldInput?: PrimitiveOverrideProps<CheckboxFieldProps>;
+  CheckboxFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetCheckboxFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  PasswordFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  PasswordFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  PasswordFieldInput?: PrimitiveOverrideProps<PasswordFieldProps>;
+  PasswordFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetPasswordFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  PhoneNumberFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  PhoneNumberFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  PhoneNumberFieldInput?: PrimitiveOverrideProps<PhoneNumberFieldProps>;
+  PhoneNumberFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetPhoneNumberFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  RadioGroupFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  RadioGroupFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  RadioGroupFieldInput?: PrimitiveOverrideProps<RadioGroupFieldProps>;
+  RadioGroupFieldInputOption1?: PrimitiveOverrideProps<RadioProps>;
+  RadioGroupFieldInputOption2?: PrimitiveOverrideProps<RadioProps>;
+  RadioGroupFieldInputOption3?: PrimitiveOverrideProps<RadioProps>;
+  RadioGroupFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetRadioGroupFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  SearchFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  SearchFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  SearchFieldInput?: PrimitiveOverrideProps<SearchFieldProps>;
+  SearchFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetSearchFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  SelectFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  SelectFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  SelectFieldInput?: PrimitiveOverrideProps<SelectFieldProps>;
+  SelectFieldInputOption1?: optionProps;
+  SelectFieldInputOption2?: optionProps;
+  SelectFieldInputOption3?: optionProps;
+  SelectFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetSelectFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  SliderFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  SliderFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  SliderFieldInput?: PrimitiveOverrideProps<SliderFieldProps>;
+  SliderFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetSliderFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  StepperFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  StepperFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  StepperFieldInput?: PrimitiveOverrideProps<StepperFieldProps>;
+  StepperFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetStepperFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  SwitchFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  SwitchFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  SwitchFieldInput?: PrimitiveOverrideProps<SwitchFieldProps>;
+  SwitchFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetSwitchFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  TextFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  TextFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  TextFieldInput?: PrimitiveOverrideProps<TextFieldProps>;
+  TextFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetTextFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+  TextAreaFieldSection?: PrimitiveOverrideProps<FlexProps>;
+  TextAreaFieldHeader?: PrimitiveOverrideProps<HeadingProps>;
+  TextAreaFieldInput?: PrimitiveOverrideProps<TextAreaFieldProps>;
+  TextAreaFieldValue?: PrimitiveOverrideProps<TextProps>;
+  SetTextAreaFieldValue?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type TwoWayBindingsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: TwoWayBindingsOverridesProps | undefined | null;
   }
 >;
 export default function TwoWayBindings(
@@ -7631,9 +8578,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { CheckboxField, CheckboxFieldProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CheckBoxFieldPrimitiveOverridesProps = {
+  CheckBoxFieldPrimitive?: PrimitiveOverrideProps<CheckboxFieldProps>;
+} & EscapeHatchProps;
 export type CheckBoxFieldPrimitiveProps = React.PropsWithChildren<
   Partial<CheckboxFieldProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: CheckBoxFieldPrimitiveOverridesProps | undefined | null;
   }
 >;
 export default function CheckBoxFieldPrimitive(
@@ -7661,11 +8613,23 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Expander, ExpanderItem, ExpanderProps } from \\"@aws-amplify/ui-react\\";
+import {
+  Expander,
+  ExpanderItem,
+  ExpanderItemProps,
+  ExpanderProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ExpanderPrimitiveOverridesProps = {
+  ExpanderPrimitive?: PrimitiveOverrideProps<ExpanderProps>;
+  ExpanderItem1?: PrimitiveOverrideProps<ExpanderItemProps>;
+  ExpanderItem2?: PrimitiveOverrideProps<ExpanderItemProps>;
+} & EscapeHatchProps;
 export type ExpanderPrimitiveProps = React.PropsWithChildren<
   Partial<ExpanderProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ExpanderPrimitiveOverridesProps | undefined | null;
   }
 >;
 export default function ExpanderPrimitive(
@@ -7707,9 +8671,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { ExpanderItem, ExpanderItemProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type MyExpanderItemOverridesProps = {
+  MyExpanderItem?: PrimitiveOverrideProps<ExpanderItemProps>;
+} & EscapeHatchProps;
 export type MyExpanderItemProps = React.PropsWithChildren<
   Partial<ExpanderItemProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: MyExpanderItemOverridesProps | undefined | null;
   }
 >;
 export default function MyExpanderItem(
@@ -7739,9 +8708,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Icon, IconProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type IconPrimitiveOverridesProps = {
+  IconPrimitive?: PrimitiveOverrideProps<IconProps>;
+} & EscapeHatchProps;
 export type IconPrimitiveProps = React.PropsWithChildren<
   Partial<IconProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: IconPrimitiveOverridesProps | undefined | null;
   }
 >;
 export default function IconPrimitive(
@@ -7774,11 +8748,22 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Menu, MenuItem, MenuProps } from \\"@aws-amplify/ui-react\\";
+import {
+  Menu,
+  MenuItem,
+  MenuItemProps,
+  MenuProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type MenuPrimitiveOverridesProps = {
+  MenuPrimitive?: PrimitiveOverrideProps<MenuProps>;
+  MyMenuItem?: PrimitiveOverrideProps<MenuItemProps>;
+} & EscapeHatchProps;
 export type MenuPrimitiveProps = React.PropsWithChildren<
   Partial<MenuProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: MenuPrimitiveOverridesProps | undefined | null;
   }
 >;
 export default function MenuPrimitive(
@@ -7805,11 +8790,20 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { ButtonProps, MenuButton } from \\"@aws-amplify/ui-react\\";
+import {
+  ButtonProps,
+  MenuButton,
+  MenuButtonProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type MenuButtonPrimitiveOverridesProps = {
+  MenuButtonPrimitive?: PrimitiveOverrideProps<MenuButtonProps>;
+} & EscapeHatchProps;
 export type MenuButtonPrimitiveProps = React.PropsWithChildren<
   Partial<ButtonProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: MenuButtonPrimitiveOverridesProps | undefined | null;
   }
 >;
 export default function MenuButtonPrimitive(
@@ -7837,9 +8831,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { SliderField, SliderFieldProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type SliderFieldPrimitiveOverridesProps = {
+  SliderFieldPrimitive?: PrimitiveOverrideProps<SliderFieldProps>;
+} & EscapeHatchProps;
 export type SliderFieldPrimitiveProps = React.PropsWithChildren<
   Partial<SliderFieldProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: SliderFieldPrimitiveOverridesProps | undefined | null;
   }
 >;
 export default function SliderFieldPrimitive(
@@ -7873,16 +8872,49 @@ import {
 import {
   Table,
   TableBody,
+  TableBodyProps,
   TableCell,
+  TableCellProps,
   TableFoot,
+  TableFootProps,
   TableHead,
+  TableHeadProps,
   TableProps,
   TableRow,
+  TableRowProps,
 } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type TablePrimitiveOverridesProps = {
+  TablePrimitive?: PrimitiveOverrideProps<TableProps>;
+  MyTableHead?: PrimitiveOverrideProps<TableHeadProps>;
+  MyTableRow?: PrimitiveOverrideProps<TableRowProps>;
+  MyTableCellCitrus?: PrimitiveOverrideProps<TableCellProps>;
+  MyTableCellStoneFruit?: PrimitiveOverrideProps<TableCellProps>;
+  MyTableCellBerry?: PrimitiveOverrideProps<TableCellProps>;
+  MyTableBody?: PrimitiveOverrideProps<TableBodyProps>;
+  TableRow1?: PrimitiveOverrideProps<TableRowProps>;
+  TableCell11?: PrimitiveOverrideProps<TableCellProps>;
+  TableCell12?: PrimitiveOverrideProps<TableCellProps>;
+  TableCell13?: PrimitiveOverrideProps<TableCellProps>;
+  TableRow2?: PrimitiveOverrideProps<TableRowProps>;
+  TableCell21?: PrimitiveOverrideProps<TableCellProps>;
+  TableCell22?: PrimitiveOverrideProps<TableCellProps>;
+  TableCell23?: PrimitiveOverrideProps<TableCellProps>;
+  TableRow3?: PrimitiveOverrideProps<TableRowProps>;
+  TableCell31?: PrimitiveOverrideProps<TableCellProps>;
+  TableCell32?: PrimitiveOverrideProps<TableCellProps>;
+  TableCell33?: PrimitiveOverrideProps<TableCellProps>;
+  MyTableFoot?: PrimitiveOverrideProps<TableFootProps>;
+  TableRowFoot?: PrimitiveOverrideProps<TableRowProps>;
+  TableCellFoot1?: PrimitiveOverrideProps<TableCellProps>;
+  TableCellFoot2?: PrimitiveOverrideProps<TableCellProps>;
+  TableCellFoot3?: PrimitiveOverrideProps<TableCellProps>;
+} & EscapeHatchProps;
 export type TablePrimitiveProps = React.PropsWithChildren<
   Partial<TableProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: TablePrimitiveOverridesProps | undefined | null;
   }
 >;
 export default function TablePrimitive(
@@ -7996,9 +9028,14 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { TextAreaField, TextAreaFieldProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type TextAreaFieldPrimitiveOverridesProps = {
+  TextAreaFieldPrimitive?: PrimitiveOverrideProps<TextAreaFieldProps>;
+} & EscapeHatchProps;
 export type TextAreaFieldPrimitiveProps = React.PropsWithChildren<
   Partial<TextAreaFieldProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: TextAreaFieldPrimitiveOverridesProps | undefined | null;
   }
 >;
 export default function TextAreaFieldPrimitive(
@@ -8028,10 +9065,15 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { TextField, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type TextFieldPrimitiveOverridesProps = {
+  TextFieldPrimitive?: PrimitiveOverrideProps<TextFieldProps>;
+} & EscapeHatchProps;
 export type TextFieldPrimitiveProps<Multiline extends boolean> =
   React.PropsWithChildren<
     Partial<TextFieldProps<Multiline>> & {
-      overrides?: EscapeHatchProps | undefined | null;
+      overrides?: TextFieldPrimitiveOverridesProps | undefined | null;
     }
   >;
 export default function TextFieldPrimitive<Multiline extends boolean>(
@@ -8059,12 +9101,18 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import CustomButton from \\"./CustomButton\\";
+import CustomButton, { CustomButtonProps } from \\"./CustomButton\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ViewWithButtonOverridesProps = {
+  ViewWithButton?: PrimitiveOverrideProps<ViewProps>;
+  MyCustomButton?: CustomButtonProps;
+} & EscapeHatchProps;
 export type ViewWithButtonProps = React.PropsWithChildren<
   Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ViewWithButtonOverridesProps | undefined | null;
   }
 >;
 export default function ViewWithButton(
@@ -8098,9 +9146,39 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Flex, FlexProps, Text, TextField } from \\"@aws-amplify/ui-react\\";
+import {
+  Flex,
+  FlexProps,
+  Text,
+  TextField,
+  TextFieldProps,
+  TextProps,
+} from \\"@aws-amplify/ui-react\\";
 import { SyntheticEvent } from \\"react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type EventsOverridesProps = {
+  Events?: PrimitiveOverrideProps<FlexProps>;
+  GenericEvents?: PrimitiveOverrideProps<FlexProps>;
+  onClick?: PrimitiveOverrideProps<TextProps>;
+  onDoubleClick?: PrimitiveOverrideProps<TextProps>;
+  onMouseDown?: PrimitiveOverrideProps<TextProps>;
+  onMouseEnter?: PrimitiveOverrideProps<TextProps>;
+  onMouseLeave?: PrimitiveOverrideProps<TextProps>;
+  onMouseMove?: PrimitiveOverrideProps<TextProps>;
+  onMouseOut?: PrimitiveOverrideProps<TextProps>;
+  onMouseOver?: PrimitiveOverrideProps<TextProps>;
+  onMouseUp?: PrimitiveOverrideProps<TextProps>;
+  FieldEvents?: PrimitiveOverrideProps<FlexProps>;
+  onChange?: PrimitiveOverrideProps<TextFieldProps>;
+  onInput?: PrimitiveOverrideProps<TextFieldProps>;
+  onFocus?: PrimitiveOverrideProps<TextFieldProps>;
+  onBlur?: PrimitiveOverrideProps<TextFieldProps>;
+  onKeyDown?: PrimitiveOverrideProps<TextFieldProps>;
+  onKeyPress?: PrimitiveOverrideProps<TextFieldProps>;
+  onKeyUp?: PrimitiveOverrideProps<TextFieldProps>;
+} & EscapeHatchProps;
 export type EventsProps = React.PropsWithChildren<
   Partial<FlexProps> & {
     onClick?: (event: SyntheticEvent) => void;
@@ -8120,7 +9198,7 @@ export type EventsProps = React.PropsWithChildren<
     onKeyPress?: (event: SyntheticEvent) => void;
     onKeyUp?: (event: SyntheticEvent) => void;
   } & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: EventsOverridesProps | undefined | null;
   }
 >;
 export default function Events(props: EventsProps): React.ReactElement {
@@ -8248,12 +9326,28 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import Input from \\"./Input\\";
+import Input, { InputProps } from \\"./Input\\";
 import { View, ViewProps } from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ParsedFixedValuesOverridesProps = {
+  ParsedFixedValues?: PrimitiveOverrideProps<ViewProps>;
+  MyInputString?: InputProps;
+  MyInputNumber?: InputProps;
+  MyInputParsedNumber?: InputProps;
+  MyInputBoolean?: InputProps;
+  MyInputPrasedBoolean?: InputProps;
+  MyInputJson?: InputProps;
+  MyInputParsedJson?: InputProps;
+  MyInputArray?: InputProps;
+  MyInputParsedArray?: InputProps;
+  MyInputNull?: InputProps;
+  MyInputParsedNull?: InputProps;
+} & EscapeHatchProps;
 export type ParsedFixedValuesProps = React.PropsWithChildren<
   Partial<ViewProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ParsedFixedValuesOverridesProps | undefined | null;
   }
 >;
 export default function ParsedFixedValues(
@@ -8390,7 +9484,7 @@ export default function Profile(props) {
     )
   );
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssS0FBSyxNQUFNLE9BQU8sQ0FBQztBQUMvQixPQUFPLEVBQW9CLGdCQUFnQixFQUFFLE9BQU8sRUFBRSxNQUFNLGdDQUFnQyxDQUFDO0FBQzdGLE9BQU8sRUFBRSxNQUFNLEVBQUUsSUFBSSxFQUFhLEtBQUssRUFBRSxNQUFNLHVCQUF1QixDQUFDO0FBS3ZFLE1BQU0sQ0FBQyxPQUFPLFVBQVUsT0FBTyxDQUFDLEtBQW1COztJQUMvQyxNQUFNLEVBQUUsU0FBUyxLQUFjLEtBQUssRUFBZCxJQUFJLFVBQUssS0FBSyxFQUE5QixhQUFzQixDQUFRLENBQUM7SUFDckMsTUFBTSxjQUFjLEdBQUcsTUFBQSxNQUFBLE9BQU8sRUFBRSxDQUFDLElBQUksMENBQUUsVUFBVSxtQ0FBSSxFQUFFLENBQUM7SUFDeEQsT0FBTyxDQUFDLG9CQUFDLElBQUksb0JBQUssZ0JBQWdCLENBQUMsU0FBUyxFQUFFLFNBQVMsQ0FBQyxFQUFNLElBQUk7UUFBRSxvQkFBQyxLQUFLLGtCQUFDLEdBQUcsRUFBRSxjQUFjLENBQUMsVUFBVSxDQUFDLElBQU0sZ0JBQWdCLENBQUMsU0FBUyxFQUFFLFFBQVEsQ0FBQyxFQUFVO1FBQUEsb0JBQUMsTUFBTSxrQkFBQyxRQUFRLEVBQUUsY0FBYyxDQUFDLFNBQVMsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVztRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLGNBQWMsQ0FBQywwQkFBMEIsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVyxDQUFPLENBQUMsQ0FBQztBQUMvWCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyogZXNsaW50LWRpc2FibGUgKi9cbmltcG9ydCAqIGFzIFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IHsgRXNjYXBlSGF0Y2hQcm9wcywgZ2V0T3ZlcnJpZGVQcm9wcywgdXNlQXV0aCB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3QvaW50ZXJuYWxcIjtcbmltcG9ydCB7IEJ1dHRvbiwgRmxleCwgRmxleFByb3BzLCBJbWFnZSB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3RcIjtcblxuZXhwb3J0IHR5cGUgUHJvZmlsZVByb3BzID0gUmVhY3QuUHJvcHNXaXRoQ2hpbGRyZW48UGFydGlhbDxGbGV4UHJvcHM+ICYge1xuICAgIG92ZXJyaWRlcz86IEVzY2FwZUhhdGNoUHJvcHMgfCB1bmRlZmluZWQgfCBudWxsO1xufT47XG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBQcm9maWxlKHByb3BzOiBQcm9maWxlUHJvcHMpOiBSZWFjdC5SZWFjdEVsZW1lbnQge1xuICAgIGNvbnN0IHsgb3ZlcnJpZGVzLCAuLi5yZXN0IH0gPSBwcm9wcztcbiAgICBjb25zdCBhdXRoQXR0cmlidXRlcyA9IHVzZUF1dGgoKS51c2VyPy5hdHRyaWJ1dGVzID8/IHt9O1xuICAgIHJldHVybiAoPEZsZXggey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcIlByb2ZpbGVcIil9IHsuLi5yZXN0fT48SW1hZ2Ugc3JjPXthdXRoQXR0cmlidXRlc1tcInVzZXJuYW1lXCJdfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiY2hpbGQxXCIpfT48L0ltYWdlPjxCdXR0b24gY2hpbGRyZW49e2F1dGhBdHRyaWJ1dGVzW1wicGljdHVyZVwiXX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcImNoaWxkMlwiKX0+PC9CdXR0b24+PEJ1dHRvbiBjaGlsZHJlbj17YXV0aEF0dHJpYnV0ZXNbXCJjdXN0b206ZmF2b3JpdGVfaWNlY3JlYW1cIl19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJjaGlsZDNcIil9PjwvQnV0dG9uPjwvRmxleD4pO1xufSJdfQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsibW9kdWxlLnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLG9CQUFvQjtBQUNwQixPQUFPLEtBQUssS0FBSyxNQUFNLE9BQU8sQ0FBQztBQUMvQixPQUFPLEVBQW9CLGdCQUFnQixFQUFFLE9BQU8sRUFBRSxNQUFNLGdDQUFnQyxDQUFDO0FBQzdGLE9BQU8sRUFBRSxNQUFNLEVBQWUsSUFBSSxFQUFhLEtBQUssRUFBYyxNQUFNLHVCQUF1QixDQUFDO0FBVWhHLE1BQU0sQ0FBQyxPQUFPLFVBQVUsT0FBTyxDQUFDLEtBQW1COztJQUMvQyxNQUFNLEVBQUUsU0FBUyxLQUFjLEtBQUssRUFBZCxJQUFJLFVBQUssS0FBSyxFQUE5QixhQUFzQixDQUFRLENBQUM7SUFDckMsTUFBTSxjQUFjLEdBQUcsTUFBQSxNQUFBLE9BQU8sRUFBRSxDQUFDLElBQUksMENBQUUsVUFBVSxtQ0FBSSxFQUFFLENBQUM7SUFDeEQsT0FBTyxDQUFDLG9CQUFDLElBQUksb0JBQUssZ0JBQWdCLENBQUMsU0FBUyxFQUFFLFNBQVMsQ0FBQyxFQUFNLElBQUk7UUFBRSxvQkFBQyxLQUFLLGtCQUFDLEdBQUcsRUFBRSxjQUFjLENBQUMsVUFBVSxDQUFDLElBQU0sZ0JBQWdCLENBQUMsU0FBUyxFQUFFLFFBQVEsQ0FBQyxFQUFVO1FBQUEsb0JBQUMsTUFBTSxrQkFBQyxRQUFRLEVBQUUsY0FBYyxDQUFDLFNBQVMsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVztRQUFBLG9CQUFDLE1BQU0sa0JBQUMsUUFBUSxFQUFFLGNBQWMsQ0FBQywwQkFBMEIsQ0FBQyxJQUFNLGdCQUFnQixDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsRUFBVyxDQUFPLENBQUMsQ0FBQztBQUMvWCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyogZXNsaW50LWRpc2FibGUgKi9cbmltcG9ydCAqIGFzIFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IHsgRXNjYXBlSGF0Y2hQcm9wcywgZ2V0T3ZlcnJpZGVQcm9wcywgdXNlQXV0aCB9IGZyb20gXCJAYXdzLWFtcGxpZnkvdWktcmVhY3QvaW50ZXJuYWxcIjtcbmltcG9ydCB7IEJ1dHRvbiwgQnV0dG9uUHJvcHMsIEZsZXgsIEZsZXhQcm9wcywgSW1hZ2UsIEltYWdlUHJvcHMgfSBmcm9tIFwiQGF3cy1hbXBsaWZ5L3VpLXJlYWN0XCI7XG5cbmV4cG9ydCBkZWNsYXJlIHR5cGUgUHJpbWl0aXZlT3ZlcnJpZGVQcm9wczxUPiA9IFBhcnRpYWw8VD4gJiBSZWFjdC5ET01BdHRyaWJ1dGVzPEhUTUxEaXZFbGVtZW50PjtleHBvcnQgZGVjbGFyZSB0eXBlIFByb2ZpbGVPdmVycmlkZXNQcm9wcyA9IHtcbiAgICBQcm9maWxlPzogUHJpbWl0aXZlT3ZlcnJpZGVQcm9wczxGbGV4UHJvcHM+O1xuICAgIGNoaWxkMT86IFByaW1pdGl2ZU92ZXJyaWRlUHJvcHM8SW1hZ2VQcm9wcz47XG4gICAgY2hpbGQyPzogUHJpbWl0aXZlT3ZlcnJpZGVQcm9wczxCdXR0b25Qcm9wcz47XG4gICAgY2hpbGQzPzogUHJpbWl0aXZlT3ZlcnJpZGVQcm9wczxCdXR0b25Qcm9wcz47XG59ICYgRXNjYXBlSGF0Y2hQcm9wcztleHBvcnQgdHlwZSBQcm9maWxlUHJvcHMgPSBSZWFjdC5Qcm9wc1dpdGhDaGlsZHJlbjxQYXJ0aWFsPEZsZXhQcm9wcz4gJiB7XG4gICAgb3ZlcnJpZGVzPzogUHJvZmlsZU92ZXJyaWRlc1Byb3BzIHwgdW5kZWZpbmVkIHwgbnVsbDtcbn0+O1xuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUHJvZmlsZShwcm9wczogUHJvZmlsZVByb3BzKTogUmVhY3QuUmVhY3RFbGVtZW50IHtcbiAgICBjb25zdCB7IG92ZXJyaWRlcywgLi4ucmVzdCB9ID0gcHJvcHM7XG4gICAgY29uc3QgYXV0aEF0dHJpYnV0ZXMgPSB1c2VBdXRoKCkudXNlcj8uYXR0cmlidXRlcyA/PyB7fTtcbiAgICByZXR1cm4gKDxGbGV4IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJQcm9maWxlXCIpfSB7Li4ucmVzdH0+PEltYWdlIHNyYz17YXV0aEF0dHJpYnV0ZXNbXCJ1c2VybmFtZVwiXX0gey4uLmdldE92ZXJyaWRlUHJvcHMob3ZlcnJpZGVzLCBcImNoaWxkMVwiKX0+PC9JbWFnZT48QnV0dG9uIGNoaWxkcmVuPXthdXRoQXR0cmlidXRlc1tcInBpY3R1cmVcIl19IHsuLi5nZXRPdmVycmlkZVByb3BzKG92ZXJyaWRlcywgXCJjaGlsZDJcIil9PjwvQnV0dG9uPjxCdXR0b24gY2hpbGRyZW49e2F1dGhBdHRyaWJ1dGVzW1wiY3VzdG9tOmZhdm9yaXRlX2ljZWNyZWFtXCJdfSB7Li4uZ2V0T3ZlcnJpZGVQcm9wcyhvdmVycmlkZXMsIFwiY2hpbGQzXCIpfT48L0J1dHRvbj48L0ZsZXg+KTtcbn0iXX0=
 "
 `;
 
@@ -8402,11 +9496,26 @@ import {
   getOverrideProps,
   useAuth,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { Button, Flex, FlexProps, Image } from \\"@aws-amplify/ui-react\\";
+import {
+  Button,
+  ButtonProps,
+  Flex,
+  FlexProps,
+  Image,
+  ImageProps,
+} from \\"@aws-amplify/ui-react\\";
 
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ProfileOverridesProps = {
+  Profile?: PrimitiveOverrideProps<FlexProps>;
+  child1?: PrimitiveOverrideProps<ImageProps>;
+  child2?: PrimitiveOverrideProps<ButtonProps>;
+  child3?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
 export type ProfileProps = React.PropsWithChildren<
   Partial<FlexProps> & {
-    overrides?: EscapeHatchProps | undefined | null;
+    overrides?: ProfileOverridesProps | undefined | null;
   }
 >;
 export default function Profile(props: ProfileProps): React.ReactElement {

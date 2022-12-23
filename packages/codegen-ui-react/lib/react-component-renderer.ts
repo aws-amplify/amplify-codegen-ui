@@ -44,7 +44,7 @@ import {
 } from './workflow';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { addFormAttributes } from './forms';
-import { renderArrayFieldComponent } from './utils/forms/array-field-component';
+import { shouldWrapInArrayField, renderArrayFieldComponent } from './forms/form-renderer-helper';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   TPropIn,
@@ -74,8 +74,14 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
 
     this.importCollection.addImport(ImportSource.UI_REACT, this.component.componentType);
 
+    const formFieldConfigs = this.componentMetadata.formMetadata?.fieldConfigs;
+
     // Add ArrayField wrapper to element if Array type
-    if (this.componentMetadata.formMetadata?.fieldConfigs[this.component.name]?.isArray) {
+    if (
+      formFieldConfigs &&
+      formFieldConfigs[this.component.name] &&
+      shouldWrapInArrayField(formFieldConfigs[this.component.name])
+    ) {
       this.importCollection.addImport(ImportSource.UI_REACT, 'Icon');
       this.importCollection.addImport(ImportSource.UI_REACT, 'Badge');
       this.importCollection.addImport(ImportSource.UI_REACT, 'ScrollView');
@@ -87,12 +93,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       if (typeof this.component.properties.label === 'object' && 'value' in this.component.properties.label) {
         label = this.component.properties.label.value.toString() ?? '';
       }
-      return renderArrayFieldComponent(
-        this.component.name,
-        label,
-        this.componentMetadata.formMetadata?.fieldConfigs,
-        element,
-      );
+      return renderArrayFieldComponent(this.component.name, label, formFieldConfigs, element);
     }
 
     return element;
@@ -151,7 +152,13 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
     ];
 
     if (this.componentMetadata.formMetadata) {
-      attributes.push(...addFormAttributes(this.component, this.componentMetadata.formMetadata));
+      attributes.push(
+        ...addFormAttributes(
+          this.component,
+          this.componentMetadata.formMetadata,
+          this.componentMetadata.dataSchemaMetadata,
+        ),
+      );
     }
     this.addPropsSpreadAttributes(attributes);
 

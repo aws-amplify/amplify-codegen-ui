@@ -1,0 +1,45 @@
+{
+  "name": "MyMemberForm",
+  "formActionType": "update",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "Member"
+  },
+  "fields": {
+    "Team": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "Team",
+                  "field": "id"
+                }
+              },
+              "displayValue": {
+                "bindingProperties": {
+                  "property": "Team",
+                  "field": "name"
+                }
+              }
+            }
+          ],
+          "bindingProperties": {
+            "Team": { "type": "Data", "bindingProperties": { "model": "Team" } }
+          }
+        }
+      },
+      "label": "Team Label"
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": {
+    "position": "top",
+    "clear": {},
+    "cancel": {},
+    "submit": {}
+  }
+}

@@ -13,12 +13,19 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FormDefinition, SectionalElement, FormDefinitionSectionalElement } from '../../types';
-import { InvalidInputError } from '../../errors';
+import {
+  FormDefinition,
+  GenericSectionalElementConfig,
+  SectionalElementConfig,
+  FormDefinitionSectionalElement,
+} from '../../types';
+import { InternalError, InvalidInputError } from '../../errors';
 import { deleteUndefined } from './mapper-utils';
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
 
-export function getFormDefinitionSectionalElement(config: SectionalElement): FormDefinitionSectionalElement {
+export function getFormDefinitionSectionalElement(
+  config: GenericSectionalElementConfig,
+): FormDefinitionSectionalElement {
   const componentType = config.type;
 
   let formDefinitionElement: FormDefinitionSectionalElement;
@@ -66,11 +73,14 @@ export function getFormDefinitionSectionalElement(config: SectionalElement): For
  */
 /* eslint-disable no-param-reassign */
 export function mapSectionalElement(
-  element: { name: string; config: SectionalElement },
+  element: { name: string; config: SectionalElementConfig },
   formDefinition: FormDefinition,
 ) {
   if (formDefinition.elements[element.name]) {
     throw new InvalidInputError(`There is are form elements with the same name: ${element.name}`);
+  }
+  if ('excluded' in element.config) {
+    throw new InternalError(`Attempted to map excluded sectional element ${element.name}`);
   }
   formDefinition.elements[element.name] = getFormDefinitionSectionalElement(element.config);
 }
