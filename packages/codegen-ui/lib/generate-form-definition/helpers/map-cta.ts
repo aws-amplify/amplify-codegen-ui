@@ -83,6 +83,10 @@ function mapMatrix(buttons?: StudioFormCTA): string[][] {
       ) {
         return false;
       }
+      // remove cancel by default if there is no defined value for it
+      if (element === 'cancel' && !buttons?.cancel) {
+        return false;
+      }
       return true;
     });
   });

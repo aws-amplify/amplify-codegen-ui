@@ -1,0 +1,45 @@
+{
+    "name": "BookCreateForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "Book"
+    },
+    "formActionType": "create",
+    "fields": {
+        "authorId": {},
+        "primary-author": {
+            "inputType": {
+                "type": "Autocomplete",
+                "valueMappings": {
+                    "values": [
+                        {
+                            "value": {
+                                "bindingProperties": {
+                                    "property": "Author",
+                                    "field": "id"
+                                }
+                            },
+                            "displayValue": {
+                                "bindingProperties": {
+                                    "property": "Author",
+                                    "field": "name"
+                                }
+                            }
+                        }
+                    ],
+                    "bindingProperties": {
+                        "Author": {
+                            "type": "Data",
+                            "bindingProperties": {
+                                "model": "Author"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

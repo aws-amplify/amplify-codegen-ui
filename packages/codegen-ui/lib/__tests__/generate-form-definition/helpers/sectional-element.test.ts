@@ -15,7 +15,7 @@
  */
 
 import { mapSectionalElement, getFormDefinitionSectionalElement } from '../../../generate-form-definition/helpers';
-import { FormDefinition, SectionalElement } from '../../../types';
+import { FormDefinition, GenericSectionalElementConfig, SectionalElementConfig } from '../../../types';
 import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('mapSectionalElement', () => {
@@ -25,7 +25,7 @@ describe('mapSectionalElement', () => {
       elements: { Heading123: { componentType: 'Heading', props: {} } },
     };
 
-    const element: { name: string; config: SectionalElement } = {
+    const element: { name: string; config: GenericSectionalElementConfig } = {
       name: 'Heading123',
       config: { type: 'Heading', level: 1, text: 'My Heading', position: { fixed: 'first' } },
     };
@@ -36,7 +36,7 @@ describe('mapSectionalElement', () => {
   it('should map configurations', () => {
     const formDefinition: FormDefinition = getBasicFormDefinition();
 
-    const element: { name: string; config: SectionalElement } = {
+    const element: { name: string; config: GenericSectionalElementConfig } = {
       name: 'Heading123',
       config: { type: 'Heading', level: 1, text: 'My Heading', position: { fixed: 'first' } },
     };
@@ -48,11 +48,22 @@ describe('mapSectionalElement', () => {
       props: { level: 1, children: 'My Heading' },
     });
   });
+
+  it('should throw if attempting to map excluded sectional element', () => {
+    const formDefinition: FormDefinition = getBasicFormDefinition();
+
+    const element: { name: string; config: SectionalElementConfig } = {
+      name: 'Heading123',
+      config: { excluded: true },
+    };
+
+    expect(() => mapSectionalElement(element, formDefinition)).toThrow();
+  });
 });
 
 describe('getFormDefinitionSectionalElement', () => {
   it('should map Text', () => {
-    const config: SectionalElement = {
+    const config: GenericSectionalElementConfig = {
       type: 'Text',
       text: 'MyText',
       position: { fixed: 'first' },
@@ -65,7 +76,7 @@ describe('getFormDefinitionSectionalElement', () => {
   });
 
   it('should map Divider', () => {
-    const config: SectionalElement = {
+    const config: GenericSectionalElementConfig = {
       type: 'Divider',
       position: { fixed: 'first' },
       orientation: 'horizontal',
@@ -78,7 +89,7 @@ describe('getFormDefinitionSectionalElement', () => {
   });
 
   it('should map Heading', () => {
-    const config: SectionalElement = {
+    const config: GenericSectionalElementConfig = {
       type: 'Heading',
       position: { fixed: 'first' },
     };
@@ -90,7 +101,7 @@ describe('getFormDefinitionSectionalElement', () => {
   });
 
   it('should throw if componentType is unmappable', () => {
-    const config: SectionalElement = {
+    const config: GenericSectionalElementConfig = {
       type: 'Invalid',
       position: { fixed: 'first' },
     };

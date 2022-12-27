@@ -23,7 +23,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@aws-amplify/datastore": "^3.7.8"
+    "@aws-amplify/datastore": "^4.0.0"
   },
   "jest": {
     "verbose": false,

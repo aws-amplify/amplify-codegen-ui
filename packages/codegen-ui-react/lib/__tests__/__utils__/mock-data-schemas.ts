@@ -16,29 +16,29 @@
 import { GenericDataSchema, getGenericFromDataStore } from '@aws-amplify/codegen-ui';
 
 /**
-type Author @model {
-  name: String
-  profileImageSrc: AWSURL
-  description: String
-  Books: [Book] @hasMany
-  Publisher: Publisher @hasOne
-  Sponsors: [Sponsor] @manyToMany(relationName: "AuthorSponsor")
-}
-
-type Book @model {
-  name: String
-  bookImageSrc: AWSURL
-  description: String
-}
-
-type Publisher @model {
-  name: String
-}
-
-type Sponsor @model {
-  Authors: [Author] @manyToMany(relationName: "AuthorSponsor")
-}
- */
+  type Author @model {
+    name: String
+    profileImageSrc: AWSURL
+    description: String
+    Books: [Book] @hasMany
+    Publisher: Publisher @hasOne
+    Sponsors: [Sponsor] @manyToMany(relationName: "AuthorSponsor")
+  }
+  
+  type Book @model {
+    name: String
+    bookImageSrc: AWSURL
+    description: String
+  }
+  
+  type Publisher @model {
+    name: String
+  }
+  
+  type Sponsor @model {
+    Authors: [Author] @manyToMany(relationName: "AuthorSponsor")
+  }
+   */
 export const authorHasManySchema: GenericDataSchema = getGenericFromDataStore({
   models: {
     Author: {
@@ -404,5 +404,6 @@ export const authorHasManySchema: GenericDataSchema = getGenericFromDataStore({
   },
   enums: {},
   nonModels: {},
+  codegenVersion: '3.3.1',
   version: '448accd13d4335db7822f28a44b0972a',
 });

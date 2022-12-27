@@ -1,0 +1,227 @@
+{
+  "models": {
+    "Book": {
+      "name": "Book",
+      "fields": {
+          "id": {
+              "name": "id",
+              "isArray": false,
+              "type": "ID",
+              "isRequired": true,
+              "attributes": []
+          },
+          "name": {
+              "name": "name",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+          },
+          "primaryAuthor": {
+            "name": "primaryAuthor",
+            "isArray": false,
+            "type": {
+              "model": "Author"
+            },
+            "isRequired": false,
+            "attributes": [],
+            "association": {
+              "connectionType": "HAS_ONE",
+              "associatedWith": "id",
+              "targetName": "authorId"
+            }
+          },
+          "authorId": {
+            "name": "authorId",
+            "isArray": false,
+            "type": "ID",
+            "isRequired": false,
+            "attributes": []
+          },
+          "primaryTitle": {
+            "name": "primaryTitle",
+            "isArray": false,
+            "type": {
+              "model": "Title"
+            },
+            "isRequired": false,
+            "attributes": [],
+            "association": {
+              "connectionType": "HAS_ONE",
+              "associatedWith": "id",
+              "targetName": "titleId"
+            }
+          },
+          "titleId": {
+            "name": "titleId",
+            "isArray": false,
+            "type": "ID",
+            "isRequired": false,
+            "attributes": []
+          },
+          "createdAt": {
+              "name": "createdAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+          },
+          "updatedAt": {
+              "name": "updatedAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+          }
+      },
+      "syncable": true,
+      "pluralName": "Books",
+      "attributes": [
+          {
+              "type": "model",
+              "properties": {}
+          },
+          {
+              "type": "auth",
+              "properties": {
+                  "rules": [
+                      {
+                          "allow": "public",
+                          "operations": [
+                              "create",
+                              "update",
+                              "delete",
+                              "read"
+                          ]
+                      }
+                  ]
+              }
+          }
+      ]
+  },
+  "Author": {
+      "name": "Author",
+      "fields": {
+          "id": {
+              "name": "id",
+              "isArray": false,
+              "type": "ID",
+              "isRequired": true,
+              "attributes": []
+          },
+          "name": {
+              "name": "name",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+          },
+          "createdAt": {
+              "name": "createdAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+          },
+          "updatedAt": {
+              "name": "updatedAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+          }
+      },
+      "syncable": true,
+      "pluralName": "Authors",
+      "attributes": [
+          {
+              "type": "model",
+              "properties": {}
+          },
+          {
+              "type": "auth",
+              "properties": {
+                  "rules": [
+                      {
+                          "allow": "public",
+                          "operations": [
+                              "create",
+                              "update",
+                              "delete",
+                              "read"
+                          ]
+                      }
+                  ]
+              }
+          }
+      ]
+    },
+    "Title": {
+        "name": "Title",
+        "fields": {
+            "id": {
+                "name": "id",
+                "isArray": false,
+                "type": "ID",
+                "isRequired": true,
+                "attributes": []
+            },
+            "name": {
+                "name": "name",
+                "isArray": false,
+                "type": "String",
+                "isRequired": false,
+                "attributes": []
+            },
+            "createdAt": {
+                "name": "createdAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+            },
+            "updatedAt": {
+                "name": "updatedAt",
+                "isArray": false,
+                "type": "AWSDateTime",
+                "isRequired": false,
+                "attributes": [],
+                "isReadOnly": true
+            }
+        },
+        "syncable": true,
+        "pluralName": "Titles",
+        "attributes": [
+            {
+                "type": "model",
+                "properties": {}
+            },
+            {
+                "type": "auth",
+                "properties": {
+                    "rules": [
+                        {
+                            "allow": "public",
+                            "operations": [
+                                "create",
+                                "update",
+                                "delete",
+                                "read"
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+  },
+  "enums": {
+  },
+  "nonModels": {},
+  "version": "000000"
+}

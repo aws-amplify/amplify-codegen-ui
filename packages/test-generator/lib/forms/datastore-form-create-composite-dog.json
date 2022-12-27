@@ -1,0 +1,13 @@
+{
+    "id": "kdjfskdfddj",
+    "name": "DataStoreFormCreateCompositeDog",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "CompositeDog"
+    },
+    "formActionType": "create",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

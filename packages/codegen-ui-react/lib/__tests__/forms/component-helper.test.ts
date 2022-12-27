@@ -13,7 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { renderValueAttribute, renderDefaultValueAttribute } from '../../forms/component-helper';
+
+import { renderValueAttribute, renderDefaultValueAttribute } from '../../forms/form-renderer-helper/value-props';
 
 describe('render value attribute', () => {
   it('should render TextField with value attribute', () => {

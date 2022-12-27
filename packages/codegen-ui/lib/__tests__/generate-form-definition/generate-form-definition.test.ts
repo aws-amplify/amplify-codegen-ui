@@ -35,6 +35,7 @@ describe('generateFormDefinition', () => {
         nonModels: {},
         models: {
           Dog: {
+            primaryKeys: ['id'],
             fields: {
               name: { dataType: 'String', readOnly: false, required: true, isArray: false },
               tricks: { dataType: 'String', readOnly: false, required: false, isArray: true },
@@ -71,7 +72,6 @@ describe('generateFormDefinition', () => {
         dataType: { dataSourceType: 'DataStore', dataTypeName: 'Dog' },
         fields: {
           tricks: {
-            dataType: 'String',
             inputType: {
               isArray: true,
               type: 'TextField',
@@ -88,6 +88,7 @@ describe('generateFormDefinition', () => {
         nonModels: {},
         models: {
           Dog: {
+            primaryKeys: ['id'],
             fields: {
               tricks: { dataType: 'String', readOnly: false, required: false, isArray: false },
             },
@@ -139,7 +140,12 @@ describe('generateFormDefinition', () => {
         dataSourceType: 'DataStore',
         enums: {},
         nonModels: {},
-        models: { Dog: { fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } } } },
+        models: {
+          Dog: {
+            primaryKeys: ['id'],
+            fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } },
+          },
+        },
       },
     });
     expect(formDefinition.elements).toStrictEqual({
@@ -169,7 +175,12 @@ describe('generateFormDefinition', () => {
         dataSourceType: 'DataStore',
         enums: {},
         nonModels: {},
-        models: { Dog: { fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } } } },
+        models: {
+          Dog: {
+            primaryKeys: ['id'],
+            fields: { weight: { dataType: 'Float', readOnly: false, required: true, isArray: false } },
+          },
+        },
       },
     });
 
@@ -188,7 +199,12 @@ describe('generateFormDefinition', () => {
         style: {},
         cta: {},
       },
-      dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: { Dog: { primaryKeys: ['id'], fields: {} } },
+      },
     });
     expect(formDefinition.elements).toStrictEqual({
       weight: { componentType: 'SliderField', props: { min: 1, max: 100, step: 2, label: 'Label' } },
@@ -207,7 +223,12 @@ describe('generateFormDefinition', () => {
         style: {},
         cta: {},
       },
-      dataSchema: { dataSourceType: 'DataStore', enums: {}, nonModels: {}, models: { Dog: { fields: {} } } },
+      dataSchema: {
+        dataSourceType: 'DataStore',
+        enums: {},
+        nonModels: {},
+        models: { Dog: { primaryKeys: ['id'], fields: {} } },
+      },
     });
     expect(formDefinition.elementMatrix).toStrictEqual([['weight']]);
   });
@@ -279,6 +300,7 @@ describe('generateFormDefinition', () => {
         nonModels: {},
         models: {
           Dog: {
+            primaryKeys: ['id'],
             fields: {
               name: { dataType: 'String', readOnly: false, required: true, isArray: false },
               weight: { dataType: 'Float', readOnly: false, required: true, isArray: false },
@@ -332,6 +354,7 @@ describe('generateFormDefinition', () => {
         nonModels: {},
         models: {
           Event: {
+            primaryKeys: ['id'],
             fields: {
               sourceAccountId: { dataType: 'String', readOnly: false, required: true, isArray: false },
               endTime: { dataType: 'Float', readOnly: false, required: true, isArray: false },
@@ -369,6 +392,7 @@ describe('generateFormDefinition', () => {
         nonModels: {},
         models: {
           Dog: {
+            primaryKeys: ['id'],
             fields: {
               name: { dataType: 'String', readOnly: false, required: true, isArray: false },
               weight: { dataType: 'Float', readOnly: false, required: true, isArray: false },
@@ -406,6 +430,7 @@ it('should requeue if related element is not yet found', () => {
       dataSourceType: 'DataStore',
       models: {
         Event: {
+          primaryKeys: ['id'],
           fields: {
             name: {
               dataType: 'String',
@@ -497,6 +522,7 @@ it('should skip read-only fields without overrides', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: true, required: true, isArray: false },
           },
@@ -526,6 +552,7 @@ it('should add read-only fields if it has overrides', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             name: { dataType: 'String', readOnly: true, required: true, isArray: false },
           },
@@ -564,6 +591,7 @@ it('should skip adding id field if it has no overrides', () => {
       nonModels: {},
       models: {
         Dog: {
+          primaryKeys: ['id'],
           fields: {
             id: { dataType: 'ID', readOnly: false, required: true, isArray: false },
           },
@@ -573,4 +601,48 @@ it('should skip adding id field if it has no overrides', () => {
   });
   expect(formDefinition.elements).toStrictEqual({});
   expect(formDefinition.elementMatrix).toStrictEqual([]);
+});
+
+it('should make primary key read-only if update form', () => {
+  const formDefinition = generateFormDefinition({
+    form: {
+      id: '123',
+      name: 'mySampleForm',
+      formActionType: 'update',
+      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Student' },
+      fields: {
+        specialStudentId: { position: { below: 'Heading123' }, inputType: { type: 'TextField' } },
+        grade: { position: { rightOf: 'age' }, inputType: { type: 'TextField' } },
+        age: { position: { below: 'specialStudentId' }, inputType: { type: 'TextField' } },
+      },
+      sectionalElements: {
+        Heading123: { type: 'Heading', position: { fixed: 'first' }, level: 1, text: 'Create Student' },
+      },
+      style: {},
+      cta: {},
+    },
+    dataSchema: {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Student: {
+          primaryKeys: ['specialStudentId'],
+          fields: {
+            id: { dataType: 'ID', readOnly: false, required: true, isArray: false },
+            specialStudentId: { dataType: 'ID', readOnly: false, required: true, isArray: false },
+            grade: { dataType: 'Int', readOnly: false, required: true, isArray: false },
+            age: { dataType: 'Int', readOnly: false, required: true, isArray: false },
+          },
+        },
+      },
+    },
+  });
+
+  expect(formDefinition.elementMatrix).toStrictEqual([['Heading123'], ['specialStudentId'], ['age', 'grade']]);
+  expect(formDefinition.elements.specialStudentId.props).toStrictEqual({
+    label: 'Special student id',
+    isRequired: true,
+    isReadOnly: true,
+  });
 });

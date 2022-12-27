@@ -26,7 +26,7 @@
     "typescript": "^4.2.4"
   },
   "devDependencies": {
-    "@aws-amplify/datastore": "^3.12.12",
+    "@aws-amplify/datastore": "^4.0.0",
     "@aws-amplify/ui-react": "^2.1.0",
     "cypress": "12.0.2",
     "eslint-plugin-cypress": "2.12.1",

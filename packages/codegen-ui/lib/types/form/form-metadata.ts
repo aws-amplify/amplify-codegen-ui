@@ -13,8 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { DataFieldDataType } from '../data';
+import { DataFieldDataType, GenericDataRelationshipType } from '../data';
 import { FieldValidationConfiguration } from './form-validation';
+import { StudioFormValueMappings } from './input-config';
 import { FormStyleConfig, StudioFormStyle } from './style';
 
 /**
@@ -38,11 +39,14 @@ export type FieldConfigMetadata = {
   validationRules: FieldValidationConfiguration[];
   // component field is of type AWSTimestamp will need to map this to date then get time from date
   dataType?: DataFieldDataType;
+  relationship?: GenericDataRelationshipType;
   // for JSON type with invalid variable field name ie. { "1first-Name": "John" } => "firstName"
   sanitizedFieldName?: string;
   isArray?: boolean;
   componentType: string;
   studioFormComponentType?: string;
+  // used for dynamic mapping of displayValue
+  valueMappings?: StudioFormValueMappings;
 };
 
 export type FormMetadata = {

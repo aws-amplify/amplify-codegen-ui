@@ -13,25 +13,39 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
-import { isValidVariableName } from '@aws-amplify/codegen-ui';
-import { factory, JsxChild, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
-import {
-  buildAccessChain,
-  getArrayChildRefName,
-  getCurrentValueIdentifier,
-  getCurrentValueName,
-  getDefaultValueExpression,
-  setFieldState,
-} from '../../forms/form-state';
-import { buildOverrideOnChangeStatement } from '../../forms/form-renderer-helper';
+import { factory, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typescript';
 import { addUseEffectWrapper } from '../generate-react-hooks';
-import { getSetNameIdentifier } from '../../helpers';
 
 export const generateArrayFieldComponent = () => {
   const iconPath = 'M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z';
 
+  const labelElementIdentifier = 'labelElement';
+
+  const arraySection = 'arraySection';
   const bodyBlock = [
+    // const labelElement = <Text>{label}</Text>
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(labelElementIdentifier),
+            undefined,
+            undefined,
+            factory.createJsxElement(
+              factory.createJsxOpeningElement(
+                factory.createIdentifier('Text'),
+                undefined,
+                factory.createJsxAttributes([]),
+              ),
+              [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
+              factory.createJsxClosingElement(factory.createIdentifier('Text')),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
     factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -253,27 +267,25 @@ export const generateArrayFieldComponent = () => {
                 [
                   factory.createIfStatement(
                     factory.createBinaryExpression(
-                      factory.createParenthesizedExpression(
+                      factory.createBinaryExpression(
                         factory.createBinaryExpression(
-                          factory.createBinaryExpression(
-                            factory.createBinaryExpression(
-                              factory.createIdentifier('currentFieldValue'),
-                              factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
-                              factory.createIdentifier('undefined'),
-                            ),
-                            factory.createToken(SyntaxKind.BarBarToken),
-                            factory.createBinaryExpression(
-                              factory.createIdentifier('currentFieldValue'),
-                              factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
-                              factory.createNull(),
-                            ),
-                          ),
-                          factory.createToken(SyntaxKind.BarBarToken),
                           factory.createBinaryExpression(
                             factory.createIdentifier('currentFieldValue'),
                             factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
-                            factory.createStringLiteral(''),
+                            factory.createIdentifier('undefined'),
                           ),
+                          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                          factory.createBinaryExpression(
+                            factory.createIdentifier('currentFieldValue'),
+                            factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                            factory.createNull(),
+                          ),
+                        ),
+                        factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                        factory.createBinaryExpression(
+                          factory.createIdentifier('currentFieldValue'),
+                          factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                          factory.createStringLiteral(''),
                         ),
                       ),
                       factory.createToken(SyntaxKind.AmpersandAmpersandToken),
@@ -371,6 +383,445 @@ export const generateArrayFieldComponent = () => {
         NodeFlags.Const,
       ),
     ),
+
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createIdentifier(arraySection),
+            undefined,
+            undefined,
+            factory.createJsxElement(
+              factory.createJsxOpeningElement(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('React'),
+                  factory.createIdentifier('Fragment'),
+                ) as JsxTagNamePropertyAccess,
+                undefined,
+                factory.createJsxAttributes([]),
+              ),
+              [
+                factory.createJsxExpression(
+                  undefined,
+                  factory.createBinaryExpression(
+                    factory.createPrefixUnaryExpression(
+                      SyntaxKind.ExclamationToken,
+                      factory.createPrefixUnaryExpression(
+                        SyntaxKind.ExclamationToken,
+                        factory.createPropertyAccessChain(
+                          factory.createIdentifier('items'),
+                          factory.createToken(SyntaxKind.QuestionDotToken),
+                          factory.createIdentifier('length'),
+                        ),
+                      ),
+                    ),
+                    factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                    factory.createJsxElement(
+                      factory.createJsxOpeningElement(
+                        factory.createIdentifier('ScrollView'),
+                        undefined,
+                        factory.createJsxAttributes([
+                          factory.createJsxAttribute(
+                            factory.createIdentifier('height'),
+                            factory.createStringLiteral('inherit'),
+                          ),
+                          factory.createJsxAttribute(
+                            factory.createIdentifier('width'),
+                            factory.createStringLiteral('inherit'),
+                          ),
+                          factory.createJsxAttribute(
+                            factory.createIdentifier('maxHeight'),
+                            factory.createJsxExpression(undefined, factory.createStringLiteral('7rem')),
+                          ),
+                        ]),
+                      ),
+                      [
+                        factory.createJsxExpression(
+                          undefined,
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('items'),
+                              factory.createIdentifier('map'),
+                            ),
+                            undefined,
+                            [
+                              factory.createArrowFunction(
+                                undefined,
+                                undefined,
+                                [
+                                  factory.createParameterDeclaration(
+                                    undefined,
+                                    undefined,
+                                    undefined,
+                                    factory.createIdentifier('value'),
+                                    undefined,
+                                    undefined,
+                                  ),
+                                  factory.createParameterDeclaration(
+                                    undefined,
+                                    undefined,
+                                    undefined,
+                                    factory.createIdentifier('index'),
+                                    undefined,
+                                    undefined,
+                                  ),
+                                ],
+                                undefined,
+                                factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                factory.createBlock(
+                                  [
+                                    factory.createReturnStatement(
+                                      factory.createParenthesizedExpression(
+                                        factory.createJsxElement(
+                                          factory.createJsxOpeningElement(
+                                            factory.createIdentifier('Badge'),
+                                            undefined,
+                                            factory.createJsxAttributes([
+                                              factory.createJsxAttribute(
+                                                factory.createIdentifier('key'),
+                                                factory.createJsxExpression(
+                                                  undefined,
+                                                  factory.createIdentifier('index'),
+                                                ),
+                                              ),
+                                              factory.createJsxAttribute(
+                                                factory.createIdentifier('style'),
+                                                factory.createJsxExpression(
+                                                  undefined,
+                                                  factory.createObjectLiteralExpression(
+                                                    [
+                                                      factory.createPropertyAssignment(
+                                                        factory.createIdentifier('cursor'),
+                                                        factory.createStringLiteral('pointer'),
+                                                      ),
+                                                      factory.createPropertyAssignment(
+                                                        factory.createIdentifier('alignItems'),
+                                                        factory.createStringLiteral('center'),
+                                                      ),
+                                                      factory.createPropertyAssignment(
+                                                        factory.createIdentifier('marginRight'),
+                                                        factory.createNumericLiteral('3'),
+                                                      ),
+                                                      factory.createPropertyAssignment(
+                                                        factory.createIdentifier('marginTop'),
+                                                        factory.createNumericLiteral('3'),
+                                                      ),
+                                                      factory.createPropertyAssignment(
+                                                        factory.createIdentifier('backgroundColor'),
+                                                        factory.createConditionalExpression(
+                                                          factory.createBinaryExpression(
+                                                            factory.createIdentifier('index'),
+                                                            factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                                                            factory.createIdentifier('selectedBadgeIndex'),
+                                                          ),
+                                                          factory.createToken(SyntaxKind.QuestionToken),
+                                                          factory.createStringLiteral('#B8CEF9'),
+                                                          factory.createToken(SyntaxKind.ColonToken),
+                                                          factory.createStringLiteral(''),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                    true,
+                                                  ),
+                                                ),
+                                              ),
+                                              factory.createJsxAttribute(
+                                                factory.createIdentifier('onClick'),
+                                                factory.createJsxExpression(
+                                                  undefined,
+                                                  factory.createArrowFunction(
+                                                    undefined,
+                                                    undefined,
+                                                    [],
+                                                    undefined,
+                                                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                                    factory.createBlock(
+                                                      [
+                                                        factory.createExpressionStatement(
+                                                          factory.createCallExpression(
+                                                            factory.createIdentifier('setSelectedBadgeIndex'),
+                                                            undefined,
+                                                            [factory.createIdentifier('index')],
+                                                          ),
+                                                        ),
+                                                        factory.createExpressionStatement(
+                                                          factory.createCallExpression(
+                                                            factory.createIdentifier('setFieldValue'),
+                                                            undefined,
+                                                            [
+                                                              factory.createElementAccessExpression(
+                                                                factory.createIdentifier('items'),
+                                                                factory.createIdentifier('index'),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+
+                                                        factory.createExpressionStatement(
+                                                          factory.createCallExpression(
+                                                            factory.createIdentifier('setIsEditing'),
+                                                            undefined,
+                                                            [factory.createTrue()],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                      true,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]),
+                                          ),
+                                          [
+                                            // { getBadgeText ? getBadgeText(value) : value.toString() }
+                                            factory.createJsxExpression(
+                                              undefined,
+                                              factory.createConditionalExpression(
+                                                factory.createIdentifier('getBadgeText'),
+                                                factory.createToken(SyntaxKind.QuestionToken),
+                                                factory.createCallExpression(
+                                                  factory.createIdentifier('getBadgeText'),
+                                                  undefined,
+                                                  [factory.createIdentifier('value')],
+                                                ),
+                                                factory.createToken(SyntaxKind.ColonToken),
+                                                factory.createCallExpression(
+                                                  factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier('value'),
+                                                    factory.createIdentifier('toString'),
+                                                  ),
+                                                  undefined,
+                                                  [],
+                                                ),
+                                              ),
+                                            ),
+                                            factory.createJsxSelfClosingElement(
+                                              factory.createIdentifier('Icon'),
+                                              undefined,
+                                              factory.createJsxAttributes([
+                                                factory.createJsxAttribute(
+                                                  factory.createIdentifier('style'),
+                                                  factory.createJsxExpression(
+                                                    undefined,
+                                                    factory.createObjectLiteralExpression(
+                                                      [
+                                                        factory.createPropertyAssignment(
+                                                          factory.createIdentifier('cursor'),
+                                                          factory.createStringLiteral('pointer'),
+                                                        ),
+                                                        factory.createPropertyAssignment(
+                                                          factory.createIdentifier('paddingLeft'),
+                                                          factory.createNumericLiteral('3'),
+                                                        ),
+                                                        factory.createPropertyAssignment(
+                                                          factory.createIdentifier('width'),
+                                                          factory.createNumericLiteral('20'),
+                                                        ),
+                                                        factory.createPropertyAssignment(
+                                                          factory.createIdentifier('height'),
+                                                          factory.createNumericLiteral('20'),
+                                                        ),
+                                                      ],
+                                                      true,
+                                                    ),
+                                                  ),
+                                                ),
+                                                factory.createJsxAttribute(
+                                                  factory.createIdentifier('viewBox'),
+                                                  factory.createJsxExpression(
+                                                    undefined,
+                                                    factory.createObjectLiteralExpression(
+                                                      [
+                                                        factory.createPropertyAssignment(
+                                                          factory.createIdentifier('width'),
+                                                          factory.createNumericLiteral('20'),
+                                                        ),
+                                                        factory.createPropertyAssignment(
+                                                          factory.createIdentifier('height'),
+                                                          factory.createNumericLiteral('20'),
+                                                        ),
+                                                      ],
+                                                      false,
+                                                    ),
+                                                  ),
+                                                ),
+                                                factory.createJsxAttribute(
+                                                  factory.createIdentifier('paths'),
+                                                  factory.createJsxExpression(
+                                                    undefined,
+                                                    factory.createArrayLiteralExpression(
+                                                      [
+                                                        factory.createObjectLiteralExpression(
+                                                          [
+                                                            factory.createPropertyAssignment(
+                                                              factory.createIdentifier('d'),
+                                                              factory.createStringLiteral(iconPath),
+                                                            ),
+                                                            factory.createPropertyAssignment(
+                                                              factory.createIdentifier('stroke'),
+                                                              factory.createStringLiteral('black'),
+                                                            ),
+                                                          ],
+                                                          true,
+                                                        ),
+                                                      ],
+                                                      true,
+                                                    ),
+                                                  ),
+                                                ),
+                                                factory.createJsxAttribute(
+                                                  factory.createIdentifier('ariaLabel'),
+                                                  factory.createStringLiteral('button'),
+                                                ),
+                                                factory.createJsxAttribute(
+                                                  factory.createIdentifier('onClick'),
+                                                  factory.createJsxExpression(
+                                                    undefined,
+                                                    factory.createArrowFunction(
+                                                      undefined,
+                                                      undefined,
+                                                      [
+                                                        factory.createParameterDeclaration(
+                                                          undefined,
+                                                          undefined,
+                                                          undefined,
+                                                          factory.createIdentifier('event'),
+                                                          undefined,
+                                                          undefined,
+                                                        ),
+                                                      ],
+                                                      undefined,
+                                                      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                                      factory.createBlock(
+                                                        [
+                                                          factory.createExpressionStatement(
+                                                            factory.createCallExpression(
+                                                              factory.createPropertyAccessExpression(
+                                                                factory.createIdentifier('event'),
+                                                                factory.createIdentifier('stopPropagation'),
+                                                              ),
+                                                              undefined,
+                                                              [],
+                                                            ),
+                                                          ),
+                                                          factory.createExpressionStatement(
+                                                            factory.createCallExpression(
+                                                              factory.createIdentifier('removeItem'),
+                                                              undefined,
+                                                              [factory.createIdentifier('index')],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                        true,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]),
+                                            ),
+                                          ],
+                                          factory.createJsxClosingElement(factory.createIdentifier('Badge')),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                  true,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      factory.createJsxClosingElement(factory.createIdentifier('ScrollView')),
+                    ),
+                  ),
+                ),
+
+                factory.createJsxSelfClosingElement(
+                  factory.createIdentifier('Divider'),
+                  undefined,
+                  factory.createJsxAttributes([
+                    factory.createJsxAttribute(
+                      factory.createIdentifier('orientation'),
+                      factory.createStringLiteral('horizontal'),
+                    ),
+                    factory.createJsxAttribute(
+                      factory.createIdentifier('marginTop'),
+                      factory.createJsxExpression(undefined, factory.createNumericLiteral('5')),
+                    ),
+                  ]),
+                ),
+              ],
+              factory.createJsxClosingElement(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('React'),
+                  factory.createIdentifier('Fragment'),
+                ) as JsxTagNamePropertyAccess,
+              ),
+            ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
+
+    /**
+        if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+         return <>{labelElement}{arraySection}</>;
+        }
+     */
+    factory.createIfStatement(
+      factory.createBinaryExpression(
+        factory.createBinaryExpression(
+          factory.createBinaryExpression(
+            factory.createIdentifier('lengthLimit'),
+            factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+            factory.createIdentifier('undefined'),
+          ),
+          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+          factory.createBinaryExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('items'),
+              factory.createIdentifier('length'),
+            ),
+            factory.createToken(SyntaxKind.GreaterThanEqualsToken),
+            factory.createIdentifier('lengthLimit'),
+          ),
+        ),
+        factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+        factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier('isEditing')),
+      ),
+      factory.createBlock(
+        [
+          factory.createReturnStatement(
+            factory.createJsxElement(
+              factory.createJsxOpeningElement(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('React'),
+                  factory.createIdentifier('Fragment'),
+                ) as JsxTagNamePropertyAccess,
+                undefined,
+                factory.createJsxAttributes([]),
+              ),
+              [
+                factory.createJsxExpression(undefined, factory.createIdentifier(labelElementIdentifier)),
+                factory.createJsxExpression(undefined, factory.createIdentifier(arraySection)),
+              ],
+              factory.createJsxClosingElement(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('React'),
+                  factory.createIdentifier('Fragment'),
+                ) as JsxTagNamePropertyAccess,
+              ),
+            ),
+          ),
+        ],
+        true,
+      ),
+      undefined,
+    ),
+
     factory.createReturnStatement(
       factory.createParenthesizedExpression(
         factory.createJsxElement(
@@ -383,6 +834,8 @@ export const generateArrayFieldComponent = () => {
             factory.createJsxAttributes([]),
           ),
           [
+            // {labelElement}
+            factory.createJsxExpression(undefined, factory.createIdentifier(labelElementIdentifier)),
             factory.createJsxExpression(
               undefined,
               factory.createBinaryExpression(
@@ -400,16 +853,6 @@ export const generateArrayFieldComponent = () => {
                   factory.createJsxFragment(
                     factory.createJsxOpeningFragment(),
                     [
-                      factory.createJsxElement(
-                        factory.createJsxOpeningElement(
-                          factory.createIdentifier('Text'),
-                          undefined,
-                          factory.createJsxAttributes([]),
-                        ),
-                        [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
-                        factory.createJsxClosingElement(factory.createIdentifier('Text')),
-                      ),
-
                       factory.createJsxElement(
                         factory.createJsxOpeningElement(
                           factory.createIdentifier('Button'),
@@ -603,342 +1046,8 @@ export const generateArrayFieldComponent = () => {
                 ),
               ),
             ),
-
-            factory.createJsxExpression(
-              undefined,
-              factory.createBinaryExpression(
-                factory.createPrefixUnaryExpression(
-                  SyntaxKind.ExclamationToken,
-                  factory.createPrefixUnaryExpression(
-                    SyntaxKind.ExclamationToken,
-                    factory.createPropertyAccessChain(
-                      factory.createIdentifier('items'),
-                      factory.createToken(SyntaxKind.QuestionDotToken),
-                      factory.createIdentifier('length'),
-                    ),
-                  ),
-                ),
-                factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-                factory.createJsxElement(
-                  factory.createJsxOpeningElement(
-                    factory.createIdentifier('ScrollView'),
-                    undefined,
-                    factory.createJsxAttributes([
-                      factory.createJsxAttribute(
-                        factory.createIdentifier('height'),
-                        factory.createStringLiteral('inherit'),
-                      ),
-                      factory.createJsxAttribute(
-                        factory.createIdentifier('width'),
-                        factory.createStringLiteral('inherit'),
-                      ),
-                      factory.createJsxAttribute(
-                        factory.createIdentifier('maxHeight'),
-                        factory.createJsxExpression(undefined, factory.createStringLiteral('7rem')),
-                      ),
-                    ]),
-                  ),
-                  [
-                    factory.createJsxExpression(
-                      undefined,
-                      factory.createCallExpression(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier('items'),
-                          factory.createIdentifier('map'),
-                        ),
-                        undefined,
-                        [
-                          factory.createArrowFunction(
-                            undefined,
-                            undefined,
-                            [
-                              factory.createParameterDeclaration(
-                                undefined,
-                                undefined,
-                                undefined,
-                                factory.createIdentifier('value'),
-                                undefined,
-                                undefined,
-                              ),
-                              factory.createParameterDeclaration(
-                                undefined,
-                                undefined,
-                                undefined,
-                                factory.createIdentifier('index'),
-                                undefined,
-                                undefined,
-                              ),
-                            ],
-                            undefined,
-                            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                            factory.createBlock(
-                              [
-                                factory.createReturnStatement(
-                                  factory.createParenthesizedExpression(
-                                    factory.createJsxElement(
-                                      factory.createJsxOpeningElement(
-                                        factory.createIdentifier('Badge'),
-                                        undefined,
-                                        factory.createJsxAttributes([
-                                          factory.createJsxAttribute(
-                                            factory.createIdentifier('key'),
-                                            factory.createJsxExpression(undefined, factory.createIdentifier('index')),
-                                          ),
-                                          factory.createJsxAttribute(
-                                            factory.createIdentifier('style'),
-                                            factory.createJsxExpression(
-                                              undefined,
-                                              factory.createObjectLiteralExpression(
-                                                [
-                                                  factory.createPropertyAssignment(
-                                                    factory.createIdentifier('cursor'),
-                                                    factory.createStringLiteral('pointer'),
-                                                  ),
-                                                  factory.createPropertyAssignment(
-                                                    factory.createIdentifier('alignItems'),
-                                                    factory.createStringLiteral('center'),
-                                                  ),
-                                                  factory.createPropertyAssignment(
-                                                    factory.createIdentifier('marginRight'),
-                                                    factory.createNumericLiteral('3'),
-                                                  ),
-                                                  factory.createPropertyAssignment(
-                                                    factory.createIdentifier('marginTop'),
-                                                    factory.createNumericLiteral('3'),
-                                                  ),
-                                                  factory.createPropertyAssignment(
-                                                    factory.createIdentifier('backgroundColor'),
-                                                    factory.createConditionalExpression(
-                                                      factory.createBinaryExpression(
-                                                        factory.createIdentifier('index'),
-                                                        factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-                                                        factory.createIdentifier('selectedBadgeIndex'),
-                                                      ),
-                                                      factory.createToken(SyntaxKind.QuestionToken),
-                                                      factory.createStringLiteral('#B8CEF9'),
-                                                      factory.createToken(SyntaxKind.ColonToken),
-                                                      factory.createStringLiteral(''),
-                                                    ),
-                                                  ),
-                                                ],
-                                                true,
-                                              ),
-                                            ),
-                                          ),
-                                          factory.createJsxAttribute(
-                                            factory.createIdentifier('onClick'),
-                                            factory.createJsxExpression(
-                                              undefined,
-                                              factory.createArrowFunction(
-                                                undefined,
-                                                undefined,
-                                                [],
-                                                undefined,
-                                                factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                                factory.createBlock(
-                                                  [
-                                                    factory.createExpressionStatement(
-                                                      factory.createCallExpression(
-                                                        factory.createIdentifier('setSelectedBadgeIndex'),
-                                                        undefined,
-                                                        [factory.createIdentifier('index')],
-                                                      ),
-                                                    ),
-                                                    factory.createExpressionStatement(
-                                                      factory.createCallExpression(
-                                                        factory.createIdentifier('setFieldValue'),
-                                                        undefined,
-                                                        [
-                                                          factory.createElementAccessExpression(
-                                                            factory.createIdentifier('items'),
-                                                            factory.createIdentifier('index'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    factory.createExpressionStatement(
-                                                      factory.createCallExpression(
-                                                        factory.createIdentifier('setIsEditing'),
-                                                        undefined,
-                                                        [factory.createTrue()],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                  true,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ]),
-                                      ),
-                                      [
-                                        factory.createJsxExpression(
-                                          undefined,
-                                          factory.createCallExpression(
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('value'),
-                                              factory.createIdentifier('toString'),
-                                            ),
-                                            undefined,
-                                            [],
-                                          ),
-                                        ),
-                                        factory.createJsxSelfClosingElement(
-                                          factory.createIdentifier('Icon'),
-                                          undefined,
-                                          factory.createJsxAttributes([
-                                            factory.createJsxAttribute(
-                                              factory.createIdentifier('style'),
-                                              factory.createJsxExpression(
-                                                undefined,
-                                                factory.createObjectLiteralExpression(
-                                                  [
-                                                    factory.createPropertyAssignment(
-                                                      factory.createIdentifier('cursor'),
-                                                      factory.createStringLiteral('pointer'),
-                                                    ),
-                                                    factory.createPropertyAssignment(
-                                                      factory.createIdentifier('paddingLeft'),
-                                                      factory.createNumericLiteral('3'),
-                                                    ),
-                                                    factory.createPropertyAssignment(
-                                                      factory.createIdentifier('width'),
-                                                      factory.createNumericLiteral('20'),
-                                                    ),
-                                                    factory.createPropertyAssignment(
-                                                      factory.createIdentifier('height'),
-                                                      factory.createNumericLiteral('20'),
-                                                    ),
-                                                  ],
-                                                  true,
-                                                ),
-                                              ),
-                                            ),
-                                            factory.createJsxAttribute(
-                                              factory.createIdentifier('viewBox'),
-                                              factory.createJsxExpression(
-                                                undefined,
-                                                factory.createObjectLiteralExpression(
-                                                  [
-                                                    factory.createPropertyAssignment(
-                                                      factory.createIdentifier('width'),
-                                                      factory.createNumericLiteral('20'),
-                                                    ),
-                                                    factory.createPropertyAssignment(
-                                                      factory.createIdentifier('height'),
-                                                      factory.createNumericLiteral('20'),
-                                                    ),
-                                                  ],
-                                                  false,
-                                                ),
-                                              ),
-                                            ),
-                                            factory.createJsxAttribute(
-                                              factory.createIdentifier('paths'),
-                                              factory.createJsxExpression(
-                                                undefined,
-                                                factory.createArrayLiteralExpression(
-                                                  [
-                                                    factory.createObjectLiteralExpression(
-                                                      [
-                                                        factory.createPropertyAssignment(
-                                                          factory.createIdentifier('d'),
-                                                          factory.createStringLiteral(iconPath),
-                                                        ),
-                                                        factory.createPropertyAssignment(
-                                                          factory.createIdentifier('stroke'),
-                                                          factory.createStringLiteral('black'),
-                                                        ),
-                                                      ],
-                                                      true,
-                                                    ),
-                                                  ],
-                                                  true,
-                                                ),
-                                              ),
-                                            ),
-                                            factory.createJsxAttribute(
-                                              factory.createIdentifier('ariaLabel'),
-                                              factory.createStringLiteral('button'),
-                                            ),
-                                            factory.createJsxAttribute(
-                                              factory.createIdentifier('onClick'),
-                                              factory.createJsxExpression(
-                                                undefined,
-                                                factory.createArrowFunction(
-                                                  undefined,
-                                                  undefined,
-                                                  [
-                                                    factory.createParameterDeclaration(
-                                                      undefined,
-                                                      undefined,
-                                                      undefined,
-                                                      factory.createIdentifier('event'),
-                                                      undefined,
-                                                      undefined,
-                                                    ),
-                                                  ],
-                                                  undefined,
-                                                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                                  factory.createBlock(
-                                                    [
-                                                      factory.createExpressionStatement(
-                                                        factory.createCallExpression(
-                                                          factory.createPropertyAccessExpression(
-                                                            factory.createIdentifier('event'),
-                                                            factory.createIdentifier('stopPropagation'),
-                                                          ),
-                                                          undefined,
-                                                          [],
-                                                        ),
-                                                      ),
-                                                      factory.createExpressionStatement(
-                                                        factory.createCallExpression(
-                                                          factory.createIdentifier('removeItem'),
-                                                          undefined,
-                                                          [factory.createIdentifier('index')],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                    true,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ]),
-                                        ),
-                                      ],
-                                      factory.createJsxClosingElement(factory.createIdentifier('Badge')),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                              true,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  factory.createJsxClosingElement(factory.createIdentifier('ScrollView')),
-                ),
-              ),
-            ),
-
-            factory.createJsxSelfClosingElement(
-              factory.createIdentifier('Divider'),
-              undefined,
-              factory.createJsxAttributes([
-                factory.createJsxAttribute(
-                  factory.createIdentifier('orientation'),
-                  factory.createStringLiteral('horizontal'),
-                ),
-                factory.createJsxAttribute(
-                  factory.createIdentifier('marginTop'),
-                  factory.createJsxExpression(undefined, factory.createNumericLiteral('5')),
-                ),
-              ]),
-            ),
+            // {arraySection}
+            factory.createJsxExpression(undefined, factory.createIdentifier(arraySection)),
           ],
           factory.createJsxClosingElement(
             factory.createPropertyAccessExpression(
@@ -977,6 +1086,8 @@ export const generateArrayFieldComponent = () => {
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('setFieldValue'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('currentFieldValue'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('defaultFieldValue'), undefined),
+          factory.createBindingElement(undefined, undefined, factory.createIdentifier('lengthLimit'), undefined),
+          factory.createBindingElement(undefined, undefined, factory.createIdentifier('getBadgeText'), undefined),
         ]),
         undefined,
         undefined,
@@ -985,142 +1096,5 @@ export const generateArrayFieldComponent = () => {
     ],
     undefined,
     factory.createBlock(bodyBlock, true),
-  );
-};
-/*
-  <ArrayField
-    onChange = { async(items) => {
-      setBreeds(items);
-      setCurrentBreedsValue('');
-    }}
-    currentBreedsValue = { currentBreedsValue }
-    hasError = { errors.breeds?.hasError }
-    setFieldValue = { setCurrentBreedsValue }
-    inputFieldRef={ breedsRef }
-    >
-    <ExampleInputField />
-  </ArrayField>
-
-  wraps input field component with array field component
- */
-
-export const renderArrayFieldComponent = (
-  fieldName: string,
-  fieldLabel: string,
-  fieldConfigs: Record<string, FieldConfigMetadata>,
-  inputField: JsxChild,
-) => {
-  const { sanitizedFieldName, dataType, componentType } = fieldConfigs[fieldName];
-  const renderedFieldName = sanitizedFieldName || fieldName;
-  const stateName = getCurrentValueIdentifier(renderedFieldName);
-  const setStateName = getSetNameIdentifier(getCurrentValueName(renderedFieldName));
-  const valuesListName = factory.createIdentifier('values');
-  const onChangeArgName = factory.createIdentifier('items');
-
-  return factory.createJsxElement(
-    factory.createJsxOpeningElement(
-      factory.createIdentifier('ArrayField'),
-      undefined,
-      factory.createJsxAttributes([
-        factory.createJsxAttribute(
-          factory.createIdentifier('onChange'),
-          factory.createJsxExpression(
-            undefined,
-            factory.createArrowFunction(
-              [factory.createModifier(SyntaxKind.AsyncKeyword)],
-              undefined,
-              [
-                factory.createParameterDeclaration(
-                  undefined,
-                  undefined,
-                  undefined,
-                  onChangeArgName,
-                  undefined,
-                  undefined,
-                ),
-              ],
-              undefined,
-              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-              factory.createBlock(
-                [
-                  factory.createVariableStatement(
-                    undefined,
-                    factory.createVariableDeclarationList(
-                      [factory.createVariableDeclaration(valuesListName, undefined, undefined, onChangeArgName)],
-                      NodeFlags.Let,
-                    ),
-                  ),
-                  buildOverrideOnChangeStatement(fieldName, fieldConfigs, valuesListName),
-                  factory.createExpressionStatement(setFieldState(renderedFieldName, valuesListName)),
-
-                  factory.createExpressionStatement(
-                    factory.createCallExpression(setStateName, undefined, [
-                      getDefaultValueExpression(fieldName, componentType, dataType),
-                    ]),
-                  ),
-                ],
-                true,
-              ),
-            ),
-          ),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier(`currentFieldValue`),
-          factory.createJsxExpression(undefined, stateName),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier(`label`),
-          factory.createJsxExpression(undefined, factory.createStringLiteral(fieldLabel)),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('items'),
-          factory.createJsxExpression(
-            undefined,
-            // render `?? []` if nested && build access chain
-            renderedFieldName.includes('.')
-              ? factory.createBinaryExpression(
-                  buildAccessChain(renderedFieldName.split('.'), true),
-                  factory.createToken(SyntaxKind.QuestionQuestionToken),
-                  factory.createArrayLiteralExpression([], false),
-                )
-              : factory.createIdentifier(renderedFieldName),
-          ),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('hasError'),
-          factory.createJsxExpression(
-            undefined,
-            factory.createPropertyAccessChain(
-              isValidVariableName(fieldName)
-                ? factory.createPropertyAccessExpression(
-                    factory.createIdentifier('errors'),
-                    factory.createIdentifier(fieldName),
-                  )
-                : factory.createElementAccessChain(
-                    factory.createIdentifier('errors'),
-                    factory.createToken(SyntaxKind.QuestionDotToken),
-                    factory.createStringLiteral(fieldName),
-                  ),
-              factory.createToken(SyntaxKind.QuestionDotToken),
-              factory.createIdentifier('hasError'),
-            ),
-          ),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('setFieldValue'),
-          factory.createJsxExpression(undefined, setStateName),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('inputFieldRef'),
-          factory.createJsxExpression(undefined, factory.createIdentifier(getArrayChildRefName(renderedFieldName))),
-        ),
-        factory.createJsxAttribute(
-          factory.createIdentifier('defaultFieldValue'),
-          factory.createJsxExpression(undefined, getDefaultValueExpression(fieldName, componentType, dataType)),
-        ),
-      ]),
-    ),
-    [inputField],
-    factory.createJsxClosingElement(factory.createIdentifier('ArrayField')),
   );
 };

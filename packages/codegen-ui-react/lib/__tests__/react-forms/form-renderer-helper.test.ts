@@ -60,4 +60,23 @@ describe('form-render utils', () => {
     const node = printNode(propSignatures);
     expect(node).toMatchSnapshot();
   });
+
+  it('should render cancel props if included cancel object is an empty object', () => {
+    const form: StudioForm = {
+      id: '123',
+      name: 'myCustomForm',
+      formActionType: 'create',
+      dataType: { dataSourceType: 'Custom', dataTypeName: 'Custom' },
+      fields: {},
+      sectionalElements: {},
+      style: {},
+      cta: {
+        cancel: {},
+      },
+    };
+    const propSignatures = buildFormPropNode(form);
+    const node = printNode(propSignatures);
+    expect(node).toContain('onCancel?: () => void;');
+    expect(node).toMatchSnapshot();
+  });
 });

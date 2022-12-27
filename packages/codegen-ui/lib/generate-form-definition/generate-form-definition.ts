@@ -55,6 +55,7 @@ export function generateFormDefinition({
       dataSchema,
       formDefinition,
       dataTypeName: form.dataType.dataTypeName,
+      formActionType: form.formActionType,
     });
   }
 
@@ -69,8 +70,8 @@ export function generateFormDefinition({
     .concat(
       Object.entries(form.sectionalElements).map(([elementName, elementConfig]) => ({
         name: elementName,
-        position: elementConfig.position,
-        excluded: false,
+        position: 'position' in elementConfig ? elementConfig.position : undefined,
+        excluded: 'excluded' in elementConfig ? elementConfig.excluded : false,
       })),
     );
 

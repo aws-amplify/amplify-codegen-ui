@@ -330,7 +330,7 @@ export default function BookCreateForm(props) {
           isRequired={false}
           isReadOnly={false}
           onChange={(e) => {
-            // called when user is tping
+            // called when user is typing
             let { value } = e.target;
             if (errors.primaryAuthor?.hasError) {
               runValidationTasks('primaryAuthor', value);
@@ -338,9 +338,9 @@ export default function BookCreateForm(props) {
             setCurrentPrimaryAuthorDisplayValue(value);
             setCurrentPrimaryAuthorValue(undefined); // empty out prev selected option
           }}
-          suggestions={Array.from(authorRecords).map(([key, record]) => ({
-            id: key,
-            label: getDisplayValue['primaryAuthor'](record),
+          suggestions={authorRecords.map((r) => ({
+            id: r.id,
+            label: getDisplayValue['primaryAuthor']?.(record) ?? r.id,
           }))}
           onSuggestionSelect={({ id, label }) => {
             setCurrentPrimaryAuthorValue(authorRecords.find((r) => r.id === id));
