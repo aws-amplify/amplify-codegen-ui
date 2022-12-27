@@ -40,7 +40,9 @@ export const removeArrayItem = (itemLabel: string) => {
 };
 
 export const typeInAutocomplete = (content: string) => {
-  cy.get(`.amplify-autocomplete`).within(() => {
-    cy.get('input').type(content);
-  });
+  cy.get(`.amplify-autocomplete`)
+    .first()
+    .within(() => {
+      cy.get('input').type(content);
+    });
 };
