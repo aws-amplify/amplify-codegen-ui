@@ -213,80 +213,84 @@ describe('CreateForms', () => {
   // this model & related models all use CPK
   describe('DataStoreFormCreateCPKTeacher', () => {
     it('should display current values and save to DataStore', () => {
-      cy.get('#dataStoreFormCreateCPKTeacher').within(() => {
-        getInputByLabel('Special teacher id').type('Teacher ID');
+      cy.get('#dataStoreFormCreateCPKTeacher')
+        .first()
+        .within(() => {
+          getInputByLabel('Special teacher id').type('Teacher ID');
 
-        // hasOne
-        getArrayFieldButtonByLabel('Cpk student').click();
-        typeInAutocomplete('Her{downArrow}{enter}');
-        clickAddToArray();
+          // hasOne
+          getArrayFieldButtonByLabel('Cpk student').click();
+          typeInAutocomplete('Her{downArrow}{enter}');
+          clickAddToArray();
 
-        // manyToMany
-        getArrayFieldButtonByLabel('Cpk classes').click();
-        typeInAutocomplete('English{downArrow}{enter}');
-        clickAddToArray();
+          // manyToMany
+          getArrayFieldButtonByLabel('Cpk classes').click();
+          typeInAutocomplete('English{downArrow}{enter}');
+          clickAddToArray();
 
-        // hasMany
-        getArrayFieldButtonByLabel('Cpk projects').click();
-        typeInAutocomplete('Either{downArrow}{enter}');
-        clickAddToArray();
+          // hasMany
+          getArrayFieldButtonByLabel('Cpk projects').click();
+          typeInAutocomplete('Either{downArrow}{enter}');
+          clickAddToArray();
 
-        cy.contains('Submit').click();
+          cy.contains('Submit').click();
 
-        cy.contains(/Teacher ID/).then((recordElement: JQuery) => {
-          const record = JSON.parse(recordElement.text());
+          cy.contains(/Teacher ID/).then((recordElement: JQuery) => {
+            const record = JSON.parse(recordElement.text());
 
-          expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
-          expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
-          expect(record.CPKClasses.length).to.equal(1);
-          expect(record.CPKClasses[0].specialClassId).to.equal('English');
-          expect(record.CPKProjects.length).to.equal(1);
-          expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
+            expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
+            expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
+            expect(record.CPKClasses.length).to.equal(1);
+            expect(record.CPKClasses[0].specialClassId).to.equal('English');
+            expect(record.CPKProjects.length).to.equal(1);
+            expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
+          });
         });
-      });
     });
   });
 
   // this model & related models all use composite keys
   describe('DataStoreFormCreateCompositeDog', () => {
     it('should display current values and save to DataStore', () => {
-      cy.get('#dataStoreFormCreateCompositeDog').within(() => {
-        getInputByLabel('Name').type('Cookie');
-        getInputByLabel('Description').type('mogwai');
+      cy.get('#dataStoreFormCreateCompositeDog')
+        .first()
+        .within(() => {
+          getInputByLabel('Name').type('Cookie');
+          getInputByLabel('Description').type('mogwai');
 
-        // hasOne
-        getArrayFieldButtonByLabel('Composite bowl').click();
-        typeInAutocomplete('round - xl{downArrow}{enter}');
-        clickAddToArray();
+          // hasOne
+          getArrayFieldButtonByLabel('Composite bowl').click();
+          typeInAutocomplete('round - xl{downArrow}{enter}');
+          clickAddToArray();
 
-        // belongsTo
-        getArrayFieldButtonByLabel('Composite owner').click();
-        typeInAutocomplete('Cooper - Gordon{downArrow}{enter}');
-        clickAddToArray();
+          // belongsTo
+          getArrayFieldButtonByLabel('Composite owner').click();
+          typeInAutocomplete('Cooper - Gordon{downArrow}{enter}');
+          clickAddToArray();
 
-        // manyToMany
-        getArrayFieldButtonByLabel('Composite toys').click();
-        typeInAutocomplete('chew - red{downArrow}{enter}');
-        clickAddToArray();
+          // manyToMany
+          getArrayFieldButtonByLabel('Composite toys').click();
+          typeInAutocomplete('chew - red{downArrow}{enter}');
+          clickAddToArray();
 
-        // hasMany
-        getArrayFieldButtonByLabel('Composite vets').click();
-        typeInAutocomplete('Dentistry - Los Angeles{downArrow}{enter}');
-        clickAddToArray();
+          // hasMany
+          getArrayFieldButtonByLabel('Composite vets').click();
+          typeInAutocomplete('Dentistry - Los Angeles{downArrow}{enter}');
+          clickAddToArray();
 
-        cy.contains('Submit').click();
+          cy.contains('Submit').click();
 
-        cy.contains(/Cookie/).then((recordElement: JQuery) => {
-          const record = JSON.parse(recordElement.text());
+          cy.contains(/Cookie/).then((recordElement: JQuery) => {
+            const record = JSON.parse(recordElement.text());
 
-          expect(record.CompositeBowl.size).to.equal('xl');
-          expect(record.CompositeOwner.firstName).to.equal('Gordon');
-          expect(record.CompositeToys.length).to.equal(1);
-          expect(record.CompositeToys[0].color).to.equal('red');
-          expect(record.CompositeVets.length).to.equal(1);
-          expect(record.CompositeVets[0].city).to.equal('Los Angeles');
+            expect(record.CompositeBowl.size).to.equal('xl');
+            expect(record.CompositeOwner.firstName).to.equal('Gordon');
+            expect(record.CompositeToys.length).to.equal(1);
+            expect(record.CompositeToys[0].color).to.equal('red');
+            expect(record.CompositeVets.length).to.equal(1);
+            expect(record.CompositeVets[0].city).to.equal('Los Angeles');
+          });
         });
-      });
     });
   });
 });
