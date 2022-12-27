@@ -15,11 +15,13 @@
  */
 
 import { sentenceCase } from 'change-case';
+import { checkIsSupportedAsFormField } from '../../check-support';
 
 import { InvalidInputError } from '../../errors';
 import {
   FieldTypeMapKeys,
   FormDefinition,
+  FormFeatureFlags,
   GenericDataField,
   GenericDataModel,
   GenericDataSchema,
@@ -159,11 +161,13 @@ export function mapModelFieldsConfigs({
   formDefinition,
   dataSchema,
   formActionType,
+  featureFlags,
 }: {
   dataTypeName: string;
   dataSchema: GenericDataSchema;
   formDefinition: FormDefinition;
   formActionType?: StudioForm['formActionType'];
+  featureFlags?: FormFeatureFlags;
 }) {
   const modelFieldsConfigs: ModelFieldsConfigs = {};
   const model = dataSchema.models[dataTypeName];
@@ -176,6 +180,7 @@ export function mapModelFieldsConfigs({
     const isAutoExcludedField =
       field.readOnly ||
       (fieldName === 'id' && field.dataType === 'ID' && field.required) ||
+      !checkIsSupportedAsFormField(field, featureFlags) ||
       (field.relationship && !(typeof field.dataType === 'object' && 'model' in field.dataType));
 
     if (!isAutoExcludedField) {

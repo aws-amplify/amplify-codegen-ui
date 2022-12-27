@@ -22,6 +22,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-create',
         'datastore/post',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       expect(componentText).toContain('DataStore.save');
       expect(componentText).toContain('resetStateValues();');
@@ -33,6 +35,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/book-datastore-relationship',
         'datastore/relationship',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // check nested model is imported
       expect(componentText).toContain('import { Book, Author } from "../models";');
@@ -48,6 +52,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/book-datastore-relationship-multiple',
         'datastore/relationship-multiple',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // check nested model is imported
       expect(componentText).toContain('import { Book, Author, Title } from "../models";');
@@ -64,6 +70,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/member-datastore-create',
         'datastore/project-team-model',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // check nested model is imported
       expect(componentText).toContain('import { Member, Team as Team0 } from "../models";');
@@ -79,6 +87,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/member-datastore-update-belongs-to',
         'datastore/project-team-model',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // check nested model is imported
       expect(componentText).toContain('import { Member, Team as Team0 } from "../models";');
@@ -94,6 +104,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/member-datastore-create',
         'datastore/project-team-model',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // Check that custom field label is working as expected
       expect(componentText).toContain('Team Label');
@@ -108,6 +120,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/tag-datastore-create',
         'datastore/tag-post',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // check nested model is imported
       expect(componentText).toContain('import { Tag, Post, TagPost } from "../models";');
@@ -126,6 +140,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/tag-datastore-update',
         'datastore/tag-post',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // check nested model is imported
       expect(componentText).toContain('import { Tag, Post, TagPost } from "../models";');
@@ -153,6 +169,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/tag-datastore-create',
         'datastore/tag-post',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // get displayValue function
       expect(componentText).toContain('statuses: (r) => {');
@@ -171,6 +189,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/school-datastore-create',
         'datastore/school-student',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // check nested model is imported
       expect(componentText).toContain('import { School, Student } from "../models";');
@@ -189,6 +209,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/school-datastore-update',
         'datastore/school-student',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       // check nested model is imported
       expect(componentText).toContain('import { School, Student } from "../models";');
@@ -216,6 +238,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-create-row',
         'datastore/post',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       expect(componentText).toContain('DataStore.save');
       expect(componentText).toMatchSnapshot();
@@ -226,6 +250,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-update',
         'datastore/post',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       expect(componentText).toContain('DataStore.save');
       expect(componentText).toMatchSnapshot();
@@ -236,6 +262,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/blog-datastore-create',
         'datastore/blog',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       expect(componentText).toContain('DataStore.save');
       expect(componentText).toMatchSnapshot();
@@ -246,6 +274,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/input-gallery-create',
         'datastore/input-gallery',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       expect(componentText).toContain('DataStore.save');
       expect(componentText).toContain('const convertToLocal');
@@ -257,6 +287,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/input-gallery-update',
         'datastore/input-gallery',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       expect(componentText).toContain('DataStore.save');
       expect(componentText).toContain('const convertToLocal');
@@ -272,6 +304,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/flex-datastore-create',
         'datastore/flex',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       expect(componentText).toContain('DataStore.save');
       expect(componentText).toContain('Flex0');
@@ -282,6 +316,8 @@ describe('amplify form renderer tests', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/flex-datastore-update',
         'datastore/flex',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
       );
       expect(componentText).toContain('DataStore.save');
       expect(componentText).toContain('Flex0');
@@ -368,15 +404,29 @@ describe('amplify form renderer tests', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer(
           'forms/post-datastore-create-with-custom-array',
           'datastore/post',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
         );
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
+      });
+
+      it('should not render non-model fields if non-model support off', () => {
+        const { componentText } = generateWithAmplifyFormRenderer(
+          'forms/post-datastore-create-with-custom-array',
+          'datastore/post',
+          undefined,
+        );
+
+        expect(componentText).not.toContain('nonModelField');
       });
 
       it('should use matching case for ref when array field is capitalized', () => {
         const { componentText } = generateWithAmplifyFormRenderer(
           'forms/post-datastore-create-with-custom-array',
           'datastore/post',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
         );
 
         expect(componentText).toContain('const CustomtagsRef');
@@ -388,6 +438,8 @@ describe('amplify form renderer tests', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer(
           'forms/cpk-teacher-datastore-update',
           'datastore/cpk-relationships',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
         );
         // hasOne
         expect(componentText).toContain('specialTeacherId: specialTeacherIdProp');
@@ -416,6 +468,8 @@ describe('amplify form renderer tests', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer(
           'forms/composite-dog-datastore-update',
           'datastore/composite-relationships',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
         );
 
         expect(componentText).toMatchSnapshot();
@@ -426,10 +480,24 @@ describe('amplify form renderer tests', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer(
           'forms/composite-dog-datastore-create',
           'datastore/composite-relationships',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
         );
 
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
+      });
+
+      it('should not render relationships if relationship support off', () => {
+        const { componentText } = generateWithAmplifyFormRenderer(
+          'forms/composite-dog-datastore-create',
+          'datastore/composite-relationships',
+          undefined,
+        );
+        expect(componentText).not.toContain('CompositeBowl');
+        expect(componentText).not.toContain('CompositeOwner');
+        expect(componentText).not.toContain('CompositeToys');
+        expect(componentText).not.toContain('CompositeVets');
       });
     });
   });

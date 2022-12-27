@@ -20,6 +20,7 @@ import {
   getGenericFromDataStore,
   StudioForm,
   StudioView,
+  FormFeatureFlags,
 } from '@aws-amplify/codegen-ui';
 import { Schema } from '@aws-amplify/datastore';
 import { createPrinter, createSourceFile, EmitHint, NewLineKind, Node } from 'typescript';
@@ -56,6 +57,7 @@ export const generateWithAmplifyFormRenderer = (
   formJsonFile: string,
   dataSchemaJsonFile: string | undefined,
   renderConfig: ReactRenderConfig = defaultCLIRenderConfig,
+  featureFlags?: FormFeatureFlags,
 ): { componentText: string; declaration?: string } => {
   let dataSchema: GenericDataSchema | undefined;
   if (dataSchemaJsonFile) {
@@ -63,7 +65,7 @@ export const generateWithAmplifyFormRenderer = (
     dataSchema = getGenericFromDataStore(dataStoreSchema);
   }
   const rendererFactory = new StudioTemplateRendererFactory(
-    (component: StudioForm) => new AmplifyFormRenderer(component, dataSchema, renderConfig),
+    (component: StudioForm) => new AmplifyFormRenderer(component, dataSchema, renderConfig, featureFlags),
   );
 
   const renderer = rendererFactory.buildRenderer(loadSchemaFromJSONFile<StudioForm>(formJsonFile));

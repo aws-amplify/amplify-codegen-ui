@@ -61,7 +61,7 @@ describe('checkIsSupportedAsForm', () => {
     expect(checkIsSupportedAsForm(model)).toBe(false);
   });
 
-  it('should support relationships', () => {
+  it('should support relationships if relationship is enabled', () => {
     const model: GenericDataModel = {
       primaryKeys: ['id'],
       fields: {
@@ -75,6 +75,23 @@ describe('checkIsSupportedAsForm', () => {
       },
     };
 
-    expect(checkIsSupportedAsForm(model)).toBe(true);
+    expect(checkIsSupportedAsForm(model, { isRelationshipSupported: true })).toBe(true);
+  });
+
+  it('should not support relationships if relationship is not enabled', () => {
+    const model: GenericDataModel = {
+      primaryKeys: ['id'],
+      fields: {
+        relationship: {
+          dataType: 'ID',
+          required: true,
+          readOnly: false,
+          isArray: false,
+          relationship: { type: 'HAS_ONE', relatedModelName: 'RelatedModel' },
+        },
+      },
+    };
+
+    expect(checkIsSupportedAsForm(model)).toBe(false);
   });
 });

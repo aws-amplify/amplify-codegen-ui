@@ -13,19 +13,26 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { DataFieldDataType, GenericDataField, GenericDataModel } from './types';
+import { DataFieldDataType, GenericDataField, GenericDataModel, FormFeatureFlags } from './types';
 
 export const isNonModelDataType = (dataType?: DataFieldDataType): boolean => {
   return typeof dataType === 'object' && 'nonModel' in dataType;
 };
 
+// TODO: change so that default is supported once GA release
+const isRelationshipSupported = (featureFlags: FormFeatureFlags | undefined) => featureFlags?.isRelationshipSupported;
+
+// TODO: change so that default is supported once GA release
+const isNonModelSupported = (featureFlags: FormFeatureFlags | undefined) => featureFlags?.isNonModelSupported;
+
 /**
  * Checks whether a field is supported as a form input
  */
 
-export const checkIsSupportedAsFormField = (field: GenericDataField): boolean => {
+export const checkIsSupportedAsFormField = (field: GenericDataField, featureFlags?: FormFeatureFlags): boolean => {
   const unsupportedFieldMap: { [key: string]: (f: GenericDataField) => boolean } = {
-    nonModel: (f) => typeof f.dataType === 'object' && 'nonModel' in f.dataType,
+    nonModel: (f) => !isNonModelSupported(featureFlags) && typeof f.dataType === 'object' && 'nonModel' in f.dataType,
+    relationship: (f) => !isRelationshipSupported(featureFlags) && !!f.relationship,
   };
 
   const unsupportedArray = Object.values(unsupportedFieldMap);
@@ -34,7 +41,7 @@ export const checkIsSupportedAsFormField = (field: GenericDataField): boolean =>
 /**
  * Checks whether a form should be autogen'd from the given model
  */
-export const checkIsSupportedAsForm = (model: GenericDataModel): boolean => {
+export const checkIsSupportedAsForm = (model: GenericDataModel, featureFlags?: FormFeatureFlags): boolean => {
   const fieldsArray = Object.values(model.fields);
 
   // no empty forms
@@ -45,7 +52,7 @@ export const checkIsSupportedAsForm = (model: GenericDataModel): boolean => {
   let unsupportedFieldsCount = 0;
 
   const hasRequiredUnsupportedField = fieldsArray.some((field) => {
-    const isUnsupported = !checkIsSupportedAsFormField(field);
+    const isUnsupported = !checkIsSupportedAsFormField(field, featureFlags);
     if (isUnsupported) {
       unsupportedFieldsCount += 1;
 

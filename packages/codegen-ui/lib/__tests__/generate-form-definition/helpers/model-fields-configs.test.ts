@@ -168,7 +168,63 @@ describe('mapModelFieldsConfigs', () => {
     });
   });
 
-  it('should add model-type relationship fields to configs and matrix', () => {
+  it('should add model-type relationship fields to matrix if relationship enabled', () => {
+    const formDefinition: FormDefinition = getBasicFormDefinition();
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Owner: {
+          primaryKeys: ['id'],
+          fields: {},
+        },
+        Dog: {
+          primaryKeys: ['id'],
+          fields: {
+            Owner: {
+              dataType: { model: 'Owner' },
+              readOnly: false,
+              required: false,
+              isArray: false,
+              relationship: { type: 'HAS_ONE', relatedModelName: 'Owner' },
+            },
+          },
+        },
+      },
+    };
+
+    const modelFieldsConfigs = mapModelFieldsConfigs({
+      dataTypeName: 'Dog',
+      formDefinition,
+      dataSchema,
+      featureFlags: { isRelationshipSupported: true },
+    });
+
+    expect(formDefinition.elementMatrix).toStrictEqual([['Owner']]);
+    expect(modelFieldsConfigs).toStrictEqual({
+      Owner: {
+        dataType: { model: 'Owner' },
+        inputType: {
+          name: 'Owner',
+          readOnly: false,
+          required: false,
+          type: 'Autocomplete',
+          value: 'Owner',
+          isArray: false,
+          valueMappings: {
+            values: [{ value: { bindingProperties: { property: 'Owner', field: 'id' } } }],
+            bindingProperties: { Owner: { type: 'Data', bindingProperties: { model: 'Owner' } } },
+          },
+        },
+        label: 'Owner',
+        relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },
+      },
+    });
+  });
+
+  it('should not add model-type relationship fields matrix if relationship not enabled', () => {
     const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
@@ -197,7 +253,7 @@ describe('mapModelFieldsConfigs', () => {
 
     const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
 
-    expect(formDefinition.elementMatrix).toStrictEqual([['Owner']]);
+    expect(formDefinition.elementMatrix).toStrictEqual([]);
     expect(modelFieldsConfigs).toStrictEqual({
       Owner: {
         dataType: { model: 'Owner' },
@@ -270,7 +326,55 @@ describe('mapModelFieldsConfigs', () => {
     });
   });
 
-  it('should add nonModel field to matrix', () => {
+  it('should add nonModel field to matrix if nonModel enabled', () => {
+    const formDefinition: FormDefinition = getBasicFormDefinition();
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: { Interaction: { fields: {} } },
+      models: {
+        Dog: {
+          primaryKeys: ['id'],
+          fields: {
+            ownerId: {
+              dataType: { nonModel: 'Interaction' },
+              readOnly: false,
+              required: false,
+              isArray: false,
+            },
+          },
+        },
+      },
+    };
+
+    const modelFieldsConfigs = mapModelFieldsConfigs({
+      dataTypeName: 'Dog',
+      formDefinition,
+      dataSchema,
+      featureFlags: { isNonModelSupported: true },
+    });
+
+    expect(modelFieldsConfigs).toStrictEqual({
+      ownerId: {
+        dataType: {
+          nonModel: 'Interaction',
+        },
+        inputType: {
+          isArray: false,
+          name: 'ownerId',
+          readOnly: false,
+          required: false,
+          type: 'TextAreaField',
+          value: 'ownerId',
+        },
+        label: 'Owner id',
+      },
+    });
+    expect(formDefinition.elementMatrix).toStrictEqual([['ownerId']]);
+  });
+
+  it('should not add nonModel field to matrix if nonModel not supported', () => {
     const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
@@ -310,7 +414,7 @@ describe('mapModelFieldsConfigs', () => {
         label: 'Owner id',
       },
     });
-    expect(formDefinition.elementMatrix).toStrictEqual([['ownerId']]);
+    expect(formDefinition.elementMatrix).toStrictEqual([]);
   });
 
   it('should add value mappings from enums', () => {

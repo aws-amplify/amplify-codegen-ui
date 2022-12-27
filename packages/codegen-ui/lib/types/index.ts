@@ -31,5 +31,6 @@ export * from './form';
 export * from './view';
 export * from './data';
 export * from './string-format';
+export * from './featureFlags';
 
 export type StudioSchema = StudioComponent | StudioForm | StudioView | StudioTheme;

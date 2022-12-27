@@ -15,7 +15,14 @@
  */
 
 import { mapModelFieldsConfigs, mapElementMatrix, mapStyles, mapElements, mapButtons } from './helpers';
-import { StudioForm, FormDefinition, ModelFieldsConfigs, StudioFieldPosition, GenericDataSchema } from '../types';
+import {
+  StudioForm,
+  FormDefinition,
+  ModelFieldsConfigs,
+  StudioFieldPosition,
+  GenericDataSchema,
+  FormFeatureFlags,
+} from '../types';
 import { InvalidInputError } from '../errors';
 
 /**
@@ -28,9 +35,11 @@ import { InvalidInputError } from '../errors';
 export function generateFormDefinition({
   form,
   dataSchema,
+  featureFlags,
 }: {
   form: StudioForm;
   dataSchema?: GenericDataSchema;
+  featureFlags?: FormFeatureFlags;
 }): FormDefinition {
   const formDefinition: FormDefinition = {
     form: { layoutStyle: mapStyles(form.style) },
@@ -56,6 +65,7 @@ export function generateFormDefinition({
       formDefinition,
       dataTypeName: form.dataType.dataTypeName,
       formActionType: form.formActionType,
+      featureFlags,
     });
   }
 
