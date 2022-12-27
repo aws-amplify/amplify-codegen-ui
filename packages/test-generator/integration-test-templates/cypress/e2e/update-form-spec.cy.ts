@@ -23,7 +23,7 @@ import {
 } from '../utils/form';
 
 describe('UpdateForms', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/update-form-tests');
   });
 
