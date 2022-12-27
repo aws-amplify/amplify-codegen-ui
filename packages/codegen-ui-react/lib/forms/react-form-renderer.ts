@@ -29,6 +29,7 @@ import {
   StudioNode,
   StudioTemplateRenderer,
   validateFormSchema,
+  FormFeatureFlags,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import {
@@ -131,7 +132,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
   protected primaryKeys: string[] | undefined;
 
-  constructor(component: StudioForm, dataSchema: GenericDataSchema | undefined, renderConfig: ReactRenderConfig) {
+  constructor(
+    component: StudioForm,
+    dataSchema: GenericDataSchema | undefined,
+    renderConfig: ReactRenderConfig,
+    featureFlags?: FormFeatureFlags,
+  ) {
     super(component, new ReactOutputManager(), renderConfig);
     this.renderConfig = {
       ...defaultRenderConfig,
@@ -140,7 +146,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // the super class creates a component aka form which is what we pass in this extended implmentation
     this.fileName = `${this.component.name}.${scriptKindToFileExtension(this.renderConfig.script)}`;
 
-    this.formDefinition = generateFormDefinition({ form: component, dataSchema });
+    this.formDefinition = generateFormDefinition({ form: component, dataSchema, featureFlags });
 
     // create a studio component which will represent the structure of the form
     this.formComponent = mapFormDefinitionToComponent(this.component.name, this.formDefinition);
