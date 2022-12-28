@@ -31,6 +31,7 @@ import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-rend
 import { hasTokenReference } from '../utils/forms/layout-helpers';
 import { resetFunctionCheck } from '../forms/form-renderer-helper/value-props';
 import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
+import { replaceEmptyStringStatement } from '../forms/form-renderer-helper/cta-props';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -138,6 +139,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
         factory.createTryStatement(
           factory.createBlock(
             [
+              replaceEmptyStringStatement,
               ...buildDataStoreExpression(
                 formActionType,
                 dataTypeName,

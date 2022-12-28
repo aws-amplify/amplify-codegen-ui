@@ -92,6 +92,23 @@ describe('CreateForms', () => {
   });
 
   describe('DataStoreFormCreateAllSupportedFormFields', () => {
+    beforeEach(() => {
+      cy.reload();
+    });
+    it('should save to DataStore with blank values in non-required fields', () => {
+      cy.get('#dataStoreFormCreateAllSupportedFormFields').within(() => {
+        getInputByLabel('String').type('MyString');
+
+        cy.contains('Submit').click();
+
+        cy.contains(/MyString/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
+
+          expect(record.string).to.equal('MyString');
+        });
+      });
+    });
+
     it('should save to DataStore', () => {
       cy.get('#dataStoreFormCreateAllSupportedFormFields').within(() => {
         getInputByLabel('String').type('MyString');
