@@ -28,6 +28,9 @@ describe('UpdateForms', () => {
   });
 
   describe('DataStoreFormUpdateAllSupportedFormFields', () => {
+    beforeEach(() => {
+      cy.reload();
+    });
     it('should display current values and save to DataStore', () => {
       cy.get('#dataStoreFormUpdateAllSupportedFormFields').within(() => {
         // TODO: check current values on all fields and change
@@ -97,9 +100,6 @@ describe('UpdateForms', () => {
     });
 
     it('should remove hasOne and belongsTo relationships', () => {
-      // reset state
-      cy.reload();
-
       cy.get('#dataStoreFormUpdateAllSupportedFormFields').within(() => {
         // hasOne
         removeArrayItem('John Lennon');

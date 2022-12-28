@@ -379,6 +379,11 @@ export default function CreateCompositeDogForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           const compositeDog = await DataStore.save(
             new CompositeDog({
               ...modelFields,
@@ -2817,6 +2822,11 @@ export default function MyPostForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Post(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -3594,6 +3604,11 @@ export default function UpdateCompositeDogForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           const promises = [];
           const compositeToysToLink = [];
           const compositeToysToUnLink = [];
@@ -4574,6 +4589,11 @@ export default function UpdateCPKTeacherForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           const promises = [];
           const cPKClassesToLinkMap = new Map();
           const cPKClassesToUnLinkMap = new Map();
@@ -6536,6 +6556,11 @@ export default function MyPostForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Post(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -7110,6 +7135,11 @@ export default function TagCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           const tag = await DataStore.save(
             new Tag({
               ...modelFields,
@@ -7658,6 +7688,11 @@ export default function MyMemberForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Member(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -8125,6 +8160,11 @@ export default function SchoolCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           const school = await DataStore.save(
             new School({
               ...modelFields,
@@ -8612,6 +8652,11 @@ export default function BookCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Book(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -9100,6 +9145,11 @@ export default function TagCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           const tag = await DataStore.save(
             new Tag({
               ...modelFields,
@@ -9678,6 +9728,11 @@ export default function BookCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Book(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -10095,6 +10150,11 @@ export default function MyPostForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(
             Post.copyOf(postRecord, (updated) => {
               Object.assign(updated, modelFields);
@@ -10754,6 +10814,11 @@ export default function SchoolUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           const promises = [];
           const studentsToLink = [];
           const studentsToUnLink = [];
@@ -11280,6 +11345,11 @@ export default function MyMemberForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(
             Member.copyOf(memberRecord, (updated) => {
               Object.assign(updated, modelFields);
@@ -11798,6 +11868,11 @@ export default function TagUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           const promises = [];
           const postsToLinkMap = new Map();
           const postsToUnLinkMap = new Map();
@@ -12397,6 +12472,11 @@ export default function MyFlexCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Flex0(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -12971,6 +13051,11 @@ export default function BlogCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Blog(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -13567,6 +13652,11 @@ export default function InputGalleryCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new InputGallery(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -14489,6 +14579,11 @@ export default function InputGalleryUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(
             InputGallery.copyOf(inputGalleryRecord, (updated) => {
               Object.assign(updated, modelFields);
@@ -15357,6 +15452,11 @@ export default function MyFlexUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(
             Flex0.copyOf(flexRecord, (updated) => {
               Object.assign(updated, modelFields);
@@ -15785,6 +15885,11 @@ export default function PostCreateFormRow(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Post(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -16391,6 +16496,11 @@ export default function MyMemberForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Member(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);

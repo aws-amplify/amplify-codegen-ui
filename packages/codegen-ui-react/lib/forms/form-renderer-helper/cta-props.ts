@@ -102,6 +102,92 @@ const getRecordUpdateDataStoreCallExpression = ({
   );
 };
 
+/**
+  Object.entries(modelFields).forEach(([key, value]) => {
+    if (typeof value === 'string' && value.trim() === "") {
+      modelFields[key] = undefined;
+    }
+  });
+ */
+export const replaceEmptyStringStatement = factory.createExpressionStatement(
+  factory.createCallExpression(
+    factory.createPropertyAccessExpression(
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier('Object'), factory.createIdentifier('entries')),
+        undefined,
+        [factory.createIdentifier('modelFields')],
+      ),
+      factory.createIdentifier('forEach'),
+    ),
+    undefined,
+    [
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createArrayBindingPattern([
+              factory.createBindingElement(undefined, undefined, factory.createIdentifier('key'), undefined),
+              factory.createBindingElement(undefined, undefined, factory.createIdentifier('value'), undefined),
+            ]),
+            undefined,
+            undefined,
+            undefined,
+          ),
+        ],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createBlock(
+          [
+            factory.createIfStatement(
+              factory.createBinaryExpression(
+                factory.createBinaryExpression(
+                  factory.createTypeOfExpression(factory.createIdentifier('value')),
+                  factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                  factory.createStringLiteral('string'),
+                ),
+                factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                factory.createBinaryExpression(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('value'),
+                      factory.createIdentifier('trim'),
+                    ),
+                    undefined,
+                    [],
+                  ),
+                  factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                  factory.createStringLiteral(''),
+                ),
+              ),
+              factory.createBlock(
+                [
+                  factory.createExpressionStatement(
+                    factory.createBinaryExpression(
+                      factory.createElementAccessExpression(
+                        factory.createIdentifier('modelFields'),
+                        factory.createIdentifier('key'),
+                      ),
+                      factory.createToken(SyntaxKind.EqualsToken),
+                      factory.createIdentifier('undefined'),
+                    ),
+                  ),
+                ],
+                true,
+              ),
+              undefined,
+            ),
+          ],
+          true,
+        ),
+      ),
+    ],
+  ),
+);
+
 export const buildDataStoreExpression = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
