@@ -559,7 +559,12 @@ export default function CreateCompositeDogForm(props) {
             setCurrentCompositeBowlDisplayValue(value);
             setCurrentCompositeBowlValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"CompositeBowl\\", CompositeBowl)}
+          onBlur={() =>
+            runValidationTasks(
+              \\"CompositeBowl\\",
+              currentCompositeBowlDisplayValue
+            )
+          }
           errorMessage={errors.CompositeBowl?.errorMessage}
           hasError={errors.CompositeBowl?.hasError}
           ref={CompositeBowlRef}
@@ -635,7 +640,12 @@ export default function CreateCompositeDogForm(props) {
             setCurrentCompositeOwnerDisplayValue(value);
             setCurrentCompositeOwnerValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"CompositeOwner\\", CompositeOwner)}
+          onBlur={() =>
+            runValidationTasks(
+              \\"CompositeOwner\\",
+              currentCompositeOwnerDisplayValue
+            )
+          }
           errorMessage={errors.CompositeOwner?.errorMessage}
           hasError={errors.CompositeOwner?.hasError}
           ref={CompositeOwnerRef}
@@ -711,7 +721,10 @@ export default function CreateCompositeDogForm(props) {
             setCurrentCompositeToysValue(undefined);
           }}
           onBlur={() =>
-            runValidationTasks(\\"CompositeToys\\", currentCompositeToysValue)
+            runValidationTasks(
+              \\"CompositeToys\\",
+              currentCompositeToysDisplayValue
+            )
           }
           errorMessage={errors.CompositeToys?.errorMessage}
           hasError={errors.CompositeToys?.hasError}
@@ -788,7 +801,10 @@ export default function CreateCompositeDogForm(props) {
             setCurrentCompositeVetsValue(undefined);
           }}
           onBlur={() =>
-            runValidationTasks(\\"CompositeVets\\", currentCompositeVetsValue)
+            runValidationTasks(
+              \\"CompositeVets\\",
+              currentCompositeVetsDisplayValue
+            )
           }
           errorMessage={errors.CompositeVets?.errorMessage}
           hasError={errors.CompositeVets?.hasError}
@@ -3883,7 +3899,12 @@ export default function UpdateCompositeDogForm(props) {
             setCurrentCompositeBowlDisplayValue(value);
             setCurrentCompositeBowlValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"CompositeBowl\\", CompositeBowl)}
+          onBlur={() =>
+            runValidationTasks(
+              \\"CompositeBowl\\",
+              currentCompositeBowlDisplayValue
+            )
+          }
           errorMessage={errors.CompositeBowl?.errorMessage}
           hasError={errors.CompositeBowl?.hasError}
           ref={CompositeBowlRef}
@@ -3960,7 +3981,12 @@ export default function UpdateCompositeDogForm(props) {
             setCurrentCompositeOwnerDisplayValue(value);
             setCurrentCompositeOwnerValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"CompositeOwner\\", CompositeOwner)}
+          onBlur={() =>
+            runValidationTasks(
+              \\"CompositeOwner\\",
+              currentCompositeOwnerDisplayValue
+            )
+          }
           errorMessage={errors.CompositeOwner?.errorMessage}
           hasError={errors.CompositeOwner?.hasError}
           ref={CompositeOwnerRef}
@@ -4036,7 +4062,10 @@ export default function UpdateCompositeDogForm(props) {
             setCurrentCompositeToysValue(undefined);
           }}
           onBlur={() =>
-            runValidationTasks(\\"CompositeToys\\", currentCompositeToysValue)
+            runValidationTasks(
+              \\"CompositeToys\\",
+              currentCompositeToysDisplayValue
+            )
           }
           errorMessage={errors.CompositeToys?.errorMessage}
           hasError={errors.CompositeToys?.hasError}
@@ -4113,7 +4142,10 @@ export default function UpdateCompositeDogForm(props) {
             setCurrentCompositeVetsValue(undefined);
           }}
           onBlur={() =>
-            runValidationTasks(\\"CompositeVets\\", currentCompositeVetsValue)
+            runValidationTasks(
+              \\"CompositeVets\\",
+              currentCompositeVetsDisplayValue
+            )
           }
           errorMessage={errors.CompositeVets?.errorMessage}
           hasError={errors.CompositeVets?.hasError}
@@ -4816,7 +4848,9 @@ export default function UpdateCPKTeacherForm(props) {
             setCurrentCPKStudentDisplayValue(value);
             setCurrentCPKStudentValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"CPKStudent\\", CPKStudent)}
+          onBlur={() =>
+            runValidationTasks(\\"CPKStudent\\", currentCPKStudentDisplayValue)
+          }
           errorMessage={errors.CPKStudent?.errorMessage}
           hasError={errors.CPKStudent?.hasError}
           ref={CPKStudentRef}
@@ -4886,7 +4920,7 @@ export default function UpdateCPKTeacherForm(props) {
             setCurrentCPKClassesValue(undefined);
           }}
           onBlur={() =>
-            runValidationTasks(\\"CPKClasses\\", currentCPKClassesValue)
+            runValidationTasks(\\"CPKClasses\\", currentCPKClassesDisplayValue)
           }
           errorMessage={errors.CPKClasses?.errorMessage}
           hasError={errors.CPKClasses?.hasError}
@@ -4957,7 +4991,7 @@ export default function UpdateCPKTeacherForm(props) {
             setCurrentCPKProjectsValue(undefined);
           }}
           onBlur={() =>
-            runValidationTasks(\\"CPKProjects\\", currentCPKProjectsValue)
+            runValidationTasks(\\"CPKProjects\\", currentCPKProjectsDisplayValue)
           }
           errorMessage={errors.CPKProjects?.errorMessage}
           hasError={errors.CPKProjects?.hasError}
@@ -7260,7 +7294,7 @@ export default function TagCreateForm(props) {
             setCurrentPostsDisplayValue(value);
             setCurrentPostsValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Posts\\", currentPostsValue)}
+          onBlur={() => runValidationTasks(\\"Posts\\", currentPostsDisplayValue)}
           errorMessage={errors.Posts?.errorMessage}
           hasError={errors.Posts?.hasError}
           ref={PostsRef}
@@ -7828,7 +7862,7 @@ export default function MyMemberForm(props) {
             setCurrentTeamDisplayValue(value);
             setCurrentTeamValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Team\\", Team)}
+          onBlur={() => runValidationTasks(\\"Team\\", currentTeamDisplayValue)}
           errorMessage={errors.Team?.errorMessage}
           hasError={errors.Team?.hasError}
           ref={TeamRef}
@@ -8282,7 +8316,9 @@ export default function SchoolCreateForm(props) {
             setCurrentStudentsDisplayValue(value);
             setCurrentStudentsValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Students\\", currentStudentsValue)}
+          onBlur={() =>
+            runValidationTasks(\\"Students\\", currentStudentsDisplayValue)
+          }
           errorMessage={errors.Students?.errorMessage}
           hasError={errors.Students?.hasError}
           ref={StudentsRef}
@@ -8796,7 +8832,12 @@ export default function BookCreateForm(props) {
             setCurrentPrimaryAuthorDisplayValue(value);
             setCurrentPrimaryAuthorValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"primaryAuthor\\", primaryAuthor)}
+          onBlur={() =>
+            runValidationTasks(
+              \\"primaryAuthor\\",
+              currentPrimaryAuthorDisplayValue
+            )
+          }
           errorMessage={errors.primaryAuthor?.errorMessage}
           hasError={errors.primaryAuthor?.hasError}
           ref={primaryAuthorRef}
@@ -9270,7 +9311,7 @@ export default function TagCreateForm(props) {
             setCurrentPostsDisplayValue(value);
             setCurrentPostsValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Posts\\", currentPostsValue)}
+          onBlur={() => runValidationTasks(\\"Posts\\", currentPostsDisplayValue)}
           errorMessage={errors.Posts?.errorMessage}
           hasError={errors.Posts?.hasError}
           ref={PostsRef}
@@ -9874,7 +9915,12 @@ export default function BookCreateForm(props) {
             setCurrentPrimaryAuthorDisplayValue(value);
             setCurrentPrimaryAuthorValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"primaryAuthor\\", primaryAuthor)}
+          onBlur={() =>
+            runValidationTasks(
+              \\"primaryAuthor\\",
+              currentPrimaryAuthorDisplayValue
+            )
+          }
           errorMessage={errors.primaryAuthor?.errorMessage}
           hasError={errors.primaryAuthor?.hasError}
           ref={primaryAuthorRef}
@@ -9945,7 +9991,9 @@ export default function BookCreateForm(props) {
             setCurrentPrimaryTitleDisplayValue(value);
             setCurrentPrimaryTitleValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"primaryTitle\\", primaryTitle)}
+          onBlur={() =>
+            runValidationTasks(\\"primaryTitle\\", currentPrimaryTitleDisplayValue)
+          }
           errorMessage={errors.primaryTitle?.errorMessage}
           hasError={errors.primaryTitle?.hasError}
           ref={primaryTitleRef}
@@ -10960,7 +11008,9 @@ export default function SchoolUpdateForm(props) {
             setCurrentStudentsDisplayValue(value);
             setCurrentStudentsValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Students\\", currentStudentsValue)}
+          onBlur={() =>
+            runValidationTasks(\\"Students\\", currentStudentsDisplayValue)
+          }
           errorMessage={errors.Students?.errorMessage}
           hasError={errors.Students?.hasError}
           ref={StudentsRef}
@@ -11494,7 +11544,7 @@ export default function MyMemberForm(props) {
             setCurrentTeamDisplayValue(value);
             setCurrentTeamValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Team\\", Team)}
+          onBlur={() => runValidationTasks(\\"Team\\", currentTeamDisplayValue)}
           errorMessage={errors.Team?.errorMessage}
           hasError={errors.Team?.hasError}
           ref={TeamRef}
@@ -12043,7 +12093,7 @@ export default function TagUpdateForm(props) {
             setCurrentPostsDisplayValue(value);
             setCurrentPostsValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Posts\\", currentPostsValue)}
+          onBlur={() => runValidationTasks(\\"Posts\\", currentPostsDisplayValue)}
           errorMessage={errors.Posts?.errorMessage}
           hasError={errors.Posts?.hasError}
           ref={PostsRef}
@@ -16636,7 +16686,7 @@ export default function MyMemberForm(props) {
             setCurrentTeamDisplayValue(value);
             setCurrentTeamValue(undefined);
           }}
-          onBlur={() => runValidationTasks(\\"Team\\", Team)}
+          onBlur={() => runValidationTasks(\\"Team\\", currentTeamDisplayValue)}
           errorMessage={errors.Team?.errorMessage}
           hasError={errors.Team?.hasError}
           ref={TeamRef}

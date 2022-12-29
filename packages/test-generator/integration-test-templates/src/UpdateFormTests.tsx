@@ -173,7 +173,8 @@ const initializeCPKTeacherTestData = async ({
   const createdRecord = await DataStore.save(
     new CPKTeacher({
       specialTeacherId: 'mySpecialTeacherId',
-      CPKStudent: connectedStudent,
+      CPKStudent: connectedStudent as CPKStudent,
+      cPKTeacherCPKStudentSpecialStudentId: 'Harry',
     }),
   );
 

@@ -900,7 +900,7 @@ export default {
           type: {
             model: 'CPKStudent',
           },
-          isRequired: false,
+          isRequired: true,
           attributes: [],
           association: {
             connectionType: 'HAS_ONE',
@@ -956,7 +956,7 @@ export default {
           name: 'cPKTeacherCPKStudentSpecialStudentId',
           isArray: false,
           type: 'ID',
-          isRequired: false,
+          isRequired: true,
           attributes: [],
         },
       },
