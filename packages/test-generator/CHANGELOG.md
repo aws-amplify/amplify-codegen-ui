@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.6.0...v2.7.0) (2022-12-29)
+
+
+### Bug Fixes
+
+* add temp solution for removing hasOne & belongsTo relationships ([22e3838](https://github.com/aws-amplify/amplify-codegen-ui/commit/22e38386f5fc44a91c8c4ca6070e4ee000cc3070))
+* allow empty non-required fields to save ([3524702](https://github.com/aws-amplify/amplify-codegen-ui/commit/352470234e45fbf3c24554957f4a461ad02dcf3a))
+* bad merge conflict ([cad4606](https://github.com/aws-amplify/amplify-codegen-ui/commit/cad4606246a10451629c335d276337bb2ec1e53a))
+* fix label and edit behavior of hasOne relationship field ([ece13b6](https://github.com/aws-amplify/amplify-codegen-ui/commit/ece13b6127c8184feca80907746e66189a8feabd))
+* fix merge conflicts ([2ad276c](https://github.com/aws-amplify/amplify-codegen-ui/commit/2ad276c16ab50a137d066f25f33de1f2aa938a2e))
+* handle association breaking changes for new schema ([f63a424](https://github.com/aws-amplify/amplify-codegen-ui/commit/f63a424c028747ec2c723f994588e956c45cc837))
+* hasMany integ test ([927d61b](https://github.com/aws-amplify/amplify-codegen-ui/commit/927d61bb98b55a47a4a39504691e96d6d0cd0f06))
+* reverting schema change for model based hasMany integ test ([95e8f14](https://github.com/aws-amplify/amplify-codegen-ui/commit/95e8f14a402b88a5da959f8763d9f45d6afbdd93))
+* set authModeStrategyType in e2e test ([eb3496e](https://github.com/aws-amplify/amplify-codegen-ui/commit/eb3496eda036ca0ae3f9170014326e5b3dbe7bb7))
+* unmatching schema in hasMany integ test ([44ca4fb](https://github.com/aws-amplify/amplify-codegen-ui/commit/44ca4fb939f5a74e4d888aa83a8e7020f6302e1c))
+
+
+### Features
+
+* add feature flags for relationship and non-model form fields support ([40bfeec](https://github.com/aws-amplify/amplify-codegen-ui/commit/40bfeecf4a634080fe56e97b55db292a0b452718))
+
+
+### Reverts
+
+* Revert "chore: temporarily typecast custom theme" ([fa4769b](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa4769b09a3695e221179ad921f698a69ce66642))
+
+
+
+
+
 # [2.6.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.8...v2.6.0) (2022-12-14)
 
 ### Bug Fixes
