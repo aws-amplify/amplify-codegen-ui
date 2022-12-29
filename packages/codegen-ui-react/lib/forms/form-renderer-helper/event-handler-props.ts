@@ -118,6 +118,14 @@ export function buildOnBlurStatement(fieldName: string, fieldConfig: FieldConfig
     );
   }
 
+  let valueToValidate = fieldNameIdentifier;
+  if (shouldWrapInArrayField(fieldConfig)) {
+    valueToValidate = getCurrentValueIdentifier(renderedFieldName);
+  }
+  if (isModelDataType(fieldConfig)) {
+    valueToValidate = factory.createIdentifier(getCurrentDisplayValueName(renderedFieldName));
+  }
+
   return factory.createJsxAttribute(
     factory.createIdentifier('onBlur'),
     factory.createJsxExpression(
@@ -130,7 +138,7 @@ export function buildOnBlurStatement(fieldName: string, fieldConfig: FieldConfig
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
           factory.createStringLiteral(fieldName),
-          fieldConfig.isArray ? getCurrentValueIdentifier(renderedFieldName) : fieldNameIdentifier,
+          valueToValidate,
         ]),
       ),
     ),

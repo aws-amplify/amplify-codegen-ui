@@ -491,12 +491,12 @@ type EagerCPKTeacher = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly specialTeacherId: string;
-  readonly CPKStudent?: CPKStudent | null;
+  readonly CPKStudent: CPKStudent;
   readonly CPKClasses?: (CPKTeacherCPKClass | null)[] | null;
   readonly CPKProjects?: (CPKProject | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly cPKTeacherCPKStudentSpecialStudentId?: string | null;
+  readonly cPKTeacherCPKStudentSpecialStudentId: string;
 };
 
 type LazyCPKTeacher = {
@@ -505,12 +505,12 @@ type LazyCPKTeacher = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly specialTeacherId: string;
-  readonly CPKStudent: AsyncItem<CPKStudent | undefined>;
+  readonly CPKStudent: AsyncItem<CPKStudent>;
   readonly CPKClasses: AsyncCollection<CPKTeacherCPKClass>;
   readonly CPKProjects: AsyncCollection<CPKProject>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly cPKTeacherCPKStudentSpecialStudentId?: string | null;
+  readonly cPKTeacherCPKStudentSpecialStudentId: string;
 };
 
 export declare type CPKTeacher = LazyLoading extends LazyLoadingDisabled ? EagerCPKTeacher : LazyCPKTeacher;

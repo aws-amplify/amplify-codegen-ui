@@ -41,7 +41,7 @@
             }
           ],
           "bindingProperties": {
-            "Author": {
+            "User": {
               "type": "Data",
               "bindingProperties": {
                 "model": "User"
