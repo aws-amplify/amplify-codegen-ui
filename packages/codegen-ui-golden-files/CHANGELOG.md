@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.6.0...v2.7.0) (2022-12-29)
+
+
+### Features
+
+* adding many-to-many relationship create form golden file ([a0c5cbe](https://github.com/aws-amplify/amplify-codegen-ui/commit/a0c5cbe44c35dfa1fd8acfbc45e6cd3e48ab8f25))
+
+
+
+
+
 # [2.6.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.8...v2.6.0) (2022-12-14)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui-golden-files
