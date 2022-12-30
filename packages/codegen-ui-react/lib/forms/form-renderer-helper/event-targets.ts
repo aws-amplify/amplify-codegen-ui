@@ -14,8 +14,7 @@
   limitations under the License.
  */
 import { DataFieldDataType } from '@aws-amplify/codegen-ui';
-import { factory, NodeFlags, Expression, SyntaxKind, Identifier, VariableStatement } from 'typescript';
-import { buildAccessChain, setErrorState } from './form-state';
+import { factory, NodeFlags, Expression, SyntaxKind, Identifier } from 'typescript';
 
 /*
 Builds the event target variable. Example:
@@ -55,110 +54,6 @@ const setVariableStatement = (lhs: Identifier, assignment: Expression) =>
     ),
   );
 
-const numberVariableStatement = (fieldName: string, variable: VariableStatement) => {
-  return [
-    variable,
-    factory.createIfStatement(
-      factory.createCallExpression(factory.createIdentifier('isNaN'), undefined, [factory.createIdentifier('value')]),
-      factory.createBlock(
-        [
-          setErrorState(
-            factory.createIdentifier(fieldName),
-            factory.createStringLiteral('Value must be a valid number'),
-          ),
-          factory.createReturnStatement(undefined),
-        ],
-        true,
-      ),
-      undefined,
-    ),
-  ];
-};
-
-/**
- * const date = new Date(e.target.value);
- *
- * if(!(date instanceof Date && !isNaN(date))) {
- *
- * setErrors((errors) => ({ ...errors, [key]: 'The value must be a valid date' }));
- *
- * return
- *
- * }
- *
- * let value = Number(value);
- *
- * @param fieldName name of field used to set error if date is invalid
- * @returns return expression block {example above}
- */
-const timestampVariableStatement = (fieldName: string) => {
-  return [
-    factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            factory.createIdentifier('date'),
-            undefined,
-            undefined,
-            factory.createNewExpression(factory.createIdentifier('Date'), undefined, [
-              buildAccessChain(['e', 'target', 'value'], false),
-            ]),
-          ),
-        ],
-        NodeFlags.Const,
-      ),
-    ),
-    factory.createIfStatement(
-      factory.createPrefixUnaryExpression(
-        SyntaxKind.ExclamationToken,
-        factory.createParenthesizedExpression(
-          factory.createBinaryExpression(
-            factory.createBinaryExpression(
-              factory.createIdentifier('date'),
-              factory.createToken(SyntaxKind.InstanceOfKeyword),
-              factory.createIdentifier('Date'),
-            ),
-            factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-            factory.createPrefixUnaryExpression(
-              SyntaxKind.ExclamationToken,
-              factory.createCallExpression(factory.createIdentifier('isNaN'), undefined, [
-                factory.createIdentifier('date'),
-              ]),
-            ),
-          ),
-        ),
-      ),
-      factory.createBlock(
-        [
-          setErrorState(
-            factory.createIdentifier(fieldName),
-            factory.createStringLiteral('The value must be a valid date'),
-          ),
-          factory.createReturnStatement(undefined),
-        ],
-        false,
-      ),
-    ),
-    factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
-            expressionMap.value,
-            undefined,
-            undefined,
-            factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
-              factory.createIdentifier('date'),
-            ]),
-          ),
-        ],
-        NodeFlags.Let,
-      ),
-    ),
-  ];
-};
-
 export const buildTargetVariable = (fieldType: string, fieldName: string, dataType?: DataFieldDataType) => {
   const fieldTypeToExpressionMap: {
     [fieldType: string]: { expression: Expression; identifier: Identifier };
@@ -190,27 +85,54 @@ export const buildTargetVariable = (fieldType: string, fieldName: string, dataTy
     fieldTypeToExpressionMap[fieldType]?.identifier ?? expressionMap.destructuredValue;
   switch (dataType) {
     case 'AWSTimestamp':
-      // validate date first then cast to number
-      return timestampVariableStatement(fieldName);
+      // value = e.target.value === '' ? '' : Number(new Date(e.target.value))
+      defaultIdentifier = expressionMap.value;
+      expression = factory.createConditionalExpression(
+        factory.createBinaryExpression(
+          expressionMap.eTargetValue,
+          factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+          factory.createStringLiteral(''),
+        ),
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createStringLiteral(''),
+        factory.createToken(SyntaxKind.ColonToken),
+        factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
+          factory.createNewExpression(factory.createIdentifier('Date'), undefined, [expressionMap.eTargetValue]),
+        ]),
+      );
+      return [setVariableStatement(defaultIdentifier, expression)];
     case 'Float':
       if (fieldType === 'TextField') {
-        // value = Number(e.target.value);
+        // value = isNaN(parseFloat(e.target.value)) ? e.target.value : parseFloat(e.target.value);
         defaultIdentifier = expressionMap.value;
-        expression = factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
+        expression = factory.createConditionalExpression(
+          factory.createCallExpression(factory.createIdentifier('isNaN'), undefined, [
+            factory.createCallExpression(factory.createIdentifier('parseFloat'), undefined, [
+              expressionMap.eTargetValue,
+            ]),
+          ]),
+          factory.createToken(SyntaxKind.QuestionToken),
           expressionMap.eTargetValue,
-        ]);
+          factory.createToken(SyntaxKind.ColonToken),
+          factory.createCallExpression(factory.createIdentifier('parseFloat'), undefined, [expressionMap.eTargetValue]),
+        );
       }
-      return numberVariableStatement(fieldName, setVariableStatement(defaultIdentifier, expression));
-      break;
+      return [setVariableStatement(defaultIdentifier, expression)];
     case 'Int':
       if (fieldType === 'TextField') {
-        // value = parseInt(e.target.value);
+        // value = isNaN(parseInt(e.target.value)) ? e.target.value : parseInt(e.target.value);
         defaultIdentifier = expressionMap.value;
-        expression = factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [
+        expression = factory.createConditionalExpression(
+          factory.createCallExpression(factory.createIdentifier('isNaN'), undefined, [
+            factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [expressionMap.eTargetValue]),
+          ]),
+          factory.createToken(SyntaxKind.QuestionToken),
           expressionMap.eTargetValue,
-        ]);
+          factory.createToken(SyntaxKind.ColonToken),
+          factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [expressionMap.eTargetValue]),
+        );
       }
-      return numberVariableStatement(fieldName, setVariableStatement(defaultIdentifier, expression));
+      return [setVariableStatement(defaultIdentifier, expression)];
     case 'Boolean':
       if (fieldType === 'RadioGroupField') {
         // value = e.target.value === 'true'
@@ -222,23 +144,31 @@ export const buildTargetVariable = (fieldType: string, fieldName: string, dataTy
         );
       }
       return [setVariableStatement(defaultIdentifier, expression)];
+    case 'AWSDateTime':
+      // value = e.target.value === '' ? '' : new Date(value).toISOString()
+      defaultIdentifier = expressionMap.value;
+      expression = factory.createConditionalExpression(
+        factory.createBinaryExpression(
+          expressionMap.eTargetValue,
+          factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+          factory.createStringLiteral(''),
+        ),
+        factory.createToken(SyntaxKind.QuestionToken),
+        factory.createStringLiteral(''),
+        factory.createToken(SyntaxKind.ColonToken),
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createNewExpression(factory.createIdentifier('Date'), undefined, [expressionMap.eTargetValue]),
+            factory.createIdentifier('toISOString'),
+          ),
+          undefined,
+          [],
+        ),
+      );
+
+      return [setVariableStatement(defaultIdentifier, expression)];
+
     default:
       return [setVariableStatement(defaultIdentifier, expression)];
   }
-};
-
-export const getFormattedValueExpression = (dataType?: DataFieldDataType): Expression => {
-  // setStateExpression(getCurrentValueName(renderedFieldName), factory.createIdentifier('value')),
-  let setExpression: Expression = factory.createIdentifier('value');
-  if (dataType === 'AWSDateTime') {
-    setExpression = factory.createCallExpression(
-      factory.createPropertyAccessExpression(
-        factory.createNewExpression(factory.createIdentifier('Date'), undefined, [factory.createIdentifier('value')]),
-        factory.createIdentifier('toISOString'),
-      ),
-      undefined,
-      [],
-    );
-  }
-  return setExpression;
 };
