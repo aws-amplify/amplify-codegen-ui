@@ -2157,7 +2157,7 @@ export default function CustomDataForm(props) {
   const initialValues = {
     name: \\"\\",
     email: \\"\\",
-    \\"metadata-field\\": undefined,
+    \\"metadata-field\\": \\"\\",
     city: undefined,
     category: undefined,
     pages: 0,
@@ -2319,7 +2319,7 @@ export default function CustomDataForm(props) {
       <TextAreaField
         label=\\"Metadata\\"
         isRequired={true}
-        defaultValue={metadataField}
+        value={metadataField}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -2733,24 +2733,20 @@ export default function MyPostForm(props) {
     caption: \\"\\",
     Customtags: [],
     post_url: \\"\\",
-    metadata: undefined,
+    metadata: \\"\\",
     profile_url: \\"\\",
-    nonModelField: undefined,
+    nonModelField: \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [Customtags, setCustomtags] = React.useState(initialValues.Customtags);
   const [post_url, setPost_url] = React.useState(initialValues.post_url);
-  const [metadata, setMetadata] = React.useState(
-    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
-  );
+  const [metadata, setMetadata] = React.useState(initialValues.metadata);
   const [profile_url, setProfile_url] = React.useState(
     initialValues.profile_url
   );
   const [nonModelField, setNonModelField] = React.useState(
     initialValues.nonModelField
-      ? JSON.stringify(initialValues.nonModelField)
-      : undefined
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -6499,23 +6495,19 @@ export default function MyPostForm(props) {
     caption: \\"\\",
     username: \\"\\",
     post_url: \\"\\",
-    metadata: undefined,
+    metadata: \\"\\",
     profile_url: \\"\\",
-    nonModelField: undefined,
+    nonModelField: \\"\\",
   };
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [username, setUsername] = React.useState(initialValues.username);
   const [post_url, setPost_url] = React.useState(initialValues.post_url);
-  const [metadata, setMetadata] = React.useState(
-    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
-  );
+  const [metadata, setMetadata] = React.useState(initialValues.metadata);
   const [profile_url, setProfile_url] = React.useState(
     initialValues.profile_url
   );
   const [nonModelField, setNonModelField] = React.useState(
     initialValues.nonModelField
-      ? JSON.stringify(initialValues.nonModelField)
-      : undefined
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -10077,13 +10069,13 @@ export default function MyPostForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    TextAreaFieldbbd63464: undefined,
+    TextAreaFieldbbd63464: \\"\\",
     caption: \\"\\",
     username: \\"\\",
     profile_url: \\"\\",
     post_url: \\"\\",
-    metadata: undefined,
-    nonModelField: undefined,
+    metadata: \\"\\",
+    nonModelField: \\"\\",
   };
   const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
     initialValues.TextAreaFieldbbd63464
@@ -10094,13 +10086,9 @@ export default function MyPostForm(props) {
     initialValues.profile_url
   );
   const [post_url, setPost_url] = React.useState(initialValues.post_url);
-  const [metadata, setMetadata] = React.useState(
-    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
-  );
+  const [metadata, setMetadata] = React.useState(initialValues.metadata);
   const [nonModelField, setNonModelField] = React.useState(
     initialValues.nonModelField
-      ? JSON.stringify(initialValues.nonModelField)
-      : undefined
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -10260,7 +10248,7 @@ export default function MyPostForm(props) {
       </Flex>
       <TextAreaField
         label=\\"Label\\"
-        defaultValue={TextAreaFieldbbd63464}
+        value={TextAreaFieldbbd63464}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -10412,7 +10400,7 @@ export default function MyPostForm(props) {
         label=\\"Metadata\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={metadata}
+        value={metadata}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -10442,7 +10430,7 @@ export default function MyPostForm(props) {
         label=\\"Non model field\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={nonModelField}
+        value={nonModelField}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -13213,7 +13201,8 @@ export default function BlogCreateForm(props) {
         type=\\"datetime-local\\"
         value={published && convertToLocal(new Date(published))}
         onChange={(e) => {
-          let { value } = e.target;
+          let value =
+            e.target.value === \\"\\" ? \\"\\" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
               title,
@@ -13228,7 +13217,7 @@ export default function BlogCreateForm(props) {
           if (errors.published?.hasError) {
             runValidationTasks(\\"published\\", value);
           }
-          setPublished(new Date(value).toISOString());
+          setPublished(value);
         }}
         onBlur={() => runValidationTasks(\\"published\\", published)}
         errorMessage={errors.published?.errorMessage}
@@ -13270,15 +13259,8 @@ export default function BlogCreateForm(props) {
             convertToLocal(convertTimeStampToDate(currentEditedAtValue))
           }
           onChange={(e) => {
-            const date = new Date(e.target.value);
-            if (!(date instanceof Date && !isNaN(date))) {
-              setErrors((errors) => ({
-                ...errors,
-                editedAt: \\"The value must be a valid date\\",
-              }));
-              return;
-            }
-            let value = Number(date);
+            let value =
+              e.target.value === \\"\\" ? \\"\\" : Number(new Date(e.target.value));
             if (errors.editedAt?.hasError) {
               runValidationTasks(\\"editedAt\\", value);
             }
@@ -13561,7 +13543,7 @@ export default function InputGalleryCreateForm(props) {
     maybeCheck: false,
     arrayTypeField: [],
     jsonArray: [],
-    jsonField: undefined,
+    jsonField: \\"\\",
     timestamp: \\"\\",
     ippy: \\"\\",
     timeisnow: \\"\\",
@@ -13575,11 +13557,7 @@ export default function InputGalleryCreateForm(props) {
     initialValues.arrayTypeField
   );
   const [jsonArray, setJsonArray] = React.useState(initialValues.jsonArray);
-  const [jsonField, setJsonField] = React.useState(
-    initialValues.jsonField
-      ? JSON.stringify(initialValues.jsonField)
-      : undefined
-  );
+  const [jsonField, setJsonField] = React.useState(initialValues.jsonField);
   const [timestamp, setTimestamp] = React.useState(initialValues.timestamp);
   const [ippy, setIppy] = React.useState(initialValues.ippy);
   const [timeisnow, setTimeisnow] = React.useState(initialValues.timeisnow);
@@ -13593,7 +13571,7 @@ export default function InputGalleryCreateForm(props) {
     setArrayTypeField(initialValues.arrayTypeField);
     setCurrentArrayTypeFieldValue(\\"\\");
     setJsonArray(initialValues.jsonArray);
-    setCurrentJsonArrayValue(undefined);
+    setCurrentJsonArrayValue(\\"\\");
     setJsonField(initialValues.jsonField);
     setTimestamp(initialValues.timestamp);
     setIppy(initialValues.ippy);
@@ -13603,8 +13581,7 @@ export default function InputGalleryCreateForm(props) {
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
     React.useState(\\"\\");
   const arrayTypeFieldRef = React.createRef();
-  const [currentJsonArrayValue, setCurrentJsonArrayValue] =
-    React.useState(undefined);
+  const [currentJsonArrayValue, setCurrentJsonArrayValue] = React.useState(\\"\\");
   const jsonArrayRef = React.createRef();
   const validations = {
     num: [],
@@ -13731,14 +13708,9 @@ export default function InputGalleryCreateForm(props) {
         step=\\"any\\"
         value={num}
         onChange={(e) => {
-          let value = parseInt(e.target.value);
-          if (isNaN(value)) {
-            setErrors((errors) => ({
-              ...errors,
-              num: \\"Value must be a valid number\\",
-            }));
-            return;
-          }
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
               num: value,
@@ -13774,14 +13746,9 @@ export default function InputGalleryCreateForm(props) {
         step=\\"any\\"
         value={rootbeer}
         onChange={(e) => {
-          let value = Number(e.target.value);
-          if (isNaN(value)) {
-            setErrors((errors) => ({
-              ...errors,
-              rootbeer: \\"Value must be a valid number\\",
-            }));
-            return;
-          }
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
               num,
@@ -13997,7 +13964,7 @@ export default function InputGalleryCreateForm(props) {
             values = result?.jsonArray ?? values;
           }
           setJsonArray(values);
-          setCurrentJsonArrayValue(undefined);
+          setCurrentJsonArrayValue(\\"\\");
         }}
         currentFieldValue={currentJsonArrayValue}
         label={\\"Json array\\"}
@@ -14005,7 +13972,7 @@ export default function InputGalleryCreateForm(props) {
         hasError={errors.jsonArray?.hasError}
         setFieldValue={setCurrentJsonArrayValue}
         inputFieldRef={jsonArrayRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextAreaField
           label=\\"Json array\\"
@@ -14067,15 +14034,8 @@ export default function InputGalleryCreateForm(props) {
         type=\\"datetime-local\\"
         value={timestamp && convertToLocal(convertTimeStampToDate(timestamp))}
         onChange={(e) => {
-          const date = new Date(e.target.value);
-          if (!(date instanceof Date && !isNaN(date))) {
-            setErrors((errors) => ({
-              ...errors,
-              timestamp: \\"The value must be a valid date\\",
-            }));
-            return;
-          }
-          let value = Number(date);
+          let value =
+            e.target.value === \\"\\" ? \\"\\" : Number(new Date(e.target.value));
           if (onChange) {
             const modelFields = {
               num,
@@ -14469,7 +14429,7 @@ export default function InputGalleryUpdateForm(props) {
     maybeCheck: false,
     arrayTypeField: [],
     jsonArray: [],
-    jsonField: undefined,
+    jsonField: \\"\\",
     timestamp: \\"\\",
     ippy: \\"\\",
     timeisnow: \\"\\",
@@ -14483,11 +14443,7 @@ export default function InputGalleryUpdateForm(props) {
     initialValues.arrayTypeField
   );
   const [jsonArray, setJsonArray] = React.useState(initialValues.jsonArray);
-  const [jsonField, setJsonField] = React.useState(
-    initialValues.jsonField
-      ? JSON.stringify(initialValues.jsonField)
-      : undefined
-  );
+  const [jsonField, setJsonField] = React.useState(initialValues.jsonField);
   const [timestamp, setTimestamp] = React.useState(initialValues.timestamp);
   const [ippy, setIppy] = React.useState(initialValues.ippy);
   const [timeisnow, setTimeisnow] = React.useState(initialValues.timeisnow);
@@ -14504,7 +14460,7 @@ export default function InputGalleryUpdateForm(props) {
     setArrayTypeField(cleanValues.arrayTypeField ?? []);
     setCurrentArrayTypeFieldValue(\\"\\");
     setJsonArray(cleanValues.jsonArray ?? []);
-    setCurrentJsonArrayValue(undefined);
+    setCurrentJsonArrayValue(\\"\\");
     setJsonField(
       typeof cleanValues.jsonField === \\"string\\"
         ? cleanValues.jsonField
@@ -14530,8 +14486,7 @@ export default function InputGalleryUpdateForm(props) {
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
     React.useState(\\"\\");
   const arrayTypeFieldRef = React.createRef();
-  const [currentJsonArrayValue, setCurrentJsonArrayValue] =
-    React.useState(undefined);
+  const [currentJsonArrayValue, setCurrentJsonArrayValue] = React.useState(\\"\\");
   const jsonArrayRef = React.createRef();
   const validations = {
     num: [],
@@ -14659,14 +14614,9 @@ export default function InputGalleryUpdateForm(props) {
         step=\\"any\\"
         value={num}
         onChange={(e) => {
-          let value = parseInt(e.target.value);
-          if (isNaN(value)) {
-            setErrors((errors) => ({
-              ...errors,
-              num: \\"Value must be a valid number\\",
-            }));
-            return;
-          }
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
               num: value,
@@ -14702,14 +14652,9 @@ export default function InputGalleryUpdateForm(props) {
         step=\\"any\\"
         value={rootbeer}
         onChange={(e) => {
-          let value = Number(e.target.value);
-          if (isNaN(value)) {
-            setErrors((errors) => ({
-              ...errors,
-              rootbeer: \\"Value must be a valid number\\",
-            }));
-            return;
-          }
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
               num,
@@ -14927,7 +14872,7 @@ export default function InputGalleryUpdateForm(props) {
             values = result?.jsonArray ?? values;
           }
           setJsonArray(values);
-          setCurrentJsonArrayValue(undefined);
+          setCurrentJsonArrayValue(\\"\\");
         }}
         currentFieldValue={currentJsonArrayValue}
         label={\\"Json array\\"}
@@ -14935,7 +14880,7 @@ export default function InputGalleryUpdateForm(props) {
         hasError={errors.jsonArray?.hasError}
         setFieldValue={setCurrentJsonArrayValue}
         inputFieldRef={jsonArrayRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <TextAreaField
           label=\\"Json array\\"
@@ -14961,7 +14906,7 @@ export default function InputGalleryUpdateForm(props) {
         label=\\"Json field\\"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={jsonField}
+        value={jsonField}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -14998,15 +14943,8 @@ export default function InputGalleryUpdateForm(props) {
         type=\\"datetime-local\\"
         value={timestamp && convertToLocal(convertTimeStampToDate(timestamp))}
         onChange={(e) => {
-          const date = new Date(e.target.value);
-          if (!(date instanceof Date && !isNaN(date))) {
-            setErrors((errors) => ({
-              ...errors,
-              timestamp: \\"The value must be a valid date\\",
-            }));
-            return;
-          }
-          let value = Number(date);
+          let value =
+            e.target.value === \\"\\" ? \\"\\" : Number(new Date(e.target.value));
           if (onChange) {
             const modelFields = {
               num,
@@ -15835,8 +15773,8 @@ export default function PostCreateFormRow(props) {
     post_url: \\"\\",
     profile_url: \\"\\",
     status: undefined,
-    metadata: undefined,
-    nonModelField: undefined,
+    metadata: \\"\\",
+    nonModelField: \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -15845,13 +15783,9 @@ export default function PostCreateFormRow(props) {
     initialValues.profile_url
   );
   const [status, setStatus] = React.useState(initialValues.status);
-  const [metadata, setMetadata] = React.useState(
-    initialValues.metadata ? JSON.stringify(initialValues.metadata) : undefined
-  );
+  const [metadata, setMetadata] = React.useState(initialValues.metadata);
   const [nonModelField, setNonModelField] = React.useState(
     initialValues.nonModelField
-      ? JSON.stringify(initialValues.nonModelField)
-      : undefined
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {

@@ -140,6 +140,7 @@ export const getDefaultValueExpression = (
     SliderField: factory.createNumericLiteral(0),
     CheckboxField: factory.createFalse(),
     TextField: factory.createStringLiteral(''),
+    TextAreaField: factory.createStringLiteral(''),
   };
 
   if (isArray) {
@@ -207,7 +208,7 @@ export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadat
  */
 export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
   const stateNames = new Set();
-  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName, dataType, isArray }]) => {
+  return Object.entries(fieldConfigs).reduce<Statement[]>((acc, [name, { sanitizedFieldName }]) => {
     const fieldName = name.split('.')[0];
     const renderedFieldName = sanitizedFieldName || fieldName;
 
@@ -224,23 +225,6 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
     }
 
     function renderCorrectUseStateValue() {
-      if ((dataType === 'AWSJSON' || isNonModelDataType(dataType)) && !isArray) {
-        return factory.createConditionalExpression(
-          determinePropertyName(),
-          factory.createToken(SyntaxKind.QuestionToken),
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('JSON'),
-              factory.createIdentifier('stringify'),
-            ),
-            undefined,
-            [determinePropertyName()],
-          ),
-          factory.createToken(SyntaxKind.ColonToken),
-          factory.createIdentifier('undefined'),
-        );
-      }
-
       return determinePropertyName();
     }
 

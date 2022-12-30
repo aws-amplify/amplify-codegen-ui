@@ -37,7 +37,7 @@ import {
   ExpressionStatement,
 } from 'typescript';
 import { lowerCaseFirst, getSetNameIdentifier } from '../../helpers';
-import { buildTargetVariable, getFormattedValueExpression } from './event-targets';
+import { buildTargetVariable } from './event-targets';
 import {
   buildAccessChain,
   buildNestedStateSet,
@@ -282,20 +282,20 @@ export const buildOnChangeStatement = (
 
   handleChangeStatements.push(getOnChangeValidationBlock(fieldName));
 
+  const valueToSetOnChange = factory.createIdentifier('value');
+
   if (shouldWrapInArrayField(fieldConfig)) {
     if (isModelDataType(fieldConfig)) {
       handleChangeStatements.push(
-        setStateExpression(getCurrentDisplayValueName(renderedFieldName), getFormattedValueExpression(dataType)),
+        setStateExpression(getCurrentDisplayValueName(renderedFieldName), valueToSetOnChange),
         setStateExpression(getCurrentValueName(renderedFieldName), factory.createIdentifier('undefined')),
       );
     } else {
-      handleChangeStatements.push(
-        setStateExpression(getCurrentValueName(renderedFieldName), getFormattedValueExpression(dataType)),
-      );
+      handleChangeStatements.push(setStateExpression(getCurrentValueName(renderedFieldName), valueToSetOnChange));
     }
   } else {
     handleChangeStatements.push(
-      factory.createExpressionStatement(setFieldState(renderedFieldName, getFormattedValueExpression(dataType))),
+      factory.createExpressionStatement(setFieldState(renderedFieldName, valueToSetOnChange)),
     );
   }
 
