@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.0...v2.7.1) (2022-12-30)
+
+
+### Bug Fixes
+
+* fix updates in scalar fields ([f117a2b](https://github.com/aws-amplify/amplify-codegen-ui/commit/f117a2b0e6392f10cc9d54e1144d8152d904fd85))
+* fix validation for required relationships ([94d4dd8](https://github.com/aws-amplify/amplify-codegen-ui/commit/94d4dd80ab8166b73c7b4f43818af17afa30095e))
+
+
+
+
+
 # [2.7.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.6.0...v2.7.0) (2022-12-29)
 
 
