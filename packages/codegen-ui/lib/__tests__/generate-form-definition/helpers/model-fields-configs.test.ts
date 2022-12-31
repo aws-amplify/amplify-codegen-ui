@@ -174,11 +174,84 @@ describe('mapModelFieldsConfigs', () => {
     const dataSchema: GenericDataSchema = {
       dataSourceType: 'DataStore',
       enums: {},
-      nonModels: {},
+      nonModels: {
+        metaData: {
+          fields: {},
+        },
+      },
       models: {
         Owner: {
-          primaryKeys: ['id'],
-          fields: {},
+          primaryKeys: ['id', 'lastName'],
+          fields: {
+            id: {
+              dataType: 'ID',
+              readOnly: false,
+              required: true,
+              isArray: false,
+            },
+            lastName: {
+              dataType: 'String',
+              readOnly: false,
+              required: true,
+              isArray: false,
+            },
+            barcode: {
+              dataType: 'ID',
+              readOnly: false,
+              required: true,
+              isArray: false,
+            },
+            description: {
+              dataType: 'AWSJSON',
+              readOnly: false,
+              required: true,
+              isArray: false,
+            },
+            time: {
+              dataType: 'AWSTime',
+              readOnly: false,
+              required: true,
+              isArray: false,
+            },
+            date: {
+              dataType: 'AWSDate',
+              readOnly: false,
+              required: true,
+              isArray: false,
+            },
+            dateTime: {
+              dataType: 'AWSDateTime',
+              readOnly: false,
+              required: true,
+              isArray: false,
+            },
+            metadata: {
+              dataType: { nonModel: 'Metadata' },
+              readOnly: false,
+              required: true,
+              isArray: false,
+            },
+            Dog: {
+              dataType: { model: 'Dog' },
+              readOnly: false,
+              required: true,
+              isArray: false,
+              relationship: { type: 'BELONGS_TO', relatedModelName: 'Dog' },
+            },
+            dogName: {
+              dataType: 'String',
+              readOnly: false,
+              required: true,
+              isArray: false,
+              relationship: { type: 'BELONGS_TO', relatedModelName: 'Dog' },
+            },
+            firstName: {
+              dataType: 'String',
+              readOnly: false,
+              required: true,
+              isArray: false,
+            },
+          },
         },
         Dog: {
           primaryKeys: ['id'],
@@ -203,23 +276,39 @@ describe('mapModelFieldsConfigs', () => {
     });
 
     expect(formDefinition.elementMatrix).toStrictEqual([['Owner']]);
+
     expect(modelFieldsConfigs).toStrictEqual({
       Owner: {
+        label: 'Owner',
         dataType: { model: 'Owner' },
         inputType: {
-          name: 'Owner',
-          readOnly: false,
-          required: false,
           type: 'Autocomplete',
+          required: false,
+          readOnly: false,
+          name: 'Owner',
           value: 'Owner',
           isArray: false,
           valueMappings: {
-            values: [{ value: { bindingProperties: { property: 'Owner', field: 'id' } } }],
+            values: [
+              {
+                value: { bindingProperties: { property: 'Owner', field: 'id' } },
+                displayValue: {
+                  isDefault: true,
+                  concat: [
+                    { bindingProperties: { property: 'Owner', field: 'firstName' } },
+                    { value: ' - ' },
+                    { bindingProperties: { property: 'Owner', field: 'id' } },
+                    { value: '-' },
+                    { bindingProperties: { property: 'Owner', field: 'lastName' } },
+                  ],
+                },
+              },
+              { value: { bindingProperties: { property: 'Owner', field: 'lastName' } } },
+            ],
             bindingProperties: { Owner: { type: 'Data', bindingProperties: { model: 'Owner' } } },
           },
         },
-        label: 'Owner',
-        relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },
+        relationship: { type: 'HAS_ONE', relatedModelName: 'Owner' },
       },
     });
   });
@@ -256,21 +345,26 @@ describe('mapModelFieldsConfigs', () => {
     expect(formDefinition.elementMatrix).toStrictEqual([]);
     expect(modelFieldsConfigs).toStrictEqual({
       Owner: {
+        label: 'Owner',
         dataType: { model: 'Owner' },
         inputType: {
-          name: 'Owner',
-          readOnly: false,
-          required: false,
           type: 'Autocomplete',
+          required: false,
+          readOnly: false,
+          name: 'Owner',
           value: 'Owner',
           isArray: false,
           valueMappings: {
-            values: [{ value: { bindingProperties: { property: 'Owner', field: 'id' } } }],
+            values: [
+              {
+                value: { bindingProperties: { property: 'Owner', field: 'id' } },
+                displayValue: { isDefault: true, bindingProperties: { property: 'Owner', field: 'id' } },
+              },
+            ],
             bindingProperties: { Owner: { type: 'Data', bindingProperties: { model: 'Owner' } } },
           },
         },
-        label: 'Owner',
-        relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },
+        relationship: { type: 'HAS_ONE', relatedModelName: 'Owner' },
       },
     });
   });
@@ -451,10 +545,13 @@ describe('mapModelFieldsConfigs', () => {
           value: 'city',
           valueMappings: {
             values: [
-              { value: { value: 'NEW_YORK' }, displayValue: { value: 'New york' } },
-              { value: { value: 'HOUSTON' }, displayValue: { value: 'Houston' } },
-              { value: { value: 'LOS_ANGELES' }, displayValue: { value: 'Los angeles' } },
-              { value: { value: nonEnglishAlphabetTest }, displayValue: { value: nonEnglishAlphabetTest } },
+              { value: { value: 'NEW_YORK' }, displayValue: { value: 'New york', isDefault: true } },
+              { value: { value: 'HOUSTON' }, displayValue: { value: 'Houston', isDefault: true } },
+              { value: { value: 'LOS_ANGELES' }, displayValue: { value: 'Los angeles', isDefault: true } },
+              {
+                value: { value: nonEnglishAlphabetTest },
+                displayValue: { value: nonEnglishAlphabetTest, isDefault: true },
+              },
             ],
           },
           isArray: false,

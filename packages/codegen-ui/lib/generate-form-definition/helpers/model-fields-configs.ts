@@ -31,6 +31,7 @@ import {
   StudioFormValueMappings,
 } from '../../types';
 import { ExtendedStudioGenericFieldConfig } from '../../types/form/form-definition';
+import { StudioFormInputFieldProperty } from '../../types/form/input-config';
 import { FIELD_TYPE_MAP } from './field-type-map';
 
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
@@ -46,6 +47,52 @@ export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
     return 'NonModel';
   }
   return field.dataType;
+}
+
+function getModelDisplayValue({
+  model,
+  modelName,
+}: {
+  model: GenericDataModel;
+  modelName: string;
+}): StudioFormInputFieldProperty & { isDefault: true } {
+  const concatArray: StudioFormInputFieldProperty[] = [];
+  const { primaryKeys } = model;
+
+  const scalarNonReadableFields = new Set(['ID', 'AWSJSON', 'AWSTime', 'AWSDate', 'AWSDateTime']);
+
+  const firstReadableNonKeyField = Object.entries(model.fields).find(
+    ([fieldName, fieldObject]) =>
+      !primaryKeys.includes(fieldName) &&
+      !fieldObject.relationship &&
+      !(typeof fieldObject.dataType === 'string' && scalarNonReadableFields.has(fieldObject.dataType)) &&
+      !(typeof fieldObject.dataType === 'object' && 'nonModel' in fieldObject.dataType) &&
+      !(typeof fieldObject.dataType === 'object' && 'model' in fieldObject.dataType),
+  )?.[0];
+
+  if (firstReadableNonKeyField) {
+    concatArray.push(
+      {
+        bindingProperties: { property: modelName, field: firstReadableNonKeyField },
+      },
+      {
+        value: ' - ',
+      },
+    );
+  }
+
+  primaryKeys.forEach((key, index) => {
+    concatArray.push({
+      bindingProperties: { property: modelName, field: key },
+    });
+    if (index !== primaryKeys.length - 1) {
+      concatArray.push({
+        value: '-',
+      });
+    }
+  });
+
+  return concatArray.length === 1 ? { ...concatArray[0], isDefault: true } : { concat: concatArray, isDefault: true };
 }
 
 function getValueMappings({
@@ -68,7 +115,7 @@ function getValueMappings({
 
     return {
       values: fieldEnums.values.map((value) => ({
-        displayValue: { value: sentenceCase(value) ? sentenceCase(value) : value },
+        displayValue: { value: sentenceCase(value) ? sentenceCase(value) : value, isDefault: true },
         value: { value },
       })),
     };
@@ -77,12 +124,17 @@ function getValueMappings({
   // if relationship
   if (field.relationship) {
     const modelName = field.relationship.relatedModelName;
+    const relatedModel = allModels[modelName];
+    const isModelType = typeof field.dataType === 'object' && 'model' in field.dataType;
     // if model, store all keys; else, store field as key
-    const keys =
-      typeof field.dataType === 'object' && 'model' in field.dataType ? allModels[modelName].primaryKeys : [fieldName];
+    const keys = isModelType ? relatedModel.primaryKeys : [fieldName];
     const values: StudioFormValueMappings['values'] = keys.map((key) => ({
       value: { bindingProperties: { property: modelName, field: key } },
     }));
+    if (isModelType) {
+      // attach displayValue for all options to the first value
+      values[0].displayValue = getModelDisplayValue({ model: relatedModel, modelName });
+    }
     return {
       values,
       bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },
