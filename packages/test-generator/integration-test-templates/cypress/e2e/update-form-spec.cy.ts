@@ -166,27 +166,27 @@ describe('UpdateForms', () => {
         getInputByLabel('Description').should('have.attr', 'readonly');
 
         // hasOne
-        removeArrayItem('round - xs');
+        removeArrayItem('round-xs');
         getArrayFieldButtonByLabel('Composite bowl').click();
-        typeInAutocomplete('round - xl{downArrow}{enter}');
+        typeInAutocomplete('round-xl{downArrow}{enter}');
         clickAddToArray();
 
         // belongsTo
-        removeArrayItem('Cooper - Dale');
+        removeArrayItem('Cooper-Dale');
         getArrayFieldButtonByLabel('Composite owner').click();
-        typeInAutocomplete('Cooper - Gordon{downArrow}{enter}');
+        typeInAutocomplete('Cooper-Gordon{downArrow}{enter}');
         clickAddToArray();
 
         // manyToMany
-        removeArrayItem('chew - green');
+        removeArrayItem('chew-green');
         getArrayFieldButtonByLabel('Composite toys').click();
-        typeInAutocomplete('chew - red{downArrow}{enter}');
+        typeInAutocomplete('chew-red{downArrow}{enter}');
         clickAddToArray();
 
         // hasMany
-        removeArrayItem('Dentistry - Seattle');
+        removeArrayItem('Dentistry-Seattle');
         getArrayFieldButtonByLabel('Composite vets').click();
-        typeInAutocomplete('Dentistry - Los Angeles{downArrow}{enter}');
+        typeInAutocomplete('Dentistry-Los Angeles{downArrow}{enter}');
         clickAddToArray();
 
         cy.contains('Submit').click();

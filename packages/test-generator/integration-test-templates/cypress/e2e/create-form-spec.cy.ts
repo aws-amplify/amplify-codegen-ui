@@ -281,22 +281,22 @@ describe('CreateForms', () => {
 
         // hasOne
         getArrayFieldButtonByLabel('Composite bowl').click();
-        typeInAutocomplete('round - xl{downArrow}{enter}');
+        typeInAutocomplete('round-xl{downArrow}{enter}');
         clickAddToArray();
 
         // belongsTo
         getArrayFieldButtonByLabel('Composite owner').click();
-        typeInAutocomplete('Cooper - Gordon{downArrow}{enter}');
+        typeInAutocomplete('Cooper-Gordon{downArrow}{enter}');
         clickAddToArray();
 
         // manyToMany
         getArrayFieldButtonByLabel('Composite toys').click();
-        typeInAutocomplete('chew - red{downArrow}{enter}');
+        typeInAutocomplete('chew-red{downArrow}{enter}');
         clickAddToArray();
 
         // hasMany
         getArrayFieldButtonByLabel('Composite vets').click();
-        typeInAutocomplete('Dentistry - Los Angeles{downArrow}{enter}');
+        typeInAutocomplete('Dentistry-Los Angeles{downArrow}{enter}');
         clickAddToArray();
 
         cy.contains('Submit').click();
