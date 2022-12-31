@@ -36,11 +36,9 @@ export function mergeValueMappings(
   // if model-based
   if (base?.bindingProperties || override?.bindingProperties) {
     const valueMappings = override || base;
-    const firstValue = valueMappings?.values[0];
-    if (!firstValue) {
-      throw new InternalError(`No valueMapping found for model-bound field`);
+    if (!valueMappings) {
+      throw new InternalError(`Value mappings not found`);
     }
-    firstValue.displayValue = override?.values?.[0]?.displayValue;
 
     return {
       values: valueMappings.values,

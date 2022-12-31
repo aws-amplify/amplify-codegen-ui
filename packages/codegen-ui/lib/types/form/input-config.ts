@@ -29,7 +29,10 @@ export type StudioFormInputFieldProperty =
   | BoundStudioComponentProperty;
 
 export type StudioFormValueMappings = {
-  values: { displayValue?: StudioFormInputFieldProperty; value: StudioFormInputFieldProperty }[];
+  values: {
+    displayValue?: StudioFormInputFieldProperty & { isDefault?: boolean };
+    value: StudioFormInputFieldProperty;
+  }[];
 
   bindingProperties?: { [propertyName: string]: StudioComponentPropertyBinding };
 };

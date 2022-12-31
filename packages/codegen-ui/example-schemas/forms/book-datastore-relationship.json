@@ -6,32 +6,6 @@
     "dataTypeName": "Book"
   },
   "fields": {
-    "primaryAuthor": {
-      "inputType": {
-        "type": "Autocomplete",
-        "valueMappings": {
-          "values": [
-            {
-              "value": {
-                "bindingProperties": {
-                  "property": "Author",
-                  "field": "id"
-                }
-              },
-              "displayValue": {
-                "bindingProperties": {
-                  "property": "Author",
-                  "field": "name"
-                }
-              }
-            }
-          ],
-          "bindingProperties": {
-            "Author": { "type": "Data", "bindingProperties": { "model": "Author" } }
-          }
-        }
-      }
-    }
   },
   "sectionalElements": {},
   "style": {},

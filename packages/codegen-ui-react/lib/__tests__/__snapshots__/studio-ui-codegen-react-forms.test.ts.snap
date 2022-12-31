@@ -303,10 +303,10 @@ export default function CreateCompositeDogForm(props) {
     model: CompositeVet,
   }).items;
   const getDisplayValue = {
-    CompositeBowl: (r) => \`\${r?.shape}\${\\" - \\"}\${r?.size}\`,
-    CompositeOwner: (r) => \`\${r?.lastName}\${\\" - \\"}\${r?.firstName}\`,
-    CompositeToys: (r) => \`\${r?.kind}\${\\" - \\"}\${r?.color}\`,
-    CompositeVets: (r) => \`\${r?.specialty}\${\\" - \\"}\${r?.city}\`,
+    CompositeBowl: (r) => \`\${r?.shape}\${\\"-\\"}\${r?.size}\`,
+    CompositeOwner: (r) => \`\${r?.lastName}\${\\"-\\"}\${r?.firstName}\`,
+    CompositeToys: (r) => \`\${r?.kind}\${\\"-\\"}\${r?.color}\`,
+    CompositeVets: (r) => \`\${r?.specialty}\${\\"-\\"}\${r?.city}\`,
   };
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -3540,10 +3540,10 @@ export default function UpdateCompositeDogForm(props) {
     model: CompositeVet,
   }).items;
   const getDisplayValue = {
-    CompositeBowl: (r) => \`\${r?.shape}\${\\" - \\"}\${r?.size}\`,
-    CompositeOwner: (r) => \`\${r?.lastName}\${\\" - \\"}\${r?.firstName}\`,
-    CompositeToys: (r) => \`\${r?.kind}\${\\" - \\"}\${r?.color}\`,
-    CompositeVets: (r) => \`\${r?.specialty}\${\\" - \\"}\${r?.city}\`,
+    CompositeBowl: (r) => \`\${r?.shape}\${\\"-\\"}\${r?.size}\`,
+    CompositeOwner: (r) => \`\${r?.lastName}\${\\"-\\"}\${r?.firstName}\`,
+    CompositeToys: (r) => \`\${r?.kind}\${\\"-\\"}\${r?.color}\`,
+    CompositeVets: (r) => \`\${r?.specialty}\${\\"-\\"}\${r?.city}\`,
   };
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -8615,7 +8615,7 @@ export default function BookCreateForm(props) {
     model: Author,
   }).items;
   const getDisplayValue = {
-    primaryAuthor: (r) => r?.name,
+    primaryAuthor: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [],

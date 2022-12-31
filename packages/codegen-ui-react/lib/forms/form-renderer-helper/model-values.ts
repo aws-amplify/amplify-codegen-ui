@@ -18,8 +18,6 @@ import {
   InvalidInputError,
   StudioFormValueMappings,
   InternalError,
-  StudioComponentProperty,
-  BoundStudioComponentProperty,
   ConcatenatedStudioComponentProperty,
 } from '@aws-amplify/codegen-ui';
 import { StudioFormInputFieldProperty } from '@aws-amplify/codegen-ui/lib/types/form/input-config';
@@ -34,6 +32,7 @@ import {
   CallExpression,
   VariableStatement,
   Statement,
+  TemplateSpan,
 } from 'typescript';
 
 import {
@@ -316,36 +315,70 @@ export function getIDValueObject(idValueFunctions: PropertyAssignment[]) {
     ),
   );
 }
-
-function getDefaultDisplayValue({
-  fieldConfig,
-  modelName,
-}: {
-  fieldConfig: FieldConfigMetadata;
-  modelName: string;
-}): BoundStudioComponentProperty | ConcatenatedStudioComponentProperty {
-  const { keys } = extractModelAndKeys(fieldConfig.valueMappings);
-  if (!keys || !keys.length) {
-    throw new InternalError(`Unable to find primary key(s) for ${modelName}`);
-  }
-  if (keys.length === 1) {
-    return { bindingProperties: { property: modelName, field: keys[0] } };
-  }
-
-  const concatArray: StudioComponentProperty[] = [];
-
-  keys.forEach((key, index) => {
-    concatArray.push({
-      bindingProperties: { property: modelName, field: key },
-    });
-    if (index !== keys.length - 1) {
-      concatArray.push({
-        value: ' - ',
-      });
+// this is a measure to not show `undefined` the way `bquildConcatExpression` would if the first field is undefined
+// `${r?.humanReadable ? r?.humanReadable + ' - ' : ""}${r?.key}-${r?.anotherKey}`
+function buildDefaultModelDisplayValue({ displayValue }: { displayValue: ConcatenatedStudioComponentProperty }) {
+  const { concat: concatArray } = displayValue;
+  const humanReadableFieldExists =
+    concatArray[1] && isFixedPropertyWithValue(concatArray[1]) && concatArray[1].value === ' - ';
+  if (humanReadableFieldExists) {
+    const [humanReadableField, ...primaryKeys] = concatArray;
+    if (!isBoundProperty(humanReadableField) || !humanReadableField.bindingProperties.field) {
+      throw new InternalError(`Wrong default value mapping shape for human-readable field`);
     }
-  });
 
-  return { concat: concatArray };
+    const { property: propertyName } = humanReadableField.bindingProperties;
+
+    const templateSpans: TemplateSpan[] = [];
+
+    templateSpans.push(
+      factory.createTemplateSpan(
+        factory.createConditionalExpression(
+          factory.createPropertyAccessChain(
+            factory.createIdentifier(propertyName),
+            factory.createToken(SyntaxKind.QuestionDotToken),
+            factory.createIdentifier(humanReadableField.bindingProperties.field),
+          ),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createBinaryExpression(
+            factory.createPropertyAccessChain(
+              factory.createIdentifier(propertyName),
+              factory.createToken(SyntaxKind.QuestionDotToken),
+              factory.createIdentifier(humanReadableField.bindingProperties.field),
+            ),
+            factory.createToken(SyntaxKind.PlusToken),
+            factory.createStringLiteral(' - '),
+          ),
+          factory.createToken(SyntaxKind.ColonToken),
+          factory.createStringLiteral(''),
+        ),
+        factory.createTemplateMiddle('', ''),
+      ),
+    );
+
+    const filteredPrimaryKeys = primaryKeys.filter((key) => isBoundProperty(key) && key.bindingProperties.field);
+
+    filteredPrimaryKeys.forEach((key, index) => {
+      if (!isBoundProperty(key) || !key.bindingProperties.field) {
+        return;
+      }
+      templateSpans.push(
+        factory.createTemplateSpan(
+          factory.createPropertyAccessChain(
+            factory.createIdentifier(propertyName),
+            factory.createToken(SyntaxKind.QuestionDotToken),
+            factory.createIdentifier(key.bindingProperties.field),
+          ),
+          index === filteredPrimaryKeys.length - 1
+            ? factory.createTemplateTail('', '')
+            : factory.createTemplateMiddle('-', '-'),
+        ),
+      );
+    });
+    return factory.createTemplateExpression(factory.createTemplateHead('', ''), templateSpans);
+  }
+
+  return buildConcatExpression(displayValue);
 }
 
 // CompositeBowl: (r) => JSON.stringify({ shape: r?.shape, size: r?.size })
@@ -402,10 +435,15 @@ export function buildDisplayValueFunction(fieldName: string, fieldConfig: FieldC
     const valueConfig = fieldConfig.valueMappings.values[0];
     if (valueConfig) {
       const modelName = fieldConfig.dataType.model;
-      const displayValueProperty = valueConfig.displayValue || getDefaultDisplayValue({ fieldConfig, modelName });
+      const displayValueIsDefault = valueConfig.displayValue?.isDefault;
+      const displayValueProperty = valueConfig.displayValue || valueConfig.value;
       replaceProperty(displayValueProperty, modelName, recordString);
       if (isConcatenatedProperty(displayValueProperty)) {
-        renderedDisplayValue = buildConcatExpression(displayValueProperty);
+        if (displayValueIsDefault) {
+          renderedDisplayValue = buildDefaultModelDisplayValue({ displayValue: displayValueProperty });
+        } else {
+          renderedDisplayValue = buildConcatExpression(displayValueProperty);
+        }
       } else if (isBoundProperty(displayValueProperty)) {
         renderedDisplayValue = buildBindingExpression(displayValueProperty);
       }
