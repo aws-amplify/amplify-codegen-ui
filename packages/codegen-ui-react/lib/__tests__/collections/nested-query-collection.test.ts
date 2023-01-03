@@ -13,22 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { ScriptKind } from 'typescript';
 import { authorHasManySchema, generateWithAmplifyRenderer } from '../__utils__';
 
 describe('nested query collections', () => {
-  it('should test blah', () => {
-    const { componentText } = generateWithAmplifyRenderer('testCollectionComponent');
-
-    expect(componentText).toMatchSnapshot();
-    expect(
-      generateWithAmplifyRenderer('testCollectionComponent', {
-        script: ScriptKind.JS,
-        renderTypeDeclarations: true,
-      }).declaration,
-    ).toMatchSnapshot();
-  });
-
   it('should contain nested query generated resources', () => {
     const { componentText } = generateWithAmplifyRenderer('authorCollectionComponent', {}, false, authorHasManySchema);
     // check nested model is not imported
