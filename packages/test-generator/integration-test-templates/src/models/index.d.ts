@@ -166,16 +166,6 @@ export declare class Listing {
   ): Listing;
 }
 
-export declare class CustomType {
-  readonly StringVal?: string;
-
-  readonly NumVal?: number;
-
-  readonly BoolVal?: boolean;
-
-  constructor(init: ModelInit<CustomType>);
-}
-
 export declare class ComplexModel {
   readonly id: string;
 
@@ -344,6 +334,22 @@ export declare const Student: (new (init: ModelInit<Student, StudentMetaData>) =
   ): Student;
 };
 
+type EagerCustomType = {
+  readonly StringVal?: string | null;
+  readonly NumVal?: number | null;
+  readonly BoolVal?: boolean | null;
+};
+
+type LazyCustomType = {
+  readonly StringVal?: string | null;
+  readonly NumVal?: number | null;
+  readonly BoolVal?: boolean | null;
+};
+
+export declare type CustomType = LazyLoading extends LazyLoadingDisabled ? EagerCustomType : LazyCustomType;
+
+export declare const CustomType: new (init: ModelInit<CustomType>) => CustomType;
+
 type EagerAllSupportedFormFields = {
   readonly id: string;
 
@@ -377,7 +383,9 @@ type EagerAllSupportedFormFields = {
 
   readonly enum?: City | keyof typeof City | null;
 
-  readonly nonModelField?: string | null;
+  readonly nonModelField?: CustomType | null;
+
+  readonly nonModelFieldArray?: (CustomType | null)[] | null;
 
   readonly createdAt?: string | null;
 
@@ -427,7 +435,9 @@ type LazyAllSupportedFormFields = {
 
   readonly enum?: City | keyof typeof City | null;
 
-  readonly nonModelField?: string | null;
+  readonly nonModelField?: CustomType | null;
+
+  readonly nonModelFieldArray?: (CustomType | null)[] | null;
 
   readonly createdAt?: string | null;
 

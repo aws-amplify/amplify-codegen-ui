@@ -52,6 +52,7 @@ const {
   CompositeToy,
   CompositeVet,
   CompositeDogCompositeVet,
+  CustomType,
 } = initSchema(schema);
 
 export {
@@ -77,4 +78,5 @@ export {
   CompositeToy,
   CompositeVet,
   CompositeDogCompositeVet,
+  CustomType,
 };
