@@ -74,10 +74,8 @@ export const renderDefaultValueAttribute = (
     expression = factory.createJsxExpression(undefined, convertedValueAttributeMap[dataType](identifier));
   }
 
-  const componentsWithValue: string[] = ['TextField', 'TextAreaField'];
-
   return factory.createJsxAttribute(
-    componentsWithValue.includes(componentType)
+    componentType === 'TextField' || componentType === 'TextAreaField'
       ? factory.createIdentifier('value')
       : factory.createIdentifier('defaultValue'),
     expression,
