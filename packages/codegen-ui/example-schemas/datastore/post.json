@@ -54,6 +54,15 @@
           "isRequired": false,
           "attributes": []
         },
+        "nonModelFieldArray": {
+          "name": "nonModelFieldArray",
+          "isArray": true,
+          "type": {
+            "nonModel": "CustomType"
+          },
+          "isRequired": false,
+          "attributes": []
+        },
         "createdAt": {
           "name": "createdAt",
           "isArray": false,
