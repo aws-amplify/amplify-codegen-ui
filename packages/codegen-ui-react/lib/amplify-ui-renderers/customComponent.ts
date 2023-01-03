@@ -15,7 +15,7 @@
  */
 import { StudioComponentChild } from '@aws-amplify/codegen-ui';
 import { JsxChild, JsxElement, factory } from 'typescript';
-import { Primitive } from '../primitive';
+import { isAliased } from '../helpers';
 import { ReactComponentRenderer } from '../react-component-renderer';
 
 export default class CustomComponentRenderer<TPropIn> extends ReactComponentRenderer<TPropIn> {
@@ -27,8 +27,11 @@ export default class CustomComponentRenderer<TPropIn> extends ReactComponentRend
       factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
 
-    if (Object.keys(Primitive).includes(this.component.name) && this.component.componentType.match(/(Custom$)/g)) {
-      this.importCollection.addImport(`./${this.component.name}`, this.component.componentType);
+    if (isAliased(this.component.componentType)) {
+      this.importCollection.addImport(
+        `./${this.component.name}`,
+        `${this.component.name} as ${this.component.componentType}`,
+      );
     } else {
       this.importCollection.addImport(`./${this.component.componentType}`, 'default');
     }

@@ -5475,15 +5475,14 @@ import {
   EscapeHatchProps,
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
-import { GridCustom } from \\"./Grid\\";
+import { Grid as GridCustom, GridProps } from \\"./Grid\\";
 import ViewTest, { ViewTestProps } from \\"./ViewTest\\";
-import { GridCustomProps } from \\"./GridCustom\\";
 
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type AliasParentOverridesProps = {
   AliasParent?: ViewTestProps;
-  Grid?: GridCustomProps;
+  Grid?: GridProps;
 } & EscapeHatchProps;
 export type AliasParentProps = React.PropsWithChildren<
   Partial<ViewTestProps> & {
