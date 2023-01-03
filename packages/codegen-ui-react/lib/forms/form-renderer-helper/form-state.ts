@@ -19,6 +19,7 @@ import {
   DataFieldDataType,
   isValidVariableName,
   isNonModelDataType,
+  StudioForm,
 } from '@aws-amplify/codegen-ui';
 import {
   factory,
@@ -131,6 +132,7 @@ export const getDefaultValueExpression = (
   dataType?: DataFieldDataType,
   isArray?: boolean,
   isDisplayValue?: boolean,
+  defaultValue?: string | null,
 ): Expression => {
   const componentTypeToDefaultValueMap: { [key: string]: Expression } = {
     Autocomplete: isDisplayValue ? factory.createStringLiteral('') : factory.createIdentifier('undefined'),
@@ -142,6 +144,12 @@ export const getDefaultValueExpression = (
     TextField: factory.createStringLiteral(''),
     TextAreaField: factory.createStringLiteral(''),
   };
+
+  if (defaultValue) {
+    return isArray
+      ? factory.createArrayLiteralExpression([factory.createStringLiteral(defaultValue)], false)
+      : factory.createStringLiteral(defaultValue);
+  }
 
   if (isArray) {
     return factory.createArrayLiteralExpression([], false);
@@ -157,14 +165,23 @@ export const getDefaultValueExpression = (
   isChecked: false
 }
 */
-export const getInitialValues = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement => {
+export const getInitialValues = (
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+  component: StudioForm,
+): Statement => {
   const stateNames = new Set<string>();
   const propertyAssignments = Object.entries(fieldConfigs).reduce<PropertyAssignment[]>(
     (acc, [name, { dataType, componentType, isArray }]) => {
       const isNested = name.includes('.');
       // we are only setting top-level keys
       const stateName = name.split('.')[0];
-      let initialValue = getDefaultValueExpression(name, componentType, dataType, isArray);
+      let defaultValue = null;
+      Object.entries(component.fields).forEach(([key, value]) => {
+        if (key === name && 'inputType' in value && value.inputType?.defaultValue && componentType === 'TextField') {
+          defaultValue = value.inputType.defaultValue;
+        }
+      });
+      let initialValue = getDefaultValueExpression(name, componentType, dataType, isArray, false, defaultValue);
       if (isNested) {
         // if nested, just set up an empty object for the top-level key
         initialValue = factory.createObjectLiteralExpression();

@@ -452,7 +452,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       );
     }
 
-    statements.push(getInitialValues(formMetadata.fieldConfigs));
+    statements.push(getInitialValues(formMetadata.fieldConfigs, this.component));
 
     statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
 

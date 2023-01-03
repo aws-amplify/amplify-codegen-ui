@@ -914,12 +914,12 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"\\",
-    email: \\"\\",
+    name: \\"John Doe\\",
+    email: \\"johndoe@amplify.com\\",
     city: undefined,
     category: undefined,
     pages: 0,
-    phone: \\"\\",
+    phone: \\"+1-401-152-6995\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -1313,12 +1313,12 @@ export default function CustomDataForm(props) {
     props;
   const { tokens } = useTheme();
   const initialValues = {
-    name: \\"\\",
-    email: \\"\\",
+    name: \\"John Doe\\",
+    email: \\"johndoe@amplify.com\\",
     city: undefined,
     category: undefined,
     pages: 0,
-    phone: \\"\\",
+    phone: \\"+1-401-152-6995\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -1859,9 +1859,9 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"\\",
-    email: [],
-    phone: [],
+    name: \\"John Doe\\",
+    email: [\\"johndoe@amplify.com\\"],
+    phone: [\\"+1-401-152-6995\\"],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -2155,8 +2155,8 @@ export default function CustomDataForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    email: \\"\\",
+    name: \\"John Doe\\",
+    email: \\"johndoe@amplify.com\\",
     \\"metadata-field\\": \\"\\",
     city: undefined,
     category: undefined,
