@@ -741,6 +741,15 @@ export const schema = {
           isRequired: false,
           attributes: [],
         },
+        nonModelFieldArray: {
+          name: 'nonModelFieldArray',
+          isArray: true,
+          type: {
+            nonModel: 'CustomType',
+          },
+          isRequired: false,
+          attributes: [],
+        },
         HasOneUser: {
           name: 'HasOneUser',
           isArray: false,

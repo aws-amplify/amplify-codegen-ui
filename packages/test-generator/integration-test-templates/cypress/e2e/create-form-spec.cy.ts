@@ -132,6 +132,13 @@ describe('CreateForms', () => {
         getTextAreaByLabel('Non model field').type(JSON.stringify({ StringVal: 'myValue' }), {
           parseSpecialCharSequences: false,
         });
+
+        getArrayFieldButtonByLabel('Non model field array').click();
+        getTextAreaByLabel('Non model field array').type(JSON.stringify({ StringVal: 'index1StringValue' }), {
+          parseSpecialCharSequences: false,
+        });
+        clickAddToArray();
+
         getInputByLabel('Aws phone').type('714-234-4829');
         cy.get('select').select('San francisco');
 
@@ -196,6 +203,7 @@ describe('CreateForms', () => {
           expect(record.awsIPAddress).to.equal('192.0.2.146');
           expect(record.awsJson.myKey).to.equal('myValue');
           expect(record.nonModelField.StringVal).to.equal('myValue');
+          expect(record.nonModelFieldArray[0].StringVal).to.equal('index1StringValue');
           expect(record.awsPhone).to.equal('714-234-4829');
           expect(record.enum).to.equal('SAN_FRANCISCO');
           expect(record.stringArray[0]).to.equal('String1');

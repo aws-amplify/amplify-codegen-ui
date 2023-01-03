@@ -22,6 +22,7 @@ import {
   Statement,
   VariableStatement,
   ExpressionStatement,
+  PropertyAssignment,
 } from 'typescript';
 import { getSetNameIdentifier, lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './model-values';
@@ -198,10 +199,15 @@ export const buildDataStoreExpression = (
   const thisModelPrimaryKeys = dataSchema.models[modelName].primaryKeys;
   const hasManyDataStoreStatements: (VariableStatement | ExpressionStatement)[] = [];
   const hasManyRelationshipFields: string[] = [];
+  const nonModelArrayFields: string[] = [];
   const savedModelName = lowerCaseFirst(modelName);
 
   Object.entries(fieldConfigs).forEach((fieldConfig) => {
     const [fieldName, fieldConfigMetaData] = fieldConfig;
+    const { dataType, isArray } = fieldConfigMetaData;
+    if (isArray && dataType && typeof dataType === 'object' && 'nonModel' in dataType) {
+      nonModelArrayFields.push(fieldName);
+    }
     if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
       hasManyRelationshipFields.push(fieldName);
 
@@ -250,6 +256,68 @@ export const buildDataStoreExpression = (
     );
   }
 
+  const propertyAssignments: PropertyAssignment[] = [];
+
+  hasManyRelationshipFields.forEach((field) => {
+    // CPKProjects: undefined
+    propertyAssignments.push(
+      factory.createPropertyAssignment(factory.createIdentifier(field), factory.createIdentifier('undefined')),
+    );
+  });
+
+  nonModelArrayFields.forEach((field) => {
+    // nonModelFieldArray: modelFields.nonModelFieldArray.map(s => JSON.parse(s))
+    propertyAssignments.push(
+      factory.createPropertyAssignment(
+        factory.createIdentifier(field),
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('modelFields'),
+              factory.createIdentifier(field),
+            ),
+            factory.createIdentifier('map'),
+          ),
+          undefined,
+          [
+            factory.createArrowFunction(
+              undefined,
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('s'),
+                  undefined,
+                  undefined,
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('JSON'),
+                  factory.createIdentifier('parse'),
+                ),
+                undefined,
+                [factory.createIdentifier('s')],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  });
+
+  const modelFieldsObject = propertyAssignments.length
+    ? factory.createObjectLiteralExpression(
+        [factory.createSpreadAssignment(factory.createIdentifier('modelFields')), ...propertyAssignments],
+        true,
+      )
+    : factory.createIdentifier('modelFields');
+
   const genericSaveStatement = hasManyRelationshipFields.length
     ? [
         factory.createVariableStatement(
@@ -269,23 +337,7 @@ export const buildDataStoreExpression = (
                     undefined,
                     [
                       factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
-                        // {
-                        //  ...modelFields,
-                        //  CPKClasses: undefined,
-                        //  CPKProjects: undefined
-                        // }
-                        factory.createObjectLiteralExpression(
-                          [
-                            factory.createSpreadAssignment(factory.createIdentifier('modelFields')),
-                            ...hasManyRelationshipFields.map((field) =>
-                              factory.createPropertyAssignment(
-                                factory.createIdentifier(field),
-                                factory.createIdentifier('undefined'),
-                              ),
-                            ),
-                          ],
-                          true,
-                        ),
+                        modelFieldsObject,
                       ]),
                     ],
                   ),
@@ -307,7 +359,7 @@ export const buildDataStoreExpression = (
               undefined,
               [
                 factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
-                  factory.createIdentifier('modelFields'),
+                  modelFieldsObject,
                 ]),
               ],
             ),

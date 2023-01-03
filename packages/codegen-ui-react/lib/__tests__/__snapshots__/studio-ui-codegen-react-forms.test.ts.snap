@@ -2736,6 +2736,7 @@ export default function MyPostForm(props) {
     metadata: \\"\\",
     profile_url: \\"\\",
     nonModelField: \\"\\",
+    nonModelFieldArray: [],
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -2748,6 +2749,9 @@ export default function MyPostForm(props) {
   const [nonModelField, setNonModelField] = React.useState(
     initialValues.nonModelField
   );
+  const [nonModelFieldArray, setNonModelFieldArray] = React.useState(
+    initialValues.nonModelFieldArray
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setUsername(initialValues.username);
@@ -2758,11 +2762,16 @@ export default function MyPostForm(props) {
     setMetadata(initialValues.metadata);
     setProfile_url(initialValues.profile_url);
     setNonModelField(initialValues.nonModelField);
+    setNonModelFieldArray(initialValues.nonModelFieldArray);
+    setCurrentNonModelFieldArrayValue(\\"\\");
     setErrors({});
   };
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
     React.useState(\\"\\");
   const CustomtagsRef = React.createRef();
+  const [currentNonModelFieldArrayValue, setCurrentNonModelFieldArrayValue] =
+    React.useState(\\"\\");
+  const nonModelFieldArrayRef = React.createRef();
   const validations = {
     username: [
       {
@@ -2777,6 +2786,7 @@ export default function MyPostForm(props) {
     metadata: [{ type: \\"JSON\\" }],
     profile_url: [{ type: \\"URL\\" }],
     nonModelField: [{ type: \\"JSON\\" }],
+    nonModelFieldArray: [{ type: \\"JSON\\" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -2806,10 +2816,11 @@ export default function MyPostForm(props) {
           username,
           caption,
           Customtags,
-          post_url: post_url || undefined,
+          post_url,
           metadata,
-          profile_url: profile_url || undefined,
-          nonModelField: nonModelField || undefined,
+          profile_url,
+          nonModelField,
+          nonModelFieldArray,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -2839,7 +2850,14 @@ export default function MyPostForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new Post(modelFields));
+          await DataStore.save(
+            new Post({
+              ...modelFields,
+              nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
+                JSON.parse(s)
+              ),
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -2912,6 +2930,7 @@ export default function MyPostForm(props) {
                 metadata,
                 profile_url,
                 nonModelField,
+                nonModelFieldArray,
               };
               const result = onChange(modelFields);
               value = result?.username ?? value;
@@ -2943,6 +2962,7 @@ export default function MyPostForm(props) {
                 metadata,
                 profile_url,
                 nonModelField,
+                nonModelFieldArray,
               };
               const result = onChange(modelFields);
               value = result?.caption ?? value;
@@ -2970,6 +2990,7 @@ export default function MyPostForm(props) {
               metadata,
               profile_url,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             values = result?.Customtags ?? values;
@@ -3022,6 +3043,7 @@ export default function MyPostForm(props) {
               metadata,
               profile_url,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -3051,6 +3073,7 @@ export default function MyPostForm(props) {
               metadata: value,
               profile_url,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;
@@ -3081,6 +3104,7 @@ export default function MyPostForm(props) {
               metadata,
               profile_url: value,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -3110,6 +3134,7 @@ export default function MyPostForm(props) {
               metadata,
               profile_url,
               nonModelField: value,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.nonModelField ?? value;
@@ -3124,6 +3149,59 @@ export default function MyPostForm(props) {
         hasError={errors.nonModelField?.hasError}
         {...getOverrideProps(overrides, \\"nonModelField\\")}
       ></TextAreaField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              post_url,
+              metadata,
+              profile_url,
+              nonModelField,
+              nonModelFieldArray: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.nonModelFieldArray ?? values;
+          }
+          setNonModelFieldArray(values);
+          setCurrentNonModelFieldArrayValue(\\"\\");
+        }}
+        currentFieldValue={currentNonModelFieldArrayValue}
+        label={\\"Non model field array\\"}
+        items={nonModelFieldArray}
+        hasError={errors.nonModelFieldArray?.hasError}
+        setFieldValue={setCurrentNonModelFieldArrayValue}
+        inputFieldRef={nonModelFieldArrayRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <TextAreaField
+          label=\\"Non model field array\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentNonModelFieldArrayValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.nonModelFieldArray?.hasError) {
+              runValidationTasks(\\"nonModelFieldArray\\", value);
+            }
+            setCurrentNonModelFieldArrayValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"nonModelFieldArray\\",
+              currentNonModelFieldArrayValue
+            )
+          }
+          errorMessage={errors.nonModelFieldArray?.errorMessage}
+          hasError={errors.nonModelFieldArray?.hasError}
+          ref={nonModelFieldArrayRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"nonModelFieldArray\\")}
+        ></TextAreaField>
+      </ArrayField>
     </Grid>
   );
 }
@@ -3147,6 +3225,7 @@ export declare type MyPostFormInputValues = {
     metadata?: string;
     profile_url?: string;
     nonModelField?: string;
+    nonModelFieldArray?: string[];
 };
 export declare type MyPostFormValidationValues = {
     username?: ValidationFunction<string>;
@@ -3156,6 +3235,7 @@ export declare type MyPostFormValidationValues = {
     metadata?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
     nonModelField?: ValidationFunction<string>;
+    nonModelFieldArray?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
@@ -3168,6 +3248,7 @@ export declare type MyPostFormOverridesProps = {
     metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
     profile_url?: PrimitiveOverrideProps<TextFieldProps>;
     nonModelField?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    nonModelFieldArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -6469,16 +6550,169 @@ exports[`amplify form renderer tests datastore form tests should generate a crea
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
+  Text,
   TextAreaField,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function MyPostForm(props) {
   const {
     clearOnSuccess = true,
@@ -6498,6 +6732,7 @@ export default function MyPostForm(props) {
     metadata: \\"\\",
     profile_url: \\"\\",
     nonModelField: \\"\\",
+    nonModelFieldArray: [],
   };
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [username, setUsername] = React.useState(initialValues.username);
@@ -6509,6 +6744,9 @@ export default function MyPostForm(props) {
   const [nonModelField, setNonModelField] = React.useState(
     initialValues.nonModelField
   );
+  const [nonModelFieldArray, setNonModelFieldArray] = React.useState(
+    initialValues.nonModelFieldArray
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setCaption(initialValues.caption);
@@ -6517,8 +6755,13 @@ export default function MyPostForm(props) {
     setMetadata(initialValues.metadata);
     setProfile_url(initialValues.profile_url);
     setNonModelField(initialValues.nonModelField);
+    setNonModelFieldArray(initialValues.nonModelFieldArray);
+    setCurrentNonModelFieldArrayValue(\\"\\");
     setErrors({});
   };
+  const [currentNonModelFieldArrayValue, setCurrentNonModelFieldArrayValue] =
+    React.useState(\\"\\");
+  const nonModelFieldArrayRef = React.createRef();
   const validations = {
     caption: [],
     username: [],
@@ -6526,6 +6769,7 @@ export default function MyPostForm(props) {
     metadata: [{ type: \\"JSON\\" }],
     profile_url: [{ type: \\"URL\\" }],
     nonModelField: [{ type: \\"JSON\\" }],
+    nonModelFieldArray: [{ type: \\"JSON\\" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -6554,10 +6798,11 @@ export default function MyPostForm(props) {
         let modelFields = {
           caption,
           username,
-          post_url: post_url || undefined,
+          post_url,
           metadata,
-          profile_url: profile_url || undefined,
-          nonModelField: nonModelField || undefined,
+          profile_url,
+          nonModelField,
+          nonModelFieldArray,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -6587,7 +6832,14 @@ export default function MyPostForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new Post(modelFields));
+          await DataStore.save(
+            new Post({
+              ...modelFields,
+              nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
+                JSON.parse(s)
+              ),
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -6652,6 +6904,7 @@ export default function MyPostForm(props) {
               metadata,
               profile_url,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.caption ?? value;
@@ -6681,6 +6934,7 @@ export default function MyPostForm(props) {
               metadata,
               profile_url,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -6710,6 +6964,7 @@ export default function MyPostForm(props) {
               metadata,
               profile_url,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -6738,6 +6993,7 @@ export default function MyPostForm(props) {
               metadata: value,
               profile_url,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;
@@ -6767,6 +7023,7 @@ export default function MyPostForm(props) {
               metadata,
               profile_url: value,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -6795,6 +7052,7 @@ export default function MyPostForm(props) {
               metadata,
               profile_url,
               nonModelField: value,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.nonModelField ?? value;
@@ -6809,6 +7067,58 @@ export default function MyPostForm(props) {
         hasError={errors.nonModelField?.hasError}
         {...getOverrideProps(overrides, \\"nonModelField\\")}
       ></TextAreaField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              caption,
+              username,
+              post_url,
+              metadata,
+              profile_url,
+              nonModelField,
+              nonModelFieldArray: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.nonModelFieldArray ?? values;
+          }
+          setNonModelFieldArray(values);
+          setCurrentNonModelFieldArrayValue(\\"\\");
+        }}
+        currentFieldValue={currentNonModelFieldArrayValue}
+        label={\\"Non model field array\\"}
+        items={nonModelFieldArray}
+        hasError={errors.nonModelFieldArray?.hasError}
+        setFieldValue={setCurrentNonModelFieldArrayValue}
+        inputFieldRef={nonModelFieldArrayRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <TextAreaField
+          label=\\"Non model field array\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentNonModelFieldArrayValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.nonModelFieldArray?.hasError) {
+              runValidationTasks(\\"nonModelFieldArray\\", value);
+            }
+            setCurrentNonModelFieldArrayValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"nonModelFieldArray\\",
+              currentNonModelFieldArrayValue
+            )
+          }
+          errorMessage={errors.nonModelFieldArray?.errorMessage}
+          hasError={errors.nonModelFieldArray?.hasError}
+          ref={nonModelFieldArrayRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"nonModelFieldArray\\")}
+        ></TextAreaField>
+      </ArrayField>
     </Grid>
   );
 }
@@ -6831,6 +7141,7 @@ export declare type MyPostFormInputValues = {
     metadata?: string;
     profile_url?: string;
     nonModelField?: string;
+    nonModelFieldArray?: string[];
 };
 export declare type MyPostFormValidationValues = {
     caption?: ValidationFunction<string>;
@@ -6839,6 +7150,7 @@ export declare type MyPostFormValidationValues = {
     metadata?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
     nonModelField?: ValidationFunction<string>;
+    nonModelFieldArray?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
@@ -6849,6 +7161,7 @@ export declare type MyPostFormOverridesProps = {
     metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
     profile_url?: PrimitiveOverrideProps<TextFieldProps>;
     nonModelField?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    nonModelFieldArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -10045,16 +10358,169 @@ exports[`amplify form renderer tests datastore form tests should generate a upda
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
+  Text,
   TextAreaField,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function MyPostForm(props) {
   const {
     id: idProp,
@@ -10076,6 +10542,7 @@ export default function MyPostForm(props) {
     post_url: \\"\\",
     metadata: \\"\\",
     nonModelField: \\"\\",
+    nonModelFieldArray: [],
   };
   const [TextAreaFieldbbd63464, setTextAreaFieldbbd63464] = React.useState(
     initialValues.TextAreaFieldbbd63464
@@ -10089,6 +10556,9 @@ export default function MyPostForm(props) {
   const [metadata, setMetadata] = React.useState(initialValues.metadata);
   const [nonModelField, setNonModelField] = React.useState(
     initialValues.nonModelField
+  );
+  const [nonModelFieldArray, setNonModelFieldArray] = React.useState(
+    initialValues.nonModelFieldArray
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -10110,6 +10580,8 @@ export default function MyPostForm(props) {
         ? cleanValues.nonModelField
         : JSON.stringify(cleanValues.nonModelField)
     );
+    setNonModelFieldArray(cleanValues.nonModelFieldArray ?? []);
+    setCurrentNonModelFieldArrayValue(\\"\\");
     setErrors({});
   };
   const [postRecord, setPostRecord] = React.useState(post);
@@ -10121,6 +10593,9 @@ export default function MyPostForm(props) {
     queryData();
   }, [idProp, post]);
   React.useEffect(resetStateValues, [postRecord]);
+  const [currentNonModelFieldArrayValue, setCurrentNonModelFieldArrayValue] =
+    React.useState(\\"\\");
+  const nonModelFieldArrayRef = React.createRef();
   const validations = {
     TextAreaFieldbbd63464: [],
     caption: [],
@@ -10129,6 +10604,7 @@ export default function MyPostForm(props) {
     post_url: [{ type: \\"URL\\" }],
     metadata: [{ type: \\"JSON\\" }],
     nonModelField: [{ type: \\"JSON\\" }],
+    nonModelFieldArray: [{ type: \\"JSON\\" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -10158,10 +10634,11 @@ export default function MyPostForm(props) {
           TextAreaFieldbbd63464,
           caption,
           username,
-          profile_url: profile_url || undefined,
-          post_url: post_url || undefined,
+          profile_url,
+          post_url,
           metadata,
-          nonModelField: nonModelField || undefined,
+          nonModelField,
+          nonModelFieldArray,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -10260,6 +10737,7 @@ export default function MyPostForm(props) {
               post_url,
               metadata,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.TextAreaFieldbbd63464 ?? value;
@@ -10292,6 +10770,7 @@ export default function MyPostForm(props) {
               post_url,
               metadata,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.caption ?? value;
@@ -10322,6 +10801,7 @@ export default function MyPostForm(props) {
               post_url,
               metadata,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.username ?? value;
@@ -10352,6 +10832,7 @@ export default function MyPostForm(props) {
               post_url,
               metadata,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -10382,6 +10863,7 @@ export default function MyPostForm(props) {
               post_url: value,
               metadata,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -10412,6 +10894,7 @@ export default function MyPostForm(props) {
               post_url,
               metadata: value,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;
@@ -10442,6 +10925,7 @@ export default function MyPostForm(props) {
               post_url,
               metadata,
               nonModelField: value,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.nonModelField ?? value;
@@ -10456,6 +10940,59 @@ export default function MyPostForm(props) {
         hasError={errors.nonModelField?.hasError}
         {...getOverrideProps(overrides, \\"nonModelField\\")}
       ></TextAreaField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              TextAreaFieldbbd63464,
+              caption,
+              username,
+              profile_url,
+              post_url,
+              metadata,
+              nonModelField,
+              nonModelFieldArray: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.nonModelFieldArray ?? values;
+          }
+          setNonModelFieldArray(values);
+          setCurrentNonModelFieldArrayValue(\\"\\");
+        }}
+        currentFieldValue={currentNonModelFieldArrayValue}
+        label={\\"Non model field array\\"}
+        items={nonModelFieldArray}
+        hasError={errors.nonModelFieldArray?.hasError}
+        setFieldValue={setCurrentNonModelFieldArrayValue}
+        inputFieldRef={nonModelFieldArrayRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <TextAreaField
+          label=\\"Non model field array\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentNonModelFieldArrayValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.nonModelFieldArray?.hasError) {
+              runValidationTasks(\\"nonModelFieldArray\\", value);
+            }
+            setCurrentNonModelFieldArrayValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"nonModelFieldArray\\",
+              currentNonModelFieldArrayValue
+            )
+          }
+          errorMessage={errors.nonModelFieldArray?.errorMessage}
+          hasError={errors.nonModelFieldArray?.hasError}
+          ref={nonModelFieldArrayRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"nonModelFieldArray\\")}
+        ></TextAreaField>
+      </ArrayField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -10518,6 +11055,7 @@ export declare type MyPostFormInputValues = {
     post_url?: string;
     metadata?: string;
     nonModelField?: string;
+    nonModelFieldArray?: string[];
 };
 export declare type MyPostFormValidationValues = {
     TextAreaFieldbbd63464?: ValidationFunction<string>;
@@ -10527,6 +11065,7 @@ export declare type MyPostFormValidationValues = {
     post_url?: ValidationFunction<string>;
     metadata?: ValidationFunction<string>;
     nonModelField?: ValidationFunction<string>;
+    nonModelFieldArray?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyPostFormOverridesProps = {
@@ -10538,6 +11077,7 @@ export declare type MyPostFormOverridesProps = {
     post_url?: PrimitiveOverrideProps<TextFieldProps>;
     metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
     nonModelField?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    nonModelFieldArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type MyPostFormProps = React.PropsWithChildren<{
     overrides?: MyPostFormOverridesProps | undefined | null;
@@ -12485,7 +13025,7 @@ export default function MyFlexCreateForm(props) {
           caption,
           Customtags,
           tags,
-          profile_url: profile_url || undefined,
+          profile_url,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -15415,7 +15955,7 @@ export default function MyFlexUpdateForm(props) {
           caption,
           Customtags,
           tags,
-          profile_url: profile_url || undefined,
+          profile_url,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -15744,17 +16284,170 @@ exports[`amplify form renderer tests datastore form tests should render form wit
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
+  Badge,
   Button,
+  Divider,
   Flex,
   Grid,
+  Icon,
+  ScrollView,
   SelectField,
+  Text,
   TextAreaField,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const { tokens } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            color={tokens.colors.brand.primary[80]}
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
 export default function PostCreateFormRow(props) {
   const {
     clearOnSuccess = true,
@@ -15775,6 +16468,7 @@ export default function PostCreateFormRow(props) {
     status: undefined,
     metadata: \\"\\",
     nonModelField: \\"\\",
+    nonModelFieldArray: [],
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
@@ -15787,6 +16481,9 @@ export default function PostCreateFormRow(props) {
   const [nonModelField, setNonModelField] = React.useState(
     initialValues.nonModelField
   );
+  const [nonModelFieldArray, setNonModelFieldArray] = React.useState(
+    initialValues.nonModelFieldArray
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setUsername(initialValues.username);
@@ -15796,8 +16493,13 @@ export default function PostCreateFormRow(props) {
     setStatus(initialValues.status);
     setMetadata(initialValues.metadata);
     setNonModelField(initialValues.nonModelField);
+    setNonModelFieldArray(initialValues.nonModelFieldArray);
+    setCurrentNonModelFieldArrayValue(\\"\\");
     setErrors({});
   };
+  const [currentNonModelFieldArrayValue, setCurrentNonModelFieldArrayValue] =
+    React.useState(\\"\\");
+  const nonModelFieldArrayRef = React.createRef();
   const validations = {
     username: [
       {
@@ -15812,6 +16514,7 @@ export default function PostCreateFormRow(props) {
     status: [],
     metadata: [{ type: \\"JSON\\" }],
     nonModelField: [{ type: \\"JSON\\" }],
+    nonModelFieldArray: [{ type: \\"JSON\\" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -15840,11 +16543,12 @@ export default function PostCreateFormRow(props) {
         let modelFields = {
           username,
           caption,
-          post_url: post_url || undefined,
-          profile_url: profile_url || undefined,
+          post_url,
+          profile_url,
           status,
           metadata,
-          nonModelField: nonModelField || undefined,
+          nonModelField,
+          nonModelFieldArray,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -15874,7 +16578,14 @@ export default function PostCreateFormRow(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new Post(modelFields));
+          await DataStore.save(
+            new Post({
+              ...modelFields,
+              nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
+                JSON.parse(s)
+              ),
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -15913,6 +16624,7 @@ export default function PostCreateFormRow(props) {
                 status,
                 metadata,
                 nonModelField,
+                nonModelFieldArray,
               };
               const result = onChange(modelFields);
               value = result?.username ?? value;
@@ -15944,6 +16656,7 @@ export default function PostCreateFormRow(props) {
                 status,
                 metadata,
                 nonModelField,
+                nonModelFieldArray,
               };
               const result = onChange(modelFields);
               value = result?.caption ?? value;
@@ -15976,6 +16689,7 @@ export default function PostCreateFormRow(props) {
               status,
               metadata,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.post_url ?? value;
@@ -16007,6 +16721,7 @@ export default function PostCreateFormRow(props) {
               status,
               metadata,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.profile_url ?? value;
@@ -16036,6 +16751,7 @@ export default function PostCreateFormRow(props) {
               status: value,
               metadata,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.status ?? value;
@@ -16065,6 +16781,7 @@ export default function PostCreateFormRow(props) {
               status,
               metadata: value,
               nonModelField,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.metadata ?? value;
@@ -16094,6 +16811,7 @@ export default function PostCreateFormRow(props) {
               status,
               metadata,
               nonModelField: value,
+              nonModelFieldArray,
             };
             const result = onChange(modelFields);
             value = result?.nonModelField ?? value;
@@ -16108,6 +16826,59 @@ export default function PostCreateFormRow(props) {
         hasError={errors.nonModelField?.hasError}
         {...getOverrideProps(overrides, \\"nonModelField\\")}
       ></TextAreaField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              post_url,
+              profile_url,
+              status,
+              metadata,
+              nonModelField,
+              nonModelFieldArray: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.nonModelFieldArray ?? values;
+          }
+          setNonModelFieldArray(values);
+          setCurrentNonModelFieldArrayValue(\\"\\");
+        }}
+        currentFieldValue={currentNonModelFieldArrayValue}
+        label={\\"Non model field array\\"}
+        items={nonModelFieldArray}
+        hasError={errors.nonModelFieldArray?.hasError}
+        setFieldValue={setCurrentNonModelFieldArrayValue}
+        inputFieldRef={nonModelFieldArrayRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <TextAreaField
+          label=\\"Non model field array\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentNonModelFieldArrayValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.nonModelFieldArray?.hasError) {
+              runValidationTasks(\\"nonModelFieldArray\\", value);
+            }
+            setCurrentNonModelFieldArrayValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"nonModelFieldArray\\",
+              currentNonModelFieldArrayValue
+            )
+          }
+          errorMessage={errors.nonModelFieldArray?.errorMessage}
+          hasError={errors.nonModelFieldArray?.hasError}
+          ref={nonModelFieldArrayRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"nonModelFieldArray\\")}
+        ></TextAreaField>
+      </ArrayField>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -16165,6 +16936,7 @@ export declare type PostCreateFormRowInputValues = {
     status?: string;
     metadata?: string;
     nonModelField?: string;
+    nonModelFieldArray?: string[];
 };
 export declare type PostCreateFormRowValidationValues = {
     username?: ValidationFunction<string>;
@@ -16174,6 +16946,7 @@ export declare type PostCreateFormRowValidationValues = {
     status?: ValidationFunction<string>;
     metadata?: ValidationFunction<string>;
     nonModelField?: ValidationFunction<string>;
+    nonModelFieldArray?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PostCreateFormRowOverridesProps = {
@@ -16186,6 +16959,7 @@ export declare type PostCreateFormRowOverridesProps = {
     status?: PrimitiveOverrideProps<SelectFieldProps>;
     metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
     nonModelField?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    nonModelFieldArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
 } & EscapeHatchProps;
 export declare type PostCreateFormRowProps = React.PropsWithChildren<{
     overrides?: PostCreateFormRowOverridesProps | undefined | null;
