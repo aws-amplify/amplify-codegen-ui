@@ -5,6 +5,11 @@ on:
     - cron: '*/30 * * * *' # Run every 30m
   workflow_dispatch:
 
+# These permissions are needed to interact with GitHub's OIDC Token endpoint.
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
 jobs:
   beta-canary:
     runs-on: ubuntu-latest
@@ -62,8 +67,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CANARY_METRIC_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CANARY_METRIC_SECRET_KEY }}
+          role-to-assume: ${{ secrets.CANARY_METRIC_ROLE_ARN }}
           aws-region: us-west-2
       - run: aws cloudwatch put-metric-data --metric-name BetaSuccessRate --namespace CodegenUiCanaries --value 0
 
@@ -75,8 +79,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CANARY_METRIC_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CANARY_METRIC_SECRET_KEY }}
+          role-to-assume: ${{ secrets.CANARY_METRIC_ROLE_ARN }}
           aws-region: us-west-2
       - run: aws cloudwatch put-metric-data --metric-name BetaSuccessRate --namespace CodegenUiCanaries --value 1
 
@@ -136,8 +139,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CANARY_METRIC_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CANARY_METRIC_SECRET_KEY }}
+          role-to-assume: ${{ secrets.CANARY_METRIC_ROLE_ARN }}
           aws-region: us-west-2
       - run: aws cloudwatch put-metric-data --metric-name ReleaseSuccessRate --namespace CodegenUiCanaries --value 0
 
@@ -149,7 +151,6 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CANARY_METRIC_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.CANARY_METRIC_SECRET_KEY }}
+          role-to-assume: ${{ secrets.CANARY_METRIC_ROLE_ARN }}
           aws-region: us-west-2
       - run: aws cloudwatch put-metric-data --metric-name ReleaseSuccessRate --namespace CodegenUiCanaries --value 1
