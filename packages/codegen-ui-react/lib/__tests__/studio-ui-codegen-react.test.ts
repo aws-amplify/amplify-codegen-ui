@@ -548,7 +548,7 @@ describe('amplify render tests', () => {
 
       it('should render declarations', () => {
         expect(
-          generateWithAmplifyRenderer('custom/customParentAndChildren', {
+          generateWithAmplifyRenderer('custom/aliasParent', {
             script: ScriptKind.JS,
             renderTypeDeclarations: true,
           }).declaration,

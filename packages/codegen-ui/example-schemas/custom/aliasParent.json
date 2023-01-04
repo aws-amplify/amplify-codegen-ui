@@ -5,6 +5,11 @@
             "name": "Grid",
             "componentType": "GridCustom",
             "properties": {}
+        },
+        {
+            "name": "Button",
+            "componentType": "Button",
+            "properties": {}
         }
     ],
     "properties": {},

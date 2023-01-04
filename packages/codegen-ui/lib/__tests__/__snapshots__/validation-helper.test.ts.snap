@@ -14,9 +14,11 @@ exports[`validation-helper validateComponentSchema fails on componentType with l
 
 exports[`validation-helper validateComponentSchema fails on componentType with whitespace 1`] = `"Expected an alphanumeric string, starting with a character"`;
 
-exports[`validation-helper validateComponentSchema throws on all components sharing a name 1`] = `"Duplicate names are not allowed within a component, found duplicates of [\\"DeepComp\\",\\"MyComp\\"]"`;
+exports[`validation-helper validateComponentSchema throws on child components sharing a name 1`] = `"Duplicate names are not allowed within a component, found duplicates of [\\"ChildComponent\\"]"`;
 
 exports[`validation-helper validateComponentSchema throws on invalid schema version 1`] = `"unsupported schemaVersion 1.1.4"`;
+
+exports[`validation-helper validateComponentSchema throws on parent and child components sharing a name 1`] = `"Duplicate names are not allowed within a component, found duplicates of [\\"MyComp\\"]"`;
 
 exports[`validation-helper validateComponentSchema throws on unsupported schema version 1`] = `"unsupported schemaVersion 1.1"`;
 

@@ -103,6 +103,8 @@ import {
   buildUseStateExpression,
   modelNeedsRelationshipsLoadedForCollection,
   fieldNeedsRelationshipLoadedForCollection,
+  isAliased,
+  removeAlias,
 } from './helpers';
 
 export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer<
@@ -355,9 +357,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         factory.createTypeLiteralNode(
           Object.entries(this.componentMetadata.componentNameToTypeMap).map(([name, componentType]) => {
             const isComponentTypePrimitive = isPrimitive(componentType);
-            const componentTypePropName = `${componentType}Props`;
+            const componentName = isAliased(componentType) ? removeAlias(componentType) : componentType;
+            const componentTypePropName = `${componentName}Props`;
             this.importCollection.addImport(
-              isComponentTypePrimitive ? ImportSource.UI_REACT : `./${componentType}`,
+              isComponentTypePrimitive ? ImportSource.UI_REACT : `./${componentName}`,
               componentTypePropName,
             );
             return factory.createPropertySignature(
