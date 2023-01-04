@@ -14,7 +14,6 @@
   limitations under the License.
  */
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
-import { isEnumFieldType } from '@aws-amplify/datastore';
 
 export const shouldWrapInArrayField = (config: FieldConfigMetadata): boolean => config.isArray || !!config.relationship;
 
@@ -23,8 +22,13 @@ export const isModelDataType = (
 ): config is FieldConfigMetadata & { dataType: { model: string } } =>
   !!(config.dataType && typeof config.dataType === 'object' && 'model' in config.dataType);
 
+export const isEnumDataType = (
+  config: FieldConfigMetadata,
+): config is FieldConfigMetadata & { dataType: { enum: string } } =>
+  !!(config.dataType && typeof config.dataType === 'object' && 'enum' in config.dataType);
+
 export const shouldImplementDisplayValueFunction = (config: FieldConfigMetadata): boolean => {
-  return isModelDataType(config) || (isEnumFieldType(config.dataType) && shouldWrapInArrayField(config));
+  return isModelDataType(config) || (isEnumDataType(config) && shouldWrapInArrayField(config));
 };
 
 export const shouldImplementIDValueFunction = (config: FieldConfigMetadata): boolean => {

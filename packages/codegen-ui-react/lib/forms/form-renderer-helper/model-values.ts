@@ -21,7 +21,6 @@ import {
   ConcatenatedStudioComponentProperty,
 } from '@aws-amplify/codegen-ui';
 import { StudioFormInputFieldProperty } from '@aws-amplify/codegen-ui/lib/types/form/input-config';
-import { isEnumFieldType } from '@aws-amplify/datastore';
 import {
   Expression,
   factory,
@@ -44,7 +43,7 @@ import {
 } from '../../react-component-render-helper';
 import { buildAccessChain, getRecordsName } from './form-state';
 import { getElementAccessExpression, getValidProperty } from './invalid-variable-helpers';
-import { isModelDataType } from './render-checkers';
+import { isEnumDataType, isModelDataType } from './render-checkers';
 
 export const getDisplayValueObjectName = 'getDisplayValue';
 
@@ -450,7 +449,7 @@ export function buildDisplayValueFunction(fieldName: string, fieldConfig: FieldC
     }
   }
 
-  if (isEnumFieldType(fieldConfig.dataType) && fieldConfig.valueMappings && fieldConfig.isArray) {
+  if (isEnumDataType(fieldConfig) && fieldConfig.valueMappings && fieldConfig.isArray) {
     const displayValueMapName = `enumDisplayValueMap`;
     additionalStatements = [
       factory.createVariableStatement(
