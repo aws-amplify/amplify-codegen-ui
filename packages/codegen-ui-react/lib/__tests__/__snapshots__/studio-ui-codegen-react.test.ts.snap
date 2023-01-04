@@ -1256,6 +1256,82 @@ export default function ListingCardCollection(
 "
 `;
 
+exports[`amplify render tests collection should render concatenated keys if model has composite keys 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { CompositePerson } from \\"../models\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import CompositePersonProfile, {
+  CompositePersonProfileProps,
+} from \\"./CompositePersonProfile\\";
+import { Collection, CollectionProps } from \\"@aws-amplify/ui-react\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CompositePersonProfileCollectionOverridesProps = {
+  CompositePersonProfileCollection?: PrimitiveOverrideProps<CollectionProps>;
+  CompositePersonProfile?: CompositePersonProfileProps;
+} & EscapeHatchProps;
+export type CompositePersonProfileCollectionProps = React.PropsWithChildren<
+  Partial<CollectionProps<any>> & {
+    items?: any[];
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => CompositePersonProfileProps;
+  } & {
+    overrides?:
+      | CompositePersonProfileCollectionOverridesProps
+      | undefined
+      | null;
+  }
+>;
+export default function CompositePersonProfileCollection(
+  props: CompositePersonProfileCollectionProps
+): React.ReactElement {
+  const { items: itemsProp, overrideItems, overrides, ...rest } = props;
+  const [items, setItems] = React.useState(undefined);
+  const itemsDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositePerson,
+  }).items;
+  React.useEffect(() => {
+    if (itemsProp !== undefined) {
+      setItems(itemsProp);
+      return;
+    }
+    setItems(itemsDataStore);
+  }, [itemsProp, itemsDataStore]);
+  return (
+    /* @ts-ignore: TS2322 */
+    <Collection
+      type=\\"list\\"
+      itemsPerPage={6}
+      templateColumns=\\"1fr 1fr\\"
+      autoFlow=\\"row\\"
+      alignItems=\\"stretch\\"
+      justifyContent=\\"stretch\\"
+      items={items || []}
+      {...getOverrideProps(overrides, \\"CompositePersonProfileCollection\\")}
+      {...rest}
+    >
+      {(item, index) => (
+        <CompositePersonProfile
+          author={item}
+          key={\`\${item.name}\${item.description}\`}
+          {...(overrideItems && overrideItems({ item, index }))}
+        ></CompositePersonProfile>
+      )}
+    </Collection>
+  );
+}
+"
+`;
+
 exports[`amplify render tests collection should render if model name collides with component types 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";

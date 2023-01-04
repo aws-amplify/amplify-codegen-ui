@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { ModuleKind, ScriptTarget, ScriptKind } from '..';
-import { authorHasManySchema, generateWithAmplifyRenderer } from './__utils__';
+import { authorHasManySchema, compositePersonSchema, generateWithAmplifyRenderer } from './__utils__';
 
 describe('amplify render tests', () => {
   describe('basic component tests', () => {
@@ -141,6 +141,17 @@ describe('amplify render tests', () => {
     });
     it('should render if model name collides with component types', () => {
       const { componentText } = generateWithAmplifyRenderer('collectionWithModelNameCollisions');
+      expect(componentText).toMatchSnapshot();
+    });
+
+    it('should render concatenated keys if model has composite keys', () => {
+      const { componentText } = generateWithAmplifyRenderer(
+        'compositePersonCollectionComponent',
+        {},
+        false,
+        compositePersonSchema,
+      );
+      expect(componentText).toContain(`key={\`\${item.name}\${item.description}\`}`);
       expect(componentText).toMatchSnapshot();
     });
   });
