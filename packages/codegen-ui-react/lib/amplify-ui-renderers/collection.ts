@@ -14,7 +14,11 @@
   limitations under the License.
  */
 import { BaseComponentProps } from '@aws-amplify/ui-react';
-import { isStudioComponentWithCollectionProperties, StudioComponentChild } from '@aws-amplify/codegen-ui';
+import {
+  CollectionStudioComponentProperty,
+  isStudioComponentWithCollectionProperties,
+  StudioComponentChild,
+} from '@aws-amplify/codegen-ui';
 import { factory, JsxChild, JsxElement, JsxExpression, JsxOpeningElement, SyntaxKind } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildOpeningElementProperties } from '../react-component-render-helper';
@@ -69,13 +73,26 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
       if ('key' in child.properties) {
         return;
       }
-      // eslint-disable-next-line no-param-reassign
-      child.properties.key = {
+      let keys = ['id'];
+      if (isStudioComponentWithCollectionProperties(this.component)) {
+        const firstCollectionProp = Object.entries(this.component.collectionProperties ?? {})[0];
+        if (firstCollectionProp) {
+          const [, { model }] = firstCollectionProp;
+          const primaryKeys = this.componentMetadata.dataSchemaMetadata?.models[model]?.primaryKeys;
+          if (primaryKeys) {
+            keys = primaryKeys;
+          }
+        }
+      }
+      const bindingProperties: CollectionStudioComponentProperty[] = keys.map((key) => ({
         collectionBindingProperties: {
           property: '',
-          field: 'id',
+          field: key,
         },
-      };
+      }));
+
+      // eslint-disable-next-line no-param-reassign
+      child.properties.key = bindingProperties.length === 1 ? bindingProperties[0] : { concat: bindingProperties };
     });
   }
 

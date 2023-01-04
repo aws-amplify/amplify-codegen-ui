@@ -122,8 +122,6 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   protected componentMetadata: ComponentMetadata;
 
-  protected dataSchema: GenericDataSchema | undefined;
-
   fileName = `${this.component.name}.tsx`;
 
   constructor(component: StudioComponent, renderConfig: ReactRenderConfig, dataSchema?: GenericDataSchema) {
@@ -136,9 +134,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     this.componentMetadata = computeComponentMetadata(this.component);
 
     this.componentMetadata.stateReferences = mapSyntheticStateReferences(this.componentMetadata);
+    this.componentMetadata.dataSchemaMetadata = dataSchema;
     this.mapSyntheticPropsForVariants();
     this.mapSyntheticProps();
-    this.dataSchema = dataSchema;
     this.importCollection = new ImportCollection(this.componentMetadata);
     addBindingPropertiesImports(this.component, this.importCollection);
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
@@ -961,7 +959,10 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           this.buildSetCollectionItemsUseEffectStatement({
             itemsDataStoreName: this.getDataStoreName(propName),
             itemsPropName: this.hasCollectionPropertyNamedItems(component) ? 'itemsProp' : 'items',
-            needsRelationshipsLoaded: modelNeedsRelationshipsLoadedForCollection(model, this.dataSchema),
+            needsRelationshipsLoaded: modelNeedsRelationshipsLoadedForCollection(
+              model,
+              this.componentMetadata.dataSchemaMetadata,
+            ),
             modelName: model,
             propName,
           }),
@@ -1091,14 +1092,15 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     setItemsIdentifier: Identifier;
     modelName: string;
   }) {
-    const model = this.dataSchema?.models[modelName];
+    const { dataSchemaMetadata: dataSchema } = this.componentMetadata;
+    const model = dataSchema?.models[modelName];
     if (!model) {
       throw new InternalError(`Could not find schema for ${modelName}`);
     }
 
     const loadedFields: PropertyAssignment[] = [];
     Object.entries(model.fields).forEach(([fieldName, fieldSchema]) => {
-      if (fieldNeedsRelationshipLoadedForCollection(fieldSchema, this.dataSchema as GenericDataSchema)) {
+      if (fieldNeedsRelationshipLoadedForCollection(fieldSchema, dataSchema as GenericDataSchema)) {
         const { relationship } = fieldSchema;
         if (relationship?.type === 'HAS_MANY') {
           loadedFields.push(

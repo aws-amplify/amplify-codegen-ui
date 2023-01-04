@@ -1,0 +1,48 @@
+{
+    "id": "1234-5678-9010",
+    "componentType": "Collection",
+    "name": "CompositePersonProfileCollection",
+    "properties": {
+      "type": {
+        "value": "list"
+      },
+      "itemsPerPage": {
+        "value": "6",
+        "type": "number"
+      },
+      "templateColumns": {
+        "value": "1fr 1fr"
+      },
+      "autoFlow": {
+        "value": "row"
+      },
+      "alignItems": {
+        "value": "stretch"
+      },
+      "justifyContent": {
+        "value": "stretch"
+      }
+    },
+    "bindingProperties": {},
+    "collectionProperties": {
+      "items": {
+        "model": "CompositePerson"
+      }
+    },
+    "children": [
+      {
+        "children": [],
+        "componentType": "CompositePersonProfile",
+        "name": "CompositePersonProfile",
+        "properties": {
+          "author": {
+            "collectionBindingProperties": {
+              "property": "item"
+            }
+          }
+        },
+        "events": {}
+      }
+    ],
+    "schemaVersion": "1.0"
+  }
