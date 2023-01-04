@@ -15,6 +15,7 @@
  */
 import { GenericDataField, GenericDataSchema } from '@aws-amplify/codegen-ui/lib/types';
 import { factory, Statement, Expression, NodeFlags, Identifier } from 'typescript';
+import { isPrimitive } from '../primitive';
 
 export const lowerCaseFirst = (input: string) => input.charAt(0).toLowerCase() + input.slice(1);
 
@@ -103,4 +104,12 @@ export function modelNeedsRelationshipsLoadedForCollection(modelName: string, da
       fieldNeedsRelationshipLoadedForCollection(field, dataSchema),
     )
   );
+}
+
+export function isAliased(componentType: string): boolean {
+  return !!(isPrimitive(removeAlias(componentType)) && componentType.match(/(Custom$)/g));
+}
+
+export function removeAlias(aliasString: string): string {
+  return aliasString.replace(/(Custom$)/g, '');
 }
