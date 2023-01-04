@@ -407,3 +407,76 @@ export const authorHasManySchema: GenericDataSchema = getGenericFromDataStore({
   codegenVersion: '3.3.1',
   version: '448accd13d4335db7822f28a44b0972a',
 });
+
+/**
+  type CompositePerson @model {
+    name: ID! @primaryKey(sortKeyFields: ["description"])
+    description: String!
+    address: String
+  }
+ */
+
+export const compositePersonSchema: GenericDataSchema = getGenericFromDataStore({
+  models: {
+    CompositePerson: {
+      name: 'CompositePerson',
+      fields: {
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        description: {
+          name: 'description',
+          isArray: false,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+        },
+        address: {
+          name: 'address',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'CompositePeople',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['name', 'description'],
+          },
+        },
+      ],
+    },
+  },
+  enums: {},
+  nonModels: {},
+  codegenVersion: '3.3.2',
+  version: 'accea0d7a2f24829740c710ceb3264a8',
+});
