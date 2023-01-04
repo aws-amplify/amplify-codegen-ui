@@ -5454,17 +5454,19 @@ export default function CustomButton(
 exports[`amplify render tests custom components alias parent should render declarations 1`] = `
 "import * as React from \\"react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
-import { CustomButtonProps } from \\"./CustomButton\\";
+import { GridProps } from \\"./Grid\\";
+import { ButtonProps } from \\"@aws-amplify/ui-react\\";
 import { ViewTestProps } from \\"./ViewTest\\";
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type CustomParentAndChildrenOverridesProps = {
-    CustomParentAndChildren?: ViewTestProps;
-    MyCustomButton?: CustomButtonProps;
+export declare type AliasParentOverridesProps = {
+    AliasParent?: ViewTestProps;
+    Grid?: GridProps;
+    Button?: PrimitiveOverrideProps<ButtonProps>;
 } & EscapeHatchProps;
-export declare type CustomParentAndChildrenProps = React.PropsWithChildren<Partial<ViewTestProps> & {
-    overrides?: CustomParentAndChildrenOverridesProps | undefined | null;
+export declare type AliasParentProps = React.PropsWithChildren<Partial<ViewTestProps> & {
+    overrides?: AliasParentOverridesProps | undefined | null;
 }>;
-export default function CustomParentAndChildren(props: CustomParentAndChildrenProps): React.ReactElement;
+export default function AliasParent(props: AliasParentProps): React.ReactElement;
 "
 `;
 
@@ -5476,6 +5478,7 @@ import {
   getOverrideProps,
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Grid as GridCustom, GridProps } from \\"./Grid\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
 import ViewTest, { ViewTestProps } from \\"./ViewTest\\";
 
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
@@ -5483,6 +5486,7 @@ export declare type PrimitiveOverrideProps<T> = Partial<T> &
 export declare type AliasParentOverridesProps = {
   AliasParent?: ViewTestProps;
   Grid?: GridProps;
+  Button?: PrimitiveOverrideProps<ButtonProps>;
 } & EscapeHatchProps;
 export type AliasParentProps = React.PropsWithChildren<
   Partial<ViewTestProps> & {
@@ -5497,6 +5501,7 @@ export default function AliasParent(
     /* @ts-ignore: TS2322 */
     <ViewTest {...getOverrideProps(overrides, \\"AliasParent\\")} {...rest}>
       <GridCustom {...getOverrideProps(overrides, \\"Grid\\")}></GridCustom>
+      <Button {...getOverrideProps(overrides, \\"Button\\")}></Button>
     </ViewTest>
   );
 }

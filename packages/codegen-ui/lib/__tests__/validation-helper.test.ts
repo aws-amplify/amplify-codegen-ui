@@ -289,7 +289,7 @@ describe('validation-helper', () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
-    test('throws on all components sharing a name', () => {
+    test('throws on parent and child components sharing a name', () => {
       expect(() => {
         validateComponentSchema({
           name: 'MyComp',
@@ -308,7 +308,7 @@ describe('validation-helper', () => {
               properties: {},
               children: [
                 {
-                  name: 'DeepComp',
+                  name: 'DeepCompChild',
                   componentType: 'Tooltip',
                   properties: {},
                 },
@@ -318,6 +318,29 @@ describe('validation-helper', () => {
                   properties: {},
                 },
               ],
+            },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    test('throws on child components sharing a name', () => {
+      expect(() => {
+        validateComponentSchema({
+          name: 'MyComp',
+          componentType: 'Flex',
+          properties: {},
+          schemaVersion: '1.0',
+          children: [
+            {
+              name: 'ChildComponent',
+              componentType: 'Button',
+              properties: {},
+            },
+            {
+              name: 'ChildComponent',
+              componentType: 'View',
+              properties: {},
             },
           ],
         });
