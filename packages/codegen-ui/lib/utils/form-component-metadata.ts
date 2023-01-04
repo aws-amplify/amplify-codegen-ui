@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { isEnumFieldType } from '@aws-amplify/datastore';
 import { camelCase } from 'change-case';
 
 import {
@@ -93,7 +92,11 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
           });
         }
 
-        if ((element.relationship || isEnumFieldType(element.dataType)) && 'valueMappings' in element) {
+        if (
+          (element.relationship ||
+            (element.dataType && typeof element.dataType === 'object' && 'enum' in element.dataType)) &&
+          'valueMappings' in element
+        ) {
           metadata.valueMappings = element.valueMappings;
         }
 
