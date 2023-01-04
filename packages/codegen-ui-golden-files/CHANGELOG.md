@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.1...v2.7.2) (2023-01-04)
+
+
+### Bug Fixes
+
+* remove functions imported from devDep ([d7544bd](https://github.com/aws-amplify/amplify-codegen-ui/commit/d7544bd6eb1b0726d461b501242d9a93340878d6))
+
+
+
+
+
 ## [2.7.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.0...v2.7.1) (2022-12-30)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui-golden-files

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.1...v2.7.2) (2023-01-04)
+
+
+### Bug Fixes
+
+* parse values for non-model arrays ([ffb68b7](https://github.com/aws-amplify/amplify-codegen-ui/commit/ffb68b7bd5b16603ccc16e5b20d5a2db8de80959))
+* remove functions imported from devDep ([d7544bd](https://github.com/aws-amplify/amplify-codegen-ui/commit/d7544bd6eb1b0726d461b501242d9a93340878d6))
+* update imports and props for aliased components ([#868](https://github.com/aws-amplify/amplify-codegen-ui/issues/868)) ([7c5138a](https://github.com/aws-amplify/amplify-codegen-ui/commit/7c5138a9d822445690b0316e79a6a0cd3c330e6a))
+
+
+
+
+
 ## [2.7.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.0...v2.7.1) (2022-12-30)
 
 
