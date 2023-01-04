@@ -14,7 +14,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -44,7 +43,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -165,7 +163,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -1704,7 +1701,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
@@ -1722,7 +1718,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -1843,7 +1838,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -2563,7 +2557,6 @@ import {
   Text,
   TextAreaField,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
@@ -2583,7 +2576,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -2704,7 +2696,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -3279,7 +3270,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -3309,7 +3299,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -3430,7 +3419,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -4332,7 +4320,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -4361,7 +4348,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -4482,7 +4468,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -5191,7 +5176,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -5312,7 +5296,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -5875,7 +5858,6 @@ import {
   SelectField,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
@@ -5893,7 +5875,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -6014,7 +5995,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -6560,7 +6540,6 @@ import {
   Text,
   TextAreaField,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
@@ -6580,7 +6559,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -6701,7 +6679,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -7193,7 +7170,6 @@ import {
   SelectField,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -7216,7 +7192,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -7337,7 +7312,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -7763,7 +7737,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -7786,7 +7759,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -7907,7 +7879,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -8234,7 +8205,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -8257,7 +8227,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -8378,7 +8347,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -8724,7 +8692,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -8747,7 +8714,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -8868,7 +8834,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -9210,7 +9175,6 @@ import {
   SelectField,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -9233,7 +9197,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -9354,7 +9317,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -9780,7 +9742,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -9803,7 +9764,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -9924,7 +9884,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -10368,7 +10327,6 @@ import {
   Text,
   TextAreaField,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
@@ -10388,7 +10346,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -10509,7 +10466,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -11109,7 +11065,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -11132,7 +11087,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -11253,7 +11207,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -11644,7 +11597,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -11667,7 +11619,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -11788,7 +11739,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -12141,7 +12091,6 @@ import {
   SelectField,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -12164,7 +12113,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -12285,7 +12233,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -12788,7 +12735,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Flex as Flex0 } from \\"../models\\";
@@ -12808,7 +12754,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -12929,7 +12874,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -13357,7 +13301,6 @@ import {
   SwitchField,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Blog } from \\"../models\\";
@@ -13377,7 +13320,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -13498,7 +13440,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -13910,7 +13851,6 @@ import {
   TextAreaField,
   TextField,
   ToggleButton,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { InputGallery } from \\"../models\\";
@@ -13930,7 +13870,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -14051,7 +13990,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -14795,7 +14733,6 @@ import {
   TextAreaField,
   TextField,
   ToggleButton,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { InputGallery } from \\"../models\\";
@@ -14815,7 +14752,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -14936,7 +14872,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -15705,7 +15640,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Flex as Flex0 } from \\"../models\\";
@@ -15725,7 +15659,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -15846,7 +15779,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -16295,7 +16227,6 @@ import {
   Text,
   TextAreaField,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
@@ -16315,7 +16246,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -16436,7 +16366,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
@@ -16990,7 +16919,6 @@ import {
   ScrollView,
   Text,
   TextField,
-  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -17013,7 +16941,6 @@ function ArrayField({
   getBadgeText,
 }) {
   const labelElement = <Text>{label}</Text>;
-  const { tokens } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -17134,7 +17061,6 @@ function ArrayField({
           <Button
             size=\\"small\\"
             variation=\\"link\\"
-            color={tokens.colors.brand.primary[80]}
             isDisabled={hasError}
             onClick={addItem}
           >
