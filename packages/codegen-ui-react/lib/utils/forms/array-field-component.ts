@@ -51,22 +51,6 @@ export const generateArrayFieldComponent = () => {
       factory.createVariableDeclarationList(
         [
           factory.createVariableDeclaration(
-            factory.createObjectBindingPattern([
-              factory.createBindingElement(undefined, undefined, factory.createIdentifier('tokens'), undefined),
-            ]),
-            undefined,
-            undefined,
-            factory.createCallExpression(factory.createIdentifier('useTheme'), undefined, []),
-          ),
-        ],
-        NodeFlags.Const,
-      ),
-    ),
-    factory.createVariableStatement(
-      undefined,
-      factory.createVariableDeclarationList(
-        [
-          factory.createVariableDeclaration(
             factory.createArrayBindingPattern([
               factory.createBindingElement(
                 undefined,
@@ -992,25 +976,6 @@ export const generateArrayFieldComponent = () => {
                             factory.createJsxAttribute(
                               factory.createIdentifier('variation'),
                               factory.createStringLiteral('link'),
-                            ),
-                            factory.createJsxAttribute(
-                              factory.createIdentifier('color'),
-                              factory.createJsxExpression(
-                                undefined,
-                                factory.createElementAccessExpression(
-                                  factory.createPropertyAccessExpression(
-                                    factory.createPropertyAccessExpression(
-                                      factory.createPropertyAccessExpression(
-                                        factory.createIdentifier('tokens'),
-                                        factory.createIdentifier('colors'),
-                                      ),
-                                      factory.createIdentifier('brand'),
-                                    ),
-                                    factory.createIdentifier('primary'),
-                                  ),
-                                  factory.createNumericLiteral('80'),
-                                ),
-                              ),
                             ),
                             factory.createJsxAttribute(
                               factory.createIdentifier('isDisabled'),
