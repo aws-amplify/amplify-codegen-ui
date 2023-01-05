@@ -1,0 +1,59 @@
+{
+    "bindingProperties" : {
+      "compositeDog" : {
+        "bindingProperties" : {
+          "model" : "CompositeDog"
+        },
+        "type" : "Data"
+      },
+      "mySlot" : {
+        "type" : "Amplify.Slot"
+      }
+    },
+    "children" : [ {
+      "children" : [ ],
+      "componentType" : "Text",
+      "events" : { },
+      "name" : "dfdfd",
+      "properties" : {
+        "label" : {
+          "bindingProperties" : {
+            "field" : "name",
+            "property" : "compositeDog"
+          },
+          "configured" : true,
+          "importedValue" : "dfdfd"
+        }
+      },
+      "sourceId" : "3547:2443"
+    }, {
+      "children" : [ ],
+      "componentType" : "View",
+      "events" : { },
+      "name" : "Frame 1",
+      "properties" : {
+        "children" : {
+          "bindingProperties" : {
+            "property" : "mySlot"
+          },
+          "configured" : true
+        }
+      },
+      "sourceId" : "3548:2442"
+    } ],
+    "collectionProperties" : { },
+    "componentType" : "View",
+    "events" : { },
+    "id" : "c-FtxCA8bCBkYpMjeGFw",
+    "name" : "CompositeDogCard",
+    "overrides" : { },
+    "properties" : {
+    },
+    "schemaVersion" : "1.0",
+    "sourceId" : "3547:2444",
+    "variants" : [ ],
+    "appId" : "d3h9zzjdfdf",
+    "environmentName" : "staging",
+    "createdAt" : "2022-12-19T18:34:56.022Z",
+    "modifiedAt" : "2022-12-21T00:38:59.079Z"
+  }

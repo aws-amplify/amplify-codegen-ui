@@ -227,6 +227,15 @@ describe('Generated Components', () => {
         cy.contains('Cap');
       });
     });
+
+    it('Supports hasOne, belongsTo, and hasMany relationships', () => {
+      cy.get('#collectionWithCompositeKeysAndRelationships').within(() => {
+        cy.contains('Ruca');
+        cy.contains('Owner: Erica');
+        cy.contains('Bowl: round');
+        cy.contains('Toys: stick, ball');
+      });
+    });
   });
 
   describe('Default Value', () => {

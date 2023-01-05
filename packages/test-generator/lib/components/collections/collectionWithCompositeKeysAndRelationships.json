@@ -1,0 +1,43 @@
+{
+    "bindingProperties" : { },
+    "children" : [ {
+      "children" : [ ],
+      "componentType" : "CompositeDogCard",
+      "events" : { },
+      "name" : "CompositeDogCard",
+      "properties" : {
+        "compositeDog" : {
+          "collectionBindingProperties" : {
+            "property" : "item"
+          }
+        }
+      }
+    } ],
+    "collectionProperties" : {
+      "items" : {
+        "model" : "CompositeDog"
+      }
+    },
+    "componentType" : "Collection",
+    "events" : { },
+    "id" : "c-9mUNJkHk8OG529D86b",
+    "name" : "CollectionWithCompositeKeysAndRelationships",
+    "overrides" : { },
+    "properties" : {
+      "type" : {
+        "value" : "list"
+      },
+      "direction" : {
+        "value" : "column"
+      },
+      "justifyContent" : {
+        "value" : "left"
+      }
+    },
+    "schemaVersion" : "1.0",
+    "variants" : [ ],
+    "appId" : "jkdjl",
+    "environmentName" : "staging",
+    "createdAt" : "2022-12-19T18:35:24.549Z",
+    "modifiedAt" : "2023-01-04T21:17:33.685Z"
+  }
