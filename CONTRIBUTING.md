@@ -16,7 +16,7 @@ See [AWS Amplify Contributing Guidelines](https://github.com/aws-amplify/.github
 # To run a full build
 npm run setup-dev
 
-# Or, if you'd like to run steps manually
+# Or, if you'd like to run steps manually.
 npm install
 lerna bootstrap
 lerna run build
