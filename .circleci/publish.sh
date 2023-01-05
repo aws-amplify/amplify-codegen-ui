@@ -2,7 +2,7 @@
 
 if [[ `git log --format=%s -n 1` =~ ^chore\(release\):\ v.* ]]; then
   # production release
-  npx lerna publish from-git --ignore-scripts -y;
+  npx lerna publish from-git --ignore-scripts --no-verify-access -y;
 else
   SHORT_SHA1=$(echo $CIRCLE_SHA1 | cut -c -7)
 
@@ -22,6 +22,7 @@ else
       -y
     npx lerna publish from-git \
       --ignore-scripts \
+      --no-verify-access \
       --pre-dist-tag $TAGGED_RELEASE_NAME \
       -y;
   else
@@ -33,6 +34,7 @@ else
       -y
     npx lerna publish from-git \
       --ignore-scripts \
+      --no-verify-access \
       --pre-dist-tag next \
       -y;
   fi;
