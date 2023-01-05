@@ -13,9 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+/* eslint-disable max-len */
 export { default as CollectionWithBinding } from './collectionWithBinding.json';
 export { default as CollectionWithSort } from './collectionWithSort.json';
 export { default as CollectionWithBindingItemsName } from './collectionWithBindingItemsName.json';
 export { default as PaginatedCollection } from './paginatedCollection.json';
 export { default as SearchableCollection } from './searchableCollection.json';
 export { default as SimpleUserCollection } from './simpleUserCollection.json';
+export { default as CollectionWithCompositeKeysAndRelationships } from './collectionWithCompositeKeysAndRelationships.json';

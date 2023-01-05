@@ -17,7 +17,7 @@ import { useEffect, useState, useRef } from 'react';
 import { AmplifyProvider } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { DataStore } from 'aws-amplify';
-import { User, Listing, Class } from './models';
+import { User, Listing, Class, CompositeBowl, CompositeToy, CompositeOwner, CompositeDog } from './models';
 import {
   ViewTest,
   ViewWithButton,
@@ -60,6 +60,7 @@ import {
   SearchableCollection,
   ComponentWithAuthBinding,
   DataBindingNamedClass,
+  CollectionWithCompositeKeysAndRelationships,
 } from './ui-components'; // eslint-disable-line import/extensions
 import { initializeAuthMockData } from './mock-utils';
 
@@ -127,6 +128,38 @@ const initializeListingTestData = async (): Promise<void> => {
   await DataStore.save(new Listing({ title: 'Chalet away from home', priceUSD: 5000, description: 'youll like it' }));
 };
 
+const initializeCompositeDogTestData = async (): Promise<void> => {
+  const connectedBowl = await DataStore.save(new CompositeBowl({ shape: 'round', size: 'xl' }));
+  const connectedOwner = await DataStore.save(new CompositeOwner({ lastName: 'Erica', firstName: 'Raunak' }));
+
+  const connectedToys = await Promise.all([
+    DataStore.save(new CompositeToy({ kind: 'stick', color: 'oak' })),
+    DataStore.save(new CompositeToy({ kind: 'ball', color: 'green' })),
+  ]);
+
+  const createdRecord = await DataStore.save(
+    new CompositeDog({
+      name: 'Ruca',
+      description: 'fetch maniac',
+      CompositeBowl: connectedBowl,
+      CompositeOwner: connectedOwner,
+    }),
+  );
+
+  await Promise.all(
+    connectedToys.map((toy) => {
+      return DataStore.save(
+        CompositeToy.copyOf(toy, (updated) => {
+          Object.assign(updated, {
+            compositeDogCompositeToysName: createdRecord.name,
+            compositeDogCompositeToysDescription: createdRecord.description,
+          });
+        }),
+      );
+    }),
+  );
+};
+
 export default function ComponentTests() {
   const [isInitialized, setInitialized] = useState(false);
   const initializeStarted = useRef(false);
@@ -138,7 +171,7 @@ export default function ComponentTests() {
       }
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
-      await Promise.all([initializeUserTestData(), initializeListingTestData()]);
+      await Promise.all([initializeUserTestData(), initializeListingTestData(), initializeCompositeDogTestData()]);
       initializeAuthMockData({
         picture: 'http://media.corporate-ir.net/media_files/IROL/17/176060/Oct18/AWS.png',
         username: 'TestUser',
@@ -361,6 +394,20 @@ export default function ComponentTests() {
                   <div>{item.lastName}</div>
                   <div>{item.firstName}</div>
                 </>
+              ),
+            };
+          }}
+        />
+        <CollectionWithCompositeKeysAndRelationships
+          id="collectionWithCompositeKeysAndRelationships"
+          overrideItems={({ item }) => {
+            return {
+              mySlot: (
+                <div>
+                  <span>{`Owner: ${item.CompositeOwner?.lastName}`}</span>
+                  <span>{`Bowl: ${item.CompositeBowl?.shape}`}</span>
+                  <span>{`Toys: ${item.CompositeToys?.map((toy: CompositeToy) => toy.kind).join(', ')}`}</span>
+                </div>
               ),
             };
           }}

@@ -19,3 +19,4 @@ export { default as ComponentWithSimplePropertyBinding } from './componentWithSi
 export { default as ComponentWithAuthBinding } from './componentWithAuthBinding.json';
 export { default as CompWithMultipleBindingsWithPred } from './componentWithMultipleDataBindingsWithPredicate.json';
 export { default as ComponentWithSlotBinding } from './componentWithSlotBinding.json';
+export { default as CompositeDogCard } from './componentBoundToCompositeDog.json';
