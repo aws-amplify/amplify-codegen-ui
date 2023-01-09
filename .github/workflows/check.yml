@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main, develop, feature/*, tagged-release/*]
 
+# These permissions are needed to interact with GitHub's OIDC Token endpoint.
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
 jobs:
   amplify-cli-tests:
     runs-on: ubuntu-latest
@@ -52,17 +57,26 @@ jobs:
         run: |
           npm i aws-amplify @aws-amplify/ui-react
           npm i --save-dev cypress
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.E2E_TEST_ROLE_ARN }}
+          aws-region: us-west-2
+      - name: Create temp AWS credentials file
+        working-directory: e2e-test-app
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && \
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && \
+          aws configure set aws_session_token $AWS_SESSION_TOKEN && \
+          aws configure set default.region $AWS_REGION
       - name: Run CLI Pull in test app
         working-directory: e2e-test-app
         run: |
           FORCE_RENDER=1 amplify-dev pull --appId ${{ secrets.E2E_TEST_APP_ID }} --envName staging -y --providers "{\
             \"awscloudformation\":{\
               \"configLevel\":\"project\",\
-              \"useProfile\":false,\
+              \"useProfile\":true,\
               \"profileName\":\"default\",\
-              \"accessKeyId\":\"${{ secrets.E2E_TEST_ACCESS_KEY }}\",\
-              \"secretAccessKey\":\"${{ secrets.E2E_TEST_SECRET_KEY }}\",\
-              \"region\":\"us-west-2\"\
             }\
           }"
       - name: Write test files
