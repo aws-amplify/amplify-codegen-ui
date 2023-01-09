@@ -206,7 +206,6 @@ export function getFormDefinitionInputElement(
           isRequired: isRequiredValue,
           isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
           placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
-          defaultValue: defaultStringValue,
           type: getTextFieldType(componentType),
         },
         studioFormComponentType: componentType,

@@ -1001,7 +1001,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"name\\"
         isRequired={true}
-        defaultValue=\\"John Doe\\"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -1030,7 +1029,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"E-mail\\"
         isRequired={true}
-        defaultValue=\\"johndoe@amplify.com\\"
         value={email}
         onChange={(e) => {
           let { value } = e.target;
@@ -1175,7 +1173,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"Phone Number\\"
         isRequired={true}
-        defaultValue=\\"+1-401-152-6995\\"
         type=\\"tel\\"
         value={phone}
         onChange={(e) => {
@@ -1400,7 +1397,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"name\\"
         isRequired={true}
-        defaultValue=\\"John Doe\\"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -1429,7 +1425,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"E-mail\\"
         isRequired={true}
-        defaultValue=\\"johndoe@amplify.com\\"
         value={email}
         onChange={(e) => {
           let { value } = e.target;
@@ -1574,7 +1569,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"Phone Number\\"
         isRequired={true}
-        defaultValue=\\"+1-401-152-6995\\"
         type=\\"tel\\"
         value={phone}
         onChange={(e) => {
@@ -1934,7 +1928,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"name\\"
         isRequired={true}
-        defaultValue=\\"John Doe\\"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -1983,7 +1976,6 @@ export default function CustomDataForm(props) {
         <TextField
           label=\\"E-mail\\"
           isRequired={true}
-          defaultValue=\\"johndoe@amplify.com\\"
           value={currentEmailValue}
           onChange={(e) => {
             let { value } = e.target;
@@ -2026,7 +2018,6 @@ export default function CustomDataForm(props) {
         <TextField
           label=\\"phone\\"
           isRequired={true}
-          defaultValue=\\"+1-401-152-6995\\"
           type=\\"tel\\"
           value={currentPhoneValue}
           onChange={(e) => {
@@ -2255,7 +2246,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"name\\"
         isRequired={true}
-        defaultValue=\\"John Doe\\"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -2284,7 +2274,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"E-mail\\"
         isRequired={true}
-        defaultValue=\\"johndoe@amplify.com\\"
         value={email}
         onChange={(e) => {
           let { value } = e.target;
