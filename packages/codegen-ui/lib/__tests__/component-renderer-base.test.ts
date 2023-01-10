@@ -44,6 +44,7 @@ describe('ComponentRendererBase', () => {
   });
 
   test('renderElement with children', () => {
+    console.log('yup');
     expect(
       new MockComponentRendererWithChildren({
         componentType: 'Button',
