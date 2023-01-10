@@ -388,8 +388,32 @@ export default function CreateCompositeDogForm(props) {
               CompositeVets: undefined,
             })
           );
-          await Promise.all(
-            CompositeToys.reduce((promises, original) => {
+          const promises = [];
+          const compositeOwnerToLink = modelFields.CompositeOwner;
+          if (compositeOwnerToLink) {
+            promises.push(
+              DataStore.save(
+                CompositeOwner0.copyOf(compositeOwnerToLink, (updated) => {
+                  updated.CompositeDog = compositeDog;
+                })
+              )
+            );
+            const compositeDogToUnlink =
+              await compositeOwnerToLink.CompositeDog;
+            if (compositeDogToUnlink) {
+              promises.push(
+                DataStore.save(
+                  CompositeDog.copyOf(compositeDogToUnlink, (updated) => {
+                    updated.CompositeOwner = undefined;
+                    updated.compositeDogCompositeOwnerLastName = undefined;
+                    updated.compositeDogCompositeOwnerFirstName = undefined;
+                  })
+                )
+              );
+            }
+          }
+          promises.push(
+            ...CompositeToys.reduce((promises, original) => {
               promises.push(
                 DataStore.save(
                   CompositeToy.copyOf(original, (updated) => {
@@ -402,8 +426,8 @@ export default function CreateCompositeDogForm(props) {
               return promises;
             }, [])
           );
-          await Promise.all(
-            CompositeVets.reduce((promises, compositeVet) => {
+          promises.push(
+            ...CompositeVets.reduce((promises, compositeVet) => {
               promises.push(
                 DataStore.save(
                   new CompositeDogCompositeVet({
@@ -415,6 +439,7 @@ export default function CreateCompositeDogForm(props) {
               return promises;
             }, [])
           );
+          await Promise.all(promises);
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -3691,6 +3716,42 @@ export default function UpdateCompositeDogForm(props) {
             }
           });
           const promises = [];
+          const compositeOwnerToUnlink =
+            await compositeDogRecord.CompositeOwner;
+          if (compositeOwnerToUnlink) {
+            promises.push(
+              DataStore.save(
+                CompositeOwner0.copyOf(compositeOwnerToUnlink, (updated) => {
+                  updated.CompositeDog = undefined;
+                  updated.compositeOwnerCompositeDogName = undefined;
+                  updated.compositeOwnerCompositeDogDescription = undefined;
+                })
+              )
+            );
+          }
+          const compositeOwnerToLink = modelFields.CompositeOwner;
+          if (compositeOwnerToLink) {
+            promises.push(
+              DataStore.save(
+                CompositeOwner0.copyOf(compositeOwnerToLink, (updated) => {
+                  updated.CompositeDog = compositeDogRecord;
+                })
+              )
+            );
+            const compositeDogToUnlink =
+              await compositeOwnerToLink.CompositeDog;
+            if (compositeDogToUnlink) {
+              promises.push(
+                DataStore.save(
+                  CompositeDog.copyOf(compositeDogToUnlink, (updated) => {
+                    updated.CompositeOwner = undefined;
+                    updated.compositeDogCompositeOwnerLastName = undefined;
+                    updated.compositeDogCompositeOwnerFirstName = undefined;
+                  })
+                )
+              );
+            }
+          }
           const compositeToysToLink = [];
           const compositeToysToUnLink = [];
           const compositeToysSet = new Set();
@@ -7459,8 +7520,9 @@ export default function TagCreateForm(props) {
               Posts: undefined,
             })
           );
-          await Promise.all(
-            Posts.reduce((promises, post) => {
+          const promises = [];
+          promises.push(
+            ...Posts.reduce((promises, post) => {
               promises.push(
                 DataStore.save(
                   new TagPost({
@@ -7472,6 +7534,7 @@ export default function TagCreateForm(props) {
               return promises;
             }, [])
           );
+          await Promise.all(promises);
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -8478,8 +8541,9 @@ export default function SchoolCreateForm(props) {
               Students: undefined,
             })
           );
-          await Promise.all(
-            Students.reduce((promises, original) => {
+          const promises = [];
+          promises.push(
+            ...Students.reduce((promises, original) => {
               promises.push(
                 DataStore.save(
                   Student.copyOf(original, (updated) => {
@@ -8490,6 +8554,7 @@ export default function SchoolCreateForm(props) {
               return promises;
             }, [])
           );
+          await Promise.all(promises);
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -9464,8 +9529,9 @@ export default function TagCreateForm(props) {
               Posts: undefined,
             })
           );
-          await Promise.all(
-            Posts.reduce((promises, post) => {
+          const promises = [];
+          promises.push(
+            ...Posts.reduce((promises, post) => {
               promises.push(
                 DataStore.save(
                   new TagPost({
@@ -9477,6 +9543,7 @@ export default function TagCreateForm(props) {
               return promises;
             }, [])
           );
+          await Promise.all(promises);
           if (onSuccess) {
             onSuccess(modelFields);
           }

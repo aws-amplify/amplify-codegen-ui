@@ -63,6 +63,8 @@ export const getCurrentDisplayValueName = (fieldName: string) =>
 
 export const getRecordsName = (modelName: string) => `${lowerCaseFirst(modelName)}Records`;
 
+export const getRecordName = (modelName: string) => `${lowerCaseFirst(modelName)}Record`;
+
 export const getLinkedDataName = (modelName: string) => `linked${capitalizeFirstLetter(modelName)}`;
 
 export const getCurrentValueIdentifier = (fieldName: string) =>
