@@ -146,6 +146,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
                 importedModelName,
                 formMetadata.fieldConfigs,
                 dataSchemaMetadata,
+                this.importCollection,
               ),
               // call onSuccess hook if it exists
               factory.createIfStatement(
