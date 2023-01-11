@@ -63,7 +63,7 @@ describe('set field state', () => {
 });
 
 describe('get default values', () => {
-  it('should generate the proper default value for a TextField', () => {
+  it('should generate the proper default value for an empty TextField', () => {
     const expression = getDefaultValueExpression('name', 'TextField');
     expect(expression).toMatchObject({ text: '' });
   });
@@ -71,5 +71,19 @@ describe('get default values', () => {
   it('should generate the proper default value for a SliderField', () => {
     const expression = getDefaultValueExpression('name', 'SliderField');
     expect(expression).toMatchObject({ text: '0' });
+  });
+
+  it('should generate the proper default value for non-empty TextField', () => {
+    const expression = getDefaultValueExpression('name', 'TextField', undefined, false, false, 'Don Corleone');
+    expect(expression).toMatchObject({ text: 'Don Corleone' });
+  });
+
+  it('should generate the proper default value for non-empty TextField array', () => {
+    const expression = getDefaultValueExpression('name', 'TextField', undefined, true, false, 'mobster');
+    expect(expression).toEqual(
+      expect.objectContaining({
+        elements: expect.arrayContaining([expect.objectContaining({ text: 'mobster' })]),
+      }),
+    );
   });
 });

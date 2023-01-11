@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { GenericDataField, GenericDataSchema } from '@aws-amplify/codegen-ui/lib/types';
+import { GenericDataField, GenericDataSchema, StudioFormFields } from '@aws-amplify/codegen-ui/lib/types';
 import { factory, Statement, Expression, NodeFlags, Identifier } from 'typescript';
 import { isPrimitive } from '../primitive';
 
@@ -112,4 +112,18 @@ export function isAliased(componentType: string): boolean {
 
 export function removeAlias(aliasString: string): string {
   return aliasString.replace(/(Custom$)/g, '');
+}
+
+export function getControlledComponentDefaultValue(
+  fields: StudioFormFields,
+  componentType: string,
+  name: string,
+): string | null {
+  let defaultValue = null;
+  Object.entries(fields).forEach(([key, value]) => {
+    if (key === name && 'inputType' in value && value.inputType?.defaultValue && componentType === 'TextField') {
+      defaultValue = value.inputType.defaultValue;
+    }
+  });
+  return defaultValue;
 }

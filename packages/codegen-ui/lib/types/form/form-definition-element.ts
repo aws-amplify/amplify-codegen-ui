@@ -33,7 +33,6 @@ export type FormDefinitionTextFieldElement = {
     isRequired?: boolean;
     isReadOnly?: boolean;
     placeholder?: string;
-    defaultValue?: string;
     type?: string;
   };
   studioFormComponentType:
