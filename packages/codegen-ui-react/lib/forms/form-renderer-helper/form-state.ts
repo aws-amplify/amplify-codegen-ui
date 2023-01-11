@@ -37,6 +37,7 @@ import {
   PropertyAccessExpression,
   ElementAccessExpression,
   ConditionalExpression,
+  CallChain,
 } from 'typescript';
 import { capitalizeFirstLetter, lowerCaseFirst, getSetNameIdentifier, buildUseStateExpression } from '../../helpers';
 import { getElementAccessExpression } from './invalid-variable-helpers';
@@ -259,22 +260,22 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
     const renderedName = sanitizedFieldName || stateName;
     if (!stateNames.has(stateName)) {
       const accessExpression = getElementAccessExpression(recordOrInitialValues, stateName);
+      const isNonModelField = isNonModelDataType(dataType);
 
       // Initial values should have the correct values and not need a modifier
-      if (
-        (dataType === 'AWSJSON' || isNonModelDataType(dataType)) &&
-        !isArray &&
-        recordOrInitialValues !== 'initialValues'
-      ) {
+      if ((dataType === 'AWSJSON' || isNonModelField) && !isArray && recordOrInitialValues !== 'initialValues') {
         const awsJSONAccessModifier = stringifyAWSJSONFieldValue(accessExpression);
         acc.push(setStateExpression(renderedName, awsJSONAccessModifier));
       } else {
+        const stringifiedOrAccessExpression = isNonModelField
+          ? stringifyAWSJSONFieldArrayValues(accessExpression)
+          : accessExpression;
         acc.push(
           setStateExpression(
             renderedName,
             isArray && recordOrInitialValues === 'cleanValues'
               ? factory.createBinaryExpression(
-                  accessExpression,
+                  stringifiedOrAccessExpression,
                   factory.createToken(SyntaxKind.QuestionQuestionToken),
                   factory.createArrayLiteralExpression([], false),
                 )
@@ -405,6 +406,61 @@ const stringifyAWSJSONFieldValue = (
       undefined,
       [value],
     ),
+  );
+};
+
+/**
+ * Datastore allows JSON strings and normal JSON so make sure items in array are string type
+ *
+ * Example output:
+ * cleanValues.nonModelFieldArray?.map(item => typeof item === "string" ? item : JSON.stringify(item))
+ */
+const stringifyAWSJSONFieldArrayValues = (value: PropertyAccessExpression | ElementAccessExpression): CallChain => {
+  return factory.createCallChain(
+    factory.createPropertyAccessChain(
+      value,
+      factory.createToken(SyntaxKind.QuestionDotToken),
+      factory.createIdentifier('map'),
+    ),
+    undefined,
+    undefined,
+    [
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createIdentifier('item'),
+            undefined,
+            undefined,
+            undefined,
+          ),
+        ],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createConditionalExpression(
+          factory.createBinaryExpression(
+            factory.createTypeOfExpression(factory.createIdentifier('item')),
+            factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+            factory.createStringLiteral('string'),
+          ),
+          factory.createToken(SyntaxKind.QuestionToken),
+          factory.createIdentifier('item'),
+          factory.createToken(SyntaxKind.ColonToken),
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('JSON'),
+              factory.createIdentifier('stringify'),
+            ),
+            undefined,
+            [factory.createIdentifier('item')],
+          ),
+        ),
+      ),
+    ],
   );
 };
 

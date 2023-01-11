@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, GenericDataSchema } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, GenericDataSchema, isNonModelDataType } from '@aws-amplify/codegen-ui';
 import {
   factory,
   NodeFlags,
@@ -34,6 +34,7 @@ import {
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { ImportCollection } from '../../imports';
 import { getBiDirectionalRelationshipStatements } from './bidirectional-relationship';
+import { generateParsePropertyAssignments, generateUpdateModelObject } from './parse-fields';
 
 const getRecordUpdateDataStoreCallExpression = ({
   modelName,
@@ -91,7 +92,10 @@ const getRecordUpdateDataStoreCallExpression = ({
                       factory.createIdentifier('assign'),
                     ),
                     undefined,
-                    [factory.createIdentifier(updatedObjectName), factory.createIdentifier(modelFieldsObjectName)],
+                    [
+                      factory.createIdentifier(updatedObjectName),
+                      generateUpdateModelObject(fieldConfigs, modelFieldsObjectName),
+                    ],
                   ),
                 ),
                 ...relationshipBasedUpdates,
@@ -205,12 +209,17 @@ export const buildDataStoreExpression = (
   const hasManyRelationshipFields: string[] = [];
   const nonModelArrayFields: string[] = [];
   const savedRecordName = lowerCaseFirst(modelName);
+  const nonModelFields: string[] = [];
 
   Object.entries(fieldConfigs).forEach((fieldConfig) => {
     const [fieldName, fieldConfigMetaData] = fieldConfig;
     const { dataType, isArray } = fieldConfigMetaData;
-    if (isArray && dataType && typeof dataType === 'object' && 'nonModel' in dataType) {
-      nonModelArrayFields.push(fieldName);
+    if (isNonModelDataType(dataType)) {
+      if (isArray) {
+        nonModelArrayFields.push(fieldName);
+      } else {
+        nonModelFields.push(fieldName);
+      }
     }
     relationshipsPromisesAccessStatements.push(
       ...getBiDirectionalRelationshipStatements({
@@ -279,51 +288,7 @@ export const buildDataStoreExpression = (
     );
   });
 
-  nonModelArrayFields.forEach((field) => {
-    // nonModelFieldArray: modelFields.nonModelFieldArray.map(s => JSON.parse(s))
-    propertyAssignments.push(
-      factory.createPropertyAssignment(
-        factory.createIdentifier(field),
-        factory.createCallExpression(
-          factory.createPropertyAccessExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('modelFields'),
-              factory.createIdentifier(field),
-            ),
-            factory.createIdentifier('map'),
-          ),
-          undefined,
-          [
-            factory.createArrowFunction(
-              undefined,
-              undefined,
-              [
-                factory.createParameterDeclaration(
-                  undefined,
-                  undefined,
-                  undefined,
-                  factory.createIdentifier('s'),
-                  undefined,
-                  undefined,
-                  undefined,
-                ),
-              ],
-              undefined,
-              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-              factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createIdentifier('JSON'),
-                  factory.createIdentifier('parse'),
-                ),
-                undefined,
-                [factory.createIdentifier('s')],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  });
+  propertyAssignments.push(...generateParsePropertyAssignments(nonModelArrayFields, nonModelFields));
 
   const modelFieldsObject = propertyAssignments.length
     ? factory.createObjectLiteralExpression(

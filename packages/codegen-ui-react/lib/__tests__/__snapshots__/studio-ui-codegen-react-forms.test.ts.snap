@@ -2872,6 +2872,9 @@ export default function MyPostForm(props) {
               nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
                 JSON.parse(s)
               ),
+              nonModelField: modelFields.nonModelField
+                ? JSON.parse(modelFields.nonModelField)
+                : modelFields.nonModelField,
             })
           );
           if (onSuccess) {
@@ -6876,6 +6879,9 @@ export default function MyPostForm(props) {
               nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
                 JSON.parse(s)
               ),
+              nonModelField: modelFields.nonModelField
+                ? JSON.parse(modelFields.nonModelField)
+                : modelFields.nonModelField,
             })
           );
           if (onSuccess) {
@@ -10603,7 +10609,11 @@ export default function MyPostForm(props) {
         ? cleanValues.nonModelField
         : JSON.stringify(cleanValues.nonModelField)
     );
-    setNonModelFieldArray(cleanValues.nonModelFieldArray ?? []);
+    setNonModelFieldArray(
+      cleanValues.nonModelFieldArray?.map((item) =>
+        typeof item === \\"string\\" ? item : JSON.stringify(item)
+      ) ?? []
+    );
     setCurrentNonModelFieldArrayValue(\\"\\");
     setErrors({});
   };
@@ -10693,7 +10703,15 @@ export default function MyPostForm(props) {
           });
           await DataStore.save(
             Post.copyOf(postRecord, (updated) => {
-              Object.assign(updated, modelFields);
+              Object.assign(updated, {
+                ...modelFields,
+                nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
+                  JSON.parse(s)
+                ),
+                nonModelField: modelFields.nonModelField
+                  ? JSON.parse(modelFields.nonModelField)
+                  : modelFields.nonModelField,
+              });
             })
           );
           if (onSuccess) {
@@ -16580,6 +16598,9 @@ export default function PostCreateFormRow(props) {
               nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
                 JSON.parse(s)
               ),
+              nonModelField: modelFields.nonModelField
+                ? JSON.parse(modelFields.nonModelField)
+                : modelFields.nonModelField,
             })
           );
           if (onSuccess) {
