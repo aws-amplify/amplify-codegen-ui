@@ -194,6 +194,7 @@ export function getFieldConfigFromModelField({
 
   if (field.relationship) {
     config.relationship = field.relationship;
+    config.inputType.placeholder = `Search ${field.relationship.relatedModelName}`;
   }
 
   const valueMappings = getValueMappings({ fieldName, field, enums: dataSchema.enums, allModels: dataSchema.models });

@@ -551,6 +551,7 @@ export default function CreateCompositeDogForm(props) {
           label=\\"Composite bowl\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CompositeBowl\\"
           value={currentCompositeBowlDisplayValue}
           options={compositeBowlRecords
             .filter(
@@ -632,6 +633,7 @@ export default function CreateCompositeDogForm(props) {
           label=\\"Composite owner\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CompositeOwner\\"
           value={currentCompositeOwnerDisplayValue}
           options={compositeOwnerRecords
             .filter(
@@ -712,6 +714,7 @@ export default function CreateCompositeDogForm(props) {
           label=\\"Composite toys\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CompositeToy\\"
           value={currentCompositeToysDisplayValue}
           options={compositeToyRecords
             .filter(
@@ -792,6 +795,7 @@ export default function CreateCompositeDogForm(props) {
           label=\\"Composite vets\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CompositeVet\\"
           value={currentCompositeVetsDisplayValue}
           options={compositeVetRecords
             .filter(
@@ -3997,6 +4001,7 @@ export default function UpdateCompositeDogForm(props) {
           label=\\"Composite bowl\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CompositeBowl\\"
           value={currentCompositeBowlDisplayValue}
           options={compositeBowlRecords
             .filter(
@@ -4079,6 +4084,7 @@ export default function UpdateCompositeDogForm(props) {
           label=\\"Composite owner\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CompositeOwner\\"
           value={currentCompositeOwnerDisplayValue}
           options={compositeOwnerRecords
             .filter(
@@ -4160,6 +4166,7 @@ export default function UpdateCompositeDogForm(props) {
           label=\\"Composite toys\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CompositeToy\\"
           value={currentCompositeToysDisplayValue}
           options={compositeToyRecords
             .filter(
@@ -4240,6 +4247,7 @@ export default function UpdateCompositeDogForm(props) {
           label=\\"Composite vets\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CompositeVet\\"
           value={currentCompositeVetsDisplayValue}
           options={compositeVetRecords
             .filter(
@@ -4945,6 +4953,7 @@ export default function UpdateCPKTeacherForm(props) {
           label=\\"Cpk student\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CPKStudent\\"
           value={currentCPKStudentDisplayValue}
           options={cPKStudentRecords
             .filter((r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r)))
@@ -5017,6 +5026,7 @@ export default function UpdateCPKTeacherForm(props) {
           label=\\"Cpk classes\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CPKClass\\"
           value={currentCPKClassesDisplayValue}
           options={cPKClassRecords
             .filter((r) => !CPKClassesIdSet.has(getIDValue.CPKClasses?.(r)))
@@ -5088,6 +5098,7 @@ export default function UpdateCPKTeacherForm(props) {
           label=\\"Cpk projects\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search CPKProject\\"
           value={currentCPKProjectsDisplayValue}
           options={cPKProjectRecords
             .filter((r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r)))
@@ -7614,6 +7625,7 @@ export default function TagCreateForm(props) {
           label=\\"Posts\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Post\\"
           value={currentPostsDisplayValue}
           options={postRecords
             .filter((r) => !PostsIdSet.has(getIDValue.Posts?.(r)))
@@ -8179,6 +8191,7 @@ export default function MyMemberForm(props) {
           label=\\"Team Label\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Team\\"
           value={currentTeamDisplayValue}
           options={teamRecords
             .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
@@ -8632,6 +8645,7 @@ export default function SchoolCreateForm(props) {
           label=\\"Students\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Student\\"
           value={currentStudentsDisplayValue}
           options={studentRecords
             .filter((r) => !StudentsIdSet.has(getIDValue.Students?.(r)))
@@ -9143,6 +9157,7 @@ export default function BookCreateForm(props) {
           label=\\"Primary author\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Author\\"
           value={currentPrimaryAuthorDisplayValue}
           options={authorRecords
             .filter(
@@ -9623,6 +9638,7 @@ export default function TagCreateForm(props) {
           label=\\"Posts\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Post\\"
           value={currentPostsDisplayValue}
           options={postRecords
             .filter((r) => !PostsIdSet.has(getIDValue.Posts?.(r)))
@@ -10222,6 +10238,7 @@ export default function BookCreateForm(props) {
           label=\\"Primary author\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Author\\"
           value={currentPrimaryAuthorDisplayValue}
           options={authorRecords
             .filter(
@@ -10300,6 +10317,7 @@ export default function BookCreateForm(props) {
           label=\\"Primary title\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Title\\"
           value={currentPrimaryTitleDisplayValue}
           options={titleRecords
             .filter((r) => !primaryTitleIdSet.has(getIDValue.primaryTitle?.(r)))
@@ -11546,6 +11564,7 @@ export default function SchoolUpdateForm(props) {
           label=\\"Students\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Student\\"
           value={currentStudentsDisplayValue}
           options={studentRecords
             .filter((r) => !StudentsIdSet.has(getIDValue.Students?.(r)))
@@ -12078,6 +12097,7 @@ export default function MyMemberForm(props) {
           label=\\"Team Label\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Team\\"
           value={currentTeamDisplayValue}
           options={teamRecords
             .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
@@ -12625,6 +12645,7 @@ export default function TagUpdateForm(props) {
           label=\\"Posts\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Post\\"
           value={currentPostsDisplayValue}
           options={postRecords
             .filter((r) => !PostsIdSet.has(getIDValue.Posts?.(r)))
@@ -17380,6 +17401,7 @@ export default function MyMemberForm(props) {
           label=\\"Team Label\\"
           isRequired={false}
           isReadOnly={false}
+          placeholder=\\"Search Team\\"
           value={currentTeamDisplayValue}
           options={teamRecords
             .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
