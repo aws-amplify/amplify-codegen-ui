@@ -283,6 +283,7 @@ describe('mapModelFieldsConfigs', () => {
         dataType: { model: 'Owner' },
         inputType: {
           type: 'Autocomplete',
+          placeholder: 'Search Owner',
           required: false,
           readOnly: false,
           name: 'Owner',
@@ -349,6 +350,7 @@ describe('mapModelFieldsConfigs', () => {
         dataType: { model: 'Owner' },
         inputType: {
           type: 'Autocomplete',
+          placeholder: 'Search Owner',
           required: false,
           readOnly: false,
           name: 'Owner',
@@ -407,6 +409,7 @@ describe('mapModelFieldsConfigs', () => {
           readOnly: false,
           required: false,
           type: 'Autocomplete',
+          placeholder: 'Search Owner',
           value: 'ownerId',
           isArray: false,
           valueMappings: {
