@@ -936,12 +936,12 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"\\",
-    email: \\"\\",
+    name: \\"John Doe\\",
+    email: \\"johndoe@amplify.com\\",
     city: undefined,
     category: undefined,
     pages: 0,
-    phone: \\"\\",
+    phone: \\"+1-401-152-6995\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -1026,7 +1026,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"name\\"
         isRequired={true}
-        defaultValue=\\"John Doe\\"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -1055,7 +1054,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"E-mail\\"
         isRequired={true}
-        defaultValue=\\"johndoe@amplify.com\\"
         value={email}
         onChange={(e) => {
           let { value } = e.target;
@@ -1200,7 +1198,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"Phone Number\\"
         isRequired={true}
-        defaultValue=\\"+1-401-152-6995\\"
         type=\\"tel\\"
         value={phone}
         onChange={(e) => {
@@ -1335,12 +1332,12 @@ export default function CustomDataForm(props) {
     props;
   const { tokens } = useTheme();
   const initialValues = {
-    name: \\"\\",
-    email: \\"\\",
+    name: \\"John Doe\\",
+    email: \\"johndoe@amplify.com\\",
     city: undefined,
     category: undefined,
     pages: 0,
-    phone: \\"\\",
+    phone: \\"+1-401-152-6995\\",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -1425,7 +1422,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"name\\"
         isRequired={true}
-        defaultValue=\\"John Doe\\"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -1454,7 +1450,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"E-mail\\"
         isRequired={true}
-        defaultValue=\\"johndoe@amplify.com\\"
         value={email}
         onChange={(e) => {
           let { value } = e.target;
@@ -1599,7 +1594,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"Phone Number\\"
         isRequired={true}
-        defaultValue=\\"+1-401-152-6995\\"
         type=\\"tel\\"
         value={phone}
         onChange={(e) => {
@@ -1878,9 +1872,9 @@ export default function CustomDataForm(props) {
   const { onSubmit, onCancel, onValidate, onChange, overrides, ...rest } =
     props;
   const initialValues = {
-    name: \\"\\",
-    email: [],
-    phone: [],
+    name: \\"John Doe\\",
+    email: [\\"johndoe@amplify.com\\"],
+    phone: [\\"+1-401-152-6995\\"],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
@@ -1959,7 +1953,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"name\\"
         isRequired={true}
-        defaultValue=\\"John Doe\\"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -2008,7 +2001,6 @@ export default function CustomDataForm(props) {
         <TextField
           label=\\"E-mail\\"
           isRequired={true}
-          defaultValue=\\"johndoe@amplify.com\\"
           value={currentEmailValue}
           onChange={(e) => {
             let { value } = e.target;
@@ -2051,7 +2043,6 @@ export default function CustomDataForm(props) {
         <TextField
           label=\\"phone\\"
           isRequired={true}
-          defaultValue=\\"+1-401-152-6995\\"
           type=\\"tel\\"
           value={currentPhoneValue}
           onChange={(e) => {
@@ -2174,8 +2165,8 @@ export default function CustomDataForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: \\"\\",
-    email: \\"\\",
+    name: \\"John Doe\\",
+    email: \\"johndoe@amplify.com\\",
     \\"metadata-field\\": \\"\\",
     city: undefined,
     category: undefined,
@@ -2280,7 +2271,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"name\\"
         isRequired={true}
-        defaultValue=\\"John Doe\\"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -2309,7 +2299,6 @@ export default function CustomDataForm(props) {
       <TextField
         label=\\"E-mail\\"
         isRequired={true}
-        defaultValue=\\"johndoe@amplify.com\\"
         value={email}
         onChange={(e) => {
           let { value } = e.target;
