@@ -48,7 +48,7 @@ import {
   SyntaxKind,
   TypeAliasDeclaration,
 } from 'typescript';
-import { buildUseStateExpression, lowerCaseFirst } from '../helpers';
+import { buildInitConstVariableExpression, buildUseStateExpression, lowerCaseFirst } from '../helpers';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { PrimitiveTypeParameter, Primitive, primitiveOverrideProp } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
@@ -86,6 +86,7 @@ import {
   getInitialValues,
   getUseStateHooks,
   resetStateFunction,
+  getCanUnlinkModelName,
 } from './form-renderer-helper/form-state';
 import { isModelDataType, shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
 import {
@@ -484,6 +485,12 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
             const linkedDataName = getLinkedDataName(fieldName);
             linkedDataNames.push(linkedDataName);
             statements.push(buildUseStateExpression(linkedDataName, factory.createIdentifier('[]')));
+            statements.push(
+              buildInitConstVariableExpression(
+                getCanUnlinkModelName(fieldName),
+                value.relationship.canUnlinkAssociatedModel ? factory.createTrue() : factory.createFalse(),
+              ),
+            );
           }
           if (value.relationship.type === 'BELONGS_TO' || value.relationship?.type === 'HAS_ONE') {
             linkedDataNames.push(fieldName);

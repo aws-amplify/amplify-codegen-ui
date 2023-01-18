@@ -75,6 +75,8 @@ export const getRecordName = (modelName: string) => `${lowerCaseFirst(modelName)
 
 export const getLinkedDataName = (modelName: string) => `linked${capitalizeFirstLetter(modelName)}`;
 
+export const getCanUnlinkModelName = (modelName: string) => `canUnlink${capitalizeFirstLetter(modelName)}`;
+
 export const getCurrentValueIdentifier = (fieldName: string) =>
   factory.createIdentifier(getCurrentValueName(fieldName));
 

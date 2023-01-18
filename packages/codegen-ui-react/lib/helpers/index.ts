@@ -75,6 +75,24 @@ export const buildUseStateExpression = (name: string, defaultValue: Expression):
   );
 };
 
+/**
+ * Create statement to declare and initialized a const.
+ *
+ * const name = value;
+ * @param name
+ * @param value
+ * @returns
+ */
+export const buildInitConstVariableExpression = (name: string, value: Expression): Statement => {
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [factory.createVariableDeclaration(factory.createIdentifier(name), undefined, undefined, value)],
+      NodeFlags.Const,
+    ),
+  );
+};
+
 export function fieldNeedsRelationshipLoadedForCollection(field: GenericDataField, dataSchema: GenericDataSchema) {
   const { relationship, dataType } = field;
   if (!relationship || !dataType) {

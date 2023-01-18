@@ -100,9 +100,14 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
             const associatedFieldNames = Array.isArray(field.association?.associatedWith)
               ? field.association.associatedWith
               : [field.association.associatedWith];
+            let canUnlinkAssociatedModel = true;
 
             associatedFieldNames.forEach((associatedFieldName) => {
               const associatedField = associatedModel?.fields[associatedFieldName];
+              // if any of the associatedField is required, you cannot unlink from parent model
+              if (associatedField?.isRequired) {
+                canUnlinkAssociatedModel = false;
+              }
               // if the associated model is a join table, update relatedModelName to the actual related model
               if (
                 associatedField &&
@@ -133,6 +138,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
             });
             modelRelationship = {
               type: relationshipType,
+              canUnlinkAssociatedModel,
               relatedModelName,
               relatedModelFields: associatedFieldNames,
               relatedJoinFieldName,

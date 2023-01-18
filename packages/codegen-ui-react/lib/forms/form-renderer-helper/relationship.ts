@@ -22,7 +22,7 @@ import {
   GenericDataModel,
   GenericDataField,
 } from '@aws-amplify/codegen-ui';
-import { getRecordsName, getLinkedDataName, buildAccessChain } from './form-state';
+import { getRecordsName, getLinkedDataName, buildAccessChain, getCanUnlinkModelName } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
 import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst, getSetNameIdentifier } from '../../helpers';
@@ -1334,6 +1334,45 @@ export const buildHasManyRelationshipDataStoreStatements = (
           NodeFlags.Const,
         ),
       ),
+      factory.createIfStatement(
+        factory.createBinaryExpression(
+          factory.createPrefixUnaryExpression(
+            SyntaxKind.ExclamationToken,
+            factory.createIdentifier(getCanUnlinkModelName(fieldName)),
+          ),
+          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+          factory.createBinaryExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier(dataToUnLink),
+              factory.createIdentifier('length'),
+            ),
+            factory.createToken(SyntaxKind.GreaterThanToken),
+            factory.createNumericLiteral('0'),
+          ),
+        ),
+        factory.createBlock(
+          [
+            factory.createThrowStatement(
+              factory.createCallExpression(factory.createIdentifier('Error'), undefined, [
+                factory.createTemplateExpression(factory.createTemplateHead('', ''), [
+                  factory.createTemplateSpan(
+                    factory.createPropertyAccessExpression(
+                      factory.createIdentifier('original'),
+                      factory.createIdentifier('id'),
+                    ),
+                    factory.createTemplateTail(
+                      // eslint-disable-next-line max-len
+                      ` cannot be unlinked from ${modelName} because ${relatedModelFields[0]} is a required field.`,
+                    ),
+                  ),
+                ]),
+              ]),
+            ),
+          ],
+          true,
+        ),
+        undefined,
+      ),
       factory.createExpressionStatement(
         factory.createCallExpression(
           // CPKProjects.forEach((r) => cPKProjectsSet.add(getIDValue.CPKProjects?.(r)));
@@ -1558,120 +1597,67 @@ export const buildHasManyRelationshipDataStoreStatements = (
               factory.createToken(SyntaxKind.EqualsGreaterThanToken),
               factory.createBlock(
                 [
-                  factory.createTryStatement(
-                    factory.createBlock(
-                      [
-                        factory.createExpressionStatement(
-                          factory.createCallExpression(
-                            factory.createPropertyAccessExpression(
-                              factory.createIdentifier('promises'),
-                              factory.createIdentifier('push'),
-                            ),
-                            undefined,
-                            [
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('DataStore'),
-                                  factory.createIdentifier('save'),
-                                ),
-                                undefined,
-                                [
-                                  factory.createCallExpression(
-                                    factory.createPropertyAccessExpression(
-                                      factory.createIdentifier(relatedModelName),
-                                      factory.createIdentifier('copyOf'),
-                                    ),
-                                    undefined,
-                                    [
-                                      factory.createIdentifier('original'),
-                                      factory.createArrowFunction(
-                                        undefined,
-                                        undefined,
-                                        [
-                                          factory.createParameterDeclaration(
-                                            undefined,
-                                            undefined,
-                                            undefined,
-                                            factory.createIdentifier('updated'),
-                                            undefined,
-                                            undefined,
-                                            undefined,
-                                          ),
-                                        ],
-                                        undefined,
-                                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                        factory.createBlock(
-                                          relatedModelFields.map((relatedModelField) =>
-                                            factory.createExpressionStatement(
-                                              factory.createBinaryExpression(
-                                                factory.createPropertyAccessExpression(
-                                                  factory.createIdentifier('updated'),
-                                                  factory.createIdentifier(relatedModelField),
-                                                ),
-                                                factory.createToken(SyntaxKind.EqualsToken),
-                                                factory.createNull(),
-                                              ),
-                                            ),
-                                          ),
-                                          true,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                      true,
-                    ),
-                    factory.createCatchClause(
-                      factory.createVariableDeclaration(
-                        factory.createIdentifier('err'),
-                        undefined,
-                        undefined,
-                        undefined,
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier('promises'),
+                        factory.createIdentifier('push'),
                       ),
-                      factory.createBlock(
-                        [
-                          factory.createIfStatement(
-                            factory.createBinaryExpression(
+                      undefined,
+                      [
+                        factory.createCallExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('DataStore'),
+                            factory.createIdentifier('save'),
+                          ),
+                          undefined,
+                          [
+                            factory.createCallExpression(
                               factory.createPropertyAccessExpression(
-                                factory.createIdentifier('err'),
-                                factory.createIdentifier('message'),
+                                factory.createIdentifier(relatedModelName),
+                                factory.createIdentifier('copyOf'),
                               ),
-                              factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-                              factory.createStringLiteral(`Field ${relatedModelFields[0]} is required`),
-                            ),
-                            factory.createBlock(
+                              undefined,
                               [
-                                factory.createThrowStatement(
-                                  factory.createCallExpression(factory.createIdentifier('Error'), undefined, [
-                                    factory.createTemplateExpression(factory.createTemplateHead('', ''), [
-                                      factory.createTemplateSpan(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('original'),
-                                          factory.createIdentifier('id'),
-                                        ),
-                                        factory.createTemplateTail(
-                                          // eslint-disable-next-line max-len
-                                          ` cannot be unlinked from ${modelName} because ${relatedModelFields[0]} is a required field.`,
+                                factory.createIdentifier('original'),
+                                factory.createArrowFunction(
+                                  undefined,
+                                  undefined,
+                                  [
+                                    factory.createParameterDeclaration(
+                                      undefined,
+                                      undefined,
+                                      undefined,
+                                      factory.createIdentifier('updated'),
+                                      undefined,
+                                      undefined,
+                                      undefined,
+                                    ),
+                                  ],
+                                  undefined,
+                                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                  factory.createBlock(
+                                    relatedModelFields.map((relatedModelField) =>
+                                      factory.createExpressionStatement(
+                                        factory.createBinaryExpression(
+                                          factory.createPropertyAccessExpression(
+                                            factory.createIdentifier('updated'),
+                                            factory.createIdentifier(relatedModelField),
+                                          ),
+                                          factory.createToken(SyntaxKind.EqualsToken),
+                                          factory.createNull(),
                                         ),
                                       ),
-                                    ]),
-                                  ]),
+                                    ),
+                                    true,
+                                  ),
                                 ),
                               ],
-                              true,
                             ),
-                            factory.createBlock([factory.createThrowStatement(factory.createIdentifier('err'))], true),
-                          ),
-                        ],
-                        true,
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
-                    undefined,
                   ),
                 ],
                 true,

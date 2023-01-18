@@ -3514,7 +3514,9 @@ export default function UpdateCompositeDogForm(props) {
   const [compositeDogRecord, setCompositeDogRecord] =
     React.useState(compositeDog);
   const [linkedCompositeToys, setLinkedCompositeToys] = React.useState([]);
+  const canUnlinkCompositeToys = true;
   const [linkedCompositeVets, setLinkedCompositeVets] = React.useState([]);
+  const canUnlinkCompositeVets = false;
   React.useEffect(() => {
     const queryData = async () => {
       const record = nameProp
@@ -3748,6 +3750,11 @@ export default function UpdateCompositeDogForm(props) {
           const compositeToysToUnLink = [];
           const compositeToysSet = new Set();
           const linkedCompositeToysSet = new Set();
+          if (!canUnlinkCompositeToys && compositeToysToUnLink.length > 0) {
+            throw Error(
+              \`\${original.id} cannot be unlinked from CompositeDog because compositeDogCompositeToysName is a required field.\`
+            );
+          }
           CompositeToys.forEach((r) =>
             compositeToysSet.add(getIDValue.CompositeToys?.(r))
           );
@@ -3765,27 +3772,14 @@ export default function UpdateCompositeDogForm(props) {
             }
           });
           compositeToysToUnLink.forEach((original) => {
-            try {
-              promises.push(
-                DataStore.save(
-                  CompositeToy.copyOf(original, (updated) => {
-                    updated.compositeDogCompositeToysName = null;
-                    updated.compositeDogCompositeToysDescription = null;
-                  })
-                )
-              );
-            } catch (err) {
-              if (
-                err.message ===
-                \\"Field compositeDogCompositeToysName is required\\"
-              ) {
-                throw Error(
-                  \`\${original.id} cannot be unlinked from CompositeDog because compositeDogCompositeToysName is a required field.\`
-                );
-              } else {
-                throw err;
-              }
-            }
+            promises.push(
+              DataStore.save(
+                CompositeToy.copyOf(original, (updated) => {
+                  updated.compositeDogCompositeToysName = null;
+                  updated.compositeDogCompositeToysDescription = null;
+                })
+              )
+            );
           });
           compositeToysToLink.forEach((original) => {
             promises.push(
@@ -4596,7 +4590,9 @@ export default function UpdateCPKTeacherForm(props) {
   };
   const [cPKTeacherRecord, setCPKTeacherRecord] = React.useState(cPKTeacher);
   const [linkedCPKClasses, setLinkedCPKClasses] = React.useState([]);
+  const canUnlinkCPKClasses = false;
   const [linkedCPKProjects, setLinkedCPKProjects] = React.useState([]);
+  const canUnlinkCPKProjects = true;
   React.useEffect(() => {
     const queryData = async () => {
       const record = specialTeacherIdProp
@@ -4829,6 +4825,11 @@ export default function UpdateCPKTeacherForm(props) {
           const cPKProjectsToUnLink = [];
           const cPKProjectsSet = new Set();
           const linkedCPKProjectsSet = new Set();
+          if (!canUnlinkCPKProjects && cPKProjectsToUnLink.length > 0) {
+            throw Error(
+              \`\${original.id} cannot be unlinked from CPKTeacher because cPKTeacherID is a required field.\`
+            );
+          }
           CPKProjects.forEach((r) =>
             cPKProjectsSet.add(getIDValue.CPKProjects?.(r))
           );
@@ -4846,23 +4847,13 @@ export default function UpdateCPKTeacherForm(props) {
             }
           });
           cPKProjectsToUnLink.forEach((original) => {
-            try {
-              promises.push(
-                DataStore.save(
-                  CPKProject.copyOf(original, (updated) => {
-                    updated.cPKTeacherID = null;
-                  })
-                )
-              );
-            } catch (err) {
-              if (err.message === \\"Field cPKTeacherID is required\\") {
-                throw Error(
-                  \`\${original.id} cannot be unlinked from CPKTeacher because cPKTeacherID is a required field.\`
-                );
-              } else {
-                throw err;
-              }
-            }
+            promises.push(
+              DataStore.save(
+                CPKProject.copyOf(original, (updated) => {
+                  updated.cPKTeacherID = null;
+                })
+              )
+            );
           });
           cPKProjectsToLink.forEach((original) => {
             promises.push(
@@ -11347,6 +11338,7 @@ export default function SchoolUpdateForm(props) {
   };
   const [schoolRecord, setSchoolRecord] = React.useState(school);
   const [linkedStudents, setLinkedStudents] = React.useState([]);
+  const canUnlinkStudents = false;
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp ? await DataStore.query(School, idProp) : school;
@@ -11450,6 +11442,11 @@ export default function SchoolUpdateForm(props) {
           const studentsToUnLink = [];
           const studentsSet = new Set();
           const linkedStudentsSet = new Set();
+          if (!canUnlinkStudents && studentsToUnLink.length > 0) {
+            throw Error(
+              \`\${original.id} cannot be unlinked from School because schoolID is a required field.\`
+            );
+          }
           Students.forEach((r) => studentsSet.add(getIDValue.Students?.(r)));
           linkedStudents.forEach((r) =>
             linkedStudentsSet.add(getIDValue.Students?.(r))
@@ -11465,23 +11462,13 @@ export default function SchoolUpdateForm(props) {
             }
           });
           studentsToUnLink.forEach((original) => {
-            try {
-              promises.push(
-                DataStore.save(
-                  Student.copyOf(original, (updated) => {
-                    updated.schoolID = null;
-                  })
-                )
-              );
-            } catch (err) {
-              if (err.message === \\"Field schoolID is required\\") {
-                throw Error(
-                  \`\${original.id} cannot be unlinked from School because schoolID is a required field.\`
-                );
-              } else {
-                throw err;
-              }
-            }
+            promises.push(
+              DataStore.save(
+                Student.copyOf(original, (updated) => {
+                  updated.schoolID = null;
+                })
+              )
+            );
           });
           studentsToLink.forEach((original) => {
             promises.push(
@@ -12387,6 +12374,7 @@ export default function TagUpdateForm(props) {
   };
   const [tagRecord, setTagRecord] = React.useState(tag);
   const [linkedPosts, setLinkedPosts] = React.useState([]);
+  const canUnlinkPosts = false;
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp ? await DataStore.query(Tag, idProp) : tag;

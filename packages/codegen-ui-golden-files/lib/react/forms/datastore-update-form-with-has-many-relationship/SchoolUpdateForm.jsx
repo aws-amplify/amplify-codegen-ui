@@ -164,6 +164,7 @@ export default function SchoolUpdateForm(props) {
 
   const [schoolRecord, setSchoolRecord] = React.useState(school);
   const [linkedStudents, setLinkedStudents] = React.useState([]);
+  const canUnlinkStudents = false;
 
   React.useEffect(() => {
     const queryData = async () => {
@@ -252,6 +253,9 @@ export default function SchoolUpdateForm(props) {
           const studentsToUnLink = [];
           const studentsSet = new Set();
           const linkedStudentsSet = new Set();
+          if (!canUnlinkStudents && studentsToUnLink.length > 0) {
+            throw Error(`${original.id} cannot be unlinked from School because schoolID is a required field.`);
+          }
           Students.forEach((r) => studentsSet.add(r.id));
           linkedStudents.forEach((r) => linkedStudentsSet.add(r.id));
 

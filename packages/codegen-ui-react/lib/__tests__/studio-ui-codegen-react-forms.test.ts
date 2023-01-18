@@ -464,6 +464,17 @@ describe('amplify form renderer tests', () => {
         expect(declaration).toMatchSnapshot();
       });
 
+      it('should render an update form with validation for misconfigured schema for hasMany relationship', () => {
+        const { componentText } = generateWithAmplifyFormRenderer(
+          'forms/school-datastore-update',
+          'datastore/school-student',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+
+        expect(componentText).toContain('const canUnlinkStudents = false');
+      });
+
       it('should render an update form for model with composite keys', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer(
           'forms/composite-dog-datastore-update',
