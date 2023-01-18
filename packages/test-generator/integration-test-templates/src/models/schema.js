@@ -1393,7 +1393,7 @@ export const schema = {
           attributes: [],
           association: {
             connectionType: 'HAS_ONE',
-            associatedWith: ['CompositeOwner'],
+            associatedWith: ['name', 'description'],
             targetNames: ['compositeOwnerCompositeDogName', 'compositeOwnerCompositeDogDescription'],
           },
         },

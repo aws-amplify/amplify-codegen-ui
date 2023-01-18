@@ -1,4 +1,4 @@
-{
+ {
     "models": {
         "CompositeDog": {
             "name": "CompositeDog",
@@ -229,7 +229,8 @@
                     "association": {
                         "connectionType": "HAS_ONE",
                         "associatedWith": [
-                            "CompositeOwner"
+                            "name",
+                            "description"
                         ],
                         "targetNames": [
                             "compositeOwnerCompositeDogName",
@@ -549,6 +550,6 @@
     },
     "enums": {},
     "nonModels": {},
-    "codegenVersion": "3.3.2",
+    "codegenVersion": "3.3.5",
     "version": "8f8e59ee8fb2e3ca4efda3aa25b0211f"
 }

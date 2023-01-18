@@ -1394,7 +1394,7 @@ export default {
           attributes: [],
           association: {
             connectionType: 'HAS_ONE',
-            associatedWith: ['CompositeOwner'],
+            associatedWith: ['name', 'description'],
             targetNames: ['compositeOwnerCompositeDogName', 'compositeOwnerCompositeDogDescription'],
           },
         },

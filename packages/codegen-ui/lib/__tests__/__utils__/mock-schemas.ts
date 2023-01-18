@@ -1577,7 +1577,7 @@ export const schemaWithCPK: Schema = {
           type: {
             model: 'CPKStudent',
           },
-          isRequired: false,
+          isRequired: true,
           attributes: [],
           association: {
             connectionType: 'HAS_ONE',
@@ -1633,7 +1633,7 @@ export const schemaWithCPK: Schema = {
           name: 'cPKTeacherCPKStudentSpecialStudentId',
           isArray: false,
           type: 'ID',
-          isRequired: false,
+          isRequired: true,
           attributes: [],
         },
       },
@@ -1857,8 +1857,8 @@ export const schemaWithCPK: Schema = {
   },
   enums: {},
   nonModels: {},
-  codegenVersion: '3.3.2',
-  version: '6cdebeac40c17b1a27a64848aafdc86a',
+  codegenVersion: '3.3.5',
+  version: '19f0d1f134e00e6d1829446b37439661',
 };
 
 export const schemaWithCompositeKeys: Schema = {
@@ -2071,7 +2071,7 @@ export const schemaWithCompositeKeys: Schema = {
           attributes: [],
           association: {
             connectionType: 'HAS_ONE',
-            associatedWith: ['CompositeOwner'],
+            associatedWith: ['name', 'description'],
             targetNames: ['compositeOwnerCompositeDogName', 'compositeOwnerCompositeDogDescription'],
           },
         },
@@ -2361,6 +2361,6 @@ export const schemaWithCompositeKeys: Schema = {
   },
   enums: {},
   nonModels: {},
-  codegenVersion: '3.3.2',
+  codegenVersion: '3.3.5',
   version: '8f8e59ee8fb2e3ca4efda3aa25b0211f',
 };
