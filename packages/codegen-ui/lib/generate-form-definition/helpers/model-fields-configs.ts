@@ -34,6 +34,41 @@ import { ExtendedStudioGenericFieldConfig } from '../../types/form/form-definiti
 import { StudioFormInputFieldProperty } from '../../types/form/input-config';
 import { FIELD_TYPE_MAP } from './field-type-map';
 
+function extractCorrespondingKey({
+  thisModel,
+  relatedModel,
+  relationshipFieldName,
+}: {
+  thisModel: GenericDataModel;
+  relatedModel: GenericDataModel;
+  relationshipFieldName: string;
+}): string {
+  const relationshipField = thisModel.fields[relationshipFieldName];
+  if (
+    relationshipField.relationship &&
+    'isHasManyIndex' in relationshipField.relationship &&
+    relationshipField.relationship.isHasManyIndex
+  ) {
+    const correspondingFieldTuple = Object.entries(relatedModel.fields).find(
+      ([, field]) =>
+        field.relationship?.type === 'HAS_MANY' &&
+        field.relationship?.relatedModelFields.includes(relationshipFieldName),
+    );
+    if (correspondingFieldTuple) {
+      const correspondingField = correspondingFieldTuple[1].relationship;
+      if (correspondingField?.type === 'HAS_MANY') {
+        const indexOfKey = correspondingField.relatedModelFields.indexOf(relationshipFieldName);
+        if (indexOfKey !== -1) {
+          return relatedModel.primaryKeys[indexOfKey];
+        }
+      }
+    }
+  }
+
+  // TODO: support other types
+  return relationshipFieldName;
+}
+
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
   if (typeof field.dataType === 'object' && 'enum' in field.dataType) {
     return 'Enum';
@@ -96,11 +131,13 @@ function getModelDisplayValue({
 }
 
 function getValueMappings({
+  dataTypeName,
   fieldName,
   field,
   enums,
   allModels,
 }: {
+  dataTypeName: string;
   fieldName: string;
   field: GenericDataField;
   enums: GenericDataSchema['enums'];
@@ -126,8 +163,16 @@ function getValueMappings({
     const modelName = field.relationship.relatedModelName;
     const relatedModel = allModels[modelName];
     const isModelType = typeof field.dataType === 'object' && 'model' in field.dataType;
-    // if model, store all keys; else, store field as key
-    const keys = isModelType ? relatedModel.primaryKeys : [fieldName];
+    // if model, store all keys; else, store corresponding primary key
+    const keys = isModelType
+      ? relatedModel.primaryKeys
+      : [
+          extractCorrespondingKey({
+            thisModel: allModels[dataTypeName],
+            relatedModel,
+            relationshipFieldName: fieldName,
+          }),
+        ];
     const values: StudioFormValueMappings['values'] = keys.map((key) => ({
       value: { bindingProperties: { property: modelName, field: key } },
     }));
@@ -145,11 +190,13 @@ function getValueMappings({
 }
 
 export function getFieldConfigFromModelField({
+  dataTypeName,
   fieldName,
   field,
   dataSchema,
   setReadOnly,
 }: {
+  dataTypeName: string;
   fieldName: string;
   field: GenericDataField;
   dataSchema: GenericDataSchema;
@@ -197,7 +244,13 @@ export function getFieldConfigFromModelField({
     config.inputType.placeholder = `Search ${field.relationship.relatedModelName}`;
   }
 
-  const valueMappings = getValueMappings({ fieldName, field, enums: dataSchema.enums, allModels: dataSchema.models });
+  const valueMappings = getValueMappings({
+    dataTypeName,
+    fieldName,
+    field,
+    enums: dataSchema.enums,
+    allModels: dataSchema.models,
+  });
   if (valueMappings) {
     config.inputType.valueMappings = valueMappings;
   }
@@ -234,7 +287,9 @@ export function mapModelFieldsConfigs({
       field.readOnly ||
       (fieldName === 'id' && field.dataType === 'ID' && field.required) ||
       !checkIsSupportedAsFormField(field, featureFlags) ||
-      (field.relationship && !(typeof field.dataType === 'object' && 'model' in field.dataType));
+      (field.relationship &&
+        !(typeof field.dataType === 'object' && 'model' in field.dataType) &&
+        !('isHasManyIndex' in field.relationship && field.relationship.isHasManyIndex));
 
     if (!isAutoExcludedField) {
       formDefinition.elementMatrix.push([fieldName]);
@@ -243,6 +298,7 @@ export function mapModelFieldsConfigs({
     const isPrimaryKey = model.primaryKeys.includes(fieldName);
 
     modelFieldsConfigs[fieldName] = getFieldConfigFromModelField({
+      dataTypeName,
       fieldName,
       field,
       dataSchema,

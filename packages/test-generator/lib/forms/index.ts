@@ -24,3 +24,4 @@ export { default as DataStoreFormUpdateCPKTeacher } from './datastore-form-updat
 export { default as DataStoreFormUpdateCompositeDog } from './datastore-form-update-composite-dog.json';
 export { default as DataStoreFormCreateCPKTeacher } from './datastore-form-create-cpk-teacher.json';
 export { default as DataStoreFormCreateCompositeDog } from './datastore-form-create-composite-dog.json';
+export { default as DataStoreFormUpdateCompositeToy } from './datastore-form-update-composite-toy.json';

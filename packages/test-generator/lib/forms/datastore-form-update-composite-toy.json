@@ -1,0 +1,13 @@
+{
+    "id": "kdjfskdfddj",
+    "name": "DataStoreFormUpdateCompositeToy",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "CompositeToy"
+    },
+    "formActionType": "update",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

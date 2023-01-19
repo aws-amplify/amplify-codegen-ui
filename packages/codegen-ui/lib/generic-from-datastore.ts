@@ -128,6 +128,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
                 addRelationship(fieldsWithImplicitRelationships, relatedModelName, associatedFieldName, {
                   type: 'HAS_ONE',
                   relatedModelName: model.name,
+                  isHasManyIndex: true,
                 });
               }
             });

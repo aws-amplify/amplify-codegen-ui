@@ -114,6 +114,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Dog.fields.ownerID.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Owner',
+      isHasManyIndex: true,
     });
   });
 
@@ -175,6 +176,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Dog.fields.ownerID.relationship).toStrictEqual({
       type: 'HAS_ONE',
       relatedModelName: 'Owner',
+      isHasManyIndex: true,
     });
   });
 

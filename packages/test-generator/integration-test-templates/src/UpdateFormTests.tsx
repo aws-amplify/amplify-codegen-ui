@@ -21,6 +21,7 @@ import {
   DataStoreFormUpdateAllSupportedFormFields,
   DataStoreFormUpdateCompositeDog,
   DataStoreFormUpdateCPKTeacher,
+  DataStoreFormUpdateCompositeToy,
 } from './ui-components'; // eslint-disable-line import/extensions, max-len
 import {
   Owner,
@@ -266,6 +267,8 @@ export default function UpdateFormTests() {
   const [compositeDogRecordString, setCompositeDogRecordString] = useState<string>('');
   const initializeStarted = useRef(false);
 
+  const [compositeToyRecord, setCompositeToyRecord] = useState<CompositeToy | undefined>();
+  const [compositeToyRecordString, setCompositeToyRecordString] = useState<string>('');
   useEffect(() => {
     const initializeTestState = async () => {
       if (initializeStarted.current) {
@@ -279,6 +282,7 @@ export default function UpdateFormTests() {
         initializeCPKTeacherTestData({ setCPKTeacherId }),
         initializeCompositeDogTestData({ setCompositeDogRecord }),
       ]);
+      setCompositeToyRecord(await DataStore.query(CompositeToy, { kind: 'chew', color: 'red' }));
       setInitialized(true);
     };
 
@@ -374,6 +378,18 @@ export default function UpdateFormTests() {
           }}
         />
         <Text>{compositeDogRecordString}</Text>
+      </View>
+      <Heading>DataStore Form - UpdateCompositeToy</Heading>
+      <View id="dataStoreFormUpdateCompositeToy">
+        <DataStoreFormUpdateCompositeToy
+          compositeToy={compositeToyRecord}
+          onSuccess={async () => {
+            const record = await DataStore.query(CompositeToy, { kind: 'chew', color: 'red' });
+
+            setCompositeToyRecordString(JSON.stringify(record));
+          }}
+        />
+        <Text>{compositeToyRecordString}</Text>
       </View>
     </AmplifyProvider>
   );

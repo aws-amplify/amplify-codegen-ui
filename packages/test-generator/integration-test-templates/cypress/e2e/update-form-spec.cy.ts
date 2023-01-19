@@ -205,4 +205,31 @@ describe('UpdateForms', () => {
       });
     });
   });
+
+  // this model is m in 1:m
+  describe('DataStoreFormUpdateCompositeToy', () => {
+    beforeEach(() => {
+      cy.reload();
+    });
+    it('should update indices used for 1:m relationships', () => {
+      cy.get('#dataStoreFormUpdateCompositeToy').within(() => {
+        getArrayFieldButtonByLabel('Composite dog composite toys name').click();
+        typeInAutocomplete('Yundoo{downArrow}{enter}');
+        clickAddToArray();
+
+        getArrayFieldButtonByLabel('Composite dog composite toys description').click();
+        typeInAutocomplete('tiny but mighty{downArrow}{enter}');
+        clickAddToArray();
+
+        cy.contains('Submit').click();
+
+        cy.contains(/chew/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
+
+          expect(record.compositeDogCompositeToysName).to.equal('Yundoo');
+          expect(record.compositeDogCompositeToysDescription).to.equal('tiny but mighty');
+        });
+      });
+    });
+  });
 });

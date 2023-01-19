@@ -1,5 +1,565 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for child of 1:m relationship 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+import {
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { CompositeToy, CompositeDog } from \\"../models\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CreateCompositeToyForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    kind: \\"\\",
+    color: \\"\\",
+    compositeDogCompositeToysName: undefined,
+    compositeDogCompositeToysDescription: undefined,
+  };
+  const [kind, setKind] = React.useState(initialValues.kind);
+  const [color, setColor] = React.useState(initialValues.color);
+  const [compositeDogCompositeToysName, setCompositeDogCompositeToysName] =
+    React.useState(initialValues.compositeDogCompositeToysName);
+  const [
+    compositeDogCompositeToysDescription,
+    setCompositeDogCompositeToysDescription,
+  ] = React.useState(initialValues.compositeDogCompositeToysDescription);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setKind(initialValues.kind);
+    setColor(initialValues.color);
+    setCompositeDogCompositeToysName(
+      initialValues.compositeDogCompositeToysName
+    );
+    setCurrentCompositeDogCompositeToysNameValue(undefined);
+    setCompositeDogCompositeToysDescription(
+      initialValues.compositeDogCompositeToysDescription
+    );
+    setCurrentCompositeDogCompositeToysDescriptionValue(undefined);
+    setErrors({});
+  };
+  const [
+    currentCompositeDogCompositeToysNameValue,
+    setCurrentCompositeDogCompositeToysNameValue,
+  ] = React.useState(undefined);
+  const compositeDogCompositeToysNameRef = React.createRef();
+  const [
+    currentCompositeDogCompositeToysDescriptionValue,
+    setCurrentCompositeDogCompositeToysDescriptionValue,
+  ] = React.useState(undefined);
+  const compositeDogCompositeToysDescriptionRef = React.createRef();
+  const compositeDogRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositeDog,
+  }).items;
+  const validations = {
+    kind: [{ type: \\"Required\\" }],
+    color: [{ type: \\"Required\\" }],
+    compositeDogCompositeToysName: [],
+    compositeDogCompositeToysDescription: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          kind,
+          color,
+          compositeDogCompositeToysName,
+          compositeDogCompositeToysDescription,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          await DataStore.save(new CompositeToy(modelFields));
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CreateCompositeToyForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Kind\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={kind}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              kind: value,
+              color,
+              compositeDogCompositeToysName,
+              compositeDogCompositeToysDescription,
+            };
+            const result = onChange(modelFields);
+            value = result?.kind ?? value;
+          }
+          if (errors.kind?.hasError) {
+            runValidationTasks(\\"kind\\", value);
+          }
+          setKind(value);
+        }}
+        onBlur={() => runValidationTasks(\\"kind\\", kind)}
+        errorMessage={errors.kind?.errorMessage}
+        hasError={errors.kind?.hasError}
+        {...getOverrideProps(overrides, \\"kind\\")}
+      ></TextField>
+      <TextField
+        label=\\"Color\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={color}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              kind,
+              color: value,
+              compositeDogCompositeToysName,
+              compositeDogCompositeToysDescription,
+            };
+            const result = onChange(modelFields);
+            value = result?.color ?? value;
+          }
+          if (errors.color?.hasError) {
+            runValidationTasks(\\"color\\", value);
+          }
+          setColor(value);
+        }}
+        onBlur={() => runValidationTasks(\\"color\\", color)}
+        errorMessage={errors.color?.errorMessage}
+        hasError={errors.color?.hasError}
+        {...getOverrideProps(overrides, \\"color\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              kind,
+              color,
+              compositeDogCompositeToysName: value,
+              compositeDogCompositeToysDescription,
+            };
+            const result = onChange(modelFields);
+            value = result?.compositeDogCompositeToysName ?? value;
+          }
+          setCompositeDogCompositeToysName(value);
+          setCurrentCompositeDogCompositeToysNameValue(undefined);
+        }}
+        currentFieldValue={currentCompositeDogCompositeToysNameValue}
+        label={\\"Composite dog composite toys name\\"}
+        items={
+          compositeDogCompositeToysName ? [compositeDogCompositeToysName] : []
+        }
+        hasError={errors.compositeDogCompositeToysName?.hasError}
+        setFieldValue={setCurrentCompositeDogCompositeToysNameValue}
+        inputFieldRef={compositeDogCompositeToysNameRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite dog composite toys name\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentCompositeDogCompositeToysNameValue}
+          options={compositeDogRecords.map((r) => ({
+            id: r?.name,
+            label: r?.name,
+          }))}
+          onSelect={({ id }) => {
+            setCurrentCompositeDogCompositeToysNameValue(id);
+          }}
+          onClear={() => {
+            setCurrentCompositeDogCompositeToysNameDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.compositeDogCompositeToysName?.hasError) {
+              runValidationTasks(\\"compositeDogCompositeToysName\\", value);
+            }
+            setCurrentCompositeDogCompositeToysNameValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"compositeDogCompositeToysName\\",
+              currentCompositeDogCompositeToysNameValue
+            )
+          }
+          errorMessage={errors.compositeDogCompositeToysName?.errorMessage}
+          hasError={errors.compositeDogCompositeToysName?.hasError}
+          ref={compositeDogCompositeToysNameRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"compositeDogCompositeToysName\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              kind,
+              color,
+              compositeDogCompositeToysName,
+              compositeDogCompositeToysDescription: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.compositeDogCompositeToysDescription ?? value;
+          }
+          setCompositeDogCompositeToysDescription(value);
+          setCurrentCompositeDogCompositeToysDescriptionValue(undefined);
+        }}
+        currentFieldValue={currentCompositeDogCompositeToysDescriptionValue}
+        label={\\"Composite dog composite toys description\\"}
+        items={
+          compositeDogCompositeToysDescription
+            ? [compositeDogCompositeToysDescription]
+            : []
+        }
+        hasError={errors.compositeDogCompositeToysDescription?.hasError}
+        setFieldValue={setCurrentCompositeDogCompositeToysDescriptionValue}
+        inputFieldRef={compositeDogCompositeToysDescriptionRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite dog composite toys description\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentCompositeDogCompositeToysDescriptionValue}
+          options={compositeDogRecords.map((r) => ({
+            id: r?.description,
+            label: r?.description,
+          }))}
+          onSelect={({ id }) => {
+            setCurrentCompositeDogCompositeToysDescriptionValue(id);
+          }}
+          onClear={() => {
+            setCurrentCompositeDogCompositeToysDescriptionDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.compositeDogCompositeToysDescription?.hasError) {
+              runValidationTasks(\\"compositeDogCompositeToysDescription\\", value);
+            }
+            setCurrentCompositeDogCompositeToysDescriptionValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"compositeDogCompositeToysDescription\\",
+              currentCompositeDogCompositeToysDescriptionValue
+            )
+          }
+          errorMessage={
+            errors.compositeDogCompositeToysDescription?.errorMessage
+          }
+          hasError={errors.compositeDogCompositeToysDescription?.hasError}
+          ref={compositeDogCompositeToysDescriptionRef}
+          labelHidden={true}
+          {...getOverrideProps(
+            overrides,
+            \\"compositeDogCompositeToysDescription\\"
+          )}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for child of 1:m relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateCompositeToyFormInputValues = {
+    kind?: string;
+    color?: string;
+    compositeDogCompositeToysName?: string;
+    compositeDogCompositeToysDescription?: string;
+};
+export declare type CreateCompositeToyFormValidationValues = {
+    kind?: ValidationFunction<string>;
+    color?: ValidationFunction<string>;
+    compositeDogCompositeToysName?: ValidationFunction<string>;
+    compositeDogCompositeToysDescription?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateCompositeToyFormOverridesProps = {
+    CreateCompositeToyFormGrid?: PrimitiveOverrideProps<GridProps>;
+    kind?: PrimitiveOverrideProps<TextFieldProps>;
+    color?: PrimitiveOverrideProps<TextFieldProps>;
+    compositeDogCompositeToysName?: PrimitiveOverrideProps<AutocompleteProps>;
+    compositeDogCompositeToysDescription?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateCompositeToyFormProps = React.PropsWithChildren<{
+    overrides?: CreateCompositeToyFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateCompositeToyFormInputValues) => CreateCompositeToyFormInputValues;
+    onSuccess?: (fields: CreateCompositeToyFormInputValues) => void;
+    onError?: (fields: CreateCompositeToyFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateCompositeToyFormInputValues) => CreateCompositeToyFormInputValues;
+    onValidate?: CreateCompositeToyFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateCompositeToyForm(props: CreateCompositeToyFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for model with composite keys 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -7997,18 +8557,24 @@ export default function MyMemberForm(props) {
   } = props;
   const initialValues = {
     name: \\"\\",
+    teamID: undefined,
     Team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
+  const [teamID, setTeamID] = React.useState(initialValues.teamID);
   const [Team, setTeam] = React.useState(initialValues.Team);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
+    setTeamID(initialValues.teamID);
+    setCurrentTeamIDValue(undefined);
     setTeam(initialValues.Team);
     setCurrentTeamValue(undefined);
     setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
   };
+  const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
+  const teamIDRef = React.createRef();
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
@@ -8030,6 +8596,7 @@ export default function MyMemberForm(props) {
   };
   const validations = {
     name: [],
+    teamID: [{ type: \\"Required\\" }],
     Team: [],
   };
   const runValidationTasks = async (
@@ -8058,6 +8625,7 @@ export default function MyMemberForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
+          teamID,
           Team,
         };
         const validationResponses = await Promise.all(
@@ -8156,6 +8724,7 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
+              teamID,
               Team,
             };
             const result = onChange(modelFields);
@@ -8178,6 +8747,61 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name,
+              teamID: value,
+              Team,
+            };
+            const result = onChange(modelFields);
+            value = result?.teamID ?? value;
+          }
+          setTeamID(value);
+          setCurrentTeamIDValue(undefined);
+        }}
+        currentFieldValue={currentTeamIDValue}
+        label={\\"Team id\\"}
+        items={teamID ? [teamID] : []}
+        hasError={errors.teamID?.hasError}
+        setFieldValue={setCurrentTeamIDValue}
+        inputFieldRef={teamIDRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Team id\\"
+          isRequired={true}
+          isReadOnly={false}
+          value={currentTeamIDValue}
+          options={teamRecords.map((r) => ({
+            id: r?.id,
+            label: r?.id,
+          }))}
+          onSelect={({ id }) => {
+            setCurrentTeamIDValue(id);
+          }}
+          onClear={() => {
+            setCurrentTeamIDDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.teamID?.hasError) {
+              runValidationTasks(\\"teamID\\", value);
+            }
+            setCurrentTeamIDValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"teamID\\", currentTeamIDValue)}
+          errorMessage={errors.teamID?.errorMessage}
+          hasError={errors.teamID?.hasError}
+          ref={teamIDRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"teamID\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              teamID,
               Team: value,
             };
             const result = onChange(modelFields);
@@ -8258,16 +8882,19 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type MyMemberFormInputValues = {
     name?: string;
+    teamID?: string;
     Team?: Team0;
 };
 export declare type MyMemberFormValidationValues = {
     name?: ValidationFunction<string>;
+    teamID?: ValidationFunction<string>;
     Team?: ValidationFunction<Team0>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyMemberFormOverridesProps = {
     MyMemberFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
+    teamID?: PrimitiveOverrideProps<AutocompleteProps>;
     Team?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type MyMemberFormProps = React.PropsWithChildren<{
@@ -11891,16 +12518,20 @@ export default function MyMemberForm(props) {
   } = props;
   const initialValues = {
     name: \\"\\",
+    teamID: undefined,
     Team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
+  const [teamID, setTeamID] = React.useState(initialValues.teamID);
   const [Team, setTeam] = React.useState(initialValues.Team);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = memberRecord
-      ? { ...initialValues, ...memberRecord, Team }
+      ? { ...initialValues, ...memberRecord, teamID, Team }
       : initialValues;
     setName(cleanValues.name);
+    setTeamID(cleanValues.teamID);
+    setCurrentTeamIDValue(undefined);
     setTeam(cleanValues.Team);
     setCurrentTeamValue(undefined);
     setCurrentTeamDisplayValue(\\"\\");
@@ -11911,12 +12542,16 @@ export default function MyMemberForm(props) {
     const queryData = async () => {
       const record = idProp ? await DataStore.query(Member, idProp) : member;
       setMemberRecord(record);
+      const teamIDRecord = record ? await record.teamID : undefined;
+      setTeamID(teamIDRecord);
       const TeamRecord = record ? await record.Team : undefined;
       setTeam(TeamRecord);
     };
     queryData();
   }, [idProp, member]);
-  React.useEffect(resetStateValues, [memberRecord, Team]);
+  React.useEffect(resetStateValues, [memberRecord, teamID, Team]);
+  const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
+  const teamIDRef = React.createRef();
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
@@ -11938,6 +12573,7 @@ export default function MyMemberForm(props) {
   };
   const validations = {
     name: [],
+    teamID: [{ type: \\"Required\\" }],
     Team: [],
   };
   const runValidationTasks = async (
@@ -11966,6 +12602,7 @@ export default function MyMemberForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
+          teamID,
           Team,
         };
         const validationResponses = await Promise.all(
@@ -12072,6 +12709,7 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
+              teamID,
               Team,
             };
             const result = onChange(modelFields);
@@ -12094,6 +12732,62 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name,
+              teamID: value,
+              Team,
+            };
+            const result = onChange(modelFields);
+            value = result?.teamID ?? value;
+          }
+          setTeamID(value);
+          setCurrentTeamIDValue(undefined);
+        }}
+        currentFieldValue={currentTeamIDValue}
+        label={\\"Team id\\"}
+        items={teamID ? [teamID] : []}
+        hasError={errors.teamID?.hasError}
+        setFieldValue={setCurrentTeamIDValue}
+        inputFieldRef={teamIDRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Team id\\"
+          isRequired={true}
+          isReadOnly={false}
+          value={currentTeamIDValue}
+          options={teamRecords.map((r) => ({
+            id: r?.id,
+            label: r?.id,
+          }))}
+          onSelect={({ id }) => {
+            setCurrentTeamIDValue(id);
+          }}
+          onClear={() => {
+            setCurrentTeamIDDisplayValue(\\"\\");
+          }}
+          defaultValue={teamID}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.teamID?.hasError) {
+              runValidationTasks(\\"teamID\\", value);
+            }
+            setCurrentTeamIDValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"teamID\\", currentTeamIDValue)}
+          errorMessage={errors.teamID?.errorMessage}
+          hasError={errors.teamID?.hasError}
+          ref={teamIDRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"teamID\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              teamID,
               Team: value,
             };
             const result = onChange(modelFields);
@@ -12175,16 +12869,19 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type MyMemberFormInputValues = {
     name?: string;
+    teamID?: string;
     Team?: Team0;
 };
 export declare type MyMemberFormValidationValues = {
     name?: ValidationFunction<string>;
+    teamID?: ValidationFunction<string>;
     Team?: ValidationFunction<Team0>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyMemberFormOverridesProps = {
     MyMemberFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
+    teamID?: PrimitiveOverrideProps<AutocompleteProps>;
     Team?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type MyMemberFormProps = React.PropsWithChildren<{
@@ -17217,18 +17914,24 @@ export default function MyMemberForm(props) {
   } = props;
   const initialValues = {
     name: \\"\\",
+    teamID: undefined,
     Team: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
+  const [teamID, setTeamID] = React.useState(initialValues.teamID);
   const [Team, setTeam] = React.useState(initialValues.Team);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
+    setTeamID(initialValues.teamID);
+    setCurrentTeamIDValue(undefined);
     setTeam(initialValues.Team);
     setCurrentTeamValue(undefined);
     setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
   };
+  const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
+  const teamIDRef = React.createRef();
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState(\\"\\");
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
@@ -17250,6 +17953,7 @@ export default function MyMemberForm(props) {
   };
   const validations = {
     name: [],
+    teamID: [{ type: \\"Required\\" }],
     Team: [],
   };
   const runValidationTasks = async (
@@ -17278,6 +17982,7 @@ export default function MyMemberForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
+          teamID,
           Team,
         };
         const validationResponses = await Promise.all(
@@ -17376,6 +18081,7 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
+              teamID,
               Team,
             };
             const result = onChange(modelFields);
@@ -17398,6 +18104,61 @@ export default function MyMemberForm(props) {
           if (onChange) {
             const modelFields = {
               name,
+              teamID: value,
+              Team,
+            };
+            const result = onChange(modelFields);
+            value = result?.teamID ?? value;
+          }
+          setTeamID(value);
+          setCurrentTeamIDValue(undefined);
+        }}
+        currentFieldValue={currentTeamIDValue}
+        label={\\"Team id\\"}
+        items={teamID ? [teamID] : []}
+        hasError={errors.teamID?.hasError}
+        setFieldValue={setCurrentTeamIDValue}
+        inputFieldRef={teamIDRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Team id\\"
+          isRequired={true}
+          isReadOnly={false}
+          value={currentTeamIDValue}
+          options={teamRecords.map((r) => ({
+            id: r?.id,
+            label: r?.id,
+          }))}
+          onSelect={({ id }) => {
+            setCurrentTeamIDValue(id);
+          }}
+          onClear={() => {
+            setCurrentTeamIDDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.teamID?.hasError) {
+              runValidationTasks(\\"teamID\\", value);
+            }
+            setCurrentTeamIDValue(value);
+          }}
+          onBlur={() => runValidationTasks(\\"teamID\\", currentTeamIDValue)}
+          errorMessage={errors.teamID?.errorMessage}
+          hasError={errors.teamID?.hasError}
+          ref={teamIDRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"teamID\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              teamID,
               Team: value,
             };
             const result = onChange(modelFields);
@@ -17478,16 +18239,19 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type MyMemberFormInputValues = {
     name?: string;
+    teamID?: string;
     Team?: Team0;
 };
 export declare type MyMemberFormValidationValues = {
     name?: ValidationFunction<string>;
+    teamID?: ValidationFunction<string>;
     Team?: ValidationFunction<Team0>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type MyMemberFormOverridesProps = {
     MyMemberFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
+    teamID?: PrimitiveOverrideProps<AutocompleteProps>;
     Team?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type MyMemberFormProps = React.PropsWithChildren<{

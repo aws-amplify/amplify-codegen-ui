@@ -499,6 +499,18 @@ describe('amplify form renderer tests', () => {
         expect(componentText).not.toContain('CompositeToys');
         expect(componentText).not.toContain('CompositeVets');
       });
+
+      it('should render a create form for child of 1:m relationship', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/composite-toy-datastore-create',
+          'datastore/composite-relationships',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
     });
   });
 });
