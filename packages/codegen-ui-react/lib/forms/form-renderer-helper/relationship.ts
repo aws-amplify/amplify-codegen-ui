@@ -1334,45 +1334,6 @@ export const buildHasManyRelationshipDataStoreStatements = (
           NodeFlags.Const,
         ),
       ),
-      factory.createIfStatement(
-        factory.createBinaryExpression(
-          factory.createPrefixUnaryExpression(
-            SyntaxKind.ExclamationToken,
-            factory.createIdentifier(getCanUnlinkModelName(fieldName)),
-          ),
-          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-          factory.createBinaryExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier(dataToUnLink),
-              factory.createIdentifier('length'),
-            ),
-            factory.createToken(SyntaxKind.GreaterThanToken),
-            factory.createNumericLiteral('0'),
-          ),
-        ),
-        factory.createBlock(
-          [
-            factory.createThrowStatement(
-              factory.createCallExpression(factory.createIdentifier('Error'), undefined, [
-                factory.createTemplateExpression(factory.createTemplateHead('', ''), [
-                  factory.createTemplateSpan(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('original'),
-                      factory.createIdentifier('id'),
-                    ),
-                    factory.createTemplateTail(
-                      // eslint-disable-next-line max-len
-                      ` cannot be unlinked from ${modelName} because ${relatedModelFields[0]} is a required field.`,
-                    ),
-                  ),
-                ]),
-              ]),
-            ),
-          ],
-          true,
-        ),
-        undefined,
-      ),
       factory.createExpressionStatement(
         factory.createCallExpression(
           // CPKProjects.forEach((r) => cPKProjectsSet.add(getIDValue.CPKProjects?.(r)));
@@ -1597,6 +1558,45 @@ export const buildHasManyRelationshipDataStoreStatements = (
               factory.createToken(SyntaxKind.EqualsGreaterThanToken),
               factory.createBlock(
                 [
+                  factory.createIfStatement(
+                    factory.createBinaryExpression(
+                      factory.createPrefixUnaryExpression(
+                        SyntaxKind.ExclamationToken,
+                        factory.createIdentifier(getCanUnlinkModelName(fieldName)),
+                      ),
+                      factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                      factory.createBinaryExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createIdentifier(dataToUnLink),
+                          factory.createIdentifier('length'),
+                        ),
+                        factory.createToken(SyntaxKind.GreaterThanToken),
+                        factory.createNumericLiteral('0'),
+                      ),
+                    ),
+                    factory.createBlock(
+                      [
+                        factory.createThrowStatement(
+                          factory.createCallExpression(factory.createIdentifier('Error'), undefined, [
+                            factory.createTemplateExpression(factory.createTemplateHead(`${relatedModelName} `), [
+                              factory.createTemplateSpan(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('original'),
+                                  factory.createIdentifier('id'),
+                                ),
+                                factory.createTemplateTail(
+                                  // eslint-disable-next-line max-len
+                                  ` cannot be unlinked from ${modelName} because ${relatedModelFields[0]} is a required field.`,
+                                ),
+                              ),
+                            ]),
+                          ]),
+                        ),
+                      ],
+                      true,
+                    ),
+                    undefined,
+                  ),
                   factory.createExpressionStatement(
                     factory.createCallExpression(
                       factory.createPropertyAccessExpression(

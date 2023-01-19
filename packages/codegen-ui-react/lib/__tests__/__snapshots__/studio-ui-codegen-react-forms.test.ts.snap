@@ -3750,11 +3750,6 @@ export default function UpdateCompositeDogForm(props) {
           const compositeToysToUnLink = [];
           const compositeToysSet = new Set();
           const linkedCompositeToysSet = new Set();
-          if (!canUnlinkCompositeToys && compositeToysToUnLink.length > 0) {
-            throw Error(
-              \`\${original.id} cannot be unlinked from CompositeDog because compositeDogCompositeToysName is a required field.\`
-            );
-          }
           CompositeToys.forEach((r) =>
             compositeToysSet.add(getIDValue.CompositeToys?.(r))
           );
@@ -3772,6 +3767,11 @@ export default function UpdateCompositeDogForm(props) {
             }
           });
           compositeToysToUnLink.forEach((original) => {
+            if (!canUnlinkCompositeToys && compositeToysToUnLink.length > 0) {
+              throw Error(
+                \`CompositeToy \${original.id} cannot be unlinked from CompositeDog because compositeDogCompositeToysName is a required field.\`
+              );
+            }
             promises.push(
               DataStore.save(
                 CompositeToy.copyOf(original, (updated) => {
@@ -4825,11 +4825,6 @@ export default function UpdateCPKTeacherForm(props) {
           const cPKProjectsToUnLink = [];
           const cPKProjectsSet = new Set();
           const linkedCPKProjectsSet = new Set();
-          if (!canUnlinkCPKProjects && cPKProjectsToUnLink.length > 0) {
-            throw Error(
-              \`\${original.id} cannot be unlinked from CPKTeacher because cPKTeacherID is a required field.\`
-            );
-          }
           CPKProjects.forEach((r) =>
             cPKProjectsSet.add(getIDValue.CPKProjects?.(r))
           );
@@ -4847,6 +4842,11 @@ export default function UpdateCPKTeacherForm(props) {
             }
           });
           cPKProjectsToUnLink.forEach((original) => {
+            if (!canUnlinkCPKProjects && cPKProjectsToUnLink.length > 0) {
+              throw Error(
+                \`CPKProject \${original.id} cannot be unlinked from CPKTeacher because cPKTeacherID is a required field.\`
+              );
+            }
             promises.push(
               DataStore.save(
                 CPKProject.copyOf(original, (updated) => {
@@ -11442,11 +11442,6 @@ export default function SchoolUpdateForm(props) {
           const studentsToUnLink = [];
           const studentsSet = new Set();
           const linkedStudentsSet = new Set();
-          if (!canUnlinkStudents && studentsToUnLink.length > 0) {
-            throw Error(
-              \`\${original.id} cannot be unlinked from School because schoolID is a required field.\`
-            );
-          }
           Students.forEach((r) => studentsSet.add(getIDValue.Students?.(r)));
           linkedStudents.forEach((r) =>
             linkedStudentsSet.add(getIDValue.Students?.(r))
@@ -11462,6 +11457,11 @@ export default function SchoolUpdateForm(props) {
             }
           });
           studentsToUnLink.forEach((original) => {
+            if (!canUnlinkStudents && studentsToUnLink.length > 0) {
+              throw Error(
+                \`Student \${original.id} cannot be unlinked from School because schoolID is a required field.\`
+              );
+            }
             promises.push(
               DataStore.save(
                 Student.copyOf(original, (updated) => {
