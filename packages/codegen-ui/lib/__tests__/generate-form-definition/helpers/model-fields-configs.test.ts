@@ -463,6 +463,7 @@ describe('mapModelFieldsConfigs', () => {
               readOnly: false,
               isArray: true,
               relationship: {
+                canUnlinkAssociatedModel: true,
                 type: 'HAS_MANY',
                 relatedModelName: 'CompositeToy',
                 relatedModelFields: ['compositeDogCompositeToysName', 'compositeDogCompositeToysDescription'],
@@ -529,6 +530,7 @@ describe('mapModelFieldsConfigs', () => {
       label: 'Composite dog composite toys name',
       dataType: 'ID',
       inputType: {
+        placeholder: 'Search CompositeDog',
         type: 'Autocomplete',
         required: false,
         readOnly: false,
@@ -547,6 +549,7 @@ describe('mapModelFieldsConfigs', () => {
       dataType: 'String',
       inputType: {
         type: 'Autocomplete',
+        placeholder: 'Search CompositeDog',
         required: false,
         readOnly: false,
         name: 'compositeDogCompositeToysDescription',
