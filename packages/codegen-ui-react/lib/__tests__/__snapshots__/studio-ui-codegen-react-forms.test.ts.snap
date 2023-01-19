@@ -3767,9 +3767,9 @@ export default function UpdateCompositeDogForm(props) {
             }
           });
           compositeToysToUnLink.forEach((original) => {
-            if (!canUnlinkCompositeToys && compositeToysToUnLink.length > 0) {
+            if (!canUnlinkCompositeToys) {
               throw Error(
-                \`CompositeToy \${original.id} cannot be unlinked from CompositeDog because compositeDogCompositeToysName is a required field.\`
+                \`CompositeToy \${original.kind} cannot be unlinked from CompositeDog because compositeDogCompositeToysName is a required field.\`
               );
             }
             promises.push(
@@ -4842,9 +4842,9 @@ export default function UpdateCPKTeacherForm(props) {
             }
           });
           cPKProjectsToUnLink.forEach((original) => {
-            if (!canUnlinkCPKProjects && cPKProjectsToUnLink.length > 0) {
+            if (!canUnlinkCPKProjects) {
               throw Error(
-                \`CPKProject \${original.id} cannot be unlinked from CPKTeacher because cPKTeacherID is a required field.\`
+                \`CPKProject \${original.specialProjectId} cannot be unlinked from CPKTeacher because cPKTeacherID is a required field.\`
               );
             }
             promises.push(
@@ -11457,7 +11457,7 @@ export default function SchoolUpdateForm(props) {
             }
           });
           studentsToUnLink.forEach((original) => {
-            if (!canUnlinkStudents && studentsToUnLink.length > 0) {
+            if (!canUnlinkStudents) {
               throw Error(
                 \`Student \${original.id} cannot be unlinked from School because schoolID is a required field.\`
               );

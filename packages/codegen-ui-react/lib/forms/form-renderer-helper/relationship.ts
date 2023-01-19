@@ -1559,20 +1559,9 @@ export const buildHasManyRelationshipDataStoreStatements = (
               factory.createBlock(
                 [
                   factory.createIfStatement(
-                    factory.createBinaryExpression(
-                      factory.createPrefixUnaryExpression(
-                        SyntaxKind.ExclamationToken,
-                        factory.createIdentifier(getCanUnlinkModelName(fieldName)),
-                      ),
-                      factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-                      factory.createBinaryExpression(
-                        factory.createPropertyAccessExpression(
-                          factory.createIdentifier(dataToUnLink),
-                          factory.createIdentifier('length'),
-                        ),
-                        factory.createToken(SyntaxKind.GreaterThanToken),
-                        factory.createNumericLiteral('0'),
-                      ),
+                    factory.createPrefixUnaryExpression(
+                      SyntaxKind.ExclamationToken,
+                      factory.createIdentifier(getCanUnlinkModelName(fieldName)),
                     ),
                     factory.createBlock(
                       [
@@ -1582,7 +1571,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                               factory.createTemplateSpan(
                                 factory.createPropertyAccessExpression(
                                   factory.createIdentifier('original'),
-                                  factory.createIdentifier('id'),
+                                  factory.createIdentifier(keys[0]),
                                 ),
                                 factory.createTemplateTail(
                                   // eslint-disable-next-line max-len

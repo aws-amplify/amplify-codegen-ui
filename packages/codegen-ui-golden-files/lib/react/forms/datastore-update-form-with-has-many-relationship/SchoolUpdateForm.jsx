@@ -273,6 +273,11 @@ export default function SchoolUpdateForm(props) {
 
           const promises = [];
           studentsToUnLink.forEach((original) => {
+            if (!canUnlinkStudents) {
+              throw Error(
+                `Student ${original.id} cannot be unlinked from School because schoolID is a required field.`,
+              );
+            }
             promises.push(
               DataStore.save(
                 Student.copyOf(original, (updated) => {
