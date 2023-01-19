@@ -23,6 +23,7 @@ import {
   VariableStatement,
   ExpressionStatement,
   PropertyAssignment,
+  IfStatement,
 } from 'typescript';
 import { getSetNameIdentifier, lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './model-values';
@@ -205,7 +206,7 @@ export const buildDataStoreExpression = (
 ) => {
   const thisModelPrimaryKeys = dataSchema.models[modelName].primaryKeys;
   // promises.push(...statements that handle hasMany/ manyToMany/ hasOne-belongsTo relationships)
-  const relationshipsPromisesAccessStatements: (VariableStatement | ExpressionStatement)[] = [];
+  const relationshipsPromisesAccessStatements: (VariableStatement | ExpressionStatement | IfStatement)[] = [];
   const hasManyRelationshipFields: string[] = [];
   const nonModelArrayFields: string[] = [];
   const savedRecordName = lowerCaseFirst(modelName);

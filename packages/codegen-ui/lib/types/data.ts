@@ -37,6 +37,7 @@ export type CommonRelationshipType = {
 export type HasManyRelationshipType = {
   type: 'HAS_MANY';
   relatedModelFields: string[];
+  canUnlinkAssociatedModel: boolean;
   relatedJoinFieldName?: string;
   relatedJoinTableName?: string;
 } & CommonRelationshipType;

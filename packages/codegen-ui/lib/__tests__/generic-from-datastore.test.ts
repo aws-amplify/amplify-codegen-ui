@@ -74,6 +74,7 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
       relatedModelFields: ['student'],
+      canUnlinkAssociatedModel: false,
       relatedJoinFieldName: 'teacher',
       relatedJoinTableName: 'StudentTeacher',
     });
@@ -82,6 +83,7 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Student',
       relatedModelFields: ['teacher'],
+      canUnlinkAssociatedModel: false,
       relatedJoinFieldName: 'student',
       relatedJoinTableName: 'StudentTeacher',
     });
@@ -107,6 +109,7 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Dog',
       relatedModelFields: ['ownerID'],
+      canUnlinkAssociatedModel: true,
       relatedJoinFieldName: undefined,
       relatedJoinTableName: undefined,
     });
@@ -136,6 +139,7 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
       relatedModelFields: ['student'],
+      canUnlinkAssociatedModel: false,
       relatedJoinFieldName: 'teacher',
       relatedJoinTableName: 'StudentTeacher',
     });
@@ -144,6 +148,7 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Student',
       relatedModelFields: ['teacher'],
+      canUnlinkAssociatedModel: false,
       relatedJoinFieldName: 'student',
       relatedJoinTableName: 'StudentTeacher',
     });
@@ -169,6 +174,7 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Dog',
       relatedModelFields: ['ownerID'],
+      canUnlinkAssociatedModel: true,
       relatedJoinFieldName: undefined,
       relatedJoinTableName: undefined,
     });
@@ -203,18 +209,20 @@ describe('getGenericFromDataStore', () => {
     const genericSchema = getGenericFromDataStore(schemaWithAssumptions);
     const userFields = genericSchema.models.User.fields;
 
-    expect(userFields.friends.relationship).toStrictEqual({
+    expect(userFields.friends.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Friend',
       relatedModelFields: ['friendId'],
+      canUnlinkAssociatedModel: true,
       relatedJoinFieldName: undefined,
       relatedJoinTableName: undefined,
     });
 
-    expect(userFields.posts.relationship).toStrictEqual({
+    expect(userFields.posts.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Post',
       relatedModelFields: ['userPostsId'],
+      canUnlinkAssociatedModel: true,
       relatedJoinFieldName: undefined,
       relatedJoinTableName: undefined,
     });
