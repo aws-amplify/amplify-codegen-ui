@@ -1,0 +1,12 @@
+{
+    "name": "CreateCompositeToyForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "CompositeToy"
+    },
+    "formActionType": "create",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

@@ -396,7 +396,12 @@ describe('mapModelFieldsConfigs', () => {
       },
     };
 
-    const modelFieldsConfigs = mapModelFieldsConfigs({ dataTypeName: 'Dog', formDefinition, dataSchema });
+    const modelFieldsConfigs = mapModelFieldsConfigs({
+      dataTypeName: 'Dog',
+      formDefinition,
+      dataSchema,
+      featureFlags: { isRelationshipSupported: true },
+    });
 
     expect(formDefinition.elementMatrix).toStrictEqual([]);
     expect(modelFieldsConfigs).toStrictEqual({
@@ -417,6 +422,139 @@ describe('mapModelFieldsConfigs', () => {
         label: 'Owner id',
         relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },
       },
+    });
+  });
+
+  it('should add not-model type relationship fields to configs and to matrix if it is hasMany index', () => {
+    const formDefinition: FormDefinition = getBasicFormDefinition();
+
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Owner: {
+          primaryKeys: ['id'],
+          fields: {},
+        },
+        CompositeDog: {
+          primaryKeys: ['name', 'description'],
+          fields: {
+            name: {
+              dataType: 'ID',
+              required: true,
+              readOnly: false,
+              isArray: false,
+            },
+            description: {
+              dataType: 'String',
+              required: true,
+              readOnly: false,
+              isArray: false,
+            },
+            CompositeToys: {
+              dataType: {
+                model: 'CompositeToy',
+              },
+              required: false,
+              readOnly: false,
+              isArray: true,
+              relationship: {
+                type: 'HAS_MANY',
+                relatedModelName: 'CompositeToy',
+                relatedModelFields: ['compositeDogCompositeToysName', 'compositeDogCompositeToysDescription'],
+              },
+            },
+          },
+        },
+        CompositeToy: {
+          fields: {
+            kind: {
+              dataType: 'ID',
+              required: true,
+              readOnly: false,
+              isArray: false,
+            },
+            color: {
+              dataType: 'String',
+              required: true,
+              readOnly: false,
+              isArray: false,
+            },
+            compositeDogCompositeToysName: {
+              dataType: 'ID',
+              required: false,
+              readOnly: false,
+              isArray: false,
+              relationship: {
+                type: 'HAS_ONE',
+                relatedModelName: 'CompositeDog',
+                isHasManyIndex: true,
+              },
+            },
+            compositeDogCompositeToysDescription: {
+              dataType: 'String',
+              required: false,
+              readOnly: false,
+              isArray: false,
+              relationship: {
+                type: 'HAS_ONE',
+                relatedModelName: 'CompositeDog',
+                isHasManyIndex: true,
+              },
+            },
+          },
+          primaryKeys: ['kind', 'color'],
+        },
+      },
+    };
+
+    const modelFieldsConfigs = mapModelFieldsConfigs({
+      dataTypeName: 'CompositeToy',
+      formDefinition,
+      dataSchema,
+      featureFlags: { isRelationshipSupported: true },
+    });
+
+    expect(formDefinition.elementMatrix).toStrictEqual([
+      ['kind'],
+      ['color'],
+      ['compositeDogCompositeToysName'],
+      ['compositeDogCompositeToysDescription'],
+    ]);
+    expect(modelFieldsConfigs.compositeDogCompositeToysName).toStrictEqual({
+      label: 'Composite dog composite toys name',
+      dataType: 'ID',
+      inputType: {
+        type: 'Autocomplete',
+        required: false,
+        readOnly: false,
+        name: 'compositeDogCompositeToysName',
+        value: 'compositeDogCompositeToysName',
+        isArray: false,
+        valueMappings: {
+          values: [{ value: { bindingProperties: { property: 'CompositeDog', field: 'name' } } }],
+          bindingProperties: { CompositeDog: { type: 'Data', bindingProperties: { model: 'CompositeDog' } } },
+        },
+      },
+      relationship: { type: 'HAS_ONE', relatedModelName: 'CompositeDog', isHasManyIndex: true },
+    });
+    expect(modelFieldsConfigs.compositeDogCompositeToysDescription).toStrictEqual({
+      label: 'Composite dog composite toys description',
+      dataType: 'String',
+      inputType: {
+        type: 'Autocomplete',
+        required: false,
+        readOnly: false,
+        name: 'compositeDogCompositeToysDescription',
+        value: 'compositeDogCompositeToysDescription',
+        isArray: false,
+        valueMappings: {
+          values: [{ value: { bindingProperties: { property: 'CompositeDog', field: 'description' } } }],
+          bindingProperties: { CompositeDog: { type: 'Data', bindingProperties: { model: 'CompositeDog' } } },
+        },
+      },
+      relationship: { type: 'HAS_ONE', relatedModelName: 'CompositeDog', isHasManyIndex: true },
     });
   });
 

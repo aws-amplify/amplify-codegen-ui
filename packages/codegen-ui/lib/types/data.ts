@@ -44,6 +44,7 @@ export type HasManyRelationshipType = {
 export type HasOneRelationshipType = {
   type: 'HAS_ONE';
   associatedFields?: string[];
+  isHasManyIndex?: boolean;
 } & CommonRelationshipType;
 
 export type BelongsToRelationshipType = {

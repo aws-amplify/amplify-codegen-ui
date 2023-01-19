@@ -16,7 +16,6 @@
 import { CallExpression, factory, IfStatement, NodeFlags, SyntaxKind } from 'typescript';
 import {
   FieldConfigMetadata,
-  GenericDataRelationshipType,
   HasManyRelationshipType,
   InternalError,
   GenericDataModel,
@@ -30,11 +29,7 @@ import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { extractModelAndKeys, getIDValueCallChain, getMatchEveryModelFieldCallExpression } from './model-values';
 import { isModelDataType } from './render-checkers';
 
-export const buildRelationshipQuery = (
-  relationship: GenericDataRelationshipType,
-  importCollection: ImportCollection,
-) => {
-  const { relatedModelName } = relationship;
+export const buildRelationshipQuery = (relatedModelName: string, importCollection: ImportCollection) => {
   const itemsName = getRecordsName(relatedModelName);
   const objectProperties = [
     factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral('collection')),
