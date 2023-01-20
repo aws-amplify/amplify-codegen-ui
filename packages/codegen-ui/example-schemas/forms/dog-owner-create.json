@@ -1,0 +1,12 @@
+{
+  "name": "CreateDogForm",
+  "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "Dog"
+  },
+  "formActionType": "create",
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {}
+}

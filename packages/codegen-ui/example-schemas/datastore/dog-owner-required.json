@@ -1,0 +1,94 @@
+{
+  "models": {
+    "Dog": {
+      "name": "Dog",
+      "fields": {
+        "id": { "name": "id", "isArray": false, "type": "ID", "isRequired": true, "attributes": [] },
+        "name": { "name": "name", "isArray": false, "type": "String", "isRequired": false, "attributes": [] },
+        "Owner": {
+          "name": "Owner",
+          "isArray": false,
+          "type": { "model": "Owner" },
+          "isRequired": true,
+          "attributes": [],
+          "association": { "connectionType": "BELONGS_TO", "targetName": "dogOwnerId" }
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        }
+      },
+      "syncable": true,
+      "pluralName": "Dogs",
+      "attributes": [
+        { "type": "model", "properties": {} },
+        {
+          "type": "auth",
+          "properties": { "rules": [{ "allow": "public", "operations": ["create", "update", "delete", "read"] }] }
+        }
+      ]
+    },
+    "Owner": {
+      "name": "Owner",
+      "fields": {
+        "id": { "name": "id", "isArray": false, "type": "ID", "isRequired": true, "attributes": [] },
+        "name": { "name": "name", "isArray": false, "type": "String", "isRequired": true, "attributes": [] },
+        "Dog": {
+          "name": "Dog",
+          "isArray": false,
+          "type": { "model": "Dog" },
+          "isRequired": false,
+          "attributes": [],
+          "association": { "connectionType": "HAS_ONE", "associatedWith": "Dog", "targetName": "ownerDogId" }
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        },
+        "ownerDogId": {
+          "name": "ownerDogId",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": false,
+          "attributes": []
+        }
+      },
+      "syncable": true,
+      "pluralName": "Owners",
+      "attributes": [
+        { "type": "model", "properties": {} },
+        {
+          "type": "auth",
+          "properties": { "rules": [{ "allow": "public", "operations": ["create", "update", "delete", "read"] }] }
+        }
+      ]
+    }
+  },
+  "enums": {},
+  "nonModels": {},
+  "version": "f4d166560661ebce8a75b9c1b1735ed1"
+}
