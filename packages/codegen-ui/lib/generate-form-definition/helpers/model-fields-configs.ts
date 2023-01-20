@@ -289,7 +289,12 @@ export function mapModelFieldsConfigs({
       !checkIsSupportedAsFormField(field, featureFlags) ||
       (field.relationship &&
         !(typeof field.dataType === 'object' && 'model' in field.dataType) &&
-        !('isHasManyIndex' in field.relationship && field.relationship.isHasManyIndex));
+        // if index overlaps with that of BELONGS_TO, the model field will establish bidirectionality automatically
+        !(
+          'isHasManyIndex' in field.relationship &&
+          field.relationship.isHasManyIndex &&
+          field.relationship.type === 'HAS_ONE'
+        ));
 
     if (!isAutoExcludedField) {
       formDefinition.elementMatrix.push([fieldName]);

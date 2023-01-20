@@ -40,6 +40,7 @@ export type HasManyRelationshipType = {
   canUnlinkAssociatedModel: boolean;
   relatedJoinFieldName?: string;
   relatedJoinTableName?: string;
+  belongsToFieldOnRelatedModel?: string;
 } & CommonRelationshipType;
 
 export type HasOneRelationshipType = {
@@ -51,6 +52,7 @@ export type HasOneRelationshipType = {
 export type BelongsToRelationshipType = {
   type: 'BELONGS_TO';
   associatedFields?: string[];
+  isHasManyIndex?: boolean;
 } & CommonRelationshipType;
 
 export type GenericDataRelationshipType = HasManyRelationshipType | HasOneRelationshipType | BelongsToRelationshipType;

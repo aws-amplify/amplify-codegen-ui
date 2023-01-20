@@ -522,6 +522,37 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });
+
+      it('should render a create form for child of 1:m-belongsTo relationship', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/comment-datastore-create',
+          'datastore/comment-hasMany-belongsTo-relationships',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+
+        expect(componentText).toContain('postCommentsId');
+        expect(componentText).not.toContain('postID');
+        expect(componentText).not.toContain('userCommentsId');
+        expect(componentText).not.toContain('orgCommentsId');
+
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render a update form for parent of 1:m-belongsTo relationship', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/org-datastore-update',
+          'datastore/comment-hasMany-belongsTo-relationships',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+
+        expect(componentText).toContain('updated.Org = orgRecord');
+        expect(componentText).toContain('updated.Org = null');
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
     });
   });
 });

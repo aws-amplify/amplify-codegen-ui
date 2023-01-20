@@ -1,0 +1,12 @@
+{
+    "name": "CreateCommentForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "Comment"
+    },
+    "formActionType": "create",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}
