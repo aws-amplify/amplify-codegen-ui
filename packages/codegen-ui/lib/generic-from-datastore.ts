@@ -30,6 +30,7 @@ function getGenericDataField(field: ModelField): GenericDataField {
   };
 }
 
+/* eslint-disable no-param-reassign */
 function addRelationship(
   fields: {
     [modelName: string]: { [fieldName: string]: GenericDataField['relationship'] };
@@ -43,13 +44,25 @@ function addRelationship(
     throw new InvalidInputError('Invalid model name "__proto__"');
   }
   if (!fields[modelName]) {
-    // eslint-disable-next-line no-param-reassign
     fields[modelName] = {};
   }
 
-  // eslint-disable-next-line no-param-reassign
+  const existingRelationship = fields[modelName][fieldName];
+
+  const isHasManyIndex =
+    existingRelationship && 'isHasManyIndex' in existingRelationship && existingRelationship.isHasManyIndex;
+  if (relationship?.type === 'HAS_ONE' || relationship?.type === 'BELONGS_TO') {
+    // give priority to designations as isHasManyIndex and BELONGS_TO
+    if (isHasManyIndex) {
+      relationship.isHasManyIndex = true;
+    }
+    if (existingRelationship?.type === 'BELONGS_TO') {
+      relationship.type = 'BELONGS_TO';
+    }
+  }
   fields[modelName][fieldName] = relationship;
 }
+/* eslint-enable no-param-reassign */
 
 // get custom primary keys || id
 // TODO: when moved over to use introspection schema, this can be vastly simplified
@@ -137,6 +150,19 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
                 });
               }
             });
+
+            const belongsToFieldOnRelatedModelTuple = Object.entries(associatedModel?.fields ?? {}).find(
+              ([, f]) =>
+                typeof f.type === 'object' &&
+                'model' in f.type &&
+                f.type.model === model.name &&
+                f.association?.connectionType === 'BELONGS_TO',
+            );
+
+            if (belongsToFieldOnRelatedModelTuple && belongsToFieldOnRelatedModelTuple[1].isRequired) {
+              canUnlinkAssociatedModel = false;
+            }
+
             modelRelationship = {
               type: relationshipType,
               canUnlinkAssociatedModel,
@@ -145,6 +171,11 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
               relatedJoinFieldName,
               relatedJoinTableName,
             };
+
+            if (belongsToFieldOnRelatedModelTuple) {
+              const [belongsToField] = belongsToFieldOnRelatedModelTuple;
+              modelRelationship.belongsToFieldOnRelatedModel = belongsToField;
+            }
           }
 
           // note implicit relationship for associated field within same model

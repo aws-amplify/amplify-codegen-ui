@@ -2364,3 +2364,320 @@ export const schemaWithCompositeKeys: Schema = {
   codegenVersion: '3.3.5',
   version: '8f8e59ee8fb2e3ca4efda3aa25b0211f',
 };
+
+/**
+type User @model {
+    name: String
+    comments: [Comment] @hasMany
+}
+
+type Org @model {
+    id: ID!
+    name: String
+    comments: [Comment] @hasMany
+}
+
+type Post @model  {
+    id: ID!
+    name: String
+    comments: [Comment] @hasMany
+}
+
+type Comment @model  {
+    id: ID!
+    name: String!
+    postID: ID
+    post: Post @belongsTo(fields: ["postID"])
+    User: User @belongsTo
+    Org: Org! @belongsTo
+}
+ */
+export const schemaWithHasManyBelongsTo: Schema = {
+  models: {
+    User: {
+      name: 'User',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        comments: {
+          name: 'comments',
+          isArray: true,
+          type: {
+            model: 'Comment',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['userCommentsId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Users',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    Comment: {
+      name: 'Comment',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+        },
+        postID: {
+          name: 'postID',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        post: {
+          name: 'post',
+          isArray: false,
+          type: {
+            model: 'Post',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['postID'],
+          },
+        },
+        User: {
+          name: 'User',
+          isArray: false,
+          type: {
+            model: 'User',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['userCommentsId'],
+          },
+        },
+        Org: {
+          name: 'Org',
+          isArray: false,
+          type: {
+            model: 'Org',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['orgCommentsId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        userCommentsId: {
+          name: 'userCommentsId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        orgCommentsId: {
+          name: 'orgCommentsId',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        postCommentsId: {
+          name: 'postCommentsId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'Comments',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    Post: {
+      name: 'Post',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        comments: {
+          name: 'comments',
+          isArray: true,
+          type: {
+            model: 'Comment',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['postCommentsId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Posts',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    Org: {
+      name: 'Org',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        comments: {
+          name: 'comments',
+          isArray: true,
+          type: {
+            model: 'Comment',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['orgCommentsId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Orgs',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+  },
+  enums: {},
+  nonModels: {},
+  codegenVersion: '3.3.5',
+  version: 'f2f8e885f81740e5be20b201c850fa05',
+};

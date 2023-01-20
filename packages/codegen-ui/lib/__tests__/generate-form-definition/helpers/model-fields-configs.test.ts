@@ -428,7 +428,7 @@ describe('mapModelFieldsConfigs', () => {
     });
   });
 
-  it('should add not-model type relationship fields to configs and to matrix if it is hasMany index', () => {
+  it('should add not-model type relationship fields to configs and matrix if HAS_ONE & hasMany index', () => {
     const formDefinition: FormDefinition = getBasicFormDefinition();
 
     const dataSchema: GenericDataSchema = {
@@ -438,7 +438,28 @@ describe('mapModelFieldsConfigs', () => {
       models: {
         Owner: {
           primaryKeys: ['id'],
-          fields: {},
+          fields: {
+            id: {
+              dataType: 'ID',
+              required: true,
+              readOnly: false,
+              isArray: false,
+            },
+            CompositeToys: {
+              dataType: {
+                model: 'CompositeToy',
+              },
+              required: false,
+              readOnly: false,
+              isArray: true,
+              relationship: {
+                canUnlinkAssociatedModel: true,
+                type: 'HAS_MANY',
+                relatedModelName: 'CompositeToy',
+                relatedModelFields: ['ownerCompositeToysID'],
+              },
+            },
+          },
         },
         CompositeDog: {
           primaryKeys: ['name', 'description'],
@@ -504,6 +525,17 @@ describe('mapModelFieldsConfigs', () => {
               relationship: {
                 type: 'HAS_ONE',
                 relatedModelName: 'CompositeDog',
+                isHasManyIndex: true,
+              },
+            },
+            ownerID: {
+              dataType: 'ID',
+              required: true,
+              readOnly: false,
+              isArray: false,
+              relationship: {
+                type: 'BELONGS_TO',
+                relatedModelName: 'Owner',
                 isHasManyIndex: true,
               },
             },

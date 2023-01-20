@@ -562,6 +562,738 @@ export default function CreateCompositeToyForm(props: CreateCompositeToyFormProp
 "
 `;
 
+exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for child of 1:m-belongsTo relationship 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+import {
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Comment, Post, User as User0, Org as Org0 } from \\"../models\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CreateCommentForm(props) {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    post: undefined,
+    User: undefined,
+    Org: undefined,
+    postCommentsId: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [post, setPost] = React.useState(initialValues.post);
+  const [User, setUser] = React.useState(initialValues.User);
+  const [Org, setOrg] = React.useState(initialValues.Org);
+  const [postCommentsId, setPostCommentsId] = React.useState(
+    initialValues.postCommentsId
+  );
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setName(initialValues.name);
+    setPost(initialValues.post);
+    setCurrentPostValue(undefined);
+    setCurrentPostDisplayValue(\\"\\");
+    setUser(initialValues.User);
+    setCurrentUserValue(undefined);
+    setCurrentUserDisplayValue(\\"\\");
+    setOrg(initialValues.Org);
+    setCurrentOrgValue(undefined);
+    setCurrentOrgDisplayValue(\\"\\");
+    setPostCommentsId(initialValues.postCommentsId);
+    setCurrentPostCommentsIdValue(undefined);
+    setErrors({});
+  };
+  const [currentPostDisplayValue, setCurrentPostDisplayValue] =
+    React.useState(\\"\\");
+  const [currentPostValue, setCurrentPostValue] = React.useState(undefined);
+  const postRef = React.createRef();
+  const [currentUserDisplayValue, setCurrentUserDisplayValue] =
+    React.useState(\\"\\");
+  const [currentUserValue, setCurrentUserValue] = React.useState(undefined);
+  const UserRef = React.createRef();
+  const [currentOrgDisplayValue, setCurrentOrgDisplayValue] =
+    React.useState(\\"\\");
+  const [currentOrgValue, setCurrentOrgValue] = React.useState(undefined);
+  const OrgRef = React.createRef();
+  const [currentPostCommentsIdValue, setCurrentPostCommentsIdValue] =
+    React.useState(undefined);
+  const postCommentsIdRef = React.createRef();
+  const getIDValue = {
+    post: (r) => JSON.stringify({ id: r?.id }),
+    User: (r) => JSON.stringify({ id: r?.id }),
+    Org: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const postIdSet = new Set(
+    Array.isArray(post)
+      ? post.map((r) => getIDValue.post?.(r))
+      : getIDValue.post?.(post)
+  );
+  const UserIdSet = new Set(
+    Array.isArray(User)
+      ? User.map((r) => getIDValue.User?.(r))
+      : getIDValue.User?.(User)
+  );
+  const OrgIdSet = new Set(
+    Array.isArray(Org)
+      ? Org.map((r) => getIDValue.Org?.(r))
+      : getIDValue.Org?.(Org)
+  );
+  const postRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Post,
+  }).items;
+  const userRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: User0,
+  }).items;
+  const orgRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Org0,
+  }).items;
+  const getDisplayValue = {
+    post: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    User: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    Org: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    post: [],
+    User: [],
+    Org: [{ type: \\"Required\\", validationMessage: \\"Org is required.\\" }],
+    postCommentsId: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          post,
+          User,
+          Org,
+          postCommentsId,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          await DataStore.save(new Comment(modelFields));
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CreateCommentForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              post,
+              User,
+              Org,
+              postCommentsId,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              post: value,
+              User,
+              Org,
+              postCommentsId,
+            };
+            const result = onChange(modelFields);
+            value = result?.post ?? value;
+          }
+          setPost(value);
+          setCurrentPostValue(undefined);
+          setCurrentPostDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentPostValue}
+        label={\\"Post\\"}
+        items={post ? [post] : []}
+        hasError={errors.post?.hasError}
+        getBadgeText={getDisplayValue.post}
+        setFieldValue={(model) => {
+          setCurrentPostDisplayValue(getDisplayValue.post(model));
+          setCurrentPostValue(model);
+        }}
+        inputFieldRef={postRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Post\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Post\\"
+          value={currentPostDisplayValue}
+          options={postRecords
+            .filter((r) => !postIdSet.has(getIDValue.post?.(r)))
+            .map((r) => ({
+              id: getIDValue.post?.(r),
+              label: getDisplayValue.post?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentPostValue(
+              postRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentPostDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentPostDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.post?.hasError) {
+              runValidationTasks(\\"post\\", value);
+            }
+            setCurrentPostDisplayValue(value);
+            setCurrentPostValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"post\\", currentPostDisplayValue)}
+          errorMessage={errors.post?.errorMessage}
+          hasError={errors.post?.hasError}
+          ref={postRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"post\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              post,
+              User: value,
+              Org,
+              postCommentsId,
+            };
+            const result = onChange(modelFields);
+            value = result?.User ?? value;
+          }
+          setUser(value);
+          setCurrentUserValue(undefined);
+          setCurrentUserDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentUserValue}
+        label={\\"User\\"}
+        items={User ? [User] : []}
+        hasError={errors.User?.hasError}
+        getBadgeText={getDisplayValue.User}
+        setFieldValue={(model) => {
+          setCurrentUserDisplayValue(getDisplayValue.User(model));
+          setCurrentUserValue(model);
+        }}
+        inputFieldRef={UserRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"User\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search User\\"
+          value={currentUserDisplayValue}
+          options={userRecords
+            .filter((r) => !UserIdSet.has(getIDValue.User?.(r)))
+            .map((r) => ({
+              id: getIDValue.User?.(r),
+              label: getDisplayValue.User?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentUserValue(
+              userRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentUserDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentUserDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.User?.hasError) {
+              runValidationTasks(\\"User\\", value);
+            }
+            setCurrentUserDisplayValue(value);
+            setCurrentUserValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"User\\", currentUserDisplayValue)}
+          errorMessage={errors.User?.errorMessage}
+          hasError={errors.User?.hasError}
+          ref={UserRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"User\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              post,
+              User,
+              Org: value,
+              postCommentsId,
+            };
+            const result = onChange(modelFields);
+            value = result?.Org ?? value;
+          }
+          setOrg(value);
+          setCurrentOrgValue(undefined);
+          setCurrentOrgDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentOrgValue}
+        label={\\"Org\\"}
+        items={Org ? [Org] : []}
+        hasError={errors.Org?.hasError}
+        getBadgeText={getDisplayValue.Org}
+        setFieldValue={(model) => {
+          setCurrentOrgDisplayValue(getDisplayValue.Org(model));
+          setCurrentOrgValue(model);
+        }}
+        inputFieldRef={OrgRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Org\\"
+          isRequired={true}
+          isReadOnly={false}
+          placeholder=\\"Search Org\\"
+          value={currentOrgDisplayValue}
+          options={orgRecords
+            .filter((r) => !OrgIdSet.has(getIDValue.Org?.(r)))
+            .map((r) => ({
+              id: getIDValue.Org?.(r),
+              label: getDisplayValue.Org?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentOrgValue(
+              orgRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentOrgDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentOrgDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Org?.hasError) {
+              runValidationTasks(\\"Org\\", value);
+            }
+            setCurrentOrgDisplayValue(value);
+            setCurrentOrgValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"Org\\", currentOrgDisplayValue)}
+          errorMessage={errors.Org?.errorMessage}
+          hasError={errors.Org?.hasError}
+          ref={OrgRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"Org\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              post,
+              User,
+              Org,
+              postCommentsId: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.postCommentsId ?? value;
+          }
+          setPostCommentsId(value);
+          setCurrentPostCommentsIdValue(undefined);
+        }}
+        currentFieldValue={currentPostCommentsIdValue}
+        label={\\"Post comments id\\"}
+        items={postCommentsId ? [postCommentsId] : []}
+        hasError={errors.postCommentsId?.hasError}
+        setFieldValue={setCurrentPostCommentsIdValue}
+        inputFieldRef={postCommentsIdRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Post comments id\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Post\\"
+          value={currentPostCommentsIdValue}
+          options={postRecords.map((r) => ({
+            id: r?.id,
+            label: r?.id,
+          }))}
+          onSelect={({ id }) => {
+            setCurrentPostCommentsIdValue(id);
+          }}
+          onClear={() => {
+            setCurrentPostCommentsIdDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.postCommentsId?.hasError) {
+              runValidationTasks(\\"postCommentsId\\", value);
+            }
+            setCurrentPostCommentsIdValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"postCommentsId\\", currentPostCommentsIdValue)
+          }
+          errorMessage={errors.postCommentsId?.errorMessage}
+          hasError={errors.postCommentsId?.hasError}
+          ref={postCommentsIdRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"postCommentsId\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for child of 1:m-belongsTo relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Post, User as User0, Org as Org0 } from \\"../models\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateCommentFormInputValues = {
+    name?: string;
+    post?: Post;
+    User?: User0;
+    Org?: Org0;
+    postCommentsId?: string;
+};
+export declare type CreateCommentFormValidationValues = {
+    name?: ValidationFunction<string>;
+    post?: ValidationFunction<Post>;
+    User?: ValidationFunction<User0>;
+    Org?: ValidationFunction<Org0>;
+    postCommentsId?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateCommentFormOverridesProps = {
+    CreateCommentFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    post?: PrimitiveOverrideProps<AutocompleteProps>;
+    User?: PrimitiveOverrideProps<AutocompleteProps>;
+    Org?: PrimitiveOverrideProps<AutocompleteProps>;
+    postCommentsId?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateCommentFormProps = React.PropsWithChildren<{
+    overrides?: CreateCommentFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateCommentFormInputValues) => CreateCommentFormInputValues;
+    onSuccess?: (fields: CreateCommentFormInputValues) => void;
+    onError?: (fields: CreateCommentFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateCommentFormInputValues) => CreateCommentFormInputValues;
+    onValidate?: CreateCommentFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateCommentForm(props: CreateCommentFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for model with composite keys 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -3836,6 +4568,536 @@ export declare type MyPostFormProps = React.PropsWithChildren<{
     onValidate?: MyPostFormValidationValues;
 } & React.CSSProperties>;
 export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests custom form tests should render a update form for parent of 1:m-belongsTo relationship 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+} from \\"@aws-amplify/ui-react\\";
+import {
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Org, Comment } from \\"../models\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function UpdateOrgForm(props) {
+  const {
+    id: idProp,
+    org,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    comments: [],
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [comments, setComments] = React.useState(initialValues.comments);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = orgRecord
+      ? { ...initialValues, ...orgRecord, comments: linkedComments }
+      : initialValues;
+    setName(cleanValues.name);
+    setComments(cleanValues.comments ?? []);
+    setCurrentCommentsValue(undefined);
+    setCurrentCommentsDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [orgRecord, setOrgRecord] = React.useState(org);
+  const [linkedComments, setLinkedComments] = React.useState([]);
+  const canUnlinkComments = false;
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp ? await DataStore.query(Org, idProp) : org;
+      setOrgRecord(record);
+      const linkedComments = record ? await record.comments.toArray() : [];
+      setLinkedComments(linkedComments);
+    };
+    queryData();
+  }, [idProp, org]);
+  React.useEffect(resetStateValues, [orgRecord, linkedComments]);
+  const [currentCommentsDisplayValue, setCurrentCommentsDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCommentsValue, setCurrentCommentsValue] =
+    React.useState(undefined);
+  const commentsRef = React.createRef();
+  const getIDValue = {
+    comments: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const commentsIdSet = new Set(
+    Array.isArray(comments)
+      ? comments.map((r) => getIDValue.comments?.(r))
+      : getIDValue.comments?.(comments)
+  );
+  const commentRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Comment,
+  }).items;
+  const getDisplayValue = {
+    comments: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    name: [],
+    comments: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          comments,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const promises = [];
+          const commentsToLink = [];
+          const commentsToUnLink = [];
+          const commentsSet = new Set();
+          const linkedCommentsSet = new Set();
+          comments.forEach((r) => commentsSet.add(getIDValue.comments?.(r)));
+          linkedComments.forEach((r) =>
+            linkedCommentsSet.add(getIDValue.comments?.(r))
+          );
+          linkedComments.forEach((r) => {
+            if (!commentsSet.has(getIDValue.comments?.(r))) {
+              commentsToUnLink.push(r);
+            }
+          });
+          comments.forEach((r) => {
+            if (!linkedCommentsSet.has(getIDValue.comments?.(r))) {
+              commentsToLink.push(r);
+            }
+          });
+          commentsToUnLink.forEach((original) => {
+            if (!canUnlinkComments) {
+              throw Error(
+                \`Comment \${original.id} cannot be unlinked from Org because orgCommentsId is a required field.\`
+              );
+            }
+            promises.push(
+              DataStore.save(
+                Comment.copyOf(original, (updated) => {
+                  updated.orgCommentsId = null;
+                  updated.Org = null;
+                })
+              )
+            );
+          });
+          commentsToLink.forEach((original) => {
+            promises.push(
+              DataStore.save(
+                Comment.copyOf(original, (updated) => {
+                  updated.orgCommentsId = orgRecord.id;
+                  updated.Org = orgRecord;
+                })
+              )
+            );
+          });
+          promises.push(
+            DataStore.save(
+              Org.copyOf(orgRecord, (updated) => {
+                Object.assign(updated, modelFields);
+              })
+            )
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"UpdateOrgForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              comments,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              comments: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.comments ?? values;
+          }
+          setComments(values);
+          setCurrentCommentsValue(undefined);
+          setCurrentCommentsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCommentsValue}
+        label={\\"Comments\\"}
+        items={comments}
+        hasError={errors.comments?.hasError}
+        getBadgeText={getDisplayValue.comments}
+        setFieldValue={(model) => {
+          setCurrentCommentsDisplayValue(getDisplayValue.comments(model));
+          setCurrentCommentsValue(model);
+        }}
+        inputFieldRef={commentsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Comments\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Comment\\"
+          value={currentCommentsDisplayValue}
+          options={commentRecords
+            .filter((r) => !commentsIdSet.has(getIDValue.comments?.(r)))
+            .map((r) => ({
+              id: getIDValue.comments?.(r),
+              label: getDisplayValue.comments?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCommentsValue(
+              commentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCommentsDisplayValue(label);
+          }}
+          onClear={() => {
+            setCurrentCommentsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.comments?.hasError) {
+              runValidationTasks(\\"comments\\", value);
+            }
+            setCurrentCommentsDisplayValue(value);
+            setCurrentCommentsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"comments\\", currentCommentsDisplayValue)
+          }
+          errorMessage={errors.comments?.errorMessage}
+          hasError={errors.comments?.hasError}
+          ref={commentsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"comments\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || org)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(idProp || org) || Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests custom form tests should render a update form for parent of 1:m-belongsTo relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Org, Comment } from \\"../models\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdateOrgFormInputValues = {
+    name?: string;
+    comments?: Comment[];
+};
+export declare type UpdateOrgFormValidationValues = {
+    name?: ValidationFunction<string>;
+    comments?: ValidationFunction<Comment>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateOrgFormOverridesProps = {
+    UpdateOrgFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    comments?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type UpdateOrgFormProps = React.PropsWithChildren<{
+    overrides?: UpdateOrgFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    org?: Org;
+    onSubmit?: (fields: UpdateOrgFormInputValues) => UpdateOrgFormInputValues;
+    onSuccess?: (fields: UpdateOrgFormInputValues) => void;
+    onError?: (fields: UpdateOrgFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateOrgFormInputValues) => UpdateOrgFormInputValues;
+    onValidate?: UpdateOrgFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdateOrgForm(props: UpdateOrgFormProps): React.ReactElement;
 "
 `;
 

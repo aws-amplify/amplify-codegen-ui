@@ -23,6 +23,7 @@ import {
   schemaWithAssumptions,
   schemaWithCPK,
   schemaWithCompositeKeys,
+  schemaWithHasManyBelongsTo,
 } from './__utils__/mock-schemas';
 
 describe('getGenericFromDataStore', () => {
@@ -74,6 +75,7 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
       relatedModelFields: ['student'],
+      belongsToFieldOnRelatedModel: 'student',
       canUnlinkAssociatedModel: false,
       relatedJoinFieldName: 'teacher',
       relatedJoinTableName: 'StudentTeacher',
@@ -82,6 +84,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Student',
+      belongsToFieldOnRelatedModel: 'teacher',
       relatedModelFields: ['teacher'],
       canUnlinkAssociatedModel: false,
       relatedJoinFieldName: 'student',
@@ -139,6 +142,7 @@ describe('getGenericFromDataStore', () => {
       type: 'HAS_MANY',
       relatedModelName: 'Teacher',
       relatedModelFields: ['student'],
+      belongsToFieldOnRelatedModel: 'student',
       canUnlinkAssociatedModel: false,
       relatedJoinFieldName: 'teacher',
       relatedJoinTableName: 'StudentTeacher',
@@ -147,6 +151,7 @@ describe('getGenericFromDataStore', () => {
     expect(genericSchema.models.Teacher.fields.students.relationship).toStrictEqual<HasManyRelationshipType>({
       type: 'HAS_MANY',
       relatedModelName: 'Student',
+      belongsToFieldOnRelatedModel: 'teacher',
       relatedModelFields: ['teacher'],
       canUnlinkAssociatedModel: false,
       relatedJoinFieldName: 'student',
@@ -257,6 +262,64 @@ describe('getGenericFromDataStore', () => {
       type: 'BELONGS_TO',
       relatedModelName: 'CompositeOwner',
       associatedFields: ['compositeDogCompositeOwnerLastName', 'compositeDogCompositeOwnerFirstName'],
+    });
+  });
+
+  it('should correctly map schema with hasMany-belongsTo', () => {
+    const genericSchema = getGenericFromDataStore(schemaWithHasManyBelongsTo);
+    const { User, Org, Post, Comment } = genericSchema.models;
+
+    expect(User.fields.comments.relationship).toStrictEqual({
+      type: 'HAS_MANY',
+      canUnlinkAssociatedModel: true,
+      relatedModelName: 'Comment',
+      relatedModelFields: ['userCommentsId'],
+      belongsToFieldOnRelatedModel: 'User',
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
+    });
+
+    expect(Post.fields.comments.relationship).toStrictEqual({
+      type: 'HAS_MANY',
+      canUnlinkAssociatedModel: true,
+      relatedModelName: 'Comment',
+      relatedModelFields: ['postCommentsId'],
+      belongsToFieldOnRelatedModel: 'post',
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
+    });
+
+    expect(Org.fields.comments.relationship).toStrictEqual({
+      type: 'HAS_MANY',
+      canUnlinkAssociatedModel: false,
+      relatedModelName: 'Comment',
+      relatedModelFields: ['orgCommentsId'],
+      belongsToFieldOnRelatedModel: 'Org',
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
+    });
+
+    expect(Comment.fields.postID.relationship).toStrictEqual({
+      type: 'BELONGS_TO',
+      relatedModelName: 'Post',
+    });
+
+    expect(Comment.fields.userCommentsId.relationship).toStrictEqual({
+      type: 'BELONGS_TO',
+      relatedModelName: 'User',
+      isHasManyIndex: true,
+    });
+
+    expect(Comment.fields.orgCommentsId.relationship).toStrictEqual({
+      type: 'BELONGS_TO',
+      relatedModelName: 'Org',
+      isHasManyIndex: true,
+    });
+
+    expect(Comment.fields.postCommentsId.relationship).toStrictEqual({
+      type: 'HAS_ONE',
+      relatedModelName: 'Post',
+      isHasManyIndex: true,
     });
   });
 });

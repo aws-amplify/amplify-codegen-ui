@@ -1,0 +1,12 @@
+{
+    "name": "UpdateOrgForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "Org"
+    },
+    "formActionType": "update",
+    "fields": {},
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

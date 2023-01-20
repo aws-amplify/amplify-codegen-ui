@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { CallExpression, factory, IfStatement, NodeFlags, SyntaxKind } from 'typescript';
+import { CallExpression, factory, IfStatement, NodeFlags, Statement, SyntaxKind } from 'typescript';
 import {
   FieldConfigMetadata,
   HasManyRelationshipType,
@@ -152,35 +152,55 @@ function createHasManyUpdateRelatedModelBlock({
   relatedModelFields,
   thisModelPrimaryKeys,
   thisModelRecord,
+  belongsToFieldOnRelatedModel,
+  setToNull,
 }: {
   relatedModelFields: string[];
   thisModelPrimaryKeys: string[];
   thisModelRecord: string;
+  belongsToFieldOnRelatedModel?: string;
+  setToNull?: boolean;
 }) {
-  return factory.createBlock(
-    // updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId;
-    relatedModelFields.map((relatedModelField, index) => {
-      const correspondingPrimaryKey = thisModelPrimaryKeys[index];
-      if (!correspondingPrimaryKey) {
-        throw new InternalError(`Corresponding primary key not found for ${relatedModelField}`);
-      }
+  const statements: Statement[] = relatedModelFields.map((relatedModelField, index) => {
+    const correspondingPrimaryKey = thisModelPrimaryKeys[index];
+    if (!correspondingPrimaryKey) {
+      throw new InternalError(`Corresponding primary key not found for ${relatedModelField}`);
+    }
 
-      return factory.createExpressionStatement(
+    // updated.cPKTeacherID = cPKTeacherRecord.specialTeacherId;
+    return factory.createExpressionStatement(
+      factory.createBinaryExpression(
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier('updated'),
+          factory.createIdentifier(relatedModelField),
+        ),
+        factory.createToken(SyntaxKind.EqualsToken),
+        setToNull
+          ? factory.createNull()
+          : factory.createPropertyAccessExpression(
+              factory.createIdentifier(thisModelRecord),
+              factory.createIdentifier(correspondingPrimaryKey),
+            ),
+      ),
+    );
+  });
+
+  // updated.Org = orgRecord;
+  if (belongsToFieldOnRelatedModel) {
+    statements.push(
+      factory.createExpressionStatement(
         factory.createBinaryExpression(
           factory.createPropertyAccessExpression(
             factory.createIdentifier('updated'),
-            factory.createIdentifier(relatedModelField),
+            factory.createIdentifier(belongsToFieldOnRelatedModel),
           ),
           factory.createToken(SyntaxKind.EqualsToken),
-          factory.createPropertyAccessExpression(
-            factory.createIdentifier(thisModelRecord),
-            factory.createIdentifier(correspondingPrimaryKey),
-          ),
+          setToNull ? factory.createNull() : factory.createIdentifier(thisModelRecord),
         ),
-      );
-    }),
-    true,
-  );
+      ),
+    );
+  }
+  return factory.createBlock(statements, true);
 }
 
 export const buildManyToManyRelationshipDataStoreStatements = (
@@ -1259,7 +1279,8 @@ export const buildHasManyRelationshipDataStoreStatements = (
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
   fieldName = fieldConfigMetaData.sanitizedFieldName || fieldName;
-  const { relatedModelName, relatedModelFields } = fieldConfigMetaData.relationship as HasManyRelationshipType;
+  const { relatedModelName, relatedModelFields, belongsToFieldOnRelatedModel } =
+    fieldConfigMetaData.relationship as HasManyRelationshipType;
   const linkedDataName = getLinkedDataName(fieldName);
   const dataToLink = `${lowerCaseFirst(fieldName)}ToLink`;
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
@@ -1620,21 +1641,13 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                   ],
                                   undefined,
                                   factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                  factory.createBlock(
-                                    relatedModelFields.map((relatedModelField) =>
-                                      factory.createExpressionStatement(
-                                        factory.createBinaryExpression(
-                                          factory.createPropertyAccessExpression(
-                                            factory.createIdentifier('updated'),
-                                            factory.createIdentifier(relatedModelField),
-                                          ),
-                                          factory.createToken(SyntaxKind.EqualsToken),
-                                          factory.createNull(),
-                                        ),
-                                      ),
-                                    ),
-                                    true,
-                                  ),
+                                  createHasManyUpdateRelatedModelBlock({
+                                    relatedModelFields,
+                                    thisModelPrimaryKeys,
+                                    thisModelRecord: `${lowerCaseFirst(modelName)}Record`,
+                                    belongsToFieldOnRelatedModel,
+                                    setToNull: true,
+                                  }),
                                 ),
                               ],
                             ),
@@ -1719,6 +1732,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                     relatedModelFields,
                                     thisModelPrimaryKeys,
                                     thisModelRecord: `${lowerCaseFirst(modelName)}Record`,
+                                    belongsToFieldOnRelatedModel,
                                   }),
                                 ),
                               ],
@@ -1822,6 +1836,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                                           relatedModelFields,
                                           thisModelPrimaryKeys,
                                           thisModelRecord: savedModelName,
+                                          belongsToFieldOnRelatedModel,
                                         }),
                                       ),
                                     ],
