@@ -1675,12 +1675,14 @@ export default function CreateCompositeDogForm(props) {
               modelFields[key] = undefined;
             }
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            description: modelFields.description,
+            CompositeBowl: modelFields.CompositeBowl,
+            CompositeOwner: modelFields.CompositeOwner,
+          };
           const compositeDog = await DataStore.save(
-            new CompositeDog({
-              ...modelFields,
-              CompositeToys: undefined,
-              CompositeVets: undefined,
-            })
+            new CompositeDog(modelFieldsToSave)
           );
           const promises = [];
           const compositeOwnerToLink = modelFields.CompositeOwner;
@@ -4153,17 +4155,20 @@ export default function MyPostForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(
-            new Post({
-              ...modelFields,
-              nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
-                JSON.parse(s)
-              ),
-              nonModelField: modelFields.nonModelField
-                ? JSON.parse(modelFields.nonModelField)
-                : modelFields.nonModelField,
-            })
-          );
+          const modelFieldsToSave = {
+            username: modelFields.username,
+            caption: modelFields.caption,
+            post_url: modelFields.post_url,
+            metadata: modelFields.metadata,
+            profile_url: modelFields.profile_url,
+            nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
+              JSON.parse(s)
+            ),
+            nonModelField: modelFields.nonModelField
+              ? JSON.parse(modelFields.nonModelField)
+              : modelFields.nonModelField,
+          };
+          await DataStore.save(new Post(modelFieldsToSave));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -4912,10 +4917,13 @@ export default function UpdateOrgForm(props) {
               )
             );
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+          };
           promises.push(
             DataStore.save(
               Org.copyOf(orgRecord, (updated) => {
-                Object.assign(updated, modelFields);
+                Object.assign(updated, modelFieldsToSave);
               })
             )
           );
@@ -5697,15 +5705,21 @@ export default function UpdateCompositeDogForm(props) {
               );
             }
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            description: modelFields.description,
+            CompositeBowl: modelFields.CompositeBowl,
+            CompositeOwner: modelFields.CompositeOwner,
+          };
           promises.push(
             DataStore.save(
               CompositeDog.copyOf(compositeDogRecord, (updated) => {
-                Object.assign(updated, modelFields);
-                if (!modelFields.CompositeBowl) {
+                Object.assign(updated, modelFieldsToSave);
+                if (!modelFieldsToSave.CompositeBowl) {
                   updated.compositeDogCompositeBowlShape = undefined;
                   updated.compositeDogCompositeBowlSize = undefined;
                 }
-                if (!modelFields.CompositeOwner) {
+                if (!modelFieldsToSave.CompositeOwner) {
                   updated.compositeDogCompositeOwnerLastName = undefined;
                   updated.compositeDogCompositeOwnerFirstName = undefined;
                 }
@@ -6696,11 +6710,15 @@ export default function UpdateCPKTeacherForm(props) {
               )
             );
           });
+          const modelFieldsToSave = {
+            specialTeacherId: modelFields.specialTeacherId,
+            CPKStudent: modelFields.CPKStudent,
+          };
           promises.push(
             DataStore.save(
               CPKTeacher.copyOf(cPKTeacherRecord, (updated) => {
-                Object.assign(updated, modelFields);
-                if (!modelFields.CPKStudent) {
+                Object.assign(updated, modelFieldsToSave);
+                if (!modelFieldsToSave.CPKStudent) {
                   updated.cPKTeacherCPKStudentSpecialStudentId = undefined;
                 }
               })
@@ -10707,17 +10725,20 @@ export default function MyPostForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(
-            new Post({
-              ...modelFields,
-              nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
-                JSON.parse(s)
-              ),
-              nonModelField: modelFields.nonModelField
-                ? JSON.parse(modelFields.nonModelField)
-                : modelFields.nonModelField,
-            })
-          );
+          const modelFieldsToSave = {
+            caption: modelFields.caption,
+            username: modelFields.username,
+            post_url: modelFields.post_url,
+            metadata: modelFields.metadata,
+            profile_url: modelFields.profile_url,
+            nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
+              JSON.parse(s)
+            ),
+            nonModelField: modelFields.nonModelField
+              ? JSON.parse(modelFields.nonModelField)
+              : modelFields.nonModelField,
+          };
+          await DataStore.save(new Post(modelFieldsToSave));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -11354,12 +11375,11 @@ export default function TagCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          const tag = await DataStore.save(
-            new Tag({
-              ...modelFields,
-              Posts: undefined,
-            })
-          );
+          const modelFieldsToSave = {
+            label: modelFields.label,
+            statuses: modelFields.statuses,
+          };
+          const tag = await DataStore.save(new Tag(modelFieldsToSave));
           const promises = [];
           promises.push(
             ...Posts.reduce((promises, post) => {
@@ -12445,12 +12465,10 @@ export default function SchoolCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          const school = await DataStore.save(
-            new School({
-              ...modelFields,
-              Students: undefined,
-            })
-          );
+          const modelFieldsToSave = {
+            name: modelFields.name,
+          };
+          const school = await DataStore.save(new School(modelFieldsToSave));
           const promises = [];
           promises.push(
             ...Students.reduce((promises, original) => {
@@ -13435,12 +13453,11 @@ export default function TagCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          const tag = await DataStore.save(
-            new Tag({
-              ...modelFields,
-              Posts: undefined,
-            })
-          );
+          const modelFieldsToSave = {
+            label: modelFields.label,
+            statuses: modelFields.statuses,
+          };
+          const tag = await DataStore.save(new Tag(modelFieldsToSave));
           const promises = [];
           promises.push(
             ...Posts.reduce((promises, post) => {
@@ -14610,17 +14627,22 @@ export default function MyPostForm(props) {
               modelFields[key] = undefined;
             }
           });
+          const modelFieldsToSave = {
+            caption: modelFields.caption,
+            username: modelFields.username,
+            profile_url: modelFields.profile_url,
+            post_url: modelFields.post_url,
+            metadata: modelFields.metadata,
+            nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
+              JSON.parse(s)
+            ),
+            nonModelField: modelFields.nonModelField
+              ? JSON.parse(modelFields.nonModelField)
+              : modelFields.nonModelField,
+          };
           await DataStore.save(
             Post.copyOf(postRecord, (updated) => {
-              Object.assign(updated, {
-                ...modelFields,
-                nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
-                  JSON.parse(s)
-                ),
-                nonModelField: modelFields.nonModelField
-                  ? JSON.parse(modelFields.nonModelField)
-                  : modelFields.nonModelField,
-              });
+              Object.assign(updated, modelFieldsToSave);
             })
           );
           if (onSuccess) {
@@ -15385,10 +15407,13 @@ export default function SchoolUpdateForm(props) {
               )
             );
           });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+          };
           promises.push(
             DataStore.save(
               School.copyOf(schoolRecord, (updated) => {
-                Object.assign(updated, modelFields);
+                Object.assign(updated, modelFieldsToSave);
               })
             )
           );
@@ -16536,10 +16561,14 @@ export default function TagUpdateForm(props) {
               );
             }
           });
+          const modelFieldsToSave = {
+            label: modelFields.label,
+            statuses: modelFields.statuses,
+          };
           promises.push(
             DataStore.save(
               Tag.copyOf(tagRecord, (updated) => {
-                Object.assign(updated, modelFields);
+                Object.assign(updated, modelFieldsToSave);
               })
             )
           );
@@ -17074,7 +17103,13 @@ export default function MyFlexCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new Flex0(modelFields));
+          const modelFieldsToSave = {
+            username: modelFields.username,
+            caption: modelFields.caption,
+            tags: modelFields.tags,
+            profile_url: modelFields.profile_url,
+          };
+          await DataStore.save(new Flex0(modelFieldsToSave));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -19992,9 +20027,15 @@ export default function MyFlexUpdateForm(props) {
               modelFields[key] = undefined;
             }
           });
+          const modelFieldsToSave = {
+            username: modelFields.username,
+            caption: modelFields.caption,
+            tags: modelFields.tags,
+            profile_url: modelFields.profile_url,
+          };
           await DataStore.save(
             Flex0.copyOf(flexRecord, (updated) => {
-              Object.assign(updated, modelFields);
+              Object.assign(updated, modelFieldsToSave);
             })
           );
           if (onSuccess) {
@@ -20582,17 +20623,20 @@ export default function PostCreateFormRow(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(
-            new Post({
-              ...modelFields,
-              nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
-                JSON.parse(s)
-              ),
-              nonModelField: modelFields.nonModelField
-                ? JSON.parse(modelFields.nonModelField)
-                : modelFields.nonModelField,
-            })
-          );
+          const modelFieldsToSave = {
+            username: modelFields.username,
+            caption: modelFields.caption,
+            post_url: modelFields.post_url,
+            profile_url: modelFields.profile_url,
+            metadata: modelFields.metadata,
+            nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
+              JSON.parse(s)
+            ),
+            nonModelField: modelFields.nonModelField
+              ? JSON.parse(modelFields.nonModelField)
+              : modelFields.nonModelField,
+          };
+          await DataStore.save(new Post(modelFieldsToSave));
           if (onSuccess) {
             onSuccess(modelFields);
           }

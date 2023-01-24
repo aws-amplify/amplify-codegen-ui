@@ -1864,11 +1864,11 @@ export const buildHasManyRelationshipDataStoreStatements = (
 
 export const getRelationshipBasedRecordUpdateStatements = ({
   updatedObjectName,
-  modelFieldsObjectName,
+  savedObjectName,
   fieldConfigs,
 }: {
   updatedObjectName: string;
-  modelFieldsObjectName: string;
+  savedObjectName: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
 }): IfStatement[] => {
   const statements: IfStatement[] = [];
@@ -1893,7 +1893,7 @@ export const getRelationshipBasedRecordUpdateStatements = ({
       factory.createIfStatement(
         factory.createPrefixUnaryExpression(
           SyntaxKind.ExclamationToken,
-          buildAccessChain([modelFieldsObjectName, modelField], false),
+          buildAccessChain([savedObjectName, modelField], false),
         ),
         factory.createBlock(
           scalarFields.map((scalarField) =>
