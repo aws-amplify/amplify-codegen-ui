@@ -21,7 +21,9 @@ import {
   SyntaxKind,
   Expression,
   ObjectLiteralExpression,
+  PropertyAssignment,
 } from 'typescript';
+import { buildAccessChain } from './form-state';
 /**
  * JSON.parse(s)
  */
@@ -66,13 +68,17 @@ export const parseArrayValues = (accessName: PropertyAccessExpression | Identifi
  * singleFields =
  *  nonModelField: modelFields.nonModelField ? JSON.parse(modelFields.nonModelField) : modelFields.nonModelField
  */
-export const generateParsePropertyAssignments = (arrayFields: string[], nonArrayFields: string[]) => {
+export const generateParsePropertyAssignments = (
+  arrayFields: string[],
+  nonArrayFields: string[],
+  modelFieldsObjectName: string,
+) => {
   const parseArrayFields = arrayFields.map((field) =>
     factory.createPropertyAssignment(
       factory.createIdentifier(field),
       parseArrayValues(
         factory.createPropertyAccessExpression(
-          factory.createIdentifier('modelFields'),
+          factory.createIdentifier(modelFieldsObjectName),
           factory.createIdentifier(field),
         ),
       ),
@@ -83,19 +89,19 @@ export const generateParsePropertyAssignments = (arrayFields: string[], nonArray
       factory.createIdentifier(field),
       factory.createConditionalExpression(
         factory.createPropertyAccessExpression(
-          factory.createIdentifier('modelFields'),
+          factory.createIdentifier(modelFieldsObjectName),
           factory.createIdentifier(field),
         ),
         factory.createToken(SyntaxKind.QuestionToken),
         parseValue(
           factory.createPropertyAccessExpression(
-            factory.createIdentifier('modelFields'),
+            factory.createIdentifier(modelFieldsObjectName),
             factory.createIdentifier(field),
           ),
         ),
         factory.createToken(SyntaxKind.ColonToken),
         factory.createPropertyAccessExpression(
-          factory.createIdentifier('modelFields'),
+          factory.createIdentifier(modelFieldsObjectName),
           factory.createIdentifier(field),
         ),
       ),
@@ -105,14 +111,21 @@ export const generateParsePropertyAssignments = (arrayFields: string[], nonArray
 };
 
 //
-export const generateUpdateModelObject = (
+export const generateModelObjectToSave = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   modelFieldsObjectName: string,
-) => {
+): { modelObjectToSave: ObjectLiteralExpression; isDifferentFromModelObject: boolean } => {
   const nonModelFields: string[] = [];
   const nonModelArrayFields: string[] = [];
+  const inheritFromModelFieldsPropertyAssignments: PropertyAssignment[] = [];
+  let isDifferentFromModelObject = false;
 
-  Object.entries(fieldConfigs).forEach(([name, { dataType, sanitizedFieldName, isArray }]) => {
+  Object.entries(fieldConfigs).forEach(([name, { dataType, sanitizedFieldName, isArray, relationship }]) => {
+    const shouldExclude = !dataType || relationship?.type === 'HAS_MANY';
+    if (shouldExclude) {
+      isDifferentFromModelObject = true;
+      return;
+    }
     if (isNonModelDataType(dataType)) {
       const renderedFieldName = sanitizedFieldName || name;
       if (!isArray) {
@@ -120,15 +133,25 @@ export const generateUpdateModelObject = (
       } else {
         nonModelArrayFields.push(renderedFieldName);
       }
+      isDifferentFromModelObject = true;
+      return;
     }
-  });
-  const parsePropertyAssignments = generateParsePropertyAssignments(nonModelArrayFields, nonModelFields);
-  let updateModelObject: ObjectLiteralExpression | Identifier = factory.createIdentifier(modelFieldsObjectName);
-  if (parsePropertyAssignments.length) {
-    updateModelObject = factory.createObjectLiteralExpression(
-      [factory.createSpreadAssignment(factory.createIdentifier(modelFieldsObjectName)), ...parsePropertyAssignments],
-      true,
+
+    inheritFromModelFieldsPropertyAssignments.push(
+      factory.createPropertyAssignment(
+        factory.createIdentifier(name),
+        buildAccessChain([modelFieldsObjectName, name], false),
+      ),
     );
-  }
-  return updateModelObject;
+  });
+  const parsePropertyAssignments = generateParsePropertyAssignments(
+    nonModelArrayFields,
+    nonModelFields,
+    modelFieldsObjectName,
+  );
+  const modelObjectToSave = factory.createObjectLiteralExpression(
+    [...inheritFromModelFieldsPropertyAssignments, ...parsePropertyAssignments],
+    true,
+  );
+  return { modelObjectToSave, isDifferentFromModelObject };
 };

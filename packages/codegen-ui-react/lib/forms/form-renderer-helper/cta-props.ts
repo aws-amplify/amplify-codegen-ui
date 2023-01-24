@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, GenericDataSchema, isNonModelDataType } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, GenericDataSchema } from '@aws-amplify/codegen-ui';
 import {
   factory,
   NodeFlags,
@@ -22,7 +22,6 @@ import {
   Statement,
   VariableStatement,
   ExpressionStatement,
-  PropertyAssignment,
   IfStatement,
 } from 'typescript';
 import { getSetNameIdentifier, lowerCaseFirst } from '../../helpers';
@@ -35,24 +34,43 @@ import {
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { ImportCollection } from '../../imports';
 import { getBiDirectionalRelationshipStatements } from './bidirectional-relationship';
-import { generateParsePropertyAssignments, generateUpdateModelObject } from './parse-fields';
+import { generateModelObjectToSave } from './parse-fields';
+
+const getRecordCreateDataStoreCallExpression = ({
+  savedObjectName,
+  importedModelName,
+}: {
+  savedObjectName: string;
+  importedModelName: string;
+}) => {
+  return factory.createCallExpression(
+    factory.createPropertyAccessExpression(factory.createIdentifier('DataStore'), factory.createIdentifier('save')),
+    undefined,
+    [
+      factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
+        factory.createIdentifier(savedObjectName),
+      ]),
+    ],
+  );
+};
 
 const getRecordUpdateDataStoreCallExpression = ({
+  savedObjectName,
   modelName,
   importedModelName,
   fieldConfigs,
 }: {
+  savedObjectName: string;
   modelName: string;
   importedModelName: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
 }) => {
   const updatedObjectName = 'updated';
-  const modelFieldsObjectName = 'modelFields';
   // TODO: remove after DataStore addresses issue: https://github.com/aws-amplify/amplify-js/issues/10750
   // temporary solution to remove hasOne & belongsTo records
   const relationshipBasedUpdates = getRelationshipBasedRecordUpdateStatements({
     updatedObjectName,
-    modelFieldsObjectName,
+    savedObjectName,
     fieldConfigs,
   });
 
@@ -93,10 +111,7 @@ const getRecordUpdateDataStoreCallExpression = ({
                       factory.createIdentifier('assign'),
                     ),
                     undefined,
-                    [
-                      factory.createIdentifier(updatedObjectName),
-                      generateUpdateModelObject(fieldConfigs, modelFieldsObjectName),
-                    ],
+                    [factory.createIdentifier(updatedObjectName), factory.createIdentifier(savedObjectName)],
                   ),
                 ),
                 ...relationshipBasedUpdates,
@@ -203,25 +218,18 @@ export const buildDataStoreExpression = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   dataSchema: GenericDataSchema,
   importCollection: ImportCollection,
-) => {
+): Statement[] => {
+  const modelFieldsObjectName = 'modelFields';
+  const modelFieldsObjectToSaveName = 'modelFieldsToSave';
+
   const thisModelPrimaryKeys = dataSchema.models[modelName].primaryKeys;
   // promises.push(...statements that handle hasMany/ manyToMany/ hasOne-belongsTo relationships)
   const relationshipsPromisesAccessStatements: (VariableStatement | ExpressionStatement | IfStatement)[] = [];
-  const hasManyRelationshipFields: string[] = [];
-  const nonModelArrayFields: string[] = [];
   const savedRecordName = lowerCaseFirst(modelName);
-  const nonModelFields: string[] = [];
 
   Object.entries(fieldConfigs).forEach((fieldConfig) => {
-    const [fieldName, fieldConfigMetaData] = fieldConfig;
-    const { dataType, isArray } = fieldConfigMetaData;
-    if (isNonModelDataType(dataType)) {
-      if (isArray) {
-        nonModelArrayFields.push(fieldName);
-      } else {
-        nonModelFields.push(fieldName);
-      }
-    }
+    const [, fieldConfigMetaData] = fieldConfig;
+
     relationshipsPromisesAccessStatements.push(
       ...getBiDirectionalRelationshipStatements({
         formActionType: dataStoreActionType,
@@ -233,8 +241,6 @@ export const buildDataStoreExpression = (
       }),
     );
     if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
-      hasManyRelationshipFields.push(fieldName);
-
       if (isManyToManyRelationship(fieldConfigMetaData)) {
         const joinTable = dataSchema.models[fieldConfigMetaData.relationship.relatedJoinTableName];
         relationshipsPromisesAccessStatements.push(
@@ -280,25 +286,39 @@ export const buildDataStoreExpression = (
     );
   }
 
-  const propertyAssignments: PropertyAssignment[] = [];
+  const { modelObjectToSave, isDifferentFromModelObject } = generateModelObjectToSave(
+    fieldConfigs,
+    modelFieldsObjectName,
+  );
 
-  hasManyRelationshipFields.forEach((field) => {
-    // CPKProjects: undefined
-    propertyAssignments.push(
-      factory.createPropertyAssignment(factory.createIdentifier(field), factory.createIdentifier('undefined')),
+  const modelObjectToSaveStatements: Statement[] = [];
+
+  let savedObjectName = modelFieldsObjectName;
+  if (isDifferentFromModelObject) {
+    savedObjectName = modelFieldsObjectToSaveName;
+    modelObjectToSaveStatements.push(
+      factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              factory.createIdentifier(modelFieldsObjectToSaveName),
+              undefined,
+              undefined,
+              modelObjectToSave,
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      ),
     );
+  }
+
+  const recordCreateDataStoreCallExpression = getRecordCreateDataStoreCallExpression({
+    savedObjectName,
+    importedModelName,
   });
-
-  propertyAssignments.push(...generateParsePropertyAssignments(nonModelArrayFields, nonModelFields));
-
-  const modelFieldsObject = propertyAssignments.length
-    ? factory.createObjectLiteralExpression(
-        [factory.createSpreadAssignment(factory.createIdentifier('modelFields')), ...propertyAssignments],
-        true,
-      )
-    : factory.createIdentifier('modelFields');
-
-  const genericSaveStatement = relationshipsPromisesAccessStatements.length
+  const genericCreateStatement = relationshipsPromisesAccessStatements.length
     ? [
         factory.createVariableStatement(
           undefined,
@@ -308,44 +328,14 @@ export const buildDataStoreExpression = (
                 factory.createIdentifier(savedRecordName),
                 undefined,
                 undefined,
-                factory.createAwaitExpression(
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('DataStore'),
-                      factory.createIdentifier('save'),
-                    ),
-                    undefined,
-                    [
-                      factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
-                        modelFieldsObject,
-                      ]),
-                    ],
-                  ),
-                ),
+                factory.createAwaitExpression(recordCreateDataStoreCallExpression),
               ),
             ],
             NodeFlags.Const,
           ),
         ),
       ]
-    : [
-        factory.createExpressionStatement(
-          factory.createAwaitExpression(
-            factory.createCallExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier('DataStore'),
-                factory.createIdentifier('save'),
-              ),
-              undefined,
-              [
-                factory.createNewExpression(factory.createIdentifier(importedModelName), undefined, [
-                  modelFieldsObject,
-                ]),
-              ],
-            ),
-          ),
-        ),
-      ];
+    : [factory.createExpressionStatement(factory.createAwaitExpression(recordCreateDataStoreCallExpression))];
 
   const resolvePromisesStatement = factory.createExpressionStatement(
     factory.createAwaitExpression(
@@ -357,6 +347,13 @@ export const buildDataStoreExpression = (
     ),
   );
 
+  const recordUpdateDataStoreCallExpression = getRecordUpdateDataStoreCallExpression({
+    savedObjectName,
+    modelName,
+    importedModelName,
+    fieldConfigs,
+  });
+
   const genericUpdateStatement = relationshipsPromisesAccessStatements.length
     ? [
         factory.createExpressionStatement(
@@ -366,23 +363,21 @@ export const buildDataStoreExpression = (
               factory.createIdentifier('push'),
             ),
             undefined,
-            [getRecordUpdateDataStoreCallExpression({ modelName, importedModelName, fieldConfigs })],
+            [recordUpdateDataStoreCallExpression],
           ),
         ),
         resolvePromisesStatement,
       ]
-    : [
-        factory.createExpressionStatement(
-          factory.createAwaitExpression(
-            getRecordUpdateDataStoreCallExpression({ modelName, importedModelName, fieldConfigs }),
-          ),
-        ),
-      ];
+    : [factory.createExpressionStatement(factory.createAwaitExpression(recordUpdateDataStoreCallExpression))];
 
   if (dataStoreActionType === 'update') {
-    return [...relationshipsPromisesAccessStatements, ...genericUpdateStatement];
+    return [...relationshipsPromisesAccessStatements, ...modelObjectToSaveStatements, ...genericUpdateStatement];
   }
-  const createStatements = [...genericSaveStatement, ...relationshipsPromisesAccessStatements];
+  const createStatements = [
+    ...modelObjectToSaveStatements,
+    ...genericCreateStatement,
+    ...relationshipsPromisesAccessStatements,
+  ];
   if (relationshipsPromisesAccessStatements.length) {
     createStatements.push(resolvePromisesStatement);
   }
