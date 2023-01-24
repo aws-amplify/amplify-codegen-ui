@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+/* eslint-disable no-template-curly-in-string */
 import { ImportSource } from '../imports';
 import { generateComponentOnlyWithAmplifyFormRenderer, generateWithAmplifyFormRenderer } from './__utils__';
 
@@ -535,7 +536,6 @@ describe('amplify form renderer tests', () => {
         expect(componentText).not.toContain('postID');
         expect(componentText).not.toContain('userCommentsId');
         expect(componentText).not.toContain('orgCommentsId');
-
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });
@@ -547,9 +547,70 @@ describe('amplify form renderer tests', () => {
           undefined,
           { isNonModelSupported: true, isRelationshipSupported: true },
         );
-
         expect(componentText).toContain('updated.Org = orgRecord');
         expect(componentText).toContain('updated.Org = null');
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render thrown error for required parent field 1:1 relationships - Create', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/dog-owner-create',
+          'datastore/dog-owner-required',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+
+        expect(componentText).toContain('if (JSON.stringify(dogToUnlink) !== JSON.stringify(dog)) {');
+        expect(componentText).toContain('throw Error(');
+        expect(componentText).toContain(
+          'Owner ${ownerToLink.id} cannot be linked to Dog because it is already linked to another Dog.',
+        );
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render thrown error for required parent field 1:1 relationships - Update', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/dog-owner-update',
+          'datastore/dog-owner-required',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+
+        expect(componentText).toContain('throw Error(');
+        expect(componentText).toContain('if (JSON.stringify(dogToUnlink) !== JSON.stringify(dogRecord)) {');
+        expect(componentText).toContain(
+          'Owner ${ownerToLink.id} cannot be linked to Dog because it is already linked to another Dog.',
+        );
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render thrown error for required related field 1:1 relationships - Create', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/owner-dog-create',
+          'datastore/dog-owner-required',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+
+        expect(componentText).not.toContain('cannot be unlinked because');
+        expect(componentText).not.toContain('cannot be linked to ');
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render thrown error for required related field 1:1 relationships - Update', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/owner-dog-update',
+          'datastore/dog-owner-required',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+
+        expect(componentText).toContain('throw Error(');
+        expect(componentText).toContain('Dog ${dogToUnlink.id} cannot be unlinked because Dog requires Owner.');
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });

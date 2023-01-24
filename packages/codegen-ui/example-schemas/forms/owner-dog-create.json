@@ -1,0 +1,12 @@
+{
+  "name": "CreateOwnerForm",
+  "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "Owner"
+  },
+  "formActionType": "create",
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {}
+}

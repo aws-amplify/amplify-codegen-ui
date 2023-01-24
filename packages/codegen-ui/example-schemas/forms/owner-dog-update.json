@@ -1,0 +1,12 @@
+{
+  "name": "UpdateOwnerForm",
+  "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "Owner"
+  },
+  "formActionType": "update",
+  "fields": {},
+  "sectionalElements": {},
+  "style": {},
+  "cta": {}
+}

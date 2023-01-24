@@ -15,7 +15,7 @@
  */
 import { GenericDataSchema, GenericDataField } from '@aws-amplify/codegen-ui';
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
-import { factory, NodeFlags, SyntaxKind } from 'typescript';
+import { factory, NodeFlags, SyntaxKind, ThrowStatement } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
 import { ImportCollection, ImportSource } from '../../imports';
 import { isModelDataType } from './render-checkers';
@@ -35,6 +35,7 @@ function getFieldBiDirectionalWith({
       fieldBiDirectionalWithName: string;
       fieldBiDirectionalWith: GenericDataField;
       associatedFieldsBiDirectionalWith: string[];
+      fieldBiDirectionalWithPrimaryKeys: string[];
     }
   | undefined {
   const [, fieldConfigMetaData] = fieldConfig;
@@ -69,6 +70,7 @@ function getFieldBiDirectionalWith({
         relatedModelName,
         fieldBiDirectionalWithName: name,
         fieldBiDirectionalWith: field,
+        fieldBiDirectionalWithPrimaryKeys: dataSchema.models[relatedModelName].primaryKeys,
         associatedFieldsBiDirectionalWith: field.relationship.associatedFields
           ? field.relationship.associatedFields
           : [],
@@ -77,6 +79,151 @@ function getFieldBiDirectionalWith({
   }
 
   return undefined;
+}
+
+function unlinkModelRecordExpression({
+  modelName,
+  recordNameToUnlink,
+  fieldName,
+  associatedFields,
+}: {
+  modelName: string;
+  recordNameToUnlink: string;
+  fieldName: string;
+  associatedFields: string[];
+}) {
+  return factory.createExpressionStatement(
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
+      undefined,
+      [
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('DataStore'),
+            factory.createIdentifier('save'),
+          ),
+          undefined,
+          [
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier(modelName),
+                factory.createIdentifier('copyOf'),
+              ),
+              undefined,
+              [
+                factory.createIdentifier(recordNameToUnlink),
+                factory.createArrowFunction(
+                  undefined,
+                  undefined,
+                  [
+                    factory.createParameterDeclaration(
+                      undefined,
+                      undefined,
+                      undefined,
+                      factory.createIdentifier('updated'),
+                      undefined,
+                      undefined,
+                      undefined,
+                    ),
+                  ],
+                  undefined,
+                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                  factory.createBlock(
+                    [
+                      factory.createExpressionStatement(
+                        factory.createBinaryExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('updated'),
+                            factory.createIdentifier(fieldName),
+                          ),
+                          factory.createToken(SyntaxKind.EqualsToken),
+                          factory.createIdentifier('undefined'),
+                        ),
+                      ),
+                      ...associatedFields.map((field) =>
+                        factory.createExpressionStatement(
+                          factory.createBinaryExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('updated'),
+                              factory.createIdentifier(field),
+                            ),
+                            factory.createToken(SyntaxKind.EqualsToken),
+                            factory.createIdentifier('undefined'),
+                          ),
+                        ),
+                      ),
+                    ],
+                    true,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+function unlinkModelThrowErrorExpression(
+  relatedModelName: string,
+  relatedRecordToLink: string,
+  modelName: string,
+  primaryKey: string,
+  isFieldRequired: boolean,
+) {
+  // Dog dkflj423dfl cannot be unlinked because Dog requires an Owner.
+  // "Image 398038 cannot be linked to FakeModel because it is already linked to another FakeModel"
+  return factory.createThrowStatement(
+    factory.createCallExpression(factory.createIdentifier('Error'), undefined, [
+      factory.createTemplateExpression(factory.createTemplateHead(`${relatedModelName} `), [
+        factory.createTemplateSpan(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(relatedRecordToLink),
+            factory.createIdentifier(primaryKey),
+          ),
+          factory.createTemplateTail(
+            isFieldRequired
+              ? ` cannot be unlinked because ${relatedModelName} requires ${modelName}.`
+              : ` cannot be linked to ${modelName} because it is already linked to another ${modelName}.`,
+          ),
+        ),
+      ]),
+    ]),
+  );
+}
+
+/*
+ if (JSON.stringify(imageToUnlink) !== JSON.stringify(imageRecord)) {
+        //throwExpression
+    }
+ */
+function wrapThrowInIfStatement({
+  thisModelRecordToUnlink,
+  currentRecord,
+  throwExpression,
+}: {
+  thisModelRecordToUnlink: string;
+  currentRecord: string;
+  throwExpression: ThrowStatement;
+}) {
+  return factory.createIfStatement(
+    factory.createBinaryExpression(
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier('JSON'), factory.createIdentifier('stringify')),
+        undefined,
+        [factory.createIdentifier(thisModelRecordToUnlink)],
+      ),
+      factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier('JSON'), factory.createIdentifier('stringify')),
+        undefined,
+        [factory.createIdentifier(currentRecord)],
+      ),
+    ),
+    factory.createBlock([throwExpression], true),
+    undefined,
+  );
 }
 
 export function getBiDirectionalRelationshipStatements({
@@ -106,8 +253,13 @@ export function getBiDirectionalRelationshipStatements({
 
   const currentRecord = formActionType === 'update' ? getRecordName(modelName) : savedRecordName;
 
-  const { relatedModelName, fieldBiDirectionalWithName, associatedFieldsBiDirectionalWith } =
-    getFieldBiDirectionalWithReturnValue;
+  const {
+    relatedModelName,
+    fieldBiDirectionalWithName,
+    associatedFieldsBiDirectionalWith,
+    fieldBiDirectionalWith,
+    fieldBiDirectionalWithPrimaryKeys,
+  } = getFieldBiDirectionalWithReturnValue;
   const [fieldName, { relationship }] = fieldConfig;
   const importedRelatedModelName = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, relatedModelName);
   const importedThisModelName = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, modelName);
@@ -118,7 +270,10 @@ export function getBiDirectionalRelationshipStatements({
       ? relationship.associatedFields
       : [];
 
+  const isFieldRequired = dataSchema.models[modelName].fields[fieldName].required;
+  const isFieldBiDirectionalWithRequired = fieldBiDirectionalWith.required;
   const statements: any[] = [];
+
   if (formActionType === 'update') {
     const relatedRecordToUnlink = `${lowerCaseFirst(relatedModelName)}ToUnlink`;
     /**
@@ -156,80 +311,24 @@ export function getBiDirectionalRelationshipStatements({
           factory.createIdentifier(relatedRecordToUnlink),
           factory.createBlock(
             [
-              factory.createExpressionStatement(
-                factory.createCallExpression(
-                  factory.createPropertyAccessExpression(
-                    factory.createIdentifier('promises'),
-                    factory.createIdentifier('push'),
-                  ),
-                  undefined,
-                  [
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('DataStore'),
-                        factory.createIdentifier('save'),
-                      ),
-                      undefined,
-                      [
-                        factory.createCallExpression(
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier(importedRelatedModelName),
-                            factory.createIdentifier('copyOf'),
-                          ),
-                          undefined,
-                          [
-                            factory.createIdentifier(relatedRecordToUnlink),
-                            factory.createArrowFunction(
-                              undefined,
-                              undefined,
-                              [
-                                factory.createParameterDeclaration(
-                                  undefined,
-                                  undefined,
-                                  undefined,
-                                  factory.createIdentifier('updated'),
-                                  undefined,
-                                  undefined,
-                                  undefined,
-                                ),
-                              ],
-                              undefined,
-                              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                              factory.createBlock(
-                                [
-                                  factory.createExpressionStatement(
-                                    factory.createBinaryExpression(
-                                      factory.createPropertyAccessExpression(
-                                        factory.createIdentifier('updated'),
-                                        factory.createIdentifier(fieldBiDirectionalWithName),
-                                      ),
-                                      factory.createToken(SyntaxKind.EqualsToken),
-                                      factory.createIdentifier('undefined'),
-                                    ),
-                                  ),
-                                  ...associatedFieldsBiDirectionalWith.map((field) =>
-                                    factory.createExpressionStatement(
-                                      factory.createBinaryExpression(
-                                        factory.createPropertyAccessExpression(
-                                          factory.createIdentifier('updated'),
-                                          factory.createIdentifier(field),
-                                        ),
-                                        factory.createToken(SyntaxKind.EqualsToken),
-                                        factory.createIdentifier('undefined'),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                true,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+              isFieldBiDirectionalWithRequired
+                ? wrapThrowInIfStatement({
+                    currentRecord: `modelFields.${fieldName}`,
+                    thisModelRecordToUnlink: relatedRecordToUnlink,
+                    throwExpression: unlinkModelThrowErrorExpression(
+                      relatedModelName,
+                      relatedRecordToUnlink,
+                      modelName,
+                      fieldBiDirectionalWithPrimaryKeys[0],
+                      isFieldBiDirectionalWithRequired,
                     ),
-                  ],
-                ),
-              ),
+                  })
+                : unlinkModelRecordExpression({
+                    modelName: importedRelatedModelName,
+                    recordNameToUnlink: relatedRecordToUnlink,
+                    fieldName: fieldBiDirectionalWithName,
+                    associatedFields: associatedFieldsBiDirectionalWith,
+                  }),
             ],
             true,
           ),
@@ -245,7 +344,7 @@ export function getBiDirectionalRelationshipStatements({
             promises.push(DataStore.save(CompositeOwner0.copyOf(compositeOwnerToLink, (updated) => {
               updated.CompositeDog = compositeDogRecord;
             })))
-
+  
             const compositeDogToUnlink = await compositeOwnerToLink.CompositeDog;
             if (compositeDogToUnlink) {
               promises.push(DataStore.save(CompositeDog.copyOf(compositeDogToUnlink, (updated) => {
@@ -367,80 +466,24 @@ export function getBiDirectionalRelationshipStatements({
               factory.createIdentifier(thisModelRecordToUnlink),
               factory.createBlock(
                 [
-                  factory.createExpressionStatement(
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('promises'),
-                        factory.createIdentifier('push'),
-                      ),
-                      undefined,
-                      [
-                        factory.createCallExpression(
-                          factory.createPropertyAccessExpression(
-                            factory.createIdentifier('DataStore'),
-                            factory.createIdentifier('save'),
-                          ),
-                          undefined,
-                          [
-                            factory.createCallExpression(
-                              factory.createPropertyAccessExpression(
-                                factory.createIdentifier(importedThisModelName),
-                                factory.createIdentifier('copyOf'),
-                              ),
-                              undefined,
-                              [
-                                factory.createIdentifier(thisModelRecordToUnlink),
-                                factory.createArrowFunction(
-                                  undefined,
-                                  undefined,
-                                  [
-                                    factory.createParameterDeclaration(
-                                      undefined,
-                                      undefined,
-                                      undefined,
-                                      factory.createIdentifier('updated'),
-                                      undefined,
-                                      undefined,
-                                      undefined,
-                                    ),
-                                  ],
-                                  undefined,
-                                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                                  factory.createBlock(
-                                    [
-                                      factory.createExpressionStatement(
-                                        factory.createBinaryExpression(
-                                          factory.createPropertyAccessExpression(
-                                            factory.createIdentifier('updated'),
-                                            factory.createIdentifier(fieldName),
-                                          ),
-                                          factory.createToken(SyntaxKind.EqualsToken),
-                                          factory.createIdentifier('undefined'),
-                                        ),
-                                      ),
-                                      ...associatedFields.map((field) =>
-                                        factory.createExpressionStatement(
-                                          factory.createBinaryExpression(
-                                            factory.createPropertyAccessExpression(
-                                              factory.createIdentifier('updated'),
-                                              factory.createIdentifier(field),
-                                            ),
-                                            factory.createToken(SyntaxKind.EqualsToken),
-                                            factory.createIdentifier('undefined'),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                    true,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                  isFieldRequired
+                    ? wrapThrowInIfStatement({
+                        thisModelRecordToUnlink,
+                        currentRecord,
+                        throwExpression: unlinkModelThrowErrorExpression(
+                          relatedModelName,
+                          relatedRecordToLink,
+                          modelName,
+                          fieldBiDirectionalWithPrimaryKeys[0],
+                          isFieldBiDirectionalWithRequired,
                         ),
-                      ],
-                    ),
-                  ),
+                      })
+                    : unlinkModelRecordExpression({
+                        modelName: importedThisModelName,
+                        recordNameToUnlink: thisModelRecordToUnlink,
+                        fieldName,
+                        associatedFields,
+                      }),
                 ],
                 true,
               ),
