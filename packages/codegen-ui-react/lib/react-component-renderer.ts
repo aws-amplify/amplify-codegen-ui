@@ -87,6 +87,7 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       this.importCollection.addImport(ImportSource.UI_REACT, 'ScrollView');
       this.importCollection.addImport(ImportSource.UI_REACT, 'Divider');
       this.importCollection.addImport(ImportSource.UI_REACT, 'Text');
+      this.importCollection.addImport(ImportSource.UI_REACT, 'useTheme');
 
       let label = '';
       if (typeof this.component.properties.label === 'object' && 'value' in this.component.properties.label) {

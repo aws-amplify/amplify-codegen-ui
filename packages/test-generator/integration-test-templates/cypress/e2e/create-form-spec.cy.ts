@@ -241,6 +241,10 @@ describe('CreateForms', () => {
       cy.get('#dataStoreFormCreateCPKTeacher').within(() => {
         getInputByLabel('Special teacher id').type('Teacher ID');
 
+        // check error message shows on closed ArrayField
+        cy.contains('Submit').click();
+        cy.contains('CPKStudent is required');
+
         // hasOne
         getArrayFieldButtonByLabel('Cpk student').click();
         typeInAutocomplete('Her{downArrow}{enter}');

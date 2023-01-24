@@ -13,9 +13,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata, isValidVariableName } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
 import { Expression, factory, Identifier, JsxAttribute, JsxChild, NodeFlags, SyntaxKind } from 'typescript';
 import {
+  buildAccessChain,
   getArrayChildRefName,
   getCurrentDisplayValueName,
   getCurrentValueIdentifier,
@@ -189,23 +190,14 @@ export const renderArrayFieldComponent = (
   props.push(
     factory.createJsxAttribute(
       factory.createIdentifier('hasError'),
-      factory.createJsxExpression(
-        undefined,
-        factory.createPropertyAccessChain(
-          isValidVariableName(fieldName)
-            ? factory.createPropertyAccessExpression(
-                factory.createIdentifier('errors'),
-                factory.createIdentifier(fieldName),
-              )
-            : factory.createElementAccessChain(
-                factory.createIdentifier('errors'),
-                factory.createToken(SyntaxKind.QuestionDotToken),
-                factory.createStringLiteral(fieldName),
-              ),
-          factory.createToken(SyntaxKind.QuestionDotToken),
-          factory.createIdentifier('hasError'),
-        ),
-      ),
+      factory.createJsxExpression(undefined, buildAccessChain(['errors', fieldName, 'hasError'])),
+    ),
+  );
+
+  props.push(
+    factory.createJsxAttribute(
+      factory.createIdentifier('errorMessage'),
+      factory.createJsxExpression(undefined, buildAccessChain(['errors', fieldName, 'errorMessage'])),
     ),
   );
 
