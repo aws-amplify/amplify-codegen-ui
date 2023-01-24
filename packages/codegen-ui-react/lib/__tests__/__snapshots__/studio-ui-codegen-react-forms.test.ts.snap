@@ -14,6 +14,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -34,8 +35,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -138,6 +147,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -376,7 +390,8 @@ export default function CreateCompositeToyForm(props) {
         items={
           compositeDogCompositeToysName ? [compositeDogCompositeToysName] : []
         }
-        hasError={errors.compositeDogCompositeToysName?.hasError}
+        hasError={errors?.compositeDogCompositeToysName?.hasError}
+        errorMessage={errors?.compositeDogCompositeToysName?.errorMessage}
         setFieldValue={setCurrentCompositeDogCompositeToysNameValue}
         inputFieldRef={compositeDogCompositeToysNameRef}
         defaultFieldValue={\\"\\"}
@@ -393,6 +408,7 @@ export default function CreateCompositeToyForm(props) {
           }))}
           onSelect={({ id }) => {
             setCurrentCompositeDogCompositeToysNameValue(id);
+            runValidationTasks(\\"compositeDogCompositeToysName\\", id);
           }}
           onClear={() => {
             setCurrentCompositeDogCompositeToysNameDisplayValue(\\"\\");
@@ -441,7 +457,10 @@ export default function CreateCompositeToyForm(props) {
             ? [compositeDogCompositeToysDescription]
             : []
         }
-        hasError={errors.compositeDogCompositeToysDescription?.hasError}
+        hasError={errors?.compositeDogCompositeToysDescription?.hasError}
+        errorMessage={
+          errors?.compositeDogCompositeToysDescription?.errorMessage
+        }
         setFieldValue={setCurrentCompositeDogCompositeToysDescriptionValue}
         inputFieldRef={compositeDogCompositeToysDescriptionRef}
         defaultFieldValue={\\"\\"}
@@ -458,6 +477,7 @@ export default function CreateCompositeToyForm(props) {
           }))}
           onSelect={({ id }) => {
             setCurrentCompositeDogCompositeToysDescriptionValue(id);
+            runValidationTasks(\\"compositeDogCompositeToysDescription\\", id);
           }}
           onClear={() => {
             setCurrentCompositeDogCompositeToysDescriptionDisplayValue(\\"\\");
@@ -576,6 +596,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -596,8 +617,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -700,6 +729,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -962,7 +996,8 @@ export default function CreateCommentForm(props) {
         currentFieldValue={currentPostValue}
         label={\\"Post\\"}
         items={post ? [post] : []}
-        hasError={errors.post?.hasError}
+        hasError={errors?.post?.hasError}
+        errorMessage={errors?.post?.errorMessage}
         getBadgeText={getDisplayValue.post}
         setFieldValue={(model) => {
           setCurrentPostDisplayValue(getDisplayValue.post(model));
@@ -992,6 +1027,7 @@ export default function CreateCommentForm(props) {
               )
             );
             setCurrentPostDisplayValue(label);
+            runValidationTasks(\\"post\\", label);
           }}
           onClear={() => {
             setCurrentPostDisplayValue(\\"\\");
@@ -1034,7 +1070,8 @@ export default function CreateCommentForm(props) {
         currentFieldValue={currentUserValue}
         label={\\"User\\"}
         items={User ? [User] : []}
-        hasError={errors.User?.hasError}
+        hasError={errors?.User?.hasError}
+        errorMessage={errors?.User?.errorMessage}
         getBadgeText={getDisplayValue.User}
         setFieldValue={(model) => {
           setCurrentUserDisplayValue(getDisplayValue.User(model));
@@ -1064,6 +1101,7 @@ export default function CreateCommentForm(props) {
               )
             );
             setCurrentUserDisplayValue(label);
+            runValidationTasks(\\"User\\", label);
           }}
           onClear={() => {
             setCurrentUserDisplayValue(\\"\\");
@@ -1106,7 +1144,8 @@ export default function CreateCommentForm(props) {
         currentFieldValue={currentOrgValue}
         label={\\"Org\\"}
         items={Org ? [Org] : []}
-        hasError={errors.Org?.hasError}
+        hasError={errors?.Org?.hasError}
+        errorMessage={errors?.Org?.errorMessage}
         getBadgeText={getDisplayValue.Org}
         setFieldValue={(model) => {
           setCurrentOrgDisplayValue(getDisplayValue.Org(model));
@@ -1136,6 +1175,7 @@ export default function CreateCommentForm(props) {
               )
             );
             setCurrentOrgDisplayValue(label);
+            runValidationTasks(\\"Org\\", label);
           }}
           onClear={() => {
             setCurrentOrgDisplayValue(\\"\\");
@@ -1177,7 +1217,8 @@ export default function CreateCommentForm(props) {
         currentFieldValue={currentPostCommentsIdValue}
         label={\\"Post comments id\\"}
         items={postCommentsId ? [postCommentsId] : []}
-        hasError={errors.postCommentsId?.hasError}
+        hasError={errors?.postCommentsId?.hasError}
+        errorMessage={errors?.postCommentsId?.errorMessage}
         setFieldValue={setCurrentPostCommentsIdValue}
         inputFieldRef={postCommentsIdRef}
         defaultFieldValue={\\"\\"}
@@ -1194,6 +1235,7 @@ export default function CreateCommentForm(props) {
           }))}
           onSelect={({ id }) => {
             setCurrentPostCommentsIdValue(id);
+            runValidationTasks(\\"postCommentsId\\", id);
           }}
           onClear={() => {
             setCurrentPostCommentsIdDisplayValue(\\"\\");
@@ -1308,6 +1350,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -1335,8 +1378,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -1439,6 +1490,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -1832,7 +1888,8 @@ export default function CreateCompositeDogForm(props) {
         currentFieldValue={currentCompositeBowlValue}
         label={\\"Composite bowl\\"}
         items={CompositeBowl ? [CompositeBowl] : []}
-        hasError={errors.CompositeBowl?.hasError}
+        hasError={errors?.CompositeBowl?.hasError}
+        errorMessage={errors?.CompositeBowl?.errorMessage}
         getBadgeText={getDisplayValue.CompositeBowl}
         setFieldValue={(model) => {
           setCurrentCompositeBowlDisplayValue(
@@ -1866,6 +1923,7 @@ export default function CreateCompositeDogForm(props) {
               )
             );
             setCurrentCompositeBowlDisplayValue(label);
+            runValidationTasks(\\"CompositeBowl\\", label);
           }}
           onClear={() => {
             setCurrentCompositeBowlDisplayValue(\\"\\");
@@ -1914,7 +1972,8 @@ export default function CreateCompositeDogForm(props) {
         currentFieldValue={currentCompositeOwnerValue}
         label={\\"Composite owner\\"}
         items={CompositeOwner ? [CompositeOwner] : []}
-        hasError={errors.CompositeOwner?.hasError}
+        hasError={errors?.CompositeOwner?.hasError}
+        errorMessage={errors?.CompositeOwner?.errorMessage}
         getBadgeText={getDisplayValue.CompositeOwner}
         setFieldValue={(model) => {
           setCurrentCompositeOwnerDisplayValue(
@@ -1948,6 +2007,7 @@ export default function CreateCompositeDogForm(props) {
               )
             );
             setCurrentCompositeOwnerDisplayValue(label);
+            runValidationTasks(\\"CompositeOwner\\", label);
           }}
           onClear={() => {
             setCurrentCompositeOwnerDisplayValue(\\"\\");
@@ -1995,7 +2055,8 @@ export default function CreateCompositeDogForm(props) {
         currentFieldValue={currentCompositeToysValue}
         label={\\"Composite toys\\"}
         items={CompositeToys}
-        hasError={errors.CompositeToys?.hasError}
+        hasError={errors?.CompositeToys?.hasError}
+        errorMessage={errors?.CompositeToys?.errorMessage}
         getBadgeText={getDisplayValue.CompositeToys}
         setFieldValue={(model) => {
           setCurrentCompositeToysDisplayValue(
@@ -2029,6 +2090,7 @@ export default function CreateCompositeDogForm(props) {
               )
             );
             setCurrentCompositeToysDisplayValue(label);
+            runValidationTasks(\\"CompositeToys\\", label);
           }}
           onClear={() => {
             setCurrentCompositeToysDisplayValue(\\"\\");
@@ -2076,7 +2138,8 @@ export default function CreateCompositeDogForm(props) {
         currentFieldValue={currentCompositeVetsValue}
         label={\\"Composite vets\\"}
         items={CompositeVets}
-        hasError={errors.CompositeVets?.hasError}
+        hasError={errors?.CompositeVets?.hasError}
+        errorMessage={errors?.CompositeVets?.errorMessage}
         getBadgeText={getDisplayValue.CompositeVets}
         setFieldValue={(model) => {
           setCurrentCompositeVetsDisplayValue(
@@ -2110,6 +2173,7 @@ export default function CreateCompositeDogForm(props) {
               )
             );
             setCurrentCompositeVetsDisplayValue(label);
+            runValidationTasks(\\"CompositeVets\\", label);
           }}
           onClear={() => {
             setCurrentCompositeVetsDisplayValue(\\"\\");
@@ -3020,6 +3084,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
@@ -3035,8 +3100,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -3139,6 +3212,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -3293,7 +3371,8 @@ export default function CustomDataForm(props) {
         currentFieldValue={currentEmailValue}
         label={\\"E-mail\\"}
         items={email}
-        hasError={errors.email?.hasError}
+        hasError={errors?.email?.hasError}
+        errorMessage={errors?.email?.errorMessage}
         setFieldValue={setCurrentEmailValue}
         inputFieldRef={emailRef}
         defaultFieldValue={\\"\\"}
@@ -3335,7 +3414,8 @@ export default function CustomDataForm(props) {
         currentFieldValue={currentPhoneValue}
         label={\\"phone\\"}
         items={phone}
-        hasError={errors.phone?.hasError}
+        hasError={errors?.phone?.hasError}
+        errorMessage={errors?.phone?.errorMessage}
         setFieldValue={setCurrentPhoneValue}
         inputFieldRef={phoneRef}
         defaultFieldValue={\\"\\"}
@@ -3871,6 +3951,7 @@ import {
   Text,
   TextAreaField,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
@@ -3888,8 +3969,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -3992,6 +4081,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -4312,7 +4406,8 @@ export default function MyPostForm(props) {
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
         items={Customtags}
-        hasError={errors.Customtags?.hasError}
+        hasError={errors?.Customtags?.hasError}
+        errorMessage={errors?.Customtags?.errorMessage}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
         defaultFieldValue={\\"\\"}
@@ -4483,7 +4578,8 @@ export default function MyPostForm(props) {
         currentFieldValue={currentNonModelFieldArrayValue}
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
-        hasError={errors.nonModelFieldArray?.hasError}
+        hasError={errors?.nonModelFieldArray?.hasError}
+        errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
         defaultFieldValue={\\"\\"}
@@ -4590,6 +4686,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -4610,8 +4707,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -4714,6 +4819,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -4983,7 +5093,8 @@ export default function UpdateOrgForm(props) {
         currentFieldValue={currentCommentsValue}
         label={\\"Comments\\"}
         items={comments}
-        hasError={errors.comments?.hasError}
+        hasError={errors?.comments?.hasError}
+        errorMessage={errors?.comments?.errorMessage}
         getBadgeText={getDisplayValue.comments}
         setFieldValue={(model) => {
           setCurrentCommentsDisplayValue(getDisplayValue.comments(model));
@@ -5013,6 +5124,7 @@ export default function UpdateOrgForm(props) {
               )
             );
             setCurrentCommentsDisplayValue(label);
+            runValidationTasks(\\"comments\\", label);
           }}
           onClear={() => {
             setCurrentCommentsDisplayValue(\\"\\");
@@ -5123,6 +5235,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -5150,8 +5263,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -5254,6 +5375,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -5820,7 +5946,8 @@ export default function UpdateCompositeDogForm(props) {
         currentFieldValue={currentCompositeBowlValue}
         label={\\"Composite bowl\\"}
         items={CompositeBowl ? [CompositeBowl] : []}
-        hasError={errors.CompositeBowl?.hasError}
+        hasError={errors?.CompositeBowl?.hasError}
+        errorMessage={errors?.CompositeBowl?.errorMessage}
         getBadgeText={getDisplayValue.CompositeBowl}
         setFieldValue={(model) => {
           setCurrentCompositeBowlDisplayValue(
@@ -5854,6 +5981,7 @@ export default function UpdateCompositeDogForm(props) {
               )
             );
             setCurrentCompositeBowlDisplayValue(label);
+            runValidationTasks(\\"CompositeBowl\\", label);
           }}
           onClear={() => {
             setCurrentCompositeBowlDisplayValue(\\"\\");
@@ -5903,7 +6031,8 @@ export default function UpdateCompositeDogForm(props) {
         currentFieldValue={currentCompositeOwnerValue}
         label={\\"Composite owner\\"}
         items={CompositeOwner ? [CompositeOwner] : []}
-        hasError={errors.CompositeOwner?.hasError}
+        hasError={errors?.CompositeOwner?.hasError}
+        errorMessage={errors?.CompositeOwner?.errorMessage}
         getBadgeText={getDisplayValue.CompositeOwner}
         setFieldValue={(model) => {
           setCurrentCompositeOwnerDisplayValue(
@@ -5937,6 +6066,7 @@ export default function UpdateCompositeDogForm(props) {
               )
             );
             setCurrentCompositeOwnerDisplayValue(label);
+            runValidationTasks(\\"CompositeOwner\\", label);
           }}
           onClear={() => {
             setCurrentCompositeOwnerDisplayValue(\\"\\");
@@ -5985,7 +6115,8 @@ export default function UpdateCompositeDogForm(props) {
         currentFieldValue={currentCompositeToysValue}
         label={\\"Composite toys\\"}
         items={CompositeToys}
-        hasError={errors.CompositeToys?.hasError}
+        hasError={errors?.CompositeToys?.hasError}
+        errorMessage={errors?.CompositeToys?.errorMessage}
         getBadgeText={getDisplayValue.CompositeToys}
         setFieldValue={(model) => {
           setCurrentCompositeToysDisplayValue(
@@ -6019,6 +6150,7 @@ export default function UpdateCompositeDogForm(props) {
               )
             );
             setCurrentCompositeToysDisplayValue(label);
+            runValidationTasks(\\"CompositeToys\\", label);
           }}
           onClear={() => {
             setCurrentCompositeToysDisplayValue(\\"\\");
@@ -6066,7 +6198,8 @@ export default function UpdateCompositeDogForm(props) {
         currentFieldValue={currentCompositeVetsValue}
         label={\\"Composite vets\\"}
         items={CompositeVets}
-        hasError={errors.CompositeVets?.hasError}
+        hasError={errors?.CompositeVets?.hasError}
+        errorMessage={errors?.CompositeVets?.errorMessage}
         getBadgeText={getDisplayValue.CompositeVets}
         setFieldValue={(model) => {
           setCurrentCompositeVetsDisplayValue(
@@ -6100,6 +6233,7 @@ export default function UpdateCompositeDogForm(props) {
               )
             );
             setCurrentCompositeVetsDisplayValue(label);
+            runValidationTasks(\\"CompositeVets\\", label);
           }}
           onClear={() => {
             setCurrentCompositeVetsDisplayValue(\\"\\");
@@ -6226,6 +6360,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -6252,8 +6387,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -6356,6 +6499,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -6785,7 +6933,8 @@ export default function UpdateCPKTeacherForm(props) {
         currentFieldValue={currentCPKStudentValue}
         label={\\"Cpk student\\"}
         items={CPKStudent ? [CPKStudent] : []}
-        hasError={errors.CPKStudent?.hasError}
+        hasError={errors?.CPKStudent?.hasError}
+        errorMessage={errors?.CPKStudent?.errorMessage}
         getBadgeText={getDisplayValue.CPKStudent}
         setFieldValue={(model) => {
           setCurrentCPKStudentDisplayValue(getDisplayValue.CPKStudent(model));
@@ -6815,6 +6964,7 @@ export default function UpdateCPKTeacherForm(props) {
               )
             );
             setCurrentCPKStudentDisplayValue(label);
+            runValidationTasks(\\"CPKStudent\\", label);
           }}
           onClear={() => {
             setCurrentCPKStudentDisplayValue(\\"\\");
@@ -6858,7 +7008,8 @@ export default function UpdateCPKTeacherForm(props) {
         currentFieldValue={currentCPKClassesValue}
         label={\\"Cpk classes\\"}
         items={CPKClasses}
-        hasError={errors.CPKClasses?.hasError}
+        hasError={errors?.CPKClasses?.hasError}
+        errorMessage={errors?.CPKClasses?.errorMessage}
         getBadgeText={getDisplayValue.CPKClasses}
         setFieldValue={(model) => {
           setCurrentCPKClassesDisplayValue(getDisplayValue.CPKClasses(model));
@@ -6888,6 +7039,7 @@ export default function UpdateCPKTeacherForm(props) {
               )
             );
             setCurrentCPKClassesDisplayValue(label);
+            runValidationTasks(\\"CPKClasses\\", label);
           }}
           onClear={() => {
             setCurrentCPKClassesDisplayValue(\\"\\");
@@ -6930,7 +7082,8 @@ export default function UpdateCPKTeacherForm(props) {
         currentFieldValue={currentCPKProjectsValue}
         label={\\"Cpk projects\\"}
         items={CPKProjects}
-        hasError={errors.CPKProjects?.hasError}
+        hasError={errors?.CPKProjects?.hasError}
+        errorMessage={errors?.CPKProjects?.errorMessage}
         getBadgeText={getDisplayValue.CPKProjects}
         setFieldValue={(model) => {
           setCurrentCPKProjectsDisplayValue(getDisplayValue.CPKProjects(model));
@@ -6960,6 +7113,7 @@ export default function UpdateCPKTeacherForm(props) {
               )
             );
             setCurrentCPKProjectsDisplayValue(label);
+            runValidationTasks(\\"CPKProjects\\", label);
           }}
           onClear={() => {
             setCurrentCPKProjectsDisplayValue(\\"\\");
@@ -7094,8 +7248,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -7198,6 +7360,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -7483,6 +7650,7 @@ export default function NestedJson(props) {
         label={\\"favorite trees\\"}
         items={bio.favorite - trees ?? []}
         hasError={errors?.[\\"bio.favorite-trees\\"]?.hasError}
+        errorMessage={errors?.[\\"bio.favorite-trees\\"]?.errorMessage}
         setFieldValue={setCurrentBioFavoritetreesValue}
         inputFieldRef={bioFavoritetreesRef}
         defaultFieldValue={\\"\\"}
@@ -7537,7 +7705,8 @@ export default function NestedJson(props) {
         currentFieldValue={currentNicknames1Value}
         label={\\"Nick Names1\\"}
         items={Nicknames1}
-        hasError={errors.Nicknames1?.hasError}
+        hasError={errors?.Nicknames1?.hasError}
+        errorMessage={errors?.Nicknames1?.errorMessage}
         setFieldValue={setCurrentNicknames1Value}
         inputFieldRef={Nicknames1Ref}
         defaultFieldValue={\\"\\"}
@@ -7585,6 +7754,7 @@ export default function NestedJson(props) {
         label={\\"nick-Names2\\"}
         items={nickNames}
         hasError={errors?.[\\"nick-names2\\"]?.hasError}
+        errorMessage={errors?.[\\"nick-names2\\"]?.errorMessage}
         setFieldValue={setCurrentNickNamesValue}
         inputFieldRef={nickNamesRef}
         defaultFieldValue={\\"\\"}
@@ -7778,6 +7948,7 @@ import {
   SelectField,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
@@ -7793,8 +7964,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -7897,6 +8076,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -8093,7 +8277,8 @@ export default function NestedJson(props) {
         currentFieldValue={currentLastName1Value}
         label={\\"lastName\\"}
         items={lastName1}
-        hasError={errors.lastName?.hasError}
+        hasError={errors?.lastName?.hasError}
+        errorMessage={errors?.lastName?.errorMessage}
         setFieldValue={setCurrentLastName1Value}
         inputFieldRef={lastName1Ref}
         defaultFieldValue={\\"\\"}
@@ -8460,6 +8645,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -8480,8 +8666,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -8584,6 +8778,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -8805,7 +9004,8 @@ export default function CreateDogForm(props) {
         currentFieldValue={currentOwnerValue}
         label={\\"Owner\\"}
         items={Owner ? [Owner] : []}
-        hasError={errors.Owner?.hasError}
+        hasError={errors?.Owner?.hasError}
+        errorMessage={errors?.Owner?.errorMessage}
         getBadgeText={getDisplayValue.Owner}
         setFieldValue={(model) => {
           setCurrentOwnerDisplayValue(getDisplayValue.Owner(model));
@@ -8835,6 +9035,7 @@ export default function CreateDogForm(props) {
               )
             );
             setCurrentOwnerDisplayValue(label);
+            runValidationTasks(\\"Owner\\", label);
           }}
           onClear={() => {
             setCurrentOwnerDisplayValue(\\"\\");
@@ -8939,6 +9140,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -8959,8 +9161,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -9063,6 +9273,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -9316,7 +9531,8 @@ export default function UpdateDogForm(props) {
         currentFieldValue={currentOwnerValue}
         label={\\"Owner\\"}
         items={Owner ? [Owner] : []}
-        hasError={errors.Owner?.hasError}
+        hasError={errors?.Owner?.hasError}
+        errorMessage={errors?.Owner?.errorMessage}
         getBadgeText={getDisplayValue.Owner}
         setFieldValue={(model) => {
           setCurrentOwnerDisplayValue(getDisplayValue.Owner(model));
@@ -9346,6 +9562,7 @@ export default function UpdateDogForm(props) {
               )
             );
             setCurrentOwnerDisplayValue(label);
+            runValidationTasks(\\"Owner\\", label);
           }}
           onClear={() => {
             setCurrentOwnerDisplayValue(\\"\\");
@@ -9455,6 +9672,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -9475,8 +9693,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -9579,6 +9805,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -9803,7 +10034,8 @@ export default function CreateOwnerForm(props) {
         currentFieldValue={currentDogValue}
         label={\\"Dog\\"}
         items={Dog ? [Dog] : []}
-        hasError={errors.Dog?.hasError}
+        hasError={errors?.Dog?.hasError}
+        errorMessage={errors?.Dog?.errorMessage}
         getBadgeText={getDisplayValue.Dog}
         setFieldValue={(model) => {
           setCurrentDogDisplayValue(getDisplayValue.Dog(model));
@@ -9833,6 +10065,7 @@ export default function CreateOwnerForm(props) {
               )
             );
             setCurrentDogDisplayValue(label);
+            runValidationTasks(\\"Dog\\", label);
           }}
           onClear={() => {
             setCurrentDogDisplayValue(\\"\\");
@@ -9937,6 +10170,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -9957,8 +10191,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -10061,6 +10303,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -10316,7 +10563,8 @@ export default function UpdateOwnerForm(props) {
         currentFieldValue={currentDogValue}
         label={\\"Dog\\"}
         items={Dog ? [Dog] : []}
-        hasError={errors.Dog?.hasError}
+        hasError={errors?.Dog?.hasError}
+        errorMessage={errors?.Dog?.errorMessage}
         getBadgeText={getDisplayValue.Dog}
         setFieldValue={(model) => {
           setCurrentDogDisplayValue(getDisplayValue.Dog(model));
@@ -10346,6 +10594,7 @@ export default function UpdateOwnerForm(props) {
               )
             );
             setCurrentDogDisplayValue(label);
+            runValidationTasks(\\"Dog\\", label);
           }}
           onClear={() => {
             setCurrentDogDisplayValue(\\"\\");
@@ -10456,6 +10705,7 @@ import {
   Text,
   TextAreaField,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
@@ -10473,8 +10723,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -10577,6 +10835,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -10988,7 +11251,8 @@ export default function MyPostForm(props) {
         currentFieldValue={currentNonModelFieldArrayValue}
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
-        hasError={errors.nonModelFieldArray?.hasError}
+        hasError={errors?.nonModelFieldArray?.hasError}
+        errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
         defaultFieldValue={\\"\\"}
@@ -11092,6 +11356,7 @@ import {
   SelectField,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -11112,8 +11377,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -11216,6 +11489,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -11455,7 +11733,8 @@ export default function TagCreateForm(props) {
         currentFieldValue={currentPostsValue}
         label={\\"Posts\\"}
         items={Posts}
-        hasError={errors.Posts?.hasError}
+        hasError={errors?.Posts?.hasError}
+        errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
           setCurrentPostsDisplayValue(getDisplayValue.Posts(model));
@@ -11485,6 +11764,7 @@ export default function TagCreateForm(props) {
               )
             );
             setCurrentPostsDisplayValue(label);
+            runValidationTasks(\\"Posts\\", label);
           }}
           onClear={() => {
             setCurrentPostsDisplayValue(\\"\\");
@@ -11523,7 +11803,8 @@ export default function TagCreateForm(props) {
         currentFieldValue={currentStatusesValue}
         label={\\"Statuses\\"}
         items={statuses}
-        hasError={errors.statuses?.hasError}
+        hasError={errors?.statuses?.hasError}
+        errorMessage={errors?.statuses?.errorMessage}
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
         inputFieldRef={statusesRef}
@@ -11661,6 +11942,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -11681,8 +11963,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -11785,6 +12075,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -12030,7 +12325,8 @@ export default function MyMemberForm(props) {
         currentFieldValue={currentTeamIDValue}
         label={\\"Team id\\"}
         items={teamID ? [teamID] : []}
-        hasError={errors.teamID?.hasError}
+        hasError={errors?.teamID?.hasError}
+        errorMessage={errors?.teamID?.errorMessage}
         setFieldValue={setCurrentTeamIDValue}
         inputFieldRef={teamIDRef}
         defaultFieldValue={\\"\\"}
@@ -12047,6 +12343,7 @@ export default function MyMemberForm(props) {
           }))}
           onSelect={({ id }) => {
             setCurrentTeamIDValue(id);
+            runValidationTasks(\\"teamID\\", id);
           }}
           onClear={() => {
             setCurrentTeamIDDisplayValue(\\"\\");
@@ -12086,7 +12383,8 @@ export default function MyMemberForm(props) {
         currentFieldValue={currentTeamValue}
         label={\\"Team Label\\"}
         items={Team ? [Team] : []}
-        hasError={errors.Team?.hasError}
+        hasError={errors?.Team?.hasError}
+        errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
           setCurrentTeamDisplayValue(getDisplayValue.Team(model));
@@ -12116,6 +12414,7 @@ export default function MyMemberForm(props) {
               )
             );
             setCurrentTeamDisplayValue(label);
+            runValidationTasks(\\"Team\\", label);
           }}
           onClear={() => {
             setCurrentTeamDisplayValue(\\"\\");
@@ -12198,6 +12497,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -12218,8 +12518,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -12322,6 +12630,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -12541,7 +12854,8 @@ export default function SchoolCreateForm(props) {
         currentFieldValue={currentStudentsValue}
         label={\\"Students\\"}
         items={Students}
-        hasError={errors.Students?.hasError}
+        hasError={errors?.Students?.hasError}
+        errorMessage={errors?.Students?.errorMessage}
         getBadgeText={getDisplayValue.Students}
         setFieldValue={(model) => {
           setCurrentStudentsDisplayValue(getDisplayValue.Students(model));
@@ -12571,6 +12885,7 @@ export default function SchoolCreateForm(props) {
               )
             );
             setCurrentStudentsDisplayValue(label);
+            runValidationTasks(\\"Students\\", label);
           }}
           onClear={() => {
             setCurrentStudentsDisplayValue(\\"\\");
@@ -12686,6 +13001,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -12706,8 +13022,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -12810,6 +13134,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -13051,7 +13380,8 @@ export default function BookCreateForm(props) {
         currentFieldValue={currentPrimaryAuthorValue}
         label={\\"Primary author\\"}
         items={primaryAuthor ? [primaryAuthor] : []}
-        hasError={errors.primaryAuthor?.hasError}
+        hasError={errors?.primaryAuthor?.hasError}
+        errorMessage={errors?.primaryAuthor?.errorMessage}
         getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={(model) => {
           setCurrentPrimaryAuthorDisplayValue(
@@ -13085,6 +13415,7 @@ export default function BookCreateForm(props) {
               )
             );
             setCurrentPrimaryAuthorDisplayValue(label);
+            runValidationTasks(\\"primaryAuthor\\", label);
           }}
           onClear={() => {
             setCurrentPrimaryAuthorDisplayValue(\\"\\");
@@ -13170,6 +13501,7 @@ import {
   SelectField,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -13190,8 +13522,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -13294,6 +13634,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -13533,7 +13878,8 @@ export default function TagCreateForm(props) {
         currentFieldValue={currentPostsValue}
         label={\\"Posts\\"}
         items={Posts}
-        hasError={errors.Posts?.hasError}
+        hasError={errors?.Posts?.hasError}
+        errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
           setCurrentPostsDisplayValue(getDisplayValue.Posts(model));
@@ -13563,6 +13909,7 @@ export default function TagCreateForm(props) {
               )
             );
             setCurrentPostsDisplayValue(label);
+            runValidationTasks(\\"Posts\\", label);
           }}
           onClear={() => {
             setCurrentPostsDisplayValue(\\"\\");
@@ -13601,7 +13948,8 @@ export default function TagCreateForm(props) {
         currentFieldValue={currentStatusesValue}
         label={\\"Statuses\\"}
         items={statuses}
-        hasError={errors.statuses?.hasError}
+        hasError={errors?.statuses?.hasError}
+        errorMessage={errors?.statuses?.errorMessage}
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
         inputFieldRef={statusesRef}
@@ -13739,6 +14087,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -13759,8 +14108,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -13863,6 +14220,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -14131,7 +14493,8 @@ export default function BookCreateForm(props) {
         currentFieldValue={currentPrimaryAuthorValue}
         label={\\"Primary author\\"}
         items={primaryAuthor ? [primaryAuthor] : []}
-        hasError={errors.primaryAuthor?.hasError}
+        hasError={errors?.primaryAuthor?.hasError}
+        errorMessage={errors?.primaryAuthor?.errorMessage}
         getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={(model) => {
           setCurrentPrimaryAuthorDisplayValue(
@@ -14165,6 +14528,7 @@ export default function BookCreateForm(props) {
               )
             );
             setCurrentPrimaryAuthorDisplayValue(label);
+            runValidationTasks(\\"primaryAuthor\\", label);
           }}
           onClear={() => {
             setCurrentPrimaryAuthorDisplayValue(\\"\\");
@@ -14210,7 +14574,8 @@ export default function BookCreateForm(props) {
         currentFieldValue={currentPrimaryTitleValue}
         label={\\"Primary title\\"}
         items={primaryTitle ? [primaryTitle] : []}
-        hasError={errors.primaryTitle?.hasError}
+        hasError={errors?.primaryTitle?.hasError}
+        errorMessage={errors?.primaryTitle?.errorMessage}
         getBadgeText={getDisplayValue.primaryTitle}
         setFieldValue={(model) => {
           setCurrentPrimaryTitleDisplayValue(
@@ -14242,6 +14607,7 @@ export default function BookCreateForm(props) {
               )
             );
             setCurrentPrimaryTitleDisplayValue(label);
+            runValidationTasks(\\"primaryTitle\\", label);
           }}
           onClear={() => {
             setCurrentPrimaryTitleDisplayValue(\\"\\");
@@ -14326,6 +14692,7 @@ import {
   Text,
   TextAreaField,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
@@ -14343,8 +14710,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -14447,6 +14822,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -14935,7 +15315,8 @@ export default function MyPostForm(props) {
         currentFieldValue={currentNonModelFieldArrayValue}
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
-        hasError={errors.nonModelFieldArray?.hasError}
+        hasError={errors?.nonModelFieldArray?.hasError}
+        errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
         defaultFieldValue={\\"\\"}
@@ -15081,6 +15462,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -15101,8 +15483,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -15205,6 +15595,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -15473,7 +15868,8 @@ export default function SchoolUpdateForm(props) {
         currentFieldValue={currentStudentsValue}
         label={\\"Students\\"}
         items={Students}
-        hasError={errors.Students?.hasError}
+        hasError={errors?.Students?.hasError}
+        errorMessage={errors?.Students?.errorMessage}
         getBadgeText={getDisplayValue.Students}
         setFieldValue={(model) => {
           setCurrentStudentsDisplayValue(getDisplayValue.Students(model));
@@ -15503,6 +15899,7 @@ export default function SchoolUpdateForm(props) {
               )
             );
             setCurrentStudentsDisplayValue(label);
+            runValidationTasks(\\"Students\\", label);
           }}
           onClear={() => {
             setCurrentStudentsDisplayValue(\\"\\");
@@ -15623,6 +16020,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -15643,8 +16041,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -15747,6 +16153,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -16017,7 +16428,8 @@ export default function MyMemberForm(props) {
         currentFieldValue={currentTeamIDValue}
         label={\\"Team id\\"}
         items={teamID ? [teamID] : []}
-        hasError={errors.teamID?.hasError}
+        hasError={errors?.teamID?.hasError}
+        errorMessage={errors?.teamID?.errorMessage}
         setFieldValue={setCurrentTeamIDValue}
         inputFieldRef={teamIDRef}
         defaultFieldValue={\\"\\"}
@@ -16034,6 +16446,7 @@ export default function MyMemberForm(props) {
           }))}
           onSelect={({ id }) => {
             setCurrentTeamIDValue(id);
+            runValidationTasks(\\"teamID\\", id);
           }}
           onClear={() => {
             setCurrentTeamIDDisplayValue(\\"\\");
@@ -16074,7 +16487,8 @@ export default function MyMemberForm(props) {
         currentFieldValue={currentTeamValue}
         label={\\"Team Label\\"}
         items={Team ? [Team] : []}
-        hasError={errors.Team?.hasError}
+        hasError={errors?.Team?.hasError}
+        errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
           setCurrentTeamDisplayValue(getDisplayValue.Team(model));
@@ -16104,6 +16518,7 @@ export default function MyMemberForm(props) {
               )
             );
             setCurrentTeamDisplayValue(label);
+            runValidationTasks(\\"Team\\", label);
           }}
           onClear={() => {
             setCurrentTeamDisplayValue(\\"\\");
@@ -16189,6 +16604,7 @@ import {
   SelectField,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -16209,8 +16625,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -16313,6 +16737,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -16630,7 +17059,8 @@ export default function TagUpdateForm(props) {
         currentFieldValue={currentPostsValue}
         label={\\"Posts\\"}
         items={Posts}
-        hasError={errors.Posts?.hasError}
+        hasError={errors?.Posts?.hasError}
+        errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
           setCurrentPostsDisplayValue(getDisplayValue.Posts(model));
@@ -16660,6 +17090,7 @@ export default function TagUpdateForm(props) {
               )
             );
             setCurrentPostsDisplayValue(label);
+            runValidationTasks(\\"Posts\\", label);
           }}
           onClear={() => {
             setCurrentPostsDisplayValue(\\"\\");
@@ -16698,7 +17129,8 @@ export default function TagUpdateForm(props) {
         currentFieldValue={currentStatusesValue}
         label={\\"Statuses\\"}
         items={statuses}
-        hasError={errors.statuses?.hasError}
+        hasError={errors?.statuses?.hasError}
+        errorMessage={errors?.statuses?.errorMessage}
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
         inputFieldRef={statusesRef}
@@ -16839,6 +17271,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Flex as Flex0 } from \\"../models\\";
@@ -16856,8 +17289,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -16960,6 +17401,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -17244,7 +17690,8 @@ export default function MyFlexCreateForm(props) {
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
         items={Customtags}
-        hasError={errors.Customtags?.hasError}
+        hasError={errors?.Customtags?.hasError}
+        errorMessage={errors?.Customtags?.errorMessage}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
         defaultFieldValue={\\"\\"}
@@ -17290,7 +17737,8 @@ export default function MyFlexCreateForm(props) {
         currentFieldValue={currentTagsValue}
         label={\\"Tags\\"}
         items={tags}
-        hasError={errors.tags?.hasError}
+        hasError={errors?.tags?.hasError}
+        errorMessage={errors?.tags?.errorMessage}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
         defaultFieldValue={\\"\\"}
@@ -17411,6 +17859,7 @@ import {
   SwitchField,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Blog } from \\"../models\\";
@@ -17428,8 +17877,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -17532,6 +17989,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -17835,7 +18297,8 @@ export default function BlogCreateForm(props) {
         currentFieldValue={currentEditedAtValue}
         label={\\"Edited at\\"}
         items={editedAt}
-        hasError={errors.editedAt?.hasError}
+        hasError={errors?.editedAt?.hasError}
+        errorMessage={errors?.editedAt?.errorMessage}
         setFieldValue={setCurrentEditedAtValue}
         inputFieldRef={editedAtRef}
         defaultFieldValue={\\"\\"}
@@ -17961,6 +18424,7 @@ import {
   TextAreaField,
   TextField,
   ToggleButton,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { InputGallery } from \\"../models\\";
@@ -17978,8 +18442,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -18082,6 +18554,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -18504,7 +18981,8 @@ export default function InputGalleryCreateForm(props) {
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
         items={arrayTypeField}
-        hasError={errors.arrayTypeField?.hasError}
+        hasError={errors?.arrayTypeField?.hasError}
+        errorMessage={errors?.arrayTypeField?.errorMessage}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
         defaultFieldValue={\\"\\"}
@@ -18557,7 +19035,8 @@ export default function InputGalleryCreateForm(props) {
         currentFieldValue={currentJsonArrayValue}
         label={\\"Json array\\"}
         items={jsonArray}
-        hasError={errors.jsonArray?.hasError}
+        hasError={errors?.jsonArray?.hasError}
+        errorMessage={errors?.jsonArray?.errorMessage}
         setFieldValue={setCurrentJsonArrayValue}
         inputFieldRef={jsonArrayRef}
         defaultFieldValue={\\"\\"}
@@ -18843,6 +19322,7 @@ import {
   TextAreaField,
   TextField,
   ToggleButton,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { InputGallery } from \\"../models\\";
@@ -18860,8 +19340,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -18964,6 +19452,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -19409,7 +19902,8 @@ export default function InputGalleryUpdateForm(props) {
         currentFieldValue={currentArrayTypeFieldValue}
         label={\\"Array type field\\"}
         items={arrayTypeField}
-        hasError={errors.arrayTypeField?.hasError}
+        hasError={errors?.arrayTypeField?.hasError}
+        errorMessage={errors?.arrayTypeField?.errorMessage}
         setFieldValue={setCurrentArrayTypeFieldValue}
         inputFieldRef={arrayTypeFieldRef}
         defaultFieldValue={\\"\\"}
@@ -19462,7 +19956,8 @@ export default function InputGalleryUpdateForm(props) {
         currentFieldValue={currentJsonArrayValue}
         label={\\"Json array\\"}
         items={jsonArray}
-        hasError={errors.jsonArray?.hasError}
+        hasError={errors?.jsonArray?.hasError}
+        errorMessage={errors?.jsonArray?.errorMessage}
         setFieldValue={setCurrentJsonArrayValue}
         inputFieldRef={jsonArrayRef}
         defaultFieldValue={\\"\\"}
@@ -19750,6 +20245,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Flex as Flex0 } from \\"../models\\";
@@ -19767,8 +20263,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -19871,6 +20375,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -20173,7 +20682,8 @@ export default function MyFlexUpdateForm(props) {
         currentFieldValue={currentCustomtagsValue}
         label={\\"Tags\\"}
         items={Customtags}
-        hasError={errors.Customtags?.hasError}
+        hasError={errors?.Customtags?.hasError}
+        errorMessage={errors?.Customtags?.errorMessage}
         setFieldValue={setCurrentCustomtagsValue}
         inputFieldRef={CustomtagsRef}
         defaultFieldValue={\\"\\"}
@@ -20219,7 +20729,8 @@ export default function MyFlexUpdateForm(props) {
         currentFieldValue={currentTagsValue}
         label={\\"Tags\\"}
         items={tags}
-        hasError={errors.tags?.hasError}
+        hasError={errors?.tags?.hasError}
+        errorMessage={errors?.tags?.errorMessage}
         setFieldValue={setCurrentTagsValue}
         inputFieldRef={tagsRef}
         defaultFieldValue={\\"\\"}
@@ -20343,6 +20854,7 @@ import {
   Text,
   TextAreaField,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../models\\";
@@ -20360,8 +20872,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -20464,6 +20984,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -20900,7 +21425,8 @@ export default function PostCreateFormRow(props) {
         currentFieldValue={currentNonModelFieldArrayValue}
         label={\\"Non model field array\\"}
         items={nonModelFieldArray}
-        hasError={errors.nonModelFieldArray?.hasError}
+        hasError={errors?.nonModelFieldArray?.hasError}
+        errorMessage={errors?.nonModelFieldArray?.errorMessage}
         setFieldValue={setCurrentNonModelFieldArrayValue}
         inputFieldRef={nonModelFieldArrayRef}
         defaultFieldValue={\\"\\"}
@@ -21041,6 +21567,7 @@ import {
   ScrollView,
   Text,
   TextField,
+  useTheme,
 } from \\"@aws-amplify/ui-react\\";
 import {
   getOverrideProps,
@@ -21061,8 +21588,16 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
   const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
   const [isEditing, setIsEditing] = React.useState();
   React.useEffect(() => {
@@ -21165,6 +21700,11 @@ function ArrayField({
           >
             Add item
           </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
         </>
       ) : (
         <Flex justifyContent=\\"flex-end\\">
@@ -21410,7 +21950,8 @@ export default function MyMemberForm(props) {
         currentFieldValue={currentTeamIDValue}
         label={\\"Team id\\"}
         items={teamID ? [teamID] : []}
-        hasError={errors.teamID?.hasError}
+        hasError={errors?.teamID?.hasError}
+        errorMessage={errors?.teamID?.errorMessage}
         setFieldValue={setCurrentTeamIDValue}
         inputFieldRef={teamIDRef}
         defaultFieldValue={\\"\\"}
@@ -21427,6 +21968,7 @@ export default function MyMemberForm(props) {
           }))}
           onSelect={({ id }) => {
             setCurrentTeamIDValue(id);
+            runValidationTasks(\\"teamID\\", id);
           }}
           onClear={() => {
             setCurrentTeamIDDisplayValue(\\"\\");
@@ -21466,7 +22008,8 @@ export default function MyMemberForm(props) {
         currentFieldValue={currentTeamValue}
         label={\\"Team Label\\"}
         items={Team ? [Team] : []}
-        hasError={errors.Team?.hasError}
+        hasError={errors?.Team?.hasError}
+        errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
           setCurrentTeamDisplayValue(getDisplayValue.Team(model));
@@ -21496,6 +22039,7 @@ export default function MyMemberForm(props) {
               )
             );
             setCurrentTeamDisplayValue(label);
+            runValidationTasks(\\"Team\\", label);
           }}
           onClear={() => {
             setCurrentTeamDisplayValue(\\"\\");

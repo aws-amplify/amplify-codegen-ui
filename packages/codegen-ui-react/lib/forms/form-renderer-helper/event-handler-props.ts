@@ -345,9 +345,11 @@ examples:
  */
 export function buildOnSelect({
   sanitizedFieldName,
+  fieldName,
   fieldConfig,
 }: {
   sanitizedFieldName: string;
+  fieldName: string;
   fieldConfig: FieldConfigMetadata;
 }): JsxAttribute {
   const labelString = 'label';
@@ -385,6 +387,15 @@ export function buildOnSelect({
       setStateExpression(getCurrentDisplayValueName(sanitizedFieldName), nextCurrentDisplayValue),
     );
   }
+
+  setStateExpressions.push(
+    factory.createExpressionStatement(
+      factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
+        factory.createStringLiteral(fieldName),
+        factory.createIdentifier(isModelDataType(fieldConfig) ? labelString : idString),
+      ]),
+    ),
+  );
 
   return factory.createJsxAttribute(
     factory.createIdentifier('onSelect'),

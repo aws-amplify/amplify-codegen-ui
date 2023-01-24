@@ -17,6 +17,9 @@ import { factory, JsxTagNamePropertyAccess, NodeFlags, SyntaxKind } from 'typesc
 import { addUseEffectWrapper } from '../generate-react-hooks';
 
 export const generateArrayFieldComponent = () => {
+  const errorMessagePropName = 'errorMessage';
+  const errorStylesVariableName = 'errorStyles';
+
   const iconPath = 'M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z';
 
   const labelElementIdentifier = 'labelElement';
@@ -41,6 +44,57 @@ export const generateArrayFieldComponent = () => {
               [factory.createJsxExpression(undefined, factory.createIdentifier('label'))],
               factory.createJsxClosingElement(factory.createIdentifier('Text')),
             ),
+          ),
+        ],
+        NodeFlags.Const,
+      ),
+    ),
+    /**
+      const {
+        tokens: {
+          components: {
+            fieldmessages: { error: errorStyles },
+          },
+        },
+      } = useTheme();
+     */
+    factory.createVariableStatement(
+      undefined,
+      factory.createVariableDeclarationList(
+        [
+          factory.createVariableDeclaration(
+            factory.createObjectBindingPattern([
+              factory.createBindingElement(
+                undefined,
+                factory.createIdentifier('tokens'),
+                factory.createObjectBindingPattern([
+                  factory.createBindingElement(
+                    undefined,
+                    factory.createIdentifier('components'),
+                    factory.createObjectBindingPattern([
+                      factory.createBindingElement(
+                        undefined,
+                        factory.createIdentifier('fieldmessages'),
+                        factory.createObjectBindingPattern([
+                          factory.createBindingElement(
+                            undefined,
+                            factory.createIdentifier('error'),
+                            factory.createIdentifier(errorStylesVariableName),
+                            undefined,
+                          ),
+                        ]),
+                        undefined,
+                      ),
+                    ]),
+                    undefined,
+                  ),
+                ]),
+                undefined,
+              ),
+            ]),
+            undefined,
+            undefined,
+            factory.createCallExpression(factory.createIdentifier('useTheme'), undefined, []),
           ),
         ],
         NodeFlags.Const,
@@ -872,7 +926,58 @@ export const generateArrayFieldComponent = () => {
                         [factory.createJsxText('Add item', false)],
                         factory.createJsxClosingElement(factory.createIdentifier('Button')),
                       ),
+                      /**
+                        {errorMessage && hasError && (
+                          <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+                            {errorMessage}
+                          </Text>
+                        )}
+                      */
+                      factory.createJsxExpression(
+                        undefined,
+                        factory.createBinaryExpression(
+                          factory.createBinaryExpression(
+                            factory.createIdentifier(errorMessagePropName),
+                            factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                            factory.createIdentifier('hasError'),
+                          ),
+                          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                          factory.createParenthesizedExpression(
+                            factory.createJsxElement(
+                              factory.createJsxOpeningElement(
+                                factory.createIdentifier('Text'),
+                                undefined,
+                                factory.createJsxAttributes([
+                                  factory.createJsxAttribute(
+                                    factory.createIdentifier('color'),
+                                    factory.createJsxExpression(
+                                      undefined,
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier(errorStylesVariableName),
+                                        factory.createIdentifier('color'),
+                                      ),
+                                    ),
+                                  ),
+                                  factory.createJsxAttribute(
+                                    factory.createIdentifier('fontSize'),
+                                    factory.createJsxExpression(
+                                      undefined,
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier(errorStylesVariableName),
+                                        factory.createIdentifier('fontSize'),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                              ),
+                              [factory.createJsxExpression(undefined, factory.createIdentifier(errorMessagePropName))],
+                              factory.createJsxClosingElement(factory.createIdentifier('Text')),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
+
                     factory.createJsxJsxClosingFragment(),
                   ),
                 ),
@@ -1053,6 +1158,7 @@ export const generateArrayFieldComponent = () => {
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('defaultFieldValue'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('lengthLimit'), undefined),
           factory.createBindingElement(undefined, undefined, factory.createIdentifier('getBadgeText'), undefined),
+          factory.createBindingElement(undefined, undefined, factory.createIdentifier(errorMessagePropName), undefined),
         ]),
         undefined,
         undefined,
