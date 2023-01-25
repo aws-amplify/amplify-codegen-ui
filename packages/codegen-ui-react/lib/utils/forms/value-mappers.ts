@@ -45,7 +45,7 @@ export const convertToLocal = (date: Date) => {
     minute: '2-digit',
     calendar: 'iso8601',
     numberingSystem: 'latn',
-    hour12: false,
+    hourCycle: 'h23',
   });
   const parts = df.formatToParts(date).reduce<Record<string, string>>((acc, part) => {
     acc[part.type] = part.value;
@@ -241,8 +241,8 @@ export const convertToLocalAST = factory.createVariableStatement(
                                 factory.createStringLiteral('latn'),
                               ),
                               factory.createPropertyAssignment(
-                                factory.createIdentifier('hour12'),
-                                factory.createFalse(),
+                                factory.createIdentifier('hourCycle'),
+                                factory.createStringLiteral('h23'),
                               ),
                             ],
                             true,
