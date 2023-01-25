@@ -17634,7 +17634,7 @@ export default function BlogCreateForm(props) {
       minute: \\"2-digit\\",
       calendar: \\"iso8601\\",
       numberingSystem: \\"latn\\",
-      hour12: false,
+      hourCycle: \\"h23\\",
     });
     const parts = df.formatToParts(date).reduce((acc, part) => {
       acc[part.type] = part.value;
@@ -18215,7 +18215,7 @@ export default function InputGalleryCreateForm(props) {
       minute: \\"2-digit\\",
       calendar: \\"iso8601\\",
       numberingSystem: \\"latn\\",
-      hour12: false,
+      hourCycle: \\"h23\\",
     });
     const parts = df.formatToParts(date).reduce((acc, part) => {
       acc[part.type] = part.value;
@@ -19117,7 +19117,7 @@ export default function InputGalleryUpdateForm(props) {
       minute: \\"2-digit\\",
       calendar: \\"iso8601\\",
       numberingSystem: \\"latn\\",
-      hour12: false,
+      hourCycle: \\"h23\\",
     });
     const parts = df.formatToParts(date).reduce((acc, part) => {
       acc[part.type] = part.value;
