@@ -25,6 +25,10 @@ describe('validateField tests', () => {
       hasError: true,
       errorMessage: 'The value is required',
     });
+    expect(validateField(null, [{ type: ValidationTypes.REQUIRED, validationMessage: '' }])).toEqual({
+      hasError: true,
+      errorMessage: 'The value is required',
+    });
     expect(validateField(0, [{ type: ValidationTypes.REQUIRED, validationMessage: 'test' }])).toEqual({
       hasError: false,
     });
@@ -236,6 +240,9 @@ describe('validateField tests', () => {
       hasError: true,
       errorMessage: 'test',
     });
+    expect(validateField(null, [{ type: ValidationTypes.EMAIL, validationMessage: 'test' }])).toEqual({
+      hasError: false,
+    });
   });
   it('should validate JSON type', () => {
     expect(validateField('{}', [{ type: ValidationTypes.JSON, validationMessage: '' }])).toEqual({
@@ -284,6 +291,9 @@ describe('validateField tests', () => {
       hasError: true,
       errorMessage: 'test',
     });
+    expect(validateField(null, [{ type: ValidationTypes.URL, validationMessage: 'test' }])).toEqual({
+      hasError: false,
+    });
   });
 
   it('should validate Phone type', () => {
@@ -305,6 +315,9 @@ describe('validateField tests', () => {
     });
 
     expect(validateField('293 849-3029', [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
+      hasError: false,
+    });
+    expect(validateField(null, [{ type: ValidationTypes.PHONE, validationMessage: 'test' }])).toEqual({
       hasError: false,
     });
   });
