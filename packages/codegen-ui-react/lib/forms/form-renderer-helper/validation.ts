@@ -137,7 +137,7 @@ export function getOnChangeValidationBlock(fieldName: string) {
 
 /**
   const runValidationTasks = async (fieldName, currentValue, getDisplayValue) => {
-    const value = getDisplayValue ? getDisplayValue(currentValue) : currentValue;
+    const value = currentValue && getDisplayValue ? getDisplayValue(currentValue) : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -201,7 +201,11 @@ export const runValidationTasksFunction = factory.createVariableStatement(
                       undefined,
                       undefined,
                       factory.createConditionalExpression(
-                        factory.createIdentifier('getDisplayValue'),
+                        factory.createBinaryExpression(
+                          factory.createIdentifier('currentValue'),
+                          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+                          factory.createIdentifier('getDisplayValue'),
+                        ),
                         factory.createToken(SyntaxKind.QuestionToken),
                         factory.createCallExpression(factory.createIdentifier('getDisplayValue'), undefined, [
                           factory.createIdentifier('currentValue'),

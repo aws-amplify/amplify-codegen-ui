@@ -1,13 +1,52 @@
 {
-    "id": "kdjfsfdkdj",
-    "name": "DataStoreFormCreateCPKTeacher",
-    "dataType": {
-        "dataSourceType": "DataStore",
-        "dataTypeName": "CPKTeacher"
-    },
-    "formActionType": "create",
-    "fields": {},
-    "sectionalElements": {},
-    "style": {},
-    "cta": {}
+  "id": "kdjfsfdkdj",
+  "name": "DataStoreFormCreateCPKTeacher",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "CPKTeacher"
+  },
+  "formActionType": "create",
+  "fields": {
+    "CPKStudent": {
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "bindingProperties": {
+                  "property": "CPKStudent",
+                  "field": "specialStudentId"
+                }
+              },
+              "displayValue": {
+                "concat": [
+                  {
+                    "bindingProperties": {
+                      "property": "CPKStudent",
+                      "field": "specialStudentId"
+                    }
+                  },
+                  {
+                    "value": " Student"
+                  }
+                ]
+              }
+            }
+          ],
+          "bindingProperties": {
+            "CPKStudent": {
+              "type": "Data",
+              "bindingProperties": {
+                "model": "CPKStudent"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": {}
 }
