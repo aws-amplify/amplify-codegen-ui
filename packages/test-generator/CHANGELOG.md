@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.2...v2.8.0) (2023-01-27)
+
+
+### Bug Fixes
+
+* correctly validate on submit for fields with concat display values ([a1f3bfd](https://github.com/aws-amplify/amplify-codegen-ui/commit/a1f3bfd7770e3bdc7e721dd7857e73b1c7a5c02f))
+* handle 12AM when converting to local time ([1eb9541](https://github.com/aws-amplify/amplify-codegen-ui/commit/1eb95415761f57dd632fee0c45fd6853af3a2519))
+* hasMany update assertion ([728e61a](https://github.com/aws-amplify/amplify-codegen-ui/commit/728e61aa2c29bed041b1b736e0c69b97c6741c2e))
+* hasMany update form should throw better error message for invalid schema ([b25a562](https://github.com/aws-amplify/amplify-codegen-ui/commit/b25a5620ab0d37b5a826f4f656e3324e57547917))
+* show arrayField error message in non-edit mode ([6855edc](https://github.com/aws-amplify/amplify-codegen-ui/commit/6855edce360fd9e0ae264ec2a958267eb958faba))
+
+
+
+
+
 ## [2.7.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.1...v2.7.2) (2023-01-04)
 
 
