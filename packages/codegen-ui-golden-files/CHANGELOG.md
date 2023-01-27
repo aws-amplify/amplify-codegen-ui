@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.2...v2.8.0) (2023-01-27)
+
+
+### Bug Fixes
+
+* throw validation error when updating models with misconfigured h… ([#886](https://github.com/aws-amplify/amplify-codegen-ui/issues/886)) ([ac80c9c](https://github.com/aws-amplify/amplify-codegen-ui/commit/ac80c9c9679ac6e8c7479c11ce0122b27f2e84ba))
+
+
+
+
+
 ## [2.7.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.1...v2.7.2) (2023-01-04)
 
 

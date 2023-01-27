@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.2...v2.8.0) (2023-01-27)
+
+
+### Bug Fixes
+
+* add default value support for controlled textfield components ([#884](https://github.com/aws-amplify/amplify-codegen-ui/issues/884)) ([b90e191](https://github.com/aws-amplify/amplify-codegen-ui/commit/b90e1918ab83b534c1d70dfa0d8aff2cc2a7bcff))
+* hasMany update form should throw better error message for invalid schema ([b25a562](https://github.com/aws-amplify/amplify-codegen-ui/commit/b25a5620ab0d37b5a826f4f656e3324e57547917))
+* throw validation error when updating models with misconfigured h… ([#886](https://github.com/aws-amplify/amplify-codegen-ui/issues/886)) ([ac80c9c](https://github.com/aws-amplify/amplify-codegen-ui/commit/ac80c9c9679ac6e8c7479c11ce0122b27f2e84ba))
+
+
+### Features
+
+* support bidirectional hasMany ([e6ebec3](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6ebec39c1d1db38c4e9e908c1ea121786af62bb))
+
+
+
+
+
 ## [2.7.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.1...v2.7.2) (2023-01-04)
 
 

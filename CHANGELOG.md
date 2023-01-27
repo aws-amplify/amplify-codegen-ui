@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.2...v2.8.0) (2023-01-27)
+
+
+### Bug Fixes
+
+* add default value support for controlled textfield components ([#884](https://github.com/aws-amplify/amplify-codegen-ui/issues/884)) ([b90e191](https://github.com/aws-amplify/amplify-codegen-ui/commit/b90e1918ab83b534c1d70dfa0d8aff2cc2a7bcff))
+* allow required arrays in relationships ([166f92b](https://github.com/aws-amplify/amplify-codegen-ui/commit/166f92ba47d72f5a486a8925589be19671b22327))
+* check for null value during form validation ([#902](https://github.com/aws-amplify/amplify-codegen-ui/issues/902)) ([30891e7](https://github.com/aws-amplify/amplify-codegen-ui/commit/30891e7c326a8b1f00eedaf14ae612776cd8307c))
+* correctly validate on submit for fields with concat display values ([a1f3bfd](https://github.com/aws-amplify/amplify-codegen-ui/commit/a1f3bfd7770e3bdc7e721dd7857e73b1c7a5c02f))
+* enforce bidirectionality between hasOne and belongsTo ([12ccbcd](https://github.com/aws-amplify/amplify-codegen-ui/commit/12ccbcd41af0305e42da7889b20b2208c692c003))
+* handle 12AM when converting to local time ([1eb9541](https://github.com/aws-amplify/amplify-codegen-ui/commit/1eb95415761f57dd632fee0c45fd6853af3a2519))
+* hasMany update assertion ([728e61a](https://github.com/aws-amplify/amplify-codegen-ui/commit/728e61aa2c29bed041b1b736e0c69b97c6741c2e))
+* hasMany update form should throw better error message for invalid schema ([b25a562](https://github.com/aws-amplify/amplify-codegen-ui/commit/b25a5620ab0d37b5a826f4f656e3324e57547917))
+* parse and stringify nonmodel fields ([#882](https://github.com/aws-amplify/amplify-codegen-ui/issues/882)) ([7c5ab39](https://github.com/aws-amplify/amplify-codegen-ui/commit/7c5ab39ddc3e33236c84c70085049660b8b8d03c))
+* remove e2e test account credentials ([#875](https://github.com/aws-amplify/amplify-codegen-ui/issues/875)) ([5dcd69b](https://github.com/aws-amplify/amplify-codegen-ui/commit/5dcd69bbca56f527a3a3c4d0dfa26f7ece492b63))
+* show arrayField error message in non-edit mode ([6855edc](https://github.com/aws-amplify/amplify-codegen-ui/commit/6855edce360fd9e0ae264ec2a958267eb958faba))
+* throw validation error when updating models with misconfigured h… ([#886](https://github.com/aws-amplify/amplify-codegen-ui/issues/886)) ([ac80c9c](https://github.com/aws-amplify/amplify-codegen-ui/commit/ac80c9c9679ac6e8c7479c11ce0122b27f2e84ba))
+* use oidc provider for canary metrics ([#873](https://github.com/aws-amplify/amplify-codegen-ui/issues/873)) ([f2311c3](https://github.com/aws-amplify/amplify-codegen-ui/commit/f2311c3c3876ac29e535ad12a14df407dfe2280d))
+
+
+### Features
+
+* support bidirectional hasMany ([e6ebec3](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6ebec39c1d1db38c4e9e908c1ea121786af62bb))
+
+
+
+
+
 ## [2.7.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.1...v2.7.2) (2023-01-04)
 
 
