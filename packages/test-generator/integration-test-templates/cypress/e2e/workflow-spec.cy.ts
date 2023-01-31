@@ -252,7 +252,7 @@ describe('Workflow', () => {
         cy.get('#complex-model').within(() => {
           cy.get('button').click();
           cy.contains('"listElement":["a","b","c","1","2","3"]');
-          cy.contains('"listElement":["a","b","c","1","2","3"]');
+          cy.contains('"myCustomField":{"StringVal":"hi there","NumVal":7,"BoolVal":false}');
         });
       });
     });

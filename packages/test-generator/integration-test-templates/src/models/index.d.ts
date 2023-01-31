@@ -13,20 +13,20 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-/* eslint-disable max-classes-per-file */
+
 /* eslint-disable @typescript-eslint/no-redeclare */
+/* eslint-disable import/no-duplicates */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
   ModelInit,
   MutableModel,
-  LazyLoading,
-  LazyLoadingDisabled,
-  AsyncItem,
-  AsyncCollection,
   __modelMeta__,
-  CustomIdentifier,
   ManagedIdentifier,
+  CustomIdentifier,
   CompositeIdentifier,
 } from '@aws-amplify/datastore';
+// @ts-ignore
+import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from '@aws-amplify/datastore';
 
 export enum City {
   SAN_FRANCISCO = 'SAN_FRANCISCO',
@@ -40,299 +40,6 @@ export enum City {
   PORTLAND = 'PORTLAND',
   SEATTLE = 'SEATTLE',
 }
-
-type UserPreferenceMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-type UserMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-type ListingMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-type ComplexModelMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-type ClassMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-type TagMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-type AllSupportedFormFieldsTagMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-type OwnerMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-type StudentMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-type AllSupportedFormFieldsMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-};
-
-export declare class UserPreference {
-  readonly id: string;
-
-  readonly favoriteColor?: string;
-
-  readonly createdAt?: string;
-
-  readonly updatedAt?: string;
-  constructor(init: ModelInit<UserPreference, UserPreferenceMetaData>);
-  static copyOf(
-    source: UserPreference,
-    mutator: (
-      draft: MutableModel<UserPreference, UserPreferenceMetaData>,
-    ) => MutableModel<UserPreference, UserPreferenceMetaData> | void,
-  ): UserPreference;
-}
-
-type EagerUser = {
-  readonly id: string;
-
-  readonly firstName?: string;
-
-  readonly lastName?: string;
-
-  readonly age?: number;
-
-  readonly isLoggedIn?: boolean;
-
-  readonly loggedInColor?: string;
-
-  readonly loggedOutColor?: string;
-
-  readonly createdAt?: string;
-
-  readonly updatedAt?: string;
-};
-
-type LazyUser = {
-  readonly id: string;
-
-  readonly firstName?: string;
-
-  readonly lastName?: string;
-
-  readonly age?: number;
-
-  readonly isLoggedIn?: boolean;
-
-  readonly loggedInColor?: string;
-
-  readonly loggedOutColor?: string;
-
-  readonly createdAt?: string;
-
-  readonly updatedAt?: string;
-};
-
-export declare type User = LazyLoading extends LazyLoadingDisabled ? EagerUser : LazyUser;
-
-export declare const User: (new (init: ModelInit<User, UserMetaData>) => User) & {
-  copyOf(
-    source: User,
-    mutator: (draft: MutableModel<User, UserMetaData>) => MutableModel<User, UserMetaData> | void,
-  ): User;
-};
-
-export declare class Listing {
-  readonly id: string;
-
-  readonly title?: string;
-
-  readonly priceUSD?: number;
-
-  readonly description?: string;
-
-  readonly createdAt?: string;
-
-  readonly updatedAt?: string;
-  constructor(init: ModelInit<Listing, ListingMetaData>);
-  static copyOf(
-    source: Listing,
-    mutator: (draft: MutableModel<Listing, ListingMetaData>) => MutableModel<Listing, ListingMetaData> | void,
-  ): Listing;
-}
-
-export declare class ComplexModel {
-  readonly id: string;
-
-  readonly listElement: string[];
-
-  readonly myCustomField?: CustomType;
-
-  readonly createdAt?: string;
-
-  readonly updatedAt?: string;
-
-  constructor(init: ModelInit<ComplexModel, ComplexModelMetaData>);
-
-  static copyOf(
-    source: ComplexModel,
-    mutator: (
-      draft: MutableModel<ComplexModel, ComplexModelMetaData>,
-    ) => MutableModel<ComplexModel, ComplexModelMetaData> | void,
-  ): ComplexModel;
-}
-
-export declare class Class {
-  readonly id: string;
-
-  readonly name?: string;
-
-  readonly createdAt?: string;
-
-  readonly updatedAt?: string;
-
-  constructor(init: ModelInit<Class, ClassMetaData>);
-  static copyOf(
-    source: Class,
-    mutator: (draft: MutableModel<Class, ClassMetaData>) => MutableModel<Class, ClassMetaData> | void,
-  ): Class;
-}
-
-type EagerTag = {
-  readonly id: string;
-
-  readonly label?: string | null;
-
-  readonly AllSupportedFormFields?: (AllSupportedFormFieldsTag | null)[] | null;
-
-  readonly createdAt?: string | null;
-
-  readonly updatedAt?: string | null;
-};
-
-type LazyTag = {
-  readonly id: string;
-
-  readonly label?: string | null;
-
-  readonly AllSupportedFormFields?: AsyncCollection<AllSupportedFormFieldsTag>;
-
-  readonly createdAt?: string | null;
-
-  readonly updatedAt?: string | null;
-};
-
-export declare type Tag = LazyLoading extends LazyLoadingDisabled ? EagerTag : LazyTag;
-
-export declare const Tag: (new (init: ModelInit<Tag, TagMetaData>) => Tag) & {
-  copyOf(source: Tag, mutator: (draft: MutableModel<Tag, TagMetaData>) => MutableModel<Tag, TagMetaData> | void): Tag;
-};
-
-type EagerAllSupportedFormFieldsTag = {
-  readonly id: string;
-
-  readonly tag?: Tag;
-
-  readonly allSupportedFormFields?: AllSupportedFormFields | null;
-
-  readonly createdAt?: string | null;
-
-  readonly updatedAt?: string | null;
-};
-
-type LazyAllSupportedFormFieldsTag = {
-  readonly id: string;
-
-  readonly tag?: AsyncItem<Tag>;
-
-  readonly allSupportedFormFields?: AsyncItem<AllSupportedFormFields>;
-
-  readonly createdAt?: string | null;
-
-  readonly updatedAt?: string | null;
-};
-
-export declare type AllSupportedFormFieldsTag = LazyLoading extends LazyLoadingDisabled
-  ? EagerAllSupportedFormFieldsTag
-  : LazyAllSupportedFormFieldsTag;
-
-export declare const AllSupportedFormFieldsTag: (new (
-  init: ModelInit<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData>,
-) => AllSupportedFormFieldsTag) & {
-  copyOf(
-    source: AllSupportedFormFieldsTag,
-    mutator: (
-      draft: MutableModel<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData>,
-    ) => MutableModel<AllSupportedFormFieldsTag, AllSupportedFormFieldsTagMetaData> | void,
-  ): AllSupportedFormFieldsTag;
-};
-
-type EagerOwner = {
-  readonly id: string;
-
-  readonly name?: string;
-
-  readonly AllSupportedFormFields?: AllSupportedFormFields | null;
-
-  readonly ownerAllSupportedFormFieldsId?: string;
-
-  readonly createdAt?: string;
-
-  readonly updatedAt?: string;
-};
-
-type LazyOwner = {
-  readonly id: string;
-
-  readonly name?: string;
-
-  readonly AllSupportedFormFields?: AsyncItem<AllSupportedFormFields | undefined>;
-
-  readonly ownerAllSupportedFormFieldsId?: string;
-
-  readonly createdAt?: string;
-
-  readonly updatedAt?: string;
-};
-
-export declare type Owner = LazyLoading extends LazyLoadingDisabled ? EagerOwner : LazyOwner;
-
-export declare const Owner: (new (init: ModelInit<Owner, OwnerMetaData>) => Owner) & {
-  copyOf(
-    source: Owner,
-    mutator: (draft: MutableModel<Owner, OwnerMetaData>) => MutableModel<Owner, OwnerMetaData> | void,
-  ): Owner;
-};
-
-type EagerStudent = {
-  readonly id: string;
-  readonly name?: string | null;
-  readonly allSupportedFormFieldsID?: string;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-};
-
-type LazyStudent = {
-  readonly id: string;
-  readonly name?: string | null;
-  readonly allSupportedFormFieldsID?: string;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-};
-
-export declare type Student = LazyLoading extends LazyLoadingDisabled ? EagerStudent : LazyStudent;
-
-export declare const Student: (new (init: ModelInit<Student, StudentMetaData>) => Student) & {
-  copyOf(
-    source: Student,
-    mutator: (draft: MutableModel<Student, StudentMetaData>) => MutableModel<Student, StudentMetaData> | void,
-  ): Student;
-};
 
 type EagerCustomType = {
   readonly StringVal?: string | null;
@@ -350,108 +57,262 @@ export declare type CustomType = LazyLoading extends LazyLoadingDisabled ? Eager
 
 export declare const CustomType: new (init: ModelInit<CustomType>) => CustomType;
 
-type EagerAllSupportedFormFields = {
+type EagerUserPreference = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserPreference, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
-
-  readonly string?: string | null;
-
-  readonly stringArray?: string[] | null;
-
-  readonly int?: number | null;
-
-  readonly float?: number | null;
-
-  readonly awsDate?: string | null;
-
-  readonly awsTime?: string | null;
-
-  readonly awsDateTime?: string | null;
-
-  readonly awsTimestamp?: number | null;
-
-  readonly awsEmail?: string | null;
-
-  readonly awsUrl?: string | null;
-
-  readonly awsIPAddress?: string | null;
-
-  readonly boolean?: boolean | null;
-
-  readonly awsJson?: string | null;
-
-  readonly awsPhone?: string | null;
-
-  readonly enum?: City | keyof typeof City | null;
-
-  readonly nonModelField?: CustomType | null;
-
-  readonly nonModelFieldArray?: (CustomType | null)[] | null;
-
+  readonly favoriteColor?: string | null;
   readonly createdAt?: string | null;
-
   readonly updatedAt?: string | null;
+};
 
+type LazyUserPreference = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserPreference, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly favoriteColor?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type UserPreference = LazyLoading extends LazyLoadingDisabled ? EagerUserPreference : LazyUserPreference;
+
+export declare const UserPreference: (new (init: ModelInit<UserPreference>) => UserPreference) & {
+  copyOf(
+    source: UserPreference,
+    mutator: (draft: MutableModel<UserPreference>) => MutableModel<UserPreference> | void,
+  ): UserPreference;
+};
+
+type EagerUser = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<User, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly firstName?: string | null;
+  readonly lastName?: string | null;
+  readonly age?: number | null;
+  readonly isLoggedIn?: boolean | null;
+  readonly loggedInColor?: string | null;
+  readonly loggedOutColor?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyUser = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<User, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly firstName?: string | null;
+  readonly lastName?: string | null;
+  readonly age?: number | null;
+  readonly isLoggedIn?: boolean | null;
+  readonly loggedInColor?: string | null;
+  readonly loggedOutColor?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type User = LazyLoading extends LazyLoadingDisabled ? EagerUser : LazyUser;
+
+export declare const User: (new (init: ModelInit<User>) => User) & {
+  copyOf(source: User, mutator: (draft: MutableModel<User>) => MutableModel<User> | void): User;
+};
+
+type EagerListing = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Listing, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly title?: string | null;
+  readonly priceUSD?: number | null;
+  readonly description?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyListing = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Listing, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly title?: string | null;
+  readonly priceUSD?: number | null;
+  readonly description?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type Listing = LazyLoading extends LazyLoadingDisabled ? EagerListing : LazyListing;
+
+export declare const Listing: (new (init: ModelInit<Listing>) => Listing) & {
+  copyOf(source: Listing, mutator: (draft: MutableModel<Listing>) => MutableModel<Listing> | void): Listing;
+};
+
+type EagerComplexModel = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ComplexModel, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly listElement: (string | null)[];
+  readonly myCustomField?: CustomType | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyComplexModel = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ComplexModel, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly listElement: (string | null)[];
+  readonly myCustomField?: CustomType | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type ComplexModel = LazyLoading extends LazyLoadingDisabled ? EagerComplexModel : LazyComplexModel;
+
+export declare const ComplexModel: (new (init: ModelInit<ComplexModel>) => ComplexModel) & {
+  copyOf(
+    source: ComplexModel,
+    mutator: (draft: MutableModel<ComplexModel>) => MutableModel<ComplexModel> | void,
+  ): ComplexModel;
+};
+
+type EagerClass = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Class, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyClass = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Class, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type Class = LazyLoading extends LazyLoadingDisabled ? EagerClass : LazyClass;
+
+export declare const Class: (new (init: ModelInit<Class>) => Class) & {
+  copyOf(source: Class, mutator: (draft: MutableModel<Class>) => MutableModel<Class> | void): Class;
+};
+
+type EagerTag = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Tag, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly label?: string | null;
+  readonly AllSupportedFormFields?: (AllSupportedFormFieldsTag | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyTag = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Tag, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly label?: string | null;
+  readonly AllSupportedFormFields: AsyncCollection<AllSupportedFormFieldsTag>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type Tag = LazyLoading extends LazyLoadingDisabled ? EagerTag : LazyTag;
+
+export declare const Tag: (new (init: ModelInit<Tag>) => Tag) & {
+  copyOf(source: Tag, mutator: (draft: MutableModel<Tag>) => MutableModel<Tag> | void): Tag;
+};
+
+type EagerAllSupportedFormFields = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<AllSupportedFormFields, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly string?: string | null;
+  readonly stringArray?: (string | null)[] | null;
+  readonly int?: number | null;
+  readonly float?: number | null;
+  readonly awsDate?: string | null;
+  readonly awsTime?: string | null;
+  readonly awsDateTime?: string | null;
+  readonly awsTimestamp?: number | null;
+  readonly awsEmail?: string | null;
+  readonly awsUrl?: string | null;
+  readonly awsIPAddress?: string | null;
+  readonly boolean?: boolean | null;
+  readonly awsJson?: string | null;
+  readonly awsPhone?: string | null;
+  readonly enum?: City | keyof typeof City | null;
+  readonly nonModelField?: CustomType | null;
+  readonly nonModelFieldArray?: (CustomType | null)[] | null;
   readonly HasOneUser?: User | null;
-
   readonly BelongsToOwner?: Owner | null;
-
   readonly HasManyStudents?: (Student | null)[] | null;
-
   readonly ManyToManyTags?: (AllSupportedFormFieldsTag | null)[] | null;
-
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
   readonly allSupportedFormFieldsHasOneUserId?: string | null;
+  readonly allSupportedFormFieldsBelongsToOwnerId?: string | null;
 };
 
 type LazyAllSupportedFormFields = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<AllSupportedFormFields, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
   readonly id: string;
-
   readonly string?: string | null;
-
-  readonly stringArray?: string[] | null;
-
+  readonly stringArray?: (string | null)[] | null;
   readonly int?: number | null;
-
   readonly float?: number | null;
-
   readonly awsDate?: string | null;
-
   readonly awsTime?: string | null;
-
   readonly awsDateTime?: string | null;
-
   readonly awsTimestamp?: number | null;
-
   readonly awsEmail?: string | null;
-
   readonly awsUrl?: string | null;
-
   readonly awsIPAddress?: string | null;
-
   readonly boolean?: boolean | null;
-
   readonly awsJson?: string | null;
-
   readonly awsPhone?: string | null;
-
   readonly enum?: City | keyof typeof City | null;
-
   readonly nonModelField?: CustomType | null;
-
   readonly nonModelFieldArray?: (CustomType | null)[] | null;
-
+  readonly HasOneUser: AsyncItem<User | undefined>;
+  readonly BelongsToOwner: AsyncItem<Owner | undefined>;
+  readonly HasManyStudents: AsyncCollection<Student>;
+  readonly ManyToManyTags: AsyncCollection<AllSupportedFormFieldsTag>;
   readonly createdAt?: string | null;
-
   readonly updatedAt?: string | null;
-
-  readonly HasOneUser?: AsyncItem<User | undefined>;
-
-  readonly BelongsToOwner?: AsyncItem<Owner | undefined>;
-
-  readonly HasManyStudents?: AsyncCollection<Student>;
-
-  readonly ManyToManyTags?: AsyncCollection<AllSupportedFormFieldsTag>;
-
   readonly allSupportedFormFieldsHasOneUserId?: string | null;
+  readonly allSupportedFormFieldsBelongsToOwnerId?: string | null;
 };
 
 export declare type AllSupportedFormFields = LazyLoading extends LazyLoadingDisabled
@@ -459,14 +320,74 @@ export declare type AllSupportedFormFields = LazyLoading extends LazyLoadingDisa
   : LazyAllSupportedFormFields;
 
 export declare const AllSupportedFormFields: (new (
-  init: ModelInit<AllSupportedFormFields, AllSupportedFormFieldsMetaData>,
+  init: ModelInit<AllSupportedFormFields>,
 ) => AllSupportedFormFields) & {
   copyOf(
     source: AllSupportedFormFields,
-    mutator: (
-      draft: MutableModel<AllSupportedFormFields, AllSupportedFormFieldsMetaData>,
-    ) => MutableModel<AllSupportedFormFields, AllSupportedFormFieldsMetaData> | void,
+    mutator: (draft: MutableModel<AllSupportedFormFields>) => MutableModel<AllSupportedFormFields> | void,
   ): AllSupportedFormFields;
+};
+
+type EagerOwner = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Owner, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly AllSupportedFormFields?: AllSupportedFormFields | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly ownerAllSupportedFormFieldsId?: string | null;
+};
+
+type LazyOwner = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Owner, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly AllSupportedFormFields: AsyncItem<AllSupportedFormFields | undefined>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly ownerAllSupportedFormFieldsId?: string | null;
+};
+
+export declare type Owner = LazyLoading extends LazyLoadingDisabled ? EagerOwner : LazyOwner;
+
+export declare const Owner: (new (init: ModelInit<Owner>) => Owner) & {
+  copyOf(source: Owner, mutator: (draft: MutableModel<Owner>) => MutableModel<Owner> | void): Owner;
+};
+
+type EagerStudent = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Student, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly allSupportedFormFieldsID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyStudent = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Student, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly allSupportedFormFieldsID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type Student = LazyLoading extends LazyLoadingDisabled ? EagerStudent : LazyStudent;
+
+export declare const Student: (new (init: ModelInit<Student>) => Student) & {
+  copyOf(source: Student, mutator: (draft: MutableModel<Student>) => MutableModel<Student> | void): Student;
 };
 
 type EagerCPKStudent = {
@@ -583,45 +504,6 @@ export declare type CPKProject = LazyLoading extends LazyLoadingDisabled ? Eager
 
 export declare const CPKProject: (new (init: ModelInit<CPKProject>) => CPKProject) & {
   copyOf(source: CPKProject, mutator: (draft: MutableModel<CPKProject>) => MutableModel<CPKProject> | void): CPKProject;
-};
-
-type EagerCPKTeacherCPKClass = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<CPKTeacherCPKClass, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly cPKTeacherSpecialTeacherId?: string | null;
-  readonly cPKClassSpecialClassId?: string | null;
-  readonly cpkTeacher: CPKTeacher;
-  readonly cpkClass: CPKClass;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-};
-
-type LazyCPKTeacherCPKClass = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<CPKTeacherCPKClass, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly cPKTeacherSpecialTeacherId?: string | null;
-  readonly cPKClassSpecialClassId?: string | null;
-  readonly cpkTeacher: AsyncItem<CPKTeacher>;
-  readonly cpkClass: AsyncItem<CPKClass>;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-};
-
-export declare type CPKTeacherCPKClass = LazyLoading extends LazyLoadingDisabled
-  ? EagerCPKTeacherCPKClass
-  : LazyCPKTeacherCPKClass;
-
-export declare const CPKTeacherCPKClass: (new (init: ModelInit<CPKTeacherCPKClass>) => CPKTeacherCPKClass) & {
-  copyOf(
-    source: CPKTeacherCPKClass,
-    mutator: (draft: MutableModel<CPKTeacherCPKClass>) => MutableModel<CPKTeacherCPKClass> | void,
-  ): CPKTeacherCPKClass;
 };
 
 type EagerCompositeDog = {
@@ -805,6 +687,86 @@ export declare const CompositeVet: (new (init: ModelInit<CompositeVet>) => Compo
     source: CompositeVet,
     mutator: (draft: MutableModel<CompositeVet>) => MutableModel<CompositeVet> | void,
   ): CompositeVet;
+};
+
+type EagerAllSupportedFormFieldsTag = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<AllSupportedFormFieldsTag, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly tagId?: string | null;
+  readonly allSupportedFormFieldsId?: string | null;
+  readonly tag: Tag;
+  readonly allSupportedFormFields: AllSupportedFormFields;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyAllSupportedFormFieldsTag = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<AllSupportedFormFieldsTag, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly tagId?: string | null;
+  readonly allSupportedFormFieldsId?: string | null;
+  readonly tag: AsyncItem<Tag>;
+  readonly allSupportedFormFields: AsyncItem<AllSupportedFormFields>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type AllSupportedFormFieldsTag = LazyLoading extends LazyLoadingDisabled
+  ? EagerAllSupportedFormFieldsTag
+  : LazyAllSupportedFormFieldsTag;
+
+export declare const AllSupportedFormFieldsTag: (new (
+  init: ModelInit<AllSupportedFormFieldsTag>,
+) => AllSupportedFormFieldsTag) & {
+  copyOf(
+    source: AllSupportedFormFieldsTag,
+    mutator: (draft: MutableModel<AllSupportedFormFieldsTag>) => MutableModel<AllSupportedFormFieldsTag> | void,
+  ): AllSupportedFormFieldsTag;
+};
+
+type EagerCPKTeacherCPKClass = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CPKTeacherCPKClass, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly cPKTeacherSpecialTeacherId?: string | null;
+  readonly cPKClassSpecialClassId?: string | null;
+  readonly cpkTeacher: CPKTeacher;
+  readonly cpkClass: CPKClass;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyCPKTeacherCPKClass = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CPKTeacherCPKClass, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly cPKTeacherSpecialTeacherId?: string | null;
+  readonly cPKClassSpecialClassId?: string | null;
+  readonly cpkTeacher: AsyncItem<CPKTeacher>;
+  readonly cpkClass: AsyncItem<CPKClass>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type CPKTeacherCPKClass = LazyLoading extends LazyLoadingDisabled
+  ? EagerCPKTeacherCPKClass
+  : LazyCPKTeacherCPKClass;
+
+export declare const CPKTeacherCPKClass: (new (init: ModelInit<CPKTeacherCPKClass>) => CPKTeacherCPKClass) & {
+  copyOf(
+    source: CPKTeacherCPKClass,
+    mutator: (draft: MutableModel<CPKTeacherCPKClass>) => MutableModel<CPKTeacherCPKClass> | void,
+  ): CPKTeacherCPKClass;
 };
 
 type EagerCompositeDogCompositeVet = {

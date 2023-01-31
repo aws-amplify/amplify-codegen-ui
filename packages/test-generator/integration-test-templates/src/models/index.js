@@ -13,7 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-// @ts-check
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
@@ -37,20 +36,20 @@ const {
   ComplexModel,
   Class,
   Tag,
-  AllSupportedFormFieldsTag,
+  AllSupportedFormFields,
   Owner,
   Student,
-  AllSupportedFormFields,
   CPKStudent,
   CPKTeacher,
   CPKClass,
-  CPKTeacherCPKClass,
   CPKProject,
   CompositeDog,
   CompositeBowl,
   CompositeOwner,
   CompositeToy,
   CompositeVet,
+  AllSupportedFormFieldsTag,
+  CPKTeacherCPKClass,
   CompositeDogCompositeVet,
   CustomType,
 } = initSchema(schema);
@@ -62,21 +61,21 @@ export {
   ComplexModel,
   Class,
   Tag,
-  AllSupportedFormFieldsTag,
+  AllSupportedFormFields,
   Owner,
   Student,
-  AllSupportedFormFields,
-  City,
   CPKStudent,
   CPKTeacher,
   CPKClass,
-  CPKTeacherCPKClass,
   CPKProject,
   CompositeDog,
   CompositeBowl,
   CompositeOwner,
   CompositeToy,
   CompositeVet,
+  AllSupportedFormFieldsTag,
+  CPKTeacherCPKClass,
   CompositeDogCompositeVet,
+  City,
   CustomType,
 };
