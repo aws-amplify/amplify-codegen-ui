@@ -16,7 +16,7 @@
 const TEST_ROUTE = 'http://localhost:3000/workflow-tests';
 
 describe('Workflow', () => {
-  before(() => {
+  beforeEach(() => {
     cy.url().then((url) => {
       if (url !== TEST_ROUTE) {
         cy.visit(TEST_ROUTE);

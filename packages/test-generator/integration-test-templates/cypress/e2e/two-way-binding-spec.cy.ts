@@ -14,8 +14,8 @@
   limitations under the License.
  */
 
-describe('Workflow', () => {
-  before(() => {
+describe('Two way binding', () => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/two-way-binding-tests');
   });
 

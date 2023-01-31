@@ -14,7 +14,7 @@
   limitations under the License.
  */
 describe('Primitives', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/primitives-tests');
   });
 
@@ -135,6 +135,7 @@ describe('Primitives', () => {
     it('Basic', () => {
       cy.get('#icon')
         .get('.amplify-icon')
+        .first()
         .within(() => {
           cy.get('path').should(
             'have.attr',
@@ -304,6 +305,7 @@ describe('Primitives', () => {
     it('Basic', () => {
       cy.get('#tabs')
         .find('div')
+        .first()
         .within(() => {
           cy.get('.amplify-tabs').within(() => {
             cy.get('button').eq(0).should('have.text', 'Tab 1');

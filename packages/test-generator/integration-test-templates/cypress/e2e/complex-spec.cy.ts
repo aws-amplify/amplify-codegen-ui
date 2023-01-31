@@ -14,7 +14,7 @@
   limitations under the License.
  */
 describe('Complex Components', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/complex-tests');
   });
 
@@ -65,6 +65,7 @@ describe('Complex Components', () => {
   it('Complex 2', () => {
     cy.get('#complex-test-2').within(() => {
       cy.get('.amplify-flex')
+        .first()
         .then((el) => {
           const style = el.attr('style');
           const expectedStyles = [
@@ -241,6 +242,7 @@ describe('Complex Components', () => {
   it('Complex 4', () => {
     cy.get('#complex-test-4').within(() => {
       cy.get('.amplify-flex')
+        .first()
         .then((el) => {
           const style = el.attr('style');
           const expectedStyles = [
@@ -545,6 +547,7 @@ describe('Complex Components', () => {
   it('Complex 8', () => {
     cy.get('#complex-test-8').within(() => {
       cy.get('.amplify-flex')
+        .first()
         .then((el) => {
           const style = el.attr('style');
           const expectedStyles = [
@@ -620,103 +623,238 @@ describe('Complex Components', () => {
   });
   it('Complex 9', () => {
     cy.get('#complex-test-9').within(() => {
-      cy.get('.amplify-flex').within(() => {
+      cy.get('.amplify-flex')
+        .first()
+        .within(() => {
+          cy.get('.amplify-flex')
+            .then((el) => {
+              const style = el.attr('style');
+              const expectedStyles = [
+                'align-items: center',
+                'align-self: stretch',
+                'background-color: rgb(0, 64, 77)',
+                'flex-basis: 685px',
+                'flex-direction: column',
+                'gap: 10px',
+                'flex-grow: 1',
+                'height: 422px',
+                'justify-content: center',
+                'overflow: hidden',
+                'padding: 120px',
+                'position: relative',
+              ];
+              expect(style.split('; ')).to.have.length(expectedStyles.length);
+              expectedStyles.forEach((expected) => {
+                expect(style).to.include(expected);
+              });
+            })
+            .first()
+            .within(() => {
+              cy.get('.amplify-flex')
+                .then((el) => {
+                  const style = el.attr('style');
+                  const expectedStyles = [
+                    'align-items: center',
+                    'align-self: stretch',
+                    'flex-direction: column',
+                    'gap: 24px',
+                    'justify-content: center',
+                    'padding: 0px',
+                    'position: relative',
+                    'flex-shrink: 0',
+                  ];
+                  expect(style.split('; ')).to.have.length(expectedStyles.length);
+                  expectedStyles.forEach((expected) => {
+                    expect(style).to.include(expected);
+                  });
+                })
+                .first()
+                .within(() => {
+                  cy.get('.amplify-text')
+                    .contains('TestMessage1')
+                    .then((el) => {
+                      const style = el.attr('style');
+                      const expectedStyles = [
+                        'align-self: stretch',
+                        'color: rgb(233, 249, 252)',
+                        'flex-direction: column',
+                        'display: flex',
+                        'font-family: Inter',
+                        'font-size: 16px',
+                        'font-weight: 700',
+                        'justify-content: flex-start',
+                        'letter-spacing: 0.49px',
+                        'line-height: 20px',
+                        'padding: 0px',
+                        'position: relative',
+                        'flex-shrink: 0',
+                        'text-align: center',
+                        'width: 445px',
+                      ];
+                      expect(style.split('; ')).to.have.length(expectedStyles.length);
+                      expectedStyles.forEach((expected) => {
+                        expect(style).to.include(expected);
+                      });
+                    });
+                  cy.get('.amplify-button').contains('TestButton1');
+                  cy.get('.amplify-flex')
+                    .then((el) => {
+                      const style = el.attr('style');
+                      const expectedStyles = [
+                        'align-items: center',
+                        'align-self: stretch',
+                        'flex-direction: column',
+                        'gap: 16px',
+                        'justify-content: center',
+                        'padding: 0px',
+                        'position: relative',
+                        'flex-shrink: 0',
+                      ];
+                      expect(style.split('; ')).to.have.length(expectedStyles.length);
+                      expectedStyles.forEach((expected) => {
+                        expect(style).to.include(expected);
+                      });
+                    })
+                    .first()
+                    .within(() => {
+                      cy.get('.amplify-text')
+                        .eq(0)
+                        .contains('TestMessage2')
+                        .then((el) => {
+                          const style = el.attr('style');
+                          const expectedStyles = [
+                            'align-self: stretch',
+                            'color: rgb(233, 249, 252)',
+                            'flex-direction: column',
+                            'display: flex',
+                            'font-family: Inter',
+                            'font-size: 40px',
+                            'font-weight: 700',
+                            'justify-content: flex-start',
+                            'line-height: 48px',
+                            'padding: 0px',
+                            'position: relative',
+                            'flex-shrink: 0',
+                            'text-align: center',
+                            'width: 445px',
+                          ];
+                          expect(style.split('; ')).to.have.length(expectedStyles.length);
+                          expectedStyles.forEach((expected) => {
+                            expect(style).to.include(expected);
+                          });
+                        });
+                      cy.get('.amplify-text')
+                        .eq(1)
+                        .contains('TestMessage3')
+                        .then((el) => {
+                          const style = el.attr('style');
+                          const expectedStyles = [
+                            'align-self: stretch',
+                            'color: rgb(233, 249, 252)',
+                            'flex-direction: column',
+                            'display: flex',
+                            'font-family: Inter',
+                            'font-size: 16px',
+                            'font-weight: 400',
+                            'justify-content: flex-start',
+                            'letter-spacing: 0.01px',
+                            'line-height: 24px',
+                            'padding: 0px',
+                            'position: relative',
+                            'flex-shrink: 0',
+                            'text-align: center',
+                            'width: 445px',
+                          ];
+                          expect(style.split('; ')).to.have.length(expectedStyles.length);
+                          expectedStyles.forEach((expected) => {
+                            expect(style).to.include(expected);
+                          });
+                        });
+                    });
+                });
+            });
+        });
+    });
+  });
+
+  it('Complex 10', () => {
+    cy.get('#complex-test-10')
+      .first()
+      .within(() => {
         cy.get('.amplify-flex')
           .then((el) => {
             const style = el.attr('style');
             const expectedStyles = [
               'align-items: center',
-              'align-self: stretch',
-              'background-color: rgb(0, 64, 77)',
-              'flex-basis: 685px',
-              'flex-direction: column',
-              'gap: 10px',
-              'flex-grow: 1',
-              'height: 422px',
+              'background-color: rgb(239, 240, 240)',
+              'flex-direction: row',
+              'gap: 24px',
               'justify-content: center',
               'overflow: hidden',
-              'padding: 120px',
+              'padding: 40px 140px',
               'position: relative',
+              'width: 1440px',
             ];
             expect(style.split('; ')).to.have.length(expectedStyles.length);
             expectedStyles.forEach((expected) => {
               expect(style).to.include(expected);
             });
           })
+          .first()
           .within(() => {
             cy.get('.amplify-flex')
               .then((el) => {
                 const style = el.attr('style');
                 const expectedStyles = [
-                  'align-items: center',
-                  'align-self: stretch',
-                  'flex-direction: column',
+                  'align-items: flex-start',
+                  'flex-basis: 1160px',
+                  'flex-direction: row',
                   'gap: 24px',
-                  'justify-content: center',
+                  'flex-grow: 1',
+                  'height: 618px',
                   'padding: 0px',
                   'position: relative',
-                  'flex-shrink: 0',
+                  'width: 1160px',
                 ];
                 expect(style.split('; ')).to.have.length(expectedStyles.length);
                 expectedStyles.forEach((expected) => {
                   expect(style).to.include(expected);
                 });
               })
+              .first()
               .within(() => {
-                cy.get('.amplify-text')
-                  .contains('TestMessage1')
-                  .then((el) => {
-                    const style = el.attr('style');
-                    const expectedStyles = [
-                      'align-self: stretch',
-                      'color: rgb(233, 249, 252)',
-                      'flex-direction: column',
-                      'display: flex',
-                      'font-family: Inter',
-                      'font-size: 16px',
-                      'font-weight: 700',
-                      'justify-content: flex-start',
-                      'letter-spacing: 0.49px',
-                      'line-height: 20px',
-                      'padding: 0px',
-                      'position: relative',
-                      'flex-shrink: 0',
-                      'text-align: center',
-                      'width: 445px',
-                    ];
-                    expect(style.split('; ')).to.have.length(expectedStyles.length);
-                    expectedStyles.forEach((expected) => {
-                      expect(style).to.include(expected);
-                    });
-                  });
-                cy.get('.amplify-button').contains('TestButton1');
                 cy.get('.amplify-flex')
+                  .eq(0)
                   .then((el) => {
                     const style = el.attr('style');
                     const expectedStyles = [
                       'align-items: center',
-                      'align-self: stretch',
+                      'background-color: rgb(255, 255, 255)',
+                      'flex-basis: 272px',
                       'flex-direction: column',
-                      'gap: 16px',
+                      'gap: 24px',
+                      'flex-grow: 1',
+                      'height: 618px',
                       'justify-content: center',
-                      'padding: 0px',
+                      'padding: 24px',
                       'position: relative',
-                      'flex-shrink: 0',
+                      'width: 272px',
                     ];
                     expect(style.split('; ')).to.have.length(expectedStyles.length);
                     expectedStyles.forEach((expected) => {
                       expect(style).to.include(expected);
                     });
                   })
+                  .first()
                   .within(() => {
                     cy.get('.amplify-text')
                       .eq(0)
-                      .contains('TestMessage2')
+                      .contains('Free')
                       .then((el) => {
                         const style = el.attr('style');
                         const expectedStyles = [
                           'align-self: stretch',
-                          'color: rgb(233, 249, 252)',
+                          'color: rgb(13, 26, 38)',
                           'flex-direction: column',
                           'display: flex',
                           'font-family: Inter',
@@ -728,345 +866,225 @@ describe('Complex Components', () => {
                           'position: relative',
                           'flex-shrink: 0',
                           'text-align: center',
-                          'width: 445px',
+                          'width: 224px',
                         ];
                         expect(style.split('; ')).to.have.length(expectedStyles.length);
                         expectedStyles.forEach((expected) => {
                           expect(style).to.include(expected);
                         });
                       });
-                    cy.get('.amplify-text')
-                      .eq(1)
-                      .contains('TestMessage3')
+                    cy.get('.amplify-button').contains('Primary Button');
+                    cy.get('.amplify-flex')
+                      .eq(0)
                       .then((el) => {
                         const style = el.attr('style');
                         const expectedStyles = [
+                          'align-items: flex-start',
                           'align-self: stretch',
-                          'color: rgb(233, 249, 252)',
-                          'flex-direction: column',
-                          'display: flex',
-                          'font-family: Inter',
-                          'font-size: 16px',
-                          'font-weight: 400',
-                          'justify-content: flex-start',
-                          'letter-spacing: 0.01px',
-                          'line-height: 24px',
+                          'flex-direction: row',
+                          'gap: 16px',
                           'padding: 0px',
                           'position: relative',
                           'flex-shrink: 0',
-                          'text-align: center',
-                          'width: 445px',
                         ];
                         expect(style.split('; ')).to.have.length(expectedStyles.length);
                         expectedStyles.forEach((expected) => {
                           expect(style).to.include(expected);
                         });
+                      })
+                      .first()
+                      .within(() => {
+                        cy.get('.amplify-icon').then((el) => {
+                          const style = el.attr('style');
+                          const expectedStyles = [
+                            'color: rgb(64, 170, 191)',
+                            'font-size: 24px',
+                            'height: 24px',
+                            'overflow: hidden',
+                            'padding: 0px',
+                            'position: relative',
+                            'flex-shrink: 0',
+                            'width: 24px',
+                          ];
+                          expect(style.split('; ')).to.have.length(expectedStyles.length);
+                          expectedStyles.forEach((expected) => {
+                            expect(style).to.include(expected);
+                          });
+                        });
+                        cy.get('.amplify-text')
+                          .then((el) => {
+                            const style = el.attr('style');
+                            const expectedStyles = [
+                              'flex-basis: 184px',
+                              'color: rgb(48, 64, 80)',
+                              'flex-direction: column',
+                              'display: flex',
+                              'font-family: Inter',
+                              'font-size: 16px',
+                              'font-weight: 400',
+                              'flex-grow: 1',
+                              'justify-content: flex-start',
+                              'letter-spacing: 0.01px',
+                              'line-height: 24px',
+                              'padding: 0px',
+                              'position: relative',
+                              'text-align: left',
+                              'width: 184px',
+                            ];
+                            expect(style.split('; ')).to.have.length(expectedStyles.length);
+                            expectedStyles.forEach((expected) => {
+                              expect(style).to.include(expected);
+                            });
+                          })
+                          .contains('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.');
+                      });
+                  });
+                cy.get('.amplify-flex')
+                  .eq(12)
+                  .then((el) => {
+                    const style = el.attr('style');
+                    const expectedStyles = [
+                      'align-items: center',
+                      'background-color: rgb(255, 255, 255)',
+                      'flex-basis: 272px',
+                      'flex-direction: column',
+                      'gap: 24px',
+                      'flex-grow: 1',
+                      'height: 618px',
+                      'justify-content: center',
+                      'padding: 24px',
+                      'position: relative',
+                      'width: 272px',
+                    ];
+                    expect(style.split('; ')).to.have.length(expectedStyles.length);
+                    expectedStyles.forEach((expected) => {
+                      expect(style).to.include(expected);
+                    });
+                  })
+                  .first()
+                  .within(() => {
+                    cy.get('.amplify-text')
+                      .eq(0)
+                      .contains('Enterprise')
+                      .then((el) => {
+                        const style = el.attr('style');
+                        const expectedStyles = [
+                          'align-self: stretch',
+                          'color: rgb(13, 26, 38)',
+                          'flex-direction: column',
+                          'display: flex',
+                          'font-family: Inter',
+                          'font-size: 40px',
+                          'font-weight: 700',
+                          'justify-content: flex-start',
+                          'line-height: 48px',
+                          'padding: 0px',
+                          'position: relative',
+                          'flex-shrink: 0',
+                          'text-align: center',
+                          'width: 224px',
+                        ];
+                        expect(style.split('; ')).to.have.length(expectedStyles.length);
+                        expectedStyles.forEach((expected) => {
+                          expect(style).to.include(expected);
+                        });
+                      });
+                    cy.get('.amplify-button').contains('Primary Button');
+                    cy.get('.amplify-flex')
+                      .eq(0)
+                      .then((el) => {
+                        const style = el.attr('style');
+                        const expectedStyles = [
+                          'align-items: flex-start',
+                          'align-self: stretch',
+                          'flex-direction: row',
+                          'gap: 16px',
+                          'padding: 0px',
+                          'position: relative',
+                          'flex-shrink: 0',
+                        ];
+                        expect(style.split('; ')).to.have.length(expectedStyles.length);
+                        expectedStyles.forEach((expected) => {
+                          expect(style).to.include(expected);
+                        });
+                      })
+                      .first()
+                      .within(() => {
+                        cy.get('.amplify-icon').then((el) => {
+                          const style = el.attr('style');
+                          const expectedStyles = [
+                            'color: rgb(64, 170, 191)',
+                            'font-size: 24px',
+                            'height: 24px',
+                            'overflow: hidden',
+                            'padding: 0px',
+                            'position: relative',
+                            'flex-shrink: 0',
+                            'width: 24px',
+                          ];
+                          expect(style.split('; ')).to.have.length(expectedStyles.length);
+                          expectedStyles.forEach((expected) => {
+                            expect(style).to.include(expected);
+                          });
+                        });
+                        cy.get('.amplify-text')
+                          .then((el) => {
+                            const style = el.attr('style');
+                            const expectedStyles = [
+                              'flex-basis: 184px',
+                              'color: rgb(48, 64, 80)',
+                              'flex-direction: column',
+                              'display: flex',
+                              'font-family: Inter',
+                              'font-size: 16px',
+                              'font-weight: 400',
+                              'flex-grow: 1',
+                              'justify-content: flex-start',
+                              'letter-spacing: 0.01px',
+                              'line-height: 24px',
+                              'padding: 0px',
+                              'position: relative',
+                              'text-align: left',
+                              'width: 184px',
+                            ];
+                            expect(style.split('; ')).to.have.length(expectedStyles.length);
+                            expectedStyles.forEach((expected) => {
+                              expect(style).to.include(expected);
+                            });
+                          })
+                          .contains(
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor123123.',
+                          );
                       });
                   });
               });
           });
       });
-    });
-  });
-
-  it('Complex 10', () => {
-    cy.get('#complex-test-10').within(() => {
-      cy.get('.amplify-flex')
-        .then((el) => {
-          const style = el.attr('style');
-          const expectedStyles = [
-            'align-items: center',
-            'background-color: rgb(239, 240, 240)',
-            'flex-direction: row',
-            'gap: 24px',
-            'justify-content: center',
-            'overflow: hidden',
-            'padding: 40px 140px',
-            'position: relative',
-            'width: 1440px',
-          ];
-          expect(style.split('; ')).to.have.length(expectedStyles.length);
-          expectedStyles.forEach((expected) => {
-            expect(style).to.include(expected);
-          });
-        })
-        .within(() => {
-          cy.get('.amplify-flex')
-            .then((el) => {
-              const style = el.attr('style');
-              const expectedStyles = [
-                'align-items: flex-start',
-                'flex-basis: 1160px',
-                'flex-direction: row',
-                'gap: 24px',
-                'flex-grow: 1',
-                'height: 618px',
-                'padding: 0px',
-                'position: relative',
-                'width: 1160px',
-              ];
-              expect(style.split('; ')).to.have.length(expectedStyles.length);
-              expectedStyles.forEach((expected) => {
-                expect(style).to.include(expected);
-              });
-            })
-            .within(() => {
-              cy.get('.amplify-flex')
-                .eq(0)
-                .then((el) => {
-                  const style = el.attr('style');
-                  const expectedStyles = [
-                    'align-items: center',
-                    'background-color: rgb(255, 255, 255)',
-                    'flex-basis: 272px',
-                    'flex-direction: column',
-                    'gap: 24px',
-                    'flex-grow: 1',
-                    'height: 618px',
-                    'justify-content: center',
-                    'padding: 24px',
-                    'position: relative',
-                    'width: 272px',
-                  ];
-                  expect(style.split('; ')).to.have.length(expectedStyles.length);
-                  expectedStyles.forEach((expected) => {
-                    expect(style).to.include(expected);
-                  });
-                })
-                .within(() => {
-                  cy.get('.amplify-text')
-                    .eq(0)
-                    .contains('Free')
-                    .then((el) => {
-                      const style = el.attr('style');
-                      const expectedStyles = [
-                        'align-self: stretch',
-                        'color: rgb(13, 26, 38)',
-                        'flex-direction: column',
-                        'display: flex',
-                        'font-family: Inter',
-                        'font-size: 40px',
-                        'font-weight: 700',
-                        'justify-content: flex-start',
-                        'line-height: 48px',
-                        'padding: 0px',
-                        'position: relative',
-                        'flex-shrink: 0',
-                        'text-align: center',
-                        'width: 224px',
-                      ];
-                      expect(style.split('; ')).to.have.length(expectedStyles.length);
-                      expectedStyles.forEach((expected) => {
-                        expect(style).to.include(expected);
-                      });
-                    });
-                  cy.get('.amplify-button').contains('Primary Button');
-                  cy.get('.amplify-flex')
-                    .eq(0)
-                    .then((el) => {
-                      const style = el.attr('style');
-                      const expectedStyles = [
-                        'align-items: flex-start',
-                        'align-self: stretch',
-                        'flex-direction: row',
-                        'gap: 16px',
-                        'padding: 0px',
-                        'position: relative',
-                        'flex-shrink: 0',
-                      ];
-                      expect(style.split('; ')).to.have.length(expectedStyles.length);
-                      expectedStyles.forEach((expected) => {
-                        expect(style).to.include(expected);
-                      });
-                    })
-                    .within(() => {
-                      cy.get('.amplify-icon').then((el) => {
-                        const style = el.attr('style');
-                        const expectedStyles = [
-                          'color: rgb(64, 170, 191)',
-                          'font-size: 24px',
-                          'height: 24px',
-                          'overflow: hidden',
-                          'padding: 0px',
-                          'position: relative',
-                          'flex-shrink: 0',
-                          'width: 24px',
-                        ];
-                        expect(style.split('; ')).to.have.length(expectedStyles.length);
-                        expectedStyles.forEach((expected) => {
-                          expect(style).to.include(expected);
-                        });
-                      });
-                      cy.get('.amplify-text')
-                        .then((el) => {
-                          const style = el.attr('style');
-                          const expectedStyles = [
-                            'flex-basis: 184px',
-                            'color: rgb(48, 64, 80)',
-                            'flex-direction: column',
-                            'display: flex',
-                            'font-family: Inter',
-                            'font-size: 16px',
-                            'font-weight: 400',
-                            'flex-grow: 1',
-                            'justify-content: flex-start',
-                            'letter-spacing: 0.01px',
-                            'line-height: 24px',
-                            'padding: 0px',
-                            'position: relative',
-                            'text-align: left',
-                            'width: 184px',
-                          ];
-                          expect(style.split('; ')).to.have.length(expectedStyles.length);
-                          expectedStyles.forEach((expected) => {
-                            expect(style).to.include(expected);
-                          });
-                        })
-                        .contains('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.');
-                    });
-                });
-              cy.get('.amplify-flex')
-                .eq(12)
-                .then((el) => {
-                  const style = el.attr('style');
-                  const expectedStyles = [
-                    'align-items: center',
-                    'background-color: rgb(255, 255, 255)',
-                    'flex-basis: 272px',
-                    'flex-direction: column',
-                    'gap: 24px',
-                    'flex-grow: 1',
-                    'height: 618px',
-                    'justify-content: center',
-                    'padding: 24px',
-                    'position: relative',
-                    'width: 272px',
-                  ];
-                  expect(style.split('; ')).to.have.length(expectedStyles.length);
-                  expectedStyles.forEach((expected) => {
-                    expect(style).to.include(expected);
-                  });
-                })
-                .within(() => {
-                  cy.get('.amplify-text')
-                    .eq(0)
-                    .contains('Enterprise')
-                    .then((el) => {
-                      const style = el.attr('style');
-                      const expectedStyles = [
-                        'align-self: stretch',
-                        'color: rgb(13, 26, 38)',
-                        'flex-direction: column',
-                        'display: flex',
-                        'font-family: Inter',
-                        'font-size: 40px',
-                        'font-weight: 700',
-                        'justify-content: flex-start',
-                        'line-height: 48px',
-                        'padding: 0px',
-                        'position: relative',
-                        'flex-shrink: 0',
-                        'text-align: center',
-                        'width: 224px',
-                      ];
-                      expect(style.split('; ')).to.have.length(expectedStyles.length);
-                      expectedStyles.forEach((expected) => {
-                        expect(style).to.include(expected);
-                      });
-                    });
-                  cy.get('.amplify-button').contains('Primary Button');
-                  cy.get('.amplify-flex')
-                    .eq(0)
-                    .then((el) => {
-                      const style = el.attr('style');
-                      const expectedStyles = [
-                        'align-items: flex-start',
-                        'align-self: stretch',
-                        'flex-direction: row',
-                        'gap: 16px',
-                        'padding: 0px',
-                        'position: relative',
-                        'flex-shrink: 0',
-                      ];
-                      expect(style.split('; ')).to.have.length(expectedStyles.length);
-                      expectedStyles.forEach((expected) => {
-                        expect(style).to.include(expected);
-                      });
-                    })
-                    .within(() => {
-                      cy.get('.amplify-icon').then((el) => {
-                        const style = el.attr('style');
-                        const expectedStyles = [
-                          'color: rgb(64, 170, 191)',
-                          'font-size: 24px',
-                          'height: 24px',
-                          'overflow: hidden',
-                          'padding: 0px',
-                          'position: relative',
-                          'flex-shrink: 0',
-                          'width: 24px',
-                        ];
-                        expect(style.split('; ')).to.have.length(expectedStyles.length);
-                        expectedStyles.forEach((expected) => {
-                          expect(style).to.include(expected);
-                        });
-                      });
-                      cy.get('.amplify-text')
-                        .then((el) => {
-                          const style = el.attr('style');
-                          const expectedStyles = [
-                            'flex-basis: 184px',
-                            'color: rgb(48, 64, 80)',
-                            'flex-direction: column',
-                            'display: flex',
-                            'font-family: Inter',
-                            'font-size: 16px',
-                            'font-weight: 400',
-                            'flex-grow: 1',
-                            'justify-content: flex-start',
-                            'letter-spacing: 0.01px',
-                            'line-height: 24px',
-                            'padding: 0px',
-                            'position: relative',
-                            'text-align: left',
-                            'width: 184px',
-                          ];
-                          expect(style.split('; ')).to.have.length(expectedStyles.length);
-                          expectedStyles.forEach((expected) => {
-                            expect(style).to.include(expected);
-                          });
-                        })
-                        .contains(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor123123.',
-                        );
-                    });
-                });
-            });
-        });
-    });
   });
 
   it('Complex 11', () => {
-    cy.get('#complex-test-11').within(() => {
-      cy.get('.amplify-flex')
-        .then((el) => {
-          const style = el.attr('style');
-          const expectedStyles = [
-            'align-items: flex-start',
-            'flex-direction: row',
-            'gap: 24px',
-            'padding: 0px',
-            'position: relative',
-            'width: 1160px',
-          ];
-          expect(style.split('; ')).to.have.length(expectedStyles.length);
-          expectedStyles.forEach((expected) => {
-            expect(style).to.include(expected);
-          });
-        })
-        .within(() => {
-          cy.get('.amplify-flex')
-            .then((el) => {
+    cy.get('#complex-test-11')
+      .first()
+      .within(() => {
+        cy.get('.amplify-flex')
+          .then((el) => {
+            const style = el.attr('style');
+            const expectedStyles = [
+              'align-items: flex-start',
+              'flex-direction: row',
+              'gap: 24px',
+              'padding: 0px',
+              'position: relative',
+              'width: 1160px',
+            ];
+            expect(style.split('; ')).to.have.length(expectedStyles.length);
+            expectedStyles.forEach((expected) => {
+              expect(style).to.include(expected);
+            });
+          })
+          .first()
+          .within(() => {
+            cy.get('.amplify-flex').then((el) => {
               const style = el.attr('style');
               const expectedStyles = [
                 'align-items: flex-start',
@@ -1084,61 +1102,59 @@ describe('Complex Components', () => {
               expectedStyles.forEach((expected) => {
                 expect(style).to.include(expected);
               });
-            })
-            .within(() => {
-              cy.get('.amplify-flex').within(() => {
-                cy.get('.amplify-button')
-                  .contains('Place Order')
-                  .then((el) => {
-                    const style = el.attr('style');
-                    const expectedStyles = [
-                      'display: flex',
-                      'left: 32px',
-                      'position: absolute',
-                      'top: 822px',
-                      'width: 405px',
-                    ];
-                    expect(style.split('; ')).to.have.length(expectedStyles.length);
-                    expectedStyles.forEach((expected) => {
-                      expect(style).to.include(expected);
-                    });
-                  });
-                cy.get('.amplify-badge')
-                  .contains('Discount - 10% off')
-                  .then((el) => {
-                    const style = el.attr('style');
-                    const expectedStyles = [
-                      'background-color: rgb(214, 245, 219)',
-                      'color: rgb(54, 94, 61)',
-                      'flex-direction: column',
-                      'display: flex',
-                      'font-family: Inter',
-                      'font-size: 16px',
-                      'font-weight: 700',
-                      'justify-content: flex-start',
-                      'left: 32px',
-                      'letter-spacing: 0.49px',
-                      'line-height: 20px',
-                      'position: absolute',
-                      'text-align: left',
-                      'top: 0px',
-                      'width: 405px',
-                    ];
-                    expect(style.split('; ')).to.have.length(expectedStyles.length);
-                    expectedStyles.forEach((expected) => {
-                      expect(style).to.include(expected);
-                    });
-                  });
+            });
+            cy.get('.amplify-button')
+              .contains('Place Order')
+              .then((el) => {
+                const style = el.attr('style');
+                const expectedStyles = [
+                  'display: flex',
+                  'left: 32px',
+                  'position: absolute',
+                  'top: 822px',
+                  'width: 405px',
+                ];
+                expect(style.split('; ')).to.have.length(expectedStyles.length);
+                expectedStyles.forEach((expected) => {
+                  expect(style).to.include(expected);
+                });
+              });
+            cy.get('.amplify-badge')
+              .contains('Discount - 10% off')
+              .then((el) => {
+                const style = el.attr('style');
+                const expectedStyles = [
+                  'background-color: rgb(214, 245, 219)',
+                  'color: rgb(54, 94, 61)',
+                  'flex-direction: column',
+                  'display: flex',
+                  'font-family: Inter',
+                  'font-size: 16px',
+                  'font-weight: 700',
+                  'justify-content: flex-start',
+                  'left: 32px',
+                  'letter-spacing: 0.49px',
+                  'line-height: 20px',
+                  'position: absolute',
+                  'text-align: left',
+                  'top: 0px',
+                  'width: 405px',
+                ];
+                expect(style.split('; ')).to.have.length(expectedStyles.length);
+                expectedStyles.forEach((expected) => {
+                  expect(style).to.include(expected);
+                });
+              });
+            cy.get('.amplify-flex')
+              .first()
+              .within(() => {
                 cy.get('.amplify-flex')
-                  .debug()
+                  .first()
                   .within(() => {
-                    cy.get('.amplify-flex').within(() => {
-                      cy.get('.amplify-label').contains('Label');
-                    });
+                    cy.get('.amplify-label').contains('Label');
                   });
               });
-            });
-        });
-    });
+          });
+      });
   });
 });
