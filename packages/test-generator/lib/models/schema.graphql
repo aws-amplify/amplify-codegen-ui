@@ -1,0 +1,151 @@
+"""
+This file keeps track of the test schema
+so that we can update schema.ts when codegenVersion changes.
+"""
+#non-models
+
+type CustomType {
+    StringVal: String
+    NumVal: Int
+    BoolVal: Boolean
+}
+
+#enums
+
+enum City {
+    SAN_FRANCISCO
+    NEW_YORK
+    HOUSTON
+    AUSTIN
+    LOS_ANGELES
+    CHICAGO
+    SAN_DIEGO
+    NEW_HAVEN
+    PORTLAND
+    SEATTLE
+}
+
+# models
+
+type UserPreference @model {
+    favoriteColor: String  
+}
+
+type User @model {
+    id: ID!
+    firstName: String
+    lastName: String
+    age: Int
+    isLoggedIn: Boolean
+    loggedInColor: String
+    loggedOutColor: String
+}
+
+type Listing @model {
+  id: ID!
+    title: String
+    priceUSD: Int
+    description: String
+}
+
+type ComplexModel @model {
+    listElement: [String]!
+    myCustomField: CustomType
+}
+
+type Class @model {
+    name: String
+}
+
+type Tag @model {
+    label: String
+    AllSupportedFormFields: [AllSupportedFormFields] @manyToMany(relationName: "AllSupportedFormFieldsTag")
+}
+
+type Owner @model {
+    name: String
+    AllSupportedFormFields: AllSupportedFormFields @hasOne
+}
+
+type Student @model {
+    name: String
+    allSupportedFormFieldsID: ID @index(name: "byAllSupportedFormFields")
+}
+
+type AllSupportedFormFields @model {
+    id: ID!
+    string: String
+    stringArray: [String]
+    int: Int
+    float: Float
+    awsDate: AWSDate
+    awsTime: AWSTime
+    awsDateTime: AWSDateTime
+    awsTimestamp: AWSTimestamp
+    awsEmail: AWSEmail
+    awsUrl: AWSURL
+    awsIPAddress: AWSIPAddress
+    boolean: Boolean
+    awsJson: AWSJSON
+    awsPhone: AWSPhone
+    enum: City
+    nonModelField: CustomType
+    nonModelFieldArray: [CustomType]
+    HasOneUser: User @hasOne
+    BelongsToOwner: Owner @belongsTo
+    HasManyStudents: [Student] @hasMany(indexName: "byAllSupportedFormFields", fields: ["id"])
+    ManyToManyTags: [Tag] @manyToMany(relationName: "AllSupportedFormFieldsTag")
+
+}
+
+type CPKStudent @model {
+  specialStudentId: ID! @primaryKey
+}
+
+type CPKTeacher @model {
+  specialTeacherId: ID! @primaryKey
+  CPKStudent: CPKStudent! @hasOne
+  CPKClasses: [CPKClass] @manyToMany(relationName: "CPKTeacherCPKClass")
+  CPKProjects: [CPKProject] @hasMany(indexName: "byCPKTeacher", fields: ["specialTeacherId"])
+}
+
+type CPKClass @model {
+  specialClassId: ID! @primaryKey
+  CPKTeachers: [CPKTeacher] @manyToMany(relationName: "CPKTeacherCPKClass")
+}
+
+type CPKProject @model {
+  specialProjectId: ID! @primaryKey
+  cPKTeacherID: ID @index(name: "byCPKTeacher")
+}
+
+type CompositeDog @model {
+  name: ID! @primaryKey(sortKeyFields: ["description"])
+  description: String!
+  CompositeBowl: CompositeBowl @hasOne
+  CompositeOwner: CompositeOwner @belongsTo
+  CompositeToys: [CompositeToy] @hasMany
+  CompositeVets: [CompositeVet] @manyToMany(relationName: "CompositeDogCompositeVet")
+}
+
+type CompositeOwner @model {
+  lastName: ID! @primaryKey(sortKeyFields: ["firstName"])
+  firstName: String!
+  CompositeDog: CompositeDog @hasOne
+}
+
+type CompositeToy @model {
+  kind: ID! @primaryKey(sortKeyFields: ["color"])
+  color: String!
+}
+
+type CompositeBowl @model {
+  shape: ID! @primaryKey(sortKeyFields: ["size"])
+  size: String!
+}
+
+type CompositeVet @model {
+  specialty: ID! @primaryKey(sortKeyFields: ["city"])
+  city: String!
+  CompositeDogs: [CompositeDog] @manyToMany(relationName: "CompositeDogCompositeVet")
+}
