@@ -127,7 +127,7 @@ const initializeAllSupportedFormFieldsTestData = async ({
 
   // connect tags through join table
   await Promise.all(
-    connectedTags.reduce((promises: AsyncItem<LazyTag>[], tag) => {
+    connectedTags.reduce((promises: AsyncItem<LazyAllSupportedFormFieldsTag>[], tag) => {
       promises.push(
         DataStore.save(
           new AllSupportedFormFieldsTag({

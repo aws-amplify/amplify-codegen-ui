@@ -232,7 +232,7 @@ export default function ComplexTests() {
         <SetStateWithoutInitialValue />
         <UpdateVisibility />
         <InputMutationOnClick />
-        <ConditionalInMutation user={{ id: '1234', age: 45 }} />
+        <ConditionalInMutation user={new User({ age: 45 })} />
       </View>
       <Divider />
       <View id="complex-model">

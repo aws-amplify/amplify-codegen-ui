@@ -211,42 +211,46 @@ export default function ComponentTests() {
         <h2>Concatenation and Conditional Tests</h2>
         <ComponentWithConcatenation />
         <ComponentWithConcatenation
-          buttonUser={{
-            id: '1',
-            firstName: 'Norm',
-            lastName: 'Gunderson',
-            age: -1,
-          }}
+          buttonUser={
+            new User({
+              firstName: 'Norm',
+              lastName: 'Gunderson',
+              age: -1,
+            })
+          }
         />
         <ComponentWithConditional
           id="conditional1"
-          buttonUser={{
-            id: '1',
-            firstName: 'Disabled',
-            lastName: 'Conditional Button',
-            isLoggedIn: false,
-            loggedInColor: 'blue',
-            loggedOutColor: 'red',
-            age: -1,
-          }}
+          buttonUser={
+            new User({
+              firstName: 'Disabled',
+              lastName: 'Conditional Button',
+              isLoggedIn: false,
+              loggedInColor: 'blue',
+              loggedOutColor: 'red',
+              age: -1,
+            })
+          }
         />
         <ComponentWithConditional
           id="conditional2"
-          buttonUser={{
-            id: '1',
-            isLoggedIn: true,
-            loggedInColor: 'blue',
-            loggedOutColor: 'red',
-          }}
+          buttonUser={
+            new User({
+              isLoggedIn: true,
+              loggedInColor: 'blue',
+              loggedOutColor: 'red',
+            })
+          }
         />
         <ComponentWithConditional
           id="conditional3"
-          buttonUser={{
-            id: '1',
-            isLoggedIn: true,
-            loggedInColor: 'blue',
-            loggedOutColor: 'red',
-          }}
+          buttonUser={
+            new User({
+              isLoggedIn: true,
+              loggedInColor: 'blue',
+              loggedOutColor: 'red',
+            })
+          }
         />
         <ComponentWithBoundPropertyConditional id="ComponentWithBoundPropertyConditional-no-prop" />
         <ComponentWithBoundPropertyConditional id="ComponentWithBoundPropertyConditional-true-prop" buttonColor="red" />
@@ -288,31 +292,35 @@ export default function ComponentTests() {
         <ComponentWithDataBindingWithoutPredicate id="dataStoreBindingWithoutPredicateNoOverride" />
         <ComponentWithDataBindingWithoutPredicate
           id="dataStoreBindingWithoutPredicateWithOverride"
-          buttonUser={{
-            id: '1',
-            firstName: 'Override Name',
-            age: -1,
-          }}
+          buttonUser={
+            new User({
+              firstName: 'Override Name',
+              age: -1,
+            })
+          }
         />
         <ComponentWithDataBindingWithPredicate id="dataStoreBindingWithPredicateNoOverrideNoModel" />
         <ComponentWithDataBindingWithPredicate
           id="dataStoreBindingWithPredicateWithOverride"
-          buttonUser={{
-            id: '1',
-            firstName: 'Override Name',
-          }}
+          buttonUser={
+            new User({
+              firstName: 'Override Name',
+            })
+          }
         />
         <ComponentWithAuthBinding id="authBinding" />
         <ComponentWithMultipleDataBindingsWithPredicate
           id="multipleDataBindings"
-          user={{
-            id: '1',
-            firstName: 'QA',
-          }}
-          listing={{
-            id: '1',
-            priceUSD: 2200,
-          }}
+          user={
+            new User({
+              firstName: 'QA',
+            })
+          }
+          listing={
+            new Listing({
+              priceUSD: 2200,
+            })
+          }
         />
         <ComponentWithSlotBinding id="slotBinding" mySlot={<div>Customer component</div>} />
       </div>

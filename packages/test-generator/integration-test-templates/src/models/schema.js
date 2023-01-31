@@ -56,17 +56,6 @@ export const schema = {
           type: 'model',
           properties: {},
         },
-        {
-          type: 'auth',
-          properties: {
-            rules: [
-              {
-                allow: 'public',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
-          },
-        },
       ],
     },
     User: {
@@ -145,17 +134,6 @@ export const schema = {
           type: 'model',
           properties: {},
         },
-        {
-          type: 'auth',
-          properties: {
-            rules: [
-              {
-                allow: 'public',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
-          },
-        },
       ],
     },
     Listing: {
@@ -213,17 +191,6 @@ export const schema = {
           type: 'model',
           properties: {},
         },
-        {
-          type: 'auth',
-          properties: {
-            rules: [
-              {
-                allow: 'public',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
-          },
-        },
       ],
     },
     ComplexModel: {
@@ -240,7 +207,7 @@ export const schema = {
           name: 'listElement',
           isArray: true,
           type: 'String',
-          isRequired: true,
+          isRequired: false,
           attributes: [],
           isArrayNullable: false,
         },
@@ -277,17 +244,6 @@ export const schema = {
           type: 'model',
           properties: {},
         },
-        {
-          type: 'auth',
-          properties: {
-            rules: [
-              {
-                allow: 'public',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
-          },
-        },
       ],
     },
     Class: {
@@ -307,6 +263,22 @@ export const schema = {
           isRequired: false,
           attributes: [],
         },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
       },
       syncable: true,
       pluralName: 'Classes',
@@ -314,17 +286,6 @@ export const schema = {
         {
           type: 'model',
           properties: {},
-        },
-        {
-          type: 'auth',
-          properties: {
-            rules: [
-              {
-                allow: 'public',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
-          },
         },
       ],
     },
@@ -356,7 +317,7 @@ export const schema = {
           isArrayNullable: true,
           association: {
             connectionType: 'HAS_MANY',
-            associatedWith: 'tag',
+            associatedWith: ['tag'],
           },
         },
         createdAt: {
@@ -383,236 +344,6 @@ export const schema = {
           type: 'model',
           properties: {},
         },
-        {
-          type: 'auth',
-          properties: {
-            rules: [
-              {
-                allow: 'public',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
-          },
-        },
-      ],
-    },
-    AllSupportedFormFieldsTag: {
-      name: 'AllSupportedFormFieldsTag',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        tag: {
-          name: 'tag',
-          isArray: false,
-          type: {
-            model: 'Tag',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetName: 'tagID',
-          },
-        },
-        allSupportedFormFields: {
-          name: 'allSupportedFormFields',
-          isArray: false,
-          type: {
-            model: 'AllSupportedFormFields',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetName: 'allSupportedFormFieldsID',
-          },
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-      },
-      syncable: true,
-      pluralName: 'AllSupportedFormFieldsTags',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'byTag',
-            fields: ['tagID'],
-          },
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'byAllSupportedFormFields',
-            fields: ['allSupportedFormFieldsID'],
-          },
-        },
-      ],
-    },
-    Owner: {
-      name: 'Owner',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        name: {
-          name: 'name',
-          isArray: false,
-          type: 'String',
-          isRequired: false,
-          attributes: [],
-        },
-        AllSupportedFormFields: {
-          name: 'AllSupportedFormFields',
-          isArray: false,
-          type: {
-            model: 'AllSupportedFormFields',
-          },
-          isRequired: false,
-          attributes: [],
-          association: {
-            connectionType: 'HAS_ONE',
-            associatedWith: 'BelongsToOwner',
-            targetName: 'ownerAllSupportedFormFieldsId',
-          },
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        ownerAllSupportedFormFieldsId: {
-          name: 'ownerAllSupportedFormFieldsId',
-          isArray: false,
-          type: 'ID',
-          isRequired: false,
-          attributes: [],
-        },
-      },
-      syncable: true,
-      pluralName: 'Owners',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-        {
-          type: 'auth',
-          properties: {
-            rules: [
-              {
-                allow: 'public',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
-          },
-        },
-      ],
-    },
-    Student: {
-      name: 'Student',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        name: {
-          name: 'name',
-          isArray: false,
-          type: 'String',
-          isRequired: false,
-          attributes: [],
-        },
-        allSupportedFormFieldsID: {
-          name: 'allSupportedFormFieldsID',
-          isArray: false,
-          type: 'ID',
-          isRequired: false,
-          attributes: [],
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-      },
-      syncable: true,
-      pluralName: 'Students',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'byAllSupportedFormFields',
-            fields: ['allSupportedFormFieldsID'],
-          },
-        },
-        {
-          type: 'auth',
-          properties: {
-            rules: [
-              {
-                allow: 'public',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
-          },
-        },
       ],
     },
     AllSupportedFormFields: {
@@ -638,6 +369,7 @@ export const schema = {
           type: 'String',
           isRequired: false,
           attributes: [],
+          isArrayNullable: true,
         },
         int: {
           name: 'int',
@@ -749,6 +481,7 @@ export const schema = {
           },
           isRequired: false,
           attributes: [],
+          isArrayNullable: true,
         },
         HasOneUser: {
           name: 'HasOneUser',
@@ -760,16 +493,9 @@ export const schema = {
           attributes: [],
           association: {
             connectionType: 'HAS_ONE',
-            associatedWith: 'id',
-            targetName: 'allSupportedFormFieldsHasOneUserId',
+            associatedWith: ['id'],
+            targetNames: ['allSupportedFormFieldsHasOneUserId'],
           },
-        },
-        allSupportedFormFieldsHasOneUserId: {
-          name: 'allSupportedFormFieldsHasOneUserId',
-          isArray: false,
-          type: 'ID',
-          isRequired: false,
-          attributes: [],
         },
         BelongsToOwner: {
           name: 'BelongsToOwner',
@@ -781,7 +507,7 @@ export const schema = {
           attributes: [],
           association: {
             connectionType: 'BELONGS_TO',
-            targetName: 'allSupportedFormFieldsOwnerId',
+            targetNames: ['allSupportedFormFieldsBelongsToOwnerId'],
           },
         },
         HasManyStudents: {
@@ -795,7 +521,7 @@ export const schema = {
           isArrayNullable: true,
           association: {
             connectionType: 'HAS_MANY',
-            associatedWith: 'allSupportedFormFieldsID',
+            associatedWith: ['allSupportedFormFieldsID'],
           },
         },
         ManyToManyTags: {
@@ -809,8 +535,136 @@ export const schema = {
           isArrayNullable: true,
           association: {
             connectionType: 'HAS_MANY',
-            associatedWith: 'allSupportedFormFields',
+            associatedWith: ['allSupportedFormFields'],
           },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        allSupportedFormFieldsHasOneUserId: {
+          name: 'allSupportedFormFieldsHasOneUserId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        allSupportedFormFieldsBelongsToOwnerId: {
+          name: 'allSupportedFormFieldsBelongsToOwnerId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'AllSupportedFormFields',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    Owner: {
+      name: 'Owner',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        AllSupportedFormFields: {
+          name: 'AllSupportedFormFields',
+          isArray: false,
+          type: {
+            model: 'AllSupportedFormFields',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'HAS_ONE',
+            associatedWith: ['id'],
+            targetNames: ['ownerAllSupportedFormFieldsId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        ownerAllSupportedFormFieldsId: {
+          name: 'ownerAllSupportedFormFieldsId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'Owners',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    Student: {
+      name: 'Student',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        allSupportedFormFieldsID: {
+          name: 'allSupportedFormFieldsID',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
         },
         createdAt: {
           name: 'createdAt',
@@ -830,21 +684,17 @@ export const schema = {
         },
       },
       syncable: true,
-      pluralName: 'AllSupportedFormFields',
+      pluralName: 'Students',
       attributes: [
         {
           type: 'model',
           properties: {},
         },
         {
-          type: 'auth',
+          type: 'key',
           properties: {
-            rules: [
-              {
-                allow: 'public',
-                operations: ['create', 'update', 'delete', 'read'],
-              },
-            ],
+            name: 'byAllSupportedFormFields',
+            fields: ['allSupportedFormFieldsID'],
           },
         },
       ],
@@ -1094,97 +944,6 @@ export const schema = {
         },
       ],
     },
-    CPKTeacherCPKClass: {
-      name: 'CPKTeacherCPKClass',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        cPKTeacherSpecialTeacherId: {
-          name: 'cPKTeacherSpecialTeacherId',
-          isArray: false,
-          type: 'ID',
-          isRequired: false,
-          attributes: [],
-        },
-        cPKClassSpecialClassId: {
-          name: 'cPKClassSpecialClassId',
-          isArray: false,
-          type: 'ID',
-          isRequired: false,
-          attributes: [],
-        },
-        cpkTeacher: {
-          name: 'cpkTeacher',
-          isArray: false,
-          type: {
-            model: 'CPKTeacher',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetNames: ['cPKTeacherSpecialTeacherId'],
-          },
-        },
-        cpkClass: {
-          name: 'cpkClass',
-          isArray: false,
-          type: {
-            model: 'CPKClass',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetNames: ['cPKClassSpecialClassId'],
-          },
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-      },
-      syncable: true,
-      pluralName: 'CPKTeacherCPKClasses',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'byCPKTeacher',
-            fields: ['cPKTeacherSpecialTeacherId'],
-          },
-        },
-        {
-          type: 'key',
-          properties: {
-            name: 'byCPKClass',
-            fields: ['cPKClassSpecialClassId'],
-          },
-        },
-      ],
-    },
-
     CompositeDog: {
       name: 'CompositeDog',
       fields: {
@@ -1576,6 +1335,186 @@ export const schema = {
         },
       ],
     },
+    AllSupportedFormFieldsTag: {
+      name: 'AllSupportedFormFieldsTag',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        tagId: {
+          name: 'tagId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        allSupportedFormFieldsId: {
+          name: 'allSupportedFormFieldsId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        tag: {
+          name: 'tag',
+          isArray: false,
+          type: {
+            model: 'Tag',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['tagId'],
+          },
+        },
+        allSupportedFormFields: {
+          name: 'allSupportedFormFields',
+          isArray: false,
+          type: {
+            model: 'AllSupportedFormFields',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['allSupportedFormFieldsId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'AllSupportedFormFieldsTags',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byTag',
+            fields: ['tagId'],
+          },
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byAllSupportedFormFields',
+            fields: ['allSupportedFormFieldsId'],
+          },
+        },
+      ],
+    },
+    CPKTeacherCPKClass: {
+      name: 'CPKTeacherCPKClass',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        cPKTeacherSpecialTeacherId: {
+          name: 'cPKTeacherSpecialTeacherId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        cPKClassSpecialClassId: {
+          name: 'cPKClassSpecialClassId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        cpkTeacher: {
+          name: 'cpkTeacher',
+          isArray: false,
+          type: {
+            model: 'CPKTeacher',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['cPKTeacherSpecialTeacherId'],
+          },
+        },
+        cpkClass: {
+          name: 'cpkClass',
+          isArray: false,
+          type: {
+            model: 'CPKClass',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['cPKClassSpecialClassId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'CPKTeacherCPKClasses',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byCPKTeacher',
+            fields: ['cPKTeacherSpecialTeacherId'],
+          },
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byCPKClass',
+            fields: ['cPKClassSpecialClassId'],
+          },
+        },
+      ],
+    },
     CompositeDogCompositeVet: {
       name: 'CompositeDogCompositeVet',
       fields: {
@@ -1681,7 +1620,6 @@ export const schema = {
       ],
     },
   },
-
   enums: {
     City: {
       name: 'City',
@@ -1727,6 +1665,6 @@ export const schema = {
       },
     },
   },
-  version: 'f6252c821249b6b1abda9fb24481c5a4',
-  codegenVersion: '3.2.0',
+  codegenVersion: '3.3.5',
+  version: '24e9b2e06bca75dbfadafe2d7f78e599',
 };
