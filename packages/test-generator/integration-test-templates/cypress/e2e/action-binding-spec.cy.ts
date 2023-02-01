@@ -24,38 +24,38 @@ describe('Action Bindings', () => {
     });
 
     it('supports value bindings', () => {
-      cy.get('#mutated-value').contains('Default Value');
+      cy.get('#mutated-value').contains('Fixed Value').should('not.exist');
       cy.contains('Apply Fixed Property Mutation').click();
       cy.get('#mutated-value').contains('Fixed Value');
     });
 
     it('supports bound prop bindings', () => {
-      cy.get('#mutated-value').contains('Default Value');
+      cy.get('#mutated-value').contains('Bound Value').should('not.exist');
       cy.contains('Current Binding - Bound Value');
       cy.contains('Apply Bound Property Mutation').click();
       cy.get('#mutated-value').contains('Bound Value');
     });
 
-    it('supports conditional bindings', () => {
-      cy.get('#mutated-value').contains('Default Value');
-      cy.contains('Apply Conditional Property Mutation').click();
-      cy.get('#mutated-value').contains('Conditional Value');
-    });
-
     it('supports concat bindings', () => {
-      cy.get('#mutated-value').contains('Default Value');
+      cy.get('#mutated-value').contains('Concatenated Value').should('not.exist');
       cy.contains('Apply Concatenated Property Mutation').click();
       cy.get('#mutated-value').contains('Concatenated Value');
     });
 
+    it('supports conditional bindings', () => {
+      cy.get('#mutated-value').contains('Conditional Value').should('not.exist');
+      cy.contains('Apply Conditional Property Mutation').click();
+      cy.get('#mutated-value').contains('Conditional Value');
+    });
+
     it('supports auth bindings', () => {
-      cy.get('#mutated-value').contains('Default Value');
+      cy.get('#mutated-value').contains('Auth Value').should('not.exist');
       cy.contains('Apply Auth Property Mutation').click();
       cy.get('#mutated-value').contains('Auth Value');
     });
 
     it('supports state bindings', () => {
-      cy.get('#mutated-value').contains('Default Value');
+      cy.get('#mutated-value').contains('State Value').should('not.exist');
       cy.contains('Apply State Property Mutation').click();
       cy.get('#mutated-value').contains('State Value');
     });
