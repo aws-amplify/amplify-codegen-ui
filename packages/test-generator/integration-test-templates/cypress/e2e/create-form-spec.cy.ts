@@ -243,6 +243,7 @@ describe('CreateForms', () => {
   describe('DataStoreFormCreateCPKTeacher', () => {
     it('should display current values and save to DataStore', () => {
       cy.get('#dataStoreFormCreateCPKTeacher').within(() => {
+        let position;
         getInputByLabel('Special teacher id').type('Teacher ID');
 
         // check error message shows on closed ArrayField
@@ -250,19 +251,22 @@ describe('CreateForms', () => {
         cy.contains('CPKStudent is required');
 
         // hasOne
+        position = cy.contains('Cpk student');
         getArrayFieldButtonByLabel('Cpk student').click();
         typeInAutocomplete('Her{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         // manyToMany
+        position = cy.contains('Cpk classes');
         getArrayFieldButtonByLabel('Cpk classes').click();
         typeInAutocomplete('English{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         // hasMany
+        position = cy.contains('Cpk projects');
         getArrayFieldButtonByLabel('Cpk projects').click();
         typeInAutocomplete('Either{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         cy.contains('Submit').click();
 

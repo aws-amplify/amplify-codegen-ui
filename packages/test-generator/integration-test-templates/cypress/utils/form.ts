@@ -25,8 +25,14 @@ export const getArrayFieldButtonByLabel = (label) => {
   return cy.contains(label).next('button');
 };
 
-export const clickAddToArray = () => {
-  cy.get('.amplify-button--link').contains('Add').click();
+export const clickAddToArray = (container?: Cypress.Chainable<any>) => {
+  if (container) {
+    container.within(() => {
+      cy.get('.amplify-button--link').contains('Add').click();
+    });
+  } else {
+    cy.get('.amplify-button--link').contains('Add').click();
+  }
 };
 
 export const removeArrayItem = (itemLabel: string) => {
