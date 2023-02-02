@@ -20,10 +20,6 @@ describe('Two way binding', () => {
   });
 
   describe('CheckboxField', () => {
-    beforeEach(() => {
-      cy.visit('http://localhost:3000/two-way-binding-tests');
-    });
-
     it('updates on ui interaction', () => {
       cy.get('#checkbox-field-section').within(() => {
         cy.get('.amplify-checkbox__button').invoke('attr', 'data-checked').should('eq', 'false');
