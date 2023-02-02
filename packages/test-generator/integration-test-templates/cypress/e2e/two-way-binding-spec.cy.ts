@@ -30,6 +30,7 @@ describe('Two way binding', () => {
 
     it('updates on state mutation', () => {
       cy.get('#checkbox-field-section').within(() => {
+        cy.contains('Subscribe').click();
         cy.get('.amplify-checkbox__button').invoke('attr', 'data-checked').should('eq', 'true');
         cy.contains('Set CheckboxFieldValue').click();
         cy.get('.amplify-checkbox__button').invoke('attr', 'data-checked').should('eq', 'false');
