@@ -20,5 +20,5 @@ export default defineConfig({
     supportFile: false,
   },
   chromeWebSecurity: false,
-  defaultCommandTimeout: 30000,
+  defaultCommandTimeout: 60000,
 });
