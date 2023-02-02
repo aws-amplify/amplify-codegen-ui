@@ -15,14 +15,13 @@
  */
 
 describe('Action Bindings', () => {
-  beforeEach(() => {
-    cy.visit('http://localhost:3000/action-binding-tests');
-    // cypress does not wait for the state to be initialized
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(1000);
-  });
-
   describe('Mutation Bindings', () => {
+    beforeEach(() => {
+      cy.visit('http://localhost:3000/action-binding-tests');
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(1000);
+    });
+
     it('supports value bindings', () => {
       cy.get('#mutated-value').contains('Fixed Value').should('not.exist');
       cy.contains('Apply Fixed Property Mutation').click();
@@ -62,6 +61,12 @@ describe('Action Bindings', () => {
   });
 
   describe('DataStore Bindings', () => {
+    beforeEach(() => {
+      cy.visit('http://localhost:3000/action-binding-tests');
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(1000);
+    });
+
     it('supports value bindings', () => {
       cy.get('#data-store-value').contains('Fixed Value').should('not.exist');
       cy.contains('Apply Fixed Property DataStoreUpdateItemAction').click();
@@ -100,6 +105,12 @@ describe('Action Bindings', () => {
   });
 
   describe('Initial Value Bindings', () => {
+    beforeEach(() => {
+      cy.visit('http://localhost:3000/action-binding-tests');
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(1000);
+    });
+
     it('supports fixed values', () => {
       cy.get('#fixed-value-initial-binding-section').within(() => {
         cy.contains('Fixed Value');
