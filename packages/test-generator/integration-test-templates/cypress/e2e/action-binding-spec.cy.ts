@@ -19,7 +19,7 @@ describe('Action Bindings', () => {
     beforeEach(() => {
       cy.visit('http://localhost:3000/action-binding-tests');
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(1000);
+      cy.wait(3000);
     });
 
     it('supports value bindings', () => {
@@ -64,7 +64,7 @@ describe('Action Bindings', () => {
     beforeEach(() => {
       cy.visit('http://localhost:3000/action-binding-tests');
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(1000);
+      cy.wait(3000);
     });
 
     it('supports value bindings', () => {
