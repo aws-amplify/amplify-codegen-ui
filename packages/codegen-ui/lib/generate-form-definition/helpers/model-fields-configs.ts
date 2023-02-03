@@ -195,16 +195,23 @@ export function getFieldConfigFromModelField({
   field,
   dataSchema,
   setReadOnly,
+  featureFlags,
 }: {
   dataTypeName: string;
   fieldName: string;
   field: GenericDataField;
   dataSchema: GenericDataSchema;
   setReadOnly?: boolean;
+  featureFlags: FormFeatureFlags | undefined;
 }): ExtendedStudioGenericFieldConfig {
   const fieldTypeMapKey = getFieldTypeMapKey(field);
 
-  const { defaultComponent } = FIELD_TYPE_MAP[fieldTypeMapKey];
+  let { defaultComponent } = FIELD_TYPE_MAP[fieldTypeMapKey];
+
+  // we are rolling out the switch to NumberField with relationship support
+  if (!featureFlags?.isRelationshipSupported && fieldTypeMapKey === 'AWSTimestamp') {
+    defaultComponent = 'DateTimeField';
+  }
 
   // When the relationship is many to many, set data type to the actual related model instead of the join table
   // if (field.relationship && field.relationship.type === 'HAS_MANY' && field.relationship.relatedJoinTableName) {
@@ -308,6 +315,7 @@ export function mapModelFieldsConfigs({
       field,
       dataSchema,
       setReadOnly: isPrimaryKey && formActionType === 'update',
+      featureFlags,
     });
   });
 
