@@ -244,7 +244,7 @@ describe('CreateForms', () => {
     it('should display current values and save to DataStore', () => {
       cy.get('#dataStoreFormCreateCPKTeacher').within(() => {
         let position;
-        getInputByLabel('Special teacher id').type('Teacher ID');
+        getInputByLabel('Special teacher id').type('Dumbledore');
 
         // check error message shows on closed ArrayField
         cy.contains('Submit').click();
@@ -270,7 +270,7 @@ describe('CreateForms', () => {
 
         cy.contains('Submit').click();
 
-        cy.contains('Teacher ID').then((recordElement: JQuery) => {
+        cy.contains('Dumbledore').then((recordElement: JQuery) => {
           const record = JSON.parse(recordElement.text());
 
           expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
