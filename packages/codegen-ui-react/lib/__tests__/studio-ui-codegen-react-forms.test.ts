@@ -292,7 +292,7 @@ describe('amplify form renderer tests', () => {
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
       expect(componentText).toContain('DataStore.save');
-      expect(componentText).toContain('const convertToLocal');
+      expect(componentText).not.toContain('const convertToLocal');
       expect(componentText).toMatchSnapshot();
       expect(declaration).toMatchSnapshot();
     });

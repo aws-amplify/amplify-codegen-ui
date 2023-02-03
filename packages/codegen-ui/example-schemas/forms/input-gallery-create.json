@@ -20,7 +20,11 @@
       "inputType": {
         "type": "CheckboxField"
       }
-    }
+    },
+    "timestamp": {
+      "inputType": {
+        "type": "DateTimeField"
+      }    }
   },
   "formActionType": "create",
   "name": "InputGalleryCreateForm",

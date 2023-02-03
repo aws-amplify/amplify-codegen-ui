@@ -85,24 +85,38 @@ export const buildTargetVariable = (fieldType: string, fieldName: string, dataTy
     fieldTypeToExpressionMap[fieldType]?.identifier ?? expressionMap.destructuredValue;
   switch (dataType) {
     case 'AWSTimestamp':
-      // value = e.target.value === '' ? '' : Number(new Date(e.target.value))
-      defaultIdentifier = expressionMap.value;
-      expression = factory.createConditionalExpression(
-        factory.createBinaryExpression(
+      if (fieldType === 'NumberField') {
+        // value = isNaN(parseInt(e.target.value)) ? e.target.value : parseInt(e.target.value);
+        defaultIdentifier = expressionMap.value;
+        expression = factory.createConditionalExpression(
+          factory.createCallExpression(factory.createIdentifier('isNaN'), undefined, [
+            factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [expressionMap.eTargetValue]),
+          ]),
+          factory.createToken(SyntaxKind.QuestionToken),
           expressionMap.eTargetValue,
-          factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+          factory.createToken(SyntaxKind.ColonToken),
+          factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [expressionMap.eTargetValue]),
+        );
+      } else if (fieldType === 'DateTimeField') {
+        // value = e.target.value === '' ? '' : Number(new Date(e.target.value))
+        defaultIdentifier = expressionMap.value;
+        expression = factory.createConditionalExpression(
+          factory.createBinaryExpression(
+            expressionMap.eTargetValue,
+            factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+            factory.createStringLiteral(''),
+          ),
+          factory.createToken(SyntaxKind.QuestionToken),
           factory.createStringLiteral(''),
-        ),
-        factory.createToken(SyntaxKind.QuestionToken),
-        factory.createStringLiteral(''),
-        factory.createToken(SyntaxKind.ColonToken),
-        factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
-          factory.createNewExpression(factory.createIdentifier('Date'), undefined, [expressionMap.eTargetValue]),
-        ]),
-      );
+          factory.createToken(SyntaxKind.ColonToken),
+          factory.createCallExpression(factory.createIdentifier('Number'), undefined, [
+            factory.createNewExpression(factory.createIdentifier('Date'), undefined, [expressionMap.eTargetValue]),
+          ]),
+        );
+      }
       return [setVariableStatement(defaultIdentifier, expression)];
     case 'Float':
-      if (fieldType === 'TextField') {
+      if (fieldType === 'NumberField') {
         // value = isNaN(parseFloat(e.target.value)) ? e.target.value : parseFloat(e.target.value);
         defaultIdentifier = expressionMap.value;
         expression = factory.createConditionalExpression(
@@ -119,7 +133,7 @@ export const buildTargetVariable = (fieldType: string, fieldName: string, dataTy
       }
       return [setVariableStatement(defaultIdentifier, expression)];
     case 'Int':
-      if (fieldType === 'TextField') {
+      if (fieldType === 'NumberField') {
         // value = isNaN(parseInt(e.target.value)) ? e.target.value : parseInt(e.target.value);
         defaultIdentifier = expressionMap.value;
         expression = factory.createConditionalExpression(

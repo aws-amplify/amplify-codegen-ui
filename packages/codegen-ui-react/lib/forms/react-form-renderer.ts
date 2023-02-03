@@ -614,7 +614,16 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     // timestamp type takes precedence over datetime as it includes formatter for datetime
     // we include both the timestamp conversion and local date formatter
-    if (dataTypesMap.AWSTimestamp) {
+    if (
+      dataTypesMap.AWSTimestamp &&
+      dataTypesMap.AWSTimestamp.some((fieldName) => {
+        const field = formMetadata.fieldConfigs[fieldName];
+        if (field && field.studioFormComponentType === 'DateTimeField') {
+          return true;
+        }
+        return false;
+      })
+    ) {
       statements.push(convertTimeStampToDateAST, convertToLocalAST);
     }
     // if we only have date time then we only need the local conversion
