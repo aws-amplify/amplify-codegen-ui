@@ -320,7 +320,7 @@ describe('CreateForms', () => {
 
         cy.contains('Submit').click();
 
-        cy.get('#cpkTeacherRecord').within(() => {
+        cy.get('#cpkDogRecord').within(() => {
           cy.contains(/Cookie/).then((recordElement: JQuery) => {
             const record = JSON.parse(recordElement.text());
 
