@@ -15,7 +15,7 @@
  */
 
 import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
-import { BinaryExpression, factory, Identifier, JsxAttribute, SyntaxKind, ElementAccessExpression } from 'typescript';
+import { factory, Identifier, JsxAttribute, SyntaxKind, ElementAccessExpression } from 'typescript';
 import { getCurrentDisplayValueName, getCurrentValueName, resetValuesName } from './form-state';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 import { FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
@@ -37,23 +37,36 @@ export const ControlledComponents = [
  */
 export const isControlledComponent = (componentType: string): boolean => ControlledComponents.includes(componentType);
 
-export const convertedValueAttributeMap: Record<string, (valueIdentifier: Identifier) => BinaryExpression> = {
-  AWSTimestamp: (valueIdentifier: Identifier) =>
-    factory.createBinaryExpression(
-      valueIdentifier,
-      factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-      factory.createCallExpression(factory.createIdentifier('convertToLocal'), undefined, [
-        factory.createCallExpression(factory.createIdentifier('convertTimeStampToDate'), undefined, [valueIdentifier]),
-      ]),
-    ),
-  AWSDateTime: (valueIdentifier: Identifier) =>
-    factory.createBinaryExpression(
-      valueIdentifier,
-      factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-      factory.createCallExpression(factory.createIdentifier('convertToLocal'), undefined, [
-        factory.createNewExpression(factory.createIdentifier('Date'), undefined, [valueIdentifier]),
-      ]),
-    ),
+export const getConvertedValueAttribute = (dataType: string, studioFormComponentType: string) => {
+  switch (dataType) {
+    case 'AWSDateTime':
+      return (valueIdentifier: Identifier) =>
+        factory.createBinaryExpression(
+          valueIdentifier,
+          factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+          factory.createCallExpression(factory.createIdentifier('convertToLocal'), undefined, [
+            factory.createNewExpression(factory.createIdentifier('Date'), undefined, [valueIdentifier]),
+          ]),
+        );
+
+    case 'AWSTimestamp':
+      if (studioFormComponentType === 'DateTimeField') {
+        return (valueIdentifier: Identifier) =>
+          factory.createBinaryExpression(
+            valueIdentifier,
+            factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+            factory.createCallExpression(factory.createIdentifier('convertToLocal'), undefined, [
+              factory.createCallExpression(factory.createIdentifier('convertTimeStampToDate'), undefined, [
+                valueIdentifier,
+              ]),
+            ]),
+          );
+      }
+      break;
+    default:
+      return undefined;
+  }
+  return undefined;
 };
 
 /**
@@ -64,14 +77,17 @@ export const convertedValueAttributeMap: Record<string, (valueIdentifier: Identi
  */
 export const renderDefaultValueAttribute = (
   stateName: string,
-  { dataType }: FieldConfigMetadata,
+  { dataType, studioFormComponentType }: FieldConfigMetadata,
   componentType: string,
 ) => {
   const identifier = factory.createIdentifier(stateName);
   let expression = factory.createJsxExpression(undefined, identifier);
 
-  if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {
-    expression = factory.createJsxExpression(undefined, convertedValueAttributeMap[dataType](identifier));
+  if (dataType && typeof dataType !== 'object') {
+    const convertedValueAttribute = getConvertedValueAttribute(dataType, studioFormComponentType || componentType);
+    if (convertedValueAttribute) {
+      expression = factory.createJsxExpression(undefined, convertedValueAttribute(identifier));
+    }
   }
 
   return factory.createJsxAttribute(
@@ -93,7 +109,7 @@ export const renderValueAttribute = ({
 }): JsxAttribute | undefined => {
   const componentType = fieldConfig.studioFormComponentType ?? fieldConfig.componentType;
   const shouldGetForUncontrolled = shouldWrapInArrayField(fieldConfig);
-  const { dataType } = fieldConfig;
+  const { dataType, studioFormComponentType } = fieldConfig;
 
   let valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
 
@@ -120,11 +136,11 @@ export const renderValueAttribute = ({
 
   let controlledExpression = factory.createJsxExpression(undefined, fieldNameIdentifier);
 
-  if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {
-    controlledExpression = factory.createJsxExpression(
-      undefined,
-      convertedValueAttributeMap[dataType](valueIdentifier),
-    );
+  if (dataType && typeof dataType !== 'object') {
+    const convertedValueAttribute = getConvertedValueAttribute(dataType, studioFormComponentType || componentType);
+    if (convertedValueAttribute) {
+      controlledExpression = factory.createJsxExpression(undefined, convertedValueAttribute(valueIdentifier));
+    }
   }
 
   const controlledComponentToAttributesMap: { [key: string]: JsxAttribute } = {
@@ -171,8 +187,11 @@ export const renderValueAttribute = ({
   if (shouldGetForUncontrolled) {
     let expression = factory.createJsxExpression(undefined, valueIdentifier);
 
-    if (dataType && typeof dataType !== 'object' && convertedValueAttributeMap[dataType]) {
-      expression = factory.createJsxExpression(undefined, convertedValueAttributeMap[dataType](valueIdentifier));
+    if (dataType && typeof dataType !== 'object') {
+      const convertedValueAttribute = getConvertedValueAttribute(dataType, studioFormComponentType || componentType);
+      if (convertedValueAttribute) {
+        expression = factory.createJsxExpression(undefined, convertedValueAttribute(valueIdentifier));
+      }
     }
 
     return factory.createJsxAttribute(factory.createIdentifier('value'), expression);

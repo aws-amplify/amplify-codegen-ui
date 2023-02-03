@@ -37,7 +37,7 @@ export type StudioFormDataType = {
 export type FieldConfigMetadata = {
   // ex. name field has a string validation type where the rule is char length > 5
   validationRules: FieldValidationConfiguration[];
-  // component field is of type AWSTimestamp will need to map this to date then get time from date
+  // needed for mapping conversions e.g. for Int
   dataType?: DataFieldDataType;
   relationship?: GenericDataRelationshipType;
   // for JSON type with invalid variable field name ie. { "1first-Name": "John" } => "firstName"

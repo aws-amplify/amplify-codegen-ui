@@ -54,8 +54,8 @@ export const FIELD_TYPE_MAP: {
     supportedComponents: new Set(['DateTimeField']),
   },
   AWSTimestamp: {
-    defaultComponent: 'DateTimeField',
-    supportedComponents: new Set(['DateTimeField']),
+    defaultComponent: 'NumberField',
+    supportedComponents: new Set(['DateTimeField', 'NumberField']),
   },
   AWSEmail: {
     defaultComponent: 'EmailField',

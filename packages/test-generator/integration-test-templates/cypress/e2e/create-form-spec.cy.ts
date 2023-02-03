@@ -123,10 +123,7 @@ describe('CreateForms', () => {
         getInputByLabel('Aws date').type('2022-10-12');
         getInputByLabel('Aws time').type('10:12');
         getInputByLabel('Aws date time').type('2017-06-01T08:30');
-        getInputByLabel('Aws timestamp').type('2022-12-01T00:30');
-
-        // handle chrome bug - https://support.google.com/chrome/thread/29828561?hl=en
-        getInputByLabel('Aws timestamp').should('have.value', '2022-12-01T00:30');
+        getInputByLabel('Aws timestamp').type('1669854600000');
 
         getInputByLabel('Aws email').type('myemail@yahoo.com');
         getInputByLabel('Aws url').type('https://amazon.com');

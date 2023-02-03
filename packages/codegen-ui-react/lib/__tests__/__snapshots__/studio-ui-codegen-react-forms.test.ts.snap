@@ -18112,12 +18112,6 @@ export default function BlogCreateForm(props) {
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
-  const convertTimeStampToDate = (ts) => {
-    if (Math.abs(Date.now() - ts) < Math.abs(Date.now() - ts * 1000)) {
-      return new Date(ts);
-    }
-    return new Date(ts * 1000);
-  };
   const convertToLocal = (date) => {
     const df = new Intl.DateTimeFormat(\\"default\\", {
       year: \\"numeric\\",
@@ -18338,14 +18332,13 @@ export default function BlogCreateForm(props) {
           label=\\"Edited at\\"
           isRequired={false}
           isReadOnly={false}
-          type=\\"datetime-local\\"
-          value={
-            currentEditedAtValue &&
-            convertToLocal(convertTimeStampToDate(currentEditedAtValue))
-          }
+          type=\\"number\\"
+          step=\\"any\\"
+          value={currentEditedAtValue}
           onChange={(e) => {
-            let value =
-              e.target.value === \\"\\" ? \\"\\" : Number(new Date(e.target.value));
+            let value = isNaN(parseInt(e.target.value))
+              ? e.target.value
+              : parseInt(e.target.value);
             if (errors.editedAt?.hasError) {
               runValidationTasks(\\"editedAt\\", value);
             }
@@ -19628,29 +19621,6 @@ export default function InputGalleryUpdateForm(props) {
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
-  const convertTimeStampToDate = (ts) => {
-    if (Math.abs(Date.now() - ts) < Math.abs(Date.now() - ts * 1000)) {
-      return new Date(ts);
-    }
-    return new Date(ts * 1000);
-  };
-  const convertToLocal = (date) => {
-    const df = new Intl.DateTimeFormat(\\"default\\", {
-      year: \\"numeric\\",
-      month: \\"2-digit\\",
-      day: \\"2-digit\\",
-      hour: \\"2-digit\\",
-      minute: \\"2-digit\\",
-      calendar: \\"iso8601\\",
-      numberingSystem: \\"latn\\",
-      hourCycle: \\"h23\\",
-    });
-    const parts = df.formatToParts(date).reduce((acc, part) => {
-      acc[part.type] = part.value;
-      return acc;
-    }, {});
-    return \`\${parts.year}-\${parts.month}-\${parts.day}T\${parts.hour}:\${parts.minute}\`;
-  };
   return (
     <Grid
       as=\\"form\\"
@@ -20053,11 +20023,13 @@ export default function InputGalleryUpdateForm(props) {
         label=\\"Timestamp\\"
         isRequired={false}
         isReadOnly={false}
-        type=\\"datetime-local\\"
-        value={timestamp && convertToLocal(convertTimeStampToDate(timestamp))}
+        type=\\"number\\"
+        step=\\"any\\"
+        value={timestamp}
         onChange={(e) => {
-          let value =
-            e.target.value === \\"\\" ? \\"\\" : Number(new Date(e.target.value));
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
               num,
