@@ -14,8 +14,8 @@
   limitations under the License.
  */
 
-describe('Workflow', () => {
-  before(() => {
+describe('Two way binding', () => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/two-way-binding-tests');
   });
 
@@ -30,6 +30,7 @@ describe('Workflow', () => {
 
     it('updates on state mutation', () => {
       cy.get('#checkbox-field-section').within(() => {
+        cy.contains('Subscribe').click();
         cy.get('.amplify-checkbox__button').invoke('attr', 'data-checked').should('eq', 'true');
         cy.contains('Set CheckboxFieldValue').click();
         cy.get('.amplify-checkbox__button').invoke('attr', 'data-checked').should('eq', 'false');

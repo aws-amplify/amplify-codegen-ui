@@ -14,7 +14,7 @@
   limitations under the License.
  */
 describe('Expander', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/view-tests');
   });
 

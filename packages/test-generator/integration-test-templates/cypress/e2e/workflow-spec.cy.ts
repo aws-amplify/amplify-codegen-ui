@@ -16,7 +16,7 @@
 const TEST_ROUTE = 'http://localhost:3000/workflow-tests';
 
 describe('Workflow', () => {
-  before(() => {
+  beforeEach(() => {
     cy.url().then((url) => {
       if (url !== TEST_ROUTE) {
         cy.visit(TEST_ROUTE);
@@ -130,6 +130,9 @@ describe('Workflow', () => {
   describe('Actions', () => {
     describe('Navigation', () => {
       it('supports hard navigation events', () => {
+        cy.visit(TEST_ROUTE);
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(3000);
         cy.url().should('include', '/workflow-tests');
         cy.get('#hard-navigate').click();
         cy.url().should('eq', 'https://www.amazon.com/');

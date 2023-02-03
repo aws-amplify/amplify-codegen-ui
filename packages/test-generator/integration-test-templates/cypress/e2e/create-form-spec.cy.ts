@@ -23,7 +23,7 @@ import {
 } from '../utils/form';
 
 describe('CreateForms', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/create-form-tests');
   });
 
@@ -243,6 +243,7 @@ describe('CreateForms', () => {
   describe('DataStoreFormCreateCPKTeacher', () => {
     it('should display current values and save to DataStore', () => {
       cy.get('#dataStoreFormCreateCPKTeacher').within(() => {
+        let position;
         getInputByLabel('Special teacher id').type('Teacher ID');
 
         // check error message shows on closed ArrayField
@@ -250,23 +251,26 @@ describe('CreateForms', () => {
         cy.contains('CPKStudent is required');
 
         // hasOne
+        position = cy.contains('Cpk student');
         getArrayFieldButtonByLabel('Cpk student').click();
         typeInAutocomplete('Her{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         // manyToMany
+        position = cy.contains('Cpk classes');
         getArrayFieldButtonByLabel('Cpk classes').click();
         typeInAutocomplete('English{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         // hasMany
+        position = cy.contains('Cpk projects');
         getArrayFieldButtonByLabel('Cpk projects').click();
         typeInAutocomplete('Either{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         cy.contains('Submit').click();
 
-        cy.contains(/Teacher ID/).then((recordElement: JQuery) => {
+        cy.contains('Teacher ID').then((recordElement: JQuery) => {
           const record = JSON.parse(recordElement.text());
 
           expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
@@ -284,32 +288,37 @@ describe('CreateForms', () => {
   describe('DataStoreFormCreateCompositeDog', () => {
     it('should display current values and save to DataStore', () => {
       cy.get('#dataStoreFormCreateCompositeDog').within(() => {
+        let position;
         getInputByLabel('Name').type('Cookie');
         getInputByLabel('Description').type('mogwai');
 
         // hasOne
+        position = cy.contains('Composite bowl');
         getArrayFieldButtonByLabel('Composite bowl').click();
         typeInAutocomplete('round-xl{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         // belongsTo
+        position = cy.contains('Composite owner');
         getArrayFieldButtonByLabel('Composite owner').click();
         typeInAutocomplete('Cooper-Gordon{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         // manyToMany
+        position = cy.contains('Composite toys');
         getArrayFieldButtonByLabel('Composite toys').click();
         typeInAutocomplete('chew-red{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         // hasMany
+        position = cy.contains('Composite vets');
         getArrayFieldButtonByLabel('Composite vets').click();
         typeInAutocomplete('Dentistry-Los Angeles{downArrow}{enter}');
-        clickAddToArray();
+        clickAddToArray(position.next().next());
 
         cy.contains('Submit').click();
 
-        cy.contains(/Cookie/).then((recordElement: JQuery) => {
+        cy.contains('Cookie').then((recordElement: JQuery) => {
           const record = JSON.parse(recordElement.text());
 
           expect(record.CompositeBowl.size).to.equal('xl');
