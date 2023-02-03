@@ -14,8 +14,12 @@
   limitations under the License.
  */
 
-import { mapModelFieldsConfigs, getFieldTypeMapKey } from '../../../generate-form-definition/helpers';
-import { FormDefinition, GenericDataSchema } from '../../../types';
+import {
+  mapModelFieldsConfigs,
+  getFieldTypeMapKey,
+  getFieldConfigFromModelField,
+} from '../../../generate-form-definition/helpers';
+import { FormDefinition, GenericDataField, GenericDataSchema } from '../../../types';
 import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
 
 describe('mapModelFieldsConfigs', () => {
@@ -789,5 +793,45 @@ describe('getFieldTypeMapKey', () => {
         isArray: false,
       }),
     ).toBe('NonModel');
+  });
+});
+
+describe('getFieldConfigFromModelField', () => {
+  it('should map the componentType of AWSTimestamp fields based on feature flag', () => {
+    const fieldName = 'birthTime';
+    const field: GenericDataField = { dataType: 'AWSTimestamp', readOnly: false, required: false, isArray: false };
+    const dataSchema: GenericDataSchema = {
+      dataSourceType: 'DataStore',
+      enums: {},
+      nonModels: {},
+      models: {
+        Dog: {
+          primaryKeys: ['id'],
+          fields: {
+            [fieldName]: field,
+          },
+        },
+      },
+    };
+
+    const fieldConfigWithoutFeatureFlags = getFieldConfigFromModelField({
+      dataTypeName: 'Dog',
+      fieldName,
+      field,
+      dataSchema,
+      featureFlags: undefined,
+    });
+
+    expect(fieldConfigWithoutFeatureFlags.inputType?.type).toBe('DateTimeField');
+
+    const fieldConfigWithRelationshipEnabled = getFieldConfigFromModelField({
+      dataTypeName: 'Dog',
+      fieldName,
+      field,
+      dataSchema,
+      featureFlags: { isRelationshipSupported: true },
+    });
+
+    expect(fieldConfigWithRelationshipEnabled.inputType?.type).toBe('NumberField');
   });
 });
