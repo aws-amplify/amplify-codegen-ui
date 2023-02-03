@@ -14,12 +14,14 @@
   limitations under the License.
  */
 
-describe('Workflow', () => {
-  before(() => {
-    cy.visit('http://localhost:3000/action-binding-tests');
-  });
-
+describe('Action Bindings', () => {
   describe('Mutation Bindings', () => {
+    beforeEach(() => {
+      cy.visit('http://localhost:3000/action-binding-tests');
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(3000);
+    });
+
     it('supports value bindings', () => {
       cy.get('#mutated-value').contains('Fixed Value').should('not.exist');
       cy.contains('Apply Fixed Property Mutation').click();
@@ -59,6 +61,12 @@ describe('Workflow', () => {
   });
 
   describe('DataStore Bindings', () => {
+    beforeEach(() => {
+      cy.visit('http://localhost:3000/action-binding-tests');
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(3000);
+    });
+
     it('supports value bindings', () => {
       cy.get('#data-store-value').contains('Fixed Value').should('not.exist');
       cy.contains('Apply Fixed Property DataStoreUpdateItemAction').click();
@@ -97,6 +105,12 @@ describe('Workflow', () => {
   });
 
   describe('Initial Value Bindings', () => {
+    beforeEach(() => {
+      cy.visit('http://localhost:3000/action-binding-tests');
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(1000);
+    });
+
     it('supports fixed values', () => {
       cy.get('#fixed-value-initial-binding-section').within(() => {
         cy.contains('Fixed Value');

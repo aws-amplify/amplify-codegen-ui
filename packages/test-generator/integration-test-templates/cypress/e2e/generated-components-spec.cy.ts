@@ -14,7 +14,7 @@
   limitations under the License.
  */
 describe('Generated Components', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('http://localhost:3000/component-tests');
   });
 

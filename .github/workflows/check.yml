@@ -83,7 +83,7 @@ jobs:
         working-directory: e2e-test-app
         run: cp -r ../amplify-codegen-ui/packages/test-generator/e2e-test-templates/. .
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v5
         with:
           working-directory: e2e-test-app
           install: false
@@ -111,7 +111,7 @@ jobs:
       - name: Setup Integration Test
         run: npm run integ:setup
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v5
         with:
           working-directory: packages/integration-test
           install: false
