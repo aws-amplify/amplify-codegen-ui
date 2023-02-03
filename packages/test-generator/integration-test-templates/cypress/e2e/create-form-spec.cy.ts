@@ -270,15 +270,17 @@ describe('CreateForms', () => {
 
         cy.contains('Submit').click();
 
-        cy.contains('Dumbledore').then((recordElement: JQuery) => {
-          const record = JSON.parse(recordElement.text());
+        cy.get('#cpkTeacherRecord').within(() => {
+          cy.contains(/Dumbledore/).then((recordElement: JQuery) => {
+            const record = JSON.parse(recordElement.text());
 
-          expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
-          expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
-          expect(record.CPKClasses.length).to.equal(1);
-          expect(record.CPKClasses[0].specialClassId).to.equal('English');
-          expect(record.CPKProjects.length).to.equal(1);
-          expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
+            expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
+            expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
+            expect(record.CPKClasses.length).to.equal(1);
+            expect(record.CPKClasses[0].specialClassId).to.equal('English');
+            expect(record.CPKProjects.length).to.equal(1);
+            expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
+          });
         });
       });
     });
@@ -318,15 +320,17 @@ describe('CreateForms', () => {
 
         cy.contains('Submit').click();
 
-        cy.contains('Cookie').then((recordElement: JQuery) => {
-          const record = JSON.parse(recordElement.text());
+        cy.get('#cpkTeacherRecord').within(() => {
+          cy.contains(/Cookie/).then((recordElement: JQuery) => {
+            const record = JSON.parse(recordElement.text());
 
-          expect(record.CompositeBowl.size).to.equal('xl');
-          expect(record.CompositeOwner.firstName).to.equal('Gordon');
-          expect(record.CompositeToys.length).to.equal(1);
-          expect(record.CompositeToys[0].color).to.equal('red');
-          expect(record.CompositeVets.length).to.equal(1);
-          expect(record.CompositeVets[0].city).to.equal('Los Angeles');
+            expect(record.CompositeBowl.size).to.equal('xl');
+            expect(record.CompositeOwner.firstName).to.equal('Gordon');
+            expect(record.CompositeToys.length).to.equal(1);
+            expect(record.CompositeToys[0].color).to.equal('red');
+            expect(record.CompositeVets.length).to.equal(1);
+            expect(record.CompositeVets[0].city).to.equal('Los Angeles');
+          });
         });
       });
     });

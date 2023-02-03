@@ -201,7 +201,7 @@ export default function CreateFormTests() {
             );
           }}
         />
-        <Text>{cpkTeacherRecordString}</Text>
+        <Text id="cpkTeacherRecord">{cpkTeacherRecordString}</Text>
       </View>
       <Divider />
       <Heading>DataStore Form - CreateCompositeDog</Heading>
@@ -228,7 +228,7 @@ export default function CreateFormTests() {
             );
           }}
         />
-        <Text>{compositeDogRecordString}</Text>
+        <Text id="cpkDogRecord">{compositeDogRecordString}</Text>
       </View>
     </AmplifyProvider>
   );
