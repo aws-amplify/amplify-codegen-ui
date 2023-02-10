@@ -158,50 +158,45 @@ describe('validateField tests', () => {
     ).toEqual({ hasError: true, errorMessage: 'test' });
   });
   describe('DateTime tests', () => {
-    it('should parse Date and timestamp', () => {
-      const time = Date.now().toString();
-      const timestamp = parseDateValidator(time);
-      const invalidTimestamp = parseDateValidator('1232131asdfasf123');
-      const ddMMYYYY = parseDateValidator('01 Jan 2022');
-      const mmDDYYYY = parseDateValidator('1/01/2022');
-      const yyyyMMDD = parseDateValidator('2022-1-1');
-
-      expect(timestamp.toString()).toEqual(time);
-      expect(new Date(invalidTimestamp).toString()).toEqual('Invalid Date');
-      expect(ddMMYYYY).toEqual('01 Jan 2022');
-      expect(mmDDYYYY).toEqual('1/01/2022');
-      expect(yyyyMMDD).toEqual('2022-1-1');
+    const timestamp = Date.now();
+    const invalidTimestamp = '1232131asdfasf123';
+    it.each([
+      { type: 'timestamp', input: timestamp.toString(), result: timestamp },
+      { type: 'invalid timestamp', input: new Date(invalidTimestamp).toString(), result: 'Invalid Date' },
+      { type: 'DD MMM YYYY', input: '01 Jan 2022', result: '01 Jan 2022' },
+      { type: 'MM/DD/YYYY', input: '1/01/2022', result: '1/01/2022' },
+      { type: 'YYYY-M-DD', input: '2022-1-1', result: '2022-1-1' },
+    ])('should parse $type', ({ input, result }) => {
+      expect(parseDateValidator(input)).toEqual(result);
     });
-    it('should validate BE_AFTER type', () => {
-      // timestamp tests
-      const startTime = Date.now();
-      const endTime1 = startTime + 10;
-      const endTime2 = startTime - 10;
 
-      const dateFormatTestCases = [
-        {
-          startDate: '01 Jan 2022',
-          endDate1: 'Jan 08 2023',
-          endDate2: '01 Jan 2021',
-        },
-        {
-          startDate: '01/09/2022',
-          endDate1: '01/09/2023',
-          endDate2: '01/09/2021',
-        },
-        {
-          startDate: '2022-1-9',
-          endDate1: '123123asdfdf123123',
-          endDate2: '2021-1-9',
-        },
-        {
-          startDate: startTime,
-          endDate1: endTime1.toString(),
-          endDate2: endTime2.toString(),
-        },
-      ];
-
-      dateFormatTestCases.forEach(({ startDate, endDate1, endDate2 }) => {
+    const endTime1 = timestamp + 10;
+    const endTime2 = timestamp - 10;
+    const beforeAfterTestCases = [
+      {
+        startDate: '01 Jan 2022',
+        endDate1: 'Jan 08 2023',
+        endDate2: '01 Jan 2021',
+      },
+      {
+        startDate: '01/09/2022',
+        endDate1: '01/09/2023',
+        endDate2: '01/09/2021',
+      },
+      {
+        startDate: timestamp,
+        endDate1: endTime1.toString(),
+        endDate2: endTime2.toString(),
+      },
+    ];
+    const invalidAfterTestCase = {
+      startDate: '2022-1-9',
+      endDate1: '123123asd---fdf123123',
+      endDate2: '2021-1-9',
+    };
+    it.each([...beforeAfterTestCases, invalidAfterTestCase])(
+      'should validate BE_AFTER type - startDate: $startDate, endDate1: $endDate1, endDate2: $endDate2',
+      ({ startDate, endDate1, endDate2 }) => {
         expect(
           validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [endDate2], validationMessage: '' }]),
         ).toEqual({ hasError: false });
@@ -211,38 +206,16 @@ describe('validateField tests', () => {
         expect(
           validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [''], validationMessage: 'test' }]),
         ).toEqual({ hasError: true, errorMessage: 'test' });
-      });
-    });
-
-    it('should validate BE_BEFORE type', () => {
-      // timestamp tests
-      const startTime = Date.now();
-      const endTime1 = startTime + 10;
-      const endTime2 = startTime - 10;
-
-      const dateFormatTestCases = [
-        {
-          startDate: '01 Jan 2022',
-          endDate1: 'Jan 08 2023',
-          endDate2: '01 Jan 2021',
-        },
-        {
-          startDate: '01/09/2022',
-          endDate1: '01/09/2023',
-          endDate2: '01/09/2021',
-        },
-        {
-          startDate: '2022-01-09',
-          endDate1: '2023-01-09',
-          endDate2: '123123asdfdf123123',
-        },
-        {
-          startDate: startTime,
-          endDate1: endTime1.toString(),
-          endDate2: endTime2.toString(),
-        },
-      ];
-      dateFormatTestCases.forEach(({ startDate, endDate1, endDate2 }) => {
+      },
+    );
+    const invalidBeforeTestCase = {
+      startDate: '2022-1-9',
+      endDate1: '2023-1-9',
+      endDate2: '123123asd---fdf123123',
+    };
+    it.each([...beforeAfterTestCases, invalidBeforeTestCase])(
+      'should validate BE_BEFORE type - startDate: $startDate, endDate1: $endDate1, endDate2: $endDate2',
+      ({ startDate, endDate1, endDate2 }) => {
         expect(
           validateField(startDate, [{ type: ValidationTypes.BE_BEFORE, strValues: [endDate1], validationMessage: '' }]),
         ).toEqual({ hasError: false });
@@ -252,8 +225,8 @@ describe('validateField tests', () => {
         expect(
           validateField(startDate, [{ type: ValidationTypes.BE_BEFORE, strValues: [''], validationMessage: 'test' }]),
         ).toEqual({ hasError: true, errorMessage: 'test' });
-      });
-    });
+      },
+    );
   });
 
   it('should validate EMAIL type', () => {
