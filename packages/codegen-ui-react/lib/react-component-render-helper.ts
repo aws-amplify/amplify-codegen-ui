@@ -52,7 +52,7 @@ import {
   ArrayLiteralExpression,
 } from 'typescript';
 
-import { FormMetadata, FormStyleConfig } from '@aws-amplify/codegen-ui/lib/types';
+import { FormMetadata, FormStyleConfig, StudioFormInputFieldProperty } from '@aws-amplify/codegen-ui/lib/types';
 import { ImportCollection, ImportSource } from './imports';
 import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 import { getChildPropMappingForComponentName } from './workflow/utils';
@@ -71,7 +71,9 @@ export function getComponentPropName(componentName?: string): string {
   return 'ComponentWithoutNameProps';
 }
 
-export function isFixedPropertyWithValue(prop: StudioComponentProperty): prop is FixedStudioComponentProperty {
+export function isFixedPropertyWithValue(
+  prop: StudioComponentProperty | StudioFormInputFieldProperty,
+): prop is FixedStudioComponentProperty {
   return typeof prop === 'object' && 'value' in prop;
 }
 

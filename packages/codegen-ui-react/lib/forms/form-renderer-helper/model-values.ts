@@ -15,7 +15,6 @@
  */
 import {
   FieldConfigMetadata,
-  InvalidInputError,
   StudioFormValueMappings,
   InternalError,
   ConcatenatedStudioComponentProperty,
@@ -37,6 +36,7 @@ import {
 import {
   buildBindingExpression,
   buildConcatExpression,
+  getFixedComponentPropValueExpression,
   isBoundProperty,
   isConcatenatedProperty,
   isFixedPropertyWithValue,
@@ -228,6 +228,38 @@ export function extractModelAndKeys(valueMappings?: StudioFormValueMappings): { 
   }
   return { model, keys };
 }
+/*
+ *  [{ id: 'value', label: 'valuelabel' }, { id: 'value', label: 'label' }]
+ */
+export function buildFixedAutocompleteOptions(fieldName: string, valueMappings?: StudioFormValueMappings) {
+  return factory.createArrayLiteralExpression(
+    valueMappings?.values.map(({ displayValue, value }) => {
+      let idStringLiteral: Expression | undefined;
+      let labelStringLiteral: Expression | undefined;
+      if (isFixedPropertyWithValue(value)) {
+        idStringLiteral = getFixedComponentPropValueExpression(value);
+        labelStringLiteral = getFixedComponentPropValueExpression(value);
+      }
+      if (displayValue && isFixedPropertyWithValue(displayValue)) {
+        labelStringLiteral = getFixedComponentPropValueExpression(displayValue);
+      }
+      if (!idStringLiteral) {
+        throw new InternalError(`Unable to render value for ${fieldName} Autocomplete option`);
+      }
+      if (!labelStringLiteral) {
+        throw new InternalError(`Unable to render display value for ${fieldName} Autocomplete option`);
+      }
+      return factory.createObjectLiteralExpression(
+        [
+          factory.createPropertyAssignment(factory.createIdentifier('id'), idStringLiteral),
+          factory.createPropertyAssignment(factory.createIdentifier('label'), labelStringLiteral),
+        ],
+        true,
+      );
+    }),
+    false,
+  );
+}
 
 /**
     example:
@@ -257,10 +289,8 @@ export function getAutocompleteOptionsProp({
     } else if (keys) {
       options = getSuggestionsForRelationshipScalar({ modelName: model, key: keys[0] });
     }
-  }
-
-  if (!options) {
-    throw new InvalidInputError(`Invalid value mappings on ${fieldName}`);
+  } else {
+    options = buildFixedAutocompleteOptions(fieldName, valueMappings);
   }
 
   return factory.createJsxAttribute(

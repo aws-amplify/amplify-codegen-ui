@@ -154,6 +154,7 @@ export function buildOnBlurStatement(fieldName: string, fieldConfig: FieldConfig
 export function buildOnClearStatement(fieldName: string, fieldConfig: FieldConfigMetadata) {
   const { componentType, dataType } = fieldConfig;
   const renderedFieldName = fieldConfig.sanitizedFieldName || fieldName;
+  const isNotArrayAndNotRelationshipField = !fieldConfig.relationship && !fieldConfig.isArray;
 
   return factory.createJsxAttribute(
     factory.createIdentifier('onClear'),
@@ -169,7 +170,9 @@ export function buildOnClearStatement(fieldName: string, fieldConfig: FieldConfi
           [
             factory.createExpressionStatement(
               factory.createCallExpression(
-                getSetNameIdentifier(getCurrentDisplayValueName(renderedFieldName)),
+                getSetNameIdentifier(
+                  isNotArrayAndNotRelationshipField ? renderedFieldName : getCurrentDisplayValueName(renderedFieldName),
+                ),
                 undefined,
                 [getDefaultValueExpression(fieldName, componentType, dataType, false, true)],
               ),
@@ -356,6 +359,7 @@ export function buildOnSelect({
 }): JsxAttribute {
   const labelString = 'label';
   const idString = 'id';
+  const isNotArrayAndNotRelationshipField = !fieldConfig.relationship && !fieldConfig.isArray;
 
   const props: BindingElement[] = [
     factory.createBindingElement(undefined, undefined, factory.createIdentifier(idString), undefined),
@@ -381,12 +385,18 @@ export function buildOnSelect({
   }
 
   const setStateExpressions: ExpressionStatement[] = [
-    setStateExpression(getCurrentValueName(sanitizedFieldName), nextCurrentValue),
+    setStateExpression(
+      isNotArrayAndNotRelationshipField ? sanitizedFieldName : getCurrentValueName(sanitizedFieldName),
+      nextCurrentValue,
+    ),
   ];
 
   if (isModelDataType(fieldConfig)) {
     setStateExpressions.push(
-      setStateExpression(getCurrentDisplayValueName(sanitizedFieldName), nextCurrentDisplayValue),
+      setStateExpression(
+        isNotArrayAndNotRelationshipField ? sanitizedFieldName : getCurrentDisplayValueName(sanitizedFieldName),
+        nextCurrentDisplayValue,
+      ),
     );
   }
 

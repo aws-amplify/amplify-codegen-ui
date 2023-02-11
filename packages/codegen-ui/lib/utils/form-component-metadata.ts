@@ -92,11 +92,7 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
           });
         }
 
-        if (
-          (element.relationship ||
-            (element.dataType && typeof element.dataType === 'object' && 'enum' in element.dataType)) &&
-          'valueMappings' in element
-        ) {
+        if ('valueMappings' in element) {
           metadata.valueMappings = element.valueMappings;
         }
 

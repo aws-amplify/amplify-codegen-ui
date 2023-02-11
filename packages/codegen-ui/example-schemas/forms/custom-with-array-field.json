@@ -38,7 +38,21 @@
     "city": {
       "inputType": {
         "type": "Autocomplete",
-        "name": "city"
+        "name": "city",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "value": "SF"
+              }
+            },
+            {
+              "value": {
+                "value": "LA"
+              }
+            }
+          ]
+        }
       },
       "label": "City"
     }

@@ -91,8 +91,7 @@ export const addFormAttributes = (
       attributes.push(valueAttribute);
     }
 
-    // TODO: Allow for other relationship types once valueMappings available
-    if (fieldConfig.componentType === 'Autocomplete' && fieldConfig.relationship) {
+    if (fieldConfig.componentType === 'Autocomplete') {
       attributes.push(getAutocompleteOptionsProp({ fieldName: componentName, fieldConfig }));
       attributes.push(
         buildOnSelect({ sanitizedFieldName: renderedVariableName, fieldConfig, fieldName: componentName }),
