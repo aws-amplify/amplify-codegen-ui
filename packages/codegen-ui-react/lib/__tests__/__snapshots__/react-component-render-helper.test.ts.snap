@@ -254,7 +254,15 @@ exports[`react-component-render-helper buildConcatExpression should build concat
 
 exports[`react-component-render-helper buildContionalExpression operandType does not exist 1`] = `"(user?.age && user?.age > \\"18\\") ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
 
+exports[`react-component-render-helper buildContionalExpression operandType does not exist 2`] = `"(user?.age && user?.age > \\"true\\") ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+
+exports[`react-component-render-helper buildContionalExpression operandType does not exist 3`] = `"(user?.age && user?.age > \\"dlo\\") ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+
 exports[`react-component-render-helper buildContionalExpression operandType exists 1`] = `"(user?.age && user?.age > 18) ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+
+exports[`react-component-render-helper buildContionalExpression operandType exists 2`] = `"(user?.age && user?.age > true) ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+
+exports[`react-component-render-helper buildContionalExpression operandType exists 3`] = `"(user?.age && user?.age > \\"true\\") ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
 
 exports[`react-component-render-helper buildFixedJsxExpression boolean 1`] = `"{true}"`;
 
