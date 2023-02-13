@@ -226,10 +226,6 @@ exports[`react-component-render-helper buildContionalExpression operandType exis
 
 exports[`react-component-render-helper buildContionalExpression operandType exists 3`] = `"user?.age > \\"true\\" ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
 
-exports[`react-component-render-helper buildContionalExpression operandType exists 2`] = `"(user?.age && user?.age > true) ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
-
-exports[`react-component-render-helper buildContionalExpression operandType exists 3`] = `"(user?.age && user?.age > \\"true\\") ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
-
 exports[`react-component-render-helper buildFixedJsxExpression boolean 1`] = `"{true}"`;
 
 exports[`react-component-render-helper buildFixedJsxExpression json parse error 1`] = `"Failed to parse value \\"⭐\\""`;
