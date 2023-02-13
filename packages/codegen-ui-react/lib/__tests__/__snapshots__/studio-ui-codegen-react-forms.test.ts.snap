@@ -3080,6 +3080,7 @@ exports[`amplify form renderer tests datastore form tests custom form tests shou
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
+  Autocomplete,
   Badge,
   Button,
   Divider,
@@ -3258,10 +3259,12 @@ export default function CustomDataForm(props) {
     name: \\"John Doe\\",
     email: [\\"johndoe@amplify.com\\"],
     phone: [\\"+1-401-152-6995\\"],
+    city: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
   const [phone, setPhone] = React.useState(initialValues.phone);
+  const [city, setCity] = React.useState(initialValues.city);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -3269,6 +3272,7 @@ export default function CustomDataForm(props) {
     setCurrentEmailValue(\\"\\");
     setPhone(initialValues.phone);
     setCurrentPhoneValue(\\"\\");
+    setCity(initialValues.city);
     setErrors({});
   };
   const [currentEmailValue, setCurrentEmailValue] = React.useState(\\"\\");
@@ -3279,6 +3283,7 @@ export default function CustomDataForm(props) {
     name: [{ type: \\"Required\\" }],
     email: [{ type: \\"Required\\" }],
     phone: [{ type: \\"Required\\" }, { type: \\"Phone\\" }],
+    city: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -3309,6 +3314,7 @@ export default function CustomDataForm(props) {
           name,
           email,
           phone,
+          city,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -3345,6 +3351,7 @@ export default function CustomDataForm(props) {
               name: value,
               email,
               phone,
+              city,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -3367,6 +3374,7 @@ export default function CustomDataForm(props) {
               name,
               email: values,
               phone,
+              city,
             };
             const result = onChange(modelFields);
             values = result?.email ?? values;
@@ -3410,6 +3418,7 @@ export default function CustomDataForm(props) {
               name,
               email,
               phone: values,
+              city,
             };
             const result = onChange(modelFields);
             values = result?.phone ?? values;
@@ -3446,6 +3455,31 @@ export default function CustomDataForm(props) {
           {...getOverrideProps(overrides, \\"phone\\")}
         ></TextField>
       </ArrayField>
+      <Autocomplete
+        label=\\"City\\"
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              phone,
+              city: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.city ?? value;
+          }
+          if (errors.city?.hasError) {
+            runValidationTasks(\\"city\\", value);
+          }
+          setCity(value);
+        }}
+        onBlur={() => runValidationTasks(\\"city\\", city)}
+        errorMessage={errors.city?.errorMessage}
+        hasError={errors.city?.hasError}
+        labelHidden={false}
+        {...getOverrideProps(overrides, \\"city\\")}
+      ></Autocomplete>
       <Flex
         justifyContent=\\"space-between\\"
         {...getOverrideProps(overrides, \\"CTAFlex\\")}
@@ -3488,7 +3522,7 @@ export default function CustomDataForm(props) {
 
 exports[`amplify form renderer tests datastore form tests custom form tests should render a custom backed form with an array field 2`] = `
 "import * as React from \\"react\\";
-import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -3499,11 +3533,13 @@ export declare type CustomDataFormInputValues = {
     name?: string;
     email?: string[];
     phone?: string[];
+    city?: string;
 };
 export declare type CustomDataFormValidationValues = {
     name?: ValidationFunction<string>;
     email?: ValidationFunction<string>;
     phone?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CustomDataFormOverridesProps = {
@@ -3511,6 +3547,7 @@ export declare type CustomDataFormOverridesProps = {
     name?: PrimitiveOverrideProps<TextFieldProps>;
     email?: PrimitiveOverrideProps<TextFieldProps>;
     phone?: PrimitiveOverrideProps<TextFieldProps>;
+    city?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type CustomDataFormProps = React.PropsWithChildren<{
     overrides?: CustomDataFormOverridesProps | undefined | null;
