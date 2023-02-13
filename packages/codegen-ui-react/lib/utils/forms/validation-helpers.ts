@@ -266,6 +266,85 @@ export const generateValidateFieldFunction = () =>
     ),
   );
 
+export const generateParseDateValidatorFunction = () =>
+  factory.createVariableStatement(
+    [factory.createToken(ts.SyntaxKind.ExportKeyword)],
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('parseDateValidator'),
+          undefined,
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('dateValidator'),
+                undefined,
+                factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createVariableStatement(
+                  undefined,
+                  factory.createVariableDeclarationList(
+                    [
+                      factory.createVariableDeclaration(
+                        factory.createIdentifier('isTimestamp'),
+                        undefined,
+                        undefined,
+                        factory.createBinaryExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createTemplateExpression(factory.createTemplateHead('', ''), [
+                              factory.createTemplateSpan(
+                                factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [
+                                  factory.createIdentifier('dateValidator'),
+                                ]),
+                                factory.createTemplateTail('', ''),
+                              ),
+                            ]),
+                            factory.createIdentifier('length'),
+                          ),
+                          factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+                          factory.createPropertyAccessExpression(
+                            factory.createIdentifier('dateValidator'),
+                            factory.createIdentifier('length'),
+                          ),
+                        ),
+                      ),
+                    ],
+                    ts.NodeFlags.Const,
+                  ),
+                ),
+                factory.createReturnStatement(
+                  factory.createConditionalExpression(
+                    factory.createIdentifier('isTimestamp'),
+                    factory.createToken(ts.SyntaxKind.QuestionToken),
+                    factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [
+                      factory.createIdentifier('dateValidator'),
+                    ]),
+                    factory.createToken(ts.SyntaxKind.ColonToken),
+                    factory.createIdentifier('dateValidator'),
+                  ),
+                ),
+              ],
+              true,
+            ),
+          ),
+        ),
+      ],
+      ts.NodeFlags.Const,
+    ),
+  );
+
 const numValuesSwitchStatement = () =>
   factory.createSwitchStatement(
     factory.createPropertyAccessExpression(factory.createIdentifier('validation'), factory.createIdentifier('type')),
@@ -902,61 +981,6 @@ const strValuesSwitchStatement = () =>
         ),
       ]),
       factory.createCaseClause(factory.createStringLiteral('BeAfter'), [
-        factory.createVariableStatement(
-          undefined,
-          factory.createVariableDeclarationList(
-            [
-              factory.createVariableDeclaration(
-                factory.createIdentifier('afterTimeValue'),
-                undefined,
-                undefined,
-                factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [
-                  factory.createElementAccessExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('validation'),
-                      factory.createIdentifier('strValues'),
-                    ),
-                    factory.createNumericLiteral('0'),
-                  ),
-                ]),
-              ),
-            ],
-            ts.NodeFlags.Const,
-          ),
-        ),
-        factory.createVariableStatement(
-          undefined,
-          factory.createVariableDeclarationList(
-            [
-              factory.createVariableDeclaration(
-                factory.createIdentifier('afterTimeValidator'),
-                undefined,
-                undefined,
-                factory.createConditionalExpression(
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('Number'),
-                      factory.createIdentifier('isNaN'),
-                    ),
-                    undefined,
-                    [factory.createIdentifier('afterTimeValue')],
-                  ),
-                  factory.createToken(ts.SyntaxKind.QuestionToken),
-                  factory.createElementAccessExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('validation'),
-                      factory.createIdentifier('strValues'),
-                    ),
-                    factory.createNumericLiteral('0'),
-                  ),
-                  factory.createToken(ts.SyntaxKind.ColonToken),
-                  factory.createIdentifier('afterTimeValue'),
-                ),
-              ),
-            ],
-            ts.NodeFlags.Const,
-          ),
-        ),
         factory.createReturnStatement(
           factory.createObjectLiteralExpression(
             [
@@ -971,7 +995,15 @@ const strValuesSwitchStatement = () =>
                       ]),
                       factory.createToken(ts.SyntaxKind.GreaterThanToken),
                       factory.createNewExpression(factory.createIdentifier('Date'), undefined, [
-                        factory.createIdentifier('afterTimeValidator'),
+                        factory.createCallExpression(factory.createIdentifier('parseDateValidator'), undefined, [
+                          factory.createElementAccessExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('validation'),
+                              factory.createIdentifier('strValues'),
+                            ),
+                            factory.createNumericLiteral('0'),
+                          ),
+                        ]),
                       ]),
                     ),
                   ),
@@ -1008,61 +1040,6 @@ const strValuesSwitchStatement = () =>
         ),
       ]),
       factory.createCaseClause(factory.createStringLiteral('BeBefore'), [
-        factory.createVariableStatement(
-          undefined,
-          factory.createVariableDeclarationList(
-            [
-              factory.createVariableDeclaration(
-                factory.createIdentifier('beforeTimeValue'),
-                undefined,
-                undefined,
-                factory.createCallExpression(factory.createIdentifier('parseInt'), undefined, [
-                  factory.createElementAccessExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('validation'),
-                      factory.createIdentifier('strValues'),
-                    ),
-                    factory.createNumericLiteral('0'),
-                  ),
-                ]),
-              ),
-            ],
-            ts.NodeFlags.Const,
-          ),
-        ),
-        factory.createVariableStatement(
-          undefined,
-          factory.createVariableDeclarationList(
-            [
-              factory.createVariableDeclaration(
-                factory.createIdentifier('beforeTimevalue'),
-                undefined,
-                undefined,
-                factory.createConditionalExpression(
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('Number'),
-                      factory.createIdentifier('isNaN'),
-                    ),
-                    undefined,
-                    [factory.createIdentifier('beforeTimeValue')],
-                  ),
-                  factory.createToken(ts.SyntaxKind.QuestionToken),
-                  factory.createElementAccessExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('validation'),
-                      factory.createIdentifier('strValues'),
-                    ),
-                    factory.createNumericLiteral('0'),
-                  ),
-                  factory.createToken(ts.SyntaxKind.ColonToken),
-                  factory.createIdentifier('beforeTimeValue'),
-                ),
-              ),
-            ],
-            ts.NodeFlags.Const,
-          ),
-        ),
         factory.createReturnStatement(
           factory.createObjectLiteralExpression(
             [
@@ -1077,7 +1054,15 @@ const strValuesSwitchStatement = () =>
                       ]),
                       factory.createToken(ts.SyntaxKind.LessThanToken),
                       factory.createNewExpression(factory.createIdentifier('Date'), undefined, [
-                        factory.createIdentifier('beforeTimevalue'),
+                        factory.createCallExpression(factory.createIdentifier('parseDateValidator'), undefined, [
+                          factory.createElementAccessExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('validation'),
+                              factory.createIdentifier('strValues'),
+                            ),
+                            factory.createNumericLiteral('0'),
+                          ),
+                        ]),
                       ]),
                     ),
                   ),

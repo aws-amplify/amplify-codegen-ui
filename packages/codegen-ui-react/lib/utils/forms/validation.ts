@@ -2,6 +2,7 @@
 import {
   fieldValidationConfigurationDeclaration,
   generateCheckValidationFunction,
+  generateParseDateValidatorFunction,
   generateValidateFieldFunction,
   validationResponseDeclaration,
 } from './validation-helpers';
@@ -36,6 +37,11 @@ export const validateField = (value: any, validations: FieldValidationConfigurat
     }
   }
   return { hasError: false };
+};
+
+export const parseDateValidator = (dateValidator: string) => {
+  const isTimestamp = `${parseInt(dateValidator)}`.length === dateValidator.length;
+  return isTimestamp ? parseInt(dateValidator) : dateValidator;
 };
 
 const checkValidation = (value: any, validation: FieldValidationConfiguration) => {
@@ -94,17 +100,13 @@ const checkValidation = (value: any, validation: FieldValidationConfiguration) =
           errorMessage: validation.validationMessage || `The value must not contain ${validation.strValues.join(', ')}`,
         };
       case 'BeAfter':
-        const afterTimeValue = parseInt(validation.strValues[0]);
-        const afterTimeValidator = Number.isNaN(afterTimeValue) ? validation.strValues[0] : afterTimeValue;
         return {
-          hasError: !(new Date(value) > new Date(afterTimeValidator)),
+          hasError: !(new Date(value) > new Date(parseDateValidator(validation.strValues[0]))),
           errorMessage: validation.validationMessage || `The value must be after ${validation.strValues[0]}`,
         };
       case 'BeBefore':
-        const beforeTimeValue = parseInt(validation.strValues[0]);
-        const beforeTimevalue = Number.isNaN(beforeTimeValue) ? validation.strValues[0] : beforeTimeValue;
         return {
-          hasError: !(new Date(value) < new Date(beforeTimevalue)),
+          hasError: !(new Date(value) < new Date(parseDateValidator(validation.strValues[0]))),
           errorMessage: validation.validationMessage || `The value must be before ${validation.strValues[0]}`,
         };
     }
@@ -164,6 +166,7 @@ export const generateValidationFunction = () => {
     validationResponseDeclaration(),
     fieldValidationConfigurationDeclaration(),
     generateValidateFieldFunction(),
+    generateParseDateValidatorFunction(),
     generateCheckValidationFunction(),
   ];
 };

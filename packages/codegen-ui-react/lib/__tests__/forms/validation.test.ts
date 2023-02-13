@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { FieldValidationConfiguration, ValidationTypes } from '@aws-amplify/codegen-ui/lib/types/form/form-validation';
-import { validateField } from '../../utils/forms/validation';
+import { parseDateValidator, validateField } from '../../utils/forms/validation';
 
 describe('validateField tests', () => {
   it('should validate REQUIRED type', () => {
@@ -157,77 +157,78 @@ describe('validateField tests', () => {
       validateField(3, [{ type: ValidationTypes.EQUAL_TO_NUM, numValues: [4, 5, 6], validationMessage: 'test' }]),
     ).toEqual({ hasError: true, errorMessage: 'test' });
   });
-  it('should validate BE_AFTER type', () => {
-    const startDate = new Date().toDateString();
-    const endDate1 = new Date('2021-01-09').toDateString();
-    const endDate2 = new Date('3000-01-09').toDateString();
-    expect(
-      validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [endDate1], validationMessage: '' }]),
-    ).toEqual({ hasError: false });
-    expect(
-      validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [endDate2], validationMessage: '' }]),
-    ).toEqual({ hasError: true, errorMessage: `The value must be after ${endDate2}` });
-    expect(
-      validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [''], validationMessage: 'test' }]),
-    ).toEqual({ hasError: true, errorMessage: 'test' });
+  describe('DateTime tests', () => {
+    const timestamp = Date.now();
+    const invalidTimestamp = '1232131asdfasf123';
+    it.each([
+      { type: 'timestamp', input: timestamp.toString(), result: timestamp },
+      { type: 'invalid timestamp', input: new Date(invalidTimestamp).toString(), result: 'Invalid Date' },
+      { type: 'DD MMM YYYY', input: '01 Jan 2022', result: '01 Jan 2022' },
+      { type: 'MM/DD/YYYY', input: '1/01/2022', result: '1/01/2022' },
+      { type: 'YYYY-M-DD', input: '2022-1-1', result: '2022-1-1' },
+    ])('should parse $type', ({ input, result }) => {
+      expect(parseDateValidator(input)).toEqual(result);
+    });
 
-    const startTime = Date.now();
-    const endTime1 = startTime - 10;
-    expect(
-      validateField(startTime, [
-        { type: ValidationTypes.BE_AFTER, strValues: [endTime1.toString()], validationMessage: '' },
-      ]),
-    ).toEqual({ hasError: false });
-    expect(
-      validateField(endTime1, [
-        { type: ValidationTypes.BE_AFTER, strValues: [startTime.toString()], validationMessage: '' },
-      ]),
-    ).toEqual({ hasError: true, errorMessage: `The value must be after ${startTime}` });
-    expect(
-      validateField(endTime1, [
-        { type: ValidationTypes.BE_AFTER, strValues: [startTime.toString()], validationMessage: 'test' },
-      ]),
-    ).toEqual({ hasError: true, errorMessage: 'test' });
+    const endTime1 = timestamp + 10;
+    const endTime2 = timestamp - 10;
+    const beforeAfterTestCases = [
+      {
+        startDate: '01 Jan 2022',
+        endDate1: 'Jan 08 2023',
+        endDate2: '01 Jan 2021',
+      },
+      {
+        startDate: '01/09/2022',
+        endDate1: '01/09/2023',
+        endDate2: '01/09/2021',
+      },
+      {
+        startDate: timestamp,
+        endDate1: endTime1.toString(),
+        endDate2: endTime2.toString(),
+      },
+    ];
+    const invalidAfterTestCase = {
+      startDate: '2022-1-9',
+      endDate1: '123123asd---fdf123123',
+      endDate2: '2021-1-9',
+    };
+    it.each([...beforeAfterTestCases, invalidAfterTestCase])(
+      'should validate BE_AFTER type - startDate: $startDate, endDate1: $endDate1, endDate2: $endDate2',
+      ({ startDate, endDate1, endDate2 }) => {
+        expect(
+          validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [endDate2], validationMessage: '' }]),
+        ).toEqual({ hasError: false });
+        expect(
+          validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [endDate1], validationMessage: '' }]),
+        ).toEqual({ hasError: true, errorMessage: `The value must be after ${endDate1}` });
+        expect(
+          validateField(startDate, [{ type: ValidationTypes.BE_AFTER, strValues: [''], validationMessage: 'test' }]),
+        ).toEqual({ hasError: true, errorMessage: 'test' });
+      },
+    );
+    const invalidBeforeTestCase = {
+      startDate: '2022-1-9',
+      endDate1: '2023-1-9',
+      endDate2: '123123asd---fdf123123',
+    };
+    it.each([...beforeAfterTestCases, invalidBeforeTestCase])(
+      'should validate BE_BEFORE type - startDate: $startDate, endDate1: $endDate1, endDate2: $endDate2',
+      ({ startDate, endDate1, endDate2 }) => {
+        expect(
+          validateField(startDate, [{ type: ValidationTypes.BE_BEFORE, strValues: [endDate1], validationMessage: '' }]),
+        ).toEqual({ hasError: false });
+        expect(
+          validateField(startDate, [{ type: ValidationTypes.BE_BEFORE, strValues: [endDate2], validationMessage: '' }]),
+        ).toEqual({ hasError: true, errorMessage: `The value must be before ${endDate2}` });
+        expect(
+          validateField(startDate, [{ type: ValidationTypes.BE_BEFORE, strValues: [''], validationMessage: 'test' }]),
+        ).toEqual({ hasError: true, errorMessage: 'test' });
+      },
+    );
   });
-  it('should validate BE_BEFORE type', () => {
-    const startDate = new Date('2022-01-09').toString();
-    const endDate1 = new Date('2023-01-09').toString();
-    const endDate2 = new Date('2021-01-09').toString();
 
-    expect(
-      validateField(startDate, [
-        { type: ValidationTypes.BE_BEFORE, strValues: [endDate1.toString()], validationMessage: '' },
-      ]),
-    ).toEqual({ hasError: false });
-    expect(
-      validateField(startDate, [
-        { type: ValidationTypes.BE_BEFORE, strValues: [endDate2.toString()], validationMessage: '' },
-      ]),
-    ).toEqual({ hasError: true, errorMessage: `The value must be before ${endDate2}` });
-    expect(
-      validateField(startDate, [
-        { type: ValidationTypes.BE_BEFORE, strValues: [endDate2.toString()], validationMessage: 'test' },
-      ]),
-    ).toEqual({ hasError: true, errorMessage: 'test' });
-
-    const startTime = Date.now();
-    const endTime1 = startTime + 10;
-    expect(
-      validateField(startTime, [
-        { type: ValidationTypes.BE_BEFORE, strValues: [endTime1.toString()], validationMessage: '' },
-      ]),
-    ).toEqual({ hasError: false });
-    expect(
-      validateField(endTime1, [
-        { type: ValidationTypes.BE_BEFORE, strValues: [startTime.toString()], validationMessage: '' },
-      ]),
-    ).toEqual({ hasError: true, errorMessage: `The value must be before ${startTime}` });
-    expect(
-      validateField(endTime1, [
-        { type: ValidationTypes.BE_BEFORE, strValues: [startTime.toString()], validationMessage: 'test' },
-      ]),
-    ).toEqual({ hasError: true, errorMessage: 'test' });
-  });
   it('should validate EMAIL type', () => {
     expect(validateField('ab-cd@amazon.com', [{ type: ValidationTypes.EMAIL, validationMessage: '' }])).toEqual({
       hasError: false,
