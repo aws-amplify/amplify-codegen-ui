@@ -436,7 +436,7 @@ export default function ConditionalInMutation(
     useStateMutationAction(\\"Default Value\\");
   const conditionalPropertyMutationOnClick = () => {
     setMutatedValueChildren(
-      user?.age && user?.age == 45 ? \\"Conditional Value\\" : \\"Unconditional Value\\"
+      user?.age == 45 ? \\"Conditional Value\\" : \\"Unconditional Value\\"
     );
   };
   return (
@@ -1392,7 +1392,7 @@ export default function CollectionWithModelNameCollisions(
   const buttonModelFilterObj = {
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
-      { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
+      { field: \\"isActive\\", operand: true, operator: \\"eq\\" },
     ],
   };
   const buttonModelFilter =
@@ -5395,16 +5395,14 @@ export default function CustomButton(
     /* @ts-ignore: TS2322 */
     <Button
       labelWidth={width}
-      disabled={
-        buttonUser?.isLoggedIn && buttonUser?.isLoggedIn == true ? true : false
-      }
+      disabled={buttonUser?.isLoggedIn == true ? true : false}
       prompt={
-        buttonUser?.age && buttonUser?.age > 18
+        buttonUser?.age > 18
           ? \`\${buttonUser?.firstname}\${\\", cast your vote.\\"}\`
           : \\"Sorry you cannot vote\\"
       }
       backgroundColor={
-        buttonUser?.isLoggedIn && buttonUser?.isLoggedIn == true
+        buttonUser?.isLoggedIn == true
           ? buttonUser?.loggedInColor
           : buttonUser?.loggedOutColor
       }
@@ -5465,22 +5463,16 @@ export default function ConditionalComponentWithDataBinding(
     >
       <Text
         value={
-          student?.id && student?.id == \\"idstringuserinput\\"
-            ? student?.createdAt
-            : student?.id
+          student?.id == \\"idstringuserinput\\" ? student?.createdAt : student?.id
         }
         children={
-          student?.id && student?.id == \\"idstringuserinput\\"
-            ? student?.createdAt
-            : student?.id
+          student?.id == \\"idstringuserinput\\" ? student?.createdAt : student?.id
         }
         {...getOverrideProps(overrides, \\"Placeholder text\\")}
       ></Text>
       <Button
         value={
-          student?.id && student?.id == \\"idstringuserinput\\"
-            ? student?.createdAt
-            : student?.id
+          student?.id == \\"idstringuserinput\\" ? student?.createdAt : student?.id
         }
         {...getOverrideProps(overrides, \\"Placeholder Button\\")}
       ></Button>
@@ -5518,7 +5510,7 @@ export default function CustomButton(
   return (
     /* @ts-ignore: TS2322 */
     <Button
-      disabled={buttonColor && buttonColor == \\"red\\" ? true : false}
+      disabled={buttonColor == \\"red\\" ? true : false}
       {...getOverrideProps(overrides, \\"CustomButton\\")}
       {...rest}
     ></Button>
@@ -7205,12 +7197,12 @@ export default function InitialValueBindings(
     if (
       conditionalValueContentsChildren === undefined &&
       user !== undefined &&
-      (user?.lastName && user?.lastName == \\"Bound Value\\"
+      (user?.lastName == \\"Bound Value\\"
         ? \\"Conditional Value\\"
         : \\"Unconditional Value\\") !== undefined
     )
       setConditionalValueContentsChildren(
-        user?.lastName && user?.lastName == \\"Bound Value\\"
+        user?.lastName == \\"Bound Value\\"
           ? \\"Conditional Value\\"
           : \\"Unconditional Value\\"
       );

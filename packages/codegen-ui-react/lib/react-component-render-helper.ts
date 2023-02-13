@@ -514,16 +514,10 @@ export function buildConditionalExpression(
       : factory.createIdentifier(property);
 
   return factory.createConditionalExpression(
-    factory.createParenthesizedExpression(
-      factory.createBinaryExpression(
-        propertyAccess,
-        factory.createToken(SyntaxKind.AmpersandAmpersandToken),
-        factory.createBinaryExpression(
-          propertyAccess,
-          operatorToken,
-          getConditionalOperandExpression(operand, operandType),
-        ),
-      ),
+    factory.createBinaryExpression(
+      propertyAccess,
+      operatorToken,
+      getConditionalOperandExpression(operand, operandType),
     ),
     factory.createToken(SyntaxKind.QuestionToken),
     resolvePropToExpression(componentMetadata, then),
