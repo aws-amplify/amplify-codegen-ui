@@ -51,9 +51,10 @@
             "operator": "gt"
           },
           {
-            "field": "lastName",
-            "operand": "L",
-            "operator": "beginsWith"
+            "field": "isActive",
+            "operand": "true",
+            "operator": "eq",
+            "operandType": "boolean"
           }
         ]
       }
