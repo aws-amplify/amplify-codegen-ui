@@ -145,3 +145,13 @@ export function getControlledComponentDefaultValue(
   });
   return defaultValue;
 }
+
+export function testing123(fields: StudioFormFields, componentType: string, name: string): string | null {
+  let defaultValue = null;
+  Object.entries(fields).forEach(([key, value]) => {
+    if (key === name && 'inputType' in value && value.inputType?.defaultValue && componentType === 'TextField') {
+      defaultValue = value.inputType.defaultValue;
+    }
+  });
+  return defaultValue;
+}
