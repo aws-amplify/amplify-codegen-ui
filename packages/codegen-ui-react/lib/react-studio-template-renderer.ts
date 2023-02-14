@@ -67,7 +67,11 @@ import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { ReactRenderConfig, ScriptKind, scriptKindToFileExtension } from './react-render-config';
 import SampleCodeRenderer from './amplify-ui-renderers/sampleCodeRenderer';
-import { addBindingPropertiesImports, getComponentPropName } from './react-component-render-helper';
+import {
+  addBindingPropertiesImports,
+  getComponentPropName,
+  getConditionalOperandExpression,
+} from './react-component-render-helper';
 import {
   transpile,
   buildPrinter,
@@ -1432,21 +1436,32 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
   }
 
   private predicateToObjectLiteralExpression(predicate: StudioComponentPredicate): ObjectLiteralExpression {
-    return factory.createObjectLiteralExpression(
-      Object.entries(predicate).map(([key, value]) => {
+    const { operandType, ...filteredPredicate } = predicate;
+    const objectAssignments = Object.entries(filteredPredicate).map(([key, value]) => {
+      if (key === 'and' || key === 'or') {
         return factory.createPropertyAssignment(
           factory.createIdentifier(key),
-          key === 'and' || key === 'or'
-            ? factory.createArrayLiteralExpression(
-                (value as StudioComponentPredicate[]).map(
-                  (pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred),
-                  false,
-                ),
-              )
-            : factory.createStringLiteral(value as string),
+          factory.createArrayLiteralExpression(
+            (predicate[key] as StudioComponentPredicate[]).map(
+              (pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred),
+              false,
+            ),
+          ),
         );
-      }, false),
-    );
+      }
+      if (key === 'operand' && typeof value === 'string') {
+        return factory.createPropertyAssignment(
+          factory.createIdentifier(key),
+          getConditionalOperandExpression(value, operandType),
+        );
+      }
+      return factory.createPropertyAssignment(
+        factory.createIdentifier(key),
+        typeof value === 'string' ? factory.createStringLiteral(value) : factory.createIdentifier('undefined'),
+      );
+    });
+
+    return factory.createObjectLiteralExpression(objectAssignments);
   }
 
   private buildUseActionStatements(): Statement[] {

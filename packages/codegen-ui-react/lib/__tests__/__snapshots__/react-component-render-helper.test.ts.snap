@@ -99,80 +99,42 @@ NodeObject {
     },
     "condition": NodeObject {
       "end": -1,
-      "expression": NodeObject {
+      "flags": 8,
+      "kind": 219,
+      "left": IdentifierObject {
         "end": -1,
+        "escapedText": "prop",
         "flags": 8,
-        "kind": 219,
-        "left": IdentifierObject {
-          "end": -1,
-          "escapedText": "prop",
-          "flags": 8,
-          "kind": 79,
-          "modifierFlagsCache": 0,
-          "originalKeywordKind": undefined,
-          "parent": undefined,
-          "pos": -1,
-          "transformFlags": 0,
-        },
+        "kind": 79,
         "modifierFlagsCache": 0,
-        "operatorToken": TokenObject {
-          "end": -1,
-          "flags": 8,
-          "kind": 55,
-          "modifierFlagsCache": 0,
-          "parent": undefined,
-          "pos": -1,
-          "transformFlags": 0,
-        },
+        "originalKeywordKind": undefined,
         "parent": undefined,
         "pos": -1,
-        "right": NodeObject {
-          "end": -1,
-          "flags": 8,
-          "kind": 219,
-          "left": IdentifierObject {
-            "end": -1,
-            "escapedText": "prop",
-            "flags": 8,
-            "kind": 79,
-            "modifierFlagsCache": 0,
-            "originalKeywordKind": undefined,
-            "parent": undefined,
-            "pos": -1,
-            "transformFlags": 0,
-          },
-          "modifierFlagsCache": 0,
-          "operatorToken": TokenObject {
-            "end": -1,
-            "flags": 8,
-            "kind": 34,
-            "modifierFlagsCache": 0,
-            "parent": undefined,
-            "pos": -1,
-            "transformFlags": 0,
-          },
-          "parent": undefined,
-          "pos": -1,
-          "right": TokenObject {
-            "end": -1,
-            "flags": 8,
-            "kind": 8,
-            "modifierFlagsCache": 0,
-            "numericLiteralFlags": 0,
-            "parent": undefined,
-            "pos": -1,
-            "text": "0",
-            "transformFlags": 0,
-          },
-          "transformFlags": 0,
-        },
         "transformFlags": 0,
       },
-      "flags": 8,
-      "kind": 210,
       "modifierFlagsCache": 0,
+      "operatorToken": TokenObject {
+        "end": -1,
+        "flags": 8,
+        "kind": 34,
+        "modifierFlagsCache": 0,
+        "parent": undefined,
+        "pos": -1,
+        "transformFlags": 0,
+      },
       "parent": undefined,
       "pos": -1,
+      "right": TokenObject {
+        "end": -1,
+        "flags": 8,
+        "kind": 8,
+        "modifierFlagsCache": 0,
+        "numericLiteralFlags": 0,
+        "parent": undefined,
+        "pos": -1,
+        "text": "0",
+        "transformFlags": 0,
+      },
       "transformFlags": 0,
     },
     "end": -1,
@@ -252,9 +214,17 @@ NodeObject {
 
 exports[`react-component-render-helper buildConcatExpression should build concat with userAttribute 1`] = `"\`\${authAttributes[\\"email\\"]}\${\\", welcome!\\"}\`"`;
 
-exports[`react-component-render-helper buildContionalExpression operandType does not exist 1`] = `"(user?.age && user?.age > \\"18\\") ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+exports[`react-component-render-helper buildContionalExpression operandType does not exist 1`] = `"user?.age > \\"18\\" ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
 
-exports[`react-component-render-helper buildContionalExpression operandType exists 1`] = `"(user?.age && user?.age > 18) ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+exports[`react-component-render-helper buildContionalExpression operandType does not exist 2`] = `"user?.age > \\"true\\" ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+
+exports[`react-component-render-helper buildContionalExpression operandType does not exist 3`] = `"user?.age > \\"dlo\\" ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+
+exports[`react-component-render-helper buildContionalExpression operandType exists 1`] = `"user?.age > 18 ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+
+exports[`react-component-render-helper buildContionalExpression operandType exists 2`] = `"user?.age > true ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
+
+exports[`react-component-render-helper buildContionalExpression operandType exists 3`] = `"user?.age > \\"true\\" ? \\"Vote\\" : \\"Sorry you cannot vote\\""`;
 
 exports[`react-component-render-helper buildFixedJsxExpression boolean 1`] = `"{true}"`;
 
