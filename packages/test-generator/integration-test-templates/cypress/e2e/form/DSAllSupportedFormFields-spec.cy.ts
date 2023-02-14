@@ -242,4 +242,122 @@ describe('FormTests - DSAllSupportedFormFields', () => {
       });
     });
   });
+
+  specify('update form should show existing values, update them and save to DataStore', () => {
+    cy.get('#DataStoreFormUpdateAllSupportedFormFields').within(() => {
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(3000);
+
+      const stringField = getInputByLabel('String');
+      stringField.should('have.value', 'Update1String');
+      stringField.type('X');
+      stringField.should('have.value', 'Update1StringX');
+
+      cy.contains('String1').should('exist');
+      getArrayFieldButtonByLabel('String array').click();
+      getInputByLabel('String array').type('String2');
+      clickAddToArray();
+      cy.contains('String2').should('exist');
+
+      const intField = getInputByLabel('Int');
+      intField.should('have.value', 10);
+      intField.type('123');
+      intField.should('have.value', 10123);
+
+      const floatField = getInputByLabel('Float');
+      floatField.should('have.value', 4.3);
+      floatField.type('456');
+      floatField.should('have.value', 4.3456);
+
+      const awsDateField = getInputByLabel('Aws date');
+      awsDateField.should('have.value', '2022-11-22');
+      awsDateField.type('2023-02-13');
+      awsDateField.should('have.value', '2023-02-13');
+
+      const awsTimeField = getInputByLabel('Aws time');
+      awsTimeField.should('have.value', '10:20:30.111');
+      awsTimeField.type('12:34:56.789');
+      awsTimeField.should('have.value', '12:34:56.789');
+
+      const awsDateTimeField = getInputByLabel('Aws date time');
+      awsDateTimeField.should('have.value', '2022-11-22T10:20');
+      awsDateTimeField.type('2023-01-13T11:11');
+      awsDateTimeField.should('have.value', '2023-01-13T11:11');
+
+      const awsTimestampField = getInputByLabel('Aws timestamp');
+      awsTimestampField.should('have.value', 100000000);
+      awsTimestampField.type('1');
+      awsTimestampField.should('have.value', 1000000001);
+
+      const awsEmailField = getInputByLabel('Aws email');
+      awsEmailField.should('have.value', 'myemail@amazon.com');
+      awsEmailField.type('{backspace}{backspace}{backspace}org');
+      awsEmailField.should('have.value', 'myemail@amazon.org');
+
+      const awsUrlField = getInputByLabel('Aws url');
+      awsUrlField.should('have.value', 'https://www.amazon.com');
+      awsUrlField.type('{selectall}{backspace}https://www.google.com');
+      awsUrlField.should('have.value', 'https://www.google.com');
+
+      const awsIPAddressField = getInputByLabel('Aws ip address');
+      awsIPAddressField.should('have.value', '123.12.34.56');
+      awsIPAddressField.type('{backspace}{backspace}78');
+      awsIPAddressField.should('have.value', '123.12.34.78');
+
+      // Boolean
+      cy.contains('Boolean').children('[data-checked="true"]').should('exist');
+      cy.contains('Boolean').click();
+      cy.contains('Boolean').children('[data-checked="false"]').should('exist');
+
+      const awsJsonField = getTextAreaByLabel('Aws json');
+      awsJsonField.should('have.value', JSON.stringify({ myKey: 'myValue' }));
+      awsJsonField.type('{backspace},"secondKey":"secondValue"}');
+      awsJsonField.should('have.value', JSON.stringify({ myKey: 'myValue', secondKey: 'secondValue' }));
+
+      const awsPhoneField = getInputByLabel('Aws phone');
+      awsPhoneField.should('have.value', '713 343 5938');
+      awsPhoneField.type('{backspace}{backspace}{backspace}{backspace}5678');
+      awsPhoneField.should('have.value', '713 343 5678');
+
+      // Enum
+      cy.get('select').should('have.value', 'NEW_YORK');
+      cy.get('select').select('Austin');
+      cy.get('select').should('have.value', 'AUSTIN');
+
+      const nonModelField = getTextAreaByLabel('Non model field');
+      nonModelField.should('have.value', JSON.stringify({ StringVal: 'myValue' }));
+      nonModelField.type('{backspace},"secondKey":"secondValue"}');
+      nonModelField.should('have.value', JSON.stringify({ StringVal: 'myValue', secondKey: 'secondValue' }));
+
+      getArrayFieldButtonByLabel('Non model field array').click();
+      getTextAreaByLabel('Non model field array').type(JSON.stringify({ StringVal: 'index1StringValue' }), {
+        parseSpecialCharSequences: false,
+      });
+      clickAddToArray();
+
+      cy.contains('Submit').click();
+
+      cy.contains(/Update1String/).then((recordElement: JQuery) => {
+        const record = JSON.parse(recordElement.text());
+
+        expect(record.string).to.equal('Update1StringX');
+        expect(record.stringArray).to.deep.equal(['String1', 'String2']);
+        expect(record.int).to.equal(10123);
+        expect(record.float).to.equal(4.3456);
+        expect(record.awsDate).to.equal('2023-02-13');
+        expect(record.awsTime).to.equal('12:34:56.789');
+        expect(record.awsDateTime).to.equal('2023-01-13T11:11:00.000Z');
+        expect(record.awsTimestamp).to.equal(1000000001);
+        expect(record.awsEmail).to.equal('myemail@amazon.org');
+        expect(record.awsUrl).to.equal('https://www.google.com');
+        expect(record.awsIPAddress).to.equal('123.12.34.78');
+        expect(record.boolean).to.equal(false);
+        expect(record.awsJson).to.deep.equal({ myKey: 'myValue', secondKey: 'secondValue' });
+        expect(record.awsPhone).to.equal('713 343 5678');
+        expect(record.enum).to.equal('AUSTIN');
+        expect(record.nonModelField).to.deep.equal({ StringVal: 'myValue', secondKey: 'secondValue' });
+        expect(record.nonModelFieldArray[0].StringVal).to.equal('index1StringValue');
+      });
+    });
+  });
 });
