@@ -155,9 +155,10 @@ describe('FormTests - DSAllSupportedFormFields', () => {
     });
   });
 
-  specify('update form should display current values and save to DataStore', () => {
+  specify('update form should display current values, update them, and save to DataStore', () => {
     cy.get('#DataStoreFormUpdateAllSupportedFormFields').within(() => {
-      // TODO: check current values on all fields and change
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(3000);
 
       // label should exist even if no input field displayed
       cy.contains('Has one user').should('exist');
@@ -203,50 +204,6 @@ describe('FormTests - DSAllSupportedFormFields', () => {
       getArrayFieldButtonByLabel('Many to many tags').click();
       typeInAutocomplete(`Gr{downArrow}{enter}`);
       clickAddToArray();
-
-      cy.contains('Submit').click();
-
-      cy.contains(/Update1String/).then((recordElement: JQuery) => {
-        const record = JSON.parse(recordElement.text());
-
-        expect(record.HasOneUser.firstName).to.equal('Paul');
-        expect(record.ManyToManyTags[0].label).to.equal('Green');
-        expect(record.ManyToManyTags[1].label).to.equal('Orange');
-        expect(record.BelongsToOwner.name).to.equal('George');
-        expect(record.HasManyStudents.length).to.equal(3);
-        expect(record.HasManyStudents[0].name).to.equal('David');
-        expect(record.HasManyStudents[0].allSupportedFormFieldsID).to.equal(record.id);
-        expect(record.HasManyStudents[1].name).to.equal('Sarah');
-        expect(record.HasManyStudents[1].allSupportedFormFieldsID).to.equal(record.id);
-        expect(record.HasManyStudents[2].name).to.equal('Matthew');
-        expect(record.HasManyStudents[2].allSupportedFormFieldsID).to.equal(record.id);
-      });
-    });
-  });
-
-  specify('update form should remove hasOne and belongsTo relationships', () => {
-    cy.get('#DataStoreFormUpdateAllSupportedFormFields').within(() => {
-      // hasOne
-      removeArrayItem('John Lennon');
-
-      // belongsTo
-      removeArrayItem('John');
-
-      cy.contains('Submit').click();
-
-      cy.contains(/Update1String/).then((recordElement: JQuery) => {
-        const record = JSON.parse(recordElement.text());
-
-        expect('HasOneUser' in record).to.equal(false);
-        expect('BelongsToOwner' in record).to.equal(false);
-      });
-    });
-  });
-
-  specify('update form should show existing values, update them and save to DataStore', () => {
-    cy.get('#DataStoreFormUpdateAllSupportedFormFields').within(() => {
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(3000);
 
       const stringField = getInputByLabel('String');
       stringField.should('have.value', 'Update1String');
@@ -326,8 +283,15 @@ describe('FormTests - DSAllSupportedFormFields', () => {
 
       const nonModelField = getTextAreaByLabel('Non model field');
       nonModelField.should('have.value', JSON.stringify({ StringVal: 'myValue' }));
-      nonModelField.type('{backspace},"secondKey":"secondValue"}');
-      nonModelField.should('have.value', JSON.stringify({ StringVal: 'myValue', secondKey: 'secondValue' }));
+      nonModelField.type('{backspace},"BoolVal":true}');
+      nonModelField.should('have.value', JSON.stringify({ StringVal: 'myValue', BoolVal: true }));
+
+      cy.contains(JSON.stringify({ NumVal: 123 })).click();
+      const nonModelFieldArray = getTextAreaByLabel('Non model field array');
+      nonModelFieldArray.should('have.value', JSON.stringify({ NumVal: 123 }));
+      nonModelFieldArray.type('{moveToEnd}{backspace}{backspace}{backspace}{backspace}456}');
+      cy.contains('Save').click();
+      cy.contains(JSON.stringify({ NumVal: 456 })).should('exist');
 
       getArrayFieldButtonByLabel('Non model field array').click();
       getTextAreaByLabel('Non model field array').type(JSON.stringify({ StringVal: 'index1StringValue' }), {
@@ -355,8 +319,38 @@ describe('FormTests - DSAllSupportedFormFields', () => {
         expect(record.awsJson).to.deep.equal({ myKey: 'myValue', secondKey: 'secondValue' });
         expect(record.awsPhone).to.equal('713 343 5678');
         expect(record.enum).to.equal('AUSTIN');
-        expect(record.nonModelField).to.deep.equal({ StringVal: 'myValue', secondKey: 'secondValue' });
-        expect(record.nonModelFieldArray[0].StringVal).to.equal('index1StringValue');
+        expect(record.nonModelField).to.deep.equal({ StringVal: 'myValue', BoolVal: true });
+        expect(record.nonModelFieldArray[0].NumVal).to.equal(456);
+        expect(record.HasOneUser.firstName).to.equal('Paul');
+        expect(record.ManyToManyTags[0].label).to.equal('Green');
+        expect(record.ManyToManyTags[1].label).to.equal('Orange');
+        expect(record.BelongsToOwner.name).to.equal('George');
+        expect(record.HasManyStudents.length).to.equal(3);
+        expect(record.HasManyStudents[0].name).to.equal('David');
+        expect(record.HasManyStudents[0].allSupportedFormFieldsID).to.equal(record.id);
+        expect(record.HasManyStudents[1].name).to.equal('Sarah');
+        expect(record.HasManyStudents[1].allSupportedFormFieldsID).to.equal(record.id);
+        expect(record.HasManyStudents[2].name).to.equal('Matthew');
+        expect(record.HasManyStudents[2].allSupportedFormFieldsID).to.equal(record.id);
+      });
+    });
+  });
+
+  specify('update form should remove hasOne and belongsTo relationships', () => {
+    cy.get('#DataStoreFormUpdateAllSupportedFormFields').within(() => {
+      // hasOne
+      removeArrayItem('John Lennon');
+
+      // belongsTo
+      removeArrayItem('John');
+
+      cy.contains('Submit').click();
+
+      cy.contains(/Update1String/).then((recordElement: JQuery) => {
+        const record = JSON.parse(recordElement.text());
+
+        expect('HasOneUser' in record).to.equal(false);
+        expect('BelongsToOwner' in record).to.equal(false);
       });
     });
   });

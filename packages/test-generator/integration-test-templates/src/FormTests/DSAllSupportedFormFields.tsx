@@ -80,6 +80,7 @@ const initializeUpdate1TestData = async ({
       boolean: true,
       awsJson: JSON.stringify({ myKey: 'myValue' }),
       nonModelField: { StringVal: 'myValue' },
+      nonModelFieldArray: [{ NumVal: 123 }],
       awsPhone: '713 343 5938',
       enum: 'NEW_YORK',
       HasOneUser: connectedUser,
