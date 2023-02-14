@@ -34,6 +34,8 @@ export function scriptKindToFileExtension(scriptKind: ScriptKind): string {
       return 'js';
     case ScriptKind.JSX:
       return 'jsx';
+    case ScriptKind.Unknown:
+      return 'unknown';
     default:
       throw new InvalidInputError(`Invalid script kind: ${ScriptKind[scriptKind]}`);
   }
