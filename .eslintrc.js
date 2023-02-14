@@ -3,6 +3,7 @@ module.exports = {
     'build',
     'dist',
     'node_modules',
+    'codecov.yaml',
     'jest.config.js',
     '.eslintrc.js',
     'commitlint.config.js',

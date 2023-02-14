@@ -4,7 +4,10 @@ codecov:
 coverage:
   precision: 2
   round: down
-  range: '70...100'
+  status:
+    project:
+      default:
+        target: auto # auto compares coverage to the previous base commit
 
 parsers:
   gcov:
