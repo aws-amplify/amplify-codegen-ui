@@ -161,7 +161,7 @@ export default function () {
       <View id="DataStoreFormCreateAllSupportedFormFields">
         <DataStoreFormCreateAllSupportedFormFields
           onSuccess={async () => {
-            const records = await DataStore.query(AllSupportedFormFields, (a) => a.string.contains('Create1String'));
+            const records = await DataStore.query(AllSupportedFormFields, (a) => a.string.eq('Create1String'));
             const record = records[0];
 
             const ManyToManyTags = await getModelsFromJoinTableRecords<
@@ -190,7 +190,7 @@ export default function () {
         <DataStoreFormUpdateAllSupportedFormFields
           id={dataStoreFormUpdateAllSupportedFormFieldsRecordId}
           onSuccess={async () => {
-            const records = await DataStore.query(AllSupportedFormFields, (a) => a.string.eq('Update1String'));
+            const records = await DataStore.query(AllSupportedFormFields, (a) => a.string.contains('Update1String'));
             const record = records[0];
 
             const ManyToManyTags = await getModelsFromJoinTableRecords<
