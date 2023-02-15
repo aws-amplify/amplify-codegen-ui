@@ -336,9 +336,6 @@ describe('FormTests - DSAllSupportedFormFields', () => {
 
   specify('update form should display current values, delete them, and save to DataStore', () => {
     cy.get('#DataStoreFormUpdateAllSupportedFormFields').within(() => {
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(3000);
-
       const hasOneUserItem = 'John Lennon';
       cy.contains(hasOneUserItem).should('exist');
       removeArrayItem(hasOneUserItem);
