@@ -155,9 +155,10 @@ describe('FormTests - DSAllSupportedFormFields', () => {
     });
   });
 
-  specify('update form should display current values and save to DataStore', () => {
+  specify('update form should display current values, update them, and save to DataStore', () => {
     cy.get('#DataStoreFormUpdateAllSupportedFormFields').within(() => {
-      // TODO: check current values on all fields and change
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(3000);
 
       // label should exist even if no input field displayed
       cy.contains('Has one user').should('exist');
@@ -204,11 +205,122 @@ describe('FormTests - DSAllSupportedFormFields', () => {
       typeInAutocomplete(`Gr{downArrow}{enter}`);
       clickAddToArray();
 
+      const stringField = getInputByLabel('String');
+      stringField.should('have.value', 'Update1String');
+      stringField.type('X');
+      stringField.should('have.value', 'Update1StringX');
+
+      cy.contains('String1').should('exist');
+      getArrayFieldButtonByLabel('String array').click();
+      getInputByLabel('String array').type('String2');
+      clickAddToArray();
+      cy.contains('String2').should('exist');
+
+      const intField = getInputByLabel('Int');
+      intField.should('have.value', 10);
+      intField.type('123');
+      intField.should('have.value', 10123);
+
+      const floatField = getInputByLabel('Float');
+      floatField.should('have.value', 4.3);
+      floatField.type('456');
+      floatField.should('have.value', 4.3456);
+
+      const awsDateField = getInputByLabel('Aws date');
+      awsDateField.should('have.value', '2022-11-22');
+      awsDateField.type('2023-02-13');
+      awsDateField.should('have.value', '2023-02-13');
+
+      const awsTimeField = getInputByLabel('Aws time');
+      awsTimeField.should('have.value', '10:20:30.111');
+      awsTimeField.type('12:34:56.789');
+      awsTimeField.should('have.value', '12:34:56.789');
+
+      const awsDateTimeField = getInputByLabel('Aws date time');
+      awsDateTimeField.should('have.value', '2022-11-22T10:20');
+      awsDateTimeField.type('2023-01-13T11:11');
+      awsDateTimeField.should('have.value', '2023-01-13T11:11');
+
+      const awsTimestampField = getInputByLabel('Aws timestamp');
+      awsTimestampField.should('have.value', 100000000);
+      awsTimestampField.type('1');
+      awsTimestampField.should('have.value', 1000000001);
+
+      const awsEmailField = getInputByLabel('Aws email');
+      awsEmailField.should('have.value', 'myemail@amazon.com');
+      awsEmailField.type('{backspace}{backspace}{backspace}org');
+      awsEmailField.should('have.value', 'myemail@amazon.org');
+
+      const awsUrlField = getInputByLabel('Aws url');
+      awsUrlField.should('have.value', 'https://www.amazon.com');
+      awsUrlField.type('{selectall}{backspace}https://www.google.com');
+      awsUrlField.should('have.value', 'https://www.google.com');
+
+      const awsIPAddressField = getInputByLabel('Aws ip address');
+      awsIPAddressField.should('have.value', '123.12.34.56');
+      awsIPAddressField.type('{backspace}{backspace}78');
+      awsIPAddressField.should('have.value', '123.12.34.78');
+
+      // Boolean
+      cy.contains('Boolean').children('[data-checked="true"]').should('exist');
+      cy.contains('Boolean').click();
+      cy.contains('Boolean').children('[data-checked="false"]').should('exist');
+
+      const awsJsonField = getTextAreaByLabel('Aws json');
+      awsJsonField.should('have.value', JSON.stringify({ myKey: 'myValue' }));
+      awsJsonField.type('{backspace},"secondKey":"secondValue"}');
+      awsJsonField.should('have.value', JSON.stringify({ myKey: 'myValue', secondKey: 'secondValue' }));
+
+      const awsPhoneField = getInputByLabel('Aws phone');
+      awsPhoneField.should('have.value', '713 343 5938');
+      awsPhoneField.type('{backspace}{backspace}{backspace}{backspace}5678');
+      awsPhoneField.should('have.value', '713 343 5678');
+
+      // Enum
+      cy.get('select').should('have.value', 'NEW_YORK');
+      cy.get('select').select('Austin');
+      cy.get('select').should('have.value', 'AUSTIN');
+
+      const nonModelField = getTextAreaByLabel('Non model field');
+      nonModelField.should('have.value', JSON.stringify({ StringVal: 'myValue' }));
+      nonModelField.type('{backspace},"BoolVal":true}');
+      nonModelField.should('have.value', JSON.stringify({ StringVal: 'myValue', BoolVal: true }));
+
+      cy.contains(JSON.stringify({ NumVal: 123 })).click();
+      const nonModelFieldArray = getTextAreaByLabel('Non model field array');
+      nonModelFieldArray.should('have.value', JSON.stringify({ NumVal: 123 }));
+      nonModelFieldArray.type('{moveToEnd}{backspace}{backspace}{backspace}{backspace}456}');
+      cy.contains('Save').click();
+      cy.contains(JSON.stringify({ NumVal: 456 })).should('exist');
+
+      getArrayFieldButtonByLabel('Non model field array').click();
+      getTextAreaByLabel('Non model field array').type(JSON.stringify({ StringVal: 'index1StringValue' }), {
+        parseSpecialCharSequences: false,
+      });
+      clickAddToArray();
+
       cy.contains('Submit').click();
 
       cy.contains(/Update1String/).then((recordElement: JQuery) => {
         const record = JSON.parse(recordElement.text());
 
+        expect(record.string).to.equal('Update1StringX');
+        expect(record.stringArray).to.deep.equal(['String1', 'String2']);
+        expect(record.int).to.equal(10123);
+        expect(record.float).to.equal(4.3456);
+        expect(record.awsDate).to.equal('2023-02-13');
+        expect(record.awsTime).to.equal('12:34:56.789');
+        expect(record.awsDateTime).to.equal('2023-01-13T11:11:00.000Z');
+        expect(record.awsTimestamp).to.equal(1000000001);
+        expect(record.awsEmail).to.equal('myemail@amazon.org');
+        expect(record.awsUrl).to.equal('https://www.google.com');
+        expect(record.awsIPAddress).to.equal('123.12.34.78');
+        expect(record.boolean).to.equal(false);
+        expect(record.awsJson).to.deep.equal({ myKey: 'myValue', secondKey: 'secondValue' });
+        expect(record.awsPhone).to.equal('713 343 5678');
+        expect(record.enum).to.equal('AUSTIN');
+        expect(record.nonModelField).to.deep.equal({ StringVal: 'myValue', BoolVal: true });
+        expect(record.nonModelFieldArray[0].NumVal).to.equal(456);
         expect(record.HasOneUser.firstName).to.equal('Paul');
         expect(record.ManyToManyTags[0].label).to.equal('Green');
         expect(record.ManyToManyTags[1].label).to.equal('Orange');
@@ -224,21 +336,136 @@ describe('FormTests - DSAllSupportedFormFields', () => {
     });
   });
 
-  specify('update form should remove hasOne and belongsTo relationships', () => {
+  specify('update form should display current values, delete them, and save to DataStore', () => {
     cy.get('#DataStoreFormUpdateAllSupportedFormFields').within(() => {
-      // hasOne
-      removeArrayItem('John Lennon');
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(3000);
 
-      // belongsTo
-      removeArrayItem('John');
+      const hasOneUserItem = 'John Lennon';
+      cy.contains(hasOneUserItem).should('exist');
+      removeArrayItem(hasOneUserItem);
+      cy.contains(hasOneUserItem).should('not.exist');
+
+      const belongsToOwnerItem = 'John -';
+      cy.contains(belongsToOwnerItem).should('exist');
+      removeArrayItem(belongsToOwnerItem);
+      cy.contains(belongsToOwnerItem).should('not.exist');
+
+      const hasManyStudentsItems = ['David -', 'Jessica -'];
+      cy.contains(hasManyStudentsItems[0]).should('exist');
+      cy.contains(hasManyStudentsItems[1]).should('exist');
+      removeArrayItem(hasManyStudentsItems[0]);
+      removeArrayItem(hasManyStudentsItems[1]);
+      cy.contains(hasManyStudentsItems[0]).should('not.exist');
+      cy.contains(hasManyStudentsItems[1]).should('not.exist');
+
+      const manyToManyTagsItems = ['Red -', 'Blue -'];
+      cy.contains(manyToManyTagsItems[0]).should('exist');
+      cy.contains(manyToManyTagsItems[1]).should('exist');
+      removeArrayItem(manyToManyTagsItems[0]);
+      removeArrayItem(manyToManyTagsItems[1]);
+      cy.contains(manyToManyTagsItems[0]).should('not.exist');
+      cy.contains(manyToManyTagsItems[1]).should('not.exist');
+
+      const stringArrayItem = 'String1';
+      cy.contains(stringArrayItem).should('exist');
+      removeArrayItem(stringArrayItem);
+      cy.contains(stringArrayItem).should('not.exist');
+
+      const intField = getInputByLabel('Int');
+      intField.should('have.value', 10);
+      intField.clear();
+      intField.should('have.value', '');
+
+      const floatField = getInputByLabel('Float');
+      floatField.should('have.value', 4.3);
+      floatField.clear();
+      floatField.should('have.value', '');
+
+      const awsDateField = getInputByLabel('Aws date');
+      awsDateField.should('have.value', '2022-11-22');
+      awsDateField.clear();
+      awsDateField.should('have.value', '');
+
+      const awsTimeField = getInputByLabel('Aws time');
+      awsTimeField.should('have.value', '10:20:30.111');
+      awsTimeField.clear();
+      awsTimeField.should('have.value', '');
+
+      const awsDateTimeField = getInputByLabel('Aws date time');
+      awsDateTimeField.should('have.value', '2022-11-22T10:20');
+      awsDateTimeField.clear();
+      awsDateTimeField.should('have.value', '');
+
+      const awsTimestampField = getInputByLabel('Aws timestamp');
+      awsTimestampField.should('have.value', 100000000);
+      awsTimestampField.clear();
+      awsTimestampField.should('have.value', '');
+
+      const awsEmailField = getInputByLabel('Aws email');
+      awsEmailField.should('have.value', 'myemail@amazon.com');
+      awsEmailField.clear();
+      awsEmailField.should('have.value', '');
+
+      const awsUrlField = getInputByLabel('Aws url');
+      awsUrlField.should('have.value', 'https://www.amazon.com');
+      awsUrlField.clear();
+      awsUrlField.should('have.value', '');
+
+      const awsIPAddressField = getInputByLabel('Aws ip address');
+      awsIPAddressField.should('have.value', '123.12.34.56');
+      awsIPAddressField.clear();
+      awsIPAddressField.should('have.value', '');
+
+      const awsJsonField = getTextAreaByLabel('Aws json');
+      awsJsonField.should('have.value', JSON.stringify({ myKey: 'myValue' }));
+      awsJsonField.clear();
+      awsJsonField.should('have.value', '');
+
+      const awsPhoneField = getInputByLabel('Aws phone');
+      awsPhoneField.should('have.value', '713 343 5938');
+      awsPhoneField.clear();
+      awsPhoneField.should('have.value', '');
+
+      // Enum
+      cy.get('select').should('have.value', 'NEW_YORK');
+      cy.get('select').select('Please select an option');
+      cy.get('select').should('have.value', '');
+
+      const nonModelField = getTextAreaByLabel('Non model field');
+      nonModelField.should('have.value', JSON.stringify({ StringVal: 'myValue' }));
+      nonModelField.clear();
+      nonModelField.should('have.value', '');
+
+      const nonModelFieldArrayItem = JSON.stringify({ NumVal: 123 });
+      cy.contains(nonModelFieldArrayItem).should('exist');
+      removeArrayItem(nonModelFieldArrayItem);
+      cy.contains(nonModelFieldArrayItem).should('not.exist');
 
       cy.contains('Submit').click();
 
       cy.contains(/Update1String/).then((recordElement: JQuery) => {
         const record = JSON.parse(recordElement.text());
 
+        expect(record.stringArray).to.deep.equal([]);
+        expect('int' in record).to.equal(false);
+        expect('float' in record).to.equal(false);
+        expect('awsDate' in record).to.equal(false);
+        expect('awsTime' in record).to.equal(false);
+        expect('awsDateTime' in record).to.equal(false);
+        expect('awsTimestamp' in record).to.equal(false);
+        expect('awsEmail' in record).to.equal(false);
+        expect('awsUrl' in record).to.equal(false);
+        expect('awsIPAddress' in record).to.equal(false);
+        expect('awsJson' in record).to.equal(false);
+        expect('awsPhone' in record).to.equal(false);
+        expect('enum' in record).to.equal(false);
+        expect('nonModelField' in record).to.equal(false);
+        expect(record.nonModelFieldArray).to.deep.equal([]);
         expect('HasOneUser' in record).to.equal(false);
         expect('BelongsToOwner' in record).to.equal(false);
+        expect(record.HasManyStudents).to.deep.equal([]);
+        expect(record.ManyToManyTags).to.deep.equal([]);
       });
     });
   });
