@@ -157,9 +157,6 @@ describe('FormTests - DSAllSupportedFormFields', () => {
 
   specify('update form should display current values, update them, and save to DataStore', () => {
     cy.get('#DataStoreFormUpdateAllSupportedFormFields').within(() => {
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(3000);
-
       // label should exist even if no input field displayed
       cy.contains('Has one user').should('exist');
       // should be able to hit edit and save
@@ -214,7 +211,7 @@ describe('FormTests - DSAllSupportedFormFields', () => {
       getArrayFieldButtonByLabel('String array').click();
       getInputByLabel('String array').type('String2');
       clickAddToArray();
-      cy.contains('String2').should('exist');
+      cy.contains('String2').parent().children().should('have.length', 2);
 
       const intField = getInputByLabel('Int');
       intField.should('have.value', 10);
