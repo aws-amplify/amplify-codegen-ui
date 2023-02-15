@@ -321,6 +321,7 @@ describe('FormTests - DSAllSupportedFormFields', () => {
         expect(record.enum).to.equal('AUSTIN');
         expect(record.nonModelField).to.deep.equal({ StringVal: 'myValue', BoolVal: true });
         expect(record.nonModelFieldArray[0].NumVal).to.equal(456);
+        expect(record.nonModelFieldArray[1].StringVal).to.equal('index1StringValue');
         expect(record.HasOneUser.firstName).to.equal('Paul');
         expect(record.ManyToManyTags[0].label).to.equal('Green');
         expect(record.ManyToManyTags[1].label).to.equal('Orange');
