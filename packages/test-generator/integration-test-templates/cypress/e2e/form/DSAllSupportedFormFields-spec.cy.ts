@@ -211,7 +211,7 @@ describe('FormTests - DSAllSupportedFormFields', () => {
       getArrayFieldButtonByLabel('String array').click();
       getInputByLabel('String array').type('String2');
       clickAddToArray();
-      cy.contains('String2').parent().children().should('have.length', 2);
+      cy.contains('String2').siblings().should('have.length', 1);
 
       const intField = getInputByLabel('Int');
       intField.should('have.value', 10);
