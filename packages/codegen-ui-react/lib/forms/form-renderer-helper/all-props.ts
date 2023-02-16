@@ -144,6 +144,13 @@ export const addFormAttributes = (
           factory.createJsxExpression(undefined, factory.createTrue()),
         ),
       );
+    } else if (fieldConfig.componentType === 'Autocomplete') {
+      attributes.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('labelHidden'),
+          factory.createJsxExpression(undefined, factory.createFalse()),
+        ),
+      );
     }
   }
 

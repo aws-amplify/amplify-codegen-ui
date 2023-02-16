@@ -34,6 +34,13 @@
         "isArray": true
       },
       "label": "phone"
+    },
+    "city": {
+      "inputType": {
+        "type": "Autocomplete",
+        "name": "city"
+      },
+      "label": "City"
     }
   },
   "sectionalElements": {},
