@@ -20,6 +20,7 @@ export const DATA_TYPE_TO_TYPESCRIPT_MAP: { [key: string]: KeywordTypeSyntaxKind
   Float: SyntaxKind.NumberKeyword,
   Boolean: SyntaxKind.BooleanKeyword,
   AWSTimestamp: SyntaxKind.NumberKeyword,
+  String: SyntaxKind.StringKeyword,
 };
 
 export const FIELD_TYPE_TO_TYPESCRIPT_MAP: { [key: string]: KeywordTypeSyntaxKind } = {

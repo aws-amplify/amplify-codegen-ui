@@ -5420,7 +5420,7 @@ function ArrayField({
 }
 export default function UpdateCompositeDogForm(props) {
   const {
-    name: nameProp,
+    id: idProp,
     compositeDog,
     onSuccess,
     onError,
@@ -5490,8 +5490,8 @@ export default function UpdateCompositeDogForm(props) {
   const canUnlinkCompositeVets = false;
   React.useEffect(() => {
     const queryData = async () => {
-      const record = nameProp
-        ? await DataStore.query(CompositeDog, nameProp)
+      const record = idProp
+        ? await DataStore.query(CompositeDog, idProp)
         : compositeDog;
       setCompositeDogRecord(record);
       const CompositeBowlRecord = record
@@ -5518,7 +5518,7 @@ export default function UpdateCompositeDogForm(props) {
       setLinkedCompositeVets(linkedCompositeVets);
     };
     queryData();
-  }, [nameProp, compositeDog]);
+  }, [idProp, compositeDog]);
   React.useEffect(resetStateValues, [
     compositeDogRecord,
     CompositeBowl,
@@ -6280,7 +6280,7 @@ export default function UpdateCompositeDogForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(nameProp || compositeDog)}
+          isDisabled={!(idProp || compositeDog)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -6292,7 +6292,7 @@ export default function UpdateCompositeDogForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(nameProp || compositeDog) ||
+              !(idProp || compositeDog) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -6344,7 +6344,10 @@ export declare type UpdateCompositeDogFormOverridesProps = {
 export declare type UpdateCompositeDogFormProps = React.PropsWithChildren<{
     overrides?: UpdateCompositeDogFormOverridesProps | undefined | null;
 } & {
-    name?: string;
+    id?: {
+        name: string;
+        description: string;
+    };
     compositeDog?: CompositeDog;
     onSubmit?: (fields: UpdateCompositeDogFormInputValues) => UpdateCompositeDogFormInputValues;
     onSuccess?: (fields: UpdateCompositeDogFormInputValues) => void;

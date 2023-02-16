@@ -54,21 +54,25 @@ import { getOnChangeValidationBlock } from './validation';
 import { buildModelFieldObject } from './model-fields';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 import { extractModelAndKeys, getMatchEveryModelFieldCallExpression } from './model-values';
+import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../../utils/constants';
 
-export const buildMutationBindings = (form: StudioForm, primaryKey?: string) => {
+export const buildMutationBindings = (form: StudioForm, primaryKeys: string[] = []) => {
   const {
     dataType: { dataSourceType, dataTypeName },
     formActionType,
   } = form;
   const elements: BindingElement[] = [];
-  if (dataSourceType === 'DataStore' && primaryKey) {
+  if (dataSourceType === 'DataStore' && primaryKeys.length) {
     if (formActionType === 'update') {
       elements.push(
         // id: idProp
         factory.createBindingElement(
           undefined,
-          factory.createIdentifier(primaryKey),
-          factory.createIdentifier(getPropName(primaryKey)),
+          // if greater than 1, it's a composite key. using 'id' for a composite key prop name.
+          factory.createIdentifier(primaryKeys.length > 1 ? COMPOSITE_PRIMARY_KEY_PROP_NAME : primaryKeys[0]),
+          factory.createIdentifier(
+            primaryKeys.length > 1 ? getPropName(COMPOSITE_PRIMARY_KEY_PROP_NAME) : getPropName(primaryKeys[0]),
+          ),
           undefined,
         ),
         factory.createBindingElement(

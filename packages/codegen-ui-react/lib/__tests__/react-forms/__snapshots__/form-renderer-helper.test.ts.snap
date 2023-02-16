@@ -27,3 +27,19 @@ exports[`form-render utils should render cancel props if included cancel object 
     onValidate?: myCustomFormValidationValues;
 }"
 `;
+
+exports[`form-render utils should render composite primary keys 1`] = `
+"{
+    id?: {
+        myKey: string;
+        description: number;
+    };
+    post?: Post;
+    onSubmit?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
+    onSuccess?: (fields: mySampleFormInputValues) => void;
+    onError?: (fields: mySampleFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: mySampleFormInputValues) => mySampleFormInputValues;
+    onValidate?: mySampleFormValidationValues;
+}"
+`;
