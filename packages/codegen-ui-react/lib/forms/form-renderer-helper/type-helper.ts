@@ -21,6 +21,7 @@ import {
   FormDefinition,
   isValidVariableName,
   shouldIncludeCancel,
+  InternalError,
 } from '@aws-amplify/codegen-ui';
 import {
   factory,
@@ -38,6 +39,7 @@ import { lowerCaseFirst } from '../../helpers';
 import { DATA_TYPE_TO_TYPESCRIPT_MAP, FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 import { ImportCollection, ImportSource } from '../../imports';
 import { PRIMITIVE_OVERRIDE_PROPS } from '../../primitive';
+import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../../utils/constants';
 
 type Node<T> = {
   [n: string]: T | Node<T>;
@@ -268,7 +270,12 @@ export const validationFunctionType = factory.createTypeAliasDeclaration(
     - onSuccess(fields)
     - onError(fields, errorMessage)
    */
-export const buildFormPropNode = (form: StudioForm, modelName?: string, primaryKey?: string) => {
+export const buildFormPropNode = (
+  form: StudioForm,
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+  modelName?: string,
+  primaryKeys: string[] = [],
+) => {
   const {
     name: formName,
     dataType: { dataSourceType, dataTypeName },
@@ -277,15 +284,8 @@ export const buildFormPropNode = (form: StudioForm, modelName?: string, primaryK
   const propSignatures: PropertySignature[] = [];
   if (dataSourceType === 'DataStore') {
     if (formActionType === 'update') {
-      if (primaryKey) {
-        propSignatures.push(
-          factory.createPropertySignature(
-            undefined,
-            factory.createIdentifier(primaryKey),
-            factory.createToken(SyntaxKind.QuestionToken),
-            factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
-          ),
-        );
+      if (primaryKeys.length >= 1) {
+        propSignatures.push(createPrimaryKeysTypeProp(primaryKeys, fieldConfigs));
       }
       propSignatures.push(
         factory.createPropertySignature(
@@ -517,5 +517,48 @@ export const buildOverrideTypesBindings = (
       factory.createTypeLiteralNode(typeNodes),
       factory.createTypeReferenceNode(factory.createIdentifier('EscapeHatchProps'), undefined),
     ]),
+  );
+};
+
+const createPrimaryKeysTypeProp = (
+  primaryKeys: string[],
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+): PropertySignature => {
+  // first element is the property name
+  if (primaryKeys.length === 1) {
+    return factory.createPropertySignature(
+      undefined,
+      factory.createIdentifier(primaryKeys[0]),
+      factory.createToken(SyntaxKind.QuestionToken),
+      factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
+    );
+  }
+
+  if (primaryKeys.length <= 0) {
+    throw new InternalError('primaryKeys must not be empty');
+  }
+  // creates the type literal for a composite key
+  const compositeKeyTypeLiteral = primaryKeys.map((primaryKey: string) => {
+    let keywordType = SyntaxKind.StringKeyword;
+    const element = fieldConfigs[primaryKey];
+    if (element) {
+      const { dataType } = element;
+      // non-scalar & boolean are not supported for primary keys that leaves number and string
+      const stringDataType = typeof dataType === 'string' ? dataType : 'String';
+      keywordType = DATA_TYPE_TO_TYPESCRIPT_MAP[stringDataType] ?? SyntaxKind.StringKeyword;
+    }
+
+    return factory.createPropertySignature(
+      undefined,
+      factory.createIdentifier(primaryKey),
+      undefined,
+      factory.createKeywordTypeNode(keywordType),
+    );
+  });
+  return factory.createPropertySignature(
+    undefined,
+    factory.createIdentifier(COMPOSITE_PRIMARY_KEY_PROP_NAME),
+    factory.createToken(SyntaxKind.QuestionToken),
+    factory.createTypeLiteralNode(compositeKeyTypeLiteral),
   );
 };

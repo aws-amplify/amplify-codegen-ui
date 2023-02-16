@@ -102,6 +102,7 @@ export default function () {
   const [dataStoreFormUpdateCompositeDogRecord, setDataStoreFormUpdateCompositeDogRecord] = useState<
     CompositeDog | undefined
   >();
+
   const [isInitialized, setInitialized] = useState(false);
 
   const initializeStarted = useRef(false);
@@ -114,7 +115,7 @@ export default function () {
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
       await initializeTestData();
-      await Promise.all([initializeUpdate1TestData({ setDataStoreFormUpdateCompositeDogRecord })]);
+      await initializeUpdate1TestData({ setDataStoreFormUpdateCompositeDogRecord });
       setInitialized(true);
     };
 
@@ -208,6 +209,10 @@ export default function () {
           }}
         />
         <Text>{dataStoreFormUpdateCompositeDogResults}</Text>
+      </View>
+      <Heading>DataStoreFormUpdateCompositeDogById</Heading>
+      <View id="DataStoreFormUpdateCompositeDogById">
+        <DataStoreFormUpdateCompositeDog id={{ name: 'Yundoo', description: 'tiny but mighty' }} />
       </View>
     </AmplifyProvider>
   );

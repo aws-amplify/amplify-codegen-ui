@@ -95,6 +95,7 @@ import {
   validationResponseType,
 } from './form-renderer-helper/type-helper';
 import { buildSelectedRecordsIdSet } from './form-renderer-helper/model-values';
+import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../utils/constants';
 
 type RenderComponentOnlyResponse = {
   compText: string;
@@ -351,7 +352,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         factory.createTypeReferenceNode(factory.createIdentifier('React.PropsWithChildren'), [
           factory.createIntersectionTypeNode([
             escapeHatchTypeNode,
-            buildFormPropNode(this.component, modelName, this.primaryKeys?.[0]),
+            buildFormPropNode(this.component, fieldConfigs, modelName, this.primaryKeys),
             factory.createTypeReferenceNode(
               factory.createQualifiedName(factory.createIdentifier('React'), factory.createIdentifier('CSSProperties')),
               undefined,
@@ -397,7 +398,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     const elements: BindingElement[] = [
       // add in hooks for before/complete with ds and basic onSubmit with props
-      ...buildMutationBindings(this.component, this.primaryKeys?.[0]),
+      ...buildMutationBindings(this.component, this.primaryKeys),
       // onValidate prop
       factory.createBindingElement(undefined, undefined, factory.createIdentifier('onValidate'), undefined),
       // onChange prop
@@ -501,7 +502,9 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
       // primaryKey should exist if DataStore update form. This condition is just for ts
       if (this.primaryKeys) {
-        const destructuredPrimaryKey = getPropName(this.primaryKeys[0]);
+        // if there are multiple primaryKeys, it's a composite key and we're using 'id' for a composite key prop
+        const destructuredPrimaryKey =
+          this.primaryKeys.length > 1 ? getPropName(COMPOSITE_PRIMARY_KEY_PROP_NAME) : getPropName(this.primaryKeys[0]);
         statements.push(
           addUseEffectWrapper(
             buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeName, relatedModelStatements, destructuredPrimaryKey),

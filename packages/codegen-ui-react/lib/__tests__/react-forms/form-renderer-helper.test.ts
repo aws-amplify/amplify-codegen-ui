@@ -40,7 +40,7 @@ describe('form-render utils', () => {
       cta: {},
     };
 
-    const propSignatures = buildFormPropNode(form);
+    const propSignatures = buildFormPropNode(form, {});
     const node = printNode(propSignatures);
     expect(node).toMatchSnapshot();
   });
@@ -56,7 +56,7 @@ describe('form-render utils', () => {
       style: {},
       cta: {},
     };
-    const propSignatures = buildFormPropNode(form);
+    const propSignatures = buildFormPropNode(form, {});
     const node = printNode(propSignatures);
     expect(node).toMatchSnapshot();
   });
@@ -74,9 +74,35 @@ describe('form-render utils', () => {
         cancel: {},
       },
     };
-    const propSignatures = buildFormPropNode(form);
+    const propSignatures = buildFormPropNode(form, {});
     const node = printNode(propSignatures);
     expect(node).toContain('onCancel?: () => void;');
+    expect(node).toMatchSnapshot();
+  });
+
+  it('should render composite primary keys', () => {
+    const form: StudioForm = {
+      id: '123',
+      name: 'mySampleForm',
+      formActionType: 'update',
+      dataType: { dataSourceType: 'DataStore', dataTypeName: 'Post' },
+      fields: {},
+      sectionalElements: {},
+      style: {},
+      cta: {
+        cancel: {},
+      },
+    };
+    const propSignatures = buildFormPropNode(
+      form,
+      { description: { dataType: 'Int', validationRules: [], componentType: 'TextField' } },
+      undefined,
+      ['myKey', 'description'],
+    );
+    const node = printNode(propSignatures);
+    expect(node).toContain('id?: {');
+    expect(node).toContain('myKey: string;');
+    expect(node).toContain('description: number;');
     expect(node).toMatchSnapshot();
   });
 });
