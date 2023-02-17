@@ -13,13 +13,103 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import type {
-  Schema as DataStoreSchema,
-  ModelField,
-  SchemaModel as DataStoreSchemaModel,
-} from '@aws-amplify/datastore';
+import { Schema as DataStoreSchema, ModelField, SchemaModel as DataStoreSchemaModel } from '@aws-amplify/datastore';
 import { InvalidInputError } from './errors';
 import { GenericDataField, GenericDataRelationshipType, GenericDataSchema } from './types';
+
+const isFieldModelType = (field: ModelField): field is ModelField & { type: { model: string } } =>
+  typeof field.type === 'object' && 'model' in field.type;
+
+const getAssociatedFieldNames = (field: ModelField): string[] => {
+  if (!field.association || !('associatedWith' in field.association)) {
+    return [];
+  }
+
+  return Array.isArray(field.association.associatedWith)
+    ? field.association.associatedWith
+    : [field.association.associatedWith];
+};
+
+/**
+  Disclaimer: there's no 100% sure way of telling if something's a join table.
+  This is best effort.
+  Feature request w/ amplify-codegen: https://github.com/aws-amplify/amplify-codegen/issues/543
+  After fulfilled, this can be fallback
+ */
+function checkIsModelAJoinTable(modelName: string, schema: DataStoreSchema) {
+  const model = schema.models[modelName];
+  if (!model) {
+    return false;
+  }
+
+  let numberOfKeyTypeAttributes = 0;
+
+  const allowedNonModelFields: string[] = ['id', 'createdAt', 'updatedAt'];
+
+  model.attributes?.forEach((attribute) => {
+    if (attribute.type === 'key') {
+      numberOfKeyTypeAttributes += 1;
+      if (attribute.properties && 'fields' in attribute.properties && Array.isArray(attribute.properties.fields)) {
+        allowedNonModelFields.push(...attribute.properties.fields);
+      }
+    }
+  });
+
+  // should have 2 keys
+  if (numberOfKeyTypeAttributes !== 2) {
+    return false;
+  }
+
+  const modelFieldTuples: [string, ModelField][] = [];
+  let allFieldsAllowed = true;
+
+  Object.entries(model.fields).forEach((field) => {
+    const [name, value] = field;
+    if (isFieldModelType(value)) {
+      modelFieldTuples.push(field);
+    } else if (!allowedNonModelFields.includes(name)) {
+      allFieldsAllowed = false;
+    }
+  });
+
+  // non-model fields should be limited
+  if (!allFieldsAllowed) {
+    return false;
+  }
+
+  // should have 2 model fields
+  if (modelFieldTuples.length !== 2) {
+    return false;
+  }
+
+  return modelFieldTuples.every(([fieldName, fieldValue]) => {
+    // should be required
+    if (!fieldValue.isRequired) {
+      return false;
+    }
+
+    // should be BELONGS_TO
+    if (fieldValue.association?.connectionType !== 'BELONGS_TO') {
+      return false;
+    }
+    const relatedModel = isFieldModelType(fieldValue) && schema.models[fieldValue.type.model];
+
+    if (!relatedModel) {
+      return false;
+    }
+
+    // should be bidirectional with HAS_MANY
+    // that has a different model type
+    return Object.values(relatedModel.fields).some((field) => {
+      if (!isFieldModelType(field) || field.association?.connectionType !== 'HAS_MANY') {
+        return false;
+      }
+
+      const associatedFieldNames = getAssociatedFieldNames(field);
+      return associatedFieldNames.length === 1 && associatedFieldNames.includes(fieldName);
+    });
+  });
+}
 
 function getGenericDataField(field: ModelField): GenericDataField {
   return {
@@ -99,7 +189,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
       const genericField = getGenericDataField(field);
 
       // handle relationships
-      if (typeof field.type === 'object' && 'model' in field.type) {
+      if (isFieldModelType(field)) {
         if (field.association) {
           const relationshipType = field.association.connectionType;
 
@@ -110,9 +200,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
 
           if (relationshipType === 'HAS_MANY' && 'associatedWith' in field.association) {
             const associatedModel = dataStoreSchema.models[relatedModelName];
-            const associatedFieldNames = Array.isArray(field.association?.associatedWith)
-              ? field.association.associatedWith
-              : [field.association.associatedWith];
+            const associatedFieldNames = getAssociatedFieldNames(field);
             let canUnlinkAssociatedModel = true;
 
             associatedFieldNames.forEach((associatedFieldName) => {
@@ -121,22 +209,15 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
               if (associatedField?.isRequired) {
                 canUnlinkAssociatedModel = false;
               }
+
               // if the associated model is a join table, update relatedModelName to the actual related model
-              if (
-                associatedField &&
-                typeof associatedField.type === 'object' &&
-                'model' in associatedField.type &&
-                associatedField.type.model === model.name
-              ) {
+              if (associatedModel && checkIsModelAJoinTable(associatedModel.name, dataStoreSchema)) {
                 joinTableNames.push(associatedModel.name);
 
                 const relatedJoinField = Object.values(associatedModel.fields).find(
-                  (joinField) =>
-                    joinField.name !== associatedFieldName &&
-                    typeof joinField.type === 'object' &&
-                    'model' in joinField.type,
+                  (joinField) => joinField.name !== associatedFieldName && isFieldModelType(joinField),
                 );
-                if (relatedJoinField && typeof relatedJoinField.type === 'object' && 'model' in relatedJoinField.type) {
+                if (relatedJoinField && isFieldModelType(relatedJoinField)) {
                   relatedJoinTableName = relatedModelName;
                   relatedModelName = relatedJoinField.type.model;
                   relatedJoinFieldName = relatedJoinField.name;
@@ -153,10 +234,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
 
             const belongsToFieldOnRelatedModelTuple = Object.entries(associatedModel?.fields ?? {}).find(
               ([, f]) =>
-                typeof f.type === 'object' &&
-                'model' in f.type &&
-                f.type.model === model.name &&
-                f.association?.connectionType === 'BELONGS_TO',
+                isFieldModelType(f) && f.type.model === model.name && f.association?.connectionType === 'BELONGS_TO',
             );
 
             if (belongsToFieldOnRelatedModelTuple && belongsToFieldOnRelatedModelTuple[1].isRequired) {
