@@ -24,6 +24,7 @@ import {
   schemaWithCPK,
   schemaWithCompositeKeys,
   schemaWithHasManyBelongsTo,
+  schemaWithoutJoinTables,
 } from './__utils__/mock-schemas';
 
 describe('getGenericFromDataStore', () => {
@@ -234,12 +235,17 @@ describe('getGenericFromDataStore', () => {
   });
 
   it('should correctly identify join tables', () => {
-    const genericSchema = getGenericFromDataStore(schemaWithRelationships);
-    const joinTables = Object.entries(genericSchema.models)
+    const genericSchemaWithJoinTable = getGenericFromDataStore(schemaWithRelationships);
+    const joinTables1 = Object.entries(genericSchemaWithJoinTable.models)
       .filter(([, model]) => model.isJoinTable)
       .map(([name]) => name);
-    expect(joinTables).toHaveLength(1);
-    expect(joinTables).toStrictEqual(['StudentTeacher']);
+    expect(joinTables1).toStrictEqual(['StudentTeacher']);
+
+    const genericSchemaWithoutJoinTable = getGenericFromDataStore(schemaWithoutJoinTables);
+    const joinTables2 = Object.entries(genericSchemaWithoutJoinTable.models)
+      .filter(([, model]) => model.isJoinTable)
+      .map(([name]) => name);
+    expect(joinTables2).toHaveLength(0);
   });
 
   it('should correctly identify primary keys', () => {

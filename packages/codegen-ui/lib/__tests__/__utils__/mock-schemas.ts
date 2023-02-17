@@ -2681,3 +2681,405 @@ export const schemaWithHasManyBelongsTo: Schema = {
   codegenVersion: '3.3.5',
   version: 'f2f8e885f81740e5be20b201c850fa05',
 };
+
+/**
+ type Box @model {
+  id: ID!
+  name: String
+  crateID: ID! @index(name: "byCrate")
+  Crate: Crate @belongsTo(fields: ["crateID"])
+}
+
+type Crate @model {
+  id: ID!
+  destination: String
+  Boxes: [Box] @hasMany(indexName: "byCrate", fields: ["id"])
+}
+
+type User @model {
+  id: ID!
+  Entries: [Entry] @hasMany(indexName: "byUser", fields: ["id"])
+  Images: [Image] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+type Entry @model  {
+  id: ID!
+  userID: ID! @index(name: "byUser")
+  User: User @belongsTo(fields: ["userID"])
+  Images: [Image] @hasMany(indexName: "byEntry", fields: ["id"])
+}
+
+type Image @model {
+  id: ID!
+  userID: ID! @index(name: "byUser")
+  entryID: ID! @index(name: "byEntry")
+  User: User @belongsTo(fields: ["userID"])
+  Entry: Entry @belongsTo(fields: ["entryID"])
+}
+ */
+export const schemaWithoutJoinTables: Schema = {
+  models: {
+    User: {
+      name: 'User',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        Entries: {
+          name: 'Entries',
+          isArray: true,
+          type: {
+            model: 'Entry',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['User'],
+          },
+        },
+        Images: {
+          name: 'Images',
+          isArray: true,
+          type: {
+            model: 'Image',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['User'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Users',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    Entry: {
+      name: 'Entry',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        userID: {
+          name: 'userID',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        User: {
+          name: 'User',
+          isArray: false,
+          type: {
+            model: 'User',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['userID'],
+          },
+        },
+        Images: {
+          name: 'Images',
+          isArray: true,
+          type: {
+            model: 'Image',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['Entry'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Entries',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byUser',
+            fields: ['userID'],
+          },
+        },
+      ],
+    },
+    Image: {
+      name: 'Image',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        userID: {
+          name: 'userID',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        entryID: {
+          name: 'entryID',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        User: {
+          name: 'User',
+          isArray: false,
+          type: {
+            model: 'User',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['userID'],
+          },
+        },
+        Entry: {
+          name: 'Entry',
+          isArray: false,
+          type: {
+            model: 'Entry',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['entryID'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Images',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byUser',
+            fields: ['userID'],
+          },
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byEntry',
+            fields: ['entryID'],
+          },
+        },
+      ],
+    },
+    Box: {
+      name: 'Box',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        crateID: {
+          name: 'crateID',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        Crate: {
+          name: 'Crate',
+          isArray: false,
+          type: {
+            model: 'Crate',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['crateID'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Boxes',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byCrate',
+            fields: ['crateID'],
+          },
+        },
+      ],
+    },
+    Crate: {
+      name: 'Crate',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        destination: {
+          name: 'destination',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        Boxes: {
+          name: 'Boxes',
+          isArray: true,
+          type: {
+            model: 'Box',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['Crate'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Crates',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+  },
+  enums: {},
+  nonModels: {},
+  codegenVersion: '3.3.5',
+  version: '925d97d5ee6e402764bce3a9c0e546c1',
+};
