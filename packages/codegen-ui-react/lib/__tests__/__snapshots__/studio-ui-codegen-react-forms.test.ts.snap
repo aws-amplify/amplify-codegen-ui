@@ -3457,6 +3457,23 @@ export default function CustomDataForm(props) {
       </ArrayField>
       <Autocomplete
         label=\\"City\\"
+        options={[
+          {
+            id: \\"SF\\",
+            label: \\"SF\\",
+          },
+          {
+            id: \\"LA\\",
+            label: \\"LA\\",
+          },
+        ]}
+        onSelect={({ id }) => {
+          setCity(id);
+          runValidationTasks(\\"city\\", id);
+        }}
+        onClear={() => {
+          setCity(\\"\\");
+        }}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -20468,12 +20485,16 @@ export default function MyFlexUpdateForm(props) {
     username: \\"\\",
     caption: \\"\\",
     Customtags: [],
+    Autocomplete: undefined,
     tags: [],
     profile_url: \\"\\",
   };
   const [username, setUsername] = React.useState(initialValues.username);
   const [caption, setCaption] = React.useState(initialValues.caption);
   const [Customtags, setCustomtags] = React.useState(initialValues.Customtags);
+  const [Autocomplete, setAutocomplete] = React.useState(
+    initialValues.Autocomplete
+  );
   const [tags, setTags] = React.useState(initialValues.tags);
   const [profile_url, setProfile_url] = React.useState(
     initialValues.profile_url
@@ -20487,6 +20508,7 @@ export default function MyFlexUpdateForm(props) {
     setCaption(cleanValues.caption);
     setCustomtags(cleanValues.Customtags ?? []);
     setCurrentCustomtagsValue(\\"\\");
+    setAutocomplete(cleanValues.Autocomplete);
     setTags(cleanValues.tags ?? []);
     setCurrentTagsValue(\\"\\");
     setProfile_url(cleanValues.profile_url);
@@ -20516,6 +20538,7 @@ export default function MyFlexUpdateForm(props) {
     ],
     caption: [],
     Customtags: [],
+    Autocomplete: [],
     tags: [],
     profile_url: [{ type: \\"URL\\" }],
   };
@@ -20548,6 +20571,7 @@ export default function MyFlexUpdateForm(props) {
           username,
           caption,
           Customtags,
+          Autocomplete,
           tags,
           profile_url,
         };
@@ -20659,6 +20683,7 @@ export default function MyFlexUpdateForm(props) {
                 username: value,
                 caption,
                 Customtags,
+                Autocomplete,
                 tags,
                 profile_url,
               };
@@ -20688,6 +20713,7 @@ export default function MyFlexUpdateForm(props) {
                 username,
                 caption: value,
                 Customtags,
+                Autocomplete,
                 tags,
                 profile_url,
               };
@@ -20713,6 +20739,7 @@ export default function MyFlexUpdateForm(props) {
               username,
               caption,
               Customtags: values,
+              Autocomplete,
               tags,
               profile_url,
             };
@@ -20752,6 +20779,52 @@ export default function MyFlexUpdateForm(props) {
           {...getOverrideProps(overrides, \\"Customtags\\")}
         ></TextField>
       </ArrayField>
+      <Autocomplete
+        label=\\"Label\\"
+        isRequired={false}
+        options={[
+          {
+            id: \\"option1\\",
+            label: \\"option1\\",
+          },
+          {
+            id: \\"option2\\",
+            label: \\"option2\\",
+          },
+        ]}
+        onSelect={({ id }) => {
+          setAutocomplete(id);
+          runValidationTasks(\\"Autocomplete\\", id);
+        }}
+        onClear={() => {
+          setAutocomplete(\\"\\");
+        }}
+        defaultValue={Autocomplete}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              caption,
+              Customtags,
+              Autocomplete: value,
+              tags,
+              profile_url,
+            };
+            const result = onChange(modelFields);
+            value = result?.Autocomplete ?? value;
+          }
+          if (errors.Autocomplete?.hasError) {
+            runValidationTasks(\\"Autocomplete\\", value);
+          }
+          setAutocomplete(value);
+        }}
+        onBlur={() => runValidationTasks(\\"Autocomplete\\", Autocomplete)}
+        errorMessage={errors.Autocomplete?.errorMessage}
+        hasError={errors.Autocomplete?.hasError}
+        labelHidden={false}
+        {...getOverrideProps(overrides, \\"Autocomplete\\")}
+      ></Autocomplete>
       <ArrayField
         onChange={async (items) => {
           let values = items;
@@ -20760,6 +20833,7 @@ export default function MyFlexUpdateForm(props) {
               username,
               caption,
               Customtags,
+              Autocomplete,
               tags: values,
               profile_url,
             };
@@ -20810,6 +20884,7 @@ export default function MyFlexUpdateForm(props) {
               username,
               caption,
               Customtags,
+              Autocomplete,
               tags,
               profile_url: value,
             };
@@ -20834,7 +20909,7 @@ export default function MyFlexUpdateForm(props) {
 
 exports[`amplify form renderer tests datastore form tests should render a update form with colliding model name 2`] = `
 "import * as React from \\"react\\";
-import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
 import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Flex as Flex0 } from \\"../models\\";
 export declare type ValidationResponse = {
@@ -20846,6 +20921,7 @@ export declare type MyFlexUpdateFormInputValues = {
     username?: string;
     caption?: string;
     Customtags?: string[];
+    Autocomplete?: string;
     tags?: string[];
     profile_url?: string;
 };
@@ -20853,6 +20929,7 @@ export declare type MyFlexUpdateFormValidationValues = {
     username?: ValidationFunction<string>;
     caption?: ValidationFunction<string>;
     Customtags?: ValidationFunction<string>;
+    Autocomplete?: ValidationFunction<string>;
     tags?: ValidationFunction<string>;
     profile_url?: ValidationFunction<string>;
 };
@@ -20863,6 +20940,7 @@ export declare type MyFlexUpdateFormOverridesProps = {
     username?: PrimitiveOverrideProps<TextFieldProps>;
     caption?: PrimitiveOverrideProps<TextFieldProps>;
     Customtags?: PrimitiveOverrideProps<TextFieldProps>;
+    Autocomplete?: PrimitiveOverrideProps<AutocompleteProps>;
     tags?: PrimitiveOverrideProps<TextFieldProps>;
     profile_url?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;

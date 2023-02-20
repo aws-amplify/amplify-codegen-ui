@@ -18,7 +18,7 @@ import { StudioFormStyle } from './style';
 import { StudioFormFields, StudioFormFieldConfig, StudioGenericFieldConfig } from './fields';
 import { GenericSectionalElementConfig, SectionalElementConfig, SectionalElementFields } from './sectional-element';
 import { FormDefinition, ModelFieldsConfigs, FieldTypeMapKeys, ButtonConfig } from './form-definition';
-import { StudioFieldInputConfig, StudioFormValueMappings } from './input-config';
+import { StudioFieldInputConfig, StudioFormValueMappings, StudioFormInputFieldProperty } from './input-config';
 import { StudioFieldPosition } from './position';
 import { StudioFormCTA } from './form-cta';
 import {
@@ -88,6 +88,7 @@ export type {
   FormMetadata,
   FieldConfigMetadata,
   StudioFieldInputConfig,
+  StudioFormInputFieldProperty,
   StudioGenericFieldConfig,
   StudioFormFields,
   ModelFieldsConfigs,

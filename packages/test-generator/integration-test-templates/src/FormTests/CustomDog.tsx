@@ -44,6 +44,7 @@ export default function () {
         <Text>{`age: ${customFormCreateDogResults.age}`}</Text>
         <Text>{`email: ${customFormCreateDogResults.email}`}</Text>
         <Text>{`ip: ${customFormCreateDogResults.ip}`}</Text>
+        <Text>{`ip: ${customFormCreateDogResults.breed}`}</Text>
       </View>
     </AmplifyProvider>
   );
