@@ -403,10 +403,15 @@ export default function CreateCompositeToyForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeDog\\"
           value={currentCompositeDogCompositeToysNameValue}
-          options={compositeDogRecords.map((r) => ({
-            id: r?.name,
-            label: r?.name,
-          }))}
+          options={compositeDogRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.name === r?.name) === i
+            )
+            .map((r) => ({
+              id: r?.name,
+              label: r?.name,
+            }))}
           onSelect={({ id }) => {
             setCurrentCompositeDogCompositeToysNameValue(id);
             runValidationTasks(\\"compositeDogCompositeToysName\\", id);
@@ -472,10 +477,17 @@ export default function CreateCompositeToyForm(props) {
           isReadOnly={false}
           placeholder=\\"Search CompositeDog\\"
           value={currentCompositeDogCompositeToysDescriptionValue}
-          options={compositeDogRecords.map((r) => ({
-            id: r?.description,
-            label: r?.description,
-          }))}
+          options={compositeDogRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex(
+                  (member) => member?.description === r?.description
+                ) === i
+            )
+            .map((r) => ({
+              id: r?.description,
+              label: r?.description,
+            }))}
           onSelect={({ id }) => {
             setCurrentCompositeDogCompositeToysDescriptionValue(id);
             runValidationTasks(\\"compositeDogCompositeToysDescription\\", id);
@@ -1231,10 +1243,15 @@ export default function CreateCommentForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Post\\"
           value={currentPostCommentsIdValue}
-          options={postRecords.map((r) => ({
-            id: r?.id,
-            label: r?.id,
-          }))}
+          options={postRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
+            )
+            .map((r) => ({
+              id: r?.id,
+              label: r?.id,
+            }))}
           onSelect={({ id }) => {
             setCurrentPostCommentsIdValue(id);
             runValidationTasks(\\"postCommentsId\\", id);
@@ -8508,6 +8525,1108 @@ export default function NestedJson(props: NestedJsonProps): React.ReactElement;
 "
 `;
 
+exports[`amplify form renderer tests datastore form tests custom form tests should render scalar relationship fields if overrides 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import {
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  CompositeDog,
+  CompositeOwner as CompositeOwner0,
+  CompositeToy,
+  CompositeVet,
+  CompositeDogCompositeVet,
+  CompositeBowl,
+} from \\"../models\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function UpdateCompositeDogForm(props) {
+  const {
+    name: nameProp,
+    compositeDog,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    description: \\"\\",
+    CompositeOwner: undefined,
+    CompositeToys: [],
+    CompositeVets: [],
+    compositeDogCompositeBowlShape: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [description, setDescription] = React.useState(
+    initialValues.description
+  );
+  const [CompositeOwner, setCompositeOwner] = React.useState(
+    initialValues.CompositeOwner
+  );
+  const [CompositeToys, setCompositeToys] = React.useState(
+    initialValues.CompositeToys
+  );
+  const [CompositeVets, setCompositeVets] = React.useState(
+    initialValues.CompositeVets
+  );
+  const [compositeDogCompositeBowlShape, setCompositeDogCompositeBowlShape] =
+    React.useState(initialValues.compositeDogCompositeBowlShape);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = compositeDogRecord
+      ? {
+          ...initialValues,
+          ...compositeDogRecord,
+          CompositeOwner,
+          CompositeToys: linkedCompositeToys,
+          CompositeVets: linkedCompositeVets,
+          compositeDogCompositeBowlShape,
+        }
+      : initialValues;
+    setName(cleanValues.name);
+    setDescription(cleanValues.description);
+    setCompositeOwner(cleanValues.CompositeOwner);
+    setCurrentCompositeOwnerValue(undefined);
+    setCurrentCompositeOwnerDisplayValue(\\"\\");
+    setCompositeToys(cleanValues.CompositeToys ?? []);
+    setCurrentCompositeToysValue(undefined);
+    setCurrentCompositeToysDisplayValue(\\"\\");
+    setCompositeVets(cleanValues.CompositeVets ?? []);
+    setCurrentCompositeVetsValue(undefined);
+    setCurrentCompositeVetsDisplayValue(\\"\\");
+    setCompositeDogCompositeBowlShape(
+      cleanValues.compositeDogCompositeBowlShape
+    );
+    setCurrentCompositeDogCompositeBowlShapeValue(undefined);
+    setErrors({});
+  };
+  const [compositeDogRecord, setCompositeDogRecord] =
+    React.useState(compositeDog);
+  const [linkedCompositeToys, setLinkedCompositeToys] = React.useState([]);
+  const canUnlinkCompositeToys = true;
+  const [linkedCompositeVets, setLinkedCompositeVets] = React.useState([]);
+  const canUnlinkCompositeVets = false;
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = nameProp
+        ? await DataStore.query(CompositeDog, nameProp)
+        : compositeDog;
+      setCompositeDogRecord(record);
+      const CompositeOwnerRecord = record
+        ? await record.CompositeOwner
+        : undefined;
+      setCompositeOwner(CompositeOwnerRecord);
+      const linkedCompositeToys = record
+        ? await record.CompositeToys.toArray()
+        : [];
+      setLinkedCompositeToys(linkedCompositeToys);
+      const linkedCompositeVets = record
+        ? await Promise.all(
+            (
+              await record.CompositeVets.toArray()
+            ).map((r) => {
+              return r.compositeVet;
+            })
+          )
+        : [];
+      setLinkedCompositeVets(linkedCompositeVets);
+      const compositeDogCompositeBowlShapeRecord = record
+        ? await record.compositeDogCompositeBowlShape
+        : undefined;
+      setCompositeDogCompositeBowlShape(compositeDogCompositeBowlShapeRecord);
+    };
+    queryData();
+  }, [nameProp, compositeDog]);
+  React.useEffect(resetStateValues, [
+    compositeDogRecord,
+    CompositeOwner,
+    linkedCompositeToys,
+    linkedCompositeVets,
+    compositeDogCompositeBowlShape,
+  ]);
+  const [
+    currentCompositeOwnerDisplayValue,
+    setCurrentCompositeOwnerDisplayValue,
+  ] = React.useState(\\"\\");
+  const [currentCompositeOwnerValue, setCurrentCompositeOwnerValue] =
+    React.useState(undefined);
+  const CompositeOwnerRef = React.createRef();
+  const [
+    currentCompositeToysDisplayValue,
+    setCurrentCompositeToysDisplayValue,
+  ] = React.useState(\\"\\");
+  const [currentCompositeToysValue, setCurrentCompositeToysValue] =
+    React.useState(undefined);
+  const CompositeToysRef = React.createRef();
+  const [
+    currentCompositeVetsDisplayValue,
+    setCurrentCompositeVetsDisplayValue,
+  ] = React.useState(\\"\\");
+  const [currentCompositeVetsValue, setCurrentCompositeVetsValue] =
+    React.useState(undefined);
+  const CompositeVetsRef = React.createRef();
+  const [
+    currentCompositeDogCompositeBowlShapeValue,
+    setCurrentCompositeDogCompositeBowlShapeValue,
+  ] = React.useState(undefined);
+  const compositeDogCompositeBowlShapeRef = React.createRef();
+  const getIDValue = {
+    CompositeOwner: (r) =>
+      JSON.stringify({ lastName: r?.lastName, firstName: r?.firstName }),
+    CompositeToys: (r) => JSON.stringify({ kind: r?.kind, color: r?.color }),
+    CompositeVets: (r) =>
+      JSON.stringify({ specialty: r?.specialty, city: r?.city }),
+  };
+  const CompositeOwnerIdSet = new Set(
+    Array.isArray(CompositeOwner)
+      ? CompositeOwner.map((r) => getIDValue.CompositeOwner?.(r))
+      : getIDValue.CompositeOwner?.(CompositeOwner)
+  );
+  const CompositeToysIdSet = new Set(
+    Array.isArray(CompositeToys)
+      ? CompositeToys.map((r) => getIDValue.CompositeToys?.(r))
+      : getIDValue.CompositeToys?.(CompositeToys)
+  );
+  const CompositeVetsIdSet = new Set(
+    Array.isArray(CompositeVets)
+      ? CompositeVets.map((r) => getIDValue.CompositeVets?.(r))
+      : getIDValue.CompositeVets?.(CompositeVets)
+  );
+  const compositeOwnerRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositeOwner0,
+  }).items;
+  const compositeToyRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositeToy,
+  }).items;
+  const compositeVetRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositeVet,
+  }).items;
+  const compositeBowlRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: CompositeBowl,
+  }).items;
+  const getDisplayValue = {
+    CompositeOwner: (r) => \`\${r?.lastName}\${\\"-\\"}\${r?.firstName}\`,
+    CompositeToys: (r) => \`\${r?.kind}\${\\"-\\"}\${r?.color}\`,
+    CompositeVets: (r) => \`\${r?.specialty}\${\\"-\\"}\${r?.city}\`,
+  };
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    description: [{ type: \\"Required\\" }],
+    CompositeOwner: [],
+    CompositeToys: [],
+    CompositeVets: [],
+    compositeDogCompositeBowlShape: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          description,
+          CompositeOwner,
+          CompositeToys,
+          CompositeVets,
+          compositeDogCompositeBowlShape,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const promises = [];
+          const compositeOwnerToUnlink =
+            await compositeDogRecord.CompositeOwner;
+          if (compositeOwnerToUnlink) {
+            promises.push(
+              DataStore.save(
+                CompositeOwner0.copyOf(compositeOwnerToUnlink, (updated) => {
+                  updated.CompositeDog = undefined;
+                  updated.compositeOwnerCompositeDogName = undefined;
+                  updated.compositeOwnerCompositeDogDescription = undefined;
+                })
+              )
+            );
+          }
+          const compositeOwnerToLink = modelFields.CompositeOwner;
+          if (compositeOwnerToLink) {
+            promises.push(
+              DataStore.save(
+                CompositeOwner0.copyOf(compositeOwnerToLink, (updated) => {
+                  updated.CompositeDog = compositeDogRecord;
+                })
+              )
+            );
+            const compositeDogToUnlink =
+              await compositeOwnerToLink.CompositeDog;
+            if (compositeDogToUnlink) {
+              promises.push(
+                DataStore.save(
+                  CompositeDog.copyOf(compositeDogToUnlink, (updated) => {
+                    updated.CompositeOwner = undefined;
+                    updated.compositeDogCompositeOwnerLastName = undefined;
+                    updated.compositeDogCompositeOwnerFirstName = undefined;
+                  })
+                )
+              );
+            }
+          }
+          const compositeToysToLink = [];
+          const compositeToysToUnLink = [];
+          const compositeToysSet = new Set();
+          const linkedCompositeToysSet = new Set();
+          CompositeToys.forEach((r) =>
+            compositeToysSet.add(getIDValue.CompositeToys?.(r))
+          );
+          linkedCompositeToys.forEach((r) =>
+            linkedCompositeToysSet.add(getIDValue.CompositeToys?.(r))
+          );
+          linkedCompositeToys.forEach((r) => {
+            if (!compositeToysSet.has(getIDValue.CompositeToys?.(r))) {
+              compositeToysToUnLink.push(r);
+            }
+          });
+          CompositeToys.forEach((r) => {
+            if (!linkedCompositeToysSet.has(getIDValue.CompositeToys?.(r))) {
+              compositeToysToLink.push(r);
+            }
+          });
+          compositeToysToUnLink.forEach((original) => {
+            if (!canUnlinkCompositeToys) {
+              throw Error(
+                \`CompositeToy \${original.kind} cannot be unlinked from CompositeDog because compositeDogCompositeToysName is a required field.\`
+              );
+            }
+            promises.push(
+              DataStore.save(
+                CompositeToy.copyOf(original, (updated) => {
+                  updated.compositeDogCompositeToysName = null;
+                  updated.compositeDogCompositeToysDescription = null;
+                })
+              )
+            );
+          });
+          compositeToysToLink.forEach((original) => {
+            promises.push(
+              DataStore.save(
+                CompositeToy.copyOf(original, (updated) => {
+                  updated.compositeDogCompositeToysName =
+                    compositeDogRecord.name;
+                  updated.compositeDogCompositeToysDescription =
+                    compositeDogRecord.description;
+                })
+              )
+            );
+          });
+          const compositeVetsToLinkMap = new Map();
+          const compositeVetsToUnLinkMap = new Map();
+          const compositeVetsMap = new Map();
+          const linkedCompositeVetsMap = new Map();
+          CompositeVets.forEach((r) => {
+            const count = compositeVetsMap.get(getIDValue.CompositeVets?.(r));
+            const newCount = count ? count + 1 : 1;
+            compositeVetsMap.set(getIDValue.CompositeVets?.(r), newCount);
+          });
+          linkedCompositeVets.forEach((r) => {
+            const count = linkedCompositeVetsMap.get(
+              getIDValue.CompositeVets?.(r)
+            );
+            const newCount = count ? count + 1 : 1;
+            linkedCompositeVetsMap.set(getIDValue.CompositeVets?.(r), newCount);
+          });
+          linkedCompositeVetsMap.forEach((count, id) => {
+            const newCount = compositeVetsMap.get(id);
+            if (newCount) {
+              const diffCount = count - newCount;
+              if (diffCount > 0) {
+                compositeVetsToUnLinkMap.set(id, diffCount);
+              }
+            } else {
+              compositeVetsToUnLinkMap.set(id, count);
+            }
+          });
+          compositeVetsMap.forEach((count, id) => {
+            const originalCount = linkedCompositeVetsMap.get(id);
+            if (originalCount) {
+              const diffCount = count - originalCount;
+              if (diffCount > 0) {
+                compositeVetsToLinkMap.set(id, diffCount);
+              }
+            } else {
+              compositeVetsToLinkMap.set(id, count);
+            }
+          });
+          compositeVetsToUnLinkMap.forEach(async (count, id) => {
+            const compositeDogCompositeVetRecords = await DataStore.query(
+              CompositeDogCompositeVet,
+              (r) =>
+                r.and((r) => {
+                  const recordKeys = JSON.parse(id);
+                  return [
+                    r.compositeVetSpecialty.eq(recordKeys.specialty),
+                    r.compositeVetcity.eq(recordKeys.city),
+                    r.compositeDogName.eq(compositeDogRecord.name),
+                    r.compositeDogdescription.eq(
+                      compositeDogRecord.description
+                    ),
+                  ];
+                })
+            );
+            for (let i = 0; i < count; i++) {
+              promises.push(
+                DataStore.delete(compositeDogCompositeVetRecords[i])
+              );
+            }
+          });
+          compositeVetsToLinkMap.forEach((count, id) => {
+            for (let i = count; i > 0; i--) {
+              promises.push(
+                DataStore.save(
+                  new CompositeDogCompositeVet({
+                    compositeDog: compositeDogRecord,
+                    compositeVet: compositeVetRecords.find((r) =>
+                      Object.entries(JSON.parse(id)).every(
+                        ([key, value]) => r[key] === value
+                      )
+                    ),
+                  })
+                )
+              );
+            }
+          });
+          const modelFieldsToSave = {
+            name: modelFields.name,
+            description: modelFields.description,
+            CompositeOwner: modelFields.CompositeOwner,
+            compositeDogCompositeBowlShape:
+              modelFields.compositeDogCompositeBowlShape,
+          };
+          promises.push(
+            DataStore.save(
+              CompositeDog.copyOf(compositeDogRecord, (updated) => {
+                Object.assign(updated, modelFieldsToSave);
+                if (!modelFieldsToSave.CompositeOwner) {
+                  updated.compositeDogCompositeOwnerLastName = undefined;
+                  updated.compositeDogCompositeOwnerFirstName = undefined;
+                }
+              })
+            )
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"UpdateCompositeDogForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={true}
+        isReadOnly={true}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              description,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlShape,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <TextField
+        label=\\"Description\\"
+        isRequired={true}
+        isReadOnly={true}
+        value={description}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description: value,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlShape,
+            };
+            const result = onChange(modelFields);
+            value = result?.description ?? value;
+          }
+          if (errors.description?.hasError) {
+            runValidationTasks(\\"description\\", value);
+          }
+          setDescription(value);
+        }}
+        onBlur={() => runValidationTasks(\\"description\\", description)}
+        errorMessage={errors.description?.errorMessage}
+        hasError={errors.description?.hasError}
+        {...getOverrideProps(overrides, \\"description\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeOwner: value,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlShape,
+            };
+            const result = onChange(modelFields);
+            value = result?.CompositeOwner ?? value;
+          }
+          setCompositeOwner(value);
+          setCurrentCompositeOwnerValue(undefined);
+          setCurrentCompositeOwnerDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCompositeOwnerValue}
+        label={\\"Composite owner\\"}
+        items={CompositeOwner ? [CompositeOwner] : []}
+        hasError={errors?.CompositeOwner?.hasError}
+        errorMessage={errors?.CompositeOwner?.errorMessage}
+        getBadgeText={getDisplayValue.CompositeOwner}
+        setFieldValue={(model) => {
+          setCurrentCompositeOwnerDisplayValue(
+            getDisplayValue.CompositeOwner(model)
+          );
+          setCurrentCompositeOwnerValue(model);
+        }}
+        inputFieldRef={CompositeOwnerRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite owner\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CompositeOwner\\"
+          value={currentCompositeOwnerDisplayValue}
+          options={compositeOwnerRecords
+            .filter(
+              (r) => !CompositeOwnerIdSet.has(getIDValue.CompositeOwner?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeOwner?.(r),
+              label: getDisplayValue.CompositeOwner?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCompositeOwnerValue(
+              compositeOwnerRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeOwnerDisplayValue(label);
+            runValidationTasks(\\"CompositeOwner\\", label);
+          }}
+          onClear={() => {
+            setCurrentCompositeOwnerDisplayValue(\\"\\");
+          }}
+          defaultValue={CompositeOwner}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CompositeOwner?.hasError) {
+              runValidationTasks(\\"CompositeOwner\\", value);
+            }
+            setCurrentCompositeOwnerDisplayValue(value);
+            setCurrentCompositeOwnerValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"CompositeOwner\\",
+              currentCompositeOwnerDisplayValue
+            )
+          }
+          errorMessage={errors.CompositeOwner?.errorMessage}
+          hasError={errors.CompositeOwner?.hasError}
+          ref={CompositeOwnerRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CompositeOwner\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeOwner,
+              CompositeToys: values,
+              CompositeVets,
+              compositeDogCompositeBowlShape,
+            };
+            const result = onChange(modelFields);
+            values = result?.CompositeToys ?? values;
+          }
+          setCompositeToys(values);
+          setCurrentCompositeToysValue(undefined);
+          setCurrentCompositeToysDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCompositeToysValue}
+        label={\\"Composite toys\\"}
+        items={CompositeToys}
+        hasError={errors?.CompositeToys?.hasError}
+        errorMessage={errors?.CompositeToys?.errorMessage}
+        getBadgeText={getDisplayValue.CompositeToys}
+        setFieldValue={(model) => {
+          setCurrentCompositeToysDisplayValue(
+            getDisplayValue.CompositeToys(model)
+          );
+          setCurrentCompositeToysValue(model);
+        }}
+        inputFieldRef={CompositeToysRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite toys\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CompositeToy\\"
+          value={currentCompositeToysDisplayValue}
+          options={compositeToyRecords
+            .filter(
+              (r) => !CompositeToysIdSet.has(getIDValue.CompositeToys?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeToys?.(r),
+              label: getDisplayValue.CompositeToys?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCompositeToysValue(
+              compositeToyRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeToysDisplayValue(label);
+            runValidationTasks(\\"CompositeToys\\", label);
+          }}
+          onClear={() => {
+            setCurrentCompositeToysDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CompositeToys?.hasError) {
+              runValidationTasks(\\"CompositeToys\\", value);
+            }
+            setCurrentCompositeToysDisplayValue(value);
+            setCurrentCompositeToysValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"CompositeToys\\",
+              currentCompositeToysDisplayValue
+            )
+          }
+          errorMessage={errors.CompositeToys?.errorMessage}
+          hasError={errors.CompositeToys?.hasError}
+          ref={CompositeToysRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CompositeToys\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets: values,
+              compositeDogCompositeBowlShape,
+            };
+            const result = onChange(modelFields);
+            values = result?.CompositeVets ?? values;
+          }
+          setCompositeVets(values);
+          setCurrentCompositeVetsValue(undefined);
+          setCurrentCompositeVetsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCompositeVetsValue}
+        label={\\"Composite vets\\"}
+        items={CompositeVets}
+        hasError={errors?.CompositeVets?.hasError}
+        errorMessage={errors?.CompositeVets?.errorMessage}
+        getBadgeText={getDisplayValue.CompositeVets}
+        setFieldValue={(model) => {
+          setCurrentCompositeVetsDisplayValue(
+            getDisplayValue.CompositeVets(model)
+          );
+          setCurrentCompositeVetsValue(model);
+        }}
+        inputFieldRef={CompositeVetsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite vets\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CompositeVet\\"
+          value={currentCompositeVetsDisplayValue}
+          options={compositeVetRecords
+            .filter(
+              (r) => !CompositeVetsIdSet.has(getIDValue.CompositeVets?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.CompositeVets?.(r),
+              label: getDisplayValue.CompositeVets?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCompositeVetsValue(
+              compositeVetRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeVetsDisplayValue(label);
+            runValidationTasks(\\"CompositeVets\\", label);
+          }}
+          onClear={() => {
+            setCurrentCompositeVetsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CompositeVets?.hasError) {
+              runValidationTasks(\\"CompositeVets\\", value);
+            }
+            setCurrentCompositeVetsDisplayValue(value);
+            setCurrentCompositeVetsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"CompositeVets\\",
+              currentCompositeVetsDisplayValue
+            )
+          }
+          errorMessage={errors.CompositeVets?.errorMessage}
+          hasError={errors.CompositeVets?.hasError}
+          ref={CompositeVetsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CompositeVets\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              CompositeOwner,
+              CompositeToys,
+              CompositeVets,
+              compositeDogCompositeBowlShape: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.compositeDogCompositeBowlShape ?? value;
+          }
+          setCompositeDogCompositeBowlShape(value);
+          setCurrentCompositeDogCompositeBowlShapeValue(undefined);
+        }}
+        currentFieldValue={currentCompositeDogCompositeBowlShapeValue}
+        label={\\"Composite dog composite bowl shape\\"}
+        items={
+          compositeDogCompositeBowlShape ? [compositeDogCompositeBowlShape] : []
+        }
+        hasError={errors?.compositeDogCompositeBowlShape?.hasError}
+        errorMessage={errors?.compositeDogCompositeBowlShape?.errorMessage}
+        setFieldValue={setCurrentCompositeDogCompositeBowlShapeValue}
+        inputFieldRef={compositeDogCompositeBowlShapeRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Composite dog composite bowl shape\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CompositeBowl\\"
+          value={currentCompositeDogCompositeBowlShapeValue}
+          options={compositeBowlRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.shape === r?.shape) === i
+            )
+            .map((r) => ({
+              id: r?.shape,
+              label: r?.shape,
+            }))}
+          onSelect={({ id }) => {
+            setCurrentCompositeDogCompositeBowlShapeValue(id);
+            runValidationTasks(\\"compositeDogCompositeBowlShape\\", id);
+          }}
+          onClear={() => {
+            setCurrentCompositeDogCompositeBowlShapeDisplayValue(\\"\\");
+          }}
+          defaultValue={compositeDogCompositeBowlShape}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.compositeDogCompositeBowlShape?.hasError) {
+              runValidationTasks(\\"compositeDogCompositeBowlShape\\", value);
+            }
+            setCurrentCompositeDogCompositeBowlShapeValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"compositeDogCompositeBowlShape\\",
+              currentCompositeDogCompositeBowlShapeValue
+            )
+          }
+          errorMessage={errors.compositeDogCompositeBowlShape?.errorMessage}
+          hasError={errors.compositeDogCompositeBowlShape?.hasError}
+          ref={compositeDogCompositeBowlShapeRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"compositeDogCompositeBowlShape\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(nameProp || compositeDog)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(nameProp || compositeDog) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests datastore form tests custom form tests should render scalar relationship fields if overrides 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CompositeDog, CompositeOwner as CompositeOwner0, CompositeToy, CompositeVet } from \\"../models\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdateCompositeDogFormInputValues = {
+    name?: string;
+    description?: string;
+    CompositeOwner?: CompositeOwner0;
+    CompositeToys?: CompositeToy[];
+    CompositeVets?: CompositeVet[];
+    compositeDogCompositeBowlShape?: string;
+};
+export declare type UpdateCompositeDogFormValidationValues = {
+    name?: ValidationFunction<string>;
+    description?: ValidationFunction<string>;
+    CompositeOwner?: ValidationFunction<CompositeOwner0>;
+    CompositeToys?: ValidationFunction<CompositeToy>;
+    CompositeVets?: ValidationFunction<CompositeVet>;
+    compositeDogCompositeBowlShape?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateCompositeDogFormOverridesProps = {
+    UpdateCompositeDogFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    description?: PrimitiveOverrideProps<TextFieldProps>;
+    CompositeOwner?: PrimitiveOverrideProps<AutocompleteProps>;
+    CompositeToys?: PrimitiveOverrideProps<AutocompleteProps>;
+    CompositeVets?: PrimitiveOverrideProps<AutocompleteProps>;
+    compositeDogCompositeBowlShape?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type UpdateCompositeDogFormProps = React.PropsWithChildren<{
+    overrides?: UpdateCompositeDogFormOverridesProps | undefined | null;
+} & {
+    name?: string;
+    compositeDog?: CompositeDog;
+    onSubmit?: (fields: UpdateCompositeDogFormInputValues) => UpdateCompositeDogFormInputValues;
+    onSuccess?: (fields: UpdateCompositeDogFormInputValues) => void;
+    onError?: (fields: UpdateCompositeDogFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateCompositeDogFormInputValues) => UpdateCompositeDogFormInputValues;
+    onValidate?: UpdateCompositeDogFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdateCompositeDogForm(props: UpdateCompositeDogFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests custom form tests should render sectional elements 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -12412,10 +13531,15 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Team\\"
           value={currentTeamIDValue}
-          options={teamRecords.map((r) => ({
-            id: r?.id,
-            label: r?.id,
-          }))}
+          options={teamRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
+            )
+            .map((r) => ({
+              id: r?.id,
+              label: r?.id,
+            }))}
           onSelect={({ id }) => {
             setCurrentTeamIDValue(id);
             runValidationTasks(\\"teamID\\", id);
@@ -16522,10 +17646,15 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Team\\"
           value={currentTeamIDValue}
-          options={teamRecords.map((r) => ({
-            id: r?.id,
-            label: r?.id,
-          }))}
+          options={teamRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
+            )
+            .map((r) => ({
+              id: r?.id,
+              label: r?.id,
+            }))}
           onSelect={({ id }) => {
             setCurrentTeamIDValue(id);
             runValidationTasks(\\"teamID\\", id);
@@ -22085,10 +23214,15 @@ export default function MyMemberForm(props) {
           isReadOnly={false}
           placeholder=\\"Search Team\\"
           value={currentTeamIDValue}
-          options={teamRecords.map((r) => ({
-            id: r?.id,
-            label: r?.id,
-          }))}
+          options={teamRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
+            )
+            .map((r) => ({
+              id: r?.id,
+              label: r?.id,
+            }))}
           onSelect={({ id }) => {
             setCurrentTeamIDValue(id);
             runValidationTasks(\\"teamID\\", id);
