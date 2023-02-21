@@ -111,4 +111,29 @@ describe('FormTests - DSCompositeDog', () => {
       });
     });
   });
+
+  specify('update form should work with scalar relationship fields', () => {
+    cy.get('#DataStoreFormUpdateCompositeDogScalar').within(() => {
+      // hasOne
+      removeArrayItem('xs');
+      getArrayFieldButtonByLabel('Composite dog composite bowl size').click();
+      typeInAutocomplete('xl{downArrow}{enter}');
+      clickAddToArray();
+
+      // belongsTo
+      removeArrayItem('Dale');
+      getArrayFieldButtonByLabel('Composite dog composite owner first name').click();
+      typeInAutocomplete('Gordon{downArrow}{enter}');
+      clickAddToArray();
+
+      cy.contains('Submit').click();
+
+      cy.contains(/Yundoo/).then((recordElement: JQuery) => {
+        const record = JSON.parse(recordElement.text());
+
+        expect(record.CompositeBowl.size).to.equal('xl');
+        expect(record.CompositeOwner.firstName).to.equal('Gordon');
+      });
+    });
+  });
 });

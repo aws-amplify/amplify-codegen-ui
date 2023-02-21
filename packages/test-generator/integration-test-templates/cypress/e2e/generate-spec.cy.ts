@@ -36,6 +36,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'DataStoreFormUpdateCPKTeacher',
   'DataStoreFormCreateCPKTeacher',
   'DataStoreFormUpdateCompositeDog',
+  'DataStoreFormUpdateCompositeDogScalar',
   'DataStoreFormCreateCompositeDog',
   'DataStoreFormUpdateCompositeToy',
   'ComponentWithDataBindingWithPredicate',

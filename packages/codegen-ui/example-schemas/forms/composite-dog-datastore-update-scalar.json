@@ -1,0 +1,21 @@
+{
+    "name": "UpdateCompositeDogForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "CompositeDog"
+    },
+    "formActionType": "update",
+    "fields": {
+        "CompositeBowl": {
+            "excluded": true
+        },
+        "compositeDogCompositeBowlShape": {
+            "inputType": {
+                "type": "Autocomplete"
+            }
+        }
+    },
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

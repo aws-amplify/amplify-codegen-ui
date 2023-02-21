@@ -383,51 +383,124 @@ describe('mapModelFieldsConfigs', () => {
       enums: {},
       nonModels: {},
       models: {
-        Owner: {
-          primaryKeys: ['id'],
-          fields: {},
-        },
-        Dog: {
-          primaryKeys: ['id'],
+        CompositeDog: {
           fields: {
-            ownerId: {
+            name: {
               dataType: 'ID',
+              required: true,
               readOnly: false,
-              required: false,
               isArray: false,
-              relationship: { type: 'HAS_ONE', relatedModelName: 'Owner' },
+            },
+            description: {
+              dataType: 'String',
+              required: true,
+              readOnly: false,
+              isArray: false,
+            },
+            CompositeBowl: {
+              dataType: {
+                model: 'CompositeBowl',
+              },
+              required: false,
+              readOnly: false,
+              isArray: false,
+              relationship: {
+                type: 'HAS_ONE',
+                relatedModelName: 'CompositeBowl',
+                associatedFields: ['compositeDogCompositeBowlShape', 'compositeDogCompositeBowlSize'],
+              },
+            },
+            compositeDogCompositeBowlShape: {
+              dataType: 'ID',
+              required: false,
+              readOnly: false,
+              isArray: false,
+              relationship: {
+                type: 'HAS_ONE',
+                relatedModelName: 'CompositeBowl',
+              },
+            },
+            compositeDogCompositeBowlSize: {
+              dataType: 'String',
+              required: false,
+              readOnly: false,
+              isArray: false,
+              relationship: {
+                type: 'HAS_ONE',
+                relatedModelName: 'CompositeBowl',
+              },
             },
           },
+          primaryKeys: ['name', 'description'],
+        },
+        CompositeBowl: {
+          fields: {
+            shape: {
+              dataType: 'ID',
+              required: true,
+              readOnly: false,
+              isArray: false,
+            },
+            size: {
+              dataType: 'String',
+              required: true,
+              readOnly: false,
+              isArray: false,
+            },
+          },
+          primaryKeys: ['shape', 'size'],
         },
       },
     };
 
     const modelFieldsConfigs = mapModelFieldsConfigs({
-      dataTypeName: 'Dog',
+      dataTypeName: 'CompositeDog',
       formDefinition,
       dataSchema,
       featureFlags: { isRelationshipSupported: true },
     });
 
-    expect(formDefinition.elementMatrix).toStrictEqual([]);
-    expect(modelFieldsConfigs).toStrictEqual({
-      ownerId: {
-        dataType: 'ID',
-        inputType: {
-          name: 'ownerId',
-          readOnly: false,
-          required: false,
-          type: 'Autocomplete',
-          placeholder: 'Search Owner',
-          value: 'ownerId',
-          isArray: false,
-          valueMappings: {
-            values: [{ value: { bindingProperties: { property: 'Owner', field: 'ownerId' } } }],
-            bindingProperties: { Owner: { type: 'Data', bindingProperties: { model: 'Owner' } } },
+    expect(formDefinition.elementMatrix).toStrictEqual([['name'], ['description'], ['CompositeBowl']]);
+
+    expect(modelFieldsConfigs.compositeDogCompositeBowlShape.inputType?.valueMappings).toStrictEqual({
+      values: [
+        {
+          value: {
+            bindingProperties: {
+              property: 'CompositeBowl',
+              field: 'shape',
+            },
           },
         },
-        label: 'Owner id',
-        relationship: { relatedModelName: 'Owner', type: 'HAS_ONE' },
+      ],
+      bindingProperties: {
+        CompositeBowl: {
+          type: 'Data',
+          bindingProperties: {
+            model: 'CompositeBowl',
+          },
+        },
+      },
+    });
+
+    expect(modelFieldsConfigs.compositeDogCompositeBowlSize.inputType?.valueMappings).toStrictEqual({
+      values: [
+        {
+          value: {
+            bindingProperties: {
+              property: 'CompositeBowl',
+              field: 'size',
+            },
+          },
+        },
+      ],
+      bindingProperties: {
+        CompositeBowl: {
+          type: 'Data',
+          bindingProperties: {
+            model: 'CompositeBowl',
+          },
+        },
       },
     });
   });
@@ -440,31 +513,6 @@ describe('mapModelFieldsConfigs', () => {
       enums: {},
       nonModels: {},
       models: {
-        Owner: {
-          primaryKeys: ['id'],
-          fields: {
-            id: {
-              dataType: 'ID',
-              required: true,
-              readOnly: false,
-              isArray: false,
-            },
-            CompositeToys: {
-              dataType: {
-                model: 'CompositeToy',
-              },
-              required: false,
-              readOnly: false,
-              isArray: true,
-              relationship: {
-                canUnlinkAssociatedModel: true,
-                type: 'HAS_MANY',
-                relatedModelName: 'CompositeToy',
-                relatedModelFields: ['ownerCompositeToysID'],
-              },
-            },
-          },
-        },
         CompositeDog: {
           primaryKeys: ['name', 'description'],
           fields: {
@@ -529,17 +577,6 @@ describe('mapModelFieldsConfigs', () => {
               relationship: {
                 type: 'HAS_ONE',
                 relatedModelName: 'CompositeDog',
-                isHasManyIndex: true,
-              },
-            },
-            ownerID: {
-              dataType: 'ID',
-              required: true,
-              readOnly: false,
-              isArray: false,
-              relationship: {
-                type: 'BELONGS_TO',
-                relatedModelName: 'Owner',
                 isHasManyIndex: true,
               },
             },

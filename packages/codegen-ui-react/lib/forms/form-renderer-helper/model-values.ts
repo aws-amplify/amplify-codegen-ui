@@ -71,6 +71,9 @@ const getDisplayValueCallChain = ({ fieldName, recordString }: { fieldName: stri
   examples:
   for model -
   authorRecords
+  .filter(
+    (r, i, arr) => arr.findIndex(member => member.shape === r.shape) === i
+    )
   .map((r) => ({
     id: r?.id,
     label: r?.id,
@@ -81,7 +84,85 @@ function getSuggestionsForRelationshipScalar({ modelName, key }: { modelName: st
 
   return factory.createCallExpression(
     factory.createPropertyAccessExpression(
-      factory.createIdentifier(getRecordsName(modelName)),
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier(getRecordsName(modelName)),
+          factory.createIdentifier('filter'),
+        ),
+        undefined,
+        [
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier(recordString),
+                undefined,
+                undefined,
+                undefined,
+              ),
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('i'),
+                undefined,
+                undefined,
+                undefined,
+              ),
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('arr'),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBinaryExpression(
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('arr'),
+                  factory.createIdentifier('findIndex'),
+                ),
+                undefined,
+                [
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier('member'),
+                        undefined,
+                        undefined,
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createBinaryExpression(
+                      buildAccessChain(['member', key]),
+                      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                      buildAccessChain([recordString, key]),
+                    ),
+                  ),
+                ],
+              ),
+              factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+              factory.createIdentifier('i'),
+            ),
+          ),
+        ],
+      ),
       factory.createIdentifier('map'),
     ),
     undefined,
