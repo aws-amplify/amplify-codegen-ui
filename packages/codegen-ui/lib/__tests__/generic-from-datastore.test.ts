@@ -25,6 +25,7 @@ import {
   schemaWithCompositeKeys,
   schemaWithHasManyBelongsTo,
   schemaWithoutJoinTables,
+  introspectionSchemaWithCompositeKeys,
 } from './__utils__/mock-schemas';
 
 describe('getGenericFromDataStore', () => {
@@ -327,5 +328,11 @@ describe('getGenericFromDataStore', () => {
       relatedModelName: 'Post',
       isHasManyIndex: true,
     });
+  });
+
+  it('should produce the same generic schema from MIPR and introspection schema', () => {
+    expect(getGenericFromDataStore(introspectionSchemaWithCompositeKeys).models).toStrictEqual(
+      getGenericFromDataStore(schemaWithCompositeKeys).models,
+    );
   });
 });
