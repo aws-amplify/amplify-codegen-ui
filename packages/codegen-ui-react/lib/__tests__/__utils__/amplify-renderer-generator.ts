@@ -22,7 +22,8 @@ import {
   StudioView,
   FormFeatureFlags,
 } from '@aws-amplify/codegen-ui';
-import { Schema } from '@aws-amplify/datastore';
+import { Schema as DataStoreSchema } from '@aws-amplify/datastore';
+import { ModelIntrospectionSchema } from '@aws-amplify/appsync-modelgen-plugin';
 import { createPrinter, createSourceFile, EmitHint, NewLineKind, Node } from 'typescript';
 import { AmplifyFormRenderer } from '../../amplify-ui-renderers/amplify-form-renderer';
 import { AmplifyRenderer } from '../../amplify-ui-renderers/amplify-renderer';
@@ -61,7 +62,7 @@ export const generateWithAmplifyFormRenderer = (
 ): { componentText: string; declaration?: string } => {
   let dataSchema: GenericDataSchema | undefined;
   if (dataSchemaJsonFile) {
-    const dataStoreSchema = loadSchemaFromJSONFile<Schema>(dataSchemaJsonFile);
+    const dataStoreSchema = loadSchemaFromJSONFile<DataStoreSchema | ModelIntrospectionSchema>(dataSchemaJsonFile);
     dataSchema = getGenericFromDataStore(dataStoreSchema);
   }
   const rendererFactory = new StudioTemplateRendererFactory(
@@ -79,7 +80,7 @@ export const generateComponentOnlyWithAmplifyFormRenderer = (
 ) => {
   let dataSchema: GenericDataSchema | undefined;
   if (dataSchemaJsonFile) {
-    const dataStoreSchema = loadSchemaFromJSONFile<Schema>(dataSchemaJsonFile);
+    const dataStoreSchema = loadSchemaFromJSONFile<DataStoreSchema | ModelIntrospectionSchema>(dataSchemaJsonFile);
     dataSchema = getGenericFromDataStore(dataStoreSchema);
   }
   const rendererFactory = new StudioTemplateRendererFactory(
@@ -97,7 +98,7 @@ export const renderWithAmplifyViewRenderer = (
 ): { componentText: string; declaration?: string } => {
   let dataSchema: GenericDataSchema | undefined;
   if (dataSchemaJsonFile) {
-    const dataStoreSchema = loadSchemaFromJSONFile<Schema>(dataSchemaJsonFile);
+    const dataStoreSchema = loadSchemaFromJSONFile<DataStoreSchema | ModelIntrospectionSchema>(dataSchemaJsonFile);
     dataSchema = getGenericFromDataStore(dataStoreSchema);
   }
   const rendererFactory = new StudioTemplateRendererFactory(

@@ -23,7 +23,8 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@aws-amplify/datastore": "^4.0.0"
+    "@aws-amplify/appsync-modelgen-plugin": "^2.3.3",
+    "@aws-amplify/datastore": "^4.0.15"
   },
   "jest": {
     "verbose": false,

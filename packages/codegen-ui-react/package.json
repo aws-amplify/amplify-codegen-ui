@@ -20,6 +20,7 @@
     "build:watch": "npm run build -- --watch"
   },
   "devDependencies": {
+    "@aws-amplify/appsync-modelgen-plugin": "^2.3.3",
     "@aws-amplify/datastore": "^4.0.0",
     "@aws-amplify/ui-react": "^2.1.0",
     "@types/node": "^16.3.3",

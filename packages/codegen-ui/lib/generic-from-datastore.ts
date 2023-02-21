@@ -13,14 +13,28 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { Schema as DataStoreSchema, ModelField, SchemaModel as DataStoreSchemaModel } from '@aws-amplify/datastore';
+import {
+  ModelIntrospectionSchema,
+  SchemaModel as IntrospectionModel,
+  Field as IntrospectionModelField,
+  SchemaNonModel as IntrospectionNonModel,
+} from '@aws-amplify/appsync-modelgen-plugin';
+import {
+  Schema as DataStoreSchema,
+  SchemaModel as DataStoreModel,
+  ModelField as DataStoreModelField,
+  SchemaNonModel as DataStoreNonModel,
+} from '@aws-amplify/datastore';
+
 import { InvalidInputError } from './errors';
 import { GenericDataField, GenericDataRelationshipType, GenericDataSchema } from './types';
 
-const isFieldModelType = (field: ModelField): field is ModelField & { type: { model: string } } =>
+const isFieldModelType = (
+  field: IntrospectionModelField | DataStoreModelField,
+): field is (IntrospectionModelField | DataStoreModelField) & { type: { model: string } } =>
   typeof field.type === 'object' && 'model' in field.type;
 
-const getAssociatedFieldNames = (field: ModelField): string[] => {
+const getAssociatedFieldNames = (field: IntrospectionModelField | DataStoreModelField): string[] => {
   if (!field.association || !('associatedWith' in field.association)) {
     return [];
   }
@@ -30,13 +44,28 @@ const getAssociatedFieldNames = (field: ModelField): string[] => {
     : [field.association.associatedWith];
 };
 
+const getTargetNames = (field: IntrospectionModelField | DataStoreModelField): string[] => {
+  const { association } = field;
+  if (association) {
+    const targetName = 'targetName' in association && association.targetName;
+    const targetNames = 'targetNames' in association && association.targetNames;
+    if (typeof targetName === 'string') {
+      return [targetName];
+    }
+    if (Array.isArray(targetNames)) {
+      return targetNames;
+    }
+  }
+  return [];
+};
+
 /**
   Disclaimer: there's no 100% sure way of telling if something's a join table.
   This is best effort.
   Feature request w/ amplify-codegen: https://github.com/aws-amplify/amplify-codegen/issues/543
   After fulfilled, this can be fallback
  */
-function checkIsModelAJoinTable(modelName: string, schema: DataStoreSchema) {
+function checkIsModelAJoinTable(modelName: string, schema: ModelIntrospectionSchema | DataStoreSchema) {
   const model = schema.models[modelName];
   if (!model) {
     return false;
@@ -60,10 +89,10 @@ function checkIsModelAJoinTable(modelName: string, schema: DataStoreSchema) {
     return false;
   }
 
-  const modelFieldTuples: [string, ModelField][] = [];
+  const modelFieldTuples: [string, IntrospectionModelField | DataStoreModelField][] = [];
   let allFieldsAllowed = true;
 
-  Object.entries(model.fields).forEach((field) => {
+  Object.entries(model.fields).forEach((field: [string, IntrospectionModelField | DataStoreModelField]) => {
     const [name, value] = field;
     if (isFieldModelType(value)) {
       modelFieldTuples.push(field);
@@ -100,7 +129,7 @@ function checkIsModelAJoinTable(modelName: string, schema: DataStoreSchema) {
 
     // should be bidirectional with HAS_MANY
     // that has a different model type
-    return Object.values(relatedModel.fields).some((field) => {
+    return Object.values(relatedModel.fields).some((field: IntrospectionModelField | DataStoreModelField) => {
       if (!isFieldModelType(field) || field.association?.connectionType !== 'HAS_MANY') {
         return false;
       }
@@ -111,7 +140,7 @@ function checkIsModelAJoinTable(modelName: string, schema: DataStoreSchema) {
   });
 }
 
-function getGenericDataField(field: ModelField): GenericDataField {
+function getGenericDataField(field: IntrospectionModelField | DataStoreModelField): GenericDataField {
   return {
     dataType: field.type,
     required: !!field.isRequired,
@@ -156,7 +185,7 @@ function addRelationship(
 
 // get custom primary keys || id
 // TODO: when moved over to use introspection schema, this can be vastly simplified
-function getPrimaryKeys({ model }: { model: DataStoreSchemaModel }) {
+function getPrimaryKeys({ model }: { model: IntrospectionModel | DataStoreModel }) {
   const customPrimaryKeys = model.attributes?.find(
     (attr) =>
       attr.type === 'key' &&
@@ -168,7 +197,9 @@ function getPrimaryKeys({ model }: { model: DataStoreSchemaModel }) {
   return customPrimaryKeys && Array.isArray(customPrimaryKeys) && customPrimaryKeys.length ? customPrimaryKeys : ['id'];
 }
 
-export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): GenericDataSchema {
+export function getGenericFromDataStore(
+  dataStoreSchema: ModelIntrospectionSchema | DataStoreSchema,
+): GenericDataSchema {
   const genericSchema: GenericDataSchema = {
     dataSourceType: 'DataStore',
     models: {},
@@ -182,10 +213,10 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
 
   const joinTableNames: string[] = [];
 
-  Object.values(dataStoreSchema.models).forEach((model) => {
+  Object.values(dataStoreSchema.models).forEach((model: DataStoreModel | IntrospectionModel) => {
     const genericFields: { [fieldName: string]: GenericDataField } = {};
 
-    Object.values(model.fields).forEach((field) => {
+    Object.values(model.fields).forEach((field: DataStoreModelField | IntrospectionModelField) => {
       const genericField = getGenericDataField(field);
 
       // handle relationships
@@ -215,7 +246,8 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
                 joinTableNames.push(associatedModel.name);
 
                 const relatedJoinField = Object.values(associatedModel.fields).find(
-                  (joinField) => joinField.name !== associatedFieldName && isFieldModelType(joinField),
+                  (joinField: IntrospectionModelField | DataStoreModelField) =>
+                    joinField.name !== associatedFieldName && isFieldModelType(joinField),
                 );
                 if (relatedJoinField && isFieldModelType(relatedJoinField)) {
                   relatedJoinTableName = relatedModelName;
@@ -233,7 +265,7 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
             });
 
             const belongsToFieldOnRelatedModelTuple = Object.entries(associatedModel?.fields ?? {}).find(
-              ([, f]) =>
+              ([, f]: [string, IntrospectionModelField | DataStoreModelField]) =>
                 isFieldModelType(f) && f.type.model === model.name && f.association?.connectionType === 'BELONGS_TO',
             );
 
@@ -256,16 +288,10 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
             }
           }
 
-          // note implicit relationship for associated field within same model
-          if (
-            (relationshipType === 'HAS_ONE' || relationshipType === 'BELONGS_TO') &&
-            ('targetName' in field.association || 'targetNames' in field.association) &&
-            (field.association.targetName || field.association.targetNames)
-          ) {
-            const targetNames = field.association.targetName
-              ? [field.association.targetName]
-              : field.association.targetNames;
+          if (relationshipType === 'HAS_ONE' || relationshipType === 'BELONGS_TO') {
+            const targetNames = getTargetNames(field);
             const associatedFields: string[] = [];
+            // note implicit relationship for associated field within same model
             if (targetNames) {
               targetNames.forEach((targetName) => {
                 addRelationship(fieldsWithImplicitRelationships, model.name, targetName, {
@@ -311,9 +337,9 @@ export function getGenericFromDataStore(dataStoreSchema: DataStoreSchema): Gener
   genericSchema.enums = dataStoreSchema.enums;
 
   if (dataStoreSchema.nonModels) {
-    Object.values(dataStoreSchema.nonModels).forEach((nonModel) => {
+    Object.values(dataStoreSchema.nonModels).forEach((nonModel: IntrospectionNonModel | DataStoreNonModel) => {
       const genericFields: { [fieldName: string]: GenericDataField } = {};
-      Object.values(nonModel.fields).forEach((field) => {
+      Object.values(nonModel.fields).forEach((field: IntrospectionModelField | DataStoreModelField) => {
         const genericField = getGenericDataField(field);
         genericFields[field.name] = genericField;
       });

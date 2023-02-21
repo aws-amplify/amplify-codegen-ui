@@ -13,9 +13,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import type { Schema } from '@aws-amplify/datastore';
+import type { Schema as DataStoreSchema } from '@aws-amplify/datastore';
+import type { ModelIntrospectionSchema } from '@aws-amplify/appsync-modelgen-plugin';
 
-export const postSchema: Schema = {
+export const postSchema: DataStoreSchema = {
   models: {
     Post: {
       name: 'Post',
@@ -114,7 +115,7 @@ export const postSchema: Schema = {
   codegenVersion: '000000',
 };
 
-export const schemaWithRelationships: Schema = {
+export const schemaWithRelationships: DataStoreSchema = {
   models: {
     PrimaryCareGiver: {
       name: 'PrimaryCareGiver',
@@ -735,7 +736,7 @@ export const schemaWithRelationships: Schema = {
   codegenVersion: '000000',
 };
 
-export const schemaWithEnums: Schema = {
+export const schemaWithEnums: DataStoreSchema = {
   models: {},
   enums: {
     City: {
@@ -748,7 +749,7 @@ export const schemaWithEnums: Schema = {
   codegenVersion: '000000',
 };
 
-export const schemaWithNonModels: Schema = {
+export const schemaWithNonModels: DataStoreSchema = {
   models: {},
   enums: {},
   nonModels: {
@@ -1409,7 +1410,7 @@ export const schemaWithRelationshipsV2: any = {
   codegenVersion: '000000',
 };
 
-export const schemaWithAssumptions: Schema = {
+export const schemaWithAssumptions: DataStoreSchema = {
   models: {
     User: {
       name: 'User',
@@ -1517,7 +1518,7 @@ export const schemaWithAssumptions: Schema = {
   }
 */
 
-export const schemaWithCPK: Schema = {
+export const schemaWithCPK: DataStoreSchema = {
   models: {
     CPKStudent: {
       name: 'CPKStudent',
@@ -1861,7 +1862,7 @@ export const schemaWithCPK: Schema = {
   version: '19f0d1f134e00e6d1829446b37439661',
 };
 
-export const schemaWithCompositeKeys: Schema = {
+export const schemaWithCompositeKeys: DataStoreSchema = {
   models: {
     CompositeDog: {
       name: 'CompositeDog',
@@ -2365,6 +2366,539 @@ export const schemaWithCompositeKeys: Schema = {
   version: '8f8e59ee8fb2e3ca4efda3aa25b0211f',
 };
 
+export const introspectionSchemaWithCompositeKeys = {
+  version: 1,
+  models: {
+    CompositeDog: {
+      name: 'CompositeDog',
+      fields: {
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        description: {
+          name: 'description',
+          isArray: false,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+        },
+        CompositeBowl: {
+          name: 'CompositeBowl',
+          isArray: false,
+          type: {
+            model: 'CompositeBowl',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'HAS_ONE',
+            associatedWith: ['shape', 'size'],
+            targetNames: ['compositeDogCompositeBowlShape', 'compositeDogCompositeBowlSize'],
+          },
+        },
+        CompositeOwner: {
+          name: 'CompositeOwner',
+          isArray: false,
+          type: {
+            model: 'CompositeOwner',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['compositeDogCompositeOwnerLastName', 'compositeDogCompositeOwnerFirstName'],
+          },
+        },
+        CompositeToys: {
+          name: 'CompositeToys',
+          isArray: true,
+          type: {
+            model: 'CompositeToy',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['compositeDogCompositeToysName', 'compositeDogCompositeToysDescription'],
+          },
+        },
+        CompositeVets: {
+          name: 'CompositeVets',
+          isArray: true,
+          type: {
+            model: 'CompositeDogCompositeVet',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['compositeDog'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        compositeDogCompositeBowlShape: {
+          name: 'compositeDogCompositeBowlShape',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        compositeDogCompositeBowlSize: {
+          name: 'compositeDogCompositeBowlSize',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        compositeDogCompositeOwnerLastName: {
+          name: 'compositeDogCompositeOwnerLastName',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        compositeDogCompositeOwnerFirstName: {
+          name: 'compositeDogCompositeOwnerFirstName',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'CompositeDogs',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['name', 'description'],
+          },
+        },
+      ],
+      primaryKeyInfo: {
+        isCustomPrimaryKey: true,
+        primaryKeyFieldName: 'name',
+        sortKeyFieldNames: ['description'],
+      },
+    },
+    CompositeBowl: {
+      name: 'CompositeBowl',
+      fields: {
+        shape: {
+          name: 'shape',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        size: {
+          name: 'size',
+          isArray: false,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'CompositeBowls',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['shape', 'size'],
+          },
+        },
+      ],
+      primaryKeyInfo: {
+        isCustomPrimaryKey: true,
+        primaryKeyFieldName: 'shape',
+        sortKeyFieldNames: ['size'],
+      },
+    },
+    CompositeOwner: {
+      name: 'CompositeOwner',
+      fields: {
+        lastName: {
+          name: 'lastName',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        firstName: {
+          name: 'firstName',
+          isArray: false,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+        },
+        CompositeDog: {
+          name: 'CompositeDog',
+          isArray: false,
+          type: {
+            model: 'CompositeDog',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'HAS_ONE',
+            associatedWith: ['name', 'description'],
+            targetNames: ['compositeOwnerCompositeDogName', 'compositeOwnerCompositeDogDescription'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        compositeOwnerCompositeDogName: {
+          name: 'compositeOwnerCompositeDogName',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        compositeOwnerCompositeDogDescription: {
+          name: 'compositeOwnerCompositeDogDescription',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'CompositeOwners',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['lastName', 'firstName'],
+          },
+        },
+      ],
+      primaryKeyInfo: {
+        isCustomPrimaryKey: true,
+        primaryKeyFieldName: 'lastName',
+        sortKeyFieldNames: ['firstName'],
+      },
+    },
+    CompositeToy: {
+      name: 'CompositeToy',
+      fields: {
+        kind: {
+          name: 'kind',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        color: {
+          name: 'color',
+          isArray: false,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        compositeDogCompositeToysName: {
+          name: 'compositeDogCompositeToysName',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        compositeDogCompositeToysDescription: {
+          name: 'compositeDogCompositeToysDescription',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'CompositeToys',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['kind', 'color'],
+          },
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'gsi-CompositeDog.CompositeToys',
+            fields: ['compositeDogCompositeToysName', 'compositeDogCompositeToysDescription'],
+          },
+        },
+      ],
+      primaryKeyInfo: {
+        isCustomPrimaryKey: true,
+        primaryKeyFieldName: 'kind',
+        sortKeyFieldNames: ['color'],
+      },
+    },
+    CompositeVet: {
+      name: 'CompositeVet',
+      fields: {
+        specialty: {
+          name: 'specialty',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        city: {
+          name: 'city',
+          isArray: false,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+        },
+        CompositeDogs: {
+          name: 'CompositeDogs',
+          isArray: true,
+          type: {
+            model: 'CompositeDogCompositeVet',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['compositeVet'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'CompositeVets',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            fields: ['specialty', 'city'],
+          },
+        },
+      ],
+      primaryKeyInfo: {
+        isCustomPrimaryKey: true,
+        primaryKeyFieldName: 'specialty',
+        sortKeyFieldNames: ['city'],
+      },
+    },
+    CompositeDogCompositeVet: {
+      name: 'CompositeDogCompositeVet',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        compositeDogName: {
+          name: 'compositeDogName',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        compositeDogdescription: {
+          name: 'compositeDogdescription',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        compositeVetSpecialty: {
+          name: 'compositeVetSpecialty',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        compositeVetcity: {
+          name: 'compositeVetcity',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        compositeDog: {
+          name: 'compositeDog',
+          isArray: false,
+          type: {
+            model: 'CompositeDog',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['compositeDogName', 'compositeDogdescription'],
+          },
+        },
+        compositeVet: {
+          name: 'compositeVet',
+          isArray: false,
+          type: {
+            model: 'CompositeVet',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['compositeVetSpecialty', 'compositeVetcity'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'CompositeDogCompositeVets',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byCompositeDog',
+            fields: ['compositeDogName', 'compositeDogdescription'],
+          },
+        },
+        {
+          type: 'key',
+          properties: {
+            name: 'byCompositeVet',
+            fields: ['compositeVetSpecialty', 'compositeVetcity'],
+          },
+        },
+      ],
+      primaryKeyInfo: {
+        isCustomPrimaryKey: false,
+        primaryKeyFieldName: 'id',
+        sortKeyFieldNames: [],
+      },
+    },
+  },
+  enums: {},
+  nonModels: {},
+} as ModelIntrospectionSchema; // typecasting because connection types are enums
+
 /**
 type User @model {
     name: String
@@ -2392,7 +2926,7 @@ type Comment @model  {
     Org: Org! @belongsTo
 }
  */
-export const schemaWithHasManyBelongsTo: Schema = {
+export const schemaWithHasManyBelongsTo: DataStoreSchema = {
   models: {
     User: {
       name: 'User',
@@ -2717,7 +3251,7 @@ type Image @model {
   Entry: Entry @belongsTo(fields: ["entryID"])
 }
  */
-export const schemaWithoutJoinTables: Schema = {
+export const schemaWithoutJoinTables: DataStoreSchema = {
   models: {
     User: {
       name: 'User',
