@@ -1,0 +1,14 @@
+{
+  "id": "123",
+  "name": "DataStoreFormUpdateBidirectionalDog",
+  "formActionType": "update",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "BiDirectionalDog"
+  },
+  "sectionalElements": {},
+  "fields": {},
+  "style": {},
+  "cta": {},
+  "schemaVersion": "1.0"
+}
