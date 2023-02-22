@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { getInputByLabel } from '../../utils/form';
+import { getInputByLabel, typeInAutocomplete } from '../../utils/form';
 
 describe('FormTests - CustomDog', () => {
   beforeEach(() => {
@@ -74,12 +74,14 @@ describe('FormTests - CustomDog', () => {
       blurField();
       getInputByLabel('IP Address').type('192.0.2.146');
       blurField();
+      typeInAutocomplete('Ret{downArrow}{enter}');
       cy.contains('Submit').click();
       cy.contains('submitted: true');
       cy.contains('name: Spot');
       cy.contains('age: 3');
       cy.contains('email: spot@yahoo.com');
       cy.contains('ip: 192.0.2.146');
+      cy.contains('Retriever');
     });
   });
 });

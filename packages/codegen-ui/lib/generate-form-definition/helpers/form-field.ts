@@ -35,15 +35,22 @@ export function mergeValueMappings(
 ): StudioFormValueMappings {
   // if model-based
   if (base?.bindingProperties || override?.bindingProperties) {
-    const valueMappings = override || base;
-    if (!valueMappings) {
-      throw new InternalError(`Value mappings not found`);
-    }
+    // if overrides present, autogen'd mappings will be passed as base
+    // else, as override
+    const autoGendValueMappings = base || override;
+    if (autoGendValueMappings) {
+      const { values } = autoGendValueMappings;
+      // only use displayValue from overrides
+      // rest should be autogend
+      if (base && override?.values[0]?.displayValue) {
+        values[0].displayValue = override.values[0].displayValue;
+      }
 
-    return {
-      values: valueMappings.values,
-      bindingProperties: valueMappings.bindingProperties,
-    };
+      return {
+        values,
+        bindingProperties: autoGendValueMappings.bindingProperties,
+      };
+    }
   }
 
   // if not model-based

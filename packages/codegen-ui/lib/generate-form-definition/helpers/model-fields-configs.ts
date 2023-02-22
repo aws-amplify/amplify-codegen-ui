@@ -17,7 +17,7 @@
 import { sentenceCase } from 'change-case';
 import { checkIsSupportedAsFormField } from '../../check-support';
 
-import { InvalidInputError } from '../../errors';
+import { InternalError, InvalidInputError } from '../../errors';
 import {
   FieldTypeMapKeys,
   FormDefinition,
@@ -34,6 +34,9 @@ import { ExtendedStudioGenericFieldConfig } from '../../types/form/form-definiti
 import { StudioFormInputFieldProperty } from '../../types/form/input-config';
 import { FIELD_TYPE_MAP } from './field-type-map';
 
+const isModelDataType = (field: GenericDataField): field is GenericDataField & { dataType: { model: string } } =>
+  typeof field.dataType === 'object' && 'model' in field.dataType;
+
 function extractCorrespondingKey({
   thisModel,
   relatedModel,
@@ -44,6 +47,7 @@ function extractCorrespondingKey({
   relationshipFieldName: string;
 }): string {
   const relationshipField = thisModel.fields[relationshipFieldName];
+
   if (
     relationshipField.relationship &&
     'isHasManyIndex' in relationshipField.relationship &&
@@ -59,14 +63,47 @@ function extractCorrespondingKey({
       if (correspondingField?.type === 'HAS_MANY') {
         const indexOfKey = correspondingField.relatedModelFields.indexOf(relationshipFieldName);
         if (indexOfKey !== -1) {
-          return relatedModel.primaryKeys[indexOfKey];
+          const relatedPrimaryKey = relatedModel.primaryKeys[indexOfKey];
+          if (relatedPrimaryKey) {
+            // secondary index on child of 1:m
+            return relatedPrimaryKey;
+          }
         }
       }
     }
   }
 
-  // TODO: support other types
-  return relationshipFieldName;
+  if (
+    relationshipField.relationship &&
+    (relationshipField.relationship.type === 'HAS_ONE' || relationshipField.relationship.type === 'BELONGS_TO')
+  ) {
+    const modelRelationshipFieldTuple = Object.entries(thisModel.fields).find(
+      ([, field]) =>
+        field.relationship?.type === relationshipField.relationship?.type &&
+        isModelDataType(field) &&
+        field.relationship?.relatedModelName === relationshipField.relationship?.relatedModelName,
+    );
+
+    if (modelRelationshipFieldTuple) {
+      const modelRelationshipField = modelRelationshipFieldTuple[1].relationship;
+      if (
+        modelRelationshipField &&
+        'associatedFields' in modelRelationshipField &&
+        modelRelationshipField.associatedFields
+      ) {
+        const indexOfKey = modelRelationshipField.associatedFields.indexOf(relationshipFieldName);
+        if (indexOfKey !== -1) {
+          const relatedPrimaryKey = relatedModel.primaryKeys[indexOfKey];
+          if (relatedPrimaryKey) {
+            // index on parent of 1:1
+            return relatedPrimaryKey;
+          }
+        }
+      }
+    }
+  }
+
+  throw new InternalError(`Cannot find corresponding key for scalar relationship field ${relationshipFieldName}`);
 }
 
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
@@ -102,7 +139,7 @@ function getModelDisplayValue({
       !fieldObject.relationship &&
       !(typeof fieldObject.dataType === 'string' && scalarNonReadableFields.has(fieldObject.dataType)) &&
       !(typeof fieldObject.dataType === 'object' && 'nonModel' in fieldObject.dataType) &&
-      !(typeof fieldObject.dataType === 'object' && 'model' in fieldObject.dataType),
+      !isModelDataType(fieldObject),
   )?.[0];
 
   if (firstReadableNonKeyField) {
@@ -162,7 +199,7 @@ function getValueMappings({
   if (field.relationship) {
     const modelName = field.relationship.relatedModelName;
     const relatedModel = allModels[modelName];
-    const isModelType = typeof field.dataType === 'object' && 'model' in field.dataType;
+    const isModelType = isModelDataType(field);
     // if model, store all keys; else, store corresponding primary key
     const keys = isModelType
       ? relatedModel.primaryKeys
@@ -219,12 +256,7 @@ export function getFieldConfigFromModelField({
   //   dataType.model = field.relationship.relatedModelName;
   // }
   let { dataType } = field;
-  if (
-    field.relationship &&
-    typeof field.dataType === 'object' &&
-    'model' in field.dataType &&
-    dataSchema.models[field.dataType.model]?.isJoinTable
-  ) {
+  if (field.relationship && isModelDataType(field) && dataSchema.models[field.dataType.model]?.isJoinTable) {
     dataType = { model: field.relationship.relatedModelName };
   }
 
@@ -295,7 +327,7 @@ export function mapModelFieldsConfigs({
       (fieldName === 'id' && field.dataType === 'ID' && field.required) ||
       !checkIsSupportedAsFormField(field, featureFlags) ||
       (field.relationship &&
-        !(typeof field.dataType === 'object' && 'model' in field.dataType) &&
+        !isModelDataType(field) &&
         // if index overlaps with that of BELONGS_TO, the model field will establish bidirectionality automatically
         !(
           'isHasManyIndex' in field.relationship &&

@@ -34,6 +34,27 @@
         "isArray": true
       },
       "label": "phone"
+    },
+    "city": {
+      "inputType": {
+        "type": "Autocomplete",
+        "name": "city",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "value": "SF"
+              }
+            },
+            {
+              "value": {
+                "value": "LA"
+              }
+            }
+          ]
+        }
+      },
+      "label": "City"
     }
   },
   "sectionalElements": {},

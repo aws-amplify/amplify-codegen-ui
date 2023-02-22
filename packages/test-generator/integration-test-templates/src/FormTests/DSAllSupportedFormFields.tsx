@@ -80,6 +80,7 @@ const initializeUpdate1TestData = async ({
       boolean: true,
       awsJson: JSON.stringify({ myKey: 'myValue' }),
       nonModelField: { StringVal: 'myValue' },
+      nonModelFieldArray: [{ NumVal: 123 }],
       awsPhone: '713 343 5938',
       enum: 'NEW_YORK',
       HasOneUser: connectedUser,
@@ -190,7 +191,7 @@ export default function () {
         <DataStoreFormUpdateAllSupportedFormFields
           id={dataStoreFormUpdateAllSupportedFormFieldsRecordId}
           onSuccess={async () => {
-            const records = await DataStore.query(AllSupportedFormFields, (a) => a.string.eq('Update1String'));
+            const records = await DataStore.query(AllSupportedFormFields, (a) => a.string.contains('Update1String'));
             const record = records[0];
 
             const ManyToManyTags = await getModelsFromJoinTableRecords<

@@ -15,7 +15,6 @@
  */
 import {
   FieldConfigMetadata,
-  InvalidInputError,
   StudioFormValueMappings,
   InternalError,
   ConcatenatedStudioComponentProperty,
@@ -37,6 +36,7 @@ import {
 import {
   buildBindingExpression,
   buildConcatExpression,
+  getFixedComponentPropValueExpression,
   isBoundProperty,
   isConcatenatedProperty,
   isFixedPropertyWithValue,
@@ -71,6 +71,9 @@ const getDisplayValueCallChain = ({ fieldName, recordString }: { fieldName: stri
   examples:
   for model -
   authorRecords
+  .filter(
+    (r, i, arr) => arr.findIndex(member => member.shape === r.shape) === i
+    )
   .map((r) => ({
     id: r?.id,
     label: r?.id,
@@ -81,7 +84,85 @@ function getSuggestionsForRelationshipScalar({ modelName, key }: { modelName: st
 
   return factory.createCallExpression(
     factory.createPropertyAccessExpression(
-      factory.createIdentifier(getRecordsName(modelName)),
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier(getRecordsName(modelName)),
+          factory.createIdentifier('filter'),
+        ),
+        undefined,
+        [
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier(recordString),
+                undefined,
+                undefined,
+                undefined,
+              ),
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('i'),
+                undefined,
+                undefined,
+                undefined,
+              ),
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier('arr'),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBinaryExpression(
+              factory.createCallExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier('arr'),
+                  factory.createIdentifier('findIndex'),
+                ),
+                undefined,
+                [
+                  factory.createArrowFunction(
+                    undefined,
+                    undefined,
+                    [
+                      factory.createParameterDeclaration(
+                        undefined,
+                        undefined,
+                        undefined,
+                        factory.createIdentifier('member'),
+                        undefined,
+                        undefined,
+                        undefined,
+                      ),
+                    ],
+                    undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    factory.createBinaryExpression(
+                      buildAccessChain(['member', key]),
+                      factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                      buildAccessChain([recordString, key]),
+                    ),
+                  ),
+                ],
+              ),
+              factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+              factory.createIdentifier('i'),
+            ),
+          ),
+        ],
+      ),
       factory.createIdentifier('map'),
     ),
     undefined,
@@ -228,6 +309,38 @@ export function extractModelAndKeys(valueMappings?: StudioFormValueMappings): { 
   }
   return { model, keys };
 }
+/*
+ *  [{ id: 'value', label: 'valuelabel' }, { id: 'value', label: 'label' }]
+ */
+export function buildFixedAutocompleteOptions(fieldName: string, valueMappings?: StudioFormValueMappings) {
+  return factory.createArrayLiteralExpression(
+    valueMappings?.values.map(({ displayValue, value }) => {
+      let idStringLiteral: Expression | undefined;
+      let labelStringLiteral: Expression | undefined;
+      if (isFixedPropertyWithValue(value)) {
+        idStringLiteral = getFixedComponentPropValueExpression(value);
+        labelStringLiteral = getFixedComponentPropValueExpression(value);
+      }
+      if (displayValue && isFixedPropertyWithValue(displayValue)) {
+        labelStringLiteral = getFixedComponentPropValueExpression(displayValue);
+      }
+      if (!idStringLiteral) {
+        throw new InternalError(`Unable to render value for ${fieldName} Autocomplete option`);
+      }
+      if (!labelStringLiteral) {
+        throw new InternalError(`Unable to render display value for ${fieldName} Autocomplete option`);
+      }
+      return factory.createObjectLiteralExpression(
+        [
+          factory.createPropertyAssignment(factory.createIdentifier('id'), idStringLiteral),
+          factory.createPropertyAssignment(factory.createIdentifier('label'), labelStringLiteral),
+        ],
+        true,
+      );
+    }),
+    false,
+  );
+}
 
 /**
     example:
@@ -257,10 +370,8 @@ export function getAutocompleteOptionsProp({
     } else if (keys) {
       options = getSuggestionsForRelationshipScalar({ modelName: model, key: keys[0] });
     }
-  }
-
-  if (!options) {
-    throw new InvalidInputError(`Invalid value mappings on ${fieldName}`);
+  } else {
+    options = buildFixedAutocompleteOptions(fieldName, valueMappings);
   }
 
   return factory.createJsxAttribute(

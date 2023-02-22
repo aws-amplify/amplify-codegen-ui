@@ -6,32 +6,36 @@
     "dataTypeName": "Flex"
   },
   "fields": {
-    "caption" : {
-      "inputType" : {
-        "placeholder" : "i love code",
-        "required" : false,
-        "type" : "TextField"
+    "caption": {
+      "inputType": {
+        "placeholder": "i love code",
+        "required": false,
+        "type": "TextField"
       },
-      "label" : "Caption",
-      "position" : {
-        "rightOf" : "username"
+      "label": "Caption",
+      "position": {
+        "rightOf": "username"
       }
     },
-    "username" : {
-      "inputType" : {
-        "placeholder" : "john",
-        "required" : false,
-        "type" : "TextField"
+    "username": {
+      "inputType": {
+        "placeholder": "john",
+        "required": false,
+        "type": "TextField"
       },
-      "label" : "Username",
-      "position" : {
-        "fixed" : "first"
+      "label": "Username",
+      "position": {
+        "fixed": "first"
       },
-      "validations" : [ {
-        "numValues" : [ 2 ],
-        "type" : "GreaterThanChar",
-        "validationMessage" : "needs to be of length 2"
-      } ]
+      "validations": [
+        {
+          "numValues": [
+            2
+          ],
+          "type": "GreaterThanChar",
+          "validationMessage": "needs to be of length 2"
+        }
+      ]
     },
     "Customtags": {
       "inputType": {
@@ -42,6 +46,29 @@
       "label": "Tags",
       "position": {
         "below": "username"
+      }
+    },
+    "Autocomplete": {
+      "position": {
+        "below": "Customtags"
+      },
+      "inputType": {
+        "type": "Autocomplete",
+        "valueMappings": {
+          "values": [
+            {
+              "value": {
+                "value": "option1"
+              }
+            },
+            {
+              "value": {
+                "value": "option2"
+              }
+            }
+          ]
+        },
+        "required": false
       }
     }
   },

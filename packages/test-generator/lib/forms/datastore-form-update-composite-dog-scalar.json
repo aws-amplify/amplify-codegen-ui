@@ -1,0 +1,40 @@
+{
+    "id": "kdjfskdfddj",
+    "name": "DataStoreFormUpdateCompositeDogScalar",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "CompositeDog"
+    },
+    "formActionType": "update",
+    "fields": {
+        "CompositeBowl": {
+            "excluded": true
+        },
+        "CompositeOwner": {
+            "excluded": true
+        },
+        "compositeDogCompositeBowlShape": {
+            "inputType": {
+                "type": "Autocomplete"
+            }
+        },
+        "compositeDogCompositeBowlSize": {
+            "inputType": {
+                "type": "Autocomplete"
+            }
+        },
+        "compositeDogCompositeOwnerLastName": {
+            "inputType": {
+                "type": "Autocomplete"
+            }
+        },
+        "compositeDogCompositeOwnerFirstName": {
+            "inputType": {
+                "type": "Autocomplete"
+            }
+        }
+    },
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

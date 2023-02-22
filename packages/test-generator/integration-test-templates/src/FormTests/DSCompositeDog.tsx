@@ -16,7 +16,11 @@
 import { AmplifyProvider, View, Heading, Text, Divider } from '@aws-amplify/ui-react';
 import React, { useState, useEffect, useRef, SetStateAction } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
-import { DataStoreFormUpdateCompositeDog, DataStoreFormCreateCompositeDog } from '../ui-components'; // eslint-disable-line import/extensions, max-len
+import {
+  DataStoreFormUpdateCompositeDog,
+  DataStoreFormCreateCompositeDog,
+  DataStoreFormUpdateCompositeDogScalar,
+} from '../ui-components'; // eslint-disable-line import/extensions, max-len
 import {
   CompositeDog,
   CompositeOwner,
@@ -188,6 +192,27 @@ export default function () {
       <Heading>DataStoreFormUpdateCompositeDogById</Heading>
       <View id="DataStoreFormUpdateCompositeDogById">
         <DataStoreFormUpdateCompositeDog id={{ name: 'Yundoo', description: 'tiny but mighty' }} />
+      </View>
+      <Heading>DataStoreFormUpdateCompositeDogScalar</Heading>
+      <View id="DataStoreFormUpdateCompositeDogScalar">
+        <DataStoreFormUpdateCompositeDogScalar
+          compositeDog={dataStoreFormUpdateCompositeDogRecord}
+          onSuccess={async () => {
+            const record = (await DataStore.query(CompositeDog, {
+              name: 'Yundoo',
+              description: 'tiny but mighty',
+            })) as LazyCompositeDog;
+
+            setDataStoreFormUpdateCompositeDogResults(
+              JSON.stringify({
+                ...record,
+                CompositeBowl: await record.CompositeBowl,
+                CompositeOwner: await record.CompositeOwner,
+              }),
+            );
+          }}
+        />
+        <Text>{dataStoreFormUpdateCompositeDogResults}</Text>
       </View>
     </AmplifyProvider>
   );

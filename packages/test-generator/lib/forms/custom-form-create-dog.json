@@ -33,6 +33,27 @@
               "type": "IPAddressField",
               "required": true
           }
+      },
+      "breed": {
+        "label": "Breed",
+        "inputType": {
+          "type": "Autocomplete",
+          "valueMappings": {
+            "values": [
+              {
+                "value": {
+                  "value": "Retriever"
+                }
+              },
+              {
+                "value": {
+                  "value": "Shepherd"
+                }
+              }
+            ]
+          },
+          "required": false
+        }
       }
   },
   "sectionalElements": {

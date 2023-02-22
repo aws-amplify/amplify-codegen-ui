@@ -614,6 +614,20 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });
+
+      it('should render scalar relationship fields if overrides', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer(
+          'forms/composite-dog-datastore-update-scalar',
+          'datastore/composite-relationships',
+          undefined,
+          { isNonModelSupported: true, isRelationshipSupported: true },
+        );
+
+        expect(componentText).toContain('arr.findIndex((member) => member?.shape === r?.shape) === i');
+
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
     });
   });
 });

@@ -92,8 +92,7 @@ export const addFormAttributes = (
       attributes.push(valueAttribute);
     }
 
-    // TODO: Allow for other relationship types once valueMappings available
-    if (fieldConfig.componentType === 'Autocomplete' && fieldConfig.relationship) {
+    if (fieldConfig.componentType === 'Autocomplete') {
       attributes.push(getAutocompleteOptionsProp({ fieldName: componentName, fieldConfig }));
       attributes.push(
         buildOnSelect({ sanitizedFieldName: renderedVariableName, fieldConfig, fieldName: componentName }),
@@ -143,6 +142,13 @@ export const addFormAttributes = (
         factory.createJsxAttribute(
           factory.createIdentifier('labelHidden'),
           factory.createJsxExpression(undefined, factory.createTrue()),
+        ),
+      );
+    } else if (fieldConfig.componentType === 'Autocomplete') {
+      attributes.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('labelHidden'),
+          factory.createJsxExpression(undefined, factory.createFalse()),
         ),
       );
     }
