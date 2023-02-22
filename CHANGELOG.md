@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.8.0...v2.9.0) (2023-02-22)
+
+
+### Bug Fixes
+
+* change timestamp check in date validation function ([#911](https://github.com/aws-amplify/amplify-codegen-ui/issues/911)) ([cf96a1c](https://github.com/aws-amplify/amplify-codegen-ui/commit/cf96a1c13e166fddfc77e7a6c005343acc23cc8d))
+* improve join table identification ([5d80ac8](https://github.com/aws-amplify/amplify-codegen-ui/commit/5d80ac8fa70e4f321fa78cb5711da8f694600fa5))
+* update conditional prop codegen ([#917](https://github.com/aws-amplify/amplify-codegen-ui/issues/917)) ([4b47155](https://github.com/aws-amplify/amplify-codegen-ui/commit/4b47155fe50964a309ecf42dbad09bdde6559d27))
+
+
+### Features
+
+* allow boolean operator on predicate ([#912](https://github.com/aws-amplify/amplify-codegen-ui/issues/912)) ([9a716a3](https://github.com/aws-amplify/amplify-codegen-ui/commit/9a716a3c503410bce35571fdee7cef40bf7c2acb))
+* change default component for AWSTimestamp to NumberField ([820094c](https://github.com/aws-amplify/amplify-codegen-ui/commit/820094c4c46d37f9d0f41c242f77dc9368939b82))
+
+
+
+
+
 # [2.8.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.2...v2.8.0) (2023-01-27)
 
 

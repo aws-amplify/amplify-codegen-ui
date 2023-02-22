@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.8.0...v2.9.0) (2023-02-22)
+
+
+### Features
+
+* change default component for AWSTimestamp to NumberField ([820094c](https://github.com/aws-amplify/amplify-codegen-ui/commit/820094c4c46d37f9d0f41c242f77dc9368939b82))
+
+
+
+
+
 # [2.8.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.2...v2.8.0) (2023-01-27)
 
 
