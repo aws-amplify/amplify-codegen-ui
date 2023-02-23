@@ -34,6 +34,7 @@ import { shouldWrapInArrayField } from './render-checkers';
 import { getAutocompleteOptionsProp } from './model-values';
 import { buildCtaLayoutProperties } from '../../react-component-render-helper';
 import { lowerCaseFirst } from '../../helpers';
+import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../../utils/constants';
 
 export const addFormAttributes = (
   component: StudioComponent | StudioComponentChild,
@@ -165,8 +166,11 @@ export const addFormAttributes = (
       resetStateValues();
     }}
   */
-  const firstPrimaryKey = dataSchema?.models[dataTypeName]?.primaryKeys[0];
-  const idProp = firstPrimaryKey ? getPropName(firstPrimaryKey) : '';
+  // multiple primary keys means it is a composite key
+  const primaryKeys = dataSchema?.models[dataTypeName]?.primaryKeys?.length
+    ? dataSchema.models[dataTypeName].primaryKeys
+    : [''];
+  const idProp = primaryKeys.length > 1 ? getPropName(COMPOSITE_PRIMARY_KEY_PROP_NAME) : getPropName(primaryKeys[0]);
   if (componentName === 'ClearButton' || componentName === 'ResetButton') {
     attributes.push(
       factory.createJsxAttribute(

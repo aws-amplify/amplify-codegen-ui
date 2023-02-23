@@ -136,4 +136,11 @@ describe('FormTests - DSCompositeDog', () => {
       });
     });
   });
+
+  specify('update form should load Data Store model with composite key', () => {
+    cy.get('#DataStoreFormUpdateCompositeDogById').within(() => {
+      getInputByLabel('Name').should('have.value', 'Yundoo');
+      getInputByLabel('Description').should('have.value', 'tiny but mighty');
+    });
+  });
 });
