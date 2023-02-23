@@ -1,0 +1,14 @@
+{
+  "id": "123",
+  "name": "DataStoreFormUpdateBidirectionalOwner",
+  "formActionType": "update",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "BiDirectionalOwner"
+  },
+  "sectionalElements": {},
+  "fields": {},
+  "style": {},
+  "cta": {},
+  "schemaVersion": "1.0"
+}

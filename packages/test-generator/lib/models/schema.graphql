@@ -149,3 +149,21 @@ type CompositeVet @model {
   city: String!
   CompositeDogs: [CompositeDog] @manyToMany(relationName: "CompositeDogCompositeVet")
 }
+
+type BiDirectionalDog @model {
+  name: String
+  BiDirectionalOwner: BiDirectionalOwner @belongsTo
+  BiDirectionalToys: [BiDirectionalToy] @hasMany
+}
+
+type BiDirectionalOwner @model {
+  name: String
+  biDirectionalDogID: ID!
+  BiDirectionalDog: BiDirectionalDog! @hasOne(fields: ["biDirectionalDogID"])
+}
+
+type BiDirectionalToy @model {
+  name: String
+  biDirectionalDogID: ID!
+  BiDirectionalDog: BiDirectionalDog! @belongsTo(fields: ["biDirectionalDogID"])
+}

@@ -813,3 +813,114 @@ export declare const CompositeDogCompositeVet: (new (
     mutator: (draft: MutableModel<CompositeDogCompositeVet>) => MutableModel<CompositeDogCompositeVet> | void,
   ): CompositeDogCompositeVet;
 };
+
+type BiDirectionalDogMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type BiDirectionalOwnerMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type BiDirectionalToyMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+};
+
+type EagerBiDirectionalDog = {
+  readonly id: string;
+  readonly name?: string | null;
+  readonly BiDirectionalOwner?: BiDirectionalOwner | null;
+  readonly BiDirectionalToys?: (BiDirectionalToy | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyBiDirectionalDog = {
+  readonly id: string;
+  readonly name?: string | null;
+  readonly BiDirectionalOwner: AsyncItem<BiDirectionalOwner | undefined>;
+  readonly BiDirectionalToys: AsyncCollection<BiDirectionalToy>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type BiDirectionalDog = LazyLoading extends LazyLoadingDisabled
+  ? EagerBiDirectionalDog
+  : LazyBiDirectionalDog;
+
+export declare const BiDirectionalDog: (new (
+  init: ModelInit<BiDirectionalDog, BiDirectionalDogMetaData>,
+) => BiDirectionalDog) & {
+  copyOf(
+    source: BiDirectionalDog,
+    mutator: (
+      draft: MutableModel<BiDirectionalDog, BiDirectionalDogMetaData>,
+    ) => MutableModel<BiDirectionalDog, BiDirectionalDogMetaData> | void,
+  ): BiDirectionalDog;
+};
+
+type EagerBiDirectionalOwner = {
+  readonly id: string;
+  readonly name?: string | null;
+  readonly BiDirectionalDog: BiDirectionalDog;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly biDirectionalOwnerBiDirectionalDogId: string;
+};
+
+type LazyBiDirectionalOwner = {
+  readonly id: string;
+  readonly name?: string | null;
+  readonly BiDirectionalDog: AsyncItem<BiDirectionalDog>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly biDirectionalOwnerBiDirectionalDogId: string;
+};
+
+export declare type BiDirectionalOwner = LazyLoading extends LazyLoadingDisabled
+  ? EagerBiDirectionalOwner
+  : LazyBiDirectionalOwner;
+
+export declare const BiDirectionalOwner: (new (
+  init: ModelInit<BiDirectionalOwner, BiDirectionalOwnerMetaData>,
+) => BiDirectionalOwner) & {
+  copyOf(
+    source: BiDirectionalOwner,
+    mutator: (
+      draft: MutableModel<BiDirectionalOwner, BiDirectionalOwnerMetaData>,
+    ) => MutableModel<BiDirectionalOwner, BiDirectionalOwnerMetaData> | void,
+  ): BiDirectionalOwner;
+};
+
+type EagerBiDirectionalToy = {
+  readonly id: string;
+  readonly name?: string | null;
+  readonly BiDirectionalDog: BiDirectionalDog;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly biDirectionalDogBiDirectionalToysId?: string | null;
+};
+
+type LazyBiDirectionalToy = {
+  readonly id: string;
+  readonly name?: string | null;
+  readonly BiDirectionalDog: AsyncItem<BiDirectionalDog>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly biDirectionalDogBiDirectionalToysId?: string | null;
+};
+
+export declare type BiDirectionalToy = LazyLoading extends LazyLoadingDisabled
+  ? EagerBiDirectionalToy
+  : LazyBiDirectionalToy;
+
+export declare const BiDirectionalToy: (new (
+  init: ModelInit<BiDirectionalToy, BiDirectionalToyMetaData>,
+) => BiDirectionalToy) & {
+  copyOf(
+    source: BiDirectionalToy,
+    mutator: (
+      draft: MutableModel<BiDirectionalToy, BiDirectionalToyMetaData>,
+    ) => MutableModel<BiDirectionalToy, BiDirectionalToyMetaData> | void,
+  ): BiDirectionalToy;
+};

@@ -20,6 +20,7 @@ import DSAllSupportedFormFields from './DSAllSupportedFormFields';
 import DSCompositeDog from './DSCompositeDog';
 import DSCompositeToy from './DSCompositeToy';
 import DSCPKTeacher from './DSCPKTeacher';
+import DSBidirectionalOwnerDog from './DSBidirectionalOwnerDog';
 
 export default function FormTests() {
   const { subject } = useParams();
@@ -37,6 +38,8 @@ export default function FormTests() {
       return <DSCompositeToy />;
     case 'DSCPKTeacher':
       return <DSCPKTeacher />;
+    case 'DSBidirectionalOwnerDog':
+      return <DSBidirectionalOwnerDog />;
     default:
       return (
         <div>
@@ -59,6 +62,9 @@ export default function FormTests() {
             </li>
             <li>
               <Link to="DSCPKTeacher">DSCPKTeacher</Link>
+            </li>
+            <li>
+              <Link to="DSBidirectionalOwnerDog">DSBidirectionalOwnerDog</Link>
             </li>
           </ul>
         </div>
