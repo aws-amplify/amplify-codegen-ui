@@ -18,13 +18,20 @@ import { AmplifyProvider, View, Heading, Text } from '@aws-amplify/ui-react';
 import { useState, useEffect, useRef } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
 import { DataStoreFormUpdateBidirectionalDog } from '../ui-components'; // eslint-disable-line import/extensions, max-len
-import { BiDirectionalDog, BiDirectionalOwner } from '../models';
+import { BiDirectionalDog, BiDirectionalOwner, BiDirectionalToy } from '../models';
 
 const initializeTestData = async (): Promise<{
   connectedOwner: BiDirectionalOwner;
   connectedDog: BiDirectionalDog;
 }> => {
   const connectedDog = await DataStore.save(new BiDirectionalDog({ name: 'Fluffy' }));
+  await DataStore.save(
+    new BiDirectionalToy({
+      name: 'Bone',
+      BiDirectionalDog: connectedDog,
+      biDirectionalDogBiDirectionalToysId: connectedDog.id,
+    }),
+  );
   const connectedOwner = await DataStore.save(
     new BiDirectionalOwner({
       name: 'Fluffys Owner',
