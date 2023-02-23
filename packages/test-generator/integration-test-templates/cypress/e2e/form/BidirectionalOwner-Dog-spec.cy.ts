@@ -20,12 +20,24 @@ describe('FormTests - DSBidirectionalDog', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000/form-tests/DSBidirectionalOwnerDog');
   });
+
   specify('Update Dog - should throw when disconnecting required hasOne field', () => {
     cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
       removeArrayItem('Fluffys Owner');
 
       cy.contains('Submit').click();
       cy.contains('cannot be unlinked because BiDirectionalOwner requires BiDirectionalDog');
+    });
+  });
+
+  specify('Update Dog - should throw when disconnecting required hasMany field', () => {
+    cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
+      removeArrayItem('Bone');
+
+      cy.contains('Submit').click();
+      cy.contains(
+        'cannot be unlinked from BiDirectionalDog because biDirectionalDogBiDirectionalToysId is a required field.',
+      );
     });
   });
 });
