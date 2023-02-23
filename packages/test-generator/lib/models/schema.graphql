@@ -158,8 +158,7 @@ type BiDirectionalDog @model {
 
 type BiDirectionalOwner @model {
   name: String
-  biDirectionalDogID: ID!
-  BiDirectionalDog: BiDirectionalDog! @hasOne(fields: ["biDirectionalDogID"])
+  BiDirectionalDog: BiDirectionalDog! @hasOne
 }
 
 type BiDirectionalToy @model {
