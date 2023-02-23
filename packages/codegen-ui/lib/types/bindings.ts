@@ -109,7 +109,7 @@ export type StudioComponentPredicate = {
   field?: string;
   operand?: string;
   operator?: string;
-  operandType?: 'string' | 'boolean' | 'number';
+  operandType?: string;
 };
 
 /**
