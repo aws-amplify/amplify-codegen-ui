@@ -17,26 +17,18 @@ import '@aws-amplify/ui-react/styles.css';
 import { AmplifyProvider, View, Heading, Text } from '@aws-amplify/ui-react';
 import { useState, useEffect, useRef } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
-import { DataStoreFormUpdateBidirectionalDog } from '../ui-components'; // eslint-disable-line import/extensions, max-len
-import { BiDirectionalDog, BiDirectionalOwner, BiDirectionalToy } from '../models';
+import { DataStoreFormCreateBidirectionalOwner, DataStoreFormUpdateBidirectionalOwner } from '../ui-components'; // eslint-disable-line import/extensions, max-len
+import { BiDirectionalDog, BiDirectionalOwner } from '../models';
 
 const initializeTestData = async (): Promise<{
   connectedOwner: BiDirectionalOwner;
-  connectedDog: BiDirectionalDog;
 }> => {
   const connectedDog = await DataStore.save(new BiDirectionalDog({ name: 'Fluffy' }));
-  await DataStore.save(
-    new BiDirectionalToy({
-      name: 'Bone',
-      BiDirectionalDog: connectedDog,
-      biDirectionalDogBiDirectionalToysId: connectedDog.id,
-    }),
-  );
   const connectedOwner = await DataStore.save(
     new BiDirectionalOwner({
       name: 'Fluffys Owner',
       BiDirectionalDog: connectedDog,
-      biDirectionalOwnerBiDirectionalDogId: connectedDog.id,
+      biDirectionalDogID: connectedDog.id,
     }),
   );
   await DataStore.save(
@@ -47,14 +39,31 @@ const initializeTestData = async (): Promise<{
     }),
   );
 
-  return { connectedOwner, connectedDog };
+  const connectedDog2 = await DataStore.save(new BiDirectionalDog({ name: 'Max' }));
+  const connectedOwner2 = await DataStore.save(
+    new BiDirectionalOwner({
+      name: 'Maxs Owner',
+      BiDirectionalDog: connectedDog2,
+      biDirectionalDogID: connectedDog2.id,
+    }),
+  );
+  await DataStore.save(
+    BiDirectionalDog.copyOf(connectedDog2, (updated) => {
+      Object.assign(updated, {
+        BiDirectionalOwner: connectedOwner2,
+      });
+    }),
+  );
+
+  return { connectedOwner };
 };
 
 export default function () {
-  const [DataStoreCreateBidirectionalDogRecord, setDataStoreCreateBidirectionalDogRecord] = useState<
-    BiDirectionalDog | undefined
+  const [DataStoreFormUpdateBidirectionalOwnerRecord, setDataStoreFormUpdateBidirectionalOwnerRecord] = useState<
+    BiDirectionalOwner | undefined
   >();
-  const [DataStoreCreateBidirectionalDogError, setDataStoreCreateBidirectionalDogError] = useState('');
+  const [DataStoreFormCreateBidirectionalOwnerError, setDataStoreFormCreateBidirectionalOwnerError] = useState('');
+  const [DataStoreFormUpdateBidirectionalOwnerError, setDataStoreFormUpdateBidirectionalOwnerError] = useState('');
   const [isInitialized, setInitialized] = useState(false);
   const initializeStarted = useRef(false);
 
@@ -65,8 +74,9 @@ export default function () {
       }
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
-      const { connectedDog } = await initializeTestData();
-      setDataStoreCreateBidirectionalDogRecord(connectedDog);
+      const { connectedOwner } = await initializeTestData();
+      setDataStoreFormUpdateBidirectionalOwnerRecord(connectedOwner);
+
       setInitialized(true);
     };
 
@@ -80,15 +90,24 @@ export default function () {
 
   return (
     <AmplifyProvider>
-      <Heading>DataStoreFormUpdateBidirectionalDog</Heading>
-      <View id="DataStoreFormUpdateBidirectionalDog">
-        <DataStoreFormUpdateBidirectionalDog
-          id={DataStoreCreateBidirectionalDogRecord?.id}
+      <Heading>DataStoreFormCreateBidirectionalOwner</Heading>
+      <View id="DataStoreFormCreateBidirectionalOwner">
+        <DataStoreFormCreateBidirectionalOwner
           onError={(fields, err) => {
-            setDataStoreCreateBidirectionalDogError(err);
+            setDataStoreFormCreateBidirectionalOwnerError(err);
           }}
         />
-        <Text>{DataStoreCreateBidirectionalDogError}</Text>
+        <Text>{DataStoreFormCreateBidirectionalOwnerError}</Text>
+      </View>
+      <Heading>DataStoreFormUpdateBidirectionalOwner</Heading>
+      <View id="DataStoreFormUpdateBidirectionalOwner">
+        <DataStoreFormUpdateBidirectionalOwner
+          id={DataStoreFormUpdateBidirectionalOwnerRecord?.id}
+          onError={(fields, err) => {
+            setDataStoreFormUpdateBidirectionalOwnerError(err);
+          }}
+        />
+        <Text>{DataStoreFormUpdateBidirectionalOwnerError}</Text>
       </View>
     </AmplifyProvider>
   );

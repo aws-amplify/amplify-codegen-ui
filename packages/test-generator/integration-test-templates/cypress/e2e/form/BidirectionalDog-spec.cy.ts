@@ -14,16 +14,28 @@
   limitations under the License.
  */
 
-import { removeArrayItem } from '../../utils/form';
+import { clickAddToArray, getArrayFieldButtonByLabel, removeArrayItem, typeInAutocomplete } from '../../utils/form';
 
 describe('FormTests - DSBidirectionalDog', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/form-tests/DSBidirectionalOwnerDog');
+    cy.visit('http://localhost:3000/form-tests/DSBidirectionalDog');
   });
 
   specify('Update Dog - should throw when disconnecting required hasOne field', () => {
     cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
       removeArrayItem('Fluffys Owner');
+
+      cy.contains('Submit').click();
+      cy.contains('cannot be unlinked because BiDirectionalOwner requires BiDirectionalDog');
+    });
+  });
+
+  specify('Update Dog - should throw when changing Owner', () => {
+    cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
+      removeArrayItem('Fluffys Owner');
+      getArrayFieldButtonByLabel('Bi directional owner').click();
+      typeInAutocomplete('M{downArrow}{enter}');
+      clickAddToArray();
 
       cy.contains('Submit').click();
       cy.contains('cannot be unlinked because BiDirectionalOwner requires BiDirectionalDog');

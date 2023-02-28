@@ -1335,6 +1335,217 @@ export const schema = {
         },
       ],
     },
+    BiDirectionalDog: {
+      name: 'BiDirectionalDog',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        BiDirectionalOwner: {
+          name: 'BiDirectionalOwner',
+          isArray: false,
+          type: {
+            model: 'BiDirectionalOwner',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['biDirectionalDogBiDirectionalOwnerId'],
+          },
+        },
+        BiDirectionalToys: {
+          name: 'BiDirectionalToys',
+          isArray: true,
+          type: {
+            model: 'BiDirectionalToy',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['biDirectionalDogBiDirectionalToysId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        biDirectionalDogBiDirectionalOwnerId: {
+          name: 'biDirectionalDogBiDirectionalOwnerId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'BiDirectionalDogs',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    BiDirectionalOwner: {
+      name: 'BiDirectionalOwner',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        biDirectionalDogID: {
+          name: 'biDirectionalDogID',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        BiDirectionalDog: {
+          name: 'BiDirectionalDog',
+          isArray: false,
+          type: {
+            model: 'BiDirectionalDog',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'HAS_ONE',
+            associatedWith: ['id'],
+            targetNames: ['biDirectionalDogID'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'BiDirectionalOwners',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    BiDirectionalToy: {
+      name: 'BiDirectionalToy',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        biDirectionalDogID: {
+          name: 'biDirectionalDogID',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        BiDirectionalDog: {
+          name: 'BiDirectionalDog',
+          isArray: false,
+          type: {
+            model: 'BiDirectionalDog',
+          },
+          isRequired: true,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['biDirectionalDogID'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        biDirectionalDogBiDirectionalToysId: {
+          name: 'biDirectionalDogBiDirectionalToysId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+      },
+      syncable: true,
+      pluralName: 'BiDirectionalToys',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
     AllSupportedFormFieldsTag: {
       name: 'AllSupportedFormFieldsTag',
       fields: {
@@ -1619,203 +1830,6 @@ export const schema = {
         },
       ],
     },
-    BiDirectionalDog: {
-      name: 'BiDirectionalDog',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        name: {
-          name: 'name',
-          isArray: false,
-          type: 'String',
-          isRequired: false,
-          attributes: [],
-        },
-        BiDirectionalOwner: {
-          name: 'BiDirectionalOwner',
-          isArray: false,
-          type: {
-            model: 'BiDirectionalOwner',
-          },
-          isRequired: false,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetName: 'biDirectionalDogBiDirectionalOwnerId',
-          },
-        },
-        BiDirectionalToys: {
-          name: 'BiDirectionalToys',
-          isArray: true,
-          type: {
-            model: 'BiDirectionalToy',
-          },
-          isRequired: false,
-          attributes: [],
-          isArrayNullable: true,
-          association: {
-            connectionType: 'HAS_MANY',
-            associatedWith: 'biDirectionalDogBiDirectionalToysId',
-          },
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-      },
-      syncable: true,
-      pluralName: 'BiDirectionalDogs',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-      ],
-    },
-    BiDirectionalOwner: {
-      name: 'BiDirectionalOwner',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        name: {
-          name: 'name',
-          isArray: false,
-          type: 'String',
-          isRequired: false,
-          attributes: [],
-        },
-        BiDirectionalDog: {
-          name: 'BiDirectionalDog',
-          isArray: false,
-          type: {
-            model: 'BiDirectionalDog',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'HAS_ONE',
-            associatedWith: 'BiDirectionalOwner',
-            targetName: 'biDirectionalOwnerBiDirectionalDogId',
-          },
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        biDirectionalOwnerBiDirectionalDogId: {
-          name: 'biDirectionalOwnerBiDirectionalDogId',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-      },
-      syncable: true,
-      pluralName: 'BiDirectionalOwners',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-      ],
-    },
-    BiDirectionalToy: {
-      name: 'BiDirectionalToy',
-      fields: {
-        id: {
-          name: 'id',
-          isArray: false,
-          type: 'ID',
-          isRequired: true,
-          attributes: [],
-        },
-        name: {
-          name: 'name',
-          isArray: false,
-          type: 'String',
-          isRequired: false,
-          attributes: [],
-        },
-        BiDirectionalDog: {
-          name: 'BiDirectionalDog',
-          isArray: false,
-          type: {
-            model: 'BiDirectionalDog',
-          },
-          isRequired: true,
-          attributes: [],
-          association: {
-            connectionType: 'BELONGS_TO',
-            targetName: 'biDirectionalDogID',
-          },
-        },
-        createdAt: {
-          name: 'createdAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        updatedAt: {
-          name: 'updatedAt',
-          isArray: false,
-          type: 'AWSDateTime',
-          isRequired: false,
-          attributes: [],
-          isReadOnly: true,
-        },
-        biDirectionalDogBiDirectionalToysId: {
-          name: 'biDirectionalDogBiDirectionalToysId',
-          isArray: false,
-          type: 'ID',
-          isRequired: false,
-          attributes: [],
-        },
-      },
-      syncable: true,
-      pluralName: 'BiDirectionalToys',
-      attributes: [
-        {
-          type: 'model',
-          properties: {},
-        },
-      ],
-    },
   },
   enums: {
     City: {
@@ -1863,5 +1877,5 @@ export const schema = {
     },
   },
   codegenVersion: '3.3.5',
-  version: '24e9b2e06bca75dbfadafe2d7f78e599',
+  version: 'c067eed5daf5304a1137986ea69ed3f9',
 };
