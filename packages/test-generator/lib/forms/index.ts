@@ -26,6 +26,7 @@ export { default as DataStoreFormCreateCPKTeacher } from './datastore-form-creat
 export { default as DataStoreFormCreateCompositeDog } from './datastore-form-create-composite-dog.json';
 export { default as DataStoreFormUpdateCompositeToy } from './datastore-form-update-composite-toy.json';
 export { default as DataStoreFormUpdateCompositeDogScalar } from './datastore-form-update-composite-dog-scalar.json';
+export { default as DataStoreFormCreateBidirectionalDog } from './datastore-form-create-bidirectional-dog.json';
 export { default as DataStoreFormUpdateBidirectionalDog } from './datastore-form-update-bidirectional-dog.json';
 export { default as DataStoreFormCreateBidirectionalOwner } from './datastore-form-create-bidirectional-owner.json';
 export { default as DataStoreFormUpdateBidirectionalOwner } from './datastore-form-update-bidirectional-owner.json';

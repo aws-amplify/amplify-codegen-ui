@@ -34,6 +34,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'DataStoreFormUpdateAllSupportedFormFields',
   'DataStoreFormUpdateBidirectionalOwner',
   'DataStoreFormUpdateBidirectionalDog',
+  'DataStoreFormCreateBidirectionalDog',
   'DataStoreFormCreateBidirectionalOwner',
   'CustomFormCreateNestedJson',
   'DataStoreFormUpdateCPKTeacher',
