@@ -22,6 +22,7 @@ export const getBasicFormDefinition = (): FormDefinition => ({
       verticalGap: { value: '15px' },
       outerPadding: { value: '20px' },
     },
+    labelDecorator: 'none',
   },
   elements: {},
   elementMatrix: [],

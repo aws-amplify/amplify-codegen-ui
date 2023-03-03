@@ -7,6 +7,9 @@
     "dataTypeName": "AllSupportedFormFields"
   },
   "fields": {
+    "stringArray": {
+      "label": "String array"
+    },
     "HasOneUser": {
       "inputType": {
         "type": "Autocomplete",

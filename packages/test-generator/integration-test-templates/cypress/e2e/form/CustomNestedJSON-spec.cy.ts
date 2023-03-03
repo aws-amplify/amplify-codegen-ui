@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { getInputByLabel } from '../../utils/form';
+import { getDecoratedLabelSibling } from '../../utils/form';
 
 describe('FormTests - CustomNestedJSON', () => {
   beforeEach(() => {
@@ -24,10 +24,10 @@ describe('FormTests - CustomNestedJSON', () => {
   specify('create form should have a working ArrayField', () => {
     cy.get('#CustomFormCreateNestedJson').within(() => {
       cy.contains('Add item').click();
-      getInputByLabel('Animals').type('String1');
+      getDecoratedLabelSibling('Animals - optional').type('String1');
       cy.contains('Add').click();
       cy.contains('Add item').click();
-      getInputByLabel('Animals').type('String2');
+      getDecoratedLabelSibling('Animals - optional').type('String2');
       cy.contains('String1').should('exist');
     });
   });

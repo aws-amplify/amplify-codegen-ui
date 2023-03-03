@@ -24,9 +24,10 @@ const toyName = 'Bone';
 
 const initializeTestData = async (): Promise<{
   connectedDog: BiDirectionalDog;
+  connectedToy: BiDirectionalToy;
 }> => {
   const connectedDog = await DataStore.save(new BiDirectionalDog({ name: 'Fluffy' }));
-  await DataStore.save(
+  const connectedToy = await DataStore.save(
     new BiDirectionalToy({
       name: toyName,
       BiDirectionalDog: connectedDog,
@@ -35,7 +36,7 @@ const initializeTestData = async (): Promise<{
     }),
   );
 
-  return { connectedDog };
+  return { connectedDog, connectedToy };
 };
 
 export default function DSBidirectionalToy() {
@@ -55,24 +56,18 @@ export default function DSBidirectionalToy() {
       }
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
-      await initializeTestData();
-      setupToySubscription();
+      const { connectedDog, connectedToy } = await initializeTestData();
+      setCreatedDogId(connectedDog.id);
+      setDogBiDirectionalToyId({
+        toyBiDirectionalDogIdUpdated: (await connectedToy.BiDirectionalDog).id,
+        biDirectionalDogBiDirectionalToysIdUpdated: connectedToy.biDirectionalDogBiDirectionalToysId,
+      });
       setInitialized(true);
     };
 
     initializeTestState();
     initializeStarted.current = true;
   }, []);
-
-  const setupToySubscription = () => {
-    DataStore.observeQuery(BiDirectionalToy, (toy) => toy.name.eq(toyName)).subscribe(async (snapshot) => {
-      const toy = snapshot.items.pop();
-      if (!toy) return;
-      const { biDirectionalDogBiDirectionalToysId: biDirectionalDogBiDirectionalToysIdUpdated } = toy;
-      const toyBiDirectionalDogIdUpdated = await (await toy.BiDirectionalDog).id;
-      setDogBiDirectionalToyId({ biDirectionalDogBiDirectionalToysIdUpdated, toyBiDirectionalDogIdUpdated });
-    });
-  };
 
   if (!isInitialized) {
     return null;

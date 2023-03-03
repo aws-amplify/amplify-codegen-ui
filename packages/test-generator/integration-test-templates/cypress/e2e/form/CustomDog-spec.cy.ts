@@ -60,7 +60,7 @@ describe('FormTests - CustomDog', () => {
       blurField();
       getInputByLabel('Email').type('spot@gmail.com');
       blurField();
-      getInputByLabel('IP Address').type('invalid ip');
+      getInputByLabel('IP Address*').type('invalid ip');
       blurField();
       cy.contains(ErrorMessageMap.name);
       cy.contains(ErrorMessageMap.age);
@@ -76,7 +76,7 @@ describe('FormTests - CustomDog', () => {
       blurField();
       getInputByLabel('Email').type('spot@yahoo.com');
       blurField();
-      getInputByLabel('IP Address').type('192.0.2.146');
+      getInputByLabel('IP Address*').type('192.0.2.146');
       blurField();
       cy.get('select').select('Blue');
       typeInAutocomplete('Ret{downArrow}{enter}');

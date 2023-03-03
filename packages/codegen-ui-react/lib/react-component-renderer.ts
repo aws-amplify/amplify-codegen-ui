@@ -44,7 +44,8 @@ import {
 } from './workflow';
 import { ImportCollection, ImportSource, ImportValue } from './imports';
 import { addFormAttributes } from './forms';
-import { shouldWrapInArrayField, renderArrayFieldComponent } from './forms/form-renderer-helper';
+import { shouldWrapInArrayField, renderArrayFieldComponent, getDecoratedLabel } from './forms/form-renderer-helper';
+import { getIsRequiredValue } from './forms/form-renderer-helper/label-decorator';
 
 export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
   TPropIn,
@@ -74,13 +75,13 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
 
     this.importCollection.addImport(ImportSource.UI_REACT, this.component.componentType);
 
-    const formFieldConfigs = this.componentMetadata.formMetadata?.fieldConfigs;
+    const { fieldConfigs, labelDecorator } = this.componentMetadata.formMetadata || {};
 
     // Add ArrayField wrapper to element if Array type
     if (
-      formFieldConfigs &&
-      formFieldConfigs[this.component.name] &&
-      shouldWrapInArrayField(formFieldConfigs[this.component.name])
+      fieldConfigs &&
+      fieldConfigs[this.component.name] &&
+      shouldWrapInArrayField(fieldConfigs[this.component.name])
     ) {
       this.importCollection.addImport(ImportSource.UI_REACT, 'Icon');
       this.importCollection.addImport(ImportSource.UI_REACT, 'Badge');
@@ -93,7 +94,9 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       if (typeof this.component.properties.label === 'object' && 'value' in this.component.properties.label) {
         label = this.component.properties.label.value.toString() ?? '';
       }
-      return renderArrayFieldComponent(this.component.name, label, formFieldConfigs, element);
+
+      const isRequired = getIsRequiredValue(this.component.properties.isRequired);
+      return renderArrayFieldComponent(this.component.name, label, fieldConfigs, element, labelDecorator, isRequired);
     }
 
     return element;
@@ -113,6 +116,27 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
           { bindingProperties: { property: stateName } },
           key,
         );
+      }
+      if (
+        this.componentMetadata.formMetadata &&
+        this.componentMetadata.formMetadata.fieldConfigs[this.component.name]
+      ) {
+        const {
+          labelDecorator,
+          fieldConfigs: {
+            [this.component.name]: { isArray },
+          },
+        } = this.componentMetadata.formMetadata;
+        const isRequired = getIsRequiredValue(this.component.properties.isRequired);
+        if (
+          ((key === 'children' && this.component.componentType === 'ToggleButton') || key === 'label') &&
+          ((labelDecorator && labelDecorator === 'required' && isRequired) ||
+            (labelDecorator === 'optional' && !isRequired)) &&
+          'value' in value &&
+          !isArray
+        ) {
+          return getDecoratedLabel(key, value.value.toString(), labelDecorator);
+        }
       }
       return buildOpeningElementProperties(this.componentMetadata, value, key);
     });

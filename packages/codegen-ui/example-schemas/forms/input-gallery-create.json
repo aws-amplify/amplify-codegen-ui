@@ -8,10 +8,17 @@
       "inputType": {
         "required": "false",
         "type": "RadioGroupField",
-        "valueMappings": { "values": [{ "value": "{ value: 'Option' }" }] }
+        "valueMappings": {
+          "values": [
+            {
+              "value": "{ value: 'Option' }"
+            }
+          ]
+        }
       }
     },
     "maybeSlide": {
+      "label": "Maybe Slide",
       "inputType": {
         "type": "ToggleButton"
       }
@@ -24,7 +31,8 @@
     "timestamp": {
       "inputType": {
         "type": "DateTimeField"
-      }    }
+      }
+    }
   },
   "formActionType": "create",
   "name": "InputGalleryCreateForm",
@@ -36,5 +44,6 @@
     "cancel": {},
     "submit": {}
   },
+  "labelDecorator": "optional",
   "id": "00001"
 }

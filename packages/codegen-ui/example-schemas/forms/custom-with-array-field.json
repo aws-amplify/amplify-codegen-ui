@@ -69,5 +69,6 @@
     "submit": {
       "children": "create"
     }
-  }
+  },
+  "labelDecorator": "required"
 }
