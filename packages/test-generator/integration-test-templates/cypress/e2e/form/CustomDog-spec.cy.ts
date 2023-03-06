@@ -47,6 +47,8 @@ describe('FormTests - CustomDog', () => {
       getInputByLabel('Email').type('jd@yahoo.com');
       cy.contains(ErrorMessageMap.validEmail).should('not.exist');
 
+      getInputByLabel('Color').type('Blue');
+
       cy.contains('Clear').click();
 
       // validates on blur & extends with onValidate prop
@@ -66,6 +68,7 @@ describe('FormTests - CustomDog', () => {
 
       // clears and submits
       cy.contains('Clear').click();
+      cy.contains('color: Red');
       getInputByLabel('Name').type('Spot');
       blurField();
       getInputByLabel('Age').type('3');
