@@ -154,6 +154,7 @@ export const getDefaultValueExpression = (
     CheckboxField: factory.createFalse(),
     TextField: factory.createStringLiteral(''),
     TextAreaField: factory.createStringLiteral(''),
+    SelectField: factory.createStringLiteral(''),
   };
 
   if (defaultValue) {
