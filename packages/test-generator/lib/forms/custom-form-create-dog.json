@@ -56,12 +56,11 @@
         }
       },
       "color": {
-        "label": "Color",
         "inputType": {
           "type": "SelectField",
+          "bindingProperties": {},
           "defaultValue": "Red",
           "valueMappings": {
-            "bindingProperties": {},
             "values": [{"value": {"value": "Red"}}, {"value": {"value": "Blue"}}, {"value": {"value": "Green"}}]
           }
         }
