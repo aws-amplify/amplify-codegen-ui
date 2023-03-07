@@ -47,9 +47,12 @@ describe('FormTests - CustomDog', () => {
       getInputByLabel('Email').type('jd@yahoo.com');
       cy.contains(ErrorMessageMap.validEmail).should('not.exist');
 
-      getInputByLabel('Color').type('Blue');
+      cy.get('select').select('Green').should('have.value', 'Green');
 
       cy.contains('Clear').click();
+
+      // validate select field is cleared
+      cy.get('select').should('have.value', '');
 
       // validates on blur & extends with onValidate prop
       getInputByLabel('Name').type('S');
@@ -68,7 +71,6 @@ describe('FormTests - CustomDog', () => {
 
       // clears and submits
       cy.contains('Clear').click();
-      cy.contains('color: Red');
       getInputByLabel('Name').type('Spot');
       blurField();
       getInputByLabel('Age').type('3');
@@ -77,6 +79,7 @@ describe('FormTests - CustomDog', () => {
       blurField();
       getInputByLabel('IP Address').type('192.0.2.146');
       blurField();
+      cy.get('select').select('Blue');
       typeInAutocomplete('Ret{downArrow}{enter}');
       cy.contains('Submit').click();
       cy.contains('submitted: true');
@@ -84,6 +87,7 @@ describe('FormTests - CustomDog', () => {
       cy.contains('age: 3');
       cy.contains('email: spot@yahoo.com');
       cy.contains('ip: 192.0.2.146');
+      cy.contains('color: Blue');
       cy.contains('Retriever');
     });
   });
