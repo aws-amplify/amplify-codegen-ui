@@ -54,6 +54,17 @@
           },
           "required": false
         }
+      },
+      "color": {
+        "label": "Color",
+        "inputType": {
+          "type": "SelectField",
+          "bindingProperties": {},
+            "valueMappings": {
+            "bindingProperties": {},
+              "values": [{"value": {"value": "Red"}}, {"value": {"value": "Blue"}}, {"value": {"value": "Green"}}]
+            }
+        }
       }
   },
   "sectionalElements": {

@@ -2322,7 +2322,7 @@ export default function CustomDataForm(props) {
   const initialValues = {
     name: \\"John Doe\\",
     email: \\"johndoe@amplify.com\\",
-    city: undefined,
+    city: \\"\\",
     category: undefined,
     pages: 0,
     phone: \\"+1-401-152-6995\\",
@@ -2719,7 +2719,7 @@ export default function CustomDataForm(props) {
   const initialValues = {
     name: \\"John Doe\\",
     email: \\"johndoe@amplify.com\\",
-    city: undefined,
+    city: \\"\\",
     category: undefined,
     pages: 0,
     phone: \\"+1-401-152-6995\\",
@@ -3625,7 +3625,7 @@ export default function CustomDataForm(props) {
     name: \\"John Doe\\",
     email: \\"johndoe@amplify.com\\",
     \\"metadata-field\\": \\"\\",
-    city: undefined,
+    city: \\"\\",
     category: undefined,
     pages: 0,
   };
@@ -8201,7 +8201,7 @@ export default function NestedJson(props) {
     props;
   const initialValues = {
     firstName: \\"\\",
-    \\"last-Name\\": undefined,
+    \\"last-Name\\": \\"\\",
     lastName: [],
     bio: {},
   };
@@ -12748,15 +12748,14 @@ export default function TagCreateForm(props) {
     setCurrentPostsValue(undefined);
     setCurrentPostsDisplayValue(\\"\\");
     setStatuses(initialValues.statuses);
-    setCurrentStatusesValue(undefined);
+    setCurrentStatusesValue(\\"\\");
     setErrors({});
   };
   const [currentPostsDisplayValue, setCurrentPostsDisplayValue] =
     React.useState(\\"\\");
   const [currentPostsValue, setCurrentPostsValue] = React.useState(undefined);
   const PostsRef = React.createRef();
-  const [currentStatusesValue, setCurrentStatusesValue] =
-    React.useState(undefined);
+  const [currentStatusesValue, setCurrentStatusesValue] = React.useState(\\"\\");
   const statusesRef = React.createRef();
   const getIDValue = {
     Posts: (r) => JSON.stringify({ id: r?.id }),
@@ -12997,7 +12996,7 @@ export default function TagCreateForm(props) {
             values = result?.statuses ?? values;
           }
           setStatuses(values);
-          setCurrentStatusesValue(undefined);
+          setCurrentStatusesValue(\\"\\");
         }}
         currentFieldValue={currentStatusesValue}
         label={\\"Statuses\\"}
@@ -13007,7 +13006,7 @@ export default function TagCreateForm(props) {
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
         inputFieldRef={statusesRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <SelectField
           label=\\"Statuses\\"
@@ -14902,15 +14901,14 @@ export default function TagCreateForm(props) {
     setCurrentPostsValue(undefined);
     setCurrentPostsDisplayValue(\\"\\");
     setStatuses(initialValues.statuses);
-    setCurrentStatusesValue(undefined);
+    setCurrentStatusesValue(\\"\\");
     setErrors({});
   };
   const [currentPostsDisplayValue, setCurrentPostsDisplayValue] =
     React.useState(\\"\\");
   const [currentPostsValue, setCurrentPostsValue] = React.useState(undefined);
   const PostsRef = React.createRef();
-  const [currentStatusesValue, setCurrentStatusesValue] =
-    React.useState(undefined);
+  const [currentStatusesValue, setCurrentStatusesValue] = React.useState(\\"\\");
   const statusesRef = React.createRef();
   const getIDValue = {
     Posts: (r) => JSON.stringify({ id: r?.id }),
@@ -15151,7 +15149,7 @@ export default function TagCreateForm(props) {
             values = result?.statuses ?? values;
           }
           setStatuses(values);
-          setCurrentStatusesValue(undefined);
+          setCurrentStatusesValue(\\"\\");
         }}
         currentFieldValue={currentStatusesValue}
         label={\\"Statuses\\"}
@@ -15161,7 +15159,7 @@ export default function TagCreateForm(props) {
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
         inputFieldRef={statusesRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <SelectField
           label=\\"Statuses\\"
@@ -18019,7 +18017,7 @@ export default function TagUpdateForm(props) {
     setCurrentPostsValue(undefined);
     setCurrentPostsDisplayValue(\\"\\");
     setStatuses(cleanValues.statuses ?? []);
-    setCurrentStatusesValue(undefined);
+    setCurrentStatusesValue(\\"\\");
     setErrors({});
   };
   const [tagRecord, setTagRecord] = React.useState(tag);
@@ -18047,8 +18045,7 @@ export default function TagUpdateForm(props) {
     React.useState(\\"\\");
   const [currentPostsValue, setCurrentPostsValue] = React.useState(undefined);
   const PostsRef = React.createRef();
-  const [currentStatusesValue, setCurrentStatusesValue] =
-    React.useState(undefined);
+  const [currentStatusesValue, setCurrentStatusesValue] = React.useState(\\"\\");
   const statusesRef = React.createRef();
   const getIDValue = {
     Posts: (r) => JSON.stringify({ id: r?.id }),
@@ -18342,7 +18339,7 @@ export default function TagUpdateForm(props) {
             values = result?.statuses ?? values;
           }
           setStatuses(values);
-          setCurrentStatusesValue(undefined);
+          setCurrentStatusesValue(\\"\\");
         }}
         currentFieldValue={currentStatusesValue}
         label={\\"Statuses\\"}
@@ -18352,7 +18349,7 @@ export default function TagUpdateForm(props) {
         getBadgeText={getDisplayValue.statuses}
         setFieldValue={setCurrentStatusesValue}
         inputFieldRef={statusesRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={\\"\\"}
       >
         <SelectField
           label=\\"Statuses\\"
@@ -22291,7 +22288,7 @@ export default function PostCreateFormRow(props) {
     caption: \\"\\",
     post_url: \\"\\",
     profile_url: \\"\\",
-    status: undefined,
+    status: \\"\\",
     metadata: \\"\\",
     nonModelField: \\"\\",
     nonModelFieldArray: [],
