@@ -42,7 +42,7 @@ export function generateFormDefinition({
   featureFlags?: FormFeatureFlags;
 }): FormDefinition {
   const formDefinition: FormDefinition = {
-    form: { layoutStyle: mapStyles(form.style) },
+    form: { layoutStyle: mapStyles(form.style), labelDecorator: form.labelDecorator || 'none' },
     elements: {},
     buttons: {
       buttonConfigs: {},

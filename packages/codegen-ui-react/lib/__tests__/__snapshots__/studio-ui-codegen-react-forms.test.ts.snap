@@ -3358,7 +3358,12 @@ export default function CustomDataForm(props) {
       {...rest}
     >
       <TextField
-        label=\\"name\\"
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>name</span>
+            <span style={{ color: \\"red\\" }}>*</span>
+          </span>
+        }
         isRequired={true}
         value={name}
         onChange={(e) => {
@@ -3400,7 +3405,12 @@ export default function CustomDataForm(props) {
           setCurrentEmailValue(\\"\\");
         }}
         currentFieldValue={currentEmailValue}
-        label={\\"E-mail\\"}
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>E-mail</span>
+            <span style={{ color: \\"red\\" }}>*</span>
+          </span>
+        }
         items={email}
         hasError={errors?.email?.hasError}
         errorMessage={errors?.email?.errorMessage}
@@ -3444,7 +3454,12 @@ export default function CustomDataForm(props) {
           setCurrentPhoneValue(\\"\\");
         }}
         currentFieldValue={currentPhoneValue}
-        label={\\"phone\\"}
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>phone</span>
+            <span style={{ color: \\"red\\" }}>*</span>
+          </span>
+        }
         items={phone}
         hasError={errors?.phone?.hasError}
         errorMessage={errors?.phone?.errorMessage}
@@ -19977,7 +19992,15 @@ export default function InputGalleryCreateForm(props) {
       {...rest}
     >
       <TextField
-        label=\\"Num\\"
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Num</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
@@ -20015,7 +20038,15 @@ export default function InputGalleryCreateForm(props) {
         {...getOverrideProps(overrides, \\"num\\")}
       ></TextField>
       <TextField
-        label=\\"Rootbeer\\"
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Rootbeer</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         isRequired={false}
         isReadOnly={false}
         type=\\"number\\"
@@ -20053,7 +20084,15 @@ export default function InputGalleryCreateForm(props) {
         {...getOverrideProps(overrides, \\"rootbeer\\")}
       ></TextField>
       <RadioGroupField
-        label=\\"Attend\\"
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Attend</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         name=\\"attend\\"
         isReadOnly={false}
         isRequired=\\"false\\"
@@ -20098,7 +20137,15 @@ export default function InputGalleryCreateForm(props) {
         ></Radio>
       </RadioGroupField>
       <ToggleButton
-        children=\\"Maybe slide\\"
+        children={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Maybe Slide</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         isDisabled={false}
         defaultPressed={false}
         isPressed={maybeSlide}
@@ -20132,7 +20179,15 @@ export default function InputGalleryCreateForm(props) {
         {...getOverrideProps(overrides, \\"maybeSlide\\")}
       ></ToggleButton>
       <CheckboxField
-        label=\\"Maybe check\\"
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Maybe check</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         name=\\"maybeCheck\\"
         value=\\"maybeCheck\\"
         isDisabled={false}
@@ -20190,7 +20245,15 @@ export default function InputGalleryCreateForm(props) {
           setCurrentArrayTypeFieldValue(\\"\\");
         }}
         currentFieldValue={currentArrayTypeFieldValue}
-        label={\\"Array type field\\"}
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Array type field</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         items={arrayTypeField}
         hasError={errors?.arrayTypeField?.hasError}
         errorMessage={errors?.arrayTypeField?.errorMessage}
@@ -20244,7 +20307,15 @@ export default function InputGalleryCreateForm(props) {
           setCurrentJsonArrayValue(\\"\\");
         }}
         currentFieldValue={currentJsonArrayValue}
-        label={\\"Json array\\"}
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Json array</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         items={jsonArray}
         hasError={errors?.jsonArray?.hasError}
         errorMessage={errors?.jsonArray?.errorMessage}
@@ -20273,7 +20344,15 @@ export default function InputGalleryCreateForm(props) {
         ></TextAreaField>
       </ArrayField>
       <TextAreaField
-        label=\\"Json field\\"
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Json field</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         isRequired={false}
         isReadOnly={false}
         onChange={(e) => {
@@ -20306,7 +20385,15 @@ export default function InputGalleryCreateForm(props) {
         {...getOverrideProps(overrides, \\"jsonField\\")}
       ></TextAreaField>
       <TextField
-        label=\\"Timestamp\\"
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Timestamp</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         isRequired={false}
         isReadOnly={false}
         type=\\"datetime-local\\"
@@ -20342,7 +20429,15 @@ export default function InputGalleryCreateForm(props) {
         {...getOverrideProps(overrides, \\"timestamp\\")}
       ></TextField>
       <TextField
-        label=\\"Ippy\\"
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Ippy</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         isRequired={false}
         isReadOnly={false}
         value={ippy}
@@ -20376,7 +20471,15 @@ export default function InputGalleryCreateForm(props) {
         {...getOverrideProps(overrides, \\"ippy\\")}
       ></TextField>
       <TextField
-        label=\\"Timeisnow\\"
+        label={
+          <span style={{ display: \\"inline-flex\\" }}>
+            <span>Timeisnow</span>
+            <span style={{ whiteSpace: \\"pre\\", fontStyle: \\"italic\\" }}>
+              {\\" \\"}
+              - optional
+            </span>
+          </span>
+        }
         isRequired={false}
         isReadOnly={false}
         type=\\"time\\"
