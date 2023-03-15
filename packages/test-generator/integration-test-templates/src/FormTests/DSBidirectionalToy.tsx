@@ -56,8 +56,7 @@ export default function DSBidirectionalToy() {
       }
       // DataStore.clear() doesn't appear to reliably work in this scenario.
       indexedDB.deleteDatabase('amplify-datastore');
-      const { connectedDog, connectedToy } = await initializeTestData();
-      setCreatedDogId(connectedDog.id);
+      const { connectedToy } = await initializeTestData();
       setDogBiDirectionalToyId({
         toyBiDirectionalDogIdUpdated: (await connectedToy.BiDirectionalDog).id,
         biDirectionalDogBiDirectionalToysIdUpdated: connectedToy.biDirectionalDogBiDirectionalToysId,
@@ -82,6 +81,13 @@ export default function DSBidirectionalToy() {
             const results = await DataStore.query(BiDirectionalDog, (dog) => dog.name.eq('Spot'));
             const createdDogId = results.pop()?.id ?? '';
             setCreatedDogId(createdDogId);
+            const stolenToy = (await DataStore.query(BiDirectionalToy, (toy) => toy.name.eq(toyName))).pop();
+            if (stolenToy) {
+              setDogBiDirectionalToyId({
+                toyBiDirectionalDogIdUpdated: (await stolenToy.BiDirectionalDog).id,
+                biDirectionalDogBiDirectionalToysIdUpdated: stolenToy.biDirectionalDogBiDirectionalToysId,
+              });
+            }
           }}
         />
         <Text>

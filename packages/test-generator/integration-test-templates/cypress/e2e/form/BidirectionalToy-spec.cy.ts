@@ -22,17 +22,23 @@ describe('FormTests - DSBidirectionalToy', () => {
   });
 
   specify('Create Dog - should update toy connection to new dog', () => {
+    const connectedPhrase1 = 'Toy BiDirectionalDogId is connected to new dog';
+    const connectedPhrase2 = 'Toy biDirectionalDogBiDirectionalToysId is connected to new dog';
+
     cy.get('#DataStoreFormCreateBidirectionalDog').within(() => {
+      cy.contains(connectedPhrase1).should('not.exist');
+      cy.contains(connectedPhrase2).should('not.exist');
+
       getInputByLabel('Name').type('Spot');
 
       getArrayFieldButtonByLabel('Bi directional toys').click();
-      typeInAutocomplete('F{downArrow}{enter}');
+      typeInAutocomplete('B{downArrow}{enter}');
       clickAddToArray();
 
       cy.contains('Submit').click();
 
-      cy.contains('Toy BiDirectionalDogId is connected to new dog');
-      cy.contains('Toy biDirectionalDogBiDirectionalToysId is connected to new dog');
+      cy.contains(connectedPhrase1);
+      cy.contains(connectedPhrase2);
     });
   });
 });
