@@ -31,7 +31,7 @@ export const FIELD_TYPE_MAP: {
   },
   String: {
     defaultComponent: 'TextField',
-    supportedComponents: new Set(['TextAreaField', 'TextField', 'PasswordField']),
+    supportedComponents: new Set(['TextAreaField', 'TextField', 'PasswordField', 'Autocomplete', 'SelectField']),
   },
   Int: {
     defaultComponent: 'NumberField',
