@@ -121,4 +121,4 @@ jobs:
           config-file: cypress.config.ts
       - name: Check Integ Test Coverage
         working-directory: packages/integration-test
-        run: npm run
+        run: node cypress/scripts/generateCoverageSummary.mjs
