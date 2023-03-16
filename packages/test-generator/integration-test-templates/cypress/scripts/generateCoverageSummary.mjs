@@ -17,7 +17,7 @@ import libCoverage from 'istanbul-lib-coverage';
 import libReport from 'istanbul-lib-report';
 import reports from 'istanbul-reports';
 
-import coverageJSON from '../../coverage/coverage-final.json';
+import coverageJSON from '../../coverage/coverage-final.json' assert { type: 'json' };
 
 // TODO: move this to root project as env vars.
 const MIN_COVERAGE_THRESHOLDS = {
