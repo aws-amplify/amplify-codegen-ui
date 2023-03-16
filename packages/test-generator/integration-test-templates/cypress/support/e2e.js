@@ -13,21 +13,4 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { defineConfig } from 'cypress';
-
-export default defineConfig({
-  e2e: {
-    setupNodeEvents(on, config) {
-      // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-      require('@cypress/code-coverage/task')(on, config);
-
-      // include any other plugin code...
-
-      // It's IMPORTANT to return the config object
-      // with any changed environment variables
-      return config;
-    },
-  },
-  chromeWebSecurity: false,
-  defaultCommandTimeout: 60000,
-});
+import '@cypress/code-coverage/support';
