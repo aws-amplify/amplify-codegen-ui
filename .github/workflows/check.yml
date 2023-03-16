@@ -119,3 +119,6 @@ jobs:
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 210
           config-file: cypress.config.ts
+      - name: Check Integ Test Coverage
+        working-directory: packages/integration-test
+        run: npm run

@@ -3,6 +3,11 @@
 npm run integ:clean
 npm run build
 
+npx nyc instrument --compact false packages packages/instrumented
+rsync -av --delete packages/instrumented/codegen-ui/dist packages/codegen-ui/
+rsync -av --delete packages/instrumented/codegen-ui-react/dist packages/codegen-ui-react/
+rm -r packages/instrumented
+
 # create
 (cd packages && npx -y create-react-app integration-test --use-npm --template typescript)
 
@@ -21,7 +26,10 @@ lerna add --scope integration-test @aws-amplify/codegen-ui-test-generator
 lerna add --no-ci --scope integration-test react-router-dom
 lerna add --no-ci --scope integration-test @types/react-router-dom
 lerna add --no-ci --dev --scope integration-test cypress
+lerna add --no-ci --dev --scope integration-test @cypress/code-coverage
 lerna add --no-ci --dev --scope integration-test wait-on
+lerna add --no-ci --dev --scope integration-test istanbul-lib-report
+lerna add --no-ci --dev --scope integration-test istanbul-reports
 lerna add --no-ci --scope integration-test os-browserify
 lerna add --no-ci --scope integration-test path-browserify
 lerna add --no-ci --scope integration-test react-app-rewired
