@@ -55,3 +55,7 @@ dist/**
 
 ui-components
 packages/integration-test
+
+#integration testing
+.nyc_output
+instrumented
