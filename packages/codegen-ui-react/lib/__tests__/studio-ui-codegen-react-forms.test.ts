@@ -391,6 +391,18 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });
+      // happy path is from an example on the docs website
+      it('should render happy path nested json fields for create form', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/nested-json-create', undefined);
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render happy path nested json fields for update form', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/nested-json-update', undefined);
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
 
       it('should render a custom backed form with an array field', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer(

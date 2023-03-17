@@ -304,7 +304,11 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
           ),
         );
       }
-      if (shouldWrapInArrayField(fieldConfig)) {
+      // We don't need to reset the current array value if it's nested
+      // because we're already clearing out the entire nested value
+      // adding this on a nested value will add a setState function
+      // that was never created to begin with
+      if (shouldWrapInArrayField(fieldConfig) && !name.includes('.')) {
         acc.push(
           setStateExpression(
             getCurrentValueName(renderedName),

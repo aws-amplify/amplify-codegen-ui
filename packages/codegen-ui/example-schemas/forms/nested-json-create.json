@@ -1,0 +1,86 @@
+{
+  "cta" : { },
+  "dataType" : {
+    "dataSourceType" : "Custom",
+    "dataTypeName" : "JSON"
+  },
+  "fields" : {
+    "basics.firstName" : {
+      "inputType" : {
+        "type" : "TextField"
+      },
+      "label" : "First name"
+    },
+    "basics.emailAddress" : {
+      "inputType" : {
+        "type" : "EmailField"
+      },
+      "label" : "Email address"
+    },
+    "favoriteThings.animals" : {
+      "inputType" : {
+        "isArray" : true,
+        "type" : "TextField"
+      },
+      "label" : "Animals"
+    },
+    "favoriteThings.month" : {
+      "inputType" : {
+        "type" : "TextField"
+      },
+      "label" : "Month"
+    },
+    "favoriteThings.number" : {
+      "inputType" : {
+        "type" : "NumberField"
+      },
+      "label" : "Number"
+    },
+    "active" : {
+      "inputType" : {
+        "type" : "SwitchField"
+      },
+      "label" : "Active"
+    },
+    "enabled" : {
+      "inputType" : {
+        "type" : "SwitchField"
+      },
+      "label" : "Enabled"
+    }
+  },
+  "formActionType" : "create",
+  "name" : "HappyPathJSONCreate",
+  "schemaVersion" : "1.0",
+  "sectionalElements" : {
+    "basics" : {
+      "level" : 3,
+      "position" : {
+        "fixed" : "first"
+      },
+      "text" : "Basics",
+      "type" : "Heading"
+    },
+    "favoriteThings" : {
+      "level" : 3,
+      "position" : {
+        "below" : "basics.emailAddress"
+      },
+      "text" : "Favorite things",
+      "type" : "Heading"
+    },
+    "activeSectionalElement" : {
+      "orientation" : "horizontal",
+      "position" : {
+        "below" : "favoriteThings.number"
+      },
+      "type" : "Divider"
+    }
+  },
+  "style" : { },
+  "id" : "f-Ga9JxWRH2eYCA6nIzt",
+  "appId" : "d2qqjmfsiquqcu",
+  "environmentName" : "staging",
+  "createdAt" : "2023-03-17T21:03:57.397Z",
+  "modifiedAt" : "2023-03-17T21:03:57.397Z"
+}
