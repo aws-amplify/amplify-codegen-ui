@@ -37,6 +37,7 @@ import {
   getBreakpoints,
   isValidVariableName,
   InternalError,
+  resolveBetweenPredicateToMultiplePredicates,
 } from '@aws-amplify/codegen-ui';
 import { EOL } from 'os';
 import ts, {
@@ -1437,6 +1438,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 
   private predicateToObjectLiteralExpression(predicate: StudioComponentPredicate): ObjectLiteralExpression {
     const { operandType, ...filteredPredicate } = predicate;
+
+    if (filteredPredicate.operator === 'between') {
+      return this.predicateToObjectLiteralExpression(resolveBetweenPredicateToMultiplePredicates(predicate));
+    }
+
     const objectAssignments = Object.entries(filteredPredicate).map(([key, value]) => {
       if (key === 'and' || key === 'or') {
         return factory.createPropertyAssignment(

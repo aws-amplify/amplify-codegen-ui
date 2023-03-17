@@ -1,0 +1,59 @@
+{
+  "id": "1234-5678-9010",
+  "componentType": "Collection",
+  "name": "CollectionWithBetweenPredicate",
+  "properties": {
+    "type": {
+      "value": "list"
+    },
+    "isPaginated": {
+      "value": true
+    },
+    "gap": {
+      "value": "1.5rem"
+    }
+  },
+  "bindingProperties": {},
+  "collectionProperties": {
+    "buttonUser": {
+      "model": "User",
+      "predicate": {
+        "and": [
+          {
+            "field": "age",
+            "operand": "5<Amplify.OperandDelimiter>71",
+            "operator": "between"
+          },
+          {
+            "field": "lastName",
+            "operand": "LUser0",
+            "operator": "ne"
+          }
+        ]
+      }
+    }
+  },
+  "children": [
+    {
+      "componentType": "Flex",
+      "name": "MyFlex",
+      "properties": {},
+      "children": [
+        {
+          "componentType": "Button",
+          "name": "MyButton",
+          "properties": {
+            "children": {
+              "collectionBindingProperties": {
+                "property": "buttonUser",
+                "field": "firstName"
+              },
+              "defaultValue": "hspain@gmail.com"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "schemaVersion": "1.0"
+}
