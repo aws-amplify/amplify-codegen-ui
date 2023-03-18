@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.10.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.9.0...v2.10.0) (2023-03-18)
+
+
+### Bug Fixes
+
+* clear button on create form should reset select field ([#939](https://github.com/aws-amplify/amplify-codegen-ui/issues/939)) ([326b579](https://github.com/aws-amplify/amplify-codegen-ui/commit/326b579b558bf19b04cf8deb7a85f8eeccc7f189))
+* nested json array text field doesn't update ([#948](https://github.com/aws-amplify/amplify-codegen-ui/issues/948)) ([bf95b98](https://github.com/aws-amplify/amplify-codegen-ui/commit/bf95b98d47c75aad75f3e229f0f7e103110d32bd))
+
+
+### Features
+
+* add optional or required decorator on form labels ([#936](https://github.com/aws-amplify/amplify-codegen-ui/issues/936)) ([d81a50e](https://github.com/aws-amplify/amplify-codegen-ui/commit/d81a50ed6c5ee511245a335eb0b891e29d81d5a7))
+* init composite key property on update form ([#928](https://github.com/aws-amplify/amplify-codegen-ui/issues/928)) ([341882b](https://github.com/aws-amplify/amplify-codegen-ui/commit/341882bea846d57a9d23a9462e5892eee1f7c75a))
+
+
+
+
+
 # [2.9.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.8.0...v2.9.0) (2023-02-22)
 
 
