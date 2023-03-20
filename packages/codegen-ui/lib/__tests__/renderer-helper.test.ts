@@ -27,6 +27,8 @@ import {
   isStudioComponentWithVariants,
   isEventPropertyBinding,
   isAuthProperty,
+  resolveBetweenPredicateToMultiplePredicates,
+  OPERAND_DELIMITER,
 } from '../renderer-helper';
 
 describe('render-helper', () => {
@@ -196,6 +198,46 @@ describe('render-helper', () => {
       expect(isAuthProperty(bindingProperties.auth)).toBeTruthy();
       const { auth, ...otherTypes } = bindingProperties;
       Object.values(otherTypes).forEach((otherType) => expect(isAuthProperty(otherType)).toBeFalsy());
+    });
+  });
+
+  describe('resolveBetweenPredicateToMultiplePredicates', () => {
+    it('should throw if not 2 operands', () => {
+      expect(() =>
+        resolveBetweenPredicateToMultiplePredicates({
+          field: 'age',
+          operator: 'between',
+          operand: '1',
+        }),
+      ).toThrow();
+      expect(() =>
+        resolveBetweenPredicateToMultiplePredicates({
+          field: 'age',
+          operator: 'between',
+        }),
+      ).toThrow();
+      expect(() =>
+        resolveBetweenPredicateToMultiplePredicates({
+          field: 'age',
+          operator: 'between',
+          operand: [1, 2, 3].join(OPERAND_DELIMITER),
+        }),
+      ).toThrow();
+    });
+
+    it('should resolve predicate', () => {
+      const betweenPredicateOperands = ['1', '2'];
+      const betweenPredicate = {
+        field: 'age',
+        operator: 'between',
+        operand: betweenPredicateOperands.join(OPERAND_DELIMITER),
+      };
+      expect(resolveBetweenPredicateToMultiplePredicates(betweenPredicate)).toStrictEqual({
+        and: [
+          { field: betweenPredicate.field, operator: 'ge', operand: betweenPredicateOperands[0] },
+          { field: betweenPredicate.field, operator: 'le', operand: betweenPredicateOperands[1] },
+        ],
+      });
     });
   });
 });

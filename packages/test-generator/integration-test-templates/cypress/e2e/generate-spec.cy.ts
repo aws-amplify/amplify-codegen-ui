@@ -70,6 +70,7 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'CollectionWithBindingItemsName',
   'CompositeDogCard',
   'CollectionWithCompositeKeysAndRelationships',
+  'CollectionWithBetweenPredicate',
   'PaginatedCollection',
   'SearchableCollection',
   'CustomParent',

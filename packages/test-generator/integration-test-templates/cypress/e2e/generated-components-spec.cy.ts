@@ -236,6 +236,15 @@ describe('Generated Components', () => {
         cy.contains('Toys: stick, ball');
       });
     });
+
+    it('Supports between predicates', () => {
+      cy.get('#collectionWithBetweenPredicate').within(() => {
+        cy.contains('Real');
+        cy.contains('Last');
+        cy.contains('Another').should('not.exist');
+        cy.contains('Too Young').should('not.exist');
+      });
+    });
   });
 
   describe('Default Value', () => {
