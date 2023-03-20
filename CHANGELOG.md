@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.10.0...v2.11.0) (2023-03-20)
+
+
+### Bug Fixes
+
+* renames model variable name from props for update forms ([#950](https://github.com/aws-amplify/amplify-codegen-ui/issues/950)) ([3c64288](https://github.com/aws-amplify/amplify-codegen-ui/commit/3c64288f7783600229fb9050fcd8366b7cafa909))
+
+
+### Features
+
+* support between predicates ([#947](https://github.com/aws-amplify/amplify-codegen-ui/issues/947)) ([fa0daaf](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa0daafd9c99f4a1986885a58bbc67200782df03))
+
+
+
+
+
 # [2.10.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.9.0...v2.10.0) (2023-03-18)
 
 
