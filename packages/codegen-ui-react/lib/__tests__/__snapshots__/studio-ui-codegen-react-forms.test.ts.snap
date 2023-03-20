@@ -4950,7 +4950,7 @@ function ArrayField({
 export default function UpdateOrgForm(props) {
   const {
     id: idProp,
-    org,
+    org: orgModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -4976,18 +4976,18 @@ export default function UpdateOrgForm(props) {
     setCurrentCommentsDisplayValue(\\"\\");
     setErrors({});
   };
-  const [orgRecord, setOrgRecord] = React.useState(org);
+  const [orgRecord, setOrgRecord] = React.useState(orgModelProp);
   const [linkedComments, setLinkedComments] = React.useState([]);
   const canUnlinkComments = false;
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Org, idProp) : org;
+      const record = idProp ? await DataStore.query(Org, idProp) : orgModelProp;
       setOrgRecord(record);
       const linkedComments = record ? await record.comments.toArray() : [];
       setLinkedComments(linkedComments);
     };
     queryData();
-  }, [idProp, org]);
+  }, [idProp, orgModelProp]);
   React.useEffect(resetStateValues, [orgRecord, linkedComments]);
   const [currentCommentsDisplayValue, setCurrentCommentsDisplayValue] =
     React.useState(\\"\\");
@@ -5253,7 +5253,7 @@ export default function UpdateOrgForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || org)}
+          isDisabled={!(idProp || orgModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -5265,7 +5265,8 @@ export default function UpdateOrgForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || org) || Object.values(errors).some((e) => e?.hasError)
+              !(idProp || orgModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
@@ -5507,7 +5508,7 @@ function ArrayField({
 export default function UpdateCompositeDogForm(props) {
   const {
     id: idProp,
-    compositeDog,
+    compositeDog: compositeDogModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -5568,8 +5569,9 @@ export default function UpdateCompositeDogForm(props) {
     setCurrentCompositeVetsDisplayValue(\\"\\");
     setErrors({});
   };
-  const [compositeDogRecord, setCompositeDogRecord] =
-    React.useState(compositeDog);
+  const [compositeDogRecord, setCompositeDogRecord] = React.useState(
+    compositeDogModelProp
+  );
   const [linkedCompositeToys, setLinkedCompositeToys] = React.useState([]);
   const canUnlinkCompositeToys = true;
   const [linkedCompositeVets, setLinkedCompositeVets] = React.useState([]);
@@ -5578,7 +5580,7 @@ export default function UpdateCompositeDogForm(props) {
     const queryData = async () => {
       const record = idProp
         ? await DataStore.query(CompositeDog, idProp)
-        : compositeDog;
+        : compositeDogModelProp;
       setCompositeDogRecord(record);
       const CompositeBowlRecord = record
         ? await record.CompositeBowl
@@ -5604,7 +5606,7 @@ export default function UpdateCompositeDogForm(props) {
       setLinkedCompositeVets(linkedCompositeVets);
     };
     queryData();
-  }, [idProp, compositeDog]);
+  }, [idProp, compositeDogModelProp]);
   React.useEffect(resetStateValues, [
     compositeDogRecord,
     CompositeBowl,
@@ -6366,7 +6368,7 @@ export default function UpdateCompositeDogForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || compositeDog)}
+          isDisabled={!(idProp || compositeDogModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -6378,7 +6380,7 @@ export default function UpdateCompositeDogForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || compositeDog) ||
+              !(idProp || compositeDogModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -6635,7 +6637,7 @@ function ArrayField({
 export default function UpdateCPKTeacherForm(props) {
   const {
     specialTeacherId: specialTeacherIdProp,
-    cPKTeacher,
+    cPKTeacher: cPKTeacherModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -6681,7 +6683,8 @@ export default function UpdateCPKTeacherForm(props) {
     setCurrentCPKProjectsDisplayValue(\\"\\");
     setErrors({});
   };
-  const [cPKTeacherRecord, setCPKTeacherRecord] = React.useState(cPKTeacher);
+  const [cPKTeacherRecord, setCPKTeacherRecord] =
+    React.useState(cPKTeacherModelProp);
   const [linkedCPKClasses, setLinkedCPKClasses] = React.useState([]);
   const canUnlinkCPKClasses = false;
   const [linkedCPKProjects, setLinkedCPKProjects] = React.useState([]);
@@ -6690,7 +6693,7 @@ export default function UpdateCPKTeacherForm(props) {
     const queryData = async () => {
       const record = specialTeacherIdProp
         ? await DataStore.query(CPKTeacher, specialTeacherIdProp)
-        : cPKTeacher;
+        : cPKTeacherModelProp;
       setCPKTeacherRecord(record);
       const CPKStudentRecord = record ? await record.CPKStudent : undefined;
       setCPKStudent(CPKStudentRecord);
@@ -6710,7 +6713,7 @@ export default function UpdateCPKTeacherForm(props) {
       setLinkedCPKProjects(linkedCPKProjects);
     };
     queryData();
-  }, [specialTeacherIdProp, cPKTeacher]);
+  }, [specialTeacherIdProp, cPKTeacherModelProp]);
   React.useEffect(resetStateValues, [
     cPKTeacherRecord,
     CPKStudent,
@@ -7247,7 +7250,7 @@ export default function UpdateCPKTeacherForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(specialTeacherIdProp || cPKTeacher)}
+          isDisabled={!(specialTeacherIdProp || cPKTeacherModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -7259,7 +7262,7 @@ export default function UpdateCPKTeacherForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(specialTeacherIdProp || cPKTeacher) ||
+              !(specialTeacherIdProp || cPKTeacherModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -9916,7 +9919,7 @@ function ArrayField({
 export default function UpdateCompositeDogForm(props) {
   const {
     id: idProp,
-    compositeDog,
+    compositeDog: compositeDogModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -9977,8 +9980,9 @@ export default function UpdateCompositeDogForm(props) {
     setCurrentCompositeDogCompositeBowlShapeValue(undefined);
     setErrors({});
   };
-  const [compositeDogRecord, setCompositeDogRecord] =
-    React.useState(compositeDog);
+  const [compositeDogRecord, setCompositeDogRecord] = React.useState(
+    compositeDogModelProp
+  );
   const [linkedCompositeToys, setLinkedCompositeToys] = React.useState([]);
   const canUnlinkCompositeToys = true;
   const [linkedCompositeVets, setLinkedCompositeVets] = React.useState([]);
@@ -9987,7 +9991,7 @@ export default function UpdateCompositeDogForm(props) {
     const queryData = async () => {
       const record = idProp
         ? await DataStore.query(CompositeDog, idProp)
-        : compositeDog;
+        : compositeDogModelProp;
       setCompositeDogRecord(record);
       const CompositeOwnerRecord = record
         ? await record.CompositeOwner
@@ -10013,7 +10017,7 @@ export default function UpdateCompositeDogForm(props) {
       setCompositeDogCompositeBowlShape(compositeDogCompositeBowlShapeRecord);
     };
     queryData();
-  }, [idProp, compositeDog]);
+  }, [idProp, compositeDogModelProp]);
   React.useEffect(resetStateValues, [
     compositeDogRecord,
     CompositeOwner,
@@ -10751,7 +10755,7 @@ export default function UpdateCompositeDogForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || compositeDog)}
+          isDisabled={!(idProp || compositeDogModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -10763,7 +10767,7 @@ export default function UpdateCompositeDogForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || compositeDog) ||
+              !(idProp || compositeDogModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -11701,7 +11705,7 @@ function ArrayField({
 export default function UpdateDogForm(props) {
   const {
     id: idProp,
-    dog,
+    dog: dogModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -11727,16 +11731,16 @@ export default function UpdateDogForm(props) {
     setCurrentOwnerDisplayValue(\\"\\");
     setErrors({});
   };
-  const [dogRecord, setDogRecord] = React.useState(dog);
+  const [dogRecord, setDogRecord] = React.useState(dogModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Dog, idProp) : dog;
+      const record = idProp ? await DataStore.query(Dog, idProp) : dogModelProp;
       setDogRecord(record);
       const OwnerRecord = record ? await record.Owner : undefined;
       setOwner(OwnerRecord);
     };
     queryData();
-  }, [idProp, dog]);
+  }, [idProp, dogModelProp]);
   React.useEffect(resetStateValues, [dogRecord, Owner]);
   const [currentOwnerDisplayValue, setCurrentOwnerDisplayValue] =
     React.useState(\\"\\");
@@ -11987,7 +11991,7 @@ export default function UpdateDogForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || dog)}
+          isDisabled={!(idProp || dogModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -11999,7 +12003,8 @@ export default function UpdateDogForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || dog) || Object.values(errors).some((e) => e?.hasError)
+              !(idProp || dogModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
@@ -12733,7 +12738,7 @@ function ArrayField({
 export default function UpdateOwnerForm(props) {
   const {
     id: idProp,
-    owner,
+    owner: ownerModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -12759,16 +12764,18 @@ export default function UpdateOwnerForm(props) {
     setCurrentDogDisplayValue(\\"\\");
     setErrors({});
   };
-  const [ownerRecord, setOwnerRecord] = React.useState(owner);
+  const [ownerRecord, setOwnerRecord] = React.useState(ownerModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Owner, idProp) : owner;
+      const record = idProp
+        ? await DataStore.query(Owner, idProp)
+        : ownerModelProp;
       setOwnerRecord(record);
       const DogRecord = record ? await record.Dog : undefined;
       setDog(DogRecord);
     };
     queryData();
-  }, [idProp, owner]);
+  }, [idProp, ownerModelProp]);
   React.useEffect(resetStateValues, [ownerRecord, Dog]);
   const [currentDogDisplayValue, setCurrentDogDisplayValue] =
     React.useState(\\"\\");
@@ -13021,7 +13028,7 @@ export default function UpdateOwnerForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || owner)}
+          isDisabled={!(idProp || ownerModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -13033,7 +13040,7 @@ export default function UpdateOwnerForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || owner) ||
+              !(idProp || ownerModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -17263,7 +17270,7 @@ function ArrayField({
 export default function MyPostForm(props) {
   const {
     id: idProp,
-    post,
+    post: postModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -17327,14 +17334,16 @@ export default function MyPostForm(props) {
     setCurrentNonModelFieldArrayValue(\\"\\");
     setErrors({});
   };
-  const [postRecord, setPostRecord] = React.useState(post);
+  const [postRecord, setPostRecord] = React.useState(postModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Post, idProp) : post;
+      const record = idProp
+        ? await DataStore.query(Post, idProp)
+        : postModelProp;
       setPostRecord(record);
     };
     queryData();
-  }, [idProp, post]);
+  }, [idProp, postModelProp]);
   React.useEffect(resetStateValues, [postRecord]);
   const [currentNonModelFieldArrayValue, setCurrentNonModelFieldArrayValue] =
     React.useState(\\"\\");
@@ -17453,7 +17462,7 @@ export default function MyPostForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || post)}
+          isDisabled={!(idProp || postModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -17473,7 +17482,7 @@ export default function MyPostForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || post) ||
+              !(idProp || postModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -17762,7 +17771,7 @@ export default function MyPostForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || post)}
+          isDisabled={!(idProp || postModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -17782,7 +17791,7 @@ export default function MyPostForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || post) ||
+              !(idProp || postModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -18037,7 +18046,7 @@ function ArrayField({
 export default function SchoolUpdateForm(props) {
   const {
     id: idProp,
-    school,
+    school: schoolModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -18064,18 +18073,20 @@ export default function SchoolUpdateForm(props) {
     setCurrentStudentsDisplayValue(\\"\\");
     setErrors({});
   };
-  const [schoolRecord, setSchoolRecord] = React.useState(school);
+  const [schoolRecord, setSchoolRecord] = React.useState(schoolModelProp);
   const [linkedStudents, setLinkedStudents] = React.useState([]);
   const canUnlinkStudents = false;
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(School, idProp) : school;
+      const record = idProp
+        ? await DataStore.query(School, idProp)
+        : schoolModelProp;
       setSchoolRecord(record);
       const linkedStudents = record ? await record.Students.toArray() : [];
       setLinkedStudents(linkedStudents);
     };
     queryData();
-  }, [idProp, school]);
+  }, [idProp, schoolModelProp]);
   React.useEffect(resetStateValues, [schoolRecord, linkedStudents]);
   const [currentStudentsDisplayValue, setCurrentStudentsDisplayValue] =
     React.useState(\\"\\");
@@ -18339,7 +18350,7 @@ export default function SchoolUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || school)}
+          isDisabled={!(idProp || schoolModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -18359,7 +18370,7 @@ export default function SchoolUpdateForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || school) ||
+              !(idProp || schoolModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -18596,7 +18607,7 @@ function ArrayField({
 export default function MyMemberForm(props) {
   const {
     id: idProp,
-    member,
+    member: memberModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -18627,10 +18638,12 @@ export default function MyMemberForm(props) {
     setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
   };
-  const [memberRecord, setMemberRecord] = React.useState(member);
+  const [memberRecord, setMemberRecord] = React.useState(memberModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Member, idProp) : member;
+      const record = idProp
+        ? await DataStore.query(Member, idProp)
+        : memberModelProp;
       setMemberRecord(record);
       const teamIDRecord = record ? await record.teamID : undefined;
       setTeamID(teamIDRecord);
@@ -18638,7 +18651,7 @@ export default function MyMemberForm(props) {
       setTeam(TeamRecord);
     };
     queryData();
-  }, [idProp, member]);
+  }, [idProp, memberModelProp]);
   React.useEffect(resetStateValues, [memberRecord, teamID, Team]);
   const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
   const teamIDRef = React.createRef();
@@ -18763,7 +18776,7 @@ export default function MyMemberForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || member)}
+          isDisabled={!(idProp || memberModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -18783,7 +18796,7 @@ export default function MyMemberForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || member) ||
+              !(idProp || memberModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -19186,7 +19199,7 @@ function ArrayField({
 export default function TagUpdateForm(props) {
   const {
     id: idProp,
-    tag,
+    tag: tagModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -19217,12 +19230,12 @@ export default function TagUpdateForm(props) {
     setCurrentStatusesValue(\\"\\");
     setErrors({});
   };
-  const [tagRecord, setTagRecord] = React.useState(tag);
+  const [tagRecord, setTagRecord] = React.useState(tagModelProp);
   const [linkedPosts, setLinkedPosts] = React.useState([]);
   const canUnlinkPosts = false;
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Tag, idProp) : tag;
+      const record = idProp ? await DataStore.query(Tag, idProp) : tagModelProp;
       setTagRecord(record);
       const linkedPosts = record
         ? await Promise.all(
@@ -19236,7 +19249,7 @@ export default function TagUpdateForm(props) {
       setLinkedPosts(linkedPosts);
     };
     queryData();
-  }, [idProp, tag]);
+  }, [idProp, tagModelProp]);
   React.useEffect(resetStateValues, [tagRecord, linkedPosts]);
   const [currentPostsDisplayValue, setCurrentPostsDisplayValue] =
     React.useState(\\"\\");
@@ -19595,7 +19608,7 @@ export default function TagUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || tag)}
+          isDisabled={!(idProp || tagModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -19615,7 +19628,8 @@ export default function TagUpdateForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || tag) || Object.values(errors).some((e) => e?.hasError)
+              !(idProp || tagModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
           ></Button>
@@ -21985,7 +21999,7 @@ function ArrayField({
 export default function InputGalleryUpdateForm(props) {
   const {
     id: idProp,
-    inputGallery,
+    inputGallery: inputGalleryModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -22045,17 +22059,18 @@ export default function InputGalleryUpdateForm(props) {
     setTimeisnow(cleanValues.timeisnow);
     setErrors({});
   };
-  const [inputGalleryRecord, setInputGalleryRecord] =
-    React.useState(inputGallery);
+  const [inputGalleryRecord, setInputGalleryRecord] = React.useState(
+    inputGalleryModelProp
+  );
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
         ? await DataStore.query(InputGallery, idProp)
-        : inputGallery;
+        : inputGalleryModelProp;
       setInputGalleryRecord(record);
     };
     queryData();
-  }, [idProp, inputGallery]);
+  }, [idProp, inputGalleryModelProp]);
   React.useEffect(resetStateValues, [inputGalleryRecord]);
   const [currentArrayTypeFieldValue, setCurrentArrayTypeFieldValue] =
     React.useState(\\"\\");
@@ -22608,7 +22623,7 @@ export default function InputGalleryUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || inputGallery)}
+          isDisabled={!(idProp || inputGalleryModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -22628,7 +22643,7 @@ export default function InputGalleryUpdateForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || inputGallery) ||
+              !(idProp || inputGalleryModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}
@@ -22888,7 +22903,7 @@ function ArrayField({
 export default function MyFlexUpdateForm(props) {
   const {
     id: idProp,
-    flex,
+    flex: flexModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -22931,14 +22946,16 @@ export default function MyFlexUpdateForm(props) {
     setProfile_url(cleanValues.profile_url);
     setErrors({});
   };
-  const [flexRecord, setFlexRecord] = React.useState(flex);
+  const [flexRecord, setFlexRecord] = React.useState(flexModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Flex0, idProp) : flex;
+      const record = idProp
+        ? await DataStore.query(Flex0, idProp)
+        : flexModelProp;
       setFlexRecord(record);
     };
     queryData();
-  }, [idProp, flex]);
+  }, [idProp, flexModelProp]);
   React.useEffect(resetStateValues, [flexRecord]);
   const [currentCustomtagsValue, setCurrentCustomtagsValue] =
     React.useState(\\"\\");
@@ -23054,7 +23071,7 @@ export default function MyFlexUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || flex)}
+          isDisabled={!(idProp || flexModelProp)}
           {...getOverrideProps(overrides, \\"ResetButton\\")}
         ></Button>
         <Flex
@@ -23074,7 +23091,7 @@ export default function MyFlexUpdateForm(props) {
             type=\\"submit\\"
             variation=\\"primary\\"
             isDisabled={
-              !(idProp || flex) ||
+              !(idProp || flexModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, \\"SubmitButton\\")}

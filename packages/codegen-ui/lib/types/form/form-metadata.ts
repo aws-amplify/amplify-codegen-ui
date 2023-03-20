@@ -56,5 +56,5 @@ export type FormMetadata = {
   name: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
   layoutConfigs: Record<keyof Omit<StudioFormStyle, 'labelDecorator'>, FormStyleConfig>;
-  labelDecorator: LabelDecorator;
+  labelDecorator?: LabelDecorator;
 };

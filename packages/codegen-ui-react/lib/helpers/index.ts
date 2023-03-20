@@ -39,6 +39,10 @@ export const getSetNameIdentifier = (value: string): Identifier => {
   return factory.createIdentifier(`set${capitalizeFirstLetter(value)}`);
 };
 
+export const getModelNameProp = (value: string): string => {
+  return `${lowerCaseFirst(value)}ModelProp`;
+};
+
 /**
  * const [name, setName] = React.useState({default_expression});
  *

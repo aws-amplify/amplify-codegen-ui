@@ -33,7 +33,7 @@ import { getArrayChildRefName, resetValuesName, getPropName } from './form-state
 import { shouldWrapInArrayField } from './render-checkers';
 import { getAutocompleteOptionsProp } from './model-values';
 import { buildCtaLayoutProperties } from '../../react-component-render-helper';
-import { lowerCaseFirst } from '../../helpers';
+import { getModelNameProp, lowerCaseFirst } from '../../helpers';
 import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../../utils/constants';
 
 export const addFormAttributes = (
@@ -225,7 +225,7 @@ export const addFormAttributes = (
                 factory.createBinaryExpression(
                   factory.createIdentifier(idProp),
                   factory.createToken(SyntaxKind.BarBarToken),
-                  factory.createIdentifier(lowerCaseFirst(dataTypeName)),
+                  factory.createIdentifier(getModelNameProp(lowerCaseFirst(dataTypeName))),
                 ),
               ),
             ),
@@ -248,7 +248,7 @@ export const addFormAttributes = (
                   factory.createBinaryExpression(
                     factory.createIdentifier(idProp),
                     factory.createToken(SyntaxKind.BarBarToken),
-                    factory.createIdentifier(lowerCaseFirst(dataTypeName)),
+                    factory.createIdentifier(getModelNameProp(lowerCaseFirst(dataTypeName))),
                   ),
                 ),
               ),

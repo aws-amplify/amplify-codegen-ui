@@ -1548,6 +1548,49 @@ export default {
         },
       ],
     },
+    ModelWithVariableCollisions: {
+      name: 'ModelWithVariableCollisions',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        modelWithVariableCollisions: {
+          name: 'modelWithVariableCollisions',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'ModelWithVariableCollisions',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
     AllSupportedFormFieldsTag: {
       name: 'AllSupportedFormFieldsTag',
       fields: {
@@ -1878,6 +1921,6 @@ export default {
       },
     },
   },
-  codegenVersion: '3.3.5',
-  version: 'c067eed5daf5304a1137986ea69ed3f9',
+  codegenVersion: '3.3.6',
+  version: 'ef1c5b877e4c74496a00a00ad035458e',
 } as Schema;

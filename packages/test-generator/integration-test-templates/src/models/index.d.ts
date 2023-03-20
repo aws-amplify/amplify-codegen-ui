@@ -804,6 +804,41 @@ export declare const BiDirectionalToy: (new (init: ModelInit<BiDirectionalToy>) 
   ): BiDirectionalToy;
 };
 
+type EagerModelWithVariableCollisions = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ModelWithVariableCollisions, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly modelWithVariableCollisions?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyModelWithVariableCollisions = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ModelWithVariableCollisions, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly modelWithVariableCollisions?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type ModelWithVariableCollisions = LazyLoading extends LazyLoadingDisabled
+  ? EagerModelWithVariableCollisions
+  : LazyModelWithVariableCollisions;
+
+export declare const ModelWithVariableCollisions: (new (
+  init: ModelInit<ModelWithVariableCollisions>,
+) => ModelWithVariableCollisions) & {
+  copyOf(
+    source: ModelWithVariableCollisions,
+    mutator: (draft: MutableModel<ModelWithVariableCollisions>) => MutableModel<ModelWithVariableCollisions> | void,
+  ): ModelWithVariableCollisions;
+};
+
 type EagerAllSupportedFormFieldsTag = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<AllSupportedFormFieldsTag, 'id'>;

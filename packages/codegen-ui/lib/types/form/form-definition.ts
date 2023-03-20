@@ -42,7 +42,7 @@ export type FormDefinition = {
       verticalGap: FormStyleConfig;
       outerPadding: FormStyleConfig;
     };
-    labelDecorator: LabelDecorator;
+    labelDecorator?: LabelDecorator;
   };
   elements: { [element: string]: FormDefinitionElement };
   buttons: ButtonConfig;

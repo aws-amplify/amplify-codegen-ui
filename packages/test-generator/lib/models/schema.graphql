@@ -166,3 +166,7 @@ type BiDirectionalToy @model {
   biDirectionalDogID: ID!
   BiDirectionalDog: BiDirectionalDog! @belongsTo(fields: ["biDirectionalDogID"])
 }
+
+type ModelWithVariableCollisions @model {
+  modelWithVariableCollisions: String
+}
