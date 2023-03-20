@@ -1546,6 +1546,49 @@ export const schema = {
         },
       ],
     },
+    ModelWithVariableCollisions: {
+      name: 'ModelWithVariableCollisions',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        modelWithVariableCollisions: {
+          name: 'modelWithVariableCollisions',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'ModelWithVariableCollisions',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
     AllSupportedFormFieldsTag: {
       name: 'AllSupportedFormFieldsTag',
       fields: {

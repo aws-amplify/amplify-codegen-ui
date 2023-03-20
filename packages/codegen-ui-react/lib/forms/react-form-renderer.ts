@@ -47,7 +47,12 @@ import {
   SyntaxKind,
   TypeAliasDeclaration,
 } from 'typescript';
-import { buildInitConstVariableExpression, buildUseStateExpression, lowerCaseFirst } from '../helpers';
+import {
+  buildInitConstVariableExpression,
+  buildUseStateExpression,
+  getModelNameProp,
+  lowerCaseFirst,
+} from '../helpers';
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { PrimitiveTypeParameter, Primitive, primitiveOverrideProp } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
@@ -473,7 +478,10 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const linkedDataNames: string[] = [];
     if (isDataStoreUpdateForm) {
       statements.push(
-        buildUseStateExpression(lowerCaseDataTypeNameRecord, factory.createIdentifier(lowerCaseDataTypeName)),
+        buildUseStateExpression(
+          lowerCaseDataTypeNameRecord,
+          factory.createIdentifier(getModelNameProp(lowerCaseDataTypeName)),
+        ),
       );
 
       const relatedModelStatements: Statement[] = [];
@@ -508,7 +516,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
         statements.push(
           addUseEffectWrapper(
             buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeName, relatedModelStatements, destructuredPrimaryKey),
-            [destructuredPrimaryKey, lowerCaseDataTypeName],
+            [destructuredPrimaryKey, getModelNameProp(lowerCaseDataTypeName)],
           ),
         );
       }

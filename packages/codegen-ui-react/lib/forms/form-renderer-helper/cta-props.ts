@@ -24,7 +24,7 @@ import {
   ExpressionStatement,
   IfStatement,
 } from 'typescript';
-import { getSetNameIdentifier, lowerCaseFirst } from '../../helpers';
+import { getModelNameProp, getSetNameIdentifier, lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './model-values';
 import {
   buildHasManyRelationshipDataStoreStatements,
@@ -667,7 +667,7 @@ export const buildUpdateDatastoreQuery = (
                               ),
                             ),
                             factory.createToken(SyntaxKind.ColonToken),
-                            factory.createIdentifier(lowerCaseDataTypeName),
+                            factory.createIdentifier(getModelNameProp(lowerCaseDataTypeName)),
                           ),
                         ),
                       ],
