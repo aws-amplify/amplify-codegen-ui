@@ -919,10 +919,10 @@ export default function CreateCommentForm(props) {
     model: Org0,
   }).items;
   const getDisplayValue = {
-    post: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
-    User: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
-    Org: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
-    postCommentsId: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    post: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    User: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    Org: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    postCommentsId: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -5061,7 +5061,7 @@ export default function UpdateOrgForm(props) {
     model: Comment,
   }).items;
   const getDisplayValue = {
-    comments: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    comments: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
@@ -10137,7 +10137,7 @@ export default function CreateDogForm(props) {
     model: Owner0,
   }).items;
   const getDisplayValue = {
-    Owner: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
@@ -10648,7 +10648,7 @@ export default function UpdateDogForm(props) {
     model: Owner0,
   }).items;
   const getDisplayValue = {
-    Owner: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
@@ -11166,7 +11166,7 @@ export default function CreateOwnerForm(props) {
     model: Dog0,
   }).items;
   const getDisplayValue = {
-    Dog: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    Dog: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -11680,7 +11680,7 @@ export default function UpdateOwnerForm(props) {
     model: Dog0,
   }).items;
   const getDisplayValue = {
-    Dog: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    Dog: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -13451,7 +13451,7 @@ export default function MyMemberForm(props) {
     model: Team0,
   }).items;
   const getDisplayValue = {
-    teamID: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    teamID: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
     Team: (r) => r?.name,
   };
   const validations = {
@@ -14529,7 +14529,7 @@ export default function BookCreateForm(props) {
     model: Author,
   }).items;
   const getDisplayValue = {
-    primaryAuthor: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    primaryAuthor: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
@@ -17575,7 +17575,7 @@ export default function MyMemberForm(props) {
     model: Team0,
   }).items;
   const getDisplayValue = {
-    teamID: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    teamID: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
     Team: (r) => r?.name,
   };
   const validations = {
@@ -23168,7 +23168,7 @@ export default function MyMemberForm(props) {
     model: Team0,
   }).items;
   const getDisplayValue = {
-    teamID: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    teamID: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
     Team: (r) => r?.name,
   };
   const validations = {
