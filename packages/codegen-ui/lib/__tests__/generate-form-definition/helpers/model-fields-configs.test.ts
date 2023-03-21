@@ -465,6 +465,26 @@ describe('mapModelFieldsConfigs', () => {
     expect(modelFieldsConfigs.compositeDogCompositeBowlShape.inputType?.valueMappings).toStrictEqual({
       values: [
         {
+          displayValue: {
+            concat: [
+              {
+                bindingProperties: {
+                  field: 'shape',
+                  property: 'CompositeBowl',
+                },
+              },
+              {
+                value: '-',
+              },
+              {
+                bindingProperties: {
+                  field: 'size',
+                  property: 'CompositeBowl',
+                },
+              },
+            ],
+            isDefault: true,
+          },
           value: {
             bindingProperties: {
               property: 'CompositeBowl',
@@ -486,6 +506,26 @@ describe('mapModelFieldsConfigs', () => {
     expect(modelFieldsConfigs.compositeDogCompositeBowlSize.inputType?.valueMappings).toStrictEqual({
       values: [
         {
+          displayValue: {
+            concat: [
+              {
+                bindingProperties: {
+                  field: 'shape',
+                  property: 'CompositeBowl',
+                },
+              },
+              {
+                value: '-',
+              },
+              {
+                bindingProperties: {
+                  field: 'size',
+                  property: 'CompositeBowl',
+                },
+              },
+            ],
+            isDefault: true,
+          },
           value: {
             bindingProperties: {
               property: 'CompositeBowl',
@@ -611,8 +651,44 @@ describe('mapModelFieldsConfigs', () => {
         value: 'compositeDogCompositeToysName',
         isArray: false,
         valueMappings: {
-          values: [{ value: { bindingProperties: { property: 'CompositeDog', field: 'name' } } }],
-          bindingProperties: { CompositeDog: { type: 'Data', bindingProperties: { model: 'CompositeDog' } } },
+          values: [
+            {
+              displayValue: {
+                concat: [
+                  {
+                    bindingProperties: {
+                      field: 'name',
+                      property: 'CompositeDog',
+                    },
+                  },
+                  {
+                    value: '-',
+                  },
+                  {
+                    bindingProperties: {
+                      field: 'description',
+                      property: 'CompositeDog',
+                    },
+                  },
+                ],
+                isDefault: true,
+              },
+              value: {
+                bindingProperties: {
+                  property: 'CompositeDog',
+                  field: 'name',
+                },
+              },
+            },
+          ],
+          bindingProperties: {
+            CompositeDog: {
+              type: 'Data',
+              bindingProperties: {
+                model: 'CompositeDog',
+              },
+            },
+          },
         },
       },
       relationship: { type: 'HAS_ONE', relatedModelName: 'CompositeDog', isHasManyIndex: true },
@@ -629,8 +705,44 @@ describe('mapModelFieldsConfigs', () => {
         value: 'compositeDogCompositeToysDescription',
         isArray: false,
         valueMappings: {
-          values: [{ value: { bindingProperties: { property: 'CompositeDog', field: 'description' } } }],
-          bindingProperties: { CompositeDog: { type: 'Data', bindingProperties: { model: 'CompositeDog' } } },
+          values: [
+            {
+              displayValue: {
+                concat: [
+                  {
+                    bindingProperties: {
+                      field: 'name',
+                      property: 'CompositeDog',
+                    },
+                  },
+                  {
+                    value: '-',
+                  },
+                  {
+                    bindingProperties: {
+                      field: 'description',
+                      property: 'CompositeDog',
+                    },
+                  },
+                ],
+                isDefault: true,
+              },
+              value: {
+                bindingProperties: {
+                  property: 'CompositeDog',
+                  field: 'description',
+                },
+              },
+            },
+          ],
+          bindingProperties: {
+            CompositeDog: {
+              type: 'Data',
+              bindingProperties: {
+                model: 'CompositeDog',
+              },
+            },
+          },
         },
       },
       relationship: { type: 'HAS_ONE', relatedModelName: 'CompositeDog', isHasManyIndex: true },

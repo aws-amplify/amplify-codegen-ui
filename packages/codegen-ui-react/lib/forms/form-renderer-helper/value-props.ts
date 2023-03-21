@@ -17,7 +17,7 @@
 import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
 import { factory, Identifier, JsxAttribute, SyntaxKind, ElementAccessExpression } from 'typescript';
 import { getCurrentDisplayValueName, getCurrentValueName, resetValuesName } from './form-state';
-import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
+import { shouldWrapInArrayField } from './render-checkers';
 import { FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
 
 export const ControlledComponents = [
@@ -114,7 +114,7 @@ export const renderValueAttribute = ({
   let valueIdentifier = currentValueIdentifier || getValueIdentifier(componentName, componentType);
 
   if (shouldWrapInArrayField(fieldConfig)) {
-    if (isModelDataType(fieldConfig)) {
+    if (fieldConfig.relationship) {
       valueIdentifier = factory.createIdentifier(getCurrentDisplayValueName(componentName));
     } else {
       valueIdentifier = factory.createIdentifier(getCurrentValueName(componentName));

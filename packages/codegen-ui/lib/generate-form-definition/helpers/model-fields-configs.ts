@@ -213,10 +213,10 @@ function getValueMappings({
     const values: StudioFormValueMappings['values'] = keys.map((key) => ({
       value: { bindingProperties: { property: modelName, field: key } },
     }));
-    if (isModelType) {
-      // attach displayValue for all options to the first value
-      values[0].displayValue = getModelDisplayValue({ model: relatedModel, modelName });
-    }
+
+    // if field is model or scalar, attach displayValue for all options to the first value
+    values[0].displayValue = getModelDisplayValue({ model: relatedModel, modelName });
+
     return {
       values,
       bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },

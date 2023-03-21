@@ -75,12 +75,22 @@ const getDisplayValueCallChain = ({ fieldName, recordString }: { fieldName: stri
     (r, i, arr) => arr.findIndex(member => member.shape === r.shape) === i
     )
   .map((r) => ({
-    id: r?.id,
-    label: r?.id,
+    id: getIDValue['fieldName]?.(r),
+    label: getDisplayValue['fieldName']?.(r),
   }))
  */
-function getSuggestionsForRelationshipScalar({ modelName, key }: { modelName: string; key: string }): CallExpression {
+function getSuggestionsForRelationshipScalar({
+  modelName,
+  key,
+  fieldName,
+}: {
+  modelName: string;
+  key: string;
+  fieldName: string;
+}): CallExpression {
   const recordString = 'r';
+
+  const labelExpression = getDisplayValueCallChain({ fieldName, recordString });
 
   return factory.createCallExpression(
     factory.createPropertyAccessExpression(
@@ -186,11 +196,11 @@ function getSuggestionsForRelationshipScalar({ modelName, key }: { modelName: st
         factory.createParenthesizedExpression(
           factory.createObjectLiteralExpression(
             [
-              factory.createPropertyAssignment(factory.createIdentifier('id'), buildAccessChain([recordString, key])),
               factory.createPropertyAssignment(
-                factory.createIdentifier('label'),
-                buildAccessChain([recordString, key]),
+                factory.createIdentifier('id'),
+                getIDValueCallChain({ fieldName, recordString }),
               ),
+              factory.createPropertyAssignment(factory.createIdentifier('label'), labelExpression),
             ],
             true,
           ),
@@ -368,7 +378,7 @@ export function getAutocompleteOptionsProp({
         fieldName,
       });
     } else if (keys) {
-      options = getSuggestionsForRelationshipScalar({ modelName: model, key: keys[0] });
+      options = getSuggestionsForRelationshipScalar({ modelName: model, key: keys[0], fieldName });
     }
   } else {
     options = buildFixedAutocompleteOptions(fieldName, valueMappings);
@@ -541,10 +551,13 @@ export function buildDisplayValueFunction(fieldName: string, fieldConfig: FieldC
 
   let renderedDisplayValue: Expression | undefined;
 
-  if (isModelDataType(fieldConfig) && fieldConfig.valueMappings) {
+  if (fieldConfig.relationship && fieldConfig.valueMappings) {
     const valueConfig = fieldConfig.valueMappings.values[0];
     if (valueConfig) {
-      const modelName = fieldConfig.dataType.model;
+      const { model: modelName } = extractModelAndKeys(fieldConfig.valueMappings);
+      if (!modelName) {
+        throw new InternalError(`Could not find model name for ${fieldName}`);
+      }
       const displayValueIsDefault = valueConfig.displayValue?.isDefault;
       const displayValueProperty = valueConfig.displayValue || valueConfig.value;
       replaceProperty(displayValueProperty, modelName, recordString);

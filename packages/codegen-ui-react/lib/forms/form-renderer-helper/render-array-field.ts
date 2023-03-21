@@ -219,7 +219,7 @@ export const renderArrayFieldComponent = (
     setCurrentHasOneUserValue(model)
   }
    */
-  if (isModelDataType(fieldConfig)) {
+  if (fieldConfig.relationship) {
     const valueArgument = 'model';
     props.push(
       factory.createJsxAttribute(

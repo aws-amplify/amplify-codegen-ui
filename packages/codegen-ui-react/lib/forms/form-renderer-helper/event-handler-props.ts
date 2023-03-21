@@ -294,7 +294,7 @@ export const buildOnChangeStatement = (
   const valueToSetOnChange = factory.createIdentifier('value');
 
   if (shouldWrapInArrayField(fieldConfig)) {
-    if (isModelDataType(fieldConfig)) {
+    if (fieldConfig.relationship) {
       handleChangeStatements.push(
         setStateExpression(getCurrentDisplayValueName(renderedFieldName), valueToSetOnChange),
         setStateExpression(getCurrentValueName(renderedFieldName), factory.createIdentifier('undefined')),
@@ -372,7 +372,7 @@ export function buildOnSelect({
   let nextCurrentValue: Expression = factory.createIdentifier(idString);
   let nextCurrentDisplayValue: Expression = factory.createIdentifier(idString);
 
-  if (isModelDataType(fieldConfig)) {
+  if (fieldConfig.relationship) {
     const { model, keys } = extractModelAndKeys(fieldConfig.valueMappings);
     if (!model || !keys || !keys.length) {
       throw new InvalidInputError(`Invalid value mappings`);
@@ -395,7 +395,7 @@ export function buildOnSelect({
     ),
   ];
 
-  if (isModelDataType(fieldConfig)) {
+  if (fieldConfig.relationship) {
     setStateExpressions.push(
       setStateExpression(
         isNotArrayAndNotRelationshipField ? sanitizedFieldName : getCurrentDisplayValueName(sanitizedFieldName),
@@ -408,7 +408,7 @@ export function buildOnSelect({
     factory.createExpressionStatement(
       factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
         factory.createStringLiteral(fieldName),
-        factory.createIdentifier(isModelDataType(fieldConfig) ? labelString : idString),
+        factory.createIdentifier(fieldConfig.relationship ? labelString : idString),
       ]),
     ),
   );

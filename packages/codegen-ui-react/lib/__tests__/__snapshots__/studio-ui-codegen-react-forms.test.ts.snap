@@ -214,26 +214,46 @@ export default function CreateCompositeToyForm(props) {
       initialValues.compositeDogCompositeToysName
     );
     setCurrentCompositeDogCompositeToysNameValue(undefined);
+    setCurrentCompositeDogCompositeToysNameDisplayValue(\\"\\");
     setCompositeDogCompositeToysDescription(
       initialValues.compositeDogCompositeToysDescription
     );
     setCurrentCompositeDogCompositeToysDescriptionValue(undefined);
+    setCurrentCompositeDogCompositeToysDescriptionDisplayValue(\\"\\");
     setErrors({});
   };
+  const [
+    currentCompositeDogCompositeToysNameDisplayValue,
+    setCurrentCompositeDogCompositeToysNameDisplayValue,
+  ] = React.useState(\\"\\");
   const [
     currentCompositeDogCompositeToysNameValue,
     setCurrentCompositeDogCompositeToysNameValue,
   ] = React.useState(undefined);
   const compositeDogCompositeToysNameRef = React.createRef();
   const [
+    currentCompositeDogCompositeToysDescriptionDisplayValue,
+    setCurrentCompositeDogCompositeToysDescriptionDisplayValue,
+  ] = React.useState(\\"\\");
+  const [
     currentCompositeDogCompositeToysDescriptionValue,
     setCurrentCompositeDogCompositeToysDescriptionValue,
   ] = React.useState(undefined);
   const compositeDogCompositeToysDescriptionRef = React.createRef();
+  const getIDValue = {
+    compositeDogCompositeToysName: (r) => JSON.stringify({ name: r?.name }),
+    compositeDogCompositeToysDescription: (r) =>
+      JSON.stringify({ description: r?.description }),
+  };
   const compositeDogRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: CompositeDog,
   }).items;
+  const getDisplayValue = {
+    compositeDogCompositeToysName: (r) => \`\${r?.name}\${\\"-\\"}\${r?.description}\`,
+    compositeDogCompositeToysDescription: (r) =>
+      \`\${r?.name}\${\\"-\\"}\${r?.description}\`,
+  };
   const validations = {
     kind: [{ type: \\"Required\\" }],
     color: [{ type: \\"Required\\" }],
@@ -393,7 +413,13 @@ export default function CreateCompositeToyForm(props) {
         }
         hasError={errors?.compositeDogCompositeToysName?.hasError}
         errorMessage={errors?.compositeDogCompositeToysName?.errorMessage}
-        setFieldValue={setCurrentCompositeDogCompositeToysNameValue}
+        getBadgeText={getDisplayValue.compositeDogCompositeToysName}
+        setFieldValue={(model) => {
+          setCurrentCompositeDogCompositeToysNameDisplayValue(
+            getDisplayValue.compositeDogCompositeToysName(model)
+          );
+          setCurrentCompositeDogCompositeToysNameValue(model);
+        }}
         inputFieldRef={compositeDogCompositeToysNameRef}
         defaultFieldValue={\\"\\"}
       >
@@ -402,19 +428,26 @@ export default function CreateCompositeToyForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"Search CompositeDog\\"
-          value={currentCompositeDogCompositeToysNameValue}
+          value={currentCompositeDogCompositeToysNameDisplayValue}
           options={compositeDogRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.name === r?.name) === i
             )
             .map((r) => ({
-              id: r?.name,
-              label: r?.name,
+              id: getIDValue.compositeDogCompositeToysName?.(r),
+              label: getDisplayValue.compositeDogCompositeToysName?.(r),
             }))}
-          onSelect={({ id }) => {
-            setCurrentCompositeDogCompositeToysNameValue(id);
-            runValidationTasks(\\"compositeDogCompositeToysName\\", id);
+          onSelect={({ id, label }) => {
+            setCurrentCompositeDogCompositeToysNameValue(
+              compositeDogRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeDogCompositeToysNameDisplayValue(label);
+            runValidationTasks(\\"compositeDogCompositeToysName\\", label);
           }}
           onClear={() => {
             setCurrentCompositeDogCompositeToysNameDisplayValue(\\"\\");
@@ -424,7 +457,8 @@ export default function CreateCompositeToyForm(props) {
             if (errors.compositeDogCompositeToysName?.hasError) {
               runValidationTasks(\\"compositeDogCompositeToysName\\", value);
             }
-            setCurrentCompositeDogCompositeToysNameValue(value);
+            setCurrentCompositeDogCompositeToysNameDisplayValue(value);
+            setCurrentCompositeDogCompositeToysNameValue(undefined);
           }}
           onBlur={() =>
             runValidationTasks(
@@ -467,7 +501,13 @@ export default function CreateCompositeToyForm(props) {
         errorMessage={
           errors?.compositeDogCompositeToysDescription?.errorMessage
         }
-        setFieldValue={setCurrentCompositeDogCompositeToysDescriptionValue}
+        getBadgeText={getDisplayValue.compositeDogCompositeToysDescription}
+        setFieldValue={(model) => {
+          setCurrentCompositeDogCompositeToysDescriptionDisplayValue(
+            getDisplayValue.compositeDogCompositeToysDescription(model)
+          );
+          setCurrentCompositeDogCompositeToysDescriptionValue(model);
+        }}
         inputFieldRef={compositeDogCompositeToysDescriptionRef}
         defaultFieldValue={\\"\\"}
       >
@@ -476,7 +516,7 @@ export default function CreateCompositeToyForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"Search CompositeDog\\"
-          value={currentCompositeDogCompositeToysDescriptionValue}
+          value={currentCompositeDogCompositeToysDescriptionDisplayValue}
           options={compositeDogRecords
             .filter(
               (r, i, arr) =>
@@ -485,12 +525,19 @@ export default function CreateCompositeToyForm(props) {
                 ) === i
             )
             .map((r) => ({
-              id: r?.description,
-              label: r?.description,
+              id: getIDValue.compositeDogCompositeToysDescription?.(r),
+              label: getDisplayValue.compositeDogCompositeToysDescription?.(r),
             }))}
-          onSelect={({ id }) => {
-            setCurrentCompositeDogCompositeToysDescriptionValue(id);
-            runValidationTasks(\\"compositeDogCompositeToysDescription\\", id);
+          onSelect={({ id, label }) => {
+            setCurrentCompositeDogCompositeToysDescriptionValue(
+              compositeDogRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeDogCompositeToysDescriptionDisplayValue(label);
+            runValidationTasks(\\"compositeDogCompositeToysDescription\\", label);
           }}
           onClear={() => {
             setCurrentCompositeDogCompositeToysDescriptionDisplayValue(\\"\\");
@@ -500,7 +547,8 @@ export default function CreateCompositeToyForm(props) {
             if (errors.compositeDogCompositeToysDescription?.hasError) {
               runValidationTasks(\\"compositeDogCompositeToysDescription\\", value);
             }
-            setCurrentCompositeDogCompositeToysDescriptionValue(value);
+            setCurrentCompositeDogCompositeToysDescriptionDisplayValue(value);
+            setCurrentCompositeDogCompositeToysDescriptionValue(undefined);
           }}
           onBlur={() =>
             runValidationTasks(
@@ -815,6 +863,7 @@ export default function CreateCommentForm(props) {
     setCurrentOrgDisplayValue(\\"\\");
     setPostCommentsId(initialValues.postCommentsId);
     setCurrentPostCommentsIdValue(undefined);
+    setCurrentPostCommentsIdDisplayValue(\\"\\");
     setErrors({});
   };
   const [currentPostDisplayValue, setCurrentPostDisplayValue] =
@@ -829,6 +878,10 @@ export default function CreateCommentForm(props) {
     React.useState(\\"\\");
   const [currentOrgValue, setCurrentOrgValue] = React.useState(undefined);
   const OrgRef = React.createRef();
+  const [
+    currentPostCommentsIdDisplayValue,
+    setCurrentPostCommentsIdDisplayValue,
+  ] = React.useState(\\"\\");
   const [currentPostCommentsIdValue, setCurrentPostCommentsIdValue] =
     React.useState(undefined);
   const postCommentsIdRef = React.createRef();
@@ -836,6 +889,7 @@ export default function CreateCommentForm(props) {
     post: (r) => JSON.stringify({ id: r?.id }),
     User: (r) => JSON.stringify({ id: r?.id }),
     Org: (r) => JSON.stringify({ id: r?.id }),
+    postCommentsId: (r) => JSON.stringify({ id: r?.id }),
   };
   const postIdSet = new Set(
     Array.isArray(post)
@@ -865,9 +919,10 @@ export default function CreateCommentForm(props) {
     model: Org0,
   }).items;
   const getDisplayValue = {
-    post: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
-    User: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
-    Org: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    post: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    User: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    Org: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
+    postCommentsId: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
   };
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -1233,7 +1288,13 @@ export default function CreateCommentForm(props) {
         items={postCommentsId ? [postCommentsId] : []}
         hasError={errors?.postCommentsId?.hasError}
         errorMessage={errors?.postCommentsId?.errorMessage}
-        setFieldValue={setCurrentPostCommentsIdValue}
+        getBadgeText={getDisplayValue.postCommentsId}
+        setFieldValue={(model) => {
+          setCurrentPostCommentsIdDisplayValue(
+            getDisplayValue.postCommentsId(model)
+          );
+          setCurrentPostCommentsIdValue(model);
+        }}
         inputFieldRef={postCommentsIdRef}
         defaultFieldValue={\\"\\"}
       >
@@ -1242,19 +1303,26 @@ export default function CreateCommentForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"Search Post\\"
-          value={currentPostCommentsIdValue}
+          value={currentPostCommentsIdDisplayValue}
           options={postRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.id === r?.id) === i
             )
             .map((r) => ({
-              id: r?.id,
-              label: r?.id,
+              id: getIDValue.postCommentsId?.(r),
+              label: getDisplayValue.postCommentsId?.(r),
             }))}
-          onSelect={({ id }) => {
-            setCurrentPostCommentsIdValue(id);
-            runValidationTasks(\\"postCommentsId\\", id);
+          onSelect={({ id, label }) => {
+            setCurrentPostCommentsIdValue(
+              postRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentPostCommentsIdDisplayValue(label);
+            runValidationTasks(\\"postCommentsId\\", label);
           }}
           onClear={() => {
             setCurrentPostCommentsIdDisplayValue(\\"\\");
@@ -1264,7 +1332,8 @@ export default function CreateCommentForm(props) {
             if (errors.postCommentsId?.hasError) {
               runValidationTasks(\\"postCommentsId\\", value);
             }
-            setCurrentPostCommentsIdValue(value);
+            setCurrentPostCommentsIdDisplayValue(value);
+            setCurrentPostCommentsIdValue(undefined);
           }}
           onBlur={() =>
             runValidationTasks(\\"postCommentsId\\", currentPostCommentsIdValue)
@@ -4992,7 +5061,7 @@ export default function UpdateOrgForm(props) {
     model: Comment,
   }).items;
   const getDisplayValue = {
-    comments: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    comments: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
@@ -8778,6 +8847,7 @@ export default function UpdateCompositeDogForm(props) {
       cleanValues.compositeDogCompositeBowlShape
     );
     setCurrentCompositeDogCompositeBowlShapeValue(undefined);
+    setCurrentCompositeDogCompositeBowlShapeDisplayValue(\\"\\");
     setErrors({});
   };
   const [compositeDogRecord, setCompositeDogRecord] =
@@ -8846,6 +8916,10 @@ export default function UpdateCompositeDogForm(props) {
     React.useState(undefined);
   const CompositeVetsRef = React.createRef();
   const [
+    currentCompositeDogCompositeBowlShapeDisplayValue,
+    setCurrentCompositeDogCompositeBowlShapeDisplayValue,
+  ] = React.useState(\\"\\");
+  const [
     currentCompositeDogCompositeBowlShapeValue,
     setCurrentCompositeDogCompositeBowlShapeValue,
   ] = React.useState(undefined);
@@ -8856,6 +8930,7 @@ export default function UpdateCompositeDogForm(props) {
     CompositeToys: (r) => JSON.stringify({ kind: r?.kind, color: r?.color }),
     CompositeVets: (r) =>
       JSON.stringify({ specialty: r?.specialty, city: r?.city }),
+    compositeDogCompositeBowlShape: (r) => JSON.stringify({ shape: r?.shape }),
   };
   const CompositeOwnerIdSet = new Set(
     Array.isArray(CompositeOwner)
@@ -8892,6 +8967,7 @@ export default function UpdateCompositeDogForm(props) {
     CompositeOwner: (r) => \`\${r?.lastName}\${\\"-\\"}\${r?.firstName}\`,
     CompositeToys: (r) => \`\${r?.kind}\${\\"-\\"}\${r?.color}\`,
     CompositeVets: (r) => \`\${r?.specialty}\${\\"-\\"}\${r?.city}\`,
+    compositeDogCompositeBowlShape: (r) => \`\${r?.shape}\${\\"-\\"}\${r?.size}\`,
   };
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -9496,7 +9572,13 @@ export default function UpdateCompositeDogForm(props) {
         }
         hasError={errors?.compositeDogCompositeBowlShape?.hasError}
         errorMessage={errors?.compositeDogCompositeBowlShape?.errorMessage}
-        setFieldValue={setCurrentCompositeDogCompositeBowlShapeValue}
+        getBadgeText={getDisplayValue.compositeDogCompositeBowlShape}
+        setFieldValue={(model) => {
+          setCurrentCompositeDogCompositeBowlShapeDisplayValue(
+            getDisplayValue.compositeDogCompositeBowlShape(model)
+          );
+          setCurrentCompositeDogCompositeBowlShapeValue(model);
+        }}
         inputFieldRef={compositeDogCompositeBowlShapeRef}
         defaultFieldValue={\\"\\"}
       >
@@ -9505,19 +9587,26 @@ export default function UpdateCompositeDogForm(props) {
           isRequired={false}
           isReadOnly={false}
           placeholder=\\"Search CompositeBowl\\"
-          value={currentCompositeDogCompositeBowlShapeValue}
+          value={currentCompositeDogCompositeBowlShapeDisplayValue}
           options={compositeBowlRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.shape === r?.shape) === i
             )
             .map((r) => ({
-              id: r?.shape,
-              label: r?.shape,
+              id: getIDValue.compositeDogCompositeBowlShape?.(r),
+              label: getDisplayValue.compositeDogCompositeBowlShape?.(r),
             }))}
-          onSelect={({ id }) => {
-            setCurrentCompositeDogCompositeBowlShapeValue(id);
-            runValidationTasks(\\"compositeDogCompositeBowlShape\\", id);
+          onSelect={({ id, label }) => {
+            setCurrentCompositeDogCompositeBowlShapeValue(
+              compositeBowlRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCompositeDogCompositeBowlShapeDisplayValue(label);
+            runValidationTasks(\\"compositeDogCompositeBowlShape\\", label);
           }}
           onClear={() => {
             setCurrentCompositeDogCompositeBowlShapeDisplayValue(\\"\\");
@@ -9528,7 +9617,8 @@ export default function UpdateCompositeDogForm(props) {
             if (errors.compositeDogCompositeBowlShape?.hasError) {
               runValidationTasks(\\"compositeDogCompositeBowlShape\\", value);
             }
-            setCurrentCompositeDogCompositeBowlShapeValue(value);
+            setCurrentCompositeDogCompositeBowlShapeDisplayValue(value);
+            setCurrentCompositeDogCompositeBowlShapeValue(undefined);
           }}
           onBlur={() =>
             runValidationTasks(
@@ -10047,7 +10137,7 @@ export default function CreateDogForm(props) {
     model: Owner0,
   }).items;
   const getDisplayValue = {
-    Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    Owner: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
@@ -10558,7 +10648,7 @@ export default function UpdateDogForm(props) {
     model: Owner0,
   }).items;
   const getDisplayValue = {
-    Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    Owner: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
@@ -11076,7 +11166,7 @@ export default function CreateOwnerForm(props) {
     model: Dog0,
   }).items;
   const getDisplayValue = {
-    Dog: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    Dog: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
   };
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -11590,7 +11680,7 @@ export default function UpdateOwnerForm(props) {
     model: Dog0,
   }).items;
   const getDisplayValue = {
-    Dog: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    Dog: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
   };
   const validations = {
     name: [{ type: \\"Required\\" }],
@@ -13333,11 +13423,14 @@ export default function MyMemberForm(props) {
     setName(initialValues.name);
     setTeamID(initialValues.teamID);
     setCurrentTeamIDValue(undefined);
+    setCurrentTeamIDDisplayValue(\\"\\");
     setTeam(initialValues.Team);
     setCurrentTeamValue(undefined);
     setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
   };
+  const [currentTeamIDDisplayValue, setCurrentTeamIDDisplayValue] =
+    React.useState(\\"\\");
   const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
   const teamIDRef = React.createRef();
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
@@ -13345,6 +13438,7 @@ export default function MyMemberForm(props) {
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const TeamRef = React.createRef();
   const getIDValue = {
+    teamID: (r) => JSON.stringify({ id: r?.id }),
     Team: (r) => JSON.stringify({ id: r?.id }),
   };
   const TeamIdSet = new Set(
@@ -13357,6 +13451,7 @@ export default function MyMemberForm(props) {
     model: Team0,
   }).items;
   const getDisplayValue = {
+    teamID: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
     Team: (r) => r?.name,
   };
   const validations = {
@@ -13527,7 +13622,11 @@ export default function MyMemberForm(props) {
         items={teamID ? [teamID] : []}
         hasError={errors?.teamID?.hasError}
         errorMessage={errors?.teamID?.errorMessage}
-        setFieldValue={setCurrentTeamIDValue}
+        getBadgeText={getDisplayValue.teamID}
+        setFieldValue={(model) => {
+          setCurrentTeamIDDisplayValue(getDisplayValue.teamID(model));
+          setCurrentTeamIDValue(model);
+        }}
         inputFieldRef={teamIDRef}
         defaultFieldValue={\\"\\"}
       >
@@ -13536,19 +13635,26 @@ export default function MyMemberForm(props) {
           isRequired={true}
           isReadOnly={false}
           placeholder=\\"Search Team\\"
-          value={currentTeamIDValue}
+          value={currentTeamIDDisplayValue}
           options={teamRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.id === r?.id) === i
             )
             .map((r) => ({
-              id: r?.id,
-              label: r?.id,
+              id: getIDValue.teamID?.(r),
+              label: getDisplayValue.teamID?.(r),
             }))}
-          onSelect={({ id }) => {
-            setCurrentTeamIDValue(id);
-            runValidationTasks(\\"teamID\\", id);
+          onSelect={({ id, label }) => {
+            setCurrentTeamIDValue(
+              teamRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentTeamIDDisplayValue(label);
+            runValidationTasks(\\"teamID\\", label);
           }}
           onClear={() => {
             setCurrentTeamIDDisplayValue(\\"\\");
@@ -13558,7 +13664,8 @@ export default function MyMemberForm(props) {
             if (errors.teamID?.hasError) {
               runValidationTasks(\\"teamID\\", value);
             }
-            setCurrentTeamIDValue(value);
+            setCurrentTeamIDDisplayValue(value);
+            setCurrentTeamIDValue(undefined);
           }}
           onBlur={() => runValidationTasks(\\"teamID\\", currentTeamIDValue)}
           errorMessage={errors.teamID?.errorMessage}
@@ -14422,7 +14529,7 @@ export default function BookCreateForm(props) {
     model: Author,
   }).items;
   const getDisplayValue = {
-    primaryAuthor: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+    primaryAuthor: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
   };
   const validations = {
     name: [],
@@ -17427,6 +17534,7 @@ export default function MyMemberForm(props) {
     setName(cleanValues.name);
     setTeamID(cleanValues.teamID);
     setCurrentTeamIDValue(undefined);
+    setCurrentTeamIDDisplayValue(\\"\\");
     setTeam(cleanValues.Team);
     setCurrentTeamValue(undefined);
     setCurrentTeamDisplayValue(\\"\\");
@@ -17445,6 +17553,8 @@ export default function MyMemberForm(props) {
     queryData();
   }, [idProp, member]);
   React.useEffect(resetStateValues, [memberRecord, teamID, Team]);
+  const [currentTeamIDDisplayValue, setCurrentTeamIDDisplayValue] =
+    React.useState(\\"\\");
   const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
   const teamIDRef = React.createRef();
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
@@ -17452,6 +17562,7 @@ export default function MyMemberForm(props) {
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const TeamRef = React.createRef();
   const getIDValue = {
+    teamID: (r) => JSON.stringify({ id: r?.id }),
     Team: (r) => JSON.stringify({ id: r?.id }),
   };
   const TeamIdSet = new Set(
@@ -17464,6 +17575,7 @@ export default function MyMemberForm(props) {
     model: Team0,
   }).items;
   const getDisplayValue = {
+    teamID: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
     Team: (r) => r?.name,
   };
   const validations = {
@@ -17642,7 +17754,11 @@ export default function MyMemberForm(props) {
         items={teamID ? [teamID] : []}
         hasError={errors?.teamID?.hasError}
         errorMessage={errors?.teamID?.errorMessage}
-        setFieldValue={setCurrentTeamIDValue}
+        getBadgeText={getDisplayValue.teamID}
+        setFieldValue={(model) => {
+          setCurrentTeamIDDisplayValue(getDisplayValue.teamID(model));
+          setCurrentTeamIDValue(model);
+        }}
         inputFieldRef={teamIDRef}
         defaultFieldValue={\\"\\"}
       >
@@ -17651,19 +17767,26 @@ export default function MyMemberForm(props) {
           isRequired={true}
           isReadOnly={false}
           placeholder=\\"Search Team\\"
-          value={currentTeamIDValue}
+          value={currentTeamIDDisplayValue}
           options={teamRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.id === r?.id) === i
             )
             .map((r) => ({
-              id: r?.id,
-              label: r?.id,
+              id: getIDValue.teamID?.(r),
+              label: getDisplayValue.teamID?.(r),
             }))}
-          onSelect={({ id }) => {
-            setCurrentTeamIDValue(id);
-            runValidationTasks(\\"teamID\\", id);
+          onSelect={({ id, label }) => {
+            setCurrentTeamIDValue(
+              teamRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentTeamIDDisplayValue(label);
+            runValidationTasks(\\"teamID\\", label);
           }}
           onClear={() => {
             setCurrentTeamIDDisplayValue(\\"\\");
@@ -17674,7 +17797,8 @@ export default function MyMemberForm(props) {
             if (errors.teamID?.hasError) {
               runValidationTasks(\\"teamID\\", value);
             }
-            setCurrentTeamIDValue(value);
+            setCurrentTeamIDDisplayValue(value);
+            setCurrentTeamIDValue(undefined);
           }}
           onBlur={() => runValidationTasks(\\"teamID\\", currentTeamIDValue)}
           errorMessage={errors.teamID?.errorMessage}
@@ -23016,11 +23140,14 @@ export default function MyMemberForm(props) {
     setName(initialValues.name);
     setTeamID(initialValues.teamID);
     setCurrentTeamIDValue(undefined);
+    setCurrentTeamIDDisplayValue(\\"\\");
     setTeam(initialValues.Team);
     setCurrentTeamValue(undefined);
     setCurrentTeamDisplayValue(\\"\\");
     setErrors({});
   };
+  const [currentTeamIDDisplayValue, setCurrentTeamIDDisplayValue] =
+    React.useState(\\"\\");
   const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
   const teamIDRef = React.createRef();
   const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
@@ -23028,6 +23155,7 @@ export default function MyMemberForm(props) {
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const TeamRef = React.createRef();
   const getIDValue = {
+    teamID: (r) => JSON.stringify({ id: r?.id }),
     Team: (r) => JSON.stringify({ id: r?.id }),
   };
   const TeamIdSet = new Set(
@@ -23040,6 +23168,7 @@ export default function MyMemberForm(props) {
     model: Team0,
   }).items;
   const getDisplayValue = {
+    teamID: (r) => \`\${r?.name}\${\\" - \\"}\${r?.id}\`,
     Team: (r) => r?.name,
   };
   const validations = {
@@ -23210,7 +23339,11 @@ export default function MyMemberForm(props) {
         items={teamID ? [teamID] : []}
         hasError={errors?.teamID?.hasError}
         errorMessage={errors?.teamID?.errorMessage}
-        setFieldValue={setCurrentTeamIDValue}
+        getBadgeText={getDisplayValue.teamID}
+        setFieldValue={(model) => {
+          setCurrentTeamIDDisplayValue(getDisplayValue.teamID(model));
+          setCurrentTeamIDValue(model);
+        }}
         inputFieldRef={teamIDRef}
         defaultFieldValue={\\"\\"}
       >
@@ -23219,19 +23352,26 @@ export default function MyMemberForm(props) {
           isRequired={true}
           isReadOnly={false}
           placeholder=\\"Search Team\\"
-          value={currentTeamIDValue}
+          value={currentTeamIDDisplayValue}
           options={teamRecords
             .filter(
               (r, i, arr) =>
                 arr.findIndex((member) => member?.id === r?.id) === i
             )
             .map((r) => ({
-              id: r?.id,
-              label: r?.id,
+              id: getIDValue.teamID?.(r),
+              label: getDisplayValue.teamID?.(r),
             }))}
-          onSelect={({ id }) => {
-            setCurrentTeamIDValue(id);
-            runValidationTasks(\\"teamID\\", id);
+          onSelect={({ id, label }) => {
+            setCurrentTeamIDValue(
+              teamRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentTeamIDDisplayValue(label);
+            runValidationTasks(\\"teamID\\", label);
           }}
           onClear={() => {
             setCurrentTeamIDDisplayValue(\\"\\");
@@ -23241,7 +23381,8 @@ export default function MyMemberForm(props) {
             if (errors.teamID?.hasError) {
               runValidationTasks(\\"teamID\\", value);
             }
-            setCurrentTeamIDValue(value);
+            setCurrentTeamIDDisplayValue(value);
+            setCurrentTeamIDValue(undefined);
           }}
           onBlur={() => runValidationTasks(\\"teamID\\", currentTeamIDValue)}
           errorMessage={errors.teamID?.errorMessage}
