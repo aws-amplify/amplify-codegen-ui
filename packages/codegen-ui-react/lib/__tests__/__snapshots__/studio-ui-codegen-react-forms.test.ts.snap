@@ -24669,3 +24669,507 @@ export declare type MyMemberFormProps = React.PropsWithChildren<{
 export default function MyMemberForm(props: MyMemberFormProps): React.ReactElement;
 "
 `;
+
+exports[`amplify form renderer tests should render form for child of bidirectional 1:m when field defined on parent 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import {
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Car, Dealership } from \\"../models\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { DataStore } from \\"aws-amplify\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function UpdateCarForm(props) {
+  const {
+    id: idProp,
+    car: carModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    name: \\"\\",
+    dealership: undefined,
+  };
+  const [name, setName] = React.useState(initialValues.name);
+  const [dealership, setDealership] = React.useState(initialValues.dealership);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = carRecord
+      ? { ...initialValues, ...carRecord, dealership }
+      : initialValues;
+    setName(cleanValues.name);
+    setDealership(cleanValues.dealership);
+    setCurrentDealershipValue(undefined);
+    setCurrentDealershipDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [carRecord, setCarRecord] = React.useState(carModelProp);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp ? await DataStore.query(Car, idProp) : carModelProp;
+      setCarRecord(record);
+      const dealershipRecord = record ? await record.dealership : undefined;
+      setDealership(dealershipRecord);
+    };
+    queryData();
+  }, [idProp, carModelProp]);
+  React.useEffect(resetStateValues, [carRecord, dealership]);
+  const [currentDealershipDisplayValue, setCurrentDealershipDisplayValue] =
+    React.useState(\\"\\");
+  const [currentDealershipValue, setCurrentDealershipValue] =
+    React.useState(undefined);
+  const dealershipRef = React.createRef();
+  const getIDValue = {
+    dealership: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const dealershipIdSet = new Set(
+    Array.isArray(dealership)
+      ? dealership.map((r) => getIDValue.dealership?.(r))
+      : getIDValue.dealership?.(dealership)
+  );
+  const dealershipRecords = useDataStoreBinding({
+    type: \\"collection\\",
+    model: Dealership,
+  }).items;
+  const getDisplayValue = {
+    dealership: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    name: [{ type: \\"Required\\" }],
+    dealership: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          name,
+          dealership,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          await DataStore.save(
+            Car.copyOf(carRecord, (updated) => {
+              Object.assign(updated, modelFields);
+              if (!modelFields.dealership) {
+                updated.dealershipId = undefined;
+              }
+            })
+          );
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"UpdateCarForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Name\\"
+        isRequired={true}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name: value,
+              dealership,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks(\\"name\\", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks(\\"name\\", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, \\"name\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              dealership: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.dealership ?? value;
+          }
+          setDealership(value);
+          setCurrentDealershipValue(undefined);
+          setCurrentDealershipDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentDealershipValue}
+        label={\\"Dealership\\"}
+        items={dealership ? [dealership] : []}
+        hasError={errors?.dealership?.hasError}
+        errorMessage={errors?.dealership?.errorMessage}
+        getBadgeText={getDisplayValue.dealership}
+        setFieldValue={(model) => {
+          setCurrentDealershipDisplayValue(getDisplayValue.dealership(model));
+          setCurrentDealershipValue(model);
+        }}
+        inputFieldRef={dealershipRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Dealership\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Dealership\\"
+          value={currentDealershipDisplayValue}
+          options={dealershipRecords
+            .filter((r) => !dealershipIdSet.has(getIDValue.dealership?.(r)))
+            .map((r) => ({
+              id: getIDValue.dealership?.(r),
+              label: getDisplayValue.dealership?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentDealershipValue(
+              dealershipRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentDealershipDisplayValue(label);
+            runValidationTasks(\\"dealership\\", label);
+          }}
+          onClear={() => {
+            setCurrentDealershipDisplayValue(\\"\\");
+          }}
+          defaultValue={dealership}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.dealership?.hasError) {
+              runValidationTasks(\\"dealership\\", value);
+            }
+            setCurrentDealershipDisplayValue(value);
+            setCurrentDealershipValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"dealership\\", currentDealershipDisplayValue)
+          }
+          errorMessage={errors.dealership?.errorMessage}
+          hasError={errors.dealership?.hasError}
+          ref={dealershipRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"dealership\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || carModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(idProp || carModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests should render form for child of bidirectional 1:m when field defined on parent 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Car, Dealership } from \\"../models\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdateCarFormInputValues = {
+    name?: string;
+    dealership?: Dealership;
+};
+export declare type UpdateCarFormValidationValues = {
+    name?: ValidationFunction<string>;
+    dealership?: ValidationFunction<Dealership>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateCarFormOverridesProps = {
+    UpdateCarFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    dealership?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type UpdateCarFormProps = React.PropsWithChildren<{
+    overrides?: UpdateCarFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    car?: Car;
+    onSubmit?: (fields: UpdateCarFormInputValues) => UpdateCarFormInputValues;
+    onSuccess?: (fields: UpdateCarFormInputValues) => void;
+    onError?: (fields: UpdateCarFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateCarFormInputValues) => UpdateCarFormInputValues;
+    onValidate?: UpdateCarFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdateCarForm(props: UpdateCarFormProps): React.ReactElement;
+"
+`;

@@ -230,6 +230,10 @@ export function getGenericFromDataStore(
           let modelRelationship: GenericDataRelationshipType | undefined;
 
           if (relationshipType === 'HAS_MANY' && 'associatedWith' in field.association) {
+            // for 1:m relationships, we will not attach these
+            // (i.e. model-type fields) as relatedModelFields
+            const modelTypeFieldsOnHasManyChild: Set<string> = new Set();
+
             const associatedModel = dataStoreSchema.models[relatedModelName];
             const associatedFieldNames = getAssociatedFieldNames(field);
             let canUnlinkAssociatedModel = true;
@@ -255,12 +259,17 @@ export function getGenericFromDataStore(
                   relatedJoinFieldName = relatedJoinField.name;
                 }
                 // if the associated model is not a join table, note implicit relationship for associated field
-              } else {
-                addRelationship(fieldsWithImplicitRelationships, relatedModelName, associatedFieldName, {
-                  type: 'HAS_ONE',
-                  relatedModelName: model.name,
-                  isHasManyIndex: true,
-                });
+              } else if (associatedField) {
+                if (isFieldModelType(associatedField)) {
+                  modelTypeFieldsOnHasManyChild.add(associatedFieldName);
+                } else {
+                  addRelationship(fieldsWithImplicitRelationships, relatedModelName, associatedFieldName, {
+                    type: 'HAS_ONE',
+                    relatedModelName: model.name,
+                    // identify index on 1:m child as such
+                    isHasManyIndex: true,
+                  });
+                }
               }
             });
 
@@ -277,7 +286,7 @@ export function getGenericFromDataStore(
               type: relationshipType,
               canUnlinkAssociatedModel,
               relatedModelName,
-              relatedModelFields: associatedFieldNames,
+              relatedModelFields: associatedFieldNames.filter((n) => !modelTypeFieldsOnHasManyChild.has(n)),
               relatedJoinFieldName,
               relatedJoinTableName,
             };

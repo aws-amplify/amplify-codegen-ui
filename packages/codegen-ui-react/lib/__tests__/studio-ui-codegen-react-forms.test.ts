@@ -642,4 +642,16 @@ describe('amplify form renderer tests', () => {
       });
     });
   });
+
+  it('should render form for child of bidirectional 1:m when field defined on parent', () => {
+    const { componentText, declaration } = generateWithAmplifyFormRenderer(
+      'forms/car-datastore-update',
+      'datastore/car',
+      undefined,
+      { isNonModelSupported: true, isRelationshipSupported: true },
+    );
+
+    expect(componentText).toMatchSnapshot();
+    expect(declaration).toMatchSnapshot();
+  });
 });
