@@ -44,6 +44,8 @@ const EXPECTED_SUCCESSFUL_CASES = new Set([
   'DataStoreFormCreateCompositeDog',
   'DataStoreFormUpdateCompositeToy',
   'DataStoreFormUpdateModelWithVariableCollisions',
+  'DataStoreFormUpdateCar',
+  'DataStoreFormUpdateDealership',
   'ComponentWithDataBindingWithPredicate',
   'ComponentWithDataBindingWithoutPredicate',
   'ComponentWithSimplePropertyBinding',

@@ -839,6 +839,68 @@ export declare const ModelWithVariableCollisions: (new (
   ): ModelWithVariableCollisions;
 };
 
+type EagerDealership = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Dealership, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly cars?: (Car | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyDealership = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Dealership, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly cars: AsyncCollection<Car>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type Dealership = LazyLoading extends LazyLoadingDisabled ? EagerDealership : LazyDealership;
+
+export declare const Dealership: (new (init: ModelInit<Dealership>) => Dealership) & {
+  copyOf(source: Dealership, mutator: (draft: MutableModel<Dealership>) => MutableModel<Dealership> | void): Dealership;
+};
+
+type EagerCar = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Car, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly dealershipId?: string | null;
+  readonly dealership?: Dealership | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+type LazyCar = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Car, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly dealershipId?: string | null;
+  readonly dealership: AsyncItem<Dealership | undefined>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+};
+
+export declare type Car = LazyLoading extends LazyLoadingDisabled ? EagerCar : LazyCar;
+
+export declare const Car: (new (init: ModelInit<Car>) => Car) & {
+  copyOf(source: Car, mutator: (draft: MutableModel<Car>) => MutableModel<Car> | void): Car;
+};
+
 type EagerAllSupportedFormFieldsTag = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<AllSupportedFormFieldsTag, 'id'>;

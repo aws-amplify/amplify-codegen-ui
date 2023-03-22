@@ -654,4 +654,17 @@ describe('amplify form renderer tests', () => {
     expect(componentText).toMatchSnapshot();
     expect(declaration).toMatchSnapshot();
   });
+
+  it('should render form for parent of bidirectional 1:m when field defined on parent', () => {
+    const { componentText, declaration } = generateWithAmplifyFormRenderer(
+      'forms/dealership-datastore-update',
+      'datastore/car',
+      undefined,
+      { isNonModelSupported: true, isRelationshipSupported: true },
+    );
+
+    expect(componentText).not.toContain('updated.dealership = dealershipRecord.id');
+    expect(componentText).toMatchSnapshot();
+    expect(declaration).toMatchSnapshot();
+  });
 });
