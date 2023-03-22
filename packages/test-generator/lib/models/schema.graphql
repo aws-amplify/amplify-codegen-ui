@@ -170,3 +170,16 @@ type BiDirectionalToy @model {
 type ModelWithVariableCollisions @model {
   modelWithVariableCollisions: String
 }
+
+type Dealership @model {
+  id: ID!
+  name: String!
+  cars: [Car] @hasMany(fields: ["id"])
+}
+
+type Car @model {
+  id: ID!
+  name: String!
+  dealershipId: ID
+  dealership: Dealership @belongsTo(fields: ["dealershipId"])
+}
