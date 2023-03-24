@@ -338,9 +338,9 @@ export const buildOnChangeStatement = (
 examples:
 
   scalar:
-  onSelect={({ id }) => {
+  onSelect={({ id, label }) => {
     setCurrentPrimaryAuthorValue(id);
-    setCurrentPrimaryAuthorDisplayValue(id);
+    setCurrentPrimaryAuthorDisplayValue(label);
   }}
 
   model:
@@ -367,18 +367,17 @@ export function buildOnSelect({
 
   const props: BindingElement[] = [
     factory.createBindingElement(undefined, undefined, factory.createIdentifier(idString), undefined),
+    factory.createBindingElement(undefined, undefined, factory.createIdentifier(labelString), undefined),
   ];
 
   let nextCurrentValue: Expression = factory.createIdentifier(idString);
-  let nextCurrentDisplayValue: Expression = factory.createIdentifier(idString);
+  let nextCurrentDisplayValue: Expression = factory.createIdentifier(labelString);
 
-  if (fieldConfig.relationship) {
+  if (isModelDataType(fieldConfig)) {
     const { model, keys } = extractModelAndKeys(fieldConfig.valueMappings);
     if (!model || !keys || !keys.length) {
       throw new InvalidInputError(`Invalid value mappings`);
     }
-
-    props.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier(labelString), undefined));
 
     nextCurrentDisplayValue = factory.createIdentifier(labelString);
 

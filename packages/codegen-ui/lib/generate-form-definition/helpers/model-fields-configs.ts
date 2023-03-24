@@ -124,9 +124,11 @@ export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
 function getModelDisplayValue({
   model,
   modelName,
+  keyToMap,
 }: {
   model: GenericDataModel;
   modelName: string;
+  keyToMap?: string;
 }): StudioFormInputFieldProperty & { isDefault: true } {
   const concatArray: StudioFormInputFieldProperty[] = [];
   const { primaryKeys } = model;
@@ -153,16 +155,22 @@ function getModelDisplayValue({
     );
   }
 
-  primaryKeys.forEach((key, index) => {
+  if (keyToMap) {
     concatArray.push({
-      bindingProperties: { property: modelName, field: key },
+      bindingProperties: { property: modelName, field: keyToMap },
     });
-    if (index !== primaryKeys.length - 1) {
+  } else {
+    primaryKeys.forEach((key, index) => {
       concatArray.push({
-        value: '-',
+        bindingProperties: { property: modelName, field: key },
       });
-    }
-  });
+      if (index !== primaryKeys.length - 1) {
+        concatArray.push({
+          value: '-',
+        });
+      }
+    });
+  }
 
   return concatArray.length === 1 ? { ...concatArray[0], isDefault: true } : { concat: concatArray, isDefault: true };
 }
@@ -214,8 +222,11 @@ function getValueMappings({
       value: { bindingProperties: { property: modelName, field: key } },
     }));
 
-    // if field is model or scalar, attach displayValue for all options to the first value
-    values[0].displayValue = getModelDisplayValue({ model: relatedModel, modelName });
+    values[0].displayValue = getModelDisplayValue({
+      model: relatedModel,
+      modelName,
+      keyToMap: isModelType ? undefined : keys[0],
+    });
 
     return {
       values,

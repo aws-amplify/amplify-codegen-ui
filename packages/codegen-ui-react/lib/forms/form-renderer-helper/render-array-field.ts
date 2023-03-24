@@ -26,7 +26,7 @@ import {
 } from './form-state';
 import { buildOverrideOnChangeStatement } from './event-handler-props';
 import { isModelDataType, shouldImplementDisplayValueFunction } from './render-checkers';
-import { getDisplayValueObjectName } from './model-values';
+import { extractModelAndKeys, getDisplayValueObjectName, getDisplayValueScalar } from './model-values';
 import { getElementAccessExpression } from './invalid-variable-helpers';
 import { getSetNameIdentifier, capitalizeFirstLetter } from '../../helpers';
 
@@ -203,66 +203,152 @@ export const renderArrayFieldComponent = (
 
   let setFieldValueIdentifier = setStateName;
 
+  let scalarModel: string | undefined;
+  let scalarKey: string | undefined;
+
+  if (fieldConfig.relationship && !isModelDataType(fieldConfig)) {
+    const { valueMappings } = fieldConfig;
+    const { model, keys } = extractModelAndKeys(valueMappings);
+    if (model && keys) {
+      [scalarModel, scalarKey] = [model, keys[0]];
+    }
+  }
+
+  let getBadgeTextFunction: Expression = getElementAccessExpression(getDisplayValueObjectName, fieldName);
+
+  if (scalarModel && scalarKey) {
+    getBadgeTextFunction = factory.createArrowFunction(
+      undefined,
+      undefined,
+      [
+        factory.createParameterDeclaration(
+          undefined,
+          undefined,
+          undefined,
+          factory.createIdentifier('value'),
+          undefined,
+          undefined,
+        ),
+      ],
+      undefined,
+      factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+      getDisplayValueScalar(fieldName, scalarModel, scalarKey),
+    );
+  }
+
   if (shouldImplementDisplayValueFunction(fieldConfig)) {
     setFieldValueIdentifier = getSetNameIdentifier(getCurrentDisplayValueName(renderedFieldName));
     props.push(
       factory.createJsxAttribute(
         factory.createIdentifier('getBadgeText'),
-        factory.createJsxExpression(undefined, getElementAccessExpression(getDisplayValueObjectName, fieldName)),
+        factory.createJsxExpression(undefined, getBadgeTextFunction),
       ),
     );
   }
 
   /**
+  // model
   setFieldValue={(model) => {
     setCurrentHasOneUserDisplayValue(getDisplayValue.HasOneUser(model))
     setCurrentHasOneUserValue(model)
   }
-   */
+
+  // scalar
+  setFieldValue={(value) => {
+    setCurrentCompositeDogCompositeToysNameDisplayValue(
+      getDisplayValue.compositeDogCompositeToysName(
+        compositeDogRecords.find((r) => r.name === value)
+      )
+    );
+    setCurrentCompositeDogCompositeToysNameValue(value);
+  }}
+  */
   if (fieldConfig.relationship) {
-    const valueArgument = 'model';
-    props.push(
-      factory.createJsxAttribute(
-        factory.createIdentifier('setFieldValue'),
-        factory.createJsxExpression(
-          undefined,
-          factory.createArrowFunction(
+    if (isModelDataType(fieldConfig)) {
+      const valueArgument = 'model';
+      props.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('setFieldValue'),
+          factory.createJsxExpression(
             undefined,
-            undefined,
-            [
-              factory.createParameterDeclaration(
-                undefined,
-                undefined,
-                undefined,
-                factory.createIdentifier(valueArgument),
-                undefined,
-                undefined,
-                undefined,
-              ),
-            ],
-            undefined,
-            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-            factory.createBlock(
+            factory.createArrowFunction(
+              undefined,
+              undefined,
               [
-                factory.createExpressionStatement(
-                  factory.createCallExpression(setFieldValueIdentifier, undefined, [
-                    factory.createCallExpression(
-                      getElementAccessExpression(getDisplayValueObjectName, fieldName),
-                      undefined,
-                      [factory.createIdentifier(valueArgument)],
-                    ),
-                  ]),
-                ),
-                factory.createExpressionStatement(
-                  factory.createCallExpression(setStateName, undefined, [factory.createIdentifier(valueArgument)]),
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier(valueArgument),
+                  undefined,
+                  undefined,
+                  undefined,
                 ),
               ],
-              true,
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
+                [
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(setFieldValueIdentifier, undefined, [
+                      factory.createCallExpression(
+                        getElementAccessExpression(getDisplayValueObjectName, fieldName),
+                        undefined,
+                        [factory.createIdentifier(valueArgument)],
+                      ),
+                    ]),
+                  ),
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(setStateName, undefined, [factory.createIdentifier(valueArgument)]),
+                  ),
+                ],
+                true,
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    } else if (scalarModel && scalarKey) {
+      const valueArgument = 'value';
+      props.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('setFieldValue'),
+          factory.createJsxExpression(
+            undefined,
+            factory.createArrowFunction(
+              undefined,
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier(valueArgument),
+                  undefined,
+                  undefined,
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBlock(
+                [
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(setFieldValueIdentifier, undefined, [
+                      getDisplayValueScalar(fieldName, scalarModel, scalarKey),
+                    ]),
+                  ),
+                  factory.createExpressionStatement(
+                    factory.createCallExpression(setStateName, undefined, [factory.createIdentifier(valueArgument)]),
+                  ),
+                ],
+                true,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   } else {
     props.push(
       factory.createJsxAttribute(

@@ -68,6 +68,58 @@ const getDisplayValueCallChain = ({ fieldName, recordString }: { fieldName: stri
 };
 
 /**
+  getDisplayValue.compositeDogCompositeToysDescription(
+    compositeDogRecords.find((r) => r.description === value)
+  )
+ */
+export function getDisplayValueScalar(fieldName: string, model: string, key: string) {
+  const recordString = 'r';
+
+  return factory.createCallExpression(
+    factory.createPropertyAccessExpression(
+      factory.createIdentifier(getDisplayValueObjectName),
+      factory.createIdentifier(fieldName),
+    ),
+    undefined,
+    [
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(
+          factory.createIdentifier(getRecordsName(model)),
+          factory.createIdentifier('find'),
+        ),
+        undefined,
+        [
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createIdentifier(recordString),
+                undefined,
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBinaryExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier(recordString),
+                factory.createIdentifier(key),
+              ),
+              factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+              factory.createIdentifier('value'),
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+/**
   examples:
   for model -
   authorRecords
@@ -75,7 +127,7 @@ const getDisplayValueCallChain = ({ fieldName, recordString }: { fieldName: stri
     (r, i, arr) => arr.findIndex(member => member.shape === r.shape) === i
     )
   .map((r) => ({
-    id: getIDValue['fieldName]?.(r),
+    id: r?.id,
     label: getDisplayValue['fieldName']?.(r),
   }))
  */
@@ -196,10 +248,11 @@ function getSuggestionsForRelationshipScalar({
         factory.createParenthesizedExpression(
           factory.createObjectLiteralExpression(
             [
-              factory.createPropertyAssignment(
-                factory.createIdentifier('id'),
-                getIDValueCallChain({ fieldName, recordString }),
-              ),
+              factory.createPropertyAssignment(factory.createIdentifier('id'), buildAccessChain([recordString, key])),
+              // factory.createPropertyAssignment(
+              //   factory.createIdentifier('id'),
+              //   getIDValueCallChain({ fieldName, recordString }),
+              // ),
               factory.createPropertyAssignment(factory.createIdentifier('label'), labelExpression),
             ],
             true,

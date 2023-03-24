@@ -466,23 +466,10 @@ describe('mapModelFieldsConfigs', () => {
       values: [
         {
           displayValue: {
-            concat: [
-              {
-                bindingProperties: {
-                  field: 'shape',
-                  property: 'CompositeBowl',
-                },
-              },
-              {
-                value: '-',
-              },
-              {
-                bindingProperties: {
-                  field: 'size',
-                  property: 'CompositeBowl',
-                },
-              },
-            ],
+            bindingProperties: {
+              field: 'shape',
+              property: 'CompositeBowl',
+            },
             isDefault: true,
           },
           value: {
@@ -507,23 +494,10 @@ describe('mapModelFieldsConfigs', () => {
       values: [
         {
           displayValue: {
-            concat: [
-              {
-                bindingProperties: {
-                  field: 'shape',
-                  property: 'CompositeBowl',
-                },
-              },
-              {
-                value: '-',
-              },
-              {
-                bindingProperties: {
-                  field: 'size',
-                  property: 'CompositeBowl',
-                },
-              },
-            ],
+            bindingProperties: {
+              field: 'size',
+              property: 'CompositeBowl',
+            },
             isDefault: true,
           },
           value: {
@@ -654,23 +628,10 @@ describe('mapModelFieldsConfigs', () => {
           values: [
             {
               displayValue: {
-                concat: [
-                  {
-                    bindingProperties: {
-                      field: 'name',
-                      property: 'CompositeDog',
-                    },
-                  },
-                  {
-                    value: '-',
-                  },
-                  {
-                    bindingProperties: {
-                      field: 'description',
-                      property: 'CompositeDog',
-                    },
-                  },
-                ],
+                bindingProperties: {
+                  field: 'name',
+                  property: 'CompositeDog',
+                },
                 isDefault: true,
               },
               value: {
@@ -708,23 +669,10 @@ describe('mapModelFieldsConfigs', () => {
           values: [
             {
               displayValue: {
-                concat: [
-                  {
-                    bindingProperties: {
-                      field: 'name',
-                      property: 'CompositeDog',
-                    },
-                  },
-                  {
-                    value: '-',
-                  },
-                  {
-                    bindingProperties: {
-                      field: 'description',
-                      property: 'CompositeDog',
-                    },
-                  },
-                ],
+                bindingProperties: {
+                  field: 'description',
+                  property: 'CompositeDog',
+                },
                 isDefault: true,
               },
               value: {
