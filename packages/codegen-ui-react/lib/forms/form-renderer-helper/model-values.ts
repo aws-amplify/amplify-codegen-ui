@@ -249,10 +249,6 @@ function getSuggestionsForRelationshipScalar({
           factory.createObjectLiteralExpression(
             [
               factory.createPropertyAssignment(factory.createIdentifier('id'), buildAccessChain([recordString, key])),
-              // factory.createPropertyAssignment(
-              //   factory.createIdentifier('id'),
-              //   getIDValueCallChain({ fieldName, recordString }),
-              // ),
               factory.createPropertyAssignment(factory.createIdentifier('label'), labelExpression),
             ],
             true,

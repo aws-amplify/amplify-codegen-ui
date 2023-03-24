@@ -32,5 +32,5 @@ export const shouldImplementDisplayValueFunction = (config: FieldConfigMetadata)
 };
 
 export const shouldImplementIDValueFunction = (config: FieldConfigMetadata): boolean => {
-  return !!(config.relationship && config.valueMappings);
+  return !!(isModelDataType(config) && config.valueMappings);
 };

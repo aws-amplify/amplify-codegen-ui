@@ -240,11 +240,6 @@ export default function CreateCompositeToyForm(props) {
     setCurrentCompositeDogCompositeToysDescriptionValue,
   ] = React.useState(undefined);
   const compositeDogCompositeToysDescriptionRef = React.createRef();
-  const getIDValue = {
-    compositeDogCompositeToysName: (r) => JSON.stringify({ name: r?.name }),
-    compositeDogCompositeToysDescription: (r) =>
-      JSON.stringify({ description: r?.description }),
-  };
   const compositeDogRecords = useDataStoreBinding({
     type: \\"collection\\",
     model: CompositeDog,
@@ -888,7 +883,6 @@ export default function CreateCommentForm(props) {
     post: (r) => JSON.stringify({ id: r?.id }),
     User: (r) => JSON.stringify({ id: r?.id }),
     Org: (r) => JSON.stringify({ id: r?.id }),
-    postCommentsId: (r) => JSON.stringify({ id: r?.id }),
   };
   const postIdSet = new Set(
     Array.isArray(post)
@@ -8929,7 +8923,6 @@ export default function UpdateCompositeDogForm(props) {
     CompositeToys: (r) => JSON.stringify({ kind: r?.kind, color: r?.color }),
     CompositeVets: (r) =>
       JSON.stringify({ specialty: r?.specialty, city: r?.city }),
-    compositeDogCompositeBowlShape: (r) => JSON.stringify({ shape: r?.shape }),
   };
   const CompositeOwnerIdSet = new Set(
     Array.isArray(CompositeOwner)
@@ -13437,7 +13430,6 @@ export default function MyMemberForm(props) {
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const TeamRef = React.createRef();
   const getIDValue = {
-    teamID: (r) => JSON.stringify({ id: r?.id }),
     Team: (r) => JSON.stringify({ id: r?.id }),
   };
   const TeamIdSet = new Set(
@@ -17559,7 +17551,6 @@ export default function MyMemberForm(props) {
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const TeamRef = React.createRef();
   const getIDValue = {
-    teamID: (r) => JSON.stringify({ id: r?.id }),
     Team: (r) => JSON.stringify({ id: r?.id }),
   };
   const TeamIdSet = new Set(
@@ -23150,7 +23141,6 @@ export default function MyMemberForm(props) {
   const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
   const TeamRef = React.createRef();
   const getIDValue = {
-    teamID: (r) => JSON.stringify({ id: r?.id }),
     Team: (r) => JSON.stringify({ id: r?.id }),
   };
   const TeamIdSet = new Set(
