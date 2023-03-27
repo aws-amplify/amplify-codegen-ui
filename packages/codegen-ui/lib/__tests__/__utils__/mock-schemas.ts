@@ -3617,3 +3617,148 @@ export const schemaWithoutJoinTables: DataStoreSchema = {
   codegenVersion: '3.3.5',
   version: '925d97d5ee6e402764bce3a9c0e546c1',
 };
+
+/**
+type Dealership @model {
+  id: ID!
+  name: String!
+  cars: [Car] @hasMany(fields: ["id"])
+}
+
+
+type Car @model {
+  id: ID!
+  name: String!
+  dealershipId: ID
+  dealership: Dealership @belongsTo(fields: ["dealershipId"])
+}
+ */
+
+export const schemaWithBiDirectionalHasManyWithDefinedField: DataStoreSchema = {
+  models: {
+    Dealership: {
+      name: 'Dealership',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+        },
+        cars: {
+          name: 'cars',
+          isArray: true,
+          type: {
+            model: 'Car',
+          },
+          isRequired: false,
+          attributes: [],
+          isArrayNullable: true,
+          association: {
+            connectionType: 'HAS_MANY',
+            associatedWith: ['dealership'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Dealerships',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+    Car: {
+      name: 'Car',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        name: {
+          name: 'name',
+          isArray: false,
+          type: 'String',
+          isRequired: true,
+          attributes: [],
+        },
+        dealershipId: {
+          name: 'dealershipId',
+          isArray: false,
+          type: 'ID',
+          isRequired: false,
+          attributes: [],
+        },
+        dealership: {
+          name: 'dealership',
+          isArray: false,
+          type: {
+            model: 'Dealership',
+          },
+          isRequired: false,
+          attributes: [],
+          association: {
+            connectionType: 'BELONGS_TO',
+            targetNames: ['dealershipId'],
+          },
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Cars',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+  },
+  enums: {},
+  nonModels: {},
+  codegenVersion: '3.3.5',
+  version: '832519d29b9b70a1444d1c99127dbd59',
+};

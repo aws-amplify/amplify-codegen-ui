@@ -47,7 +47,11 @@ describe('FormTests - CustomDog', () => {
       getInputByLabel('Email').type('jd@yahoo.com');
       cy.contains(ErrorMessageMap.validEmail).should('not.exist');
 
+      cy.get('select').select('Green').should('have.value', 'Green');
+
       cy.contains('Clear').click();
+
+      cy.get('select').should('have.value', '');
 
       // validates on blur & extends with onValidate prop
       getInputByLabel('Name').type('S');
@@ -56,7 +60,7 @@ describe('FormTests - CustomDog', () => {
       blurField();
       getInputByLabel('Email').type('spot@gmail.com');
       blurField();
-      getInputByLabel('IP Address').type('invalid ip');
+      getInputByLabel('IP Address*').type('invalid ip');
       blurField();
       cy.contains(ErrorMessageMap.name);
       cy.contains(ErrorMessageMap.age);
@@ -72,8 +76,9 @@ describe('FormTests - CustomDog', () => {
       blurField();
       getInputByLabel('Email').type('spot@yahoo.com');
       blurField();
-      getInputByLabel('IP Address').type('192.0.2.146');
+      getInputByLabel('IP Address*').type('192.0.2.146');
       blurField();
+      cy.get('select').select('Blue');
       typeInAutocomplete('Ret{downArrow}{enter}');
       cy.contains('Submit').click();
       cy.contains('submitted: true');
@@ -81,6 +86,7 @@ describe('FormTests - CustomDog', () => {
       cy.contains('age: 3');
       cy.contains('email: spot@yahoo.com');
       cy.contains('ip: 192.0.2.146');
+      cy.contains('color: Blue');
       cy.contains('Retriever');
     });
   });

@@ -24,6 +24,9 @@ import DSCPKTeacher from './DSCPKTeacher';
 import DSBidirectionalOwner from './DSBidirectionalOwner';
 import DSBidirectionalDog from './DSBidirectionalDog';
 import DSBidirectionalToy from './DSBidirectionalToy';
+import DSModelWithVariableCollisions from './DSModelWithVariableCollisions';
+import DSCar from './DSCar';
+import DSDealership from './DSDealership';
 
 export default function FormTests() {
   const { subject } = useParams();
@@ -49,6 +52,13 @@ export default function FormTests() {
       return <DSBidirectionalOwner />;
     case 'DSBidirectionalToy':
       return <DSBidirectionalToy />;
+    case 'DSModelWithVariableCollisions':
+      return <DSModelWithVariableCollisions />;
+    case 'DSCar':
+      return <DSCar />;
+    case 'DSDealership':
+      return <DSDealership />;
+
     default:
       return (
         <div>
@@ -83,6 +93,15 @@ export default function FormTests() {
             </li>
             <li>
               <Link to="DSBidirectionalToy">DSBidirectionalToy</Link>
+            </li>
+            <li>
+              <Link to="DSModelWithVariableCollisions">DSModelWithVariableCollisions</Link>
+            </li>
+            <li>
+              <Link to="DSCar">DSCar</Link>
+            </li>
+            <li>
+              <Link to="DSDealership">DSDealership</Link>
             </li>
           </ul>
         </div>

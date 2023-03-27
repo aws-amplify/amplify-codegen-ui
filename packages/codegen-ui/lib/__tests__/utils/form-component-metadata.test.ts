@@ -74,8 +74,9 @@ describe('mapFormMetaData', () => {
       cta: {},
     };
 
-    const { fieldConfigs } = mapFormMetadata(form, formDefinition);
+    const { fieldConfigs, labelDecorator } = mapFormMetadata(form, formDefinition);
 
+    expect(labelDecorator).toBe('none');
     expect('name' in fieldConfigs).toBe(true);
     expect('myDivider' in fieldConfigs || 'myText' in fieldConfigs || 'myHeading' in fieldConfigs).toBe(false);
   });

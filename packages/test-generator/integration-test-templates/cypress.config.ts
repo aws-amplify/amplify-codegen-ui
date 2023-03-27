@@ -17,7 +17,12 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
-    supportFile: false,
+    setupNodeEvents(on, config) {
+      // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+      require('@cypress/code-coverage/task')(on, config);
+
+      return config;
+    },
   },
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,

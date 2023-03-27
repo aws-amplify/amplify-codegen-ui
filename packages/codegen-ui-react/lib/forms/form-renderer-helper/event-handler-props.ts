@@ -36,7 +36,7 @@ import {
   Expression,
   ExpressionStatement,
 } from 'typescript';
-import { lowerCaseFirst, getSetNameIdentifier } from '../../helpers';
+import { lowerCaseFirst, getSetNameIdentifier, getModelNameProp } from '../../helpers';
 import { buildTargetVariable } from './event-targets';
 import {
   buildAccessChain,
@@ -75,10 +75,11 @@ export const buildMutationBindings = (form: StudioForm, primaryKeys: string[] = 
           ),
           undefined,
         ),
+        // modelName: modelNameModelProp
         factory.createBindingElement(
           undefined,
-          undefined,
           factory.createIdentifier(lowerCaseFirst(dataTypeName)),
+          factory.createIdentifier(getModelNameProp(dataTypeName)),
           undefined,
         ),
       );

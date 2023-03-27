@@ -16,7 +16,7 @@
 import { DataFieldDataType, GenericDataRelationshipType } from '../data';
 import { FieldValidationConfiguration } from './form-validation';
 import { StudioFormValueMappings } from './input-config';
-import { FormStyleConfig, StudioFormStyle } from './style';
+import { FormStyleConfig, LabelDecorator, StudioFormStyle } from './style';
 
 /**
  * Form Action type definition
@@ -55,5 +55,6 @@ export type FormMetadata = {
   dataType: StudioFormDataType;
   name: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
-  layoutConfigs: Record<keyof StudioFormStyle, FormStyleConfig>;
+  layoutConfigs: Record<keyof Omit<StudioFormStyle, 'labelDecorator'>, FormStyleConfig>;
+  labelDecorator?: LabelDecorator;
 };

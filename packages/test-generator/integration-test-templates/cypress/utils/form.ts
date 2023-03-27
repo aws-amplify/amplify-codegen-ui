@@ -25,6 +25,10 @@ export const getArrayFieldButtonByLabel = (label) => {
   return cy.contains(label).next('button');
 };
 
+export const getDecoratedLabelSibling = (label) => {
+  return cy.contains(label).parent().next();
+};
+
 export const clickAddToArray = (container?: Cypress.Chainable<any>) => {
   if (container) {
     container.within(() => {

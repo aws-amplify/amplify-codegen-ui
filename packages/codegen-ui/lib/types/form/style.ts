@@ -21,6 +21,8 @@ export type FormStyleConfig = {
   value?: string;
 } & FormStyleConfigCommon;
 
+export type LabelDecorator = 'optional' | 'required' | 'none';
+
 export type StudioFormStyle = {
   horizontalGap?: FormStyleConfig;
   verticalGap?: FormStyleConfig;

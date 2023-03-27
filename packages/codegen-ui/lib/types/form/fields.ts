@@ -22,7 +22,6 @@ import { FieldValidationConfiguration } from './form-validation';
  */
 type StudioFieldConfig = {
   label?: string;
-
   position?: StudioFieldPosition;
   validations?: FieldValidationConfiguration[];
 };

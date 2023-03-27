@@ -391,6 +391,18 @@ describe('amplify form renderer tests', () => {
         expect(componentText).toMatchSnapshot();
         expect(declaration).toMatchSnapshot();
       });
+      // happy path is from an example on the docs website
+      it('should render happy path nested json fields for create form', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/nested-json-create', undefined);
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
+
+      it('should render happy path nested json fields for update form', () => {
+        const { componentText, declaration } = generateWithAmplifyFormRenderer('forms/nested-json-update', undefined);
+        expect(componentText).toMatchSnapshot();
+        expect(declaration).toMatchSnapshot();
+      });
 
       it('should render a custom backed form with an array field', () => {
         const { componentText, declaration } = generateWithAmplifyFormRenderer(
@@ -629,5 +641,30 @@ describe('amplify form renderer tests', () => {
         expect(declaration).toMatchSnapshot();
       });
     });
+  });
+
+  it('should render form for child of bidirectional 1:m when field defined on parent', () => {
+    const { componentText, declaration } = generateWithAmplifyFormRenderer(
+      'forms/car-datastore-update',
+      'datastore/car',
+      undefined,
+      { isNonModelSupported: true, isRelationshipSupported: true },
+    );
+
+    expect(componentText).toMatchSnapshot();
+    expect(declaration).toMatchSnapshot();
+  });
+
+  it('should render form for parent of bidirectional 1:m when field defined on parent', () => {
+    const { componentText, declaration } = generateWithAmplifyFormRenderer(
+      'forms/dealership-datastore-update',
+      'datastore/car',
+      undefined,
+      { isNonModelSupported: true, isRelationshipSupported: true },
+    );
+
+    expect(componentText).not.toContain('updated.dealership = dealershipRecord.id');
+    expect(componentText).toMatchSnapshot();
+    expect(declaration).toMatchSnapshot();
   });
 });

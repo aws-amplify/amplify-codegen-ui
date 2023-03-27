@@ -34,3 +34,5 @@ export { buildRelationshipQuery, buildGetRelationshipModels } from './relationsh
 export { shouldWrapInArrayField } from './render-checkers';
 
 export { renderArrayFieldComponent } from './render-array-field';
+
+export { getDecoratedLabel } from './label-decorator';

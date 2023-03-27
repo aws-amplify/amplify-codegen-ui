@@ -1,77 +1,78 @@
 {
-    "cta" : { },
-    "dataType" : {
-      "dataSourceType" : "Custom",
-      "dataTypeName" : "JSON"
+  "cta": {},
+  "dataType": {
+    "dataSourceType": "Custom",
+    "dataTypeName": "JSON"
+  },
+  "fields": {
+    "firstName": {
+      "inputType": {
+        "type": "TextField"
+      },
+      "label": "First name"
     },
-    "fields" : {
-      "firstName" : {
-        "inputType" : {
-          "type" : "TextField"
-        },
-        "label" : "First name"
+    "emailAddress": {
+      "inputType": {
+        "type": "EmailField"
       },
-      "emailAddress" : {
-        "inputType" : {
-          "type" : "EmailField"
-        },
-        "label" : "Email address"
-      },
-      "favoriteThings.animals" : {
-        "inputType" : {
-          "isArray" : true,
-          "type" : "TextField"
-        },
-        "label" : "Animals"
-      },
-      "favoriteThings.month" : {
-        "inputType" : {
-          "type" : "TextField"
-        },
-        "label" : "Month"
-      },
-      "favoriteThings.number" : {
-        "inputType" : {
-          "type" : "NumberField"
-        },
-        "label" : "Number"
-      },
-      "active" : {
-        "inputType" : {
-          "type" : "SwitchField"
-        },
-        "label" : "Active"
-      },
-      "enabled" : {
-        "inputType" : {
-          "type" : "SwitchField"
-        },
-        "label" : "Enabled"
-      }
+      "label": "Email address"
     },
-    "formActionType" : "create",
-    "name" : "CustomFormCreateNestedJson",
-    "schemaVersion" : "1.0",
-    "sectionalElements" : {
-      "favoriteThings" : {
-        "level" : 3,
-        "position" : {
-          "below" : "emailAddress"
-        },
-        "text" : "Favorite things",
-        "type" : "Heading"
+    "favoriteThings.animals": {
+      "inputType": {
+        "isArray": true,
+        "type": "TextField"
       },
-      "activeSectionalElement" : {
-        "orientation" : "horizontal",
-        "position" : {
-          "below" : "favoriteThings.number"
-        },
-        "type" : "Divider"
-      }
+      "label": "Animals"
     },
-    "style" : { },
-    "id" : "f-gqcrwPQpzC2aK41ibI",
-    "appId" : "d3oibjjn81cyer",
-    "environmentName" : "staging",
-    "createdAt" : "2022-11-03T22:05:00.463Z"
-  }
+    "favoriteThings.month": {
+      "inputType": {
+        "type": "TextField"
+      },
+      "label": "Month"
+    },
+    "favoriteThings.number": {
+      "inputType": {
+        "type": "NumberField"
+      },
+      "label": "Number"
+    },
+    "active": {
+      "inputType": {
+        "type": "SwitchField"
+      },
+      "label": "Active"
+    },
+    "enabled": {
+      "inputType": {
+        "type": "SwitchField"
+      },
+      "label": "Enabled"
+    }
+  },
+  "formActionType": "create",
+  "name": "CustomFormCreateNestedJson",
+  "schemaVersion": "1.0",
+  "sectionalElements": {
+    "favoriteThings": {
+      "level": 3,
+      "position": {
+        "below": "emailAddress"
+      },
+      "text": "Favorite things",
+      "type": "Heading"
+    },
+    "activeSectionalElement": {
+      "orientation": "horizontal",
+      "position": {
+        "below": "favoriteThings.number"
+      },
+      "type": "Divider"
+    }
+  },
+  "style": {},
+  "labelDecorator": "optional",
+  "id": "f-gqcrwPQpzC2aK41ibI",
+  "appId": "d3oibjjn81cyer",
+  "environmentName": "staging",
+  "createdAt": "2022-11-03T22:05:00.463Z"
+}

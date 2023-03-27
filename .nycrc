@@ -1,0 +1,12 @@
+{
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "all": true,
+    "check-coverage": true,
+    "coverageReporters": [
+        "json"
+    ],
+    "exclude": [
+        "**/cypress.config.ts",
+        "packages/*/index.ts"
+    ]
+}

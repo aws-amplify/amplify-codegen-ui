@@ -126,7 +126,11 @@ export const renderValueAttribute = ({
     renderedFieldName = getCurrentValueName(renderedFieldName);
   }
   let fieldNameIdentifier: Identifier | ElementAccessExpression = factory.createIdentifier(renderedFieldName);
-  if (componentName.includes('.')) {
+
+  // If a component has a '.', it's nested and needs an object ref.
+  // but if it's an array, it needs to use the currentArrayValue whether it's nested or not
+  // The ArrayField component will update the nested value.
+  if (componentName.includes('.') && !fieldConfig.isArray) {
     const [parent, child] = componentName.split('.');
     fieldNameIdentifier = factory.createElementAccessExpression(
       factory.createIdentifier(parent),

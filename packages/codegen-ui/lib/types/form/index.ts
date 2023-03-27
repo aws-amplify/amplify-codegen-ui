@@ -14,7 +14,7 @@
   limitations under the License.
  */
 
-import { StudioFormStyle } from './style';
+import { LabelDecorator, StudioFormStyle } from './style';
 import { StudioFormFields, StudioFormFieldConfig, StudioGenericFieldConfig } from './fields';
 import { GenericSectionalElementConfig, SectionalElementConfig, SectionalElementFields } from './sectional-element';
 import { FormDefinition, ModelFieldsConfigs, FieldTypeMapKeys, ButtonConfig } from './form-definition';
@@ -48,6 +48,8 @@ export type StudioForm = {
   style: StudioFormStyle;
 
   cta: StudioFormCTA;
+
+  labelDecorator?: LabelDecorator;
 };
 
 export type FormInputType =

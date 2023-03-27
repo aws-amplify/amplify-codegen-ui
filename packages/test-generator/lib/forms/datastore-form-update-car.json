@@ -1,0 +1,14 @@
+{
+  "id": "123",
+  "name": "DataStoreFormUpdateCar",
+  "formActionType": "update",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "Car"
+  },
+  "sectionalElements": {},
+  "fields": {},
+  "style": {},
+  "cta": {},
+  "schemaVersion": "1.0"
+}

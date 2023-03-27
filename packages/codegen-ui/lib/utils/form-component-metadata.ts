@@ -69,6 +69,7 @@ export const mapFormMetadata = (form: StudioForm, formDefinition: FormDefinition
     formActionType: form.formActionType,
     dataType: form.dataType,
     layoutConfigs: formDefinition.form.layoutStyle,
+    labelDecorator: formDefinition.form.labelDecorator,
     fieldConfigs: Object.entries(formDefinition.elements).reduce<Record<string, FieldConfigMetadata>>(
       (configs, [name, element]) => {
         if (!elementIsInput(element)) {

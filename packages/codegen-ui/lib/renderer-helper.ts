@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
+import { InvalidInputError } from './errors';
 import {
   StudioComponent,
   StudioComponentAuthProperty,
@@ -24,6 +25,7 @@ import {
   StudioComponentPropertyBinding,
   StudioComponentProperty,
   StudioComponentSlotBinding,
+  StudioComponentPredicate,
 } from './types';
 import { breakpointSizes, BreakpointSizeType } from './utils/breakpoint-utils';
 
@@ -100,4 +102,29 @@ export function isEventPropertyBinding(
 
 export function isSlotBinding(prop: StudioComponentPropertyBinding): prop is StudioComponentSlotBinding {
   return typeof prop === 'object' && 'type' in prop && prop.type === 'Amplify.Slot';
+}
+
+/**
+ For StudioComponentPredicate, there are cases when
+ we want multiple operands. This string indicates the end of
+ one operand and start of another.
+ Warning: if you change this, saved schemas may break.
+ */
+export const OPERAND_DELIMITER = '<Amplify.OperandDelimiter>';
+
+export function resolveBetweenPredicateToMultiplePredicates(
+  betweenPredicate: StudioComponentPredicate,
+): StudioComponentPredicate {
+  const operands = betweenPredicate.operand?.split(OPERAND_DELIMITER);
+
+  if (!operands || operands.length !== 2) {
+    throw new InvalidInputError('There must be 2 operands for a `between` predicate');
+  }
+
+  return {
+    and: [
+      { field: betweenPredicate.field, operator: 'ge', operand: operands[0] },
+      { field: betweenPredicate.field, operator: 'le', operand: operands[1] },
+    ],
+  };
 }

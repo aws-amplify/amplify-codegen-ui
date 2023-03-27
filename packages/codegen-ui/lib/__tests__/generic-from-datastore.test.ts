@@ -26,6 +26,7 @@ import {
   schemaWithHasManyBelongsTo,
   schemaWithoutJoinTables,
   introspectionSchemaWithCompositeKeys,
+  schemaWithBiDirectionalHasManyWithDefinedField,
 } from './__utils__/mock-schemas';
 
 describe('getGenericFromDataStore', () => {
@@ -334,5 +335,24 @@ describe('getGenericFromDataStore', () => {
     expect(getGenericFromDataStore(introspectionSchemaWithCompositeKeys).models).toStrictEqual(
       getGenericFromDataStore(schemaWithCompositeKeys).models,
     );
+  });
+
+  it('should handle bidirectional hasMany with defined field', () => {
+    const { Car, Dealership } = getGenericFromDataStore(schemaWithBiDirectionalHasManyWithDefinedField).models;
+    expect(Car.fields.dealership.relationship).toStrictEqual({
+      type: 'BELONGS_TO',
+      relatedModelName: 'Dealership',
+      associatedFields: ['dealershipId'],
+    });
+
+    expect(Dealership.fields.cars.relationship).toStrictEqual({
+      type: 'HAS_MANY',
+      canUnlinkAssociatedModel: true,
+      relatedModelName: 'Car',
+      relatedModelFields: [],
+      belongsToFieldOnRelatedModel: 'dealership',
+      relatedJoinFieldName: undefined,
+      relatedJoinTableName: undefined,
+    });
   });
 });

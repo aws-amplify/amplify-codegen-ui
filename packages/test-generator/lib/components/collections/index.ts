@@ -21,3 +21,4 @@ export { default as PaginatedCollection } from './paginatedCollection.json';
 export { default as SearchableCollection } from './searchableCollection.json';
 export { default as SimpleUserCollection } from './simpleUserCollection.json';
 export { default as CollectionWithCompositeKeysAndRelationships } from './collectionWithCompositeKeysAndRelationships.json';
+export { default as CollectionWithBetweenPredicate } from './collectionWithBetweenPredicate.json';

@@ -31,3 +31,6 @@ export { default as DataStoreFormCreateBidirectionalDog } from './datastore-form
 export { default as DataStoreFormUpdateBidirectionalDog } from './datastore-form-update-bidirectional-dog.json';
 export { default as DataStoreFormCreateBidirectionalOwner } from './datastore-form-create-bidirectional-owner.json';
 export { default as DataStoreFormUpdateBidirectionalOwner } from './datastore-form-update-bidirectional-owner.json';
+export { default as DataStoreFormUpdateModelWithVariableCollisions } from './datastore-form-update-model-with-variable-collisions.json';
+export { default as DataStoreFormUpdateDealership } from './datastore-form-update-dealership.json';
+export { default as DataStoreFormUpdateCar } from './datastore-form-update-car.json';

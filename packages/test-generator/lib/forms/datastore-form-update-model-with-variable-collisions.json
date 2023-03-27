@@ -1,0 +1,13 @@
+{
+  "id": "123",
+  "name": "DataStoreFormUpdateModelWithVariableCollisions",
+  "formActionType": "update",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "ModelWithVariableCollisions"
+  },
+  "sectionalElements": {},
+  "fields": {},
+  "style": {},
+  "cta": {}
+}

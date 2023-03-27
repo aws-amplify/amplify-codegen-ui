@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
+import { FieldConfigMetadata, LabelDecorator } from '@aws-amplify/codegen-ui';
 import { Expression, factory, Identifier, JsxAttribute, JsxChild, NodeFlags, SyntaxKind } from 'typescript';
 import {
   buildAccessChain,
@@ -29,6 +29,7 @@ import { isModelDataType, shouldImplementDisplayValueFunction } from './render-c
 import { extractModelAndKeys, getDisplayValueObjectName, getDisplayValueScalar } from './model-values';
 import { getElementAccessExpression } from './invalid-variable-helpers';
 import { getSetNameIdentifier, capitalizeFirstLetter } from '../../helpers';
+import { getDecoratedLabel } from './label-decorator';
 
 function getOnChangeAttribute({
   setStateName,
@@ -127,6 +128,8 @@ export const renderArrayFieldComponent = (
   fieldLabel: string,
   fieldConfigs: Record<string, FieldConfigMetadata>,
   inputField: JsxChild,
+  labelDecorator?: LabelDecorator,
+  isRequired?: boolean,
 ) => {
   const fieldConfig = fieldConfigs[fieldName];
   const { sanitizedFieldName, dataType, componentType } = fieldConfig;
@@ -168,16 +171,20 @@ export const renderArrayFieldComponent = (
   }
 
   props.push(getOnChangeAttribute({ fieldName, isLimitedToOneValue, fieldConfigs, renderedFieldName, setStateName }));
+  let labelAttribute = factory.createJsxAttribute(
+    factory.createIdentifier('label'),
+    factory.createJsxExpression(undefined, factory.createStringLiteral(fieldLabel)),
+  );
 
+  if ((labelDecorator === 'required' && isRequired) || (labelDecorator === 'optional' && !isRequired)) {
+    labelAttribute = getDecoratedLabel('label', fieldLabel, labelDecorator);
+  }
   props.push(
     factory.createJsxAttribute(
-      factory.createIdentifier(`currentFieldValue`),
+      factory.createIdentifier('currentFieldValue'),
       factory.createJsxExpression(undefined, stateName),
     ),
-    factory.createJsxAttribute(
-      factory.createIdentifier(`label`),
-      factory.createJsxExpression(undefined, factory.createStringLiteral(fieldLabel)),
-    ),
+    labelAttribute,
   );
 
   props.push(

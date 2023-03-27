@@ -799,6 +799,7 @@ export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
     width?: Number;
     backgroundColor?: String;
     buttonColor?: UserPreferences;
+    buttonEnabled?: UserPreferences;
     items?: any[];
     overrideItems?: (collectionItem: {
       item: any;
@@ -815,6 +816,7 @@ export default function CollectionOfCustomButtons(
     width,
     backgroundColor,
     buttonColor: buttonColorProp,
+    buttonEnabled: buttonEnabledProp,
     items,
     overrideItems,
     overrides,
@@ -824,6 +826,12 @@ export default function CollectionOfCustomButtons(
     and: [
       { field: \\"age\\", operand: \\"10\\", operator: \\"gt\\" },
       { field: \\"lastName\\", operand: \\"L\\", operator: \\"beginsWith\\" },
+      {
+        and: [
+          { field: \\"date\\", operator: \\"ge\\", operand: \\"2022-03-10\\" },
+          { field: \\"date\\", operator: \\"le\\", operand: \\"2023-03-11\\" },
+        ],
+      },
     ],
   };
   const buttonUserFilter = createDataStorePredicate<User>(buttonUserFilterObj);
@@ -854,6 +862,24 @@ export default function CollectionOfCustomButtons(
   }).items[0];
   const buttonColor =
     buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
+  const buttonEnabledFilterObj = {
+    and: [
+      { field: \\"date\\", operator: \\"ge\\", operand: \\"2022-03-10\\" },
+      { field: \\"date\\", operator: \\"le\\", operand: \\"2023-03-11\\" },
+    ],
+  };
+  const buttonEnabledFilter = createDataStorePredicate<UserPreferences>(
+    buttonEnabledFilterObj
+  );
+  const buttonEnabledDataStore = useDataStoreBinding({
+    type: \\"collection\\",
+    model: UserPreferences,
+    criteria: buttonEnabledFilter,
+  }).items[0];
+  const buttonEnabled =
+    buttonEnabledProp !== undefined
+      ? buttonEnabledProp
+      : buttonEnabledDataStore;
   return (
     /* @ts-ignore: TS2322 */
     <Collection

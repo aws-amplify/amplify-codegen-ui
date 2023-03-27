@@ -61,6 +61,7 @@ import {
   ComponentWithAuthBinding,
   DataBindingNamedClass,
   CollectionWithCompositeKeysAndRelationships,
+  CollectionWithBetweenPredicate,
 } from './ui-components'; // eslint-disable-line import/extensions
 import { initializeAuthMockData } from './mock-utils';
 
@@ -420,6 +421,7 @@ export default function ComponentTests() {
             };
           }}
         />
+        <CollectionWithBetweenPredicate id="collectionWithBetweenPredicate" />
       </div>
       <div id="default-value">
         <h2>Default Value</h2>
