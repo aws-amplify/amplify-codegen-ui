@@ -40,7 +40,9 @@ jobs:
         run: npx lerna exec npm pack
       - name: Build amplify-cli
         working-directory: amplify-cli
-        run: yarn setup-dev
+        run: |
+          yarn policies set-version 1.19.0
+          yarn setup-dev
       - name: Install updated codegen libraries
         working-directory: amplify-cli/packages/amplify-util-uibuilder
         run: |
