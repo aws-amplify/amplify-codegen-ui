@@ -20,7 +20,7 @@ import {
   DataStoreFormCreateAllSupportedFormFields,
   DataStoreFormUpdateAllSupportedFormFields,
   DataStoreFormCreateAllSupportedFormFieldsScalar,
-} from '../ui-components'; // eslint-disable-line import/extensions, max-len
+} from '../ui-components';
 import {
   Owner,
   User,
