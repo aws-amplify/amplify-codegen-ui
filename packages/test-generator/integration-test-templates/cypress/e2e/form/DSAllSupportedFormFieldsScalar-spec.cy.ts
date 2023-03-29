@@ -23,6 +23,9 @@ describe('FormTests - DSAllSupportedFormFieldsScalar', () => {
 
   specify('scalar relationship labels should be hyphenated like model fields', () => {
     cy.get('#DataStoreFormCreateAllSupportedFormFieldsScalar').within(() => {
+      // cypress does not populate value in ci w/out wait
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(3000);
       getArrayFieldButtonByLabel('All supported form fields has one user id').click();
       typeInAutocomplete(`P{downArrow}{enter}`);
       clickAddToArray();

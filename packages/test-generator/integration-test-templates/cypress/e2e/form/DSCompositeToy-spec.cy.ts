@@ -23,6 +23,9 @@ describe('FormTests - DSCompositeToy', () => {
 
   specify('update form should update indices used for 1:m relationships', () => {
     cy.get('#DataStoreFormUpdateCompositeToy').within(() => {
+      // cypress does not populate value in ci w/out wait
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(3000);
       getArrayFieldButtonByLabel('Composite dog composite toys name').click();
       typeInAutocomplete('Yundoo{downArrow}{enter}');
       clickAddToArray();
