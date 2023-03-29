@@ -17,7 +17,6 @@ import { Link, useParams } from 'react-router-dom';
 import CustomDog from './CustomDog';
 import CustomNestedJSON from './CustomNestedJSON';
 import DSAllSupportedFormFields from './DSAllSupportedFormFields';
-import DSAllSupportedFormFieldsScalar from './DSAllSupportedFormFieldsScalar';
 import DSCompositeDog from './DSCompositeDog';
 import DSCompositeToy from './DSCompositeToy';
 import DSCPKTeacher from './DSCPKTeacher';
@@ -38,8 +37,6 @@ export default function FormTests() {
       return <CustomNestedJSON />;
     case 'DSAllSupportedFormFields':
       return <DSAllSupportedFormFields />;
-    case 'DSAllSupportedFormFieldsScalar':
-      return <DSAllSupportedFormFieldsScalar />;
     case 'DSCompositeDog':
       return <DSCompositeDog />;
     case 'DSCompositeToy':
@@ -72,9 +69,6 @@ export default function FormTests() {
             </li>
             <li>
               <Link to="DSAllSupportedFormFields">DSAllSupportedFormFields</Link>
-            </li>
-            <li>
-              <Link to="DSAllSupportedFormFieldsScalar">DSAllSupportedFormFieldsScalar</Link>
             </li>
             <li>
               <Link to="DSCompositeDog">DSCompositeDog</Link>

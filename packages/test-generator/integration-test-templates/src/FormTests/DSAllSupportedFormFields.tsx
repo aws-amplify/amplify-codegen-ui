@@ -16,7 +16,11 @@
 import { AmplifyProvider, View, Heading, Text, Divider } from '@aws-amplify/ui-react';
 import React, { useState, useEffect, useRef, SetStateAction } from 'react';
 import { AsyncItem, DataStore } from '@aws-amplify/datastore';
-import { DataStoreFormCreateAllSupportedFormFields, DataStoreFormUpdateAllSupportedFormFields } from '../ui-components'; // eslint-disable-line import/extensions, max-len
+import {
+  DataStoreFormCreateAllSupportedFormFields,
+  DataStoreFormUpdateAllSupportedFormFields,
+  DataStoreFormCreateAllSupportedFormFieldsScalar,
+} from '../ui-components'; // eslint-disable-line import/extensions, max-len
 import {
   Owner,
   User,
@@ -132,6 +136,10 @@ export default function () {
     useState('');
   const [dataStoreFormUpdateAllSupportedFormFieldsRecordId, setDataStoreFormUpdateAllSupportedFormFieldsRecordId] =
     useState<string | undefined>();
+  const [
+    dataStoreFormCreateAllSupportedFormFieldsScalarResults,
+    setDataStoreFormCreateAllSupportedFormFieldsScalarResults,
+  ] = useState('');
   const [isInitialized, setInitialized] = useState(false);
 
   const initializeStarted = useRef(false);
@@ -213,6 +221,34 @@ export default function () {
           }}
         />
         <Text>{dataStoreFormUpdateAllSupportedFormFieldsResults}</Text>
+      </View>
+      <Divider />
+      <Heading>DataStoreFormCreateAllSupportedFormFieldsScalar</Heading>
+      <View id="DataStoreFormCreateAllSupportedFormFieldsScalar">
+        <DataStoreFormCreateAllSupportedFormFieldsScalar
+          onSuccess={async () => {
+            const records = await DataStore.query(AllSupportedFormFields, (a) => a.string.eq('Create1String'));
+            const record = records[0];
+
+            const ManyToManyTags = await getModelsFromJoinTableRecords<
+              AllSupportedFormFields,
+              LazyTag,
+              LazyAllSupportedFormFieldsTag
+            >(record, 'ManyToManyTags', 'tag');
+            ManyToManyTags.sort((a, b) => a.label?.localeCompare(b.label as string) as number);
+
+            setDataStoreFormCreateAllSupportedFormFieldsScalarResults(
+              JSON.stringify({
+                ...record,
+                HasOneUser: await record.HasOneUser,
+                BelongsToOwner: await record.BelongsToOwner,
+                HasManyStudents: await record.HasManyStudents?.toArray(),
+                ManyToManyTags,
+              }),
+            );
+          }}
+        />
+        <Text>{dataStoreFormCreateAllSupportedFormFieldsScalarResults}</Text>
       </View>
       <Divider />
     </AmplifyProvider>
