@@ -29,7 +29,7 @@ describe('FormTests - DSDealership', () => {
       clickAddToArray();
       cy.contains('Submit').click();
 
-      cy.get('.results').then((recordElement: JQuery) => {
+      cy.contains('.results', /Toyota/).then((recordElement: JQuery) => {
         const record = JSON.parse(recordElement.text());
 
         expect(record.cars[0].name).to.equal('Toyota');
