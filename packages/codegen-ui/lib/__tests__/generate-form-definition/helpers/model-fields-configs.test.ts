@@ -519,61 +519,6 @@ describe('mapModelFieldsConfigs', () => {
     });
   });
 
-  it('should handle invalid relationship indexes with default', () => {
-    const formDefinition: FormDefinition = getBasicFormDefinition();
-
-    const dataSchema: GenericDataSchema = {
-      dataSourceType: 'DataStore',
-      enums: {},
-      nonModels: {},
-      models: {
-        CompositeDog: {
-          fields: {
-            compositeDogCompositeBowlSize: {
-              dataType: 'String',
-              required: false,
-              readOnly: false,
-              isArray: false,
-              relationship: {
-                type: 'HAS_ONE',
-                relatedModelName: 'CompositeBowl',
-              },
-            },
-          },
-          primaryKeys: ['name'],
-        },
-      },
-    };
-
-    const modelFieldsConfigs = mapModelFieldsConfigs({
-      dataTypeName: 'CompositeDog',
-      formDefinition,
-      dataSchema,
-      featureFlags: { isRelationshipSupported: true },
-    });
-
-    expect(modelFieldsConfigs.compositeDogCompositeBowlSize.inputType?.valueMappings).toStrictEqual({
-      values: [
-        {
-          value: {
-            bindingProperties: {
-              property: 'CompositeBowl',
-              field: 'id',
-            },
-          },
-        },
-      ],
-      bindingProperties: {
-        CompositeBowl: {
-          type: 'Data',
-          bindingProperties: {
-            model: 'CompositeBowl',
-          },
-        },
-      },
-    });
-  });
-
   it('should add not-model type relationship fields to configs and matrix if HAS_ONE & hasMany index', () => {
     const formDefinition: FormDefinition = getBasicFormDefinition();
 

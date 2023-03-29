@@ -17,7 +17,7 @@
 import { sentenceCase } from 'change-case';
 import { checkIsSupportedAsFormField } from '../../check-support';
 
-import { InvalidInputError } from '../../errors';
+import { InternalError, InvalidInputError } from '../../errors';
 import {
   FieldTypeMapKeys,
   FormDefinition,
@@ -103,8 +103,7 @@ function extractCorrespondingKey({
     }
   }
 
-  // defaultValue for unhandled cases
-  return 'id';
+  throw new InternalError(`Cannot find corresponding key for scalar relationship field ${relationshipFieldName}`);
 }
 
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
