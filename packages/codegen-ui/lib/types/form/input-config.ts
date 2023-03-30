@@ -68,4 +68,20 @@ export type StudioFieldInputConfig = {
   value?: string;
 
   isArray?: boolean;
+
+  fileUploaderConfig?: {
+    accessLevel: StorageAccessLevel;
+
+    acceptedFileTypes: string[];
+
+    showThumbnails?: boolean;
+
+    isResumable?: boolean;
+
+    maxFileCount?: number;
+
+    maxSize?: number;
+  };
 };
+
+export type StorageAccessLevel = 'public' | 'protected' | 'private';

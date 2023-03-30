@@ -128,6 +128,23 @@ export type FormDefinitionStepperFieldElement = {
   };
 };
 
+export type FormDefinitionFileUploaderFieldElement = {
+  componentType: 'FileUploaderField';
+  props: {
+    label: string;
+    descriptiveText?: string;
+    isRequired?: boolean;
+    isReadOnly?: boolean;
+    defaultValue?: string;
+    accessLevel: StorageAccessLevel;
+    acceptedFileTypes: string[];
+    showThumbnails?: boolean;
+    isResumable?: boolean;
+    maxFileCount?: number;
+    maxSize?: number;
+  };
+};
+
 export type FormDefinitionToggleButtonElement = {
   componentType: 'ToggleButton';
   props: {
@@ -192,6 +209,7 @@ export type FormDefinitionInputElement = (
   | FormDefinitionRadioGroupFieldElement
   | FormDefinitionPasswordFieldElement
   | FormDefinitionAutocompleteElement
+  | FormDefinitionFileUploaderFieldElement
 ) &
   FormDefinitionInputElementCommon;
 
@@ -219,3 +237,5 @@ export type FormDefinitionElement =
   | FormDefinitionInputElement
   | FormDefinitionSectionalElement
   | FormDefinitionButtonElement;
+
+export type StorageAccessLevel = 'public' | 'protected' | 'private';
