@@ -72,7 +72,8 @@ export type FormInputType =
   | 'URLField'
   | 'EmailField'
   | 'JSONField'
-  | 'Autocomplete';
+  | 'Autocomplete'
+  | 'StorageField';
 
 export * from './form-definition-element';
 export * from './style';

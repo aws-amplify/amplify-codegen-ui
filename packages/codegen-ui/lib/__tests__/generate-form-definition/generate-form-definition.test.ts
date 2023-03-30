@@ -107,6 +107,123 @@ describe('generateFormDefinition', () => {
     });
   });
 
+  describe('forms with StorageField', () => {
+    it('should generate form definition with default values from minimal config', () => {
+      const result = generateFormDefinition({
+        form: {
+          name: 'CreateProductForm',
+          dataType: {
+            dataSourceType: 'DataStore',
+            dataTypeName: 'Product',
+          },
+          formActionType: 'create',
+          fields: {
+            imgKeys: {
+              inputType: { type: 'StorageField' },
+            },
+          },
+          sectionalElements: {},
+          style: {},
+          cta: {},
+        },
+        dataSchema: {
+          dataSourceType: 'DataStore',
+          enums: {},
+          nonModels: {},
+          models: {
+            Product: {
+              primaryKeys: ['id'],
+              fields: {
+                imgKeys: { dataType: 'String', readOnly: false, required: false, isArray: true },
+              },
+            },
+          },
+        },
+      });
+
+      expect(result.elements).toStrictEqual({
+        imgKeys: {
+          componentType: 'StorageField',
+          dataType: 'String',
+          isArray: true,
+          props: {
+            acceptedFileTypes: [],
+            accessLevel: 'private',
+            isReadOnly: false,
+            isRequired: false,
+            isResumable: false,
+            label: 'Img keys',
+            showThumbnails: true,
+          },
+        },
+      });
+    });
+
+    it('should generate form definition that matches the studio form shape', () => {
+      const result = generateFormDefinition({
+        form: {
+          name: 'UpdateProductForm',
+          dataType: {
+            dataSourceType: 'DataStore',
+            dataTypeName: 'Product',
+          },
+          formActionType: 'update',
+          fields: {
+            imgKeys: {
+              label: 'Images',
+              inputType: {
+                type: 'StorageField',
+                fileUploaderConfig: {
+                  accessLevel: 'protected',
+                  acceptedFileTypes: ['.txt', '.pdf'],
+                  showThumbnails: false,
+                  isResumable: true,
+                  maxFileCount: 5,
+                  maxSize: 1024,
+                },
+              },
+            },
+          },
+          sectionalElements: {},
+          style: {},
+          cta: {},
+        },
+        dataSchema: {
+          dataSourceType: 'DataStore',
+          enums: {},
+          nonModels: {},
+          models: {
+            Product: {
+              primaryKeys: ['id'],
+              fields: {
+                imgKeys: { dataType: 'String', readOnly: false, required: false, isArray: false },
+              },
+            },
+          },
+        },
+      });
+
+      expect(result.elements).toStrictEqual({
+        imgKeys: {
+          componentType: 'StorageField',
+          dataType: 'String',
+          isArray: false,
+          props: {
+            acceptedFileTypes: ['.txt', '.pdf'],
+            accessLevel: 'protected',
+            isReadOnly: false,
+            isRequired: false,
+            isResumable: true,
+            label: 'Images',
+            showThumbnails: false,
+            maxFileCount: 5,
+            maxSize: 1024,
+          },
+        },
+      });
+    });
+  });
+
   it('should throw if form has source type DataStore, but no schema is available', () => {
     expect(() =>
       generateFormDefinition({

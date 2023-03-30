@@ -22,6 +22,7 @@ import {
   FieldValidationConfiguration,
   ValidationTypes,
   DataFieldDataType,
+  StorageAccessLevel,
 } from '../../types';
 import { InternalError, InvalidInputError } from '../../errors';
 import { FORM_DEFINITION_DEFAULTS } from './defaults';
@@ -193,6 +194,7 @@ export function getFormDefinitionInputElement(
 
   const defaultStringValue = getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]);
   const isRequiredValue = getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]);
+
   let formDefinitionElement: FormDefinitionInputElement;
 
   switch (componentType) {
@@ -366,6 +368,48 @@ export function getFormDefinitionInputElement(
           defaultValue: defaultStringValue,
         },
         valueMappings: mergeValueMappings(baseConfig?.inputType?.valueMappings, config.inputType?.valueMappings),
+      };
+      break;
+
+    case 'StorageField':
+      formDefinitionElement = {
+        componentType: 'StorageField',
+        props: {
+          label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
+          descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
+          isRequired: isRequiredValue,
+          isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
+          defaultValue: defaultStringValue,
+
+          accessLevel: getFirstDefinedValue([
+            config.inputType?.fileUploaderConfig?.accessLevel,
+            baseConfig?.inputType?.fileUploaderConfig?.accessLevel,
+            FORM_DEFINITION_DEFAULTS.field.inputType.fileUploaderConfig.accessLevel,
+          ]) as StorageAccessLevel,
+          acceptedFileTypes: getFirstDefinedValue([
+            config.inputType?.fileUploaderConfig?.acceptedFileTypes,
+            baseConfig?.inputType?.fileUploaderConfig?.acceptedFileTypes,
+            FORM_DEFINITION_DEFAULTS.field.inputType.fileUploaderConfig.acceptedFileTypes,
+          ]) as string[],
+          isResumable: getFirstDefinedValue([
+            config.inputType?.fileUploaderConfig?.isResumable,
+            baseConfig?.inputType?.fileUploaderConfig?.isResumable,
+            FORM_DEFINITION_DEFAULTS.field.inputType.fileUploaderConfig.isResumable,
+          ]),
+          showThumbnails: getFirstDefinedValue([
+            config.inputType?.fileUploaderConfig?.showThumbnails,
+            baseConfig?.inputType?.fileUploaderConfig?.showThumbnails,
+            FORM_DEFINITION_DEFAULTS.field.inputType.fileUploaderConfig.showThumbnails,
+          ]),
+          maxFileCount: getFirstDefinedValue([
+            config.inputType?.fileUploaderConfig?.maxFileCount,
+            baseConfig?.inputType?.fileUploaderConfig?.maxFileCount,
+          ]),
+          maxSize: getFirstDefinedValue([
+            config.inputType?.fileUploaderConfig?.maxSize,
+            baseConfig?.inputType?.fileUploaderConfig?.maxSize,
+          ]),
+        },
       };
       break;
 

@@ -34,6 +34,12 @@ export const FORM_DEFINITION_DEFAULTS = {
       value: 'fieldName',
       name: 'fieldName',
       valueMappings: { values: [{ value: { value: 'Option' } }] },
+      fileUploaderConfig: {
+        accessLevel: 'private',
+        acceptedFileTypes: [],
+        isResumable: false,
+        showThumbnails: true,
+      },
     },
     radioGroupFieldBooleanDisplayValue: { true: 'Yes', false: 'No' },
   },
