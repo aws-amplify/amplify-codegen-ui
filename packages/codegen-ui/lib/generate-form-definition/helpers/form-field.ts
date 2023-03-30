@@ -194,7 +194,6 @@ export function getFormDefinitionInputElement(
 
   const defaultStringValue = getFirstString([config.inputType?.defaultValue, baseConfig?.inputType?.defaultValue]);
   const isRequiredValue = getFirstDefinedValue([config.inputType?.required, baseConfig?.inputType?.required]);
-  const placeholder = config.inputType?.placeholder || baseConfig?.inputType?.placeholder;
 
   let formDefinitionElement: FormDefinitionInputElement;
 
@@ -214,7 +213,7 @@ export function getFormDefinitionInputElement(
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
           isRequired: isRequiredValue,
-          placeholder,
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
           isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
           type: getTextFieldType(componentType),
         },
@@ -245,7 +244,7 @@ export function getFormDefinitionInputElement(
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
-          placeholder: placeholder || 'Please select an option',
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder || 'Please select an option',
           isDisabled: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
         },
 
@@ -262,7 +261,7 @@ export function getFormDefinitionInputElement(
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
           isRequired: isRequiredValue,
-          placeholder,
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
           isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
           defaultValue: defaultStringValue,
         },
@@ -350,7 +349,7 @@ export function getFormDefinitionInputElement(
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
           isRequired: isRequiredValue,
-          placeholder,
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
           isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
           defaultValue: defaultStringValue,
         },
@@ -364,7 +363,7 @@ export function getFormDefinitionInputElement(
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
           isRequired: isRequiredValue,
-          placeholder,
+          placeholder: config.inputType?.placeholder || baseConfig?.inputType?.placeholder,
           isReadOnly: getFirstDefinedValue([config.inputType?.readOnly, baseConfig?.inputType?.readOnly]),
           defaultValue: defaultStringValue,
         },
@@ -373,9 +372,6 @@ export function getFormDefinitionInputElement(
       break;
 
     case 'FileUploaderField':
-      console.log('charlshi form-field config', config);
-      console.log('charlshi form-field base ', baseConfig);
-
       formDefinitionElement = {
         componentType: 'FileUploaderField',
         props: {
