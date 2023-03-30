@@ -422,7 +422,7 @@ export class AmplifyRenderer extends ReactStudioTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TextField:
-        return new ReactComponentRenderer<TextFieldProps<boolean>>(
+        return new ReactComponentRenderer<TextFieldProps>(
           component,
           this.componentMetadata,
           this.importCollection,

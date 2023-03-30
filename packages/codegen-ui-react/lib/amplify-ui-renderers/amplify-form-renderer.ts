@@ -447,7 +447,7 @@ export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
         ).renderElement(renderChildren);
 
       case Primitive.TextField:
-        return new ReactComponentRenderer<TextFieldProps<boolean>>(
+        return new ReactComponentRenderer<TextFieldProps>(
           formComponent,
           this.componentMetadata,
           this.importCollection,
