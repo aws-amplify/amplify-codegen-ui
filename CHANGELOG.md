@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.11.0...v2.11.1) (2023-03-30)
+
+
+### Bug Fixes
+
+* improve pill labels for scalar relationships ([#952](https://github.com/aws-amplify/amplify-codegen-ui/issues/952)) ([2d6f54b](https://github.com/aws-amplify/amplify-codegen-ui/commit/2d6f54bab35fcc5979ad89dc47c154344e2dd0fb))
+
+
+
+
+
 # [2.11.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.10.0...v2.11.0) (2023-03-20)
 
 
