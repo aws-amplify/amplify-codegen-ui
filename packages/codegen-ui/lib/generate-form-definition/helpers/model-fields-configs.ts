@@ -17,7 +17,7 @@
 import { sentenceCase } from 'change-case';
 import { checkIsSupportedAsFormField } from '../../check-support';
 
-import { InvalidInputError } from '../../errors';
+import { InternalError, InvalidInputError } from '../../errors';
 import {
   FieldTypeMapKeys,
   FormDefinition,
@@ -103,8 +103,7 @@ function extractCorrespondingKey({
     }
   }
 
-  // defaultValue for unhandled cases
-  return 'id';
+  throw new InternalError(`Cannot find corresponding key for scalar relationship field ${relationshipFieldName}`);
 }
 
 export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
@@ -125,9 +124,11 @@ export function getFieldTypeMapKey(field: GenericDataField): FieldTypeMapKeys {
 function getModelDisplayValue({
   model,
   modelName,
+  keyToMap,
 }: {
   model: GenericDataModel;
   modelName: string;
+  keyToMap?: string;
 }): StudioFormInputFieldProperty & { isDefault: true } {
   const concatArray: StudioFormInputFieldProperty[] = [];
   const { primaryKeys } = model;
@@ -154,16 +155,22 @@ function getModelDisplayValue({
     );
   }
 
-  primaryKeys.forEach((key, index) => {
+  if (keyToMap) {
     concatArray.push({
-      bindingProperties: { property: modelName, field: key },
+      bindingProperties: { property: modelName, field: keyToMap },
     });
-    if (index !== primaryKeys.length - 1) {
+  } else {
+    primaryKeys.forEach((key, index) => {
       concatArray.push({
-        value: '-',
+        bindingProperties: { property: modelName, field: key },
       });
-    }
-  });
+      if (index !== primaryKeys.length - 1) {
+        concatArray.push({
+          value: '-',
+        });
+      }
+    });
+  }
 
   return concatArray.length === 1 ? { ...concatArray[0], isDefault: true } : { concat: concatArray, isDefault: true };
 }
@@ -214,10 +221,13 @@ function getValueMappings({
     const values: StudioFormValueMappings['values'] = keys.map((key) => ({
       value: { bindingProperties: { property: modelName, field: key } },
     }));
-    if (isModelType) {
-      // attach displayValue for all options to the first value
-      values[0].displayValue = getModelDisplayValue({ model: relatedModel, modelName });
-    }
+
+    values[0].displayValue = getModelDisplayValue({
+      model: relatedModel,
+      modelName,
+      keyToMap: isModelType ? undefined : keys[0],
+    });
+
     return {
       values,
       bindingProperties: { [modelName]: { type: 'Data', bindingProperties: { model: modelName } } },

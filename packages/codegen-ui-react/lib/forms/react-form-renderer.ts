@@ -92,7 +92,7 @@ import {
   resetStateFunction,
   getCanUnlinkModelName,
 } from './form-renderer-helper/form-state';
-import { isModelDataType, shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
+import { shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
 import {
   buildFormPropNode,
   generateFieldTypes,
@@ -541,7 +541,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       const { sanitizedFieldName, componentType, dataType, relationship } = fieldConfig;
       if (shouldWrapInArrayField(fieldConfig)) {
         const renderedName = sanitizedFieldName || field;
-        if (isModelDataType(fieldConfig)) {
+        if (fieldConfig.relationship) {
           statements.push(
             buildUseStateExpression(
               getCurrentDisplayValueName(renderedName),

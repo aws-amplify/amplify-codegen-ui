@@ -295,7 +295,7 @@ export const buildOnChangeStatement = (
   const valueToSetOnChange = factory.createIdentifier('value');
 
   if (shouldWrapInArrayField(fieldConfig)) {
-    if (isModelDataType(fieldConfig)) {
+    if (fieldConfig.relationship) {
       handleChangeStatements.push(
         setStateExpression(getCurrentDisplayValueName(renderedFieldName), valueToSetOnChange),
         setStateExpression(getCurrentValueName(renderedFieldName), factory.createIdentifier('undefined')),
@@ -339,9 +339,9 @@ export const buildOnChangeStatement = (
 examples:
 
   scalar:
-  onSelect={({ id }) => {
+  onSelect={({ id, label }) => {
     setCurrentPrimaryAuthorValue(id);
-    setCurrentPrimaryAuthorDisplayValue(id);
+    setCurrentPrimaryAuthorDisplayValue(label);
   }}
 
   model:
@@ -368,18 +368,17 @@ export function buildOnSelect({
 
   const props: BindingElement[] = [
     factory.createBindingElement(undefined, undefined, factory.createIdentifier(idString), undefined),
+    factory.createBindingElement(undefined, undefined, factory.createIdentifier(labelString), undefined),
   ];
 
   let nextCurrentValue: Expression = factory.createIdentifier(idString);
-  let nextCurrentDisplayValue: Expression = factory.createIdentifier(idString);
+  let nextCurrentDisplayValue: Expression = factory.createIdentifier(labelString);
 
   if (isModelDataType(fieldConfig)) {
     const { model, keys } = extractModelAndKeys(fieldConfig.valueMappings);
     if (!model || !keys || !keys.length) {
       throw new InvalidInputError(`Invalid value mappings`);
     }
-
-    props.push(factory.createBindingElement(undefined, undefined, factory.createIdentifier(labelString), undefined));
 
     nextCurrentDisplayValue = factory.createIdentifier(labelString);
 
@@ -396,7 +395,7 @@ export function buildOnSelect({
     ),
   ];
 
-  if (isModelDataType(fieldConfig)) {
+  if (fieldConfig.relationship) {
     setStateExpressions.push(
       setStateExpression(
         isNotArrayAndNotRelationshipField ? sanitizedFieldName : getCurrentDisplayValueName(sanitizedFieldName),
@@ -409,7 +408,7 @@ export function buildOnSelect({
     factory.createExpressionStatement(
       factory.createCallExpression(factory.createIdentifier('runValidationTasks'), undefined, [
         factory.createStringLiteral(fieldName),
-        factory.createIdentifier(isModelDataType(fieldConfig) ? labelString : idString),
+        factory.createIdentifier(fieldConfig.relationship ? labelString : idString),
       ]),
     ),
   );

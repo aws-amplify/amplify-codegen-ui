@@ -28,7 +28,7 @@ export const isEnumDataType = (
   !!(config.dataType && typeof config.dataType === 'object' && 'enum' in config.dataType);
 
 export const shouldImplementDisplayValueFunction = (config: FieldConfigMetadata): boolean => {
-  return isModelDataType(config) || (isEnumDataType(config) && shouldWrapInArrayField(config));
+  return !!config.relationship || (isEnumDataType(config) && shouldWrapInArrayField(config));
 };
 
 export const shouldImplementIDValueFunction = (config: FieldConfigMetadata): boolean => {

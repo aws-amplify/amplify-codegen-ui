@@ -48,7 +48,7 @@ import {
   getControlledComponentDefaultValue,
 } from '../../helpers';
 import { getElementAccessExpression } from './invalid-variable-helpers';
-import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
+import { shouldWrapInArrayField } from './render-checkers';
 
 // used just to sanitize nested array field names
 // when rendering currentValue state and ref
@@ -317,7 +317,7 @@ export const resetStateFunction = (fieldConfigs: Record<string, FieldConfigMetad
         );
       }
 
-      if (isModelDataType(fieldConfig)) {
+      if (fieldConfig.relationship) {
         acc.push(
           setStateExpression(
             getCurrentDisplayValueName(renderedName),

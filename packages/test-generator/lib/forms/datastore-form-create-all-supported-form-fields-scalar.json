@@ -1,0 +1,31 @@
+{
+  "id": "123-ds-create-class",
+  "name": "DataStoreFormCreateAllSupportedFormFieldsScalar",
+  "formActionType": "create",
+  "dataType": {
+    "dataSourceType": "DataStore",
+    "dataTypeName": "AllSupportedFormFields"
+  },
+  "fields": {
+    "HasOneUser": {
+      "excluded": true
+    },
+    "BelongsToOwner": {
+      "excluded": true
+    },
+    "allSupportedFormFieldsHasOneUserId": {
+      "inputType": {
+        "type": "Autocomplete"
+      }
+    },
+    "allSupportedFormFieldsBelongsToOwnerId": {
+      "inputType": {
+        "type": "Autocomplete"
+      }
+    }
+  },
+  "sectionalElements": {},
+  "style": {},
+  "cta": {},
+  "schemaVersion": "1.0"
+}
