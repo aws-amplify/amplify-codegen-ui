@@ -107,7 +107,7 @@ describe('generateFormDefinition', () => {
     });
   });
 
-  describe('form with FileUploaderFields', () => {
+  describe('forms with StorageField', () => {
     it('should generate form definition with default values from minimal config', () => {
       const result = generateFormDefinition({
         form: {
@@ -119,14 +119,7 @@ describe('generateFormDefinition', () => {
           formActionType: 'create',
           fields: {
             imgKeys: {
-              label: 'Images',
-              inputType: {
-                type: 'FileUploaderField',
-                fileUploaderConfig: {
-                  accessLevel: 'public',
-                  acceptedFileTypes: ['images/*', '.pdf'],
-                },
-              },
+              inputType: { type: 'StorageField' },
             },
           },
           sectionalElements: {},
@@ -150,23 +143,23 @@ describe('generateFormDefinition', () => {
 
       expect(result.elements).toStrictEqual({
         imgKeys: {
-          componentType: 'FileUploaderField',
+          componentType: 'StorageField',
           dataType: 'String',
           isArray: true,
           props: {
-            acceptedFileTypes: ['images/*', '.pdf'],
-            accessLevel: 'public',
+            acceptedFileTypes: [],
+            accessLevel: 'private',
             isReadOnly: false,
             isRequired: false,
             isResumable: false,
-            label: 'Images',
+            label: 'Img keys',
             showThumbnails: true,
           },
         },
       });
     });
 
-    it('should generate form definition with default values from minimal config', () => {
+    it('should generate form definition that matches the studio form shape', () => {
       const result = generateFormDefinition({
         form: {
           name: 'UpdateProductForm',
@@ -179,7 +172,7 @@ describe('generateFormDefinition', () => {
             imgKeys: {
               label: 'Images',
               inputType: {
-                type: 'FileUploaderField',
+                type: 'StorageField',
                 fileUploaderConfig: {
                   accessLevel: 'protected',
                   acceptedFileTypes: ['.txt', '.pdf'],
@@ -212,7 +205,7 @@ describe('generateFormDefinition', () => {
 
       expect(result.elements).toStrictEqual({
         imgKeys: {
-          componentType: 'FileUploaderField',
+          componentType: 'StorageField',
           dataType: 'String',
           isArray: false,
           props: {

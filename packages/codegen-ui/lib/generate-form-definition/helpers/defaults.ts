@@ -36,6 +36,7 @@ export const FORM_DEFINITION_DEFAULTS = {
       valueMappings: { values: [{ value: { value: 'Option' } }] },
       fileUploaderConfig: {
         accessLevel: 'private',
+        acceptedFileTypes: [],
         isResumable: false,
         showThumbnails: true,
       },

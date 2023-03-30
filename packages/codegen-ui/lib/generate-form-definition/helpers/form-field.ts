@@ -371,9 +371,9 @@ export function getFormDefinitionInputElement(
       };
       break;
 
-    case 'FileUploaderField':
+    case 'StorageField':
       formDefinitionElement = {
-        componentType: 'FileUploaderField',
+        componentType: 'StorageField',
         props: {
           label: config.label || baseConfig?.label || FORM_DEFINITION_DEFAULTS.field.inputType.label,
           descriptiveText: config.inputType?.descriptiveText ?? baseConfig?.inputType?.descriptiveText,
@@ -384,10 +384,12 @@ export function getFormDefinitionInputElement(
           accessLevel: getFirstDefinedValue([
             config.inputType?.fileUploaderConfig?.accessLevel,
             baseConfig?.inputType?.fileUploaderConfig?.accessLevel,
+            FORM_DEFINITION_DEFAULTS.field.inputType.fileUploaderConfig.accessLevel,
           ]) as StorageAccessLevel,
           acceptedFileTypes: getFirstDefinedValue([
             config.inputType?.fileUploaderConfig?.acceptedFileTypes,
             baseConfig?.inputType?.fileUploaderConfig?.acceptedFileTypes,
+            FORM_DEFINITION_DEFAULTS.field.inputType.fileUploaderConfig.acceptedFileTypes,
           ]) as string[],
           isResumable: getFirstDefinedValue([
             config.inputType?.fileUploaderConfig?.isResumable,

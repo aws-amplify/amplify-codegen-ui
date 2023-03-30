@@ -128,8 +128,8 @@ export type FormDefinitionStepperFieldElement = {
   };
 };
 
-export type FormDefinitionFileUploaderFieldElement = {
-  componentType: 'FileUploaderField';
+export type FormDefinitionStorageFieldElement = {
+  componentType: 'StorageField';
   props: {
     label: string;
     descriptiveText?: string;
@@ -209,7 +209,7 @@ export type FormDefinitionInputElement = (
   | FormDefinitionRadioGroupFieldElement
   | FormDefinitionPasswordFieldElement
   | FormDefinitionAutocompleteElement
-  | FormDefinitionFileUploaderFieldElement
+  | FormDefinitionStorageFieldElement
 ) &
   FormDefinitionInputElementCommon;
 

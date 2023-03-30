@@ -37,7 +37,7 @@ export const FIELD_TYPE_MAP: {
       'PasswordField',
       'Autocomplete',
       'SelectField',
-      'FileUploaderField',
+      'StorageField',
     ]),
   },
   Int: {
