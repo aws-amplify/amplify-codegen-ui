@@ -7657,7 +7657,7 @@ export default function HappyPathJSONCreate(props) {
       ></Heading>
       <TextField
         label=\\"First name\\"
-        value={basics[\\"firstName\\"]}
+        value={basics[\\"firstName\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -7684,7 +7684,7 @@ export default function HappyPathJSONCreate(props) {
       ></TextField>
       <TextField
         label=\\"Email address\\"
-        value={basics[\\"emailAddress\\"]}
+        value={basics[\\"emailAddress\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -7764,7 +7764,7 @@ export default function HappyPathJSONCreate(props) {
       </ArrayField>
       <TextField
         label=\\"Month\\"
-        value={favoriteThings[\\"month\\"]}
+        value={favoriteThings[\\"month\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -7793,7 +7793,7 @@ export default function HappyPathJSONCreate(props) {
         label=\\"Number\\"
         type=\\"number\\"
         step=\\"any\\"
-        value={favoriteThings[\\"number\\"]}
+        value={favoriteThings[\\"number\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -8254,7 +8254,7 @@ export default function HappyPathJSONUpdate(props) {
       ></Heading>
       <TextField
         label=\\"First name\\"
-        value={basics[\\"firstName\\"]}
+        value={basics[\\"firstName\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -8281,7 +8281,7 @@ export default function HappyPathJSONUpdate(props) {
       ></TextField>
       <TextField
         label=\\"Email address\\"
-        value={basics[\\"emailAddress\\"]}
+        value={basics[\\"emailAddress\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -8361,7 +8361,7 @@ export default function HappyPathJSONUpdate(props) {
       </ArrayField>
       <TextField
         label=\\"Month\\"
-        value={favoriteThings[\\"month\\"]}
+        value={favoriteThings[\\"month\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -8390,7 +8390,7 @@ export default function HappyPathJSONUpdate(props) {
         label=\\"Number\\"
         type=\\"number\\"
         step=\\"any\\"
-        value={favoriteThings[\\"number\\"]}
+        value={favoriteThings[\\"number\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -8917,7 +8917,7 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
-        value={bio[\\"favorite Quote\\"]}
+        value={bio[\\"favorite Quote\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -8947,7 +8947,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
-        value={bio[\\"favorite-Animal\\"]}
+        value={bio[\\"favorite-Animal\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -9657,7 +9657,7 @@ export default function NestedJson(props) {
       ></Heading>
       <TextField
         label=\\"favoriteQuote\\"
-        value={bio[\\"favoriteQuote\\"]}
+        value={bio[\\"favoriteQuote\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -9684,7 +9684,7 @@ export default function NestedJson(props) {
       ></TextField>
       <TextField
         label=\\"favoriteAnimal\\"
-        value={bio[\\"favoriteAnimal\\"]}
+        value={bio[\\"favoriteAnimal\\"] ?? \\"\\"}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {

@@ -15,7 +15,7 @@
  */
 
 import { FieldConfigMetadata, StudioDataSourceType, StudioFormActionType } from '@aws-amplify/codegen-ui';
-import { factory, Identifier, JsxAttribute, SyntaxKind, ElementAccessExpression } from 'typescript';
+import { factory, Identifier, JsxAttribute, SyntaxKind, Expression } from 'typescript';
 import { getCurrentDisplayValueName, getCurrentValueName, resetValuesName } from './form-state';
 import { shouldWrapInArrayField } from './render-checkers';
 import { FIELD_TYPE_TO_TYPESCRIPT_MAP } from './typescript-type-map';
@@ -125,16 +125,19 @@ export const renderValueAttribute = ({
   if (fieldConfig.isArray) {
     renderedFieldName = getCurrentValueName(renderedFieldName);
   }
-  let fieldNameIdentifier: Identifier | ElementAccessExpression = factory.createIdentifier(renderedFieldName);
+  let fieldNameIdentifier: Identifier | Expression = factory.createIdentifier(renderedFieldName);
 
   // If a component has a '.', it's nested and needs an object ref.
   // but if it's an array, it needs to use the currentArrayValue whether it's nested or not
   // The ArrayField component will update the nested value.
   if (componentName.includes('.') && !fieldConfig.isArray) {
     const [parent, child] = componentName.split('.');
-    fieldNameIdentifier = factory.createElementAccessExpression(
-      factory.createIdentifier(parent),
-      factory.createStringLiteral(child),
+    // if it's nested default to an empty string because initial value is undefined.
+    // favoriteThings["animals"] ?? ""
+    fieldNameIdentifier = factory.createBinaryExpression(
+      factory.createElementAccessExpression(factory.createIdentifier(parent), factory.createStringLiteral(child)),
+      factory.createToken(SyntaxKind.QuestionQuestionToken),
+      factory.createStringLiteral(''),
     );
   }
 
