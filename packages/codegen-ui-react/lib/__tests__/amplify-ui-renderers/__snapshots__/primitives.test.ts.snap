@@ -66,8 +66,6 @@ exports[`Primitives SliderField 1`] = `"<SliderField {...getOverrideProps(overri
 
 exports[`Primitives StepperField 1`] = `"<StepperField {...getOverrideProps(overrides, \\"MyStepperField\\")} {...rest}></StepperField>"`;
 
-exports[`Primitives StorageField 1`] = `"<StorageField {...getOverrideProps(overrides, \\"MyStorageField\\")} {...rest}></StorageField>"`;
-
 exports[`Primitives SwitchField 1`] = `"<SwitchField {...getOverrideProps(overrides, \\"MySwitchField\\")} {...rest}></SwitchField>"`;
 
 exports[`Primitives TabItem 1`] = `"<TabItem {...getOverrideProps(overrides, \\"MyTabItem\\")} {...rest}></TabItem>"`;

@@ -367,7 +367,7 @@ export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
           parent,
         ).renderElement(renderChildren);
 
-      case Primitive.StorageField:
+      case 'StorageField':
         return new ReactComponentRenderer<StorageManagerProps>(
           formComponent,
           this.componentMetadata,
