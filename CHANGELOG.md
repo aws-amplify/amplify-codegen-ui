@@ -3,181 +3,145 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.11.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.11.0...v2.11.1) (2023-03-30)
-
+# [2.12.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.11.1...v2.12.0) (2023-04-05)
 
 ### Bug Fixes
 
-* improve pill labels for scalar relationships ([#952](https://github.com/aws-amplify/amplify-codegen-ui/issues/952)) ([2d6f54b](https://github.com/aws-amplify/amplify-codegen-ui/commit/2d6f54bab35fcc5979ad89dc47c154344e2dd0fb))
+- add default value on nested inputs to avoid console errors ([#974](https://github.com/aws-amplify/amplify-codegen-ui/issues/974)) ([7299042](https://github.com/aws-amplify/amplify-codegen-ui/commit/7299042c377804791e24825ba150dfc463f72de8))
 
+### Features
 
+- generate Storagefield for form builder ([#976](https://github.com/aws-amplify/amplify-codegen-ui/issues/976)) ([b9f2bda](https://github.com/aws-amplify/amplify-codegen-ui/commit/b9f2bda6c34ce9c4bca38b69c0857cf9cb05c74d))
 
+## [2.11.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.11.0...v2.11.1) (2023-03-30)
 
+### Bug Fixes
+
+- improve pill labels for scalar relationships ([#952](https://github.com/aws-amplify/amplify-codegen-ui/issues/952)) ([2d6f54b](https://github.com/aws-amplify/amplify-codegen-ui/commit/2d6f54bab35fcc5979ad89dc47c154344e2dd0fb))
 
 # [2.11.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.10.0...v2.11.0) (2023-03-20)
 
-
 ### Bug Fixes
 
-* renames model variable name from props for update forms ([#950](https://github.com/aws-amplify/amplify-codegen-ui/issues/950)) ([3c64288](https://github.com/aws-amplify/amplify-codegen-ui/commit/3c64288f7783600229fb9050fcd8366b7cafa909))
-
+- renames model variable name from props for update forms ([#950](https://github.com/aws-amplify/amplify-codegen-ui/issues/950)) ([3c64288](https://github.com/aws-amplify/amplify-codegen-ui/commit/3c64288f7783600229fb9050fcd8366b7cafa909))
 
 ### Features
 
-* support between predicates ([#947](https://github.com/aws-amplify/amplify-codegen-ui/issues/947)) ([fa0daaf](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa0daafd9c99f4a1986885a58bbc67200782df03))
-
-
-
-
+- support between predicates ([#947](https://github.com/aws-amplify/amplify-codegen-ui/issues/947)) ([fa0daaf](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa0daafd9c99f4a1986885a58bbc67200782df03))
 
 # [2.10.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.9.0...v2.10.0) (2023-03-18)
 
-
 ### Bug Fixes
 
-* clear button on create form should reset select field ([#939](https://github.com/aws-amplify/amplify-codegen-ui/issues/939)) ([326b579](https://github.com/aws-amplify/amplify-codegen-ui/commit/326b579b558bf19b04cf8deb7a85f8eeccc7f189))
-* make operandType more generic ([#933](https://github.com/aws-amplify/amplify-codegen-ui/issues/933)) ([19bc806](https://github.com/aws-amplify/amplify-codegen-ui/commit/19bc806c43a0b230dc94423e3007e28cc5e3da17))
-* nested json array text field doesn't update ([#948](https://github.com/aws-amplify/amplify-codegen-ui/issues/948)) ([bf95b98](https://github.com/aws-amplify/amplify-codegen-ui/commit/bf95b98d47c75aad75f3e229f0f7e103110d32bd))
-
+- clear button on create form should reset select field ([#939](https://github.com/aws-amplify/amplify-codegen-ui/issues/939)) ([326b579](https://github.com/aws-amplify/amplify-codegen-ui/commit/326b579b558bf19b04cf8deb7a85f8eeccc7f189))
+- make operandType more generic ([#933](https://github.com/aws-amplify/amplify-codegen-ui/issues/933)) ([19bc806](https://github.com/aws-amplify/amplify-codegen-ui/commit/19bc806c43a0b230dc94423e3007e28cc5e3da17))
+- nested json array text field doesn't update ([#948](https://github.com/aws-amplify/amplify-codegen-ui/issues/948)) ([bf95b98](https://github.com/aws-amplify/amplify-codegen-ui/commit/bf95b98d47c75aad75f3e229f0f7e103110d32bd))
 
 ### Features
 
-* add optional or required decorator on form labels ([#936](https://github.com/aws-amplify/amplify-codegen-ui/issues/936)) ([d81a50e](https://github.com/aws-amplify/amplify-codegen-ui/commit/d81a50ed6c5ee511245a335eb0b891e29d81d5a7))
-* allow selectField or autoCompleteField to be used for String fields ([#941](https://github.com/aws-amplify/amplify-codegen-ui/issues/941)) ([f8f4c41](https://github.com/aws-amplify/amplify-codegen-ui/commit/f8f4c41884496f7d08e591b18ed0541a370ac669))
-* init composite key property on update form ([#928](https://github.com/aws-amplify/amplify-codegen-ui/issues/928)) ([341882b](https://github.com/aws-amplify/amplify-codegen-ui/commit/341882bea846d57a9d23a9462e5892eee1f7c75a))
-
-
-
-
+- add optional or required decorator on form labels ([#936](https://github.com/aws-amplify/amplify-codegen-ui/issues/936)) ([d81a50e](https://github.com/aws-amplify/amplify-codegen-ui/commit/d81a50ed6c5ee511245a335eb0b891e29d81d5a7))
+- allow selectField or autoCompleteField to be used for String fields ([#941](https://github.com/aws-amplify/amplify-codegen-ui/issues/941)) ([f8f4c41](https://github.com/aws-amplify/amplify-codegen-ui/commit/f8f4c41884496f7d08e591b18ed0541a370ac669))
+- init composite key property on update form ([#928](https://github.com/aws-amplify/amplify-codegen-ui/issues/928)) ([341882b](https://github.com/aws-amplify/amplify-codegen-ui/commit/341882bea846d57a9d23a9462e5892eee1f7c75a))
 
 # [2.9.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.8.0...v2.9.0) (2023-02-22)
 
-
 ### Bug Fixes
 
-* change timestamp check in date validation function ([#911](https://github.com/aws-amplify/amplify-codegen-ui/issues/911)) ([cf96a1c](https://github.com/aws-amplify/amplify-codegen-ui/commit/cf96a1c13e166fddfc77e7a6c005343acc23cc8d))
-* improve join table identification ([5d80ac8](https://github.com/aws-amplify/amplify-codegen-ui/commit/5d80ac8fa70e4f321fa78cb5711da8f694600fa5))
-* update conditional prop codegen ([#917](https://github.com/aws-amplify/amplify-codegen-ui/issues/917)) ([4b47155](https://github.com/aws-amplify/amplify-codegen-ui/commit/4b47155fe50964a309ecf42dbad09bdde6559d27))
-
+- change timestamp check in date validation function ([#911](https://github.com/aws-amplify/amplify-codegen-ui/issues/911)) ([cf96a1c](https://github.com/aws-amplify/amplify-codegen-ui/commit/cf96a1c13e166fddfc77e7a6c005343acc23cc8d))
+- improve join table identification ([5d80ac8](https://github.com/aws-amplify/amplify-codegen-ui/commit/5d80ac8fa70e4f321fa78cb5711da8f694600fa5))
+- update conditional prop codegen ([#917](https://github.com/aws-amplify/amplify-codegen-ui/issues/917)) ([4b47155](https://github.com/aws-amplify/amplify-codegen-ui/commit/4b47155fe50964a309ecf42dbad09bdde6559d27))
 
 ### Features
 
-* allow boolean operator on predicate ([#912](https://github.com/aws-amplify/amplify-codegen-ui/issues/912)) ([9a716a3](https://github.com/aws-amplify/amplify-codegen-ui/commit/9a716a3c503410bce35571fdee7cef40bf7c2acb))
-* change default component for AWSTimestamp to NumberField ([820094c](https://github.com/aws-amplify/amplify-codegen-ui/commit/820094c4c46d37f9d0f41c242f77dc9368939b82))
-
-
-
-
+- allow boolean operator on predicate ([#912](https://github.com/aws-amplify/amplify-codegen-ui/issues/912)) ([9a716a3](https://github.com/aws-amplify/amplify-codegen-ui/commit/9a716a3c503410bce35571fdee7cef40bf7c2acb))
+- change default component for AWSTimestamp to NumberField ([820094c](https://github.com/aws-amplify/amplify-codegen-ui/commit/820094c4c46d37f9d0f41c242f77dc9368939b82))
 
 # [2.8.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.2...v2.8.0) (2023-01-27)
 
-
 ### Bug Fixes
 
-* add default value support for controlled textfield components ([#884](https://github.com/aws-amplify/amplify-codegen-ui/issues/884)) ([b90e191](https://github.com/aws-amplify/amplify-codegen-ui/commit/b90e1918ab83b534c1d70dfa0d8aff2cc2a7bcff))
-* allow required arrays in relationships ([166f92b](https://github.com/aws-amplify/amplify-codegen-ui/commit/166f92ba47d72f5a486a8925589be19671b22327))
-* check for null value during form validation ([#902](https://github.com/aws-amplify/amplify-codegen-ui/issues/902)) ([30891e7](https://github.com/aws-amplify/amplify-codegen-ui/commit/30891e7c326a8b1f00eedaf14ae612776cd8307c))
-* correctly validate on submit for fields with concat display values ([a1f3bfd](https://github.com/aws-amplify/amplify-codegen-ui/commit/a1f3bfd7770e3bdc7e721dd7857e73b1c7a5c02f))
-* enforce bidirectionality between hasOne and belongsTo ([12ccbcd](https://github.com/aws-amplify/amplify-codegen-ui/commit/12ccbcd41af0305e42da7889b20b2208c692c003))
-* handle 12AM when converting to local time ([1eb9541](https://github.com/aws-amplify/amplify-codegen-ui/commit/1eb95415761f57dd632fee0c45fd6853af3a2519))
-* hasMany update assertion ([728e61a](https://github.com/aws-amplify/amplify-codegen-ui/commit/728e61aa2c29bed041b1b736e0c69b97c6741c2e))
-* hasMany update form should throw better error message for invalid schema ([b25a562](https://github.com/aws-amplify/amplify-codegen-ui/commit/b25a5620ab0d37b5a826f4f656e3324e57547917))
-* parse and stringify nonmodel fields ([#882](https://github.com/aws-amplify/amplify-codegen-ui/issues/882)) ([7c5ab39](https://github.com/aws-amplify/amplify-codegen-ui/commit/7c5ab39ddc3e33236c84c70085049660b8b8d03c))
-* remove e2e test account credentials ([#875](https://github.com/aws-amplify/amplify-codegen-ui/issues/875)) ([5dcd69b](https://github.com/aws-amplify/amplify-codegen-ui/commit/5dcd69bbca56f527a3a3c4d0dfa26f7ece492b63))
-* show arrayField error message in non-edit mode ([6855edc](https://github.com/aws-amplify/amplify-codegen-ui/commit/6855edce360fd9e0ae264ec2a958267eb958faba))
-* throw validation error when updating models with misconfigured h… ([#886](https://github.com/aws-amplify/amplify-codegen-ui/issues/886)) ([ac80c9c](https://github.com/aws-amplify/amplify-codegen-ui/commit/ac80c9c9679ac6e8c7479c11ce0122b27f2e84ba))
-* use oidc provider for canary metrics ([#873](https://github.com/aws-amplify/amplify-codegen-ui/issues/873)) ([f2311c3](https://github.com/aws-amplify/amplify-codegen-ui/commit/f2311c3c3876ac29e535ad12a14df407dfe2280d))
-
+- add default value support for controlled textfield components ([#884](https://github.com/aws-amplify/amplify-codegen-ui/issues/884)) ([b90e191](https://github.com/aws-amplify/amplify-codegen-ui/commit/b90e1918ab83b534c1d70dfa0d8aff2cc2a7bcff))
+- allow required arrays in relationships ([166f92b](https://github.com/aws-amplify/amplify-codegen-ui/commit/166f92ba47d72f5a486a8925589be19671b22327))
+- check for null value during form validation ([#902](https://github.com/aws-amplify/amplify-codegen-ui/issues/902)) ([30891e7](https://github.com/aws-amplify/amplify-codegen-ui/commit/30891e7c326a8b1f00eedaf14ae612776cd8307c))
+- correctly validate on submit for fields with concat display values ([a1f3bfd](https://github.com/aws-amplify/amplify-codegen-ui/commit/a1f3bfd7770e3bdc7e721dd7857e73b1c7a5c02f))
+- enforce bidirectionality between hasOne and belongsTo ([12ccbcd](https://github.com/aws-amplify/amplify-codegen-ui/commit/12ccbcd41af0305e42da7889b20b2208c692c003))
+- handle 12AM when converting to local time ([1eb9541](https://github.com/aws-amplify/amplify-codegen-ui/commit/1eb95415761f57dd632fee0c45fd6853af3a2519))
+- hasMany update assertion ([728e61a](https://github.com/aws-amplify/amplify-codegen-ui/commit/728e61aa2c29bed041b1b736e0c69b97c6741c2e))
+- hasMany update form should throw better error message for invalid schema ([b25a562](https://github.com/aws-amplify/amplify-codegen-ui/commit/b25a5620ab0d37b5a826f4f656e3324e57547917))
+- parse and stringify nonmodel fields ([#882](https://github.com/aws-amplify/amplify-codegen-ui/issues/882)) ([7c5ab39](https://github.com/aws-amplify/amplify-codegen-ui/commit/7c5ab39ddc3e33236c84c70085049660b8b8d03c))
+- remove e2e test account credentials ([#875](https://github.com/aws-amplify/amplify-codegen-ui/issues/875)) ([5dcd69b](https://github.com/aws-amplify/amplify-codegen-ui/commit/5dcd69bbca56f527a3a3c4d0dfa26f7ece492b63))
+- show arrayField error message in non-edit mode ([6855edc](https://github.com/aws-amplify/amplify-codegen-ui/commit/6855edce360fd9e0ae264ec2a958267eb958faba))
+- throw validation error when updating models with misconfigured h… ([#886](https://github.com/aws-amplify/amplify-codegen-ui/issues/886)) ([ac80c9c](https://github.com/aws-amplify/amplify-codegen-ui/commit/ac80c9c9679ac6e8c7479c11ce0122b27f2e84ba))
+- use oidc provider for canary metrics ([#873](https://github.com/aws-amplify/amplify-codegen-ui/issues/873)) ([f2311c3](https://github.com/aws-amplify/amplify-codegen-ui/commit/f2311c3c3876ac29e535ad12a14df407dfe2280d))
 
 ### Features
 
-* support bidirectional hasMany ([e6ebec3](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6ebec39c1d1db38c4e9e908c1ea121786af62bb))
-
-
-
-
+- support bidirectional hasMany ([e6ebec3](https://github.com/aws-amplify/amplify-codegen-ui/commit/e6ebec39c1d1db38c4e9e908c1ea121786af62bb))
 
 ## [2.7.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.1...v2.7.2) (2023-01-04)
 
-
 ### Bug Fixes
 
-* parse values for non-model arrays ([ffb68b7](https://github.com/aws-amplify/amplify-codegen-ui/commit/ffb68b7bd5b16603ccc16e5b20d5a2db8de80959))
-* remove functions imported from devDep ([d7544bd](https://github.com/aws-amplify/amplify-codegen-ui/commit/d7544bd6eb1b0726d461b501242d9a93340878d6))
-* update imports and props for aliased components ([#868](https://github.com/aws-amplify/amplify-codegen-ui/issues/868)) ([7c5138a](https://github.com/aws-amplify/amplify-codegen-ui/commit/7c5138a9d822445690b0316e79a6a0cd3c330e6a))
-
-
-
-
+- parse values for non-model arrays ([ffb68b7](https://github.com/aws-amplify/amplify-codegen-ui/commit/ffb68b7bd5b16603ccc16e5b20d5a2db8de80959))
+- remove functions imported from devDep ([d7544bd](https://github.com/aws-amplify/amplify-codegen-ui/commit/d7544bd6eb1b0726d461b501242d9a93340878d6))
+- update imports and props for aliased components ([#868](https://github.com/aws-amplify/amplify-codegen-ui/issues/868)) ([7c5138a](https://github.com/aws-amplify/amplify-codegen-ui/commit/7c5138a9d822445690b0316e79a6a0cd3c330e6a))
 
 ## [2.7.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.7.0...v2.7.1) (2022-12-30)
 
-
 ### Bug Fixes
 
-* fix updates in scalar fields ([f117a2b](https://github.com/aws-amplify/amplify-codegen-ui/commit/f117a2b0e6392f10cc9d54e1144d8152d904fd85))
-* fix validation for required relationships ([94d4dd8](https://github.com/aws-amplify/amplify-codegen-ui/commit/94d4dd80ab8166b73c7b4f43818af17afa30095e))
-
-
-
-
+- fix updates in scalar fields ([f117a2b](https://github.com/aws-amplify/amplify-codegen-ui/commit/f117a2b0e6392f10cc9d54e1144d8152d904fd85))
+- fix validation for required relationships ([94d4dd8](https://github.com/aws-amplify/amplify-codegen-ui/commit/94d4dd80ab8166b73c7b4f43818af17afa30095e))
 
 # [2.7.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.6.0...v2.7.0) (2022-12-29)
 
-
 ### Bug Fixes
 
-* add form datamodel to requiredDataModels for renderComponentOnly ([#815](https://github.com/aws-amplify/amplify-codegen-ui/issues/815)) ([f0d74e5](https://github.com/aws-amplify/amplify-codegen-ui/commit/f0d74e56da761e6c2959f3b44bf78a69b333e46d))
-* add importCollection to renderComponentOnly return ([#813](https://github.com/aws-amplify/amplify-codegen-ui/issues/813)) ([609ffc2](https://github.com/aws-amplify/amplify-codegen-ui/commit/609ffc272df116578120e406209959d41197dd1b))
-* add temp solution for removing hasOne & belongsTo relationships ([22e3838](https://github.com/aws-amplify/amplify-codegen-ui/commit/22e38386f5fc44a91c8c4ca6070e4ee000cc3070))
-* alias form model names so we do not get naming collisions ([#771](https://github.com/aws-amplify/amplify-codegen-ui/issues/771)) ([2746004](https://github.com/aws-amplify/amplify-codegen-ui/commit/274600473d6b4430738879b6a09bde69b2b008b0))
-* allow empty non-required fields to save ([3524702](https://github.com/aws-amplify/amplify-codegen-ui/commit/352470234e45fbf3c24554957f4a461ad02dcf3a))
-* array field implementation for model types api update ([#775](https://github.com/aws-amplify/amplify-codegen-ui/issues/775)) ([d63d502](https://github.com/aws-amplify/amplify-codegen-ui/commit/d63d5027751b676b1e07ad8bae6f7d749f22d981))
-* bad merge conflict ([cad4606](https://github.com/aws-amplify/amplify-codegen-ui/commit/cad4606246a10451629c335d276337bb2ec1e53a))
-* cli test fix ([96a5af9](https://github.com/aws-amplify/amplify-codegen-ui/commit/96a5af9e6c1213581e4dfa5790754cbca0f713a1))
-* fix a bug ([ef5ea3c](https://github.com/aws-amplify/amplify-codegen-ui/commit/ef5ea3ce155b1d166b19cbc797622310e12bdba1))
-* fix ArrayField label ([13e33e5](https://github.com/aws-amplify/amplify-codegen-ui/commit/13e33e5ec1aefd3846ec98f4cbb91ea3f0754b52))
-* fix conditional ([daf5a0b](https://github.com/aws-amplify/amplify-codegen-ui/commit/daf5a0b718a853fa90538f11b1caaaf7168a6cca))
-* fix datastore submit statement ([#800](https://github.com/aws-amplify/amplify-codegen-ui/issues/800)) ([f00cf16](https://github.com/aws-amplify/amplify-codegen-ui/commit/f00cf163bcb9bb6b199882fcb6459d789ad53908))
-* fix label and edit behavior of hasOne relationship field ([ece13b6](https://github.com/aws-amplify/amplify-codegen-ui/commit/ece13b6127c8184feca80907746e66189a8feabd))
-* fix merge conflicts ([2ad276c](https://github.com/aws-amplify/amplify-codegen-ui/commit/2ad276c16ab50a137d066f25f33de1f2aa938a2e))
-* handle association breaking changes for new schema ([f63a424](https://github.com/aws-amplify/amplify-codegen-ui/commit/f63a424c028747ec2c723f994588e956c45cc837))
-* hasMany integ test ([927d61b](https://github.com/aws-amplify/amplify-codegen-ui/commit/927d61bb98b55a47a4a39504691e96d6d0cd0f06))
-* hide cancel button by default ([#696](https://github.com/aws-amplify/amplify-codegen-ui/issues/696)) ([662dd10](https://github.com/aws-amplify/amplify-codegen-ui/commit/662dd106928677ed8fc3e424ca5debdc1e440d86))
-* load hasOne and hasMany relationships for collections the ds v4 way ([2b789ff](https://github.com/aws-amplify/amplify-codegen-ui/commit/2b789ff5b2a9e8a09e69c1fbb1f8777eff328c44))
-* reverting schema change for model based hasMany integ test ([95e8f14](https://github.com/aws-amplify/amplify-codegen-ui/commit/95e8f14a402b88a5da959f8763d9f45d6afbdd93))
-* set authModeStrategyType in e2e test ([eb3496e](https://github.com/aws-amplify/amplify-codegen-ui/commit/eb3496eda036ca0ae3f9170014326e5b3dbe7bb7))
-* support display value for array of enums ([10ed135](https://github.com/aws-amplify/amplify-codegen-ui/commit/10ed13597ba779aa46bc8ff77444acdb3739cbba))
-* unmatching schema in hasMany integ test ([44ca4fb](https://github.com/aws-amplify/amplify-codegen-ui/commit/44ca4fb939f5a74e4d888aa83a8e7020f6302e1c))
-* updating snapshot ([d19ea80](https://github.com/aws-amplify/amplify-codegen-ui/commit/d19ea80cc0ea2f1bc20bffa291da6ec04fa1b12b))
-* use lowercase datatype name for update form query ([#855](https://github.com/aws-amplify/amplify-codegen-ui/issues/855)) ([bf8ae6f](https://github.com/aws-amplify/amplify-codegen-ui/commit/bf8ae6ff105fa429c4582228677ec8347a154d15))
-
+- add form datamodel to requiredDataModels for renderComponentOnly ([#815](https://github.com/aws-amplify/amplify-codegen-ui/issues/815)) ([f0d74e5](https://github.com/aws-amplify/amplify-codegen-ui/commit/f0d74e56da761e6c2959f3b44bf78a69b333e46d))
+- add importCollection to renderComponentOnly return ([#813](https://github.com/aws-amplify/amplify-codegen-ui/issues/813)) ([609ffc2](https://github.com/aws-amplify/amplify-codegen-ui/commit/609ffc272df116578120e406209959d41197dd1b))
+- add temp solution for removing hasOne & belongsTo relationships ([22e3838](https://github.com/aws-amplify/amplify-codegen-ui/commit/22e38386f5fc44a91c8c4ca6070e4ee000cc3070))
+- alias form model names so we do not get naming collisions ([#771](https://github.com/aws-amplify/amplify-codegen-ui/issues/771)) ([2746004](https://github.com/aws-amplify/amplify-codegen-ui/commit/274600473d6b4430738879b6a09bde69b2b008b0))
+- allow empty non-required fields to save ([3524702](https://github.com/aws-amplify/amplify-codegen-ui/commit/352470234e45fbf3c24554957f4a461ad02dcf3a))
+- array field implementation for model types api update ([#775](https://github.com/aws-amplify/amplify-codegen-ui/issues/775)) ([d63d502](https://github.com/aws-amplify/amplify-codegen-ui/commit/d63d5027751b676b1e07ad8bae6f7d749f22d981))
+- bad merge conflict ([cad4606](https://github.com/aws-amplify/amplify-codegen-ui/commit/cad4606246a10451629c335d276337bb2ec1e53a))
+- cli test fix ([96a5af9](https://github.com/aws-amplify/amplify-codegen-ui/commit/96a5af9e6c1213581e4dfa5790754cbca0f713a1))
+- fix a bug ([ef5ea3c](https://github.com/aws-amplify/amplify-codegen-ui/commit/ef5ea3ce155b1d166b19cbc797622310e12bdba1))
+- fix ArrayField label ([13e33e5](https://github.com/aws-amplify/amplify-codegen-ui/commit/13e33e5ec1aefd3846ec98f4cbb91ea3f0754b52))
+- fix conditional ([daf5a0b](https://github.com/aws-amplify/amplify-codegen-ui/commit/daf5a0b718a853fa90538f11b1caaaf7168a6cca))
+- fix datastore submit statement ([#800](https://github.com/aws-amplify/amplify-codegen-ui/issues/800)) ([f00cf16](https://github.com/aws-amplify/amplify-codegen-ui/commit/f00cf163bcb9bb6b199882fcb6459d789ad53908))
+- fix label and edit behavior of hasOne relationship field ([ece13b6](https://github.com/aws-amplify/amplify-codegen-ui/commit/ece13b6127c8184feca80907746e66189a8feabd))
+- fix merge conflicts ([2ad276c](https://github.com/aws-amplify/amplify-codegen-ui/commit/2ad276c16ab50a137d066f25f33de1f2aa938a2e))
+- handle association breaking changes for new schema ([f63a424](https://github.com/aws-amplify/amplify-codegen-ui/commit/f63a424c028747ec2c723f994588e956c45cc837))
+- hasMany integ test ([927d61b](https://github.com/aws-amplify/amplify-codegen-ui/commit/927d61bb98b55a47a4a39504691e96d6d0cd0f06))
+- hide cancel button by default ([#696](https://github.com/aws-amplify/amplify-codegen-ui/issues/696)) ([662dd10](https://github.com/aws-amplify/amplify-codegen-ui/commit/662dd106928677ed8fc3e424ca5debdc1e440d86))
+- load hasOne and hasMany relationships for collections the ds v4 way ([2b789ff](https://github.com/aws-amplify/amplify-codegen-ui/commit/2b789ff5b2a9e8a09e69c1fbb1f8777eff328c44))
+- reverting schema change for model based hasMany integ test ([95e8f14](https://github.com/aws-amplify/amplify-codegen-ui/commit/95e8f14a402b88a5da959f8763d9f45d6afbdd93))
+- set authModeStrategyType in e2e test ([eb3496e](https://github.com/aws-amplify/amplify-codegen-ui/commit/eb3496eda036ca0ae3f9170014326e5b3dbe7bb7))
+- support display value for array of enums ([10ed135](https://github.com/aws-amplify/amplify-codegen-ui/commit/10ed13597ba779aa46bc8ff77444acdb3739cbba))
+- unmatching schema in hasMany integ test ([44ca4fb](https://github.com/aws-amplify/amplify-codegen-ui/commit/44ca4fb939f5a74e4d888aa83a8e7020f6302e1c))
+- updating snapshot ([d19ea80](https://github.com/aws-amplify/amplify-codegen-ui/commit/d19ea80cc0ea2f1bc20bffa291da6ec04fa1b12b))
+- use lowercase datatype name for update form query ([#855](https://github.com/aws-amplify/amplify-codegen-ui/issues/855)) ([bf8ae6f](https://github.com/aws-amplify/amplify-codegen-ui/commit/bf8ae6ff105fa429c4582228677ec8347a154d15))
 
 ### Features
 
-* add feature flags for relationship and non-model form fields support ([40bfeec](https://github.com/aws-amplify/amplify-codegen-ui/commit/40bfeecf4a634080fe56e97b55db292a0b452718))
-* add getAliasMap method to importCollection ([cb49a06](https://github.com/aws-amplify/amplify-codegen-ui/commit/cb49a06e980e9733449eecc230784cc333f369b2))
-* add handling for excluded sectional elements ([1f693d6](https://github.com/aws-amplify/amplify-codegen-ui/commit/1f693d63c7478cd09e0efdf36df3a15581888a56))
-* add relationship suggestion query to forms ([#722](https://github.com/aws-amplify/amplify-codegen-ui/issues/722)) ([deed693](https://github.com/aws-amplify/amplify-codegen-ui/commit/deed6933a4dd43c9dc92753d3474f7123b265a43)), closes [#721](https://github.com/aws-amplify/amplify-codegen-ui/issues/721)
-* add support for hasMany relationship for create and update form ([#792](https://github.com/aws-amplify/amplify-codegen-ui/issues/792)) ([fb6f79e](https://github.com/aws-amplify/amplify-codegen-ui/commit/fb6f79e1f4d97a00102242ae7ae8a17bb87ac6e6))
-* add support for manyToMany update form ([264c92b](https://github.com/aws-amplify/amplify-codegen-ui/commit/264c92b7541142166ee947645eab586edf39c26e))
-* adding many to many support for form creation ([e7852c3](https://github.com/aws-amplify/amplify-codegen-ui/commit/e7852c3cc6e10a2924309181ff148fee5e585570))
-* adding many-to-many relationship create form golden file ([a0c5cbe](https://github.com/aws-amplify/amplify-codegen-ui/commit/a0c5cbe44c35dfa1fd8acfbc45e6cd3e48ab8f25))
-* have Autocomplete props support composite keys ([9b197c1](https://github.com/aws-amplify/amplify-codegen-ui/commit/9b197c1bf9657da9924e675f768c3006ee7dc66a))
-* init form support for has-one relationship ([#718](https://github.com/aws-amplify/amplify-codegen-ui/issues/718)) ([1196013](https://github.com/aws-amplify/amplify-codegen-ui/commit/1196013cb8c90fd8b04aeba15528cfd936e7e04d))
-* support cpk for forms with hasMany relationship ([ab9862f](https://github.com/aws-amplify/amplify-codegen-ui/commit/ab9862f02eb1f38186d68a5a5663b3a3d996ff9e))
-* support cpk for manyToMany form ([c5d6abd](https://github.com/aws-amplify/amplify-codegen-ui/commit/c5d6abd7d019d8a54ca09e759c735bd62fc221d9))
-* support cpk in forms with hasOne relationship ([aabe2f8](https://github.com/aws-amplify/amplify-codegen-ui/commit/aabe2f8c1c8629031b22afa6a0c3e00b5dab0ad1))
-* support hasMany and manyToMany between models with composite keys ([bd65d82](https://github.com/aws-amplify/amplify-codegen-ui/commit/bd65d825989000fbe78d06081abadf43e4a5d78f))
-
+- add feature flags for relationship and non-model form fields support ([40bfeec](https://github.com/aws-amplify/amplify-codegen-ui/commit/40bfeecf4a634080fe56e97b55db292a0b452718))
+- add getAliasMap method to importCollection ([cb49a06](https://github.com/aws-amplify/amplify-codegen-ui/commit/cb49a06e980e9733449eecc230784cc333f369b2))
+- add handling for excluded sectional elements ([1f693d6](https://github.com/aws-amplify/amplify-codegen-ui/commit/1f693d63c7478cd09e0efdf36df3a15581888a56))
+- add relationship suggestion query to forms ([#722](https://github.com/aws-amplify/amplify-codegen-ui/issues/722)) ([deed693](https://github.com/aws-amplify/amplify-codegen-ui/commit/deed6933a4dd43c9dc92753d3474f7123b265a43)), closes [#721](https://github.com/aws-amplify/amplify-codegen-ui/issues/721)
+- add support for hasMany relationship for create and update form ([#792](https://github.com/aws-amplify/amplify-codegen-ui/issues/792)) ([fb6f79e](https://github.com/aws-amplify/amplify-codegen-ui/commit/fb6f79e1f4d97a00102242ae7ae8a17bb87ac6e6))
+- add support for manyToMany update form ([264c92b](https://github.com/aws-amplify/amplify-codegen-ui/commit/264c92b7541142166ee947645eab586edf39c26e))
+- adding many to many support for form creation ([e7852c3](https://github.com/aws-amplify/amplify-codegen-ui/commit/e7852c3cc6e10a2924309181ff148fee5e585570))
+- adding many-to-many relationship create form golden file ([a0c5cbe](https://github.com/aws-amplify/amplify-codegen-ui/commit/a0c5cbe44c35dfa1fd8acfbc45e6cd3e48ab8f25))
+- have Autocomplete props support composite keys ([9b197c1](https://github.com/aws-amplify/amplify-codegen-ui/commit/9b197c1bf9657da9924e675f768c3006ee7dc66a))
+- init form support for has-one relationship ([#718](https://github.com/aws-amplify/amplify-codegen-ui/issues/718)) ([1196013](https://github.com/aws-amplify/amplify-codegen-ui/commit/1196013cb8c90fd8b04aeba15528cfd936e7e04d))
+- support cpk for forms with hasMany relationship ([ab9862f](https://github.com/aws-amplify/amplify-codegen-ui/commit/ab9862f02eb1f38186d68a5a5663b3a3d996ff9e))
+- support cpk for manyToMany form ([c5d6abd](https://github.com/aws-amplify/amplify-codegen-ui/commit/c5d6abd7d019d8a54ca09e759c735bd62fc221d9))
+- support cpk in forms with hasOne relationship ([aabe2f8](https://github.com/aws-amplify/amplify-codegen-ui/commit/aabe2f8c1c8629031b22afa6a0c3e00b5dab0ad1))
+- support hasMany and manyToMany between models with composite keys ([bd65d82](https://github.com/aws-amplify/amplify-codegen-ui/commit/bd65d825989000fbe78d06081abadf43e4a5d78f))
 
 ### Reverts
 
-* Revert "chore: temporarily typecast custom theme" ([fa4769b](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa4769b09a3695e221179ad921f698a69ce66642))
-
-
-
-
+- Revert "chore: temporarily typecast custom theme" ([fa4769b](https://github.com/aws-amplify/amplify-codegen-ui/commit/fa4769b09a3695e221179ad921f698a69ce66642))
 
 # [2.6.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.5.8...v2.6.0) (2022-12-14)
 
