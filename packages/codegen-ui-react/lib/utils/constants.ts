@@ -14,3 +14,5 @@
   limitations under the License.
  */
 export const COMPOSITE_PRIMARY_KEY_PROP_NAME = 'id';
+
+export const STORAGE_FILE_KEY = 'key';

@@ -91,7 +91,6 @@ import {
   getUseStateHooks,
   resetStateFunction,
   getCanUnlinkModelName,
-  getUseRefHooks,
 } from './form-renderer-helper/form-state';
 import { shouldWrapInArrayField } from './form-renderer-helper/render-checkers';
 import {
@@ -462,8 +461,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     statements.push(getInitialValues(formMetadata.fieldConfigs, this.component));
 
     statements.push(...getUseStateHooks(formMetadata.fieldConfigs));
-
-    statements.push(...getUseRefHooks(formMetadata.fieldConfigs));
 
     statements.push(buildUseStateExpression('errors', factory.createObjectLiteralExpression()));
 
