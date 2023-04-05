@@ -46,7 +46,6 @@ import {
   getSetNameIdentifier,
   buildUseStateExpression,
   getControlledComponentDefaultValue,
-  buildUseRefExpression,
 } from '../../helpers';
 import { getElementAccessExpression } from './invalid-variable-helpers';
 import { shouldWrapInArrayField } from './render-checkers';
@@ -259,21 +258,6 @@ export const getUseStateHooks = (fieldConfigs: Record<string, FieldConfigMetadat
     }
     return acc;
   }, []);
-};
-
-/**
- * iterates field configs to create useRef hooks for fields that need refs.
- * @param fieldConfigs
- * @returns
- */
-export const getUseRefHooks = (fieldConfigs: Record<string, FieldConfigMetadata>): Statement[] => {
-  return Object.entries(fieldConfigs)
-    .filter(([, { componentType }]) => {
-      return componentType === 'StorageField';
-    })
-    .map(([name]) => {
-      return buildUseRefExpression(`${name}Ref`, factory.createArrayLiteralExpression([], false));
-    });
 };
 
 /**

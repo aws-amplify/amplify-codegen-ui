@@ -26,6 +26,7 @@ import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxExpression, Syn
 import { getDecoratedLabel } from '../../forms/form-renderer-helper';
 import { buildOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
 import { propertyToExpression } from '../../react-component-render-helper';
+import { STORAGE_FILE_KEY } from '../constants';
 
 const fieldKeys = new Set<keyof FormDefinitionStorageFieldElement['props']>(['label', 'isRequired', 'isReadOnly']);
 
@@ -59,13 +60,6 @@ export const renderStorageFieldComponent = (
   const storageManagerAttributes: JsxAttribute[] = [];
   const fieldAttributes: JsxAttribute[] = [];
 
-  storageManagerAttributes.push(
-    factory.createJsxAttribute(
-      factory.createIdentifier('ref'),
-      factory.createJsxExpression(undefined, factory.createIdentifier(`${component.name}Ref`)),
-    ),
-  );
-
   if (componentMetadata.formMetadata) {
     const errorKey =
       componentName.split('.').length > 1 || !isValidVariableName(componentName)
@@ -98,7 +92,7 @@ export const renderStorageFieldComponent = (
                         undefined,
                         undefined,
                         undefined,
-                        factory.createIdentifier('s3Key'),
+                        factory.createIdentifier(STORAGE_FILE_KEY),
                         undefined,
                         undefined,
                         undefined,
@@ -108,7 +102,12 @@ export const renderStorageFieldComponent = (
                     factory.createToken(SyntaxKind.EqualsGreaterThanToken),
                     factory.createParenthesizedExpression(
                       factory.createObjectLiteralExpression(
-                        [factory.createShorthandPropertyAssignment(factory.createIdentifier('s3Key'), undefined)],
+                        [
+                          factory.createShorthandPropertyAssignment(
+                            factory.createIdentifier(STORAGE_FILE_KEY),
+                            undefined,
+                          ),
+                        ],
                         false,
                       ),
                     ),
@@ -124,7 +123,7 @@ export const renderStorageFieldComponent = (
                 factory.createObjectLiteralExpression(
                   [
                     factory.createPropertyAssignment(
-                      factory.createIdentifier('s3Key'),
+                      factory.createIdentifier(STORAGE_FILE_KEY),
                       factory.createIdentifier('singleImgKey'),
                     ),
                   ],

@@ -24820,7 +24820,6 @@ export default function CreateProductForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [imgKeys, setImgKeys] = React.useState(initialValues.imgKeys);
-  const imgKeysRef = React.useRef([]);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -24937,9 +24936,8 @@ export default function CreateProductForm(props) {
         isReadOnly={false}
       >
         <StorageManager
-          ref={imgKeysRef}
           onUploadSuccess={(files) => {
-            let value = files.map(({ s3Key }) => s3Key);
+            let value = files.map(({ key }) => key);
             if (onChange) {
               const modelFields = {
                 name,
@@ -25020,7 +25018,6 @@ export default function UpdateProductForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [imgKeys, setImgKeys] = React.useState(initialValues.imgKeys);
-  const imgKeysRef = React.useRef([]);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = productRecord
@@ -25152,10 +25149,9 @@ export default function UpdateProductForm(props) {
         isReadOnly={false}
       >
         <StorageManager
-          ref={imgKeysRef}
-          defaultFiles={imgKeys.map((s3Key) => ({ s3Key }))}
+          defaultFiles={imgKeys.map((key) => ({ key }))}
           onUploadSuccess={(files) => {
-            let value = files.map(({ s3Key }) => s3Key);
+            let value = files.map(({ key }) => key);
             if (onChange) {
               const modelFields = {
                 name,
@@ -25240,7 +25236,6 @@ export default function UpdateProductForm(props) {
   const [singleImgKey, setSingleImgKey] = React.useState(
     initialValues.singleImgKey
   );
-  const singleImgKeyRef = React.useRef([]);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = productRecord
@@ -25372,10 +25367,9 @@ export default function UpdateProductForm(props) {
         isReadOnly={false}
       >
         <StorageManager
-          ref={singleImgKeyRef}
-          defaultFiles={[{ s3Key: singleImgKey }]}
+          defaultFiles={[{ key: singleImgKey }]}
           onUploadSuccess={(files) => {
-            let value = files?.[0]?.s3Key;
+            let value = files?.[0]?.key;
             if (onChange) {
               const modelFields = {
                 name,

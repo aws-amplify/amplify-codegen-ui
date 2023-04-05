@@ -15,6 +15,7 @@
  */
 import { DataFieldDataType } from '@aws-amplify/codegen-ui';
 import { factory, NodeFlags, Expression, SyntaxKind, Identifier } from 'typescript';
+import { STORAGE_FILE_KEY } from '../../utils/constants';
 
 /*
 Builds the event target variable. Example:
@@ -44,8 +45,8 @@ const expressionMap = {
   ),
 };
 
-// array:     files.map(({ s3Key }) => s3Key)
-// non-array: files?.[0]?.s3Key;
+// array:     files.map(({ key }) => key)
+// non-array: files?.[0]?.key;
 export function extractKeyByMapping(array: string, key: string, isArray?: boolean) {
   if (isArray) {
     return factory.createCallExpression(
@@ -82,7 +83,7 @@ export function extractKeyByMapping(array: string, key: string, isArray?: boolea
       factory.createNumericLiteral('0'),
     ),
     factory.createToken(SyntaxKind.QuestionDotToken),
-    factory.createIdentifier('s3Key'),
+    factory.createIdentifier(STORAGE_FILE_KEY),
   );
 }
 
@@ -126,7 +127,7 @@ export const buildTargetVariable = (
       identifier: expressionMap.value,
     },
     StorageField: {
-      expression: extractKeyByMapping('files', 's3Key', isArray),
+      expression: extractKeyByMapping('files', STORAGE_FILE_KEY, isArray),
       identifier: expressionMap.value,
     },
   };
