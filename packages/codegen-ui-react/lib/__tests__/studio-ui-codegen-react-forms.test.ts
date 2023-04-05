@@ -653,6 +653,15 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
     });
 
+    it.only('should render a update form with StorageField on non-array field', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/product-datastore-update-non-array',
+        'datastore/product-non-array',
+        undefined,
+      );
+      expect(componentText).toMatchSnapshot();
+    });
+
     it('should render a update form with StorageField', () => {
       const { componentText } = generateWithAmplifyFormRenderer(
         'forms/product-datastore-update',

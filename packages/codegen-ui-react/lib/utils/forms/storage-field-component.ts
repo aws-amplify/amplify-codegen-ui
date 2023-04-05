@@ -21,7 +21,7 @@ import {
   StudioComponentChild,
 } from '@aws-amplify/codegen-ui/lib/types';
 import { ComponentMetadata, isValidVariableName } from '@aws-amplify/codegen-ui/lib/utils';
-import { factory, JsxAttribute, JsxAttributeLike, JsxElement, SyntaxKind } from 'typescript';
+import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
 import { getDecoratedLabel } from '../../forms/form-renderer-helper';
 import { buildOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
 import { propertyToExpression } from '../../react-component-render-helper';
@@ -78,10 +78,8 @@ export const renderStorageFieldComponent = (
           );
 
     if (componentMetadata.formMetadata.formActionType === 'update') {
-      storageManagerAttributes.push(
-        factory.createJsxAttribute(
-          factory.createIdentifier('defaultFiles'),
-          factory.createJsxExpression(
+      const defaultFileExpression: JsxExpression = fieldConfigs[component.name].isArray
+        ? factory.createJsxExpression(
             undefined,
             factory.createCallExpression(
               factory.createPropertyAccessExpression(
@@ -117,8 +115,27 @@ export const renderStorageFieldComponent = (
                 ),
               ],
             ),
-          ),
-        ),
+          )
+        : factory.createJsxExpression(
+            undefined,
+            factory.createArrayLiteralExpression(
+              [
+                factory.createObjectLiteralExpression(
+                  [
+                    factory.createPropertyAssignment(
+                      factory.createIdentifier('s3Key'),
+                      factory.createIdentifier('singleImgKey'),
+                    ),
+                  ],
+                  false,
+                ),
+              ],
+              false,
+            ),
+          );
+
+      storageManagerAttributes.push(
+        factory.createJsxAttribute(factory.createIdentifier('defaultFiles'), defaultFileExpression),
       );
     }
 
@@ -166,8 +183,14 @@ export const renderStorageFieldComponent = (
       }
     }
     if (isStorageManagerKey(key)) {
-      const storageManagerValue =
-        key === 'acceptedFileTypes' ? { ...value, value: (value as any).value.split(',') } : value;
+      let storageManagerValue = value;
+
+      if (key === 'acceptedFileTypes') {
+        storageManagerValue = { ...value, value: (value as any).value.split(',') };
+      }
+      if (key === 'maxFileCount' && !fieldConfigs[componentName].isArray) {
+        storageManagerValue = { ...value, value: 1 };
+      }
 
       storageManagerAttributes.push(
         factory.createJsxAttribute(

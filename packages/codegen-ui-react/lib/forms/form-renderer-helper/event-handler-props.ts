@@ -287,12 +287,12 @@ export const buildOnChangeStatement = (
 ) => {
   const { name: fieldName, componentType: fieldType } = component;
   const fieldConfig = fieldConfigs[fieldName];
-  const { dataType, sanitizedFieldName, studioFormComponentType } = fieldConfig;
+  const { dataType, sanitizedFieldName, studioFormComponentType, isArray } = fieldConfig;
   const renderedFieldName = sanitizedFieldName || fieldName;
 
   // build statements that handle new value
   const handleChangeStatements: Statement[] = [
-    ...buildTargetVariable(studioFormComponentType || fieldType, renderedFieldName, dataType),
+    ...buildTargetVariable(studioFormComponentType || fieldType, renderedFieldName, dataType, isArray),
   ];
 
   if (!shouldWrapInArrayField(fieldConfig)) {
