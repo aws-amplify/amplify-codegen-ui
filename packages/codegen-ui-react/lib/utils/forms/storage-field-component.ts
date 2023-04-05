@@ -19,8 +19,9 @@ import {
   LabelDecorator,
   StudioComponent,
   StudioComponentChild,
-} from '@aws-amplify/codegen-ui/lib/types';
-import { ComponentMetadata, isValidVariableName } from '@aws-amplify/codegen-ui/lib/utils';
+  ComponentMetadata,
+  isValidVariableName,
+} from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
 import { getDecoratedLabel } from '../../forms/form-renderer-helper';
 import { buildOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
