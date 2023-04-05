@@ -34,7 +34,7 @@ export class ReactRequiredDependencyProvider extends RequiredDependencyProvider<
       },
       {
         dependencyName: '@aws-amplify/ui-react-storage',
-        supportedSemVerPattern: '^1.0.2',
+        supportedSemVerPattern: '^1.0.1',
         reason: 'Required to leverage StorageManager.',
       },
     ];

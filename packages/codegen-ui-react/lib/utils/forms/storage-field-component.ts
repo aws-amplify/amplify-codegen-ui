@@ -24,7 +24,7 @@ import {
 } from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
 import { getDecoratedLabel } from '../../forms/form-renderer-helper';
-import { buildOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
+import { buildStorageManagerOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
 import { propertyToExpression } from '../../react-component-render-helper';
 import { STORAGE_FILE_KEY } from '../constants';
 
@@ -78,7 +78,7 @@ export const renderStorageFieldComponent = (
             undefined,
             factory.createCallExpression(
               factory.createPropertyAccessExpression(
-                factory.createIdentifier('imgKeys'),
+                factory.createIdentifier(componentName),
                 factory.createIdentifier('map'),
               ),
               undefined,
@@ -118,19 +118,25 @@ export const renderStorageFieldComponent = (
           )
         : factory.createJsxExpression(
             undefined,
-            factory.createArrayLiteralExpression(
-              [
-                factory.createObjectLiteralExpression(
-                  [
-                    factory.createPropertyAssignment(
-                      factory.createIdentifier(STORAGE_FILE_KEY),
-                      factory.createIdentifier('singleImgKey'),
-                    ),
-                  ],
-                  false,
-                ),
-              ],
-              false,
+            factory.createConditionalExpression(
+              factory.createIdentifier(componentName),
+              factory.createToken(SyntaxKind.QuestionToken),
+              factory.createArrayLiteralExpression(
+                [
+                  factory.createObjectLiteralExpression(
+                    [
+                      factory.createPropertyAssignment(
+                        factory.createIdentifier('key'),
+                        factory.createIdentifier(componentName),
+                      ),
+                    ],
+                    false,
+                  ),
+                ],
+                false,
+              ),
+              factory.createToken(SyntaxKind.ColonToken),
+              factory.createIdentifier('undefined'),
             ),
           );
 
@@ -139,7 +145,8 @@ export const renderStorageFieldComponent = (
       );
     }
 
-    storageManagerAttributes.push(buildOnChangeStatement(component, fieldConfigs));
+    storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onUploadSuccess'));
+    storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onFileRemove'));
     fieldAttributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('errorMessage'),

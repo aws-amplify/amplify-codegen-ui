@@ -54,7 +54,7 @@ import { getOnChangeValidationBlock } from './validation';
 import { buildModelFieldObject } from './model-fields';
 import { isModelDataType, shouldWrapInArrayField } from './render-checkers';
 import { extractModelAndKeys, getMatchEveryModelFieldCallExpression } from './model-values';
-import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../../utils/constants';
+import { COMPOSITE_PRIMARY_KEY_PROP_NAME, STORAGE_FILE_KEY } from '../../utils/constants';
 
 export const buildMutationBindings = (form: StudioForm, primaryKeys: string[] = []) => {
   const {
@@ -447,3 +447,137 @@ export function buildOnSelect({
     ),
   );
 }
+
+const storageManagerOnChangeHandlerMap = {
+  onUploadSuccess: {
+    value: {
+      scalar: () => factory.createIdentifier('key'),
+      array: () =>
+        factory.createArrayLiteralExpression(
+          [factory.createSpreadElement(factory.createIdentifier('prev')), factory.createIdentifier(STORAGE_FILE_KEY)],
+          false,
+        ),
+    },
+  },
+  onFileRemove: {
+    value: {
+      scalar: (fieldName?: string) =>
+        fieldName ? buildAccessChain(['initialValues', fieldName]) : factory.createIdentifier('undefined'),
+      array: () =>
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(factory.createIdentifier('prev'), factory.createIdentifier('filter')),
+          undefined,
+          [
+            factory.createArrowFunction(
+              undefined,
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier('f'),
+                  undefined,
+                  undefined,
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBinaryExpression(
+                factory.createIdentifier('f'),
+                factory.createToken(SyntaxKind.ExclamationEqualsEqualsToken),
+                factory.createIdentifier(STORAGE_FILE_KEY),
+              ),
+            ),
+          ],
+        ),
+    },
+  },
+};
+
+export const buildStorageManagerOnChangeStatement = (
+  component: StudioComponent | StudioComponentChild,
+  fieldConfigs: Record<string, FieldConfigMetadata>,
+  handlerName: 'onUploadSuccess' | 'onFileRemove',
+) => {
+  const { name: fieldName } = component;
+  const fieldConfig = fieldConfigs[fieldName];
+  const { sanitizedFieldName, isArray } = fieldConfig;
+  const renderedFieldName = sanitizedFieldName || fieldName;
+
+  return factory.createJsxAttribute(
+    factory.createIdentifier(handlerName),
+    factory.createJsxExpression(
+      undefined,
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createObjectBindingPattern([
+              factory.createBindingElement(undefined, undefined, factory.createIdentifier(STORAGE_FILE_KEY), undefined),
+            ]),
+            undefined,
+            undefined,
+            undefined,
+          ),
+        ],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createBlock(
+          [
+            factory.createExpressionStatement(
+              factory.createCallExpression(getSetNameIdentifier(renderedFieldName), undefined, [
+                factory.createArrowFunction(
+                  undefined,
+                  undefined,
+                  [
+                    factory.createParameterDeclaration(
+                      undefined,
+                      undefined,
+                      undefined,
+                      factory.createIdentifier('prev'),
+                      undefined,
+                      undefined,
+                      undefined,
+                    ),
+                  ],
+                  undefined,
+                  factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                  factory.createBlock(
+                    [
+                      factory.createVariableStatement(
+                        undefined,
+                        factory.createVariableDeclarationList(
+                          [
+                            factory.createVariableDeclaration(
+                              factory.createIdentifier('value'),
+                              undefined,
+                              undefined,
+                              storageManagerOnChangeHandlerMap[handlerName].value[isArray ? 'array' : 'scalar'](
+                                renderedFieldName,
+                              ),
+                            ),
+                          ],
+                          NodeFlags.Let,
+                        ),
+                      ),
+                      buildOverrideOnChangeStatement(fieldName, fieldConfigs),
+                      factory.createReturnStatement(factory.createIdentifier('value')),
+                    ],
+                    true,
+                  ),
+                ),
+              ]),
+            ),
+          ],
+          true,
+        ),
+      ),
+    ),
+  );
+};
