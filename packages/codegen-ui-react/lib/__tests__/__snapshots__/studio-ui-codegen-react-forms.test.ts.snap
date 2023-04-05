@@ -24936,20 +24936,33 @@ export default function CreateProductForm(props) {
         isReadOnly={false}
       >
         <StorageManager
-          onUploadSuccess={(files) => {
-            let value = files.map(({ key }) => key);
-            if (onChange) {
-              const modelFields = {
-                name,
-                imgKeys: value,
-              };
-              const result = onChange(modelFields);
-              value = result?.imgKeys ?? value;
-            }
-            if (errors.imgKeys?.hasError) {
-              runValidationTasks(\\"imgKeys\\", value);
-            }
-            setImgKeys(value);
+          onUploadSuccess={({ key }) => {
+            setImgKeys((prev) => {
+              let value = [...prev, key];
+              if (onChange) {
+                const modelFields = {
+                  name,
+                  imgKeys: value,
+                };
+                const result = onChange(modelFields);
+                value = result?.imgKeys ?? value;
+              }
+              return value;
+            });
+          }}
+          onFileRemove={({ key }) => {
+            setImgKeys((prev) => {
+              let value = prev.filter((f) => f !== key);
+              if (onChange) {
+                const modelFields = {
+                  name,
+                  imgKeys: value,
+                };
+                const result = onChange(modelFields);
+                value = result?.imgKeys ?? value;
+              }
+              return value;
+            });
           }}
           accessLevel={\\"protected\\"}
           acceptedFileTypes={[\\".txt\\", \\".pdf\\"]}
@@ -25150,20 +25163,33 @@ export default function UpdateProductForm(props) {
       >
         <StorageManager
           defaultFiles={imgKeys.map((key) => ({ key }))}
-          onUploadSuccess={(files) => {
-            let value = files.map(({ key }) => key);
-            if (onChange) {
-              const modelFields = {
-                name,
-                imgKeys: value,
-              };
-              const result = onChange(modelFields);
-              value = result?.imgKeys ?? value;
-            }
-            if (errors.imgKeys?.hasError) {
-              runValidationTasks(\\"imgKeys\\", value);
-            }
-            setImgKeys(value);
+          onUploadSuccess={({ key }) => {
+            setImgKeys((prev) => {
+              let value = [...prev, key];
+              if (onChange) {
+                const modelFields = {
+                  name,
+                  imgKeys: value,
+                };
+                const result = onChange(modelFields);
+                value = result?.imgKeys ?? value;
+              }
+              return value;
+            });
+          }}
+          onFileRemove={({ key }) => {
+            setImgKeys((prev) => {
+              let value = prev.filter((f) => f !== key);
+              if (onChange) {
+                const modelFields = {
+                  name,
+                  imgKeys: value,
+                };
+                const result = onChange(modelFields);
+                value = result?.imgKeys ?? value;
+              }
+              return value;
+            });
           }}
           accessLevel={\\"private\\"}
           acceptedFileTypes={[\\".doc\\", \\".pdf\\"]}
@@ -25367,21 +25393,34 @@ export default function UpdateProductForm(props) {
         isReadOnly={false}
       >
         <StorageManager
-          defaultFiles={[{ key: singleImgKey }]}
-          onUploadSuccess={(files) => {
-            let value = files?.[0]?.key;
-            if (onChange) {
-              const modelFields = {
-                name,
-                singleImgKey: value,
-              };
-              const result = onChange(modelFields);
-              value = result?.singleImgKey ?? value;
-            }
-            if (errors.singleImgKey?.hasError) {
-              runValidationTasks(\\"singleImgKey\\", value);
-            }
-            setSingleImgKey(value);
+          defaultFiles={singleImgKey ? [{ key: singleImgKey }] : undefined}
+          onUploadSuccess={({ key }) => {
+            setSingleImgKey((prev) => {
+              let value = key;
+              if (onChange) {
+                const modelFields = {
+                  name,
+                  singleImgKey: value,
+                };
+                const result = onChange(modelFields);
+                value = result?.singleImgKey ?? value;
+              }
+              return value;
+            });
+          }}
+          onFileRemove={({ key }) => {
+            setSingleImgKey((prev) => {
+              let value = initialValues?.singleImgKey;
+              if (onChange) {
+                const modelFields = {
+                  name,
+                  singleImgKey: value,
+                };
+                const result = onChange(modelFields);
+                value = result?.singleImgKey ?? value;
+              }
+              return value;
+            });
           }}
           accessLevel={\\"protected\\"}
           acceptedFileTypes={[\\".txt\\", \\".pdf\\"]}
