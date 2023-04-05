@@ -643,6 +643,26 @@ describe('amplify form renderer tests', () => {
     });
   });
 
+  describe('forms with StorageField tests', () => {
+    it('should render a create form with StorageField', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/product-datastore-create',
+        'datastore/product',
+        undefined,
+      );
+      expect(componentText).toMatchSnapshot();
+    });
+
+    it('should render a update form with StorageField', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/product-datastore-update',
+        'datastore/product',
+        undefined,
+      );
+      expect(componentText).toMatchSnapshot();
+    });
+  });
+
   it('should render form for child of bidirectional 1:m when field defined on parent', () => {
     const { componentText, declaration } = generateWithAmplifyFormRenderer(
       'forms/car-datastore-update',

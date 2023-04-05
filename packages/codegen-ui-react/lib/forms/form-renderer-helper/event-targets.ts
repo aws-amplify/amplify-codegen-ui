@@ -44,6 +44,36 @@ const expressionMap = {
   ),
 };
 
+// files.map(({ s3Key }) => s3Key)
+export function extractKeyByMapping(array: string, key: string) {
+  return factory.createCallExpression(
+    factory.createPropertyAccessExpression(factory.createIdentifier(array), factory.createIdentifier('map')),
+    undefined,
+    [
+      factory.createArrowFunction(
+        undefined,
+        undefined,
+        [
+          factory.createParameterDeclaration(
+            undefined,
+            undefined,
+            undefined,
+            factory.createObjectBindingPattern([
+              factory.createBindingElement(undefined, undefined, factory.createIdentifier(key), undefined),
+            ]),
+            undefined,
+            undefined,
+            undefined,
+          ),
+        ],
+        undefined,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        factory.createIdentifier(key),
+      ),
+    ],
+  );
+}
+
 // default variable statement
 const setVariableStatement = (lhs: Identifier, assignment: Expression) =>
   factory.createVariableStatement(
@@ -76,6 +106,10 @@ export const buildTargetVariable = (fieldType: string, fieldName: string, dataTy
     },
     ToggleButton: {
       expression: factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, factory.createIdentifier(fieldName)),
+      identifier: expressionMap.value,
+    },
+    StorageField: {
+      expression: extractKeyByMapping('files', 's3Key'),
       identifier: expressionMap.value,
     },
   };

@@ -79,6 +79,30 @@ export const buildUseStateExpression = (name: string, defaultValue: Expression):
   );
 };
 
+export const buildUseRefExpression = (name: string, defaultValue?: Expression): Statement => {
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier(name),
+          undefined,
+          undefined,
+          factory.createCallExpression(
+            factory.createPropertyAccessExpression(
+              factory.createIdentifier('React'),
+              factory.createIdentifier('useRef'),
+            ),
+            undefined,
+            defaultValue ? [defaultValue] : undefined,
+          ),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
+};
+
 /**
  * Create statement to declare and initialized a const.
  *

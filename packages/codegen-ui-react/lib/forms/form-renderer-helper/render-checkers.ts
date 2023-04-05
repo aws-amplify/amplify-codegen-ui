@@ -15,7 +15,8 @@
  */
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui';
 
-export const shouldWrapInArrayField = (config: FieldConfigMetadata): boolean => config.isArray || !!config.relationship;
+export const shouldWrapInArrayField = (config: FieldConfigMetadata): boolean =>
+  (config.isArray || !!config.relationship) && config.componentType !== 'StorageField';
 
 export const isModelDataType = (
   config: FieldConfigMetadata,

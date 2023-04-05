@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@aws-amplify/codegen-ui": "2.11.1",
+    "@aws-amplify/ui-react-storage": "^0.0.0-storagemanager-37cac7b-20230403170123",
     "@typescript/vfs": "~1.3.5",
     "typescript": "<=4.5.0"
   },

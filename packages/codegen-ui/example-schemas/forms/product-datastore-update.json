@@ -1,0 +1,25 @@
+{
+    "name": "UpdateProductForm",
+    "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "Product"
+    },
+    "formActionType": "update",
+    "fields": {
+      "imgKeys": {
+        "label": "Images",
+        "inputType": {
+          "type": "StorageField",
+          "fileUploaderConfig": {
+            "accessLevel": "private",
+            "acceptedFileTypes": [".doc", ".pdf"],
+            "showThumbnails": true,
+            "isResumable": false
+          }
+        }
+      }
+    },
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+  }
