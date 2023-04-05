@@ -65,6 +65,7 @@ import {
   VisuallyHiddenProps,
   TextProps,
 } from '@aws-amplify/ui-react';
+import { StorageManagerProps } from '@aws-amplify/ui-react-storage';
 import { HTMLProps } from 'react';
 import { Primitive } from '../primitive';
 import CustomComponentRenderer from './customComponent';
@@ -360,6 +361,14 @@ export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
 
       case Primitive.SwitchField:
         return new ReactComponentRenderer<SwitchFieldProps>(
+          formComponent,
+          this.componentMetadata,
+          this.importCollection,
+          parent,
+        ).renderElement(renderChildren);
+
+      case 'StorageField':
+        return new ReactComponentRenderer<StorageManagerProps>(
           formComponent,
           this.componentMetadata,
           this.importCollection,

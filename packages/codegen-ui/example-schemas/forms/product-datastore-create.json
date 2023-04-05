@@ -1,0 +1,27 @@
+{
+    "name": "CreateProductForm",
+    "dataType": {
+      "dataSourceType": "DataStore",
+      "dataTypeName": "Product"
+    },
+    "formActionType": "create",
+    "fields": {
+      "imgKeys": {
+        "label": "Images",
+        "inputType": {
+          "type": "StorageField",
+          "fileUploaderConfig": {
+            "accessLevel": "protected",
+            "acceptedFileTypes": [".txt", ".pdf"],
+            "showThumbnails": false,
+            "isResumable": true,
+            "maxFileCount": 5,
+            "maxSize": 1024
+          }
+        }
+      }
+    },
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+  }

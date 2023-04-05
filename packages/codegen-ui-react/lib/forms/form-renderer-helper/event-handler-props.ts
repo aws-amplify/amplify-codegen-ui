@@ -267,9 +267,18 @@ export const buildOverrideOnChangeStatement = (
 function getOnValueChangeProp(fieldType: string): string {
   const map: { [key: string]: string } = {
     StepperField: 'onStepChange',
+    StorageField: 'onFileSuccess',
   };
 
   return map[fieldType] ?? 'onChange';
+}
+
+function getCallbackVarName(fieldType: string): string {
+  const map: { [key: string]: string } = {
+    StorageField: 'files',
+  };
+
+  return map[fieldType] ?? 'e';
 }
 
 export const buildOnChangeStatement = (
@@ -278,12 +287,12 @@ export const buildOnChangeStatement = (
 ) => {
   const { name: fieldName, componentType: fieldType } = component;
   const fieldConfig = fieldConfigs[fieldName];
-  const { dataType, sanitizedFieldName, studioFormComponentType } = fieldConfig;
+  const { dataType, sanitizedFieldName, studioFormComponentType, isArray } = fieldConfig;
   const renderedFieldName = sanitizedFieldName || fieldName;
 
   // build statements that handle new value
   const handleChangeStatements: Statement[] = [
-    ...buildTargetVariable(studioFormComponentType || fieldType, renderedFieldName, dataType),
+    ...buildTargetVariable(studioFormComponentType || fieldType, renderedFieldName, dataType, isArray),
   ];
 
   if (!shouldWrapInArrayField(fieldConfig)) {
@@ -321,7 +330,7 @@ export const buildOnChangeStatement = (
             undefined,
             undefined,
             undefined,
-            factory.createIdentifier('e'),
+            factory.createIdentifier(getCallbackVarName(fieldType)),
             undefined,
             undefined,
             undefined,

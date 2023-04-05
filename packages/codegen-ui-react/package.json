@@ -23,6 +23,7 @@
     "@aws-amplify/appsync-modelgen-plugin": "^2.3.3",
     "@aws-amplify/datastore": "^4.0.0",
     "@aws-amplify/ui-react": "^4.5.1",
+    "@aws-amplify/ui-react-storage": "^1.0.1",
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.4",
     "@types/semver": "^7.3.9",
