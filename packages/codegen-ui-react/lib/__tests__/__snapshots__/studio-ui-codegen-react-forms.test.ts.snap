@@ -24938,7 +24938,7 @@ export default function CreateProductForm(props) {
       >
         <StorageManager
           ref={imgKeysRef}
-          onFileSuccess={(files) => {
+          onUploadSuccess={(files) => {
             let value = files.map(({ s3Key }) => s3Key);
             if (onChange) {
               const modelFields = {
@@ -25154,7 +25154,7 @@ export default function UpdateProductForm(props) {
         <StorageManager
           ref={imgKeysRef}
           defaultFiles={imgKeys.map((s3Key) => ({ s3Key }))}
-          onFileSuccess={(files) => {
+          onUploadSuccess={(files) => {
             let value = files.map(({ s3Key }) => s3Key);
             if (onChange) {
               const modelFields = {
@@ -25374,7 +25374,7 @@ export default function UpdateProductForm(props) {
         <StorageManager
           ref={singleImgKeyRef}
           defaultFiles={[{ s3Key: singleImgKey }]}
-          onFileSuccess={(files) => {
+          onUploadSuccess={(files) => {
             let value = files?.[0]?.s3Key;
             if (onChange) {
               const modelFields = {

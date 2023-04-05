@@ -267,7 +267,7 @@ export const buildOverrideOnChangeStatement = (
 function getOnValueChangeProp(fieldType: string): string {
   const map: { [key: string]: string } = {
     StepperField: 'onStepChange',
-    StorageField: 'onFileSuccess',
+    StorageField: 'onUploadSuccess',
   };
 
   return map[fieldType] ?? 'onChange';
