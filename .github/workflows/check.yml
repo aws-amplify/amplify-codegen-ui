@@ -41,7 +41,7 @@ jobs:
       - name: Build amplify-cli
         working-directory: amplify-cli
         run: |
-          yarn --network-concurrency 1 --cache-folder ~/.cache/yarn
+          yarn --network-concurrency 1
           yarn policies set-version 1.18.0
           yarn setup-dev
       - name: Install updated codegen libraries
@@ -52,7 +52,7 @@ jobs:
       - name: Build amplify-cli with updated codegen libraries
         working-directory: amplify-cli
         run: |
-          yarn --network-concurrency 1 --cache-folder ~/.cache/yarn
+          yarn --network-concurrency 1
           yarn policies set-version 1.18.0
           yarn dev-build
       - name: Create a test react app
