@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.12.0...v2.12.1) (2023-04-06)
+
+### Bug Fixes
+
+- change handlers and props for StorageField ([2a1ea75](https://github.com/aws-amplify/amplify-codegen-ui/commit/2a1ea755e074e1a364f9424653d57f33c0723855))
+- change key name and remove ref ([aca2b7d](https://github.com/aws-amplify/amplify-codegen-ui/commit/aca2b7d11ba3ce49e95e20ef11eaed9c0fc2bdd7))
+
 # [2.12.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.11.1...v2.12.0) (2023-04-05)
 
 ### Bug Fixes
