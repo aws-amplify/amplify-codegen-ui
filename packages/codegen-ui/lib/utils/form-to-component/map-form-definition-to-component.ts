@@ -26,7 +26,11 @@ import { ctaButtonMapper, addCTAPosition } from './helpers/map-cta-buttons';
 const mapFormElementProps = (element: FormDefinitionElement) => {
   const props: StudioComponentProperties = {};
   Object.entries(element.props).forEach(([key, value]) => {
-    props[key] = { value: `${value}`, type: `${typeof value}` };
+    if (Array.isArray(value)) {
+      props[key] = { value: JSON.stringify(value), type: 'object' };
+    } else {
+      props[key] = { value: `${value}`, type: `${typeof value}` };
+    }
   });
   return props;
 };

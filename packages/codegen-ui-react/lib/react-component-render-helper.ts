@@ -193,14 +193,12 @@ export function buildFixedLiteralExpression(
   const { value, type } = prop;
   switch (typeof value) {
     case 'number':
-      return factory.createNumericLiteral(value as number, undefined);
+      return factory.createNumericLiteral(value, undefined);
     case 'boolean':
       return value ? factory.createTrue() : factory.createFalse();
     case 'string':
+      return fixedPropertyWithTypeToLiteral(value, type);
     case 'object':
-      if (type !== 'object') {
-        return fixedPropertyWithTypeToLiteral(value as string, type);
-      }
       if (value instanceof Date) {
         throw new Error('Date object is not currently supported for fixed literal expression.');
       }

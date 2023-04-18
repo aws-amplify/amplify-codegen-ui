@@ -192,9 +192,6 @@ export const renderStorageFieldComponent = (
     if (isStorageManagerKey(key)) {
       let storageManagerValue = value;
 
-      if (key === 'acceptedFileTypes') {
-        storageManagerValue = { ...value, value: (value as any).value.split(',') };
-      }
       if (key === 'maxFileCount' && !fieldConfigs[componentName].isArray) {
         storageManagerValue = { ...value, value: 1 };
       }
