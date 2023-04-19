@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.12.1...v2.12.2) (2023-04-19)
+
+### Bug Fixes
+
+- address icon regression ([d913b93](https://github.com/aws-amplify/amplify-codegen-ui/commit/d913b932b0edda5c148299d6ffe8d6dadbe72ac7))
+- address yarn failures during check ([53c81ab](https://github.com/aws-amplify/amplify-codegen-ui/commit/53c81abb7a2d70360c42b3e9ae61237be5f052f5))
+- remove downgrade ([7a4bbb0](https://github.com/aws-amplify/amplify-codegen-ui/commit/7a4bbb08c8e4e25baf4f4a9b2ff8bac122adeb8d))
+- restore downgrade but move it to top ([de9f6b6](https://github.com/aws-amplify/amplify-codegen-ui/commit/de9f6b672f76cdc7c370b4a594c97013b1dc064e))
+
 ## [2.12.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.12.0...v2.12.1) (2023-04-06)
 
 ### Bug Fixes
