@@ -24,6 +24,7 @@ import {
   SchemaModel as DataStoreModel,
   ModelField as DataStoreModelField,
   SchemaNonModel as DataStoreNonModel,
+  isModelFieldType
 } from '@aws-amplify/datastore';
 
 import { InvalidInputError } from './errors';
@@ -94,7 +95,7 @@ function checkIsModelAJoinTable(modelName: string, schema: ModelIntrospectionSch
 
   Object.entries(model.fields).forEach((field: [string, IntrospectionModelField | DataStoreModelField]) => {
     const [name, value] = field;
-    if (isFieldModelType(value)) {
+    if (isModelFieldType(value)) {
       modelFieldTuples.push(field);
     } else if (!allowedNonModelFields.includes(name)) {
       allFieldsAllowed = false;
