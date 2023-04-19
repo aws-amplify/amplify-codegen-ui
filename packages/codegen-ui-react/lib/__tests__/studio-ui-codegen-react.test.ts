@@ -608,6 +608,10 @@ describe('amplify render tests', () => {
     test('Icon', () => {
       expect(generateWithAmplifyRenderer('primitives/IconPrimitive').componentText).toMatchSnapshot();
     });
+
+    test('Icon with lower-cased type `object` for values', () => {
+      expect(generateWithAmplifyRenderer('primitives/IconPrimitiveWithLowerCasedType').componentText).toMatchSnapshot();
+    });
   });
 
   describe('icon-indices', () => {
