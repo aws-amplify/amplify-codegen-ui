@@ -1,14 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`form-render utils createValidationExpression handles undefined numValues 1`] = `
+exports[`form-render utils createValidationExpression handles BeAfter with undefined numValues 1`] = `
+"[
+    { type: \\"BeAfter\\", strValues: [\\"chard\\"] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles BeBefore with undefined numValues 1`] = `
+"[
+    { type: \\"BeBefore\\", strValues: [\\"chard\\"] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles Contains with undefined numValues 1`] = `
 "[
     { type: \\"Contains\\", strValues: [\\"chard\\"] }
 ]"
 `;
 
-exports[`form-render utils createValidationExpression handles undefined strValues 1`] = `
+exports[`form-render utils createValidationExpression handles EndWith with undefined numValues 1`] = `
+"[
+    { type: \\"EndWith\\", strValues: [\\"chard\\"] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles EqualTo with undefined strValues 1`] = `
+"[
+    { type: \\"EqualTo\\", numValues: [9] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles GreaterThanChar with undefined strValues 1`] = `
+"[
+    { type: \\"GreaterThanChar\\", numValues: [9] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles GreaterThanNum with undefined strValues 1`] = `
 "[
     { type: \\"GreaterThanNum\\", numValues: [9] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles LessThanChar with undefined strValues 1`] = `
+"[
+    { type: \\"LessThanChar\\", numValues: [9] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles LessThanNum with undefined strValues 1`] = `
+"[
+    { type: \\"LessThanNum\\", numValues: [9] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles NotContains with undefined numValues 1`] = `
+"[
+    { type: \\"NotContains\\", strValues: [\\"chard\\"] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles StartWith with undefined numValues 1`] = `
+"[
+    { type: \\"StartWith\\", strValues: [\\"chard\\"] }
 ]"
 `;
 
