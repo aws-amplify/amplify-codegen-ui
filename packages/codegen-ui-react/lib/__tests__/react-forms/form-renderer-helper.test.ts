@@ -13,10 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioForm } from '@aws-amplify/codegen-ui';
+import { StudioForm, ValidationTypes } from '@aws-amplify/codegen-ui';
 import { EmitHint, Node } from 'typescript';
 import { buildFormPropNode } from '../../forms';
 import { buildPrinter, defaultRenderConfig } from '../../react-studio-template-renderer-helper';
+import { createValidationExpression } from '../../forms/form-renderer-helper/validation';
 
 describe('form-render utils', () => {
   let printNode: (node: Node) => string;
@@ -103,6 +104,33 @@ describe('form-render utils', () => {
     expect(node).toContain('id?: {');
     expect(node).toContain('myKey: string;');
     expect(node).toContain('description: number;');
+    expect(node).toMatchSnapshot();
+  });
+
+  test.each([
+    [
+      'undefined strValues',
+      [
+        {
+          strValues: undefined,
+          numValues: [9],
+          type: ValidationTypes.GREATER_THAN_NUM,
+        } as any,
+      ],
+    ],
+    [
+      'undefined numValues',
+      [
+        {
+          strValues: ['chard'],
+          numValues: undefined,
+          type: ValidationTypes.CONTAINS,
+        } as any,
+      ],
+    ],
+  ])('createValidationExpression handles %s', (description, rules) => {
+    const expression = createValidationExpression(rules);
+    const node = printNode(expression);
     expect(node).toMatchSnapshot();
   });
 });

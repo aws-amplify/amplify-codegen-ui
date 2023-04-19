@@ -22,14 +22,21 @@ import {
   ObjectLiteralExpression,
   PropertyAssignment,
 } from 'typescript';
-import { FieldValidationConfiguration, isValidVariableName } from '@aws-amplify/codegen-ui';
+import { FieldValidationConfiguration, ValidationTypes, isValidVariableName } from '@aws-amplify/codegen-ui';
 
 export const createValidationExpression = (validationRules: FieldValidationConfiguration[] = []): Expression => {
   const validateExpressions = validationRules.map<ObjectLiteralExpression>((rule) => {
     const elements: ObjectLiteralElementLike[] = [
       factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral(rule.type)),
     ];
-    if ('strValues' in rule) {
+    if (
+      rule.type === ValidationTypes.CONTAINS ||
+      rule.type === ValidationTypes.NOT_CONTAINS ||
+      rule.type === ValidationTypes.END_WITH ||
+      rule.type === ValidationTypes.START_WITH ||
+      rule.type === ValidationTypes.BE_BEFORE ||
+      rule.type === ValidationTypes.BE_AFTER
+    ) {
       elements.push(
         factory.createPropertyAssignment(
           factory.createIdentifier('strValues'),
@@ -39,8 +46,13 @@ export const createValidationExpression = (validationRules: FieldValidationConfi
           ),
         ),
       );
-    }
-    if ('numValues' in rule) {
+    } else if (
+      rule.type === ValidationTypes.LESS_THAN_CHAR_LENGTH ||
+      rule.type === ValidationTypes.GREATER_THAN_CHAR_LENGTH ||
+      rule.type === ValidationTypes.LESS_THAN_NUM ||
+      rule.type === ValidationTypes.GREATER_THAN_NUM ||
+      rule.type === ValidationTypes.EQUAL_TO_NUM
+    ) {
       elements.push(
         factory.createPropertyAssignment(
           factory.createIdentifier('numValues'),

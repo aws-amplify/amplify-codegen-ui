@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`form-render utils createValidationExpression handles undefined numValues 1`] = `
+"[
+    { type: \\"Contains\\", strValues: [\\"chard\\"] }
+]"
+`;
+
+exports[`form-render utils createValidationExpression handles undefined strValues 1`] = `
+"[
+    { type: \\"GreaterThanNum\\", numValues: [9] }
+]"
+`;
+
 exports[`form-render utils should generate before & complete types if datastore config is set 1`] = `
 "{
     clearOnSuccess?: boolean;
