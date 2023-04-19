@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-import { StudioForm, ValidationTypes } from '@aws-amplify/codegen-ui';
+import { StudioForm, ValidationTypeMapping } from '@aws-amplify/codegen-ui';
 import { EmitHint, Node } from 'typescript';
 import { buildFormPropNode } from '../../forms';
 import { buildPrinter, defaultRenderConfig } from '../../react-studio-template-renderer-helper';
@@ -107,28 +107,29 @@ describe('form-render utils', () => {
     expect(node).toMatchSnapshot();
   });
 
-  test.each([
-    [
-      'undefined strValues',
-      [
-        {
-          strValues: undefined,
-          numValues: [9],
-          type: ValidationTypes.GREATER_THAN_NUM,
-        } as any,
-      ],
-    ],
-    [
-      'undefined numValues',
+  test.each(
+    ValidationTypeMapping.StringType.map<[string, any[]]>((type) => [
+      `${type} with undefined numValues`,
       [
         {
           strValues: ['chard'],
           numValues: undefined,
-          type: ValidationTypes.CONTAINS,
+          type,
         } as any,
       ],
-    ],
-  ])('createValidationExpression handles %s', (description, rules) => {
+    ]).concat(
+      ValidationTypeMapping.NumberType.map<[string, any[]]>((type) => [
+        `${type} with undefined strValues`,
+        [
+          {
+            strValues: undefined,
+            numValues: [9],
+            type,
+          } as any,
+        ],
+      ]),
+    ),
+  )('createValidationExpression handles %s', (description, rules) => {
     const expression = createValidationExpression(rules);
     const node = printNode(expression);
     expect(node).toMatchSnapshot();
