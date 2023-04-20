@@ -41,9 +41,11 @@ import ts, {
   ArrowFunction,
   CallExpression,
   Identifier,
+  CompilerOptions,
 } from 'typescript';
-import { createDefaultMapFromNodeModules, createSystem, createVirtualCompilerHost } from '@typescript/vfs';
+import { createSystem, createVirtualCompilerHost, knownLibFilesForCompilerOptions } from '@typescript/vfs';
 import path from 'path';
+import fs from 'fs';
 import { ReactRenderConfig, ScriptKind, ScriptTarget, ModuleKind } from './react-render-config';
 
 export const defaultRenderConfig = {
@@ -313,4 +315,22 @@ export const createHookStatement = (variableName: string, methodName: string, pr
       ts.NodeFlags.Const,
     ),
   );
+};
+
+/**
+ * Sets up a Map with lib contents by grabbing the necessary files from
+ * the local copy of typescript via the file system.
+ */
+const createDefaultMapFromNodeModules = (compilerOptions: CompilerOptions, tsLibDirectory?: string) => {
+  const getLib = (name: string) => {
+    const lib = tsLibDirectory || path.dirname(require.resolve('typescript'));
+    return fs.readFileSync(path.join(lib, name), 'utf8');
+  };
+
+  const libs = knownLibFilesForCompilerOptions(compilerOptions, ts);
+  const fsMap = new Map<string, string>();
+  libs.forEach((lib) => {
+    fsMap.set(`/${lib}`, getLib(lib));
+  });
+  return fsMap;
 };
