@@ -21,7 +21,7 @@ describe('FormTests - DSBidirectionalToy', () => {
     cy.visit('http://localhost:3000/form-tests/DSBidirectionalToy');
   });
 
-  specify('Create Dog - should update toy connection to new dog', () => {
+  specify('Create form for parent of bidirectional 1:1 should update parent of child when connecting to it', () => {
     const connectedPhrase1 = 'Toy BiDirectionalDogId is connected to new dog';
     const connectedPhrase2 = 'Toy biDirectionalDogBiDirectionalToysId is connected to new dog';
 

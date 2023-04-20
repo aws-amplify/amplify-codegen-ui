@@ -21,21 +21,26 @@ describe('FormTests - DSDealership', () => {
     cy.visit('http://localhost:3000/form-tests/DSDealership');
   });
 
-  specify('update form should display current values and save bidirectionally', () => {
-    cy.get('#DataStoreFormUpdateDealership').within(() => {
-      removeArrayItem(/Honda/);
-      getArrayFieldButtonByLabel('Cars').click();
-      typeInAutocomplete('Toyota{downArrow}{enter}');
-      clickAddToArray();
-      cy.contains('Submit').click();
+  specify(
+    'update form for parent of bidirectional 1:m with `fields` ' +
+      'defined on the relationship with child should display current values ' +
+      'and save bidirectionally',
+    () => {
+      cy.get('#DataStoreFormUpdateDealership').within(() => {
+        removeArrayItem(/Honda/);
+        getArrayFieldButtonByLabel('Cars').click();
+        typeInAutocomplete('Toyota{downArrow}{enter}');
+        clickAddToArray();
+        cy.contains('Submit').click();
 
-      cy.contains('.results', /Toyota/).then((recordElement: JQuery) => {
-        const record = JSON.parse(recordElement.text());
+        cy.contains('.results', /Toyota/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
 
-        expect(record.cars[0].name).to.equal('Toyota');
-        expect(record.newCarBelongsToDealership).to.equal(true);
-        expect(record.newCarBelongsToDealership).to.equal(true);
+          expect(record.cars[0].name).to.equal('Toyota');
+          expect(record.newCarBelongsToDealership).to.equal(true);
+          expect(record.newCarBelongsToDealership).to.equal(true);
+        });
       });
-    });
-  });
+    },
+  );
 });

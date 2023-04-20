@@ -27,92 +27,102 @@ describe('FormTests - DSCompositeDog', () => {
     cy.visit('http://localhost:3000/form-tests/DSCompositeDog');
   });
 
-  specify('create form should display current values and save to DataStore', () => {
-    cy.get('#DataStoreFormCreateCompositeDog').within(() => {
-      getInputByLabel('Name').type('Cookie');
-      getInputByLabel('Description').type('mogwai');
+  specify(
+    'create form for model with composite keys ' +
+      'and relationships with other models with composite keys ' +
+      'should save relationships',
+    () => {
+      cy.get('#DataStoreFormCreateCompositeDog').within(() => {
+        getInputByLabel('Name').type('Cookie');
+        getInputByLabel('Description').type('mogwai');
 
-      // hasOne
-      getArrayFieldButtonByLabel('Composite bowl').click();
-      typeInAutocomplete('round-xl{downArrow}{enter}');
-      clickAddToArray();
+        // hasOne
+        getArrayFieldButtonByLabel('Composite bowl').click();
+        typeInAutocomplete('round-xl{downArrow}{enter}');
+        clickAddToArray();
 
-      // belongsTo
-      getArrayFieldButtonByLabel('Composite owner').click();
-      typeInAutocomplete('Cooper-Gordon{downArrow}{enter}');
-      clickAddToArray();
+        // belongsTo
+        getArrayFieldButtonByLabel('Composite owner').click();
+        typeInAutocomplete('Cooper-Gordon{downArrow}{enter}');
+        clickAddToArray();
 
-      // manyToMany
-      getArrayFieldButtonByLabel('Composite toys').click();
-      typeInAutocomplete('chew-red{downArrow}{enter}');
-      clickAddToArray();
+        // manyToMany
+        getArrayFieldButtonByLabel('Composite toys').click();
+        typeInAutocomplete('chew-red{downArrow}{enter}');
+        clickAddToArray();
 
-      // hasMany
-      getArrayFieldButtonByLabel('Composite vets').click();
-      typeInAutocomplete('Dentistry-Los Angeles{downArrow}{enter}');
-      clickAddToArray();
+        // hasMany
+        getArrayFieldButtonByLabel('Composite vets').click();
+        typeInAutocomplete('Dentistry-Los Angeles{downArrow}{enter}');
+        clickAddToArray();
 
-      cy.contains('Submit').click();
+        cy.contains('Submit').click();
 
-      cy.contains(/Cookie/).then((recordElement: JQuery) => {
-        const record = JSON.parse(recordElement.text());
+        cy.contains(/Cookie/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
 
-        expect(record.CompositeBowl.size).to.equal('xl');
-        expect(record.CompositeOwner.firstName).to.equal('Gordon');
-        expect(record.CompositeToys.length).to.equal(1);
-        expect(record.CompositeToys[0].color).to.equal('red');
-        expect(record.CompositeVets.length).to.equal(1);
-        expect(record.CompositeVets[0].city).to.equal('Los Angeles');
+          expect(record.CompositeBowl.size).to.equal('xl');
+          expect(record.CompositeOwner.firstName).to.equal('Gordon');
+          expect(record.CompositeToys.length).to.equal(1);
+          expect(record.CompositeToys[0].color).to.equal('red');
+          expect(record.CompositeVets.length).to.equal(1);
+          expect(record.CompositeVets[0].city).to.equal('Los Angeles');
+        });
       });
-    });
-  });
+    },
+  );
 
-  specify('update form should display current values and save to DataStore', () => {
-    cy.get('#DataStoreFormUpdateCompositeDog').within(() => {
-      // composite keys should be readonly
-      getInputByLabel('Name').should('have.attr', 'readonly');
-      getInputByLabel('Description').should('have.attr', 'readonly');
+  specify(
+    'update form for model with composite keys and ' +
+      'relationships with other models with composite keys ' +
+      'should display current values and update relationships',
+    () => {
+      cy.get('#DataStoreFormUpdateCompositeDog').within(() => {
+        // composite keys should be readonly
+        getInputByLabel('Name').should('have.attr', 'readonly');
+        getInputByLabel('Description').should('have.attr', 'readonly');
 
-      // hasOne
-      removeArrayItem('round-xs');
-      getArrayFieldButtonByLabel('Composite bowl').click();
-      typeInAutocomplete('round-xl{downArrow}{enter}');
-      clickAddToArray();
+        // hasOne
+        removeArrayItem('round-xs');
+        getArrayFieldButtonByLabel('Composite bowl').click();
+        typeInAutocomplete('round-xl{downArrow}{enter}');
+        clickAddToArray();
 
-      // belongsTo
-      removeArrayItem('Cooper-Dale');
-      getArrayFieldButtonByLabel('Composite owner').click();
-      typeInAutocomplete('Cooper-Gordon{downArrow}{enter}');
-      clickAddToArray();
+        // belongsTo
+        removeArrayItem('Cooper-Dale');
+        getArrayFieldButtonByLabel('Composite owner').click();
+        typeInAutocomplete('Cooper-Gordon{downArrow}{enter}');
+        clickAddToArray();
 
-      // manyToMany
-      removeArrayItem('chew-green');
-      getArrayFieldButtonByLabel('Composite toys').click();
-      typeInAutocomplete('chew-red{downArrow}{enter}');
-      clickAddToArray();
+        // manyToMany
+        removeArrayItem('chew-green');
+        getArrayFieldButtonByLabel('Composite toys').click();
+        typeInAutocomplete('chew-red{downArrow}{enter}');
+        clickAddToArray();
 
-      // hasMany
-      removeArrayItem('Dentistry-Seattle');
-      getArrayFieldButtonByLabel('Composite vets').click();
-      typeInAutocomplete('Dentistry-Los Angeles{downArrow}{enter}');
-      clickAddToArray();
+        // hasMany
+        removeArrayItem('Dentistry-Seattle');
+        getArrayFieldButtonByLabel('Composite vets').click();
+        typeInAutocomplete('Dentistry-Los Angeles{downArrow}{enter}');
+        clickAddToArray();
 
-      cy.contains('Submit').click();
+        cy.contains('Submit').click();
 
-      cy.contains(/Yundoo/).then((recordElement: JQuery) => {
-        const record = JSON.parse(recordElement.text());
+        cy.contains(/Yundoo/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
 
-        expect(record.CompositeBowl.size).to.equal('xl');
-        expect(record.CompositeOwner.firstName).to.equal('Gordon');
-        expect(record.CompositeToys.length).to.equal(1);
-        expect(record.CompositeToys[0].color).to.equal('red');
-        expect(record.CompositeVets.length).to.equal(1);
-        expect(record.CompositeVets[0].city).to.equal('Los Angeles');
+          expect(record.CompositeBowl.size).to.equal('xl');
+          expect(record.CompositeOwner.firstName).to.equal('Gordon');
+          expect(record.CompositeToys.length).to.equal(1);
+          expect(record.CompositeToys[0].color).to.equal('red');
+          expect(record.CompositeVets.length).to.equal(1);
+          expect(record.CompositeVets[0].city).to.equal('Los Angeles');
+        });
       });
-    });
-  });
+    },
+  );
 
-  specify('update form should work with scalar relationship fields', () => {
+  specify('update form for model with composite keys should update relationships through the index fields', () => {
     cy.get('#DataStoreFormUpdateCompositeDogScalar').within(() => {
       // hasOne
       removeArrayItem('xs');
@@ -137,7 +147,7 @@ describe('FormTests - DSCompositeDog', () => {
     });
   });
 
-  specify('update form should load Data Store model with composite key', () => {
+  specify('update form for model with composite key should load the record to update when user passes in keys', () => {
     cy.get('#DataStoreFormUpdateCompositeDogById').within(() => {
       getInputByLabel('Name').should('have.value', 'Yundoo');
       getInputByLabel('Description').should('have.value', 'tiny but mighty');

@@ -21,7 +21,7 @@ describe('FormTests - CustomDog', () => {
     cy.visit('http://localhost:3000/form-tests/CustomDog');
   });
 
-  specify('create form should validate, clear, and submit', () => {
+  specify('non-data-backed create form should validate, clear, and submit', () => {
     const ErrorMessageMap = {
       name: 'Name must be longer than 1 character',
       age: 'Age must be greater than 0',

@@ -21,7 +21,7 @@ describe('FormTests - CustomNestedJSON', () => {
     cy.visit('http://localhost:3000/form-tests/CustomNestedJSON');
   });
 
-  specify('create form should have a working nested TextField array', () => {
+  specify('create form created through nested JSON should have a working nested TextField array', () => {
     cy.get('#CustomFormCreateNestedJson').within(() => {
       cy.contains('Add item').click();
       getDecoratedLabelSibling('Animals - optional').type('String1');

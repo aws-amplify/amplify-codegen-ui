@@ -26,26 +26,40 @@ describe('FormTests - DSBidirectionalOwner', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000/form-tests/DSBidirectionalOwner');
   });
-  specify('Create Owner - should throw when disconnecting Dog from another Owner', () => {
-    cy.get('#DataStoreFormCreateBidirectionalOwner').within(() => {
-      getInputByLabel('Name').type('New Fluffy Owner');
-      getArrayFieldButtonByLabel('Bi directional dog').click();
-      typeInAutocomplete('F{downArrow}{enter}');
-      clickAddToArray();
+  specify(
+    'create form for the parent of bidirectional 1:1 ' +
+      'should throw when connecting to child of another parent ' +
+      'if parent requires child',
+    () => {
+      cy.get('#DataStoreFormCreateBidirectionalOwner').within(() => {
+        getInputByLabel('Name').type('New Fluffy Owner');
+        getArrayFieldButtonByLabel('Bi directional dog').click();
+        typeInAutocomplete('F{downArrow}{enter}');
+        clickAddToArray();
 
-      cy.contains('Submit').click();
-      cy.contains('cannot be linked to BiDirectionalOwner because it is already linked to another BiDirectionalOwner');
-    });
-  });
-  specify('Update Owner - should throw when disconnecting Dog from another Owner', () => {
-    cy.get('#DataStoreFormUpdateBidirectionalOwner').within(() => {
-      removeArrayItem('Fluffy');
-      getArrayFieldButtonByLabel('Bi directional dog').click();
-      typeInAutocomplete('M{downArrow}{enter}');
-      clickAddToArray();
+        cy.contains('Submit').click();
+        cy.contains(
+          'cannot be linked to BiDirectionalOwner because it is already linked to another BiDirectionalOwner',
+        );
+      });
+    },
+  );
+  specify(
+    'update form for the parent of bidirectional 1:1 ' +
+      'should throw when connecting to child of another parent ' +
+      'if parent requires child',
+    () => {
+      cy.get('#DataStoreFormUpdateBidirectionalOwner').within(() => {
+        removeArrayItem('Fluffy');
+        getArrayFieldButtonByLabel('Bi directional dog').click();
+        typeInAutocomplete('M{downArrow}{enter}');
+        clickAddToArray();
 
-      cy.contains('Submit').click();
-      cy.contains('cannot be linked to BiDirectionalOwner because it is already linked to another BiDirectionalOwner');
-    });
-  });
+        cy.contains('Submit').click();
+        cy.contains(
+          'cannot be linked to BiDirectionalOwner because it is already linked to another BiDirectionalOwner',
+        );
+      });
+    },
+  );
 });
