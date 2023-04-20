@@ -107,7 +107,7 @@ export function transpile(
         skipLibCheck: true,
       };
 
-      const fsMap = createDefaultMapFromNodeModules(compilerOptions, ts);
+      const fsMap = createDefaultMapFromNodeModules(compilerOptions);
       fsMap.set('index.tsx', code);
 
       const host = createVirtualCompilerHost(createSystem(fsMap), compilerOptions, ts);
