@@ -21,12 +21,12 @@ export const shouldWrapInArrayField = (config: FieldConfigMetadata): boolean =>
 export const isModelDataType = (
   config: FieldConfigMetadata,
 ): config is FieldConfigMetadata & { dataType: { model: string } } =>
-  !!(config.dataType && typeof config.dataType === 'object' && 'model' in config.dataType);
+  !!(config.dataType && typeof config.dataType === 'object' && 'model' in config.dataType && config.dataType.model);
 
 export const isEnumDataType = (
   config: FieldConfigMetadata,
 ): config is FieldConfigMetadata & { dataType: { enum: string } } =>
-  !!(config.dataType && typeof config.dataType === 'object' && 'enum' in config.dataType);
+  !!(config.dataType && typeof config.dataType === 'object' && 'enum' in config.dataType && config.dataType.enum);
 
 export const shouldImplementDisplayValueFunction = (config: FieldConfigMetadata): boolean => {
   return !!config.relationship || (isEnumDataType(config) && shouldWrapInArrayField(config));
