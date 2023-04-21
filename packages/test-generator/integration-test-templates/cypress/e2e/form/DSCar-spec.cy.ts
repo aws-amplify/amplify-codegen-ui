@@ -21,21 +21,26 @@ describe('FormTests - DSCar', () => {
     cy.visit('http://localhost:3000/form-tests/DSCar');
   });
 
-  specify('update form should display current values and save bidirectionally', () => {
-    cy.get('#DataStoreFormUpdateCar').within(() => {
-      removeArrayItem(/Oceans Fullerton/);
-      getArrayFieldButtonByLabel('Dealership').click();
-      typeInAutocomplete('Tustin Toyota{downArrow}{enter}');
-      clickAddToArray();
-      cy.contains('Submit').click();
+  specify(
+    'update form for child in bidirectional 1:1 ' +
+      'with `fields` specified on parent should display current values ' +
+      'and save bidirectionally',
+    () => {
+      cy.get('#DataStoreFormUpdateCar').within(() => {
+        removeArrayItem(/Oceans Fullerton/);
+        getArrayFieldButtonByLabel('Dealership').click();
+        typeInAutocomplete('Tustin Toyota{downArrow}{enter}');
+        clickAddToArray();
+        cy.contains('Submit').click();
 
-      cy.contains('.results', /Tustin Toyota/).then((recordElement: JQuery) => {
-        const record = JSON.parse(recordElement.text());
+        cy.contains('.results', /Tustin Toyota/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
 
-        expect(record.dealership.name).to.equal('Tustin Toyota');
-        expect(record.newDealershipHasCar).to.equal(true);
-        expect(record.prevDealershipDoesNotHaveCar).to.equal(true);
+          expect(record.dealership.name).to.equal('Tustin Toyota');
+          expect(record.newDealershipHasCar).to.equal(true);
+          expect(record.prevDealershipDoesNotHaveCar).to.equal(true);
+        });
       });
-    });
-  });
+    },
+  );
 });

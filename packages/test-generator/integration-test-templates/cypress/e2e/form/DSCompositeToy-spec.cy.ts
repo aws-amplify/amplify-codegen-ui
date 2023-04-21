@@ -21,7 +21,7 @@ describe('FormTests - DSCompositeToy', () => {
     cy.visit('http://localhost:3000/form-tests/DSCompositeToy');
   });
 
-  specify('update form should update indices used for 1:m relationships', () => {
+  specify('update form for child of 1:m relationship should update the secondary indices linking it to parent', () => {
     cy.get('#DataStoreFormUpdateCompositeToy').within(() => {
       // cypress does not populate value in ci w/out wait
       // eslint-disable-next-line cypress/no-unnecessary-waiting

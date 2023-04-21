@@ -72,6 +72,9 @@ type Student @model {
     allSupportedFormFieldsID: ID @index(name: "byAllSupportedFormFields")
 }
 
+"""
+This model aims to include all data types that are supported by form builder
+"""
 type AllSupportedFormFields @model {
     id: ID!
     string: String
@@ -95,9 +98,13 @@ type AllSupportedFormFields @model {
     BelongsToOwner: Owner @belongsTo
     HasManyStudents: [Student] @hasMany(indexName: "byAllSupportedFormFields", fields: ["id"])
     ManyToManyTags: [Tag] @manyToMany(relationName: "AllSupportedFormFieldsTag")
-
 }
 
+
+"""
+The following models that start with `CPK` use a custom primary key
+and have relationships with each other
+"""
 type CPKStudent @model {
   specialStudentId: ID! @primaryKey
 }
@@ -118,6 +125,11 @@ type CPKProject @model {
   specialProjectId: ID! @primaryKey
   cPKTeacherID: ID @index(name: "byCPKTeacher")
 }
+
+"""
+The following models that start with `Composite` use a composite keys
+and have relationships with each other
+"""
 
 type CompositeDog @model {
   name: ID! @primaryKey(sortKeyFields: ["description"])
@@ -150,6 +162,16 @@ type CompositeVet @model {
   CompositeDogs: [CompositeDog] @manyToMany(relationName: "CompositeDogCompositeVet")
 }
 
+"""
+BiDirectionalDog belongs to BiDirectionalOwner and BiDirectionalOwner has 1 BiDirectionalDog.
+This means they must be exclusive to each other.
+Note also that BiDirectionalOwner requires a BidirectionlDog.
+
+BiDirectionalDog has many BiDirectionalToys and BiDirectionalToy belongs to BiDirectionalDog.
+This means that a certain BiDirectionalToy can only belong to only 1 BiDirectionalDog.
+Note that BiDirectionalToy requires a BidirectionalDog.
+"""
+
 type BiDirectionalDog @model {
   name: String
   BiDirectionalOwner: BiDirectionalOwner @belongsTo
@@ -167,10 +189,19 @@ type BiDirectionalToy @model {
   BiDirectionalDog: BiDirectionalDog! @belongsTo(fields: ["biDirectionalDogID"])
 }
 
+"""
+This model has a field with the same name but lower-cased first letter
+"""
 type ModelWithVariableCollisions @model {
   modelWithVariableCollisions: String
 }
 
+"""
+Dealership and Car is related in bidirectional 1:m.
+Dealership has `fields` defined on its relationship with Car.
+This generates a schema.js that is different from when `fields` is not specified
+in bidirectional 1:m.
+"""
 type Dealership @model {
   id: ID!
   name: String!

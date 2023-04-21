@@ -21,35 +21,44 @@ describe('FormTests - DSBidirectionalDog', () => {
     cy.visit('http://localhost:3000/form-tests/DSBidirectionalDog');
   });
 
-  specify('Update Dog - should throw when disconnecting required hasOne field', () => {
-    cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
-      removeArrayItem('Fluffys Owner');
+  specify(
+    'Update form for child of bidirectional 1:1 should throw when disconnecting parent if parent requires child',
+    () => {
+      cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
+        removeArrayItem('Fluffys Owner');
 
-      cy.contains('Submit').click();
-      cy.contains('cannot be unlinked because BiDirectionalOwner requires BiDirectionalDog');
-    });
-  });
+        cy.contains('Submit').click();
+        cy.contains('cannot be unlinked because BiDirectionalOwner requires BiDirectionalDog');
+      });
+    },
+  );
 
-  specify('Update Dog - should throw when changing Owner', () => {
-    cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
-      removeArrayItem('Fluffys Owner');
-      getArrayFieldButtonByLabel('Bi directional owner').click();
-      typeInAutocomplete('M{downArrow}{enter}');
-      clickAddToArray();
+  specify(
+    'Update form for child of bidirectional 1:1 should throw when changing parent if parent requires child',
+    () => {
+      cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
+        removeArrayItem('Fluffys Owner');
+        getArrayFieldButtonByLabel('Bi directional owner').click();
+        typeInAutocomplete('M{downArrow}{enter}');
+        clickAddToArray();
 
-      cy.contains('Submit').click();
-      cy.contains('cannot be unlinked because BiDirectionalOwner requires BiDirectionalDog');
-    });
-  });
+        cy.contains('Submit').click();
+        cy.contains('cannot be unlinked because BiDirectionalOwner requires BiDirectionalDog');
+      });
+    },
+  );
 
-  specify('Update Dog - should throw when disconnecting required hasMany field', () => {
-    cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
-      removeArrayItem('Bone');
+  specify(
+    'Update form for parent of bidirectional 1:m should throw when disconnecting child if child requires parent',
+    () => {
+      cy.get('#DataStoreFormUpdateBidirectionalDog').within(() => {
+        removeArrayItem('Bone');
 
-      cy.contains('Submit').click();
-      cy.contains(
-        'cannot be unlinked from BiDirectionalDog because biDirectionalDogBiDirectionalToysId is a required field.',
-      );
-    });
-  });
+        cy.contains('Submit').click();
+        cy.contains(
+          'cannot be unlinked from BiDirectionalDog because biDirectionalDogBiDirectionalToysId is a required field.',
+        );
+      });
+    },
+  );
 });

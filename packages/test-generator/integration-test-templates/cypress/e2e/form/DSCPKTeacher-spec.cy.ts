@@ -27,76 +27,83 @@ describe('FormTests - DSCPKTeacher', () => {
     cy.visit('http://localhost:3000/form-tests/DSCPKTeacher');
   });
 
-  specify('create form should display current values and save to DataStore', () => {
-    cy.get('#DataStoreFormCreateCPKTeacher').within(() => {
-      getInputByLabel('Special teacher id').type('Create1ID');
+  specify(
+    'create form for model with CPK and relationships to other models with CPK should create relationships',
+    () => {
+      cy.get('#DataStoreFormCreateCPKTeacher').within(() => {
+        getInputByLabel('Special teacher id').type('Create1ID');
 
-      // check error message shows on closed ArrayField
-      cy.contains('Submit').click();
-      cy.contains('CPKStudent is required');
+        // check error message shows on closed ArrayField
+        cy.contains('Submit').click();
+        cy.contains('CPKStudent is required');
 
-      // hasOne
-      getArrayFieldButtonByLabel('Cpk student').click();
-      typeInAutocomplete('Her{downArrow}{enter}');
-      clickAddToArray();
+        // hasOne
+        getArrayFieldButtonByLabel('Cpk student').click();
+        typeInAutocomplete('Her{downArrow}{enter}');
+        clickAddToArray();
 
-      // manyToMany
-      getArrayFieldButtonByLabel('Cpk classes').click();
-      typeInAutocomplete('English{downArrow}{enter}');
-      clickAddToArray();
+        // manyToMany
+        getArrayFieldButtonByLabel('Cpk classes').click();
+        typeInAutocomplete('English{downArrow}{enter}');
+        clickAddToArray();
 
-      // hasMany
-      getArrayFieldButtonByLabel('Cpk projects').click();
-      typeInAutocomplete('Either{downArrow}{enter}');
-      clickAddToArray();
+        // hasMany
+        getArrayFieldButtonByLabel('Cpk projects').click();
+        typeInAutocomplete('Either{downArrow}{enter}');
+        clickAddToArray();
 
-      cy.contains('Submit').click();
+        cy.contains('Submit').click();
 
-      cy.contains(/Create1ID/).then((recordElement: JQuery) => {
-        const record = JSON.parse(recordElement.text());
+        cy.contains(/Create1ID/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
 
-        expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
-        expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
-        expect(record.CPKClasses.length).to.equal(1);
-        expect(record.CPKClasses[0].specialClassId).to.equal('English');
-        expect(record.CPKProjects.length).to.equal(1);
-        expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
+          expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
+          expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
+          expect(record.CPKClasses.length).to.equal(1);
+          expect(record.CPKClasses[0].specialClassId).to.equal('English');
+          expect(record.CPKProjects.length).to.equal(1);
+          expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
+        });
       });
-    });
-  });
+    },
+  );
 
-  specify('update form should display current values and save to DataStore', () => {
-    cy.get('#DataStoreFormUpdateCPKTeacher').within(() => {
-      // hasOne
-      removeArrayItem('Harry');
-      getArrayFieldButtonByLabel('Cpk student').click();
-      typeInAutocomplete('Her{downArrow}{enter}');
-      clickAddToArray();
+  specify(
+    'update form for model with CPK and relationships ' +
+      'to other models with CPK should display current values and update relationships',
+    () => {
+      cy.get('#DataStoreFormUpdateCPKTeacher').within(() => {
+        // hasOne
+        removeArrayItem('Harry');
+        getArrayFieldButtonByLabel('Cpk student').click();
+        typeInAutocomplete('Her{downArrow}{enter}');
+        clickAddToArray();
 
-      // manyToMany
-      removeArrayItem('Math');
-      getArrayFieldButtonByLabel('Cpk classes').click();
-      typeInAutocomplete('English{downArrow}{enter}');
-      clickAddToArray();
+        // manyToMany
+        removeArrayItem('Math');
+        getArrayFieldButtonByLabel('Cpk classes').click();
+        typeInAutocomplete('English{downArrow}{enter}');
+        clickAddToArray();
 
-      // hasMany
-      removeArrayItem('Figure 8');
-      getArrayFieldButtonByLabel('Cpk projects').click();
-      typeInAutocomplete('Either{downArrow}{enter}');
-      clickAddToArray();
+        // hasMany
+        removeArrayItem('Figure 8');
+        getArrayFieldButtonByLabel('Cpk projects').click();
+        typeInAutocomplete('Either{downArrow}{enter}');
+        clickAddToArray();
 
-      cy.contains('Submit').click();
+        cy.contains('Submit').click();
 
-      cy.contains(/Update1ID/).then((recordElement: JQuery) => {
-        const record = JSON.parse(recordElement.text());
+        cy.contains(/Update1ID/).then((recordElement: JQuery) => {
+          const record = JSON.parse(recordElement.text());
 
-        expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
-        expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
-        expect(record.CPKClasses.length).to.equal(1);
-        expect(record.CPKClasses[0].specialClassId).to.equal('English');
-        expect(record.CPKProjects.length).to.equal(1);
-        expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
+          expect(record.cPKTeacherCPKStudentSpecialStudentId).to.equal('Hermione');
+          expect(record.CPKStudent.specialStudentId).to.equal('Hermione');
+          expect(record.CPKClasses.length).to.equal(1);
+          expect(record.CPKClasses[0].specialClassId).to.equal('English');
+          expect(record.CPKProjects.length).to.equal(1);
+          expect(record.CPKProjects[0].specialProjectId).to.equal('Either/Or');
+        });
       });
-    });
-  });
+    },
+  );
 });

@@ -21,19 +21,24 @@ describe('FormTests - DSModelWithVariableCollisions', () => {
     cy.visit('http://localhost:3000/form-tests/DSModelWithVariableCollisions');
   });
 
-  specify('Update ModelWithVariableCollisions - should render existing record values', () => {
-    cy.get('#DataStoreFormUpdateModelWithVariableCollisions').within(() => {
-      const originalValue = 'test';
-      const updatedValue = 'test2';
+  specify(
+    'update form for model with field whose name ' +
+      'is lower-case-first version of model name should ' +
+      'render existing record values',
+    () => {
+      cy.get('#DataStoreFormUpdateModelWithVariableCollisions').within(() => {
+        const originalValue = 'test';
+        const updatedValue = 'test2';
 
-      getInputByLabel('Model with variable collisions').should('have.value', originalValue);
+        getInputByLabel('Model with variable collisions').should('have.value', originalValue);
 
-      getInputByLabel('Model with variable collisions').type(updatedValue);
+        getInputByLabel('Model with variable collisions').type(updatedValue);
 
-      cy.contains('Submit').click();
+        cy.contains('Submit').click();
 
-      getInputByLabel('Model with variable collisions').should('have.value', originalValue + updatedValue);
-      cy.contains(`UpdatedField= ${originalValue}${updatedValue}`);
-    });
-  });
+        getInputByLabel('Model with variable collisions').should('have.value', originalValue + updatedValue);
+        cy.contains(`UpdatedField= ${originalValue}${updatedValue}`);
+      });
+    },
+  );
 });
