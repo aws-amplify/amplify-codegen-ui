@@ -25391,6 +25391,7 @@ export default function UpdateProductForm(props) {
         errorMessage={errors.singleImgKey?.errorMessage}
         hasError={errors.singleImgKey?.hasError}
         label={\\"Single Image\\"}
+        descriptiveText={\\"Limited to One Image\\"}
         isRequired={false}
         isReadOnly={false}
       >
