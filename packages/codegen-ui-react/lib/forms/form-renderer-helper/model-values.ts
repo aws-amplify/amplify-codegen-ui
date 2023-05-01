@@ -75,47 +75,53 @@ const getDisplayValueCallChain = ({ fieldName, recordString }: { fieldName: stri
 export function getDisplayValueScalar(fieldName: string, model: string, key: string) {
   const recordString = 'r';
 
-  return factory.createCallExpression(
-    factory.createPropertyAccessExpression(
-      factory.createIdentifier(getDisplayValueObjectName),
-      factory.createIdentifier(fieldName),
-    ),
-    undefined,
-    [
-      factory.createCallExpression(
-        factory.createPropertyAccessExpression(
-          factory.createIdentifier(getRecordsName(model)),
-          factory.createIdentifier('find'),
-        ),
-        undefined,
-        [
-          factory.createArrowFunction(
-            undefined,
-            undefined,
-            [
-              factory.createParameterDeclaration(
-                undefined,
-                undefined,
-                undefined,
-                factory.createIdentifier(recordString),
-                undefined,
-                undefined,
-              ),
-            ],
-            undefined,
-            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-            factory.createBinaryExpression(
-              factory.createPropertyAccessExpression(
-                factory.createIdentifier(recordString),
-                factory.createIdentifier(key),
-              ),
-              factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
-              factory.createIdentifier('value'),
-            ),
-          ),
-        ],
+  return factory.createConditionalExpression(
+    factory.createIdentifier('value'),
+    factory.createToken(SyntaxKind.QuestionToken),
+    factory.createCallExpression(
+      factory.createPropertyAccessExpression(
+        factory.createIdentifier(getDisplayValueObjectName),
+        factory.createIdentifier(fieldName),
       ),
-    ],
+      undefined,
+      [
+        factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier(getRecordsName(model)),
+            factory.createIdentifier('find'),
+          ),
+          undefined,
+          [
+            factory.createArrowFunction(
+              undefined,
+              undefined,
+              [
+                factory.createParameterDeclaration(
+                  undefined,
+                  undefined,
+                  undefined,
+                  factory.createIdentifier(recordString),
+                  undefined,
+                  undefined,
+                ),
+              ],
+              undefined,
+              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+              factory.createBinaryExpression(
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier(recordString),
+                  factory.createIdentifier(key),
+                ),
+                factory.createToken(SyntaxKind.EqualsEqualsEqualsToken),
+                factory.createIdentifier('value'),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+    factory.createToken(SyntaxKind.ColonToken),
+    factory.createStringLiteral(''),
   );
 }
 
