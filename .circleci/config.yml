@@ -1,14 +1,15 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@4.7.0
+  node: circleci/node@5.1.0
 
 jobs:
   install:
     docker:
-      - image: cimg/node:16.10
+      - image: cimg/node:16.14
     steps:
       - checkout
+      - run: sudo npm install -g lerna@6.4.1
       - restore_node_modules
       - node/install-packages:
           pkg-manager: npm
@@ -25,7 +26,7 @@ jobs:
 
   style:
     docker:
-      - image: cimg/node:16.10
+      - image: cimg/node:16.14
     steps:
       - checkout
       - restore_node_modules
@@ -44,7 +45,7 @@ jobs:
 
   build:
     docker:
-      - image: cimg/node:16.10
+      - image: cimg/node:16.14
     steps:
       - checkout
       - restore_node_modules
@@ -58,7 +59,7 @@ jobs:
 
   unit-test:
     docker:
-      - image: cimg/node:16.10
+      - image: cimg/node:16.14
     resource_class: large
     steps:
       - checkout
@@ -72,7 +73,7 @@ jobs:
 
   publish:
     docker:
-      - image: cimg/node:16.10
+      - image: cimg/node:16.14
     steps:
       - checkout
       - restore_node_modules
@@ -120,7 +121,7 @@ commands:
     steps:
       - run:
           name: Combine package-lock.json files to single file
-          command: npx lerna la -a | awk -F packages '{gsub("\\(PRIVATE\\)", "");gsub(" ", "");printf "\"packages%s/package-lock.json\" ", $2}' | xargs cat > << parameters.filename >>
+          command: npx lerna@6.4.1 la -a | awk -F packages '{gsub("\\(PRIVATE\\)", "");gsub(" ", "");printf "\"packages%s/package-lock.json\" ", $2}' | xargs cat > << parameters.filename >>
 
   restore_node_modules:
     description: 'Restore node_modules cache using concatenated package-lock.'
