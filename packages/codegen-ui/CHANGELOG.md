@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.12.2...v2.13.0) (2023-05-01)
+
+### Bug Fixes
+
+- set conditional messaging for ui-react-storage ([#996](https://github.com/aws-amplify/amplify-codegen-ui/issues/996)) ([62595dc](https://github.com/aws-amplify/amplify-codegen-ui/commit/62595dcf90a5e5555699b0283723f479c2d22e6a))
+- update form with storage field should render with existing files ([#993](https://github.com/aws-amplify/amplify-codegen-ui/issues/993)) ([ba85dbb](https://github.com/aws-amplify/amplify-codegen-ui/commit/ba85dbb4702c6d1092df435f478754feffe7b448))
+
 ## [2.12.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.12.1...v2.12.2) (2023-04-19)
 
 ### Bug Fixes
