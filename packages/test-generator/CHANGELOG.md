@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.12.2...v2.13.0) (2023-05-01)
+
+### Features
+
+- add processFile callback to rendered StorageManager for hashing filename ([#995](https://github.com/aws-amplify/amplify-codegen-ui/issues/995)) ([897e7c6](https://github.com/aws-amplify/amplify-codegen-ui/commit/897e7c6ff6f8410da96aa80c883957377cf188d4))
+
 ## [2.12.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.12.1...v2.12.2) (2023-04-19)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui-test-generator
