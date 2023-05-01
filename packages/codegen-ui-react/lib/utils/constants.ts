@@ -16,3 +16,5 @@
 export const COMPOSITE_PRIMARY_KEY_PROP_NAME = 'id';
 
 export const STORAGE_FILE_KEY = 'key';
+
+export const STORAGE_FILE_ALGO_TYPE = 'SHA-1';

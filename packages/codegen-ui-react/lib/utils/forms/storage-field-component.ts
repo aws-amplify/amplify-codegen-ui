@@ -22,12 +22,22 @@ import {
   ComponentMetadata,
   isValidVariableName,
 } from '@aws-amplify/codegen-ui';
-import { factory, JsxAttribute, JsxAttributeLike, JsxChild, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
+import {
+  factory,
+  JsxAttribute,
+  JsxAttributeLike,
+  JsxChild,
+  JsxElement,
+  JsxExpression,
+  NodeFlags,
+  SyntaxKind,
+} from 'typescript';
 import { getDecoratedLabel } from '../../forms/form-renderer-helper';
 import { buildStorageManagerOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
 import { propertyToExpression } from '../../react-component-render-helper';
-import { STORAGE_FILE_KEY } from '../constants';
+import { STORAGE_FILE_ALGO_TYPE, STORAGE_FILE_KEY } from '../constants';
 import { lowerCaseFirst } from '../../helpers';
+import { ImportValue } from '../../imports';
 
 const fieldKeys = new Set<keyof FormDefinitionStorageFieldElement['props']>([
   'label',
@@ -52,6 +62,269 @@ function isFieldKey(key: string) {
 function isStorageManagerKey(key: string) {
   return storageManagerKeys.has(key as any);
 }
+
+export const buildStorageManagerProcessFileVariableStatement = () => {
+  return factory.createVariableStatement(
+    [factory.createModifier(SyntaxKind.ExportKeyword)],
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier('processFile'),
+          undefined,
+          undefined,
+          factory.createArrowFunction(
+            [factory.createToken(SyntaxKind.AsyncKeyword)],
+            undefined,
+            [
+              factory.createParameterDeclaration(
+                undefined,
+                undefined,
+                undefined,
+                factory.createObjectBindingPattern([
+                  factory.createBindingElement(undefined, undefined, factory.createIdentifier('file'), undefined),
+                ]),
+                undefined,
+                undefined,
+                undefined,
+              ),
+            ],
+            undefined,
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createVariableStatement(
+                  undefined,
+                  factory.createVariableDeclarationList(
+                    [
+                      factory.createVariableDeclaration(
+                        factory.createIdentifier('fileExtension'),
+                        undefined,
+                        undefined,
+                        factory.createCallExpression(
+                          factory.createPropertyAccessExpression(
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createIdentifier('file'),
+                                  factory.createIdentifier('name'),
+                                ),
+                                factory.createIdentifier('split'),
+                              ),
+                              undefined,
+                              [factory.createStringLiteral('.')],
+                            ),
+                            factory.createIdentifier('pop'),
+                          ),
+                          undefined,
+                          [],
+                        ),
+                      ),
+                    ],
+                    NodeFlags.Const,
+                  ),
+                ),
+                factory.createReturnStatement(
+                  factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                      factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                          factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
+                              factory.createIdentifier('file'),
+                              factory.createIdentifier('arrayBuffer'),
+                            ),
+                            undefined,
+                            [],
+                          ),
+                          factory.createIdentifier('then'),
+                        ),
+                        undefined,
+                        [
+                          factory.createArrowFunction(
+                            undefined,
+                            undefined,
+                            [
+                              factory.createParameterDeclaration(
+                                undefined,
+                                undefined,
+                                undefined,
+                                factory.createIdentifier('filebuffer'),
+                                undefined,
+                                undefined,
+                                undefined,
+                              ),
+                            ],
+                            undefined,
+                            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                            factory.createCallExpression(
+                              factory.createPropertyAccessExpression(
+                                factory.createPropertyAccessExpression(
+                                  factory.createPropertyAccessExpression(
+                                    factory.createIdentifier('window'),
+                                    factory.createIdentifier('crypto'),
+                                  ),
+                                  factory.createIdentifier('subtle'),
+                                ),
+                                factory.createIdentifier('digest'),
+                              ),
+                              undefined,
+                              [
+                                factory.createStringLiteral(STORAGE_FILE_ALGO_TYPE),
+                                factory.createIdentifier('filebuffer'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      factory.createIdentifier('then'),
+                    ),
+                    undefined,
+                    [
+                      factory.createArrowFunction(
+                        undefined,
+                        undefined,
+                        [
+                          factory.createParameterDeclaration(
+                            undefined,
+                            undefined,
+                            undefined,
+                            factory.createIdentifier('hashBuffer'),
+                            undefined,
+                            undefined,
+                            undefined,
+                          ),
+                        ],
+                        undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        factory.createBlock(
+                          [
+                            factory.createVariableStatement(
+                              undefined,
+                              factory.createVariableDeclarationList(
+                                [
+                                  factory.createVariableDeclaration(
+                                    factory.createIdentifier('hashArray'),
+                                    undefined,
+                                    undefined,
+                                    factory.createCallExpression(
+                                      factory.createPropertyAccessExpression(
+                                        factory.createIdentifier('Array'),
+                                        factory.createIdentifier('from'),
+                                      ),
+                                      undefined,
+                                      [
+                                        factory.createNewExpression(factory.createIdentifier('Uint8Array'), undefined, [
+                                          factory.createIdentifier('hashBuffer'),
+                                        ]),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                NodeFlags.Const,
+                              ),
+                            ),
+                            factory.createVariableStatement(
+                              undefined,
+                              factory.createVariableDeclarationList(
+                                [
+                                  factory.createVariableDeclaration(
+                                    factory.createIdentifier('hashHex'),
+                                    undefined,
+                                    undefined,
+                                    factory.createCallExpression(
+                                      factory.createPropertyAccessExpression(
+                                        factory.createCallExpression(
+                                          factory.createPropertyAccessExpression(
+                                            factory.createIdentifier('hashArray'),
+                                            factory.createIdentifier('map'),
+                                          ),
+                                          undefined,
+                                          [
+                                            factory.createArrowFunction(
+                                              undefined,
+                                              undefined,
+                                              [
+                                                factory.createParameterDeclaration(
+                                                  undefined,
+                                                  undefined,
+                                                  undefined,
+                                                  factory.createIdentifier('a'),
+                                                  undefined,
+                                                  undefined,
+                                                  undefined,
+                                                ),
+                                              ],
+                                              undefined,
+                                              factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                              factory.createCallExpression(
+                                                factory.createPropertyAccessExpression(
+                                                  factory.createCallExpression(
+                                                    factory.createPropertyAccessExpression(
+                                                      factory.createIdentifier('a'),
+                                                      factory.createIdentifier('toString'),
+                                                    ),
+                                                    undefined,
+                                                    [factory.createNumericLiteral('16')],
+                                                  ),
+                                                  factory.createIdentifier('padStart'),
+                                                ),
+                                                undefined,
+                                                [factory.createNumericLiteral('2'), factory.createStringLiteral('0')],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        factory.createIdentifier('join'),
+                                      ),
+                                      undefined,
+                                      [factory.createStringLiteral('')],
+                                    ),
+                                  ),
+                                ],
+                                NodeFlags.Const,
+                              ),
+                            ),
+                            factory.createReturnStatement(
+                              factory.createObjectLiteralExpression(
+                                [
+                                  factory.createShorthandPropertyAssignment(
+                                    factory.createIdentifier('file'),
+                                    undefined,
+                                  ),
+                                  factory.createPropertyAssignment(
+                                    factory.createIdentifier('key'),
+                                    factory.createTemplateExpression(factory.createTemplateHead('', ''), [
+                                      factory.createTemplateSpan(
+                                        factory.createIdentifier('hashHex'),
+                                        factory.createTemplateMiddle('.', '.'),
+                                      ),
+                                      factory.createTemplateSpan(
+                                        factory.createIdentifier('fileExtension'),
+                                        factory.createTemplateTail('', ''),
+                                      ),
+                                    ]),
+                                  ),
+                                ],
+                                false,
+                              ),
+                            ),
+                          ],
+                          true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              true,
+            ),
+          ),
+        ),
+      ],
+      NodeFlags.Const,
+    ),
+  );
+};
 
 export const renderStorageFieldComponent = (
   component: StudioComponent | StudioComponentChild,
@@ -156,6 +429,12 @@ export const renderStorageFieldComponent = (
 
     storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onUploadSuccess'));
     storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onFileRemove'));
+    storageManagerAttributes.push(
+      factory.createJsxAttribute(
+        factory.createIdentifier('processFile'),
+        factory.createJsxExpression(undefined, factory.createIdentifier(ImportValue.PROCESS_FILE)),
+      ),
+    );
 
     fieldAttributes.push(
       factory.createJsxAttribute(
