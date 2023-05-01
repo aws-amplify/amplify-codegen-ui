@@ -48,6 +48,7 @@ export enum ImportValue {
   VALIDATE_FIELD_CODEGEN = 'validateField',
   FORMATTER = 'formatter',
   FETCH_BY_PATH = 'fetchByPath',
+  PROCESS_FILE = 'processFile',
   DEFAULT_THEME = 'defaultTheme',
 }
 
@@ -75,4 +76,5 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.FORMATTER]: ImportSource.UTILS,
   [ImportValue.VALIDATE_FIELD]: ImportSource.UTILS,
   [ImportValue.FETCH_BY_PATH]: ImportSource.UTILS,
+  [ImportValue.PROCESS_FILE]: ImportSource.UTILS,
 };

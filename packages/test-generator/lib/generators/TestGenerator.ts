@@ -121,9 +121,18 @@ export abstract class TestGenerator {
       try {
         if (this.params.writeToDisk) {
           const res = this.writeFormToDisk(schema as StudioForm);
-          if (res.formMetadata?.fieldConfigs && Object.keys(res.formMetadata.fieldConfigs).length) {
-            utilsFunctions.add('validation');
-            utilsFunctions.add('fetchByPath');
+          if (res.formMetadata?.fieldConfigs) {
+            if (Object.keys(res.formMetadata.fieldConfigs).length) {
+              utilsFunctions.add('validation');
+              utilsFunctions.add('fetchByPath');
+            }
+            if (
+              Object.values(res.formMetadata.fieldConfigs).find(
+                (fieldConfig) => fieldConfig.componentType === 'StorageField',
+              )
+            ) {
+              utilsFunctions.add('processFile');
+            }
           }
         }
 

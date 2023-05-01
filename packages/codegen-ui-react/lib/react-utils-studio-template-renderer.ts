@@ -24,8 +24,9 @@ import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-tem
 import { generateValidationFunction } from './utils/forms/validation';
 import { getFetchByPathNodeFunction } from './utils/json-path-fetch';
 import { generateFormatUtil } from './utils/string-formatter';
+import { buildStorageManagerProcessFileVariableStatement } from './utils/forms/storage-field-component';
 
-export type UtilTemplateType = 'validation' | 'formatter' | 'fetchByPath';
+export type UtilTemplateType = 'validation' | 'formatter' | 'fetchByPath' | 'processFile';
 
 export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -75,6 +76,10 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
 
     if (utilsSet.has('fetchByPath')) {
       utilsStatements.push(getFetchByPathNodeFunction());
+    }
+
+    if (utilsSet.has('processFile')) {
+      utilsStatements.push(buildStorageManagerProcessFileVariableStatement());
     }
 
     let componentText = `/* eslint-disable */${EOL}`;

@@ -24850,7 +24850,7 @@ import * as React from \\"react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { Field, getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Product } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, processFile, validateField } from \\"./utils\\";
 import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function CreateProductForm(props) {
@@ -25014,21 +25014,7 @@ export default function CreateProductForm(props) {
               return value;
             });
           }}
-          processFile={async ({ file }) => {
-            const fileExtension = file.name.split(\\".\\").pop();
-            return file
-              .arrayBuffer()
-              .then((filebuffer) =>
-                window.crypto.subtle.digest(\\"SHA-1\\", filebuffer)
-              )
-              .then((hashBuffer) => {
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                const hashHex = hashArray
-                  .map((a) => a.toString(16).padStart(2, \\"0\\"))
-                  .join(\\"\\");
-                return { file, key: \`\${hashHex}.\${fileExtension}\` };
-              });
-          }}
+          processFile={processFile}
           accessLevel={\\"protected\\"}
           acceptedFileTypes={[\\".txt\\", \\".pdf\\"]}
           isResumable={true}
@@ -25075,7 +25061,7 @@ import * as React from \\"react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { Field, getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Product } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, processFile, validateField } from \\"./utils\\";
 import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function UpdateProductForm(props) {
@@ -25257,21 +25243,7 @@ export default function UpdateProductForm(props) {
                 return value;
               });
             }}
-            processFile={async ({ file }) => {
-              const fileExtension = file.name.split(\\".\\").pop();
-              return file
-                .arrayBuffer()
-                .then((filebuffer) =>
-                  window.crypto.subtle.digest(\\"SHA-1\\", filebuffer)
-                )
-                .then((hashBuffer) => {
-                  const hashArray = Array.from(new Uint8Array(hashBuffer));
-                  const hashHex = hashArray
-                    .map((a) => a.toString(16).padStart(2, \\"0\\"))
-                    .join(\\"\\");
-                  return { file, key: \`\${hashHex}.\${fileExtension}\` };
-                });
-            }}
+            processFile={processFile}
             accessLevel={\\"private\\"}
             acceptedFileTypes={[\\".doc\\", \\".pdf\\"]}
             isResumable={false}
@@ -25321,7 +25293,7 @@ import * as React from \\"react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
 import { Field, getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Product } from \\"../models\\";
-import { fetchByPath, validateField } from \\"./utils\\";
+import { fetchByPath, processFile, validateField } from \\"./utils\\";
 import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function UpdateProductForm(props) {
@@ -25506,21 +25478,7 @@ export default function UpdateProductForm(props) {
                 return value;
               });
             }}
-            processFile={async ({ file }) => {
-              const fileExtension = file.name.split(\\".\\").pop();
-              return file
-                .arrayBuffer()
-                .then((filebuffer) =>
-                  window.crypto.subtle.digest(\\"SHA-1\\", filebuffer)
-                )
-                .then((hashBuffer) => {
-                  const hashArray = Array.from(new Uint8Array(hashBuffer));
-                  const hashHex = hashArray
-                    .map((a) => a.toString(16).padStart(2, \\"0\\"))
-                    .join(\\"\\");
-                  return { file, key: \`\${hashHex}.\${fileExtension}\` };
-                });
-            }}
+            processFile={processFile}
             accessLevel={\\"protected\\"}
             acceptedFileTypes={[\\".txt\\", \\".pdf\\"]}
             isResumable={true}
