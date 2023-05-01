@@ -35,7 +35,7 @@ import {
 import { getDecoratedLabel } from '../../forms/form-renderer-helper';
 import { buildStorageManagerOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
 import { propertyToExpression } from '../../react-component-render-helper';
-import { STORAGE_FILE_KEY } from '../constants';
+import { STORAGE_FILE_ALGO_TYPE, STORAGE_FILE_KEY } from '../constants';
 import { lowerCaseFirst } from '../../helpers';
 import { ImportValue } from '../../imports';
 
@@ -168,7 +168,10 @@ export const buildStorageManagerProcessFileVariableStatement = () => {
                                 factory.createIdentifier('digest'),
                               ),
                               undefined,
-                              [factory.createStringLiteral('SHA-1'), factory.createIdentifier('filebuffer')],
+                              [
+                                factory.createStringLiteral(STORAGE_FILE_ALGO_TYPE),
+                                factory.createIdentifier('filebuffer'),
+                              ],
                             ),
                           ),
                         ],
