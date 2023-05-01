@@ -24,7 +24,10 @@ import {
 } from '@aws-amplify/codegen-ui';
 import { factory, JsxAttribute, JsxAttributeLike, JsxChild, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
 import { getDecoratedLabel } from '../../forms/form-renderer-helper';
-import { buildStorageManagerOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
+import {
+  buildStorageManagerOnChangeStatement,
+  buildStorageManagerProcessFileStatement,
+} from '../../forms/form-renderer-helper/event-handler-props';
 import { propertyToExpression } from '../../react-component-render-helper';
 import { STORAGE_FILE_KEY } from '../constants';
 import { lowerCaseFirst } from '../../helpers';
@@ -156,6 +159,7 @@ export const renderStorageFieldComponent = (
 
     storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onUploadSuccess'));
     storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onFileRemove'));
+    storageManagerAttributes.push(buildStorageManagerProcessFileStatement());
 
     fieldAttributes.push(
       factory.createJsxAttribute(
