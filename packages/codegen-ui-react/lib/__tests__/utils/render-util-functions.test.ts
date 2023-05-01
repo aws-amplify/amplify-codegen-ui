@@ -17,8 +17,8 @@ import { ModuleKind, ScriptKind, ScriptTarget } from 'typescript';
 import { ReactUtilsStudioTemplateRenderer, UtilTemplateType } from '../../react-utils-studio-template-renderer';
 
 describe('render utils file', () => {
-  test('generateUtilFile', () => {
-    const utilsSet: UtilTemplateType[] = ['processFile'];
+  test('render all', () => {
+    const utilsSet: UtilTemplateType[] = ['validation', 'formatter', 'fetchByPath', 'processFile'];
     const { componentText } = new ReactUtilsStudioTemplateRenderer(utilsSet, {
       module: ModuleKind.ES2020,
       target: ScriptTarget.ES2020,

@@ -65,7 +65,7 @@ function isStorageManagerKey(key: string) {
 
 export const buildStorageManagerProcessFileVariableStatement = () => {
   return factory.createVariableStatement(
-    undefined,
+    [factory.createModifier(SyntaxKind.ExportKeyword)],
     factory.createVariableDeclarationList(
       [
         factory.createVariableDeclaration(
