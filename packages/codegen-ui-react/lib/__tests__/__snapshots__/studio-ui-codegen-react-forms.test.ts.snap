@@ -25211,41 +25211,43 @@ export default function UpdateProductForm(props) {
         isRequired={false}
         isReadOnly={false}
       >
-        <StorageManager
-          defaultFiles={imgKeys.map((key) => ({ key }))}
-          onUploadSuccess={({ key }) => {
-            setImgKeys((prev) => {
-              let value = [...prev, key];
-              if (onChange) {
-                const modelFields = {
-                  name,
-                  imgKeys: value,
-                };
-                const result = onChange(modelFields);
-                value = result?.imgKeys ?? value;
-              }
-              return value;
-            });
-          }}
-          onFileRemove={({ key }) => {
-            setImgKeys((prev) => {
-              let value = prev.filter((f) => f !== key);
-              if (onChange) {
-                const modelFields = {
-                  name,
-                  imgKeys: value,
-                };
-                const result = onChange(modelFields);
-                value = result?.imgKeys ?? value;
-              }
-              return value;
-            });
-          }}
-          accessLevel={\\"private\\"}
-          acceptedFileTypes={[\\".doc\\", \\".pdf\\"]}
-          isResumable={false}
-          showThumbnails={true}
-        ></StorageManager>
+        {productRecord && (
+          <StorageManager
+            defaultFiles={productRecord.imgKeys.map((key) => ({ key }))}
+            onUploadSuccess={({ key }) => {
+              setImgKeys((prev) => {
+                let value = [...prev, key];
+                if (onChange) {
+                  const modelFields = {
+                    name,
+                    imgKeys: value,
+                  };
+                  const result = onChange(modelFields);
+                  value = result?.imgKeys ?? value;
+                }
+                return value;
+              });
+            }}
+            onFileRemove={({ key }) => {
+              setImgKeys((prev) => {
+                let value = prev.filter((f) => f !== key);
+                if (onChange) {
+                  const modelFields = {
+                    name,
+                    imgKeys: value,
+                  };
+                  const result = onChange(modelFields);
+                  value = result?.imgKeys ?? value;
+                }
+                return value;
+              });
+            }}
+            accessLevel={\\"private\\"}
+            acceptedFileTypes={[\\".doc\\", \\".pdf\\"]}
+            isResumable={false}
+            showThumbnails={true}
+          ></StorageManager>
+        )}
       </Field>
       <Flex
         justifyContent=\\"space-between\\"
@@ -25439,46 +25441,49 @@ export default function UpdateProductForm(props) {
         errorMessage={errors.singleImgKey?.errorMessage}
         hasError={errors.singleImgKey?.hasError}
         label={\\"Single Image\\"}
+        descriptiveText={\\"Limited to One Image\\"}
         isRequired={false}
         isReadOnly={false}
       >
-        <StorageManager
-          defaultFiles={singleImgKey ? [{ key: singleImgKey }] : undefined}
-          onUploadSuccess={({ key }) => {
-            setSingleImgKey((prev) => {
-              let value = key;
-              if (onChange) {
-                const modelFields = {
-                  name,
-                  singleImgKey: value,
-                };
-                const result = onChange(modelFields);
-                value = result?.singleImgKey ?? value;
-              }
-              return value;
-            });
-          }}
-          onFileRemove={({ key }) => {
-            setSingleImgKey((prev) => {
-              let value = initialValues?.singleImgKey;
-              if (onChange) {
-                const modelFields = {
-                  name,
-                  singleImgKey: value,
-                };
-                const result = onChange(modelFields);
-                value = result?.singleImgKey ?? value;
-              }
-              return value;
-            });
-          }}
-          accessLevel={\\"protected\\"}
-          acceptedFileTypes={[\\".txt\\", \\".pdf\\"]}
-          isResumable={true}
-          showThumbnails={false}
-          maxFileCount={1}
-          maxSize={1024}
-        ></StorageManager>
+        {productRecord && (
+          <StorageManager
+            defaultFiles={[{ key: productRecord.singleImgKey }]}
+            onUploadSuccess={({ key }) => {
+              setSingleImgKey((prev) => {
+                let value = key;
+                if (onChange) {
+                  const modelFields = {
+                    name,
+                    singleImgKey: value,
+                  };
+                  const result = onChange(modelFields);
+                  value = result?.singleImgKey ?? value;
+                }
+                return value;
+              });
+            }}
+            onFileRemove={({ key }) => {
+              setSingleImgKey((prev) => {
+                let value = initialValues?.singleImgKey;
+                if (onChange) {
+                  const modelFields = {
+                    name,
+                    singleImgKey: value,
+                  };
+                  const result = onChange(modelFields);
+                  value = result?.singleImgKey ?? value;
+                }
+                return value;
+              });
+            }}
+            accessLevel={\\"protected\\"}
+            acceptedFileTypes={[\\".txt\\", \\".pdf\\"]}
+            isResumable={true}
+            showThumbnails={false}
+            maxFileCount={1}
+            maxSize={1024}
+          ></StorageManager>
+        )}
       </Field>
       <Flex
         justifyContent=\\"space-between\\"

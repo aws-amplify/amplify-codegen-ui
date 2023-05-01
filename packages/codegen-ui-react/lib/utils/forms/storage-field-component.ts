@@ -22,13 +22,19 @@ import {
   ComponentMetadata,
   isValidVariableName,
 } from '@aws-amplify/codegen-ui';
-import { factory, JsxAttribute, JsxAttributeLike, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
+import { factory, JsxAttribute, JsxAttributeLike, JsxChild, JsxElement, JsxExpression, SyntaxKind } from 'typescript';
 import { getDecoratedLabel } from '../../forms/form-renderer-helper';
 import { buildStorageManagerOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
 import { propertyToExpression } from '../../react-component-render-helper';
 import { STORAGE_FILE_KEY } from '../constants';
+import { lowerCaseFirst } from '../../helpers';
 
-const fieldKeys = new Set<keyof FormDefinitionStorageFieldElement['props']>(['label', 'isRequired', 'isReadOnly']);
+const fieldKeys = new Set<keyof FormDefinitionStorageFieldElement['props']>([
+  'label',
+  'isRequired',
+  'isReadOnly',
+  'descriptiveText',
+]);
 
 const storageManagerKeys = new Set<keyof FormDefinitionStorageFieldElement['props']>([
   'accessLevel',
@@ -54,8 +60,11 @@ export const renderStorageFieldComponent = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   labelDecorator?: LabelDecorator,
   isRequired?: boolean,
-): JsxElement => {
+) => {
   const { name: componentName } = component;
+  const dataTypeName = componentMetadata.formMetadata?.dataType.dataTypeName || '';
+  const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
+  const lowerCaseDataTypeNameRecord = `${lowerCaseDataTypeName}Record`;
   const storageManagerComponentName = factory.createIdentifier('StorageManager');
   const storageManagerAttributes: JsxAttribute[] = [];
   const fieldAttributes: JsxAttribute[] = [];
@@ -78,7 +87,10 @@ export const renderStorageFieldComponent = (
             undefined,
             factory.createCallExpression(
               factory.createPropertyAccessExpression(
-                factory.createIdentifier(componentName),
+                factory.createPropertyAccessExpression(
+                  factory.createIdentifier(lowerCaseDataTypeNameRecord),
+                  factory.createIdentifier(componentName),
+                ),
                 factory.createIdentifier('map'),
               ),
               undefined,
@@ -118,25 +130,22 @@ export const renderStorageFieldComponent = (
           )
         : factory.createJsxExpression(
             undefined,
-            factory.createConditionalExpression(
-              factory.createIdentifier(componentName),
-              factory.createToken(SyntaxKind.QuestionToken),
-              factory.createArrayLiteralExpression(
-                [
-                  factory.createObjectLiteralExpression(
-                    [
-                      factory.createPropertyAssignment(
-                        factory.createIdentifier('key'),
+            factory.createArrayLiteralExpression(
+              [
+                factory.createObjectLiteralExpression(
+                  [
+                    factory.createPropertyAssignment(
+                      factory.createIdentifier('key'),
+                      factory.createPropertyAccessExpression(
+                        factory.createIdentifier(lowerCaseDataTypeNameRecord),
                         factory.createIdentifier(componentName),
                       ),
-                    ],
-                    false,
-                  ),
-                ],
-                false,
-              ),
-              factory.createToken(SyntaxKind.ColonToken),
-              factory.createIdentifier('undefined'),
+                    ),
+                  ],
+                  false,
+                ),
+              ],
+              false,
             ),
           );
 
@@ -147,6 +156,7 @@ export const renderStorageFieldComponent = (
 
     storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onUploadSuccess'));
     storageManagerAttributes.push(buildStorageManagerOnChangeStatement(component, fieldConfigs, 'onFileRemove'));
+
     fieldAttributes.push(
       factory.createJsxAttribute(
         factory.createIdentifier('errorMessage'),
@@ -215,10 +225,21 @@ export const renderStorageFieldComponent = (
     factory.createJsxClosingElement(storageManagerComponentName),
   );
 
-  return renderFieldWrapper(fieldAttributes, storageManager);
+  const wrappedStorageManagerBlock = factory.createJsxExpression(
+    undefined,
+    factory.createBinaryExpression(
+      factory.createIdentifier(lowerCaseDataTypeNameRecord),
+      factory.createToken(SyntaxKind.AmpersandAmpersandToken),
+      factory.createParenthesizedExpression(storageManager),
+    ),
+  );
+  return renderFieldWrapper(
+    fieldAttributes,
+    componentMetadata.formMetadata?.formActionType === 'update' ? wrappedStorageManagerBlock : storageManager,
+  );
 };
 
-export const renderFieldWrapper = (attributes: JsxAttributeLike[], storageManagerComponent: JsxElement): JsxElement => {
+export const renderFieldWrapper = (attributes: JsxAttributeLike[], storageManagerComponent: JsxChild): JsxElement => {
   const storageManagerComponentName = factory.createIdentifier('Field');
 
   return factory.createJsxElement(

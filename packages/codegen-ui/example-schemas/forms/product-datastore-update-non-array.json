@@ -10,6 +10,7 @@
         "label": "Single Image",
         "inputType": {
           "type": "StorageField",
+          "descriptiveText": "Limited to One Image",
           "fileUploaderConfig": {
             "accessLevel": "protected",
             "acceptedFileTypes": [".txt", ".pdf"],
