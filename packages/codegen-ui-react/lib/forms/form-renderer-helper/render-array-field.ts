@@ -298,10 +298,16 @@ export const renderArrayFieldComponent = (
                 [
                   factory.createExpressionStatement(
                     factory.createCallExpression(setFieldValueIdentifier, undefined, [
-                      factory.createCallExpression(
-                        getElementAccessExpression(getDisplayValueObjectName, fieldName),
-                        undefined,
-                        [factory.createIdentifier(valueArgument)],
+                      factory.createConditionalExpression(
+                        factory.createIdentifier(valueArgument),
+                        factory.createToken(SyntaxKind.QuestionToken),
+                        factory.createCallExpression(
+                          getElementAccessExpression(getDisplayValueObjectName, fieldName),
+                          undefined,
+                          [factory.createIdentifier(valueArgument)],
+                        ),
+                        factory.createToken(SyntaxKind.ColonToken),
+                        factory.createStringLiteral(''),
                       ),
                     ]),
                   ),

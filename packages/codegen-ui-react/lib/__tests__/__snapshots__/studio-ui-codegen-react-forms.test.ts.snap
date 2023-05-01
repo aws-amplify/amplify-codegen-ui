@@ -408,15 +408,19 @@ export default function CreateCompositeToyForm(props) {
         hasError={errors?.compositeDogCompositeToysName?.hasError}
         errorMessage={errors?.compositeDogCompositeToysName?.errorMessage}
         getBadgeText={(value) =>
-          getDisplayValue.compositeDogCompositeToysName(
-            compositeDogRecords.find((r) => r.name === value)
-          )
+          value
+            ? getDisplayValue.compositeDogCompositeToysName(
+                compositeDogRecords.find((r) => r.name === value)
+              )
+            : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentCompositeDogCompositeToysNameDisplayValue(
-            getDisplayValue.compositeDogCompositeToysName(
-              compositeDogRecords.find((r) => r.name === value)
-            )
+            value
+              ? getDisplayValue.compositeDogCompositeToysName(
+                  compositeDogRecords.find((r) => r.name === value)
+                )
+              : \\"\\"
           );
           setCurrentCompositeDogCompositeToysNameValue(value);
         }}
@@ -496,15 +500,19 @@ export default function CreateCompositeToyForm(props) {
           errors?.compositeDogCompositeToysDescription?.errorMessage
         }
         getBadgeText={(value) =>
-          getDisplayValue.compositeDogCompositeToysDescription(
-            compositeDogRecords.find((r) => r.description === value)
-          )
+          value
+            ? getDisplayValue.compositeDogCompositeToysDescription(
+                compositeDogRecords.find((r) => r.description === value)
+              )
+            : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentCompositeDogCompositeToysDescriptionDisplayValue(
-            getDisplayValue.compositeDogCompositeToysDescription(
-              compositeDogRecords.find((r) => r.description === value)
-            )
+            value
+              ? getDisplayValue.compositeDogCompositeToysDescription(
+                  compositeDogRecords.find((r) => r.description === value)
+                )
+              : \\"\\"
           );
           setCurrentCompositeDogCompositeToysDescriptionValue(value);
         }}
@@ -1062,7 +1070,7 @@ export default function CreateCommentForm(props) {
         errorMessage={errors?.post?.errorMessage}
         getBadgeText={getDisplayValue.post}
         setFieldValue={(model) => {
-          setCurrentPostDisplayValue(getDisplayValue.post(model));
+          setCurrentPostDisplayValue(model ? getDisplayValue.post(model) : \\"\\");
           setCurrentPostValue(model);
         }}
         inputFieldRef={postRef}
@@ -1136,7 +1144,7 @@ export default function CreateCommentForm(props) {
         errorMessage={errors?.User?.errorMessage}
         getBadgeText={getDisplayValue.User}
         setFieldValue={(model) => {
-          setCurrentUserDisplayValue(getDisplayValue.User(model));
+          setCurrentUserDisplayValue(model ? getDisplayValue.User(model) : \\"\\");
           setCurrentUserValue(model);
         }}
         inputFieldRef={UserRef}
@@ -1210,7 +1218,7 @@ export default function CreateCommentForm(props) {
         errorMessage={errors?.Org?.errorMessage}
         getBadgeText={getDisplayValue.Org}
         setFieldValue={(model) => {
-          setCurrentOrgDisplayValue(getDisplayValue.Org(model));
+          setCurrentOrgDisplayValue(model ? getDisplayValue.Org(model) : \\"\\");
           setCurrentOrgValue(model);
         }}
         inputFieldRef={OrgRef}
@@ -1282,15 +1290,19 @@ export default function CreateCommentForm(props) {
         hasError={errors?.postCommentsId?.hasError}
         errorMessage={errors?.postCommentsId?.errorMessage}
         getBadgeText={(value) =>
-          getDisplayValue.postCommentsId(
-            postRecords.find((r) => r.id === value)
-          )
+          value
+            ? getDisplayValue.postCommentsId(
+                postRecords.find((r) => r.id === value)
+              )
+            : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentPostCommentsIdDisplayValue(
-            getDisplayValue.postCommentsId(
-              postRecords.find((r) => r.id === value)
-            )
+            value
+              ? getDisplayValue.postCommentsId(
+                  postRecords.find((r) => r.id === value)
+                )
+              : \\"\\"
           );
           setCurrentPostCommentsIdValue(value);
         }}
@@ -1975,7 +1987,7 @@ export default function CreateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeBowl}
         setFieldValue={(model) => {
           setCurrentCompositeBowlDisplayValue(
-            getDisplayValue.CompositeBowl(model)
+            model ? getDisplayValue.CompositeBowl(model) : \\"\\"
           );
           setCurrentCompositeBowlValue(model);
         }}
@@ -2059,7 +2071,7 @@ export default function CreateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeOwner}
         setFieldValue={(model) => {
           setCurrentCompositeOwnerDisplayValue(
-            getDisplayValue.CompositeOwner(model)
+            model ? getDisplayValue.CompositeOwner(model) : \\"\\"
           );
           setCurrentCompositeOwnerValue(model);
         }}
@@ -2142,7 +2154,7 @@ export default function CreateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeToys}
         setFieldValue={(model) => {
           setCurrentCompositeToysDisplayValue(
-            getDisplayValue.CompositeToys(model)
+            model ? getDisplayValue.CompositeToys(model) : \\"\\"
           );
           setCurrentCompositeToysValue(model);
         }}
@@ -2225,7 +2237,7 @@ export default function CreateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeVets}
         setFieldValue={(model) => {
           setCurrentCompositeVetsDisplayValue(
-            getDisplayValue.CompositeVets(model)
+            model ? getDisplayValue.CompositeVets(model) : \\"\\"
           );
           setCurrentCompositeVetsValue(model);
         }}
@@ -5254,7 +5266,9 @@ export default function UpdateOrgForm(props) {
         errorMessage={errors?.comments?.errorMessage}
         getBadgeText={getDisplayValue.comments}
         setFieldValue={(model) => {
-          setCurrentCommentsDisplayValue(getDisplayValue.comments(model));
+          setCurrentCommentsDisplayValue(
+            model ? getDisplayValue.comments(model) : \\"\\"
+          );
           setCurrentCommentsValue(model);
         }}
         inputFieldRef={commentsRef}
@@ -6111,7 +6125,7 @@ export default function UpdateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeBowl}
         setFieldValue={(model) => {
           setCurrentCompositeBowlDisplayValue(
-            getDisplayValue.CompositeBowl(model)
+            model ? getDisplayValue.CompositeBowl(model) : \\"\\"
           );
           setCurrentCompositeBowlValue(model);
         }}
@@ -6196,7 +6210,7 @@ export default function UpdateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeOwner}
         setFieldValue={(model) => {
           setCurrentCompositeOwnerDisplayValue(
-            getDisplayValue.CompositeOwner(model)
+            model ? getDisplayValue.CompositeOwner(model) : \\"\\"
           );
           setCurrentCompositeOwnerValue(model);
         }}
@@ -6280,7 +6294,7 @@ export default function UpdateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeToys}
         setFieldValue={(model) => {
           setCurrentCompositeToysDisplayValue(
-            getDisplayValue.CompositeToys(model)
+            model ? getDisplayValue.CompositeToys(model) : \\"\\"
           );
           setCurrentCompositeToysValue(model);
         }}
@@ -6363,7 +6377,7 @@ export default function UpdateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeVets}
         setFieldValue={(model) => {
           setCurrentCompositeVetsDisplayValue(
-            getDisplayValue.CompositeVets(model)
+            model ? getDisplayValue.CompositeVets(model) : \\"\\"
           );
           setCurrentCompositeVetsValue(model);
         }}
@@ -7102,7 +7116,9 @@ export default function UpdateCPKTeacherForm(props) {
         errorMessage={errors?.CPKStudent?.errorMessage}
         getBadgeText={getDisplayValue.CPKStudent}
         setFieldValue={(model) => {
-          setCurrentCPKStudentDisplayValue(getDisplayValue.CPKStudent(model));
+          setCurrentCPKStudentDisplayValue(
+            model ? getDisplayValue.CPKStudent(model) : \\"\\"
+          );
           setCurrentCPKStudentValue(model);
         }}
         inputFieldRef={CPKStudentRef}
@@ -7177,7 +7193,9 @@ export default function UpdateCPKTeacherForm(props) {
         errorMessage={errors?.CPKClasses?.errorMessage}
         getBadgeText={getDisplayValue.CPKClasses}
         setFieldValue={(model) => {
-          setCurrentCPKClassesDisplayValue(getDisplayValue.CPKClasses(model));
+          setCurrentCPKClassesDisplayValue(
+            model ? getDisplayValue.CPKClasses(model) : \\"\\"
+          );
           setCurrentCPKClassesValue(model);
         }}
         inputFieldRef={CPKClassesRef}
@@ -7251,7 +7269,9 @@ export default function UpdateCPKTeacherForm(props) {
         errorMessage={errors?.CPKProjects?.errorMessage}
         getBadgeText={getDisplayValue.CPKProjects}
         setFieldValue={(model) => {
-          setCurrentCPKProjectsDisplayValue(getDisplayValue.CPKProjects(model));
+          setCurrentCPKProjectsDisplayValue(
+            model ? getDisplayValue.CPKProjects(model) : \\"\\"
+          );
           setCurrentCPKProjectsValue(model);
         }}
         inputFieldRef={CPKProjectsRef}
@@ -10516,7 +10536,7 @@ export default function UpdateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeOwner}
         setFieldValue={(model) => {
           setCurrentCompositeOwnerDisplayValue(
-            getDisplayValue.CompositeOwner(model)
+            model ? getDisplayValue.CompositeOwner(model) : \\"\\"
           );
           setCurrentCompositeOwnerValue(model);
         }}
@@ -10600,7 +10620,7 @@ export default function UpdateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeToys}
         setFieldValue={(model) => {
           setCurrentCompositeToysDisplayValue(
-            getDisplayValue.CompositeToys(model)
+            model ? getDisplayValue.CompositeToys(model) : \\"\\"
           );
           setCurrentCompositeToysValue(model);
         }}
@@ -10683,7 +10703,7 @@ export default function UpdateCompositeDogForm(props) {
         getBadgeText={getDisplayValue.CompositeVets}
         setFieldValue={(model) => {
           setCurrentCompositeVetsDisplayValue(
-            getDisplayValue.CompositeVets(model)
+            model ? getDisplayValue.CompositeVets(model) : \\"\\"
           );
           setCurrentCompositeVetsValue(model);
         }}
@@ -10766,15 +10786,19 @@ export default function UpdateCompositeDogForm(props) {
         hasError={errors?.compositeDogCompositeBowlShape?.hasError}
         errorMessage={errors?.compositeDogCompositeBowlShape?.errorMessage}
         getBadgeText={(value) =>
-          getDisplayValue.compositeDogCompositeBowlShape(
-            compositeBowlRecords.find((r) => r.shape === value)
-          )
+          value
+            ? getDisplayValue.compositeDogCompositeBowlShape(
+                compositeBowlRecords.find((r) => r.shape === value)
+              )
+            : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentCompositeDogCompositeBowlShapeDisplayValue(
-            getDisplayValue.compositeDogCompositeBowlShape(
-              compositeBowlRecords.find((r) => r.shape === value)
-            )
+            value
+              ? getDisplayValue.compositeDogCompositeBowlShape(
+                  compositeBowlRecords.find((r) => r.shape === value)
+                )
+              : \\"\\"
           );
           setCurrentCompositeDogCompositeBowlShapeValue(value);
         }}
@@ -11485,7 +11509,9 @@ export default function CreateDogForm(props) {
         errorMessage={errors?.Owner?.errorMessage}
         getBadgeText={getDisplayValue.Owner}
         setFieldValue={(model) => {
-          setCurrentOwnerDisplayValue(getDisplayValue.Owner(model));
+          setCurrentOwnerDisplayValue(
+            model ? getDisplayValue.Owner(model) : \\"\\"
+          );
           setCurrentOwnerValue(model);
         }}
         inputFieldRef={OwnerRef}
@@ -12013,7 +12039,9 @@ export default function UpdateDogForm(props) {
         errorMessage={errors?.Owner?.errorMessage}
         getBadgeText={getDisplayValue.Owner}
         setFieldValue={(model) => {
-          setCurrentOwnerDisplayValue(getDisplayValue.Owner(model));
+          setCurrentOwnerDisplayValue(
+            model ? getDisplayValue.Owner(model) : \\"\\"
+          );
           setCurrentOwnerValue(model);
         }}
         inputFieldRef={OwnerRef}
@@ -12518,7 +12546,7 @@ export default function CreateOwnerForm(props) {
         errorMessage={errors?.Dog?.errorMessage}
         getBadgeText={getDisplayValue.Dog}
         setFieldValue={(model) => {
-          setCurrentDogDisplayValue(getDisplayValue.Dog(model));
+          setCurrentDogDisplayValue(model ? getDisplayValue.Dog(model) : \\"\\");
           setCurrentDogValue(model);
         }}
         inputFieldRef={DogRef}
@@ -13050,7 +13078,7 @@ export default function UpdateOwnerForm(props) {
         errorMessage={errors?.Dog?.errorMessage}
         getBadgeText={getDisplayValue.Dog}
         setFieldValue={(model) => {
-          setCurrentDogDisplayValue(getDisplayValue.Dog(model));
+          setCurrentDogDisplayValue(model ? getDisplayValue.Dog(model) : \\"\\");
           setCurrentDogValue(model);
         }}
         inputFieldRef={DogRef}
@@ -14221,7 +14249,9 @@ export default function TagCreateForm(props) {
         errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
-          setCurrentPostsDisplayValue(getDisplayValue.Posts(model));
+          setCurrentPostsDisplayValue(
+            model ? getDisplayValue.Posts(model) : \\"\\"
+          );
           setCurrentPostsValue(model);
         }}
         inputFieldRef={PostsRef}
@@ -14817,11 +14847,15 @@ export default function MyMemberForm(props) {
         hasError={errors?.teamID?.hasError}
         errorMessage={errors?.teamID?.errorMessage}
         getBadgeText={(value) =>
-          getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+          value
+            ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+            : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentTeamIDDisplayValue(
-            getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+            value
+              ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+              : \\"\\"
           );
           setCurrentTeamIDValue(value);
         }}
@@ -14891,7 +14925,7 @@ export default function MyMemberForm(props) {
         errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
-          setCurrentTeamDisplayValue(getDisplayValue.Team(model));
+          setCurrentTeamDisplayValue(model ? getDisplayValue.Team(model) : \\"\\");
           setCurrentTeamValue(model);
         }}
         inputFieldRef={TeamRef}
@@ -15363,7 +15397,9 @@ export default function SchoolCreateForm(props) {
         errorMessage={errors?.Students?.errorMessage}
         getBadgeText={getDisplayValue.Students}
         setFieldValue={(model) => {
-          setCurrentStudentsDisplayValue(getDisplayValue.Students(model));
+          setCurrentStudentsDisplayValue(
+            model ? getDisplayValue.Students(model) : \\"\\"
+          );
           setCurrentStudentsValue(model);
         }}
         inputFieldRef={StudentsRef}
@@ -15891,7 +15927,7 @@ export default function BookCreateForm(props) {
         getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={(model) => {
           setCurrentPrimaryAuthorDisplayValue(
-            getDisplayValue.primaryAuthor(model)
+            model ? getDisplayValue.primaryAuthor(model) : \\"\\"
           );
           setCurrentPrimaryAuthorValue(model);
         }}
@@ -16388,7 +16424,9 @@ export default function TagCreateForm(props) {
         errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
-          setCurrentPostsDisplayValue(getDisplayValue.Posts(model));
+          setCurrentPostsDisplayValue(
+            model ? getDisplayValue.Posts(model) : \\"\\"
+          );
           setCurrentPostsValue(model);
         }}
         inputFieldRef={PostsRef}
@@ -17005,7 +17043,7 @@ export default function BookCreateForm(props) {
         getBadgeText={getDisplayValue.primaryAuthor}
         setFieldValue={(model) => {
           setCurrentPrimaryAuthorDisplayValue(
-            getDisplayValue.primaryAuthor(model)
+            model ? getDisplayValue.primaryAuthor(model) : \\"\\"
           );
           setCurrentPrimaryAuthorValue(model);
         }}
@@ -17086,7 +17124,7 @@ export default function BookCreateForm(props) {
         getBadgeText={getDisplayValue.primaryTitle}
         setFieldValue={(model) => {
           setCurrentPrimaryTitleDisplayValue(
-            getDisplayValue.primaryTitle(model)
+            model ? getDisplayValue.primaryTitle(model) : \\"\\"
           );
           setCurrentPrimaryTitleValue(model);
         }}
@@ -18385,7 +18423,9 @@ export default function SchoolUpdateForm(props) {
         errorMessage={errors?.Students?.errorMessage}
         getBadgeText={getDisplayValue.Students}
         setFieldValue={(model) => {
-          setCurrentStudentsDisplayValue(getDisplayValue.Students(model));
+          setCurrentStudentsDisplayValue(
+            model ? getDisplayValue.Students(model) : \\"\\"
+          );
           setCurrentStudentsValue(model);
         }}
         inputFieldRef={StudentsRef}
@@ -18951,11 +18991,15 @@ export default function MyMemberForm(props) {
         hasError={errors?.teamID?.hasError}
         errorMessage={errors?.teamID?.errorMessage}
         getBadgeText={(value) =>
-          getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+          value
+            ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+            : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentTeamIDDisplayValue(
-            getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+            value
+              ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+              : \\"\\"
           );
           setCurrentTeamIDValue(value);
         }}
@@ -19026,7 +19070,7 @@ export default function MyMemberForm(props) {
         errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
-          setCurrentTeamDisplayValue(getDisplayValue.Team(model));
+          setCurrentTeamDisplayValue(model ? getDisplayValue.Team(model) : \\"\\");
           setCurrentTeamValue(model);
         }}
         inputFieldRef={TeamRef}
@@ -19598,7 +19642,9 @@ export default function TagUpdateForm(props) {
         errorMessage={errors?.Posts?.errorMessage}
         getBadgeText={getDisplayValue.Posts}
         setFieldValue={(model) => {
-          setCurrentPostsDisplayValue(getDisplayValue.Posts(model));
+          setCurrentPostsDisplayValue(
+            model ? getDisplayValue.Posts(model) : \\"\\"
+          );
           setCurrentPostsValue(model);
         }}
         inputFieldRef={PostsRef}
@@ -24624,11 +24670,15 @@ export default function MyMemberForm(props) {
         hasError={errors?.teamID?.hasError}
         errorMessage={errors?.teamID?.errorMessage}
         getBadgeText={(value) =>
-          getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+          value
+            ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+            : \\"\\"
         }
         setFieldValue={(value) => {
           setCurrentTeamIDDisplayValue(
-            getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+            value
+              ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+              : \\"\\"
           );
           setCurrentTeamIDValue(value);
         }}
@@ -24698,7 +24748,7 @@ export default function MyMemberForm(props) {
         errorMessage={errors?.Team?.errorMessage}
         getBadgeText={getDisplayValue.Team}
         setFieldValue={(model) => {
-          setCurrentTeamDisplayValue(getDisplayValue.Team(model));
+          setCurrentTeamDisplayValue(model ? getDisplayValue.Team(model) : \\"\\");
           setCurrentTeamValue(model);
         }}
         inputFieldRef={TeamRef}
@@ -25844,7 +25894,9 @@ export default function UpdateCarForm(props) {
         errorMessage={errors?.dealership?.errorMessage}
         getBadgeText={getDisplayValue.dealership}
         setFieldValue={(model) => {
-          setCurrentDealershipDisplayValue(getDisplayValue.dealership(model));
+          setCurrentDealershipDisplayValue(
+            model ? getDisplayValue.dealership(model) : \\"\\"
+          );
           setCurrentDealershipValue(model);
         }}
         inputFieldRef={dealershipRef}
@@ -26394,7 +26446,7 @@ export default function UpdateDealershipForm(props) {
         errorMessage={errors?.cars?.errorMessage}
         getBadgeText={getDisplayValue.cars}
         setFieldValue={(model) => {
-          setCurrentCarsDisplayValue(getDisplayValue.cars(model));
+          setCurrentCarsDisplayValue(model ? getDisplayValue.cars(model) : \\"\\");
           setCurrentCarsValue(model);
         }}
         inputFieldRef={carsRef}
