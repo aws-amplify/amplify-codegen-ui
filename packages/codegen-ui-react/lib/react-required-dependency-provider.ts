@@ -20,8 +20,8 @@ type SemVerRequiredDependency = RequiredDependency & {
 };
 
 export class ReactRequiredDependencyProvider extends RequiredDependencyProvider<SemVerRequiredDependency> {
-  getRequiredDependencies(): SemVerRequiredDependency[] {
-    return [
+  getRequiredDependencies(hasStorageManager?: boolean): SemVerRequiredDependency[] {
+    const dependencies = [
       {
         dependencyName: '@aws-amplify/ui-react',
         supportedSemVerPattern: '^4.6.0',
@@ -32,11 +32,16 @@ export class ReactRequiredDependencyProvider extends RequiredDependencyProvider<
         supportedSemVerPattern: '^5.0.2',
         reason: 'Required to leverage DataStore.',
       },
-      {
+    ];
+
+    if (hasStorageManager) {
+      dependencies.push({
         dependencyName: '@aws-amplify/ui-react-storage',
         supportedSemVerPattern: '^1.1.0',
         reason: 'Required to leverage StorageManager.',
-      },
-    ];
+      });
+    }
+
+    return dependencies;
   }
 }
