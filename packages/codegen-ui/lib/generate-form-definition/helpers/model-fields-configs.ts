@@ -24,7 +24,9 @@ import {
   FormFeatureFlags,
   GenericDataField,
   GenericDataModel,
+  GenericDataRelationshipType,
   GenericDataSchema,
+  HasManyRelationshipType,
   ModelFieldsConfigs,
   StudioFieldInputConfig,
   StudioForm,
@@ -37,6 +39,9 @@ import { FIELD_TYPE_MAP } from './field-type-map';
 const isModelDataType = (field: GenericDataField): field is GenericDataField & { dataType: { model: string } } =>
   typeof field.dataType === 'object' && 'model' in field.dataType;
 
+const isHasManyRelationship = (relationship: GenericDataRelationshipType): relationship is HasManyRelationshipType =>
+  ('isHasManyIndex' in relationship && relationship.isHasManyIndex) ?? false;
+
 function extractCorrespondingKey({
   thisModel,
   relatedModel,
@@ -46,57 +51,57 @@ function extractCorrespondingKey({
   relatedModel: GenericDataModel;
   relationshipFieldName: string;
 }): string {
-  const relationshipField = thisModel.fields[relationshipFieldName];
+  const { relationship: thisModelRelationship } = thisModel.fields[relationshipFieldName] ?? {};
 
-  if (
-    relationshipField.relationship &&
-    'isHasManyIndex' in relationshipField.relationship &&
-    relationshipField.relationship.isHasManyIndex
-  ) {
-    const correspondingFieldTuple = Object.entries(relatedModel.fields).find(
-      ([, field]) =>
-        field.relationship?.type === 'HAS_MANY' &&
-        field.relationship?.relatedModelFields.includes(relationshipFieldName),
-    );
-    if (correspondingFieldTuple) {
-      const correspondingField = correspondingFieldTuple[1].relationship;
-      if (correspondingField?.type === 'HAS_MANY') {
-        const indexOfKey = correspondingField.relatedModelFields.indexOf(relationshipFieldName);
-        if (indexOfKey !== -1) {
-          const relatedPrimaryKey = relatedModel.primaryKeys[indexOfKey];
-          if (relatedPrimaryKey) {
-            // secondary index on child of 1:m
-            return relatedPrimaryKey;
+  if (thisModelRelationship) {
+    if (isHasManyRelationship(thisModelRelationship)) {
+      const correspondingFieldTuple = Object.values(relatedModel.fields).find(
+        ({ relationship }) =>
+          relationship?.type === 'HAS_MANY' && relationship?.relatedModelFields.includes(relationshipFieldName),
+      );
+
+      if (correspondingFieldTuple) {
+        const correspondingField = correspondingFieldTuple.relationship;
+
+        if (correspondingField?.type === 'HAS_MANY') {
+          const indexOfKey = correspondingField.relatedModelFields.indexOf(relationshipFieldName);
+
+          if (indexOfKey !== -1) {
+            const relatedPrimaryKey = relatedModel.primaryKeys[indexOfKey];
+
+            if (relatedPrimaryKey) {
+              // secondary index on child of 1:m
+              return relatedPrimaryKey;
+            }
           }
         }
       }
-    }
-  }
+    } else {
+      const modelRelationshipFieldTuple = Object.values(thisModel.fields)
+        .filter(isModelDataType)
+        .find(({ relationship: matchingFieldRelationship }) => {
+          return (
+            matchingFieldRelationship?.type === thisModelRelationship.type &&
+            matchingFieldRelationship?.relatedModelName === thisModelRelationship.relatedModelName &&
+            matchingFieldRelationship?.associatedFields?.includes(relationshipFieldName)
+          );
+        });
 
-  if (
-    relationshipField.relationship &&
-    (relationshipField.relationship.type === 'HAS_ONE' || relationshipField.relationship.type === 'BELONGS_TO')
-  ) {
-    const modelRelationshipFieldTuple = Object.entries(thisModel.fields).find(
-      ([, field]) =>
-        field.relationship?.type === relationshipField.relationship?.type &&
-        isModelDataType(field) &&
-        field.relationship?.relatedModelName === relationshipField.relationship?.relatedModelName,
-    );
+      if (modelRelationshipFieldTuple) {
+        const modelRelationshipField = modelRelationshipFieldTuple.relationship;
 
-    if (modelRelationshipFieldTuple) {
-      const modelRelationshipField = modelRelationshipFieldTuple[1].relationship;
-      if (
-        modelRelationshipField &&
-        'associatedFields' in modelRelationshipField &&
-        modelRelationshipField.associatedFields
-      ) {
-        const indexOfKey = modelRelationshipField.associatedFields.indexOf(relationshipFieldName);
-        if (indexOfKey !== -1) {
-          const relatedPrimaryKey = relatedModel.primaryKeys[indexOfKey];
-          if (relatedPrimaryKey) {
-            // index on parent of 1:1
-            return relatedPrimaryKey;
+        if (
+          modelRelationshipField &&
+          'associatedFields' in modelRelationshipField &&
+          modelRelationshipField.associatedFields
+        ) {
+          const indexOfKey = modelRelationshipField.associatedFields.indexOf(relationshipFieldName);
+          if (indexOfKey !== -1) {
+            const relatedPrimaryKey = relatedModel.primaryKeys[indexOfKey];
+            if (relatedPrimaryKey) {
+              // index on parent of 1:1
+              return relatedPrimaryKey;
+            }
           }
         }
       }

@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "test": "jest",
-    "test:ci": "jest --ci --maxWorkers=30%",
+    "test:ci": "jest -i --ci",
     "test:update": "jest --updateSnapshot",
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "npm run build -- --watch"
