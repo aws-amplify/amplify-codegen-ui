@@ -1,6 +1,6 @@
 {
   "name": "@aws-amplify/codegen-ui-react",
-  "version": "2.13.0",
+  "version": "2.13.1",
   "description": "Amplify UI React code generation implementation",
   "author": "Amazon Web Services",
   "repository": "https://github.com/aws-amplify/amplify-codegen-ui.git",
@@ -14,7 +14,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:ci": "jest --ci --maxWorkers=30%",
+    "test:ci": "jest --ci -i",
     "test:update": "jest --updateSnapshot",
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "npm run build -- --watch"
@@ -31,7 +31,7 @@
     "semver": "^7.3.5"
   },
   "dependencies": {
-    "@aws-amplify/codegen-ui": "2.13.0",
+    "@aws-amplify/codegen-ui": "2.13.1",
     "@typescript/vfs": "~1.3.5",
     "typescript": "<=4.5.0"
   },
