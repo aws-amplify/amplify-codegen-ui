@@ -14,13 +14,16 @@
   limitations under the License.
  */
 
+import { ModelIntrospectionSchema } from '@aws-amplify/appsync-modelgen-plugin';
 import {
   mapModelFieldsConfigs,
   getFieldTypeMapKey,
   getFieldConfigFromModelField,
 } from '../../../generate-form-definition/helpers';
+import { getGenericFromDataStore } from '../../../generic-from-datastore';
 import { FormDefinition, GenericDataField, GenericDataSchema } from '../../../types';
 import { getBasicFormDefinition } from '../../__utils__/basic-form-definition';
+import schemaWith2HasOne from '../../__utils__/introspection-schemas/schema-with-2-has-one.json';
 
 describe('mapModelFieldsConfigs', () => {
   it('should map to elementMatrix and add to modelFieldsConfigs', () => {
@@ -98,6 +101,74 @@ describe('mapModelFieldsConfigs', () => {
     };
 
     expect(() => mapModelFieldsConfigs({ dataTypeName: 'Cat', formDefinition, dataSchema })).toThrow();
+  });
+
+  it('should properly map all hasOne relationships if multiple are provided', () => {
+    const genericDataSchema = getGenericFromDataStore(schemaWith2HasOne as unknown as ModelIntrospectionSchema);
+
+    const modelFields = mapModelFieldsConfigs({
+      dataTypeName: 'Foo',
+      formDefinition: {
+        form: {
+          layoutStyle: { horizontalGap: { value: '12' }, verticalGap: { value: '12' }, outerPadding: { value: '5' } },
+          labelDecorator: 'none',
+        },
+        elements: {},
+        buttons: {
+          buttonConfigs: {},
+          position: '',
+          buttonMatrix: [],
+        },
+        elementMatrix: [],
+      },
+      dataSchema: genericDataSchema,
+      formActionType: 'create',
+      featureFlags: { isRelationshipSupported: true },
+    });
+
+    const userValueMappings = {
+      bindingProperties: {
+        User: {
+          bindingProperties: {
+            model: 'User',
+          },
+          type: 'Data',
+        },
+      },
+      values: [
+        {
+          displayValue: {
+            concat: [
+              {
+                bindingProperties: {
+                  field: 'name',
+                  property: 'User',
+                },
+              },
+              {
+                value: ' - ',
+              },
+              {
+                bindingProperties: {
+                  field: 'id',
+                  property: 'User',
+                },
+              },
+            ],
+            isDefault: true,
+          },
+          value: {
+            bindingProperties: {
+              field: 'id',
+              property: 'User',
+            },
+          },
+        },
+      ],
+    };
+
+    expect(modelFields.fooUser1Id.inputType?.valueMappings).toEqual(userValueMappings);
+    expect(modelFields.fooUser2Id.inputType?.valueMappings).toEqual(userValueMappings);
   });
 
   it('should generate config from id field but not add it to matrix', () => {
