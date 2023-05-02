@@ -67,6 +67,7 @@ jobs:
       - run:
           name: Unit Test
           command: npm run test:ci
+          no_output_timeout: 30m
       - run:
           name: Codecov
           command: npx codecov
