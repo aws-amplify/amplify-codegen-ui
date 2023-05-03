@@ -28,10 +28,13 @@ import * as ThemeSchemas from '../themes';
 import * as FormSchemas from '../forms';
 import * as ViewSchemas from '../views';
 
-const DEFAULT_RENDER_CONFIG = {
+const DEFAULT_RENDER_CONFIG: ReactRenderConfig = {
   module: ModuleKind.CommonJS,
   target: ScriptTarget.ES2015,
   script: ScriptKind.TSX,
+  apiConfiguration: {
+    dataApi: 'DataStore',
+  },
 };
 
 const DEFAULT_OUTPUT_CONFIG = {
@@ -49,8 +52,8 @@ export type TestCase = {
 export type TestGeneratorParams = {
   writeToLogger: boolean;
   writeToDisk: boolean;
-  renderConfigOverride?: ReactRenderConfig;
-  outputConfigOverride?: ReactOutputConfig;
+  renderConfigOverride?: Partial<ReactRenderConfig>;
+  outputConfigOverride?: Partial<ReactOutputConfig>;
   immediatelyThrowGenerateErrors?: boolean;
 };
 
