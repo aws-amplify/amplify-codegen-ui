@@ -53,7 +53,7 @@ import {
   getModelNameProp,
   lowerCaseFirst,
 } from '../helpers';
-import { ImportCollection, ImportSource, ImportValue } from '../imports';
+import { ImportCollection, ImportValue } from '../imports';
 import { PrimitiveTypeParameter, Primitive, primitiveOverrideProp } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
 import { ReactOutputManager } from '../react-output-manager';
@@ -68,7 +68,6 @@ import { generateArrayFieldComponent } from '../utils/forms/array-field-componen
 import { hasTokenReference } from '../utils/forms/layout-helpers';
 import { convertTimeStampToDateAST, convertToLocalAST } from '../utils/forms/value-mappers';
 import { addUseEffectWrapper } from '../utils/generate-react-hooks';
-import { RequiredKeys } from '../utils/type-utils';
 import {
   buildMutationBindings,
   buildOverrideTypesBindings,
@@ -122,7 +121,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection: ImportCollection;
 
-  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
+  protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig;
 
   protected formDefinition: FormDefinition;
 
@@ -159,7 +158,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     this.componentMetadata = computeComponentMetadata(this.formComponent);
     this.componentMetadata.formMetadata = mapFormMetadata(this.component, this.formDefinition);
-    this.importCollection = new ImportCollection(this.componentMetadata);
+    this.importCollection = new ImportCollection({ rendererConfig: renderConfig });
+    this.importCollection.ingestComponentMetadata(this.componentMetadata);
     if (dataSchema) {
       const dataSchemaMetadata = dataSchema;
       this.componentMetadata.dataSchemaMetadata = dataSchemaMetadata;
@@ -338,7 +338,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
       this.requiredDataModels.push(dataTypeName);
-      modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      modelName = this.importCollection.addModelImport(dataTypeName);
     }
 
     return [
@@ -398,7 +398,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
       this.requiredDataModels.push(dataTypeName);
-      modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, dataTypeName);
+      modelName = this.importCollection.addModelImport(dataTypeName);
     }
 
     const elements: BindingElement[] = [
@@ -597,7 +597,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
 
     modelsToImport.forEach((model) => {
       this.requiredDataModels.push(model);
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+      this.importCollection.addModelImport(model);
     });
 
     // datastore relationship query

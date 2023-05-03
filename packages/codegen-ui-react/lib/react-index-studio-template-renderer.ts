@@ -20,7 +20,6 @@ import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-re
 import { ImportCollection } from './imports';
 import { ReactOutputManager } from './react-output-manager';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
-import { RequiredKeys } from './utils/type-utils';
 
 export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
   string,
@@ -33,7 +32,7 @@ export class ReactIndexStudioTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection = new ImportCollection();
 
-  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
+  protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig;
 
   fileName: string;
 

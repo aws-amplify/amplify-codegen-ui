@@ -14,7 +14,12 @@
   limitations under the License.
  */
 import { ModuleKind, ScriptTarget, ScriptKind } from '..';
-import { authorHasManySchema, compositePersonSchema, generateWithAmplifyRenderer } from './__utils__';
+import {
+  authorHasManySchema,
+  compositePersonSchema,
+  generateWithAmplifyRenderer,
+  rendererConfigWithGraphQL,
+} from './__utils__';
 
 describe('amplify render tests', () => {
   describe('basic component tests', () => {
@@ -85,6 +90,11 @@ describe('amplify render tests', () => {
   describe('component with data binding', () => {
     it('should add model imports', () => {
       const generatedCode = generateWithAmplifyRenderer('componentWithDataBinding');
+      expect(generatedCode.componentText).toMatchSnapshot();
+    });
+
+    it('should add GraphQL model imports', () => {
+      const generatedCode = generateWithAmplifyRenderer('componentWithDataBinding', rendererConfigWithGraphQL);
       expect(generatedCode.componentText).toMatchSnapshot();
     });
 
@@ -368,6 +378,26 @@ describe('amplify render tests', () => {
 
       it('DataStoreDeleteItem', () => {
         expect(generateWithAmplifyRenderer('workflow/dataStoreDeleteItem')).toMatchSnapshot();
+      });
+    });
+
+    describe('GraphQL', () => {
+      it('DataStoreCreateItem', () => {
+        expect(
+          generateWithAmplifyRenderer('workflow/dataStoreCreateItem', rendererConfigWithGraphQL),
+        ).toMatchSnapshot();
+      });
+
+      it('DataStoreUpdateItem', () => {
+        expect(
+          generateWithAmplifyRenderer('workflow/dataStoreUpdateItem', rendererConfigWithGraphQL),
+        ).toMatchSnapshot();
+      });
+
+      it('DataStoreDeleteItem', () => {
+        expect(
+          generateWithAmplifyRenderer('workflow/dataStoreDeleteItem', rendererConfigWithGraphQL),
+        ).toMatchSnapshot();
       });
     });
 

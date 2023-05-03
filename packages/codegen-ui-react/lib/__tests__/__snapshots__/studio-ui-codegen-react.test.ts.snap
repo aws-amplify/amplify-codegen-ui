@@ -151,6 +151,166 @@ export default function UpdateCustomerButton(
 }
 `;
 
+exports[`amplify render tests actions GraphQL DataStoreCreateItem 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import * as React from \\"react\\";
+import { API } from \\"@aws-amplify/api\\";
+import { createCustomer } from \\"../graphql/mutations\\";
+import { Customer } from \\"../API\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CreateCustomerButtonOverridesProps = {
+  CreateCustomerButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type CreateCustomerButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: CreateCustomerButtonOverridesProps | undefined | null;
+  }
+>;
+export default function CreateCustomerButton(
+  props: CreateCustomerButtonProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const createCustomerButtonOnClick = async () => {
+    const input = { firstName: \\"Din\\", lastName: \\"Djarin\\" };
+    await API.graphql({
+      query: createCustomer,
+      variables: { input },
+    });
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Create\\"
+      onClick={() => {
+        createCustomerButtonOnClick();
+      }}
+      {...getOverrideProps(overrides, \\"CreateCustomerButton\\")}
+      {...rest}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests actions GraphQL DataStoreDeleteItem 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import * as React from \\"react\\";
+import { API } from \\"@aws-amplify/api\\";
+import { deleteCustomer } from \\"../graphql/mutations\\";
+import { Customer } from \\"../API\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type DeleteCustomerButtonOverridesProps = {
+  DeleteCustomerButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type DeleteCustomerButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: DeleteCustomerButtonOverridesProps | undefined | null;
+  }
+>;
+export default function DeleteCustomerButton(
+  props: DeleteCustomerButtonProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const deleteCustomerButtonOnClick = async () => {
+    const input = { id: \\"d9887268-47dd-4899-9568-db5809218751\\" };
+    await API.graphql({
+      query: deleteCustomer,
+      variables: { input },
+    });
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Delete\\"
+      onClick={() => {
+        deleteCustomerButtonOnClick();
+      }}
+      {...getOverrideProps(overrides, \\"DeleteCustomerButton\\")}
+      {...rest}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
+exports[`amplify render tests actions GraphQL DataStoreUpdateItem 1`] = `
+Object {
+  "componentText": "/* eslint-disable */
+import * as React from \\"react\\";
+import { API } from \\"@aws-amplify/api\\";
+import { updateCustomer } from \\"../graphql/mutations\\";
+import { Customer } from \\"../API\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateCustomerButtonOverridesProps = {
+  UpdateCustomerButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type UpdateCustomerButtonProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    overrides?: UpdateCustomerButtonOverridesProps | undefined | null;
+  }
+>;
+export default function UpdateCustomerButton(
+  props: UpdateCustomerButtonProps
+): React.ReactElement {
+  const { overrides, ...rest } = props;
+  const updateCustomerButtonOnClick = async () => {
+    const input = {
+      firstName: \\"Din\\",
+      lastName: \\"Djarin\\",
+      id: \\"d9887268-47dd-4899-9568-db5809218751\\",
+    };
+    await API.graphql({
+      query: updateCustomer,
+      variables: { input },
+    });
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      children=\\"Update\\"
+      onClick={() => {
+        updateCustomerButtonOnClick();
+      }}
+      {...getOverrideProps(overrides, \\"UpdateCustomerButton\\")}
+      {...rest}
+    ></Button>
+  );
+}
+",
+  "declaration": undefined,
+  "renderComponentToFilesystem": [Function],
+}
+`;
+
 exports[`amplify render tests actions auth signs out 1`] = `
 Object {
   "componentText": "/* eslint-disable */
@@ -4830,6 +4990,50 @@ export default function ComponentWithSlotBinding(
         {...getOverrideProps(overrides, \\"Rectangle\\")}
       ></View>
     </Flex>
+  );
+}
+"
+`;
+
+exports[`amplify render tests component with data binding should add GraphQL model imports 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { User } from \\"../API\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Button, ButtonProps } from \\"@aws-amplify/ui-react\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ComponentWithDataBindingOverridesProps = {
+  ComponentWithDataBinding?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type ComponentWithDataBindingProps = React.PropsWithChildren<
+  Partial<ButtonProps> & {
+    width?: Number;
+    isDisabled?: Boolean;
+    buttonUser?: User;
+    buttonColor?: String;
+  } & {
+    overrides?: ComponentWithDataBindingOverridesProps | undefined | null;
+  }
+>;
+export default function ComponentWithDataBinding(
+  props: ComponentWithDataBindingProps
+): React.ReactElement {
+  const { width, isDisabled, buttonUser, buttonColor, overrides, ...rest } =
+    props;
+  return (
+    /* @ts-ignore: TS2322 */
+    <Button
+      labelWidth={width}
+      disabled={isDisabled}
+      children={buttonUser?.username || \\"hspain@gmail.com\\"}
+      {...getOverrideProps(overrides, \\"ComponentWithDataBinding\\")}
+      {...rest}
+    ></Button>
   );
 }
 "

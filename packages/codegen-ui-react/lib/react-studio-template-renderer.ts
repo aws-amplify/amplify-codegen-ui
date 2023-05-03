@@ -93,7 +93,6 @@ import {
   PRIMITIVE_OVERRIDE_PROPS,
   isPrimitive,
 } from './primitive';
-import { RequiredKeys } from './utils/type-utils';
 import {
   getComponentActions,
   buildUseActionStatement,
@@ -123,7 +122,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
 > {
   protected importCollection: ImportCollection;
 
-  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
+  protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig;
 
   protected componentMetadata: ComponentMetadata;
 
@@ -142,7 +141,8 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     this.componentMetadata.dataSchemaMetadata = dataSchema;
     this.mapSyntheticPropsForVariants();
     this.mapSyntheticProps();
-    this.importCollection = new ImportCollection(this.componentMetadata);
+    this.importCollection = new ImportCollection({ rendererConfig: renderConfig });
+    this.importCollection.ingestComponentMetadata(this.componentMetadata);
     addBindingPropertiesImports(this.component, this.importCollection);
     // TODO: throw warnings on invalid config combinations. i.e. CommonJS + JSX
   }
@@ -503,10 +503,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           );
           propSignatures.push(propSignature);
         } else if (isDataPropertyBinding(binding)) {
-          const modelName = this.importCollection.getMappedAlias(
-            ImportSource.LOCAL_MODELS,
-            binding.bindingProperties.model,
-          );
+          const modelName = this.importCollection.getMappedModelAlias(binding.bindingProperties.model);
           const propSignature = factory.createPropertySignature(
             undefined,
             propName,
@@ -717,7 +714,12 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       statements.push(entry);
     });
 
-    const stateStatements = buildStateStatements(component, this.componentMetadata, this.importCollection);
+    const stateStatements = buildStateStatements(
+      component,
+      this.componentMetadata,
+      this.importCollection,
+      this.renderConfig.apiConfiguration?.dataApi,
+    );
     stateStatements.forEach((entry) => {
       statements.push(entry);
     });
@@ -931,7 +933,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     if (isStudioComponentWithCollectionProperties(component)) {
       Object.entries(component.collectionProperties).forEach((collectionProp) => {
         const [propName, { model, sort, predicate }] = collectionProp;
-        const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+        const modelName = this.importCollection.addModelImport(model);
 
         if (predicate) {
           statements.push(this.buildPredicateDeclaration(propName, predicate));
@@ -1247,7 +1249,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           const { bindingProperties } = binding;
           if ('predicate' in bindingProperties && bindingProperties.predicate !== undefined) {
             this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
-            const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, bindingProperties.model);
+            const modelName = this.importCollection.addModelImport(bindingProperties.model);
 
             /* const buttonColorFilter = {
              *   field: "userID",
@@ -1474,7 +1476,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     const actions = getComponentActions(this.component);
     if (actions) {
       return actions.map(({ action, identifier }) =>
-        buildUseActionStatement(this.componentMetadata, action, identifier, this.importCollection),
+        buildUseActionStatement(
+          this.componentMetadata,
+          action,
+          identifier,
+          this.importCollection,
+          this.renderConfig.apiConfiguration?.dataApi,
+        ),
       );
     }
     return [];

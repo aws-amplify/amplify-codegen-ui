@@ -23,7 +23,7 @@ import {
 } from '@aws-amplify/codegen-ui';
 import { getRecordsName, getLinkedDataName, buildAccessChain, getCanUnlinkModelName } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
-import { ImportCollection, ImportSource } from '../../imports';
+import { ImportCollection } from '../../imports';
 import { lowerCaseFirst, getSetNameIdentifier } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { extractModelAndKeys, getIDValueCallChain, getMatchEveryModelFieldCallExpression } from './model-values';
@@ -35,7 +35,7 @@ export const buildRelationshipQuery = (relatedModelName: string, importCollectio
     factory.createPropertyAssignment(factory.createIdentifier('type'), factory.createStringLiteral('collection')),
     factory.createPropertyAssignment(
       factory.createIdentifier('model'),
-      factory.createIdentifier(importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, relatedModelName)),
+      factory.createIdentifier(importCollection.addModelImport(relatedModelName)),
     ),
   ];
   return buildBaseCollectionVariableStatement(

@@ -53,12 +53,11 @@ import {
   getDeclarationFilename,
   transpile,
 } from '../react-studio-template-renderer-helper';
-import { ImportCollection, ImportSource, ImportValue } from '../imports';
+import { ImportCollection, ImportValue } from '../imports';
 import { Primitive, PrimitiveTypeParameter } from '../primitive';
 import { getComponentPropName } from '../react-component-render-helper';
 import { ReactOutputManager } from '../react-output-manager';
 import { ReactRenderConfig, scriptKindToFileExtension } from '../react-render-config';
-import { RequiredKeys } from '../utils/type-utils';
 import {
   buildDataStoreCollectionCall,
   getDataStoreName,
@@ -79,7 +78,7 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection = new ImportCollection();
 
-  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
+  protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig;
 
   protected viewDefinition: TableDefinition = DEFAULT_TABLE_DEFINITION;
 
@@ -259,7 +258,7 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
     const itemsProp = 'itemsProp';
     const isDataStoreEnabled = type === 'DataStore' && model;
     if (isDataStoreEnabled) {
-      this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
+      this.importCollection.addModelImport(model);
       this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
       elements.push(
         factory.createBindingElement(

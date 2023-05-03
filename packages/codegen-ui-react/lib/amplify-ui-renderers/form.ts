@@ -94,7 +94,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
       dataType: { dataSourceType, dataTypeName },
       formActionType,
     } = this.form;
-    const importedModelName = this.importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, dataTypeName);
+    const importedModelName = this.importCollection.getMappedModelAlias(dataTypeName);
 
     const { formMetadata } = this.componentMetadata;
     if (!formMetadata) {

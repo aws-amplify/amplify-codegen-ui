@@ -19,7 +19,6 @@ import { StudioTemplateRenderer } from '@aws-amplify/codegen-ui';
 import { ReactRenderConfig, scriptKindToFileExtensionNonReact } from './react-render-config';
 import { ImportCollection } from './imports';
 import { ReactOutputManager } from './react-output-manager';
-import { RequiredKeys } from './utils/type-utils';
 import { transpile, buildPrinter, defaultRenderConfig } from './react-studio-template-renderer-helper';
 import { generateValidationFunction } from './utils/forms/validation';
 import { getFetchByPathNodeFunction } from './utils/json-path-fetch';
@@ -39,7 +38,7 @@ export class ReactUtilsStudioTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection = new ImportCollection();
 
-  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
+  protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig;
 
   fileName: string;
 
