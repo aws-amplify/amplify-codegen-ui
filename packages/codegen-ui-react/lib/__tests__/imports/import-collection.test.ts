@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { ImportCollection, ImportSource } from '../../imports';
-import { assertASTMatchesSnapshot } from '../__utils__';
+import { assertASTMatchesSnapshot, rendererConfigWithGraphQL } from '../__utils__';
 
 function assertImportCollectionMatchesSnapshot(importCollection: ImportCollection) {
   assertASTMatchesSnapshot(importCollection.buildImportStatements());
@@ -70,7 +70,8 @@ describe('ImportCollection', () => {
       assertImportCollectionMatchesSnapshot(importCollection);
     });
     test('model imports colliding with exisiting imports', () => {
-      const importCollection = new ImportCollection({
+      const importCollection = new ImportCollection();
+      importCollection.ingestComponentMetadata({
         componentNameToTypeMap: { TextInput: 'TextField' },
         hasAuthBindings: false,
         requiredDataModels: [],
@@ -103,6 +104,88 @@ describe('ImportCollection', () => {
     collectionA.mergeCollections(collectionB);
 
     assertImportCollectionMatchesSnapshot(collectionA);
+  });
+
+  describe('addGraphqlMutationImport', () => {
+    it('should import mutation correctly', () => {
+      const importCollection = new ImportCollection({ rendererConfig: rendererConfigWithGraphQL });
+      importCollection.addGraphqlMutationImport('createPost');
+      assertImportCollectionMatchesSnapshot(importCollection);
+    });
+  });
+
+  describe('addGraphqlQueryImport', () => {
+    it('should import query correctly', () => {
+      const importCollection = new ImportCollection({ rendererConfig: rendererConfigWithGraphQL });
+      importCollection.addGraphqlQueryImport('listPosts');
+      assertImportCollectionMatchesSnapshot(importCollection);
+    });
+  });
+
+  describe('addGraphqlSubscriptionImport', () => {
+    it('should import subscription correctly', () => {
+      const importCollection = new ImportCollection({ rendererConfig: rendererConfigWithGraphQL });
+      importCollection.addGraphqlSubscriptionImport('onCreatePost');
+      assertImportCollectionMatchesSnapshot(importCollection);
+    });
+  });
+
+  describe('addModelImport', () => {
+    it('should use path from rendererConfig if using GraphQL', () => {
+      const importCollection = new ImportCollection({ rendererConfig: rendererConfigWithGraphQL });
+      importCollection.addModelImport('Post');
+      assertImportCollectionMatchesSnapshot(importCollection);
+    });
+
+    it('should use local models constant if using DataStore', () => {
+      const importCollection = new ImportCollection();
+      importCollection.addModelImport('Post');
+      assertImportCollectionMatchesSnapshot(importCollection);
+    });
+  });
+
+  describe('getMappedModelAlias', () => {
+    it('should successfully retrieve model alias when using DataStore', () => {
+      const importCollection = new ImportCollection();
+      importCollection.ingestComponentMetadata({
+        componentNameToTypeMap: { TextInput: 'TextField' },
+        hasAuthBindings: false,
+        requiredDataModels: [],
+        stateReferences: [],
+      });
+      importCollection.addModelImport('TextField0');
+      importCollection.addModelImport('TextField');
+      importCollection.addModelImport('TestModel');
+      importCollection.addModelImport('ButtonProps');
+      importCollection.addModelImport('React');
+      expect(importCollection.getMappedModelAlias('TextField')).toEqual('TextField1');
+      expect(importCollection.getMappedModelAlias('TestModel')).toEqual('TestModel');
+      expect(importCollection.getMappedModelAlias('TextField0')).toEqual('TextField0');
+      expect(importCollection.getMappedModelAlias('ButtonProps')).toEqual('ButtonProps0');
+      expect(importCollection.getMappedModelAlias('React')).toEqual('React0');
+    });
+
+    // TODO: import collection currently does not alias import collisions
+    //   unless it's explicitly for the ImportSource.LOCAL_MODELS package
+    it('should successfully retrieve model alias when using GraphQL', () => {
+      const importCollection = new ImportCollection({ rendererConfig: rendererConfigWithGraphQL });
+      // importCollection.ingestComponentMetadata({
+      //   componentNameToTypeMap: { TextInput: 'TextField' },
+      //   hasAuthBindings: false,
+      //   requiredDataModels: [],
+      //   stateReferences: [],
+      // });
+      // importCollection.addModelImport('TextField0');
+      // importCollection.addModelImport('TextField');
+      importCollection.addModelImport('TestModel');
+      // importCollection.addModelImport('ButtonProps');
+      // importCollection.addModelImport('React');
+      // expect(importCollection.getMappedModelAlias('TextField')).toEqual('TextField1');
+      expect(importCollection.getMappedModelAlias('TestModel')).toEqual('TestModel');
+      // expect(importCollection.getMappedModelAlias('TextField0')).toEqual('TextField0');
+      // expect(importCollection.getMappedModelAlias('ButtonProps')).toEqual('ButtonProps0');
+      // expect(importCollection.getMappedModelAlias('React')).toEqual('React0');
+    });
   });
 
   test('buildSampleSnippetImports', () => {

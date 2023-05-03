@@ -42,7 +42,6 @@ import {
   getDeclarationFilename,
   formatCode,
 } from './react-studio-template-renderer-helper';
-import { RequiredKeys } from './utils/type-utils';
 
 export type ReactThemeStudioTemplateRendererOptions = {
   renderDefaultTheme?: boolean;
@@ -60,7 +59,7 @@ export class ReactThemeStudioTemplateRenderer extends StudioTemplateRenderer<
 > {
   protected importCollection = new ImportCollection();
 
-  protected renderConfig: RequiredKeys<ReactRenderConfig, keyof typeof defaultRenderConfig>;
+  protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig;
 
   protected options: ReactThemeStudioTemplateRendererOptions | undefined;
 

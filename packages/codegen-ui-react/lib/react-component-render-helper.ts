@@ -59,7 +59,7 @@ import {
   GenericDataField,
   StudioFormInputFieldProperty,
 } from '@aws-amplify/codegen-ui/lib/types';
-import { ImportCollection, ImportSource } from './imports';
+import { ImportCollection } from './imports';
 import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 import { getChildPropMappingForComponentName } from './workflow/utils';
 import nameReplacements from './name-replacements';
@@ -673,7 +673,7 @@ export function addBindingPropertiesImports(
   if (typeof component === 'object' && 'bindingProperties' in component) {
     Object.entries(component.bindingProperties).forEach(([, binding]) => {
       if (typeof binding === 'object' && 'bindingProperties' in binding && 'model' in binding.bindingProperties) {
-        importCollection.addImport(ImportSource.LOCAL_MODELS, binding.bindingProperties.model);
+        importCollection.addModelImport(binding.bindingProperties.model);
       }
     });
   }

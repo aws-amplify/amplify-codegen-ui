@@ -17,7 +17,7 @@ import { GenericDataSchema, GenericDataField } from '@aws-amplify/codegen-ui';
 import { FieldConfigMetadata } from '@aws-amplify/codegen-ui/lib/types';
 import { factory, NodeFlags, SyntaxKind, ThrowStatement } from 'typescript';
 import { lowerCaseFirst } from '../../helpers';
-import { ImportCollection, ImportSource } from '../../imports';
+import { ImportCollection } from '../../imports';
 import { isModelDataType } from './render-checkers';
 import { getRecordName } from './form-state';
 
@@ -261,8 +261,8 @@ export function getBiDirectionalRelationshipStatements({
     fieldBiDirectionalWithPrimaryKeys,
   } = getFieldBiDirectionalWithReturnValue;
   const [fieldName, { relationship }] = fieldConfig;
-  const importedRelatedModelName = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, relatedModelName);
-  const importedThisModelName = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, modelName);
+  const importedRelatedModelName = importCollection.getMappedModelAlias(relatedModelName);
+  const importedThisModelName = importCollection.getMappedModelAlias(modelName);
   // TODO: setting associated fields to `undefined` is a workaround.
   // remove after DataStore addresses issue: https://github.com/aws-amplify/amplify-js/issues/10750
   const associatedFields =

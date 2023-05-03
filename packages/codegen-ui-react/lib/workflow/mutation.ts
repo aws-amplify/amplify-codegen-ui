@@ -41,6 +41,7 @@ import {
   PrimitiveLevelPropConfiguration,
   PrimitiveDefaultPropertyValue,
 } from '../primitive';
+import { DataApiKind } from '../react-render-config';
 
 type EventHandlerBuilder = (setStateName: string, stateName: string) => JsxExpression;
 
@@ -278,9 +279,11 @@ export function buildStateStatements(
   component: StudioComponent,
   componentMetadata: ComponentMetadata,
   importCollection: ImportCollection,
+  apiKind: DataApiKind = 'DataStore',
 ): Statement[] {
+  const stateHook = apiKind === 'DataStore' ? ImportValue.USE_STATE_MUTATION_ACTION : ImportValue.USE_STATE;
   if (componentMetadata.stateReferences.length > 0) {
-    importCollection.addMappedImport(ImportValue.USE_STATE_MUTATION_ACTION);
+    importCollection.addMappedImport(stateHook);
   }
   const dedupedStateReferences = dedupeStateReferences(componentMetadata.stateReferences);
   return dedupedStateReferences.map((stateReference) => {
@@ -305,7 +308,7 @@ export function buildStateStatements(
             ]),
             undefined,
             undefined,
-            factory.createCallExpression(factory.createIdentifier('useStateMutationAction'), undefined, [
+            factory.createCallExpression(factory.createIdentifier(stateHook), undefined, [
               getStateInitialValue(component, componentMetadata, stateReference),
             ]),
           ),
