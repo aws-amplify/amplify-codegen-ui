@@ -13,6 +13,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export { buildDataStoreExpression, addFormAttributes } from './form-renderer-helper';
+export { buildExpression, addFormAttributes } from './form-renderer-helper';
 export * from './react-form-renderer';
 export * from './form-renderer-helper/type-helper';

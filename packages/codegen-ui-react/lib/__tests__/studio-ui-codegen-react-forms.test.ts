@@ -15,7 +15,11 @@
  */
 /* eslint-disable no-template-curly-in-string */
 import { ImportSource } from '../imports';
-import { generateComponentOnlyWithAmplifyFormRenderer, generateWithAmplifyFormRenderer } from './__utils__';
+import {
+  generateComponentOnlyWithAmplifyFormRenderer,
+  generateWithAmplifyFormRenderer,
+  rendererConfigWithGraphQL,
+} from './__utils__';
 
 describe('amplify form renderer tests', () => {
   describe('datastore form tests', () => {
@@ -668,6 +672,19 @@ describe('amplify form renderer tests', () => {
         'datastore/product',
         undefined,
       );
+      expect(componentText).toMatchSnapshot();
+    });
+  });
+
+  describe('GraphQL form tests', () => {
+    it('should generate a create form', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-create',
+        'datastore/post',
+        rendererConfigWithGraphQL,
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
       expect(componentText).toMatchSnapshot();
     });
   });

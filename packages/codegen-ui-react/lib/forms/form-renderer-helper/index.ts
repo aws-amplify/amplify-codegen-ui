@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-export { onSubmitValidationRun, buildUpdateDatastoreQuery, buildDataStoreExpression } from './cta-props';
+export { onSubmitValidationRun, buildUpdateDatastoreQuery, buildExpression } from './cta-props';
 
 export { buildModelFieldObject } from './model-fields';
 
