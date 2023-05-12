@@ -138,6 +138,7 @@ export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
           this.component,
           this.componentMetadata,
           this.importCollection,
+          this.renderConfig,
           parent,
         ).renderElement(renderChildren);
 
@@ -189,6 +190,7 @@ export class AmplifyFormRenderer extends ReactFormTemplateRenderer {
             this.component,
             this.componentMetadata,
             this.importCollection,
+            this.renderConfig,
             parent,
           ).renderElement(renderChildren);
         }

@@ -419,7 +419,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       ),
     ];
 
-    // add binding elments to statements
+    // add binding elements to statements
     statements.push(
       factory.createVariableStatement(
         undefined,

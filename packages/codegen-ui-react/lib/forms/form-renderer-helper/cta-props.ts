@@ -35,14 +35,51 @@ import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { ImportCollection } from '../../imports';
 import { getBiDirectionalRelationshipStatements } from './bidirectional-relationship';
 import { generateModelObjectToSave } from './parse-fields';
+import { DataApiKind } from '../../react-render-config';
 
-const getRecordCreateDataStoreCallExpression = ({
+const getRecordCreateCallExpression = ({
   savedObjectName,
   importedModelName,
+  importCollection,
+  dataApi,
 }: {
   savedObjectName: string;
   importedModelName: string;
+  importCollection: ImportCollection;
+  dataApi: DataApiKind;
 }) => {
+  if (dataApi === 'GraphQL') {
+    const createMutation = `create${importedModelName}`;
+
+    return factory.createCallExpression(
+      factory.createPropertyAccessExpression(factory.createIdentifier('API'), factory.createIdentifier('graphql')),
+      undefined,
+      [
+        factory.createObjectLiteralExpression(
+          [
+            factory.createPropertyAssignment(
+              factory.createIdentifier('query'),
+              factory.createIdentifier(importCollection.addGraphqlMutationImport(createMutation)),
+            ),
+            factory.createPropertyAssignment(
+              factory.createIdentifier('variables'),
+              factory.createObjectLiteralExpression(
+                [
+                  factory.createPropertyAssignment(
+                    factory.createIdentifier('input'),
+                    factory.createIdentifier(savedObjectName),
+                  ),
+                ],
+                false,
+              ),
+            ),
+          ],
+          true,
+        ),
+      ],
+    );
+  }
+
   return factory.createCallExpression(
     factory.createPropertyAccessExpression(factory.createIdentifier('DataStore'), factory.createIdentifier('save')),
     undefined,
@@ -211,13 +248,14 @@ export const replaceEmptyStringStatement = factory.createExpressionStatement(
   ),
 );
 
-export const buildDataStoreExpression = (
+export const buildExpression = (
   dataStoreActionType: 'update' | 'create',
   modelName: string,
   importedModelName: string,
   fieldConfigs: Record<string, FieldConfigMetadata>,
   dataSchema: GenericDataSchema,
   importCollection: ImportCollection,
+  dataApi: DataApiKind = 'DataStore',
 ): Statement[] => {
   const modelFieldsObjectName = 'modelFields';
   const modelFieldsObjectToSaveName = 'modelFieldsToSave';
@@ -315,9 +353,11 @@ export const buildDataStoreExpression = (
     );
   }
 
-  const recordCreateDataStoreCallExpression = getRecordCreateDataStoreCallExpression({
+  const recordCreateCallExpression = getRecordCreateCallExpression({
     savedObjectName,
     importedModelName,
+    importCollection,
+    dataApi,
   });
   const genericCreateStatement = relationshipsPromisesAccessStatements.length
     ? [
@@ -329,14 +369,14 @@ export const buildDataStoreExpression = (
                 factory.createIdentifier(savedRecordName),
                 undefined,
                 undefined,
-                factory.createAwaitExpression(recordCreateDataStoreCallExpression),
+                factory.createAwaitExpression(recordCreateCallExpression),
               ),
             ],
             NodeFlags.Const,
           ),
         ),
       ]
-    : [factory.createExpressionStatement(factory.createAwaitExpression(recordCreateDataStoreCallExpression))];
+    : [factory.createExpressionStatement(factory.createAwaitExpression(recordCreateCallExpression))];
 
   const resolvePromisesStatement = factory.createExpressionStatement(
     factory.createAwaitExpression(
