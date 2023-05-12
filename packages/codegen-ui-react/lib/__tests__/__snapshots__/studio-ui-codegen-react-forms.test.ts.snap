@@ -1,5 +1,666 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`amplify form renderer tests GraphQL form tests should generate a create form 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  GridProps,
+  Icon,
+  ScrollView,
+  Text,
+  TextAreaField,
+  TextAreaFieldProps,
+  TextField,
+  TextFieldProps,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { Post } from \\"../API\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { createPost } from \\"../graphql/mutations\\";
+import { API } from \\"@aws-amplify/api\\";
+
+export declare type ValidationResponse = {
+  hasError: boolean;
+  errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (
+  value: T,
+  validationResponse: ValidationResponse
+) => ValidationResponse | Promise<ValidationResponse>;
+export declare type MyPostFormInputValues = {
+  caption?: string;
+  username?: string;
+  post_url?: string;
+  metadata?: string;
+  profile_url?: string;
+  nonModelField?: string;
+  nonModelFieldArray?: string[];
+};
+export declare type MyPostFormValidationValues = {
+  caption?: ValidationFunction<string>;
+  username?: ValidationFunction<string>;
+  post_url?: ValidationFunction<string>;
+  metadata?: ValidationFunction<string>;
+  profile_url?: ValidationFunction<string>;
+  nonModelField?: ValidationFunction<string>;
+  nonModelFieldArray?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type MyPostFormOverridesProps = {
+  MyPostFormGrid?: PrimitiveOverrideProps<GridProps>;
+  caption?: PrimitiveOverrideProps<TextFieldProps>;
+  username?: PrimitiveOverrideProps<TextFieldProps>;
+  post_url?: PrimitiveOverrideProps<TextFieldProps>;
+  metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
+  profile_url?: PrimitiveOverrideProps<TextFieldProps>;
+  nonModelField?: PrimitiveOverrideProps<TextAreaFieldProps>;
+  nonModelFieldArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
+} & EscapeHatchProps;
+export type MyPostFormProps = React.PropsWithChildren<
+  {
+    overrides?: MyPostFormOverridesProps | undefined | null;
+  } & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onValidate?: MyPostFormValidationValues;
+  } & React.CSSProperties
+>;
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
+  const {
+    clearOnSuccess = true,
+    onSuccess,
+    onError,
+    onSubmit,
+    onCancel,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    caption: \\"\\",
+    username: \\"\\",
+    post_url: \\"\\",
+    metadata: \\"\\",
+    profile_url: \\"\\",
+    nonModelField: \\"\\",
+    nonModelFieldArray: [],
+  };
+  const [caption, setCaption] = React.useState(initialValues.caption);
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [post_url, setPost_url] = React.useState(initialValues.post_url);
+  const [metadata, setMetadata] = React.useState(initialValues.metadata);
+  const [profile_url, setProfile_url] = React.useState(
+    initialValues.profile_url
+  );
+  const [nonModelField, setNonModelField] = React.useState(
+    initialValues.nonModelField
+  );
+  const [nonModelFieldArray, setNonModelFieldArray] = React.useState(
+    initialValues.nonModelFieldArray
+  );
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    setCaption(initialValues.caption);
+    setUsername(initialValues.username);
+    setPost_url(initialValues.post_url);
+    setMetadata(initialValues.metadata);
+    setProfile_url(initialValues.profile_url);
+    setNonModelField(initialValues.nonModelField);
+    setNonModelFieldArray(initialValues.nonModelFieldArray);
+    setCurrentNonModelFieldArrayValue(\\"\\");
+    setErrors({});
+  };
+  const [currentNonModelFieldArrayValue, setCurrentNonModelFieldArrayValue] =
+    React.useState(\\"\\");
+  const nonModelFieldArrayRef = React.createRef();
+  const validations = {
+    caption: [],
+    username: [],
+    post_url: [{ type: \\"URL\\" }],
+    metadata: [{ type: \\"JSON\\" }],
+    profile_url: [{ type: \\"URL\\" }],
+    nonModelField: [{ type: \\"JSON\\" }],
+    nonModelFieldArray: [{ type: \\"JSON\\" }],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    /* @ts-ignore: TS2322 */
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event: SyntheticEvent) => {
+        event.preventDefault();
+        let modelFields = {
+          caption,
+          username,
+          post_url,
+          metadata,
+          profile_url,
+          nonModelField,
+          nonModelFieldArray,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(fieldName, item)
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(fieldName, modelFields[fieldName])
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const modelFieldsToSave = {
+            caption: modelFields.caption,
+            username: modelFields.username,
+            post_url: modelFields.post_url,
+            metadata: modelFields.metadata,
+            profile_url: modelFields.profile_url,
+            nonModelFieldArray: modelFields.nonModelFieldArray.map((s) =>
+              JSON.parse(s)
+            ),
+            nonModelField: modelFields.nonModelField
+              ? JSON.parse(modelFields.nonModelField)
+              : modelFields.nonModelField,
+          };
+          await API.graphql({
+            query: createPost,
+            variables: { input: modelFieldsToSave },
+          });
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"MyPostForm\\")}
+      {...rest}
+    >
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Clear\\"
+          type=\\"reset\\"
+          onClick={(event: SyntheticEvent) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          {...getOverrideProps(overrides, \\"ClearButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Cancel\\"
+            type=\\"button\\"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, \\"CancelButton\\")}
+          ></Button>
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+      <TextField
+        label=\\"Caption\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={caption}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              caption: value,
+              username,
+              post_url,
+              metadata,
+              profile_url,
+              nonModelField,
+              nonModelFieldArray,
+            };
+            const result = onChange(modelFields);
+            value = result?.caption ?? value;
+          }
+          if (errors.caption?.hasError) {
+            runValidationTasks(\\"caption\\", value);
+          }
+          setCaption(value);
+        }}
+        onBlur={() => runValidationTasks(\\"caption\\", caption)}
+        errorMessage={errors.caption?.errorMessage}
+        hasError={errors.caption?.hasError}
+        {...getOverrideProps(overrides, \\"caption\\")}
+      ></TextField>
+      <TextField
+        label=\\"Username\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={username}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              caption,
+              username: value,
+              post_url,
+              metadata,
+              profile_url,
+              nonModelField,
+              nonModelFieldArray,
+            };
+            const result = onChange(modelFields);
+            value = result?.username ?? value;
+          }
+          if (errors.username?.hasError) {
+            runValidationTasks(\\"username\\", value);
+          }
+          setUsername(value);
+        }}
+        onBlur={() => runValidationTasks(\\"username\\", username)}
+        errorMessage={errors.username?.errorMessage}
+        hasError={errors.username?.hasError}
+        {...getOverrideProps(overrides, \\"username\\")}
+      ></TextField>
+      <TextField
+        label=\\"Post url\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={post_url}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              caption,
+              username,
+              post_url: value,
+              metadata,
+              profile_url,
+              nonModelField,
+              nonModelFieldArray,
+            };
+            const result = onChange(modelFields);
+            value = result?.post_url ?? value;
+          }
+          if (errors.post_url?.hasError) {
+            runValidationTasks(\\"post_url\\", value);
+          }
+          setPost_url(value);
+        }}
+        onBlur={() => runValidationTasks(\\"post_url\\", post_url)}
+        errorMessage={errors.post_url?.errorMessage}
+        hasError={errors.post_url?.hasError}
+        {...getOverrideProps(overrides, \\"post_url\\")}
+      ></TextField>
+      <TextAreaField
+        label=\\"Metadata\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              caption,
+              username,
+              post_url,
+              metadata: value,
+              profile_url,
+              nonModelField,
+              nonModelFieldArray,
+            };
+            const result = onChange(modelFields);
+            value = result?.metadata ?? value;
+          }
+          if (errors.metadata?.hasError) {
+            runValidationTasks(\\"metadata\\", value);
+          }
+          setMetadata(value);
+        }}
+        onBlur={() => runValidationTasks(\\"metadata\\", metadata)}
+        errorMessage={errors.metadata?.errorMessage}
+        hasError={errors.metadata?.hasError}
+        {...getOverrideProps(overrides, \\"metadata\\")}
+      ></TextAreaField>
+      <TextField
+        label=\\"Profile url\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={profile_url}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              caption,
+              username,
+              post_url,
+              metadata,
+              profile_url: value,
+              nonModelField,
+              nonModelFieldArray,
+            };
+            const result = onChange(modelFields);
+            value = result?.profile_url ?? value;
+          }
+          if (errors.profile_url?.hasError) {
+            runValidationTasks(\\"profile_url\\", value);
+          }
+          setProfile_url(value);
+        }}
+        onBlur={() => runValidationTasks(\\"profile_url\\", profile_url)}
+        errorMessage={errors.profile_url?.errorMessage}
+        hasError={errors.profile_url?.hasError}
+        {...getOverrideProps(overrides, \\"profile_url\\")}
+      ></TextField>
+      <TextAreaField
+        label=\\"Non model field\\"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              caption,
+              username,
+              post_url,
+              metadata,
+              profile_url,
+              nonModelField: value,
+              nonModelFieldArray,
+            };
+            const result = onChange(modelFields);
+            value = result?.nonModelField ?? value;
+          }
+          if (errors.nonModelField?.hasError) {
+            runValidationTasks(\\"nonModelField\\", value);
+          }
+          setNonModelField(value);
+        }}
+        onBlur={() => runValidationTasks(\\"nonModelField\\", nonModelField)}
+        errorMessage={errors.nonModelField?.errorMessage}
+        hasError={errors.nonModelField?.hasError}
+        {...getOverrideProps(overrides, \\"nonModelField\\")}
+      ></TextAreaField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              caption,
+              username,
+              post_url,
+              metadata,
+              profile_url,
+              nonModelField,
+              nonModelFieldArray: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.nonModelFieldArray ?? values;
+          }
+          setNonModelFieldArray(values);
+          setCurrentNonModelFieldArrayValue(\\"\\");
+        }}
+        currentFieldValue={currentNonModelFieldArrayValue}
+        label={\\"Non model field array\\"}
+        items={nonModelFieldArray}
+        hasError={errors?.nonModelFieldArray?.hasError}
+        errorMessage={errors?.nonModelFieldArray?.errorMessage}
+        setFieldValue={setCurrentNonModelFieldArrayValue}
+        inputFieldRef={nonModelFieldArrayRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <TextAreaField
+          label=\\"Non model field array\\"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentNonModelFieldArrayValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.nonModelFieldArray?.hasError) {
+              runValidationTasks(\\"nonModelFieldArray\\", value);
+            }
+            setCurrentNonModelFieldArrayValue(value);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              \\"nonModelFieldArray\\",
+              currentNonModelFieldArrayValue
+            )
+          }
+          errorMessage={errors.nonModelFieldArray?.errorMessage}
+          hasError={errors.nonModelFieldArray?.hasError}
+          ref={nonModelFieldArrayRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"nonModelFieldArray\\")}
+        ></TextAreaField>
+      </ArrayField>
+    </Grid>
+  );
+}
+"
+`;
+
 exports[`amplify form renderer tests datastore form tests custom form tests should render a create form for child of 1:m relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";

@@ -25,13 +25,15 @@ import {
 import { factory, JsxAttribute, JsxChild, JsxElement, JsxOpeningElement, Statement, SyntaxKind } from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildFormLayoutProperties, buildOpeningElementProperties } from '../react-component-render-helper';
-import { ImportCollection, ImportSource } from '../imports';
-import { buildDataStoreExpression } from '../forms';
+import { ImportCollection, ImportSource, ImportValue } from '../imports';
+import { buildExpression } from '../forms';
 import { onSubmitValidationRun, buildModelFieldObject } from '../forms/form-renderer-helper';
 import { hasTokenReference } from '../utils/forms/layout-helpers';
 import { resetFunctionCheck } from '../forms/form-renderer-helper/value-props';
 import { isModelDataType } from '../forms/form-renderer-helper/render-checkers';
 import { replaceEmptyStringStatement } from '../forms/form-renderer-helper/cta-props';
+import { ReactRenderConfig } from '../react-render-config';
+import { defaultRenderConfig } from '../react-studio-template-renderer-helper';
 
 export default class FormRenderer extends ReactComponentRenderer<BaseComponentProps> {
   constructor(
@@ -39,6 +41,7 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     protected form: StudioForm, // we are passing in form here as it's the top level component
     protected componentMetadata: ComponentMetadata,
     protected importCollection: ImportCollection,
+    protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig,
     protected parent?: StudioNode,
   ) {
     super(component, componentMetadata, importCollection, parent);
@@ -54,7 +57,12 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
     );
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
-    if (this.form.dataType.dataSourceType === 'DataStore') {
+    if (
+      this.form.dataType.dataSourceType === 'DataStore' &&
+      this.renderConfig.apiConfiguration?.dataApi === 'GraphQL'
+    ) {
+      this.importCollection.addMappedImport(ImportValue.API);
+    } else if (this.form.dataType.dataSourceType === 'DataStore') {
       this.importCollection.addImport('aws-amplify', 'DataStore');
     }
 
@@ -140,13 +148,14 @@ export default class FormRenderer extends ReactComponentRenderer<BaseComponentPr
           factory.createBlock(
             [
               replaceEmptyStringStatement,
-              ...buildDataStoreExpression(
+              ...buildExpression(
                 formActionType,
                 dataTypeName,
                 importedModelName,
                 formMetadata.fieldConfigs,
                 dataSchemaMetadata,
                 this.importCollection,
+                'apiConfiguration' in this.renderConfig ? this.renderConfig.apiConfiguration?.dataApi : undefined,
               ),
               // call onSuccess hook if it exists
               factory.createIfStatement(
