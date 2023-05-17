@@ -27,8 +27,8 @@ import {
 import { getModelNameProp, getSetNameIdentifier, lowerCaseFirst } from '../../helpers';
 import { getDisplayValueObjectName } from './model-values';
 import {
-  buildHasManyRelationshipDataStoreStatements,
-  buildManyToManyRelationshipDataStoreStatements,
+  buildHasManyRelationshipStatements,
+  buildManyToManyRelationshipStatements,
   getRelationshipBasedRecordUpdateStatements,
 } from './relationship';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
@@ -46,7 +46,7 @@ const getRecordCreateCallExpression = ({
   savedObjectName: string;
   importedModelName: string;
   importCollection: ImportCollection;
-  dataApi: DataApiKind;
+  dataApi?: DataApiKind;
 }) => {
   if (dataApi === 'GraphQL') {
     const createMutation = `create${importedModelName}`;
@@ -255,7 +255,7 @@ export const buildExpression = (
   fieldConfigs: Record<string, FieldConfigMetadata>,
   dataSchema: GenericDataSchema,
   importCollection: ImportCollection,
-  dataApi: DataApiKind = 'DataStore',
+  dataApi?: DataApiKind,
 ): Statement[] => {
   const modelFieldsObjectName = 'modelFields';
   const modelFieldsObjectToSaveName = 'modelFieldsToSave';
@@ -276,30 +276,34 @@ export const buildExpression = (
         fieldConfig,
         modelName,
         savedRecordName,
+        dataApi,
       }),
     );
     if (fieldConfigMetaData.relationship?.type === 'HAS_MANY') {
       if (isManyToManyRelationship(fieldConfigMetaData)) {
         const joinTable = dataSchema.models[fieldConfigMetaData.relationship.relatedJoinTableName];
         relationshipsPromisesAccessStatements.push(
-          ...buildManyToManyRelationshipDataStoreStatements(
+          ...buildManyToManyRelationshipStatements(
             dataStoreActionType,
             importedModelName,
             fieldConfig,
             thisModelPrimaryKeys,
             joinTable,
             savedRecordName,
+            importCollection,
+            dataApi,
           ),
         );
       } else {
         relationshipsPromisesAccessStatements.push(
-          ...buildHasManyRelationshipDataStoreStatements(
+          ...buildHasManyRelationshipStatements(
             dataStoreActionType,
             importedModelName,
             fieldConfig,
             thisModelPrimaryKeys,
             savedRecordName,
             importCollection,
+            dataApi,
           ),
         );
       }
