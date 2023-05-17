@@ -81,10 +81,11 @@ describe.only('FormTests - DSUserProfile', () => {
         .contains(/Hello World/);
       cy.get('p')
         .contains('image')
-        .contains(/"file1.jpg"/);
+        .contains(/("file1.jpg")/);
       cy.get('p')
         .contains('additionalImages')
-        .contains(/["file2.jpg","file3.png"]/);
+        .should('have.length', 2)
+        .contains(/[("file2.jpg","file3.png")]/);
     });
 
     cy.get('#UpdateUserProfile > form').within(() => {
@@ -121,9 +122,10 @@ describe.only('FormTests - DSUserProfile', () => {
         .contains(/Hello World/);
       cy.get('p')
         .contains('image')
-        .contains(/"file1.jpg"/);
+        .contains(/("file1.jpg")/);
       cy.get('p')
         .contains('additionalImages')
+        .should('have.length', 1)
         .contains(/["file3.png"]/);
     });
   });
