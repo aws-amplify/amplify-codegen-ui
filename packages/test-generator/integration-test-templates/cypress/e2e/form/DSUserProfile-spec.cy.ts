@@ -16,7 +16,7 @@
 
 import { getStorageManagerByLabel, getInputByLabel } from '../../utils/form';
 
-describe.only('FormTests - DSUserProfile', () => {
+describe('FormTests - DSUserProfile', () => {
   const firstFile = 'amplify-logo.jpg';
   const secondFile = 'amplify-logo.svg';
 
@@ -73,19 +73,10 @@ describe.only('FormTests - DSUserProfile', () => {
   specify('Should load with existing user profile and be able to unlink existing files from record', () => {
     // Check initial data
     cy.get('#UpdateUserProfile > #data-preview').within(() => {
-      cy.get('p')
-        .contains('name')
-        .contains(/Jane Doe/);
-      cy.get('p')
-        .contains('headline')
-        .contains(/Hello World/);
-      cy.get('p')
-        .contains('image')
-        .contains(/("file1.jpg")/);
-      cy.get('p')
-        .contains('additionalImages')
-        .should('have.length', 2)
-        .contains(/[("file2.jpg","file3.png")]/);
+      cy.get('p').contains('name').contains('Jane Doe');
+      cy.get('p').contains('headline').contains('Hello World');
+      cy.get('p').contains('image').contains('("file1.jpg")');
+      cy.get('p').contains('additionalImages').should('have.length', 2).contains('[("file2.jpg","file3.png")]');
     });
 
     cy.get('#UpdateUserProfile > form').within(() => {
@@ -104,8 +95,8 @@ describe.only('FormTests - DSUserProfile', () => {
           .first()
           .within(() => {
             // remove the first file (file2.jpg)
-            cy.contains(/file2.jpg/);
-            cy.contains(/Remove file/).click();
+            cy.contains('file2.jpg');
+            cy.contains('Remove file').click();
           });
       });
 
@@ -114,19 +105,10 @@ describe.only('FormTests - DSUserProfile', () => {
 
     // Check data send onSubmit
     cy.get('#UpdateUserProfile > #data-preview').within(() => {
-      cy.get('p')
-        .contains('name')
-        .contains(/Jane Doe/);
-      cy.get('p')
-        .contains('headline')
-        .contains(/Hello World/);
-      cy.get('p')
-        .contains('image')
-        .contains(/("file1.jpg")/);
-      cy.get('p')
-        .contains('additionalImages')
-        .should('have.length', 1)
-        .contains(/["file3.png"]/);
+      cy.get('p').contains('name').contains('Jane Doe');
+      cy.get('p').contains('headline').contains('Hello World');
+      cy.get('p').contains('image').contains('("file1.jpg")');
+      cy.get('p').contains('additionalImages').should('have.length', 1).contains('["file3.png"]');
     });
   });
 });
