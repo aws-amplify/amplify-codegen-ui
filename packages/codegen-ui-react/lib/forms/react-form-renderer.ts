@@ -600,18 +600,28 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       this.importCollection.addModelImport(model);
     });
 
-    // datastore relationship query
-    /**
+    // relationship query
+    /** GraphQL:
+     *    const authorRecords = await API.graphql(
+     *      { query: listAuthors }
+     *    ).data.listAuthors.items;
+     */
+    /** Datastore:
           const authorRecords = useDataStoreBinding({
             type: 'collection',
             model: Author,
           }).items;
-        */
+    */
     if (relatedModelNames.size) {
-      this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
+      if (!(this.renderConfig.apiConfiguration?.dataApi === 'GraphQL')) {
+        this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
+      }
+
+      const dataApi = 'apiConfiguration' in this.renderConfig ? this.renderConfig.apiConfiguration?.dataApi : undefined;
+
       statements.push(
         ...[...relatedModelNames].map((relatedModelName) =>
-          buildRelationshipQuery(relatedModelName, this.importCollection),
+          buildRelationshipQuery(relatedModelName, this.importCollection, dataApi),
         ),
       );
     }
