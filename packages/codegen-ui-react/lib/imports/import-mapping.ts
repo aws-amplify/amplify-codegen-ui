@@ -22,7 +22,7 @@ export enum ImportSource {
   LOCAL_MODELS = '../models',
   LOCAL_SCHEMA = '../models/schema',
   UTILS = './utils',
-  AMPLIFY_API = '@aws-amplify/api',
+  AMPLIFY = 'aws-amplify',
 }
 
 export enum ImportValue {
@@ -81,5 +81,5 @@ export const ImportMapping: Record<ImportValue, ImportSource> = {
   [ImportValue.FETCH_BY_PATH]: ImportSource.UTILS,
   [ImportValue.PROCESS_FILE]: ImportSource.UTILS,
   [ImportValue.USE_STATE]: ImportSource.REACT,
-  [ImportValue.API]: ImportSource.AMPLIFY_API,
+  [ImportValue.API]: ImportSource.AMPLIFY,
 };

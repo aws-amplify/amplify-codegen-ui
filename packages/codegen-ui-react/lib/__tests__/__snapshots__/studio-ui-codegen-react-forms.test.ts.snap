@@ -26,7 +26,7 @@ import {
 import { Post } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { createPost } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -688,7 +688,7 @@ import { Member, Team } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { listTeams } from \\"../graphql/queries\\";
 import { createMember } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -1273,7 +1273,7 @@ import { School, Student } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { listStudents } from \\"../graphql/queries\\";
 import { createSchool, updateSchool } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -1793,7 +1793,7 @@ import { Author, Book } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { listAuthors } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -2303,7 +2303,7 @@ import { Post, Tag, TagPost } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { listPosts } from \\"../graphql/queries\\";
 import { createTag, createTagPost } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -2900,7 +2900,7 @@ import { Author, Book, Title } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { listAuthors, listTitles } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -3510,7 +3510,7 @@ import { CompositeDog, CompositeToy } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { listCompositeDogs } from \\"../graphql/queries\\";
 import { createCompositeToy } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -4170,7 +4170,7 @@ import { Comment, Org, Post, User } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { listOrgs, listPosts, listUsers } from \\"../graphql/queries\\";
 import { createComment } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -4978,7 +4978,7 @@ import {
   updateCompositeDog,
   updateCompositeOwner,
 } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -5939,7 +5939,7 @@ import { Dog, Owner } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { listOwners } from \\"../graphql/queries\\";
 import { createDog, updateOwner } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -6447,7 +6447,7 @@ import { Dog, Owner } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { listDogs } from \\"../graphql/queries\\";
 import { createOwner, updateDog, updateOwner } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
