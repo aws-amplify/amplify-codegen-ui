@@ -56,3 +56,12 @@ export const typeInAutocomplete = (content: string) => {
       cy.get('input').type(content);
     });
 };
+
+export const getStorageManagerByLabel = (label) => {
+  return cy
+    .contains('label', label)
+    .parent()
+    .within(() => {
+      cy.get('div.amplify-storagemanager');
+    });
+};

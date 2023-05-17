@@ -31,6 +31,12 @@ export const AUTH_MOCK_EXPORTS = {
   aws_user_pools_web_client_id: TEST_POOL_NAME,
 };
 
+export const STORAGE_MOCK_EXPORTS = {
+  aws_user_files_s3_bucket: 'bucket',
+  aws_user_files_s3_bucket_region: TEST_REGION,
+  aws_user_files_s3_dangerously_connect_to_http_endpoint_for_testing: true,
+};
+
 export const initializeAuthMockData = (authAttributes: Record<string, string>) => {
   const buildAuthKey = (key: string) => `CognitoIdentityServiceProvider.${TEST_POOL_NAME}.${TEST_USER_NAME}.${key}`;
   const generateJwt = (tokenData: any) => `.${Buffer.from(JSON.stringify(tokenData), 'utf8').toString('base64')}`;

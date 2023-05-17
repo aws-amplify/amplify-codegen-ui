@@ -26,6 +26,7 @@ import DSBidirectionalToy from './DSBidirectionalToy';
 import DSModelWithVariableCollisions from './DSModelWithVariableCollisions';
 import DSCar from './DSCar';
 import DSDealership from './DSDealership';
+import DSUserProfile from './DSUserProfile';
 
 export default function FormTests() {
   const { subject } = useParams();
@@ -55,6 +56,8 @@ export default function FormTests() {
       return <DSCar />;
     case 'DSDealership':
       return <DSDealership />;
+    case 'DSUserProfile':
+      return <DSUserProfile />;
 
     default:
       return (
@@ -96,6 +99,9 @@ export default function FormTests() {
             </li>
             <li>
               <Link to="DSDealership">DSDealership</Link>
+            </li>
+            <li>
+              <Link to="DSUserProfile">DSUserProfile</Link>
             </li>
           </ul>
         </div>

@@ -32,6 +32,7 @@ const City = {
 const {
   UserPreference,
   User,
+  UserProfile,
   Listing,
   ComplexModel,
   Class,
@@ -63,6 +64,7 @@ const {
 export {
   UserPreference,
   User,
+  UserProfile,
   Listing,
   ComplexModel,
   Class,
