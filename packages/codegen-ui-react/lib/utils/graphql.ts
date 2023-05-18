@@ -14,6 +14,7 @@
   limitations under the License.
  */
 
+import { plural } from 'pluralize';
 import { InvalidInputError } from '@aws-amplify/codegen-ui';
 import { CallExpression, factory } from 'typescript';
 import { ImportCollection, ImportValue } from '../imports';
@@ -34,7 +35,7 @@ export const getGraphqlQueryForModel = (action: ActionType, model: string): stri
     case ActionType.DELETE:
       return `delete${model}`;
     case ActionType.LIST:
-      return `list${model}s`;
+      return `list${plural(model)}`;
     default:
       throw new InvalidInputError(`Action ${action} has no corresponding GraphQL operation`);
   }
