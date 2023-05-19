@@ -45,7 +45,7 @@
           {
             "field": "age",
             "operand": "10",
-            "operator": "gt"
+            "operator": "eq"
           },
           {
             "field": "lastName",

@@ -52,7 +52,13 @@ import {
   ArrayLiteralExpression,
 } from 'typescript';
 
-import { FormMetadata, FormStyleConfig, StudioFormInputFieldProperty } from '@aws-amplify/codegen-ui/lib/types';
+import {
+  DataFieldDataType,
+  FormMetadata,
+  FormStyleConfig,
+  GenericDataField,
+  StudioFormInputFieldProperty,
+} from '@aws-amplify/codegen-ui/lib/types';
 import { ImportCollection, ImportSource } from './imports';
 import { json, jsonToLiteral } from './react-studio-template-renderer-helper';
 import { getChildPropMappingForComponentName } from './workflow/utils';
@@ -456,6 +462,19 @@ export function getSyntaxKindToken(operator: RelationalOperator): BinaryOperator
     default:
       return undefined;
   }
+}
+
+export function parseNumberOperand(operand: string | number | boolean, dataField: GenericDataField | undefined) {
+  if (dataField) {
+    const numberOperandType: DataFieldDataType[] = ['Int', 'Float'];
+    if (numberOperandType.includes(dataField.dataType)) {
+      const parsedOperand = parseFloat(`${operand}`);
+      if (!Number.isNaN(parsedOperand) && Number.isFinite(parsedOperand)) {
+        return parsedOperand;
+      }
+    }
+  }
+  return operand;
 }
 
 export function getConditionalOperandExpression(
