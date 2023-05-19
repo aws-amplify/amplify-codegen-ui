@@ -35,6 +35,7 @@ import {
   buildConditionalExpression,
   hasChildrenProp,
   buildConcatExpression,
+  parseNumberOperand,
 } from '../react-component-render-helper';
 
 import { assertASTMatchesSnapshot } from './__utils__';
@@ -343,6 +344,17 @@ describe('react-component-render-helper', () => {
 
       const exp = buildConcatExpression(concatProp);
       assertASTMatchesSnapshot(exp);
+    });
+  });
+
+  describe('parseNumberOperand', () => {
+    test('should parse int if field data type is Int', () => {
+      expect(parseNumberOperand('10', { dataType: 'Int', readOnly: false, required: false, isArray: false })).toBe(10);
+    });
+    test('should parse int if field data type is Int', () => {
+      expect(parseNumberOperand('10.01', { dataType: 'Float', readOnly: false, required: false, isArray: false })).toBe(
+        10.01,
+      );
     });
   });
 });
