@@ -155,7 +155,7 @@ exports[`amplify render tests actions GraphQL DataStoreCreateItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 import { createCustomer } from \\"../graphql/mutations\\";
 import { Customer } from \\"../API\\";
 import {
@@ -179,10 +179,14 @@ export default function CreateCustomerButton(
 ): React.ReactElement {
   const { overrides, ...rest } = props;
   const createCustomerButtonOnClick = async () => {
-    const input = { firstName: \\"Din\\", lastName: \\"Djarin\\" };
     await API.graphql({
       query: createCustomer,
-      variables: { input },
+      variables: {
+        input: {
+          firstName: \\"Din\\",
+          lastName: \\"Djarin\\",
+        },
+      },
     });
   };
   return (
@@ -207,7 +211,7 @@ exports[`amplify render tests actions GraphQL DataStoreDeleteItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 import { deleteCustomer } from \\"../graphql/mutations\\";
 import { Customer } from \\"../API\\";
 import {
@@ -231,10 +235,13 @@ export default function DeleteCustomerButton(
 ): React.ReactElement {
   const { overrides, ...rest } = props;
   const deleteCustomerButtonOnClick = async () => {
-    const input = { id: \\"d9887268-47dd-4899-9568-db5809218751\\" };
     await API.graphql({
       query: deleteCustomer,
-      variables: { input },
+      variables: {
+        input: {
+          id: \\"d9887268-47dd-4899-9568-db5809218751\\",
+        },
+      },
     });
   };
   return (
@@ -259,7 +266,7 @@ exports[`amplify render tests actions GraphQL DataStoreUpdateItem 1`] = `
 Object {
   "componentText": "/* eslint-disable */
 import * as React from \\"react\\";
-import { API } from \\"@aws-amplify/api\\";
+import { API } from \\"aws-amplify\\";
 import { updateCustomer } from \\"../graphql/mutations\\";
 import { Customer } from \\"../API\\";
 import {
@@ -283,14 +290,15 @@ export default function UpdateCustomerButton(
 ): React.ReactElement {
   const { overrides, ...rest } = props;
   const updateCustomerButtonOnClick = async () => {
-    const input = {
-      firstName: \\"Din\\",
-      lastName: \\"Djarin\\",
-      id: \\"d9887268-47dd-4899-9568-db5809218751\\",
-    };
     await API.graphql({
       query: updateCustomer,
-      variables: { input },
+      variables: {
+        input: {
+          firstName: \\"Din\\",
+          lastName: \\"Djarin\\",
+          id: \\"d9887268-47dd-4899-9568-db5809218751\\",
+        },
+      },
     });
   };
   return (

@@ -21,6 +21,7 @@ import { ImportCollection } from '../../imports';
 import { isModelDataType } from './render-checkers';
 import { getRecordName } from './form-state';
 import { DataApiKind } from '../../react-render-config';
+import { ActionType, getGraphqlCallExpression } from '../../utils/graphql';
 
 function getFieldBiDirectionalWith({
   modelName,
@@ -98,59 +99,19 @@ function unlinkModelRecordExpression({
   dataApi?: DataApiKind;
 }) {
   if (dataApi === 'GraphQL') {
-    const updateMutation = `update${modelName}`;
+    const inputs = [
+      factory.createSpreadAssignment(factory.createIdentifier(recordNameToUnlink)),
+      factory.createPropertyAssignment(factory.createIdentifier(fieldName), factory.createIdentifier('undefined')),
+      ...associatedFields.map((field) =>
+        factory.createPropertyAssignment(factory.createIdentifier(field), factory.createIdentifier('undefined')),
+      ),
+    ];
 
     return factory.createExpressionStatement(
       factory.createCallExpression(
         factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
         undefined,
-        [
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('API'),
-              factory.createIdentifier('graphql'),
-            ),
-            undefined,
-            [
-              factory.createObjectLiteralExpression(
-                [
-                  factory.createPropertyAssignment(
-                    factory.createIdentifier('query'),
-                    factory.createIdentifier(importCollection.addGraphqlMutationImport(updateMutation)),
-                  ),
-                  factory.createPropertyAssignment(
-                    factory.createIdentifier('variables'),
-                    factory.createObjectLiteralExpression(
-                      [
-                        factory.createPropertyAssignment(
-                          factory.createIdentifier('input'),
-                          factory.createObjectLiteralExpression(
-                            [
-                              factory.createSpreadAssignment(factory.createIdentifier(recordNameToUnlink)),
-                              factory.createPropertyAssignment(
-                                factory.createIdentifier(fieldName),
-                                factory.createIdentifier('undefined'),
-                              ),
-                              ...associatedFields.map((field) =>
-                                factory.createPropertyAssignment(
-                                  factory.createIdentifier(field),
-                                  factory.createIdentifier('undefined'),
-                                ),
-                              ),
-                            ],
-                            true,
-                          ),
-                        ),
-                      ],
-                      true,
-                    ),
-                  ),
-                ],
-                true,
-              ),
-            ],
-          ),
-        ],
+        [getGraphqlCallExpression(ActionType.UPDATE, modelName, importCollection, inputs)],
       ),
     );
   }
@@ -305,53 +266,19 @@ function linkModelRecordExpression({
   dataApi?: DataApiKind;
 }) {
   if (dataApi === 'GraphQL') {
-    const updateMutation = `update${importedRelatedModelName}`;
+    const inputs = [
+      factory.createSpreadAssignment(factory.createIdentifier(importedRelatedModelName)),
+      factory.createPropertyAssignment(
+        factory.createIdentifier(fieldBiDirectionalWithName),
+        factory.createIdentifier(currentRecord),
+      ),
+    ];
 
     return factory.createExpressionStatement(
       factory.createCallExpression(
         factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
         undefined,
-        [
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('API'),
-              factory.createIdentifier('graphql'),
-            ),
-            undefined,
-            [
-              factory.createObjectLiteralExpression(
-                [
-                  factory.createPropertyAssignment(
-                    factory.createIdentifier('query'),
-                    factory.createIdentifier(importCollection.addGraphqlMutationImport(updateMutation)),
-                  ),
-                  factory.createPropertyAssignment(
-                    factory.createIdentifier('variables'),
-                    factory.createObjectLiteralExpression(
-                      [
-                        factory.createPropertyAssignment(
-                          factory.createIdentifier('input'),
-                          factory.createObjectLiteralExpression(
-                            [
-                              factory.createSpreadAssignment(factory.createIdentifier(importedRelatedModelName)),
-                              factory.createPropertyAssignment(
-                                factory.createIdentifier(fieldBiDirectionalWithName),
-                                factory.createIdentifier(currentRecord),
-                              ),
-                            ],
-                            true,
-                          ),
-                        ),
-                      ],
-                      true,
-                    ),
-                  ),
-                ],
-                true,
-              ),
-            ],
-          ),
-        ],
+        [getGraphqlCallExpression(ActionType.UPDATE, importedRelatedModelName, importCollection, inputs)],
       ),
     );
   }

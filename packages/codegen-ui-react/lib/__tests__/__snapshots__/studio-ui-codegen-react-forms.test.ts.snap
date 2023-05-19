@@ -25,8 +25,8 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { createPost } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -373,7 +373,11 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
           };
           await API.graphql({
             query: createPost,
-            variables: { input: modelFieldsToSave },
+            variables: {
+              input: {
+                ...modelFieldsToSave,
+              },
+            },
           });
           if (onSuccess) {
             onSuccess(modelFields);
@@ -686,9 +690,9 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Member, Team } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { listTeams } from \\"../graphql/queries\\";
 import { createMember } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -936,7 +940,9 @@ export default function MyMemberForm(
       ? Team.map((r) => getIDValue.Team?.(r))
       : getIDValue.Team?.(Team)
   );
-  const teamRecords = await API.graphql({ query: listTeams }).data.listTeams;
+  const teamRecords = await API.graphql({
+    query: listTeams,
+  }).data.listTeams.items;
   const getDisplayValue = {
     teamID: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
     Team: (r) => r?.name,
@@ -1015,7 +1021,11 @@ export default function MyMemberForm(
           });
           await API.graphql({
             query: createMember,
-            variables: { input: modelFields },
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
           });
           if (onSuccess) {
             onSuccess(modelFields);
@@ -1271,9 +1281,9 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { School, Student } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { listStudents } from \\"../graphql/queries\\";
 import { createSchool, updateSchool } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -1517,8 +1527,9 @@ export default function SchoolCreateForm(
       ? Students.map((r) => getIDValue.Students?.(r))
       : getIDValue.Students?.(Students)
   );
-  const studentRecords = await API.graphql({ query: listStudents }).data
-    .listStudents;
+  const studentRecords = await API.graphql({
+    query: listStudents,
+  }).data.listStudents.items;
   const getDisplayValue = {
     Students: (r) => r?.name,
   };
@@ -1597,7 +1608,11 @@ export default function SchoolCreateForm(
           };
           const school = await API.graphql({
             query: createSchool,
-            variables: { input: modelFieldsToSave },
+            variables: {
+              input: {
+                ...modelFieldsToSave,
+              },
+            },
           });
           const promises = [];
           promises.push(
@@ -1605,7 +1620,12 @@ export default function SchoolCreateForm(
               promises.push(
                 API.graphql({
                   query: updateSchool,
-                  variables: { input: { ...original, schoolID: school.id } },
+                  variables: {
+                    input: {
+                      ...original,
+                      schoolID: school.id,
+                    },
+                  },
                 })
               );
               return promises;
@@ -1791,9 +1811,9 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Author, Book } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { listAuthors } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -2034,8 +2054,9 @@ export default function BookCreateForm(
       ? primaryAuthor.map((r) => getIDValue.primaryAuthor?.(r))
       : getIDValue.primaryAuthor?.(primaryAuthor)
   );
-  const authorRecords = await API.graphql({ query: listAuthors }).data
-    .listAuthors;
+  const authorRecords = await API.graphql({
+    query: listAuthors,
+  }).data.listAuthors.items;
   const getDisplayValue = {
     primaryAuthor: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
@@ -2111,7 +2132,11 @@ export default function BookCreateForm(
           });
           await API.graphql({
             query: createBook,
-            variables: { input: modelFields },
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
           });
           if (onSuccess) {
             onSuccess(modelFields);
@@ -2301,9 +2326,9 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Post, Tag, TagPost } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { listPosts } from \\"../graphql/queries\\";
 import { createTag, createTagPost } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -2548,7 +2573,9 @@ export default function TagCreateForm(
       ? Posts.map((r) => getIDValue.Posts?.(r))
       : getIDValue.Posts?.(Posts)
   );
-  const postRecords = await API.graphql({ query: listPosts }).data.listPosts;
+  const postRecords = await API.graphql({
+    query: listPosts,
+  }).data.listPosts.items;
   const getDisplayValue = {
     Posts: (r) => r?.title,
     statuses: (r) => {
@@ -2638,7 +2665,11 @@ export default function TagCreateForm(
           };
           const tag = await API.graphql({
             query: createTag,
-            variables: { input: modelFieldsToSave },
+            variables: {
+              input: {
+                ...modelFieldsToSave,
+              },
+            },
           });
           const promises = [];
           promises.push(
@@ -2898,9 +2929,9 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Author, Book, Title } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { listAuthors, listTitles } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -3162,9 +3193,12 @@ export default function BookCreateForm(
       ? primaryTitle.map((r) => getIDValue.primaryTitle?.(r))
       : getIDValue.primaryTitle?.(primaryTitle)
   );
-  const authorRecords = await API.graphql({ query: listAuthors }).data
-    .listAuthors;
-  const titleRecords = await API.graphql({ query: listTitles }).data.listTitles;
+  const authorRecords = await API.graphql({
+    query: listAuthors,
+  }).data.listAuthors.items;
+  const titleRecords = await API.graphql({
+    query: listTitles,
+  }).data.listTitles.items;
   const getDisplayValue = {
     primaryAuthor: (r) => r?.name,
     primaryTitle: (r) => r?.name,
@@ -3243,7 +3277,11 @@ export default function BookCreateForm(
           });
           await API.graphql({
             query: createBook,
-            variables: { input: modelFields },
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
           });
           if (onSuccess) {
             onSuccess(modelFields);
@@ -3508,9 +3546,9 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { CompositeDog, CompositeToy } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { listCompositeDogs } from \\"../graphql/queries\\";
 import { createCompositeToy } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -3779,8 +3817,9 @@ export default function CreateCompositeToyForm(
     setCurrentCompositeDogCompositeToysDescriptionValue,
   ] = React.useState(undefined);
   const compositeDogCompositeToysDescriptionRef = React.createRef();
-  const compositeDogRecords = await API.graphql({ query: listCompositeDogs })
-    .data.listCompositeDogs;
+  const compositeDogRecords = await API.graphql({
+    query: listCompositeDogs,
+  }).data.listCompositeDogs.items;
   const getDisplayValue = {
     compositeDogCompositeToysName: (r) => r?.name,
     compositeDogCompositeToysDescription: (r) => r?.description,
@@ -3853,7 +3892,11 @@ export default function CreateCompositeToyForm(
           });
           await API.graphql({
             query: createCompositeToy,
-            variables: { input: modelFields },
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
           });
           if (onSuccess) {
             onSuccess(modelFields);
@@ -4168,9 +4211,9 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Comment, Org, Post, User } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { listOrgs, listPosts, listUsers } from \\"../graphql/queries\\";
 import { createComment } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -4464,9 +4507,15 @@ export default function CreateCommentForm(
       ? Org.map((r) => getIDValue.Org?.(r))
       : getIDValue.Org?.(Org)
   );
-  const postRecords = await API.graphql({ query: listPosts }).data.listPosts;
-  const userRecords = await API.graphql({ query: listUsers }).data.listUsers;
-  const orgRecords = await API.graphql({ query: listOrgs }).data.listOrgs;
+  const postRecords = await API.graphql({
+    query: listPosts,
+  }).data.listPosts.items;
+  const userRecords = await API.graphql({
+    query: listUsers,
+  }).data.listUsers.items;
+  const orgRecords = await API.graphql({
+    query: listOrgs,
+  }).data.listOrgs.items;
   const getDisplayValue = {
     post: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
     User: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
@@ -4551,7 +4600,11 @@ export default function CreateCommentForm(
           });
           await API.graphql({
             query: createComment,
-            variables: { input: modelFields },
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
           });
           if (onSuccess) {
             onSuccess(modelFields);
@@ -4966,6 +5019,7 @@ import {
   CompositeVet,
 } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import {
   listCompositeBowls,
   listCompositeOwners,
@@ -4978,7 +5032,6 @@ import {
   updateCompositeDog,
   updateCompositeOwner,
 } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -5303,15 +5356,18 @@ export default function CreateCompositeDogForm(
       ? CompositeVets.map((r) => getIDValue.CompositeVets?.(r))
       : getIDValue.CompositeVets?.(CompositeVets)
   );
-  const compositeBowlRecords = await API.graphql({ query: listCompositeBowls })
-    .data.listCompositeBowls;
+  const compositeBowlRecords = await API.graphql({
+    query: listCompositeBowls,
+  }).data.listCompositeBowls.items;
   const compositeOwnerRecords = await API.graphql({
     query: listCompositeOwners,
-  }).data.listCompositeOwners;
-  const compositeToyRecords = await API.graphql({ query: listCompositeToys })
-    .data.listCompositeToys;
-  const compositeVetRecords = await API.graphql({ query: listCompositeVets })
-    .data.listCompositeVets;
+  }).data.listCompositeOwners.items;
+  const compositeToyRecords = await API.graphql({
+    query: listCompositeToys,
+  }).data.listCompositeToys.items;
+  const compositeVetRecords = await API.graphql({
+    query: listCompositeVets,
+  }).data.listCompositeVets.items;
   const getDisplayValue = {
     CompositeBowl: (r) => \`\${r?.shape}\${\\"-\\"}\${r?.size}\`,
     CompositeOwner: (r) => \`\${r?.lastName}\${\\"-\\"}\${r?.firstName}\`,
@@ -5404,7 +5460,11 @@ export default function CreateCompositeDogForm(
           };
           const compositeDog = await API.graphql({
             query: createCompositeDog,
-            variables: { input: modelFieldsToSave },
+            variables: {
+              input: {
+                ...modelFieldsToSave,
+              },
+            },
           });
           const promises = [];
           const compositeOwnerToLink = modelFields.CompositeOwner;
@@ -5937,9 +5997,9 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Dog, Owner } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { listOwners } from \\"../graphql/queries\\";
 import { createDog, updateOwner } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -6173,7 +6233,9 @@ export default function CreateDogForm(
       ? Owner.map((r) => getIDValue.Owner?.(r))
       : getIDValue.Owner?.(Owner)
   );
-  const ownerRecords = await API.graphql({ query: listOwners }).data.listOwners;
+  const ownerRecords = await API.graphql({
+    query: listOwners,
+  }).data.listOwners.items;
   const getDisplayValue = {
     Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
@@ -6249,7 +6311,11 @@ export default function CreateDogForm(
           });
           const dog = await API.graphql({
             query: createDog,
-            variables: { input: modelFields },
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
           });
           const promises = [];
           const ownerToLink = modelFields.Owner;
@@ -6445,9 +6511,9 @@ import {
 } from \\"@aws-amplify/ui-react/internal\\";
 import { Dog, Owner } from \\"../API\\";
 import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
 import { listDogs } from \\"../graphql/queries\\";
 import { createOwner, updateDog, updateOwner } from \\"../graphql/mutations\\";
-import { API } from \\"@aws-amplify/api\\";
 
 export declare type ValidationResponse = {
   hasError: boolean;
@@ -6688,7 +6754,9 @@ export default function CreateOwnerForm(
       ? Dog.map((r) => getIDValue.Dog?.(r))
       : getIDValue.Dog?.(Dog)
   );
-  const dogRecords = await API.graphql({ query: listDogs }).data.listDogs;
+  const dogRecords = await API.graphql({
+    query: listDogs,
+  }).data.listDogs.items;
   const getDisplayValue = {
     Dog: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
@@ -6764,7 +6832,11 @@ export default function CreateOwnerForm(
           });
           const owner = await API.graphql({
             query: createOwner,
-            variables: { input: modelFields },
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
           });
           const promises = [];
           const dogToLink = modelFields.Dog;

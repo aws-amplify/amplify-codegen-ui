@@ -36,6 +36,7 @@ import { ImportCollection } from '../../imports';
 import { getBiDirectionalRelationshipStatements } from './bidirectional-relationship';
 import { generateModelObjectToSave } from './parse-fields';
 import { DataApiKind } from '../../react-render-config';
+import { ActionType, getGraphqlCallExpression } from '../../utils/graphql';
 
 const getRecordCreateCallExpression = ({
   savedObjectName,
@@ -49,35 +50,9 @@ const getRecordCreateCallExpression = ({
   dataApi?: DataApiKind;
 }) => {
   if (dataApi === 'GraphQL') {
-    const createMutation = `create${importedModelName}`;
+    const inputs = [factory.createSpreadAssignment(factory.createIdentifier(savedObjectName))];
 
-    return factory.createCallExpression(
-      factory.createPropertyAccessExpression(factory.createIdentifier('API'), factory.createIdentifier('graphql')),
-      undefined,
-      [
-        factory.createObjectLiteralExpression(
-          [
-            factory.createPropertyAssignment(
-              factory.createIdentifier('query'),
-              factory.createIdentifier(importCollection.addGraphqlMutationImport(createMutation)),
-            ),
-            factory.createPropertyAssignment(
-              factory.createIdentifier('variables'),
-              factory.createObjectLiteralExpression(
-                [
-                  factory.createPropertyAssignment(
-                    factory.createIdentifier('input'),
-                    factory.createIdentifier(savedObjectName),
-                  ),
-                ],
-                false,
-              ),
-            ),
-          ],
-          true,
-        ),
-      ],
-    );
+    return getGraphqlCallExpression(ActionType.CREATE, importedModelName, importCollection, inputs);
   }
 
   return factory.createCallExpression(
