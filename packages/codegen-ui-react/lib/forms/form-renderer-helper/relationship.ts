@@ -29,6 +29,7 @@ import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { extractModelAndKeys, getIDValueCallChain, getMatchEveryModelFieldCallExpression } from './model-values';
 import { isModelDataType } from './render-checkers';
 import { DataApiKind } from '../../react-render-config';
+import { ActionType, getGraphqlCallExpression, getGraphqlQueryForModel } from '../../utils/graphql';
 
 export const buildRelationshipQuery = (
   relatedModelName: string,
@@ -38,7 +39,6 @@ export const buildRelationshipQuery = (
   const itemsName = getRecordsName(relatedModelName);
 
   if (dataApi === 'GraphQL') {
-    const query = `list${importCollection.addModelImport(relatedModelName)}s`;
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -50,27 +50,13 @@ export const buildRelationshipQuery = (
             factory.createAwaitExpression(
               factory.createPropertyAccessExpression(
                 factory.createPropertyAccessExpression(
-                  factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                      factory.createIdentifier('API'),
-                      factory.createIdentifier('graphql'),
-                    ),
-                    undefined,
-                    [
-                      factory.createObjectLiteralExpression(
-                        [
-                          factory.createPropertyAssignment(
-                            factory.createIdentifier('query'),
-                            factory.createIdentifier(importCollection.addGraphqlQueryImport(query)),
-                          ),
-                        ],
-                        false,
-                      ),
-                    ],
+                  factory.createPropertyAccessExpression(
+                    getGraphqlCallExpression(ActionType.LIST, relatedModelName, importCollection),
+                    factory.createIdentifier('data'),
                   ),
-                  factory.createIdentifier('data'),
+                  factory.createIdentifier(getGraphqlQueryForModel(ActionType.LIST, relatedModelName)),
                 ),
-                factory.createIdentifier(query),
+                factory.createIdentifier('items'),
               ),
             ),
           ),
@@ -1917,7 +1903,6 @@ const getUpdateRelatedModelExpression = (
   setToNull?: boolean,
 ) => {
   if (dataApi === 'GraphQL') {
-    const updateMutation = `update${capitalizeFirstLetter(savedModelName)}`;
     const statements: PropertyAssignment[] = relatedModelFields.map((relatedModelField, index) => {
       const correspondingPrimaryKey = thisModelPrimaryKeys[index];
 
@@ -1948,39 +1933,17 @@ const getUpdateRelatedModelExpression = (
     /**
      * API.graphql({
      *    query: updateStudent,
-     *    variables: { input: { ...original, schoolID: school.id }}
+     *    variables: {
+     *      input: {
+     *        ...original,
+     *        schoolID: school.id
+     *      }
+     *    }
      * })
      */
-    return factory.createCallExpression(
-      factory.createPropertyAccessExpression(factory.createIdentifier('API'), factory.createIdentifier('graphql')),
-      undefined,
-      [
-        factory.createObjectLiteralExpression(
-          [
-            factory.createPropertyAssignment(
-              factory.createIdentifier('query'),
-              factory.createIdentifier(importCollection.addGraphqlMutationImport(updateMutation)),
-            ),
-            factory.createPropertyAssignment(
-              factory.createIdentifier('variables'),
-              factory.createObjectLiteralExpression(
-                [
-                  factory.createPropertyAssignment(
-                    factory.createIdentifier('input'),
-                    factory.createObjectLiteralExpression(
-                      [factory.createSpreadAssignment(factory.createIdentifier('original')), ...statements],
-                      false,
-                    ),
-                  ),
-                ],
-                false,
-              ),
-            ),
-          ],
-          true,
-        ),
-      ],
-    );
+    const inputs = [factory.createSpreadAssignment(factory.createIdentifier('original')), ...statements];
+
+    return getGraphqlCallExpression(ActionType.UPDATE, capitalizeFirstLetter(savedModelName), importCollection, inputs);
   }
 
   /**
@@ -2041,52 +2004,17 @@ const getCreateJoinTableExpression = (
   dataApi?: DataApiKind,
 ): CallExpression => {
   if (dataApi === 'GraphQL') {
-    const createMutation = `create${relatedJoinTableName}`;
+    const inputs = [
+      savedModelName === joinTableThisModelName
+        ? factory.createShorthandPropertyAssignment(factory.createIdentifier(joinTableThisModelName), undefined)
+        : factory.createPropertyAssignment(
+            factory.createIdentifier(joinTableThisModelName),
+            factory.createIdentifier(savedModelName),
+          ),
+      factory.createShorthandPropertyAssignment(factory.createIdentifier(joinTableRelatedModelName), undefined),
+    ];
 
-    return factory.createCallExpression(
-      factory.createPropertyAccessExpression(factory.createIdentifier('API'), factory.createIdentifier('graphql')),
-      undefined,
-      [
-        factory.createObjectLiteralExpression(
-          [
-            factory.createPropertyAssignment(
-              factory.createIdentifier('query'),
-              factory.createIdentifier(importCollection.addGraphqlMutationImport(createMutation)),
-            ),
-            factory.createPropertyAssignment(
-              factory.createIdentifier('variables'),
-              factory.createObjectLiteralExpression(
-                [
-                  factory.createPropertyAssignment(
-                    factory.createIdentifier('input'),
-                    factory.createObjectLiteralExpression(
-                      [
-                        savedModelName === joinTableThisModelName
-                          ? factory.createShorthandPropertyAssignment(
-                              factory.createIdentifier(joinTableThisModelName),
-                              undefined,
-                            )
-                          : factory.createPropertyAssignment(
-                              factory.createIdentifier(joinTableThisModelName),
-                              factory.createIdentifier(savedModelName),
-                            ),
-                        factory.createShorthandPropertyAssignment(
-                          factory.createIdentifier(joinTableRelatedModelName),
-                          undefined,
-                        ),
-                      ],
-                      true,
-                    ),
-                  ),
-                ],
-                true,
-              ),
-            ),
-          ],
-          true,
-        ),
-      ],
-    );
+    return getGraphqlCallExpression(ActionType.CREATE, relatedJoinTableName, importCollection, inputs);
   }
 
   return factory.createCallExpression(

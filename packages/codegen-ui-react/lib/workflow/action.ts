@@ -31,6 +31,7 @@ import { isActionEvent, propertyToExpression, getSetStateName, sanitizeName } fr
 import { ImportCollection, ImportSource, ImportValue } from '../imports';
 import { getChildPropMappingForComponentName } from './utils';
 import { DataApiKind } from '../react-render-config';
+import { ActionType, getGraphqlCallExpression } from '../utils/graphql';
 
 enum Action {
   'Amplify.Navigation' = 'Amplify.Navigation',
@@ -76,24 +77,17 @@ export function getActionHookImportValue(action: string): ImportValue {
   return actionName;
 }
 
-export function getGraphqlMutationForModel(action: Action, model: string): string {
-  let prefix: string;
-
+function getGraphqlMutationFromAction(action: Action): ActionType {
   switch (action) {
     case Action['Amplify.DataStoreCreateItemAction']:
-      prefix = 'create';
-      break;
+      return ActionType.CREATE;
     case Action['Amplify.DataStoreUpdateItemAction']:
-      prefix = 'update';
-      break;
+      return ActionType.UPDATE;
     case Action['Amplify.DataStoreDeleteItemAction']:
-      prefix = 'delete';
-      break;
+      return ActionType.DELETE;
     default:
       throw new InvalidInputError(`Action ${action} has no corresponding GraphQL operation`);
   }
-
-  return prefix + model;
 }
 
 export function getComponentActions(component: StudioComponent | StudioComponentChild): {
@@ -163,12 +157,6 @@ export function buildGraphqlCallback(
   identifier: string,
   importCollection: ImportCollection,
 ) {
-  // Import API client
-  const actionMutation = getGraphqlMutationForModel(action.action as Action, action.parameters.model);
-  importCollection.addMappedImport(ImportValue.API);
-  importCollection.addGraphqlMutationImport(actionMutation);
-  importCollection.addModelImport(action.parameters.model);
-
   const inputKeys = [];
 
   if ('id' in action.parameters && action.parameters.id) {
@@ -199,55 +187,13 @@ export function buildGraphqlCallback(
             factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
             factory.createBlock(
               [
-                factory.createVariableStatement(
-                  undefined,
-                  factory.createVariableDeclarationList(
-                    [
-                      factory.createVariableDeclaration(
-                        factory.createIdentifier('input'),
-                        undefined,
-                        undefined,
-                        factory.createObjectLiteralExpression(inputKeys),
-                      ),
-                    ],
-                    // eslint-disable-next-line no-bitwise
-                    ts.NodeFlags.Const |
-                      ts.NodeFlags.AwaitContext |
-                      ts.NodeFlags.ContextFlags |
-                      ts.NodeFlags.TypeExcludesFlags,
-                  ),
-                ),
                 factory.createExpressionStatement(
                   factory.createAwaitExpression(
-                    factory.createCallExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createIdentifier('API'),
-                        factory.createIdentifier('graphql'),
-                      ),
-                      undefined,
-                      [
-                        factory.createObjectLiteralExpression(
-                          [
-                            factory.createPropertyAssignment(
-                              factory.createIdentifier('query'),
-                              factory.createIdentifier(actionMutation),
-                            ),
-                            factory.createPropertyAssignment(
-                              factory.createIdentifier('variables'),
-                              factory.createObjectLiteralExpression(
-                                [
-                                  factory.createShorthandPropertyAssignment(
-                                    factory.createIdentifier('input'),
-                                    undefined,
-                                  ),
-                                ],
-                                false,
-                              ),
-                            ),
-                          ],
-                          true,
-                        ),
-                      ],
+                    getGraphqlCallExpression(
+                      getGraphqlMutationFromAction(action.action as Action),
+                      action.parameters.model,
+                      importCollection,
+                      inputKeys,
                     ),
                   ),
                 ),

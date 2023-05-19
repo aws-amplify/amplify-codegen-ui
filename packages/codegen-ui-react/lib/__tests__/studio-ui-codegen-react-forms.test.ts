@@ -729,7 +729,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('import { Author, Book } from "../API";');
 
       // check binding call is generated
-      expect(componentText).toContain('const authorRecords = await API.graphql({ query: listAuthors');
+      expect(componentText).toContain('const authorRecords = await API.graphql({');
 
       expect(componentText).toMatchSnapshot();
     });
@@ -745,8 +745,8 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('import { Author, Book, Title } from "../API";');
 
       // check binding calls are generated
-      expect(componentText).toContain('const authorRecords = await API.graphql({ query: listAuthors');
-      expect(componentText).toContain('const titleRecords = await API.graphql({ query: listTitles');
+      expect(componentText).toContain('const authorRecords = await API.graphql({');
+      expect(componentText).toContain('const titleRecords = await API.graphql({');
 
       expect(componentText).toMatchSnapshot();
     });
@@ -762,7 +762,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('import { Member, Team } from "../API";');
 
       // check binding call is generated
-      expect(componentText).toContain('const teamRecords = await API.graphql({ query: listTeams');
+      expect(componentText).toContain('const teamRecords = await API.graphql({');
 
       expect(componentText).toMatchSnapshot();
     });
@@ -778,7 +778,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('import { Post, Tag, TagPost } from "../API";');
 
       // check binding call is generated
-      expect(componentText).toContain('const postRecords = await API.graphql({ query: listPosts');
+      expect(componentText).toContain('const postRecords = await API.graphql({');
 
       // check custom display value is set
       expect(componentText).toContain('Posts: (r) => r?.title');
@@ -797,7 +797,7 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('import { School, Student } from "../API";');
 
       // check binding call is generated
-      expect(componentText).toContain('const studentRecords = await API.graphql({ query: listStudents');
+      expect(componentText).toContain('const studentRecords = await API.graphql({');
 
       // check custom display value is set
       expect(componentText).toContain('Students: (r) => r?.name');
