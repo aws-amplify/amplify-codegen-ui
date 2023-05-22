@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.13.0...v2.14.0) (2023-05-22)
+
+### Bug Fixes
+
+- **codegen-ui:** fix multiple has one relationships ([#1005](https://github.com/aws-amplify/amplify-codegen-ui/issues/1005)) ([96b7b9d](https://github.com/aws-amplify/amplify-codegen-ui/commit/96b7b9dc3e9e70e1d8527d9abb59334b0bb56ca7))
+- parse operand value when field is number type ([#1013](https://github.com/aws-amplify/amplify-codegen-ui/issues/1013)) ([ad9ba60](https://github.com/aws-amplify/amplify-codegen-ui/commit/ad9ba606ab381b2b4759f19f9310a0901dd10fa8))
+
 ## [2.13.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.13.0...v2.13.1) (2023-05-02)
 
 **Note:** Version bump only for package @aws-amplify/codegen-ui
