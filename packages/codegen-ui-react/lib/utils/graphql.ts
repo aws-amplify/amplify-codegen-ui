@@ -16,7 +16,7 @@
 
 import { plural } from 'pluralize';
 import { InvalidInputError } from '@aws-amplify/codegen-ui';
-import { CallExpression, factory } from 'typescript';
+import { CallExpression, ObjectLiteralElementLike, factory } from 'typescript';
 import { ImportCollection, ImportValue } from '../imports';
 
 export enum ActionType {
@@ -63,7 +63,7 @@ export const getGraphqlCallExpression = (
   action: ActionType,
   model: string,
   importCollection: ImportCollection,
-  inputs?: any[],
+  inputs?: ObjectLiteralElementLike[],
 ): CallExpression => {
   const query = getGraphqlQueryForModel(action, model);
 

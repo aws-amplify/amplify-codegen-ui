@@ -3838,7 +3838,7 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
             query: getPost,
             variables: {
               input: {
-                idProp,
+                id: idProp,
               },
             },
           })

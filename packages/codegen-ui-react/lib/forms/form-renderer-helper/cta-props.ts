@@ -665,7 +665,9 @@ export const buildUpdateDatastoreQuery = (
 
   const queryCall =
     dataApi === 'GraphQL'
-      ? getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, [pkQueryIdentifier])
+      ? getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, [
+          factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
+        ])
       : factory.createCallExpression(
           factory.createPropertyAccessExpression(
             factory.createIdentifier('DataStore'),
