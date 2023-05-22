@@ -72,6 +72,7 @@ import {
   addBindingPropertiesImports,
   getComponentPropName,
   getConditionalOperandExpression,
+  parseNumberOperand,
 } from './react-component-render-helper';
 import {
   transpile,
@@ -934,7 +935,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
         const modelName = this.importCollection.addImport(ImportSource.LOCAL_MODELS, model);
 
         if (predicate) {
-          statements.push(this.buildPredicateDeclaration(propName, predicate));
+          statements.push(this.buildPredicateDeclaration(propName, predicate, model));
           statements.push(this.buildCreateDataStorePredicateCall(modelName, propName));
         }
         if (sort) {
@@ -1255,7 +1256,9 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
              *   operator: "eq",
              * }
              */
-            statements.push(this.buildPredicateDeclaration(propName, bindingProperties.predicate));
+            statements.push(
+              this.buildPredicateDeclaration(propName, bindingProperties.predicate, bindingProperties.model),
+            );
             statements.push(this.buildCreateDataStorePredicateCall(modelName, propName));
             /**
              * const buttonColorDataStore = useDataStoreBinding({
@@ -1436,11 +1439,14 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     ]);
   }
 
-  private predicateToObjectLiteralExpression(predicate: StudioComponentPredicate): ObjectLiteralExpression {
+  private predicateToObjectLiteralExpression(
+    predicate: StudioComponentPredicate,
+    model: string,
+  ): ObjectLiteralExpression {
     const { operandType, ...filteredPredicate } = predicate;
 
     if (filteredPredicate.operator === 'between') {
-      return this.predicateToObjectLiteralExpression(resolveBetweenPredicateToMultiplePredicates(predicate));
+      return this.predicateToObjectLiteralExpression(resolveBetweenPredicateToMultiplePredicates(predicate), model);
     }
 
     const objectAssignments = Object.entries(filteredPredicate).map(([key, value]) => {
@@ -1449,7 +1455,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           factory.createIdentifier(key),
           factory.createArrayLiteralExpression(
             (predicate[key] as StudioComponentPredicate[]).map(
-              (pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred),
+              (pred: StudioComponentPredicate) => this.predicateToObjectLiteralExpression(pred, model),
               false,
             ),
           ),
@@ -1458,7 +1464,13 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
       if (key === 'operand' && typeof value === 'string') {
         return factory.createPropertyAssignment(
           factory.createIdentifier(key),
-          getConditionalOperandExpression(value, operandType),
+          getConditionalOperandExpression(
+            parseNumberOperand(
+              value,
+              this.componentMetadata.dataSchemaMetadata?.models[model]?.fields[predicate.field || ''],
+            ),
+            operandType,
+          ),
         );
       }
       return factory.createPropertyAssignment(
@@ -1480,7 +1492,11 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
     return [];
   }
 
-  private buildPredicateDeclaration(name: string, predicate: StudioComponentPredicate): VariableStatement {
+  private buildPredicateDeclaration(
+    name: string,
+    predicate: StudioComponentPredicate,
+    model: string,
+  ): VariableStatement {
     return factory.createVariableStatement(
       undefined,
       factory.createVariableDeclarationList(
@@ -1489,7 +1505,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
             factory.createIdentifier(this.getFilterObjName(name)),
             undefined,
             undefined,
-            this.predicateToObjectLiteralExpression(predicate),
+            this.predicateToObjectLiteralExpression(predicate, model),
           ),
         ],
         ts.NodeFlags.Const,

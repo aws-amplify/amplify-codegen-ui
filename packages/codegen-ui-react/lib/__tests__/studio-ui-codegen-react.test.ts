@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { ModuleKind, ScriptTarget, ScriptKind } from '..';
-import { authorHasManySchema, compositePersonSchema, generateWithAmplifyRenderer } from './__utils__';
+import { authorHasManySchema, compositePersonSchema, generateWithAmplifyRenderer, userSchema } from './__utils__';
 
 describe('amplify render tests', () => {
   describe('basic component tests', () => {
@@ -121,7 +121,12 @@ describe('amplify render tests', () => {
     });
 
     it('should render collection with data binding if binding name is items', () => {
-      const generatedCode = generateWithAmplifyRenderer('collectionWithBindingItemsName');
+      const generatedCode = generateWithAmplifyRenderer(
+        'collectionWithBindingItemsName',
+        undefined,
+        undefined,
+        userSchema,
+      );
       expect(generatedCode.componentText).toMatchSnapshot();
     });
 
