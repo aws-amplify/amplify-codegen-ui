@@ -696,6 +696,18 @@ describe('amplify form renderer tests', () => {
         { isNonModelSupported: true, isRelationshipSupported: false },
       );
 
+      // check import for graphql operations
+      expect(componentText).toContain('import { API } from "aws-amplify";');
+      expect(componentText).toContain('import { getPost } from "../graphql/queries";');
+      expect(componentText).toContain('import { updatePost } from "../graphql/mutations";');
+
+      // should not have DataStore.save call
+      expect(componentText).not.toContain('await DataStore.save(');
+
+      // should call updatePost mutation onSubmit
+      expect(componentText).toContain(`await API.graphql`);
+      expect(componentText).toContain(`query: updatePost,`);
+
       expect(componentText).toMatchSnapshot();
     });
 
