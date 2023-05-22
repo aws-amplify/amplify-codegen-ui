@@ -24,6 +24,7 @@ export enum ActionType {
   UPDATE = 'update',
   DELETE = 'delete',
   LIST = 'list',
+  GET = 'get',
 }
 
 export const getGraphqlQueryForModel = (action: ActionType, model: string): string => {
@@ -34,6 +35,8 @@ export const getGraphqlQueryForModel = (action: ActionType, model: string): stri
       return `update${model}`;
     case ActionType.DELETE:
       return `delete${model}`;
+    case ActionType.GET:
+      return `get${model}`;
     case ActionType.LIST:
       return `list${plural(model)}`;
     default:
@@ -66,7 +69,7 @@ export const getGraphqlCallExpression = (
 
   importCollection.addMappedImport(ImportValue.API);
 
-  if (action === ActionType.LIST) {
+  if (action === ActionType.LIST || action === ActionType.GET) {
     importCollection.addGraphqlQueryImport(query);
   } else {
     importCollection.addGraphqlMutationImport(query);

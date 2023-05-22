@@ -688,6 +688,17 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
     });
 
+    it('should generate a update form without relationships', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-update',
+        'datastore/post',
+        rendererConfigWithGraphQL,
+        { isNonModelSupported: true, isRelationshipSupported: false },
+      );
+
+      expect(componentText).toMatchSnapshot();
+    });
+
     it('should generate a create form with hasOne relationship', () => {
       const { componentText } = generateWithAmplifyFormRenderer(
         'forms/book-datastore-relationship',

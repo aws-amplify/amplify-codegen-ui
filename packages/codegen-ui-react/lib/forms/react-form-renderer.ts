@@ -388,6 +388,8 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
     const lowerCaseDataTypeNameRecord = `${lowerCaseDataTypeName}Record`;
     const isDataStoreUpdateForm = dataSourceType === 'DataStore' && formActionType === 'update';
+    const dataApi = 'apiConfiguration' in this.renderConfig ? this.renderConfig.apiConfiguration?.dataApi : undefined;
+
     let modelName = dataTypeName;
     if (!formMetadata) {
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
@@ -515,7 +517,14 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
           this.primaryKeys.length > 1 ? getPropName(COMPOSITE_PRIMARY_KEY_PROP_NAME) : getPropName(this.primaryKeys[0]);
         statements.push(
           addUseEffectWrapper(
-            buildUpdateDatastoreQuery(modelName, lowerCaseDataTypeName, relatedModelStatements, destructuredPrimaryKey),
+            buildUpdateDatastoreQuery(
+              modelName,
+              lowerCaseDataTypeName,
+              relatedModelStatements,
+              destructuredPrimaryKey,
+              this.importCollection,
+              dataApi,
+            ),
             [destructuredPrimaryKey, getModelNameProp(lowerCaseDataTypeName)],
           ),
         );
@@ -616,8 +625,6 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       if (!(this.renderConfig.apiConfiguration?.dataApi === 'GraphQL')) {
         this.importCollection.addMappedImport(ImportValue.USE_DATA_STORE_BINDING);
       }
-
-      const dataApi = 'apiConfiguration' in this.renderConfig ? this.renderConfig.apiConfiguration?.dataApi : undefined;
 
       statements.push(
         ...[...relatedModelNames].map((relatedModelName) =>
