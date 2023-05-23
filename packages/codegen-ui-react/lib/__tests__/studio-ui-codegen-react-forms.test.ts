@@ -663,12 +663,13 @@ describe('amplify form renderer tests', () => {
     });
 
     it('should render a update form with StorageField', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/product-datastore-update',
         'datastore/product',
         undefined,
       );
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
   });
 

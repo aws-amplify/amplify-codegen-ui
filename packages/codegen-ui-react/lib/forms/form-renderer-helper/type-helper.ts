@@ -493,7 +493,13 @@ export const buildOverrideTypesBindings = (
       if (field.split('.').length > 1 || !isValidVariableName(field)) {
         propKey = factory.createStringLiteral(field);
       }
-      const componentTypePropName = `${formDefinition.elements[field].componentType}Props`;
+      let componentTypePropName = `${formDefinition.elements[field].componentType}Props`;
+      if (formDefinition.elements[field].componentType === 'StorageField') {
+        componentTypePropName = 'StorageManagerProps';
+        importCollection.addImport(ImportSource.REACT_STORAGE, componentTypePropName);
+      } else {
+        importCollection.addImport(ImportSource.UI_REACT, componentTypePropName);
+      }
       typeNodes.push(
         factory.createPropertySignature(
           undefined,
@@ -504,7 +510,6 @@ export const buildOverrideTypesBindings = (
           ]),
         ),
       );
-      importCollection.addImport(ImportSource.UI_REACT, componentTypePropName);
     });
   });
 

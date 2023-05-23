@@ -24848,10 +24848,10 @@ exports[`amplify form renderer tests forms with StorageField tests should render
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
 import { Field, getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Product } from \\"../models\\";
 import { fetchByPath, processFile, validateField } from \\"./utils\\";
-import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function CreateProductForm(props) {
   const {
@@ -25059,10 +25059,10 @@ exports[`amplify form renderer tests forms with StorageField tests should render
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
 import { Field, getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Product } from \\"../models\\";
 import { fetchByPath, processFile, validateField } from \\"./utils\\";
-import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function UpdateProductForm(props) {
   const {
@@ -25287,14 +25287,54 @@ export default function UpdateProductForm(props) {
 "
 `;
 
+exports[`amplify form renderer tests forms with StorageField tests should render a update form with StorageField 2`] = `
+"import * as React from \\"react\\";
+import { GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { StorageManagerProps } from \\"@aws-amplify/ui-react-storage\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Product } from \\"../models\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdateProductFormInputValues = {
+    name?: string;
+    imgKeys?: string[];
+};
+export declare type UpdateProductFormValidationValues = {
+    name?: ValidationFunction<string>;
+    imgKeys?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateProductFormOverridesProps = {
+    UpdateProductFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    imgKeys?: PrimitiveOverrideProps<StorageManagerProps>;
+} & EscapeHatchProps;
+export declare type UpdateProductFormProps = React.PropsWithChildren<{
+    overrides?: UpdateProductFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    product?: Product;
+    onSubmit?: (fields: UpdateProductFormInputValues) => UpdateProductFormInputValues;
+    onSuccess?: (fields: UpdateProductFormInputValues) => void;
+    onError?: (fields: UpdateProductFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateProductFormInputValues) => UpdateProductFormInputValues;
+    onValidate?: UpdateProductFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdateProductForm(props: UpdateProductFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests forms with StorageField tests should render a update form with StorageField on non-array field 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import { Button, Flex, Grid, TextField } from \\"@aws-amplify/ui-react\\";
+import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
 import { Field, getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { Product } from \\"../models\\";
 import { fetchByPath, processFile, validateField } from \\"./utils\\";
-import { StorageManager } from \\"@aws-amplify/ui-react-storage\\";
 import { DataStore } from \\"aws-amplify\\";
 export default function UpdateProductForm(props) {
   const {
