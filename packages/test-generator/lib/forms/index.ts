@@ -24,6 +24,8 @@ export { default as CustomFormCreateNestedJson } from './custom-form-nested-json
 export { default as DataStoreFormUpdateCPKTeacher } from './datastore-form-update-cpk-teacher.json';
 export { default as DataStoreFormUpdateCompositeDog } from './datastore-form-update-composite-dog.json';
 export { default as DataStoreFormCreateCPKTeacher } from './datastore-form-create-cpk-teacher.json';
+export { default as DataStoreFormCreateUserProfile } from './datastore-form-create-user-profile.json';
+export { default as DataStoreFormUpdateUserProfile } from './datastore-form-update-user-profile.json';
 export { default as DataStoreFormCreateCompositeDog } from './datastore-form-create-composite-dog.json';
 export { default as DataStoreFormUpdateCompositeToy } from './datastore-form-update-composite-toy.json';
 export { default as DataStoreFormUpdateCompositeDogScalar } from './datastore-form-update-composite-dog-scalar.json';

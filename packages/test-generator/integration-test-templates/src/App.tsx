@@ -25,12 +25,13 @@ import WorkflowTests from './WorkflowTests';
 import TwoWayBindingTests from './TwoWayBindingTests';
 import ActionBindingTests from './ActionBindingTests';
 import FormTests from './FormTests';
-import { DATA_STORE_MOCK_EXPORTS, AUTH_MOCK_EXPORTS } from './mock-utils';
+import { DATA_STORE_MOCK_EXPORTS, AUTH_MOCK_EXPORTS, STORAGE_MOCK_EXPORTS } from './mock-utils';
 
 // use fake endpoint so useDataStoreBinding does not fail
 Amplify.configure({
   ...DATA_STORE_MOCK_EXPORTS,
   ...AUTH_MOCK_EXPORTS,
+  ...STORAGE_MOCK_EXPORTS,
 });
 
 const HomePage = () => {

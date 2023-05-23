@@ -1,0 +1,68 @@
+{
+    "cta": {},
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "UserProfile"
+    },
+    "fields": {
+        "name": {
+            "inputType": {
+                "type": "TextField"
+            },
+            "position": {
+                "fixed": "first"
+            }
+        },
+        "headline": {
+            "inputType": {
+                "type": "TextField"
+            },
+            "position": {
+                "below": "name"
+            }
+        },
+        "image": {
+            "inputType": {
+                "descriptiveText": "Used for your profile page",
+                "fileUploaderConfig": {
+                    "acceptedFileTypes": [
+                        "image/*"
+                    ],
+                    "accessLevel": "public",
+                    "isResumable": false,
+                    "maxFileCount": 1,
+                    "showThumbnails": true
+                },
+                "type": "StorageField"
+            },
+            "position": {
+                "below": "headline"
+            }
+        },
+        "additionalImages": {
+            "inputType": {
+                "fileUploaderConfig": {
+                    "acceptedFileTypes": [
+                        "audio/*",
+                        "video/*",
+                        "image/*"
+                    ],
+                    "accessLevel": "private",
+                    "isResumable": false,
+                    "maxFileCount": 2,
+                    "maxSize": 22000000,
+                    "showThumbnails": true
+                },
+                "type": "StorageField"
+            },
+            "position": {
+                "below": "image"
+            }
+        }
+    },
+    "formActionType": "update",
+    "name": "DataStoreFormUpdateUserProfile",
+    "schemaVersion": "1.0",
+    "sectionalElements": {},
+    "style": {}
+}
