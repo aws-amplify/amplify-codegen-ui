@@ -71,11 +71,15 @@ const getRecordUpdateDataStoreCallExpression = ({
   modelName,
   importedModelName,
   fieldConfigs,
+  importCollection,
+  dataApi,
 }: {
   savedObjectName: string;
   modelName: string;
   importedModelName: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
+  importCollection: ImportCollection;
+  dataApi?: DataApiKind;
 }) => {
   const updatedObjectName = 'updated';
   // TODO: remove after DataStore addresses issue: https://github.com/aws-amplify/amplify-js/issues/10750
@@ -85,6 +89,12 @@ const getRecordUpdateDataStoreCallExpression = ({
     savedObjectName,
     fieldConfigs,
   });
+
+  if (dataApi === 'GraphQL') {
+    const inputs = [factory.createSpreadAssignment(factory.createIdentifier(savedObjectName))];
+
+    return getGraphqlCallExpression(ActionType.UPDATE, importedModelName, importCollection, inputs);
+  }
 
   return factory.createCallExpression(
     factory.createPropertyAccessExpression(factory.createIdentifier('DataStore'), factory.createIdentifier('save')),
@@ -332,6 +342,45 @@ export const buildExpression = (
     );
   }
 
+  const resolvePromisesStatement = factory.createExpressionStatement(
+    factory.createAwaitExpression(
+      factory.createCallExpression(
+        factory.createPropertyAccessExpression(factory.createIdentifier('Promise'), factory.createIdentifier('all')),
+        undefined,
+        [factory.createIdentifier('promises')],
+      ),
+    ),
+  );
+
+  if (dataStoreActionType === 'update') {
+    const recordUpdateDataStoreCallExpression = getRecordUpdateDataStoreCallExpression({
+      savedObjectName,
+      modelName,
+      importedModelName,
+      fieldConfigs,
+      importCollection,
+      dataApi,
+    });
+
+    const genericUpdateStatement = relationshipsPromisesAccessStatements.length
+      ? [
+          factory.createExpressionStatement(
+            factory.createCallExpression(
+              factory.createPropertyAccessExpression(
+                factory.createIdentifier('promises'),
+                factory.createIdentifier('push'),
+              ),
+              undefined,
+              [recordUpdateDataStoreCallExpression],
+            ),
+          ),
+          resolvePromisesStatement,
+        ]
+      : [factory.createExpressionStatement(factory.createAwaitExpression(recordUpdateDataStoreCallExpression))];
+
+    return [...relationshipsPromisesAccessStatements, ...modelObjectToSaveStatements, ...genericUpdateStatement];
+  }
+
   const recordCreateCallExpression = getRecordCreateCallExpression({
     savedObjectName,
     importedModelName,
@@ -356,43 +405,6 @@ export const buildExpression = (
         ),
       ]
     : [factory.createExpressionStatement(factory.createAwaitExpression(recordCreateCallExpression))];
-
-  const resolvePromisesStatement = factory.createExpressionStatement(
-    factory.createAwaitExpression(
-      factory.createCallExpression(
-        factory.createPropertyAccessExpression(factory.createIdentifier('Promise'), factory.createIdentifier('all')),
-        undefined,
-        [factory.createIdentifier('promises')],
-      ),
-    ),
-  );
-
-  const recordUpdateDataStoreCallExpression = getRecordUpdateDataStoreCallExpression({
-    savedObjectName,
-    modelName,
-    importedModelName,
-    fieldConfigs,
-  });
-
-  const genericUpdateStatement = relationshipsPromisesAccessStatements.length
-    ? [
-        factory.createExpressionStatement(
-          factory.createCallExpression(
-            factory.createPropertyAccessExpression(
-              factory.createIdentifier('promises'),
-              factory.createIdentifier('push'),
-            ),
-            undefined,
-            [recordUpdateDataStoreCallExpression],
-          ),
-        ),
-        resolvePromisesStatement,
-      ]
-    : [factory.createExpressionStatement(factory.createAwaitExpression(recordUpdateDataStoreCallExpression))];
-
-  if (dataStoreActionType === 'update') {
-    return [...relationshipsPromisesAccessStatements, ...modelObjectToSaveStatements, ...genericUpdateStatement];
-  }
   const createStatements = [
     ...modelObjectToSaveStatements,
     ...genericCreateStatement,
@@ -646,8 +658,25 @@ export const buildUpdateDatastoreQuery = (
   lowerCaseDataTypeName: string,
   relatedModelStatements: Statement[],
   primaryKey: string,
+  importCollection: ImportCollection,
+  dataApi?: DataApiKind,
 ) => {
   const pkQueryIdentifier = factory.createIdentifier(primaryKey);
+
+  const queryCall =
+    dataApi === 'GraphQL'
+      ? getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, [
+          factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
+        ])
+      : factory.createCallExpression(
+          factory.createPropertyAccessExpression(
+            factory.createIdentifier('DataStore'),
+            factory.createIdentifier('query'),
+          ),
+          undefined,
+          [factory.createIdentifier(importedModelName), pkQueryIdentifier],
+        );
+
   return [
     factory.createVariableStatement(
       undefined,
@@ -676,16 +705,7 @@ export const buildUpdateDatastoreQuery = (
                           factory.createConditionalExpression(
                             pkQueryIdentifier,
                             factory.createToken(SyntaxKind.QuestionToken),
-                            factory.createAwaitExpression(
-                              factory.createCallExpression(
-                                factory.createPropertyAccessExpression(
-                                  factory.createIdentifier('DataStore'),
-                                  factory.createIdentifier('query'),
-                                ),
-                                undefined,
-                                [factory.createIdentifier(importedModelName), pkQueryIdentifier],
-                              ),
-                            ),
+                            factory.createAwaitExpression(queryCall),
                             factory.createToken(SyntaxKind.ColonToken),
                             factory.createIdentifier(getModelNameProp(lowerCaseDataTypeName)),
                           ),

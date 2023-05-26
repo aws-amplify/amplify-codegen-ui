@@ -718,6 +718,29 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toMatchSnapshot();
     });
 
+    it('should generate a update form without relationships', () => {
+      const { componentText } = generateWithAmplifyFormRenderer(
+        'forms/post-datastore-update',
+        'datastore/post',
+        rendererConfigWithGraphQL,
+        { isNonModelSupported: true, isRelationshipSupported: false },
+      );
+
+      // check import for graphql operations
+      expect(componentText).toContain('import { API } from "aws-amplify";');
+      expect(componentText).toContain('import { getPost } from "../graphql/queries";');
+      expect(componentText).toContain('import { updatePost } from "../graphql/mutations";');
+
+      // should not have DataStore.save call
+      expect(componentText).not.toContain('await DataStore.save(');
+
+      // should call updatePost mutation onSubmit
+      expect(componentText).toContain(`await API.graphql`);
+      expect(componentText).toContain(`query: updatePost,`);
+
+      expect(componentText).toMatchSnapshot();
+    });
+
     it('should generate a create form with hasOne relationship', () => {
       const { componentText } = generateWithAmplifyFormRenderer(
         'forms/book-datastore-relationship',
