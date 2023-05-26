@@ -16,7 +16,7 @@
 
 import { plural } from 'pluralize';
 import { InvalidInputError } from '@aws-amplify/codegen-ui';
-import { CallExpression, factory } from 'typescript';
+import { CallExpression, ObjectLiteralElementLike, factory } from 'typescript';
 import { ImportCollection, ImportValue } from '../imports';
 
 export enum ActionType {
@@ -24,6 +24,7 @@ export enum ActionType {
   UPDATE = 'update',
   DELETE = 'delete',
   LIST = 'list',
+  GET = 'get',
 }
 
 export const getGraphqlQueryForModel = (action: ActionType, model: string): string => {
@@ -34,6 +35,8 @@ export const getGraphqlQueryForModel = (action: ActionType, model: string): stri
       return `update${model}`;
     case ActionType.DELETE:
       return `delete${model}`;
+    case ActionType.GET:
+      return `get${model}`;
     case ActionType.LIST:
       return `list${plural(model)}`;
     default:
@@ -60,13 +63,13 @@ export const getGraphqlCallExpression = (
   action: ActionType,
   model: string,
   importCollection: ImportCollection,
-  inputs?: any[],
+  inputs?: ObjectLiteralElementLike[],
 ): CallExpression => {
   const query = getGraphqlQueryForModel(action, model);
 
   importCollection.addMappedImport(ImportValue.API);
 
-  if (action === ActionType.LIST) {
+  if (action === ActionType.LIST || action === ActionType.GET) {
     importCollection.addGraphqlQueryImport(query);
   } else {
     importCollection.addGraphqlMutationImport(query);
