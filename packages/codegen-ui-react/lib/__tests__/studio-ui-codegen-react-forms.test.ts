@@ -16,6 +16,7 @@
 /* eslint-disable no-template-curly-in-string */
 import { ImportSource } from '../imports';
 import {
+  defaultCLIRenderConfig,
   generateComponentOnlyWithAmplifyFormRenderer,
   generateWithAmplifyFormRenderer,
   rendererConfigWithGraphQL,
@@ -708,21 +709,22 @@ describe('amplify form renderer tests', () => {
 
   describe('GraphQL form tests', () => {
     it('should generate a create form', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-create',
         'datastore/post',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should generate a update form without relationships', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-update',
         'datastore/post',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: false },
       );
 
@@ -739,66 +741,62 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain(`query: updatePost,`);
 
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should generate a create form with hasOne relationship', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/book-datastore-relationship',
         'datastore/relationship',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
-      // check nested model is imported
-      expect(componentText).toContain('import { Author, Book } from "../API";');
 
       // check binding call is generated
       expect(componentText).toContain('const authorRecords = await API.graphql({');
 
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should generate a create form with multiple hasOne relationships', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/book-datastore-relationship-multiple',
         'datastore/relationship-multiple',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
-      // check nested model is imported
-      expect(componentText).toContain('import { Author, Book, Title } from "../API";');
 
       // check binding calls are generated
       expect(componentText).toContain('const authorRecords = await API.graphql({');
       expect(componentText).toContain('const titleRecords = await API.graphql({');
 
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should generate a create form with belongsTo relationship', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/member-datastore-create',
         'datastore/project-team-model',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
-      // check nested model is imported
-      expect(componentText).toContain('import { Member, Team } from "../API";');
 
       // check binding call is generated
       expect(componentText).toContain('const teamRecords = await API.graphql({');
 
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should generate a create form with manyToMany relationship', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/tag-datastore-create',
         'datastore/tag-post',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
-      // check nested model is imported
-      expect(componentText).toContain('import { Post, Tag, TagPost } from "../API";');
 
       // check binding call is generated
       expect(componentText).toContain('const postRecords = await API.graphql({');
@@ -807,17 +805,16 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('Posts: (r) => r?.title');
 
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should generate a create form with hasMany relationship', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/school-datastore-create',
         'datastore/school-student',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
-      // check nested model is imported
-      expect(componentText).toContain('import { School, Student } from "../API";');
 
       // check binding call is generated
       expect(componentText).toContain('const studentRecords = await API.graphql({');
@@ -826,35 +823,38 @@ describe('amplify form renderer tests', () => {
       expect(componentText).toContain('Students: (r) => r?.name');
 
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should render a create form for model with composite keys', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/composite-dog-datastore-create',
         'datastore/composite-relationships',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should render a create form for child of 1:m relationship', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/composite-toy-datastore-create',
         'datastore/composite-relationships',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should render a create form for child of 1:m-belongsTo relationship', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/comment-datastore-create',
         'datastore/comment-hasMany-belongsTo-relationships',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
@@ -863,13 +863,14 @@ describe('amplify form renderer tests', () => {
       expect(componentText).not.toContain('userCommentsId');
       expect(componentText).not.toContain('orgCommentsId');
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should render thrown error for required parent field 1:1 relationships - Create', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/dog-owner-create',
         'datastore/dog-owner-required',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
@@ -879,19 +880,21 @@ describe('amplify form renderer tests', () => {
         'Owner ${ownerToLink.id} cannot be linked to Dog because it is already linked to another Dog.',
       );
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should render thrown error for required related field 1:1 relationships - Create', () => {
-      const { componentText } = generateWithAmplifyFormRenderer(
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/owner-dog-create',
         'datastore/dog-owner-required',
-        rendererConfigWithGraphQL,
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
         { isNonModelSupported: true, isRelationshipSupported: true },
       );
 
       expect(componentText).not.toContain('cannot be unlinked because');
       expect(componentText).not.toContain('cannot be linked to ');
       expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
     });
   });
 

@@ -9,76 +9,17 @@ import {
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextAreaField,
-  TextAreaFieldProps,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Post } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { createPost } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type MyPostFormInputValues = {
-  caption?: string;
-  username?: string;
-  post_url?: string;
-  metadata?: string;
-  profile_url?: string;
-  nonModelField?: string;
-  nonModelFieldArray?: string[];
-};
-export declare type MyPostFormValidationValues = {
-  caption?: ValidationFunction<string>;
-  username?: ValidationFunction<string>;
-  post_url?: ValidationFunction<string>;
-  metadata?: ValidationFunction<string>;
-  profile_url?: ValidationFunction<string>;
-  nonModelField?: ValidationFunction<string>;
-  nonModelFieldArray?: ValidationFunction<string>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type MyPostFormOverridesProps = {
-  MyPostFormGrid?: PrimitiveOverrideProps<GridProps>;
-  caption?: PrimitiveOverrideProps<TextFieldProps>;
-  username?: PrimitiveOverrideProps<TextFieldProps>;
-  post_url?: PrimitiveOverrideProps<TextFieldProps>;
-  metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
-  profile_url?: PrimitiveOverrideProps<TextFieldProps>;
-  nonModelField?: PrimitiveOverrideProps<TextAreaFieldProps>;
-  nonModelFieldArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
-} & EscapeHatchProps;
-export type MyPostFormProps = React.PropsWithChildren<
-  {
-    overrides?: MyPostFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onSuccess?: (fields: MyPostFormInputValues) => void;
-    onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
-    onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onValidate?: MyPostFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -237,7 +178,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
+export default function MyPostForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -313,13 +254,12 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           caption,
@@ -401,7 +341,7 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -665,74 +605,80 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate a create form 2`] = `
+"import * as React from \\"react\\";
+import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type MyPostFormInputValues = {
+    caption?: string;
+    username?: string;
+    post_url?: string;
+    metadata?: string;
+    profile_url?: string;
+    nonModelField?: string;
+    nonModelFieldArray?: string[];
+};
+export declare type MyPostFormValidationValues = {
+    caption?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+    nonModelField?: ValidationFunction<string>;
+    nonModelFieldArray?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type MyPostFormOverridesProps = {
+    MyPostFormGrid?: PrimitiveOverrideProps<GridProps>;
+    caption?: PrimitiveOverrideProps<TextFieldProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    post_url?: PrimitiveOverrideProps<TextFieldProps>;
+    metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    profile_url?: PrimitiveOverrideProps<TextFieldProps>;
+    nonModelField?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    nonModelFieldArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
+} & EscapeHatchProps;
+export declare type MyPostFormProps = React.PropsWithChildren<{
+    overrides?: MyPostFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onValidate?: MyPostFormValidationValues;
+} & React.CSSProperties>;
+export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with belongsTo relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Member, Team } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listTeams } from \\"../graphql/queries\\";
 import { createMember } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type MyMemberFormInputValues = {
-  name?: string;
-  teamID?: string;
-  Team?: Team;
-};
-export declare type MyMemberFormValidationValues = {
-  name?: ValidationFunction<string>;
-  teamID?: ValidationFunction<string>;
-  Team?: ValidationFunction<Team>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type MyMemberFormOverridesProps = {
-  MyMemberFormGrid?: PrimitiveOverrideProps<GridProps>;
-  name?: PrimitiveOverrideProps<TextFieldProps>;
-  teamID?: PrimitiveOverrideProps<AutocompleteProps>;
-  Team?: PrimitiveOverrideProps<AutocompleteProps>;
-} & EscapeHatchProps;
-export type MyMemberFormProps = React.PropsWithChildren<
-  {
-    overrides?: MyMemberFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
-    onSuccess?: (fields: MyMemberFormInputValues) => void;
-    onError?: (fields: MyMemberFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
-    onChange?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
-    onValidate?: MyMemberFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -891,9 +837,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function MyMemberForm(
-  props: MyMemberFormProps
-): React.ReactElement {
+export default function MyMemberForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -970,13 +914,12 @@ export default function MyMemberForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           name,
@@ -1049,7 +992,7 @@ export default function MyMemberForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -1256,78 +1199,69 @@ export default function MyMemberForm(
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with belongsTo relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Team } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type MyMemberFormInputValues = {
+    name?: string;
+    teamID?: string;
+    Team?: Team;
+};
+export declare type MyMemberFormValidationValues = {
+    name?: ValidationFunction<string>;
+    teamID?: ValidationFunction<string>;
+    Team?: ValidationFunction<Team>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type MyMemberFormOverridesProps = {
+    MyMemberFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    teamID?: PrimitiveOverrideProps<AutocompleteProps>;
+    Team?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type MyMemberFormProps = React.PropsWithChildren<{
+    overrides?: MyMemberFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
+    onSuccess?: (fields: MyMemberFormInputValues) => void;
+    onError?: (fields: MyMemberFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: MyMemberFormInputValues) => MyMemberFormInputValues;
+    onValidate?: MyMemberFormValidationValues;
+} & React.CSSProperties>;
+export default function MyMemberForm(props: MyMemberFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with hasMany relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { School, Student } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listStudents } from \\"../graphql/queries\\";
 import { createSchool, updateSchool } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type SchoolCreateFormInputValues = {
-  name?: string;
-  Students?: Student[];
-};
-export declare type SchoolCreateFormValidationValues = {
-  name?: ValidationFunction<string>;
-  Students?: ValidationFunction<Student>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type SchoolCreateFormOverridesProps = {
-  SchoolCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-  name?: PrimitiveOverrideProps<TextFieldProps>;
-  Students?: PrimitiveOverrideProps<AutocompleteProps>;
-} & EscapeHatchProps;
-export type SchoolCreateFormProps = React.PropsWithChildren<
-  {
-    overrides?: SchoolCreateFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (
-      fields: SchoolCreateFormInputValues
-    ) => SchoolCreateFormInputValues;
-    onSuccess?: (fields: SchoolCreateFormInputValues) => void;
-    onError?: (
-      fields: SchoolCreateFormInputValues,
-      errorMessage: string
-    ) => void;
-    onCancel?: () => void;
-    onChange?: (
-      fields: SchoolCreateFormInputValues
-    ) => SchoolCreateFormInputValues;
-    onValidate?: SchoolCreateFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -1486,9 +1420,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function SchoolCreateForm(
-  props: SchoolCreateFormProps
-): React.ReactElement {
+export default function SchoolCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -1555,13 +1487,12 @@ export default function SchoolCreateForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           name,
@@ -1753,7 +1684,7 @@ export default function SchoolCreateForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -1786,71 +1717,66 @@ export default function SchoolCreateForm(
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with hasMany relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Student } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type SchoolCreateFormInputValues = {
+    name?: string;
+    Students?: Student[];
+};
+export declare type SchoolCreateFormValidationValues = {
+    name?: ValidationFunction<string>;
+    Students?: ValidationFunction<Student>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type SchoolCreateFormOverridesProps = {
+    SchoolCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Students?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type SchoolCreateFormProps = React.PropsWithChildren<{
+    overrides?: SchoolCreateFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: SchoolCreateFormInputValues) => SchoolCreateFormInputValues;
+    onSuccess?: (fields: SchoolCreateFormInputValues) => void;
+    onError?: (fields: SchoolCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: SchoolCreateFormInputValues) => SchoolCreateFormInputValues;
+    onValidate?: SchoolCreateFormValidationValues;
+} & React.CSSProperties>;
+export default function SchoolCreateForm(props: SchoolCreateFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with hasOne relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Author, Book } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listAuthors } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type BookCreateFormInputValues = {
-  name?: string;
-  primaryAuthor?: Author;
-};
-export declare type BookCreateFormValidationValues = {
-  name?: ValidationFunction<string>;
-  primaryAuthor?: ValidationFunction<Author>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type BookCreateFormOverridesProps = {
-  BookCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-  name?: PrimitiveOverrideProps<TextFieldProps>;
-  primaryAuthor?: PrimitiveOverrideProps<AutocompleteProps>;
-} & EscapeHatchProps;
-export type BookCreateFormProps = React.PropsWithChildren<
-  {
-    overrides?: BookCreateFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
-    onSuccess?: (fields: BookCreateFormInputValues) => void;
-    onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
-    onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
-    onValidate?: BookCreateFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -2009,9 +1935,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function BookCreateForm(
-  props: BookCreateFormProps
-): React.ReactElement {
+export default function BookCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -2082,13 +2006,12 @@ export default function BookCreateForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           name,
@@ -2160,7 +2083,7 @@ export default function BookCreateForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -2298,77 +2221,67 @@ export default function BookCreateForm(
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with hasOne relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Author } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type BookCreateFormInputValues = {
+    name?: string;
+    primaryAuthor?: Author;
+};
+export declare type BookCreateFormValidationValues = {
+    name?: ValidationFunction<string>;
+    primaryAuthor?: ValidationFunction<Author>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type BookCreateFormOverridesProps = {
+    BookCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    primaryAuthor?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type BookCreateFormProps = React.PropsWithChildren<{
+    overrides?: BookCreateFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
+    onSuccess?: (fields: BookCreateFormInputValues) => void;
+    onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
+    onValidate?: BookCreateFormValidationValues;
+} & React.CSSProperties>;
+export default function BookCreateForm(props: BookCreateFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with manyToMany relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   SelectField,
-  SelectFieldProps,
   Text,
   TextField,
-  TextFieldProps,
-  option,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Post, Tag, TagPost } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listPosts } from \\"../graphql/queries\\";
 import { createTag, createTagPost } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type TagCreateFormInputValues = {
-  label?: string;
-  Posts?: Post[];
-  statuses?: string[];
-};
-export declare type TagCreateFormValidationValues = {
-  label?: ValidationFunction<string>;
-  Posts?: ValidationFunction<Post>;
-  statuses?: ValidationFunction<string>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type TagCreateFormOverridesProps = {
-  TagCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-  label?: PrimitiveOverrideProps<TextFieldProps>;
-  Posts?: PrimitiveOverrideProps<AutocompleteProps>;
-  statuses?: PrimitiveOverrideProps<SelectFieldProps>;
-} & EscapeHatchProps;
-export type TagCreateFormProps = React.PropsWithChildren<
-  {
-    overrides?: TagCreateFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
-    onSuccess?: (fields: TagCreateFormInputValues) => void;
-    onError?: (fields: TagCreateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
-    onChange?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
-    onValidate?: TagCreateFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -2527,9 +2440,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function TagCreateForm(
-  props: TagCreateFormProps
-): React.ReactElement {
+export default function TagCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -2610,13 +2521,12 @@ export default function TagCreateForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           label,
@@ -2871,7 +2781,7 @@ export default function TagCreateForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -2904,74 +2814,69 @@ export default function TagCreateForm(
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with manyToMany relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Post } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type TagCreateFormInputValues = {
+    label?: string;
+    Posts?: Post[];
+    statuses?: string[];
+};
+export declare type TagCreateFormValidationValues = {
+    label?: ValidationFunction<string>;
+    Posts?: ValidationFunction<Post>;
+    statuses?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type TagCreateFormOverridesProps = {
+    TagCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    label?: PrimitiveOverrideProps<TextFieldProps>;
+    Posts?: PrimitiveOverrideProps<AutocompleteProps>;
+    statuses?: PrimitiveOverrideProps<SelectFieldProps>;
+} & EscapeHatchProps;
+export declare type TagCreateFormProps = React.PropsWithChildren<{
+    overrides?: TagCreateFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
+    onSuccess?: (fields: TagCreateFormInputValues) => void;
+    onError?: (fields: TagCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: TagCreateFormInputValues) => TagCreateFormInputValues;
+    onValidate?: TagCreateFormValidationValues;
+} & React.CSSProperties>;
+export default function TagCreateForm(props: TagCreateFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should generate a create form with multiple hasOne relationships 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Author, Book, Title } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listAuthors, listTitles } from \\"../graphql/queries\\";
 import { createBook } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type BookCreateFormInputValues = {
-  name?: string;
-  primaryAuthor?: Author;
-  primaryTitle?: Title;
-};
-export declare type BookCreateFormValidationValues = {
-  name?: ValidationFunction<string>;
-  primaryAuthor?: ValidationFunction<Author>;
-  primaryTitle?: ValidationFunction<Title>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type BookCreateFormOverridesProps = {
-  BookCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-  name?: PrimitiveOverrideProps<TextFieldProps>;
-  primaryAuthor?: PrimitiveOverrideProps<AutocompleteProps>;
-  primaryTitle?: PrimitiveOverrideProps<AutocompleteProps>;
-} & EscapeHatchProps;
-export type BookCreateFormProps = React.PropsWithChildren<
-  {
-    overrides?: BookCreateFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
-    onSuccess?: (fields: BookCreateFormInputValues) => void;
-    onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
-    onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
-    onValidate?: BookCreateFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -3130,9 +3035,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function BookCreateForm(
-  props: BookCreateFormProps
-): React.ReactElement {
+export default function BookCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -3226,13 +3129,12 @@ export default function BookCreateForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           name,
@@ -3305,7 +3207,7 @@ export default function BookCreateForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -3521,6 +3423,48 @@ export default function BookCreateForm(
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate a create form with multiple hasOne relationships 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Author, Title } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type BookCreateFormInputValues = {
+    name?: string;
+    primaryAuthor?: Author;
+    primaryTitle?: Title;
+};
+export declare type BookCreateFormValidationValues = {
+    name?: ValidationFunction<string>;
+    primaryAuthor?: ValidationFunction<Author>;
+    primaryTitle?: ValidationFunction<Title>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type BookCreateFormOverridesProps = {
+    BookCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    primaryAuthor?: PrimitiveOverrideProps<AutocompleteProps>;
+    primaryTitle?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type BookCreateFormProps = React.PropsWithChildren<{
+    overrides?: BookCreateFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
+    onSuccess?: (fields: BookCreateFormInputValues) => void;
+    onError?: (fields: BookCreateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: BookCreateFormInputValues) => BookCreateFormInputValues;
+    onValidate?: BookCreateFormValidationValues;
+} & React.CSSProperties>;
+export default function BookCreateForm(props: BookCreateFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should generate a update form without relationships 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -3530,81 +3474,18 @@ import {
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextAreaField,
-  TextAreaFieldProps,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Post } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { getPost } from \\"../graphql/queries\\";
 import { updatePost } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type MyPostFormInputValues = {
-  TextAreaFieldbbd63464?: string;
-  caption?: string;
-  username?: string;
-  profile_url?: string;
-  post_url?: string;
-  metadata?: string;
-  nonModelField?: string;
-  nonModelFieldArray?: string[];
-};
-export declare type MyPostFormValidationValues = {
-  TextAreaFieldbbd63464?: ValidationFunction<string>;
-  caption?: ValidationFunction<string>;
-  username?: ValidationFunction<string>;
-  profile_url?: ValidationFunction<string>;
-  post_url?: ValidationFunction<string>;
-  metadata?: ValidationFunction<string>;
-  nonModelField?: ValidationFunction<string>;
-  nonModelFieldArray?: ValidationFunction<string>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type MyPostFormOverridesProps = {
-  MyPostFormGrid?: PrimitiveOverrideProps<GridProps>;
-  TextAreaFieldbbd63464?: PrimitiveOverrideProps<TextAreaFieldProps>;
-  caption?: PrimitiveOverrideProps<TextFieldProps>;
-  username?: PrimitiveOverrideProps<TextFieldProps>;
-  profile_url?: PrimitiveOverrideProps<TextFieldProps>;
-  post_url?: PrimitiveOverrideProps<TextFieldProps>;
-  metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
-  nonModelField?: PrimitiveOverrideProps<TextAreaFieldProps>;
-  nonModelFieldArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
-} & EscapeHatchProps;
-export type MyPostFormProps = React.PropsWithChildren<
-  {
-    overrides?: MyPostFormOverridesProps | undefined | null;
-  } & {
-    id?: string;
-    post?: Post;
-    onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onSuccess?: (fields: MyPostFormInputValues) => void;
-    onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
-    onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
-    onValidate?: MyPostFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -3763,7 +3644,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
+export default function MyPostForm(props) {
   const {
     id: idProp,
     post: postModelProp,
@@ -3879,13 +3760,12 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           TextAreaFieldbbd63464,
@@ -3965,7 +3845,7 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -4274,7 +4154,7 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
         <Button
           children=\\"Reset\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -4311,83 +4191,85 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement {
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate a update form without relationships 2`] = `
+"import * as React from \\"react\\";
+import { GridProps, TextAreaFieldProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Post } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type MyPostFormInputValues = {
+    TextAreaFieldbbd63464?: string;
+    caption?: string;
+    username?: string;
+    profile_url?: string;
+    post_url?: string;
+    metadata?: string;
+    nonModelField?: string;
+    nonModelFieldArray?: string[];
+};
+export declare type MyPostFormValidationValues = {
+    TextAreaFieldbbd63464?: ValidationFunction<string>;
+    caption?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    profile_url?: ValidationFunction<string>;
+    post_url?: ValidationFunction<string>;
+    metadata?: ValidationFunction<string>;
+    nonModelField?: ValidationFunction<string>;
+    nonModelFieldArray?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type MyPostFormOverridesProps = {
+    MyPostFormGrid?: PrimitiveOverrideProps<GridProps>;
+    TextAreaFieldbbd63464?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    caption?: PrimitiveOverrideProps<TextFieldProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    profile_url?: PrimitiveOverrideProps<TextFieldProps>;
+    post_url?: PrimitiveOverrideProps<TextFieldProps>;
+    metadata?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    nonModelField?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    nonModelFieldArray?: PrimitiveOverrideProps<TextAreaFieldProps>;
+} & EscapeHatchProps;
+export declare type MyPostFormProps = React.PropsWithChildren<{
+    overrides?: MyPostFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    post?: Post;
+    onSubmit?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onSuccess?: (fields: MyPostFormInputValues) => void;
+    onError?: (fields: MyPostFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
+    onChange?: (fields: MyPostFormInputValues) => MyPostFormInputValues;
+    onValidate?: MyPostFormValidationValues;
+} & React.CSSProperties>;
+export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should render a create form for child of 1:m relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { CompositeDog, CompositeToy } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listCompositeDogs } from \\"../graphql/queries\\";
 import { createCompositeToy } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type CreateCompositeToyFormInputValues = {
-  kind?: string;
-  color?: string;
-  compositeDogCompositeToysName?: string;
-  compositeDogCompositeToysDescription?: string;
-};
-export declare type CreateCompositeToyFormValidationValues = {
-  kind?: ValidationFunction<string>;
-  color?: ValidationFunction<string>;
-  compositeDogCompositeToysName?: ValidationFunction<string>;
-  compositeDogCompositeToysDescription?: ValidationFunction<string>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type CreateCompositeToyFormOverridesProps = {
-  CreateCompositeToyFormGrid?: PrimitiveOverrideProps<GridProps>;
-  kind?: PrimitiveOverrideProps<TextFieldProps>;
-  color?: PrimitiveOverrideProps<TextFieldProps>;
-  compositeDogCompositeToysName?: PrimitiveOverrideProps<AutocompleteProps>;
-  compositeDogCompositeToysDescription?: PrimitiveOverrideProps<AutocompleteProps>;
-} & EscapeHatchProps;
-export type CreateCompositeToyFormProps = React.PropsWithChildren<
-  {
-    overrides?: CreateCompositeToyFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (
-      fields: CreateCompositeToyFormInputValues
-    ) => CreateCompositeToyFormInputValues;
-    onSuccess?: (fields: CreateCompositeToyFormInputValues) => void;
-    onError?: (
-      fields: CreateCompositeToyFormInputValues,
-      errorMessage: string
-    ) => void;
-    onChange?: (
-      fields: CreateCompositeToyFormInputValues
-    ) => CreateCompositeToyFormInputValues;
-    onValidate?: CreateCompositeToyFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -4546,9 +4428,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function CreateCompositeToyForm(
-  props: CreateCompositeToyFormProps
-): React.ReactElement {
+export default function CreateCompositeToyForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -4638,13 +4518,12 @@ export default function CreateCompositeToyForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           kind,
@@ -4951,7 +4830,7 @@ export default function CreateCompositeToyForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -4976,86 +4855,70 @@ export default function CreateCompositeToyForm(
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should render a create form for child of 1:m relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateCompositeToyFormInputValues = {
+    kind?: string;
+    color?: string;
+    compositeDogCompositeToysName?: string;
+    compositeDogCompositeToysDescription?: string;
+};
+export declare type CreateCompositeToyFormValidationValues = {
+    kind?: ValidationFunction<string>;
+    color?: ValidationFunction<string>;
+    compositeDogCompositeToysName?: ValidationFunction<string>;
+    compositeDogCompositeToysDescription?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateCompositeToyFormOverridesProps = {
+    CreateCompositeToyFormGrid?: PrimitiveOverrideProps<GridProps>;
+    kind?: PrimitiveOverrideProps<TextFieldProps>;
+    color?: PrimitiveOverrideProps<TextFieldProps>;
+    compositeDogCompositeToysName?: PrimitiveOverrideProps<AutocompleteProps>;
+    compositeDogCompositeToysDescription?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateCompositeToyFormProps = React.PropsWithChildren<{
+    overrides?: CreateCompositeToyFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateCompositeToyFormInputValues) => CreateCompositeToyFormInputValues;
+    onSuccess?: (fields: CreateCompositeToyFormInputValues) => void;
+    onError?: (fields: CreateCompositeToyFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateCompositeToyFormInputValues) => CreateCompositeToyFormInputValues;
+    onValidate?: CreateCompositeToyFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateCompositeToyForm(props: CreateCompositeToyFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should render a create form for child of 1:m-belongsTo relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Comment, Org, Post, User } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listOrgs, listPosts, listUsers } from \\"../graphql/queries\\";
 import { createComment } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type CreateCommentFormInputValues = {
-  name?: string;
-  post?: Post;
-  User?: User;
-  Org?: Org;
-  postCommentsId?: string;
-};
-export declare type CreateCommentFormValidationValues = {
-  name?: ValidationFunction<string>;
-  post?: ValidationFunction<Post>;
-  User?: ValidationFunction<User>;
-  Org?: ValidationFunction<Org>;
-  postCommentsId?: ValidationFunction<string>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type CreateCommentFormOverridesProps = {
-  CreateCommentFormGrid?: PrimitiveOverrideProps<GridProps>;
-  name?: PrimitiveOverrideProps<TextFieldProps>;
-  post?: PrimitiveOverrideProps<AutocompleteProps>;
-  User?: PrimitiveOverrideProps<AutocompleteProps>;
-  Org?: PrimitiveOverrideProps<AutocompleteProps>;
-  postCommentsId?: PrimitiveOverrideProps<AutocompleteProps>;
-} & EscapeHatchProps;
-export type CreateCommentFormProps = React.PropsWithChildren<
-  {
-    overrides?: CreateCommentFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (
-      fields: CreateCommentFormInputValues
-    ) => CreateCommentFormInputValues;
-    onSuccess?: (fields: CreateCommentFormInputValues) => void;
-    onError?: (
-      fields: CreateCommentFormInputValues,
-      errorMessage: string
-    ) => void;
-    onChange?: (
-      fields: CreateCommentFormInputValues
-    ) => CreateCommentFormInputValues;
-    onValidate?: CreateCommentFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -5214,9 +5077,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function CreateCommentForm(
-  props: CreateCommentFormProps
-): React.ReactElement {
+export default function CreateCommentForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -5337,13 +5198,12 @@ export default function CreateCommentForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           name,
@@ -5752,7 +5612,7 @@ export default function CreateCommentForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -5777,37 +5637,70 @@ export default function CreateCommentForm(
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should render a create form for child of 1:m-belongsTo relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Org, Post, User } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateCommentFormInputValues = {
+    name?: string;
+    post?: Post;
+    User?: User;
+    Org?: Org;
+    postCommentsId?: string;
+};
+export declare type CreateCommentFormValidationValues = {
+    name?: ValidationFunction<string>;
+    post?: ValidationFunction<Post>;
+    User?: ValidationFunction<User>;
+    Org?: ValidationFunction<Org>;
+    postCommentsId?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateCommentFormOverridesProps = {
+    CreateCommentFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    post?: PrimitiveOverrideProps<AutocompleteProps>;
+    User?: PrimitiveOverrideProps<AutocompleteProps>;
+    Org?: PrimitiveOverrideProps<AutocompleteProps>;
+    postCommentsId?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateCommentFormProps = React.PropsWithChildren<{
+    overrides?: CreateCommentFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateCommentFormInputValues) => CreateCommentFormInputValues;
+    onSuccess?: (fields: CreateCommentFormInputValues) => void;
+    onError?: (fields: CreateCommentFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateCommentFormInputValues) => CreateCommentFormInputValues;
+    onValidate?: CreateCommentFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateCommentForm(props: CreateCommentFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should render a create form for model with composite keys 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import {
-  CompositeBowl,
-  CompositeDog,
-  CompositeDogCompositeVet,
-  CompositeOwner,
-  CompositeToy,
-  CompositeVet,
-} from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import {
@@ -5822,61 +5715,6 @@ import {
   updateCompositeDog,
   updateCompositeOwner,
 } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type CreateCompositeDogFormInputValues = {
-  name?: string;
-  description?: string;
-  CompositeBowl?: CompositeBowl;
-  CompositeOwner?: CompositeOwner;
-  CompositeToys?: CompositeToy[];
-  CompositeVets?: CompositeVet[];
-};
-export declare type CreateCompositeDogFormValidationValues = {
-  name?: ValidationFunction<string>;
-  description?: ValidationFunction<string>;
-  CompositeBowl?: ValidationFunction<CompositeBowl>;
-  CompositeOwner?: ValidationFunction<CompositeOwner>;
-  CompositeToys?: ValidationFunction<CompositeToy>;
-  CompositeVets?: ValidationFunction<CompositeVet>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type CreateCompositeDogFormOverridesProps = {
-  CreateCompositeDogFormGrid?: PrimitiveOverrideProps<GridProps>;
-  name?: PrimitiveOverrideProps<TextFieldProps>;
-  description?: PrimitiveOverrideProps<TextFieldProps>;
-  CompositeBowl?: PrimitiveOverrideProps<AutocompleteProps>;
-  CompositeOwner?: PrimitiveOverrideProps<AutocompleteProps>;
-  CompositeToys?: PrimitiveOverrideProps<AutocompleteProps>;
-  CompositeVets?: PrimitiveOverrideProps<AutocompleteProps>;
-} & EscapeHatchProps;
-export type CreateCompositeDogFormProps = React.PropsWithChildren<
-  {
-    overrides?: CreateCompositeDogFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (
-      fields: CreateCompositeDogFormInputValues
-    ) => CreateCompositeDogFormInputValues;
-    onSuccess?: (fields: CreateCompositeDogFormInputValues) => void;
-    onError?: (
-      fields: CreateCompositeDogFormInputValues,
-      errorMessage: string
-    ) => void;
-    onChange?: (
-      fields: CreateCompositeDogFormInputValues
-    ) => CreateCompositeDogFormInputValues;
-    onValidate?: CreateCompositeDogFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -6035,9 +5873,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function CreateCompositeDogForm(
-  props: CreateCompositeDogFormProps
-): React.ReactElement {
+export default function CreateCompositeDogForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -6190,13 +6026,12 @@ export default function CreateCompositeDogForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           name,
@@ -6737,7 +6572,7 @@ export default function CreateCompositeDogForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -6762,70 +6597,77 @@ export default function CreateCompositeDogForm(
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should render a create form for model with composite keys 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CompositeBowl, CompositeOwner, CompositeToy, CompositeVet } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateCompositeDogFormInputValues = {
+    name?: string;
+    description?: string;
+    CompositeBowl?: CompositeBowl;
+    CompositeOwner?: CompositeOwner;
+    CompositeToys?: CompositeToy[];
+    CompositeVets?: CompositeVet[];
+};
+export declare type CreateCompositeDogFormValidationValues = {
+    name?: ValidationFunction<string>;
+    description?: ValidationFunction<string>;
+    CompositeBowl?: ValidationFunction<CompositeBowl>;
+    CompositeOwner?: ValidationFunction<CompositeOwner>;
+    CompositeToys?: ValidationFunction<CompositeToy>;
+    CompositeVets?: ValidationFunction<CompositeVet>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateCompositeDogFormOverridesProps = {
+    CreateCompositeDogFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    description?: PrimitiveOverrideProps<TextFieldProps>;
+    CompositeBowl?: PrimitiveOverrideProps<AutocompleteProps>;
+    CompositeOwner?: PrimitiveOverrideProps<AutocompleteProps>;
+    CompositeToys?: PrimitiveOverrideProps<AutocompleteProps>;
+    CompositeVets?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateCompositeDogFormProps = React.PropsWithChildren<{
+    overrides?: CreateCompositeDogFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateCompositeDogFormInputValues) => CreateCompositeDogFormInputValues;
+    onSuccess?: (fields: CreateCompositeDogFormInputValues) => void;
+    onError?: (fields: CreateCompositeDogFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateCompositeDogFormInputValues) => CreateCompositeDogFormInputValues;
+    onValidate?: CreateCompositeDogFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateCompositeDogForm(props: CreateCompositeDogFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should render thrown error for required parent field 1:1 relationships - Create 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Dog, Owner } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listOwners } from \\"../graphql/queries\\";
 import { createDog, updateOwner } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type CreateDogFormInputValues = {
-  name?: string;
-  Owner?: Owner;
-};
-export declare type CreateDogFormValidationValues = {
-  name?: ValidationFunction<string>;
-  Owner?: ValidationFunction<Owner>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type CreateDogFormOverridesProps = {
-  CreateDogFormGrid?: PrimitiveOverrideProps<GridProps>;
-  name?: PrimitiveOverrideProps<TextFieldProps>;
-  Owner?: PrimitiveOverrideProps<AutocompleteProps>;
-} & EscapeHatchProps;
-export type CreateDogFormProps = React.PropsWithChildren<
-  {
-    overrides?: CreateDogFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (fields: CreateDogFormInputValues) => CreateDogFormInputValues;
-    onSuccess?: (fields: CreateDogFormInputValues) => void;
-    onError?: (fields: CreateDogFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: CreateDogFormInputValues) => CreateDogFormInputValues;
-    onValidate?: CreateDogFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -6984,9 +6826,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function CreateDogForm(
-  props: CreateDogFormProps
-): React.ReactElement {
+export default function CreateDogForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -7051,13 +6891,12 @@ export default function CreateDogForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           name,
@@ -7251,7 +7090,7 @@ export default function CreateDogForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -7276,77 +7115,65 @@ export default function CreateDogForm(
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should render thrown error for required parent field 1:1 relationships - Create 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Owner } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateDogFormInputValues = {
+    name?: string;
+    Owner?: Owner;
+};
+export declare type CreateDogFormValidationValues = {
+    name?: ValidationFunction<string>;
+    Owner?: ValidationFunction<Owner>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateDogFormOverridesProps = {
+    CreateDogFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Owner?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateDogFormProps = React.PropsWithChildren<{
+    overrides?: CreateDogFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateDogFormInputValues) => CreateDogFormInputValues;
+    onSuccess?: (fields: CreateDogFormInputValues) => void;
+    onError?: (fields: CreateDogFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateDogFormInputValues) => CreateDogFormInputValues;
+    onValidate?: CreateDogFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateDogForm(props: CreateDogFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should render thrown error for required related field 1:1 relationships - Create 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
 import {
   Autocomplete,
-  AutocompleteProps,
   Badge,
   Button,
   Divider,
   Flex,
   Grid,
-  GridProps,
   Icon,
   ScrollView,
   Text,
   TextField,
-  TextFieldProps,
   useTheme,
 } from \\"@aws-amplify/ui-react\\";
-import {
-  EscapeHatchProps,
-  getOverrideProps,
-} from \\"@aws-amplify/ui-react/internal\\";
-import { Dog, Owner } from \\"../API\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
 import { fetchByPath, validateField } from \\"./utils\\";
 import { API } from \\"aws-amplify\\";
 import { listDogs } from \\"../graphql/queries\\";
 import { createOwner, updateDog, updateOwner } from \\"../graphql/mutations\\";
-
-export declare type ValidationResponse = {
-  hasError: boolean;
-  errorMessage?: string;
-};
-export declare type ValidationFunction<T> = (
-  value: T,
-  validationResponse: ValidationResponse
-) => ValidationResponse | Promise<ValidationResponse>;
-export declare type CreateOwnerFormInputValues = {
-  name?: string;
-  Dog?: Dog;
-};
-export declare type CreateOwnerFormValidationValues = {
-  name?: ValidationFunction<string>;
-  Dog?: ValidationFunction<Dog>;
-};
-export declare type PrimitiveOverrideProps<T> = Partial<T> &
-  React.DOMAttributes<HTMLDivElement>;
-export declare type CreateOwnerFormOverridesProps = {
-  CreateOwnerFormGrid?: PrimitiveOverrideProps<GridProps>;
-  name?: PrimitiveOverrideProps<TextFieldProps>;
-  Dog?: PrimitiveOverrideProps<AutocompleteProps>;
-} & EscapeHatchProps;
-export type CreateOwnerFormProps = React.PropsWithChildren<
-  {
-    overrides?: CreateOwnerFormOverridesProps | undefined | null;
-  } & {
-    clearOnSuccess?: boolean;
-    onSubmit?: (
-      fields: CreateOwnerFormInputValues
-    ) => CreateOwnerFormInputValues;
-    onSuccess?: (fields: CreateOwnerFormInputValues) => void;
-    onError?: (
-      fields: CreateOwnerFormInputValues,
-      errorMessage: string
-    ) => void;
-    onChange?: (
-      fields: CreateOwnerFormInputValues
-    ) => CreateOwnerFormInputValues;
-    onValidate?: CreateOwnerFormValidationValues;
-  } & React.CSSProperties
->;
 function ArrayField({
   items = [],
   onChange,
@@ -7505,9 +7332,7 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function CreateOwnerForm(
-  props: CreateOwnerFormProps
-): React.ReactElement {
+export default function CreateOwnerForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -7572,13 +7397,12 @@ export default function CreateOwnerForm(
     return validationResponse;
   };
   return (
-    /* @ts-ignore: TS2322 */
     <Grid
       as=\\"form\\"
       rowGap=\\"15px\\"
       columnGap=\\"15px\\"
       padding=\\"20px\\"
-      onSubmit={async (event: SyntheticEvent) => {
+      onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
           name,
@@ -7777,7 +7601,7 @@ export default function CreateOwnerForm(
         <Button
           children=\\"Clear\\"
           type=\\"reset\\"
-          onClick={(event: SyntheticEvent) => {
+          onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
@@ -7799,6 +7623,44 @@ export default function CreateOwnerForm(
     </Grid>
   );
 }
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should render thrown error for required related field 1:1 relationships - Create 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Dog } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CreateOwnerFormInputValues = {
+    name?: string;
+    Dog?: Dog;
+};
+export declare type CreateOwnerFormValidationValues = {
+    name?: ValidationFunction<string>;
+    Dog?: ValidationFunction<Dog>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CreateOwnerFormOverridesProps = {
+    CreateOwnerFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    Dog?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type CreateOwnerFormProps = React.PropsWithChildren<{
+    overrides?: CreateOwnerFormOverridesProps | undefined | null;
+} & {
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
+    onSuccess?: (fields: CreateOwnerFormInputValues) => void;
+    onError?: (fields: CreateOwnerFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CreateOwnerFormInputValues) => CreateOwnerFormInputValues;
+    onValidate?: CreateOwnerFormValidationValues;
+} & React.CSSProperties>;
+export default function CreateOwnerForm(props: CreateOwnerFormProps): React.ReactElement;
 "
 `;
 
