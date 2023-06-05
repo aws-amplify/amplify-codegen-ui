@@ -261,6 +261,7 @@ export const buildDataStoreExpression = (
             fieldConfig,
             thisModelPrimaryKeys,
             savedRecordName,
+            importCollection,
           ),
         );
       }

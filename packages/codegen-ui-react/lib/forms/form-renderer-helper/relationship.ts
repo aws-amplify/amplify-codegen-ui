@@ -1275,12 +1275,14 @@ export const buildHasManyRelationshipDataStoreStatements = (
   hasManyFieldConfig: [string, FieldConfigMetadata],
   thisModelPrimaryKeys: string[],
   savedModelName: string,
+  importCollection: ImportCollection,
 ) => {
   let [fieldName] = hasManyFieldConfig;
   const [, fieldConfigMetaData] = hasManyFieldConfig;
   fieldName = fieldConfigMetaData.sanitizedFieldName || fieldName;
   const { relatedModelName, relatedModelFields, belongsToFieldOnRelatedModel } =
     fieldConfigMetaData.relationship as HasManyRelationshipType;
+  const relatedModelVariableName = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, relatedModelName);
   const linkedDataName = getLinkedDataName(fieldName);
   const dataToLink = `${lowerCaseFirst(fieldName)}ToLink`;
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
@@ -1619,7 +1621,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                           [
                             factory.createCallExpression(
                               factory.createPropertyAccessExpression(
-                                factory.createIdentifier(relatedModelName),
+                                factory.createIdentifier(relatedModelVariableName),
                                 factory.createIdentifier('copyOf'),
                               ),
                               undefined,
@@ -1706,7 +1708,7 @@ export const buildHasManyRelationshipDataStoreStatements = (
                           [
                             factory.createCallExpression(
                               factory.createPropertyAccessExpression(
-                                factory.createIdentifier(relatedModelName),
+                                factory.createIdentifier(relatedModelVariableName),
                                 factory.createIdentifier('copyOf'),
                               ),
                               undefined,
