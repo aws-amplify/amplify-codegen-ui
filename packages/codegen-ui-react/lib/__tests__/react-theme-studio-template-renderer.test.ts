@@ -25,11 +25,14 @@ function generateWithThemeRenderer(
   jsonFile: string,
   renderConfig: ReactRenderConfig = {},
   options?: ReactThemeStudioTemplateRendererOptions,
-): string {
+) {
   const rendererFactory = new StudioTemplateRendererFactory(
     (theme: StudioTheme) => new ReactThemeStudioTemplateRenderer(theme, renderConfig, options),
   );
-  return rendererFactory.buildRenderer(loadSchemaFromJSONFile(jsonFile)).renderComponent().componentText;
+  const { componentText, declaration } = rendererFactory
+    .buildRenderer(loadSchemaFromJSONFile(jsonFile))
+    .renderComponent();
+  return { componentText, declaration };
 }
 
 function generateThemeObject(jsonFile: string): any {
@@ -46,19 +49,28 @@ function generateThemeObject(jsonFile: string): any {
 describe('react theme renderer tests', () => {
   describe('theme', () => {
     it('should render the theme', () => {
-      expect(generateWithThemeRenderer('theme')).toMatchSnapshot();
+      expect(generateWithThemeRenderer('theme').componentText).toMatchSnapshot();
     });
 
     it('should render the theme with TSX', () => {
-      expect(generateWithThemeRenderer('theme', { script: ScriptKind.TSX })).toMatchSnapshot();
+      const { componentText, declaration } = generateWithThemeRenderer('theme', { script: ScriptKind.TSX });
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toBeUndefined();
     });
 
     it('should render the theme with ES5', () => {
-      expect(generateWithThemeRenderer('theme', { target: ScriptTarget.ES5, script: ScriptKind.JS })).toMatchSnapshot();
+      const { componentText, declaration } = generateWithThemeRenderer('theme', {
+        target: ScriptTarget.ES5,
+        script: ScriptKind.JS,
+        renderTypeDeclarations: true,
+      });
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toBeDefined();
+      expect(declaration).toMatchSnapshot();
     });
 
     it('should render the default theme', () => {
-      expect(generateWithThemeRenderer('theme', {}, { renderDefaultTheme: true })).toMatchSnapshot();
+      expect(generateWithThemeRenderer('theme', {}, { renderDefaultTheme: true }).componentText).toMatchSnapshot();
     });
   });
 
