@@ -24984,6 +24984,7 @@ export default function CreateProductForm(props) {
         label={\\"Images\\"}
         isRequired={false}
         isReadOnly={false}
+        {...getOverrideProps(overrides, \\"imgKeys\\")}
       >
         <StorageManager
           onUploadSuccess={({ key }) => {
@@ -25212,6 +25213,7 @@ export default function UpdateProductForm(props) {
         label={\\"Images\\"}
         isRequired={false}
         isReadOnly={false}
+        {...getOverrideProps(overrides, \\"imgKeys\\")}
       >
         {productRecord && (
           <StorageManager
@@ -25488,6 +25490,7 @@ export default function UpdateProductForm(props) {
         descriptiveText={\\"Limited to One Image\\"}
         isRequired={false}
         isReadOnly={false}
+        {...getOverrideProps(overrides, \\"singleImgKey\\")}
       >
         {productRecord && (
           <StorageManager
