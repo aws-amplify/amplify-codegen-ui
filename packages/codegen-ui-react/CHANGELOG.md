@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.2](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.14.1...v2.14.2) (2023-06-06)
+
+### Bug Fixes
+
+- add getOverrideProps to StorageManager ([#1020](https://github.com/aws-amplify/amplify-codegen-ui/issues/1020)) ([8ff282f](https://github.com/aws-amplify/amplify-codegen-ui/commit/8ff282f5a5b2f42dbbb20737d1060a3f5e60cc90))
+
 ## [2.14.1](https://github.com/aws-amplify/amplify-codegen-ui/compare/v2.14.0...v2.14.1) (2023-05-23)
 
 ### Bug Fixes
