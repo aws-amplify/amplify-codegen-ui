@@ -25021,6 +25021,7 @@ export default function CreateProductForm(props) {
           showThumbnails={false}
           maxFileCount={5}
           maxSize={1024}
+          {...getOverrideProps(overrides, \\"imgKeys\\")}
         ></StorageManager>
       </Field>
       <Flex
@@ -25248,6 +25249,7 @@ export default function UpdateProductForm(props) {
             acceptedFileTypes={[\\".doc\\", \\".pdf\\"]}
             isResumable={false}
             showThumbnails={true}
+            {...getOverrideProps(overrides, \\"imgKeys\\")}
           ></StorageManager>
         )}
       </Field>
@@ -25525,6 +25527,7 @@ export default function UpdateProductForm(props) {
             showThumbnails={false}
             maxFileCount={1}
             maxSize={1024}
+            {...getOverrideProps(overrides, \\"singleImgKey\\")}
           ></StorageManager>
         )}
       </Field>
