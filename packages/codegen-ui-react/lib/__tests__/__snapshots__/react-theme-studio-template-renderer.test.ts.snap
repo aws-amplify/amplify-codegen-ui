@@ -91,6 +91,12 @@ export default createTheme({
 "
 `;
 
+exports[`react theme renderer tests theme should render the theme with ES5 2`] = `
+"declare const _default: any;
+export default _default;
+"
+`;
+
 exports[`react theme renderer tests theme should render the theme with TSX 1`] = `
 "/* eslint-disable */
 import { createTheme } from \\"@aws-amplify/ui-react\\";
