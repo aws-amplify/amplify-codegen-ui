@@ -89,8 +89,8 @@ export class ReactComponentRenderer<TPropIn> extends ComponentRendererBase<
       if (this.component.componentType === 'StorageField') {
         this.importCollection.addImport(ImportSource.REACT_STORAGE, 'StorageManager');
         this.importCollection.addImport(ImportSource.UI_REACT_INTERNAL, 'Field');
+        this.importCollection.addImport(ImportSource.UI_REACT_INTERNAL, ImportValue.GET_OVERRIDE_PROPS);
         this.importCollection.addImport(ImportSource.UTILS, 'processFile');
-
         return renderStorageFieldComponent(
           this.component,
           this.componentMetadata,
