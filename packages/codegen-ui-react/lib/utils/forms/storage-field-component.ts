@@ -485,15 +485,6 @@ export const renderStorageFieldComponent = (
     }
   });
 
-  fieldAttributes.push(
-    factory.createJsxSpreadAttribute(
-      factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
-        factory.createIdentifier('overrides'),
-        factory.createStringLiteral(componentName),
-      ]),
-    ),
-  );
-
   storageManagerAttributes.push(
     factory.createJsxSpreadAttribute(
       factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
