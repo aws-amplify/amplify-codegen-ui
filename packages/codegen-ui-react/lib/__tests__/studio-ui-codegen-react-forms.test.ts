@@ -235,6 +235,35 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate a update form with hasMany relationship with model name collision', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/school-datastore-update',
+        'datastore/school-student-collision',
+        undefined,
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+      // check nested model is imported
+      expect(componentText).toContain('import { School, Student as Student0 } from "../models";');
+
+      // check binding call is generated
+      expect(componentText).toContain('const studentRecords = useDataStoreBinding({');
+
+      // check lazy load linked data
+      expect(componentText).toContain('const linkedStudent = record ? await record.Student.toArray() : [];');
+
+      // check custom display value is set
+      expect(componentText).toContain('Student: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,');
+
+      // check linked data useState is generate
+      expect(componentText).toContain('const [linkedStudent, setLinkedStudent] = React.useState([]);');
+
+      // check resetStateValues has correct dependencies
+      expect(componentText).toContain('React.useEffect(resetStateValues, [schoolRecord, linkedStudent]);');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should render form with a two inputs in row', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/post-datastore-create-row',
