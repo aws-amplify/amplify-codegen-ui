@@ -31,8 +31,11 @@ export type ReactRenderConfig = FrameworkRenderConfig & {
 
 export type GraphqlRenderConfig = {
   dataApi: 'GraphQL';
-  operationsFilePath: string;
   typesFilePath: string | undefined;
+  queriesFilePath: string;
+  mutationsFilePath: string;
+  subscriptionsFilePath: string;
+  fragmentsFilePath: string;
 };
 
 export type DataStoreRenderConfig = {
