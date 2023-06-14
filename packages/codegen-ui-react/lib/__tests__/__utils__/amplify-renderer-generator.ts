@@ -160,7 +160,10 @@ export const renderExpanderJsxElement = (
 export const rendererConfigWithGraphQL: ReactRenderConfig = {
   apiConfiguration: {
     dataApi: 'GraphQL',
-    operationsFilePath: '../graphql',
     typesFilePath: '../API',
+    queriesFilePath: '../graphql/queries',
+    mutationsFilePath: '../graphql/mutations',
+    subscriptionsFilePath: '../graphql/subscriptions',
+    fragmentsFilePath: '../graphql/fragments',
   },
 };

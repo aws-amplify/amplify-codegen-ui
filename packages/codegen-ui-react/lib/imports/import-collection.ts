@@ -48,9 +48,20 @@ export class ImportCollection {
     }
   }
 
-  private getOperationsPath() {
+  private getOperationsPath(operation: 'mutation' | 'query' | 'subscription' | 'fragment') {
     if (this.rendererConfig?.apiConfiguration?.dataApi === 'GraphQL') {
-      return this.rendererConfig.apiConfiguration.operationsFilePath;
+      switch (operation) {
+        case 'mutation':
+          return this.rendererConfig.apiConfiguration.mutationsFilePath;
+        case 'query':
+          return this.rendererConfig.apiConfiguration.queriesFilePath;
+        case 'subscription':
+          return this.rendererConfig.apiConfiguration.subscriptionsFilePath;
+        case 'fragment':
+          return this.rendererConfig.apiConfiguration.fragmentsFilePath;
+        default:
+          throw new InvalidInputError(`Unexpected GraphQL operation encountered: ${operation}`);
+      }
     }
     throw new InvalidInputError('Render is not configured to utilize GraphQL operations');
   }
@@ -61,15 +72,15 @@ export class ImportCollection {
   }
 
   addGraphqlMutationImport(importName: string) {
-    return this.addImport(`${this.getOperationsPath()}/mutations`, importName);
+    return this.addImport(this.getOperationsPath('mutation'), importName);
   }
 
   addGraphqlQueryImport(importName: string) {
-    return this.addImport(`${this.getOperationsPath()}/queries`, importName);
+    return this.addImport(this.getOperationsPath('query'), importName);
   }
 
   addGraphqlSubscriptionImport(importName: string) {
-    return this.addImport(`${this.getOperationsPath()}/subscriptions`, importName);
+    return this.addImport(this.getOperationsPath('subscription'), importName);
   }
 
   addModelImport(importName: string) {
