@@ -22,16 +22,7 @@ import {
   ComponentMetadata,
   isValidVariableName,
 } from '@aws-amplify/codegen-ui';
-import {
-  factory,
-  JsxAttribute,
-  JsxAttributeLike,
-  JsxChild,
-  JsxElement,
-  JsxExpression,
-  NodeFlags,
-  SyntaxKind,
-} from 'typescript';
+import { factory, JsxAttributeLike, JsxChild, JsxElement, JsxExpression, NodeFlags, SyntaxKind } from 'typescript';
 import { getDecoratedLabel } from '../../forms/form-renderer-helper';
 import { buildStorageManagerOnChangeStatement } from '../../forms/form-renderer-helper/event-handler-props';
 import { propertyToExpression } from '../../react-component-render-helper';
@@ -339,8 +330,8 @@ export const renderStorageFieldComponent = (
   const lowerCaseDataTypeName = lowerCaseFirst(dataTypeName);
   const lowerCaseDataTypeNameRecord = `${lowerCaseDataTypeName}Record`;
   const storageManagerComponentName = factory.createIdentifier('StorageManager');
-  const storageManagerAttributes: JsxAttribute[] = [];
-  const fieldAttributes: JsxAttribute[] = [];
+  const storageManagerAttributes: JsxAttributeLike[] = [];
+  const fieldAttributes: JsxAttributeLike[] = [];
 
   if (componentMetadata.formMetadata) {
     const errorKey =
@@ -493,6 +484,15 @@ export const renderStorageFieldComponent = (
       );
     }
   });
+
+  storageManagerAttributes.push(
+    factory.createJsxSpreadAttribute(
+      factory.createCallExpression(factory.createIdentifier('getOverrideProps'), undefined, [
+        factory.createIdentifier('overrides'),
+        factory.createStringLiteral(componentName),
+      ]),
+    ),
+  );
 
   const storageManager = factory.createJsxElement(
     factory.createJsxOpeningElement(

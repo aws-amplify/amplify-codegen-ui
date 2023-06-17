@@ -41,8 +41,7 @@ jobs:
       - name: Build amplify-cli
         working-directory: amplify-cli
         run: |
-          yarn policies set-version 1.18.0
-          yarn --network-concurrency 1
+          yarn install
           yarn setup-dev
       - name: Install updated codegen libraries
         working-directory: amplify-cli/packages/amplify-util-uibuilder
@@ -52,9 +51,9 @@ jobs:
       - name: Build amplify-cli with updated codegen libraries
         working-directory: amplify-cli
         run: |
-          yarn policies set-version 1.18.0
-          yarn --network-concurrency 1
-          yarn dev-build
+          yarn install
+          yarn build
+          echo "$HOME/work/amplify-codegen-ui/amplify-codegen-ui/amplify-cli/.bin" >> $GITHUB_PATH
       - name: Create a test react app
         run: npx create-react-app e2e-test-app
       - name: Install test app dependencies
@@ -112,7 +111,7 @@ jobs:
       - name: Install packages
         run: npm ci
       - name: Lerna bootstrap
-        run: lerna bootstrap
+        run: npm run bootstrap
       - name: Setup Integration Test
         run: npm run integ:setup
       - name: Cypress run

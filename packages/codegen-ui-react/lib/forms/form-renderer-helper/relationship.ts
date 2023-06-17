@@ -23,7 +23,7 @@ import {
 } from '@aws-amplify/codegen-ui';
 import { getRecordsName, getLinkedDataName, buildAccessChain, getCanUnlinkModelName } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
-import { ImportCollection } from '../../imports';
+import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst, getSetNameIdentifier, capitalizeFirstLetter } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { extractModelAndKeys, getIDValueCallChain, getMatchEveryModelFieldCallExpression } from './model-values';
@@ -1291,6 +1291,7 @@ export const buildHasManyRelationshipStatements = (
   fieldName = fieldConfigMetaData.sanitizedFieldName || fieldName;
   const { relatedModelName, relatedModelFields, belongsToFieldOnRelatedModel } =
     fieldConfigMetaData.relationship as HasManyRelationshipType;
+  const relatedModelVariableName = importCollection.getMappedAlias(ImportSource.LOCAL_MODELS, relatedModelName);
   const linkedDataName = getLinkedDataName(fieldName);
   const dataToLink = `${lowerCaseFirst(fieldName)}ToLink`;
   const dataToUnLink = `${lowerCaseFirst(fieldName)}ToUnLink`;
@@ -1629,7 +1630,7 @@ export const buildHasManyRelationshipStatements = (
                           [
                             factory.createCallExpression(
                               factory.createPropertyAccessExpression(
-                                factory.createIdentifier(relatedModelName),
+                                factory.createIdentifier(relatedModelVariableName),
                                 factory.createIdentifier('copyOf'),
                               ),
                               undefined,
@@ -1716,7 +1717,7 @@ export const buildHasManyRelationshipStatements = (
                           [
                             factory.createCallExpression(
                               factory.createPropertyAccessExpression(
-                                factory.createIdentifier(relatedModelName),
+                                factory.createIdentifier(relatedModelVariableName),
                                 factory.createIdentifier('copyOf'),
                               ),
                               undefined,
