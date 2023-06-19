@@ -480,3 +480,90 @@ export const compositePersonSchema: GenericDataSchema = getGenericFromDataStore(
   codegenVersion: '3.3.2',
   version: 'accea0d7a2f24829740c710ceb3264a8',
 });
+
+export const userSchema: GenericDataSchema = getGenericFromDataStore({
+  models: {
+    User: {
+      name: 'User',
+      fields: {
+        id: {
+          name: 'id',
+          isArray: false,
+          type: 'ID',
+          isRequired: true,
+          attributes: [],
+        },
+        firstName: {
+          name: 'firstName',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        lastName: {
+          name: 'lastName',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        age: {
+          name: 'age',
+          isArray: false,
+          type: 'Int',
+          isRequired: false,
+          attributes: [],
+        },
+        isLoggedIn: {
+          name: 'isLoggedIn',
+          isArray: false,
+          type: 'Boolean',
+          isRequired: false,
+          attributes: [],
+        },
+        loggedInColor: {
+          name: 'loggedInColor',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        loggedOutColor: {
+          name: 'loggedOutColor',
+          isArray: false,
+          type: 'String',
+          isRequired: false,
+          attributes: [],
+        },
+        createdAt: {
+          name: 'createdAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+        updatedAt: {
+          name: 'updatedAt',
+          isArray: false,
+          type: 'AWSDateTime',
+          isRequired: false,
+          attributes: [],
+          isReadOnly: true,
+        },
+      },
+      syncable: true,
+      pluralName: 'Users',
+      attributes: [
+        {
+          type: 'model',
+          properties: {},
+        },
+      ],
+    },
+  },
+  enums: {},
+  nonModels: {},
+  codegenVersion: '3.3.2',
+  version: 'accea0d7a2f24829740c710ceb3264a8',
+});

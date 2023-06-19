@@ -19,6 +19,7 @@ import {
   compositePersonSchema,
   generateWithAmplifyRenderer,
   rendererConfigWithGraphQL,
+  userSchema,
 } from './__utils__';
 
 describe('amplify render tests', () => {
@@ -131,7 +132,12 @@ describe('amplify render tests', () => {
     });
 
     it('should render collection with data binding if binding name is items', () => {
-      const generatedCode = generateWithAmplifyRenderer('collectionWithBindingItemsName');
+      const generatedCode = generateWithAmplifyRenderer(
+        'collectionWithBindingItemsName',
+        undefined,
+        undefined,
+        userSchema,
+      );
       expect(generatedCode.componentText).toMatchSnapshot();
     });
 

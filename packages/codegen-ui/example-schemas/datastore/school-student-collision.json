@@ -1,0 +1,155 @@
+{
+  "models": {
+    "School": {
+      "name": "School",
+      "fields": {
+        "id": {
+          "name": "id",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": true,
+          "attributes": []
+        },
+        "name": {
+          "name": "name",
+          "isArray": false,
+          "type": "String",
+          "isRequired": false,
+          "attributes": []
+        },
+        "Student": {
+          "name": "Student",
+          "isArray": true,
+          "type": {
+            "model": "Student"
+          },
+          "isRequired": false,
+          "attributes": [],
+          "isArrayNullable": true,
+          "association": {
+            "connectionType": "HAS_MANY",
+            "associatedWith": "schoolID"
+          }
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        }
+      },
+      "syncable": true,
+      "pluralName": "Schools",
+      "attributes": [
+        {
+          "type": "model",
+          "properties": {}
+        },
+        {
+          "type": "auth",
+          "properties": {
+            "rules": [
+              {
+                "allow": "public",
+                "operations": [
+                  "create",
+                  "update",
+                  "delete",
+                  "read"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Student": {
+      "name": "Student",
+      "fields": {
+        "id": {
+          "name": "id",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": true,
+          "attributes": []
+        },
+        "name": {
+          "name": "name",
+          "isArray": false,
+          "type": "String",
+          "isRequired": false,
+          "attributes": []
+        },
+        "schoolID": {
+          "name": "schoolID",
+          "isArray": false,
+          "type": "ID",
+          "isRequired": true,
+          "attributes": []
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "isArray": false,
+          "type": "AWSDateTime",
+          "isRequired": false,
+          "attributes": [],
+          "isReadOnly": true
+        }
+      },
+      "syncable": true,
+      "pluralName": "Students",
+      "attributes": [
+        {
+          "type": "model",
+          "properties": {}
+        },
+        {
+          "type": "key",
+          "properties": {
+            "name": "bySchool",
+            "fields": [
+              "schoolID"
+            ]
+          }
+        },
+        {
+          "type": "auth",
+          "properties": {
+            "rules": [
+              {
+                "allow": "public",
+                "operations": [
+                  "create",
+                  "update",
+                  "delete",
+                  "read"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "enums": {},
+  "nonModels": {},
+  "version": "5e020d89e4dbb0a2e3b90b771dbcff66"
+}
