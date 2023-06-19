@@ -23,7 +23,7 @@ import {
 } from '@aws-amplify/codegen-ui';
 import { getRecordsName, getLinkedDataName, buildAccessChain, getCanUnlinkModelName } from './form-state';
 import { buildBaseCollectionVariableStatement } from '../../react-studio-template-renderer-helper';
-import { ImportCollection } from '../../imports';
+import { ImportCollection, ImportSource } from '../../imports';
 import { lowerCaseFirst, getSetNameIdentifier, capitalizeFirstLetter } from '../../helpers';
 import { isManyToManyRelationship } from './map-from-fieldConfigs';
 import { extractModelAndKeys, getIDValueCallChain, getMatchEveryModelFieldCallExpression } from './model-values';
