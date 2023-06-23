@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { GenericDataField, GenericDataSchema, StudioFormFields } from '@aws-amplify/codegen-ui/lib/types';
-import { factory, Statement, Expression, NodeFlags, Identifier } from 'typescript';
+import ts, { factory, Statement, Expression, NodeFlags, Identifier, ParameterDeclaration } from 'typescript';
 import { isPrimitive } from '../primitive';
 
 export const lowerCaseFirst = (input: string) => input.charAt(0).toLowerCase() + input.slice(1);
@@ -117,6 +117,52 @@ export const buildInitConstVariableExpression = (name: string, value: Expression
     factory.createVariableDeclarationList(
       [factory.createVariableDeclaration(factory.createIdentifier(name), undefined, undefined, value)],
       NodeFlags.Const,
+    ),
+  );
+};
+
+/**
+ * Create statement to declare an arrow function to a const.
+ *
+ * @example
+ * ```
+ * const variableName = (parameterDeclaration) => {
+ *  functionName(expression);
+ * };
+ * ```
+ */
+export const buildArrowFunctionStatement = (
+  variableName: string,
+  functionName: string,
+  expression: Expression,
+  parameterDeclarations?: ParameterDeclaration[],
+): Statement => {
+  return factory.createVariableStatement(
+    undefined,
+    factory.createVariableDeclarationList(
+      [
+        factory.createVariableDeclaration(
+          factory.createIdentifier(variableName),
+          undefined,
+          undefined,
+          factory.createArrowFunction(
+            undefined,
+            undefined,
+            parameterDeclarations ?? [],
+            undefined,
+            factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+            factory.createBlock(
+              [
+                factory.createExpressionStatement(
+                  factory.createCallExpression(factory.createIdentifier(functionName), undefined, [expression]),
+                ),
+              ],
+              true,
+            ),
+          ),
+        ),
+      ],
+      ts.NodeFlags.Const,
     ),
   );
 };

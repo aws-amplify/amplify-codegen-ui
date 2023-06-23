@@ -170,6 +170,41 @@ describe('amplify render tests', () => {
       expect(componentText).toContain(`key={\`\${item.name}\${item.description}\`}`);
       expect(componentText).toMatchSnapshot();
     });
+
+    describe('GraphQL', () => {
+      it('should render collection with data binding', () => {
+        const generatedCode = generateWithAmplifyRenderer('collectionWithBinding', rendererConfigWithGraphQL);
+        expect(generatedCode.componentText).toMatchSnapshot();
+      });
+
+      it('should render collection without data binding', () => {
+        const generatedCode = generateWithAmplifyRenderer('collectionWithoutBinding', rendererConfigWithGraphQL);
+        expect(generatedCode.componentText).toMatchSnapshot();
+      });
+
+      it('should render collection with data binding with no predicate', () => {
+        const generatedCode = generateWithAmplifyRenderer(
+          'collectionWithBindingWithoutPredicate',
+          rendererConfigWithGraphQL,
+        );
+        expect(generatedCode.componentText).toMatchSnapshot();
+      });
+
+      it('should render nested query if model has a hasMany relationship', () => {
+        const { componentText } = generateWithAmplifyRenderer(
+          'authorCollectionComponent',
+          rendererConfigWithGraphQL,
+          false,
+          authorHasManySchema,
+        );
+        expect(componentText).toMatchSnapshot();
+      });
+
+      it('should not render nested query if the data schema is not provided', () => {
+        const { componentText } = generateWithAmplifyRenderer('authorCollectionComponent', rendererConfigWithGraphQL);
+        expect(componentText).toMatchSnapshot();
+      });
+    });
   });
 
   describe('complex examples', () => {
