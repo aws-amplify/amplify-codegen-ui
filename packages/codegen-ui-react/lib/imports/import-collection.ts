@@ -66,9 +66,11 @@ export class ImportCollection {
     throw new InvalidInputError('Render is not configured to utilize GraphQL operations');
   }
 
-  addMappedImport(importValue: ImportValue) {
-    const importPackage = ImportMapping[importValue];
-    this.addImport(importPackage, importValue);
+  addMappedImport(...importValue: ImportValue[]) {
+    importValue.forEach((value) => {
+      const importPackage = ImportMapping[value];
+      this.addImport(importPackage, value);
+    });
   }
 
   addGraphqlMutationImport(importName: string) {

@@ -359,8 +359,7 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
        * builds sort function
        */
       if (sort) {
-        this.importCollection.addMappedImport(ImportValue.SORT_DIRECTION);
-        this.importCollection.addMappedImport(ImportValue.SORT_PREDICATE);
+        this.importCollection.addMappedImport(ImportValue.SORT_DIRECTION, ImportValue.SORT_PREDICATE);
         statements.push(
           factory.createVariableStatement(
             undefined,
@@ -476,8 +475,7 @@ export abstract class ReactViewTemplateRenderer extends StudioTemplateRenderer<
     ]);
     const formPropType = getComponentPropName(this.component.name);
 
-    this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS);
-    this.importCollection.addMappedImport(ImportValue.CREATE_DATA_STORE_PREDICATE);
+    this.importCollection.addMappedImport(ImportValue.ESCAPE_HATCH_PROPS, ImportValue.CREATE_DATA_STORE_PREDICATE);
 
     return [
       factory.createTypeAliasDeclaration(

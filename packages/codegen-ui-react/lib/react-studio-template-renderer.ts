@@ -945,8 +945,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
    * );
    */
   private buildOverridesFromVariantsAndProp(hasBreakpoint: boolean) {
-    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDES_FROM_VARIANTS);
-    this.importCollection.addMappedImport(ImportValue.VARIANT);
+    this.importCollection.addMappedImport(ImportValue.GET_OVERRIDES_FROM_VARIANTS, ImportValue.VARIANT);
 
     return factory.createVariableStatement(
       undefined,
@@ -997,8 +996,7 @@ export abstract class ReactStudioTemplateRenderer extends StudioTemplateRenderer
           statements.push(this.buildCreateDataStorePredicateCall(modelName, propName));
         }
         if (sort) {
-          this.importCollection.addMappedImport(ImportValue.SORT_DIRECTION);
-          this.importCollection.addMappedImport(ImportValue.SORT_PREDICATE);
+          this.importCollection.addMappedImport(ImportValue.SORT_DIRECTION, ImportValue.SORT_PREDICATE);
           statements.push(this.buildPaginationStatement(propName, modelName, sort));
         }
 

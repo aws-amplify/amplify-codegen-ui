@@ -34,7 +34,7 @@ import ts, {
 import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildOpeningElementProperties } from '../react-component-render-helper';
 import { ImportCollection, ImportValue } from '../imports';
-import { ReactRenderConfig } from '../react-render-config';
+import { DataApiKind, ReactRenderConfig } from '../react-render-config';
 import { defaultRenderConfig } from '../react-studio-template-renderer-helper';
 
 export default class CollectionRenderer extends ReactComponentRenderer<BaseComponentProps> {
@@ -52,74 +52,12 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
     this.addKeyPropertyToChildren(this.component.children ?? []);
     const childrenJsx = this.component.children ? renderChildren(this.component.children ?? []) : [];
 
-    const arrowFuncExpr = this.renderItemArrowFunctionExpr(childrenJsx);
-    const itemsVariableName = this.findItemsVariableName();
-    const element =
-      this.renderConfig.apiConfiguration?.dataApi === 'GraphQL'
-        ? factory.createJsxElement(
-            factory.createJsxOpeningElement(
-              factory.createIdentifier('div'),
-              undefined,
-              factory.createJsxAttributes([]),
-            ),
-            [
-              factory.createJsxElement(
-                this.renderCollectionOpeningElement(itemsVariableName),
-                [arrowFuncExpr],
-                factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
-              ),
-              factory.createJsxExpression(
-                undefined,
-                factory.createBinaryExpression(
-                  factory.createIdentifier('isApiPagination'),
-                  factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
-                  factory.createJsxSelfClosingElement(
-                    factory.createIdentifier('Pagination'),
-                    undefined,
-                    factory.createJsxAttributes([
-                      factory.createJsxAttribute(
-                        factory.createIdentifier('currentPage'),
-                        factory.createJsxExpression(undefined, factory.createIdentifier('pageIndex')),
-                      ),
-                      factory.createJsxAttribute(
-                        factory.createIdentifier('totalPages'),
-                        factory.createJsxExpression(undefined, factory.createIdentifier('maxViewed')),
-                      ),
-                      factory.createJsxAttribute(
-                        factory.createIdentifier('hasMorePages'),
-                        factory.createJsxExpression(undefined, factory.createIdentifier('hasMorePages')),
-                      ),
-                      factory.createJsxAttribute(
-                        factory.createIdentifier('onNext'),
-                        factory.createJsxExpression(undefined, factory.createIdentifier('handleNextPage')),
-                      ),
-                      factory.createJsxAttribute(
-                        factory.createIdentifier('onPrevious'),
-                        factory.createJsxExpression(undefined, factory.createIdentifier('handlePreviousPage')),
-                      ),
-                      factory.createJsxAttribute(
-                        factory.createIdentifier('onChange'),
-                        factory.createJsxExpression(undefined, factory.createIdentifier('jumpToPage')),
-                      ),
-                    ]),
-                  ),
-                ),
-              ),
-            ],
-            factory.createJsxClosingElement(factory.createIdentifier('div')),
-          )
-        : factory.createJsxElement(
-            this.renderCollectionOpeningElement(itemsVariableName),
-            [arrowFuncExpr],
-            factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
-          );
+    const element = this.getCollectionElement(childrenJsx, this.renderConfig.apiConfiguration?.dataApi);
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
 
     if (this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
-      this.importCollection.addMappedImport(ImportValue.API);
-      this.importCollection.addMappedImport(ImportValue.PAGINATION);
-      this.importCollection.addMappedImport(ImportValue.PLACEHOLDER);
+      this.importCollection.addMappedImport(ImportValue.API, ImportValue.PAGINATION, ImportValue.PLACEHOLDER);
     }
 
     return element;
@@ -337,6 +275,63 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createParenthesizedExpression(childrenJsx[0] as JsxExpression),
       ),
+    );
+  }
+
+  private getCollectionElement(childrenJsx: JsxChild[], dataApi: DataApiKind = 'DataStore'): JsxElement {
+    const arrowFuncExpr = this.renderItemArrowFunctionExpr(childrenJsx);
+    const itemsVariableName = this.findItemsVariableName();
+
+    if (dataApi === 'GraphQL') {
+      const attributesObj: { name: string; initialValue: string }[] = [
+        { name: 'currentPage', initialValue: 'pageIndex' },
+        { name: 'totalPages', initialValue: 'maxViewed' },
+        { name: 'hasMorePages', initialValue: 'hasMorePages' },
+        { name: 'onNext', initialValue: 'handleNextPage' },
+        { name: 'onPrevious', initialValue: 'handlePreviousPage' },
+        { name: 'onChange', initialValue: 'jumpToPage' },
+      ];
+
+      const attributes: JsxAttribute[] = [];
+
+      attributesObj.forEach((attribute) => {
+        attributes.push(
+          factory.createJsxAttribute(
+            factory.createIdentifier(attribute.name),
+            factory.createJsxExpression(undefined, factory.createIdentifier(attribute.initialValue)),
+          ),
+        );
+      });
+
+      return factory.createJsxElement(
+        factory.createJsxOpeningElement(factory.createIdentifier('div'), undefined, factory.createJsxAttributes([])),
+        [
+          factory.createJsxElement(
+            this.renderCollectionOpeningElement(itemsVariableName),
+            [arrowFuncExpr],
+            factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
+          ),
+          factory.createJsxExpression(
+            undefined,
+            factory.createBinaryExpression(
+              factory.createIdentifier('isApiPagination'),
+              factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+              factory.createJsxSelfClosingElement(
+                factory.createIdentifier('Pagination'),
+                undefined,
+                factory.createJsxAttributes(attributes),
+              ),
+            ),
+          ),
+        ],
+        factory.createJsxClosingElement(factory.createIdentifier('div')),
+      );
+    }
+
+    return factory.createJsxElement(
+      this.renderCollectionOpeningElement(itemsVariableName),
+      [arrowFuncExpr],
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
   }
 }

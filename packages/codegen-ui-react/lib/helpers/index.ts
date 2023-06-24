@@ -14,7 +14,7 @@
   limitations under the License.
  */
 import { GenericDataField, GenericDataSchema, StudioFormFields } from '@aws-amplify/codegen-ui/lib/types';
-import ts, { factory, Statement, Expression, NodeFlags, Identifier, ParameterDeclaration } from 'typescript';
+import { factory, Statement, Expression, NodeFlags, Identifier, ParameterDeclaration, SyntaxKind } from 'typescript';
 import { isPrimitive } from '../primitive';
 
 export const lowerCaseFirst = (input: string) => input.charAt(0).toLowerCase() + input.slice(1);
@@ -150,7 +150,7 @@ export const buildArrowFunctionStatement = (
             undefined,
             parameterDeclarations ?? [],
             undefined,
-            factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
             factory.createBlock(
               [
                 factory.createExpressionStatement(
@@ -162,7 +162,7 @@ export const buildArrowFunctionStatement = (
           ),
         ),
       ],
-      ts.NodeFlags.Const,
+      NodeFlags.Const,
     ),
   );
 };
