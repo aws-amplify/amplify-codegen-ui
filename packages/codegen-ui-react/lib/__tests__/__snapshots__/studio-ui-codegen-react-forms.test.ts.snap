@@ -4249,6 +4249,2136 @@ export default function MyPostForm(props: MyPostFormProps): React.ReactElement;
 "
 `;
 
+exports[`amplify form renderer tests GraphQL form tests should generate an update form with hasMany relationship 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { getComment, listPosts } from \\"../graphql/queries\\";
+import { updateComment } from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function CommentUpdateForm(props) {
+  const {
+    id: idProp,
+    comment: commentModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    content: \\"\\",
+    postID: undefined,
+    Post: undefined,
+    post: \\"\\",
+  };
+  const [content, setContent] = React.useState(initialValues.content);
+  const [postID, setPostID] = React.useState(initialValues.postID);
+  const [Post, setPost] = React.useState(initialValues.Post);
+  const [post1, setPost1] = React.useState(initialValues.post);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = commentRecord
+      ? { ...initialValues, ...commentRecord, postID, Post }
+      : initialValues;
+    setContent(cleanValues.content);
+    setPostID(cleanValues.postID);
+    setCurrentPostIDValue(undefined);
+    setCurrentPostIDDisplayValue(\\"\\");
+    setPost(cleanValues.Post);
+    setCurrentPostValue(undefined);
+    setCurrentPostDisplayValue(\\"\\");
+    setPost1(cleanValues.post);
+    setErrors({});
+  };
+  const [commentRecord, setCommentRecord] = React.useState(commentModelProp);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? await API.graphql({
+            query: getComment,
+            variables: {
+              input: {
+                id: idProp,
+              },
+            },
+          })
+        : commentModelProp;
+      setCommentRecord(record);
+      const postIDRecord = record ? await record.postID : undefined;
+      setPostID(postIDRecord);
+      const PostRecord = record ? await record.Post : undefined;
+      setPost(PostRecord);
+    };
+    queryData();
+  }, [idProp, commentModelProp]);
+  React.useEffect(resetStateValues, [commentRecord, postID, Post]);
+  const [currentPostIDDisplayValue, setCurrentPostIDDisplayValue] =
+    React.useState(\\"\\");
+  const [currentPostIDValue, setCurrentPostIDValue] = React.useState(undefined);
+  const postIDRef = React.createRef();
+  const [currentPostDisplayValue, setCurrentPostDisplayValue] =
+    React.useState(\\"\\");
+  const [currentPostValue, setCurrentPostValue] = React.useState(undefined);
+  const PostRef = React.createRef();
+  const getIDValue = {
+    Post: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const PostIdSet = new Set(
+    Array.isArray(Post)
+      ? Post.map((r) => getIDValue.Post?.(r))
+      : getIDValue.Post?.(Post)
+  );
+  const postRecords = await API.graphql({
+    query: listPosts,
+  }).data.listPosts.items;
+  const getDisplayValue = {
+    postID: (r) => \`\${r?.title ? r?.title + \\" - \\" : \\"\\"}\${r?.id}\`,
+    Post: (r) => \`\${r?.title ? r?.title + \\" - \\" : \\"\\"}\${r?.id}\`,
+  };
+  const validations = {
+    content: [],
+    postID: [{ type: \\"Required\\" }],
+    Post: [],
+    post: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          content,
+          postID,
+          Post,
+          post: post1,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const modelFieldsToSave = {
+            content: modelFields.content,
+            postID: modelFields.postID,
+            Post: modelFields.Post,
+          };
+          await API.graphql({
+            query: updateComment,
+            variables: {
+              input: {
+                ...modelFieldsToSave,
+              },
+            },
+          });
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"CommentUpdateForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Content\\"
+        isRequired={false}
+        isReadOnly={false}
+        value={content}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content: value,
+              postID,
+              Post,
+              post: post1,
+            };
+            const result = onChange(modelFields);
+            value = result?.content ?? value;
+          }
+          if (errors.content?.hasError) {
+            runValidationTasks(\\"content\\", value);
+          }
+          setContent(value);
+        }}
+        onBlur={() => runValidationTasks(\\"content\\", content)}
+        errorMessage={errors.content?.errorMessage}
+        hasError={errors.content?.hasError}
+        {...getOverrideProps(overrides, \\"content\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              content,
+              postID: value,
+              Post,
+              post: post1,
+            };
+            const result = onChange(modelFields);
+            value = result?.postID ?? value;
+          }
+          setPostID(value);
+          setCurrentPostIDValue(undefined);
+        }}
+        currentFieldValue={currentPostIDValue}
+        label={\\"Post id\\"}
+        items={postID ? [postID] : []}
+        hasError={errors?.postID?.hasError}
+        errorMessage={errors?.postID?.errorMessage}
+        getBadgeText={(value) =>
+          value
+            ? getDisplayValue.postID(postRecords.find((r) => r.id === value))
+            : \\"\\"
+        }
+        setFieldValue={(value) => {
+          setCurrentPostIDDisplayValue(
+            value
+              ? getDisplayValue.postID(postRecords.find((r) => r.id === value))
+              : \\"\\"
+          );
+          setCurrentPostIDValue(value);
+        }}
+        inputFieldRef={postIDRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Post id\\"
+          isRequired={true}
+          isReadOnly={false}
+          placeholder=\\"Search Post\\"
+          value={currentPostIDDisplayValue}
+          options={postRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
+            )
+            .map((r) => ({
+              id: r?.id,
+              label: getDisplayValue.postID?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentPostIDValue(id);
+            setCurrentPostIDDisplayValue(label);
+            runValidationTasks(\\"postID\\", label);
+          }}
+          onClear={() => {
+            setCurrentPostIDDisplayValue(\\"\\");
+          }}
+          defaultValue={postID}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.postID?.hasError) {
+              runValidationTasks(\\"postID\\", value);
+            }
+            setCurrentPostIDDisplayValue(value);
+            setCurrentPostIDValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"postID\\", currentPostIDValue)}
+          errorMessage={errors.postID?.errorMessage}
+          hasError={errors.postID?.hasError}
+          ref={postIDRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"postID\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              content,
+              postID,
+              Post: value,
+              post: post1,
+            };
+            const result = onChange(modelFields);
+            value = result?.Post ?? value;
+          }
+          setPost(value);
+          setCurrentPostValue(undefined);
+          setCurrentPostDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentPostValue}
+        label={\\"Post\\"}
+        items={Post ? [Post] : []}
+        hasError={errors?.Post?.hasError}
+        errorMessage={errors?.Post?.errorMessage}
+        getBadgeText={getDisplayValue.Post}
+        setFieldValue={(model) => {
+          setCurrentPostDisplayValue(model ? getDisplayValue.Post(model) : \\"\\");
+          setCurrentPostValue(model);
+        }}
+        inputFieldRef={PostRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Post\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Post\\"
+          value={currentPostDisplayValue}
+          options={postRecords
+            .filter((r) => !PostIdSet.has(getIDValue.Post?.(r)))
+            .map((r) => ({
+              id: getIDValue.Post?.(r),
+              label: getDisplayValue.Post?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentPostValue(
+              postRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentPostDisplayValue(label);
+            runValidationTasks(\\"Post\\", label);
+          }}
+          onClear={() => {
+            setCurrentPostDisplayValue(\\"\\");
+          }}
+          defaultValue={Post}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Post?.hasError) {
+              runValidationTasks(\\"Post\\", value);
+            }
+            setCurrentPostDisplayValue(value);
+            setCurrentPostValue(undefined);
+          }}
+          onBlur={() => runValidationTasks(\\"Post\\", currentPostDisplayValue)}
+          errorMessage={errors.Post?.errorMessage}
+          hasError={errors.Post?.hasError}
+          ref={PostRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"Post\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <TextField
+        label=\\"Label\\"
+        value={post1}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              content,
+              postID,
+              Post,
+              post: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.post ?? value;
+          }
+          if (errors.post?.hasError) {
+            runValidationTasks(\\"post\\", value);
+          }
+          setPost1(value);
+        }}
+        onBlur={() => runValidationTasks(\\"post\\", post1)}
+        errorMessage={errors.post?.errorMessage}
+        hasError={errors.post?.hasError}
+        {...getOverrideProps(overrides, \\"post\\")}
+      ></TextField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || commentModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(idProp || commentModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate an update form with hasMany relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Comment, Post } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type CommentUpdateFormInputValues = {
+    content?: string;
+    postID?: string;
+    Post?: Post;
+    post?: string;
+};
+export declare type CommentUpdateFormValidationValues = {
+    content?: ValidationFunction<string>;
+    postID?: ValidationFunction<string>;
+    Post?: ValidationFunction<Post>;
+    post?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type CommentUpdateFormOverridesProps = {
+    CommentUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    content?: PrimitiveOverrideProps<TextFieldProps>;
+    postID?: PrimitiveOverrideProps<AutocompleteProps>;
+    Post?: PrimitiveOverrideProps<AutocompleteProps>;
+    post?: PrimitiveOverrideProps<TextFieldProps>;
+} & EscapeHatchProps;
+export declare type CommentUpdateFormProps = React.PropsWithChildren<{
+    overrides?: CommentUpdateFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    comment?: Comment;
+    onSubmit?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
+    onSuccess?: (fields: CommentUpdateFormInputValues) => void;
+    onError?: (fields: CommentUpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: CommentUpdateFormInputValues) => CommentUpdateFormInputValues;
+    onValidate?: CommentUpdateFormValidationValues;
+} & React.CSSProperties>;
+export default function CommentUpdateForm(props: CommentUpdateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate an update form with many to many relationship 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import { getClass, listStudentClasses, listStudents } from \\"../graphql/queries\\";
+import {
+  createStudentClass,
+  deleteStudentClass,
+  updateClass,
+} from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function ClassUpdateForm(props) {
+  const {
+    id: idProp,
+    class: classModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    students: [],
+  };
+  const [students, setStudents] = React.useState(initialValues.students);
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = classRecord
+      ? { ...initialValues, ...classRecord, students: linkedStudents }
+      : initialValues;
+    setStudents(cleanValues.students ?? []);
+    setCurrentStudentsValue(undefined);
+    setCurrentStudentsDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [classRecord, setClassRecord] = React.useState(classModelProp);
+  const [linkedStudents, setLinkedStudents] = React.useState([]);
+  const canUnlinkStudents = false;
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? await API.graphql({
+            query: getClass,
+            variables: {
+              input: {
+                id: idProp,
+              },
+            },
+          })
+        : classModelProp;
+      setClassRecord(record);
+      const linkedStudents = record
+        ? await Promise.all(
+            (
+              await record.students.toArray()
+            ).map((r) => {
+              return r.student;
+            })
+          )
+        : [];
+      setLinkedStudents(linkedStudents);
+    };
+    queryData();
+  }, [idProp, classModelProp]);
+  React.useEffect(resetStateValues, [classRecord, linkedStudents]);
+  const [currentStudentsDisplayValue, setCurrentStudentsDisplayValue] =
+    React.useState(\\"\\");
+  const [currentStudentsValue, setCurrentStudentsValue] =
+    React.useState(undefined);
+  const studentsRef = React.createRef();
+  const getIDValue = {
+    students: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const studentsIdSet = new Set(
+    Array.isArray(students)
+      ? students.map((r) => getIDValue.students?.(r))
+      : getIDValue.students?.(students)
+  );
+  const studentRecords = await API.graphql({
+    query: listStudents,
+  }).data.listStudents.items;
+  const getDisplayValue = {
+    students: (r) => r?.id,
+  };
+  const validations = {
+    students: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          students,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const promises = [];
+          const studentsToLinkMap = new Map();
+          const studentsToUnLinkMap = new Map();
+          const studentsMap = new Map();
+          const linkedStudentsMap = new Map();
+          students.forEach((r) => {
+            const count = studentsMap.get(getIDValue.students?.(r));
+            const newCount = count ? count + 1 : 1;
+            studentsMap.set(getIDValue.students?.(r), newCount);
+          });
+          linkedStudents.forEach((r) => {
+            const count = linkedStudentsMap.get(getIDValue.students?.(r));
+            const newCount = count ? count + 1 : 1;
+            linkedStudentsMap.set(getIDValue.students?.(r), newCount);
+          });
+          linkedStudentsMap.forEach((count, id) => {
+            const newCount = studentsMap.get(id);
+            if (newCount) {
+              const diffCount = count - newCount;
+              if (diffCount > 0) {
+                studentsToUnLinkMap.set(id, diffCount);
+              }
+            } else {
+              studentsToUnLinkMap.set(id, count);
+            }
+          });
+          studentsMap.forEach((count, id) => {
+            const originalCount = linkedStudentsMap.get(id);
+            if (originalCount) {
+              const diffCount = count - originalCount;
+              if (diffCount > 0) {
+                studentsToLinkMap.set(id, diffCount);
+              }
+            } else {
+              studentsToLinkMap.set(id, count);
+            }
+          });
+          studentsToUnLinkMap.forEach(async (count, id) => {
+            const recordKeys = JSON.parse(id);
+            const studentClassRecords = await API.graphql({
+              query: listStudentClasses,
+              variables: {
+                filter: {
+                  and: [
+                    { studentId: { eq: recordKeys.id } },
+                    { classId: { eq: classRecord.id } },
+                  ],
+                },
+              },
+            }).data.listStudentClasses.items;
+            for (let i = 0; i < count; i++) {
+              promises.push(
+                API.graphql({
+                  query: deleteStudentClass,
+                  variables: {
+                    input: {
+                      input: studentClassRecords[i],
+                    },
+                  },
+                })
+              );
+            }
+          });
+          studentsToLinkMap.forEach((count, id) => {
+            for (let i = count; i > 0; i--) {
+              promises.push(
+                API.graphql({
+                  query: createStudentClass,
+                  variables: {
+                    input: {
+                      class: classRecord,
+                      student: studentRecords.find((r) =>
+                        Object.entries(JSON.parse(id)).every(
+                          ([key, value]) => r[key] === value
+                        )
+                      ),
+                    },
+                  },
+                })
+              );
+            }
+          });
+          const modelFieldsToSave = {};
+          promises.push(
+            API.graphql({
+              query: updateClass,
+              variables: {
+                input: {
+                  ...modelFieldsToSave,
+                },
+              },
+            })
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"ClassUpdateForm\\")}
+      {...rest}
+    >
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              students: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.students ?? values;
+          }
+          setStudents(values);
+          setCurrentStudentsValue(undefined);
+          setCurrentStudentsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentStudentsValue}
+        label={\\"Students\\"}
+        items={students}
+        hasError={errors?.students?.hasError}
+        errorMessage={errors?.students?.errorMessage}
+        getBadgeText={getDisplayValue.students}
+        setFieldValue={(model) => {
+          setCurrentStudentsDisplayValue(
+            model ? getDisplayValue.students(model) : \\"\\"
+          );
+          setCurrentStudentsValue(model);
+        }}
+        inputFieldRef={studentsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Students\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search Student\\"
+          value={currentStudentsDisplayValue}
+          options={studentRecords
+            .filter((r) => !studentsIdSet.has(getIDValue.students?.(r)))
+            .map((r) => ({
+              id: getIDValue.students?.(r),
+              label: getDisplayValue.students?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentStudentsValue(
+              studentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentStudentsDisplayValue(label);
+            runValidationTasks(\\"students\\", label);
+          }}
+          onClear={() => {
+            setCurrentStudentsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.students?.hasError) {
+              runValidationTasks(\\"students\\", value);
+            }
+            setCurrentStudentsDisplayValue(value);
+            setCurrentStudentsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"students\\", currentStudentsDisplayValue)
+          }
+          errorMessage={errors.students?.errorMessage}
+          hasError={errors.students?.hasError}
+          ref={studentsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"students\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || classModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(idProp || classModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate an update form with many to many relationship 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { Class, Student } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type ClassUpdateFormInputValues = {
+    students?: Student[];
+};
+export declare type ClassUpdateFormValidationValues = {
+    students?: ValidationFunction<Student>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type ClassUpdateFormOverridesProps = {
+    ClassUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    students?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type ClassUpdateFormProps = React.PropsWithChildren<{
+    overrides?: ClassUpdateFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    class?: Class;
+    onSubmit?: (fields: ClassUpdateFormInputValues) => ClassUpdateFormInputValues;
+    onSuccess?: (fields: ClassUpdateFormInputValues) => void;
+    onError?: (fields: ClassUpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: ClassUpdateFormInputValues) => ClassUpdateFormInputValues;
+    onValidate?: ClassUpdateFormValidationValues;
+} & React.CSSProperties>;
+export default function ClassUpdateForm(props: ClassUpdateFormProps): React.ReactElement;
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate an upgrade form with multiple relationship & cpk 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import {
+  Autocomplete,
+  Badge,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Icon,
+  ScrollView,
+  Text,
+  TextField,
+  useTheme,
+} from \\"@aws-amplify/ui-react\\";
+import { getOverrideProps } from \\"@aws-amplify/ui-react/internal\\";
+import { fetchByPath, validateField } from \\"./utils\\";
+import { API } from \\"aws-amplify\\";
+import {
+  getCPKTeacher,
+  listCPKClasses,
+  listCPKProjects,
+  listCPKStudents,
+  listCPKTeacherCPKClasses,
+} from \\"../graphql/queries\\";
+import {
+  createCPKTeacherCPKClass,
+  deleteCPKTeacherCPKClass,
+  updateCPKTeacher,
+  updateCPKTeacherRecord,
+} from \\"../graphql/mutations\\";
+function ArrayField({
+  items = [],
+  onChange,
+  label,
+  inputFieldRef,
+  children,
+  hasError,
+  setFieldValue,
+  currentFieldValue,
+  defaultFieldValue,
+  lengthLimit,
+  getBadgeText,
+  errorMessage,
+}) {
+  const labelElement = <Text>{label}</Text>;
+  const {
+    tokens: {
+      components: {
+        fieldmessages: { error: errorStyles },
+      },
+    },
+  } = useTheme();
+  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
+  const [isEditing, setIsEditing] = React.useState();
+  React.useEffect(() => {
+    if (isEditing) {
+      inputFieldRef?.current?.focus();
+    }
+  }, [isEditing]);
+  const removeItem = async (removeIndex) => {
+    const newItems = items.filter((value, index) => index !== removeIndex);
+    await onChange(newItems);
+    setSelectedBadgeIndex(undefined);
+  };
+  const addItem = async () => {
+    if (
+      currentFieldValue !== undefined &&
+      currentFieldValue !== null &&
+      currentFieldValue !== \\"\\" &&
+      !hasError
+    ) {
+      const newItems = [...items];
+      if (selectedBadgeIndex !== undefined) {
+        newItems[selectedBadgeIndex] = currentFieldValue;
+        setSelectedBadgeIndex(undefined);
+      } else {
+        newItems.push(currentFieldValue);
+      }
+      await onChange(newItems);
+      setIsEditing(false);
+    }
+  };
+  const arraySection = (
+    <React.Fragment>
+      {!!items?.length && (
+        <ScrollView height=\\"inherit\\" width=\\"inherit\\" maxHeight={\\"7rem\\"}>
+          {items.map((value, index) => {
+            return (
+              <Badge
+                key={index}
+                style={{
+                  cursor: \\"pointer\\",
+                  alignItems: \\"center\\",
+                  marginRight: 3,
+                  marginTop: 3,
+                  backgroundColor:
+                    index === selectedBadgeIndex ? \\"#B8CEF9\\" : \\"\\",
+                }}
+                onClick={() => {
+                  setSelectedBadgeIndex(index);
+                  setFieldValue(items[index]);
+                  setIsEditing(true);
+                }}
+              >
+                {getBadgeText ? getBadgeText(value) : value.toString()}
+                <Icon
+                  style={{
+                    cursor: \\"pointer\\",
+                    paddingLeft: 3,
+                    width: 20,
+                    height: 20,
+                  }}
+                  viewBox={{ width: 20, height: 20 }}
+                  paths={[
+                    {
+                      d: \\"M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z\\",
+                      stroke: \\"black\\",
+                    },
+                  ]}
+                  ariaLabel=\\"button\\"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeItem(index);
+                  }}
+                />
+              </Badge>
+            );
+          })}
+        </ScrollView>
+      )}
+      <Divider orientation=\\"horizontal\\" marginTop={5} />
+    </React.Fragment>
+  );
+  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
+    return (
+      <React.Fragment>
+        {labelElement}
+        {arraySection}
+      </React.Fragment>
+    );
+  }
+  return (
+    <React.Fragment>
+      {labelElement}
+      {isEditing && children}
+      {!isEditing ? (
+        <>
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+          >
+            Add item
+          </Button>
+          {errorMessage && hasError && (
+            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
+              {errorMessage}
+            </Text>
+          )}
+        </>
+      ) : (
+        <Flex justifyContent=\\"flex-end\\">
+          {(currentFieldValue || isEditing) && (
+            <Button
+              children=\\"Cancel\\"
+              type=\\"button\\"
+              size=\\"small\\"
+              onClick={() => {
+                setFieldValue(defaultFieldValue);
+                setIsEditing(false);
+                setSelectedBadgeIndex(undefined);
+              }}
+            ></Button>
+          )}
+          <Button
+            size=\\"small\\"
+            variation=\\"link\\"
+            isDisabled={hasError}
+            onClick={addItem}
+          >
+            {selectedBadgeIndex !== undefined ? \\"Save\\" : \\"Add\\"}
+          </Button>
+        </Flex>
+      )}
+      {arraySection}
+    </React.Fragment>
+  );
+}
+export default function UpdateCPKTeacherForm(props) {
+  const {
+    specialTeacherId: specialTeacherIdProp,
+    cPKTeacher: cPKTeacherModelProp,
+    onSuccess,
+    onError,
+    onSubmit,
+    onValidate,
+    onChange,
+    overrides,
+    ...rest
+  } = props;
+  const initialValues = {
+    specialTeacherId: \\"\\",
+    CPKStudent: undefined,
+    CPKClasses: [],
+    CPKProjects: [],
+  };
+  const [specialTeacherId, setSpecialTeacherId] = React.useState(
+    initialValues.specialTeacherId
+  );
+  const [CPKStudent, setCPKStudent] = React.useState(initialValues.CPKStudent);
+  const [CPKClasses, setCPKClasses] = React.useState(initialValues.CPKClasses);
+  const [CPKProjects, setCPKProjects] = React.useState(
+    initialValues.CPKProjects
+  );
+  const [errors, setErrors] = React.useState({});
+  const resetStateValues = () => {
+    const cleanValues = cPKTeacherRecord
+      ? {
+          ...initialValues,
+          ...cPKTeacherRecord,
+          CPKStudent,
+          CPKClasses: linkedCPKClasses,
+          CPKProjects: linkedCPKProjects,
+        }
+      : initialValues;
+    setSpecialTeacherId(cleanValues.specialTeacherId);
+    setCPKStudent(cleanValues.CPKStudent);
+    setCurrentCPKStudentValue(undefined);
+    setCurrentCPKStudentDisplayValue(\\"\\");
+    setCPKClasses(cleanValues.CPKClasses ?? []);
+    setCurrentCPKClassesValue(undefined);
+    setCurrentCPKClassesDisplayValue(\\"\\");
+    setCPKProjects(cleanValues.CPKProjects ?? []);
+    setCurrentCPKProjectsValue(undefined);
+    setCurrentCPKProjectsDisplayValue(\\"\\");
+    setErrors({});
+  };
+  const [cPKTeacherRecord, setCPKTeacherRecord] =
+    React.useState(cPKTeacherModelProp);
+  const [linkedCPKClasses, setLinkedCPKClasses] = React.useState([]);
+  const canUnlinkCPKClasses = false;
+  const [linkedCPKProjects, setLinkedCPKProjects] = React.useState([]);
+  const canUnlinkCPKProjects = true;
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = specialTeacherIdProp
+        ? await API.graphql({
+            query: getCPKTeacher,
+            variables: {
+              input: {
+                id: idProp,
+              },
+            },
+          })
+        : cPKTeacherModelProp;
+      setCPKTeacherRecord(record);
+      const CPKStudentRecord = record ? await record.CPKStudent : undefined;
+      setCPKStudent(CPKStudentRecord);
+      const linkedCPKClasses = record
+        ? await Promise.all(
+            (
+              await record.CPKClasses.toArray()
+            ).map((r) => {
+              return r.cpkClass;
+            })
+          )
+        : [];
+      setLinkedCPKClasses(linkedCPKClasses);
+      const linkedCPKProjects = record
+        ? await record.CPKProjects.toArray()
+        : [];
+      setLinkedCPKProjects(linkedCPKProjects);
+    };
+    queryData();
+  }, [specialTeacherIdProp, cPKTeacherModelProp]);
+  React.useEffect(resetStateValues, [
+    cPKTeacherRecord,
+    CPKStudent,
+    linkedCPKClasses,
+    linkedCPKProjects,
+  ]);
+  const [currentCPKStudentDisplayValue, setCurrentCPKStudentDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCPKStudentValue, setCurrentCPKStudentValue] =
+    React.useState(undefined);
+  const CPKStudentRef = React.createRef();
+  const [currentCPKClassesDisplayValue, setCurrentCPKClassesDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCPKClassesValue, setCurrentCPKClassesValue] =
+    React.useState(undefined);
+  const CPKClassesRef = React.createRef();
+  const [currentCPKProjectsDisplayValue, setCurrentCPKProjectsDisplayValue] =
+    React.useState(\\"\\");
+  const [currentCPKProjectsValue, setCurrentCPKProjectsValue] =
+    React.useState(undefined);
+  const CPKProjectsRef = React.createRef();
+  const getIDValue = {
+    CPKStudent: (r) =>
+      JSON.stringify({ specialStudentId: r?.specialStudentId }),
+    CPKClasses: (r) => JSON.stringify({ specialClassId: r?.specialClassId }),
+    CPKProjects: (r) =>
+      JSON.stringify({ specialProjectId: r?.specialProjectId }),
+  };
+  const CPKStudentIdSet = new Set(
+    Array.isArray(CPKStudent)
+      ? CPKStudent.map((r) => getIDValue.CPKStudent?.(r))
+      : getIDValue.CPKStudent?.(CPKStudent)
+  );
+  const CPKClassesIdSet = new Set(
+    Array.isArray(CPKClasses)
+      ? CPKClasses.map((r) => getIDValue.CPKClasses?.(r))
+      : getIDValue.CPKClasses?.(CPKClasses)
+  );
+  const CPKProjectsIdSet = new Set(
+    Array.isArray(CPKProjects)
+      ? CPKProjects.map((r) => getIDValue.CPKProjects?.(r))
+      : getIDValue.CPKProjects?.(CPKProjects)
+  );
+  const cPKStudentRecords = await API.graphql({
+    query: listCPKStudents,
+  }).data.listCPKStudents.items;
+  const cPKClassRecords = await API.graphql({
+    query: listCPKClasses,
+  }).data.listCPKClasses.items;
+  const cPKProjectRecords = await API.graphql({
+    query: listCPKProjects,
+  }).data.listCPKProjects.items;
+  const getDisplayValue = {
+    CPKStudent: (r) => r?.specialStudentId,
+    CPKClasses: (r) => r?.specialClassId,
+    CPKProjects: (r) => r?.specialProjectId,
+  };
+  const validations = {
+    specialTeacherId: [{ type: \\"Required\\" }],
+    CPKStudent: [],
+    CPKClasses: [],
+    CPKProjects: [],
+  };
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
+    let validationResponse = validateField(value, validations[fieldName]);
+    const customValidator = fetchByPath(onValidate, fieldName);
+    if (customValidator) {
+      validationResponse = await customValidator(value, validationResponse);
+    }
+    setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
+    return validationResponse;
+  };
+  return (
+    <Grid
+      as=\\"form\\"
+      rowGap=\\"15px\\"
+      columnGap=\\"15px\\"
+      padding=\\"20px\\"
+      onSubmit={async (event) => {
+        event.preventDefault();
+        let modelFields = {
+          specialTeacherId,
+          CPKStudent,
+          CPKClasses,
+          CPKProjects,
+        };
+        const validationResponses = await Promise.all(
+          Object.keys(validations).reduce((promises, fieldName) => {
+            if (Array.isArray(modelFields[fieldName])) {
+              promises.push(
+                ...modelFields[fieldName].map((item) =>
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
+                )
+              );
+              return promises;
+            }
+            promises.push(
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
+            );
+            return promises;
+          }, [])
+        );
+        if (validationResponses.some((r) => r.hasError)) {
+          return;
+        }
+        if (onSubmit) {
+          modelFields = onSubmit(modelFields);
+        }
+        try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === \\"string\\" && value.trim() === \\"\\") {
+              modelFields[key] = undefined;
+            }
+          });
+          const promises = [];
+          const cPKClassesToLinkMap = new Map();
+          const cPKClassesToUnLinkMap = new Map();
+          const cPKClassesMap = new Map();
+          const linkedCPKClassesMap = new Map();
+          CPKClasses.forEach((r) => {
+            const count = cPKClassesMap.get(getIDValue.CPKClasses?.(r));
+            const newCount = count ? count + 1 : 1;
+            cPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount);
+          });
+          linkedCPKClasses.forEach((r) => {
+            const count = linkedCPKClassesMap.get(getIDValue.CPKClasses?.(r));
+            const newCount = count ? count + 1 : 1;
+            linkedCPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount);
+          });
+          linkedCPKClassesMap.forEach((count, id) => {
+            const newCount = cPKClassesMap.get(id);
+            if (newCount) {
+              const diffCount = count - newCount;
+              if (diffCount > 0) {
+                cPKClassesToUnLinkMap.set(id, diffCount);
+              }
+            } else {
+              cPKClassesToUnLinkMap.set(id, count);
+            }
+          });
+          cPKClassesMap.forEach((count, id) => {
+            const originalCount = linkedCPKClassesMap.get(id);
+            if (originalCount) {
+              const diffCount = count - originalCount;
+              if (diffCount > 0) {
+                cPKClassesToLinkMap.set(id, diffCount);
+              }
+            } else {
+              cPKClassesToLinkMap.set(id, count);
+            }
+          });
+          cPKClassesToUnLinkMap.forEach(async (count, id) => {
+            const recordKeys = JSON.parse(id);
+            const cPKTeacherCPKClassRecords = await API.graphql({
+              query: listCPKTeacherCPKClasses,
+              variables: {
+                filter: {
+                  and: [
+                    {
+                      cPKClassSpecialClassId: { eq: recordKeys.specialClassId },
+                    },
+                    {
+                      cPKTeacherSpecialTeacherId: {
+                        eq: cPKTeacherRecord.specialTeacherId,
+                      },
+                    },
+                  ],
+                },
+              },
+            }).data.listCPKTeacherCPKClasses.items;
+            for (let i = 0; i < count; i++) {
+              promises.push(
+                API.graphql({
+                  query: deleteCPKTeacherCPKClass,
+                  variables: {
+                    input: {
+                      input: cPKTeacherCPKClassRecords[i],
+                    },
+                  },
+                })
+              );
+            }
+          });
+          cPKClassesToLinkMap.forEach((count, id) => {
+            for (let i = count; i > 0; i--) {
+              promises.push(
+                API.graphql({
+                  query: createCPKTeacherCPKClass,
+                  variables: {
+                    input: {
+                      cpkTeacher: cPKTeacherRecord,
+                      cpkClass: cPKClassRecords.find((r) =>
+                        Object.entries(JSON.parse(id)).every(
+                          ([key, value]) => r[key] === value
+                        )
+                      ),
+                    },
+                  },
+                })
+              );
+            }
+          });
+          const cPKProjectsToLink = [];
+          const cPKProjectsToUnLink = [];
+          const cPKProjectsSet = new Set();
+          const linkedCPKProjectsSet = new Set();
+          CPKProjects.forEach((r) =>
+            cPKProjectsSet.add(getIDValue.CPKProjects?.(r))
+          );
+          linkedCPKProjects.forEach((r) =>
+            linkedCPKProjectsSet.add(getIDValue.CPKProjects?.(r))
+          );
+          linkedCPKProjects.forEach((r) => {
+            if (!cPKProjectsSet.has(getIDValue.CPKProjects?.(r))) {
+              cPKProjectsToUnLink.push(r);
+            }
+          });
+          CPKProjects.forEach((r) => {
+            if (!linkedCPKProjectsSet.has(getIDValue.CPKProjects?.(r))) {
+              cPKProjectsToLink.push(r);
+            }
+          });
+          cPKProjectsToUnLink.forEach((original) => {
+            if (!canUnlinkCPKProjects) {
+              throw Error(
+                \`CPKProject \${original.specialProjectId} cannot be unlinked from CPKTeacher because cPKTeacherID is a required field.\`
+              );
+            }
+            promises.push(
+              API.graphql({
+                query: updateCPKTeacherRecord,
+                variables: {
+                  input: {
+                    ...original,
+                    cPKTeacherID: null,
+                  },
+                },
+              })
+            );
+          });
+          cPKProjectsToLink.forEach((original) => {
+            promises.push(
+              API.graphql({
+                query: updateCPKTeacherRecord,
+                variables: {
+                  input: {
+                    ...original,
+                    cPKTeacherID: cPKTeacherRecord.specialTeacherId,
+                  },
+                },
+              })
+            );
+          });
+          const modelFieldsToSave = {
+            specialTeacherId: modelFields.specialTeacherId,
+            CPKStudent: modelFields.CPKStudent,
+          };
+          promises.push(
+            API.graphql({
+              query: updateCPKTeacher,
+              variables: {
+                input: {
+                  ...modelFieldsToSave,
+                },
+              },
+            })
+          );
+          await Promise.all(promises);
+          if (onSuccess) {
+            onSuccess(modelFields);
+          }
+        } catch (err) {
+          if (onError) {
+            onError(modelFields, err.message);
+          }
+        }
+      }}
+      {...getOverrideProps(overrides, \\"UpdateCPKTeacherForm\\")}
+      {...rest}
+    >
+      <TextField
+        label=\\"Special teacher id\\"
+        isRequired={true}
+        isReadOnly={true}
+        value={specialTeacherId}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId: value,
+              CPKStudent,
+              CPKClasses,
+              CPKProjects,
+            };
+            const result = onChange(modelFields);
+            value = result?.specialTeacherId ?? value;
+          }
+          if (errors.specialTeacherId?.hasError) {
+            runValidationTasks(\\"specialTeacherId\\", value);
+          }
+          setSpecialTeacherId(value);
+        }}
+        onBlur={() => runValidationTasks(\\"specialTeacherId\\", specialTeacherId)}
+        errorMessage={errors.specialTeacherId?.errorMessage}
+        hasError={errors.specialTeacherId?.hasError}
+        {...getOverrideProps(overrides, \\"specialTeacherId\\")}
+      ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId,
+              CPKStudent: value,
+              CPKClasses,
+              CPKProjects,
+            };
+            const result = onChange(modelFields);
+            value = result?.CPKStudent ?? value;
+          }
+          setCPKStudent(value);
+          setCurrentCPKStudentValue(undefined);
+          setCurrentCPKStudentDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCPKStudentValue}
+        label={\\"Cpk student\\"}
+        items={CPKStudent ? [CPKStudent] : []}
+        hasError={errors?.CPKStudent?.hasError}
+        errorMessage={errors?.CPKStudent?.errorMessage}
+        getBadgeText={getDisplayValue.CPKStudent}
+        setFieldValue={(model) => {
+          setCurrentCPKStudentDisplayValue(
+            model ? getDisplayValue.CPKStudent(model) : \\"\\"
+          );
+          setCurrentCPKStudentValue(model);
+        }}
+        inputFieldRef={CPKStudentRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Cpk student\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CPKStudent\\"
+          value={currentCPKStudentDisplayValue}
+          options={cPKStudentRecords
+            .filter((r) => !CPKStudentIdSet.has(getIDValue.CPKStudent?.(r)))
+            .map((r) => ({
+              id: getIDValue.CPKStudent?.(r),
+              label: getDisplayValue.CPKStudent?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCPKStudentValue(
+              cPKStudentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCPKStudentDisplayValue(label);
+            runValidationTasks(\\"CPKStudent\\", label);
+          }}
+          onClear={() => {
+            setCurrentCPKStudentDisplayValue(\\"\\");
+          }}
+          defaultValue={CPKStudent}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CPKStudent?.hasError) {
+              runValidationTasks(\\"CPKStudent\\", value);
+            }
+            setCurrentCPKStudentDisplayValue(value);
+            setCurrentCPKStudentValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"CPKStudent\\", currentCPKStudentDisplayValue)
+          }
+          errorMessage={errors.CPKStudent?.errorMessage}
+          hasError={errors.CPKStudent?.hasError}
+          ref={CPKStudentRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CPKStudent\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId,
+              CPKStudent,
+              CPKClasses: values,
+              CPKProjects,
+            };
+            const result = onChange(modelFields);
+            values = result?.CPKClasses ?? values;
+          }
+          setCPKClasses(values);
+          setCurrentCPKClassesValue(undefined);
+          setCurrentCPKClassesDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCPKClassesValue}
+        label={\\"Cpk classes\\"}
+        items={CPKClasses}
+        hasError={errors?.CPKClasses?.hasError}
+        errorMessage={errors?.CPKClasses?.errorMessage}
+        getBadgeText={getDisplayValue.CPKClasses}
+        setFieldValue={(model) => {
+          setCurrentCPKClassesDisplayValue(
+            model ? getDisplayValue.CPKClasses(model) : \\"\\"
+          );
+          setCurrentCPKClassesValue(model);
+        }}
+        inputFieldRef={CPKClassesRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Cpk classes\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CPKClass\\"
+          value={currentCPKClassesDisplayValue}
+          options={cPKClassRecords
+            .filter((r) => !CPKClassesIdSet.has(getIDValue.CPKClasses?.(r)))
+            .map((r) => ({
+              id: getIDValue.CPKClasses?.(r),
+              label: getDisplayValue.CPKClasses?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCPKClassesValue(
+              cPKClassRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCPKClassesDisplayValue(label);
+            runValidationTasks(\\"CPKClasses\\", label);
+          }}
+          onClear={() => {
+            setCurrentCPKClassesDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CPKClasses?.hasError) {
+              runValidationTasks(\\"CPKClasses\\", value);
+            }
+            setCurrentCPKClassesDisplayValue(value);
+            setCurrentCPKClassesValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"CPKClasses\\", currentCPKClassesDisplayValue)
+          }
+          errorMessage={errors.CPKClasses?.errorMessage}
+          hasError={errors.CPKClasses?.hasError}
+          ref={CPKClassesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CPKClasses\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              specialTeacherId,
+              CPKStudent,
+              CPKClasses,
+              CPKProjects: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.CPKProjects ?? values;
+          }
+          setCPKProjects(values);
+          setCurrentCPKProjectsValue(undefined);
+          setCurrentCPKProjectsDisplayValue(\\"\\");
+        }}
+        currentFieldValue={currentCPKProjectsValue}
+        label={\\"Cpk projects\\"}
+        items={CPKProjects}
+        hasError={errors?.CPKProjects?.hasError}
+        errorMessage={errors?.CPKProjects?.errorMessage}
+        getBadgeText={getDisplayValue.CPKProjects}
+        setFieldValue={(model) => {
+          setCurrentCPKProjectsDisplayValue(
+            model ? getDisplayValue.CPKProjects(model) : \\"\\"
+          );
+          setCurrentCPKProjectsValue(model);
+        }}
+        inputFieldRef={CPKProjectsRef}
+        defaultFieldValue={\\"\\"}
+      >
+        <Autocomplete
+          label=\\"Cpk projects\\"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder=\\"Search CPKProject\\"
+          value={currentCPKProjectsDisplayValue}
+          options={cPKProjectRecords
+            .filter((r) => !CPKProjectsIdSet.has(getIDValue.CPKProjects?.(r)))
+            .map((r) => ({
+              id: getIDValue.CPKProjects?.(r),
+              label: getDisplayValue.CPKProjects?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentCPKProjectsValue(
+              cPKProjectRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentCPKProjectsDisplayValue(label);
+            runValidationTasks(\\"CPKProjects\\", label);
+          }}
+          onClear={() => {
+            setCurrentCPKProjectsDisplayValue(\\"\\");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.CPKProjects?.hasError) {
+              runValidationTasks(\\"CPKProjects\\", value);
+            }
+            setCurrentCPKProjectsDisplayValue(value);
+            setCurrentCPKProjectsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(\\"CPKProjects\\", currentCPKProjectsDisplayValue)
+          }
+          errorMessage={errors.CPKProjects?.errorMessage}
+          hasError={errors.CPKProjects?.hasError}
+          ref={CPKProjectsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, \\"CPKProjects\\")}
+        ></Autocomplete>
+      </ArrayField>
+      <Flex
+        justifyContent=\\"space-between\\"
+        {...getOverrideProps(overrides, \\"CTAFlex\\")}
+      >
+        <Button
+          children=\\"Reset\\"
+          type=\\"reset\\"
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(specialTeacherIdProp || cPKTeacherModelProp)}
+          {...getOverrideProps(overrides, \\"ResetButton\\")}
+        ></Button>
+        <Flex
+          gap=\\"15px\\"
+          {...getOverrideProps(overrides, \\"RightAlignCTASubFlex\\")}
+        >
+          <Button
+            children=\\"Submit\\"
+            type=\\"submit\\"
+            variation=\\"primary\\"
+            isDisabled={
+              !(specialTeacherIdProp || cPKTeacherModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
+            {...getOverrideProps(overrides, \\"SubmitButton\\")}
+          ></Button>
+        </Flex>
+      </Flex>
+    </Grid>
+  );
+}
+"
+`;
+
+exports[`amplify form renderer tests GraphQL form tests should generate an upgrade form with multiple relationship & cpk 2`] = `
+"import * as React from \\"react\\";
+import { AutocompleteProps, GridProps, TextFieldProps } from \\"@aws-amplify/ui-react\\";
+import { EscapeHatchProps } from \\"@aws-amplify/ui-react/internal\\";
+import { CPKClass, CPKProject, CPKStudent, CPKTeacher } from \\"../API\\";
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type UpdateCPKTeacherFormInputValues = {
+    specialTeacherId?: string;
+    CPKStudent?: CPKStudent;
+    CPKClasses?: CPKClass[];
+    CPKProjects?: CPKProject[];
+};
+export declare type UpdateCPKTeacherFormValidationValues = {
+    specialTeacherId?: ValidationFunction<string>;
+    CPKStudent?: ValidationFunction<CPKStudent>;
+    CPKClasses?: ValidationFunction<CPKClass>;
+    CPKProjects?: ValidationFunction<CPKProject>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type UpdateCPKTeacherFormOverridesProps = {
+    UpdateCPKTeacherFormGrid?: PrimitiveOverrideProps<GridProps>;
+    specialTeacherId?: PrimitiveOverrideProps<TextFieldProps>;
+    CPKStudent?: PrimitiveOverrideProps<AutocompleteProps>;
+    CPKClasses?: PrimitiveOverrideProps<AutocompleteProps>;
+    CPKProjects?: PrimitiveOverrideProps<AutocompleteProps>;
+} & EscapeHatchProps;
+export declare type UpdateCPKTeacherFormProps = React.PropsWithChildren<{
+    overrides?: UpdateCPKTeacherFormOverridesProps | undefined | null;
+} & {
+    specialTeacherId?: string;
+    cPKTeacher?: CPKTeacher;
+    onSubmit?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
+    onSuccess?: (fields: UpdateCPKTeacherFormInputValues) => void;
+    onError?: (fields: UpdateCPKTeacherFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: UpdateCPKTeacherFormInputValues) => UpdateCPKTeacherFormInputValues;
+    onValidate?: UpdateCPKTeacherFormValidationValues;
+} & React.CSSProperties>;
+export default function UpdateCPKTeacherForm(props: UpdateCPKTeacherFormProps): React.ReactElement;
+"
+`;
+
 exports[`amplify form renderer tests GraphQL form tests should render a create form for child of 1:m relationship 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";
@@ -13632,11 +15762,11 @@ export default function UpdateCompositeDogForm(props) {
             }
           });
           compositeVetsToUnLinkMap.forEach(async (count, id) => {
+            const recordKeys = JSON.parse(id);
             const compositeDogCompositeVetRecords = await DataStore.query(
               CompositeDogCompositeVet,
               (r) =>
                 r.and((r) => {
-                  const recordKeys = JSON.parse(id);
                   return [
                     r.compositeVetSpecialty.eq(recordKeys.specialty),
                     r.compositeVetcity.eq(recordKeys.city),
@@ -14625,11 +16755,11 @@ export default function UpdateCPKTeacherForm(props) {
             }
           });
           cPKClassesToUnLinkMap.forEach(async (count, id) => {
+            const recordKeys = JSON.parse(id);
             const cPKTeacherCPKClassRecords = await DataStore.query(
               CPKTeacherCPKClass,
               (r) =>
                 r.and((r) => {
-                  const recordKeys = JSON.parse(id);
                   return [
                     r.cPKClassSpecialClassId.eq(recordKeys.specialClassId),
                     r.cPKTeacherSpecialTeacherId.eq(
@@ -18046,11 +20176,11 @@ export default function UpdateCompositeDogForm(props) {
             }
           });
           compositeVetsToUnLinkMap.forEach(async (count, id) => {
+            const recordKeys = JSON.parse(id);
             const compositeDogCompositeVetRecords = await DataStore.query(
               CompositeDogCompositeVet,
               (r) =>
                 r.and((r) => {
-                  const recordKeys = JSON.parse(id);
                   return [
                     r.compositeVetSpecialty.eq(recordKeys.specialty),
                     r.compositeVetcity.eq(recordKeys.city),
@@ -27820,9 +29950,9 @@ export default function TagUpdateForm(props) {
             }
           });
           postsToUnLinkMap.forEach(async (count, id) => {
+            const recordKeys = JSON.parse(id);
             const tagPostRecords = await DataStore.query(TagPost, (r) =>
               r.and((r) => {
-                const recordKeys = JSON.parse(id);
                 return [r.postID.eq(recordKeys.id), r.tagID.eq(tagRecord.id)];
               })
             );

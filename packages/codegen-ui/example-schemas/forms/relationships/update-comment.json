@@ -1,0 +1,42 @@
+{
+    "name": "CommentUpdateForm",
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "Comment"
+    },
+    "formActionType": "update",
+    "fields": {
+        "post": {
+            "type": "Autocomplete",
+            "valueMappings": {
+                "values": [
+                    {
+                        "value": {
+                            "bindingProperties": {
+                                "property": "Post",
+                                "field": "id"
+                            }
+                        },
+                        "displayValue": {
+                            "bindingProperties": {
+                                "property": "Post",
+                                "field": "id"
+                            }
+                        }
+                    }
+                ],
+                "bindingProperties": {
+                    "Post": {
+                        "type": "Data",
+                        "bindingProperties": {
+                            "model": "Author"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "sectionalElements": {},
+    "style": {},
+    "cta": {}
+}

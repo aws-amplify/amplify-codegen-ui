@@ -759,6 +759,77 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
+    it('should generate an update form with hasMany relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-comment',
+        'datastore/relationships/has-many-comment',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toContain('await API.graphql({');
+      expect(componentText).toContain('query: updateComment');
+      expect(componentText).toContain('const postRecords = await API.graphql({');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate an update form with many to many relationship', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/relationships/update-class',
+        'datastore/relationships/many-to-many-class',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      expect(componentText).toContain('await API.graphql({');
+      expect(componentText).toContain('createStudentClass');
+      expect(componentText).toContain('deleteStudentClass');
+      expect(componentText).toContain('updateClass');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
+    it('should generate an upgrade form with multiple relationship & cpk', () => {
+      const { componentText, declaration } = generateWithAmplifyFormRenderer(
+        'forms/cpk-teacher-datastore-update',
+        'datastore/cpk-relationships',
+        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
+        { isNonModelSupported: true, isRelationshipSupported: true },
+      );
+
+      // check for import statement for graphql operation
+      expect(componentText).not.toContain('DataStore');
+
+      // hasOne
+      expect(componentText).toContain('specialTeacherId: specialTeacherIdProp');
+      expect(componentText).toContain('query: getCPKTeacher,');
+      expect(componentText).toContain('Student: (r) => r?.specialStudentId');
+      expect(componentText).toContain('JSON.stringify({ specialStudentId: r?.specialStudentId })');
+
+      // manyToMany
+      expect(componentText).toContain('const count = cPKClassesMap.get(getIDValue.CPKClasses?.(r))');
+      expect(componentText).toContain('cPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
+      expect(componentText).toContain('const count = linkedCPKClassesMap.get(getIDValue.CPKClasses?.(r))');
+      expect(componentText).toContain('linkedCPKClassesMap.set(getIDValue.CPKClasses?.(r), newCount)');
+      expect(componentText).toContain('cpkTeacher: cPKTeacherRecord');
+
+      // hasMany
+      expect(componentText).toContain('cPKProjectsSet.add(getIDValue.CPKProjects?.(r)');
+      expect(componentText).toContain('linkedCPKProjectsSet.add(getIDValue.CPKProjects?.(r))');
+
+      expect(componentText).toMatchSnapshot();
+      expect(declaration).toMatchSnapshot();
+    });
+
     it('should generate a create form with multiple hasOne relationships', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/book-datastore-relationship-multiple',

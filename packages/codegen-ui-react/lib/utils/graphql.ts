@@ -64,42 +64,53 @@ export const getGraphqlCallExpression = (
   model: string,
   importCollection: ImportCollection,
   inputs?: ObjectLiteralElementLike[],
+  filters?: ObjectLiteralElementLike[],
 ): CallExpression => {
   const query = getGraphqlQueryForModel(action, model);
+  const graphqlVariables: ObjectLiteralElementLike[] = [];
 
   importCollection.addMappedImport(ImportValue.API);
 
+  if (inputs) {
+    graphqlVariables.push(
+      factory.createPropertyAssignment(
+        factory.createIdentifier('input'),
+        factory.createObjectLiteralExpression(inputs, true),
+      ),
+    );
+  }
+
   if (action === ActionType.LIST || action === ActionType.GET) {
     importCollection.addGraphqlQueryImport(query);
+    // filter applies to list
+    if (filters) {
+      graphqlVariables.push(
+        factory.createPropertyAssignment(
+          factory.createIdentifier('filter'),
+          factory.createObjectLiteralExpression(filters, true),
+        ),
+      );
+    }
   } else {
     importCollection.addGraphqlMutationImport(query);
   }
   importCollection.addModelImport(model);
 
+  const graphqlOptions: ObjectLiteralElementLike[] = [
+    factory.createPropertyAssignment(factory.createIdentifier('query'), factory.createIdentifier(query)),
+  ];
+
+  if (graphqlVariables.length > 0) {
+    graphqlOptions.push(
+      factory.createPropertyAssignment(
+        factory.createIdentifier('variables'),
+        factory.createObjectLiteralExpression(graphqlVariables),
+      ),
+    );
+  }
   return factory.createCallExpression(
     factory.createPropertyAccessExpression(factory.createIdentifier('API'), factory.createIdentifier('graphql')),
     undefined,
-    [
-      factory.createObjectLiteralExpression(
-        inputs
-          ? [
-              factory.createPropertyAssignment(factory.createIdentifier('query'), factory.createIdentifier(query)),
-              factory.createPropertyAssignment(
-                factory.createIdentifier('variables'),
-                factory.createObjectLiteralExpression(
-                  [
-                    factory.createPropertyAssignment(
-                      factory.createIdentifier('input'),
-                      factory.createObjectLiteralExpression(inputs, true),
-                    ),
-                  ],
-                  true,
-                ),
-              ),
-            ]
-          : [factory.createPropertyAssignment(factory.createIdentifier('query'), factory.createIdentifier(query))],
-        true,
-      ),
-    ],
+    [factory.createObjectLiteralExpression(graphqlOptions, true)],
   );
 };
