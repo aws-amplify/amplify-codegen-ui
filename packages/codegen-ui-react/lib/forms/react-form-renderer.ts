@@ -394,8 +394,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
     if (!formMetadata) {
       throw new Error(`Form Metadata is missing from form: ${this.component.name}`);
     }
-    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
-    this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
+    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD, ImportValue.FETCH_BY_PATH);
 
     // add model import for datastore type
     if (dataSourceType === 'DataStore') {
@@ -535,8 +534,7 @@ export abstract class ReactFormTemplateRenderer extends StudioTemplateRenderer<
       statements.push(buildResetValuesOnRecordUpdate(defaultValueVariableName, linkedDataNames));
     }
 
-    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD);
-    this.importCollection.addMappedImport(ImportValue.FETCH_BY_PATH);
+    this.importCollection.addMappedImport(ImportValue.VALIDATE_FIELD, ImportValue.FETCH_BY_PATH);
 
     if (dataSourceType === 'Custom' && formActionType === 'update') {
       statements.push(addUseEffectWrapper([buildSetStateFunction(formMetadata.fieldConfigs)], []));
