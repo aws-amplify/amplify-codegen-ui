@@ -864,6 +864,805 @@ export default function DataBindingNamedClass(
 "
 `;
 
+exports[`amplify render tests collection GraphQL should not render nested query if the data schema is not provided 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { listAuthors } from \\"../graphql/queries\\";
+import AuthorProfile, { AuthorProfileProps } from \\"./AuthorProfile\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Collection,
+  CollectionProps,
+  Pagination,
+  Placeholder,
+} from \\"@aws-amplify/ui-react\\";
+import { API } from \\"aws-amplify\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type AuthorProfileCollectionOverridesProps = {
+  AuthorProfileCollection?: PrimitiveOverrideProps<CollectionProps>;
+  AuthorProfile?: AuthorProfileProps;
+} & EscapeHatchProps;
+export type AuthorProfileCollectionProps = React.PropsWithChildren<
+  Partial<CollectionProps<any>> & {
+    items?: any[];
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => AuthorProfileProps;
+  } & {
+    overrides?: AuthorProfileCollectionOverridesProps | undefined | null;
+  }
+>;
+
+const nextToken = {};
+const apiCache = {};
+export default function AuthorProfileCollection(
+  props: AuthorProfileCollectionProps
+): React.ReactElement {
+  const { items: itemsProp, overrideItems, overrides, ...rest } = props;
+  const [pageIndex, setPageIndex] = React.useState(1);
+  const [hasMorePages, setHasMorePages] = React.useState(true);
+  const [items, setItems] = React.useState([]);
+  const [isApiPagination, setIsApiPagination] = React.useState(false);
+  const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
+  const [loading, setLoading] = React.useState(true);
+  const [maxViewed, setMaxViewed] = React.useState(1);
+  const pageSize = 4;
+  React.useEffect(() => {
+    nextToken[instanceKey] = \\"\\";
+    apiCache[instanceKey] = [];
+  }, [instanceKey]);
+  React.useEffect(() => {
+    setIsApiPagination(!!!itemsProp);
+  }, [itemsProp]);
+  const handlePreviousPage = () => {
+    setPageIndex(pageIndex - 1);
+  };
+  const handleNextPage = () => {
+    setPageIndex(pageIndex + 1);
+  };
+  const jumpToPage = (pageNum?: number) => {
+    setPageIndex(pageNum!);
+  };
+  const loadPage = async (page: number) => {
+    const cacheUntil = page * pageSize + 1;
+    const newCache = apiCache[instanceKey].slice();
+    let newNext = nextToken[instanceKey];
+    while (newCache.length < cacheUntil && newNext != null) {
+      setLoading(true);
+      const variables: any = {
+        limit: pageSize,
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listAuthors,
+          variables,
+        })
+      ).data.listAuthors;
+      var loaded = await Promise.all(
+        result.items.map(async (item) => {
+          return {
+            ...item,
+          };
+        })
+      );
+      newCache.push(...loaded);
+      newNext = result.nextToken;
+    }
+    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    setItems(cacheSlice);
+    setHasMorePages(!!newNext);
+    setLoading(false);
+    apiCache[instanceKey] = newCache;
+    nextToken[instanceKey] = newNext;
+  };
+  React.useEffect(() => {
+    loadPage(pageIndex);
+  }, [pageIndex]);
+  React.useEffect(() => {
+    setMaxViewed(Math.max(maxViewed, pageIndex));
+  }, [pageIndex, maxViewed, setMaxViewed]);
+  return (
+    /* @ts-ignore: TS2322 */
+    <div>
+      <Collection
+        type=\\"list\\"
+        itemsPerPage={6}
+        templateColumns=\\"1fr 1fr\\"
+        autoFlow=\\"row\\"
+        alignItems=\\"stretch\\"
+        justifyContent=\\"stretch\\"
+        itemsPerPage={pageSize}
+        items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
+        {...getOverrideProps(overrides, \\"AuthorProfileCollection\\")}
+        {...rest}
+      >
+        {(item, index) => {
+          if (loading) {
+            return <Placeholder key={index} size=\\"large\\" />;
+          }
+          return (
+            <AuthorProfile
+              author={item}
+              key={item.id}
+              {...(overrideItems && overrideItems({ item, index }))}
+            ></AuthorProfile>
+          );
+        }}
+      </Collection>
+      {isApiPagination && (
+        <Pagination
+          currentPage={pageIndex}
+          totalPages={maxViewed}
+          hasMorePages={hasMorePages}
+          onNext={handleNextPage}
+          onPrevious={handlePreviousPage}
+          onChange={jumpToPage}
+        />
+      )}
+    </div>
+  );
+}
+"
+`;
+
+exports[`amplify render tests collection GraphQL should render collection with data binding 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { UserPreferences } from \\"../API\\";
+import { listUserPreferences, listUsers } from \\"../graphql/queries\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+  useDataStoreBinding,
+} from \\"@aws-amplify/ui-react/internal\\";
+import { API } from \\"aws-amplify\\";
+import {
+  Button,
+  ButtonProps,
+  Collection,
+  CollectionProps,
+  Flex,
+  FlexProps,
+  Pagination,
+  Placeholder,
+} from \\"@aws-amplify/ui-react\\";
+import { MyFlexProps } from \\"./MyFlex\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type CollectionOfCustomButtonsOverridesProps = {
+  CollectionOfCustomButtons?: PrimitiveOverrideProps<CollectionProps>;
+  MyFlex?: PrimitiveOverrideProps<FlexProps>;
+  MyButton?: PrimitiveOverrideProps<ButtonProps>;
+} & EscapeHatchProps;
+export type CollectionOfCustomButtonsProps = React.PropsWithChildren<
+  Partial<CollectionProps<any>> & {
+    width?: Number;
+    backgroundColor?: String;
+    buttonColor?: UserPreferences;
+    buttonEnabled?: UserPreferences;
+    items?: any[];
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => MyFlexProps;
+  } & {
+    overrides?: CollectionOfCustomButtonsOverridesProps | undefined | null;
+  }
+>;
+
+const nextToken = {};
+const apiCache = {};
+export default function CollectionOfCustomButtons(
+  props: CollectionOfCustomButtonsProps
+): React.ReactElement {
+  const {
+    width,
+    backgroundColor,
+    buttonColor: buttonColorProp,
+    buttonEnabled: buttonEnabledProp,
+    items: itemsProp,
+    overrideItems,
+    overrides,
+    ...rest
+  } = props;
+  const [pageIndex, setPageIndex] = React.useState(1);
+  const [hasMorePages, setHasMorePages] = React.useState(true);
+  const [items, setItems] = React.useState([]);
+  const [isApiPagination, setIsApiPagination] = React.useState(false);
+  const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
+  const [loading, setLoading] = React.useState(true);
+  const [maxViewed, setMaxViewed] = React.useState(1);
+  const pageSize = 4;
+  React.useEffect(() => {
+    nextToken[instanceKey] = \\"\\";
+    apiCache[instanceKey] = [];
+  }, [instanceKey]);
+  React.useEffect(() => {
+    setIsApiPagination(!!!itemsProp);
+  }, [itemsProp]);
+  const handlePreviousPage = () => {
+    setPageIndex(pageIndex - 1);
+  };
+  const handleNextPage = () => {
+    setPageIndex(pageIndex + 1);
+  };
+  const jumpToPage = (pageNum?: number) => {
+    setPageIndex(pageNum!);
+  };
+  const loadPage = async (page: number) => {
+    const cacheUntil = page * pageSize + 1;
+    const newCache = apiCache[instanceKey].slice();
+    let newNext = nextToken[instanceKey];
+    while (newCache.length < cacheUntil && newNext != null) {
+      setLoading(true);
+      const variables: any = {
+        limit: pageSize,
+        filter: {
+          and: [
+            { age: { gt: \\"10\\" } },
+            { lastName: { beginsWith: \\"L\\" } },
+            {
+              and: [
+                { date: { ge: \\"2022-03-10\\" } },
+                { date: { le: \\"2023-03-11\\" } },
+              ],
+            },
+          ],
+        },
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listUsers,
+          variables,
+        })
+      ).data.listUsers;
+      var loaded = await Promise.all(
+        result.items.map(async (item) => {
+          return {
+            ...item,
+          };
+        })
+      );
+      newCache.push(...loaded);
+      newNext = result.nextToken;
+    }
+    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    setItems(cacheSlice);
+    setHasMorePages(!!newNext);
+    setLoading(false);
+    apiCache[instanceKey] = newCache;
+    nextToken[instanceKey] = newNext;
+  };
+  React.useEffect(() => {
+    loadPage(pageIndex);
+  }, [pageIndex]);
+  React.useEffect(() => {
+    setMaxViewed(Math.max(maxViewed, pageIndex));
+  }, [pageIndex, maxViewed, setMaxViewed]);
+  const buttonColorFilterObj = { userID: { eq: \\"user@email.com\\" } };
+  const buttonColorDataStore = API.graphql({
+    query: listUserPreferences,
+    variables: {
+      input: {
+        ...buttonColorFilterObj,
+      },
+    },
+  }).items[0];
+  const buttonColor =
+    buttonColorProp !== undefined ? buttonColorProp : buttonColorDataStore;
+  const buttonEnabledFilterObj = {
+    and: [{ date: { ge: \\"2022-03-10\\" } }, { date: { le: \\"2023-03-11\\" } }],
+  };
+  const buttonEnabledDataStore = API.graphql({
+    query: listUserPreferences,
+    variables: {
+      input: {
+        ...buttonEnabledFilterObj,
+      },
+    },
+  }).items[0];
+  const buttonEnabled =
+    buttonEnabledProp !== undefined
+      ? buttonEnabledProp
+      : buttonEnabledDataStore;
+  return (
+    /* @ts-ignore: TS2322 */
+    <div>
+      <Collection
+        type=\\"list\\"
+        isPaginated={!isApiPagination}
+        gap=\\"1.5rem\\"
+        backgroundColor={backgroundColor}
+        itemsPerPage={pageSize}
+        items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
+        {...getOverrideProps(overrides, \\"CollectionOfCustomButtons\\")}
+        {...rest}
+      >
+        {(item, index) => {
+          if (loading) {
+            return <Placeholder key={index} size=\\"large\\" />;
+          }
+          return (
+            <Flex
+              key={item.id}
+              {...(overrideItems && overrideItems({ item, index }))}
+            >
+              <Button
+                labelWidth={width}
+                backgroundColor={buttonColor?.favoriteColor}
+                disabled={isDisabled}
+                children={item.username || \\"hspain@gmail.com\\"}
+                {...(overrideItems && overrideItems({ item, index }))}
+              ></Button>
+            </Flex>
+          );
+        }}
+      </Collection>
+      {isApiPagination && (
+        <Pagination
+          currentPage={pageIndex}
+          totalPages={maxViewed}
+          hasMorePages={hasMorePages}
+          onNext={handleNextPage}
+          onPrevious={handlePreviousPage}
+          onChange={jumpToPage}
+        />
+      )}
+    </div>
+  );
+}
+"
+`;
+
+exports[`amplify render tests collection GraphQL should render collection with data binding with no predicate 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { listUntitledModels } from \\"../graphql/queries\\";
+import ListingCard, { ListingCardProps } from \\"./ListingCard\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Collection,
+  CollectionProps,
+  Pagination,
+  Placeholder,
+} from \\"@aws-amplify/ui-react\\";
+import { API } from \\"aws-amplify\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ListingCardCollectionOverridesProps = {
+  ListingCardCollection?: PrimitiveOverrideProps<CollectionProps>;
+  ListingCard?: ListingCardProps;
+} & EscapeHatchProps;
+export type ListingCardCollectionProps = React.PropsWithChildren<
+  Partial<CollectionProps<any>> & {
+    items?: any[];
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => ListingCardProps;
+  } & {
+    overrides?: ListingCardCollectionOverridesProps | undefined | null;
+  }
+>;
+
+const nextToken = {};
+const apiCache = {};
+export default function ListingCardCollection(
+  props: ListingCardCollectionProps
+): React.ReactElement {
+  const { items: itemsProp, overrideItems, overrides, ...rest } = props;
+  const [pageIndex, setPageIndex] = React.useState(1);
+  const [hasMorePages, setHasMorePages] = React.useState(true);
+  const [items, setItems] = React.useState([]);
+  const [isApiPagination, setIsApiPagination] = React.useState(false);
+  const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
+  const [loading, setLoading] = React.useState(true);
+  const [maxViewed, setMaxViewed] = React.useState(1);
+  const pageSize = 4;
+  React.useEffect(() => {
+    nextToken[instanceKey] = \\"\\";
+    apiCache[instanceKey] = [];
+  }, [instanceKey]);
+  React.useEffect(() => {
+    setIsApiPagination(!!!itemsProp);
+  }, [itemsProp]);
+  const handlePreviousPage = () => {
+    setPageIndex(pageIndex - 1);
+  };
+  const handleNextPage = () => {
+    setPageIndex(pageIndex + 1);
+  };
+  const jumpToPage = (pageNum?: number) => {
+    setPageIndex(pageNum!);
+  };
+  const loadPage = async (page: number) => {
+    const cacheUntil = page * pageSize + 1;
+    const newCache = apiCache[instanceKey].slice();
+    let newNext = nextToken[instanceKey];
+    while (newCache.length < cacheUntil && newNext != null) {
+      setLoading(true);
+      const variables: any = {
+        limit: pageSize,
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listUntitledModels,
+          variables,
+        })
+      ).data.listUntitledModels;
+      var loaded = await Promise.all(
+        result.items.map(async (item) => {
+          return {
+            ...item,
+          };
+        })
+      );
+      newCache.push(...loaded);
+      newNext = result.nextToken;
+    }
+    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    setItems(cacheSlice);
+    setHasMorePages(!!newNext);
+    setLoading(false);
+    apiCache[instanceKey] = newCache;
+    nextToken[instanceKey] = newNext;
+  };
+  React.useEffect(() => {
+    loadPage(pageIndex);
+  }, [pageIndex]);
+  React.useEffect(() => {
+    setMaxViewed(Math.max(maxViewed, pageIndex));
+  }, [pageIndex, maxViewed, setMaxViewed]);
+  return (
+    /* @ts-ignore: TS2322 */
+    <div>
+      <Collection
+        isPaginated={!isApiPagination}
+        collectionType=\\"grid\\"
+        type=\\"list\\"
+        columns=\\"2\\"
+        order=\\"left-to-right\\"
+        itemsPerPage={pageSize}
+        items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
+        {...getOverrideProps(overrides, \\"ListingCardCollection\\")}
+        {...rest}
+      >
+        {(item, index) => {
+          if (loading) {
+            return <Placeholder key={index} size=\\"large\\" />;
+          }
+          return (
+            <ListingCard
+              marginRight=\\"0\\"
+              marginBottom=\\"0\\"
+              marginTop=\\"0\\"
+              marginLeft=\\"0\\"
+              key={item.id}
+              {...(overrideItems && overrideItems({ item, index }))}
+            ></ListingCard>
+          );
+        }}
+      </Collection>
+      {isApiPagination && (
+        <Pagination
+          currentPage={pageIndex}
+          totalPages={maxViewed}
+          hasMorePages={hasMorePages}
+          onNext={handleNextPage}
+          onPrevious={handlePreviousPage}
+          onChange={jumpToPage}
+        />
+      )}
+    </div>
+  );
+}
+"
+`;
+
+exports[`amplify render tests collection GraphQL should render collection without data binding 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import ListingCard, { ListingCardProps } from \\"./ListingCard\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Collection,
+  CollectionProps,
+  Pagination,
+  Placeholder,
+} from \\"@aws-amplify/ui-react\\";
+import { API } from \\"aws-amplify\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type ListingCardCollectionOverridesProps = {
+  ListingCardCollection?: PrimitiveOverrideProps<CollectionProps>;
+  ListingCard?: ListingCardProps;
+} & EscapeHatchProps;
+export type ListingCardCollectionProps = React.PropsWithChildren<
+  Partial<CollectionProps<any>> & {
+    items?: any[];
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => ListingCardProps;
+  } & {
+    overrides?: ListingCardCollectionOverridesProps | undefined | null;
+  }
+>;
+
+const nextToken = {};
+const apiCache = {};
+export default function ListingCardCollection(
+  props: ListingCardCollectionProps
+): React.ReactElement {
+  const { items: itemsProp, overrideItems, overrides, ...rest } = props;
+  const [pageIndex, setPageIndex] = React.useState(1);
+  const [hasMorePages, setHasMorePages] = React.useState(true);
+  const [items, setItems] = React.useState([]);
+  const [isApiPagination, setIsApiPagination] = React.useState(false);
+  const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
+  const [loading, setLoading] = React.useState(true);
+  const [maxViewed, setMaxViewed] = React.useState(1);
+  const pageSize = 4;
+  React.useEffect(() => {
+    nextToken[instanceKey] = \\"\\";
+    apiCache[instanceKey] = [];
+  }, [instanceKey]);
+  React.useEffect(() => {
+    setIsApiPagination(!!!itemsProp);
+  }, [itemsProp]);
+  const handlePreviousPage = () => {
+    setPageIndex(pageIndex - 1);
+  };
+  const handleNextPage = () => {
+    setPageIndex(pageIndex + 1);
+  };
+  const jumpToPage = (pageNum?: number) => {
+    setPageIndex(pageNum!);
+  };
+  const loadPage = async (page: number) => {
+    const cacheUntil = page * pageSize + 1;
+    const newCache = apiCache[instanceKey].slice();
+    let newNext = nextToken[instanceKey];
+    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    setItems(cacheSlice);
+    setHasMorePages(!!newNext);
+    setLoading(false);
+    apiCache[instanceKey] = newCache;
+    nextToken[instanceKey] = newNext;
+  };
+  React.useEffect(() => {
+    loadPage(pageIndex);
+  }, [pageIndex]);
+  React.useEffect(() => {
+    setMaxViewed(Math.max(maxViewed, pageIndex));
+  }, [pageIndex, maxViewed, setMaxViewed]);
+  return (
+    /* @ts-ignore: TS2322 */
+    <div>
+      <Collection
+        type=\\"list\\"
+        isPaginated={!isApiPagination}
+        itemsPerPage={pageSize}
+        items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
+        {...getOverrideProps(overrides, \\"ListingCardCollection\\")}
+        {...rest}
+      >
+        {(item, index) => {
+          if (loading) {
+            return <Placeholder key={index} size=\\"large\\" />;
+          }
+          return (
+            <ListingCard
+              key={item.id}
+              {...(overrideItems && overrideItems({ item, index }))}
+            ></ListingCard>
+          );
+        }}
+      </Collection>
+      {isApiPagination && (
+        <Pagination
+          currentPage={pageIndex}
+          totalPages={maxViewed}
+          hasMorePages={hasMorePages}
+          onNext={handleNextPage}
+          onPrevious={handlePreviousPage}
+          onChange={jumpToPage}
+        />
+      )}
+    </div>
+  );
+}
+"
+`;
+
+exports[`amplify render tests collection GraphQL should render nested query if model has a hasMany relationship 1`] = `
+"/* eslint-disable */
+import * as React from \\"react\\";
+import { listAuthors } from \\"../graphql/queries\\";
+import AuthorProfile, { AuthorProfileProps } from \\"./AuthorProfile\\";
+import {
+  EscapeHatchProps,
+  getOverrideProps,
+} from \\"@aws-amplify/ui-react/internal\\";
+import {
+  Collection,
+  CollectionProps,
+  Pagination,
+  Placeholder,
+} from \\"@aws-amplify/ui-react\\";
+import { API } from \\"aws-amplify\\";
+
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
+export declare type AuthorProfileCollectionOverridesProps = {
+  AuthorProfileCollection?: PrimitiveOverrideProps<CollectionProps>;
+  AuthorProfile?: AuthorProfileProps;
+} & EscapeHatchProps;
+export type AuthorProfileCollectionProps = React.PropsWithChildren<
+  Partial<CollectionProps<any>> & {
+    items?: any[];
+    overrideItems?: (collectionItem: {
+      item: any;
+      index: number;
+    }) => AuthorProfileProps;
+  } & {
+    overrides?: AuthorProfileCollectionOverridesProps | undefined | null;
+  }
+>;
+
+const nextToken = {};
+const apiCache = {};
+export default function AuthorProfileCollection(
+  props: AuthorProfileCollectionProps
+): React.ReactElement {
+  const { items: itemsProp, overrideItems, overrides, ...rest } = props;
+  const [pageIndex, setPageIndex] = React.useState(1);
+  const [hasMorePages, setHasMorePages] = React.useState(true);
+  const [items, setItems] = React.useState([]);
+  const [isApiPagination, setIsApiPagination] = React.useState(false);
+  const [instanceKey, setInstanceKey] = React.useState(\\"newGuid\\");
+  const [loading, setLoading] = React.useState(true);
+  const [maxViewed, setMaxViewed] = React.useState(1);
+  const pageSize = 4;
+  React.useEffect(() => {
+    nextToken[instanceKey] = \\"\\";
+    apiCache[instanceKey] = [];
+  }, [instanceKey]);
+  React.useEffect(() => {
+    setIsApiPagination(!!!itemsProp);
+  }, [itemsProp]);
+  const handlePreviousPage = () => {
+    setPageIndex(pageIndex - 1);
+  };
+  const handleNextPage = () => {
+    setPageIndex(pageIndex + 1);
+  };
+  const jumpToPage = (pageNum?: number) => {
+    setPageIndex(pageNum!);
+  };
+  const loadPage = async (page: number) => {
+    const cacheUntil = page * pageSize + 1;
+    const newCache = apiCache[instanceKey].slice();
+    let newNext = nextToken[instanceKey];
+    while (newCache.length < cacheUntil && newNext != null) {
+      setLoading(true);
+      const variables: any = {
+        limit: pageSize,
+      };
+      if (newNext) {
+        variables[\\"nextToken\\"] = newNext;
+      }
+      const result = (
+        await API.graphql({
+          query: listAuthors,
+          variables,
+        })
+      ).data.listAuthors;
+      var loaded = await Promise.all(
+        result.items.map(async (item) => {
+          const Books = (
+            await API.graphql({
+              query: booksByAuthorID,
+              variables: { authorID: item.id },
+            })
+          ).data.booksByAuthorID.items;
+          const Publishers = (
+            await API.graphql({
+              query: publishersByAuthorID,
+              variables: { authorID: item.id },
+            })
+          ).data.publishersByAuthorID.items;
+          return {
+            ...item,
+            Books,
+            Publisher,
+          };
+        })
+      );
+      newCache.push(...loaded);
+      newNext = result.nextToken;
+    }
+    const cacheSlice = newCache.slice((page - 1) * pageSize, page * pageSize);
+    setItems(cacheSlice);
+    setHasMorePages(!!newNext);
+    setLoading(false);
+    apiCache[instanceKey] = newCache;
+    nextToken[instanceKey] = newNext;
+  };
+  React.useEffect(() => {
+    loadPage(pageIndex);
+  }, [pageIndex]);
+  React.useEffect(() => {
+    setMaxViewed(Math.max(maxViewed, pageIndex));
+  }, [pageIndex, maxViewed, setMaxViewed]);
+  return (
+    /* @ts-ignore: TS2322 */
+    <div>
+      <Collection
+        type=\\"list\\"
+        itemsPerPage={6}
+        templateColumns=\\"1fr 1fr\\"
+        autoFlow=\\"row\\"
+        alignItems=\\"stretch\\"
+        justifyContent=\\"stretch\\"
+        itemsPerPage={pageSize}
+        items={itemsProp || (loading ? new Array(pageSize).fill({}) : items)}
+        {...getOverrideProps(overrides, \\"AuthorProfileCollection\\")}
+        {...rest}
+      >
+        {(item, index) => {
+          if (loading) {
+            return <Placeholder key={index} size=\\"large\\" />;
+          }
+          return (
+            <AuthorProfile
+              author={item}
+              key={item.id}
+              {...(overrideItems && overrideItems({ item, index }))}
+            ></AuthorProfile>
+          );
+        }}
+      </Collection>
+      {isApiPagination && (
+        <Pagination
+          currentPage={pageIndex}
+          totalPages={maxViewed}
+          hasMorePages={hasMorePages}
+          onNext={handleNextPage}
+          onPrevious={handlePreviousPage}
+          onChange={jumpToPage}
+        />
+      )}
+    </div>
+  );
+}
+"
+`;
+
 exports[`amplify render tests collection should not render nested query if the data schema is not provided 1`] = `
 "/* eslint-disable */
 import * as React from \\"react\\";

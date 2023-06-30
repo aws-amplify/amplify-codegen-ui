@@ -16,47 +16,122 @@
 import { BaseComponentProps } from '@aws-amplify/ui-react';
 import {
   CollectionStudioComponentProperty,
+  ComponentMetadata,
   isStudioComponentWithCollectionProperties,
+  StudioComponent,
   StudioComponentChild,
+  StudioNode,
 } from '@aws-amplify/codegen-ui';
-import { factory, JsxChild, JsxElement, JsxExpression, JsxOpeningElement, SyntaxKind } from 'typescript';
+import ts, {
+  factory,
+  JsxAttribute,
+  JsxChild,
+  JsxElement,
+  JsxExpression,
+  JsxOpeningElement,
+  SyntaxKind,
+} from 'typescript';
 import { ReactComponentRenderer } from '../react-component-renderer';
 import { buildOpeningElementProperties } from '../react-component-render-helper';
+import { ImportCollection, ImportValue } from '../imports';
+import { DataApiKind, ReactRenderConfig } from '../react-render-config';
+import { defaultRenderConfig } from '../react-studio-template-renderer-helper';
 
 export default class CollectionRenderer extends ReactComponentRenderer<BaseComponentProps> {
+  constructor(
+    component: StudioComponent | StudioComponentChild,
+    protected componentMetadata: ComponentMetadata,
+    protected importCollection: ImportCollection,
+    protected renderConfig: ReactRenderConfig & typeof defaultRenderConfig,
+    protected parent?: StudioNode,
+  ) {
+    super(component, componentMetadata, importCollection, parent);
+  }
+
   renderElement(renderChildren: (children: StudioComponentChild[]) => JsxChild[]): JsxElement {
     this.addKeyPropertyToChildren(this.component.children ?? []);
     const childrenJsx = this.component.children ? renderChildren(this.component.children ?? []) : [];
 
-    const arrowFuncExpr = this.renderItemArrowFunctionExpr(childrenJsx);
-    const itemsVariableName = this.findItemsVariableName();
-    const element = factory.createJsxElement(
-      this.renderCollectionOpeningElement(itemsVariableName),
-      [arrowFuncExpr],
-      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
-    );
+    const element = this.getCollectionElement(childrenJsx, this.renderConfig.apiConfiguration?.dataApi);
 
     this.importCollection.addImport('@aws-amplify/ui-react', this.component.componentType);
+
+    if (this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
+      this.importCollection.addMappedImport(ImportValue.API, ImportValue.PAGINATION, ImportValue.PLACEHOLDER);
+    }
 
     return element;
   }
 
   private renderCollectionOpeningElement(itemsVariableName?: string): JsxOpeningElement {
-    const propsArray = Object.entries(this.component.properties).map(([key, value]) =>
-      buildOpeningElementProperties(this.componentMetadata, value, key),
-    );
+    const propsArray = Object.entries(this.component.properties).map(([key, value]) => {
+      if (key === 'isPaginated' && this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
+        return factory.createJsxAttribute(
+          factory.createIdentifier('isPaginated'),
+          factory.createJsxExpression(
+            undefined,
+            factory.createPrefixUnaryExpression(
+              ts.SyntaxKind.ExclamationToken,
+              factory.createIdentifier('isApiPagination'),
+            ),
+          ),
+        );
+      }
+      return buildOpeningElementProperties(this.componentMetadata, value, key);
+    });
 
-    const itemsAttribute = factory.createJsxAttribute(
-      factory.createIdentifier('items'),
-      factory.createJsxExpression(
-        undefined,
-        factory.createBinaryExpression(
-          factory.createIdentifier(itemsVariableName || 'items'),
-          factory.createToken(SyntaxKind.BarBarToken),
-          factory.createArrayLiteralExpression([], false),
+    let itemsAttribute: JsxAttribute;
+
+    if (this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
+      propsArray.push(
+        factory.createJsxAttribute(
+          factory.createIdentifier('itemsPerPage'),
+          factory.createJsxExpression(undefined, factory.createIdentifier('pageSize')),
         ),
-      ),
-    );
+      );
+
+      itemsAttribute = factory.createJsxAttribute(
+        factory.createIdentifier('items'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createBinaryExpression(
+            factory.createIdentifier('itemsProp'),
+            factory.createToken(ts.SyntaxKind.BarBarToken),
+            factory.createParenthesizedExpression(
+              factory.createConditionalExpression(
+                factory.createIdentifier('loading'),
+                factory.createToken(ts.SyntaxKind.QuestionToken),
+                factory.createCallExpression(
+                  factory.createPropertyAccessExpression(
+                    factory.createNewExpression(factory.createIdentifier('Array'), undefined, [
+                      factory.createIdentifier('pageSize'),
+                    ]),
+                    factory.createIdentifier('fill'),
+                  ),
+                  undefined,
+                  [factory.createObjectLiteralExpression([], false)],
+                ),
+                factory.createToken(ts.SyntaxKind.ColonToken),
+                factory.createIdentifier('items'),
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      itemsAttribute = factory.createJsxAttribute(
+        factory.createIdentifier('items'),
+        factory.createJsxExpression(
+          undefined,
+          factory.createBinaryExpression(
+            factory.createIdentifier(itemsVariableName || 'items'),
+            factory.createToken(SyntaxKind.BarBarToken),
+            factory.createArrayLiteralExpression([], false),
+          ),
+        ),
+      );
+    }
+
     propsArray.push(itemsAttribute);
 
     this.addPropsSpreadAttributes(propsArray);
@@ -105,6 +180,72 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
   }
 
   private renderItemArrowFunctionExpr(childrenJsx: JsxChild[]): JsxExpression {
+    if (this.renderConfig.apiConfiguration?.dataApi === 'GraphQL') {
+      return factory.createJsxExpression(
+        undefined,
+        factory.createArrowFunction(
+          undefined,
+          undefined,
+          [
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+              factory.createIdentifier('item'),
+              undefined,
+              undefined,
+              undefined,
+            ),
+            factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              undefined,
+
+              factory.createIdentifier('index'),
+              undefined,
+              undefined,
+              undefined,
+            ),
+          ],
+          undefined,
+          factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+          factory.createBlock(
+            [
+              factory.createIfStatement(
+                factory.createIdentifier('loading'),
+                factory.createBlock(
+                  [
+                    factory.createReturnStatement(
+                      factory.createParenthesizedExpression(
+                        factory.createJsxSelfClosingElement(
+                          factory.createIdentifier('Placeholder'),
+                          undefined,
+                          factory.createJsxAttributes([
+                            factory.createJsxAttribute(
+                              factory.createIdentifier('key'),
+                              factory.createJsxExpression(undefined, factory.createIdentifier('index')),
+                            ),
+                            factory.createJsxAttribute(
+                              factory.createIdentifier('size'),
+                              factory.createStringLiteral('large'),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ),
+                  ],
+                  true,
+                ),
+                undefined,
+              ),
+              factory.createReturnStatement(factory.createParenthesizedExpression(childrenJsx[0] as JsxExpression)),
+            ],
+            true,
+          ),
+        ),
+      );
+    }
+
     return factory.createJsxExpression(
       undefined,
       factory.createArrowFunction(
@@ -134,6 +275,63 @@ export default class CollectionRenderer extends ReactComponentRenderer<BaseCompo
         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
         factory.createParenthesizedExpression(childrenJsx[0] as JsxExpression),
       ),
+    );
+  }
+
+  private getCollectionElement(childrenJsx: JsxChild[], dataApi: DataApiKind = 'DataStore'): JsxElement {
+    const arrowFuncExpr = this.renderItemArrowFunctionExpr(childrenJsx);
+    const itemsVariableName = this.findItemsVariableName();
+
+    if (dataApi === 'GraphQL') {
+      const attributesObj: { name: string; initialValue: string }[] = [
+        { name: 'currentPage', initialValue: 'pageIndex' },
+        { name: 'totalPages', initialValue: 'maxViewed' },
+        { name: 'hasMorePages', initialValue: 'hasMorePages' },
+        { name: 'onNext', initialValue: 'handleNextPage' },
+        { name: 'onPrevious', initialValue: 'handlePreviousPage' },
+        { name: 'onChange', initialValue: 'jumpToPage' },
+      ];
+
+      const attributes: JsxAttribute[] = [];
+
+      attributesObj.forEach((attribute) => {
+        attributes.push(
+          factory.createJsxAttribute(
+            factory.createIdentifier(attribute.name),
+            factory.createJsxExpression(undefined, factory.createIdentifier(attribute.initialValue)),
+          ),
+        );
+      });
+
+      return factory.createJsxElement(
+        factory.createJsxOpeningElement(factory.createIdentifier('div'), undefined, factory.createJsxAttributes([])),
+        [
+          factory.createJsxElement(
+            this.renderCollectionOpeningElement(itemsVariableName),
+            [arrowFuncExpr],
+            factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
+          ),
+          factory.createJsxExpression(
+            undefined,
+            factory.createBinaryExpression(
+              factory.createIdentifier('isApiPagination'),
+              factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+              factory.createJsxSelfClosingElement(
+                factory.createIdentifier('Pagination'),
+                undefined,
+                factory.createJsxAttributes(attributes),
+              ),
+            ),
+          ),
+        ],
+        factory.createJsxClosingElement(factory.createIdentifier('div')),
+      );
+    }
+
+    return factory.createJsxElement(
+      this.renderCollectionOpeningElement(itemsVariableName),
+      [arrowFuncExpr],
+      factory.createJsxClosingElement(factory.createIdentifier(this.component.componentType)),
     );
   }
 }
