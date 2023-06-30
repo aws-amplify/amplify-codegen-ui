@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import {
+  AwaitExpression,
   CallExpression,
   factory,
   IfStatement,
@@ -56,17 +57,9 @@ export const buildRelationshipQuery = (
             factory.createIdentifier(itemsName),
             undefined,
             undefined,
-            factory.createAwaitExpression(
-              factory.createPropertyAccessExpression(
-                factory.createPropertyAccessExpression(
-                  factory.createPropertyAccessExpression(
-                    getGraphqlCallExpression(ActionType.LIST, relatedModelName, importCollection),
-                    factory.createIdentifier('data'),
-                  ),
-                  factory.createIdentifier(getGraphqlQueryForModel(ActionType.LIST, relatedModelName)),
-                ),
-                factory.createIdentifier('items'),
-              ),
+            wrapInParenthesizedExpression(
+              getGraphqlCallExpression(ActionType.LIST, relatedModelName, importCollection),
+              ['data', getGraphqlQueryForModel(ActionType.LIST, relatedModelName), 'items'],
             ),
           ),
         ],
@@ -242,6 +235,7 @@ export const buildManyToManyRelationshipStatements = (
   const joinTableThisModelName = relatedModelFields[0];
   const joinTableRelatedModelName = relatedJoinFieldName;
   const isGraphql = dataApi === 'GraphQL';
+
   if (!relatedJoinTableName) {
     throw new InternalError(`Cannot find join table for ${fieldName}`);
   }
@@ -2018,20 +2012,11 @@ function buildUnlinkForEachBlock(
               factory.createIdentifier(getRecordsName(relatedJoinTableName)),
               undefined,
               undefined,
-              factory.createAwaitExpression(
+              wrapInParenthesizedExpression(
                 isGraphql
-                  ? factory.createPropertyAccessExpression(
-                      factory.createPropertyAccessExpression(
-                        factory.createPropertyAccessExpression(
-                          getGraphqlCallExpression(ActionType.LIST, relatedJoinTableName, importCollection, undefined, [
-                            filter,
-                          ]),
-                          factory.createIdentifier('data'),
-                        ),
-                        factory.createIdentifier(getGraphqlQueryForModel(ActionType.LIST, relatedJoinTableName)),
-                      ),
-                      factory.createIdentifier('items'),
-                    )
+                  ? getGraphqlCallExpression(ActionType.LIST, relatedJoinTableName, importCollection, undefined, [
+                      filter,
+                    ])
                   : factory.createCallExpression(
                       factory.createPropertyAccessExpression(
                         factory.createIdentifier('DataStore'),
@@ -2075,6 +2060,7 @@ function buildUnlinkForEachBlock(
                         ),
                       ],
                     ),
+                isGraphql ? ['data', getGraphqlQueryForModel(ActionType.LIST, relatedJoinTableName), 'items'] : [],
               ),
             ),
           ],
@@ -2149,5 +2135,13 @@ function buildUnlinkForEachBlock(
       ),
     ],
     true,
+  );
+}
+
+function wrapInParenthesizedExpression(callExpression: CallExpression, accessors: string[]): AwaitExpression {
+  return accessors.reduce(
+    (acc: any, _, index: any, initialValue: string[]) =>
+      factory.createPropertyAccessExpression(acc, factory.createIdentifier(initialValue[index])),
+    factory.createAwaitExpression(callExpression),
   );
 }
