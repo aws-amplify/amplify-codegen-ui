@@ -884,9 +884,11 @@ export default function MyMemberForm(props) {
       ? Team.map((r) => getIDValue.Team?.(r))
       : getIDValue.Team?.(Team)
   );
-  const teamRecords = await API.graphql({
-    query: listTeams,
-  }).data.listTeams.items;
+  const teamRecords = (
+    await API.graphql({
+      query: listTeams,
+    })
+  ).data.listTeams.items;
   const getDisplayValue = {
     teamID: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
     Team: (r) => r?.name,
@@ -1459,9 +1461,11 @@ export default function SchoolCreateForm(props) {
       ? Students.map((r) => getIDValue.Students?.(r))
       : getIDValue.Students?.(Students)
   );
-  const studentRecords = await API.graphql({
-    query: listStudents,
-  }).data.listStudents.items;
+  const studentRecords = (
+    await API.graphql({
+      query: listStudents,
+    })
+  ).data.listStudents.items;
   const getDisplayValue = {
     Students: (r) => r?.name,
   };
@@ -1978,9 +1982,11 @@ export default function BookCreateForm(props) {
       ? primaryAuthor.map((r) => getIDValue.primaryAuthor?.(r))
       : getIDValue.primaryAuthor?.(primaryAuthor)
   );
-  const authorRecords = await API.graphql({
-    query: listAuthors,
-  }).data.listAuthors.items;
+  const authorRecords = (
+    await API.graphql({
+      query: listAuthors,
+    })
+  ).data.listAuthors.items;
   const getDisplayValue = {
     primaryAuthor: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
@@ -2484,9 +2490,11 @@ export default function TagCreateForm(props) {
       ? Posts.map((r) => getIDValue.Posts?.(r))
       : getIDValue.Posts?.(Posts)
   );
-  const postRecords = await API.graphql({
-    query: listPosts,
-  }).data.listPosts.items;
+  const postRecords = (
+    await API.graphql({
+      query: listPosts,
+    })
+  ).data.listPosts.items;
   const getDisplayValue = {
     Posts: (r) => r?.title,
     statuses: (r) => {
@@ -3096,12 +3104,16 @@ export default function BookCreateForm(props) {
       ? primaryTitle.map((r) => getIDValue.primaryTitle?.(r))
       : getIDValue.primaryTitle?.(primaryTitle)
   );
-  const authorRecords = await API.graphql({
-    query: listAuthors,
-  }).data.listAuthors.items;
-  const titleRecords = await API.graphql({
-    query: listTitles,
-  }).data.listTitles.items;
+  const authorRecords = (
+    await API.graphql({
+      query: listAuthors,
+    })
+  ).data.listAuthors.items;
+  const titleRecords = (
+    await API.graphql({
+      query: listTitles,
+    })
+  ).data.listTitles.items;
   const getDisplayValue = {
     primaryAuthor: (r) => r?.name,
     primaryTitle: (r) => r?.name,
@@ -4503,9 +4515,11 @@ export default function CommentUpdateForm(props) {
       ? Post.map((r) => getIDValue.Post?.(r))
       : getIDValue.Post?.(Post)
   );
-  const postRecords = await API.graphql({
-    query: listPosts,
-  }).data.listPosts.items;
+  const postRecords = (
+    await API.graphql({
+      query: listPosts,
+    })
+  ).data.listPosts.items;
   const getDisplayValue = {
     postID: (r) => \`\${r?.title ? r?.title + \\" - \\" : \\"\\"}\${r?.id}\`,
     Post: (r) => \`\${r?.title ? r?.title + \\" - \\" : \\"\\"}\${r?.id}\`,
@@ -5144,9 +5158,11 @@ export default function ClassUpdateForm(props) {
       ? students.map((r) => getIDValue.students?.(r))
       : getIDValue.students?.(students)
   );
-  const studentRecords = await API.graphql({
-    query: listStudents,
-  }).data.listStudents.items;
+  const studentRecords = (
+    await API.graphql({
+      query: listStudents,
+    })
+  ).data.listStudents.items;
   const getDisplayValue = {
     students: (r) => r?.id,
   };
@@ -5256,17 +5272,19 @@ export default function ClassUpdateForm(props) {
           });
           studentsToUnLinkMap.forEach(async (count, id) => {
             const recordKeys = JSON.parse(id);
-            const studentClassRecords = await API.graphql({
-              query: listStudentClasses,
-              variables: {
-                filter: {
-                  and: [
-                    { studentId: { eq: recordKeys.id } },
-                    { classId: { eq: classRecord.id } },
-                  ],
+            const studentClassRecords = (
+              await API.graphql({
+                query: listStudentClasses,
+                variables: {
+                  filter: {
+                    and: [
+                      { studentId: { eq: recordKeys.id } },
+                      { classId: { eq: classRecord.id } },
+                    ],
+                  },
                 },
-              },
-            }).data.listStudentClasses.items;
+              })
+            ).data.listStudentClasses.items;
             for (let i = 0; i < count; i++) {
               promises.push(
                 API.graphql({
@@ -5788,15 +5806,21 @@ export default function UpdateCPKTeacherForm(props) {
       ? CPKProjects.map((r) => getIDValue.CPKProjects?.(r))
       : getIDValue.CPKProjects?.(CPKProjects)
   );
-  const cPKStudentRecords = await API.graphql({
-    query: listCPKStudents,
-  }).data.listCPKStudents.items;
-  const cPKClassRecords = await API.graphql({
-    query: listCPKClasses,
-  }).data.listCPKClasses.items;
-  const cPKProjectRecords = await API.graphql({
-    query: listCPKProjects,
-  }).data.listCPKProjects.items;
+  const cPKStudentRecords = (
+    await API.graphql({
+      query: listCPKStudents,
+    })
+  ).data.listCPKStudents.items;
+  const cPKClassRecords = (
+    await API.graphql({
+      query: listCPKClasses,
+    })
+  ).data.listCPKClasses.items;
+  const cPKProjectRecords = (
+    await API.graphql({
+      query: listCPKProjects,
+    })
+  ).data.listCPKProjects.items;
   const getDisplayValue = {
     CPKStudent: (r) => r?.specialStudentId,
     CPKClasses: (r) => r?.specialClassId,
@@ -5914,23 +5938,27 @@ export default function UpdateCPKTeacherForm(props) {
           });
           cPKClassesToUnLinkMap.forEach(async (count, id) => {
             const recordKeys = JSON.parse(id);
-            const cPKTeacherCPKClassRecords = await API.graphql({
-              query: listCPKTeacherCPKClasses,
-              variables: {
-                filter: {
-                  and: [
-                    {
-                      cPKClassSpecialClassId: { eq: recordKeys.specialClassId },
-                    },
-                    {
-                      cPKTeacherSpecialTeacherId: {
-                        eq: cPKTeacherRecord.specialTeacherId,
+            const cPKTeacherCPKClassRecords = (
+              await API.graphql({
+                query: listCPKTeacherCPKClasses,
+                variables: {
+                  filter: {
+                    and: [
+                      {
+                        cPKClassSpecialClassId: {
+                          eq: recordKeys.specialClassId,
+                        },
                       },
-                    },
-                  ],
+                      {
+                        cPKTeacherSpecialTeacherId: {
+                          eq: cPKTeacherRecord.specialTeacherId,
+                        },
+                      },
+                    ],
+                  },
                 },
-              },
-            }).data.listCPKTeacherCPKClasses.items;
+              })
+            ).data.listCPKTeacherCPKClasses.items;
             for (let i = 0; i < count; i++) {
               promises.push(
                 API.graphql({
@@ -6617,9 +6645,11 @@ export default function CreateCompositeToyForm(props) {
     setCurrentCompositeDogCompositeToysDescriptionValue,
   ] = React.useState(undefined);
   const compositeDogCompositeToysDescriptionRef = React.createRef();
-  const compositeDogRecords = await API.graphql({
-    query: listCompositeDogs,
-  }).data.listCompositeDogs.items;
+  const compositeDogRecords = (
+    await API.graphql({
+      query: listCompositeDogs,
+    })
+  ).data.listCompositeDogs.items;
   const getDisplayValue = {
     compositeDogCompositeToysName: (r) => r?.name,
     compositeDogCompositeToysDescription: (r) => r?.description,
@@ -7288,15 +7318,21 @@ export default function CreateCommentForm(props) {
       ? Org.map((r) => getIDValue.Org?.(r))
       : getIDValue.Org?.(Org)
   );
-  const postRecords = await API.graphql({
-    query: listPosts,
-  }).data.listPosts.items;
-  const userRecords = await API.graphql({
-    query: listUsers,
-  }).data.listUsers.items;
-  const orgRecords = await API.graphql({
-    query: listOrgs,
-  }).data.listOrgs.items;
+  const postRecords = (
+    await API.graphql({
+      query: listPosts,
+    })
+  ).data.listPosts.items;
+  const userRecords = (
+    await API.graphql({
+      query: listUsers,
+    })
+  ).data.listUsers.items;
+  const orgRecords = (
+    await API.graphql({
+      query: listOrgs,
+    })
+  ).data.listOrgs.items;
   const getDisplayValue = {
     post: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
     User: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
@@ -8112,18 +8148,26 @@ export default function CreateCompositeDogForm(props) {
       ? CompositeVets.map((r) => getIDValue.CompositeVets?.(r))
       : getIDValue.CompositeVets?.(CompositeVets)
   );
-  const compositeBowlRecords = await API.graphql({
-    query: listCompositeBowls,
-  }).data.listCompositeBowls.items;
-  const compositeOwnerRecords = await API.graphql({
-    query: listCompositeOwners,
-  }).data.listCompositeOwners.items;
-  const compositeToyRecords = await API.graphql({
-    query: listCompositeToys,
-  }).data.listCompositeToys.items;
-  const compositeVetRecords = await API.graphql({
-    query: listCompositeVets,
-  }).data.listCompositeVets.items;
+  const compositeBowlRecords = (
+    await API.graphql({
+      query: listCompositeBowls,
+    })
+  ).data.listCompositeBowls.items;
+  const compositeOwnerRecords = (
+    await API.graphql({
+      query: listCompositeOwners,
+    })
+  ).data.listCompositeOwners.items;
+  const compositeToyRecords = (
+    await API.graphql({
+      query: listCompositeToys,
+    })
+  ).data.listCompositeToys.items;
+  const compositeVetRecords = (
+    await API.graphql({
+      query: listCompositeVets,
+    })
+  ).data.listCompositeVets.items;
   const getDisplayValue = {
     CompositeBowl: (r) => \`\${r?.shape}\${\\"-\\"}\${r?.size}\`,
     CompositeOwner: (r) => \`\${r?.lastName}\${\\"-\\"}\${r?.firstName}\`,
@@ -8993,9 +9037,11 @@ export default function CreateDogForm(props) {
       ? Owner.map((r) => getIDValue.Owner?.(r))
       : getIDValue.Owner?.(Owner)
   );
-  const ownerRecords = await API.graphql({
-    query: listOwners,
-  }).data.listOwners.items;
+  const ownerRecords = (
+    await API.graphql({
+      query: listOwners,
+    })
+  ).data.listOwners.items;
   const getDisplayValue = {
     Owner: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
@@ -9499,9 +9545,11 @@ export default function CreateOwnerForm(props) {
       ? Dog.map((r) => getIDValue.Dog?.(r))
       : getIDValue.Dog?.(Dog)
   );
-  const dogRecords = await API.graphql({
-    query: listDogs,
-  }).data.listDogs.items;
+  const dogRecords = (
+    await API.graphql({
+      query: listDogs,
+    })
+  ).data.listDogs.items;
   const getDisplayValue = {
     Dog: (r) => \`\${r?.name ? r?.name + \\" - \\" : \\"\\"}\${r?.id}\`,
   };
