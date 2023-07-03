@@ -1,0 +1,12 @@
+{
+    "name": "ClassUpdateForm",
+    "formActionType": "update",
+    "fields": {},
+    "dataType": {
+        "dataSourceType": "DataStore",
+        "dataTypeName": "Class"
+    },
+    "style": {},
+    "sectionalElements": {},
+    "cta": {}
+}
