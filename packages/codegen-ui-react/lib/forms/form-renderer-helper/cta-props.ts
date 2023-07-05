@@ -52,7 +52,7 @@ const getRecordCreateCallExpression = ({
   if (dataApi === 'GraphQL') {
     const inputs = [factory.createSpreadAssignment(factory.createIdentifier(savedObjectName))];
 
-    return getGraphqlCallExpression(ActionType.CREATE, importedModelName, importCollection, inputs);
+    return getGraphqlCallExpression(ActionType.CREATE, importedModelName, importCollection, { inputs });
   }
 
   return factory.createCallExpression(
@@ -68,6 +68,8 @@ const getRecordCreateCallExpression = ({
 
 const getRecordUpdateDataStoreCallExpression = ({
   savedObjectName,
+  savedRecordName,
+  thisModelPrimaryKeys,
   modelName,
   importedModelName,
   fieldConfigs,
@@ -75,6 +77,8 @@ const getRecordUpdateDataStoreCallExpression = ({
   dataApi,
 }: {
   savedObjectName: string;
+  savedRecordName: string;
+  thisModelPrimaryKeys: string[];
   modelName: string;
   importedModelName: string;
   fieldConfigs: Record<string, FieldConfigMetadata>;
@@ -91,9 +95,17 @@ const getRecordUpdateDataStoreCallExpression = ({
   });
 
   if (dataApi === 'GraphQL') {
-    const inputs = [factory.createSpreadAssignment(factory.createIdentifier(savedObjectName))];
+    const inputs = [
+      ...thisModelPrimaryKeys.map((key) =>
+        factory.createPropertyAssignment(
+          factory.createIdentifier(key),
+          factory.createPropertyAccessExpression(factory.createIdentifier(`${savedRecordName}Record`), key),
+        ),
+      ),
+      factory.createSpreadAssignment(factory.createIdentifier(savedObjectName)),
+    ];
 
-    return getGraphqlCallExpression(ActionType.UPDATE, importedModelName, importCollection, inputs);
+    return getGraphqlCallExpression(ActionType.UPDATE, importedModelName, importCollection, { inputs });
   }
 
   return factory.createCallExpression(
@@ -355,6 +367,8 @@ export const buildExpression = (
   if (dataStoreActionType === 'update') {
     const recordUpdateDataStoreCallExpression = getRecordUpdateDataStoreCallExpression({
       savedObjectName,
+      savedRecordName,
+      thisModelPrimaryKeys,
       modelName,
       importedModelName,
       fieldConfigs,
@@ -665,9 +679,11 @@ export const buildUpdateDatastoreQuery = (
 
   const queryCall =
     dataApi === 'GraphQL'
-      ? getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, [
-          factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
-        ])
+      ? getGraphqlCallExpression(ActionType.GET, importedModelName, importCollection, {
+          inputs: [
+            factory.createPropertyAssignment(factory.createIdentifier('id'), factory.createIdentifier('idProp')),
+          ],
+        })
       : factory.createCallExpression(
           factory.createPropertyAccessExpression(
             factory.createIdentifier('DataStore'),

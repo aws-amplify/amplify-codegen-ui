@@ -35,11 +35,13 @@ import { getAutocompleteOptionsProp } from './model-values';
 import { buildCtaLayoutProperties } from '../../react-component-render-helper';
 import { getModelNameProp, lowerCaseFirst } from '../../helpers';
 import { COMPOSITE_PRIMARY_KEY_PROP_NAME } from '../../utils/constants';
+import { DataApiKind } from '../../react-render-config';
 
 export const addFormAttributes = (
   component: StudioComponent | StudioComponentChild,
   formMetadata: FormMetadata,
   dataSchema?: GenericDataSchema,
+  dataApi?: DataApiKind,
 ) => {
   const { name: componentName, componentType } = component;
   const {
@@ -94,6 +96,14 @@ export const addFormAttributes = (
 
     if (fieldConfig.componentType === 'Autocomplete') {
       attributes.push(getAutocompleteOptionsProp({ fieldName: componentName, fieldConfig }));
+      if (fieldConfig.relationship?.type === 'HAS_MANY' && dataApi === 'GraphQL') {
+        attributes.push(
+          factory.createJsxAttribute(
+            factory.createIdentifier('isLoading'),
+            factory.createJsxExpression(undefined, factory.createIdentifier(`${componentName}Loading`)),
+          ),
+        );
+      }
       attributes.push(
         buildOnSelect({ sanitizedFieldName: renderedVariableName, fieldConfig, fieldName: componentName }),
       );
@@ -103,7 +113,7 @@ export const addFormAttributes = (
     if (formMetadata.formActionType === 'update' && !fieldConfig.isArray && !isControlledComponent(componentType)) {
       attributes.push(renderDefaultValueAttribute(renderedVariableName, fieldConfig, componentType));
     }
-    attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs));
+    attributes.push(buildOnChangeStatement(component, formMetadata.fieldConfigs, dataApi));
     attributes.push(buildOnBlurStatement(componentName, fieldConfig));
     attributes.push(
       factory.createJsxAttribute(

@@ -111,7 +111,7 @@ function unlinkModelRecordExpression({
       factory.createCallExpression(
         factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
         undefined,
-        [getGraphqlCallExpression(ActionType.UPDATE, modelName, importCollection, inputs)],
+        [getGraphqlCallExpression(ActionType.UPDATE, modelName, importCollection, { inputs })],
       ),
     );
   }
@@ -278,7 +278,7 @@ function linkModelRecordExpression({
       factory.createCallExpression(
         factory.createPropertyAccessExpression(factory.createIdentifier('promises'), factory.createIdentifier('push')),
         undefined,
-        [getGraphqlCallExpression(ActionType.UPDATE, importedRelatedModelName, importCollection, inputs)],
+        [getGraphqlCallExpression(ActionType.UPDATE, importedRelatedModelName, importCollection, { inputs })],
       ),
     );
   }
