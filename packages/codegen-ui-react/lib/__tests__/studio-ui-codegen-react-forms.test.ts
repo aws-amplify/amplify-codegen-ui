@@ -778,7 +778,7 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
-    it.only('should generate an update form with hasMany relationship with autocomplete', () => {
+    it('should generate an update form with hasMany relationship with autocomplete', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/relationships/update-post',
         'datastore/relationships/has-many-autocomplete-post',
