@@ -1685,6 +1685,7 @@ export default function SchoolCreateForm(props) {
               id: getIDValue.Students?.(r),
               label: getDisplayValue.Students?.(r),
             }))}
+          isLoading={StudentsLoading}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(
               studentRecords.find((r) =>
@@ -1701,6 +1702,7 @@ export default function SchoolCreateForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchStudentsRecords(value);
             if (errors.Students?.hasError) {
               runValidationTasks(\\"Students\\", value);
             }
@@ -2763,6 +2765,7 @@ export default function TagCreateForm(props) {
               id: getIDValue.Posts?.(r),
               label: getDisplayValue.Posts?.(r),
             }))}
+          isLoading={PostsLoading}
           onSelect={({ id, label }) => {
             setCurrentPostsValue(
               postRecords.find((r) =>
@@ -2779,6 +2782,7 @@ export default function TagCreateForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchPostsRecords(value);
             if (errors.Posts?.hasError) {
               runValidationTasks(\\"Posts\\", value);
             }
@@ -6214,6 +6218,7 @@ export default function ClassUpdateForm(props) {
               id: getIDValue.students?.(r),
               label: getDisplayValue.students?.(r),
             }))}
+          isLoading={studentsLoading}
           onSelect={({ id, label }) => {
             setCurrentStudentsValue(
               studentRecords.find((r) =>
@@ -6230,6 +6235,7 @@ export default function ClassUpdateForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchStudentsRecords(value);
             if (errors.students?.hasError) {
               runValidationTasks(\\"students\\", value);
             }
@@ -7132,6 +7138,7 @@ export default function UpdateCPKTeacherForm(props) {
               id: getIDValue.CPKClasses?.(r),
               label: getDisplayValue.CPKClasses?.(r),
             }))}
+          isLoading={CPKClassesLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKClassesValue(
               cPKClassRecords.find((r) =>
@@ -7148,6 +7155,7 @@ export default function UpdateCPKTeacherForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCPKClassesRecords(value);
             if (errors.CPKClasses?.hasError) {
               runValidationTasks(\\"CPKClasses\\", value);
             }
@@ -7208,6 +7216,7 @@ export default function UpdateCPKTeacherForm(props) {
               id: getIDValue.CPKProjects?.(r),
               label: getDisplayValue.CPKProjects?.(r),
             }))}
+          isLoading={CPKProjectsLoading}
           onSelect={({ id, label }) => {
             setCurrentCPKProjectsValue(
               cPKProjectRecords.find((r) =>
@@ -7224,6 +7233,7 @@ export default function UpdateCPKTeacherForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCPKProjectsRecords(value);
             if (errors.CPKProjects?.hasError) {
               runValidationTasks(\\"CPKProjects\\", value);
             }
@@ -9606,6 +9616,7 @@ export default function CreateCompositeDogForm(props) {
               id: getIDValue.CompositeToys?.(r),
               label: getDisplayValue.CompositeToys?.(r),
             }))}
+          isLoading={CompositeToysLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeToysValue(
               compositeToyRecords.find((r) =>
@@ -9622,6 +9633,7 @@ export default function CreateCompositeDogForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCompositeToysRecords(value);
             if (errors.CompositeToys?.hasError) {
               runValidationTasks(\\"CompositeToys\\", value);
             }
@@ -9689,6 +9701,7 @@ export default function CreateCompositeDogForm(props) {
               id: getIDValue.CompositeVets?.(r),
               label: getDisplayValue.CompositeVets?.(r),
             }))}
+          isLoading={CompositeVetsLoading}
           onSelect={({ id, label }) => {
             setCurrentCompositeVetsValue(
               compositeVetRecords.find((r) =>
@@ -9705,6 +9718,7 @@ export default function CreateCompositeDogForm(props) {
           }}
           onChange={(e) => {
             let { value } = e.target;
+            fetchCompositeVetsRecords(value);
             if (errors.CompositeVets?.hasError) {
               runValidationTasks(\\"CompositeVets\\", value);
             }
