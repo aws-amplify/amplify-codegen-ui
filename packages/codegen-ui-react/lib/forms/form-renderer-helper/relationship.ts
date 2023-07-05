@@ -14,6 +14,7 @@
   limitations under the License.
  */
 import {
+  AwaitExpression,
   CallExpression,
   factory,
   IfStatement,
@@ -2207,5 +2208,13 @@ function buildUnlinkForEachBlock(
       ),
     ],
     true,
+  );
+}
+
+function wrapInParenthesizedExpression(callExpression: CallExpression, accessors: string[]): AwaitExpression {
+  return accessors.reduce(
+    (acc: any, _, index: any, initialValue: string[]) =>
+      factory.createPropertyAccessExpression(acc, factory.createIdentifier(initialValue[index])),
+    factory.createAwaitExpression(callExpression),
   );
 }

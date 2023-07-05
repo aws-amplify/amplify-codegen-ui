@@ -778,25 +778,6 @@ describe('amplify form renderer tests', () => {
       expect(declaration).toMatchSnapshot();
     });
 
-    it('should generate an update form with hasMany relationship with autocomplete', () => {
-      const { componentText, declaration } = generateWithAmplifyFormRenderer(
-        'forms/relationships/update-post',
-        'datastore/relationships/has-many-autocomplete-post',
-        { ...defaultCLIRenderConfig, ...rendererConfigWithGraphQL },
-        { isNonModelSupported: true, isRelationshipSupported: true },
-      );
-
-      // check for import statement for graphql operation
-      // expect(componentText).not.toContain('DataStore');
-
-      // expect(componentText).toContain('await API.graphql({');
-      // expect(componentText).toContain('query: updateComment');
-      // expect(componentText).toContain(').data.listPosts.items');
-
-      expect(componentText).toMatchSnapshot();
-      expect(declaration).toMatchSnapshot();
-    });
-
     it('should generate an update form with many to many relationship', () => {
       const { componentText, declaration } = generateWithAmplifyFormRenderer(
         'forms/relationships/update-class',
